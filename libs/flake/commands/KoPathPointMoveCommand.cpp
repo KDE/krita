@@ -41,7 +41,7 @@ KoPathPointMoveCommand::KoPathPointMoveCommand(const QList<KoPathPointData> &poi
 {
     setText(i18n("Move points"));
 
-    foreach( const KoPathPointData &data, pointData ) {
+    foreach (const KoPathPointData &data, pointData) {
         if (!d->points.contains(data)) {
             d->points[data] = offset;
             d->paths.insert(data.pathShape);

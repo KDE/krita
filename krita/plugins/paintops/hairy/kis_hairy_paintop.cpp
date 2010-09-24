@@ -105,7 +105,7 @@ void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings* settings)
 }
 
 
-double KisHairyPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisHairyPaintOp::paintAt(const KisPaintInformation& info)
 {
     Q_UNUSED(info);
     return 0.5;

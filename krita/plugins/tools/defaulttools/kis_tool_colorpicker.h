@@ -72,7 +72,6 @@ private:
     void pickColor(const QPointF& pos);
 
     bool m_toForegroundColor;
-    bool m_colorPicking;
     bool m_updateColor;
     bool m_addPalette;
     bool m_normaliseValues;

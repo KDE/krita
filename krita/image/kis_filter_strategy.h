@@ -39,13 +39,13 @@ public:
     QString name() {
         return m_id.name();
     }
-    virtual double valueAt(double /*t*/) const {
+    virtual qreal valueAt(qreal /*t*/) const {
         return 0;
     }
     virtual qint32 intValueAt(qint32 t) const {
         return qint32(255*valueAt(t / 256.0));
     }
-    double support() {
+    qreal support() {
         return supportVal;
     }
     qint32 intSupport() {
@@ -55,7 +55,7 @@ public:
         return false;
     }
 protected:
-    double supportVal;
+    qreal supportVal;
     qint32 intSupportVal;
     KoID m_id;
 };
@@ -69,7 +69,7 @@ public:
     virtual ~KisHermiteFilterStrategy() {}
 
     virtual qint32 intValueAt(qint32 t) const;
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBicubicFilterStrategy : public KisFilterStrategy
@@ -91,7 +91,7 @@ public:
     virtual ~KisBoxFilterStrategy() {}
 
     virtual qint32 intValueAt(qint32 t) const;
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
     virtual bool boxSpecial() {
         return true;
     }
@@ -106,7 +106,7 @@ public:
     virtual ~KisTriangleFilterStrategy() {}
 
     virtual qint32 intValueAt(qint32 t) const;
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBellFilterStrategy : public KisFilterStrategy
@@ -117,7 +117,7 @@ public:
     }
     virtual ~KisBellFilterStrategy() {}
 
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 };
 
 class KRITAIMAGE_EXPORT KisBSplineFilterStrategy : public KisFilterStrategy
@@ -128,7 +128,7 @@ public:
     }
     virtual ~KisBSplineFilterStrategy() {}
 
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 };
 
 class KRITAIMAGE_EXPORT KisLanczos3FilterStrategy : public KisFilterStrategy
@@ -139,9 +139,9 @@ public:
     }
     virtual ~KisLanczos3FilterStrategy() {}
 
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 private:
-    double sinc(double x) const;
+    qreal sinc(qreal x) const;
 };
 
 class KRITAIMAGE_EXPORT  KisMitchellFilterStrategy : public KisFilterStrategy
@@ -152,7 +152,7 @@ public:
     }
     virtual ~KisMitchellFilterStrategy() {}
 
-    virtual double valueAt(double t) const;
+    virtual qreal valueAt(qreal t) const;
 };
 
 class KRITAIMAGE_EXPORT KisFilterStrategyRegistry : public KoGenericRegistry<KisFilterStrategy *>

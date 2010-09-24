@@ -38,13 +38,13 @@
 #include "kis_image.h"
 #include "krita_export.h"
 
-void KisShearVisitor::shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress)
+void KisShearVisitor::shear(KisPaintDeviceSP dev, qreal angleX, qreal angleY, KoUpdater *progress)
 {
-    const double pi = 3.1415926535897932385;
-    double thetaX = angleX * pi / 180;
-    double shearX = tan(thetaX);
-    double thetaY = angleY * pi / 180;
-    double shearY = tan(thetaY);
+    const qreal pi = 3.1415926535897932385;
+    qreal thetaX = angleX * pi / 180;
+    qreal shearX = tan(thetaX);
+    qreal thetaY = angleY * pi / 180;
+    qreal shearY = tan(thetaY);
 
     QRect r = dev->exactBounds();
     progress->setRange(0, r.height() + r.width());
@@ -65,7 +65,7 @@ void KisShearVisitor::shear(KisPaintDeviceSP dev, double angleX, double angleY, 
 }
 
 
-KisPaintDeviceSP KisShearVisitor::xShear(KisPaintDeviceSP src, double shearX, KoUpdater *progress)
+KisPaintDeviceSP KisShearVisitor::xShear(KisPaintDeviceSP src, qreal shearX, KoUpdater *progress)
 {
     KisPaintDeviceSP dst = KisPaintDeviceSP(new KisPaintDevice(src->colorSpace()));
     dst->setX(src->x());
@@ -73,9 +73,9 @@ KisPaintDeviceSP KisShearVisitor::xShear(KisPaintDeviceSP src, double shearX, Ko
 
     QRect r = src->exactBounds();
 
-    double displacement;
+    qreal displacement;
     qint32 displacementInt;
-    double weight;
+    qreal weight;
 
     KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
 
@@ -115,7 +115,7 @@ KisPaintDeviceSP KisShearVisitor::xShear(KisPaintDeviceSP src, double shearX, Ko
     return dst;
 }
 
-KisPaintDeviceSP KisShearVisitor::yShear(KisPaintDeviceSP src, double shearY, KoUpdater *progress)
+KisPaintDeviceSP KisShearVisitor::yShear(KisPaintDeviceSP src, qreal shearY, KoUpdater *progress)
 {
     int start = progress->progress();
 
@@ -127,9 +127,9 @@ KisPaintDeviceSP KisShearVisitor::yShear(KisPaintDeviceSP src, double shearY, Ko
 
     QRect r = src->exactBounds();
 
-    double displacement;
+    qreal displacement;
     qint32 displacementInt;
-    double weight;
+    qreal weight;
 
     for (qint32 x = r.left(); x <= r.right(); x++) {
 

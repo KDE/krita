@@ -72,14 +72,13 @@ private:
 protected:
     QPointF m_dragEnd;
 
-    bool m_drawing;
     bool m_isFirstPoint;
     QPointF m_currentPt;
 private:
     typedef QVector<QPointF> QPointFVector;
 
     QPointFVector m_points;
-    PerspectiveGridEditionMode m_mode;
+    PerspectiveGridEditionMode m_internalMode;
     qint32 m_handleSize, m_handleHalfSize;
     KisPerspectiveGridNodeSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     KisCanvas2* m_canvas;

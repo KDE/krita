@@ -36,7 +36,7 @@ public:
     KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisChalkPaintOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
     KisPaintDeviceSP m_dab;

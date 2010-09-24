@@ -54,14 +54,13 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
 
-    const KoColorSpace* rgb = KoColorSpaceRegistry::instance()->rgb8();
     foreach(KisPressureHSVOption* option, m_hsvOptions)
     {
         option->readOptionSetting(settings);
         option->sensor()->reset();
         if(option->isChecked() && !m_hsvTransfo)
         {
-            m_hsvTransfo = rgb->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
+            m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
     
@@ -92,7 +91,7 @@ KisBrushOp::~KisBrushOp()
     delete m_hsvTransfo;
 }
 
-double KisBrushOp::paintAt(const KisPaintInformation& info)
+qreal KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return 1.0;
 
@@ -104,12 +103,12 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info))
         return 1.0;
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     KisPaintDeviceSP device = painter()->device();
 
-    double rotation = m_rotationOption.apply(info);
+    qreal rotation = m_rotationOption.apply(info);
     
     setCurrentScale(scale);
     setCurrentRotation(rotation);
@@ -123,9 +122,9 @@ double KisBrushOp::paintAt(const KisPaintInformation& info)
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
     qint32 x;
-    double xFraction;
+    qreal xFraction;
     qint32 y;
-    double yFraction;
+    qreal yFraction;
 
     m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
     

@@ -240,7 +240,7 @@ void KoPathShape::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (background())
         background()->paint(painter, path);
-    //paintDebug( painter );
+    //paintDebug(painter);
 }
 
 #ifndef NDEBUG
@@ -332,7 +332,7 @@ QPainterPath KoPathShape::outline() const
                     lastPoint->controlPoint2(),
                     currPoint->controlPoint1(),
                     currPoint->point());
-            } else if( activeCP || currPoint->activeControlPoint1()) {
+            } else if (activeCP || currPoint->activeControlPoint1()) {
                 Q_ASSERT(!qIsNaNPoint(lastPoint->controlPoint2()));
                 Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                 path.quadTo(
@@ -352,7 +352,7 @@ QPainterPath KoPathShape::outline() const
                         firstPoint->controlPoint1(),
                         firstPoint->point());
                 }
-                else if(currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
+                else if (currPoint->activeControlPoint2() || firstPoint->activeControlPoint1()) {
                     Q_ASSERT(!qIsNaNPoint(currPoint->point()));
                     Q_ASSERT(!qIsNaNPoint(currPoint->controlPoint1()));
                     path.quadTo(
@@ -420,7 +420,7 @@ void KoPathShape::setSize(const QSizeF &newSize)
     d->map(matrix);
 }
 
-QTransform KoPathShape::resizeMatrix( const QSizeF & newSize ) const
+QTransform KoPathShape::resizeMatrix(const QSizeF & newSize) const
 {
     QSizeF oldSize = size();
     if (oldSize.width() == 0.0) {
@@ -1204,7 +1204,7 @@ QString KoPathShape::toString(const QTransform &matrix) const
     return d;
 }
 
-char nodeType( const KoPathPoint * point )
+char nodeType(const KoPathPoint * point)
 {
     if (point->properties() & KoPathPoint::IsSmooth) {
         return 's';
@@ -1226,23 +1226,23 @@ QString KoPathShapePrivate::nodeTypes() const
         KoSubpath::const_iterator it((*pathIt)->constBegin());
         for (; it != (*pathIt)->constEnd(); ++it) {
             if (it == (*pathIt)->constBegin()) {
-                types.append( 'c' );
+                types.append('c');
             }
             else {
-                types.append( nodeType( *it ) );
+                types.append(nodeType(*it));
             }
 
             if ((*it)->properties() & KoPathPoint::StopSubpath
                 && (*it)->properties() & KoPathPoint::CloseSubpath) {
                 KoPathPoint * firstPoint = (*pathIt)->first();
-                types.append( nodeType( firstPoint ) );
+                types.append(nodeType(firstPoint));
             }
         }
     }
     return types;
 }
 
-void updateNodeType( KoPathPoint * point, const QChar & nodeType )
+void updateNodeType(KoPathPoint * point, const QChar & nodeType)
 {
     if (nodeType == 's') {
         point->setProperty(KoPathPoint::IsSmooth);
@@ -1332,12 +1332,12 @@ bool KoPathShape::hitTest(const QPointF &position) const
     if (border()) {
         KoInsets insets;
         border()->borderInsets(this, insets);
-        QRectF roi( QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom) );
-        roi.moveCenter( point );
-        if( outlinePath.intersects( roi ) || outlinePath.contains( roi ) )
+        QRectF roi(QPointF(-insets.left, -insets.top), QPointF(insets.right, insets.bottom));
+        roi.moveCenter(point);
+        if (outlinePath.intersects(roi) || outlinePath.contains(roi))
             return true;
     } else {
-        if( outlinePath.contains( point ) )
+        if (outlinePath.contains(point))
             return true;
     }
 

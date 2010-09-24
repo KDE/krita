@@ -63,7 +63,7 @@ public slots:
     virtual void slotSetFillSelection(bool);
 
 private:
-    QPointF m_startPos;
+    QPoint m_startPos;
     int m_threshold;
     qint32 m_depth;
     quint8* m_oldColor, *m_color;

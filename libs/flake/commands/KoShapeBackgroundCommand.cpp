@@ -40,14 +40,14 @@ public:
         }
     }
 
-    void addOldFill( KoShapeBackground * oldFill )
+    void addOldFill(KoShapeBackground * oldFill)
     {
         if (oldFill)
             oldFill->ref();
         oldFills.append(oldFill);
     }
 
-    void addNewFill( KoShapeBackground * newFill )
+    void addNewFill(KoShapeBackground * newFill)
     {
         if (newFill)
             newFill->ref();
@@ -92,7 +92,7 @@ KoShapeBackgroundCommand::KoShapeBackgroundCommand(const QList<KoShape*> &shapes
     foreach(KoShape *shape, d->shapes) {
         d->addOldFill(shape->background());
     }
-    foreach(KoShapeBackground * fill, fills ) {
+    foreach (KoShapeBackground * fill, fills) {
         d->addNewFill(fill);
     }
 

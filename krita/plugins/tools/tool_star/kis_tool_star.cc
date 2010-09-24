@@ -55,8 +55,7 @@
 #include <recorder/kis_node_query_path.h>
 
 KisToolStar::KisToolStar(KoCanvasBase * canvas)
-        : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6)),
-        m_dragging(false)
+        : KisToolShape(canvas, KisCursor::load("tool_star_cursor.png", 6, 6))
 {
     setObjectName("tool_star");
     m_innerOuterRatio = 40;
@@ -68,27 +67,27 @@ KisToolStar::~KisToolStar()
 }
 void KisToolStar::mousePressEvent(KoPointerEvent *event)
 {
-    if (!currentNode() || currentNode()->systemLocked()) {
-        return;
-    }
-    
-    if (canvas() && event->button() == Qt::LeftButton) {
-        m_dragging = true;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        if (!currentNode() || currentNode()->systemLocked())
+            return;
+
+        setMode(KisTool::PAINT_MODE);
+
         m_dragStart = convertToPixelCoord(event);
         m_dragEnd = convertToPixelCoord(event);
         m_vertices = m_verticesSlider->value();
         m_innerOuterRatio = m_ratioSlider->value();
     }
-    if(m_dragging && (event->button() == Qt::MidButton || event->button() == Qt::RightButton)) {
-        //end painting, if calling the menu or the pop up palette. otherwise there is weird behaviour
-        m_dragging=false;
-        updatePreview();
+    else {
+        KisToolShape::mousePressEvent(event);
     }
 }
 
 void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         //Erase old lines
         updatePreview();
         if (event->modifiers() & Qt::AltModifier) {
@@ -100,15 +99,15 @@ void KisToolStar::mouseMoveEvent(KoPointerEvent *event)
         }
         updatePreview();
     }
+    else {
+        KisToolShape::mouseMoveEvent(event);
+    }
 }
 
 void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!canvas())
-        return;
-
-    if (m_dragging && event->button() == Qt::LeftButton) {
-        m_dragging = false;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
         if (m_dragStart == m_dragEnd)
             return;
@@ -168,16 +167,16 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             canvas()->addCommand(cmd);
         }
     }
+    else {
+        KisToolShape::mouseReleaseEvent(event);
+    }
 }
 
 void KisToolStar::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    if (!m_dragging)
-        return;
-
-    if (!canvas())
+    if (mode() != KisTool::PAINT_MODE)
         return;
 
     vQPointF points = starCoordinates(m_vertices, m_dragStart.x(), m_dragStart.y(), m_dragEnd.x(), m_dragEnd.y());

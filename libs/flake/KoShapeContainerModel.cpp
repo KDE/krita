@@ -37,7 +37,7 @@ void KoShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 
 void KoShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
-    Q_UNUSED( type );
+    Q_UNUSED(type);
     KoShapeContainer * parent = child->parent();
     Q_ASSERT(parent);
     // propagate the change up the hierarchy

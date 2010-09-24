@@ -66,9 +66,7 @@ class KoCanvasControllerProxyObject;
  */
 class FLAKE_EXPORT KoCanvasController
 {
-
 public:
-
     /// An enum to alter the positioning and size of the canvas inside the canvas controller
     enum CanvasMode {
         AlignTop,     ///< canvas is top aligned if smaller than the viewport
@@ -77,7 +75,6 @@ public:
         Presentation, ///< canvas is not handled by KoCanvasController, canvas is full screen
         Spreadsheet   ///< same as Infinite, but supports right-to-left layouts
     };
-
 
     // proxy QObject: use this to connect to slots and signals.
     KoCanvasControllerProxyObject *proxyObject;
@@ -88,9 +85,7 @@ public:
     explicit KoCanvasController();
     virtual ~KoCanvasController();
 
-
 public:
-
     /**
      * Returns the current margin that is used to pad the canvas with.
      * This value is read from the KConfig property "canvasmargin"
@@ -110,7 +105,6 @@ public:
 
     /// Returns the current canvas mode
     virtual KoCanvasController::CanvasMode canvasMode() const;
-
 
     /**
      * compatibility with QAbstractScrollArea
@@ -169,7 +163,6 @@ public:
      * The topmost pixel that is shown is returned.
      */
     virtual int canvasOffsetY() const = 0;
-
 
     /**
      * @brief Scrolls the content of the canvas so that the given rect is visible.
@@ -297,7 +290,6 @@ public:
     virtual void setVastScrolling(qreal factor) = 0;
 
 protected:
-
     void setDocumentSize(const QSize &sz);
     QSize documentSize() const;
 
@@ -311,7 +303,6 @@ protected:
     QPoint documentOffset() const;
 
 private:
-
     class Private;
     Private * const d;
 };
@@ -323,13 +314,11 @@ private:
  * a QObject directly. The interface of this class should be considered public interface
  * for KoCanvasController.
  */
-class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject {
-
+class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
+{
     Q_OBJECT
     Q_DISABLE_COPY(KoCanvasControllerProxyObject);
-
 public:
-
     KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
 
 public:
@@ -350,7 +339,6 @@ public:
     KoCanvasController *canvasController() const { return m_canvasController; }
 
 signals:
-
     /**
      * Emitted when a previously added canvas is about to be removed.
      * @param canvasController this object
@@ -414,7 +402,6 @@ signals:
     void zoomBy(const qreal factor);
 
 public slots:
-
     /**
      * Call this slot whenever the size of your document in view coordinates (pixels)
      * changes, for instance when zooming.
@@ -425,7 +412,6 @@ public slots:
     void updateDocumentSize(const QSize &newSize, bool recalculateCenter = true);
 
 private:
-
     KoCanvasController *m_canvasController;
 };
 

@@ -70,7 +70,7 @@ KoLineBorder::~KoLineBorder()
     delete d;
 }
 
-KoLineBorder& KoLineBorder::operator = (const KoLineBorder &rhs)
+KoLineBorder &KoLineBorder::operator = (const KoLineBorder &rhs)
 {
     if (this == &rhs)
         return *this;
@@ -101,7 +101,7 @@ void KoLineBorder::borderInsets(const KoShape *shape, KoInsets &insets) const
     lineWidth *= 0.5; // since we draw a line half inside, and half outside the object.
 
     // if we have square cap, we need a little more space
-    // -> sqrt( (0.5*penWidth)^2 + (0.5*penWidth)^2 )
+    // -> sqrt((0.5*penWidth)^2 + (0.5*penWidth)^2)
     if (capStyle() == Qt::SquareCap)
         lineWidth *= M_SQRT2;
 
@@ -131,7 +131,7 @@ void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverte
         painter.strokePath(shape->outline(), pen);
 }
 
-void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color )
+void KoLineBorder::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, const QColor &color)
 {
     KoShape::applyConversion(painter, converter);
 
@@ -183,12 +183,12 @@ qreal KoLineBorder::miterLimit() const
     return d->pen.miterLimit();
 }
 
-const QColor & KoLineBorder::color() const
+QColor KoLineBorder::color() const
 {
     return d->color;
 }
 
-void KoLineBorder::setColor(const QColor & color)
+void KoLineBorder::setColor(const QColor &color)
 {
     d->color = color;
 }

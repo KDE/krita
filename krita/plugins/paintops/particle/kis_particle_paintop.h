@@ -37,7 +37,7 @@ public:
     KisParticlePaintOp(const KisParticlePaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisParticlePaintOp();
 
-    virtual double paintAt(const KisPaintInformation& info);
+    virtual qreal paintAt(const KisPaintInformation& info);
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
     
 private:

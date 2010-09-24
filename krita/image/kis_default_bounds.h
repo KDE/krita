@@ -23,13 +23,29 @@
 #include "kis_types.h"
 #include "kis_image.h"
 
-class KRITAIMAGE_EXPORT KisDefaultBounds
+class KisDefaultBounds;
+class KisSelectionDefaultBounds;
+typedef KisSharedPtr<KisDefaultBounds> KisDefaultBoundsSP;
+typedef KisSharedPtr<KisSelectionDefaultBounds> KisSelectionDefaultBoundsSP;
+
+class KRITAIMAGE_EXPORT KisDefaultBounds : public KisShared
 {
 public:
     KisDefaultBounds(KisImageWSP image = 0);
-    ~KisDefaultBounds();
-    KisDefaultBounds(const KisDefaultBounds& rhs);
-    KisDefaultBounds& operator=(const KisDefaultBounds& rhs);
+    virtual ~KisDefaultBounds();
+
+    virtual QRect bounds() const;
+
+private:
+    struct Private;
+    Private * const m_d;
+};
+
+class KRITAIMAGE_EXPORT KisSelectionDefaultBounds : public KisDefaultBounds
+{
+public:
+    KisSelectionDefaultBounds(KisPaintDeviceSP parentPaintDevice = 0, KisImageWSP image = 0);
+    ~KisSelectionDefaultBounds();
 
     QRect bounds() const;
 

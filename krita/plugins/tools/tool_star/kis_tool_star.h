@@ -49,8 +49,6 @@ protected:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     QRect m_final_lines;
-
-    bool m_dragging;
 private:
     vQPointF starCoordinates(int N, double mx, double my, double x, double y);
     void updatePreview();

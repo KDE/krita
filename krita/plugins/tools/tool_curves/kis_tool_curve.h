@@ -151,7 +151,6 @@ protected:
     KisCurve::iterator m_previous;
     QPointF m_currentPoint;
 
-    bool m_dragging;
     bool m_drawPivots;
     QPen m_drawingPen;
     QPen m_pivotPen;

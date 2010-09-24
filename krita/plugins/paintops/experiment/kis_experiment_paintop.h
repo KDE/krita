@@ -39,8 +39,8 @@ public:
     KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image);
     virtual ~KisExperimentPaintOp();
 
-    double spacing(double & xSpacing, double & ySpacing, double pressure1, double pressure2) const;
-    double paintAt(const KisPaintInformation& info);
+    qreal spacing(qreal & xSpacing, qreal & ySpacing, qreal pressure1, qreal pressure2) const;
+    qreal paintAt(const KisPaintInformation& info);
 
     virtual bool incremental() const {
         return false;
@@ -56,7 +56,7 @@ private:
     
     int m_size;
    
-    double m_xSpacing, m_ySpacing, m_spacing;
+    qreal m_xSpacing, m_ySpacing, m_spacing;
     QRect m_previousDab;
     bool m_isFirst;
     

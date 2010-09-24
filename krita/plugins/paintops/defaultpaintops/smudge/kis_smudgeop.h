@@ -45,7 +45,7 @@ public:
     KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSmudgeOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
     bool m_firstRun;

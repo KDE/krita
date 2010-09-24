@@ -172,34 +172,38 @@ bool KisToolFill::flood(int startX, int startY)
     return true;
 }
 
-void KisToolFill::mousePressEvent(KoPointerEvent *e)
+void KisToolFill::mousePressEvent(KoPointerEvent *event)
 {
-    QPointF pos = convertToPixelCoord(e);
-    m_startPos = pos;
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
+        m_startPos = convertToPixelCoord(event).toPoint();
+    }
+    else {
+        KisToolPaint::mousePressEvent(event);
+    }
 }
 
-void KisToolFill::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolFill::mouseReleaseEvent(KoPointerEvent *event)
 {
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-    if (!canvas()) return;
-    if (!currentNode() || currentNode()->systemLocked()) return;
-    if (!currentImage() || !currentNode()->paintDevice()) return;
-    if (e->button() == Qt::LeftButton) {
-        setCurrentNodeLocked(true);
-        int x, y;
+        if (!currentNode() || currentNode()->systemLocked() ||
+            !currentImage()->bounds().contains(m_startPos)) {
 
-        x = static_cast<int>(m_startPos.x());
-        y = static_cast<int>(m_startPos.y());
-
-        if (!currentImage()->bounds().contains(x, y)) {
             return;
         }
 
-        flood(x, y);
+        setCurrentNodeLocked(true);
+        flood(m_startPos.x(), m_startPos.y());
         setCurrentNodeLocked(false);
         notifyModified();
-    } else {
-        KisToolPaint::mouseReleaseEvent(e);
+    }
+    else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 

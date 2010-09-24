@@ -38,7 +38,7 @@ void KoCtlMixColorsOp::mixColors(const quint8 * const* colors, const qint16 *wei
     }
     int alphaPos = m_colorSpace->alphaPos();
     // Compute the total for each channel by summing each colors multiplied by the weightlabcache
-    double totalAlpha = 0.0;
+    qreal totalAlpha = 0.0;
     while (nColors--) {
         const quint8* color = *colors;
         double alphaTimesWeight;

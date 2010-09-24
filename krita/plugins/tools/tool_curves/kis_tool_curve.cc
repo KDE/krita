@@ -65,7 +65,6 @@ KisToolCurve::KisToolCurve(KoCanvasBase* canvas, const QString& UIName)
 
     m_curve = 0;
 
-    m_dragging = false;
     m_draggingCursor = false;
     m_drawPivots = true;
     m_drawingPen = QPen(Qt::black, 0, Qt::SolidLine);
@@ -91,17 +90,18 @@ void KisToolCurve::deactivate()
     }
 
     m_actionOptions = NOOPTIONS;
-    m_dragging = false;
     m_drawPivots = true;
 }
 
 void KisToolCurve::mousePressEvent(KoPointerEvent *event)
 {
     updateOptions(QApplication::keyboardModifiers());
-    if (!m_currentImage)
-        return;
-    if (event->button() == Qt::LeftButton) {
-        m_dragging = true;
+
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
         m_currentPoint = event->pos().toPointF();
         PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
         if (temp.first == m_curve->end() && !(m_actionOptions)) {
@@ -118,23 +118,66 @@ void KisToolCurve::mousePressEvent(KoPointerEvent *event)
             else
                 m_current = selectByMouse(temp.first);
 
-            if (!(*m_current).isSelected())
-                m_dragging = false;
+            if (!(*m_current).isSelected()) {
+                setMode(KisTool::PAINT_HOVER);
+            }
+
             draw(true, true);
         }
+    }
+    else {
+        KisToolPaint::mousePressEvent(event);
+    }
+}
+
+void KisToolCurve::mouseMoveEvent(KoPointerEvent *event)
+{
+    updateOptions(QApplication::keyboardModifiers());
+    PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
+    if (temp.first == m_curve->end() && !mode() == KisTool::PAINT_MODE) {
+        if (m_draggingCursor) {
+            setCursor(KisCursor::load(m_cursor, 6, 6));
+            m_draggingCursor = false;
+        }
+    } else {
+        setCursor(KisCursor::load("tool_curve_dragging.png", 6, 6));
+/////////////////
+        m_draggingCursor = true;
+    }
+
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        QPointF trans = event->pos().toPointF() - m_currentPoint;
+        m_curve->moveSelected(trans);
+        m_currentPoint = event->pos().toPointF();
+        draw();
+    }
+    else {
+        KisToolPaint::mouseMoveEvent(event);
+    }
+}
+
+void KisToolCurve::mouseReleaseEvent(KoPointerEvent *event)
+{
+    updateOptions(QApplication::keyboardModifiers());
+
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+    }
+    else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 
 void KisToolCurve::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return) {
-        m_dragging = false;
+        setMode(KisTool::HOVER_MODE);
         commitCurve();
     } else if (event->key() == Qt::Key_Escape) {
-        m_dragging = false;
+        setMode(KisTool::HOVER_MODE);
         m_curve->clear();
     } else if (event->key() == Qt::Key_Delete) {
-        m_dragging = false;
+        setMode(KisTool::HOVER_MODE);
         m_curve->deleteSelected();
         m_current = m_curve->lastIterator();
         m_previous = m_curve->selectPivot(m_current);
@@ -147,37 +190,12 @@ void KisToolCurve::keyReleaseEvent(QKeyEvent *)
 
 }
 
-void KisToolCurve::mouseReleaseEvent(KoPointerEvent *event)
-{
-    updateOptions(QApplication::keyboardModifiers());
-    m_dragging = false;
-}
-
 void KisToolCurve::mouseDoubleClick(KoPointerEvent *)
 {
     commitCurve();
 }
 
-void KisToolCurve::mouseMoveEvent(KoPointerEvent *event)
-{
-    updateOptions(QApplication::keyboardModifiers());
-    PointPair temp = pointUnderMouse(m_subject->canvasController()->windowToView(event->pos()).toPointF());
-    if (temp.first == m_curve->end() && !m_dragging) {
-        if (m_draggingCursor) {
-            setCursor(KisCursor::load(m_cursor, 6, 6));
-            m_draggingCursor = false;
-        }
-    } else {
-        setCursor(KisCursor::load("tool_curve_dragging.png", 6, 6));
-        m_draggingCursor = true;
-    }
-    if (m_dragging) {
-        QPointF trans = event->pos().toPointF() - m_currentPoint;
-        m_curve->moveSelected(trans);
-        m_currentPoint = event->pos().toPointF();
-        draw();
-    }
-}
+
 
 double pointToSegmentDistance(const QPointF& pp, const QPointF& pl0, const QPointF& pl1)
 {

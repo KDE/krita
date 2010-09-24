@@ -367,7 +367,6 @@ QString KisCanvasResourceProvider::currentCompositeOp() const
 
 void KisCanvasResourceProvider::slotPainting()
 {
-
     if (m_fGChanged && m_enablefGChange) {
         emit sigFGColorUsed(fgColor());
         m_fGChanged = false;

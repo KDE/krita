@@ -174,6 +174,30 @@ void KisSelectionTest::testCopy()
     }
 }
 
+void KisSelectionTest::testSelectionExactBounds()
+{
+    QRect referenceImageRect(0,0,1000,1000);
+    QRect referenceDeviceRect(10,10,1000,1000);
+
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+
+    KisImageSP image = new KisImage(0, referenceImageRect.width(),
+                                    referenceImageRect.height(),
+                                    cs, "stest");
+
+    KisPaintDeviceSP device = new KisPaintDevice(cs);
+    device->fill(referenceDeviceRect, KoColor(Qt::white, cs));
+
+    QCOMPARE(device->exactBounds(), referenceDeviceRect);
+
+    KisSelectionSP selection = new KisSelection(device, new KisSelectionDefaultBounds(device, image));
+
+    quint8 defaultPixel = MAX_SELECTED;
+    selection->setDefaultPixel(&defaultPixel);
+
+    QCOMPARE(selection->selectedExactRect(), referenceImageRect | referenceDeviceRect);
+}
+
 QTEST_KDEMAIN(KisSelectionTest, NoGUI)
 #include "kis_selection_test.moc"
 

@@ -51,7 +51,6 @@ public slots:
 private:
     void updateFeedback();
 
-    bool m_dragging;
     QPainterPath * m_paintPath;
     vQPointF m_points;
 

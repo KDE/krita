@@ -158,13 +158,13 @@ QString KoShapeSavingContext::subId(const QTextBlockUserData *subItem, bool inse
     return it.value();
 }
 
-void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer * layer)
+void KoShapeSavingContext::addLayerForSaving(const KoShapeLayer *layer)
 {
     if (layer && ! d->layers.contains(layer))
         d->layers.append(layer);
 }
 
-void KoShapeSavingContext::saveLayerSet(KoXmlWriter & xmlWriter) const
+void KoShapeSavingContext::saveLayerSet(KoXmlWriter &xmlWriter) const
 {
     xmlWriter.startElement("draw:layer-set");
     foreach(const KoShapeLayer * layer, d->layers) {
@@ -189,7 +189,7 @@ QString KoShapeSavingContext::imageHref(KoImageData * image)
     QMap<qint64, QString>::iterator it(d->imageNames.find(image->key()));
     if (it == d->imageNames.end()) {
         QString suffix = image->suffix();
-        if ( suffix.isEmpty() ) {
+        if (suffix.isEmpty()) {
             it = d->imageNames.insert(image->key(), QString("Pictures/image%1").arg(++d->imageId));
         }
         else {
@@ -199,7 +199,7 @@ QString KoShapeSavingContext::imageHref(KoImageData * image)
     return it.value();
 }
 
-QString KoShapeSavingContext::imageHref(QImage & image)
+QString KoShapeSavingContext::imageHref(QImage &image)
 {
     // TODO this can be optimized to recocnice images which have the same content
     // Also this can use quite a lot of memeory as the qimage are all kept until
@@ -226,7 +226,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
         //kDebug() << "ok" << ok;
     }
-    for ( QMap<QString, QImage>::iterator it(d->images.begin()); it != d->images.end(); ++it ) {
+    for (QMap<QString, QImage>::iterator it(d->images.begin()); it != d->images.end(); ++it) {
         if (store->open(it.key())) {
             KoStoreDevice device(store);
             ok = ok && it.value().save(&device, "PNG");
@@ -248,7 +248,7 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
     return ok;
 }
 
-void KoShapeSavingContext::addSharedData(const QString & id, KoSharedSavingData * data)
+void KoShapeSavingContext::addSharedData(const QString &id, KoSharedSavingData * data)
 {
     QMap<QString, KoSharedSavingData*>::iterator it(d->sharedData.find(id));
     // data will not be overwritten
@@ -260,7 +260,7 @@ void KoShapeSavingContext::addSharedData(const QString & id, KoSharedSavingData 
     }
 }
 
-KoSharedSavingData * KoShapeSavingContext::sharedData(const QString & id) const
+KoSharedSavingData * KoShapeSavingContext::sharedData(const QString &id) const
 {
     KoSharedSavingData * data = 0;
     QMap<QString, KoSharedSavingData*>::const_iterator it(d->sharedData.constFind(id));
@@ -270,17 +270,17 @@ KoSharedSavingData * KoShapeSavingContext::sharedData(const QString & id) const
     return data;
 }
 
-void KoShapeSavingContext::addShapeOffset(const KoShape * shape, const QTransform & m)
+void KoShapeSavingContext::addShapeOffset(const KoShape *shape, const QTransform &m)
 {
     d->shapeOffsets.insert(shape, m);
 }
 
-void KoShapeSavingContext::removeShapeOffset(const KoShape * shape)
+void KoShapeSavingContext::removeShapeOffset(const KoShape *shape)
 {
     d->shapeOffsets.remove(shape);
 }
 
-QTransform KoShapeSavingContext::shapeOffset(const KoShape * shape) const
+QTransform KoShapeSavingContext::shapeOffset(const KoShape *shape) const
 {
     return d->shapeOffsets.value(shape, QTransform());
 }

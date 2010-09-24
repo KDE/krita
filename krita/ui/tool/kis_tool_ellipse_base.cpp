@@ -29,8 +29,7 @@
 KisToolEllipseBase::KisToolEllipseBase(KoCanvasBase * canvas, const QCursor & cursor) :
         KisToolShape(canvas, cursor),
         m_dragStart(0,0),
-        m_dragEnd(0,0),
-        m_dragging(false)
+        m_dragEnd(0,0)
 {
 }
 
@@ -42,41 +41,38 @@ void KisToolEllipseBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
     Q_ASSERT(currentImage());
-    if (m_dragging)
+    if (mode() == KisTool::PAINT_MODE)
         paintEllipse(gc, QRect());
 }
 
 void KisToolEllipseBase::deactivate()
 {
-    m_dragging=false;
     updateArea();
 }
 
 
 void KisToolEllipseBase::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(canvas() && currentImage());
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
 
-    if (!currentNode() || currentNode()->systemLocked()) {
-        return;
-    }
-    
-    if (event->button() == Qt::LeftButton) {
+        if (!currentNode() || currentNode()->systemLocked())
+            return;
+
+        setMode(KisTool::PAINT_MODE);
+
         QPointF pos = convertToPixelCoord(event);
-        m_dragging = true;
         m_dragStart = m_dragCenter = m_dragEnd = pos;
         event->accept();
     }
-    else if (event->button()==Qt::RightButton || event->button()==Qt::MidButton) {
-        m_dragging = false;
-        updateArea();
-        event->accept();
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 
 void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         updateArea();
 
         QPointF pos = convertToPixelCoord(event);
@@ -109,20 +105,25 @@ void KisToolEllipseBase::mouseMoveEvent(KoPointerEvent *event)
         m_dragCenter = QPointF((m_dragStart.x() + m_dragEnd.x()) / 2,
                                (m_dragStart.y() + m_dragEnd.y()) / 2);
     }
+    else {
+        KisTool::mouseMoveEvent(event);
+    }
 }
 
 void KisToolEllipseBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(canvas() && currentImage());
-    if (!currentNode()) return;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-    if (m_dragging && event->button() == Qt::LeftButton) {
         updateArea();
-        m_dragging = false;
+
         setCurrentNodeLocked(true);
         finishEllipse(QRectF(m_dragStart, m_dragEnd).normalized());
         setCurrentNodeLocked(false);
         event->accept();
+    }
+    else {
+        KisTool::mouseReleaseEvent(event);
     }
 }
 

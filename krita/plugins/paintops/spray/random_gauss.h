@@ -20,6 +20,7 @@
 #define RANDOM_GAUSS_H_
 
 #include <cstdlib>
+#include <QtGlobal>
 
 #if defined(_WIN32) || defined(_WIN64)
 #define srand48 srand
@@ -40,13 +41,13 @@ public:
     }
 private:
     bool m_next;
-    double m_gauss;
+    qreal m_gauss;
 
 public:
     /**
      * Generates a random Gaussian value with the mean and sigma
      */
-    double nextGaussian(double mean = 0.0, double sigma = 1.0);
+    qreal nextGaussian(qreal mean = 0.0, qreal sigma = 1.0);
 };
 
 #endif

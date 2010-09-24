@@ -120,7 +120,7 @@ qreal KoCanvasController::preferredCenterFractionY() const
     return d->preferredCenterFractionY;
 }
 
-void KoCanvasController::setDocumentOffset( QPoint &offset)
+void KoCanvasController::setDocumentOffset(QPoint &offset)
 {
     d->documentOffset = offset;
 }

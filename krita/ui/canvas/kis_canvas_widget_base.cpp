@@ -96,7 +96,9 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
     // Paint the shapes (other than the layers)
     m_d->canvas->globalShapeManager()->paint(gc, *m_d->viewConverter, false);
 
-    // some tools do not restore gc, but that is not important here
+    // - some tools do not restore gc, but that is not important here
+    // - we need to disable clipping to draw handles properly
+    gc.setClipping(false);
     toolProxy()->paint(gc, *m_d->viewConverter);
     gc.restore();
 

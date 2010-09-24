@@ -43,7 +43,7 @@ struct KisPixelSelection::Private {
     bool interestedInDirtyness;
 };
 
-KisPixelSelection::KisPixelSelection(KisDefaultBounds defaultBounds)
+KisPixelSelection::KisPixelSelection(KisDefaultBoundsSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -52,7 +52,7 @@ KisPixelSelection::KisPixelSelection(KisDefaultBounds defaultBounds)
 
 }
 
-KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev, KisDefaultBounds defaultBounds)
+KisPixelSelection::KisPixelSelection(KisPaintDeviceSP dev, KisDefaultBoundsSP defaultBounds)
         : KisPaintDevice(0, KoColorSpaceRegistry::instance()->alpha8(), defaultBounds)
         , m_d(new Private)
 {
@@ -270,20 +270,12 @@ bool KisPixelSelection::isProbablyTotallyUnselected(const QRect & r) const
 
 QRect KisPixelSelection::selectedRect() const
 {
-    if (*defaultPixel() == MIN_SELECTED) {
-        return extent().intersected(defaultBounds().bounds());
-    } else {
-        return defaultBounds().bounds();
-    }
+    return extent();
 }
 
 QRect KisPixelSelection::selectedExactRect() const
 {
-    if (*defaultPixel() == MIN_SELECTED) {
-        return exactBounds().intersected(defaultBounds().bounds());
-    } else {
-        return defaultBounds().bounds();
-    }
+    return exactBounds();
 }
 
 void KisPixelSelection::setInterestedInDirtyness(bool b)

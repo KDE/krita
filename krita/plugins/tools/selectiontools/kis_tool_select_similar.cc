@@ -91,27 +91,20 @@ KisToolSelectSimilar::~KisToolSelectSimilar()
 }
 
 
-void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
+void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *event)
 {
-    if (canvas()) {
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
         QApplication::setOverrideCursor(KisCursor::waitCursor());
         quint8 opacity = OPACITY_OPAQUE_U8;
-
-        if (e->button() != Qt::LeftButton)
-            return;
-
-        if (!currentImage())
-            return;
-
-        if (!currentNode())
-            return;
 
         KisPaintDeviceSP dev = currentNode()->paintDevice();
 
         if (!dev || !currentNode()->visible())
             return;
 
-        QPointF pos = convertToPixelCoord(e);
+        QPointF pos = convertToPixelCoord(event);
 
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         if (!kisCanvas)
@@ -130,6 +123,9 @@ void KisToolSelectSimilar::mousePressEvent(KoPointerEvent *e)
         helper.selectPixelSelection(tmpSel, m_selectAction);
 
         QApplication::restoreOverrideCursor();
+    }
+    else {
+        KisTool::mousePressEvent(event);
     }
 }
 

@@ -203,7 +203,7 @@ void KisPixelSelectionTest::testExactRectWithImage()
     image->setGlobalSelection();
     KisPixelSelectionSP selection =  image->globalSelection()->getOrCreatePixelSelection();
     selection->select(QRect(100, 50, 200, 100));
-    QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 100, 100));
+    QCOMPARE(selection->selectedExactRect(), QRect(100, 50, 200, 100));
 }
 
 QTEST_KDEMAIN(KisPixelSelectionTest, NoGUI)

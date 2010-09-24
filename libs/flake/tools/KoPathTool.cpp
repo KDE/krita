@@ -68,7 +68,7 @@ static unsigned char needle_move_bits[] = {
 };
 
 // helper function to calculate the squared distance between two points
-qreal squaredDistance( const QPointF p1, const QPointF &p2 )
+qreal squaredDistance(const QPointF p1, const QPointF &p2)
 {
     qreal dx = p1.x()-p2.x();
     qreal dy = p1.y()-p2.y();
@@ -83,7 +83,7 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
         , m_currentStrategy(0)
 {
     QActionGroup *points = new QActionGroup(this);
-    // m_pointTypeGroup->setExclusive( true );
+    // m_pointTypeGroup->setExclusive(true);
     m_actionPathPointCorner = new KAction(KIcon("pathpoint-corner"), i18n("Corner point"), this);
     addAction("pathpoint-corner", m_actionPathPointCorner);
     m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
@@ -218,8 +218,8 @@ void KoPathTool::insertPoints()
             KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, 0.5);
             d->canvas->addCommand(cmd);
 
-            foreach( KoPathPoint * p, cmd->insertedPoints() ) {
-                m_pointSelection.add( p, false );
+            foreach (KoPathPoint * p, cmd->insertedPoints()) {
+                m_pointSelection.add(p, false);
             }
             updateActions();
         }
@@ -722,7 +722,7 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     const int clickProximity = 5;
 
     // convert click proximity to point using the current zoom level
-    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument( QPointF(clickProximity, clickProximity) );
+    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument(QPointF(clickProximity, clickProximity));
     // the max allowed distance from a segment
     const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
 
@@ -731,20 +731,20 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
     qreal clickedPointParam = 0.0;
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        if (dynamic_cast<KoParameterShape*>( shape ))
+        if (dynamic_cast<KoParameterShape*>(shape))
             continue;
 
         // convert document point to shape coordinates
-        QPointF point = shape->documentToShape( event->point );
+        QPointF point = shape->documentToShape(event->point);
         // our region of interest, i.e. a region around our mouse position
-        QRectF roi( point - clickOffset, point + clickOffset );
+        QRectF roi(point - clickOffset, point + clickOffset);
 
         qreal minSqaredDistance = HUGE_VAL;
         // check all segments of this shape which intersect the region of interest
-        QList<KoPathSegment> segments = shape->segmentsAt( roi );
-        foreach( const KoPathSegment &s, segments ) {
-            qreal nearestPointParam = s.nearestPoint( point );
-            QPointF nearestPoint = s.pointAt( nearestPointParam );
+        QList<KoPathSegment> segments = shape->segmentsAt(roi);
+        foreach (const KoPathSegment &s, segments) {
+            qreal nearestPointParam = s.nearestPoint(point);
+            QPointF nearestPoint = s.pointAt(nearestPointParam);
             QPointF diff = point - nearestPoint;
             qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
             // are we within the allowed distance ?
@@ -772,22 +772,22 @@ void KoPathTool::mouseDoubleClickEvent(KoPointerEvent *event)
         KoPathPointInsertCommand *cmd = new KoPathPointInsertCommand(segments, clickedPointParam);
         d->canvas->addCommand(cmd);
 
-        foreach( KoPathPoint * p, cmd->insertedPoints() ) {
-            m_pointSelection.add( p, false );
+        foreach (KoPathPoint * p, cmd->insertedPoints()) {
+            m_pointSelection.add(p, false);
         }
         updateActions();
         event->accept();
     }
 }
 
-bool KoPathTool::segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam )
+bool KoPathTool::segmentAtPoint(const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam)
 {
     Q_D(KoToolBase);
     // TODO: use global click proximity once added to the canvas resource provider
     const int clickProximity = 5;
 
     // convert click proximity to point using the current zoom level
-    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument( QPointF(clickProximity, clickProximity) );
+    QPointF clickOffset = d->canvas->viewConverter()->viewToDocument(QPointF(clickProximity, clickProximity));
     // the max allowed distance from a segment
     const qreal maxSquaredDistance = clickOffset.x()*clickOffset.x();
 
@@ -796,21 +796,21 @@ bool KoPathTool::segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPa
     qreal clickedPointParam = 0.0;
 
     foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>( shape );
+        KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
         if (parameterShape && parameterShape->isParametricShape())
             continue;
 
         // convert document point to shape coordinates
-        QPointF p = shape->documentToShape( point );
+        QPointF p = shape->documentToShape(point);
         // our region of interest, i.e. a region around our mouse position
-        QRectF roi( p - clickOffset, p + clickOffset );
+        QRectF roi(p - clickOffset, p + clickOffset);
 
         qreal minSqaredDistance = HUGE_VAL;
         // check all segments of this shape which intersect the region of interest
-        QList<KoPathSegment> segments = shape->segmentsAt( roi );
-        foreach( const KoPathSegment &s, segments ) {
-            qreal nearestPointParam = s.nearestPoint( p );
-            QPointF nearestPoint = s.pointAt( nearestPointParam );
+        QList<KoPathSegment> segments = shape->segmentsAt(roi);
+        foreach (const KoPathSegment &s, segments) {
+            qreal nearestPointParam = s.nearestPoint(p);
+            QPointF nearestPoint = s.pointAt(nearestPointParam);
             QPointF diff = p - nearestPoint;
             qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
             // are we within the allowed distance ?

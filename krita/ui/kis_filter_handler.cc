@@ -151,17 +151,13 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
     m_d->currentFilter = KisFilterRegistry::instance()->value(config->name());
     m_d->dev = layer->paintDevice();
 
-    QRect r1 = m_d->dev->extent();
-    QRect r2 = m_d->view->image()->bounds();
-
-    // Filters should work only on the visible part of an image.
-    QRect rect = r1.intersect(r2);
+    QRect rect = m_d->dev->extent();
 
     KisSelectionSP selection = m_d->view->selection();
 
     if (selection) {
-        QRect r3 = selection->selectedExactRect();
-        rect = rect.intersect(r3);
+        QRect r1 = selection->selectedExactRect();
+        rect = rect.intersect(r1);
     }
 
     m_d->updater = m_d->view->createProgressUpdater();

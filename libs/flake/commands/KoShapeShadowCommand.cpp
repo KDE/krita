@@ -34,14 +34,14 @@ public:
         }
     }
 
-    void addOldShadow( KoShapeShadow * oldShadow )
+    void addOldShadow(KoShapeShadow * oldShadow)
     {
         if (oldShadow)
             oldShadow->ref();
         oldShadows.append(oldShadow);
     }
 
-    void addNewShadow( KoShapeShadow * newShadow )
+    void addNewShadow(KoShapeShadow * newShadow)
     {
         if (newShadow)
             newShadow->ref();

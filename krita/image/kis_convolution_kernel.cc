@@ -104,7 +104,7 @@ KisConvolutionKernelSP KisConvolutionKernel::fromQImage(const QImage& image)
     return kernel;
 }
 
-KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator* kmg, double angle)
+KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator* kmg, qreal angle)
 {
     Q_UNUSED(angle);
 
@@ -113,10 +113,10 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
 
     KisConvolutionKernelSP kernel = new KisConvolutionKernel(width, height, 0, 0);
 
-    double cosa = cos(angle);
-    double sina = sin(angle);
-    double xc = 0.5 * width - 0.5;
-    double yc = 0.5 * height - 0.5;
+    qreal cosa = cos(angle);
+    qreal sina = sin(angle);
+    qreal xc = 0.5 * width - 0.5;
+    qreal yc = 0.5 * height - 0.5;
 
     Matrix<qreal, Dynamic, Dynamic>& data = kernel->data();
     qreal factor = 0;
@@ -124,10 +124,10 @@ KisConvolutionKernelSP KisConvolutionKernel::fromMaskGenerator(KisMaskGenerator*
 //     dbgImage << ppVar(xc) << ppVar(yc);
     for (int r = 0; r < height; ++r) {
         for (int c = 0; c < width; ++c) {
-            double x_ = (c - xc);
-            double y_ = (r - yc);
-            double x = cosa * x_ - sina * y_;
-            double y = sina * x_ + cosa * y_;
+            qreal x_ = (c - xc);
+            qreal y_ = (r - yc);
+            qreal x = cosa * x_ - sina * y_;
+            qreal y = sina * x_ + cosa * y_;
 //             dbgImage << ppVar(x) << ppVar(y) << ppVar(x_) << ppVar(y_) << ppVar( kmg->interpolatedValueAt( x,y) );
             uint value = 255 - kmg->valueAt(x, y);
             data(r, c) = value;

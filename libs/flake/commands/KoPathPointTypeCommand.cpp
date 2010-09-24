@@ -160,19 +160,19 @@ void KoPathPointTypeCommand::undo()
     repaint(false);
 
     /*
-    QList<PointData>::iterator it( m_oldPointData.begin() );
-    for ( ; it != m_oldPointData.end(); ++it )
+    QList<PointData>::iterator it(m_oldPointData.begin());
+    for (; it != m_oldPointData.end(); ++it)
     {
         KoPathShape *pathShape = it->m_pointData.pathShape;
-        KoPathPoint *point = pathShape->pointByIndex( it->m_pointData.pointIndex );
+        KoPathPoint *point = pathShape->pointByIndex(it->m_pointData.pointIndex);
 
-        point->setProperties( it->m_oldProperties );
-        if ( it->m_hadControlPoint1 )
-            point->setControlPoint1( pathShape->documentToShape( it->m_oldControlPoint1 ) );
+        point->setProperties(it->m_oldProperties);
+        if (it->m_hadControlPoint1)
+            point->setControlPoint1(pathShape->documentToShape(it->m_oldControlPoint1));
         else
             point->removeControlPoint1();
-        if ( it->m_hadControlPoint2 )
-            point->setControlPoint2( pathShape->documentToShape( it->m_oldControlPoint2 ) );
+        if (it->m_hadControlPoint2)
+            point->setControlPoint2(pathShape->documentToShape(it->m_oldControlPoint2));
         else
             point->removeControlPoint2();
     }

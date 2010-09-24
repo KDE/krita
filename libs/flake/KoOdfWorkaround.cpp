@@ -48,7 +48,7 @@ void KoOdfWorkaround::fixPenWidth(QPen & pen, KoShapeLoadingContext &context)
 void KoOdfWorkaround::fixEnhancedPath(QString & path, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
-        if (path.isEmpty() && element.attributeNS(KoXmlNS::draw, "type", "") == "ellipse" ) {
+        if (path.isEmpty() && element.attributeNS(KoXmlNS::draw, "type", "") == "ellipse") {
             path = "U 10800 10800 10800 10800 0 360 Z N";
         }
     }
@@ -71,7 +71,7 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
     // Default to an invalid color
     QColor color;
 
-    if ( element.prefix() == "chart" ) {
+    if (element.prefix() == "chart") {
         KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
         styleStack.save();
 
@@ -86,7 +86,7 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                              styleStack.hasProperty(KoXmlNS::draw, "fill-color")) {
                 color = QColor(styleStack.property(KoXmlNS::draw, "fill-color"));
             } else if (!hasStyle || (!styleStack.hasProperty(KoXmlNS::draw, "fill")
-                                    && !styleStack.hasProperty(KoXmlNS::draw, "fill-color")) ) {
+                                    && !styleStack.hasProperty(KoXmlNS::draw, "fill-color"))) {
                 KoXmlElement plotAreaElement = element.parentNode().toElement();
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
 
@@ -94,18 +94,18 @@ QColor KoOdfWorkaround::fixMissingFillColor(const KoXmlElement &element, KoShape
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
-                        if ( chartType == "chart:line" ||
+                        if (chartType == "chart:line" ||
                              chartType == "chart:area" ||
                              chartType == "chart:bar" ||
-                             chartType == "chart:scatter" )
+                             chartType == "chart:scatter")
                         color = QColor(0xe0e0e0);
                     }
                 } else if (element.tagName() == "series") {
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
-                        if ( chartType == "chart:area" ||
-                             chartType == "chart:bar" )
+                        if (chartType == "chart:area" ||
+                             chartType == "chart:bar")
                             color = QColor(0x99ccff);
                     }
                 }
@@ -125,7 +125,7 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
     bool fixed = false;
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    if ( element.prefix() == "chart" ) {
+    if (element.prefix() == "chart") {
         styleStack.save();
 
         bool hasStyle = element.hasAttributeNS(KoXmlNS::chart, "style-name");
@@ -138,7 +138,7 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
             if (hasStyle && styleStack.hasProperty(KoXmlNS::draw, "stroke") &&
                             !styleStack.hasProperty(KoXmlNS::draw, "stroke-color")) {
                 fixed = true;
-                pen.setColor( Qt::black );
+                pen.setColor(Qt::black);
             } else if (!hasStyle) {
                 KoXmlElement plotAreaElement = element.parentNode().toElement();
                 KoXmlElement chartElement = plotAreaElement.parentNode().toElement();
@@ -147,15 +147,15 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
                     if (chartElement.hasAttributeNS(KoXmlNS::chart, "class")) {
                         QString chartType = chartElement.attributeNS(KoXmlNS::chart, "class");
                         // TODO: Check what default backgrounds for surface, stock and gantt charts are
-                        if ( chartType == "chart:line" ||
-                             chartType == "chart:scatter" ) {
+                        if (chartType == "chart:line" ||
+                             chartType == "chart:scatter") {
                             fixed = true;
-                            pen = QPen( 0x99ccff );
+                            pen = QPen(0x99ccff);
                         }
                     }
                 } else if (element.tagName() == "legend") {
                     fixed = true;
-                    pen = QPen( Qt::black );
+                    pen = QPen(Qt::black);
                 }
             }
         }
@@ -165,8 +165,8 @@ bool KoOdfWorkaround::fixMissingStroke(QPen &pen, const KoXmlElement &element, K
         const KoPathShape *pathShape = dynamic_cast<const KoPathShape*>(shape);
         if (pathShape) {
             const QString strokeColor(styleStack.property(KoXmlNS::draw, "stroke-color"));
-            if(strokeColor.isEmpty()) {
-                pen.setColor( Qt::black );
+            if (strokeColor.isEmpty()) {
+                pen.setColor(Qt::black);
             } else {
                 pen.setColor(styleStack.property(KoXmlNS::svg, "stroke-color"));
             }

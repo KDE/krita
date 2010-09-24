@@ -398,7 +398,7 @@ void KoCanvasControllerWidget::ensureVisible(KoShape *shape)
 
 void KoCanvasControllerWidget::ensureVisible(const QRectF &rect, bool smooth)
 {
-    QRect currentVisible(qMax(0, -canvasOffsetX()), qMax(0, -canvasOffsetY()), visibleWidth(), visibleHeight());
+    QRect currentVisible(-canvasOffsetX(), -canvasOffsetY(), visibleWidth(), visibleHeight());
 
     QRect viewRect = rect.toRect();
     viewRect.translate(d->canvas->documentOrigin());

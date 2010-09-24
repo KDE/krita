@@ -31,8 +31,8 @@ public:
         , combinedPath(0), combinedPathParent(0)
         , isCombined(false)
     {
-        foreach( KoPathShape * path, paths )
-            oldParents.append( path->parent() );
+        foreach (KoPathShape * path, paths)
+            oldParents.append(path->parent());
     }
     ~Private() {
         if (isCombined && controller) {

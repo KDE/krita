@@ -43,14 +43,14 @@ public:
         delete removedPoint;
     }
 
-    KoPathPoint * mergePoints( KoPathPoint * p1, KoPathPoint * p2)
+    KoPathPoint * mergePoints(KoPathPoint * p1, KoPathPoint * p2)
     {
         QPointF mergePosition = 0.5 * (p1->point() + p2->point());
         QPointF mergeControlPoint1 = mergePosition + (p1->controlPoint1() - p1->point());
         QPointF mergeControlPoint2 = mergePosition + (p2->controlPoint2() - p2->point());
 
         // change position and control points of first merged point
-        p1->setPoint( mergePosition );
+        p1->setPoint(mergePosition);
         if (p1->activeControlPoint1()) {
             p1->setControlPoint1(mergeControlPoint1);
         }
@@ -63,7 +63,7 @@ public:
         return pathShape->removePoint(removeIndex);
     }
 
-    void resetPoints( KoPathPointIndex index1, KoPathPointIndex index2 )
+    void resetPoints(KoPathPointIndex index1, KoPathPointIndex index2)
     {
         KoPathPoint * p1 = pathShape->pointByIndex(index1);
         KoPathPoint * p2 = pathShape->pointByIndex(index2);

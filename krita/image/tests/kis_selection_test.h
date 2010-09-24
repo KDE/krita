@@ -35,6 +35,7 @@ private slots:
     void testUpdatePixelSelection();
     void testUpdateSelectionProjection();
     void testCopy();
+    void testSelectionExactBounds();
 };
 
 #endif

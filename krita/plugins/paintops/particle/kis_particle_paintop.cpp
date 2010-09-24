@@ -61,7 +61,7 @@ KisParticlePaintOp::~KisParticlePaintOp()
 {
 }
 
-double KisParticlePaintOp::paintAt(const KisPaintInformation& info)
+qreal KisParticlePaintOp::paintAt(const KisPaintInformation& info)
 {
     return paintLine(info, info).spacing;
 }

@@ -71,8 +71,7 @@
 #endif
 
 KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6)),
-        m_dragging(false)
+        : KisToolPaint(canvas, KisCursor::load("tool_gradient_cursor.png", 6, 6))
 {
     setObjectName("tool_gradient");
 
@@ -96,7 +95,7 @@ KisToolGradient::~KisToolGradient()
 
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_dragging && m_startPos != m_endPos) {
+    if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         if (m_gradientProgram) {
@@ -172,18 +171,15 @@ void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
     }
 }
 
-void KisToolGradient::mousePressEvent(KoPointerEvent *e)
+void KisToolGradient::mousePressEvent(KoPointerEvent *event)
 {
-    if (!currentImage()) {
-        return;
-    }
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
 
-    QPointF pos = convertToPixelCoord(e);
+        setMode(KisTool::PAINT_MODE);
 
-    if (e->button() == Qt::LeftButton) {
-        m_dragging = true;
-        m_startPos = pos;
-        m_endPos = pos;
+        m_startPos = convertToPixelCoord(event);
+        m_endPos = m_startPos;
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         KisConfig cfg;
@@ -194,10 +190,7 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
             KoColorProfile *monitorProfile = 0;
 
             Q_ASSERT(canvas);
-
-            if (canvas) {
-                monitorProfile = canvas->monitorProfile();
-            }
+            monitorProfile = canvas->monitorProfile();
 
             KisOpenGL::makeContextCurrent();
             m_gradientProgram = new KisOpenGLGradientProgram(currentGradient(),
@@ -210,19 +203,20 @@ void KisToolGradient::mousePressEvent(KoPointerEvent *e)
         }
 #endif
     }
+    else {
+        KisToolPaint::mousePressEvent(event);
+    }
 }
 
-void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
+void KisToolGradient::mouseMoveEvent(KoPointerEvent *event)
 {
-    if (m_dragging) {
-        QPointF pos = convertToPixelCoord(e);
+    if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
+        QPointF pos = convertToPixelCoord(event);
 
-        QRectF bound;
-        bound.setTopLeft(m_startPos);
-        bound.setBottomRight(m_endPos);
+        QRectF bound(m_startPos, m_endPos);
         canvas()->updateCanvas(convertToPt(bound.normalized()));
 
-        if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
+        if (event->modifiers() == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
         } else {
             m_endPos = pos;
@@ -232,36 +226,37 @@ void KisToolGradient::mouseMoveEvent(KoPointerEvent *e)
         bound.setBottomRight(m_endPos);
         canvas()->updateCanvas(convertToPt(bound.normalized()));
     }
+    else {
+        KisToolPaint::mouseMoveEvent(event);
+    }
 }
 
-void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
+void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!currentNode() || currentNode()->systemLocked())
-       return;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
 
-    if (m_dragging && e->button() == Qt::LeftButton) {
-
-        setCurrentNodeLocked(true);
+        if (!currentNode() || currentNode()->systemLocked())
+            return;
 
 #if defined(HAVE_OPENGL) && defined(HAVE_GLEW)
         delete m_gradientProgram;
         m_gradientProgram = 0;
 #endif
 
-        m_dragging = false;
+        QPointF pos = convertToPixelCoord(event);
 
-        if (m_startPos == m_endPos) {
-            m_dragging = false;
-            return;
-        }
-
-        QPointF pos = convertToPixelCoord(e);
-
-        if ((e->modifiers() & Qt::ShiftModifier) == Qt::ShiftModifier) {
+        if (event->modifiers() == Qt::ShiftModifier) {
             m_endPos = straightLine(pos);
         } else {
             m_endPos = pos;
         }
+
+        if (m_startPos == m_endPos) {
+            return;
+        }
+
+        setCurrentNodeLocked(true);
 
         KisPaintDeviceSP device;
 
@@ -299,6 +294,9 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *e)
         }
         canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
         setCurrentNodeLocked(false);
+    }
+    else {
+        KisToolPaint::mouseReleaseEvent(event);
     }
 }
 

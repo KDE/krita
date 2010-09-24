@@ -95,7 +95,9 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
 
     m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, 0, 100);
 
+    m_page->curveWidget->blockSignals(true);
     setActiveChannel(0);
+    m_page->curveWidget->blockSignals(false);
 }
 
 void KisPerChannelConfigWidget::setPreview(int state)

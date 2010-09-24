@@ -38,7 +38,7 @@ public:
     KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSprayPaintOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
 private:
     KisShapeProperties m_shapeProperties;
@@ -51,7 +51,7 @@ private:
 
     KisPaintDeviceSP m_dab;
     SprayBrush m_sprayBrush;
-    double m_xSpacing, m_ySpacing, m_spacing;
+    qreal m_xSpacing, m_ySpacing, m_spacing;
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;

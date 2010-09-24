@@ -28,7 +28,7 @@
 #include <KLocale>
 #include <limits>
 
-KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy( KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
+KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
 : KoInteractionStrategy(tool)
 , m_originalPosition(pos)
 , m_lastPosition(pos)
@@ -51,7 +51,7 @@ KoPathSegmentChangeStrategy::~KoPathSegmentChangeStrategy()
 {
 }
 
-void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
+void KoPathSegmentChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     m_tool->canvas()->updateCanvas(m_tool->canvas()->snapGuide()->boundingRect());
     QPointF snappedPosition = m_tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
@@ -69,10 +69,10 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
 
     if (m_segment.degree() == 2) {
         // interpolate quadratic segment between segment start, mouse position and segment end
-        KoPathSegment ipol = KoPathSegment::interpolate( m_segment.first()->point(),
+        KoPathSegment ipol = KoPathSegment::interpolate(m_segment.first()->point(),
                                                          localPos,
                                                          m_segment.second()->point(),
-                                                         m_segmentParam );
+                                                         m_segmentParam);
         if (ipol.isValid()) {
             move1 = move2 = ipol.controlPoints()[1] - m_segment.controlPoints()[1];
         }
@@ -105,11 +105,11 @@ void KoPathSegmentChangeStrategy::handleMouseMove( const QPointF &mouseLocation,
     }
 
     m_path->update();
-    if( m_segment.first()->activeControlPoint2() ) {
+    if(m_segment.first()->activeControlPoint2()) {
         KoPathControlPointMoveCommand cmd(m_pointData1, move2, KoPathPoint::ControlPoint2);
         cmd.redo();
     }
-    if( m_segment.second()->activeControlPoint1() ) {
+    if(m_segment.second()->activeControlPoint1()) {
         KoPathControlPointMoveCommand cmd(m_pointData2, move1, KoPathPoint::ControlPoint1);
         cmd.redo();
     }

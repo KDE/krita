@@ -32,7 +32,7 @@ const qreal FlatnessTolerance = ldexp(1.0,-MaxRecursionDepth-1);
 class BezierSegment
 {
 public:
-    BezierSegment(int degree = 0, QPointF *p = 0 )
+    BezierSegment(int degree = 0, QPointF *p = 0)
     {
         if (degree) {
             for (int i = 0; i <= degree; ++i)
@@ -100,7 +100,7 @@ public:
             }
         }
         if (right) {
-            right->setDegree( deg );
+            right->setDegree(deg);
             for (int j = 0; j <= deg; j++) {
                 right->setPoint(j, Vtemp[deg-j][j]);
             }
@@ -118,7 +118,7 @@ public:
 
         // Calculate how often the control polygon crosses the x-axis
         // This is the upper limit for the number of roots.
-        int xAxisCrossings = controlPolygonZeros( points );
+        int xAxisCrossings = controlPolygonZeros(points);
 
         if (! xAxisCrossings) {
             // No solutions.
@@ -133,7 +133,7 @@ public:
                 rootParams.append((points.first().x() + points.last().x()) / 2.0);
                 return rootParams;
             }
-            else if (isFlat( FlatnessTolerance ) ) {
+            else if (isFlat(FlatnessTolerance)) {
                 // Calculate intersection of chord with x-axis.
                 QPointF chord = points.last() - points.first();
                 QPointF segStart = points.first();
@@ -372,11 +372,11 @@ QList<qreal> KoPathSegment::Private::roots() const
         // Calculate intersection of chord with x-axis.
         QPointF chord = second->point() - first->point();
         QPointF segStart = first->point();
-        rootParams.append( ( chord.x() * segStart.y() - chord.y() * segStart.x() ) / - chord.y() );
+        rootParams.append((chord.x() * segStart.y() - chord.y() * segStart.x()) / - chord.y());
     }
     else {
         // Many solutions. Do recursive midpoint subdivision.
-        QPair<KoPathSegment, KoPathSegment> splitSegments = q->splitAt( 0.5 );
+        QPair<KoPathSegment, KoPathSegment> splitSegments = q->splitAt(0.5);
         rootParams += splitSegments.first.d->roots();
         rootParams += splitSegments.second.d->roots();
     }
@@ -930,7 +930,7 @@ QList<QPointF> KoPathSegment::intersections(const KoPathSegment &segment) const
 
     bool intersectionsFound = intersectionsFoundMin && intersectionsFoundMax;
 
-    //if ( intersectionsFound )
+    //if (intersectionsFound)
     //    kDebug(30006) << "clipping segment to interval [" << tmin << "," << tmax << "]";
 
     if (!intersectionsFound || (1.0 - (tmax - tmin)) <= 0.2) {
@@ -1231,15 +1231,15 @@ QPair<KoPathSegment, KoPathSegment> KoPathSegment::splitAt(qreal t) const
         d->deCasteljau(t, &newCP2, &splitCP1, &splitP, &splitCP2, &newCP1);
 
         if (degree() == 2) {
-            if (second()->activeControlPoint1() ) {
-                KoPathPoint *s1p1 = new KoPathPoint( 0, d->first->point() );
-                KoPathPoint *s1p2 = new KoPathPoint( 0, splitP );
-                s1p2->setControlPoint1( splitCP1 );
-                KoPathPoint *s2p1 = new KoPathPoint( 0, splitP );
-                KoPathPoint *s2p2 = new KoPathPoint( 0, d->second->point() );
-                s2p2->setControlPoint1( splitCP2 );
-                results.first = KoPathSegment( s1p1, s1p2 );
-                results.second = KoPathSegment( s2p1, s2p2 );
+            if (second()->activeControlPoint1()) {
+                KoPathPoint *s1p1 = new KoPathPoint(0, d->first->point());
+                KoPathPoint *s1p2 = new KoPathPoint(0, splitP);
+                s1p2->setControlPoint1(splitCP1);
+                KoPathPoint *s2p1 = new KoPathPoint(0, splitP);
+                KoPathPoint *s2p2 = new KoPathPoint(0, d->second->point());
+                s2p2->setControlPoint1(splitCP2);
+                results.first = KoPathSegment(s1p1, s1p2);
+                results.second = KoPathSegment(s2p1, s2p2);
             } else {
                 results.first = KoPathSegment(d->first->point(), splitCP1, splitP);
                 results.second = KoPathSegment(splitP, splitCP2, d->second->point());
@@ -1266,7 +1266,7 @@ QList<QPointF> KoPathSegment::controlPoints() const
     return controlPoints;
 }
 
-qreal KoPathSegment::nearestPoint( const QPointF &point ) const
+qreal KoPathSegment::nearestPoint(const QPointF &point) const
 {
     if (!isValid())
         return -1.0;
@@ -1303,8 +1303,8 @@ qreal KoPathSegment::nearestPoint( const QPointF &point ) const
     *
     * For the nearest point q = C(t) on this segment, the first derivative is
     * orthogonal to the distance vector "C(t) - P". In other words we are looking for
-    * solutions of f(t) = ( C(t) - P ) * C'(t) = 0.
-    * ( C(t) - P ) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
+    * solutions of f(t) = (C(t) - P) * C'(t) = 0.
+    * (C(t) - P) is a nth degree curve, C'(t) a n-1th degree curve => f(t) is a
     * (2n - 1)th degree curve and thus has up to 2n - 1 distinct solutions.
     * We solve the problem f(t) = 0 by using something called "Approximate Inversion Method".
     * Let's write f(t) explicitly (with c_i = p_i - P and d_j = p_{j+1} - p_j):
@@ -1319,23 +1319,23 @@ qreal KoPathSegment::nearestPoint( const QPointF &point ) const
     *
     * with w_{ij} = c_i * d_j * z_{ij} and
     *
-    *          BinomialCoeff( n, i ) * BinomialCoeff( n - i ,j )
+    *          BinomialCoeff(n, i) * BinomialCoeff(n - i ,j)
     * z_{ij} = -----------------------------------------------
-    *                   BinomialCoeff( 2n - 1, i + j )
+    *                   BinomialCoeff(2n - 1, i + j)
     *
     * This Bernstein-Bezier polynom representation can now be solved for it's roots.
     */
 
     QList<QPointF> ctlPoints = controlPoints();
 
-    // Calculate the c_i = point( i ) - P.
+    // Calculate the c_i = point(i) - P.
     QPointF * c_i = new QPointF[ deg + 1 ];
 
     for (int i = 0; i <= deg; ++i) {
         c_i[ i ] = ctlPoints[ i ] - point;
     }
 
-    // Calculate the d_j = point( j + 1 ) - point( j ).
+    // Calculate the d_j = point(j + 1) - point(j).
     QPointF *d_j = new QPointF[deg];
 
     for (int j = 0; j <= deg - 1; ++j) {
@@ -1357,8 +1357,8 @@ qreal KoPathSegment::nearestPoint( const QPointF &point ) const
 
     // Calculate the control points of the new 2n-1th degree curve.
     BezierSegment newCurve;
-    newCurve.setDegree( 2 * deg - 1 );
-    // Set up control points in the ( u, f(u) )-plane.
+    newCurve.setDegree(2 * deg - 1);
+    // Set up control points in the (u, f(u))-plane.
     for (unsigned short u = 0; u <= 2 * deg - 1; ++u) {
         newCurve.setPoint(u, QPointF(static_cast<qreal>(u) / static_cast<qreal>(2 * deg - 1), 0.0));
     }

@@ -124,12 +124,12 @@ public:
 
 private:
 
-    void KRITAIMAGE_EXPORT shear(KisPaintDeviceSP dev, double angleX, double angleY, KoUpdater *progress);
-    KisPaintDeviceSP xShear(KisPaintDeviceSP src, double shearX, KoUpdater *progress);
-    KisPaintDeviceSP yShear(KisPaintDeviceSP src, double shearY, KoUpdater *progress);
+    void KRITAIMAGE_EXPORT shear(KisPaintDeviceSP dev, qreal angleX, qreal angleY, KoUpdater *progress);
+    KisPaintDeviceSP xShear(KisPaintDeviceSP src, qreal shearX, KoUpdater *progress);
+    KisPaintDeviceSP yShear(KisPaintDeviceSP src, qreal shearY, KoUpdater *progress);
 
-    double m_xshear;
-    double m_yshear;
+    qreal m_xshear;
+    qreal m_yshear;
     KoUpdater* m_progress;
     KisFilterStrategy* m_strategy;
     KisUndoAdapter* m_undoAdapter;

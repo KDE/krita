@@ -75,13 +75,13 @@ public:
      * @param dev the parent paint device. The selection will never be
      * bigger than the parent paint device.
      */
-    KisSelection(KisPaintDeviceSP dev, KisDefaultBounds defaultBounds = KisDefaultBounds());
+    KisSelection(KisPaintDeviceSP dev, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
 
     /**
      * Create a new KisSelection from the given mask. The selection
      * will share its pixel data with the mask
      */
-    KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBounds defaultBounds = KisDefaultBounds());
+    KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
 
     /**
      * Create a new KisSelection. This selection will not have a
@@ -198,7 +198,7 @@ public:
     bool isVisible();
     
     ///Reimplemented
-    void setDefaultBounds(KisDefaultBounds bounds);
+    void setDefaultBounds(KisDefaultBoundsSP bounds);
 
 
 private:

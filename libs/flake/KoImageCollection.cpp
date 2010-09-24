@@ -57,7 +57,7 @@ KoImageCollection::~KoImageCollection()
 
 bool KoImageCollection::completeLoading(KoStore *store)
 {
-    Q_UNUSED( store );
+    Q_UNUSED(store);
     d->storeImages.clear();
     return true;
 }

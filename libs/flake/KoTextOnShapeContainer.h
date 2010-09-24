@@ -56,7 +56,8 @@ public:
     enum ResizeBehavior {
         TextFollowsContentSize, ///< Text area is same size as content, extra text will be clipped
         ContentFollowsTextSize, ///< Content shape will get resized if text grows/shrinks
-        IndependendSizes        ///< The text can get bigger than the content
+        IndependendSizes,       ///< The text can get bigger than the content
+        TextFollowsPreferredTextRect ///< The size/position of the text area will follow the preferredTextRect property
     };
 
     /**
@@ -71,6 +72,19 @@ public:
      * Returns the current ResizeBehavior.
      */
     ResizeBehavior resizeBehavior() const;
+
+    /**
+     * Set the current prefered text rectangle. This rect contains the coordinates of
+     * the embedded text shape relative to the content shape. This value is ignored if
+     * resizeBehavior is not TextFollowsPreferredTextRect.
+     * @param rect the new preferred text rectangle
+     */
+    void setPreferredTextRect(const QRectF &rect);
+
+    /**
+     * Returns the current prefered text rectangle.
+     */
+    QRectF preferredTextRect() const;
 
     /** Sets the alignment of the text. */
     void setTextAlignment(Qt::Alignment alignment);

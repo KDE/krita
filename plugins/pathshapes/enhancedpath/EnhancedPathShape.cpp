@@ -61,6 +61,7 @@ void EnhancedPathShape::reset()
     m_viewMatrix.reset();
     m_viewBoxOffset = QPointF();
     clear();
+    m_textArea.clear();
 }
 
 void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt::KeyboardModifiers modifiers)
@@ -183,6 +184,14 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     }
 
     return res;
+}
+
+qreal EnhancedPathShape::evaluateConstantOrReference(const QString &val)
+{
+    bool ok = true;
+    qreal res = val.toDouble(&ok);
+    if (ok) return res;
+    return evaluateReference(val);
 }
 
 void EnhancedPathShape::modifyReference(const QString &reference, qreal value)
@@ -346,6 +355,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             modifiers += QString::number(modifier) + ' ';
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
 
+        context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+
         QString path;
         foreach (EnhancedPathCommand * c, m_commands)
             path += c->toString() + ' ';
@@ -390,6 +401,8 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         if (! modifiers.isEmpty()) {
             addModifiers(modifiers);
         }
+
+        m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
 
         KoXmlElement grandChild;
         forEachElement(grandChild, enhancedGeometry) {
@@ -495,5 +508,33 @@ void EnhancedPathShape::setMirrorVertically(bool mirrorVertically)
 {
     if( m_mirrorVertically != mirrorVertically) {
         m_mirrorVertically = mirrorVertically;
+    }
+}
+
+void EnhancedPathShape::shapeChanged(ChangeType type, KoShape *shape)
+{
+    KoParameterShape::shapeChanged(type, shape);
+
+    if (!shape || shape == this) {
+        if (type == ParentChanged || type == ParameterChanged) {
+            updateTextArea();
+        }
+    }
+}
+
+void EnhancedPathShape::updateTextArea()
+{
+    KoTextOnShapeContainer* tosContainer = dynamic_cast<KoTextOnShapeContainer*>(parent());
+    if (tosContainer) {
+        tosContainer->setResizeBehavior(KoTextOnShapeContainer::TextFollowsPreferredTextRect);
+        QRectF r = m_viewBox;
+        if (m_textArea.size() >= 4) {
+            r.setLeft(evaluateConstantOrReference(m_textArea[0]));
+            r.setTop(evaluateConstantOrReference(m_textArea[1]));
+            r.setRight(evaluateConstantOrReference(m_textArea[2]));
+            r.setBottom(evaluateConstantOrReference(m_textArea[3]));
+        }
+        r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
+        tosContainer->setPreferredTextRect(r);
     }
 }

@@ -39,6 +39,7 @@ public:
     KoShape *content; // the original shape
     KoShape *textShape;
     KoTextOnShapeContainer::ResizeBehavior resizeBehavior;
+    QRectF preferredTextRect;
 };
 
 class KoTextOnShapeContainerModel : public SimpleShapeContainerModel
@@ -76,7 +77,7 @@ KoTextOnShapeContainerPrivate::~KoTextOnShapeContainerPrivate()
 KoTextOnShapeContainerModel::KoTextOnShapeContainerModel(KoTextOnShapeContainer *qq, KoTextOnShapeContainerPrivate *data)
     : q(qq),
     containerData(data),
-    lock(false)
+    lock(true)
 {
 }
 
@@ -92,7 +93,7 @@ void KoTextOnShapeContainerModel::containerChanged(KoShapeContainer *container, 
     Q_ASSERT(container == q);
     containerData->content->setSize(q->size());
     KoShape *text = containerData->textShape;
-    if (text) {
+    if (text && q->resizeBehavior() != KoTextOnShapeContainer::TextFollowsPreferredTextRect) {
         text->setSize(q->size());
     }
     lock = false;
@@ -108,7 +109,7 @@ void KoTextOnShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 
 void KoTextOnShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
-    if (lock) {
+    if (lock || q->resizeBehavior() == KoTextOnShapeContainer::TextFollowsPreferredTextRect) {
         return;
     }
     lock = true;
@@ -156,8 +157,15 @@ KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape, KoResourceMa
     if (factory) { // not installed, thats too bad, but allowed
         d->textShape = factory->createDefaultShape(documentResources);
         Q_ASSERT(d->textShape); // would be a bug in the text shape;
-        d->textShape->setSize(size());
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            d->textShape->setSize(d->preferredTextRect.size());
+        } else {
+            d->textShape->setSize(size());
+        }
         d->textShape->setTransformation(childShape->transformation());
+        if (d->resizeBehavior == TextFollowsPreferredTextRect) {
+            d->textShape->setPosition(d->preferredTextRect.topLeft());
+        }
         KoTextShapeDataBase *shapeData = qobject_cast<KoTextShapeDataBase*>(d->textShape->userData());
         Q_ASSERT(shapeData); // would be a bug in kotext
         shapeData->setVerticalAlignment(Qt::AlignVCenter);
@@ -168,6 +176,9 @@ KoTextOnShapeContainer::KoTextOnShapeContainer(KoShape *childShape, KoResourceMa
     } else {
         kWarning(30006) << "Text shape factory not found";
     }
+
+    static_cast<KoTextOnShapeContainerModel*>(d->model)->lock = false;
+
     setToolDelegates(delegates);
 }
 
@@ -220,6 +231,10 @@ void KoTextOnShapeContainer::setResizeBehavior(ResizeBehavior resizeBehavior)
         return;
     }
     d->resizeBehavior = resizeBehavior;
+    if (d->resizeBehavior == TextFollowsPreferredTextRect && d->textShape) {
+        d->textShape->setPosition(d->preferredTextRect.topLeft());
+        d->textShape->setSize(d->preferredTextRect.size());
+    }
     d->model->containerChanged(this, KoShape::SizeChanged);
 }
 
@@ -227,6 +242,22 @@ KoTextOnShapeContainer::ResizeBehavior KoTextOnShapeContainer::resizeBehavior() 
 {
     Q_D(const KoTextOnShapeContainer);
     return d->resizeBehavior;
+}
+
+void KoTextOnShapeContainer::setPreferredTextRect(const QRectF &rect)
+{
+    Q_D(KoTextOnShapeContainer);
+    d->preferredTextRect = rect;
+    if (d->resizeBehavior == TextFollowsPreferredTextRect && d->textShape) {
+        d->textShape->setPosition(rect.topLeft());
+        d->textShape->setSize(rect.size());
+    }
+}
+
+QRectF KoTextOnShapeContainer::preferredTextRect() const
+{
+    Q_D(const KoTextOnShapeContainer);
+    return d->preferredTextRect;
 }
 
 void KoTextOnShapeContainer::setTextAlignment(Qt::Alignment alignment)

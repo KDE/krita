@@ -60,6 +60,14 @@ public:
     qreal evaluateReference(const QString &reference);
 
     /**
+     * Evaluates the given constant or reference to a identifier, modifier
+     * or formula.
+     * @param val the value to evaluate
+     * @return the result of the evaluation
+     */
+    qreal evaluateConstantOrReference(const QString &val);
+
+    /**
      * Attempts to modify a given reference.
      *
      * Only modifiers can me modified, others silently ignore the attempt.
@@ -110,6 +118,8 @@ protected:
     virtual void saveOdf(KoShapeSavingContext &context) const;
     // from KoShape
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    //from KoShape
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
     // from KoParameterShape
     virtual void moveHandleAction(int handleId, const QPointF &point, Qt::KeyboardModifiers modifiers = Qt::NoModifier);
     // from KoParameterShape
@@ -125,6 +135,9 @@ private:
     /// Adds a new command
     void addCommand(const QString &command, bool triggerUpdate);
 
+    /// Updates the size and position of an optionally existing text-on-shape text area
+    void updateTextArea();
+
     typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
@@ -133,6 +146,7 @@ private:
     QRectF m_viewBound;   ///< the bounding box of the path in viewbox coordinates
     QTransform m_viewMatrix; ///< matrix to convert from viewbox coordinates to shape coordinates
     QPointF m_viewBoxOffset;
+    QStringList m_textArea;
     QList<EnhancedPathCommand*> m_commands; ///< the commands creating the outline
     QList<EnhancedPathHandle*> m_enhancedHandles; ///< the handles for modifiying the shape
     FormulaStore m_formulae;     ///< the formulae

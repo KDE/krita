@@ -85,8 +85,11 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_supportOutline = false;
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
+
+
     connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
+    connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
 
 
@@ -123,6 +126,18 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 
 void KisToolPaint::paint(QPainter&, const KoViewConverter &)
 {
+}
+
+void KisToolPaint::setMode(ToolMode mode)
+{
+    if(this->mode() == KisTool::PAINT_MODE &&
+       mode != KisTool::PAINT_MODE) {
+
+        // Let's add history information about recently used colors
+        emit sigPaintingFinished();
+    }
+
+    KisTool::setMode(mode);
 }
 
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)

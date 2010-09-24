@@ -96,9 +96,6 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
     addAction("decrease_brush_size", m_decreaseBrushSize);
 
-    KisCanvas2* canvas2 = static_cast<KisCanvas2*>(canvas);
-    connect(this, SIGNAL(sigPainting()), canvas2->view()->resourceProvider(), SLOT(slotPainting()));
-
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
 }
@@ -233,9 +230,6 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         if (!m_hasPaintAtLeastOnce) {
             paintAt(m_previousPaintInformation);
         }
-
-        // Let's add history information about recently used colors
-        emit sigPainting();
 
         setMode(KisTool::HOVER_MODE);
         endPaint();

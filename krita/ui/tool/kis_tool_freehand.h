@@ -63,9 +63,6 @@ public:
 
     virtual void setDirty(const QRegion& region);
 
-signals:
-    void sigPainting();
-
 protected:
     void gesture(const QPointF &offsetInDocPixels,
                  const QPointF &initialDocPoint);

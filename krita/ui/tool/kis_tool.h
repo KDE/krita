@@ -210,8 +210,8 @@ protected:
         OTHER // not used now
     };
 
-    void setMode(ToolMode mode);
-    ToolMode mode();
+    virtual void setMode(ToolMode mode);
+    virtual ToolMode mode();
 
 
 protected slots:

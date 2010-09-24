@@ -70,6 +70,8 @@ public:
 
 protected:
 
+    void setMode(ToolMode mode);
+
     virtual void resourceChanged(int key, const QVariant & v);
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);
@@ -155,7 +157,7 @@ private:
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);
-    void sigPainting();
+    void sigPaintingFinished();
 };
 
 #endif // KIS_TOOL_PAINT_H_

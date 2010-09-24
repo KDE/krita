@@ -3,6 +3,7 @@
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2006,2008-2010 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,13 +20,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+
+// Own
 #include "KoShapeRegistry.h"
+
 #include "KoPathShapeFactory.h"
 #include "KoConnectionShapeFactory.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeGroup.h"
 #include "KoShapeLayer.h"
+#include "KoUnavailShape.h"
 
 #include <KoPluginLoader.h>
 #include <KoXmlReader.h>
@@ -139,13 +144,16 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
     kDebug(30006) << "Going to check for" << e.namespaceURI() << ":" << e.tagName();
 
     KoShape * shape = 0;
-    // If the element is in a frame, the frame is already added by the
-    // application and we only want to create a shape from the
-    // embedded element. The very first shape we create is accepted.
-    //
-    // FIXME: we might want to have some code to determine which is
-    //        the "best" of the creatable shapes.
+
+    // Handle the case where the element is a draw:frame differently from other cases.
     if (e.tagName() == "frame" && e.namespaceURI() == KoXmlNS::draw) {
+        // If the element is in a frame, the frame is already added by the
+        // application and we only want to create a shape from the
+        // embedded element. The very first shape we create is accepted.
+        //
+        // FIXME: we might want to have some code to determine which is
+        //        the "best" of the creatable shapes.
+
         KoXmlElement element;
         forEachElement(element, e) {
             // Check for draw:object
@@ -155,10 +163,15 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                 KoXmlNode n = element.firstChild();
                 for (; !n.isNull(); n = n.nextSibling()) {
                     if (n.isElement()) {
+                        kDebug(30006) << "trying for element " << n.toElement().tagName();
                         shape = d->createShapeInternal(e, context, n.toElement());
                         break;
                     }
                 }
+                if (shape)
+                    kDebug(30006) << "Found a shape for draw:object";
+                else
+                    kDebug(30006) << "Found NO shape shape for draw:object";
             }
             else {
                 // If not draw:object, e.g draw:image or draw:plugin
@@ -169,6 +182,20 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
             if (shape) {
                 break;
             }
+        }
+
+        if (shape)
+            kDebug(30006) << "A shape was found.";
+
+        // If none of the registered shapes could handle the frame
+        // contents, create an UnavailShape.  This should never fail.
+        if (!shape) {
+            kDebug(30006) << "No shape found; Creating an unavail shape";
+            shape = new KoUnavailShape();
+            shape->setShapeId(KoUnavailShape_SHAPEID);
+            //FIXME: Add creating/setting the collection here
+
+            shape->loadOdf(e, context);
         }
     }
 
@@ -226,8 +253,8 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     // potentially hundreds of different image formats to support,
     // including vector formats.
     //
-    // If it succeeds, then we use this shape, if it does fail, then
-    // just try the next.
+    // If it succeeds, then we use this shape, if it fails, then just
+    // try the next.
     //
     // Higher numbers are more specific, map is sorted by keys.
     for (int i = factories.size() - 1; i >= 0; --i) {
@@ -243,12 +270,14 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
             context.odfLoadingContext().styleStack().restore();
 
             if (loaded) {
+                kDebug(30006) << "Shape found for factory " << factory->id() << factory->name();
                 // we return the top-level most shape as thats the one that we'll have to
                 // add to the KoShapeManager for painting later (and also to avoid memory leaks)
                 // but don't go past a KoShapeLayer as KoShape adds those from the context
                 // during loading and those are already added.
                 while (shape->parent() && dynamic_cast<KoShapeLayer*>(shape->parent()) == 0)
                     shape = shape->parent();
+
                 return shape;
             }
 

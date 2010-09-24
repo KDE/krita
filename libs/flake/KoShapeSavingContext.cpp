@@ -226,6 +226,8 @@ bool KoShapeSavingContext::saveDataCenter(KoStore *store, KoXmlWriter* manifestW
         ok = ok && dataCenter->completeSaving(store, manifestWriter, this);
         //kDebug() << "ok" << ok;
     }
+
+    // Save images
     for (QMap<QString, QImage>::iterator it(d->images.begin()); it != d->images.end(); ++it) {
         if (store->open(it.key())) {
             KoStoreDevice device(store);

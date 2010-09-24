@@ -54,6 +54,8 @@ public:
 
     static const char* const koffice;
     static const char* const officeooo;
+
+    static const char* nsURI2NS(const char* nsURI);
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

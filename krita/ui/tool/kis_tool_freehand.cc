@@ -232,10 +232,10 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
         if (!m_hasPaintAtLeastOnce) {
             paintAt(m_previousPaintInformation);
-
-            // Let's add history information about recently used colors
-            emit sigPainting();
         }
+
+        // Let's add history information about recently used colors
+        emit sigPainting();
 
         setMode(KisTool::HOVER_MODE);
         endPaint();
@@ -591,8 +591,14 @@ void KisToolFreehand::updateOutlineRect()
     QRectF outlinePixelRect = getOutlinePath(m_outlineDocPoint, KisPaintOpSettings::CursorIsOutline).boundingRect();
     QRectF outlineDocRect = currentImage()->pixelToDocument(outlinePixelRect);
 
+    if(!m_oldOutlineRect.isEmpty()) {
+        canvas()->updateCanvas(m_oldOutlineRect);
+    }
+
 #warning "Remove adjusted() call -- it smells hacky"
-    canvas()->updateCanvas(outlineDocRect.adjusted(-2,-2,2,2));
+    m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
+
+    canvas()->updateCanvas(m_oldOutlineRect);
 }
 
 void KisToolFreehand::showOutlineTemporary()

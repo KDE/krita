@@ -118,9 +118,6 @@ private slots:
     void hideOutline();
 protected:
 
-    // For Dyna brush
-    QPointF m_outlineDocPoint;
-
     KisPaintInformation m_previousPaintInformation;
     QPointF m_previousTangent;
     double m_dragDist;
@@ -147,8 +144,11 @@ private:
     QString m_brushModelName;
 #endif
 
+    QPointF m_outlineDocPoint;
     QTimer m_outlineTimer;
+    QRectF m_oldOutlineRect;
     bool m_explicitShowOutline;
+
 
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;

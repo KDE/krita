@@ -146,11 +146,11 @@ void KisToolDyna::mousePressEvent(KoPointerEvent *e)
 
 void KisToolDyna::mouseMoveEvent(KoPointerEvent *e)
 {
-    if (m_mode != PAINT){
+    if(!MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         KisToolFreehand::mouseMoveEvent(e);
         return;
     }
-    
+
     setMousePosition(e->point);
 
     if (applyFilter(m_mousePos.x(), m_mousePos.y())) {

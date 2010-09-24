@@ -304,7 +304,6 @@ private:
     int m_rotationCenterRadius;
     int m_maxRadius;
 
-    bool m_selecting; // true <=> selection has been clicked
     bool m_actuallyMoveWhileSelected; // true <=> selection has been moved while clicked
     bool m_imageTooBig;
     bool m_boxValueChanged; // true if a boxValue has been changed directly by the user (not by click + move mouse)

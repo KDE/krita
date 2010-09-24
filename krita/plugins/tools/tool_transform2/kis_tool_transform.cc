@@ -828,30 +828,33 @@ void KisToolTransform::mousePressEvent(KoPointerEvent *event)
         KisTool::mousePressEvent(event);
         return;
     }
-    setMode(KisTool::PAINT_MODE);
 
     KisImageWSP kisimage = image();
 
     if (!currentNode())
         return;
 
+    setMode(KisTool::PAINT_MODE);
     if (kisimage && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(event->point.x() * kisimage->xRes(), event->point.y() * kisimage->yRes());
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP &&
-            !m_cursorOverPoint && m_editWarpPoints) {
-
-            QVector<QPointF> origPoints = m_currentArgs.origPoints();
-            QVector<QPointF> transfPoints = m_currentArgs.transfPoints();
-            origPoints.append(mousePos);
-            transfPoints.append(mousePos);
-            m_currentArgs.setPoints(origPoints, transfPoints);
-            m_viewTransfPoints.resize(origPoints.size());
-            m_viewOrigPoints.resize(origPoints.size());
-            outlineChanged();
-            m_cursorOverPoint = true;
-            m_pointUnderCursor = origPoints.size() - 1;
-            setFunctionalCursor();
-
+        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
+            if (!m_cursorOverPoint) {
+                if (m_editWarpPoints) {
+                    QVector<QPointF> origPoints = m_currentArgs.origPoints();
+                    QVector<QPointF> transfPoints = m_currentArgs.transfPoints();
+                    origPoints.append(mousePos);
+                    transfPoints.append(mousePos);
+                    m_currentArgs.setPoints(origPoints, transfPoints);
+                    m_viewTransfPoints.resize(origPoints.size());
+                    m_viewOrigPoints.resize(origPoints.size());
+                    outlineChanged();
+                    m_cursorOverPoint = true;
+                    m_pointUnderCursor = origPoints.size() - 1;
+                    setFunctionalCursor();
+                } else {
+                    setMode(KisTool::HOVER_MODE);
+                }
+            }
         } else {
             if (m_function == ROTATE) {
                 QVector3D clickoffset(mousePos - m_rotationCenterProj);
@@ -894,9 +897,22 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Meta) {
         setTransformFunction(m_prevMousePos, event->modifiers());
-        setMode(KisTool::HOVER_MODE);
+
+        if (mode() == KisTool::PAINT_MODE) {
+            // if mode is HOVER_MODE the transformation has already
+            // been comitted to the undo stack when mouse button was released
+            if (m_imageTooBig) {
+                restoreArgs(m_clickArgs);
+                outlineChanged();
+            } else {
+                transform();
+            }
+
+            setMode(KisTool::HOVER_MODE);
+        }
     }
 
+    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     KisTool::keyReleaseEvent(event);
 }
 

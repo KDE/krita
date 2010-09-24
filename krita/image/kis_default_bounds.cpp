@@ -20,7 +20,12 @@
 
 #include "kis_global.h"
 #include "kis_default_bounds.h"
+#include "kis_paint_device.h"
 
+
+/******************************************************************/
+/*                  KisDefaultBounds                              */
+/******************************************************************/
 
 struct KisDefaultBounds::Private
 {
@@ -32,18 +37,6 @@ KisDefaultBounds::KisDefaultBounds(KisImageWSP image)
     : m_d(new Private())
 {
     m_d->image = image;
-}
-
-KisDefaultBounds::KisDefaultBounds(const KisDefaultBounds& rhs)
-    : m_d(new Private())
-{
-    m_d->image = rhs.m_d->image;
-}
-
-KisDefaultBounds& KisDefaultBounds::operator=(const KisDefaultBounds& rhs)
-{
-    m_d->image = rhs.m_d->image;
-    return *this;
 }
 
 KisDefaultBounds::~KisDefaultBounds()
@@ -58,4 +51,32 @@ QRect KisDefaultBounds::bounds() const
      */
     return m_d->image ? m_d->image->bounds() :
         QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
+}
+
+
+/******************************************************************/
+/*                  KisSelectionDefaultBounds                     */
+/******************************************************************/
+
+struct KisSelectionDefaultBounds::Private
+{
+    KisPaintDeviceSP parentDevice;
+};
+
+KisSelectionDefaultBounds::KisSelectionDefaultBounds(KisPaintDeviceSP parentDevice, KisImageWSP image)
+    : KisDefaultBounds(image),
+      m_d(new Private())
+{
+    m_d->parentDevice = parentDevice;
+}
+
+KisSelectionDefaultBounds::~KisSelectionDefaultBounds()
+{
+    delete m_d;
+}
+
+QRect KisSelectionDefaultBounds::bounds() const
+{
+    QRect additionalRect = m_d->parentDevice ? m_d->parentDevice->exactBounds() : QRect();
+    return additionalRect | KisDefaultBounds::bounds();
 }

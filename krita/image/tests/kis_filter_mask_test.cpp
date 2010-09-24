@@ -108,7 +108,7 @@ void KisFilterMaskTest::testProjectionSelected()
 
     mask->select(qimage.rect(), MAX_SELECTED);
     mask->apply(projection, QRect(0, 0, qimage.width(), qimage.height()));
-    QCOMPARE(mask->exactBounds(), QRect(0, 0, qimage.width(), qimage.height()));
+    QCOMPARE(mask->exactBounds(), QRect(0, 0, IMAGE_WIDTH, IMAGE_HEIGHT));
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, projection->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {

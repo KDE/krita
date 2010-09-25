@@ -241,7 +241,7 @@ void KisBrushChooser::update(KoResource * resource)
 
     m_lbName->setText(text);
     m_slSpacing->setValue(brush->spacing());
-    m_slRotation->setValue(brush->angle());
+    m_slRotation->setValue(brush->angle() * 180 / M_PI);
     m_slScale->setValue(brush->scale());
     
     

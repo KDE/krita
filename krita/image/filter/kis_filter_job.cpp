@@ -53,11 +53,17 @@ KisFilterJob::KisFilterJob(const KisFilter* filter,
 
 void KisFilterJob::run()
 {
-    m_filter->process(KisConstProcessingInformation(m_dev, m_rc.topLeft(), m_selection),
-                      KisProcessingInformation(m_dev, m_rc.topLeft(), m_selection),
+    KisPaintDeviceSP tempDevice = new KisPaintDevice(m_dev->colorSpace());
+
+    m_filter->process(KisConstProcessingInformation(m_dev, m_rc.topLeft(), 0),
+                      KisProcessingInformation(tempDevice, m_rc.topLeft(), 0),
                       m_rc.size(),
                       m_config,
                       m_updater);
+
+    KisPainter gc(m_dev);
+    gc.setSelection(m_selection);
+    gc.bitBlt(m_rc.topLeft(), tempDevice, m_rc);
 
     m_updater->setProgress(100);
     m_interrupted = m_updater->interrupted();

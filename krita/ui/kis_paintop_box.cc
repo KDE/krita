@@ -526,8 +526,9 @@ void KisPaintopBox::updateCompositeOpComboBox()
             if(m_cmbComposite->currentItem().isEmpty()){
 
             }
-            if (m_compositeOp == 0 || compositeOps.indexOf(const_cast<KoCompositeOp*>(m_compositeOp)) < 0) {
-                m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
+            if (m_compositeOp == 0 || !compositeOps.contains(const_cast<KoCompositeOp*>(m_compositeOp)) ||
+               (!m_compositeOp->userVisible() && !whiteList.contains(const_cast<KoCompositeOp*>(m_compositeOp)))) {
+                    m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
             m_cmbComposite->setCurrent(m_compositeOp);
             if(!m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]){

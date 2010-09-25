@@ -29,6 +29,7 @@ private slots:
     void testCreation();
     void testMaskGeneration();
     void testSizeRotation();
+    void testCopyMasking();
 
 };
 

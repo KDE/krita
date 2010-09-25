@@ -63,7 +63,7 @@ public:
 
 private:
 
-    bool savePaintDevice(KisNode * node);
+    bool savePaintDevice(KisPaintDeviceSP device, QString location);
     bool saveAnnotations(KisLayer* layer);
     bool saveSelection(KisNode* node);
     bool saveFilterConfiguration(KisNode* node);

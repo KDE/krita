@@ -86,7 +86,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)
 {
-    if (!savePaintDevice(layer)) return false;
+    if (!savePaintDevice(layer->paintDevice(), getLocation(layer))) return false;
     if (!saveAnnotations(layer)) return false;
     if (!saveMetaData(layer)) return false;
     m_count++;
@@ -157,22 +157,22 @@ bool KisKraSaveVisitor::visit(KisSelectionMask *mask)
 }
 
 
-bool KisKraSaveVisitor::savePaintDevice(KisNode * node)
+bool KisKraSaveVisitor::savePaintDevice(KisPaintDeviceSP device,
+                                        QString location)
 {
-
     // Layer data
     m_store->setCompressionEnabled(false);
-    if (m_store->open(getLocation(node))) {
-        if (!node->paintDevice()->write(m_store)) {
-            node->paintDevice()->disconnect();
+    if (m_store->open(location)) {
+        if (!device->write(m_store)) {
+            device->disconnect();
             m_store->close();
             return false;
         }
 
         m_store->close();
     }
-    if (m_store->open(getLocation(node) + ".defaultpixel")) {
-        m_store->write((char*)node->paintDevice()->defaultPixel(), node->paintDevice()->colorSpace()->pixelSize());
+    if (m_store->open(location + ".defaultpixel")) {
+        m_store->write((char*)device->defaultPixel(), device->colorSpace()->pixelSize());
         m_store->close();
     }
     m_store->setCompressionEnabled(true);
@@ -226,16 +226,8 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
     }
     if (selection->hasPixelSelection()) {
         KisPaintDeviceSP dev = selection->pixelSelection();
-        // Layer data
-        QString location = getLocation(node, DOT_PIXEL_SELECTION);
-        if (m_store->open(location)) {
-            if (!dev->write(m_store)) {
-                dev->disconnect();
-                m_store->close();
-                return false;
-            }
-            m_store->close();
-        }
+
+        savePaintDevice(dev, getLocation(node, DOT_PIXEL_SELECTION));
     }
     if (selection->hasShapeSelection()) {
         m_store->pushDirectory();

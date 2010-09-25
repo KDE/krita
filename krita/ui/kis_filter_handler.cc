@@ -174,7 +174,7 @@ void KisFilterHandler::apply(KisNodeSP layer, KisFilterConfiguration* config)
 
     if (m_d->currentFilter->supportsThreading()) {
         // Chop up in rects.
-        m_d->applicator = new KisThreadedApplicator(m_d->dev, rect, &factory, m_d->updater, KisThreadedApplicator::UNTILED);
+        m_d->applicator = new KisThreadedApplicator(m_d->dev, rect, &factory, m_d->updater, KisThreadedApplicator::TILED);
     } else {
         // Untiled, but still handle in one thread.
         m_d->applicator = new KisThreadedApplicator(m_d->dev, rect, &factory, m_d->updater, KisThreadedApplicator::UNTILED);

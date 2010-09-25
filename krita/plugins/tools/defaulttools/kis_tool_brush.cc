@@ -77,7 +77,7 @@ void KisToolBrush::timeoutPaint()
     Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
-        QRegion r = m_painter->dirtyRegion();
+        QRegion r = m_painter->takeDirtyRegion();
         dbgPlugins << "Timeout paint dirty region:" << r;
         currentNode()->setDirty(r);
     }

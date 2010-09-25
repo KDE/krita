@@ -169,7 +169,7 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
                 setupPainter(m_painter);
                 m_painter->paintLine(m_startPos, m_endPos);
 
-                QRegion dirtyRegion = m_painter->dirtyRegion();
+                QRegion dirtyRegion = m_painter->takeDirtyRegion();
                 m_painter->endTransaction(image()->undoAdapter());
 
                 device->setDirty(dirtyRegion);

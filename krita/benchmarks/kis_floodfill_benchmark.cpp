@@ -100,7 +100,7 @@ void KisFloodFillBenchmark::benchmarkFlood()
         // fill twice
         fillPainter.fillColor(1, 1, 0);
 
-        dirty = fillPainter.dirtyRegion();
+        dirty = fillPainter.takeDirtyRegion();
         fillPainter.deleteTransaction();
     }
 

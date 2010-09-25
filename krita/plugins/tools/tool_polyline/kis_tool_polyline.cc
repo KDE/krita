@@ -88,7 +88,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
                 start = end;
             }
         }
-        device->setDirty(painter.dirtyRegion());
+        device->setDirty(painter.takeDirtyRegion());
         painter.endTransaction(image()->undoAdapter());
     } else {
         KoPathShape* path = new KoPathShape();

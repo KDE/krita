@@ -166,7 +166,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.paintPainterPath(mapedOutline);
         painter.endTransaction(image->undoAdapter());
 
-        QRegion dirtyRegion = painter.dirtyRegion();
+        QRegion dirtyRegion = painter.takeDirtyRegion();
         dev->setDirty(dirtyRegion);
         image->setModified();
         setCurrentNodeLocked(false);

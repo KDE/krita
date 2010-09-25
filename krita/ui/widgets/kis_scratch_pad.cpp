@@ -389,7 +389,7 @@ void KisScratchPad::initPainting(QEvent* event) {
     }
     m_distanceInformation.spacing = m_painter->paintAt(m_previousPaintInformation);
     m_distanceInformation.distance = 0.0;
-    QRect rc = m_painter->dirtyRegion().boundingRect();
+    QRect rc = m_painter->takeDirtyRegion().boundingRect();
 
     update(pos.x() - rc.width(), pos.y() - rc.height(), rc.width() * 2, rc.height() *2);
 }
@@ -421,7 +421,7 @@ void KisScratchPad::paint(QEvent* event) {
 
     m_distanceInformation = m_painter->paintLine(m_previousPaintInformation, info, m_distanceInformation);
     m_previousPaintInformation = info;
-    QRegion dirtRegion = m_painter->dirtyRegion();
+    QRegion dirtRegion = m_painter->takeDirtyRegion();
     QRect rc = dirtRegion.boundingRect();
     m_incrementalDirtyRegion+=dirtRegion;
 
@@ -455,7 +455,7 @@ void KisScratchPad::endPaint(QEvent *event) {
         }
     }
 
-    QRect rc = m_painter->dirtyRegion().boundingRect();
+    QRect rc = m_painter->takeDirtyRegion().boundingRect();
     update(rc.translated(m_currentMousePosition));
 
     delete m_painter;

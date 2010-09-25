@@ -311,7 +311,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
             painter2.setCompositeOp(d->compositeOp);
             painter2.setOpacity(d->opacity * 255);
 
-            QRegion r = painter->dirtyRegion();
+            QRegion r = painter->takeDirtyRegion();
             QVector<QRect> dirtyRects = r.rects();
             QVector<QRect>::iterator it = dirtyRects.begin();
             QVector<QRect>::iterator end = dirtyRects.end();
@@ -320,9 +320,9 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info) const
                 ++it;
             }
 
-            node->setDirty(painter2.dirtyRegion());
+            node->setDirty(painter2.takeDirtyRegion());
         } else {
-            node->setDirty(painter->dirtyRegion());
+            node->setDirty(painter->takeDirtyRegion());
         }
         delete painter;
 

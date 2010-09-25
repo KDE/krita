@@ -119,7 +119,7 @@ bool KisToolFill::flood(int startX, int startY)
                                  currentFgColor(),
                                  m_opacity);
 
-        dirty = fillPainter.dirtyRegion();
+        dirty = fillPainter.takeDirtyRegion();
 
         m_painter = new KisPainter(device, currentSelection());
         Q_CHECK_PTR(m_painter);
@@ -163,7 +163,7 @@ bool KisToolFill::flood(int startX, int startY)
             fillPainter.fillColor(startX, startY, currentImage()->mergedImage());
 
         fillPainter.endTransaction(image()->undoAdapter());
-        dirty = fillPainter.dirtyRegion();
+        dirty = fillPainter.takeDirtyRegion();
     }
     device->setDirty(dirty);
     delete updater;

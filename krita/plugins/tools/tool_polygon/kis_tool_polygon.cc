@@ -79,7 +79,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
             painter.setOpacity(m_opacity);
             painter.setCompositeOp(m_compositeOp);
             painter.paintPolygon(points);
-            device->setDirty(painter.dirtyRegion());
+            device->setDirty(painter.takeDirtyRegion());
             notifyModified();
 
             painter.endTransaction(image()->undoAdapter());

@@ -192,7 +192,7 @@ void MixerTool::mousePressEvent(KoPointerEvent *event)
                                     KisVector2D::Zero(),
                                     event->rotation(), event->tangentialPressure());
         m_d->painter->paintAt(m_d->previousPaintInformation);
-        m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
+        m_d->mixer->updateCanvas(m_d->painter->takeDirtyRegion());
     }
 }
 
@@ -211,7 +211,7 @@ void MixerTool::mouseMoveEvent(KoPointerEvent *event)
 
             m_d->painter->paintLine(m_d->previousPaintInformation, info);
             m_d->previousPaintInformation = info;
-            m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
+            m_d->mixer->updateCanvas(m_d->painter->takeDirtyRegion());
         }
         break;
     case PANNING:
@@ -229,7 +229,7 @@ void MixerTool::mouseReleaseEvent(KoPointerEvent *event)
     //      contains the impure blend under the current cursor.
     if (m_d->state == MIXING) {
         m_d->state = HOVER;
-        m_d->mixer->updateCanvas(m_d->painter->dirtyRegion());
+        m_d->mixer->updateCanvas(m_d->painter->takeDirtyRegion());
         delete m_d->painter;
         m_d->painter = 0;
         m_d->mixer->device()->convertToQImage(0).save("canvas.png");

@@ -142,7 +142,7 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
 
             painter.paintPolygon(coord);
 
-            device->setDirty(painter.dirtyRegion());
+            device->setDirty(painter.takeDirtyRegion());
             notifyModified();
             updatePreview();
 

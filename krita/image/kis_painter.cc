@@ -241,7 +241,7 @@ KisTransaction* KisPainter::takeTransaction()
     return temp;
 }
 
-QRegion KisPainter::dirtyRegion()
+QRegion KisPainter::takeDirtyRegion()
 {
     if (d->useBoundingDirtyRect) {
         QRegion r(d->dirtyRect);

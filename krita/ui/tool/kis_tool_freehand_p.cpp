@@ -62,7 +62,7 @@ void FreehandPaintAtJob::run()
 {
     m_dragDist = KisDistanceInformation(0,0);
     m_painter->paintAt(KisPaintInformation(m_pi1));
-    m_toolFreeHand->setDirty(m_painter->dirtyRegion());
+    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
 }
 
 
@@ -84,7 +84,7 @@ void FreehandPaintLineJob::run()
 {
     m_dragDist = (m_previousPaintJob) ? m_previousPaintJob->dragDist() : KisDistanceInformation(0.0, 0.0);
     m_dragDist = m_painter->paintLine(m_pi1, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty(m_painter->dirtyRegion());
+    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
 }
 
 FreehandPaintBezierJob::FreehandPaintBezierJob(KisToolFreehand* toolFreeHand,
@@ -108,6 +108,6 @@ void FreehandPaintBezierJob::run()
 {
     m_dragDist = (m_previousPaintJob) ? m_previousPaintJob->dragDist() : KisDistanceInformation(0.0, 0.0);
     m_dragDist = m_painter->paintBezierCurve(m_pi1, m_control1, m_control2, m_pi2, m_dragDist);
-    m_toolFreeHand->setDirty(m_painter->dirtyRegion());
+    m_toolFreeHand->setDirty(m_painter->takeDirtyRegion());
 }
 

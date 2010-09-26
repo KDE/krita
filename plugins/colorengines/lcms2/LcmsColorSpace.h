@@ -171,9 +171,11 @@ protected:
                                                  this->colorSpaceType(),
                                                  INTENT_PERCEPTUAL,
                                                  0);
+            Q_ASSERT(d->defaultTransformations->fromRGB);
             d->defaultTransformations->toRGB = cmsCreateTransform(d->profile->lcmsProfile(), this->colorSpaceType(),
                                                KoLcmsDefaultTransformations::s_RGBProfile, TYPE_BGR_8,
                                                INTENT_PERCEPTUAL, 0);
+            Q_ASSERT(d->defaultTransformations->toRGB);
             KoLcmsDefaultTransformations::s_transformations[ this->id()][ d->profile ] = d->defaultTransformations;
         }
         // For conversions from default rgb

@@ -50,6 +50,11 @@
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
 
+void lcms2LogErrorHandlerFunction(cmsContext ContextID, cmsUInt32Number ErrorCode, const char *Text)
+{
+  kError(31000) << "Lcms2 error: " << ErrorCode << Text;
+}
+
 typedef KGenericFactory<LcmsEnginePlugin> LcmsEnginePluginFactory;
 K_EXPORT_COMPONENT_FACTORY(kolcmsengine, LcmsEnginePluginFactory("koffice"))
 
@@ -60,7 +65,8 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
     //setComponentData(LcmsEnginePluginFactory::componentData());
     KGlobal::locale()->insertCatalog("kocolorspaces");
 
-
+    // Set the lmcs error reporting function
+     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
 
     KoColorSpaceRegistry* registry = KoColorSpaceRegistry::instance();
 

@@ -331,10 +331,10 @@ public:
     virtual KoColorTransformation *createPerChannelAdjustment(const quint16 * const*transferValues) const {
         if (!d->profile) return 0;
 
-        cmsToneCurve ** transferFunctions = new cmsToneCurve*[ _CSTraits::channels_nb +1];
+        cmsToneCurve ** transferFunctions = new cmsToneCurve*[ this->colorChannelCount()];
 
         for (uint ch = 0; ch < this->colorChannelCount(); ch++) {
-            cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]);
+            transferFunctions[ch] = cmsBuildTabulatedToneCurve16( 0, 256, transferValues[ch]);
         }
 
         KoLcmsColorTransformation *adj = new KoLcmsColorTransformation(this);

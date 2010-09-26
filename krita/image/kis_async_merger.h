@@ -273,9 +273,6 @@ private:
         if (!m_currentProjection) return;
 
         if(m_currentProjection != m_finalProjection) {
-
-            qDebug() << "Writing final projection" << topmostNode->name();
-
             KisPainter gc(m_finalProjection);
             gc.setCompositeOp(m_finalProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc.bitBlt(rect.topLeft(), m_currentProjection, rect);

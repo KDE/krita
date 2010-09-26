@@ -10,13 +10,13 @@ set(kritaselectiontools_PART_SRCS
     kis_tool_select_path.cc
     kis_tool_select_similar.cc
     kis_tool_select_brush.cc
-    kis_tool_select_magnetic.cc
-    kis_tool_select_magnetic_option_widget.cpp
+#    kis_tool_select_magnetic.cc
+#    kis_tool_select_magnetic_option_widget.cpp
     )
 
-kde4_add_ui_files(kritaselectiontools_PART_SRCS
-    kis_tool_select_magnetic_option_widget.ui
-)
+#kde4_add_ui_files(kritaselectiontools_PART_SRCS
+#    kis_tool_select_magnetic_option_widget.ui
+#)
 
 
 kde4_add_plugin(kritaselectiontools ${kritaselectiontools_PART_SRCS})

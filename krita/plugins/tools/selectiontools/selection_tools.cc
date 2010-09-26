@@ -37,7 +37,7 @@
 #include "kis_tool_select_path.h"
 #include "kis_tool_select_similar.h"
 #include "kis_tool_select_brush.h"
-#include "kis_tool_select_magnetic.h"
+//#include "kis_tool_select_magnetic.h"
 
 K_PLUGIN_FACTORY(SelectionToolsFactory, registerPlugin<SelectionTools>();)
 K_EXPORT_PLUGIN(SelectionToolsFactory("krita"))
@@ -58,7 +58,7 @@ SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
     r->add(new KisToolSelectPathFactory(r, QStringList()));
     r->add(new KisToolSelectSimilarFactory(r, QStringList()));
     r->add(new KisToolSelectBrushFactory(r, QStringList()));
-    r->add(new KisToolSelectMagneticFactory(r, QStringList()));
+//    r->add(new KisToolSelectMagneticFactory(r, QStringList()));
 }
 
 SelectionTools::~SelectionTools()

@@ -61,6 +61,9 @@ public:
     KoFallBackColorTransformation(KoColorConversionTransformation* _csToFallBack, KoColorConversionTransformation* _fallBackToCs, KoColorTransformation* _transfo);
     virtual ~KoFallBackColorTransformation();
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const;
+    virtual QList<QString> parameters() const;
+    virtual int parameterId(const QString& name) const;
+    virtual void setParameter(int id, const QVariant& parameter);
 private:
     struct Private;
     Private* const d;

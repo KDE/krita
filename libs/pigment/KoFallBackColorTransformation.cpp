@@ -92,3 +92,18 @@ void KoFallBackColorTransformation::transform(const quint8 *src, quint8 *dst, qi
     d->colorTransformation->transform(d->buff, d->buff, nPixels);
     d->fallBackToCs->transform(d->buff, dst, nPixels);
 }
+
+QList<QString> KoFallBackColorTransformation::parameters() const
+{
+  return d->colorTransformation->parameters();
+}
+
+int KoFallBackColorTransformation::parameterId(const QString& name) const
+{
+  return d->colorTransformation->parameterId(name);
+}
+
+void KoFallBackColorTransformation::setParameter(int id, const QVariant& parameter)
+{
+  d->colorTransformation->setParameter(id, parameter);
+}

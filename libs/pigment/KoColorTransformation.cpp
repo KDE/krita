@@ -31,6 +31,7 @@ QList<QString> KoColorTransformation::parameters() const
 int KoColorTransformation::parameterId(const QString& name) const
 {
     Q_UNUSED(name);
+    qFatal("No parameter for this transformation");
     return -1;
 }
 
@@ -38,6 +39,7 @@ void KoColorTransformation::setParameter(int id, const QVariant& parameter)
 {
   Q_UNUSED(id);
   Q_UNUSED(parameter);
+  qFatal("No parameter for this transformation");
 }
 
 void KoColorTransformation::setParameters(const QHash<QString, QVariant> & parameters)

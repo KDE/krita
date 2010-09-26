@@ -73,26 +73,53 @@ void KisToolSelectPath::deactivate()
 
 void KisToolSelectPath::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mousePressEvent(event);
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier |
+                          Qt::ControlModifier | Qt::AltModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mousePressEvent(event);
+    }
+    else {
+        KisToolSelectBase::mousePressEvent(event);
+    }
 }
 
 void KisToolSelectPath::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mouseDoubleClickEvent(event);
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier |
+                          Qt::ControlModifier | Qt::AltModifier)) {
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mouseDoubleClickEvent(event);
+    }
+    else {
+        KisToolSelectBase::mouseDoubleClickEvent(event);
+    }
 }
 
 void KisToolSelectPath::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_ASSERT(m_localTool);
     m_localTool->mouseMoveEvent(event);
+
+    KisToolSelectBase::mouseMoveEvent(event);
 }
 
 void KisToolSelectPath::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mouseReleaseEvent(event);
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mouseReleaseEvent(event);
+    }
+    else {
+        KisToolSelectBase::mouseReleaseEvent(event);
+    }
 }
 
 QWidget* KisToolSelectPath::createOptionWidget()

@@ -155,7 +155,6 @@ void KoRgbColorSpaceTester::testCompositeOps()
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");
         
-        qDebug() << "===========" << cs->id() << cs->profile()->name();
         const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 

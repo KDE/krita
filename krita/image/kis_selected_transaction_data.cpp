@@ -59,6 +59,10 @@ void KisSelectedTransactionData::redo()
 //     else
 //         m_device->deselect();
 
+    if (m_layer->selection()) {
+        m_layer->selection()->updateProjection();
+    }
+
     m_layer->setDirty(m_layer->image()->bounds());
     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }
@@ -76,6 +80,10 @@ void KisSelectedTransactionData::undo()
 //     else
 //         m_device->deselect();
 //
+    if (m_layer->selection()) {
+        m_layer->selection()->updateProjection();
+    }
+
     m_layer->setDirty(m_layer->image()->bounds());
     m_layer->image()->undoAdapter()->emitSelectionChanged();
 }

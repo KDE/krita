@@ -62,6 +62,10 @@
 
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
+class KisShapeSelectionMarker : public KoShapeUserData
+{
+};
+
 class KisShapeController::Private
 {
 public:
@@ -252,7 +256,7 @@ void KisShapeController::addShape(KoShape* shape)
             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
             shape->shapeId() != KIS_LAYER_CONTAINER_ID) {
 
-        if (m_d->selectionShapeToBeAdded) {
+        if (m_d->selectionShapeToBeAdded || dynamic_cast<KisShapeSelectionMarker*>(shape->userData())) {
             // There's a selection active. that means that all shapes get added to the active selection,
             // instead of to a shape layer or a newly created shape layer.
             KisSelectionSP selection;
@@ -262,6 +266,11 @@ void KisShapeController::addShape(KoShape* shape)
                 }
                 KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                 shapeSelection->addChild(shape);
+                
+                // Mark shape as selection shape, that way it can be identified after it was removed and readded
+                if(!shape->userData()) {
+                    shape->setUserData(new KisShapeSelectionMarker);                
+                }
                 /*
                             foreach( KoView *view, m_d->doc->views() ) {
                                 KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();

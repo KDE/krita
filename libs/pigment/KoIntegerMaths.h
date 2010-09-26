@@ -66,6 +66,13 @@ inline uint UINT8_DIVIDE(uint a, uint b)
     return c;
 }
 
+/// Approximation of (a * b * c + 32512) / 65025.0
+inline uint UINT8_MULT3(uint a, uint b, uint c)
+{
+  uint t = a * b * c + 0x7F5B;
+  return ((t >> 7) + t) >> 16;
+}
+
 /// Blending of two scale values as described by the alpha scale value
 /// A scale value is interpreted as 255 equaling 1.0 (such as seen in rgb8 triplets)
 /// Basically we do: a*alpha + b*(1-alpha)
@@ -73,11 +80,9 @@ inline uint UINT8_BLEND(uint a, uint b, uint alpha)
 {
     // However the formula is refactored to (a-b)*alpha + b  since that saves a multiplication
     // Signed arithmetic is needed since a-b might be negative
-    // +b above becomes + (b<<8) - b  because we multiply it with 255 to fit the first part
-    //  That way we can do a normal rounding
-    uint c = uint(((int(a) - int(b)) * int(alpha)) + (b << 8) - b) + 0x80u;
-
-    return ((c >> 8) + c) >> 8;
+    int c = (int(a) - int(b)) * alpha + 0x80u;
+    c = ((c >> 8) + c) >> 8;
+    return c + b;
 }
 
 inline uint UINT16_MULT(uint a, uint b)

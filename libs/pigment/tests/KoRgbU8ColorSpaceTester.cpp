@@ -38,6 +38,7 @@
 #define GREEN_CHANNEL 1
 #define BLUE_CHANNEL 2
 #define ALPHA_CHANNEL 3
+#include <KoColorProfile.h>
 
 void KoRgbColorSpaceTester::testBasics()
 {
@@ -153,6 +154,8 @@ void KoRgbColorSpaceTester::testCompositeOps()
         kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");
+        
+        qDebug() << "===========" << cs->id() << cs->profile()->name();
         const KoCompositeOp* copyOp = cs->compositeOp(COMPOSITE_COPY);
         KoColor src(cs), dst(cs);
 
@@ -163,6 +166,8 @@ void KoRgbColorSpaceTester::testCompositeOps()
         // Copying a color over another color should replace the original color
         src.fromQColor(red);
         dst.fromQColor(blue);
+        
+        qDebug() << src.toQColor() << dst.toQColor();
 
         QVERIFY(memcmp(dst.data(), src.data(), cs->pixelSize()) != 0);
 

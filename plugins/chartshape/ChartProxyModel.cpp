@@ -296,8 +296,8 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     }
 
     bool useCategories =
-            dataDirection == Qt::Horizontal && firstRowIsLabel ||
-            dataDirection == Qt::Vertical && firstColumnIsLabel;
+            (dataDirection == Qt::Horizontal && firstRowIsLabel) ||
+            (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
     // Regions shared by all data sets: categories and x-data
     categoryDataRegion = CellRegion(); // member variable

@@ -580,7 +580,7 @@ static void calculateSteps(
 {
     //qDebug("-----------------------------------\nstart: %f   end: %f   power-of-ten: %i", start_, end_, power);
 
-    qreal distance;
+    qreal distance = 0.0;
     steps = 0.0;
 
     const int lastIdx = list.count()-1;

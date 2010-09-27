@@ -1440,10 +1440,10 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
-    if (!block.isValid() || block.length() == 1) // length of 1 means only linefeed. I.e. empty
+    if (!block.isValid())
         return QRectF();
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
-    if (! line1.isValid())
+    if (!line1.isValid())
         return QRectF();
     qreal startX = line1.cursorToX(startPosition - block.position());
     if (startPosition == endPosition)

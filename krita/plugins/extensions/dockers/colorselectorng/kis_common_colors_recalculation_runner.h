@@ -12,7 +12,7 @@ class KisCommonColors;
 class KisCommonColorsRecalculationRunner : public QRunnable
 {
 public:
-    KisCommonColorsRecalculationRunner(QImage data, int numberOfColors, KisCommonColors* parentObj)
+    KisCommonColorsRecalculationRunner(const QImage &data, int numberOfColors, KisCommonColors* parentObj)
         : imageData(data),
         numColors(numberOfColors),
         parent(parentObj)
@@ -23,7 +23,7 @@ public:
     QList<QRgb> getColors();
 
 private:
-    QImage imageData;
+    const QImage& imageData;
     int numColors;
     KisCommonColors* parent;
 };

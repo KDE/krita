@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QRunnable>
 #include <QThreadPool>
+#include <QApplication>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -63,7 +64,10 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+                this,                  SLOT(setDirty(const QRect &)), Qt::UniqueConnection);
     }
+    m_imageCache = QImage(m_canvas->image()->size(), QImage::Format_ARGB32_Premultiplied);
 }
 
 KisColorSelectorBase* KisCommonColors::createPopup() const
@@ -78,17 +82,21 @@ void KisCommonColors::updateSettings()
 {
     KisColorPatches::updateSettings();
 
-    if(!m_canvas)
+    if(!(m_canvas && m_canvas->image()))
         return;
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
+        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+                this,                  SLOT(setDirty(const QRect &)), Qt::UniqueConnection);
     }
     else {
-        connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()));
+        disconnect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
+                this,                  SLOT(setDirty(const QRect &)));
     }
 
     m_reloadButton->setEnabled(true);
@@ -114,15 +122,37 @@ void KisCommonColors::recalculate()
         return;
     }
     m_reloadButton->setEnabled(false);
+    qApp->processEvents();
 
+    updateImageCache();
+
+    KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(m_imageCache, patchCount(), this);
+    QThreadPool::globalInstance()->start(runner);
+}
+
+void KisCommonColors::setDirty(const QRect &rc)
+{
+    m_dirtyRegion+=rc;
+}
+
+void KisCommonColors::updateImageCache()
+{
     KisImageWSP kisImage = m_canvas->image();
     KisConfig cfg;
     const KoColorProfile* profile = KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile());
 
-    kisImage->lock();
-    QImage qImage = kisImage->convertToQImage(0,0, kisImage->width(), kisImage->height(), profile);
-    kisImage->unlock();
+    QVector<QRect> rects = m_dirtyRegion.rects();
+    foreach(QRect rect, rects) {
+        kisImage->lock();
+        QImage imagePart = kisImage->convertToQImage(rect, profile);
+        kisImage->unlock();
 
-    KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(/*kisImage, */qImage, patchCount(), this);
-    QThreadPool::globalInstance()->start(runner);
+        for(int i=0; i<imagePart.width(); i++) {
+            for(int j=0; j<imagePart.height(); j++) {
+                m_imageCache.setPixel(i+rect.x(), j+rect.y(), imagePart.pixel(i, j));
+            }
+        }
+    }
+
+    m_dirtyRegion = QRegion();
 }

@@ -191,21 +191,23 @@ QList<QRgb> KisCommonColorsRecalculationRunner::getColors()
     int width = imageData.width();
     int height = imageData.height();
 
+    QImage tmpImage;
     int pixelCount = height*width;
     if(pixelCount> (1<<16)) {
         qreal factor = sqrt((1<<16)/(qreal) pixelCount);
-        imageData=imageData.scaledToWidth(width*factor);
-        width=imageData.width();
-        height=imageData.height();
+        tmpImage=imageData.scaledToWidth(width*factor);
     }
-    width=imageData.width();
-    height=imageData.height();
+    else {
+        tmpImage=imageData;
+    }
+    width=tmpImage.width();
+    height=tmpImage.height();
 
     QSet<QRgb> colorList;
 
     for (int i=0; i<width; i++) {
         for (int j=0; j<height; j++) {
-            colorList.insert(imageData.pixel(i, j)|qRgba(0,0,0,255));
+            colorList.insert(tmpImage.pixel(i, j)|qRgba(0,0,0,255));
         }
     }
 

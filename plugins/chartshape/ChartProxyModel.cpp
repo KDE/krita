@@ -81,6 +81,7 @@ public:
     QList<DataSet*>  removedDataSets;
     
     CellRegion       selection;
+    bool             rebuildDataMapAfterloading;
 
     /**
      * Discards old and creates new data sets from the current region selection.
@@ -100,6 +101,7 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
     : q( parent )
     , tableSource( source )
     , isLoading( false )
+    , rebuildDataMapAfterloading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -373,6 +375,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 
     invalidateDataSets();
 
+    QList<DataSet*> createdDataSets;
     // A cell range for all data is optional.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by these values.
@@ -383,13 +386,15 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
         d->selection = CellRegion( d->tableSource, cellRangeAddress );
+        // This is what we'll use as basis for the data sets we "produce" from ODF.
+        // This might be data sets that were "instantiated" from the internal
+        // table or from an arbitrary selection of other tables as specified
+        // in the PlotArea's table:cell-range-address attribute (parsed above).
+        createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
+        d->rebuildDataMapAfterloading = true;
     }
 
-    // This is what we'll use as basis for the data sets we "produce" from ODF.
-    // This might be data sets that were "instantiated" from the internal
-    // table or from an arbitrary selection of other tables as specified
-    // in the PlotArea's table:cell-range-address attribute (parsed above).
-    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
+    
     int loadedDataSetCount = 0;
 
     KoXmlElement n;
@@ -542,7 +547,8 @@ void ChartProxyModel::endLoading()
     Q_ASSERT( d->isLoading );
     d->isLoading = false;
 
-    d->rebuildDataMap();
+    if ( d->rebuildDataMapAfterloading )
+        d->rebuildDataMap();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

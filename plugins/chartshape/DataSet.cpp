@@ -588,7 +588,10 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         ma.setVisible( true );
         break;
     case BubbleChartType:
-        ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
+        Q_ASSERT( attachedAxis() );
+        Q_ASSERT( attachedAxis()->plotArea() );
+        ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );        
+        ma.setThreeD( attachedAxis()->plotArea()->isThreeD() );
         ma.setVisible( true );
         break;
     default:
@@ -790,14 +793,14 @@ QVariant DataSet::categoryData( int index ) const
 QVariant DataSet::labelData() const
 {
     QString label;
-
-    const int cellCount = d->labelDataRegion.cellCount();
-    for ( int i = 0; i < cellCount; i++ )
-        label += d->data( d->labelDataRegion, i ).toString();
-
+    if ( d->labelDataRegion.isValid() )
+    {
+        const int cellCount = d->labelDataRegion.cellCount();
+        for ( int i = 0; i < cellCount; i++ )
+            label += d->data( d->labelDataRegion, i ).toString();
+    }
     if ( label.isEmpty() )
         label = d->defaultLabel;
-
     return QVariant( label );
 }
 
@@ -880,7 +883,7 @@ int DataSet::size() const
     return d->size > 0 ? d->size : 1;
 }
 
-void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &rect ) const
+void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &/*rect*/ ) const
 {
     if ( blockSignals || !kdChartModel )
         return;
@@ -1021,8 +1024,9 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
         KoStyleStack &styleStack = odfLoadingContext.styleStack();
-        styleStack.save();
-        styleStack.clear();
+//         KoStyleStack styleStack;
+//         styleStack.save();
+//         styleStack.clear();
         odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
 
         brushLoaded = false;
@@ -1050,7 +1054,7 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
             }
         }
 
-        styleStack.restore();
+//         styleStack.restore();
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1073,12 +1077,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.save();
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
     // the rows it belongs to. See ChartProxyModel::loadOdf()
-    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+    const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1104,21 +1109,21 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     bool maybeCompleteDataDefinition = false;
     bool fullDataDefinition = false;
     
-    if ( /*bubbleChart &&*/ n.hasChildNodes() ){
+    if ( n.hasChildNodes() ){
         KoXmlNode cn = n.firstChild();
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
-            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") /*&& !ignoreCellRanges*/ ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
                     fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
-                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
                     maybeCompleteDataDefinition = true;
                 }
                 
@@ -1127,20 +1132,20 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
     }
 
-    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) /*&& !ignoreCellRanges*/ ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
-        if ( !fullDataDefinition ){
-            setYDataRegion( region );
+//         if ( !fullDataDefinition ){
+//             setYDataRegion( region );
 //             if ( !maybeCompleteDataDefinition )
 //               setXDataRegion( region );
-        }
+//         }
         if ( bubbleChart )
             setCustomDataRegion( region );
         else
             setYDataRegion( region );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) /*&& !ignoreCellRanges*/ ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }
@@ -1186,7 +1191,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         ++loadedDataPointCount;
     }
-
+    styleStack.restore();
     return true;
 }
 

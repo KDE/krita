@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,6 +48,14 @@ public:
      * Initializes all values to 0
      */
     KoInsets() : top(0.), bottom(0.), left(0.), right(0.) {
+    }
+
+    /// clears the insets so all sides are set to zero
+    void clear() {
+        top = 0;
+        bottom = 0;
+        left = 0;
+        right = 0;
     }
 
     qreal top;     ///< Top inset

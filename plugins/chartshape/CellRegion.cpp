@@ -239,7 +239,7 @@ QString CellRegion::sheetName() const
 
 bool CellRegion::isValid() const
 {
-    return d->rects.size() > 0;
+    return d->rects.size() > 0 && d->table ;
 }
 
 QString CellRegion::Private::pointToString( const QPoint &point ) const

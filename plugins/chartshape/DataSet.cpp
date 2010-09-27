@@ -793,11 +793,12 @@ QVariant DataSet::categoryData( int index ) const
 QVariant DataSet::labelData() const
 {
     QString label;
-
-    const int cellCount = d->labelDataRegion.cellCount();
-    for ( int i = 0; i < cellCount; i++ )
-        label += d->data( d->labelDataRegion, i ).toString();
-
+    if ( d->labelDataRegion.isValid() )
+    {
+        const int cellCount = d->labelDataRegion.cellCount();
+        for ( int i = 0; i < cellCount; i++ )
+            label += d->data( d->labelDataRegion, i ).toString();
+    }
     if ( label.isEmpty() )
         label = d->defaultLabel;
 

@@ -24,6 +24,7 @@
 
 #include "kis_repeat_iterators_pixel.h"
 #include "kis_painter.h"
+#include <QBitArray>
 
 struct StandardIteratorFactory {
     typedef KisHLineIteratorPixel HLineIterator;
@@ -84,13 +85,14 @@ protected:
     {
         QBitArray painterChannelFlags = m_painter->channelFlags();
         if (painterChannelFlags.isEmpty()) {
-            painterChannelFlags = QBitArray(4, true);
+            painterChannelFlags = QBitArray(src->colorSpace()->channelCount(), true);
         }
+        Q_ASSERT(painterChannelFlags.size() == src->colorSpace()->channelCount());
         QList<KoChannelInfo *> channelInfo = src->colorSpace()->channels();
         QList<KoChannelInfo *> convChannelList;
 
         for (qint32 c = 0; c < channelInfo.count(); ++c) {
-            if (painterChannelFlags.testBit(channelInfo[c]->channelType())) {
+            if (painterChannelFlags.testBit(channelInfo[c]->index())) {
                 convChannelList.append(channelInfo[c]);
             }
         }

@@ -907,7 +907,6 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     OdfLoadingHelper *helper = new OdfLoadingHelper;
     helper->tableSource = &d->tableSource;
     helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
-    context.addSharedData( OdfLoadingHelperId, helper );
 
     // Get access to sheets in KSpread
     QAbstractItemModel *sheetAccessModel = 0;
@@ -918,8 +917,10 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
             // We're embedded in KSpread, which means KSpread provides the data
             d->usesInternalModelOnly = false;
             d->tableSource.setSheetAccessModel( sheetAccessModel );
+            helper->chartUsesInternalModelOnly = d->usesInternalModelOnly;
         }
     }
+    context.addSharedData( OdfLoadingHelperId, helper );
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();

@@ -1117,13 +1117,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
                     fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
-                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
                     maybeCompleteDataDefinition = true;
                 }
                 
@@ -1135,11 +1135,11 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
-        if ( !fullDataDefinition ){
-            setYDataRegion( region );
+//         if ( !fullDataDefinition ){
+//             setYDataRegion( region );
 //             if ( !maybeCompleteDataDefinition )
 //               setXDataRegion( region );
-        }
+//         }
         if ( bubbleChart )
             setCustomDataRegion( region );
         else

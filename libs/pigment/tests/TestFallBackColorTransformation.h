@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,21 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_AUTOBRUSH_RESOURCE_TEST_H
-#define KIS_AUTOBRUSH_RESOURCE_TEST_H
+#ifndef TEST_FALL_BACK_COLOR_TRANSFORMATION_H_
+#define TEST_FALL_BACK_COLOR_TRANSFORMATION_H_
 
 #include <QtTest/QtTest>
 
-class KisAutoBrushTest : public QObject
+class TestFallBackColorTransformation : public QObject
 {
     Q_OBJECT
+
 private slots:
 
-    void testCreation();
-    void testMaskGeneration();
-    void testSizeRotation();
-    void testCopyMasking();
-
+    void parametersForward();
 };
 
 #endif
+

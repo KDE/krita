@@ -41,7 +41,7 @@ void KisProjectionTest::testDirty()
     KoColor c(Qt::red, layer2->colorSpace());
     gc.fillRect(0, 0, 1000, 1000, c);
     gc.end();
-    layer2->setDirty(gc.dirtyRegion());
+    layer2->setDirty(gc.takeDirtyRegion());
 
     // wait a little for the projection to finish
     QTest::qSleep(250);

@@ -20,6 +20,7 @@
 
 #include "kis_group_layer.h"
 
+#include <KoCompositeOp.h>
 #include <KoColorSpace.h>
 
 #include "kis_types.h"
@@ -110,13 +111,16 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
 
 KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
 {
-    if (/*parent().isNull() &&*/ childCount() == 1) {
+    if (childCount() == 1) {
         const KisLayer *child = dynamic_cast<KisLayer*>(firstChild().data());
 
         if (child &&
                 child->channelFlags().isEmpty() &&
                 child->projection() &&
                 child->visible() &&
+                (child->compositeOpId() == COMPOSITE_OVER ||
+                 child->compositeOpId() == COMPOSITE_ALPHA_DARKEN ||
+                 child->compositeOpId() == COMPOSITE_COPY) &&
                 child->opacity() == OPACITY_OPAQUE_U8 &&
                 *child->projection()->colorSpace() == *colorSpace()) {
 

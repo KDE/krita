@@ -136,6 +136,9 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
             return;
         }
 
+        if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
+            return;
+
         setMode(KisTool::PAINT_MODE);
 
         initPaint(e);
@@ -274,9 +277,6 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if(canvas2)
         canvas2->view()->disableControls();
-
-    if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
-        return;
 
     setCurrentNodeLocked(true);
     m_hasPaintAtLeastOnce = false;

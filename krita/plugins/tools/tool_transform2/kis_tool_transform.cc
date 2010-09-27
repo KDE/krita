@@ -240,10 +240,11 @@ QRectF KisToolTransform::calcWarpBoundRect()
     } else if (nbPoints == 1) {
         res = QRectF(m_originalTopLeft, m_originalBottomRight);
         res.translate(m_currentArgs.transfPoints()[0] - m_currentArgs.origPoints()[0]);
+        res |= QRectF(m_currentArgs.origPoints()[0], QSizeF(1, 1));
     } else {
         res = QRectF(m_currentArgs.transfPoints()[0], m_currentArgs.transfPoints()[0]);
 
-        for (int i = 1; i < nbPoints; ++i) {
+        for (int i = 0; i < nbPoints; ++i) {
             if ( m_currentArgs.transfPoints()[i].x() < res.left() )
                 res.setLeft(m_currentArgs.transfPoints()[i].x());
             else if ( m_currentArgs.transfPoints()[i].x() > res.right() )
@@ -521,28 +522,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
                 gc.drawLine(bottomright, bottomleft);
                 gc.drawLine(bottomleft, topleft);
             }
-            //gc.drawRect(handleRect.translated(topleft).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middletop).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(topright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middleright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(bottomright).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middlebottom).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(bottomleft).adjusted(1, 1, -1, -1));
-            //gc.drawRect(handleRect.translated(middleleft).adjusted(1, 1, -1, -1));
-            //gc.setPen(Qt::black);
-            //gc.drawRect(handleRect.translated(topleft));
-            //gc.drawRect(handleRect.translated(middletop));
-            //gc.drawRect(handleRect.translated(topright));
-            //gc.drawRect(handleRect.translated(middleright));
-            //gc.drawRect(handleRect.translated(bottomright));
-            //gc.drawRect(handleRect.translated(middlebottom));
-            //gc.drawRect(handleRect.translated(bottomleft));
-            //gc.drawRect(handleRect.translated(middleleft));
-
-            //gc.drawLine(topleft, topright);
-            //gc.drawLine(topright, bottomright);
-            //gc.drawLine(bottomright, bottomleft);
-            //gc.drawLine(bottomleft, topleft);
 
             QPointF rotationCenter = converter.documentToView(QPointF(m_rotationCenterProj.x() / kisimage->xRes(), m_rotationCenterProj.y() / kisimage->yRes()));
             QRectF rotationCenterRect(- m_rotationCenterRadius / 2., - m_rotationCenterRadius / 2., m_rotationCenterRadius, m_rotationCenterRadius);
@@ -554,17 +533,6 @@ void KisToolTransform::paint(QPainter& gc, const KoViewConverter &converter)
                 gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
             }
 
-            //gc.setPen(Qt::lightGray);
-            //gc.drawEllipse(rotationCenterRect.translated(rotationCenter).adjusted(1, 1, -1, -1));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2., rotationCenter.y() - 1), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2., rotationCenter.y() - 1));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2., rotationCenter.y() + 1), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2., rotationCenter.y() + 1));
-            //gc.drawLine(QPointF(rotationCenter.x() - 1, rotationCenter.y() - m_rotationCenterRadius / 2.), QPointF(rotationCenter.x() - 1, rotationCenter.y() + m_rotationCenterRadius / 2.));
-            //gc.drawLine(QPointF(rotationCenter.x() + 1, rotationCenter.y() - m_rotationCenterRadius / 2.), QPointF(rotationCenter.x() + 1, rotationCenter.y() + m_rotationCenterRadius / 2.));
-
-            //gc.setPen(Qt::black);
-            //gc.drawEllipse(rotationCenterRect.translated(rotationCenter));
-            //gc.drawLine(QPointF(rotationCenter.x() - m_rotationCenterRadius / 2. - 2, rotationCenter.y()), QPointF(rotationCenter.x() + m_rotationCenterRadius / 2. + 2, rotationCenter.y()));
-            //gc.drawLine(QPointF(rotationCenter.x(), rotationCenter.y() - m_rotationCenterRadius / 2. - 2), QPointF(rotationCenter.x(), rotationCenter.y() + m_rotationCenterRadius / 2. + 2));
         }
     } else if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
         pen[0].setWidth(2);
@@ -855,36 +823,39 @@ void KisToolTransform::setTransformFunction(QPointF mousePos, Qt::KeyboardModifi
 
 void KisToolTransform::mousePressEvent(KoPointerEvent *event)
 {
-    if(!PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(!PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::MetaModifier)) {
 
         KisTool::mousePressEvent(event);
         return;
     }
-    setMode(KisTool::PAINT_MODE);
 
     KisImageWSP kisimage = image();
 
-    if (!currentNode())
+    if (!currentNode() || !currentNode()->paintDevice())
         return;
 
+    setMode(KisTool::PAINT_MODE);
     if (kisimage && currentNode()->paintDevice() && event->button() == Qt::LeftButton) {
         QPointF mousePos = QPointF(event->point.x() * kisimage->xRes(), event->point.y() * kisimage->yRes());
-        if (m_currentArgs.mode() == ToolTransformArgs::WARP &&
-            !m_cursorOverPoint && m_editWarpPoints) {
-
-            QVector<QPointF> origPoints = m_currentArgs.origPoints();
-            QVector<QPointF> transfPoints = m_currentArgs.transfPoints();
-            origPoints.append(mousePos);
-            transfPoints.append(mousePos);
-            m_currentArgs.setPoints(origPoints, transfPoints);
-            m_viewTransfPoints.resize(origPoints.size());
-            m_viewOrigPoints.resize(origPoints.size());
-            outlineChanged();
-            m_cursorOverPoint = true;
-            m_pointUnderCursor = origPoints.size() - 1;
-            setFunctionalCursor();
-
+        if (m_currentArgs.mode() == ToolTransformArgs::WARP) {
+            if (!m_cursorOverPoint) {
+                if (m_editWarpPoints) {
+                    QVector<QPointF> origPoints = m_currentArgs.origPoints();
+                    QVector<QPointF> transfPoints = m_currentArgs.transfPoints();
+                    origPoints.append(mousePos);
+                    transfPoints.append(mousePos);
+                    m_currentArgs.setPoints(origPoints, transfPoints);
+                    m_viewTransfPoints.resize(origPoints.size());
+                    m_viewOrigPoints.resize(origPoints.size());
+                    outlineChanged();
+                    m_cursorOverPoint = true;
+                    m_pointUnderCursor = origPoints.size() - 1;
+                    setFunctionalCursor();
+                } else {
+                    setMode(KisTool::HOVER_MODE);
+                }
+            }
         } else {
             if (m_function == ROTATE) {
                 QVector3D clickoffset(mousePos - m_rotationCenterProj);
@@ -927,8 +898,22 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Meta) {
         setTransformFunction(m_prevMousePos, event->modifiers());
+
+        if (mode() == KisTool::PAINT_MODE) {
+            // if mode is HOVER_MODE the transformation has already
+            // been comitted to the undo stack when mouse button was released
+            if (m_imageTooBig) {
+                restoreArgs(m_clickArgs);
+                outlineChanged();
+            } else {
+                transform();
+            }
+
+            setMode(KisTool::HOVER_MODE);
+        }
     }
 
+    setButtonBoxDisabled(m_currentArgs.isIdentity(m_originalCenter));
     KisTool::keyReleaseEvent(event);
 }
 

@@ -80,17 +80,14 @@ public:
 
                 // apply the alphamask
                 if (mask != 0) {
-                    if (*mask != OPACITY_OPAQUE_U8) {
-                        srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask);
-                    }
+                    srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask, U8_opacity);
                     mask++;
+                } else if (opacity != NATIVE_OPACITY_OPAQUE) {
+                    srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
                 }
 
                 if (srcAlpha != NATIVE_OPACITY_TRANSPARENT) {
 
-                    if (opacity != NATIVE_OPACITY_OPAQUE) {
-                        srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
-                    }
 
                     channels_type dstAlpha = _CSTraits::alpha_pos == -1 ? NATIVE_OPACITY_OPAQUE : dstN[_CSTraits::alpha_pos];
 

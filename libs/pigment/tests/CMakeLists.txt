@@ -101,3 +101,11 @@ set(TestKoColorSpaceSanity_test_SRCS TestKoColorSpaceSanity.cpp )
 kde4_add_unit_test(TestKoColorSpaceSanity TESTNAME libs-pigment-TestKoColorSpaceSanity ${TestKoColorSpaceSanity_test_SRCS})
 
 target_link_libraries(TestKoColorSpaceSanity  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestFallBackColorTransformation_test_SRCS TestFallBackColorTransformation.cpp )
+
+kde4_add_unit_test(TestFallBackColorTransformation TESTNAME libs-pigment-TestFallBackColorTransformation ${TestFallBackColorTransformation_test_SRCS})
+
+target_link_libraries(TestFallBackColorTransformation  ${KDE4_KDEUI_LIBS} pigmentcms ${QT_QTTEST_LIBRARY})

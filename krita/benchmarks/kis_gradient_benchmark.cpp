@@ -77,7 +77,7 @@ void KisGradientBenchmark::benchmarkGradient()
         
         fillPainter.paintGradient(QPointF(0,0), QPointF(3000,3000), KisGradientPainter::GradientShapeBiLinear, KisGradientPainter::GradientRepeatNone, true, false, 0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT);
 
-        dirty = fillPainter.dirtyRegion();
+        dirty = fillPainter.takeDirtyRegion();
         fillPainter.deleteTransaction();
     }
     

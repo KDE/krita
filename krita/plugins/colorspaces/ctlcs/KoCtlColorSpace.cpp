@@ -206,39 +206,36 @@ KoColorProfile * KoCtlColorSpace::profile()
 
 KoColorTransformation *KoCtlColorSpace::createBrightnessContrastAdjustment(const quint16 *transferValues) const
 {
-    Q_UNUSED(transferValues);
-    return 0;
+    return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(), KoColorSpaceRegistry::instance()->lab16()->createBrightnessContrastAdjustment(transferValues));
 }
 
 KoColorTransformation *KoCtlColorSpace::createDesaturateAdjustment() const
 {
-    return 0;
+    return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(), KoColorSpaceRegistry::instance()->lab16()->createDesaturateAdjustment());
 }
 
 KoColorTransformation *KoCtlColorSpace::createPerChannelAdjustment(const quint16 * const* transferValues) const
 {
-    Q_UNUSED(transferValues);
-    return 0;
+    return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(), KoColorSpaceRegistry::instance()->lab16()->createPerChannelAdjustment(transferValues));
 }
 
 KoColorTransformation *KoCtlColorSpace::createDarkenAdjustment(qint32 shade, bool compensate, qreal compensation) const
 {
-    Q_UNUSED(shade);
-    Q_UNUSED(compensate);
-    Q_UNUSED(compensation);
-    return 0;
+    return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(), KoColorSpaceRegistry::instance()->lab16()->createDarkenAdjustment(shade, compensate, compensation));
 }
 
 KoColorTransformation *KoCtlColorSpace::createInvertTransformation() const
 {
-    return 0;
+    return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(), KoColorSpaceRegistry::instance()->lab16()->createInvertTransformation());
 }
 
 quint8 KoCtlColorSpace::difference(const quint8* src1, const quint8* src2) const
 {
-    Q_UNUSED(src1);
-    Q_UNUSED(src2);
-    return 0;
+    const KoColorSpace* lab = KoColorSpaceRegistry::instance()->lab16();
+    QVector<quint8> * data = threadLocalConversionCache(2 * lab->pixelSize());
+    toLabA16(src1, data->data(), 1);
+    toLabA16(src2, data->data() + lab->pixelSize(), 1);
+    return lab->difference(data->data(), data->data() + lab->pixelSize());
 }
 
 void KoCtlColorSpace::fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile) const

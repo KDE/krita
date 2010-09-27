@@ -116,13 +116,19 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
     }
 
     d->lock.lockForWrite();
-    gc.beginTransaction(transactionText);
+    if(layer->image()) {
+        gc.beginTransaction(transactionText);
+    }
 
     foreach(const QRect& rc, region.rects()) {
         gc.bitBlt(rc.topLeft(), d->temporaryTarget, rc);
     }
     d->temporaryTarget = 0;
 
-    gc.endTransaction(layer->image()->undoAdapter());
+    // in the scratchpad the layer has no image and there is no undo adapter
+    if(layer->image()) {
+        gc.endTransaction(layer->image()->undoAdapter());
+    }
+
     d->lock.unlock();
 }

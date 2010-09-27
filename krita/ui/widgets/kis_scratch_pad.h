@@ -35,11 +35,15 @@
 #include <kis_types.h>
 #include <kis_paint_information.h>
 #include <kis_painter.h>
+#include <kis_paint_layer.h>
 
 #include <krita_export.h>
+
+class KisUndoAdapter;
+
 /**
  * A scratchpad is a painting canvas with only one zoomlevel and based on
- * a paint device, not on a KisImage. It can have a blank, tiled background or
+ * a paint layer, not on a KisImage. It can have a blank, tiled background or
  * a gradient background.
  */
 class KRITAUI_EXPORT KisScratchPad : public QWidget
@@ -108,7 +112,6 @@ signals:
     void colorSelected(const KoColor& color);
 
 protected:
-
     virtual void contextMenuEvent ( QContextMenuEvent * event );
     virtual void keyPressEvent ( QKeyEvent * event );
     virtual void keyReleaseEvent ( QKeyEvent * event );
@@ -133,6 +136,11 @@ private:
     void pan(QMouseEvent* event);
     void endPan(QMouseEvent* event);
 
+    // these methods are called like in KisToolFreehand to make refactoring easier.
+    KisPaintOpPresetSP currentPaintOpPreset() const { return m_preset; }
+    KisPaintLayerSP currentNode() const { return m_paintLayer; }
+
+
     enum Mode {
         PAINTING,
         HOVERING,
@@ -148,6 +156,7 @@ private:
     QColor m_canvasColor;
     Mode m_toolMode;
     KisPaintDeviceSP m_paintDevice;
+    KisPaintLayerSP m_paintLayer;
     KisPaintOpPresetSP m_preset;
     BackgroundMode m_backgroundMode;
     const KoColorProfile* m_displayProfile;
@@ -162,6 +171,9 @@ private:
     qreal m_scale;
     QRect m_cutoutOverlay;
     QBrush m_checkBrush;
+    bool m_paintIncremental;
+    quint8 m_opacity;
+    QRegion m_incrementalDirtyRegion;
 };
 
 #endif // KIS_SCRATCH_PAD_H

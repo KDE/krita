@@ -298,18 +298,11 @@ public:
                                     const KisFixedPaintDeviceSP selection,
                                     quint32 srcWidth, quint32 srcHeight);
 
-
-
-
     /**
-     * The methods below are 'higher' level than the above methods. They need brushes, colors
-     * etc. set before they can be called. The methods do not directly tell the image to
-     * update, but you can call dirtyRegion() to get the region that needs to be notified by your
-     * painting code.
-     *
-     * Call will RESET the dirtyRegion!
-    */
-    QRegion dirtyRegion();
+      * The methods in this class do not tell the paintdevice to update, but they calculate the
+      * dirty area. This method returns this dirty area and resets it.
+      */
+    QRegion takeDirtyRegion();
 
     /**
      * Paint a line that connects the dots in points

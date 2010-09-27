@@ -20,7 +20,7 @@
 
 #include "TestKoIntegerMaths.h"
 #include "KoIntegerMaths.h"
-
+#include <iostream>
 
 void TestKoIntegerMaths::UINT8Tests()
 {
@@ -39,14 +39,17 @@ void TestKoIntegerMaths::UINT8Tests()
     QCOMPARE((int)UINT8_DIVIDE(1, 64), 4);
     QCOMPARE((int)UINT8_DIVIDE(0, 1), 0);
 
+//     traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) >> traits::bits;
+//     return c + b;
+
     for (int i = 0; i < 256; i++) {
-        QCOMPARE((int)UINT8_BLEND(255, 0, i), int(255.0*i / 255.0 + 0.5));
+        QCOMPARE((int)UINT8_BLEND(255, 0, i), i );
     }
     for (int i = 0; i < 256; i++) {
-        QCOMPARE((int)UINT8_BLEND(0, 255, i), int(255.0*(255 - i) / 255.0 + 0.5));
+        QCOMPARE((int)UINT8_BLEND(0, 255, i), int( 255 - i) );
     }
     for (int i = 0; i < 256; i++) {
-        QCOMPARE((int)UINT8_BLEND(0, i, 128), int(i*(255 - 128) / 255.0 + 0.5));
+        QCOMPARE((int)UINT8_BLEND(0, i, 128), int( (-i * 128) / 255 + i ) );
     }
     QCOMPARE((int)UINT8_BLEND(255, 128, 128), 192);
     QCOMPARE((int)UINT8_BLEND(128, 64, 255), 128);

@@ -28,6 +28,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoCompositeOp.h>
 
 void KisAutoBrushTest::testCreation()
 {
@@ -135,6 +136,63 @@ void KisAutoBrushTest::testSizeRotation()
         QCOMPARE(a->maskHeight(0.5,0.25*M_PI), 7);
     }
 }
+
+//#define SAVE_OUTPUT_IMAGES
+void KisAutoBrushTest::testCopyMasking()
+{
+    int w = 64;
+    int h = 64;
+
+    int x = 0; 
+    int y = 0;
+    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
+    
+    KoColor black(Qt::black, cs);
+    KoColor red(Qt::red, cs);
+    
+    
+    KisPaintDeviceSP tempDev = new KisPaintDevice(cs);
+    tempDev->fill(0, 0, w+1, h+1, red.data()); // see the TODO
+#ifdef SAVE_OUTPUT_IMAGES
+    tempDev->convertToQImage(0).save("tempDev.png");
+#endif    
+    
+    KisCircleMaskGenerator * mask = new KisCircleMaskGenerator(w,1.0,0.5,0.5,2);
+    KisAutoBrush brush(mask,0,0);
+    
+    KisFixedPaintDeviceSP maskDab = new KisFixedPaintDevice(cs);
+    brush.mask(maskDab,black,1,1,0,KisPaintInformation()); // grows to w+1, h+1
+    maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());    
+
+#ifdef SAVE_OUTPUT_IMAGES    
+    maskDab->convertToQImage(0,0,0,64,64).save("maskDab.png");
+#endif        
+    
+    QRect rc = tempDev->exactBounds();
+    QRect maskRc = maskDab->bounds();
+    
+    //TODO: if rc != maskRc, bitBltWithFixedSelection works wrong
+    //qDebug() << rc;
+    //qDebug() << maskRc;
+    
+    
+    KisFixedPaintDeviceSP dev2fixed = new KisFixedPaintDevice(cs);
+    dev2fixed->setRect(rc);
+    dev2fixed->initialize();
+    tempDev->readBytes(dev2fixed->data(),rc);
+    dev2fixed->convertToQImage(0).save("converted-tempDev-to-fixed.png");
+
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+    KisPainter painter(dev);
+    painter.setCompositeOp(COMPOSITE_COPY);
+    painter.bltFixedWithFixedSelection(x, y, dev2fixed, maskDab, 0,0,0,0,rc.width(), rc.height() );
+    //painter.bitBltWithFixedSelection(x, y, tempDev, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
+    
+#ifdef SAVE_OUTPUT_IMAGES    
+    dev->convertToQImage(0).save("final.png");
+#endif
+}
+
 
 
 QTEST_KDEMAIN(KisAutoBrushTest, GUI)

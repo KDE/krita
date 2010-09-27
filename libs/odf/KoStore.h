@@ -60,14 +60,16 @@ public:
      * to be written in the file for "mime-magic" identification.
      * Only meaningful if mode is Write, and if backend!=Directory.
      */
-    static KoStore *createStore(const QString &fileName, Mode mode, const QByteArray &appIdentification = "", Backend backend = Auto);
+    static KoStore *createStore(const QString &fileName, Mode mode,
+                                const QByteArray &appIdentification = "", Backend backend = Auto);
 
     /**
      * Create a store for any kind of QIODevice: file, memory buffer...
      * KoStore will take care of opening the QIODevice.
      * This method doesn't support the Directory store!
      */
-    static KoStore *createStore(QIODevice *device, Mode mode, const QByteArray &appIdentification = "", Backend backend = Auto);
+    static KoStore *createStore(QIODevice *device, Mode mode,
+                                const QByteArray &appIdentification = "", Backend backend = Auto);
 
     /**
      * Open a store (i.e. the representation on disk of a KOffice document).
@@ -88,7 +90,8 @@ public:
      *
      * @bug saving not completely implemented (fixed temporary file)
      */
-    static KoStore *createStore(QWidget *window, const KUrl &url, Mode mode, const QByteArray &appIdentification = "", Backend backend = Auto);
+    static KoStore *createStore(QWidget *window, const KUrl &url, Mode mode,
+                                const QByteArray &appIdentification = "", Backend backend = Auto);
 
     /**
      * Destroys the store (i.e. closes the file on the hard disk)

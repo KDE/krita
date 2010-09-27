@@ -130,7 +130,8 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile)
 
 QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint32 x1, qint32 y1, qint32 w, qint32 h)
 {
-
+    Q_ASSERT( m_bounds.contains(QRect(x1,y1,w,h)) );
+    
     if (w < 0)
         return QImage();
 
@@ -141,14 +142,15 @@ QImage KisFixedPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, 
         return colorSpace()->convertToQImage(data(), w, h, dstProfile,
                                              KoColorConversionTransformation::IntentPerceptual);
     } else {
-        quint8* newData = new quint8[w * h * pixelSize()];
-        quint8* srcPtr = data();
-        quint8* dstPtr = newData;
         int pSize = pixelSize();
+        int deviceWidth = m_bounds.width();
+        quint8* newData = new quint8[w * h * pSize];
+        quint8* srcPtr = data() + x1 * pSize + y1 * deviceWidth * pSize;
+        quint8* dstPtr = newData;
         // copy the right area out of the paint device into data
-        for (int row = y1; row < h; row++) {
+        for (int row = 0; row < h; row++) {
             memcpy(dstPtr, srcPtr, w * pSize);
-            srcPtr += (row * w * pSize) + (y1 * pSize);
+            srcPtr += deviceWidth * pSize;
             dstPtr += w * pSize;
         }
         QImage image = colorSpace()->convertToQImage(newData, w, h, dstProfile,

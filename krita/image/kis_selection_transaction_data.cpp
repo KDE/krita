@@ -44,6 +44,7 @@ void KisSelectionTransactionData::redo()
 {
     KisTransactionData::redo();
     m_selection->setDirty(m_image->bounds());
+    m_selection->updateProjection();
     m_image->undoAdapter()->emitSelectionChanged();
 }
 
@@ -51,6 +52,7 @@ void KisSelectionTransactionData::undo()
 {
     KisTransactionData::undo();
     m_selection->setDirty(m_image->bounds());
+    m_selection->updateProjection();
     m_selection->setDeselected(m_wasDeselected);
     m_image->undoAdapter()->emitSelectionChanged();
 }

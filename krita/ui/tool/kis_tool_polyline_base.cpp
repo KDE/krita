@@ -47,15 +47,26 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & 
     list.append(this->action("cancel_polyline"));
     setPopupActionList(list);
 }
+
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
     if (!currentNode() || currentNode()->systemLocked()) {
         return;
     }
-    if (event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
-        m_dragging = true;
-    } else if (event->button() == Qt::LeftButton && event->modifiers() == Qt::ShiftModifier) {
-        finish();
+
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier)) {
+
+        if(event->modifiers() == Qt::ShiftModifier) {
+            finish();
+        }
+        else {
+            setMode(KisTool::PAINT_MODE);
+            m_dragging = true;
+        }
+    }
+    else {
+        KisToolShape::mousePressEvent(event);
     }
 }
 
@@ -70,28 +81,36 @@ void KisToolPolylineBase::mouseMoveEvent(KoPointerEvent *event)
         updateRect |= dragBoundingRect();
         updateCanvasViewRect(updateRect);
     }
+
+    KisToolShape::mouseMoveEvent(event);
 }
 
 void KisToolPolylineBase::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if (!currentNode() || currentNode()->systemLocked()) {
-        return;
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+
+        if(m_dragging) {
+            m_dragStart = convertToPixelCoord(event);
+            m_dragEnd = m_dragStart;
+            m_points.append(m_dragStart);
+        }
     }
-    if (!currentImage()) return;
-    if (m_dragging && event->button() == Qt::LeftButton && event->modifiers() != Qt::ShiftModifier) {
-        m_dragStart = convertToPixelCoord(event);
-        m_dragEnd = m_dragStart;
-        m_points.append(m_dragStart);
-    }
-    else if (event->button()==Qt::MidButton) {
-        cancel();
-        event->accept();
+    else {
+        KisToolShape::mouseReleaseEvent(event);
     }
 }
 
-void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *)
+void KisToolPolylineBase::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    finish();
+    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::NoModifier)) {
+
+        finish();
+    }
+    else {
+        KisToolShape::mousePressEvent(event);
+    }
 }
 
 void KisToolPolylineBase::keyPressEvent(QKeyEvent *e)
@@ -100,6 +119,8 @@ void KisToolPolylineBase::keyPressEvent(QKeyEvent *e)
         cancel();
         e->accept();
     }
+
+    KisToolShape::keyPressEvent(e);
 }
 
 void KisToolPolylineBase::paint(QPainter& gc, const KoViewConverter &converter)

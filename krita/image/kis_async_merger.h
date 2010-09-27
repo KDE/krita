@@ -235,6 +235,7 @@ private:
 
     void resetProjection() {
         m_currentProjection = 0;
+        m_finalProjection = 0;
     }
 
     void setupProjection(KisNodeSP currentNode, const QRect& rect, bool useTempProjection) {
@@ -247,10 +248,11 @@ private:
 
                 m_currentProjection = m_cachedPaintDevice;
                 m_currentProjection->prepareClone(parentOriginal);
+                m_finalProjection = parentOriginal;
             }
             else {
                 parentOriginal->clear(rect);
-                m_currentProjection = parentOriginal;
+                m_finalProjection = m_currentProjection = parentOriginal;
             }
         }
         else {
@@ -267,13 +269,12 @@ private:
 
     void writeProjection(KisNodeSP topmostNode, bool useTempProjection, QRect rect) {
         Q_UNUSED(useTempProjection);
+        Q_UNUSED(topmostNode);
         if (!m_currentProjection) return;
 
-        KisPaintDeviceSP parentOriginal = topmostNode->parent()->original();
-
-        if(m_currentProjection != parentOriginal) {
-            KisPainter gc(parentOriginal);
-            gc.setCompositeOp(parentOriginal->colorSpace()->compositeOp(COMPOSITE_COPY));
+        if(m_currentProjection != m_finalProjection) {
+            KisPainter gc(m_finalProjection);
+            gc.setCompositeOp(m_finalProjection->colorSpace()->compositeOp(COMPOSITE_COPY));
             gc.bitBlt(rect.topLeft(), m_currentProjection, rect);
         }
         DEBUG_NODE_ACTION("Writing projection", "", topmostNode->parent(), rect);
@@ -301,7 +302,22 @@ private:
     }
 
 private:
+    /**
+     * The place where intermediate results of layer's merge
+     * are going. It may be equal to m_finalProjection. In
+     * this case the projection will be written directly to
+     * the original of the parent layer
+     */
     KisPaintDeviceSP m_currentProjection;
+
+    /**
+     * The final destination of every projection of all
+     * the layers. It is equal to the original of a parental
+     * node.
+     * NOTE: This pointer is cached here to avoid
+     *       race conditions
+     */
+    KisPaintDeviceSP m_finalProjection;
 
     /**
      * Creation of the paint device is quite expensive, so we'll just

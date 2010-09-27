@@ -84,7 +84,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
         painter.paintRect(rect);
         painter.endTransaction(image()->undoAdapter());
 
-        QRegion bound = painter.dirtyRegion();
+        QRegion bound = painter.takeDirtyRegion();
         device->setDirty(bound);
         notifyModified();
     } else {

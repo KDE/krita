@@ -226,6 +226,12 @@ public:
             typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b) {
         return ((traits_compositetype)a * b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
     }
+    
+    inline static traits_compositetype multiply(traits_compositetype a,
+            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b,
+            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype c) {
+        return ((traits_compositetype)a * b * c) / (KoColorSpaceMathsTraits<_Tdst>::unitValue * KoColorSpaceMathsTraits<_Tdst>::unitValue);
+    }
 
     /**
      * Division : (a * MAX ) / b
@@ -243,7 +249,7 @@ public:
      * @param alpha
      */
     inline static _T blend(_T a, _T b, _T alpha) {
-        traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) >> traits::bits;
+        traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) / traits::unitValue;
         return c + b;
     }
 
@@ -426,6 +432,13 @@ template<>
 inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b)
 {
     return UINT8_MULT(a, b);
+}
+
+
+template<>
+inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b, qint32 c)
+{
+    return UINT8_MULT3(a, b, c);
 }
 
 template<>

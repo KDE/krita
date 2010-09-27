@@ -94,7 +94,7 @@ void KisToolDyna::timeoutPaint()
 
     if (currentImage() && m_painter) {
         paintAt(m_previousPaintInformation);
-        QRegion r = m_painter->dirtyRegion();
+        QRegion r = m_painter->takeDirtyRegion();
         dbgPlugins << "Timeout paint dirty region:" << r;
         currentNode()->setDirty(r);
     }

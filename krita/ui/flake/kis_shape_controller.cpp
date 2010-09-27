@@ -62,6 +62,10 @@
 
 typedef QMap<KisNodeSP, KoShape*> KisNodeMap;
 
+class KisShapeSelectionMarker : public KoShapeUserData
+{
+};
+
 class KisShapeController::Private
 {
 public:
@@ -214,18 +218,9 @@ void KisShapeController::removeShape(KoShape* shape)
     KisCanvas2 * canvas = 0;
     KisSelectionSP selection = 0;
 
-    if ((shape->shapeId() == KIS_NODE_SHAPE_ID
-            || shape->shapeId() == KIS_SHAPE_LAYER_ID
-            || shape->shapeId() == KIS_LAYER_CONTAINER_ID) // Those shape can be in a selection
-            && (KoToolManager::instance()->activeCanvasController()
-                && KoToolManager::instance()->activeCanvasController()->canvas()) // FIXME don't we check twice for the same thing ?
-            && (canvas =  dynamic_cast<KisCanvas2*>(KoToolManager::instance()->activeCanvasController()->canvas()))
-            && (selection = canvas->view()->selection())) {
-        // Has a selection, be in a seclection, remove it from there
-        if (selection->hasShapeSelection()) {
-            KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-            shapeSelection->removeChild(shape);
-        }
+    KisShapeSelection * shapeSelection = dynamic_cast<KisShapeSelection*>(shape->parent());
+    if (shapeSelection) {
+        shapeSelection->removeChild(shape);
     } else {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(shape->parent());
 
@@ -261,7 +256,7 @@ void KisShapeController::addShape(KoShape* shape)
             shape->shapeId() != KIS_SHAPE_LAYER_ID  &&
             shape->shapeId() != KIS_LAYER_CONTAINER_ID) {
 
-        if (m_d->selectionShapeToBeAdded) {
+        if (m_d->selectionShapeToBeAdded || dynamic_cast<KisShapeSelectionMarker*>(shape->userData())) {
             // There's a selection active. that means that all shapes get added to the active selection,
             // instead of to a shape layer or a newly created shape layer.
             KisSelectionSP selection;
@@ -271,6 +266,11 @@ void KisShapeController::addShape(KoShape* shape)
                 }
                 KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                 shapeSelection->addChild(shape);
+                
+                // Mark shape as selection shape, that way it can be identified after it was removed and readded
+                if(!shape->userData()) {
+                    shape->setUserData(new KisShapeSelectionMarker);                
+                }
                 /*
                             foreach( KoView *view, m_d->doc->views() ) {
                                 KisCanvas2 *canvas = static_cast<KisView2*>(view)->canvasBase();

@@ -426,13 +426,13 @@ void KisCubicCurve::fromString(const QString& string)
     setPoints(points);
 }
 
-QVector<quint16> KisCubicCurve::uint16Transfer(int size) const
+const QVector<quint16>& KisCubicCurve::uint16Transfer(int size) const
 {
     d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF, size);
     return d->data->u16Transfer;
 }
 
-QVector<qreal> KisCubicCurve::floatTransfer(int size) const
+const QVector<qreal>& KisCubicCurve::floatTransfer(int size) const
 {
     d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0, size);
     return d->data->fTransfer;

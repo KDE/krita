@@ -137,7 +137,7 @@ void KisSelectionMask::setActive(bool active)
 
 QImage KisSelectionMask::createThumbnail(qint32 w, qint32 h)
 {
-    KisPaintDeviceSP originalDevice = paintDevice();
+    KisPaintDeviceSP originalDevice = selection();
     if (!originalDevice) return QImage();
 
     QRect boundRect;

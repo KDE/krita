@@ -66,26 +66,53 @@ void KisToolPath::deactivate()
 
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mousePressEvent(event);
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier |
+                          Qt::ControlModifier | Qt::AltModifier)) {
+
+        setMode(KisTool::PAINT_MODE);
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mousePressEvent(event);
+    }
+    else {
+        KisToolShape::mousePressEvent(event);
+    }
 }
 
 void KisToolPath::mouseDoubleClickEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mouseDoubleClickEvent(event);
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                          Qt::LeftButton, Qt::ShiftModifier |
+                          Qt::ControlModifier | Qt::AltModifier)) {
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mouseDoubleClickEvent(event);
+    }
+    else {
+        KisToolShape::mouseDoubleClickEvent(event);
+    }
 }
 
 void KisToolPath::mouseMoveEvent(KoPointerEvent *event)
 {
     Q_ASSERT(m_localTool);
     m_localTool->mouseMoveEvent(event);
+
+    KisToolShape::mouseMoveEvent(event);
 }
 
 void KisToolPath::mouseReleaseEvent(KoPointerEvent *event)
 {
-    Q_ASSERT(m_localTool);
-    m_localTool->mouseReleaseEvent(event);
+    if(RELEASE_CONDITION(event, KisTool::PAINT_MODE, Qt::LeftButton)) {
+        setMode(KisTool::HOVER_MODE);
+
+        Q_ASSERT(m_localTool);
+        m_localTool->mouseReleaseEvent(event);
+    }
+    else {
+        KisToolShape::mouseReleaseEvent(event);
+    }
 }
 
 void KisToolPath::addPathShape(KoPathShape* pathShape)
@@ -166,7 +193,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.paintPainterPath(mapedOutline);
         painter.endTransaction(image->undoAdapter());
 
-        QRegion dirtyRegion = painter.dirtyRegion();
+        QRegion dirtyRegion = painter.takeDirtyRegion();
         dev->setDirty(dirtyRegion);
         image->setModified();
         setCurrentNodeLocked(false);

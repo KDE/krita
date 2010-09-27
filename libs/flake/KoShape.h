@@ -533,7 +533,7 @@ public:
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
 
-    /// Returns the currently set shadow or 0 if there is now shadow set
+    /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
 
     /**

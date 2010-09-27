@@ -253,7 +253,7 @@ public:
         LastPropertyType = ChildElement
     };
 
-    /// Add a property to the style
+    /// Add a property to the style. Passing DefaultType as property type uses a style-type specific property type.
     void addProperty(const QString &propName, const QString &propValue, PropertyType type = DefaultType) {
         if (type == DefaultType) {
             type = m_propertyType;
@@ -393,14 +393,22 @@ public:
     /// Not needed for QMap, but can still be useful
     bool operator==(const KoGenStyle &other) const;
 
-private:
-    QString property(const QString &propName, PropertyType type) const {
+    /**
+     * Returns a property of this style. In prinicpal this class is meant to be write-only, but
+     * some exceptional cases having read-support as well is very useful.  Passing DefaultType
+     * as property type uses a style-type specific property type.
+     */
+    QString property(const QString &propName, PropertyType type = DefaultType) const {
+        if (type == DefaultType) {
+            type = m_propertyType;
+        }
         const QMap<QString, QString>::const_iterator it = m_properties[type].constFind(propName);
         if (it != m_properties[type].constEnd())
             return it.value();
         return QString();
     }
 
+    /// Returns an attribute of this style. In prinicpal this class is meant to be write-only, but some exceptional cases having read-support as well is very useful.
     QString attribute(const QString &propName) const {
         const QMap<QString, QString>::const_iterator it = m_attributes.constFind(propName);
         if (it != m_attributes.constEnd())
@@ -408,7 +416,7 @@ private:
         return QString();
     }
 
-
+private:
 #ifndef NDEBUG
     void printDebug() const;
 #endif

@@ -391,7 +391,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
         // table or from an arbitrary selection of other tables as specified
         // in the PlotArea's table:cell-range-address attribute (parsed above).
         createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
-        d->rebuildDataMapAfterloading = true;
+//         d->rebuildDataMapAfterloading = true;
     }
 
     

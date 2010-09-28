@@ -82,6 +82,7 @@ KisNodeSP findNode(KisNodeSP node, int x, int y)
         if (cs->opacityU8(color.data()) == OPACITY_TRANSPARENT_U8) {
             return 0;
         }
+        node = node->lastChild();
     }
 
     KisNodeSP foundNode = 0;
@@ -150,7 +151,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
                 node = node->parent();
             }
         }
-
+        Q_ASSERT(node);
         // shouldn't happen
         if (!node) {
             node = currentNode();

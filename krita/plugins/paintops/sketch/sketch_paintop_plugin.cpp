@@ -43,7 +43,7 @@ SketchPaintOpPlugin::SketchPaintOpPlugin(QObject *parent, const QVariantList &)
     //
     //setComponentData(SketchPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSketchPaintOp, KisSketchPaintOpSettings, KisSketchPaintOpSettingsWidget>("sketchbrush", i18n("Sketch brush"), "krita-sketch.png"));
+    r->add(new KisSimplePaintOpFactory<KisSketchPaintOp, KisSketchPaintOpSettings, KisSketchPaintOpSettingsWidget>("sketchbrush", i18n("Sketch brush"), KisPaintOpFactory::categoryExperimental(), "krita-sketch.png"));
 
 }
 

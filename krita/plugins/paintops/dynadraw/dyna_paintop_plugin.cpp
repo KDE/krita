@@ -40,7 +40,7 @@ DynaPaintOpPlugin::DynaPaintOpPlugin(QObject *parent, const QVariantList &)
     //
     //setComponentData(DynaPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisDynaPaintOp, KisDynaPaintOpSettings, KisDynaPaintOpSettingsWidget>("dynabrush", i18n("Dyna brush"), "krita-dyna.png"));
+    r->add(new KisSimplePaintOpFactory<KisDynaPaintOp, KisDynaPaintOpSettings, KisDynaPaintOpSettingsWidget>("dynabrush", i18n("Dyna brush"), KisPaintOpFactory::categoryExperimental(), "krita-dyna.png"));
 
 }
 

@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
- *
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -46,6 +46,9 @@ public:
     KisPaintOpFactory(const QStringList & whiteListedCompositeOps = QStringList());
     virtual ~KisPaintOpFactory() {}
 
+    static QString categoryStable();
+    static QString categoryExperimental();
+
     /**
      * Create a KisPaintOp with the given settings and painter.
      * @param settings the settings associated with the input device
@@ -54,6 +57,7 @@ public:
     virtual KisPaintOp * createOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisImageWSP image) = 0;
     virtual QString id() const = 0;
     virtual QString name() const = 0;
+    virtual QString category() const = 0;
 
     /**
      * List of usually hidden compositeops that are useful for this paintop.

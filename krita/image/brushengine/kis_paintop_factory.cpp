@@ -17,6 +17,7 @@
  */
 #include "kis_paintop_factory.h"
 
+#include <klocale.h>
 #include <KoColorSpace.h>
 
 KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)
@@ -38,6 +39,17 @@ QString KisPaintOpFactory::pixmap()
 {
     return "";
 }
+
+QString KisPaintOpFactory::categoryExperimental()
+{
+    return i18n("Experimental");
+}
+
+QString KisPaintOpFactory::categoryStable()
+{
+    return i18n("Stable");
+}
+
 
 #include "kis_paintop_factory.moc"
 

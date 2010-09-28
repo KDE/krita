@@ -29,12 +29,13 @@
 template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePaintOpFactory  : public KisPaintOpFactory {
 
 public:
-    KisSimplePaintOpFactory(const QString& id, const QString& name,
+    KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
                             const QString& pixmap, const QString& model = QString(),
                             const QStringList& whiteListedCompositeOps = QStringList())
         : KisPaintOpFactory(whiteListedCompositeOps)
         , m_id(id)
         , m_name(name)
+        , m_category(category)
         , m_pixmap(pixmap)
         , m_model(model)
         {
@@ -78,10 +79,15 @@ public:
     QString pixmap() {
         return m_pixmap;
     }
+    
+    QString category() const{
+        return m_category;
+    }
 
 private:
     QString m_id;
     QString m_name;
+    QString m_category;
     QString m_pixmap;
     QString m_model;
 };

@@ -40,7 +40,7 @@ FilterOp::FilterOp(QObject *parent, const QVariantList &)
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), "krita-filterop.png"));
+    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), KisPaintOpFactory::categoryStable(), "krita-filterop.png"));
 
 }
 

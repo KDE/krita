@@ -42,7 +42,7 @@ CurvePaintOpPlugin::CurvePaintOpPlugin(QObject *parent, const QVariantList &)
 {
     //setComponentData(CurvePaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisCurvePaintOp, KisCurvePaintOpSettings, KisCurvePaintOpSettingsWidget>("curvebrush", i18n("Curve brush"), "krita-curve.png"));
+    r->add(new KisSimplePaintOpFactory<KisCurvePaintOp, KisCurvePaintOpSettings, KisCurvePaintOpSettingsWidget>("curvebrush", i18n("Curve brush"), KisPaintOpFactory::categoryExperimental(), "krita-curve.png"));
 
 }
 

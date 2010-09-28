@@ -53,6 +53,10 @@ public:
     virtual QString pixmap() {
         return "krita-duplicate.png";
     }
+    
+    virtual QString category() const{
+        return KisPaintOpFactory::categoryStable();
+    }
 
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,13 +42,14 @@ class QInputMethodEvent;
 class KoPointerEvent;
 
 /**
- * Simple proxy interface that provides a point d'appui for canvas
- * implementations to pass events to the current tool. For the paint
- * event it is possible that there more than one tool is asked to
- * paint their decorations because tools can be stacked.
+ * Tool proxy object which allows an application to address the current tool.
  *
- * The implementator of KoToolProxy should be solely responsible
- * for knowing which tool is currently in the user's hands.
+ * Applications typically have a canvas and a canvas requires a tool for
+ * the user to do anything.  Since the flake system is responsible for handling
+ * tools and also to change the active tool when needed we provide one class
+ * that can be used by an application canvas to route all the native events too
+ * which will transparantly be routed to the active tool.  Without the application
+ * having to bother about which tool is active.
  */
 class FLAKE_EXPORT KoToolProxy : public QObject
 {

@@ -38,8 +38,12 @@ public:
 public slots:
     void updateSettings();
     void recalculate();
+    void setDirty(const QRect &rc);
 
 private:
+    void updateImageCache();
+    QImage m_imageCache;
+    QRegion m_dirtyRegion;
     QMutex m_mutex;
     QTimer m_recalculationTimer;
     QPushButton* m_reloadButton;

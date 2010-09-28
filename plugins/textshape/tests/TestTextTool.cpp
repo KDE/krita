@@ -45,8 +45,7 @@ void TestTextTool::testTextRect()
 
     QCOMPARE(tool.textRect(0, 0).topLeft(), QPointF());
     // second line should be lower.
-    //qDebug() << tool.textRect(4, 4);
-    QEXPECT_FAIL("", "bug 213238", Abort);
+    // bug 213238
     QVERIFY(tool.textRect(4, 4).topLeft().y() > 0);
 }
 

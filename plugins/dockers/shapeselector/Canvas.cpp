@@ -124,7 +124,6 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         FolderShape *folder = dynamic_cast<FolderShape*>(shape);
         if ((event->buttons() & Qt::LeftButton) && itemStore()->mainFolder() == 0 && folder) {
             QPointF localPoint = pe.point - folder->position();
-            KoInsets insets = folder->borderInsets();
             if (localPoint.x() <= 5 || localPoint.x() >= folder->size().width() - 10
                 || localPoint.y() >= folder->size().height() - 5) {
                 m_currentStrategy = new ResizeFolderStrategy(this, folder, pe);

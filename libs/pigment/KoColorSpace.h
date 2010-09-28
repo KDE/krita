@@ -592,7 +592,7 @@ protected:
     const KoColorConversionTransformation* toRgbA16Converter() const;
     const KoColorConversionTransformation* fromRgbA16Converter() const;
 
-private:
+protected:
 
     /**
      * Returns the thread-local conversion cache. If it doesn't exist

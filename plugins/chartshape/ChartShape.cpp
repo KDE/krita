@@ -272,8 +272,8 @@ public:
 
 
 ChartShape::Private::Private( ChartShape *shape )
-    : resourceManager(0)
-    , internalModel( 0 )
+    : internalModel(0),
+    resourceManager(0)
 {
     // Register the owner.
     this->shape = shape;

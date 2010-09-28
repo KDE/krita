@@ -94,10 +94,14 @@ void KisGroupLayer::resetCache(const KoColorSpace *colorSpace)
     if (!m_d->paintDevice) {
 
         m_d->paintDevice = new KisPaintDevice(colorSpace);
+        m_d->paintDevice->setX(m_d->x);
+        m_d->paintDevice->setY(m_d->y);
     }
     else if(!(*m_d->paintDevice->colorSpace() == *colorSpace)) {
 
         KisPaintDeviceSP dev = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image()));
+        dev->setX(m_d->x);
+        dev->setY(m_d->y);
         quint8* defaultPixel = colorSpace->allocPixelBuffer(1);
         colorSpace->convertPixelsTo(m_d->paintDevice->defaultPixel(), defaultPixel, colorSpace, 1);
         dev->setDefaultPixel(defaultPixel);
@@ -167,6 +171,10 @@ void KisGroupLayer::setX(qint32 x)
         layer->setX(layer->x() + delta);
     }
     m_d->x = x;
+    if(m_d->paintDevice) {
+        m_d->paintDevice->setX(m_d->paintDevice->x() + delta);
+        Q_ASSERT(m_d->paintDevice->x() == m_d->x);
+    }
 }
 
 void KisGroupLayer::setY(qint32 y)
@@ -179,6 +187,10 @@ void KisGroupLayer::setY(qint32 y)
         layer->setY(layer->y() + delta);
     }
     m_d->y = y;
+    if(m_d->paintDevice) {
+        m_d->paintDevice->setY(m_d->paintDevice->y() + delta);
+        Q_ASSERT(m_d->paintDevice->y() == m_d->y);
+    }
 }
 
 #include "kis_group_layer.moc"

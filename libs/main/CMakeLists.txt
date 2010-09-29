@@ -39,6 +39,7 @@ set(komain_LIB_SRCS
     KoVersionDialog.cpp
     KoViewAdaptor.cpp
     KoView.cpp
+    kofficeversion.cpp
     KoFilterManager.cpp
     KoFilterChain.cpp
     KoFilter.cpp

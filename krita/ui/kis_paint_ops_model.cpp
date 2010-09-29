@@ -22,35 +22,29 @@
 
 #include <kcategorizedsortfilterproxymodel.h>
 #include "kis_debug.h"
+#include <kis_paintop_registry.h>
+#include "kis_factory2.h"
+#include <kstandarddirs.h>
 
-static QStringList opsInOrder;
 static const QString DEFAULT_PAINTOP = "paintbrush";
 
 KisPaintOpsModel::KisPaintOpsModel(const QList<KisPaintOpFactory*>& list)
 {
+    QString fileName;
     foreach(KisPaintOpFactory* op, list) {
-        if (op->userVisible()) {
-            m_list.push_back(PaintOpInfo(op->id(), op->name(), op->category()));
+        fileName = KisFactory2::componentData().dirs()->findResource("kis_images", op->pixmap());
+        QPixmap pixmap(fileName);
+        if (pixmap.isNull()){
+            pixmap = QPixmap(22,22);
+            pixmap.fill();
         }
+        m_list.push_back(PaintOpInfo(op->id(), op->name(), op->category(), pixmap));
     }
 
-   if (opsInOrder.isEmpty()) {
-        opsInOrder << "duplicate" 
-        << "deformbrush" 
-        << "hatchingbrush" 
-        << "dynabrush" 
-        << "hairybrush" 
-        << "particlebrush" 
-        << "spraybrush" 
-        << "experimentbrush" 
-        << "filter" 
-        << "paintbrush" 
-        << "smudge" 
-        << "gridbrush" 
-        << "sketchbrush" 
-        << "curvebrush" 
-        << "chalkbrush";
+    foreach(const PaintOpInfo & info, m_list){
+            m_opsInOrder << info.id;
     }
+    qSort(m_opsInOrder);
 }
 
 KisPaintOpsModel::~KisPaintOpsModel()
@@ -69,9 +63,13 @@ QVariant KisPaintOpsModel::data(const QModelIndex & index, int role) const
         case Qt::DisplayRole: {
             return m_list[index.row()].name;
         }
+        case Qt::DecorationRole:{
+            return m_list[index.row()].icon;
+        }
+
         case PaintOpSortRole: {
-            int idx = opsInOrder.indexOf(m_list[index.row()].id);
-            if (idx == -1) return opsInOrder.count();
+            int idx = m_opsInOrder.indexOf(m_list[index.row()].id);
+            if (idx == -1) return m_opsInOrder.count();
             return idx;
         }
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:

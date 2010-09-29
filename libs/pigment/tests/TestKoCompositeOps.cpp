@@ -1476,11 +1476,12 @@ void TestKoCompositeOps::testCompositeCopy()
     QImage expectedResult(QString(FILES_DATA_DIR) + QDir::separator() + "CopyWithSelectionExpectedResult.png");
     
     bool testOk = (result == expectedResult);
-    QVERIFY2(testOk, "Images are not equal");
     if (!testOk){
         qDebug() << "Saving the result";
         result.save("CopyWithSelection.png");
     }
+
+    QVERIFY2(testOk, "Images are not equal");
     
     copy->composite(layer, w * pixelSize,
                     white.data(), 0,

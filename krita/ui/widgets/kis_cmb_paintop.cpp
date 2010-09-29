@@ -75,9 +75,9 @@ void KisCmbPaintop::setCurrent(const KisPaintOpFactory* op)
     }
 }
 
-void KisCmbPaintop::setCurrent(const QString & s)
+void KisCmbPaintop::setCurrent(const QString & paintOpId)
 {
-    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(s));
+    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(paintOpId));
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }

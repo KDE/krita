@@ -80,6 +80,14 @@ void KisToolColorPicker::paint(QPainter& gc, const KoViewConverter &converter)
 
 void KisToolColorPicker::pickColor(const QPointF& pos)
 {
+        if(m_colorPickerDelayTimer.isActive()) {
+            return;
+        }
+        else {
+            m_colorPickerDelayTimer.setSingleShot(true);
+            m_colorPickerDelayTimer.start(100);
+        }
+
         KisPaintDeviceSP dev = currentNode()->paintDevice();
         if (!dev) return;
 

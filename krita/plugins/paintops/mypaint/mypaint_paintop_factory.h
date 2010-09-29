@@ -60,6 +60,10 @@ public:
     virtual QString pixmap() {
         return "krita-mypaint.png";
     }
+    
+    virtual QString category() const{
+        return KisPaintOpFactory::categoryExperimental();
+    }
 
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);

@@ -43,7 +43,8 @@ ChalkPaintOpPlugin::ChalkPaintOpPlugin(QObject *parent, const QVariantList &)
     //
     //setComponentData(ChalkPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisChalkPaintOp, KisChalkPaintOpSettings, KisChalkPaintOpSettingsWidget>("chalkbrush", i18n("Chalk brush"), "krita-chalk.png"));
+    r->add(new KisSimplePaintOpFactory<KisChalkPaintOp, KisChalkPaintOpSettings, KisChalkPaintOpSettingsWidget>("chalkbrush", i18n("Chalk brush"), 
+                                                                                                                KisPaintOpFactory::categoryExperimental(), "krita-chalk.png"));
 
 }
 

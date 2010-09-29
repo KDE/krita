@@ -1522,8 +1522,10 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 }
             }
             else if ( n.localName() == "categories" ) {
-                if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) )
-                    setCategoryDataRegion( CellRegion( helper->tableSource, n.attributeNS( KoXmlNS::table, "cell-range-address" ) ) );
+                if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
+                    const CellRegion region = CellRegion( helper->tableSource, n.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+                    setCategoryDataRegion( region );
+                }
             }
         }
 

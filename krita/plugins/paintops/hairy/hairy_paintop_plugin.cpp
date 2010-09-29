@@ -44,7 +44,7 @@ HairyPaintOpPlugin::HairyPaintOpPlugin(QObject *parent, const QVariantList &)
 
     //setComponentData(HairyPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy brush"), "krita-sumi.png"));
+    r->add(new KisSimplePaintOpFactory<KisHairyPaintOp, KisHairyPaintOpSettings, KisHairyPaintOpSettingsWidget>("hairybrush", i18n("Hairy brush"), KisPaintOpFactory::categoryStable(),"krita-sumi.png"));
 
 }
 

@@ -43,7 +43,7 @@ WateryMixPaintOpPlugin::WateryMixPaintOpPlugin(QObject *parent, const QVariantLi
     //
     //setComponentData(WateryMixPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisWateryMixPaintOp, KisWateryMixPaintOpSettings, KisWateryMixPaintOpSettingsWidget>("waterymixbrush", i18n("Watery Mixbrush"), "krita-waterymix.png"));
+    r->add(new KisSimplePaintOpFactory<KisWateryMixPaintOp, KisWateryMixPaintOpSettings, KisWateryMixPaintOpSettingsWidget>("waterymixbrush", i18n("Watery Mixbrush"), KisPaintOpFactory::categoryExperimental(),"krita-waterymix.png"));
 
 }
 

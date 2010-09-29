@@ -63,6 +63,7 @@ set(kritaui_LIB_SRCS
     kis_color_data_list.cpp
     kis_control_frame.cpp
     kis_composite_ops_model.cc
+    kis_paint_ops_model.cpp
     kis_cursor.cc
     kis_custom_palette.cc
     kis_custom_pattern.cc
@@ -128,6 +129,7 @@ set(kritaui_LIB_SRCS
     tool/kis_color_picker_utils.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
+    widgets/kis_cmb_paintop.cpp
     widgets/kis_cmb_idlist.cc 
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp

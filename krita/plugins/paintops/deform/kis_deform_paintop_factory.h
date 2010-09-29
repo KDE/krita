@@ -47,6 +47,9 @@ public:
     virtual QString pixmap() {
         return "krita-deform.png";
     }
+    virtual QString category() const{
+        return KisPaintOpFactory::categoryExperimental();
+    }
 
     virtual KisPaintOpSettingsSP settings(KisImageWSP image);
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent);

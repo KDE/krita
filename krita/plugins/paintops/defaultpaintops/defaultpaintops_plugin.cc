@@ -48,11 +48,11 @@ DefaultPaintOpsPlugin::DefaultPaintOpsPlugin(QObject *parent, const QVariantList
     //setComponentData(DefaultPaintOpsPluginFactory::componentData());
 
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), "krita-paintbrush.png"));
+    r->add(new KisSimplePaintOpFactory<KisBrushOp, KisBrushBasedPaintOpSettings, KisBrushOpSettingsWidget>("paintbrush", i18n("Pixel Brush"), KisPaintOpFactory::categoryStable(),"krita-paintbrush.png"));
     r->add(new KisDuplicateOpFactory);
     QStringList whiteList;
     whiteList << COMPOSITE_COPY;
-    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), "krita-smudgebrush.png","smudge-finger", whiteList));
+    r->add(new KisSimplePaintOpFactory<KisSmudgeOp, KisBrushBasedPaintOpSettings, KisSmudgeOpSettingsWidget>("smudge", i18n("Smudge Brush"), KisPaintOpFactory::categoryStable(),"krita-smudgebrush.png","smudge-finger", whiteList));
 }
 
 DefaultPaintOpsPlugin::~DefaultPaintOpsPlugin()

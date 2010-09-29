@@ -41,7 +41,7 @@ SprayPaintOpPlugin::SprayPaintOpPlugin(QObject *parent, const QVariantList &)
     //
     //setComponentData(SprayPaintOpPluginFactory::componentData());
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisSprayPaintOp, KisSprayPaintOpSettings, KisSprayPaintOpSettingsWidget>("spraybrush", i18n("Spray brush"), "krita-spray.png"));
+    r->add(new KisSimplePaintOpFactory<KisSprayPaintOp, KisSprayPaintOpSettings, KisSprayPaintOpSettingsWidget>("spraybrush", i18n("Spray brush"), KisPaintOpFactory::categoryExperimental() , "krita-spray.png"));
 
 }
 

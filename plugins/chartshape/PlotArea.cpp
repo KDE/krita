@@ -624,6 +624,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     CellRegion cellRangeAddress;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
         cellRangeAddress = CellRegion( helper->tableSource, plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
+//         setCellRangeAddress( cellRangeAddress );
     }
 
     // Find out about things that are in the plotarea style.

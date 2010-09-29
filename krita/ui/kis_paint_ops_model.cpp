@@ -27,6 +27,7 @@
 #include <kstandarddirs.h>
 
 static const QString DEFAULT_PAINTOP = "paintbrush";
+static QStringList categories;
 
 KisPaintOpsModel::KisPaintOpsModel(const QList<KisPaintOpFactory*>& list)
 {
@@ -45,6 +46,11 @@ KisPaintOpsModel::KisPaintOpsModel(const QList<KisPaintOpFactory*>& list)
             m_opsInOrder << info.id;
     }
     qSort(m_opsInOrder);
+    
+    if (categories.isEmpty()){
+        categories << KisPaintOpFactory::categoryStable() << KisPaintOpFactory::categoryExperimental();
+    }
+    
 }
 
 KisPaintOpsModel::~KisPaintOpsModel()
@@ -73,8 +79,13 @@ QVariant KisPaintOpsModel::data(const QModelIndex & index, int role) const
             return idx;
         }
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-        case KCategorizedSortFilterProxyModel::CategorySortRole:
             return m_list[index.row()].category;
+        case KCategorizedSortFilterProxyModel::CategorySortRole:
+            int idx = categories.indexOf(m_list[index.row()].category);
+            if (idx == -1){ 
+                return categories.count();
+            }
+            return idx;
         }
     }
     return QVariant();

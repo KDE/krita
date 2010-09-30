@@ -114,6 +114,9 @@ namespace KDChart
             {
                 qWarning( "KDChart didn't got signal rowsInserted, resetModel or layoutChanged, "
                           "but an index with a row outside of the known bounds." );
+                          
+                Q_ASSERT_X( index.row() < m_model->rowCount(m_rootIndex), "ModelDataCache::data", "Invalid row-index. Are you sure your model's index-method doesn't produce invalid QModelIndex's?" );
+
                 // apparently, data were added behind our back (w/o signals)
                 const_cast< ModelDataCache< T, ROLE >* >( this )->rowsInserted( m_rootIndex, 
                                                                                 m_data.count(), 
@@ -125,6 +128,9 @@ namespace KDChart
             {
                 qWarning( "KDChart didn't got signal columnsInserted, resetModel or layoutChanged, "
                           "but an index with a column outside of the known bounds." );
+                          
+                Q_ASSERT_X( index.column() < m_model->columnCount(m_rootIndex), "ModelDataCache::data", "Invalid row-index. Are you sure your model's index-method doesn't produce invalid QModelIndex's?" );
+
                 // apparently, data were added behind our back (w/o signals)
                 const_cast< ModelDataCache< T, ROLE >* >( this )->columnsInserted( m_rootIndex, 
                                                                                    m_data.first().count(), 

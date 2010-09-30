@@ -27,6 +27,7 @@
 #include <QEvent>
 #include <QPaintEvent>
 #include <QVariant>
+#include <QTimer>
 
 #include <KoResourceManager.h>
 #include <KoToolBase.h>
@@ -154,6 +155,8 @@ private:
      * Used as a switch for pickColor
      */
     bool m_toForegroundColor;
+    // used to skip some of the tablet events and don't update the colour that often
+    QTimer m_colorPickerDelayTimer;
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

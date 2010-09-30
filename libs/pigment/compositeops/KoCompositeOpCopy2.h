@@ -94,8 +94,11 @@ public:
                 {
                     channels_type blend;
                     // compute the blend
-                    if (mask == 0 || (*mask == OPACITY_OPAQUE_U8)) {
+                    if (!mask){
                         blend = opacity;
+                    }else if (*mask == OPACITY_OPAQUE_U8){
+                        blend = opacity;
+                        ++mask;
                     } else {
                         blend = KoColorSpaceMaths<channels_type, quint8>::multiply(opacity, *mask);
                         ++mask;

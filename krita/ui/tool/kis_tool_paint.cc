@@ -206,6 +206,14 @@ void KisToolPaint::pickColor(const QPointF &documentPixel,
                              bool fromCurrentNode,
                              bool toForegroundColor)
 {
+    if(m_colorPickerDelayTimer.isActive()) {
+        return;
+    }
+    else {
+        m_colorPickerDelayTimer.setSingleShot(true);
+        m_colorPickerDelayTimer.start(100);
+    }
+
     int resource = toForegroundColor ?
         KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
 

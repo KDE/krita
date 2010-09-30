@@ -21,6 +21,7 @@
 #define _KIS_PAINT_OPS_MODEL_H_
 
 #include <QAbstractListModel>
+#include <QPixmap>
 
 class KisPaintOpFactory;
 
@@ -53,10 +54,11 @@ public:
     
 private:
     struct PaintOpInfo {
-        PaintOpInfo(QString _id, QString _name, QString _category) : id(_id), name(_name), category(_category) {}
+        PaintOpInfo(QString _id, QString _name, QString _category, QPixmap _icon) : id(_id), name(_name), category(_category), icon(_icon) {}
         QString id;
         QString name;
         QString category;
+        QPixmap icon;
 
         bool operator==(const PaintOpInfo info) const
         {
@@ -65,6 +67,7 @@ private:
 
     };
     QList< PaintOpInfo > m_list;
+    QStringList m_opsInOrder;
 };
 
 #endif

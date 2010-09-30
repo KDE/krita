@@ -3,6 +3,7 @@
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -66,6 +67,7 @@
 #include "kis_paintop_settings_widget.h"
 #include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
+#include <kis_cmb_paintop.h>
 
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
@@ -91,10 +93,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    m_cmbPaintops = new KComboBox(this);
-    m_cmbPaintops->setObjectName("KisPaintopBox::m_cmbPaintops");
+    m_cmbPaintops = new KisCmbPaintop(this, "KisPaintopBox::m_cmbPaintops");
     m_cmbPaintops->setMinimumWidth(150);
-    m_cmbPaintops->setMaxVisibleItems(20);
     m_cmbPaintops->setToolTip(i18n("Artist's materials"));
 
 #ifdef Q_WS_MAC
@@ -160,16 +160,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
     m_brushChooser->setPopupWidget(m_brushEngineSelector);
 
-    QList<KoID> keys = KisPaintOpRegistry::instance()->listKeys();
-    for (QList<KoID>::Iterator it = keys.begin(); it != keys.end(); ++it) {
-        // add all paintops, and show/hide them afterwards
-        m_paintops.append(*it);
-    }
     m_colorspace = view->image()->colorSpace();
+
     updatePaintops();
+    
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
-    connect(m_cmbPaintops, SIGNAL(activated(int)), this, SLOT(slotItemSelected(int)));
+    connect(m_cmbPaintops, SIGNAL(activated(const QString&)), this, SLOT(slotSetPaintop(QString)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
 
@@ -202,13 +199,13 @@ KisPaintOpPresetSP KisPaintopBox::paintOpPresetSP(KoID* paintop)
         return activePreset(*paintop, KoToolManager::instance()->currentInputDevice());
 }
 
-void KisPaintopBox::slotItemSelected(int index)
+void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 {
-    if (index < m_displayedOps.count()) {
-        KoID paintop = m_displayedOps.at(index);
-        setCurrentPaintop(paintop);
+    if (KisPaintOpRegistry::instance()->get(paintOpId) != 0){
+        setCurrentPaintop( KoID(paintOpId, KisPaintOpRegistry::instance()->get(paintOpId)->name()) );
     }
 }
+
 
 void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
 {
@@ -216,47 +213,34 @@ void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
         m_colorspace = cs;
         updatePaintops();
 
+        // TODO: not solved completly:
         // ensure the the right paintop is selected
-        int index = m_displayedOps.indexOf(currentPaintop());
-        if (index == -1) {
-            // Must change the paintop as the current one is not supported
-            // by the new colorspace.
-            index = 0;
+        // It might happen that you must change the paintop as the current one is not supported
+        // by the new colorspace.
+        m_cmbPaintops->setCurrent( currentPaintop().id() );
+        if (m_cmbPaintops->currentItem() != currentPaintop().id()){
+            kWarning() << "PaintOp " << currentPaintop().name() << " was not selected, as it is not supported by colorspace " 
+            << m_colorspace->name();
         }
-        m_cmbPaintops->setCurrentIndex(index);
-        slotItemSelected(index);
-
     }
 }
 
 void KisPaintopBox::updatePaintops()
 {
-    m_displayedOps.clear();
-    m_cmbPaintops->clear();
-
-    QStringList paintopNames;
-    QMap<QString, KoID> paintopMap;
-    foreach(const KoID & paintopId, m_paintops) {
-        paintopNames << paintopId.name();
-        paintopMap[paintopId.name()] = paintopId;
-    }
-    qSort(paintopNames);
-
-    foreach(QString paintopName, paintopNames) {
-        KoID paintop = paintopMap[paintopName];
-        if (KisPaintOpRegistry::instance()->userVisible(paintop, m_colorspace)) {
-            QPixmap pm = paintopPixmap(paintop);
-
-            if (pm.isNull()) {
-                pm = QPixmap(16, 16);
-                pm.fill();
-            }
-
-            m_cmbPaintops->addItem(QIcon(pm), paintopName);
-            m_displayedOps.append(paintop);
+    /* get the list of the factories*/
+    QList<QString> keys = KisPaintOpRegistry::instance()->keys();
+    QList<KisPaintOpFactory*> factoryList;
+    
+    foreach(const QString & paintopId, keys) {
+        KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
+        if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()) ,m_colorspace)){
+            factoryList.append(factory);
+        }else{
+            kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << m_colorspace->name();
         }
     }
-
+    
+    m_cmbPaintops->setPaintOpList(factoryList);
 }
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
@@ -299,16 +283,13 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
         paintop = (*it);
     }
 
-    int index = m_displayedOps.indexOf(paintop);
-
-    if (index == -1) {
+    m_cmbPaintops->setCurrent(paintop.id());
+    if (m_cmbPaintops->currentItem() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
-        index = 0;
-        paintop = m_displayedOps.at(index);
+        paintop = KoID(m_cmbPaintops->currentItem(), KisPaintOpRegistry::instance()->get(m_cmbPaintops->currentItem())->name());
     }
-
-    m_cmbPaintops->setCurrentIndex(index);
+    
     setCurrentPaintop(paintop);
 
     if(inputDevice.device() == QTabletEvent::Stylus && inputDevice.pointer() == QTabletEvent::Eraser && !m_eraserUsed) {
@@ -381,15 +362,13 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     preset->settings()->setNode(m_resourceProvider->currentNode());
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
-    int index = m_displayedOps.indexOf(paintop);
-
-    if (index == -1) {
+    m_cmbPaintops->setCurrent(paintop.id());
+    if (m_cmbPaintops->currentItem() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
-        index = 0;
+        kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
-
-    m_cmbPaintops->setCurrentIndex(index);
+    
     m_activePreset = preset;
     updateCompositeOpComboBox();
     emit signalPaintopChanged(preset);
@@ -526,11 +505,13 @@ void KisPaintopBox::updateCompositeOpComboBox()
             if(m_cmbComposite->currentItem().isEmpty()){
 
             }
+            
             if (m_compositeOp == 0 || !compositeOps.contains(const_cast<KoCompositeOp*>(m_compositeOp)) ||
                (!m_compositeOp->userVisible() && !whiteList.contains(const_cast<KoCompositeOp*>(m_compositeOp)))) {
                     m_compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
             }
             m_cmbComposite->setCurrent(m_compositeOp);
+            
             if(!m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]){
                 m_cmbComposite->setEnabled(true);
             }

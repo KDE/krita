@@ -22,6 +22,7 @@
 #define KIS_TOOL_COLOR_PICKER_H_
 
 #include <QList>
+#include <QTimer>
 
 #include "KoToolFactoryBase.h"
 #include "ui_wdgcolorpicker.h"
@@ -77,6 +78,9 @@ private:
     bool m_normaliseValues;
     int m_radius;
     KoColor m_pickedColor;
+
+    // used to skip some of the tablet events and don't update the colour that often
+    QTimer m_colorPickerDelayTimer;
 
     ColorPickerOptionsWidget *m_optionsWidget;
 

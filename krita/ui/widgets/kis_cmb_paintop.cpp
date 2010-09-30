@@ -19,7 +19,7 @@
 
 #include "widgets/kis_cmb_paintop.h"
 
-#include <QItemDelegate>
+#include <QStyledItemDelegate>
 
 #include <klocale.h>
 #include <kis_debug.h>
@@ -35,7 +35,7 @@ KisCmbPaintop::KisCmbPaintop(QWidget * parent, const char * name)
     setEditable(false);
     connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
     connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
-    setItemDelegate(new KisCategorizedItemDelegate(new QItemDelegate));
+    setItemDelegate(new KisCategorizedItemDelegate(new QStyledItemDelegate));
     m_sortModel = new KCategorizedSortFilterProxyModel;
     m_sortModel->setSortRole(KisPaintOpsModel::PaintOpSortRole);
     m_sortModel->setCategorizedModel(true);
@@ -75,9 +75,9 @@ void KisCmbPaintop::setCurrent(const KisPaintOpFactory* op)
     }
 }
 
-void KisCmbPaintop::setCurrent(const QString & s)
+void KisCmbPaintop::setCurrent(const QString & paintOpId)
 {
-    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(s));
+    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(paintOpId));
     if (index.isValid()) {
         KComboBox::setCurrentIndex(index.row());
     }

@@ -9,3 +9,9 @@
  *  <li><a href="../libs-pigment/">Pigment</a> The library for everything to do with colors and color management</li>
  * </ul>
  */
+
+/**
+ *
+ * \defgroup KOfficeMacros KOffice Macros
+ *
+ */

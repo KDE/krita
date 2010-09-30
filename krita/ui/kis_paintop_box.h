@@ -1,4 +1,4 @@
-    /*
+/*
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
@@ -49,6 +49,7 @@ class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
+class KisCmbPaintop;
 class KisCmbComposite;
 class KisBrushEngineSelector;
 
@@ -80,7 +81,6 @@ signals:
 
 public slots:
 
-    void slotItemSelected(int index);
     void colorSpaceChanged(const KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
@@ -111,6 +111,7 @@ private slots:
     void eraseModeToggled(bool checked);
     void updateCompositeOpComboBox();
     void slotSetCompositeMode(const QString& compositeOp);
+    void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
 
 private:
@@ -118,7 +119,7 @@ private:
     const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
-    QComboBox* m_cmbPaintops;
+    KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
     KisPaintOpSettingsWidget* m_optionWidget;
@@ -134,8 +135,6 @@ private:
     QPushButton* m_paletteButton;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
-    QList<KoID> m_paintops;
-    QList<KoID> m_displayedOps;
     KisPaintOpPresetSP m_activePreset;
     const KoCompositeOp* m_compositeOp;
     KisNodeSP m_previousNode;

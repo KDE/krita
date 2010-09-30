@@ -45,7 +45,7 @@ public:
 
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
     void setCurrent(const KisPaintOpFactory* op);
-    void setCurrent(const QString & s);
+    void setCurrent(const QString & paintOpId);
 
 signals:
 

@@ -37,6 +37,7 @@ void KisTile::init(qint32 col, qint32 row,
     m_tileData->acquire();
 
     m_mementoManager = mm;
+    m_lockCounter = 0;
 
     if (m_mementoManager)
         m_mementoManager->registerTileChange(this);
@@ -68,8 +69,11 @@ KisTile::KisTile(const KisTile& rhs)
 
 KisTile::~KisTile()
 {
+    Q_ASSERT(!m_lockCounter);
+
     if (m_mementoManager)
         m_mementoManager->registerTileDeleted(this);
+
     m_tileData->release();
 }
 
@@ -93,13 +97,15 @@ KisTile::~KisTile()
 inline void KisTile::blockSwapping() const
 {
     /**
-     * DIRTY HACK ALERT:
-     * Please do this in a lockless way
+     * We need to hold a specal barrier lock here to ensure
+     * m_tileData->blockSwapping() has finished executing
+     * before anyone started reading the tile data. That is
+     * why we not not use atomic operations here.
      */
-    QMutexLocker locker(&m_temporaryMutex);
 
-    int oldValue = m_lockCounter.fetchAndAddOrdered(1);
-    if(!oldValue)
+    QMutexLocker locker(&m_swapBarrierLock);
+
+    if(!m_lockCounter++)
         m_tileData->blockSwapping();
 
     Q_ASSERT(data());
@@ -107,8 +113,9 @@ inline void KisTile::blockSwapping() const
 
 inline void KisTile::unblockSwapping() const
 {
-    bool lastLock = !m_lockCounter.deref();
-    if(lastLock)
+    QMutexLocker locker(&m_swapBarrierLock);
+
+    if(--m_lockCounter == 0)
         m_tileData->unblockSwapping();
 }
 
@@ -127,18 +134,29 @@ void KisTile::lockForWrite()
 
     /* We are doing COW here */
     if (lazyCopying()) {
-        KisTileData *tileData = m_tileData->clone();
-        tileData->acquire();
-        tileData->blockSwapping();
-        KisTileData *oldTileData = m_tileData; // FIXME: atomic access is better
-        m_tileData = tileData;
-        oldTileData->unblockSwapping();
-        oldTileData->release();
+        m_COWMutex.lock();
 
-        DEBUG_COWING(tileData);
+        /**
+         * Everything could have happened before we took
+         * the mutex, so let's check again...
+         */
 
-        if (m_mementoManager)
-            m_mementoManager->registerTileChange(this);
+        if (lazyCopying()) {
+
+            KisTileData *tileData = m_tileData->clone();
+            tileData->acquire();
+            tileData->blockSwapping();
+            KisTileData *oldTileData = m_tileData;
+            m_tileData = tileData;
+            oldTileData->unblockSwapping();
+            oldTileData->release();
+
+            DEBUG_COWING(tileData);
+
+            if (m_mementoManager)
+                m_mementoManager->registerTileChange(this);
+        }
+        m_COWMutex.unlock();
     }
 
     DEBUG_LOG_ACTION("lock [W]");

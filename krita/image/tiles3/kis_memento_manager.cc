@@ -125,7 +125,6 @@ KisMementoManager::~KisMementoManager()
 void KisMementoManager::registerTileChange(KisTile *tile)
 {
     if (registrationBlocked()) return;
-    m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [C]", tile, tile->col(), tile->row());
 
@@ -148,7 +147,6 @@ void KisMementoManager::registerTileChange(KisTile *tile)
 void KisMementoManager::registerTileDeleted(KisTile *tile)
 {
     if (registrationBlocked()) return;
-    m_cancelledRevisions.clear();
 
     DEBUG_LOG_TILE_ACTION("reg. [D]", tile, tile->col(), tile->row());
 
@@ -232,6 +230,9 @@ KisMementoSP KisMementoManager::getMemento()
      */
     Q_ASSERT(!namedTransactionInProgress());
 
+    // Clear redo() information
+    m_cancelledRevisions.clear();
+
     commit();
     m_currentMemento = new KisMemento(this);
 
@@ -296,9 +297,9 @@ void KisMementoManager::rollback(KisTileHashTable *ht)
 
 void KisMementoManager::rollforward(KisTileHashTable *ht)
 {
-    commit();
+    Q_ASSERT(m_index.isEmpty());
 
-    if (! m_cancelledRevisions.size()) return;
+    if (!m_cancelledRevisions.size()) return;
 
     KisHistoryItem changeList = m_cancelledRevisions.takeFirst();
 

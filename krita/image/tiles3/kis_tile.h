@@ -112,7 +112,7 @@ private:
 
 private:
     KisTileData *m_tileData;
-    mutable QAtomicInt m_lockCounter;
+    mutable volatile int m_lockCounter;
 
     qint32 m_col;
     qint32 m_row;
@@ -130,9 +130,18 @@ private:
     KisMementoManager *m_mementoManager;
 
     /**
-     * FIXME: Dirty workaround
+     * This is a special mutex for guarding copy-on-write
+     * operations. We do not use lockless way here as it'll
+     * create too much overhead for the most common operations
+     * like "read the pointer of m_tileData".
      */
-    mutable QMutex m_temporaryMutex;
+    QMutex m_COWMutex;
+
+    /**
+     * This lock is used to ensure noone will read the tile data
+     * before it has been loaded from to the memory.
+     */
+    mutable QMutex m_swapBarrierLock;
 };
 
 #endif // KIS_TILE_H_

@@ -21,7 +21,7 @@
 #include <KoColorSpace.h>
 
 KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)
-    : m_whiteListedCompositeOps(whiteListedCompositeOps)
+    : m_whiteListedCompositeOps(whiteListedCompositeOps), m_priority(100)
 {
 }
 
@@ -48,6 +48,17 @@ QString KisPaintOpFactory::categoryExperimental()
 QString KisPaintOpFactory::categoryStable()
 {
     return i18n("Stable");
+}
+
+void KisPaintOpFactory::setPriority(int newPriority)
+{
+    m_priority = newPriority;
+}
+
+
+int KisPaintOpFactory::priority() const
+{
+    return m_priority;
 }
 
 

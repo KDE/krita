@@ -31,7 +31,7 @@ template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePai
 public:
     KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
                             const QString& pixmap, const QString& model = QString(),
-                            const QStringList& whiteListedCompositeOps = QStringList())
+                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100)
         : KisPaintOpFactory(whiteListedCompositeOps)
         , m_id(id)
         , m_name(name)
@@ -39,6 +39,7 @@ public:
         , m_pixmap(pixmap)
         , m_model(model)
         {
+            setPriority(priority);
         }
 
     virtual ~KisSimplePaintOpFactory()

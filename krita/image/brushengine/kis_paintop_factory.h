@@ -86,8 +86,19 @@ public:
      * create a widget that can display paintop settings
      */
     virtual KisPaintOpSettingsWidget* createSettingsWidget(QWidget* parent) = 0;
+
+    /**
+     * Set the priority of this paintop, as it is shown in the UI; lower number means
+     * it will be show more to the front of the list.
+     * @param newPriority the priority
+     */
+    void setPriority(int newPriority);
+    
+    int priority() const;
+    
 private:
     QStringList m_whiteListedCompositeOps;
+    int m_priority;
 };
 
 #endif

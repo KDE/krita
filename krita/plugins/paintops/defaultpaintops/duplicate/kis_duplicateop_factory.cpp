@@ -36,6 +36,7 @@
 KisDuplicateOpFactory::KisDuplicateOpFactory()
     : KisPaintOpFactory(QStringList(COMPOSITE_COPY))
 {
+    setPriority(3);
 }
 
 

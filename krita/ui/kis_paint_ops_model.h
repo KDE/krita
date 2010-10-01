@@ -54,20 +54,30 @@ public:
     
 private:
     struct PaintOpInfo {
-        PaintOpInfo(QString _id, QString _name, QString _category, QPixmap _icon) : id(_id), name(_name), category(_category), icon(_icon) {}
+        PaintOpInfo(QString _id, QString _name, QString _category, QPixmap _icon, int _priority) : id(_id), name(_name), category(_category), icon(_icon), priority(_priority) {}
         QString id;
         QString name;
         QString category;
         QPixmap icon;
+        int priority;
 
         bool operator==(const PaintOpInfo info) const
         {
-            return ((info.id == id) && (info.name == name) && (info.category == category));
+            return ((info.id == id) && (info.name == name) && (info.category == category) && (info.priority == priority));
         }
-
+        
+        bool operator<( const PaintOpInfo & other ) const{
+            if (priority < other.priority) {
+                return true;
+            } else
+            if ((priority == other.priority) && (name < other.name)) {
+                return true;
+            }
+            return false;
+        }
     };
+    
     QList< PaintOpInfo > m_list;
-    QStringList m_opsInOrder;
 };
 
 #endif

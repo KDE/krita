@@ -3,7 +3,7 @@
  *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
  *
@@ -153,36 +153,25 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
         /* Without those limits, the smudge brush doesn't smudge anymore, it either makes a single
         dropplet of color, or drags a frame indefinitely over the canvas. */
         opacity = qBound(MIXABLE_LOWER_LIMIT, opacity, MIXABLE_UPPER_LIMIT);
-        
-        // Update the whole temporary data area, only grow it, don't shrink it. TODO: Shrink it when relevant
-        QRect currentTempDataRect = QRect(extractionTopLeft, maskDab->bounds().size());
-        if (currentTempDataRect.contains(m_wholeTempData)) {
-            m_wholeTempData = currentTempDataRect;
-        }
-        
-        // Reduce the opacity of all the data contained therein
-        KisRectIterator it = m_tempDev->createRectIterator(m_wholeTempData.x(), m_wholeTempData.y(),
-                                                           m_wholeTempData.width(), m_wholeTempData.height());
-        KoColorSpace* cs = m_tempDev->colorSpace();
-        while (!it.isDone()) {
-            cs->setOpacity(it.rawData(), quint8(cs->opacityF(it.rawData()) * opacity), 1);
-            ++it;
-        }
-        
+                
         // Invert the opacity value for color absorption in the next lines (copyPainter)
         opacity = OPACITY_OPAQUE_U8 - opacity;
+        m_wholeTempData |= QRect(extractionTopLeft, maskDab->bounds().size());
     }
     else {
         m_firstRun = false;
         m_wholeTempData = QRect(extractionTopLeft, maskDab->bounds().size());
     }
-                                      
     /* copyPainter will extract the piece of color (image) to be duplicated to generate the smudge effect,
     it extracts a simple unmasked rectangle and adds it to what was extracted before in this same block of code,
     this sometimes shows artifacts when the brush is used with stylus and high spacing */
     KisPainter copyPainter(m_tempDev);
+    copyPainter.setCompositeOp(COMPOSITE_COPY);
     copyPainter.setOpacity(opacity);
-    copyPainter.bitBlt(extractionTopLeft.x(), extractionTopLeft.y(), painter()->device(), x, y, sw, sh);
+    copyPainter.bitBlt(m_wholeTempData.x(), m_wholeTempData.y(), painter()->device(),
+                       x - m_wholeTempData.x() + extractionTopLeft.x(),
+                       y - m_wholeTempData.y() + extractionTopLeft.y(),
+                       m_wholeTempData.width(), m_wholeTempData.height());
     copyPainter.end();
     
     // This is the line that renders the extracted colors to the screen, with maskDab giving it the brush shape

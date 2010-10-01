@@ -397,7 +397,7 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         ;
     }
 
-    if(diagram)
+    if(diagram && diagram->model() != model)
         diagram->setModel( model );
 
     adjustAllDiagrams();

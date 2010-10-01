@@ -164,8 +164,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f)
     // Add the widget to the layout
     d->currentCentralWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     d->widgetLayout->addWidget(d->currentCentralWidget, 0 , 0);
-
-    showFilterGallery(d->visibleSelector);
+    showFilterGallery(isFilterGalleryVisible());
 }
 
 void KisFilterSelectorWidget::setFilterIndex(const QModelIndex& idx)

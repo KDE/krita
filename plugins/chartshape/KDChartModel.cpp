@@ -442,7 +442,11 @@ QVariant KDChartModel::headerData( int section,
 QModelIndex KDChartModel::index( int row, int column,
                                  const QModelIndex &parent ) const
 {
-    Q_UNUSED( parent );
+    // Seems following can happen in which case we shouldn't return a QModelIndex with an invalid
+    // position cause else other things may go wrong.
+    if( row >= rowCount(parent) || column >= columnCount(parent) ) {
+        return QModelIndex();
+    }
 
     return createIndex( row, column, 0 );
 }

@@ -159,6 +159,8 @@ public:
 
     /// Used if no data region for the label is specified
     const QString defaultLabel;
+    bool symbolsActivated;
+    int symbolID;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -183,7 +185,9 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     kdChartModel( 0 ),
     size( 0 ),
     blockSignals( false ),
-    defaultLabel( i18n( "Series %1", dataSetNr + 1 ) )
+    defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
+    symbolsActivated( false ),
+    symbolID( 0 )
 {
 }
 
@@ -596,7 +600,14 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         break;
     default:
         // TODO: Make markers customizable even for other types
-        ma.setVisible( false );
+        if ( d->symbolsActivated )
+        {
+            ma.setMarkerStyle( defaultMarkerTypes[ d->symbolID ] );
+            ma.setMarkerSize( QSize( 10, 10 ) );
+            ma.setVisible( true );
+        }
+        else
+            ma.setVisible( false );
         break;
     }
 
@@ -1161,6 +1172,29 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         else if ( format == "percentage" )
             type = PercentageValueLabel;
         setValueLabelType( type );
+    }
+    
+    if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-type" ) )
+    {
+        const QString name = styleStack.property( KoXmlNS::chart, "symbol-type" );
+        if ( name == "automatic" ) {
+            d->symbolsActivated = true;
+            d->symbolID = d->num % numDefaultMarkerTypes;
+        }
+        else if ( name == "named-symbol" ) {
+            d->symbolsActivated = true;
+            if ( styleStack.hasProperty( KoXmlNS::chart, "named-symbol" ) ) {
+                const QString type = styleStack.property( KoXmlNS::chart, "named-symbol" );
+                if ( type == "square" )
+                    d->symbolID = 0;
+                else if ( type == "diamond" )
+                    d->symbolID = 1;
+                else if ( type == "circle" )
+                    d->symbolID = 5;
+                else if ( type == "x" )
+                    d->symbolID = 2;
+            }
+        }
     }
 
     // load data points

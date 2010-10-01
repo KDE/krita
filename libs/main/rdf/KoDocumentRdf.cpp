@@ -133,6 +133,7 @@ Soprano::Node KoDocumentRdf::manifestRdfNode() const
 
 void KoDocumentRdf::freshenBNodes(Soprano::Model *m)
 {
+    Q_ASSERT(m);
     Q_ASSERT(d->model);
     QList<Soprano::Statement> removeList;
     QList<Soprano::Statement> addList;

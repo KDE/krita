@@ -117,22 +117,22 @@ int KisImageConfig::memorySoftLimit() const
     return totalRAM() * memorySoftLimitPercent() / 100;
 }
 
-int KisImageConfig::memoryHardLimitPercent() const
+qreal KisImageConfig::memoryHardLimitPercent() const
 {
-    return m_config.readEntry("memoryHardLimitPercent", 50);
+    return m_config.readEntry("memoryHardLimitPercent", 50.);
 }
 
-void KisImageConfig::setMemoryHardLimitPercent(int value)
+void KisImageConfig::setMemoryHardLimitPercent(qreal value)
 {
     m_config.writeEntry("memoryHardLimitPercent", value);
 }
 
-int KisImageConfig::memorySoftLimitPercent() const
+qreal KisImageConfig::memorySoftLimitPercent() const
 {
-    return m_config.readEntry("memorySoftLimitPercent", 25);
+    return m_config.readEntry("memorySoftLimitPercent", 25.);
 }
 
-void KisImageConfig::setMemorySoftLimitPercent(int value)
+void KisImageConfig::setMemorySoftLimitPercent(qreal value)
 {
     m_config.writeEntry("memorySoftLimitPercent", value);
 }

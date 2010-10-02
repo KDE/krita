@@ -53,10 +53,10 @@ public:
     int memoryHardLimit() const; // MiB
     int memorySoftLimit() const; // MiB
 
-    int memoryHardLimitPercent() const; // % of total RAM
-    int memorySoftLimitPercent() const; // % of total RAM
-    void setMemoryHardLimitPercent(int value);
-    void setMemorySoftLimitPercent(int value);
+    qreal memoryHardLimitPercent() const; // % of total RAM
+    qreal memorySoftLimitPercent() const; // % of total RAM
+    void setMemoryHardLimitPercent(qreal value);
+    void setMemorySoftLimitPercent(qreal value);
 
     static int totalRAM(); // MiB
 

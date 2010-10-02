@@ -144,12 +144,12 @@ public:
     /**
      * set the X offset of the paint device
      */
-    void setX(qint32 x);
+    virtual void setX(qint32 x);
 
     /**
      * set the Y offset of the paint device
      */
-    void setY(qint32 y);
+    virtual void setY(qint32 y);
 
     /**
      * Retrieve the bounds of the paint device. The size is not exact,

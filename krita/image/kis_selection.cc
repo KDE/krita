@@ -348,3 +348,22 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsSP bounds)
     }
 }
 
+void KisSelection::setX(qint32 x)
+{
+    KisPaintDevice::setX(x);
+    if (hasPixelSelection()) {
+        m_d->pixelSelection->setX(x);
+    }
+    //TODO shape selection
+}
+
+void KisSelection::setY(qint32 y)
+{
+    KisPaintDevice::setY(y);
+    if (hasPixelSelection()) {
+        m_d->pixelSelection->setY(y);
+    }
+    //TODO shape selection
+}
+
+

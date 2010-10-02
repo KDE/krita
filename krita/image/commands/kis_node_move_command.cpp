@@ -22,10 +22,12 @@
 #include <QRect>
 #include "kis_node.h"
 #include "commands/kis_node_move_command.h"
+#include <kis_image.h>
+#include <kis_undo_adapter.h>
 
 
-KisNodeMoveCommand::KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos) :
-    KisNodeCommand(i18n("Move"), node)
+KisNodeMoveCommand::KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos, KisImageSP image) :
+    KisNodeCommand(i18n("Move"), node), m_image(image)
 {
     m_oldPos = oldpos;
     m_newPos = newpos;
@@ -57,4 +59,8 @@ void KisNodeMoveCommand::moveTo(const QPoint& pos)
     m_node->setY(pos.y());
 
     m_node->setDirty(m_updateRect);
+    
+    if(m_image && m_node->inherits("KisSelectionMask")) {
+        m_image->undoAdapter()->emitSelectionChanged();
+    }
 }

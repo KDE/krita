@@ -32,8 +32,9 @@ public:
      * @param node The node the command will be working on.
      * @param oldpos the old layer position
      * @param newpos the new layer position
+     * @param image image, only needed if the moved node is a selection mask and the image should be notified
      */
-    KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos);
+    KisNodeMoveCommand(KisNodeSP node, const QPoint& oldpos, const QPoint& newpos, KisImageSP image = 0);
     virtual ~KisNodeMoveCommand();
 
     virtual void redo();
@@ -46,6 +47,7 @@ private:
     QRect m_updateRect;
     QPoint m_oldPos;
     QPoint m_newPos;
+    KisImageSP m_image;
 };
 
 

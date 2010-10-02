@@ -143,9 +143,6 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, maskWidth, maskHeight);
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    if (painter()->bounds().isValid()) {
-        dstRect &= painter()->bounds();
-    }
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
     qint32 sx = dstRect.x() - x;

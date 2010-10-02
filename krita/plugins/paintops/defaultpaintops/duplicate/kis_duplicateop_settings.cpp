@@ -40,7 +40,7 @@
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisImageWSP image)
         : m_image(image)
-        , m_isOffsetNotUptodate(true)
+        , m_isOffsetNotUptodate(false)
 {
 }
 

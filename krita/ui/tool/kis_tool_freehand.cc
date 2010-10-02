@@ -133,15 +133,19 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         updateOutlineRect();
     }
 
+    /**
+     * FIXME: we need some better way to implement modifiers
+     * for a paintop level
+     */
+    currentPaintOpPreset()->settings()->mousePressEvent(e);
+    if (e->isAccepted()) return;
+
+
     if(mode() == KisTool::HOVER_MODE &&
        e->button() == Qt::LeftButton &&
        e->modifiers() == Qt::NoModifier &&
        !specialModifierActive()) {
 
-        currentPaintOpPreset()->settings()->mousePressEvent(e);
-        if (e->isAccepted()) {
-            return;
-        }
 
         if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
             return;

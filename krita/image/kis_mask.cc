@@ -111,7 +111,7 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 {
     Q_ASSERT(parentLayer);
 
-    KisPaintDeviceSP parentPaintDevice = parentLayer->paintDevice();
+    KisPaintDeviceSP parentPaintDevice = parentLayer->original();
 
     if(copyFrom) {
         /**

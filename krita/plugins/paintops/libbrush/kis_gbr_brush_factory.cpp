@@ -35,6 +35,11 @@ KisBrushSP KisGbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     QString brushFileName = brushDefinition.attribute("filename", "9circle.gbr");
     KisBrushSP brush = rServer->getResourceByFilename(brushFileName);
+    //Fallback for files that still use the old format
+    if(!brush) {
+        QFileInfo info(brushFileName);
+        brush = rServer->getResourceByFilename(info.fileName());
+    }
     if(!brush)
         return 0;
     

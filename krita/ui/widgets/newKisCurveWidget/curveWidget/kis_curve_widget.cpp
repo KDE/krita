@@ -27,8 +27,8 @@
 #include <QPushButton>
 #include <QButtonGroup>
 
-#include "kis_cubic_curve_widget.h"
-#include "kis_linear_curve_widget.h"
+#include "kis_spline_curve_widget.h"
+#include "kis_line_curve_widget.h"
 #include "kis_freehand_curve_widget.h"
 
 

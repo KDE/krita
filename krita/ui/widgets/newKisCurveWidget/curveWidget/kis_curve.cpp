@@ -17,33 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_line_curve_widget.h"
+#include "kis_curve.h"
 
-#include <QPainter>
-#include <QPainterPath>
-
-KisLineCurveWidget::KisLineCurveWidget(QWidget *parent) :
-    KisCurveWidgetBase(parent)
+KisCurve::KisCurve() : KisShared()
 {
 }
 
-void KisLineCurveWidget::paintEvent(QPaintEvent *e) {
+KisCurve::~KisCurve()
+{}
 
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    paintBackground(&painter);
-
-    painter.setMatrix(m_converterMatrix);
-
-    QPainterPath path;
-    path.moveTo(m_points.first());
-
-    for(int i=1; i<m_points.size(); i++) {
-        path.lineTo(m_points.at(i));
-    }
-
-    painter.drawPath(path);
-
-    paintBlips(&painter);
+KisCurve* KisCurve::fromString(const QString&)
+{
+    return 0;
 }

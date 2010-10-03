@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_cubic_curve_widget.h"
+#include "kis_spline_curve_widget.h"
 
 #include <cmath>
 #include <QVector2D>

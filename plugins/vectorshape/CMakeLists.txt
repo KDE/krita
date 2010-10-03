@@ -1,6 +1,6 @@
 project( vectorshape)
 
-# The library is directly under this directory.
+# The EMF library is directly under this directory.
 # When it becomes an entity on its own we have to create
 # some cmake code here to find it.
 SET( EMF_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR/libemf} )
@@ -14,11 +14,11 @@ SET ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp
     VectorShapeFactory.cpp
+    VectorCollection.cpp
+    VectorData.cpp
     # No tool yet.
     #VectorTool.cpp
     #VectorToolFactory.cpp
-
-    WmfPainter.cpp
 
     libemf/EmfRecords.cpp
     libemf/EmfHeader.cpp

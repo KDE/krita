@@ -24,6 +24,7 @@
 #include <QVector2D>
 #include <QMouseEvent>
 
+/// delete later, it was moved to kis_curve.h
 bool pointCompare (const QPointF &p1, const QPointF &p2)
 {
     if(p1.x()<p2.x()) return true;
@@ -32,7 +33,7 @@ bool pointCompare (const QPointF &p1, const QPointF &p2)
 }
 
 KisCurveWidgetBase::KisCurveWidgetBase(QWidget *parent)
-    : QWidget(parent), CURVE_RANGE(1000), m_currentPoint(-1)
+    : QWidget(parent), /*CURVE_RANGE(1000), */m_currentPoint(-1)
 {
     KisCurveWidgetBase::reset();
     setMinimumSize(50, 50);

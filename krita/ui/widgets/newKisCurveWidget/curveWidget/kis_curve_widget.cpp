@@ -36,19 +36,19 @@
 KisCurveWidget::KisCurveWidget(QWidget *parent)
     : QWidget(parent),
       m_functionLikeWidget(new KisSplineCurveWidget),
-      m_cubicWidget(new KisSplineCurveWidget),
-      m_linearWidget(new KisLineCurveWidget),
+      m_splineWidget(new KisSplineCurveWidget),
+      m_lineWidget(new KisLineCurveWidget),
       m_freehandWidget(new KisFreehandCurveWidget)
 {
     m_functionLikeWidget->hide();
-    m_cubicWidget->hide();
-    m_linearWidget->hide();
+    m_splineWidget->hide();
+    m_lineWidget->hide();
     m_freehandWidget->hide();
 
     QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_functionLikeWidget);
-    layout->addWidget(m_cubicWidget);
-    layout->addWidget(m_linearWidget);
+    layout->addWidget(m_splineWidget);
+    layout->addWidget(m_lineWidget);
     layout->addWidget(m_freehandWidget);
 
     QVBoxLayout* buttonLayout = new QVBoxLayout();
@@ -56,14 +56,14 @@ KisCurveWidget::KisCurveWidget(QWidget *parent)
     buttonLayout->setMargin(0);
 
     QPushButton* functionlikeButton = new QPushButton("fun");
-    QPushButton* cubicButton = new QPushButton("cub");
-    QPushButton* linearButton = new QPushButton("lin");
+    QPushButton* splineButton = new QPushButton("spl");
+    QPushButton* lineButton = new QPushButton("lin");
     QPushButton* freehandButton = new QPushButton("fre");
     QPushButton* resetButton = new QPushButton("res");
 
     buttonLayout->addWidget(functionlikeButton);
-    buttonLayout->addWidget(cubicButton);
-    buttonLayout->addWidget(linearButton);
+    buttonLayout->addWidget(splineButton);
+    buttonLayout->addWidget(lineButton);
     buttonLayout->addWidget(freehandButton);
 
     QButtonGroup* buttonGroup = new QButtonGroup(this);
@@ -86,13 +86,13 @@ KisCurveWidget::KisCurveWidget(QWidget *parent)
     resetButton->setMaximumSize(30, 30);
 
     //default is cubic curve
-    m_currentCurve = m_cubicWidget;
+    m_currentCurve = m_splineWidget;
     m_currentCurve->show();
-    cubicButton->click();
+    splineButton->click();
 
     connect(functionlikeButton, SIGNAL(clicked()), SLOT(switchToFunction()));
-    connect(cubicButton,        SIGNAL(clicked()), SLOT(switchToCubic()));
-    connect(linearButton,       SIGNAL(clicked()), SLOT(switchToLinear()));
+    connect(splineButton,        SIGNAL(clicked()), SLOT(switchToCubic()));
+    connect(lineButton,       SIGNAL(clicked()), SLOT(switchToLinear()));
     connect(freehandButton,     SIGNAL(clicked()), SLOT(switchToFreehand()));
     connect(resetButton,        SIGNAL(clicked()), SLOT(reset()));
 }

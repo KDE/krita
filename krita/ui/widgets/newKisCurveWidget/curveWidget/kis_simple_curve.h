@@ -22,6 +22,8 @@
 
 #include "kis_curve.h"
 
+#include <QPainterPath>
+
 class KisSimpleCurve : public KisCurve
 {
 public:
@@ -44,7 +46,18 @@ public:
     /// returns a string in the format "className():x0,y0;x1,y1;x2,y2;.."
     virtual QString toString() const;
 
-private:
+    QVector<quint16> uint16Transfer(int size = 256) const;
+    QVector<qreal> floatTransfer(int size = 256) const;
+    qreal value(qreal x) const;
+    QPainterPath painterPath() const;
+
+protected:
+    template <typename T>
+    QVector<T> transfer(int size) const;
+    virtual void updatePainterPath() = 0;
+
+    QPainterPath m_painterPath;
+    /// the points are in the range of 0.0 to 1.0
     QList<QPointF> m_points;
 };
 

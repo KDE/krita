@@ -24,9 +24,8 @@
 #include <QList>
 
 #include "kis_shared.h"
-#include "kis_curve.h"
+
 //#include <krita_export.h>
-class QPointF;
 
 //const QString DEFAULT_CURVE_STRING = "0,0;1,1;";
 
@@ -52,13 +51,26 @@ public:
     virtual int addPoint(const QPointF& point) = 0;
     virtual void removePoint(int idx) = 0;
 
-    virtual const QVector<quint16>& uint16Transfer(int size = 256) const = 0;
-    virtual const QVector<qreal>& floatTransfer(int size = 256) const = 0;
+    virtual QVector<quint16> uint16Transfer(int size = 256) const = 0;
+    virtual QVector<qreal> floatTransfer(int size = 256) const = 0;
 
     /// must return a string in the format "ClassName:data", where data is a substring, that can be passed to the constructor.
     virtual QString toString() const = 0;
 
     static KisCurve* fromString(const QString&);
+    static bool pointCompare (const QPointF &p1, const QPointF &p2)
+    {
+        if(p1.x()<p2.x()) return true;
+        if(p1.x()==p2.x() && p1.y()<p2.y()) return true;
+        return false;
+    }
+
+protected:
+    static const int UINT16_TOP_BOUND = 0xFFFF;
+    static const int UINT16_BOTTOM_BOUND = 0x0;
+
+    static const qreal REAL_TOP_BOUND = 1.0;
+    static const qreal REAL_BOTTOM_BOUND = 0.0;
 };
 
 #endif // KIS_CURVE_H

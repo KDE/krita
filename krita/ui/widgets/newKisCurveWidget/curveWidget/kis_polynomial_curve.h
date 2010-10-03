@@ -54,8 +54,8 @@ public:
     int addPoint(const QPointF& point);
     void removePoint(int idx);
 public:
-    const QVector<quint16>& uint16Transfer(int size = 256) const;
-    const QVector<qreal>& floatTransfer(int size = 256) const;
+    QVector<quint16> uint16Transfer(int size = 256) const;
+    QVector<qreal> floatTransfer(int size = 256) const;
 public:
     QString toString() const;
 //    void fromString(const QString&);
@@ -64,7 +64,5 @@ private:
     struct Private;
     Private* const d;
 };
-
-Q_DECLARE_METATYPE(KisPolynomialCurve);
 
 #endif

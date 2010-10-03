@@ -47,6 +47,8 @@ void KisSimpleCurve::setPoint(int idx, const QPointF& point)
 int KisSimpleCurve::addPoint(const QPointF& point)
 {
     m_points.append(point);
+    qSort(m_points.begin(), m_points.end(), pointCompare);
+    return m_points.indexOf(point);
 }
 
 void KisSimpleCurve::removePoint(int idx)
@@ -72,4 +74,51 @@ QString KisSimpleCurve::toString() const
     }
 
     return ret;
+}
+
+QVector<quint16> KisSimpleCurve::uint16Transfer(int size) const
+{
+    return transfer<quint16>(size);
+}
+
+QVector<qreal> KisSimpleCurve::floatTransfer(int size) const
+{
+    return transfer<qreal>(size);
+}
+
+qreal KisSimpleCurve::value(qreal x) const
+{
+    Q_UNUSED(x);
+    return 0.5;
+}
+
+QPainterPath KisSimpleCurve::painterPath() const
+{
+    return m_painterPath;
+}
+
+template <typename T>
+QVector<T> KisSimpleCurve::transfer(int size) const
+{
+    QList<QPointF> data;
+
+    // data must be more precise, then size points
+    qreal delta = 1.0/qreal(2*size);
+    for(qreal t=0; t<=1.0; t+=delta) {
+        data.append(m_painterPath.pointAtPercent(t));
+    }
+
+    QVector<T> transferedData;
+    delta = 1.0/qreal(size);
+    int j=0;
+    for(int i=0; i<data.size(); i++) {
+        qreal currentSearchX = j*delta;
+        qreal currentIx = data.at(i).x();
+        qreal nextIx = (i+1<data.size())?(data.at(i+1).x()):1.0;
+
+        if(currentIx<currentSearchX && currentSearchX<nextIx) {
+            // linear interpolation
+
+        }
+    }
 }

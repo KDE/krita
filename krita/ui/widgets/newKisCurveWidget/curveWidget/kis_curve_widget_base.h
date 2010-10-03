@@ -25,13 +25,11 @@
 class QPainter;
 class QVector2D;
 
+static const qreal CURVE_RANGE = 1.0;
 
 class KisCurveWidgetBase : public QWidget
 {
     Q_OBJECT
-
-protected:
-    const qreal CURVE_RANGE;
 
 public:
     KisCurveWidgetBase(QWidget *parent = 0);

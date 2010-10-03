@@ -34,8 +34,8 @@ public:
 
 public slots:
     void switchToFunction() {switchTo(m_functionLikeWidget);}
-    void switchToCubic() {switchTo(m_cubicWidget);}
-    void switchToLinear() {switchTo(m_linearWidget);}
+    void switchToCubic() {switchTo(m_splineWidget);}
+    void switchToLinear() {switchTo(m_lineWidget);}
     void switchToFreehand() {switchTo(m_freehandWidget);}
     void reset();
 
@@ -45,8 +45,8 @@ protected:
 private:
     KisCurveWidgetBase* m_currentCurve;
     KisCurveWidgetBase* m_functionLikeWidget;
-    KisCurveWidgetBase* m_cubicWidget;
-    KisCurveWidgetBase* m_linearWidget;
+    KisCurveWidgetBase* m_splineWidget;
+    KisCurveWidgetBase* m_lineWidget;
     KisCurveWidgetBase* m_freehandWidget;
 };
 

@@ -416,14 +416,22 @@ QString KisPolynomialCurve::toString() const
 //    setPoints(points);
 //}
 
-const QVector<quint16>& KisPolynomialCurve::uint16Transfer(int size) const
+QVector<quint16> KisPolynomialCurve::uint16Transfer(int size) const
 {
-    d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF, size);
+    d->data->updateTransfer<quint16, int>(&d->data->u16Transfer,
+                                          d->data->validU16Transfer,
+                                          UINT16_BOTTOM_BOUND,
+                                          UINT16_TOP_BOUND,
+                                          size);
     return d->data->u16Transfer;
 }
 
-const QVector<qreal>& KisPolynomialCurve::floatTransfer(int size) const
+QVector<qreal> KisPolynomialCurve::floatTransfer(int size) const
 {
-    d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0, size);
+    d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer,
+                                          d->data->validFTransfer,
+                                          REAL_BOTTOM_BOUND,
+                                          REAL_TOP_BOUND,
+                                          size);
     return d->data->fTransfer;
 }

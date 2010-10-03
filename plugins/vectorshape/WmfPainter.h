@@ -41,10 +41,6 @@ public:
 protected:
     // -------------------------------------------------------------------------
     // Reimplemented functions
-
-    bool  begin();
-
-    void  setWindowOrg(int left, int top);
     void  setWindowExt(int width, int height);
 
 private:

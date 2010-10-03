@@ -35,77 +35,15 @@ WmfPainter::WmfPainter()
 }
 
 
-//-----------------------------------------------------------------------------
-// Virtual Painter
-
-bool WmfPainter::begin()
-{
-    bool ret = true;
-    if (mIsInternalPainter)
-        ret = mPainter->begin(mTarget);
-
-    if (ret) {
-        if (mRelativeCoord) {
-            mInternalWorldMatrix.reset();
-        } else {
-            // Some wmf files don't call setwindowOrg and
-            // setWindowExt, so it's better to do it here.  Note that
-            // boundingRect() is the rect of the WMF file, not the device.
-            QRect rec = boundingRect();
-            kDebug(31000) << "BoundingRect: " << rec;
-            mPainter->setWindow(rec.left(), rec.top(), rec.width(), rec.height());
-        }
-    }
-    // NOTE: NO SETUP OF ANY MATRIX STUFF IN HERE.
-
-    mPainter->setBrush(QBrush(Qt::NoBrush));
-    //mPainter->setBrush(QBrush(Qt::white));
-
-#if DEBUG_WMFPAINT
-    kDebug(31000) << "Using QPainter: " << mPainter->pen() << mPainter->brush() 
-                  << "Background: " << mPainter->background() << " " << mPainter->backgroundMode();
-#endif
-
-    return ret;
-}
-
-
-
-
 // ---------------------------------------------------------------------
 
 
-// We use our own setWindowOrg and setWindowExt that are basically
-// noops because the shape has already set up the mapping between
-// logical coordinates within the WMF and the size of the shape.
+// We use our own setWindowExt that are basically noops because the
+// shape has already set up the mapping between logical coordinates
+// within the WMF and the size of the shape.
 //
 // The only exception from this is that we may have to flip coordinate
 // systems in setWindowExt if the width and/or the height is negative.
-
-
-void WmfPainter::setWindowOrg(int left, int top)
-{
-    mOrgX = left;
-    mOrgY = top;
-
-    if (mRelativeCoord) {
-        // Translate back from last translation to the origin.
-        qreal dx = mInternalWorldMatrix.dx();
-        qreal dy = mInternalWorldMatrix.dy();
-        //kDebug(31000) << "old translation: " << dx << dy;
-        //kDebug(31000) << mInternalWorldMatrix;
-        //kDebug(31000) << "new translation: " << -orgX << -orgY;
-        mInternalWorldMatrix.translate(-dx, -dy);
-        mPainter->translate(-dx, -dy);
-
-        // Translate to the new origin.
-        mInternalWorldMatrix.translate(-left, -top);
-        mPainter->translate(-left, -top);
-    } else {
-        QRect rec = mPainter->window();
-        mPainter->setWindow(left, top, rec.width(), rec.height());
-    }
-}
 
 
 void WmfPainter::setWindowExt(int width, int height)
@@ -113,7 +51,6 @@ void WmfPainter::setWindowExt(int width, int height)
     mExtWidth  = width;
     mExtHeight = height;
 
-#if 1
     // Unscale the scale done last time (the first time, this code is a noop).
     qreal dx = mInternalWorldMatrix.dx();
     qreal dy = mInternalWorldMatrix.dy();
@@ -140,14 +77,15 @@ void WmfPainter::setWindowExt(int width, int height)
     mPainter->translate(dx2, dy2);
     mPainter->scale(mScaleX, mScaleY);
     mPainter->translate(-dx2, -dy2);
-#endif
+
 #if 0
     // Debug code.  Draw a rectangle with some decoration to show see
     // if all the transformations work.
     mPainter->save();
 
     mPainter->setPen(Qt::black);
-    QRect windowRect = QRect(QPoint(mOrgX, mOrgY), QSize(mExtWidth, mExtHeight));
+    QRect windowRect = QRect(QPoint(mOrgX, mOrgY),
+                             QSize(mExtWidth, mExtHeight));
     mPainter->drawRect(windowRect);
     mPainter->drawLine(QPoint(mOrgX, mOrgY), QPoint(0, 0));
 

@@ -170,30 +170,9 @@ bool LcmsColorProfileContainer::init()
         d->manufacturer = QString::fromWCharArray(buffer);
         
         // Check if the profile can convert (something->this)
-#if 0
-//         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
-//         if( OutMatShaper )
-//         {
-//             d->suitableForOutput = true;
-//         }
-#endif
-#if 0
-        cmsCIEXYZTRIPLE Primaries;
-
-        if (cmsTakeColorants(&Primaries, d->profile)) {
-            d->suitableForOutput = true;
-        }
-#endif
-        if (cmsIsTag(d->profile, cmsSigAToB0Tag)  &&
-                cmsIsTag(d->profile, cmsSigAToB1Tag) &&
-                cmsIsTag(d->profile, cmsSigAToB2Tag) &&
-                cmsIsTag(d->profile, cmsSigBToA0Tag) &&
-                cmsIsTag(d->profile, cmsSigBToA1Tag)  &&
-                cmsIsTag(d->profile, cmsSigBToA2Tag)) {
-            d->suitableForOutput = true;
-        } else {
-            d->suitableForOutput = false;
-        }
+        d->suitableForOutput = cmsIsMatrixShaper(d->profile)
+                               || ( cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) && 
+                                    cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT) );
         return true;
     }
     return false;

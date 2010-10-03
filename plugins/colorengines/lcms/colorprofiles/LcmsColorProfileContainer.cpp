@@ -170,26 +170,13 @@ bool LcmsColorProfileContainer::init()
         d->info = d->productInfo;
 
         // Check if the profile can convert (something->this)
-#if 0
-//         LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
-//         if( OutMatShaper )
-//         {
-//             d->suitableForOutput = true;
-//         }
-#endif
-#if 0
-        cmsCIEXYZTRIPLE Primaries;
-
-        if (cmsTakeColorants(&Primaries, d->profile)) {
+        LPMATSHAPER OutMatShaper = cmsBuildOutputMatrixShaper(d->profile);
+        if( OutMatShaper )
+        {
             d->suitableForOutput = true;
-        }
-#endif
-        if (cmsIsTag(d->profile, icSigAToB0Tag)  &&
-                cmsIsTag(d->profile, icSigAToB1Tag) &&
-                cmsIsTag(d->profile, icSigAToB2Tag) &&
-                cmsIsTag(d->profile, icSigBToA0Tag) &&
-                cmsIsTag(d->profile, icSigBToA1Tag)  &&
-                cmsIsTag(d->profile, icSigBToA2Tag)) {
+            cmsFreeMatShaper(OutMatShaper);
+        } else if (cmsIsTag(d->profile, icSigAToB0Tag)  &&
+                   cmsIsTag(d->profile, icSigBToA0Tag) ) {
             d->suitableForOutput = true;
         } else {
             d->suitableForOutput = false;

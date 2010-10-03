@@ -708,7 +708,7 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
 
     KisPainter gc(mergedDevice);
     gc.setChannelFlags(layer->channelFlags());
-    gc.setCompositeOp(layer->compositeOp());
+    gc.setCompositeOp(layer->colorSpace()->compositeOp(layer->compositeOp()->id()));
     gc.setOpacity(layer->opacity());
     gc.bitBlt(layerExtent.topLeft(), layer->projection(), layerExtent);
 

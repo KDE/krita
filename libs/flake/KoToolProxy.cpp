@@ -445,6 +445,16 @@ void KoToolProxy::deleteSelection()
         return d->activeTool->deleteSelection();
 }
 
+void KoToolProxy::processEvent(QEvent *e) const
+{
+    if(e->type()==QEvent::ShortcutOverride
+       && d->activeTool
+       && d->activeTool->isInTextMode()
+       && static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier) {
+        e->accept();
+    }
+}
+
 KoToolProxyPrivate *KoToolProxy::priv()
 {
     return d;

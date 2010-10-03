@@ -295,4 +295,9 @@ bool KoToolBase::isReadWrite() const
     return d->readWrite;
 }
 
+bool KoToolBase::isInTextMode() const
+{
+    return false;
+}
+
 #include <KoToolBase.moc>

@@ -341,6 +341,11 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
     }
 }
 
+bool ArtisticTextTool::isInTextMode() const
+{
+    return true;
+}
+
 void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);

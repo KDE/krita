@@ -125,6 +125,8 @@ public:
 
     QRectF textRect(int startPosition, int endPosition) const;
 
+    bool isInTextMode() const;
+
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);

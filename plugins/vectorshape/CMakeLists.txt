@@ -13,8 +13,8 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KWMF_INCLUDES} ${EMF
 SET ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp
-    VectorShapeFactory.cpp
-    VectorCollection.cpp
+    #VectorShapeFactory.cpp
+    #VectorCollection.cpp
     VectorData.cpp
     # No tool yet.
     #VectorTool.cpp

@@ -220,12 +220,17 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
     KisConfig cfg;
     QRectF viewportRect = imageRectInViewportPixels();
 
-    *textureTransform = cfg.scrollCheckers() ? QTransform() :
-        m_d->widgetToViewport.inverted() * m_d->postprocessedFlakeToWidget;
+    if(cfg.scrollCheckers()) {
+        *textureTransform = QTransform();
+        *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
+    }
+    else {
+        *textureTransform = m_d->widgetToViewport.inverted();
+        *textureRect = viewportRect;
+    }
 
     *modelTransform = viewportToWidgetTransform();;
     *modelRect = viewportRect;
-    *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
 }
 
 

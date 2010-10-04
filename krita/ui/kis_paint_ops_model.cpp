@@ -39,13 +39,10 @@ KisPaintOpsModel::KisPaintOpsModel(const QList<KisPaintOpFactory*>& list)
             pixmap = QPixmap(22,22);
             pixmap.fill();
         }
-        m_list.push_back(PaintOpInfo(op->id(), op->name(), op->category(), pixmap));
+        m_list.push_back(PaintOpInfo(op->id(), op->name(), op->category(), pixmap, op->priority()));
     }
 
-    foreach(const PaintOpInfo & info, m_list){
-            m_opsInOrder << info.id;
-    }
-    qSort(m_opsInOrder);
+    qSort(m_list);
     
     if (categories.isEmpty()){
         categories << KisPaintOpFactory::categoryStable() << KisPaintOpFactory::categoryExperimental();
@@ -74,9 +71,7 @@ QVariant KisPaintOpsModel::data(const QModelIndex & index, int role) const
         }
 
         case PaintOpSortRole: {
-            int idx = m_opsInOrder.indexOf(m_list[index.row()].id);
-            if (idx == -1) return m_opsInOrder.count();
-            return idx;
+            return index.row();
         }
         case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
             return m_list[index.row()].category;

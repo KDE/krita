@@ -97,6 +97,10 @@ public:
     /// Forwarded to the current KoToolBase
     void deleteSelection();
 
+    /// This method gives the proxy a chance to do things. for example it is need to have working singlekey
+    /// shortcuts. call it from the canvas' event function and forward it to QWidget::event() later.
+    void processEvent(QEvent *) const;
+
     /**
      * Retrieves the entire collection of actions for the active tool
      * or an empty hash if there is no active tool yet.

@@ -88,6 +88,14 @@ void KoPACanvas::updateCanvas( const QRectF& rc )
     emit canvasUpdated();
 }
 
+bool KoPACanvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void KoPACanvas::paintEvent( QPaintEvent *event )
 {
     QPainter painter(this);

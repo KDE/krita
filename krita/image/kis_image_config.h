@@ -50,10 +50,15 @@ public:
     int swapWindowSize() const;
     void setSwapWindowSize(int value);
 
-    int memoryHardLimit() const;
-    void setMemoryHardLimit(int value);
-    int memorySoftLimit() const;
-    void setMemorySoftLimit(int value);
+    int memoryHardLimit() const; // MiB
+    int memorySoftLimit() const; // MiB
+
+    qreal memoryHardLimitPercent() const; // % of total RAM
+    qreal memorySoftLimitPercent() const; // % of total RAM
+    void setMemoryHardLimitPercent(qreal value);
+    void setMemorySoftLimitPercent(qreal value);
+
+    static int totalRAM(); // MiB
 
 private:
     Q_DISABLE_COPY(KisImageConfig);

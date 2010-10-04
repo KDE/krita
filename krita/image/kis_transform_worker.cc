@@ -584,6 +584,7 @@ bool KisTransformWorker::run()
 
     //// Handle simple move case possibly with rotation of 90,180,270
     if (rotation == 0.0 && xscale == 1.0 && yscale == 1.0) {
+        m_boundRect.translate(xtranslate, ytranslate);
         if (rotQuadrant == 0) {
             // When we didn't move the m_dev to a temp device we can simply just move its coords
             srcdev->move(srcdev->x() + xtranslate, srcdev->y() + ytranslate);

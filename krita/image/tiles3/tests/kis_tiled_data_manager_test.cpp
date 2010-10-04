@@ -286,6 +286,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
     oldTile00 = dm.getOldTile(0, 0);
     QVERIFY(memoryIsFilled(oddPixel2, tile00->data(), TILESIZE));
     QVERIFY(memoryIsFilled(oddPixel1, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
 
     dm.purgeHistory(memento1);
 
@@ -297,6 +298,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
     oldTile00 = dm.getOldTile(0, 0);
     QVERIFY(memoryIsFilled(oddPixel2, tile00->data(), TILESIZE));
     QVERIFY(memoryIsFilled(oddPixel1, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
 
     dm.commit();
 
@@ -313,6 +315,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
     oldTile00 = dm.getOldTile(0, 0);
     QVERIFY(memoryIsFilled(oddPixel2, tile00->data(), TILESIZE));
     QVERIFY(memoryIsFilled(oddPixel2, oldTile00->data(), TILESIZE));
+    tile00 = oldTile00 = 0;
 
     /**
      * Just test we won't crash when the memento is not
@@ -375,19 +378,39 @@ void KisTiledDataManagerTest::benchmarkSharedPointers()
     //CALLGRIND_STOP_INSTRUMENTATION;
 }
 
+
+
 /******************* Stress job ***********************/
 
+//#define NUM_CYCLES 9000
 #define NUM_CYCLES 10000
-//#define NUM_CYCLES 100000
-#define NUM_TYPES 14
+#define NUM_TYPES 12
 
 #define TILE_DIMENSION 64
+
+
+/**
+ * The data manager has partial guarantees of reentrancy. That is
+ * you can call any arbitrary number of methods concurrently as long
+ * as their access areas do not intersect.
+ *
+ * Though the rule can be quite tricky -- some of the methods always
+ * use entire image as their access area, so they cannot be called
+ * concurrently in any circumstances.
+ * The examples are: clear(), commit(), rollback() and etc...
+ */
+
+#define run_exclusive(lock, _i) for(_i = 0, (lock).lockForWrite(); _i < 1; _i++, (lock).unlock())
+#define run_concurrent(lock, _i) for(_i = 0, (lock).lockForRead(); _i < 1; _i++, (lock).unlock())
+//#define run_exclusive(lock, _i) while(0)
+//#define run_concurrent(lock, _i) while(0)
+
 
 class KisStressJob : public QRunnable
 {
 public:
-    KisStressJob(KisTiledDataManager &dataManager, QRect rect)
-        : m_accessRect(rect), dm(dataManager)
+    KisStressJob(KisTiledDataManager &dataManager, QRect rect, QReadWriteLock &_lock)
+        : m_accessRect(rect), dm(dataManager), lock(_lock)
     {
     }
 
@@ -396,81 +419,99 @@ public:
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = qrand() % NUM_TYPES;
 
-            quint8 *buf;
-            KisTileSP tile;
-            QRect newRect;
-//            bool b;
+            qint32 t;
 
-//            qDebug() << ppVar(QThread::currentThreadId()) << ppVar(type);
             switch(type) {
             case 0:
-                buf = new quint8[dm.pixelSize()];
-                memcpy(buf, dm.defaultPixel(), dm.pixelSize());
-                dm.setDefaultPixel(buf);
-                delete[] buf;
+                run_concurrent(lock,t) {
+                    quint8 *buf;
+                    buf = new quint8[dm.pixelSize()];
+                    memcpy(buf, dm.defaultPixel(), dm.pixelSize());
+                    dm.setDefaultPixel(buf);
+                    delete[] buf;
+                }
                 break;
             case 1:
             case 2:
-                tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
-                                  m_accessRect.y() / TILE_DIMENSION, false);
-                tile->lockForRead();
-                tile->unlock();
-                tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
-                                  m_accessRect.y() / TILE_DIMENSION, true);
-                tile->lockForWrite();
-                tile->unlock();
+                run_concurrent(lock,t) {
+                    KisTileSP tile;
 
-                tile = dm.getOldTile(m_accessRect.x() / TILE_DIMENSION,
-                                     m_accessRect.y() / TILE_DIMENSION);
-                tile->lockForRead();
-                tile->unlock();
+                    tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
+                                      m_accessRect.y() / TILE_DIMENSION, false);
+                    tile->lockForRead();
+                    tile->unlock();
+                    tile = dm.getTile(m_accessRect.x() / TILE_DIMENSION,
+                                      m_accessRect.y() / TILE_DIMENSION, true);
+                    tile->lockForWrite();
+                    tile->unlock();
+
+                    tile = dm.getOldTile(m_accessRect.x() / TILE_DIMENSION,
+                                         m_accessRect.y() / TILE_DIMENSION);
+                    tile->lockForRead();
+                    tile->unlock();
+                }
                 break;
             case 3:
+                run_concurrent(lock,t) {
+                    QRect newRect = dm.extent();
+                }
+                break;
             case 4:
-//                m_memento = dm.getMemento();
+                run_concurrent(lock,t) {
+                    dm.clear(m_accessRect.x(), m_accessRect.y(),
+                             m_accessRect.width(), m_accessRect.height(), 4);
+                }
                 break;
             case 5:
-//                if(m_memento) {
-//                    dm.rollback(m_memento);
-//                    m_memento = 0;
-//                }
+                run_concurrent(lock,t) {
+                    quint8 *buf;
+
+                    buf = new quint8[m_accessRect.width() * m_accessRect.height() *
+                                     dm.pixelSize()];
+                    dm.readBytes(buf, m_accessRect.x(), m_accessRect.y(),
+                                 m_accessRect.width(), m_accessRect.height());
+                    dm.writeBytes(buf, m_accessRect.x(), m_accessRect.y(),
+                                  m_accessRect.width(), m_accessRect.height());
+                    delete[] buf;
+                    }
                 break;
             case 6:
-//                if(m_memento) {
-//                    dm.purgeHistory(m_memento);
-//                    m_memento = 0;
-//                }
+                run_concurrent(lock,t) {
+                    quint8 oddPixel = 13;
+                    KisTiledDataManager srcDM(1, &oddPixel);
+                    dm.bitBlt(&srcDM, m_accessRect);
+                }
                 break;
             case 7:
-//                b = dm.hasCurrentMemento();
-                break;
             case 8:
-                newRect = dm.extent();
+                run_exclusive(lock,t) {
+                    m_memento = dm.getMemento();
+                    dm.clear(m_accessRect.x(), m_accessRect.y(),
+                             m_accessRect.width(), m_accessRect.height(), 2);
+                    dm.commit();
+
+                    dm.rollback(m_memento);
+                    dm.rollforward(m_memento);
+
+                    dm.purgeHistory(m_memento);
+                    m_memento = 0;
+                }
                 break;
             case 9:
-                dm.setExtent(m_accessRect);
+                run_exclusive(lock,t) {
+                    bool b = dm.hasCurrentMemento();
+                    Q_UNUSED(b);
+                }
                 break;
             case 10:
-                dm.clear(m_accessRect.x(), m_accessRect.y(),
-                         m_accessRect.width(), m_accessRect.height(), 1);
+                run_exclusive(lock,t) {
+                    dm.clear();
+                }
                 break;
             case 11:
-                dm.clear();
-                break;
-            case 12:
-                buf = new quint8[m_accessRect.width() * m_accessRect.height() *
-                                 dm.pixelSize()];
-                dm.readBytes(buf, m_accessRect.x(), m_accessRect.y(),
-                             m_accessRect.width(), m_accessRect.height());
-                dm.writeBytes(buf, m_accessRect.x(), m_accessRect.y(),
-                              m_accessRect.width(), m_accessRect.height());
-                break;
-            case 13:
-            {
-                quint8 defaultPixel = 2;
-                KisTiledDataManager srcDM(1, &defaultPixel);
-                dm.bitBlt(&srcDM, m_accessRect);
-            }
+                run_exclusive(lock,t) {
+                    dm.setExtent(m_accessRect);
+                }
                 break;
             }
         }
@@ -480,21 +521,23 @@ private:
     KisMementoSP m_memento;
     QRect m_accessRect;
     KisTiledDataManager &dm;
+    QReadWriteLock &lock;
 };
 
 void KisTiledDataManagerTest::stressTest()
 {
     quint8 defaultPixel = 0;
     KisTiledDataManager dm(1, &defaultPixel);
+    QReadWriteLock lock;
 
     QThreadPool pool;
     pool.setMaxThreadCount(NUM_TYPES);
 
     QRect accessRect(0,0,100,100);
     for(qint32 i = 0; i < NUM_TYPES; i++) {
-        KisStressJob *job = new KisStressJob(dm, accessRect);
+        KisStressJob *job = new KisStressJob(dm, accessRect, lock);
         pool.start(job);
-        accessRect.translate(1024, 0);
+        accessRect.translate(100, 0);
     }
     pool.waitForDone();
 }

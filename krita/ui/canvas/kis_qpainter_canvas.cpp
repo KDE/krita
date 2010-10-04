@@ -162,6 +162,13 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 #endif
 }
 
+bool KisQPainterCanvas::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
 
 void KisQPainterCanvas::enterEvent(QEvent* e)
 {

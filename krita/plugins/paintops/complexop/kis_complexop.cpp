@@ -110,10 +110,6 @@ qreal KisComplexOp::paintAt(const KisPaintInformation& info)
     QRect dabRect = QRect(0, 0, brush->maskWidth(scale, 0.0), brush->maskHeight(scale, 0.0));
     QRect dstRect = QRect(x, y, dabRect.width(), dabRect.height());
 
-    if (painter()->bounds().isValid()) {
-        dstRect &= painter()->bounds();
-    }
-
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1;
 
     qint32 sx = dstRect.x() - x;

@@ -26,17 +26,22 @@
 
 void KisStoreLimitsTest::testLimits()
 {
+    const int totalRAM = KisImageConfig::totalRAM();
+    const int halfRAMMetric = MiB_TO_METRIC(totalRAM / 2);
+    const int quarterRAMMetric = MiB_TO_METRIC(totalRAM / 4);
+
     KisImageConfig config;
-    config.setMemoryHardLimit(16);
-    config.setMemorySoftLimit(8);
+    config.setMemoryHardLimitPercent(50);
+    config.setMemorySoftLimitPercent(25);
+
 
     KisStoreLimits limits;
 
-    QCOMPARE(limits.emergencyThreshold(), 4096);
-    QCOMPARE(limits.hardLimitThreshold(), 3584);
-    QCOMPARE(limits.hardLimit(), 3136);
-    QCOMPARE(limits.softLimitThreshold(), 2048);
-    QCOMPARE(limits.softLimit(), 1792);
+    QCOMPARE(limits.emergencyThreshold(), halfRAMMetric);
+    QCOMPARE(limits.hardLimitThreshold(), halfRAMMetric * 7 / 8);
+    QCOMPARE(limits.hardLimit(), (halfRAMMetric * 7 / 8) * 7 / 8);
+    QCOMPARE(limits.softLimitThreshold(), quarterRAMMetric);
+    QCOMPARE(limits.softLimit(), quarterRAMMetric * 7 / 8);
 }
 
 QTEST_KDEMAIN(KisStoreLimitsTest, NoGUI)

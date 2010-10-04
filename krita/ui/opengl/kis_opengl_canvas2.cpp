@@ -394,6 +394,14 @@ void KisOpenGLCanvas2::setupFlakeToWidgetTransformation()
     loadQTransform(transform);
 }
 
+bool KisOpenGLCanvas2::event(QEvent *e)
+{
+    if(toolProxy()) {
+        toolProxy()->processEvent(e);
+    }
+    return QWidget::event(e);
+}
+
 void KisOpenGLCanvas2::enterEvent(QEvent* e)
 {
     QWidget::enterEvent(e);

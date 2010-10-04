@@ -109,20 +109,60 @@ void KisImageConfig::setSwapWindowSize(int value)
 
 int KisImageConfig::memoryHardLimit() const
 {
-    return m_config.readEntry("memoryHardLimit", 512); // in MiB
-}
-
-void KisImageConfig::setMemoryHardLimit(int value)
-{
-    m_config.writeEntry("memoryHardLimit", value);
+    return totalRAM() * memoryHardLimitPercent() / 100;
 }
 
 int KisImageConfig::memorySoftLimit() const
 {
-    return m_config.readEntry("memorySoftLimit", 256); // in MiB
+    return totalRAM() * memorySoftLimitPercent() / 100;
 }
 
-void KisImageConfig::setMemorySoftLimit(int value)
+qreal KisImageConfig::memoryHardLimitPercent() const
 {
-    m_config.writeEntry("memorySoftLimit", value);
+    return m_config.readEntry("memoryHardLimitPercent", 50.);
+}
+
+void KisImageConfig::setMemoryHardLimitPercent(qreal value)
+{
+    m_config.writeEntry("memoryHardLimitPercent", value);
+}
+
+qreal KisImageConfig::memorySoftLimitPercent() const
+{
+    return m_config.readEntry("memorySoftLimitPercent", 25.);
+}
+
+void KisImageConfig::setMemorySoftLimitPercent(qreal value)
+{
+    m_config.writeEntry("memorySoftLimitPercent", value);
+}
+
+
+#if defined Q_OS_LINUX
+#include <sys/sysinfo.h>
+#endif
+
+#include <kdebug.h>
+
+int KisImageConfig::totalRAM()
+{
+    // let's think that default memory size is 1000MiB
+    int totalMemory = 1000; // MiB
+
+#if defined Q_OS_LINUX
+    struct sysinfo info;
+    int error = sysinfo(&info);
+
+    if(!error) {
+        totalMemory = info.totalram * info.mem_unit / (1UL << 20);
+    } else {
+        kWarning() << "Cannot get the size of your RAM."
+                   << "Using default value of 1GiB.";
+    }
+#else
+    kWarning() << "Cannot get the size of your RAM."
+               << "Using default value of 1GiB.";
+#endif
+
+    return totalMemory;
 }

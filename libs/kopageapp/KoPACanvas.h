@@ -67,6 +67,8 @@ signals:
 
 protected:
     /// reimplemented method from superclass
+    bool event(QEvent *);
+    /// reimplemented method from superclass
     void paintEvent( QPaintEvent* event );
     /// reimplemented method from superclass
     void tabletEvent( QTabletEvent *event );

@@ -159,7 +159,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
         currentImage()->undoAdapter()->beginMacro(i18n("Move"));
 
-        if (selection && !selection->isTotallyUnselected(image->bounds()) && !selection->isDeselected()) {
+        if (selection && !selection->isTotallyUnselected(image->bounds()) && !selection->isDeselected() && !node->inherits("KisSelectionMask")) {
             // Create a temporary layer with the contents of the selection of the current layer.
             Q_ASSERT(!node->inherits("KisGroupLayer"));
 
@@ -251,7 +251,7 @@ void KisToolMove::mouseReleaseEvent(KoPointerEvent *event)
             QPoint pos = convertToPixelCoord(event).toPoint();
             drag(pos);
 
-            QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition);
+            QUndoCommand *cmd = new KisNodeMoveCommand(m_selectedNode, m_layerStart, m_layerPosition, currentImage());
             Q_CHECK_PTR(cmd);
 
             canvas()->addCommand(cmd);
@@ -280,6 +280,10 @@ void KisToolMove::drag(const QPoint& original)
 
         m_layerPosition = QPoint(m_selectedNode->x(), m_selectedNode->y());
         m_dragStart = original;
+        
+        if (m_selectedNode->inherits("KisSelectionMask")) {
+            currentImage()->undoAdapter()->emitSelectionChanged();
+        }
 
         m_selectedNode->setDirty(rc);
     }

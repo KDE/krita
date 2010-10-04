@@ -1,8 +1,9 @@
 [Desktop Entry]
 Type=Link
 URL=.source/a4_waffle_grid.kra
-Icon=template_gray_empty
+Icon=template_comics_empty
 Name=waffle-iron grid
+Name[da]=Vaffeljernsgitter
 Name[en_GB]=waffle-iron grid
 Name[es]=rejilla de hierro para gofres
 Name[et]=Vahvlimasina ruudustik
@@ -18,6 +19,7 @@ Name[uk]=сітка з комірками
 Name[x-test]=xxwaffle-iron gridxx
 Name[zh_TW]=鐵模式格線
 Comment=300 dpi, A4 waffle-iron grid comic page with ink and color layers
+Comment[da]=300 dpi, A4 tegneserieside i vaffeljernsgitter med blæk og farvelag
 Comment[en_GB]=300 dpi, A4 waffle-iron grid comic page with ink and colour layers
 Comment[es]=página de cómic con rejilla de hierro para gofres de tamaño A4, a 300 ppp, con tinta y capas de colores
 Comment[et]=300 DPI A4 vahvlimasina ruudustikuga koomiksilehekülg tindi- ja värvikihiga

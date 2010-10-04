@@ -200,6 +200,12 @@ public:
     ///Reimplemented
     void setDefaultBounds(KisDefaultBoundsSP bounds);
 
+    ///Reimplemented
+    virtual void setX(qint32 x);
+
+    ///Reimplemented
+    virtual void setY(qint32 y);
+
 
 private:
 

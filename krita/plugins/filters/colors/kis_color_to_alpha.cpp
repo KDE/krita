@@ -96,10 +96,16 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
     while (! srcIt.isDone()) {
         if (srcIt.isSelected()) {
             quint8 d = cs->difference(color, srcIt.oldRawData());
+            qreal newOpacity; // = cs->opacityF(srcIt.rawData());
             if (d >= threshold) {
-                cs->setOpacity(dstIt.rawData(), qreal(1.0), 1);
+                newOpacity = 1.0;
             } else {
-                cs->setOpacity(dstIt.rawData(), d / thresholdF, 1);
+                newOpacity = d / thresholdF;
+            }
+            memcpy(dstIt.rawData(), srcIt.rawData(), pixelsize);
+            if(newOpacity < cs->opacityF(srcIt.rawData()))
+            {
+              cs->setOpacity(dstIt.rawData(), newOpacity, 1);
             }
         }
         if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);

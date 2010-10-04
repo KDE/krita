@@ -720,6 +720,7 @@ void KisLayerManager::rotateLayer(double radians)
     qint32 ty = qint32(cy * cos(radians) + cx * sin(radians) - cy + 0.5);
     KisTransformVisitor visitor(m_view->image(), 1.0, 1.0, 0, 0, radians, -tx, -ty, 0, filter);
     layer->accept(visitor);
+    layer->parent()->setDirty(r);
 
     undoAdapter->endMacro();
 

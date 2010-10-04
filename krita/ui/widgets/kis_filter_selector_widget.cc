@@ -49,7 +49,6 @@ struct KisFilterSelectorWidget::Private {
     KisBookmarkedFilterConfigurationsModel* currentBookmarkedFilterConfigurationsModel;
     KisFiltersModel* filtersModel;
     QGridLayout *widgetLayout;
-    bool visibleSelector;
 };
 
 KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Private)
@@ -77,8 +76,6 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent) : d(new Privat
 
     d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Minimum), 1, 0, 0, 2);
     d->widgetLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 0, 1, 2, 1);
-    
-    d->visibleSelector = true;
 }
 
 KisFilterSelectorWidget::~KisFilterSelectorWidget()
@@ -116,7 +113,6 @@ void KisFilterSelectorWidget::showFilterGallery(bool visible)
         sizes << 0 << currentCentralWidgetWidth;
     }
     d->uiFilterSelector.splitter->setSizes(sizes);
-    d->visibleSelector = visible;
 }
 
 bool KisFilterSelectorWidget::isFilterGalleryVisible() const

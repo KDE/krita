@@ -295,6 +295,13 @@ public:
      */
     bool isReadWrite() const;
 
+    /**
+      * This method can be reimplemented in a subclass.
+      * @return returns true, if the tool is in text mode. that means, that there is
+      *   any kind of textual input and all single key shortcuts should be eaten.
+      */
+    virtual bool isInTextMode() const;
+
 public slots:
 
     /**

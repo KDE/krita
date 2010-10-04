@@ -121,8 +121,22 @@ void KoToolProxy::repaintDecorations()
     if (d->activeTool) d->activeTool->repaintDecorations();
 }
 
+#include <KDebug>
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
+    // don't process tablet events for stylus middle and right mouse button
+    // they will be re-send as mouse events with the correct button. there is no possibility to get the button from the QTabletEvent.
+    if(qFuzzyIsNull(event->pressure()) && d->tabletPressed==false && event->type()!=QEvent::TabletMove) {
+        kDebug()<<"don't accept tablet event: "<< point;
+        return;
+    }
+    else {
+        // Accept the tablet events as they are useless to parent widgets and they will
+        // get re-send as mouseevents if we don't accept them.
+        kDebug()<<"accept tablet event: "<< point;
+        event->accept();
+    }
+
     KoInputDevice id(event->device(), event->pointerType(), event->uniqueId());
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
@@ -151,9 +165,6 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
         ; // ignore the rest.
     }
 
-    // Always accept tablet events as they are useless to parent widgets and they will
-    // get re-send as mouseevents if we don't accept them.
-    event->accept();
     d->mouseLeaveWorkaround = true;
 }
 
@@ -443,6 +454,16 @@ void KoToolProxy::deleteSelection()
 {
     if (d->activeTool)
         return d->activeTool->deleteSelection();
+}
+
+void KoToolProxy::processEvent(QEvent *e) const
+{
+    if(e->type()==QEvent::ShortcutOverride
+       && d->activeTool
+       && d->activeTool->isInTextMode()
+       && static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier) {
+        e->accept();
+    }
 }
 
 KoToolProxyPrivate *KoToolProxy::priv()

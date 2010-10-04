@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Phong Bumpmap Filter
+Name[da]=Phong Bumpmap-filter
 Name[en_GB]=Phong Bumpmap Filter
 Name[es]=Filtro de mapa de colisiones Phong
 Name[et]=Phongi kühmukaardi filter
@@ -12,6 +13,7 @@ Name[sv]=Phong bulkartefilter
 Name[uk]=Фільтр рельєфу за Фонгом
 Name[x-test]=xxPhong Bumpmap Filterxx
 Comment=Phong Bumpmap filter
+Comment[da]=Phong Bumpmap-filter
 Comment[en_GB]=Phong Bumpmap filter
 Comment[es]=Filtro de mapa de colisiones Phong
 Comment[et]=Phongi kühmukaardi filter

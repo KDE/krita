@@ -129,6 +129,7 @@ public:
                 uniqueFiles.append(fname);
                 QList<T*> resources = createResources(front);
                 foreach(T* resource, resources) {
+                    Q_CHECK_PTR(resource);
                     if (resource->load() && resource->valid())
                     {
                         m_resourcesByFilename[resource->shortFilename()] = resource;
@@ -140,7 +141,6 @@ public:
                         m_resources.append(resource);
 
                         notifyResourceAdded(resource);
-                        Q_CHECK_PTR(resource);
                     }
                     else {
                         delete resource;

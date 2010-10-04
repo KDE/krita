@@ -299,10 +299,6 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
 
     QRect dstRect = QRect(x, y, dab->bounds().width(), dab->bounds().height());
 
-    if (painter()->bounds().isValid()) {
-        dstRect &= painter()->bounds();
-    }
-
     if (dstRect.isNull() || dstRect.isEmpty() || !dstRect.isValid()) return 1.0;
 
     qint32 sx = dstRect.x() - x;

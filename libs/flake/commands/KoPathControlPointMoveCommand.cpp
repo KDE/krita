@@ -31,6 +31,7 @@ KoPathControlPointMoveCommand::KoPathControlPointMoveCommand(
         , m_pointData(pointData)
         , m_pointType(pointType)
 {
+    Q_ASSERT(offset.x() < 1e14 && offset.y() < 1e14);
     KoPathShape * pathShape = m_pointData.pathShape;
     KoPathPoint * point = pathShape->pointByIndex(m_pointData.pointIndex);
     if (point) {

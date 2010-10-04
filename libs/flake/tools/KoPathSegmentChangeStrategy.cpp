@@ -37,7 +37,14 @@ KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const
 , m_pointData1(segment)
 , m_pointData2(segment)
 {
-    const qreal eps = std::numeric_limits<qreal>::epsilon();
+    // The following value is a bit arbitrary, it would be more mathematically correct to use
+    // "std::numeric_limits<qreal>::epsilon()", but if the value is too small, when the user
+    // click near a control point it is relatively easy to create a path shape of almost
+    // infinite size, which blocks the application for a long period of time. A bigger value
+    // is mathematically uncorrect, but it avoids to block application, it also avoid to create
+    // an huge path shape by accident, and anyway, but it does not prevent the user to create one
+    // if he choose so.
+    const qreal eps = 1e-2;
     // force segment parameter range to avoid division by zero
     m_segmentParam = qBound(eps, m_segmentParam, qreal(1.0)-eps);
 

@@ -392,4 +392,25 @@ KisShapeSelectionFactory::KisShapeSelectionFactory(QObject* parent)
     setHidden(true);
 }
 
+void KisShapeSelection::moveX(qint32 x)
+{
+    foreach (KoShape* shape, shapeManager()->shapes()) {
+        if (shape != this) {
+            QPointF pos = shape->position();
+            shape->setPosition(QPointF(pos.x() + x/m_image->xRes(), pos.y()));
+        }
+    }
+}
+
+void KisShapeSelection::moveY(qint32 y)
+{
+    foreach (KoShape* shape, shapeManager()->shapes()) {
+        if (shape != this) {
+            QPointF pos = shape->position();
+            shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
+        }
+    }
+}
+
+
 #include "kis_shape_selection.moc"

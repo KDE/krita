@@ -994,12 +994,13 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
+    context.styleStack().setTypeProperties("table-cell");   // load all style attributes from "style:table-properties"
     loadOdfProperties(context.styleStack());   // load the KoTableCellStyle from the stylestack
+    context.styleStack().restore();
 }
 
 void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
-    styleStack.setTypeProperties("graphic");
     // Padding
     if (styleStack.hasProperty(KoXmlNS::fo, "padding-left"))
         setLeftPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding-left")));
@@ -1012,21 +1013,6 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "padding"))
         setPadding(KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "padding")));
 
-    // The fo:background-color attribute specifies the background color of a cell.
-    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
-        const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
-        QBrush brush = background();
-        if (bgcolor == "transparent")
-           clearBackground();
-        else {
-            if (brush.style() == Qt::NoBrush)
-                brush.setStyle(Qt::SolidPattern);
-            brush.setColor(bgcolor); // #rrggbb format
-            setBackground(brush);
-        }
-    }
-
-    styleStack.setTypeProperties("paragraph");
     // Borders
     if (styleStack.hasProperty(KoXmlNS::fo, "border", "left")) {
         QString border = styleStack.property(KoXmlNS::fo, "border", "left");
@@ -1129,12 +1115,25 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
+    // The fo:background-color attribute specifies the background color of a cell.
+    if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
+        const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
+        QBrush brush = background();
+        if (bgcolor == "transparent")
+           clearBackground();
+        else {
+            if (brush.style() == Qt::NoBrush)
+                brush.setStyle(Qt::SolidPattern);
+            brush.setColor(bgcolor); // #rrggbb format
+            setBackground(brush);
+        }
+    }
+
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
         setAlignment(KoText::valignmentFromString(verticalAlign));
     }
-    styleStack.restore();
 }
 
 void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)

@@ -14,8 +14,8 @@ SET ( VectorShape_SRCS
     VectorShapePlugin.cpp
     VectorShape.cpp
     VectorShapeFactory.cpp
-    VectorCollection.cpp
-    VectorData.cpp
+    #VectorCollection.cpp
+    #VectorData.cpp
     # No tool yet.
     #VectorTool.cpp
     #VectorToolFactory.cpp

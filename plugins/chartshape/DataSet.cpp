@@ -574,6 +574,7 @@ KDChart::PieAttributes DataSet::pieAttributes( int section ) const
 KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 */ ) const
 {
     KDChart::DataValueAttributes attr( d->dataValueAttributes );
+    Q_ASSERT( attr.isVisible() == d->dataValueAttributes.isVisible() );
     if ( d->sectionsDataValueAttributes.contains( section ) )
         attr = d->sectionsDataValueAttributes[ section ];
 
@@ -596,15 +597,17 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         Q_ASSERT( attachedAxis()->plotArea() );
         ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );        
         ma.setThreeD( attachedAxis()->plotArea()->isThreeD() );
-        ma.setVisible( true );
+        ma.setVisible( true );        
         break;
     default:
         // TODO: Make markers customizable even for other types
         if ( d->symbolsActivated )
-        {
+        {            
+            Q_ASSERT( attr.isVisible() );
             ma.setMarkerStyle( defaultMarkerTypes[ d->symbolID ] );
             ma.setMarkerSize( QSize( 10, 10 ) );
             ma.setVisible( true );
+//             attr.setVisible( true );
         }
         else
             ma.setVisible( false );
@@ -665,6 +668,8 @@ void DataSet::setPen( int section, const QPen &pen )
     d->pens[ section ] = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
+    if ( !d->sectionsDataValueAttributes.contains( section ) )
+        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
     mas.setPen( pen );
     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
@@ -675,6 +680,8 @@ void DataSet::setBrush( int section, const QBrush &brush )
     d->brushes[ section ] = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::BrushDataRole, section );
+    if ( !d->sectionsDataValueAttributes.contains( section ) )
+        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
     mas.setMarkerColor( brush.color() );
     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
@@ -990,7 +997,10 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 
     switch ( type ) {
         case NoValueLabel:{
-            attr.setVisible( false );
+            KDChart::TextAttributes ta ( attr.textAttributes() );
+            ta.setVisible( false );
+            attr.setTextAttributes( ta );
+//             attr.setVisible( false );
             break;
         }
         case RealValueLabel:{
@@ -1177,14 +1187,16 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-type" ) )
     {
         const QString name = styleStack.property( KoXmlNS::chart, "symbol-type" );
-        if ( name == "automatic" ) {
+        if ( name == "automatic" )
+        {
             d->symbolsActivated = true;
             d->symbolID = d->num % numDefaultMarkerTypes;
         }
-        else if ( name == "named-symbol" ) {
+        else if ( name == "named-symbol" )
+        {
             d->symbolsActivated = true;
-            if ( styleStack.hasProperty( KoXmlNS::chart, "named-symbol" ) ) {
-                const QString type = styleStack.property( KoXmlNS::chart, "named-symbol" );
+            if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-name" ) ) {
+                const QString type = styleStack.property( KoXmlNS::chart, "symbol-name" );
                 if ( type == "square" )
                     d->symbolID = 0;
                 else if ( type == "diamond" )

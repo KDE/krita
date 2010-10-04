@@ -350,20 +350,26 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsSP bounds)
 
 void KisSelection::setX(qint32 x)
 {
+    qint32 delta = x - this->x();
     KisPaintDevice::setX(x);
     if (hasPixelSelection()) {
         m_d->pixelSelection->setX(x);
     }
-    //TODO shape selection
+    if (hasShapeSelection()) {
+        m_d->shapeSelection->moveX(delta);
+    }
 }
 
 void KisSelection::setY(qint32 y)
 {
+    qint32 delta = y - this->y();
     KisPaintDevice::setY(y);
     if (hasPixelSelection()) {
         m_d->pixelSelection->setY(y);
     }
-    //TODO shape selection
+    if (hasShapeSelection()) {
+        m_d->shapeSelection->moveY(delta);
+    }
 }
 
 

@@ -66,6 +66,10 @@ public:
     virtual QPainterPath selectionOutline();
 
     KoShapeManager *shapeManager() const;
+    
+    void moveX(qint32 x);
+    void moveY(qint32 y);
+
 
 protected:
 

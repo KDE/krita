@@ -54,28 +54,25 @@ Bitmap::Bitmap( QDataStream &stream,
 {
     // If necessary read away garbage before the bitmap header.
     if (offBmiSrc > usedBytes) {
-        kDebug(31000) << "soaking " << offBmiSrc - usedBytes << "bytes before the header";
+        //kDebug(31000) << "soaking " << offBmiSrc - usedBytes << "bytes before the header";
         soakBytes(stream, offBmiSrc - usedBytes);
         usedBytes = offBmiSrc;
     }
 
     // Create the header
-    kDebug(31000) << "stream position before the bitmap header: " << stream.device()->pos();
-    kDebug(31000) << "reading bitmap header (" << cbBmiSrc << "bytes)";
     m_header = new BitmapHeader(stream, cbBmiSrc);
     usedBytes += cbBmiSrc;
-    kDebug(31000) << "stream position after the bitmap header: " << stream.device()->pos();
 
     // If necessary read away garbage between the bitmap header and the picture.
     if (offBitsSrc > usedBytes) {
-        kDebug(31000) << "soaking " << offBmiSrc - usedBytes << "bytes between the header and the image";
+        //kDebug(31000) << "soaking " << offBmiSrc - usedBytes << "bytes between the header and the image";
         soakBytes(stream, offBitsSrc - usedBytes);
         usedBytes = offBitsSrc;
     }
 
     // Read the image data
     if (cbBitsSrc > 0) {
-        kDebug(31000) << "reading bitmap (" << cbBitsSrc << "bytes)";
+        //kDebug(31000) << "reading bitmap (" << cbBitsSrc << "bytes)";
         m_imageData.resize( cbBitsSrc );
         stream.readRawData( m_imageData.data(), cbBitsSrc );
         m_hasImage = true;
@@ -85,7 +82,7 @@ Bitmap::Bitmap( QDataStream &stream,
 
     // If necessary, read away garbage after the image.
     if (recordSize > usedBytes) {
-        kDebug(31000) << "soaking " << recordSize - usedBytes << "bytes after the image";
+        //kDebug(31000) << "soaking " << recordSize - usedBytes << "bytes after the image";
         soakBytes(stream, recordSize - usedBytes);
         usedBytes = recordSize;
     }
@@ -118,15 +115,15 @@ QImage Bitmap::image()
         if ( m_header->compression() == BI_RGB ) {
             format = QImage::Format_RGB555;
         } else {
-            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
-                          << m_header->compression();
+            //kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
+            //              << m_header->compression();
             //Q_ASSERT( 0 );
             return QImage();
         }
     } else if ( m_header->bitCount() == BI_BITCOUNT_5 ) {
         format = QImage::Format_RGB888;
     } else {
-        kDebug(31000) << "Unexpected format:" << m_header->bitCount();
+        //kDebug(31000) << "Unexpected format:" << m_header->bitCount();
         //Q_ASSERT(0);
         return QImage();
     }
@@ -188,8 +185,8 @@ QImage *Bitmap::image()
         if ( m_header->compression() == 0x00 ) {
             format = QImage::Format_RGB555;
         } else {
-            kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
-                          << m_header->compression();
+            //kDebug(33100) << "Unexpected compression format for BI_BITCOUNT_4:"
+            //              << m_header->compression();
             //Q_ASSERT( 0 );
             return 0;
         }

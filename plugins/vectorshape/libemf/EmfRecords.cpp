@@ -32,25 +32,25 @@ namespace Libemf
 BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     : m_bitmap(0)
 {
-    kDebug(31000) << "stream position at the start: " << stream.device()->pos();
-    kDebug(31000) << "record size: " << recordSize;
+    //kDebug(31000) << "stream position at the start: " << stream.device()->pos();
+    //kDebug(31000) << "record size: " << recordSize;
+
     stream >> m_bounds;
 
     stream >> m_xDest;          // x, y of upper left corner of the destination.
     stream >> m_yDest;
     stream >> m_cxDest;         // width, height of the rectangle in logical coords.
     stream >> m_cyDest;
-    kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
+    //kDebug(31000) << "Destination" << m_xDest << m_yDest << m_cxDest << m_cyDest;
 
     stream >> m_BitBltRasterOperation;
-    kDebug(31000) << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
+    //kDebug(31000) << "bitblt raster operation:" << hex << m_BitBltRasterOperation << dec;
 
     stream >> m_xSrc;           // x, y of the source
     stream >> m_ySrc;
-    kDebug(31000) << "Source" << m_xSrc << m_ySrc;
+    //kDebug(31000) << "Source" << m_xSrc << m_ySrc;
 
-    kDebug(31000) << "position before the matrix: " << stream.device()->pos();
-#if 1 // it seems that the floats all use 8 bytes instead of the wanted 4.
+    //kDebug(31000) << "position before the matrix: " << stream.device()->pos();
     stream.setFloatingPointPrecision(QDataStream::SinglePrecision);
     float M11, M12, M21, M22, Dx, Dy;
     stream >> M11;              // Transformation matrix
@@ -60,47 +60,35 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
     stream >> Dx;
     stream >> Dy;
     m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
-    kDebug(31000) << "Matrix" << m_XFormSrc;
-#else
-    quint32 M11, M12, M21, M22, Dx, Dy;
-    stream >> M11;              // Transformation matrix
-    stream >> M12;
-    stream >> M21;
-    stream >> M22;
-    stream >> Dx;
-    stream >> Dy;
-    //m_XFormSrc = QTransform( M11, M12, M21, M22, Dx, Dy );
-#endif
-    kDebug(31000) << "position after the matrix: " << stream.device()->pos();
+    //kDebug(31000) << "Matrix" << m_XFormSrc;
+    //kDebug(31000) << "position after the matrix: " << stream.device()->pos();
 
     stream >> m_red >> m_green >> m_blue >> m_reserved;
-    kDebug(31000) << "Background color" << m_red << m_green << m_blue << m_reserved;
-    kDebug(31000) << "position after background color: " << stream.device()->pos();
+    //kDebug(31000) << "Background color" << m_red << m_green << m_blue << m_reserved;
+    //kDebug(31000) << "position after background color: " << stream.device()->pos();
 
     stream >> m_UsageSrc;
-    kDebug(31000) << "Color table interpretation" << m_UsageSrc;
+    //kDebug(31000) << "Color table interpretation" << m_UsageSrc;
 
     stream >> m_offBmiSrc;      // Offset to start of bitmap header from start of record
     stream >> m_cbBmiSrc;       // Size of source bitmap header
     stream >> m_offBitsSrc;     // Offset to source bitmap from start of record
     stream >> m_cbBitsSrc;      // Size of source bitmap
-#if 1
+#if 0
     kDebug(31000) << "header offset:" << m_offBmiSrc;
     kDebug(31000) << "header size:  " << m_cbBmiSrc;
     kDebug(31000) << "bitmap offset:" << m_offBitsSrc;
     kDebug(31000) << "bitmap size:  " << m_cbBitsSrc;
 #endif
 
-    kDebug(31000) << "stream position before the image: " << stream.device()->pos();
+    //kDebug(31000) << "stream position before the image: " << stream.device()->pos();
     if (m_cbBmiSrc > 0) {
         m_bitmap = new Bitmap( stream, recordSize, 8 + 23 * 4, // header + 23 ints
                                m_offBmiSrc, m_cbBmiSrc,
                                m_offBitsSrc, m_cbBitsSrc );
     }
 
-    kDebug(31000) << "stream position at the end: " << stream.device()->pos();
-    //m_imageData.resize( m_cbBitsSrc );
-    //stream.readRawData( m_imageData.data(), m_cbBitsSrc );
+    //kDebug(31000) << "stream position at the end: " << stream.device()->pos();
 }
 
 BitBltRecord::~BitBltRecord()

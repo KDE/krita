@@ -16,8 +16,8 @@ cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)
 
 # define the generic version of the KOffice libraries here
 # this makes it easy to advance it when the next KOffice release comes
-set(GENERIC_KOFFICE_LIB_VERSION "7.0.0")
-set(GENERIC_KOFFICE_LIB_SOVERSION "7")
+set(GENERIC_KOFFICE_LIB_VERSION "8.0.0")
+set(GENERIC_KOFFICE_LIB_SOVERSION "8")
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 

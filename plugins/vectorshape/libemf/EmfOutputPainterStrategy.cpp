@@ -613,7 +613,10 @@ void OutputPainterStrategy::selectStockObject( const quint32 ihObject )
 
 void OutputPainterStrategy::selectObject( const quint32 ihObject )
 {
+#if DEBUG_EMFPAINT
     kDebug(33100) << hex << ihObject << dec;
+#endif
+
     if ( ihObject & 0x80000000 ) {
 	selectStockObject( ihObject );
     } else {

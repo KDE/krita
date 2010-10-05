@@ -835,7 +835,7 @@ void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
 void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
 {
 #if DEBUG_EMFPAINT
-    //kDebug(31000) << extTextOutA;  FIXME
+    kDebug(31000);//FIXME << extTextOutA;
 #endif
 
     m_painter->save();

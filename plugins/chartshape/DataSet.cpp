@@ -1105,7 +1105,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
     // the rows it belongs to. See ChartProxyModel::loadOdf()
-//     const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+    const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 
     {
         QBrush brush(Qt::NoBrush);

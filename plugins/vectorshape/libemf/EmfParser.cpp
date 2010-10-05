@@ -957,7 +957,7 @@ bool Parser::readRecord( QDataStream &stream )
             quint32 cbBits;     // Size of the bitmap
             stream >> cbBits;
 
-#if 1
+#if DEBUG_EMFPARSER
             kDebug(31000) << "index:" << ihBrush;
             kDebug(31000) << "DIBColors enum:" << usage;
             kDebug(31000) << "header offset:" << offBmi;

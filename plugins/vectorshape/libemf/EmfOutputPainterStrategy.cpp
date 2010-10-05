@@ -67,13 +67,13 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
 OutputPainterStrategy::~OutputPainterStrategy()
 {
     delete m_header;
-    //delete m_painter;    // Don't delete the painter because we don't own it.
     delete m_path;
     delete m_image;
 }
 
 void OutputPainterStrategy::paintBounds(const Header *header)
 {
+    // The rectangle is in device coordinates.
     QRectF  rect(header->bounds());
     m_painter->save();
 
@@ -89,22 +89,18 @@ void OutputPainterStrategy::paintBounds(const Header *header)
 void OutputPainterStrategy::init( const Header *header )
 {
     // Save the header since we need the frame and bounds inside the drawing.
-    //
-    // To be precise, it seems that the StretchDiBits record uses the
-    // physical size (stored in header.frame()) to specify where to
-    // draw the picture rather than logical coordinates.
-    // (This has since been doubted, and is currently disabled.)
     m_header = new Header(*header);
 
     QSize  headerBoundsSize = header->bounds().size();
 
 #if DEBUG_EMFPAINT
     kDebug(31000) << "----------------------------------------------------------------------";
-    kDebug(31000) << "emfFrame (phys size) =" << header->frame().x() << header->frame().y()
-                  << header->frame().width() << header->frame().height();
-    kDebug(31000) << "emfBounds (log size) =" << header->bounds().x() << header->bounds().y()
+    kDebug(31000) << "Shape size               =" << m_outputSize.width() << m_outputSize.height() << " pt";
+    kDebug(31000) << "----------------------------------------------------------------------";
+    kDebug(31000) << "Boundary box (dev units) =" << header->bounds().x() << header->bounds().y()
                   << header->bounds().width() << header->bounds().height();
-    kDebug(31000) << "outputSize           =" << m_outputSize.width() << m_outputSize.height();
+    kDebug(31000) << "Frame (phys size)        =" << header->frame().x() << header->frame().y()
+                  << header->frame().width() << header->frame().height() << " *0.01 mm";
 
     kDebug(31000) << "Device =" << header->device().width() << header->device().height();
     kDebug(31000) << "Millimeters =" << header->millimeters().width()
@@ -141,6 +137,13 @@ void OutputPainterStrategy::init( const Header *header )
         m_painter->translate((m_outputSize.width() / scaleX - headerBoundsSize.width()) / 2,
                              (m_outputSize.height() / scaleY - headerBoundsSize.height()) / 2);
     }
+
+    // For calculations of window / viewport during the painting
+    m_windowOrg = QPoint(0, 0);
+    m_viewportOrg = QPoint(0, 0);
+    m_windowExtIsSet = false;
+    m_viewportExtIsSet = false;
+    m_windowViewportIsSet = false;
 
 #if DEBUG_EMFPAINT
     paintBounds(header);
@@ -259,14 +262,62 @@ void OutputPainterStrategy::setMetaRgn()
     kDebug(33100) << "EMR_SETMETARGN not yet implemented";
 }
 
+
+// ----------------------------------------------------------------
+//                     Window and Viewport
+
+
+// It would have been nice to be able to use the setWindow() and
+// setViewport() methods of QPainter directly, but these will place
+// the viewport in relation to the paintdevice and not the shape.  So
+// instead, we have to redo the calculations ourselves here.
+
+// Set Window and Viewport
+void OutputPainterStrategy::setWindowViewport()
+{
+    if (!m_windowExtIsSet && m_viewportExtIsSet)
+        return;
+
+    if (m_windowExtIsSet && m_viewportExtIsSet) {
+        // Both window and viewport are set.
+        m_windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
+        m_windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
+    } else {
+        // Only one of window and viewport ext is set: Use same width for window and viewport
+        m_windowViewportScaleX = qreal(1.0);
+        m_windowViewportScaleY = qreal(1.0);
+    }
+
+    m_painter->translate(-m_windowOrg);
+    m_painter->scale(m_windowViewportScaleX, m_windowViewportScaleY);
+    m_painter->translate(m_viewportOrg);
+
+    m_windowViewportIsSet = true;
+}
+
+// Unset Window and Viewport.  This has to be called before we can
+// reset the window or viewport origin or extension.
+void OutputPainterStrategy::unsetWindowViewport()
+{
+    if (!m_windowViewportIsSet)
+        return;
+
+    m_painter->translate(-m_viewportOrg);
+    m_painter->scale(qreal(1.0) / m_windowViewportScaleX, qreal(1.0) / m_windowViewportScaleY);
+    m_painter->translate(m_windowOrg);
+}
+
 void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << origin;
 #endif
-    return;
-    QSize windowSize = m_painter->window().size();
-    m_painter->setWindow( QRect( origin, windowSize ) );
+
+    unsetWindowViewport();
+
+    m_windowOrg = origin;
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::setWindowExtEx( const QSize &size )
@@ -274,9 +325,13 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
 #endif
-    return;
-    QPoint windowOrigin = m_painter->window().topLeft();
-    m_painter->setWindow( QRect( windowOrigin, size ) );
+
+    unsetWindowViewport();
+
+    m_windowExt = size;
+    m_windowExtIsSet = true;
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
@@ -285,9 +340,11 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
-    return;
-    QSize viewportSize = m_painter->viewport().size();
-    m_painter->setViewport( QRect( origin, viewportSize ) );
+    unsetWindowViewport();
+
+    m_viewportOrg = origin;
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::setViewportExtEx( const QSize &size )
@@ -296,10 +353,27 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
     kDebug(31000) << size;
 #endif
 
-    return;
-    QPoint viewportOrigin = m_painter->viewport().topLeft();
-    m_painter->setViewport( QRect( viewportOrigin, size ) );
+    unsetWindowViewport();
+
+    m_viewportExt = size;
+    m_viewportExtIsSet = true;
+
+#if 0
+    m_painter->setViewport(QRect(m_viewportOrg, m_viewportExt));
+
+    // If the window size is not set, then set it using the viewport size.
+    // This will most likely be changed by a call to setWindowExt soon anyway.
+    if (!m_windowExtIsSet) {
+        m_painter->setWindow(QRect(m_windowOrg, m_viewportExt));
+    }
+#else
+    setWindowViewport();
+#endif
 }
+
+
+// ----------------------------------------------------------------
+
 
 void OutputPainterStrategy::createPen( quint32 ihPen, quint32 penStyle, quint32 x, quint32 y,
                                        quint8 red, quint8 green, quint8 blue, quint8 reserved )
@@ -1144,24 +1218,7 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 
     // SRCCOPY is the simplest case.  TODO: implement the rest.
     if (record.rasterOperation() == 0x00cc0020) {
-        // For some reason, the target coordinates for the picture are
-        // expressed in physical coordinates (Frame in the header)
-        // instead of logical coordinates like all the other types of
-        // records.  Therefore we have to rescale the target from
-        // physical to logical coordinates.
-#if DEBUG_EMFPAINT
-        qreal scaleX = qreal(m_header->frame().width()) / qreal(m_header->bounds().width());
-        qreal scaleY = qreal(m_header->frame().height()) / qreal(m_header->bounds().height());
-        kDebug(31000) << "Scale = " << scaleX << scaleY;
-#endif
-
-        QRectF realTarget(QPoint(target.x(), target.y()),
-                          QSize(target.width(), target.height()));
-
-#if DEBUG_EMFPAINT
-        kDebug(31000) << "    realTarget" << realTarget;
-#endif
-        m_painter->drawImage(realTarget, record.image(), source);
+        m_painter->drawImage(target, record.image(), source);
     }
 }
 

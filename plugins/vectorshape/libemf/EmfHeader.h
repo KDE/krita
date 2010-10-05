@@ -62,12 +62,12 @@ public:
     quint32 recordCount() const;
 
     /**
-       The bounds of the file content, in device units
+       The bounding box of the file content, in device units
     */
     QRect bounds() const;
 
     /**
-       The frame of the file content, in device units
+       The frame of the file content, in 0.01 mm units
     */
     QRect frame() const;
 

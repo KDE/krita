@@ -187,9 +187,9 @@ void VectorShape::drawWmf(QPainter &painter) const
 void VectorShape::drawEmf(QPainter &painter) const
 {
     // FIXME: Make emfOutput use QSizeF
-    QSize  sizeInt( size().width(), size().height() );
+    QSize  shapeSizeInt( size().width(), size().height() );
     //kDebug(31000) << "-------------------------------------------";
-    //kDebug(31000) << "size:     " << sizeInt << size();
+    //kDebug(31000) << "size:     " << shapeSizeInt << size();
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
@@ -207,7 +207,7 @@ void VectorShape::drawEmf(QPainter &painter) const
     Libemf::Parser  emfParser;
 #if 1
     // Create a new painter output strategy.  Last param = true means keep aspect ratio. 
-    Libemf::OutputPainterStrategy  emfPaintOutput( painter, sizeInt, true );
+    Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
 #else
     Libemf::OutputDebugStrategy  emfDebugOutput;

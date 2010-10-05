@@ -1105,7 +1105,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
     // the rows it belongs to. See ChartProxyModel::loadOdf()
-    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+//     const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1157,11 +1157,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
-//         if ( !fullDataDefinition ){
-//             setYDataRegion( region );
-//             if ( !maybeCompleteDataDefinition )
-//               setXDataRegion( region );
-//         }
         if ( bubbleChart )
             setCustomDataRegion( region );
         else
@@ -1206,6 +1201,12 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                     d->symbolID = 5;
                 else if ( type == "x" )
                     d->symbolID = 2;
+                else if ( type == "triangle" )
+                    d->symbolID = 0;
+                else if ( type == "plus" )
+                    d->symbolID = 2;
+                else
+                    d->symbolID = 0;
             }
         }
     }

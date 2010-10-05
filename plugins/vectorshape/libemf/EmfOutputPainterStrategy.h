@@ -137,7 +137,12 @@ public:
     void stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord );
 
 private:
+    /// For debugging purposes: Draw the boundary box.
     void paintBounds(const Header *header);
+
+    // For setting and unsetting window and viewport.
+    void setWindowViewport();
+    void unsetWindowViewport();
 
     /**
        Select a stock object.
@@ -183,10 +188,24 @@ private:
     QPainterPath *m_path;
     bool          m_currentlyBuildingPath;
 
+    // Everything that has to do with window and viewport calculation
+    QPoint        m_windowOrg;
+    QSize         m_windowExt;
+    QPoint        m_viewportOrg;
+    QSize         m_viewportExt;
+    bool          m_windowExtIsSet;
+    bool          m_viewportExtIsSet;
+    qreal         m_windowViewportScaleX;
+    qreal         m_windowViewportScaleY;
+    bool          m_windowViewportIsSet;
+
     /**
        The image we are painting to
     */
     QImage *m_image;
+
+    // ----------------------------------------------------------------
+    //                     The graphics context
 
     /**
        The current text pen

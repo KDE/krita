@@ -1078,11 +1078,13 @@ qint32 KisPaintDevice::rowStride(qint32 x, qint32 y) const
 void KisPaintDevice::setX(qint32 x)
 {
     m_d->x = x;
+    m_d->cache.invalidate();
 }
 
 void KisPaintDevice::setY(qint32 y)
 {
     m_d->y = y;
+    m_d->cache.invalidate();
 }
 
 bool KisPaintDevice::fastBitBltPossible(KisPaintDeviceSP src)

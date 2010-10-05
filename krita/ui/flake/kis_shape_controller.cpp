@@ -214,10 +214,6 @@ void KisShapeController::removeShape(KoShape* shape)
         }
     }
 
-
-    KisCanvas2 * canvas = 0;
-    KisSelectionSP selection = 0;
-
     KisShapeSelection * shapeSelection = dynamic_cast<KisShapeSelection*>(shape->parent());
     if (shapeSelection) {
         shapeSelection->removeChild(shape);
@@ -266,10 +262,10 @@ void KisShapeController::addShape(KoShape* shape)
                 }
                 KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
                 shapeSelection->addChild(shape);
-                
+
                 // Mark shape as selection shape, that way it can be identified after it was removed and readded
                 if(!shape->userData()) {
-                    shape->setUserData(new KisShapeSelectionMarker);                
+                    shape->setUserData(new KisShapeSelectionMarker);
                 }
                 /*
                             foreach( KoView *view, m_d->doc->views() ) {

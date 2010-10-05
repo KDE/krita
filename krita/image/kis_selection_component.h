@@ -33,9 +33,9 @@ public:
 
     virtual void renderToProjection(KisSelection* projection) = 0;
     virtual void renderToProjection(KisSelection* projection, const QRect& r) = 0;
-    
-    virtual void moveX(qint32 x) {}
-    virtual void moveY(qint32 x) {}
+
+    virtual void moveX(qint32 x) { Q_UNUSED(x); }
+    virtual void moveY(qint32 y) { Q_UNUSED(y); }
 };
 
 #endif

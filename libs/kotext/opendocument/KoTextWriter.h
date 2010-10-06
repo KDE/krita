@@ -53,6 +53,18 @@ public:
     ~KoTextWriter();
 
     /**
+     * Save a paragraph style used in a text block
+     *
+     * This checks if the style is a document style or a automatic style
+     * and saves it accordingly.
+     *
+     * @param block The block form which the style information are taken
+     * @param styleManager The used style manager
+     * @param context The saving context
+     */
+    static QString saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context);
+
+    /**
      * Writes the portion of document contained within 'from' and 'to'
      */
     void write(QTextDocument *document, int from, int to = -1);

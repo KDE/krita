@@ -245,7 +245,7 @@ KoTextWriter::~KoTextWriter()
     delete d;
 }
 
-QString KoTextWriter::Private::saveParagraphStyle(const QTextBlock &block)
+QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context)
 {
     KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
 
@@ -280,6 +280,11 @@ QString KoTextWriter::Private::saveParagraphStyle(const QTextBlock &block)
         generatedName = context.mainStyles().insert(style, "P");
     }
     return generatedName;
+}
+
+QString KoTextWriter::Private::saveParagraphStyle(const QTextBlock &block)
+{
+    return KoTextWriter::saveParagraphStyle(block, styleManager, context);
 }
 
 QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)

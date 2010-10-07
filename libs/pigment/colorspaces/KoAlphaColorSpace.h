@@ -46,6 +46,8 @@ public:
 
     virtual ~KoAlphaColorSpace();
 
+    static QString colorSpaceId() { return "ALPHA"; }
+
     virtual KoID colorModelId() const {
         return AlphaColorModelID;
     }
@@ -174,6 +176,7 @@ public:
                                  KoColorConversionTransformation::Intent  renderingIntent = KoColorConversionTransformation::IntentPerceptual) const;
 private:
     KoColorProfile* m_profile;
+    QList<KoCompositeOp*> m_compositeOps;
 };
 
 

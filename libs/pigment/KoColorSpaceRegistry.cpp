@@ -51,14 +51,16 @@
 
 struct KoColorSpaceRegistry::Private {
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
+    QList<KoColorSpaceFactory *> localFactories;
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QString, QString> profileAlias;
     QHash<QString, const KoColorSpace * > csMap;
-    const KoColorSpace *alphaCs;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
+    KoColorSpaceFactory* alphaCSF;
     const KoColorSpace *rgbU8sRGB;
     const KoColorSpace *lab16sLAB;
+    const KoColorSpace *alphaCs;
     QReadWriteLock registrylock;
 };
 
@@ -76,6 +78,8 @@ void KoColorSpaceRegistry::init()
 {
     d->rgbU8sRGB = 0;
     d->lab16sLAB = 0;
+    d->alphaCs = 0;
+
     d->colorConversionSystem = new KoColorConversionSystem;
     d->colorConversionCache = new KoColorConversionCache;
 
@@ -84,14 +88,15 @@ void KoColorSpaceRegistry::init()
     addProfile(new KoDummyColorProfile);
 
     // Create the built-in colorspaces
-    add(new KoLabColorSpaceFactory());
-    add(new KoRgbU8ColorSpaceFactory());
-    add(new KoRgbU16ColorSpaceFactory());
+    d->localFactories << new KoLabColorSpaceFactory()
+            << new KoRgbU8ColorSpaceFactory()
+            << new KoRgbU16ColorSpaceFactory();
+    foreach(KoColorSpaceFactory *factory, d->localFactories) {
+        add(factory);
+    }
 
-    KoColorSpaceFactory* alphaCSF = new KoAlphaColorSpaceFactory;
-    d->colorSpaceFactoryRegistry.add(alphaCSF);
-    d->alphaCs = new KoAlphaColorSpace;
-    d->alphaCs->d->deletability = OwnedByRegistryDoNotDelete;
+    d->alphaCs = new KoAlphaColorSpace();
+    d->alphaCs->d->deletability = OwnedByRegistryRegistryDeletes;
 
     KoPluginLoader::PluginsConfig config;
     config.whiteList = "ColorSpacePlugins";
@@ -127,7 +132,8 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     d->profileMap.clear();
 
     foreach(const KoColorSpace * cs, d->csMap) {
-        cs->d->deletability = OwnedByRegistryRegistyDeletes;
+        qDebug() << "removing colorspace" << cs->id();
+        cs->d->deletability = OwnedByRegistryRegistryDeletes;
         releaseColorSpace(const_cast<KoColorSpace*>(cs));
     }
     d->csMap.clear();
@@ -137,10 +143,10 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     d->colorConversionCache = 0;
 
     // Delete the colorspace factories
-//    qDeleteAll(d->colorSpaceFactoryRegistry.values());
-    qDeleteAll(d->colorSpaceFactoryRegistry.doubleEntries());
+    qDeleteAll(d->localFactories);
 
-    // Do not explicitly delete d->rgbU8sRGB and d->lab16sLAB, since they are contained in the d->csMap
+    delete d->alphaCSF;
+
     delete d;
 }
 
@@ -160,7 +166,7 @@ void KoColorSpaceRegistry::remove(KoColorSpaceFactory* item)
     foreach(const KoColorSpace * cs, d->csMap) {
         if (cs->id() == item->id()) {
             toremove.push_back(idsToCacheName(cs->id(), cs->profile()->name()));
-            cs->d->deletability = OwnedByRegistryRegistyDeletes;
+            cs->d->deletability = OwnedByRegistryRegistryDeletes;
             releaseColorSpace(const_cast<KoColorSpace*>(cs));
         }
     }
@@ -415,6 +421,10 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
+    if (!d->alphaCs) {
+        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId(), 0);
+    }
+    Q_ASSERT(d->alphaCs);
     return d->alphaCs;
 }
 

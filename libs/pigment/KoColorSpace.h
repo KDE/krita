@@ -44,7 +44,7 @@ class QBitArray;
 
 enum Deletability {
     OwnedByRegistryDoNotDelete,
-    OwnedByRegistryRegistyDeletes,
+    OwnedByRegistryRegistryDeletes,
     NotOwnedByRegistry
 };
 

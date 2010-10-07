@@ -42,6 +42,7 @@ void KoShapeBorderRegistry::init()
 
 KoShapeBorderRegistry::~KoShapeBorderRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 

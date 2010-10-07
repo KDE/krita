@@ -28,7 +28,7 @@
 #include <klocale.h>
 
 RectangleShapeFactory::RectangleShapeFactory()
-: KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
+    : KoShapeFactoryBase(RectangleShapeId, i18n("Rectangle"))
 {
     setToolTip(i18n("A rectangle"));
     setIcon("rectangle-shape");

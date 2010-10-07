@@ -53,6 +53,7 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
     foreach(QString id, keys()) {
         get(id)->deleteLater();
     }
+    qDeleteAll(doubleEntries());
 }
 
 KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()

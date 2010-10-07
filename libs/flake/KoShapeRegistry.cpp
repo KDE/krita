@@ -66,6 +66,7 @@ KoShapeRegistry::KoShapeRegistry()
 
 KoShapeRegistry::~KoShapeRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
     delete d;
 }

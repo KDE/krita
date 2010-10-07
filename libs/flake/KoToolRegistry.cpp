@@ -60,6 +60,7 @@ void KoToolRegistry::init()
 
 KoToolRegistry::~KoToolRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 

@@ -36,9 +36,10 @@ PathShapesPlugin::PathShapesPlugin(QObject *parent, const QStringList&)
 {
     KoShapeRegistry::instance()->add(new StarShapeFactory());
     KoShapeRegistry::instance()->add(new RectangleShapeFactory());
-    KoShapeRegistry::instance()->add(new EllipseShapeFactory());
     KoShapeRegistry::instance()->add(new SpiralShapeFactory());
     KoShapeRegistry::instance()->add(new EnhancedPathShapeFactory());
+    KoShapeRegistry::instance()->add(new EllipseShapeFactory());
+
 }
 
 #include <PathShapesPlugin.moc>

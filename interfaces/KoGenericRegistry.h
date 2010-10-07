@@ -22,6 +22,7 @@
 #define _KO_GENERIC_REGISTRY_H_
 
 #include <kdemacros.h>
+#include <kdebug.h>
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QHash>
@@ -71,7 +72,13 @@ public:
      */
     void add(T item) {
         Q_ASSERT( item );
-        m_hash.insert(item->id(), item);
+        QString id = item->id();
+        if(m_hash.contains(id)) {
+            kWarning() << "Registry already contains item" << id;
+            m_doubleEntries << value(id);
+            remove(id);
+        }
+        m_hash.insert(id, item);
     }
 
     /**
@@ -81,6 +88,11 @@ public:
      */
     void add(const QString &id, T item) {
         Q_ASSERT( item );
+        if(m_hash.contains(id)) {
+            kWarning() << "Registry already contains item" << id;
+            m_doubleEntries << value(id);
+            remove(id);
+        }
         m_hash.insert(id, item);
     }
 
@@ -133,7 +145,16 @@ public:
         return m_hash.values();
     }
 
+    QList<T> doubleEntries() const {
+        return m_doubleEntries;
+    }
+
 private:
+
+    QList<T> m_doubleEntries;
+
+private:
+
     QHash<QString, T> m_hash;
 };
 

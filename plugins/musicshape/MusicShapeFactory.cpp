@@ -35,7 +35,7 @@
 K_PLUGIN_FACTORY(MusicShapePluginFactory, registerPlugin<MusicShapePlugin>();)
 K_EXPORT_PLUGIN(MusicShapePluginFactory( "MusicShape" ))
 
-MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QVariantList& )
+MusicShapePlugin::MusicShapePlugin( QObject *,  const QVariantList& )
 {
     KoShapeRegistry::instance()->add( new MusicShapeFactory() );
     KoToolRegistry::instance()->add( new MusicToolFactory() );

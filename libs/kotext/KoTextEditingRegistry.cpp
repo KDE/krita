@@ -44,6 +44,7 @@ KoTextEditingRegistry* KoTextEditingRegistry::instance()
 
 KoTextEditingRegistry::~KoTextEditingRegistry() 
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 

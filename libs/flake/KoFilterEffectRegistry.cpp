@@ -41,6 +41,7 @@ void KoFilterEffectRegistry::init()
 
 KoFilterEffectRegistry::~KoFilterEffectRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 

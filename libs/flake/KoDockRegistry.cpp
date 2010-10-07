@@ -40,6 +40,7 @@ void KoDockRegistry::init()
 
 KoDockRegistry::~KoDockRegistry()
 {
+    qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
 

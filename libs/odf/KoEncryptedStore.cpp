@@ -593,8 +593,9 @@ bool KoEncryptedStore::openRead(const QString& name)
         d->stream = resultDevice;
         d->size = encData.filesize;
     }
-    d->stream->open(QIODevice::ReadOnly);
-
+    if (!d->stream->isOpen()) {
+        d->stream->open(QIODevice::ReadOnly);
+    }
     return true;
 }
 

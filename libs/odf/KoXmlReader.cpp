@@ -2538,7 +2538,7 @@ bool KoXmlDocument::setContent(QIODevice* device, bool namespaceProcessing,
         d->nodeType = KoXmlNode::DocumentNode;
     }
 
-    device->open(QIODevice::ReadOnly);
+    if (!device->isOpen()) device->open(QIODevice::ReadOnly);
     QXmlStreamReader reader(device);
     reader.setNamespaceProcessing(namespaceProcessing);
     DumbEntityResolver entityResolver;

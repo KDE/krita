@@ -108,10 +108,12 @@ bool KoOdfReadStore::loadAndParse(const QString &fileName, KoXmlDocument &doc, Q
         return false;
     }
 
-    if (!d->store->open(fileName)) {
-        kDebug(30003) << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
-        errorMessage = i18n("Could not find %1", fileName);
-        return false;
+    if (!d->store->isOpen()) {
+        if (!d->store->open(fileName)) {
+            kDebug(30003) << "Entry " << fileName << " not found!"; // not a warning as embedded stores don't have to have all files
+            errorMessage = i18n("Could not find %1", fileName);
+            return false;
+        }
     }
 
     bool ok = loadAndParse(d->store->device(), doc, errorMessage, fileName);
@@ -125,9 +127,13 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
     QString errorMsg;
     int errorLine, errorColumn;
 
+    if (!fileDevice->isOpen()) {
+        fileDevice->open(QIODevice::ReadOnly);
+    }
+
     QXmlStreamReader reader(fileDevice);
     reader.setNamespaceProcessing(true);
-    fileDevice->open(QIODevice::ReadOnly);
+
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (!ok) {
         kError(30003) << "Parsing error in " << fileName << "! Aborting!" << endl

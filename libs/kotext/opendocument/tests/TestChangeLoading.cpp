@@ -145,9 +145,10 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
     KoOdfWriteStore odfWriteStore(store);
     KoXmlWriter *manifestWriter = odfWriteStore.manifestWriter("application/vnd.oasis.opendocument.text");
     manifestWriter->addManifestEntry("content.xml", "text/xml");
-    if (!store->open("content.xml"))
+    if (!store->open("content.xml")) {
+	delete store;
         return QString();
-
+    }
     KoStoreDevice contentDev(store);
     KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter(&contentDev, "office:document-content");
 

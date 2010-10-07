@@ -92,6 +92,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
         if (!selection->write(store)) {
             selection->disconnect();
             store->close();
+	    delete store;
             return;
         }
         store->close();

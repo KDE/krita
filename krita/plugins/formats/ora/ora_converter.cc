@@ -69,6 +69,9 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
     orslv.loadImage();
     m_image = orslv.image();
+    
+    delete store;
+    
     return KisImageBuilder_RESULT_OK;
 
 }

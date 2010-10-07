@@ -142,6 +142,7 @@ void StoreDropTest::showZipContents(QByteArray data, const char* mimeType, bool 
     KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
     if (store->bad()) {
         setText("Invalid ZIP!");
+	delete store;
         return;
     }
     store->disallowNameExpansion();
@@ -157,6 +158,7 @@ void StoreDropTest::showZipContents(QByteArray data, const char* mimeType, bool 
         txt += loadTextFile(store, "maindoc.xml");
     }
     setText(txt);
+    delete store;
 }
 
 QString StoreDropTest::loadTextFile(KoStore* store, const QString& fileName)

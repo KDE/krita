@@ -54,11 +54,12 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
     buffer.setData(bytes);
     KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
     store->disallowNameExpansion();
-    KoOdfReadStore odfStore(store);
+    KoOdfReadStore odfStore(store); // KoOdfReadStore does not delete the store on destruction
 
     QString errorMessage;
     if (! odfStore.loadAndParse(errorMessage)) {
         kWarning(30002) << "loading and parsing failed:" << errorMessage;
+        delete store;
         return false;
     }
 
@@ -67,6 +68,7 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
 
     if (realBody.isNull()) {
         kWarning(30002) << "No body tag found";
+        delete store;
         return false;
     }
 
@@ -74,8 +76,11 @@ bool KoOdfPaste::paste(KoOdf::DocumentType documentType, const QByteArray &bytes
 
     if (body.isNull()) {
         kWarning(30002) << "No" << KoOdf::bodyContentElement(documentType, true) << "tag found";
+        delete store;
         return false;
     }
 
-    return process(body, odfStore);
+    bool retval = process(body, odfStore);
+    delete store;
+    return retval;
 }

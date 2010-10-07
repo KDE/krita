@@ -331,7 +331,9 @@ KoScriptingOdfStore::~KoScriptingOdfStore()
 bool KoScriptingOdfStore::hasFile(const QString &fileName)
 {
     KoStore *store = getReadStore();
-    return store ? store->hasFile(fileName) : false;
+    bool retval = store ? store->hasFile(fileName) : false;
+    delete store;
+    return retval;
 }
 
 bool KoScriptingOdfStore::isOpen() const
@@ -361,6 +363,7 @@ QObject *KoScriptingOdfStore::open(const QString &fileName)
     int errorLine, errorColumn;
     if (! doc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn)) {
        kWarning(32010) << "Parse-Error message" << errorMsg << "line" << errorLine << "col" << errorColumn;
+       delete store;
        return 0;
     }
 
@@ -374,6 +377,9 @@ QObject *KoScriptingOdfStore::open(const QString &fileName)
         m_reader = new KoScriptingOdfManifestReader(this, doc);
     else
         m_reader = new KoScriptingOdfReader(this, doc);
+    
+    delete store;
+    
     return m_reader;
 }
 
@@ -393,6 +399,7 @@ QByteArray KoScriptingOdfStore::extract(const QString &fileName)
         store->close();
     QByteArray data;
     bool ok = store->extractFile(fileName, data);
+    delete store;
     return ok ? data : QByteArray();
 }
 
@@ -403,7 +410,9 @@ bool KoScriptingOdfStore::extractToFile(const QString &fileName, const QString &
         return false;
     if (store->isOpen())
         store->close();
-    return store->extractFile(fileName, toFileName);
+    bool retval = store->extractFile(fileName, toFileName);
+    delete store;
+    return retval;
 }
 
 QObject *KoScriptingOdfStore::document() const

@@ -70,10 +70,12 @@ static KoDocumentInfo *loadDocumentInfo(const QString &odt)
     KoDocumentInfo *documentInfo = new KoDocumentInfo;
     QString error;
     if (!odfReadStore.loadAndParse("meta.xml", metaDoc, error)) {
+	delete store;
         delete documentInfo;
         return 0;
     }
     if (!documentInfo->loadOasis(metaDoc)) {
+	delete store;
         delete documentInfo;
         return 0;
     }

@@ -26,10 +26,12 @@
 
 KoSimpleOdsDocument::KoSimpleOdsDocument()
 {
-
+    m_store = 0;
 }
+
 KoSimpleOdsDocument::~KoSimpleOdsDocument()
 {
+    delete m_store;
     qDeleteAll(m_worksheets);
 }
 
@@ -43,6 +45,11 @@ void KoSimpleOdsDocument::addSheet(KoSimpleOdsSheet* sheet)
 QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
 {
     // create output store
+    if (m_store) {
+	delete m_store;
+	m_store = 0;
+    }
+    
     m_store = KoStore::createStore(path, KoStore::Write,
                                     "application/vnd.oasis.opendocument.spreadsheet", KoStore::Zip);
     if (!m_store) {
@@ -55,10 +62,12 @@ QFile::FileError KoSimpleOdsDocument::saveDocument(const QString& path)
 
     if (!createContent(&oasisStore)) {
         delete m_store;
+	m_store = 0;
         return QFile::WriteError;
     }
 
     delete m_store;
+    m_store = 0;
     return QFile::NoError;
 
 }

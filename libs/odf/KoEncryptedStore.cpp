@@ -17,6 +17,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#define QCA2
 #ifdef QCA2
 
 #include "KoEncryptedStore.h"
@@ -301,7 +302,6 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             KMessage::message(KMessage::Error, i18n("QCA has currently no support for SHA1 or PBKDF2 using SHA1. The document can not be opened."));
         }
     }
-
     return d->good;
 }
 

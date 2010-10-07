@@ -137,6 +137,7 @@ void TestKoOdfLoadingContext::testFillStyleStack()
         QCOMPARE(styleStack.property(KoXmlNS::draw, "stroke"), QString("solid"));
         styleStack.restore();
     }
+    delete store;
 }
 
 QTEST_KDEMAIN(TestKoOdfLoadingContext, NoGUI)

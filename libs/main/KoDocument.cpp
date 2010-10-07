@@ -867,12 +867,14 @@ bool KoDocument::saveNativeFormat(const QString & file)
         delete store;
         return false;
     }
-
+    bool success;
     if (oasis) {
-        return saveNativeFormatODF(store, mimeType);
+        success = saveNativeFormatODF(store, mimeType);
     } else {
-        return saveNativeFormatKOffice(store);
+        success = saveNativeFormatKOffice(store);
     }
+    delete store;
+    return success;
 }
 
 bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
@@ -1647,8 +1649,10 @@ bool KoDocument::loadNativeFormatFromStore(QByteArray &data)
     QBuffer buffer(&data);
     KoStore *store = KoStore::createStore(&buffer, KoStore::Read, "", backend);
 
-    if (store->bad())
+    if (store->bad()) {
+        delete store;
         return false;
+    }
 
     // Remember that the file was encrypted
     if (d->specialOutputFlag == 0 && store->isEncrypted() && !d->isImporting)

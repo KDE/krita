@@ -49,8 +49,9 @@ KisFilterRegistry::KisFilterRegistry(QObject *parent)
 KisFilterRegistry::~KisFilterRegistry()
 {
     dbgRegistry << "deleting KisFilterRegistry";
-    foreach(QString id, keys()) {
-        remove(id);
+    foreach(KisFilterSP filter, values()) {
+        remove(filter->id());
+        filter.clear();
     }
 }
 

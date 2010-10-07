@@ -472,7 +472,7 @@ void KisDoc2::showErrorAndDie()
                        m_d->error,
                        i18n("Installation error"));
     if (m_d->dieOnError) {
-        QCoreApplication::exit(10);
+        exit(10);
     }
 }
 

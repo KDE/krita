@@ -46,9 +46,10 @@ KisGeneratorRegistry::KisGeneratorRegistry(QObject *parent)
 
 KisGeneratorRegistry::~KisGeneratorRegistry()
 {
-    foreach(QString id, keys()) {
-        remove(id);
-    }   
+    foreach(KisGeneratorSP generator, values()) {
+        remove(generator->id());
+        generator.clear();
+    }
     dbgRegistry << "deleting KisGeneratorRegistry";
 }
 

@@ -49,6 +49,7 @@ KisNodeProgressProxy::KisNodeProgressProxy(KisNode* _node) : d(new Private)
 
 KisNodeProgressProxy::~KisNodeProgressProxy()
 {
+    delete d;
 }
 
 const KisNodeSP KisNodeProgressProxy::node() const

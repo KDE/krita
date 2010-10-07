@@ -331,6 +331,7 @@ ChartConfigWidget::ChartConfigWidget()
     d->ganttChartAction->setEnabled( false );
 
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
+    d->ui.chartTypeMenu->setIconSize( QSize( 32, 32 ) );
 
     connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ),
              this,          SLOT( chartTypeSelected( QAction* ) ) );

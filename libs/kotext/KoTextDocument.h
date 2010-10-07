@@ -28,11 +28,14 @@
 #include "KoList.h"
 
 #include "changetracker/KoChangeTracker.h"
+#include "KoOdfNotesConfiguration.h"
 
 class KoStyleManager;
 class KoInlineTextObjectManager;
 class KUndoStack;
 class KoTextEditor;
+class KoOdfLineNumberingConfiguration;
+
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the
@@ -72,6 +75,18 @@ public:
 
     ///Returns the change tracker of the document
     KoChangeTracker *changeTracker() const;
+
+    /// set the notes configuration of the document
+    void setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration);
+
+    /// @return the notes configuration
+    KoOdfNotesConfiguration *notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const;
+
+    /// set the notes configuration of the document
+    void setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration);
+
+    /// @return the notes configuration
+    KoOdfLineNumberingConfiguration *lineNumberingConfiguration() const;
 
     ///Sets the global undo stack
     void setUndoStack(KUndoStack *undoStack);
@@ -146,14 +161,21 @@ public:
         InlineTextManager,
         ChangeTrackerResource,
         UndoStack,
-        TextEditor
+        TextEditor,
+        FootNotesConfiguration,
+        EndNotesConfiguration,
+        LineNumberingConfiguration
     };
+
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
     static const QUrl InlineObjectTextManagerURL;
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
+    static const QUrl FootNotesConfigurationURL;
+    static const QUrl EndNotesConfigurationURL;
+    static const QUrl LineNumberingConfigurationURL;
 
 private:
     QTextDocument *m_document;

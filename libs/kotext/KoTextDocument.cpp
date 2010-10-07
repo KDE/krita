@@ -25,6 +25,7 @@
 #include <QVariant>
 
 #include <kdebug.h>
+#include <KUndoStack>
 
 #include "KoTextDocument.h"
 #include "KoTextEditor.h"
@@ -33,7 +34,8 @@
 #include "KoTextDocumentLayout.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
-#include <KUndoStack>
+#include "KoOdfLineNumberingConfiguration.h"
+#include "KoOdfNotesConfiguration.h"
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
@@ -41,6 +43,9 @@ const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObj
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
+const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotesconfiguration");
+const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
+const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -113,6 +118,44 @@ KoChangeTracker *KoTextDocument::changeTracker() const
 {
     QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL);
     return resource.value<KoChangeTracker *>();
+}
+
+
+void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
+{
+    QVariant v;
+    v.setValue(notesConfiguration);
+    if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
+        m_document->addResource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL, v);
+    }
+    else {
+        m_document->addResource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL, v);
+    }
+}
+
+KoOdfNotesConfiguration *KoTextDocument::notesConfiguration(KoOdfNotesConfiguration::NoteClass noteClass) const
+{
+    if (noteClass == KoOdfNotesConfiguration::Endnote) {
+        return m_document->resource(KoTextDocument::EndNotesConfiguration, EndNotesConfigurationURL)
+                .value<KoOdfNotesConfiguration*>();
+    }
+    else {
+        return m_document->resource(KoTextDocument::FootNotesConfiguration, FootNotesConfigurationURL)
+                .value<KoOdfNotesConfiguration*>();
+    }
+}
+
+void KoTextDocument::setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration)
+{
+    QVariant v;
+    v.setValue(lineNumberingConfiguration);
+    m_document->addResource(KoTextDocument::LineNumberingConfiguration, LineNumberingConfigurationURL, v);
+}
+
+KoOdfLineNumberingConfiguration *KoTextDocument::lineNumberingConfiguration() const
+{
+    return m_document->resource(KoTextDocument::LineNumberingConfiguration, LineNumberingConfigurationURL)
+            .value<KoOdfLineNumberingConfiguration*>();
 }
 
 void KoTextDocument::setUndoStack(KUndoStack *undoStack)

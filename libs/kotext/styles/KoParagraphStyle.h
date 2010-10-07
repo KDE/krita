@@ -124,14 +124,19 @@ public:
         MasterPageName,         ///< Optional name of the master-page
 
         OutlineLevel,            ///< Outline level for headings
-        DefaultOutlineLevel
+        DefaultOutlineLevel,
+
+        // numbering
+        LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
+        LineNumberStartValue     ///< integer value that specifies the number for the first line in the paragraph
+
 // do 15.5.24
 // continue at 15.5.28
     };
 
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
-    /// Creates a KoParagraphStyle with the given block format, the block character format and \a parent
+    /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
     KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent = 0);
     /// Destructor
     ~KoParagraphStyle();
@@ -479,7 +484,7 @@ public:
      * Change this block outline level
      */
     void setOutlineLevel(int outline);
-    
+
     /**
      * Return the default outline level of this style, or 0 if there is none.
      */
@@ -489,6 +494,22 @@ public:
      * Change the default outline level for this style.
      */
     void setDefaultOutlineLevel(int outline);
+
+
+    /**
+     * 15.5.30: The text:number-lines attribute controls whether or not lines are numbered
+     */
+    bool lineNumbering() const;
+    void setLineNumbering(bool lineNumbering);
+
+    /**
+     * 15.5.31:
+     * The text:line-number property specifies a new start value for line numbering. The attribute is
+     * only recognized if there is also a text:number-lines attribute with a value of true in the
+     * same properties element.
+     */
+    int lineNumberStartValue() const;
+    void setLineNumberStartValue(int lineNumberStartValue);
 
 
     /// copy all the properties from the other style to this style, effectively duplicating it.

@@ -878,6 +878,26 @@ int KoParagraphStyle::defaultOutlineLevel() const
     return propertyInt(DefaultOutlineLevel);
 }
 
+bool KoParagraphStyle::lineNumbering() const
+{
+    return propertyBoolean(LineNumbering);
+}
+
+void KoParagraphStyle::setLineNumbering(bool lineNumbering)
+{
+    setProperty(LineNumbering, lineNumbering);
+}
+
+int KoParagraphStyle::lineNumberStartValue() const
+{
+    return propertyInt(LineNumberStartValue);
+}
+
+void KoParagraphStyle::setLineNumberStartValue(int lineNumberStartValue)
+{
+    setProperty(LineNumberStartValue, lineNumberStartValue);
+}
+
 void KoParagraphStyle::setIsListHeader(bool on)
 {
     setProperty(IsListHeader, on);
@@ -978,6 +998,18 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         if (ok)
             setDefaultOutlineLevel(level);
     }
+    
+    // 15.5.30 - 31
+    if (element->hasAttributeNS(KoXmlNS::text, "number-lines")) {
+        setLineNumbering(element->attributeNS(KoXmlNS::text, "number-lines", "false") == "true");
+            if (lineNumbering()) {
+            bool ok;
+                int startValue = element->attributeNS(KoXmlNS::text, "line-number").toInt(&ok);
+                if (ok) {
+                setLineNumberStartValue(startValue);
+                }
+            }
+    }           
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();

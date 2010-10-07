@@ -44,6 +44,7 @@ set(flake_SRCS
     #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
+    KoCanvasControllerGraphicsWidget.cpp
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp

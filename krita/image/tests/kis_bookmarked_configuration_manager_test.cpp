@@ -55,8 +55,8 @@ private:
 
 void KisBookmarkedConfigurationManagerTest::testCreation()
 {
-    TestConfigurationFactory tcf;
-    KisBookmarkedConfigurationManager test("Test", &tcf);
+    TestConfigurationFactory *tcf = new TestConfigurationFactory;
+    KisBookmarkedConfigurationManager test("Test", tcf);
 }
 
 

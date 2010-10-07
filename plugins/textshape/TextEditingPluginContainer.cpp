@@ -44,7 +44,6 @@ TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
 
 TextEditingPluginContainer::~TextEditingPluginContainer()
 {
-    qDebug() << "Deleting TextEditingPluginContainer!";
     qDeleteAll(m_textEditingPlugins);
 }
 

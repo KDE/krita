@@ -95,7 +95,6 @@ KoStyleManager::KoStyleManager(QObject *parent)
 
 KoStyleManager::~KoStyleManager()
 {
-    qDebug() << ">>>>>>>>>>>>>>Deleting style manager!";
     delete d;
 }
 

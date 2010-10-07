@@ -132,7 +132,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
     d->profileMap.clear();
 
     foreach(const KoColorSpace * cs, d->csMap) {
-        qDebug() << "removing colorspace" << cs->id();
         cs->d->deletability = OwnedByRegistryRegistryDeletes;
         releaseColorSpace(const_cast<KoColorSpace*>(cs));
     }

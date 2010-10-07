@@ -43,7 +43,10 @@ class QRectF;
 
 /**
  * The shape manager hold a list of all shape which are in scope.
- * There is one shape manager per view.
+ * There is one shape manager per canvas. This makes the shape manager
+ * different from QGraphicsScene, which contains the datamodel for all
+ * graphics items: KoShapeManager only contains the subset of shapes
+ * that are shown in its canvas.
  *
  * The selection in the different views can be different.
  */

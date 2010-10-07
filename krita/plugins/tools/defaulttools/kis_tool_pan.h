@@ -69,8 +69,8 @@ class KisToolPanFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPanFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, KoPanTool_ID) {
+    KisToolPanFactory(const QStringList&)
+            : KoToolFactoryBase(KoPanTool_ID) {
         setToolTip(i18n("Move and rotate your canvas"));
         setToolType(navigationToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);

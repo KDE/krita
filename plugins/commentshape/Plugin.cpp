@@ -31,8 +31,8 @@ K_EXPORT_COMPONENT_FACTORY( commentshape, KGenericFactory<Plugin>( "CommentShape
 Plugin::Plugin(QObject* parent, const QStringList&)
 : QObject(parent)
 {
-    KoShapeRegistry::instance()->add(new CommentShapeFactory(parent));
-    KoToolRegistry::instance()->add(new CommentToolFactory(parent));
+    KoShapeRegistry::instance()->add(new CommentShapeFactory());
+    KoToolRegistry::instance()->add(new CommentToolFactory());
 }
 
 #include <Plugin.moc>

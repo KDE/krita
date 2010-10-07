@@ -28,7 +28,7 @@ class KoShape;
 class TreeShapeFactory : public KoShapeFactoryBase
 {
 public:
-    TreeShapeFactory(QObject *parent);
+    TreeShapeFactory();
     ~TreeShapeFactory();
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

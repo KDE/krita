@@ -27,8 +27,8 @@
 
 #include <klocale.h>
 
-ChangeTrackingToolFactory::ChangeTrackingToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "ChangeTrackingToolFactory_ID")
+ChangeTrackingToolFactory::ChangeTrackingToolFactory()
+        : KoToolFactoryBase("ChangeTrackingToolFactory_ID")
 {
     setToolTip(i18n("Change Tracking tool"));
     setToolType(dynamicToolType());
@@ -52,5 +52,3 @@ bool ChangeTrackingToolFactory::canCreateTool(KoCanvasBase* canvas) const
         return true;
     return false;
 }
-
-#include <ChangeTrackingToolFactory.moc>

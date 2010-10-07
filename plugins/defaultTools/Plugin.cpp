@@ -31,9 +31,9 @@ K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defau
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new DefaultToolFactory(parent));
-    KoToolRegistry::instance()->add(new GuidesToolFactory(parent));
-    KoToolRegistry::instance()->add(new ConnectionToolFactory(parent));
+    KoToolRegistry::instance()->add(new DefaultToolFactory());
+    KoToolRegistry::instance()->add(new GuidesToolFactory());
+    KoToolRegistry::instance()->add(new ConnectionToolFactory());
 }
 
 #include <Plugin.moc>

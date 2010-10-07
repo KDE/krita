@@ -121,8 +121,8 @@ class KisToolSelectMagneticFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectMagneticFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolSelectMagnetic") {
+    KisToolSelectMagneticFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolSelectMagnetic") {
         setToolTip(i18n("Magnetic selection tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

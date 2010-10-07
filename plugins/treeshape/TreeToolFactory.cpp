@@ -26,8 +26,8 @@
 #include "TreeToolFactory.h"
 
 
-TreeToolFactory::TreeToolFactory(QObject* parent)
-    : KoToolFactoryBase(parent, "TreeToolFactoryId")
+TreeToolFactory::TreeToolFactory()
+    : KoToolFactoryBase("TreeToolFactoryId")
 {
     setToolTip(i18n("Tree editing tool"));
     setToolType(mainToolType());
@@ -44,7 +44,3 @@ KoToolBase* TreeToolFactory::createTool(KoCanvasBase* canvas)
 {
     return new TreeTool(canvas);
 }
-
-#include <TreeToolFactory.moc>
-
-

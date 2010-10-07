@@ -29,8 +29,8 @@ K_EXPORT_COMPONENT_FACTORY( videoshape, KGenericFactory<Plugin>( "VideoShape" ) 
 Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new VideoShapeFactory(parent) );
-//    KoToolRegistry::instance()->add( new VideoToolFactory(parent) );
+    KoShapeRegistry::instance()->add( new VideoShapeFactory() );
+//    KoToolRegistry::instance()->add( new VideoToolFactory() );
 }
 
 #include <Plugin.moc>

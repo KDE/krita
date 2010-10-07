@@ -25,9 +25,8 @@
 
 class TreeToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    TreeToolFactory(QObject* parent);
+    TreeToolFactory();
     ~TreeToolFactory();
 
     KoToolBase *createTool(KoCanvasBase *canvas);

@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( kopabackgroundtool, KGenericFactory<Plugin>( "kopage
 Plugin::Plugin( QObject* parent, const QStringList& )
 : QObject( parent )
 {
-    KoToolRegistry::instance()->add( new KoPABackgroundToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new KoPABackgroundToolFactory() );
 }
 
 #include <Plugin.moc>

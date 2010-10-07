@@ -32,8 +32,8 @@
 
 #include <math.h>
 
-EnhancedPathShapeFactory::EnhancedPathShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, EnhancedPathShapeId, i18n("An enhanced path shape"))
+EnhancedPathShapeFactory::EnhancedPathShapeFactory()
+    : KoShapeFactoryBase(EnhancedPathShapeId, i18n("An enhanced path shape"))
 {
     setToolTip(i18n("An enhanced path"));
     setIcon("enhancedpath");
@@ -550,5 +550,3 @@ bool EnhancedPathShapeFactory::supports(const KoXmlElement & e) const
 {
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw);
 }
-
-#include <EnhancedPathShapeFactory.moc>

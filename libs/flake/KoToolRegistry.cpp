@@ -20,6 +20,7 @@
 
 #include "KoToolRegistry.h"
 #include <KGlobal>
+#include <KDebug>
 
 #include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
@@ -50,15 +51,16 @@ void KoToolRegistry::init()
                                      QString::fromLatin1("[X-Flake-MinVersion] <= 0"));
 
     // register generic tools
-    add(new KoCreatePathToolFactory(this));
-    add(new KoCreateShapesToolFactory(this));
-    add(new KoPathToolFactory(this));
-    add(new KoZoomToolFactory(this));
-    add(new KoPanToolFactory(this));
+    add(new KoCreatePathToolFactory());
+    add(new KoCreateShapesToolFactory());
+    add(new KoPathToolFactory());
+    add(new KoZoomToolFactory());
+    add(new KoPanToolFactory());
 }
 
 KoToolRegistry::~KoToolRegistry()
 {
+    qDeleteAll(values());
 }
 
 KoToolRegistry* KoToolRegistry::instance()
@@ -69,5 +71,3 @@ KoToolRegistry* KoToolRegistry::instance()
     }
     return s_instance;
 }
-
-#include <KoToolRegistry.moc>

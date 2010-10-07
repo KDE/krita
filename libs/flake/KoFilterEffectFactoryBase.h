@@ -21,24 +21,21 @@
 #define KOFILTEREFFECTFACTORY_H
 
 #include "flake_export.h"
-#include <QObject>
 
 class KoFilterEffect;
 class KoFilterEffectConfigWidgetBase;
 
 /// API docs go here
-class FLAKE_EXPORT KoFilterEffectFactoryBase : public QObject
+class FLAKE_EXPORT KoFilterEffectFactoryBase
 {
-    Q_OBJECT
 public:
 
     /**
     * Create the new factory
-    * @param parent the parent QObject for memory management usage.
     * @param id a string that will be used internally for referencing the filter effect
     * @param name the user visible name of the filter effect this factory creates
     */
-    KoFilterEffectFactoryBase(QObject *parent, const QString &id, const QString &name);
+    KoFilterEffectFactoryBase(const QString &id, const QString &name);
     virtual ~KoFilterEffectFactoryBase();
 
     /**

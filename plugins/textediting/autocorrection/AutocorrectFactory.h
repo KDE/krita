@@ -26,7 +26,7 @@ class KoTextEditingPlugin;
 
 class AutocorrectFactory : public KoTextEditingFactory {
 public:
-    explicit AutocorrectFactory(QObject *parent);
+    explicit AutocorrectFactory();
     ~AutocorrectFactory() {}
 
     KoTextEditingPlugin *create() const;

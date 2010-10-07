@@ -29,11 +29,10 @@
 class KoShape;
 
 class VectorShapeFactory : public KoShapeFactoryBase {
-    Q_OBJECT
 
 public:
     /// constructor
-    explicit VectorShapeFactory(QObject *parent);
+    VectorShapeFactory();
     ~VectorShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

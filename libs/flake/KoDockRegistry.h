@@ -35,10 +35,8 @@
  *
  * @see KoCanvasObserverBase
  */
-class FLAKE_EXPORT KoDockRegistry : public QObject, public KoGenericRegistry<KoDockFactoryBase*>
+class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
 {
-    Q_OBJECT
-
 public:
     ~KoDockRegistry();
 

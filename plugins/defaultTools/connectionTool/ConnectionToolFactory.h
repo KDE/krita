@@ -28,7 +28,7 @@ class ConnectionToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor
-    explicit ConnectionToolFactory( QObject *parent );
+    ConnectionToolFactory();
     /// Destructor
     ~ConnectionToolFactory();
     /// reimplemented

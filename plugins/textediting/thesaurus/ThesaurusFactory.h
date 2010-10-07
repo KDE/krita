@@ -26,7 +26,7 @@ class KoTextEditingPlugin;
 
 class ThesaurusFactory : public KoTextEditingFactory {
 public:
-    explicit ThesaurusFactory(QObject *parent);
+    explicit ThesaurusFactory();
     ~ThesaurusFactory() {}
 
     KoTextEditingPlugin *create() const;

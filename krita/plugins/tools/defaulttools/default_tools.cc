@@ -50,17 +50,17 @@ DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
 {
     KoToolRegistry * r = KoToolRegistry::instance();
 
-    r->add(new KisToolFillFactory(r, QStringList()));
-    r->add(new KisToolGradientFactory(r, QStringList()));
-    r->add(new KisToolBrushFactory(r, QStringList()));
-    r->add(new KisToolColorPickerFactory(r, QStringList()));
-    r->add(new KisToolLineFactory(r, QStringList()));
-    r->add(new KisToolEllipseFactory(r, QStringList()));
-    r->add(new KisToolRectangleFactory(r, QStringList()));
-    r->add(new KisToolMeasureFactory(r, QStringList()));
-    r->add(new KisToolPathFactory(r, QStringList()));
-    r->add(new KisToolMoveFactory(r, QStringList()));
-    r->add(new KisToolPanFactory(r, QStringList()));
+    r->add(new KisToolFillFactory( QStringList()));
+    r->add(new KisToolGradientFactory(QStringList()));
+    r->add(new KisToolBrushFactory(QStringList()));
+    r->add(new KisToolColorPickerFactory(QStringList()));
+    r->add(new KisToolLineFactory(QStringList()));
+    r->add(new KisToolEllipseFactory(QStringList()));
+    r->add(new KisToolRectangleFactory(QStringList()));
+    r->add(new KisToolMeasureFactory(QStringList()));
+    r->add(new KisToolPathFactory(QStringList()));
+    r->add(new KisToolMoveFactory(QStringList()));
+    r->add(new KisToolPanFactory(QStringList()));
 }
 
 DefaultTools::~DefaultTools()

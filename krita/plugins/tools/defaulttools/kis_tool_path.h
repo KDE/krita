@@ -70,8 +70,8 @@ class KisToolPathFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPathFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolPath") {
+    KisToolPathFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolPath") {
         setToolTip(i18n("Draw a path."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

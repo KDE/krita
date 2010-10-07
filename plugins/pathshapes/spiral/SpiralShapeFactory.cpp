@@ -25,8 +25,8 @@
 #include <klocale.h>
 
 
-SpiralShapeFactory::SpiralShapeFactory(QObject *parent)
-: KoShapeFactoryBase(parent, SpiralShapeId, i18n("Spiral"))
+SpiralShapeFactory::SpiralShapeFactory()
+: KoShapeFactoryBase(SpiralShapeId, i18n("Spiral"))
 {
     setToolTip(i18n("A spiral shape"));
     setIcon("spiral-shape");

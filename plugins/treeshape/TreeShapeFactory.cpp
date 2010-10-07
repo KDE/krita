@@ -28,8 +28,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-TreeShapeFactory::TreeShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, TREESHAPEID, i18n("TreeShape"))
+TreeShapeFactory::TreeShapeFactory()
+    : KoShapeFactoryBase(TREESHAPEID, i18n("TreeShape"))
 {
     setToolTip(i18n("Tree for mind maps"));
     setIcon("x-shape-image");

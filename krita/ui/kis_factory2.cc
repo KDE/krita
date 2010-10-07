@@ -109,7 +109,7 @@ const KComponentData &KisFactory2::componentData()
         KisExiv2::initialize();
 
         KoShapeRegistry* r = KoShapeRegistry::instance();
-        r->add(new KisShapeSelectionFactory(r));
+        r->add(new KisShapeSelectionFactory());
 
         KisFilterRegistry::instance();
         KisGeneratorRegistry::instance();

@@ -50,7 +50,7 @@ ToolStar::ToolStar(QObject *parent, const QVariantList &)
     //setComponentData(ToolStarFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolStarFactory(r, QStringList()));
+    r->add(new KisToolStarFactory(QStringList()));
 
 }
 

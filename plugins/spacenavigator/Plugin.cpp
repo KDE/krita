@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(spacenavigator, KGenericFactory<Plugin>( "spacenaviga
 Plugin::Plugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice(parent));
+    KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice());
 }
 
 #include <Plugin.moc>

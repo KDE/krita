@@ -24,12 +24,11 @@
 
 class ArtisticTextToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
-    public:
-        explicit ArtisticTextToolFactory( QObject *parent );
-        ~ArtisticTextToolFactory();
+public:
+    ArtisticTextToolFactory();
+    ~ArtisticTextToolFactory();
 
-        KoToolBase * createTool( KoCanvasBase *canvas );
+    KoToolBase * createTool( KoCanvasBase *canvas );
 };
 
 #endif // ARTISTICTEXTTOOLFACTORY_H

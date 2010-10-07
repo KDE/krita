@@ -27,7 +27,7 @@
 class DefaultToolFactory : public KoToolFactoryBase {
 public:
     /// constructor
-    DefaultToolFactory(QObject *parent);
+    DefaultToolFactory();
     ~DefaultToolFactory();
 
     KoToolBase* createTool(KoCanvasBase *canvas);

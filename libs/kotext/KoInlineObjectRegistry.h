@@ -39,9 +39,8 @@ class KoShapeLoadingContext;
  * @see KoInlineObject
  * @see KoVariable
  */
-class KOTEXT_EXPORT KoInlineObjectRegistry : public QObject,  public KoGenericRegistry<KoInlineObjectFactoryBase*>
+class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineObjectFactoryBase*>
 {
-    Q_OBJECT
 public:
     ~KoInlineObjectRegistry();
 

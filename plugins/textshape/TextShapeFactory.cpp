@@ -36,8 +36,8 @@
 #include <KUndoStack>
 #include <QTextCursor>
 
-TextShapeFactory::TextShapeFactory(QObject *parent)
-        : KoShapeFactoryBase(parent, TextShape_SHAPEID, i18n("Text"))
+TextShapeFactory::TextShapeFactory()
+        : KoShapeFactoryBase(TextShape_SHAPEID, i18n("Text"))
 {
     setToolTip(i18n("A shape that shows text"));
     QList<QPair<QString, QStringList> > odfElements;
@@ -128,5 +128,3 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));
 }
-
-#include <TextShapeFactory.moc>

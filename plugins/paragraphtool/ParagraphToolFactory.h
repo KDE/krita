@@ -25,9 +25,8 @@
 
 class ParagraphToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit ParagraphToolFactory(QObject *parent);
+    ParagraphToolFactory();
     ~ParagraphToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

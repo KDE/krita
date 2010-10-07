@@ -31,8 +31,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-PluginShapeFactory::PluginShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, PLUGINSHAPEID, i18n("Plugin Placeholder"))
+PluginShapeFactory::PluginShapeFactory()
+    : KoShapeFactoryBase(PLUGINSHAPEID, i18n("Plugin Placeholder"))
 {
     setToolTip(i18n("Plugin Placeholder, embedded or fullscreen"));
     //setIcon("video-x-generic");

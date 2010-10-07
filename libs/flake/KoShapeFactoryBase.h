@@ -73,8 +73,8 @@ struct FLAKE_EXPORT KoShapeTemplate {
 @code
 class MyShapeFactory : public KoShapeFactoryBase {
 public:
-    MyShapeFactory(QObject *parent)
-        : KoShapeFactoryBase(parent, "MyShape", i18n("My Shape")) {
+    MyShapeFactory()
+        : KoShapeFactoryBase("MyShape", i18n("My Shape")) {
         setToolTip(i18n("A nice shape"));
     }
     ~MyShapeFactory() {}
@@ -85,19 +85,17 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactoryBase : public QObject
+class FLAKE_EXPORT KoShapeFactoryBase
 {
-    Q_OBJECT
 public:
 
     /**
      * Create the new factory
-     * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the shape, for
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(QObject *parent, const QString &id, const QString &name);
+    KoShapeFactoryBase(const QString &id, const QString &name);
     virtual ~KoShapeFactoryBase();
 
     /**

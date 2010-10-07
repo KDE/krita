@@ -27,8 +27,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-PageVariableFactory::PageVariableFactory(QObject *parent)
-        : KoInlineObjectFactoryBase(parent, "page", TextVariable)
+PageVariableFactory::PageVariableFactory()
+    : KoInlineObjectFactoryBase("page", TextVariable)
 {
     KoInlineObjectTemplate var1;
     var1.id = "pagecount";

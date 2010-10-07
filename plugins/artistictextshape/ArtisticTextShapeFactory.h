@@ -26,10 +26,8 @@ class KoShape;
 
 class ArtisticTextShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
-
 public:
-    explicit ArtisticTextShapeFactory(QObject *parent);
+    ArtisticTextShapeFactory();
     ~ArtisticTextShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

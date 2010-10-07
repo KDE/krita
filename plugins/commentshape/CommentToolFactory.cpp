@@ -22,8 +22,8 @@
 #include "CommentShapeFactory.h"
 #include "CommentTool.h"
 
-CommentToolFactory::CommentToolFactory(QObject* parent)
-: KoToolFactoryBase(parent, "CommentToolFactory")
+CommentToolFactory::CommentToolFactory()
+: KoToolFactoryBase("CommentToolFactory")
 {
     setToolTip(i18n("Comment Tool"));
     setToolType(mainToolType());
@@ -44,5 +44,3 @@ bool CommentToolFactory::canCreateTool(KoCanvasBase* canvas) const
 {
     return KoToolFactoryBase::canCreateTool(canvas);
 }
-
-#include <CommentShapeFactory.moc>

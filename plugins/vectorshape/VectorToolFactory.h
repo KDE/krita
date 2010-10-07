@@ -26,9 +26,8 @@
 
 
 class VectorToolFactory : public KoToolFactoryBase {
-    Q_OBJECT
 public:
-    explicit VectorToolFactory(QObject *parent);
+    VectorToolFactory();
     ~VectorToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

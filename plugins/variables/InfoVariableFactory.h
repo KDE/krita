@@ -28,7 +28,7 @@ class KoVariable;
 class InfoVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    InfoVariableFactory(QObject *parent = 0);
+    InfoVariableFactory();
 
     virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };

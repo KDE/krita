@@ -30,8 +30,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-PictureShapeFactory::PictureShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, PICTURESHAPEID, i18n("Image"))
+PictureShapeFactory::PictureShapeFactory()
+    : KoShapeFactoryBase(PICTURESHAPEID, i18n("Image"))
 {
     setToolTip(i18n("Image shape that can display jpg, png etc."));
     setIcon("x-shape-image");

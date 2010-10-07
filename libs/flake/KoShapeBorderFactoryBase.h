@@ -21,16 +21,14 @@
 #define KOSHAPEBORDERFACTORY_H
 
 #include "flake_export.h"
-#include <QObject>
 
 class KoShapeBorderModel;
 
-class FLAKE_EXPORT KoShapeBorderFactoryBase : public QObject
+class FLAKE_EXPORT KoShapeBorderFactoryBase
 {
-    Q_OBJECT
 public:
 
-    KoShapeBorderFactoryBase(QObject *parent, const QString &id);
+    KoShapeBorderFactoryBase(const QString &id);
     virtual ~KoShapeBorderFactoryBase();
 
     /**

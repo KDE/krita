@@ -31,7 +31,7 @@ K_EXPORT_PLUGIN(SpellCheckPluginFactory("SpellCheckPlugin"))
 SpellCheckPlugin::SpellCheckPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add(new SpellCheckFactory(parent));
+    KoTextEditingRegistry::instance()->add(new SpellCheckFactory());
 }
 
 #include <SpellCheckPlugin.moc>

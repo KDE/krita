@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-DivineProportionToolFactory::DivineProportionToolFactory(QObject *parent)
-    : KoToolFactoryBase(parent, "DivineProportionToolFactory_ID")
+DivineProportionToolFactory::DivineProportionToolFactory()
+    : KoToolFactoryBase("DivineProportionToolFactory_ID")
 {
     setToolTip (i18n("DivineProportion editing tool"));
     setToolType (dynamicToolType());

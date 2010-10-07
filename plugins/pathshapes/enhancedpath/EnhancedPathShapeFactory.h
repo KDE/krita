@@ -27,11 +27,9 @@ class KoShape;
 /// Factory for path shapes
 class EnhancedPathShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
-
 public:
     /// constructor
-    explicit EnhancedPathShapeFactory(QObject *parent);
+    EnhancedPathShapeFactory();
     ~EnhancedPathShapeFactory() {}
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

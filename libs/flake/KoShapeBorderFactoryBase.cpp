@@ -19,7 +19,7 @@
  */
 
 #include "KoShapeBorderFactoryBase.h"
-
+#include <QString>
 class KoShapeBorderFactoryBase::Private
 {
 public:
@@ -27,9 +27,8 @@ public:
     const QString id;
 };
 
-KoShapeBorderFactoryBase::KoShapeBorderFactoryBase(QObject *parent, const QString &id)
-        : QObject(parent),
-        d(new Private(id))
+KoShapeBorderFactoryBase::KoShapeBorderFactoryBase(const QString &id)
+    : d(new Private(id))
 {
 }
 
@@ -42,5 +41,3 @@ QString KoShapeBorderFactoryBase::id() const
 {
     return d->id;
 }
-
-#include <KoShapeBorderFactoryBase.moc>

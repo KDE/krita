@@ -38,7 +38,7 @@ public:
 class MusicShapeFactory : public KoShapeFactoryBase
 {
 public:
-    MusicShapeFactory( QObject* parent );
+    MusicShapeFactory();
     ~MusicShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

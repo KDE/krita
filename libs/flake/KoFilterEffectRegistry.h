@@ -22,7 +22,6 @@
 
 #include <KoGenericRegistry.h>
 #include <KoFilterEffectFactoryBase.h>
-#include <QtCore/QObject>
 #include <QtGui/QTransform>
 
 #include "flake_export.h"
@@ -30,10 +29,8 @@
 class KoXmlElement;
 class KoFilterEffectLoadingContext;
 
-class FLAKE_EXPORT KoFilterEffectRegistry : public QObject, public KoGenericRegistry<KoFilterEffectFactoryBase*>
+class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEffectFactoryBase*>
 {
-Q_OBJECT
-
 public:
     virtual ~KoFilterEffectRegistry();
 

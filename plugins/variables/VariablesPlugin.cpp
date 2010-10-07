@@ -31,9 +31,9 @@ K_EXPORT_COMPONENT_FACTORY(textvariables,
 VariablesPlugin::VariablesPlugin(QObject *parent, const QStringList&)
         : QObject(parent)
 {
-    KoInlineObjectRegistry::instance()->add(new PageVariableFactory(parent));
-    KoInlineObjectRegistry::instance()->add(new DateVariableFactory(parent));
-    KoInlineObjectRegistry::instance()->add(new InfoVariableFactory(parent));
+    KoInlineObjectRegistry::instance()->add(new PageVariableFactory());
+    KoInlineObjectRegistry::instance()->add(new DateVariableFactory());
+    KoInlineObjectRegistry::instance()->add(new InfoVariableFactory());
 }
 
 #include <VariablesPlugin.moc>

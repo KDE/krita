@@ -21,6 +21,7 @@
 #include "KoFilterEffect.h"
 #include <KoPluginLoader.h>
 #include <KGlobal>
+#include <KDebug>
 #include <KoXmlReader.h>
 
 KoFilterEffectRegistry::KoFilterEffectRegistry()
@@ -40,6 +41,7 @@ void KoFilterEffectRegistry::init()
 
 KoFilterEffectRegistry::~KoFilterEffectRegistry()
 {
+    qDeleteAll(values());
 }
 
 KoFilterEffectRegistry* KoFilterEffectRegistry::instance()
@@ -64,5 +66,3 @@ KoFilterEffect * KoFilterEffectRegistry::createFilterEffectFromXml(const KoXmlEl
     delete filterEffect;
     return 0;
 }
-
-#include <KoFilterEffectRegistry.moc>

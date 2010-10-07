@@ -73,8 +73,8 @@ class KisToolBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolBrushFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KritaShape/KisToolBrush") {
+    KisToolBrushFactory(const QStringList&)
+            : KoToolFactoryBase("KritaShape/KisToolBrush") {
 
         setToolTip(i18n("Paint with brushes"));
 

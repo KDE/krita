@@ -44,9 +44,8 @@ public:
     KoInlineObjectFactoryBase::ObjectType type;
 };
 
-KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(QObject *parent, const QString &id, ObjectType type)
-        : QObject(parent)
-        , d(new InlineObjectFactoryPrivate(id))
+KoInlineObjectFactoryBase::KoInlineObjectFactoryBase(const QString &id, ObjectType type)
+        : d(new InlineObjectFactoryPrivate(id))
 {
     d->type = type;
 }
@@ -91,5 +90,3 @@ KoInlineObjectFactoryBase::ObjectType KoInlineObjectFactoryBase::type() const
 {
     return d->type;
 }
-
-#include <KoInlineObjectFactoryBase.moc>

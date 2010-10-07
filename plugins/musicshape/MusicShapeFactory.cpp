@@ -37,14 +37,14 @@ K_EXPORT_PLUGIN(MusicShapePluginFactory( "MusicShape" ))
 
 MusicShapePlugin::MusicShapePlugin( QObject * parent,  const QVariantList& )
 {
-    KoShapeRegistry::instance()->add( new MusicShapeFactory( parent ) );
-    KoToolRegistry::instance()->add( new MusicToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new SimpleEntryToolFactory( parent ) );
+    KoShapeRegistry::instance()->add( new MusicShapeFactory() );
+    KoToolRegistry::instance()->add( new MusicToolFactory() );
+    KoToolRegistry::instance()->add( new SimpleEntryToolFactory() );
 }
 
 
-MusicShapeFactory::MusicShapeFactory( QObject* parent )
-    : KoShapeFactoryBase( parent, MusicShapeId, i18n( "Music Shape" ) )
+MusicShapeFactory::MusicShapeFactory()
+    : KoShapeFactoryBase(MusicShapeId, i18n( "Music Shape" ) )
 {
     setToolTip( i18n( "A shape which provides a music editor" ) );
     ///@todo setIcon( "musicflake" );
@@ -73,5 +73,3 @@ bool MusicShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/music" );
 }
-
-#include <MusicShapeFactory.moc>

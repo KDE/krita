@@ -69,8 +69,8 @@ class KisToolSelectBrushFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectBrushFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolSelectBrush") {
+    KisToolSelectBrushFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolSelectBrush") {
         setToolTip(i18n("Select by brush"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

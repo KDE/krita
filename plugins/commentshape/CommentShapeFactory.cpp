@@ -25,8 +25,8 @@
 #include <KoResourceManager.h>
 #include <KoOdfDocument.h>
 
-CommentShapeFactory::CommentShapeFactory(QObject* parent)
-: KoShapeFactoryBase(parent, COMMENTSHAPEID, i18n("Comment"))
+CommentShapeFactory::CommentShapeFactory()
+: KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
 {
     setOdfElementNames(KoXmlNS::officeooo, QStringList("annotation"));
 }

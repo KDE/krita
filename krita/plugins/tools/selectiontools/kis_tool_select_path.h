@@ -69,8 +69,8 @@ class KisToolSelectPathFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectPathFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolSelectPath") {
+    KisToolSelectPathFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolSelectPath") {
         setToolTip(i18n("Select an area of the image with path."));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

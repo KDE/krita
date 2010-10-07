@@ -25,9 +25,8 @@
 
 class ChangeTrackingToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    explicit ChangeTrackingToolFactory(QObject *parent);
+    ChangeTrackingToolFactory();
     ~ChangeTrackingToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

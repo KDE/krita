@@ -91,10 +91,9 @@ private:
 
 class KRITAUI_EXPORT KisShapeSelectionFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
 public:
 
-    KisShapeSelectionFactory(QObject* parent);
+    KisShapeSelectionFactory();
     ~KisShapeSelectionFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const {

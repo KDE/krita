@@ -27,8 +27,8 @@
 #include <QRectF>
 #include <QPixmap>
 
-KoCreatePathToolFactory::KoCreatePathToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, KoCreatePathTool_ID)
+KoCreatePathToolFactory::KoCreatePathToolFactory()
+        : KoToolFactoryBase(KoCreatePathTool_ID)
 {
     setToolTip(i18n("Create Path"));
     setToolType(mainToolType());

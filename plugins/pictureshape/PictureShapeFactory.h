@@ -25,7 +25,7 @@
 class PictureShapeFactory : public KoShapeFactoryBase
 {
 public:
-    PictureShapeFactory(QObject *parent);
+    PictureShapeFactory();
     ~PictureShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

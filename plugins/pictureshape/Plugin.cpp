@@ -31,8 +31,8 @@ K_EXPORT_COMPONENT_FACTORY( pictureshape, KGenericFactory<Plugin>( "PictureShape
 Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new PictureShapeFactory(parent) );
-    KoToolRegistry::instance()->add( new PictureToolFactory(parent) );
+    KoShapeRegistry::instance()->add( new PictureShapeFactory() );
+    KoToolRegistry::instance()->add( new PictureToolFactory() );
 }
 
 #include <Plugin.moc>

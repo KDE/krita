@@ -51,7 +51,7 @@ ToolDyna::ToolDyna(QObject *parent, const QVariantList &)
     //setComponentData(ToolDynaFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolDynaFactory(r, QStringList()));
+    r->add(new KisToolDynaFactory(QStringList()));
 }
 
 ToolDyna::~ToolDyna()

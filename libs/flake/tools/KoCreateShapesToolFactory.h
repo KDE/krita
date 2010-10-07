@@ -28,7 +28,7 @@ class KoCreateShapesToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor
-    KoCreateShapesToolFactory(QObject *parent);
+    KoCreateShapesToolFactory();
     /// Destructor
     ~KoCreateShapesToolFactory();
 

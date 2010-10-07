@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-KoPathToolFactory::KoPathToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "PathToolFactoryId")
+KoPathToolFactory::KoPathToolFactory()
+        : KoToolFactoryBase("PathToolFactoryId")
 {
     setToolTip(i18n("Path editing tool"));
     setToolType(dynamicToolType());
@@ -41,5 +41,3 @@ KoToolBase * KoPathToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new KoPathTool(canvas);
 }
-
-#include <KoPathToolFactory.moc>

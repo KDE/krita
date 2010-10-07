@@ -24,9 +24,8 @@
 
 
 class DivineProportionToolFactory : public KoToolFactoryBase {
-    Q_OBJECT
 public:
-    explicit DivineProportionToolFactory(QObject *parent);
+    DivineProportionToolFactory();
     ~DivineProportionToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);

@@ -29,8 +29,8 @@
 #include "VectorShape.h"
 
 
-VectorToolFactory::VectorToolFactory(QObject *parent)
-  : KoToolFactoryBase(parent, "VectorToolFactory_ID", i18n("Vector image tool"))
+VectorToolFactory::VectorToolFactory()
+  : KoToolFactoryBase("VectorToolFactory_ID", i18n("Vector image tool"))
 {
     setToolTip (i18n("Vector image selection tool"));
     setToolType (dynamicToolType());
@@ -48,6 +48,3 @@ KoToolBase * VectorToolFactory::createTool(KoCanvasBase *canvas)
 {
     return new VectorTool(canvas);
 }
-
-
-#include <VectorToolFactory.moc>

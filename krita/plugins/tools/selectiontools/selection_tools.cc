@@ -50,15 +50,15 @@ SelectionTools::SelectionTools(QObject *parent, const QVariantList &)
 
     KoToolRegistry * r = KoToolRegistry::instance();
 
-    r->add(new KisToolSelectOutlineFactory(r, QStringList()));
-    r->add(new KisToolSelectPolygonalFactory(r, QStringList()));
-    r->add(new KisToolSelectRectangularFactory(r, QStringList()));
-    r->add(new KisToolSelectEllipticalFactory(r, QStringList()));
-    r->add(new KisToolSelectContiguousFactory(r, QStringList()));
-    r->add(new KisToolSelectPathFactory(r, QStringList()));
-    r->add(new KisToolSelectSimilarFactory(r, QStringList()));
-    r->add(new KisToolSelectBrushFactory(r, QStringList()));
-//    r->add(new KisToolSelectMagneticFactory(r, QStringList()));
+    r->add(new KisToolSelectOutlineFactory(QStringList()));
+    r->add(new KisToolSelectPolygonalFactory(QStringList()));
+    r->add(new KisToolSelectRectangularFactory(QStringList()));
+    r->add(new KisToolSelectEllipticalFactory(QStringList()));
+    r->add(new KisToolSelectContiguousFactory(QStringList()));
+    r->add(new KisToolSelectPathFactory(QStringList()));
+    r->add(new KisToolSelectSimilarFactory(QStringList()));
+    r->add(new KisToolSelectBrushFactory(QStringList()));
+//    r->add(new KisToolSelectMagneticFactory(QStringList()));
 }
 
 SelectionTools::~SelectionTools()

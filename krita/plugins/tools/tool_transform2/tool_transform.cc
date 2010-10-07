@@ -47,7 +47,7 @@ ToolTransform::ToolTransform(QObject *parent, const QVariantList &)
     //setComponentData(ToolTransformFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolTransformFactory(r, QStringList()));
+    r->add(new KisToolTransformFactory(QStringList()));
 
 }
 

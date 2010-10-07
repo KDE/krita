@@ -26,9 +26,6 @@
 #include "kis_tool_polyline_base.h"
 //#include "flake/kis_node_shape.h"
 
-
-
-
 class KisToolPolyline : public KisToolPolylineBase
 {
 
@@ -49,8 +46,8 @@ class KisToolPolylineFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolPolylineFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolPolyline") {
+    KisToolPolylineFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolPolyline") {
         setToolTip(i18n("Draw a polyline. Shift-mouseclick ends the polyline."));
         setToolType(TOOL_TYPE_SHAPE);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

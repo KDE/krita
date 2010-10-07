@@ -62,8 +62,8 @@ class KisToolSelectRectangularFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectRectangularFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolSelectRectangular") {
+    KisToolSelectRectangularFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolSelectRectangular") {
         setToolTip(i18n("Select a rectangular area"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -27,7 +27,7 @@ class CommentToolFactory : public KoToolFactoryBase
 {
 
 public:
-    CommentToolFactory(QObject* parent);
+    CommentToolFactory();
     virtual ~CommentToolFactory();
 
     virtual KoToolBase* createTool(KoCanvasBase* canvas);

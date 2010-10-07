@@ -25,7 +25,7 @@
 class MusicToolFactory : public KoToolFactoryBase
 {
 public:
-    MusicToolFactory( QObject* parent );
+    MusicToolFactory();
     ~MusicToolFactory();
 
     KoToolBase* createTool( KoCanvasBase* canvas );

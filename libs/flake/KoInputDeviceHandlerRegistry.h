@@ -32,10 +32,8 @@
  * These will get routed the the active tools which can then do whatever
  * they like with it.
  */
-class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public QObject, public KoGenericRegistry<KoInputDeviceHandler*>
+class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInputDeviceHandler*>
 {
-    Q_OBJECT
-
 public:
     ~KoInputDeviceHandlerRegistry();
 

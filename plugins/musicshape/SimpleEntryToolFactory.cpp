@@ -24,8 +24,8 @@
 #include "SimpleEntryToolFactory.h"
 
 
-SimpleEntryToolFactory::SimpleEntryToolFactory( QObject* parent )
-    : KoToolFactoryBase(parent, "SimpleEntryToolFactoryId")
+SimpleEntryToolFactory::SimpleEntryToolFactory()
+    : KoToolFactoryBase("SimpleEntryToolFactoryId")
 {
     setToolTip( i18n( "Music editing tool" ) );
     setIcon( "music-note-16th" );

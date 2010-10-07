@@ -28,7 +28,7 @@ K_EXPORT_COMPONENT_FACTORY(paragraphtool, KGenericFactory<ParagraphPlugin>("Para
 ParagraphPlugin::ParagraphPlugin(QObject * parent, const QStringList &)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new ParagraphToolFactory(parent));
+    KoToolRegistry::instance()->add(new ParagraphToolFactory());
 }
 
 #include <ParagraphPlugin.moc>

@@ -29,6 +29,8 @@
 /**
  * Base class for registry objects.
  *
+ * Registered objects are owned by the registry.
+ *
  * Items are mapped by QString as a unique Id.
  *
  * Exemple of use:
@@ -57,11 +59,14 @@ class KoGenericRegistry
 {
 public:
     KoGenericRegistry() { }
-    virtual ~KoGenericRegistry() { }
+    virtual ~KoGenericRegistry() { m_hash.clear(); }
 
 public:
     /**
-     * add an object to the registry
+     * Add an object to the registry. If it is a QObject, make sure it isn't in the
+     * QObject ownership hierarchy, since the registry itself is responsbile for
+     * deleting it.
+     *
      * @param item the item to add (NOTE: T must have an QString id() const   function)
      */
     void add(T item) {

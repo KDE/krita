@@ -39,9 +39,8 @@ public:
 };
 
 
-KoToolFactoryBase::KoToolFactoryBase(QObject *parent, const QString &id)
-        : QObject(parent),
-        d(new Private(id))
+KoToolFactoryBase::KoToolFactoryBase(const QString &id)
+        : d(new Private(id))
 {
 }
 
@@ -129,5 +128,3 @@ bool KoToolFactoryBase::canCreateTool(KoCanvasBase *) const
 {
     return true;
 }
-
-#include <KoToolFactoryBase.moc>

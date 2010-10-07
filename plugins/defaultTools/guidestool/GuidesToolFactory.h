@@ -30,7 +30,7 @@ class GuidesToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor
-    explicit GuidesToolFactory(QObject *parent);
+    GuidesToolFactory();
     /// Destructor
     ~GuidesToolFactory();
     /// reimplemented

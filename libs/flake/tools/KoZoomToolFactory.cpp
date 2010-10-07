@@ -23,8 +23,8 @@
 
 #include <klocale.h>
 
-KoZoomToolFactory::KoZoomToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, "KoZoomToolId")
+KoZoomToolFactory::KoZoomToolFactory()
+        : KoToolFactoryBase("KoZoomToolId")
 {
     setToolTip(i18n("Zoom"));
     setToolType(navigationToolType());

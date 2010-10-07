@@ -43,11 +43,11 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 }
 
 void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo,
-        KisProcessingInformation dstInfo,
-        const QSize& size,
-        const KisFilterConfiguration* config,
-        KoUpdater* progressUpdater
-                                          ) const
+                                           KisProcessingInformation dstInfo,
+                                           const QSize& size,
+                                           const KisFilterConfiguration* config,
+                                           KoUpdater* progressUpdater
+                                           ) const
 {
     const KisPaintDeviceSP src = srcInfo.paintDevice();
     KisPaintDeviceSP dst = dstInfo.paintDevice();

@@ -62,8 +62,8 @@ class KisToolGridFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolGridFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolGrid") {
+    KisToolGridFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolGrid") {
         setToolTip(i18n("Edit the grid"));
         setToolType(TOOL_TYPE_VIEW);
         setIcon("krita_tool_grid");

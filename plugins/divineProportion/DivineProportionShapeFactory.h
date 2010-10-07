@@ -25,11 +25,9 @@
 class KoShape;
 
 class DivineProportionShapeFactory : public KoShapeFactoryBase {
-    Q_OBJECT
-
 public:
     /// constructor
-    explicit DivineProportionShapeFactory(QObject *parent);
+    DivineProportionShapeFactory();
     ~DivineProportionShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

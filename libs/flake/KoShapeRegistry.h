@@ -39,9 +39,8 @@ class KoShapeLoadingContext;
  * or rather, of the factories that applications can use to create flake
  * shape objects.
  */
-class FLAKE_EXPORT KoShapeRegistry : public QObject,  public KoGenericRegistry<KoShapeFactoryBase*>
+class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase*>
 {
-    Q_OBJECT
 public:
     ~KoShapeRegistry();
 

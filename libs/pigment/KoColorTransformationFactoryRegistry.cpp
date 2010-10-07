@@ -34,6 +34,7 @@ KoColorTransformationFactoryRegistry::KoColorTransformationFactoryRegistry() : d
 
 KoColorTransformationFactoryRegistry::~KoColorTransformationFactoryRegistry()
 {
+    qDeleteAll(values());
     delete d;
 }
 

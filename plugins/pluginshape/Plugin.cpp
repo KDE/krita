@@ -30,7 +30,7 @@ K_EXPORT_COMPONENT_FACTORY( pluginshape, KGenericFactory<Plugin>( "pluginshape" 
 Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new PluginShapeFactory(parent) );
+    KoShapeRegistry::instance()->add( new PluginShapeFactory() );
 }
 
 #include <Plugin.moc>

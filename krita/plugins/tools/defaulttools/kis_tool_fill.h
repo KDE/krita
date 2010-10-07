@@ -86,8 +86,8 @@ class KisToolFillFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolFillFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KritaFill/KisToolFill") {
+    KisToolFillFactory(const QStringList&)
+            : KoToolFactoryBase("KritaFill/KisToolFill") {
         setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

@@ -48,7 +48,7 @@ ToolPerspectiveGrid::ToolPerspectiveGrid(QObject *parent, const QVariantList &)
     //setComponentData(ToolPerspectiveGridFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPerspectiveGridFactory(r, QStringList()));
+    r->add(new KisToolPerspectiveGridFactory(QStringList()));
 }
 
 ToolPerspectiveGrid::~ToolPerspectiveGrid()

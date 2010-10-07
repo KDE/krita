@@ -31,8 +31,8 @@ K_EXPORT_COMPONENT_FACTORY(artistictextshape, KGenericFactory<ArtisticTextShapeP
 ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QStringList & )
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory( parent ) );
-    KoToolRegistry::instance()->add( new ArtisticTextToolFactory( parent ) );
+    KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory() );
+    KoToolRegistry::instance()->add( new ArtisticTextToolFactory() );
 }
 
 ArtisticTextShapePlugin::~ArtisticTextShapePlugin()

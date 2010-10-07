@@ -30,7 +30,7 @@ K_EXPORT_PLUGIN( ChangecasePluginFactory("ChangecasePlugin") )
 ChangecasePlugin::ChangecasePlugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add( new ChangecaseFactory( parent));
+    KoTextEditingRegistry::instance()->add( new ChangecaseFactory());
 }
 
 #include <ChangecasePlugin.moc>

@@ -42,4 +42,9 @@ KoTextEditingRegistry* KoTextEditingRegistry::instance()
     return s_instance;
 }
 
+KoTextEditingRegistry::~KoTextEditingRegistry() 
+{
+    qDeleteAll(values());
+}
+
 #include <KoTextEditingRegistry.moc>

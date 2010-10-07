@@ -41,7 +41,7 @@ class KoColorConversionCache;
  *      - a registry of singleton colorspace factories.
  *      - a registry of icc profiles
  */
-class PIGMENTCMS_EXPORT KoColorSpaceRegistry : public QObject
+class PIGMENTCMS_EXPORT KoColorSpaceRegistry
 {
 public:
     enum ColorSpaceListVisibility {

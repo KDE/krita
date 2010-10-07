@@ -49,7 +49,7 @@ ToolPolyline::ToolPolyline(QObject *parent, const QVariantList &)
     //setComponentData(ToolPolylineFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPolylineFactory(r, QStringList()));
+    r->add(new KisToolPolylineFactory(QStringList()));
 
 }
 

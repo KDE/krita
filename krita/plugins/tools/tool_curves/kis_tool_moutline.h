@@ -88,8 +88,8 @@ class KisToolMagneticFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolMagneticFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolMagnetic") {
+    KisToolMagneticFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolMagnetic") {
         setToolTip(i18n("Magnetic Selection: move around an edge to select it. Hit Ctrl to enter/quit manual mode, and double click to finish."));
         setToolType(TOOL_TYPE_SELECTED);
         setIcon("tool_moutline");

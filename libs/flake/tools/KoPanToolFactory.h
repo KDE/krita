@@ -28,7 +28,7 @@ class KoPanToolFactory : public KoToolFactoryBase
 {
 public:
     /// constructor
-    KoPanToolFactory(QObject *parent);
+    KoPanToolFactory();
 
     KoToolBase *createTool(KoCanvasBase *canvas);
 };

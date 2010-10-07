@@ -26,10 +26,8 @@
 
 class CommentShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
-
 public:
-    CommentShapeFactory(QObject* parent);
+    CommentShapeFactory();
     virtual ~CommentShapeFactory();
 
     virtual bool supports(const KoXmlElement& element) const;

@@ -27,11 +27,9 @@ class KoShape;
 /// Factory for path shapes
 class StarShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
-
 public:
     /// constructor
-    explicit StarShapeFactory(QObject *parent);
+    StarShapeFactory();
     ~StarShapeFactory() {}
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;

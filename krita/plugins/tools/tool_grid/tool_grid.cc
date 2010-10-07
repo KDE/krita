@@ -45,7 +45,7 @@ GridPlugin::GridPlugin(QObject *parent, const QVariantList &)
     //setComponentData(GridFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolGridFactory(r, QStringList()));
+    r->add(new KisToolGridFactory(QStringList()));
 }
 
 GridPlugin::~GridPlugin()

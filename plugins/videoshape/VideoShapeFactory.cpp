@@ -30,8 +30,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-VideoShapeFactory::VideoShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, VIDEOSHAPEID, i18n("Video"))
+VideoShapeFactory::VideoShapeFactory()
+    : KoShapeFactoryBase(VIDEOSHAPEID, i18n("Video"))
 {
     setToolTip(i18n("Video, embedded or fullscreen"));
     setIcon("video-x-generic");

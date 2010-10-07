@@ -34,8 +34,8 @@
 #include <KDebug>
 
 
-VectorShapeFactory::VectorShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, VectorShape_SHAPEID, i18n("Vector image"))
+VectorShapeFactory::VectorShapeFactory()
+    : KoShapeFactoryBase(VectorShape_SHAPEID, i18n("Vector image"))
 {
     setToolTip(i18n("A shape that shows a vector image"));
     setIcon( "vector-shape" );
@@ -62,5 +62,3 @@ QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()
 
     return result;
 }
-
-#include <VectorShapeFactory.moc>

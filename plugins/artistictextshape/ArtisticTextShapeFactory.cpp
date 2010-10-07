@@ -26,8 +26,8 @@
 
 #include <klocale.h>
 
-ArtisticTextShapeFactory::ArtisticTextShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, ArtisticTextShapeID, i18n("ArtisticTextShape"))
+ArtisticTextShapeFactory::ArtisticTextShapeFactory()
+    : KoShapeFactoryBase(ArtisticTextShapeID, i18n("ArtisticTextShape"))
 {
     setToolTip(i18n("A shape which shows a single text line"));
     setIcon( "text" );
@@ -46,5 +46,3 @@ bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
 {
     return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
 }
-
-#include <ArtisticTextShapeFactory.moc>

@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 
-DivineProportionShapeFactory::DivineProportionShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, DivineProportionShape_SHAPEID, i18n("DivineProportion"))
+DivineProportionShapeFactory::DivineProportionShapeFactory()
+    : KoShapeFactoryBase(DivineProportionShape_SHAPEID, i18n("DivineProportion"))
 {
     setToolTip(i18n("A Shape That Shows DivineProportion"));
     setIcon( "divine-shape" );
@@ -42,5 +42,3 @@ QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionP
     answer.append(new Intro());
     return answer;
 }
-
-#include <DivineProportionShapeFactory.moc>

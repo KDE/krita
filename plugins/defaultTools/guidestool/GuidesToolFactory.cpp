@@ -21,8 +21,8 @@
 #include "GuidesTool.h"
 #include <KLocale>
 
-GuidesToolFactory::GuidesToolFactory( QObject *parent )
-    : KoToolFactoryBase(parent, GuidesToolId)
+GuidesToolFactory::GuidesToolFactory()
+    : KoToolFactoryBase(GuidesToolId)
 {
     setToolTip(i18n("Edit guidelines"));
     setToolType("never");

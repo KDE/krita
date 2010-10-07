@@ -386,8 +386,8 @@ KoShapeManager* KisShapeSelection::shapeManager() const
     return m_canvas->shapeManager();
 }
 
-KisShapeSelectionFactory::KisShapeSelectionFactory(QObject* parent)
-        : KoShapeFactoryBase(parent, "KisShapeSelection", "selection shape container")
+KisShapeSelectionFactory::KisShapeSelectionFactory()
+        : KoShapeFactoryBase("KisShapeSelection", "selection shape container")
 {
     setHidden(true);
 }
@@ -413,4 +413,3 @@ void KisShapeSelection::moveY(qint32 y)
 }
 
 
-#include "kis_shape_selection.moc"

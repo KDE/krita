@@ -26,7 +26,6 @@
 
 #include <klocale.h>
 #include <kshortcut.h>
-#include <QObject>
 
 /**
  * A factory for KoToolBase objects.
@@ -37,8 +36,8 @@
  * An example usage would be:<pre>
 class MyToolFactory : public KoToolFactoryBase {
 public:
-    MyToolFactory(QObject *parent, const QStringList&)
-        : KoToolFactoryBase(parent, "MyTool") {
+    MyToolFactory(const QStringList&)
+        : KoToolFactoryBase("MyTool") {
         setToolTip(i18n("Create object"));
         setToolType("dynamic");
         setPriority(5);
@@ -51,18 +50,15 @@ K_EXPORT_COMPONENT_FACTORY(myLibrary,
 </pre>
 
  */
-class FLAKE_EXPORT KoToolFactoryBase : public QObject
+class FLAKE_EXPORT KoToolFactoryBase
 {
-    Q_OBJECT
-
 public:
     /**
      * Create the new factory
-     * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the tool, for
      *   example for use by the KoToolBase::activateTemporary.
      */
-    KoToolFactoryBase(QObject *parent, const QString &id);
+    KoToolFactoryBase(const QString &id);
     virtual ~KoToolFactoryBase();
 
     /**

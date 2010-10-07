@@ -28,7 +28,7 @@ class VideoShapeConfigWidget;
 class VideoShapeFactory : public KoShapeFactoryBase
 {
 public:
-    VideoShapeFactory(QObject *parent);
+    VideoShapeFactory();
     ~VideoShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

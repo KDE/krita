@@ -29,7 +29,7 @@ class SpiralShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor
-    explicit SpiralShapeFactory(QObject *parent);
+    SpiralShapeFactory();
     ~SpiralShapeFactory() {}
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();

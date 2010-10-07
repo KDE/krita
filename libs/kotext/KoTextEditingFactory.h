@@ -32,16 +32,15 @@ class KoTextEditingPlugin;
  * allow the creation of the text-editing-class from that plugin.
  * @see KoTextEditingRegistry
  */
-class KOTEXT_EXPORT KoTextEditingFactory : public QObject
+class KOTEXT_EXPORT KoTextEditingFactory
 {
-    Q_OBJECT
 public:
     /**
      * Create the new factory
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
      */
-    KoTextEditingFactory(QObject *parent, const QString &id);
+    explicit KoTextEditingFactory(const QString &id);
     virtual ~KoTextEditingFactory();
 
     /**

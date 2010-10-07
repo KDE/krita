@@ -57,8 +57,8 @@ class KisToolSelectSimilarFactory : public KoToolFactoryBase
 {
 
 public:
-    KisToolSelectSimilarFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolSelectSimilar") {
+    KisToolSelectSimilarFactory(const QStringList&)
+            : KoToolFactoryBase("KisToolSelectSimilar") {
         setToolTip(i18n("Select similar colors"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);

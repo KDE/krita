@@ -24,9 +24,8 @@
 
 #include <KDebug>
 
-TextEditingPluginContainer::TextEditingPluginContainer(QObject *parent)
-    : QObject(parent),
-    m_spellcheckPlugin(0)
+TextEditingPluginContainer::TextEditingPluginContainer(QObject *)
+    : m_spellcheckPlugin(0)
 {
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);

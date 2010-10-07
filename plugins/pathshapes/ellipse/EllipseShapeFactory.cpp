@@ -28,8 +28,8 @@
 #include <klocale.h>
 
 
-EllipseShapeFactory::EllipseShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, EllipseShapeId, i18n("Ellipse"))
+EllipseShapeFactory::EllipseShapeFactory()
+    : KoShapeFactoryBase(EllipseShapeId, i18n("Ellipse"))
 {
     setToolTip(i18n( "An ellipse"));
     setIcon("ellipse-shape");

@@ -51,15 +51,15 @@ K_EXPORT_COMPONENT_FACTORY( chartshape, KGenericFactory<ChartShapePlugin>( "Char
 ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
 {
     // Register the chart shape factory.
-    KoShapeRegistry::instance()->add( new ChartShapeFactory( parent ) );
+    KoShapeRegistry::instance()->add( new ChartShapeFactory() );
 
     // Register all tools for the chart shape.
-    KoToolRegistry::instance()->add( new ChartToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new ChartToolFactory() );
 }
 
 
-ChartShapeFactory::ChartShapeFactory( QObject* parent )
-    : KoShapeFactoryBase( parent, ChartShapeId, i18n( "Chart" ) )
+ChartShapeFactory::ChartShapeFactory()
+    : KoShapeFactoryBase(ChartShapeId, i18n( "Chart" ) )
 {
     setOdfElementNames( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", QStringList( "object" ) );
     setToolTip( i18n( "Business charts" ) );

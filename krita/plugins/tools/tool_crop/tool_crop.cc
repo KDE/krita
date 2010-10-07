@@ -48,7 +48,7 @@ ToolCrop::ToolCrop(QObject *parent, const QVariantList &)
     //setComponentData(ToolCropFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolCropFactory(r, QStringList()));
+    r->add(new KisToolCropFactory(QStringList()));
 
 
 }

@@ -32,8 +32,8 @@
 using namespace KChart;
 
 
-ChartToolFactory::ChartToolFactory( QObject *parent )
-    : KoToolFactoryBase(parent, "ChartToolFactory_ID")
+ChartToolFactory::ChartToolFactory()
+    : KoToolFactoryBase("ChartToolFactory_ID")
 {
     setToolTip ( i18n( "Chart Editing Tool" ) );
     setToolType ( dynamicToolType() );
@@ -52,4 +52,3 @@ KoToolBase *ChartToolFactory::createTool( KoCanvasBase *canvas )
 }
 
 
-#include "ChartToolFactory.moc"

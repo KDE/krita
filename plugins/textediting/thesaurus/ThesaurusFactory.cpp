@@ -20,8 +20,8 @@
 #include "ThesaurusFactory.h"
 #include "Thesaurus.h"
 
-ThesaurusFactory::ThesaurusFactory(QObject *parent)
-    : KoTextEditingFactory(parent, "thesaurustool")
+ThesaurusFactory::ThesaurusFactory()
+    : KoTextEditingFactory("thesaurustool")
 {
     setShowInMenu(false);
     setTitle("Thesaurus");

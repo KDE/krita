@@ -22,8 +22,8 @@
 
 #include <KLocale>
 
-SpellCheckFactory::SpellCheckFactory(QObject *parent)
-    : KoTextEditingFactory(parent, "spellcheck")
+SpellCheckFactory::SpellCheckFactory()
+    : KoTextEditingFactory("spellcheck")
 {
     setShowInMenu(true);
     setTitle(i18n("Spell Check"));

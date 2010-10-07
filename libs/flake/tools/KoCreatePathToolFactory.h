@@ -28,7 +28,7 @@ class KoCreatePathToolFactory : public KoToolFactoryBase
 {
 public:
     /// Constructor
-    KoCreatePathToolFactory(QObject *parent);
+    KoCreatePathToolFactory();
     /// Destructor
     ~KoCreatePathToolFactory();
 

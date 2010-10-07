@@ -31,9 +31,9 @@ K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>("TextShape"))
 TextPlugin::TextPlugin(QObject * parent, const QStringList &)
         : QObject(parent)
 {
-    KoToolRegistry::instance()->add(new TextToolFactory(parent));
-    KoToolRegistry::instance()->add(new ChangeTrackingToolFactory(parent));
-    KoShapeRegistry::instance()->add(new TextShapeFactory(parent));
+    KoToolRegistry::instance()->add(new TextToolFactory());
+    KoToolRegistry::instance()->add(new ChangeTrackingToolFactory());
+    KoShapeRegistry::instance()->add(new TextShapeFactory());
 }
 
 #include <TextPlugin.moc>

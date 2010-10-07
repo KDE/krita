@@ -18,7 +18,7 @@
  */
 
 #include "KoFilterEffectFactoryBase.h"
-
+#include <QString>
 class KoFilterEffectFactoryBase::Private
 {
 public:
@@ -29,8 +29,8 @@ public:
     const QString name;
 };
 
-KoFilterEffectFactoryBase::KoFilterEffectFactoryBase(QObject *parent, const QString &id, const QString &name)
-: QObject(parent), d(new Private(id, name))
+KoFilterEffectFactoryBase::KoFilterEffectFactoryBase(const QString &id, const QString &name)
+    : d(new Private(id, name))
 {
 }
 
@@ -48,5 +48,3 @@ QString KoFilterEffectFactoryBase::id() const
 {
     return d->id;
 }
-
-#include <KoFilterEffectFactoryBase.moc>

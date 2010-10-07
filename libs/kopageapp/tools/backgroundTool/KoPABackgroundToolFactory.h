@@ -25,9 +25,8 @@
 
 class KoPABackgroundToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    KoPABackgroundToolFactory( QObject *parent );
+    KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase
     virtual ~KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase

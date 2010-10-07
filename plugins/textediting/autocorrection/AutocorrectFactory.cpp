@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 
-AutocorrectFactory::AutocorrectFactory(QObject *parent)
-    : KoTextEditingFactory(parent, "autocorrection")
+AutocorrectFactory::AutocorrectFactory()
+    : KoTextEditingFactory("autocorrection")
 {
     setShowInMenu(true);
     setTitle(i18n ("Autocorrect") );

@@ -28,7 +28,7 @@ class KoZoomToolFactory : public KoToolFactoryBase
 {
 public:
     /// constructor
-    KoZoomToolFactory(QObject *parent);
+    KoZoomToolFactory();
 
     KoToolBase *createTool(KoCanvasBase *canvas);
 };

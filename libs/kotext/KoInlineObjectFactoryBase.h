@@ -21,7 +21,6 @@
 #define KOINLINEOBJECTFACTORY_H
 
 #include <QString>
-#include <QObject>
 
 #include "kotext_export.h"
 
@@ -47,9 +46,8 @@ struct KOTEXT_EXPORT KoInlineObjectTemplate {
  * access to the object-type.
  * @see KoInlineObjectRegistry
  */
-class KOTEXT_EXPORT KoInlineObjectFactoryBase : public QObject
+class KOTEXT_EXPORT KoInlineObjectFactoryBase
 {
-    Q_OBJECT
 public:
     /// The type of inlineObject this factory creates.
     enum ObjectType {
@@ -62,7 +60,7 @@ public:
      * @param parent the parent QObject for memory management usage.
      * @param id a string that will be used internally for referencing the variable-type.
      */
-    KoInlineObjectFactoryBase(QObject *parent, const QString &id, ObjectType type);
+    KoInlineObjectFactoryBase(const QString &id, ObjectType type);
     virtual ~KoInlineObjectFactoryBase();
 
     /**

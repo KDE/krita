@@ -66,6 +66,7 @@ KoShapeRegistry::KoShapeRegistry()
 
 KoShapeRegistry::~KoShapeRegistry()
 {
+    qDeleteAll(values());
     delete d;
 }
 
@@ -85,8 +86,8 @@ void KoShapeRegistry::Private::init(KoShapeRegistry *q)
                                      config);
 
     // Also add our hard-coded basic shape
-    q->add(new KoPathShapeFactory(q, QStringList()));
-    q->add(new KoConnectionShapeFactory(q));
+    q->add(new KoPathShapeFactory(QStringList()));
+    q->add(new KoConnectionShapeFactory());
 
     // Now all shape factories are registered with us, determine their
     // assocated odf tagname & priority and prepare ourselves for
@@ -234,7 +235,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
     // Remove duplicate lookup.
     if (!factoryMap.contains(p))
-        return 0; 
+        return 0;
 
     QMultiMap<int, KoShapeFactoryBase*> priorityMap = factoryMap.value(p);
     QList<KoShapeFactoryBase*> factories = priorityMap.values();
@@ -289,5 +290,3 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
 
     return 0;
 }
-
-#include <KoShapeRegistry.moc>

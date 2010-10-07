@@ -56,9 +56,8 @@ public:
 };
 
 
-KoShapeFactoryBase::KoShapeFactoryBase(QObject *parent, const QString &id, const QString &name)
-        : QObject(parent),
-        d(new Private(id, name))
+KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name)
+        : d(new Private(id, name))
 {
 }
 
@@ -182,5 +181,3 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties*, KoResourceManager 
 {
     return createDefaultShape(documentResources);
 }
-
-#include <KoShapeFactoryBase.moc>

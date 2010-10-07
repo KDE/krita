@@ -49,7 +49,7 @@ class KisToolExampleFactory : public KoToolFactoryBase
 
 public:
     KisToolExampleFactory(QObject *parent, const QStringList&)
-            : KoToolFactoryBase(parent, "KisToolExample") {
+            : KoToolFactoryBase("KisToolExample") {
         setToolTip(i18n("Example tool for the curves framework"));
         setToolType(TOOL_TYPE_SHAPE);
         setIcon("tool-example");

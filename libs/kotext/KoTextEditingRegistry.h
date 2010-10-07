@@ -34,9 +34,8 @@
  * @see KoTextEditingFactory
  * @see KoTextEditingPlugin
  */
-class KOTEXT_EXPORT KoTextEditingRegistry : public QObject,  public KoGenericRegistry<KoTextEditingFactory*>
+class KOTEXT_EXPORT KoTextEditingRegistry : public KoGenericRegistry<KoTextEditingFactory*>
 {
-    Q_OBJECT
 public:
     /**
      * Return an instance of the KoTextEditingRegistry
@@ -46,6 +45,7 @@ public:
 
 private:
     KoTextEditingRegistry() {}
+    virtual ~KoTextEditingRegistry();
     void init();
 };
 

@@ -501,8 +501,7 @@ void ShapeCollectionDocker::onLoadingFinished()
         temp.icon = generateShapeIcon(shape);
         templateList.append(temp);
         CollectionShapeFactory* factory =
-                new CollectionShapeFactory(this,
-                loader->collectionPath() + shape->name(), shape);
+                new CollectionShapeFactory(loader->collectionPath() + shape->name(), shape);
         KoShapeRegistry::instance()->add(loader->collectionPath() + shape->name(), factory);
     }
 

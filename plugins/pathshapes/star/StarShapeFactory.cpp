@@ -30,8 +30,8 @@
 
 #include <klocale.h>
 
-StarShapeFactory::StarShapeFactory(QObject *parent)
-    : KoShapeFactoryBase(parent, StarShapeId, i18n("A star shape"))
+StarShapeFactory::StarShapeFactory()
+    : KoShapeFactoryBase(StarShapeId, i18n("A star shape"))
 {
     setToolTip(i18n("A star"));
     setIcon("star");
@@ -150,5 +150,3 @@ QList<KoShapeConfigWidgetBase*> StarShapeFactory::createShapeOptionPanels()
     panels.append(new StarShapeConfigWidget());
     return panels;
 }
-
-#include <StarShapeFactory.moc>

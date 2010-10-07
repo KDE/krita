@@ -25,9 +25,8 @@ class KoShapeControllerBase;
 
 class CollectionShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
     public:
-        CollectionShapeFactory(QObject *parent, const QString &id, KoShape* shape);
+        CollectionShapeFactory(const QString &id, KoShape* shape);
         ~CollectionShapeFactory();
 
         virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

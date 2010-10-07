@@ -24,8 +24,8 @@
 #include "MusicToolFactory.h"
 
 
-MusicToolFactory::MusicToolFactory( QObject* parent )
-    : KoToolFactoryBase(parent, "MusicToolFactoryId")
+MusicToolFactory::MusicToolFactory()
+    : KoToolFactoryBase("MusicToolFactoryId")
 {
     setToolTip( i18n( "Music editing tool, parts" ) );
     setIcon( "musicshape" );

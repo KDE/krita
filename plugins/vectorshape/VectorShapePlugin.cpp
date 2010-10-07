@@ -39,8 +39,8 @@ K_EXPORT_COMPONENT_FACTORY(vectorshape, KGenericFactory<VectorShapePlugin>( "Vec
 VectorShapePlugin::VectorShapePlugin(QObject * parent, const QStringList &)
     : QObject(parent)
 {
-    //KoToolRegistry::instance()->add(new VectorToolFactory(parent));
-    KoShapeRegistry::instance()->add(new VectorShapeFactory(parent));
+    //KoToolRegistry::instance()->add(new VectorToolFactory());
+    KoShapeRegistry::instance()->add(new VectorShapeFactory());
 }
 
 #include <VectorShapePlugin.moc>

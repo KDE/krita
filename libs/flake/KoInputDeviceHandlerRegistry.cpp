@@ -46,8 +46,12 @@ KoInputDeviceHandlerRegistry::~KoInputDeviceHandlerRegistry()
 {
     foreach(const QString & id, keys()) {
         KoInputDeviceHandler * d = value(id);
-        if (d)
+        if (d) {
             d->stop();
+        }
+    }
+    foreach(QString id, keys()) {
+        get(id)->deleteLater();
     }
 }
 
@@ -59,5 +63,3 @@ KoInputDeviceHandlerRegistry* KoInputDeviceHandlerRegistry::instance()
     }
     return s_instance;
 }
-
-#include <KoInputDeviceHandlerRegistry.moc>

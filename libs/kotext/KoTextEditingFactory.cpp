@@ -32,9 +32,8 @@ public:
     QString title;
 };
 
-KoTextEditingFactory::KoTextEditingFactory(QObject *parent, const QString &id)
-        : QObject(parent)
-        , d(new Private(id))
+KoTextEditingFactory::KoTextEditingFactory(const QString &id)
+    : d(new Private(id))
 {
 }
 
@@ -68,4 +67,3 @@ void KoTextEditingFactory::setTitle(const QString &title)
     d->title = title;
 }
 
-#include <KoTextEditingFactory.moc>

@@ -27,8 +27,8 @@
 #include <QRectF>
 #include <QPixmap>
 
-KoCreateShapesToolFactory::KoCreateShapesToolFactory(QObject *parent)
-        : KoToolFactoryBase(parent, KoCreateShapesTool_ID)
+KoCreateShapesToolFactory::KoCreateShapesToolFactory()
+        : KoToolFactoryBase(KoCreateShapesTool_ID)
 {
     setToolTip(i18n("Create object"));
     setToolType(mainToolType());

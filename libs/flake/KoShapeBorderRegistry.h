@@ -25,12 +25,8 @@
 #include <KoGenericRegistry.h>
 #include <KoShapeBorderFactoryBase.h>
 
-#include <QObject>
-
-class FLAKE_EXPORT KoShapeBorderRegistry : public QObject,  public KoGenericRegistry<KoShapeBorderFactoryBase*>
+class FLAKE_EXPORT KoShapeBorderRegistry : public KoGenericRegistry<KoShapeBorderFactoryBase*>
 {
-    Q_OBJECT
-
 public:
     ~KoShapeBorderRegistry();
 

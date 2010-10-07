@@ -33,8 +33,8 @@ K_EXPORT_COMPONENT_FACTORY( treeshape, KGenericFactory<Plugin>( "TreeShape" ) )
 Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
-    KoShapeRegistry::instance()->add(new TreeShapeFactory(parent));
-    KoToolRegistry::instance()->add(new TreeToolFactory(parent));
+    KoShapeRegistry::instance()->add(new TreeShapeFactory());
+    KoToolRegistry::instance()->add(new TreeToolFactory());
 }
 
 #include <Plugin.moc>

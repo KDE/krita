@@ -21,8 +21,8 @@
 
 #include <KLocale>
 
-KoLineBorderFactory::KoLineBorderFactory(QObject *parent)
-        : KoShapeBorderFactoryBase(parent, "LineBorder")
+KoLineBorderFactory::KoLineBorderFactory()
+        : KoShapeBorderFactoryBase("LineBorder")
 {
 }
 

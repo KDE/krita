@@ -24,8 +24,8 @@
 
 #include "KoPABackgroundTool.h"
 
-KoPABackgroundToolFactory::KoPABackgroundToolFactory( QObject *parent )
-    : KoToolFactoryBase(parent, "KoPABackgroundTool")
+KoPABackgroundToolFactory::KoPABackgroundToolFactory()
+    : KoToolFactoryBase("KoPABackgroundTool")
 {
     setToolTip( i18n( "Background editing tool" ) );
     setToolType( mainToolType() );
@@ -48,5 +48,3 @@ bool KoPABackgroundToolFactory::canCreateTool( KoCanvasBase *canvas ) const
     KoPACanvas *paCanvas = dynamic_cast<KoPACanvas *>(canvas);
     return paCanvas != 0; // we only work in KoPACanvas
 }
-
-#include <KoPABackgroundToolFactory.moc>

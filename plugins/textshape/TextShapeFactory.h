@@ -28,11 +28,9 @@ class KoInlineTextObjectManager;
 
 class TextShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
-
 public:
     /// constructor
-    explicit TextShapeFactory(QObject *parent);
+    TextShapeFactory();
     ~TextShapeFactory() {}
 
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;

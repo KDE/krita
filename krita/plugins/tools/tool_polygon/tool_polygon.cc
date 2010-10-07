@@ -49,7 +49,7 @@ ToolPolygon::ToolPolygon(QObject *parent, const QVariantList &)
     //setComponentData(ToolPolygonFactory::componentData());
 
     KoToolRegistry * r = KoToolRegistry::instance();
-    r->add(new KisToolPolygonFactory(r, QStringList()));
+    r->add(new KisToolPolygonFactory(QStringList()));
 }
 
 ToolPolygon::~ToolPolygon()

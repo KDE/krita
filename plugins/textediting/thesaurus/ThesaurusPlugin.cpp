@@ -31,7 +31,7 @@ K_EXPORT_PLUGIN( ThesaurusPluginFactory("ThesaurusPlugin") )
 ThesaurusPlugin::ThesaurusPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
-    KoTextEditingRegistry::instance()->add(new ThesaurusFactory(parent));
+    KoTextEditingRegistry::instance()->add(new ThesaurusFactory());
 }
 
 #include <ThesaurusPlugin.moc>

@@ -26,7 +26,7 @@
 class DateVariableFactory : public KoInlineObjectFactoryBase
 {
 public:
-    DateVariableFactory(QObject *parent = 0);
+    DateVariableFactory();
 
     virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
 };

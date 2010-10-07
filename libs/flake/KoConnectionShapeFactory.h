@@ -29,7 +29,7 @@ class KoShape;
 class KoConnectionShapeFactory : public KoShapeFactoryBase
 {
 public:
-    KoConnectionShapeFactory(QObject *parent);
+    KoConnectionShapeFactory();
     ~KoConnectionShapeFactory() {}
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;

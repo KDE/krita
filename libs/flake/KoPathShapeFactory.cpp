@@ -27,8 +27,8 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
-KoPathShapeFactory::KoPathShapeFactory(QObject *parent, const QStringList&)
-        : KoShapeFactoryBase(parent, KoPathShapeId, i18n("Simple path shape"))
+KoPathShapeFactory::KoPathShapeFactory(const QStringList&)
+        : KoShapeFactoryBase(KoPathShapeId, i18n("Simple path shape"))
 {
     setToolTip(i18n("A simple path shape"));
     setIcon("pathshape");

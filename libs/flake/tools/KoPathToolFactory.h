@@ -25,9 +25,8 @@
 /// Factory for the KoPathTool
 class KoPathToolFactory : public KoToolFactoryBase
 {
-    Q_OBJECT
 public:
-    KoPathToolFactory(QObject *parent);
+    KoPathToolFactory();
     ~KoPathToolFactory();
 
     KoToolBase *createTool(KoCanvasBase *canvas);

@@ -47,9 +47,8 @@ public:
 
 class ChartShapeFactory : public KoShapeFactoryBase
 {
-    Q_OBJECT
 public:
-    ChartShapeFactory( QObject* parent );
+    ChartShapeFactory();
     ~ChartShapeFactory() {}
 
     bool supports( const KoXmlElement &element ) const;

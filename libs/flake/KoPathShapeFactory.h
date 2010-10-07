@@ -31,7 +31,7 @@ class FLAKE_TEST_EXPORT KoPathShapeFactory : public KoShapeFactoryBase
 {
 public:
     /// constructor
-    KoPathShapeFactory(QObject *parent, const QStringList&);
+    KoPathShapeFactory(const QStringList&);
     ~KoPathShapeFactory() {}
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     bool supports(const KoXmlElement &element) const;

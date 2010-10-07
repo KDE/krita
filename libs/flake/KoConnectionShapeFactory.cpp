@@ -29,8 +29,8 @@
 #include <klocale.h>
 #include <KoLineBorder.h>
 
-KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
-        : KoShapeFactoryBase(parent, KOCONNECTIONSHAPEID, i18n("Tie"))
+KoConnectionShapeFactory::KoConnectionShapeFactory()
+        : KoShapeFactoryBase(KOCONNECTIONSHAPEID, i18n("Tie"))
 {
     setToolTip(i18n("A connection between two other shapes"));
     setIcon("x-shape-connection");

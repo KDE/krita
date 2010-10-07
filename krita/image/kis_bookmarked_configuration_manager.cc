@@ -39,7 +39,8 @@ struct KisBookmarkedConfigurationManager::Private {
     KisSerializableConfigurationFactory* configFactory;
 };
 
-KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory* configFactory) : d(new Private)
+KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QString & configEntryGroup, KisSerializableConfigurationFactory* configFactory)
+    : d(new Private)
 {
     d->configEntryGroup = configEntryGroup;
     d->configFactory = configFactory;
@@ -47,6 +48,7 @@ KisBookmarkedConfigurationManager::KisBookmarkedConfigurationManager(const QStri
 
 KisBookmarkedConfigurationManager::~KisBookmarkedConfigurationManager()
 {
+    delete d->configFactory;
     delete d;
 }
 

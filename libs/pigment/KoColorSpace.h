@@ -592,8 +592,6 @@ protected:
     const KoColorConversionTransformation* toRgbA16Converter() const;
     const KoColorConversionTransformation* fromRgbA16Converter() const;
 
-protected:
-
     /**
      * Returns the thread-local conversion cache. If it doesn't exist
      * yet, it is created. If it is currently too small, it is resized.

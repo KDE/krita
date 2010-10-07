@@ -37,14 +37,13 @@ public:
     enum ResourceManagerId {
         ResourceId = 345681743
     };
+
     TextEditingPluginContainer(QObject *parent = 0);
     ~TextEditingPluginContainer();
 
-    KoTextEditingPlugin *spellcheck() const {
-        return m_spellcheckPlugin;
-    }
+    KoTextEditingPlugin *spellcheck() const;
 
-    KoTextEditingPlugin *plugin(const QString &pluginId) {
+    KoTextEditingPlugin *plugin(const QString &pluginId) const {
         return m_textEditingPlugins.value(pluginId);
     }
 
@@ -54,7 +53,6 @@ public:
 
 private:
     QHash<QString, KoTextEditingPlugin*> m_textEditingPlugins;
-    KoTextEditingPlugin *m_spellcheckPlugin;
 };
 
 Q_DECLARE_METATYPE(TextEditingPluginContainer*)

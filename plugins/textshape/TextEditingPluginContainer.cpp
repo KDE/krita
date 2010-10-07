@@ -24,8 +24,8 @@
 
 #include <KDebug>
 
-TextEditingPluginContainer::TextEditingPluginContainer(QObject *)
-    : m_spellcheckPlugin(0)
+TextEditingPluginContainer::TextEditingPluginContainer(QObject * parent)
+    : QObject(parent)
 {
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
@@ -36,15 +36,19 @@ TextEditingPluginContainer::TextEditingPluginContainer(QObject *)
         }
         QString factoryId = factory->id();
         KoTextEditingPlugin *plugin = factory->create();
-        if (factoryId == "spellcheck") {
-            kDebug(32500) << "KOffice SpellCheck plugin found";
-            m_spellcheckPlugin = plugin;
+        if (plugin) {
+            m_textEditingPlugins.insert(factory->id(), plugin);
         }
-        m_textEditingPlugins.insert(factory->id(), plugin);
     }
 }
 
 TextEditingPluginContainer::~TextEditingPluginContainer()
 {
+    qDebug() << "Deleting TextEditingPluginContainer!";
     qDeleteAll(m_textEditingPlugins);
+}
+
+KoTextEditingPlugin *TextEditingPluginContainer::spellcheck() const
+{
+    return plugin("spellcheck");
 }

@@ -34,6 +34,7 @@
 #include <KoText.h>
 #include <KoImageCollection.h>
 #include <KoImageData.h>
+#include <KoOdfNumberDefinition.h>
 
 class KoListLevelProperties::Private
 {
@@ -427,35 +428,38 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
-        const QString format = style.attributeNS(KoXmlNS::style, "num-format", QString());
-        kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "format=" << format;
-        if (format.isEmpty()) {
+
+        KoOdfNumberDefinition numberDefinition;
+        numberDefinition.loadOdf(style);
+
+        switch(numberDefinition.formatSpecification()) {
+        case KoOdfNumberDefinition::Empty:
             setStyle(KoListStyle::CustomCharItem);
             setBulletCharacter(QChar());
-        } else {
-            if (format[0] == '1')
-                setStyle(KoListStyle::DecimalItem);
-            else if (format[0] == 'a')
-                setStyle(KoListStyle::AlphaLowerItem);
-            else if (format[0] == 'A')
-                setStyle(KoListStyle::UpperAlphaItem);
-            else if (format[0] == 'i')
-                setStyle(KoListStyle::RomanLowerItem);
-            else if (format[0] == 'I')
-                setStyle(KoListStyle::UpperRomanItem);
-            else {
-                kDebug(32500) << "list-level-style-number fallback!";
-                setStyle(KoListStyle::DecimalItem); // fallback
-            }
+        case KoOdfNumberDefinition::AlphabeticLowerCase:
+            setStyle(KoListStyle::AlphaLowerItem);
+            break;
+        case KoOdfNumberDefinition::AlphabeticUpperCase:
+            setStyle(KoListStyle::UpperAlphaItem);
+            break;
+        case KoOdfNumberDefinition::RomanLowerCase:
+            setStyle(KoListStyle::RomanLowerItem);
+            break;
+        case KoOdfNumberDefinition::RomanUpperCase:
+            setStyle(KoListStyle::UpperRomanItem);
+            break;
+        case KoOdfNumberDefinition::Numeric:
+        default:
+            setStyle(KoListStyle::DecimalItem);
         }
 
-        //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.
-        const QString prefix = style.attributeNS(KoXmlNS::style, "num-prefix", QString());
-        if (! prefix.isEmpty())
-            setListItemPrefix(prefix);
-        const QString suffix = style.attributeNS(KoXmlNS::style, "num-suffix", QString());
-        if (! suffix.isEmpty())
-            setListItemSuffix(suffix);
+        if (!numberDefinition.prefix().isNull()) {
+            setListItemPrefix(numberDefinition.prefix());
+        }
+
+        if (!numberDefinition.suffix().isNull()) {
+            setListItemSuffix(numberDefinition.suffix());
+        }
         const QString startValue = style.attributeNS(KoXmlNS::text, "start-value", QString("1"));
         setStartValue(startValue.toInt());
     }

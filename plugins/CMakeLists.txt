@@ -40,10 +40,5 @@ macro_optional_add_subdirectory( treeshape )
 
 # as the vector shape depends on filters subdir (not really intuitive) lets allow disabling
 macro_optional_add_subdirectory( vectorshape )
-
-# only build the reporting plugins if building koreport
-if (BUILD_koreport AND SHOULD_BUILD_KOREPORT)
-    macro_optional_add_subdirectory( reporting )
-endif (BUILD_koreport AND SHOULD_BUILD_KOREPORT)
-
+macro_optional_add_subdirectory( reporting )
 macro_optional_add_subdirectory( staging )

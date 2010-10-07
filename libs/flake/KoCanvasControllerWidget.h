@@ -69,29 +69,11 @@ public:
     void activate();
 
 
-    /**
-     * Set the shadow option -- by default the canvas controller draws
-     * a black shadow around the canvas widget, which you may or may
-     * not want.
-     *
-     * @param drawShadow if true, the shadow is drawn, if false, not
-     */
-    void setDrawShadow(bool drawShadow);
+    virtual void setDrawShadow(bool drawShadow);
 
-    /**
-     * Set the new canvas to be shown as a child
-     * Calling this will emit canvasRemoved() if there was a canvas before, and will emit
-     * canvasSet() with the new canvas.
-     * @param canvas the new canvas. The KoCanvasBase::canvas() will be called to retrieve the
-     *        actual widget which will then be added as child of this one.
-     */
-    void setCanvas(KoCanvasBase *canvas);
+    virtual void setCanvas(KoCanvasBase *canvas);
 
-    /**
-     * Return the currently set canvas
-     * @return the currently set canvas
-     */
-    KoCanvasBase *canvas() const;
+    virtual KoCanvasBase *canvas() const;
 
     /**
      * Change the actual canvas widget used by the current canvas. This allows the canvas widget
@@ -101,47 +83,14 @@ public:
      */
     void changeCanvasWidget(QWidget *widget);
 
-    /**
-     * return the amount of pixels vertically visible of the child canvas.
-     * @return the amount of pixels vertically visible of the child canvas.
-     */
-    int visibleHeight() const;
-    /**
-     * return the amount of pixels horizontally visible of the child canvas.
-     * @return the amount of pixels horizontally visible of the child canvas.
-     */
-    int visibleWidth() const;
-    /**
-     * return the amount of pixels that are not visible on the left side of the canvas.
-     * The leftmost pixel that is shown is returned.
-     */
-    int canvasOffsetX() const;
-    /**
-     * return the amount of pixels that are not visible on the top side of the canvas.
-     * The topmost pixel that is shown is returned.
-     */
-    int canvasOffsetY() const;
+    virtual int visibleHeight() const;
+    virtual int visibleWidth() const;
+    virtual int canvasOffsetX() const;
+    virtual int canvasOffsetY() const;
 
-    /**
-     * @brief Scrolls the content of the canvas so that the given rect is visible.
-     *
-     * The rect is to be specified in view coordinates (pixels). The scrollbar positions
-     * are changed so that the centerpoint of the rectangle is centered if possible.
-     *
-     * @param rect the rectangle to make visible
-     * @param smooth if true the viewport translation will make be just enough to ensure visibility, no more.
-     * @see KoViewConverter::documentToView()
-     */
-    void ensureVisible(const QRectF &rect, bool smooth = false);
+    virtual void ensureVisible(const QRectF &rect, bool smooth = false);
 
-    /**
-     * @brief Scrolls the content of the canvas so that the given shape is visible.
-     *
-     * This is just a wrapper function of the above function.
-     *
-     * @param shape the shape to make visible
-     */
-    void ensureVisible(KoShape *shape);
+    virtual void ensureVisible(KoShape *shape);
 
     /**
      * will cause the toolOptionWidgetsChanged to be emitted and all
@@ -154,97 +103,30 @@ public:
      */
     void setToolOptionWidgets(const QMap<QString, QWidget *> &widgets);
 
-    /**
-     * @brief zooms in around the center.
-     *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom in on
-     */
-    void zoomIn(const QPoint &center);
+    virtual void zoomIn(const QPoint &center);
 
-    /**
-     * @brief zooms out around the center.
-     *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom out around
-     */
-    void zoomOut(const QPoint &center);
+    virtual void zoomOut(const QPoint &center);
 
-    /**
-     * @brief zooms around the center.
-     *
-     * The center must be specified in view coordinates (pixels). The scrollbar positions
-     * are changed so that the center becomes center if possible.
-     *
-     * @param center the position to zoom around
-     * @param zoom the zoom to apply
-     */
-    void zoomBy(const QPoint &center, qreal zoom);
+    virtual void zoomBy(const QPoint &center, qreal zoom);
 
-    /**
-     * @brief zoom so that rect is exactly visible (as close as possible)
-     *
-     * The rect must be specified in view coordinates (pixels). The scrollbar positions
-     * are changed so that the center of the rect becomes center if possible.
-     *
-     * @param rect the rect in view coordinates (pixels) that should fit the view afterwards
-     */
-    void zoomTo(const QRect &rect);
+    virtual void zoomTo(const QRect &rect);
 
-    /**
-     * @brief repositions the scrollbars so previous center is once again center
-     *
-     * The previous center is cached from when the user uses the scrollbars or zoomTo
-     * are called. zoomTo is mostly used when a zoom tool of sorts have marked an area
-     * to zoom in on
-     *
-     * The success of this method is limited by the size of thing. But we try our best.
-     */
-    void recenterPreferred();
+    virtual void recenterPreferred();
 
-    /**
-     * Sets the preferred center point in view coordinates (pixels).
-     * @param viewPoint the new preferred center
-     */
-    void setPreferredCenter(const QPoint &viewPoint);
+    virtual void setPreferredCenter(const QPoint &viewPoint);
 
     /// Returns the currently set preferred center point in view coordinates (pixels)
-    QPoint preferredCenter() const;
+    virtual QPoint preferredCenter() const;
 
-    /**
-     * Move the canvas over the x and y distance of the parameter distance
-     * @param distance the distance in view coordinates (pixels).  A positive distance means moving the canvas up/left.
-     */
-    void pan(const QPoint &distance);
+    virtual void pan(const QPoint &distance);
 
-    /**
-     * Set the new margin to pad the canvas with.
-     */
-    void setMargin(int margin);
+    virtual void setMargin(int margin);
 
-    /**
-     * Get the position of the scrollbar
-     */
-    QPoint scrollBarValue() const;
+    virtual QPoint scrollBarValue() const;
 
-    /**
-     * Set the position of the scrollbar
-     * @param value the new values of the scroll bars
-     */
-    void setScrollBarValue(const QPoint &value);
+    virtual void setScrollBarValue(const QPoint &value);
 
-    /**
-     * Call this slot whenever the size of your document in view coordinates (pixels)
-     * changes, for instance when zooming.
-     * @param newSize the new size, in view coordinates (pixels), of the document.
-     * @param recalculateCenter if true the offset in the document we center on after calling
-     *      recenterPreferred() will be recalculated for the new document size so the visual offset stays the same.
-     */
-    void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
+    virtual void updateDocumentSize(const QSize &sz, bool recalculateCenter = true);
 
     /**
      * Set mouse wheel to zoom behaviour
@@ -252,16 +134,7 @@ public:
      */
     void setZoomWithWheel(bool zoom);
 
-    /**
-     * Set scroll area to be bigger than actual document.
-     * It allows the user to move the corner of the document
-     * to e.g. the center of the screen
-     *
-     * @param factor the coefficient, defining how much we can scroll out,
-     *     measured in parts of the widget size. Null value means vast
-     *     scrolling is disabled.
-     */
-    void setVastScrolling(qreal factor);
+    virtual void setVastScrolling(qreal factor);
 
     /**
      * \internal

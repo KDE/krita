@@ -22,6 +22,7 @@
 #include <QString>
 #include <QPair>
 #include <QMetaType>
+#include <QObject>
 
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
@@ -53,8 +54,9 @@
  * The following element may be included in the <text:linenumbering-separator> element:
  * <li> Separator
  */
-class KOODF_EXPORT KoOdfLineNumberingConfiguration
+class KOODF_EXPORT KoOdfLineNumberingConfiguration : public QObject
 {
+    Q_OBJECT
 public:
 
     KoOdfLineNumberingConfiguration();

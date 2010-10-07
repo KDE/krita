@@ -22,6 +22,7 @@
 #include <QString>
 #include <QPair>
 #include <QMetaType>
+#include <QObject>
 
 #include "KoXmlReader.h"
 #include "KoXmlWriter.h"
@@ -50,8 +51,9 @@
  *
  * • Footnote continuation notice (forward and backward)
  */
-class KOODF_EXPORT KoOdfNotesConfiguration
+class KOODF_EXPORT KoOdfNotesConfiguration : public QObject
 {
+    Q_OBJECT
 public:
 
     KoOdfNotesConfiguration();

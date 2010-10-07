@@ -123,6 +123,7 @@ KoChangeTracker *KoTextDocument::changeTracker() const
 
 void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
 {
+    notesConfiguration->setParent(m_document);
     QVariant v;
     v.setValue(notesConfiguration);
     if (notesConfiguration->noteClass() == KoOdfNotesConfiguration::Footnote) {
@@ -147,6 +148,7 @@ KoOdfNotesConfiguration *KoTextDocument::notesConfiguration(KoOdfNotesConfigurat
 
 void KoTextDocument::setLineNumberingConfiguration(KoOdfLineNumberingConfiguration *lineNumberingConfiguration)
 {
+    lineNumberingConfiguration->setParent(m_document);
     QVariant v;
     v.setValue(lineNumberingConfiguration);
     m_document->addResource(KoTextDocument::LineNumberingConfiguration, LineNumberingConfigurationURL, v);

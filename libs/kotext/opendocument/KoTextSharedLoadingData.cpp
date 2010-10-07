@@ -45,6 +45,7 @@
 #include "styles/KoTableRowStyle.h"
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoSectionStyle.h"
+#include "KoOdfNotesConfiguration.h"
 
 class KoTextSharedLoadingData::Private
 {
@@ -90,6 +91,9 @@ public:
     QList<KoTableRowStyle *> tableRowStylesToDelete;
     QList<KoSectionStyle *> sectionStylesToDelete;
     QHash<QString, KoParagraphStyle*> namedParagraphStyles;
+
+    KoOdfNotesConfiguration footnotesConfiguration;
+    KoOdfNotesConfiguration endnotesConfiguration;
 };
 
 KoTextSharedLoadingData::KoTextSharedLoadingData()
@@ -157,6 +161,8 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &scontext, KoS
     addSectionStyles(context, context.stylesReader().customStyles("section").values(), ContentDotXml | StylesDotXml, styleManager);
 
     addOutlineStyle(scontext, styleManager);
+
+    addNotesConfiguration(scontext);
 
     kDebug(32500) << "content.xml: paragraph styles" << d->paragraphContentDotXmlStyles.count() << "character styles" << d->characterContentDotXmlStyles.count();
     kDebug(32500) << "styles.xml:  paragraph styles" << d->paragraphStylesDotXmlStyles.count() << "character styles" << d->characterStylesDotXmlStyles.count();
@@ -581,8 +587,27 @@ KoSectionStyle *KoTextSharedLoadingData::sectionStyle(const QString &name, bool 
     return stylesDotXml ? d->sectionStylesDotXmlStyles.value(name) : d->sectionContentDotXmlStyles.value(name);
 }
 
+KoOdfNotesConfiguration KoTextSharedLoadingData::footnotesConfiguration() const
+{
+    return d->footnotesConfiguration;
+}
+
+KoOdfNotesConfiguration KoTextSharedLoadingData::endnotesConfiguration() const
+{
+    return d->endnotesConfiguration;
+}
+
+
 void KoTextSharedLoadingData::shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &/*context*/)
 {
     Q_UNUSED(shape);
     Q_UNUSED(element);
+}
+
+void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context)
+{
+    d->footnotesConfiguration =
+            context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote);
+    d->endnotesConfiguration =
+            context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Endnote);
 }

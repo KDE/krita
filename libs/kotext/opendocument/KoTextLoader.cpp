@@ -277,6 +277,24 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
     const QTextDocument *document = cursor.block().document();
 
+    KoOdfNotesConfiguration *notesConfiguration =
+            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
+                                        .stylesReader()
+                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Endnote));
+    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+
+    notesConfiguration =
+            new KoOdfNotesConfiguration(d->context.odfLoadingContext()
+                                        .stylesReader()
+                                        .globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
+    KoTextDocument(document).setNotesConfiguration(notesConfiguration);
+
+    KoOdfLineNumberingConfiguration *lineNumberingConfiguration =
+            new KoOdfLineNumberingConfiguration(d->context.odfLoadingContext()
+                                                .stylesReader()
+                                                .lineNumberingConfiguration());
+    KoTextDocument(document).setLineNumberingConfiguration(lineNumberingConfiguration);
+
     d->styleManager = KoTextDocument(document).styleManager();
     d->changeTracker = KoTextDocument(document).changeTracker();
 //    if (!d->changeTracker)

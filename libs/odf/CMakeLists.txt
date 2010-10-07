@@ -42,6 +42,9 @@ set(koodf_LIB_SRCS
     KoEncryptionChecker.cpp
     KoProperties.cpp
     KoUnit.cpp
+    KoOdfNotesConfiguration.cpp
+    KoOdfNumberDefinition.cpp
+    KoOdfLineNumberingConfiguration.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})

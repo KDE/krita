@@ -220,8 +220,10 @@ ItemStore::ItemStore(ShapeSelector *parent)
     m_canvas = new Canvas(parent, this);
     m_shapeManager = new KoShapeManager(m_canvas);
 
-    parent->setWidget(m_canvas);
-    QObject::connect(m_canvas, SIGNAL(resized(const QSize&)), parent, SLOT(setSize(const QSize &)));
+    if (parent) {
+        parent->setWidget(m_canvas);
+        QObject::connect(m_canvas, SIGNAL(resized(const QSize&)), parent, SLOT(setSize(const QSize &)));
+    }
 
     s_itemStorePrivate()->addUser(m_shapeManager);
     if (s_itemStorePrivate()->shapeManagers.count() > 1) {

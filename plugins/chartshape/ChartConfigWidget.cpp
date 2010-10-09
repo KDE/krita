@@ -1415,7 +1415,14 @@ void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
     if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
         return;
 
-    emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
+    const int index = d->ui.axes->currentIndex();
+
+    // TODO: This can surely be done better
+    int dataSetAxisIndex = d->dataSetAxes.indexOf( d->axes[index] );
+    d->ui.dataSetAxes->setItemText( dataSetAxisIndex, title );
+
+    d->ui.axes->setItemText( index, title );
+    emit axisTitleChanged( d->axes[ index ], title );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b )

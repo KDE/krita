@@ -87,9 +87,6 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
 
 KisFilterDialog::~KisFilterDialog()
 {
-    if (d->node->inherits("KisLayer")) {
-        Q_ASSERT(qobject_cast<KisLayer*>(d->node.data())->previewMask() == 0);
-    }
     delete d;
 }
 

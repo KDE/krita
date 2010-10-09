@@ -38,7 +38,7 @@ public:
         ImageMode,  ///< Displays image of resources (default)
         TextMode   ///< Displays name of resources
     };
-    
+
     /**
      * Constructs a new resource selector.
      * @param parent the parent widget
@@ -51,7 +51,7 @@ public:
      * @param parent the parent widget
      */
     explicit KoResourceSelector( KoAbstractResourceServerAdapter * resourceAdapter, QWidget * parent = 0 );
-    
+
     /// Destroys the resource selector
     virtual ~KoResourceSelector();
 
@@ -85,6 +85,7 @@ protected:
 private slots:
     void indexChanged( int index );
     void resourceAdded(KoResource*);
+    void resourceRemoved(KoResource*);
 private:
     class Private;
     Private * const d;

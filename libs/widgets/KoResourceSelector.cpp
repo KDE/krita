@@ -84,6 +84,8 @@ KoResourceSelector::KoResourceSelector( KoAbstractResourceServerAdapter * resour
 
     connect(resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
+    connect(resourceAdapter, SIGNAL(removingResource(KoResource*)),
+            this, SLOT(resourceRemoved(KoResource*)));
 }
 
 KoResourceSelector::~KoResourceSelector()
@@ -103,7 +105,7 @@ void KoResourceSelector::paintEvent( QPaintEvent *pe )
         QStyleOptionViewItem viewOption;
         viewOption.initFrom( this );
         viewOption.rect = r;
-        
+
         QPainter painter( this );
         itemDelegate()->paint( &painter, viewOption, view()->currentIndex() );
     }
@@ -152,6 +154,8 @@ void KoResourceSelector::setResourceAdapter(KoAbstractResourceServerAdapter *res
 
     connect(resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
             this, SLOT(resourceAdded(KoResource*)));
+    connect(resourceAdapter, SIGNAL(removingResource(KoResource*)),
+            this, SLOT(resourceRemoved(KoResource*)));
 }
 
 void KoResourceSelector::setDisplayMode(DisplayMode mode)
@@ -201,6 +205,12 @@ void KoResourceSelector::indexChanged( int )
 
 void KoResourceSelector::resourceAdded(KoResource*)
 {
+    d->updateIndex(this);
+}
+
+void KoResourceSelector::resourceRemoved(KoResource* r)
+{
+    qDebug() << "Removed resource " << r->name();
     d->updateIndex(this);
 }
 

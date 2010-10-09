@@ -127,6 +127,8 @@ void KoResourceItemChooser::slotButtonClicked( int button )
     }
     else if( button == Button_Remove ) {
         QModelIndex index = d->view->currentIndex();
+        int row = index.row();
+        int column = index.column();
         if( index.isValid() ) {
 
             KoResource * resource = resourceFromModelIndex(index);
@@ -134,6 +136,12 @@ void KoResourceItemChooser::slotButtonClicked( int button )
                 d->model->resourceServerAdapter()->removeResource(resource);
             }
         }
+        if (column == 0) {
+            row = qBound(0, --row, row);
+        }
+        column = qBound(0, --column, column);
+        setCurrentItem(row, column);
+        activated(d->model->index(row, column));
     }
 #ifdef GHNS
     else if (button == Button_GhnsDownload) {
@@ -259,7 +267,7 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
 {
     if(!index.isValid())
         return 0;
-    
+
     const QAbstractProxyModel* proxyModel = dynamic_cast<const QAbstractProxyModel*>(index.model());
     if(proxyModel) {
         //Get original model index, because proxy models destroy the internalPointer

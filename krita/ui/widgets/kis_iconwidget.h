@@ -38,7 +38,7 @@ public:
     KisIconWidget(QWidget *parent = 0, const char *name = 0);
 
     /**
-     * Set an resource server adapter that the widgit will observe.
+     * Set an resource server adapter that the widget will observe.
      */
     void setResourceAdapter(KoAbstractResourceServerAdapter* adapter);
 public slots:

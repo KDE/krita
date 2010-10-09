@@ -45,17 +45,58 @@ private:
     }
 
 protected:
-    void startTrip(KisNodeSP startWith) {
-        /**
-         * We don't even bother about change rect, because
-         * it is gracefully set up to requestedRect by the base class.
-         * Anyway first invocation of startTrip will usually
-         * have startWith set to root layer
-         */
 
-        // Just for consistency reasons
-        if(isRootNode(startWith))
+    QRect calculateChangeRect(KisNodeSP startWith,
+                              const QRect &requestedRect,
+                              bool *changeRectVaries) {
+
+        if(!isLayer(startWith))
+            return requestedRect;
+
+        QRect childrenRect;
+        QRect tempRect = requestedRect;
+
+        KisNodeSP currentNode = startWith->firstChild();
+        KisNodeSP prevNode;
+        KisNodeSP nextNode;
+
+        while(currentNode) {
+            nextNode = currentNode->nextSibling();
+
+            if(isLayer(currentNode)) {
+                tempRect = calculateChangeRect(currentNode, tempRect, changeRectVaries);
+
+                if(!*changeRectVaries)
+                    *changeRectVaries = tempRect != requestedRect;
+
+                childrenRect = tempRect;
+                prevNode = currentNode;
+            }
+
+            currentNode = nextNode;
+        }
+
+        tempRect = startWith->changeRect(requestedRect | childrenRect);
+
+        if(!*changeRectVaries)
+            *changeRectVaries = tempRect != requestedRect;
+
+        return tempRect;
+    }
+
+    void startTrip(KisNodeSP startWith) {
+
+        bool changeRectVaries;
+        QRect changeRect = calculateChangeRect(startWith, requestedRect(), &changeRectVaries);
+        setExplicitChangeRect(changeRect, changeRectVaries);
+
+        if(startWith == startNode()) {
+            NodePosition pos = N_FILTHY;
+            if(!startWith->nextSibling()) pos |= N_TOPMOST;
+            if(!startWith->prevSibling()) pos |= N_BOTTOMMOST;
             registerNeedRect(startWith, N_TOPMOST | N_FILTHY);
+        }
+
 
         KisNodeSP currentNode = startWith->lastChild();
         if(!currentNode) return;

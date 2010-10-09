@@ -182,6 +182,14 @@ protected:
     }
 
     /**
+     * Used by KisFullRefreshWalker as it has a special changeRect strategy
+     */
+    inline void setExplicitChangeRect(const QRect &changeRect, bool changeRectVaries) {
+        m_resultChangeRect = changeRect;
+        m_changeRectVaries = changeRectVaries;
+    }
+
+    /**
      * Called for every node we meet on a forward way of the trip.
      */
     virtual void registerChangeRect(KisNodeSP node, NodePosition position) {

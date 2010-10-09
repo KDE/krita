@@ -542,12 +542,15 @@ public slots:
      * Triggers synchronous recomposition of the projection
      */
     void refreshGraph(KisNodeSP root = 0);
+    void refreshGraph(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
 private:
     KisImage& operator=(const KisImage& rhs);
     void init(KisUndoAdapter * adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace);
     void emitSizeChanged();
-    void preparePaintLayerAfterAdding(KisLayerSP layer);
+
+    void refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea);
+    static QRect realNodeExtent(KisNodeSP rootNode, QRect currentRect = QRect());
 
     friend class KisImageResizeCommand;
     void setSize(const QSize& size);

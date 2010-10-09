@@ -61,8 +61,8 @@ public:
      * called from the main thread, this divides rc in chunks and emits a signal
      * for KisImageUpdater to catch. KisImageUpdater belongs to this thread.
      */
-    void updateProjection(KisNodeSP node, const QRect& rc);
-    void fullRefresh(KisNodeSP root);
+    void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
+    void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
     void updateSettings();
 
 protected:
@@ -72,7 +72,7 @@ protected:
 signals:
 
     void sigUpdateProjection(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void sigFullRefresh(KisNodeSP node, const QRect& rc);
+    void sigFullRefresh(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
 private:
 
@@ -100,7 +100,7 @@ public:
 public slots:
 
     void startUpdate(KisNodeSP node, const QRect& rc, const QRect& cropRect);
-    void startFullRefresh(KisNodeSP node, const QRect& rc);
+    void startFullRefresh(KisNodeSP node, const QRect& rc, const QRect& cropRect);
 
 signals:
 

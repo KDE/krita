@@ -41,7 +41,6 @@ class KisProjection::Private
 public:
 
     KisImageUpdater* updater;
-    KisImageWSP image;
     bool locked;
     int updateRectSize;
     QRect roi; // Region of interest
@@ -53,7 +52,6 @@ public:
 KisProjection::KisProjection(KisImageWSP image)
     : m_d(new Private)
 {
-    m_d->image = image;
     m_d->updater = 0;
     updateSettings();
 
@@ -63,14 +61,14 @@ KisProjection::KisProjection(KisImageWSP image)
     m_d->updater->moveToThread(&m_d->thread);
 
     // Full refresh should be synchronous
-    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect)),
-            m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect)),
+    connect(this, SIGNAL(sigFullRefresh(KisNodeSP, QRect, QRect)),
+            m_d->updater, SLOT(startFullRefresh(KisNodeSP, QRect, QRect)),
             Qt::BlockingQueuedConnection);
 
     connect(this, SIGNAL(sigUpdateProjection(KisNodeSP, QRect, QRect)),
             m_d->updater, SLOT(startUpdate(KisNodeSP, QRect, QRect)));
     connect(m_d->updater, SIGNAL(updateDone(QRect)),
-            m_d->image, SLOT(slotProjectionUpdated(QRect)),
+            image, SLOT(slotProjectionUpdated(QRect)),
             Qt::DirectConnection);
 }
 
@@ -131,14 +129,12 @@ void KisProjection::setRegionOfInterest(const QRect & roi)
 }
 
 
-void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
+void KisProjection::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    if (!m_d->image)return;
-
     // The chunks do not run concurrently (there is only one KisImageUpdater and only
     // one event loop), but it is still useful, since intermediate results are passed
     // back to the main thread where the gui can be updated.
-    QRect interestingRect = rc.intersected(m_d->image->bounds());
+    QRect interestingRect = rc.intersected(cropRect);
 
     if (m_d->useRegionOfInterest) {
         interestingRect = rc.intersected(m_d->roi);
@@ -155,7 +151,7 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     // at the bottom, we have as few and as long runs of pixels left
     // as possible.
     if (w <= m_d->updateRectSize && h <= m_d->updateRectSize) {
-        emit sigUpdateProjection(node, interestingRect, m_d->image->bounds());
+        emit sigUpdateProjection(node, interestingRect, cropRect);
         return;
     }
     int wleft = w;
@@ -166,7 +162,7 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
         while (hleft > 0) {
             QRect rc2(col + x, row + y, qMin(wleft, m_d->updateRectSize), qMin(hleft, m_d->updateRectSize));
 
-            emit sigUpdateProjection(node, rc2, m_d->image->bounds());
+            emit sigUpdateProjection(node, rc2, cropRect);
 
             hleft -= m_d->updateRectSize;
             row += m_d->updateRectSize;
@@ -177,10 +173,10 @@ void KisProjection::updateProjection(KisNodeSP node, const QRect& rc)
     }
 }
 
-void KisProjection::fullRefresh(KisNodeSP root)
+void KisProjection::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)
 {
     // No splitting - trivial, but works :)
-    emit sigFullRefresh(root, m_d->image->bounds());
+    emit sigFullRefresh(root, rc, cropRect);
 }
 
 void KisProjection::updateSettings()
@@ -205,13 +201,13 @@ void KisImageUpdater::unlock()
     m_mutex.unlock();
 }
 
-void KisImageUpdater::startFullRefresh(KisNodeSP node, const QRect& cropRect)
+void KisImageUpdater::startFullRefresh(KisNodeSP node, const QRect& rc, const QRect& cropRect)
 {
     QMutexLocker locker(&m_mutex);
     KisFullRefreshWalker walker(cropRect);
     KisAsyncMerger merger;
 
-    walker.collectRects(node, cropRect);
+    walker.collectRects(node, rc);
     merger.startMerge(walker);
 
     QRect rect = walker.changeRect();

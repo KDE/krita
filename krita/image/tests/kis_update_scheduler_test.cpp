@@ -74,7 +74,7 @@ void KisUpdateSchedulerTest::testMerge()
      * Test synchronous Full Refresh
      */
 
-    scheduler.fullRefresh(rootLayer);
+    scheduler.fullRefresh(rootLayer, image->bounds(), image->bounds());
     QCOMPARE(rootLayer->exactBounds(), image->bounds());
 
     QImage resultFRProjection = rootLayer->projection()->convertToQImage(0);
@@ -98,11 +98,11 @@ void KisUpdateSchedulerTest::testMerge()
     dirtyRects[num-1] = QRect(width*(num-1), 0, lastWidth, imageRect.height());
 
     for(qint32 i = 0; i < num; i+=2) {
-        scheduler.updateProjection(paintLayer1, dirtyRects[i]);
+        scheduler.updateProjection(paintLayer1, dirtyRects[i], image->bounds());
     }
 
     for(qint32 i = 1; i < num; i+=2) {
-        scheduler.updateProjection(paintLayer1, dirtyRects[i]);
+        scheduler.updateProjection(paintLayer1, dirtyRects[i], image->bounds());
     }
 
     scheduler.waitForDone();
@@ -137,7 +137,7 @@ void KisUpdateSchedulerTest::benchmarkOverlappedMerge()
 
         for(int i = 0; i < numShifts; i++) {
             // qDebug() << dirtyRect;
-            scheduler.updateProjection(paintLayer1, dirtyRect);
+            scheduler.updateProjection(paintLayer1, dirtyRect, image->bounds());
             dirtyRect.translate(xShift, yShift);
         }
 

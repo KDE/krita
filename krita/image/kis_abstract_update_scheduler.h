@@ -32,8 +32,8 @@ public:
     virtual void unlock() = 0;
     virtual void waitForDone() = 0;
 
-    virtual void updateProjection(KisNodeSP node, const QRect& rc) = 0;
-    virtual void fullRefresh(KisNodeSP root) = 0;
+    virtual void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect) = 0;
+    virtual void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect) = 0;
 
     virtual void updateSettings() = 0;
 };

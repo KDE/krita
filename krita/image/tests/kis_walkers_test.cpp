@@ -413,11 +413,11 @@ void KisWalkersTest::testFullRefreshVisiting()
         QString order("root,paint5,cplx2,group,paint1,"
                       "paint4,paint3,cplx1,paint2");
         QStringList orderList = order.split(",");
-        QRect accessRect(-4,-4,38,38);
+        QRect accessRect(-10,-10,50,50);
 
         reportStartWith("root");
         walker.collectRects(image->rootLayer(), testRect);
-        verifyResult(walker, orderList, accessRect, false, true);
+        verifyResult(walker, orderList, accessRect, true, true);
     }
 }
 

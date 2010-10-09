@@ -35,8 +35,8 @@ public:
     void unlock();
     void waitForDone();
 
-    void updateProjection(KisNodeSP node, const QRect& rc);
-    void fullRefresh(KisNodeSP root);
+    void updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect);
+    void fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect);
 
     void updateSettings();
 
@@ -45,7 +45,6 @@ protected slots:
     void spareThreadAppeared();
 
 protected:
-    KisImageWSP m_image;
     KisAbstractUpdateQueue* m_workQueue;
     KisUpdaterContext m_updaterContext;
 };

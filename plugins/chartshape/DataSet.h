@@ -215,8 +215,6 @@ public:
 
     void setKdChartModel( KDChartModel *model );
     KDChartModel *kdChartModel() const;
-    
-    void blockSignals( bool block );
 
     bool loadOdf( const KoXmlElement &n,
                   KoShapeLoadingContext &context );

@@ -155,7 +155,6 @@ public:
     KDChartModel *kdChartModel;
 
     int size;
-    bool blockSignals;
 
     /// Used if no data region for the label is specified
     const QString defaultLabel;
@@ -184,7 +183,6 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     num( dataSetNr ),
     kdChartModel( 0 ),
     size( 0 ),
-    blockSignals( false ),
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
     symbolsActivated( false ),
     symbolID( 0 )
@@ -254,7 +252,7 @@ void DataSet::Private::updateSize()
 
     if ( size != newSize ) {
         size = newSize;
-        if ( !blockSignals && kdChartModel )
+        if ( kdChartModel )
             kdChartModel->dataSetSizeChanged( parent, size );
     }
 }
@@ -854,7 +852,7 @@ void DataSet::setXDataRegion( const CellRegion &region )
     d->xDataRegion = region;
     d->updateSize();
 
-    if ( !d->blockSignals && d->kdChartModel )
+    if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::XDataRole );
 }
 
@@ -863,7 +861,7 @@ void DataSet::setYDataRegion( const CellRegion &region )
     d->yDataRegion = region;
     d->updateSize();
 
-    if ( !d->blockSignals && d->kdChartModel )
+    if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::YDataRole );
 }
 
@@ -873,7 +871,7 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
     d->updateSize();
     d->refreshCustomData();
     
-    if ( !d->blockSignals && d->kdChartModel )
+    if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole );
 }
 
@@ -882,7 +880,7 @@ void DataSet::setCategoryDataRegion( const CellRegion &region )
     d->categoryDataRegion = region;
     d->updateSize();
 
-    if ( !d->blockSignals && d->kdChartModel )
+    if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::CategoryDataRole );
 }
 
@@ -891,7 +889,7 @@ void DataSet::setLabelDataRegion( const CellRegion &region )
     d->labelDataRegion = region;
     d->updateSize();
 
-    if ( !d->blockSignals && d->kdChartModel )
+    if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
 }
 
@@ -903,7 +901,7 @@ int DataSet::size() const
 
 void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &/*rect*/ ) const
 {
-    if ( blockSignals || !kdChartModel )
+    if ( !kdChartModel )
         return;
 
     // Stubbornly pretend like everything changed. This as well should be
@@ -982,11 +980,6 @@ KDChartModel *DataSet::kdChartModel() const
     return d->kdChartModel;
 }
 
-void DataSet::blockSignals( bool block )
-{
-    d->blockSignals = block;
-}
-
 void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 {
     if ( section >= 0 && !d->sectionsDataValueAttributes.contains( section ) )
@@ -1024,7 +1017,7 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
         }
     }
 
-    if ( !d->blockSignals && d->kdChartModel ) {
+    if ( d->kdChartModel ) {
         if ( section >= 0 )
             d->kdChartModel->dataSetChanged( this, KDChartModel::DataValueAttributesRole, section );
         else

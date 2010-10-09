@@ -842,6 +842,7 @@ void ChartConfigWidget::update()
                     d->dataSetAxes.append( axis );
                     d->ui.dataSetAxes->blockSignals( true );
                     QString title = axis->titleText();
+                    // TODO (post-2.3): Use "Y Axis" as default label instead
                     if ( title.isEmpty() )
                         title = i18n( "Axis %1", d->ui.dataSetAxes->count() + 1 );
                     d->ui.dataSetAxes->addItem( title );

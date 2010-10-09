@@ -824,6 +824,8 @@ void ChartConfigWidget::update()
 
     // We only want to update this widget according to the current
     // state of the shape
+    // Note that this does not recursively block signals but only those
+    // of ChartConfigWidget.
     blockSignals( true );
 
     // Update cartesian diagram-specific properties
@@ -838,6 +840,8 @@ void ChartConfigWidget::update()
 
         if ( !d->axes.isEmpty() ) {
             foreach ( Axis *axis, d->axes ) {
+                // This automatically calls ui_axisSelectionChanged()
+                // after first insertion
                 d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
                     d->dataSetAxes.append( axis );
@@ -850,15 +854,6 @@ void ChartConfigWidget::update()
                     d->ui.dataSetAxes->blockSignals( false );
                 }
             }
-
-            const Axis *selectedAxis = d->shape->plotArea()->axes().first();
-
-            d->ui.axisShowGridLines->setEnabled( true );
-            d->ui.axisShowGridLines->setChecked( selectedAxis->showMajorGrid() || selectedAxis->showMinorGrid() );
-            d->ui.axisShowTitle->setEnabled( true );
-            d->ui.axisShowTitle->setChecked( selectedAxis->title()->isVisible() );
-            d->ui.axisTitle->setEnabled( true );
-            d->ui.axisTitle->setText( selectedAxis->titleText() );
         } else {
             d->ui.axisShowGridLines->blockSignals( true );
             d->ui.axisShowGridLines->setChecked( false );

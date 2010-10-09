@@ -117,11 +117,11 @@ const KComponentData &KisFactory2::componentData()
 
         // Load the krita-specific tools
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Tool"),
-                                         QString::fromLatin1("[X-Krita-Version] == 3"));
+                                         QString::fromLatin1("[X-Krita-Version] == 4"));
 
         // Load dockers
         KoPluginLoader::instance()->load(QString::fromLatin1("Krita/Dock"),
-                                         QString::fromLatin1("[X-Krita-Version] == 3"));
+                                         QString::fromLatin1("[X-Krita-Version] == 4"));
 
         s_instance->dirs()->addResourceType("krita_template", "data", "krita/templates");
 

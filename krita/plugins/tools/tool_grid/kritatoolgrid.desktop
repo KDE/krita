@@ -41,4 +41,4 @@ Name[zh_TW]=格線
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatoolgrid
-X-Krita-Version=3
+X-Krita-Version=4

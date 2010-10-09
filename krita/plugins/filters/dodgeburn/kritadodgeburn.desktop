@@ -42,4 +42,4 @@ Comment[zh_TW]=曝光過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritadodgeburn
-X-Krita-Version=3
+X-Krita-Version=4

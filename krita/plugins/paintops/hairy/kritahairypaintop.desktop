@@ -23,4 +23,4 @@ Name[zh_TW]=毛筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritahairypaintop
-X-Krita-Version=3
+X-Krita-Version=4

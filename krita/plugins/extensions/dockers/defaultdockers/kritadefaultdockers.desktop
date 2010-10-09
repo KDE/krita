@@ -25,4 +25,4 @@ Name[zh_TW]=預設嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadefaultdockers
-X-Krita-Version=3
+X-Krita-Version=4

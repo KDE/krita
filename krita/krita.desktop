@@ -156,4 +156,4 @@ X-KDE-NativeMimeType=application/x-krita
 X-KDE-StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.koffice.krita
-X-Krita-Version=2
+X-Krita-Version=4

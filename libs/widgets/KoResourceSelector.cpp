@@ -208,7 +208,7 @@ void KoResourceSelector::resourceAdded(KoResource*)
     d->updateIndex(this);
 }
 
-void KoResourceSelector::resourceRemoved(KoResource* r)
+void KoResourceSelector::resourceRemoved(KoResource*)
 {
     d->updateIndex(this);
 }

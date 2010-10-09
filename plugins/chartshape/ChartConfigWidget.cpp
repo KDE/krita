@@ -827,7 +827,8 @@ void ChartConfigWidget::update()
     blockSignals( true );
 
     // Update cartesian diagram-specific properties
-    if ( d->axes != d->shape->plotArea()->axes() ) {
+    // Always update, as e.g. name of axis could have changed
+    // if ( d->axes != d->shape->plotArea()->axes() ) {
         // Remove old items from the combo box
         d->ui.axes->clear();
         d->ui.dataSetAxes->clear();
@@ -874,7 +875,7 @@ void ChartConfigWidget::update()
             d->ui.axisTitle->setEnabled( false );
             d->ui.axisTitle->blockSignals( false );
         }
-    }
+    // }
 
     // Update "Labels" section in "Plot Area" tab
     d->ui.showTitle->setChecked( d->shape->title()->isVisible() );

@@ -158,8 +158,6 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
     m.scale(zoomX, zoomY);
-    if ( parent() )
-        m *= absoluteTransformation(&converter);
     painter.setClipPath(m.map(outline()));
 
     QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());

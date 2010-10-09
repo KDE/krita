@@ -89,7 +89,8 @@ public:
         CustomDataRole,
         BrushDataRole,
         PenDataRole,
-        PieAttributesRole
+        PieAttributesRole,
+        DataValueAttributesRole
     };
     
     /**
@@ -137,6 +138,10 @@ public slots:
     /**
      * Called by DataSet whenever one or more of its data points changes,
      * e.g. the x value of a data point.
+     *
+     * FIXME: @a role doesn't make sense here, it's not needed for emitting
+     *        the dataChanged() signal. Removing it would conflict with
+     *        dataSetChanged( DataSet* ), that's why it's still there.
      *
      * @param first First data point that changed. If -1 it is assumed that
      *              all data points in this series changed.

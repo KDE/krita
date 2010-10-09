@@ -989,11 +989,13 @@ void DataSet::blockSignals( bool block )
 
 void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 {
-    KDChart::DataValueAttributes &attr = d->dataValueAttributes;
     if ( section >= 0 && !d->sectionsDataValueAttributes.contains( section ) )
         d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
-    if ( section >= 0 )
-        attr = d->sectionsDataValueAttributes[ section ];
+
+    // This is a reference, not a copy!
+    KDChart::DataValueAttributes &attr = section >= 0 ?
+                                         d->sectionsDataValueAttributes[ section ] :
+                                         d->dataValueAttributes;
 
     switch ( type ) {
         case NoValueLabel:{
@@ -1021,10 +1023,13 @@ void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
             break;
         }
     }
-    if ( section > 0 )
-      d->sectionsDataValueAttributes[ section ] = attr;
-    else
-      d->dataValueAttributes = attr;
+
+    if ( !d->blockSignals && d->kdChartModel ) {
+        if ( section >= 0 )
+            d->kdChartModel->dataSetChanged( this, KDChartModel::DataValueAttributesRole, section );
+        else
+            d->kdChartModel->dataSetChanged( this );
+    }
 }
 
 DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const

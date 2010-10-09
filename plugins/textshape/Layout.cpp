@@ -923,6 +923,7 @@ void Layout::resetPrivate()
     m_blockData = 0;
     m_newParag = true;
     m_block = m_parent->document()->begin();
+    m_frameStack.clear();
     updateFrameStack();
     m_currentMasterPage.clear();
     m_dropCapsPositionAdjust = 0;

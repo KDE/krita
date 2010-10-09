@@ -210,7 +210,6 @@ void KoResourceSelector::resourceAdded(KoResource*)
 
 void KoResourceSelector::resourceRemoved(KoResource* r)
 {
-    qDebug() << "Removed resource " << r->name();
     d->updateIndex(this);
 }
 

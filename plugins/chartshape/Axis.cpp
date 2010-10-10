@@ -2089,6 +2089,8 @@ void Axis::deregisterKdAxis( KDChart::CartesianAxis *axis )
 
 void Axis::setThreeD( bool threeD )
 {
+    // FIXME: Setting KD Chart attributes does not belong here. They should be
+    // determined dynamically somehow.
     // KDChart
     if ( d->kdBarDiagram ) {
         KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );

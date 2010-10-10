@@ -400,6 +400,7 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         ;
     }
 
+    // FIXME: What's this supposed to do?
     if(diagram && diagram->model() != model)
         diagram->setModel( model );
 
@@ -1135,6 +1136,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
         if( ! diagram )
             return false;
         KDChartModel *model = (KDChartModel*)diagram->model();
+        Q_ASSERT( model );
         if( !model )
             return false;
 

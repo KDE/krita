@@ -105,6 +105,7 @@
 #include "Layout.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
+#include "SingleModelHelper.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -260,6 +261,7 @@ public:
     ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
+    SingleModelHelper   *internalModelHelper;
 
     bool usesInternalModelOnly; /// @see usesInternalModelOnly()
 
@@ -274,6 +276,7 @@ public:
 ChartShape::Private::Private( ChartShape *shape )
     : internalModel(0),
     resourceManager(0)
+    , internalModelHelper( 0 )
 {
     // Register the owner.
     this->shape = shape;
@@ -611,7 +614,11 @@ QAbstractItemModel *ChartShape::internalModel() const
 
 void ChartShape::setInternalModel( QAbstractItemModel *model )
 {
-    Q_ASSERT( !d->internalModel );
+    Table *table = d->tableSource.get( model );
+    Q_ASSERT( table );
+    delete d->internalModelHelper;
+    delete d->internalModel;
+    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
     d->internalModel = model;
 }
 
@@ -1075,22 +1082,16 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
 
     Table *oldInternalTable = d->tableSource.get( d->internalModel );
     d->tableSource.remove( oldInternalTable->name() );
-    delete d->internalModel;
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
     // Create a table with data from document, add it as table source
     // and reset the proxy only with data from this new table.
     ChartTableModel *internalModel = new ChartTableModel;
-    d->internalModel = internalModel;
-    internalModel->loadOdf( tableElement, context );
-    int rows = internalModel->rowCount();
-    int cols = internalModel->columnCount();
 
     QString tableName = tableElement.attributeNS( KoXmlNS::table, "name" );
-    Table *table = d->tableSource.add( tableName, internalModel );
+    d->tableSource.add( tableName, internalModel );
     // TODO: d->tableSource.setAvoidNameClash( tableName )
-    CellRegion region( table, QRect( 1, 1, cols, rows ) );
-    d->proxyModel->reset( region );
+    setInternalModel( internalModel );
 
     return true;
 }

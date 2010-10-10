@@ -284,12 +284,16 @@ void ListItemsHelper::recalculate()
         if (paragIndex > 0)
             index = paragIndex;
 
+        //check if this is the first of this level meaning we should start from startvalue
         QTextBlock b = tb.previous();
         for (;b.isValid(); b = b.previous()) {
             if (b.textList() == m_textList)
                 break; // all fine
             if (b.textList() == 0)
                 continue;
+            QTextListFormat otherFormat = b.textList()->format();
+            if (otherFormat.style() != format.style())
+                continue; // uninteresting for us
             if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
                 index = startValue;
                 break;
@@ -304,6 +308,8 @@ void ListItemsHelper::recalculate()
                 if (b.textList() == 0)
                     continue;
                 QTextListFormat lf = b.textList()->format();
+                if (lf.style() != format.style())
+                    continue; // uninteresting for us
                 const int otherLevel  = lf.intProperty(KoListStyle::Level);
                 if (checkLevel <= otherLevel)
                     continue;
@@ -432,7 +438,9 @@ void ListItemsHelper::recalculate()
         while (nb.isValid() && nb.textList() == 0)
             nb = nb.next();
         if (nb.isValid()) {
-            if (nb.textList()->format().intProperty(KoListStyle::Level) > level) {
+            QTextListFormat lf = nb.textList()->format();
+            if ((lf.style() == format.style())
+              && nb.textList()->format().intProperty(KoListStyle::Level) > level) {
                 // this is a sublist
                 // have to remember to recalculate this list after the current level is done
                 // cant do it right away since the sublist's prefix text is dependant on this level

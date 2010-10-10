@@ -1029,16 +1029,11 @@ DataSet::ValueLabelType DataSet::valueLabelType( int section /* = -1 */ ) const
     return PercentageValueLabel;
 }
 
-bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded)
+bool loadBrushAndPen( KoStyleStack &styleStack, KoShapeLoadingContext &context,
+                      const KoXmlElement &n, QBrush& brush, bool& brushLoaded, QPen& pen, bool& penLoaded )
 {
     if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-        KoStyleStack &styleStack = odfLoadingContext.styleStack();
-//         KoStyleStack styleStack;
-//         styleStack.save();
-//         styleStack.clear();
-        odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
-
         brushLoaded = false;
         penLoaded = false;
 
@@ -1063,8 +1058,6 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
                 brushLoaded = true;
             }
         }
-
-//         styleStack.restore();
     }
 
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1082,12 +1075,24 @@ bool loadBrushAndPen(KoShapeLoadingContext &context, const KoXmlElement &n, QBru
     return true;
 }
 
+static DataSet::ValueLabelType valueLabelTypeFromString( const QString &format )
+{
+    DataSet::ValueLabelType type = DataSet::NoValueLabel;
+    if ( format == "value" )
+        type = DataSet::RealValueLabel;
+    else if ( format == "percentage" )
+        type = DataSet::PercentageValueLabel;
+    return type;
+}
+
 bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-    KoStyleStack &styleStack = odfLoadingContext.styleStack();
-    styleStack.save();
+    KoStyleStack styleStack;
+
+    OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
+                                      n, KoXmlNS::chart, "style-name", "chart" );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // If we exclusively use the chart's internal model then all data
@@ -1100,16 +1105,14 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         QPen pen(Qt::NoPen);
         bool brushLoaded = false;
         bool penLoaded = false;
-        loadBrushAndPen(context, n, brush, brushLoaded, pen, penLoaded);
+        loadBrushAndPen( styleStack, context, n, brush, brushLoaded, pen, penLoaded );
         if(penLoaded)
             setPen( pen );
         if(brushLoaded)
             setBrush( brush );
-        styleStack.save();
         styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty(KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-        styleStack.restore();
     }
     bool bubbleChart = false;
     if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
@@ -1160,12 +1163,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     }
     if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
         const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
-        ValueLabelType type = NoValueLabel;
-        if ( format == "value" )
-            type = RealValueLabel;
-        else if ( format == "percentage" )
-            type = PercentageValueLabel;
-        setValueLabelType( type );
+        setValueLabelType( valueLabelTypeFromString( format ) );
     }
     
     if ( styleStack.hasProperty( KoXmlNS::chart, "symbol-type" ) )
@@ -1207,27 +1205,32 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             continue;
         if ( m.localName() != "data-point" )
             continue;
+
+        styleStack.clear();
+        OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
+                                          m, KoXmlNS::chart, "style-name", "chart" );
+
         QBrush brush(Qt::NoBrush);
         QPen pen(Qt::NoPen);
         bool brushLoaded = false;
         bool penLoaded = false;
-        loadBrushAndPen(context, m, brush, brushLoaded, pen, penLoaded);
+        loadBrushAndPen(styleStack, context, m, brush, brushLoaded, pen, penLoaded);
         if(penLoaded)
             setPen( loadedDataPointCount, pen );
         if(brushLoaded)
             setBrush( loadedDataPointCount, brush );
 
         //load pie explode factor
-        styleStack.save();
-        odfLoadingContext.fillStyleStack(m, KoXmlNS::chart, "style-name", "chart");
         styleStack.setTypeProperties("chart");
         if(styleStack.hasProperty( KoXmlNS::chart, "pie-offset"))
             setPieExplodeFactor( loadedDataPointCount, styleStack.property( KoXmlNS::chart, "pie-offset" ).toInt() );
-        styleStack.restore();
+        if ( styleStack.hasProperty( KoXmlNS::chart, "data-label-number" ) ) {
+            const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
+            setValueLabelType( valueLabelTypeFromString( format ), loadedDataPointCount );
+        }
 
         ++loadedDataPointCount;
     }
-    styleStack.restore();
     return true;
 }
 

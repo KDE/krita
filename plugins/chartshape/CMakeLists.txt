@@ -35,6 +35,7 @@ SET (chartshape_LIB_SRCS
     ScreenConversions.cpp
     Layout.cpp
     SingleModelHelper.cpp
+    OdfLoadingHelper.cpp
     dialogs/TableEditorDialog.cpp
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp

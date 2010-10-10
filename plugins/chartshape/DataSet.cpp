@@ -106,7 +106,6 @@ public:
     QPen defaultPen() const;
 
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
-    void refreshCustomData();
 
     DataSet      *parent;
 
@@ -269,27 +268,6 @@ void DataSet::Private::updateSize()
 bool DataSet::Private::hasOwnChartType() const
 {
     return chartType != LastChartType;
-}
-
-void DataSet::Private::refreshCustomData()
-{
-    int i = 0;
-    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = sectionsDataValueAttributes.begin();
-          it != sectionsDataValueAttributes.end(); ++it ){
-        KDChart::MarkerAttributes mattr( it->markerAttributes() );
-        mattr.setMarkerSize( QSizeF( parent->customData( i ).toDouble(), parent->customData( i ).toDouble() ) );
-        it->setMarkerAttributes( mattr );
-        ++i;
-    }
-    if ( sectionsDataValueAttributes.empty() ){
-        for ( i = 0; i < parent->size(); ++i ){
-          KDChart::DataValueAttributes attrs = dataValueAttributes;
-          KDChart::MarkerAttributes mattr( attrs.markerAttributes() );
-          mattr.setMarkerSize( QSizeF( parent->customData( i ).toDouble(), parent->customData( i ).toDouble() ) );
-          attrs.setMarkerAttributes( mattr );
-          sectionsDataValueAttributes[ i ] = attrs;
-        }
-    }
 }
 
 
@@ -604,6 +582,10 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         Q_ASSERT( attachedAxis()->plotArea() );
         ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );        
         ma.setThreeD( attachedAxis()->plotArea()->isThreeD() );
+        if ( section >= 0 ) {
+            qreal bubbleWidth = customData( section ).toReal();
+            ma.setMarkerSize( QSizeF( bubbleWidth, bubbleWidth ) );
+        }
         ma.setVisible( true );        
         break;
     default:
@@ -878,7 +860,6 @@ void DataSet::setCustomDataRegion( const CellRegion &region )
 {
     d->customDataRegion = region;
     d->updateSize();
-    d->refreshCustomData();
     
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::CustomDataRole );
@@ -931,7 +912,6 @@ void DataSet::xDataChanged( const QRect &region ) const
 
 void DataSet::customDataChanged( const QRect &region ) const
 {
-    d->refreshCustomData();
     d->dataChanged( KDChartModel::CustomDataRole, region );
 }
 

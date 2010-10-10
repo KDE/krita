@@ -283,6 +283,9 @@ Axis::Private::~Private()
     delete kdGanttDiagramModel;
 
     delete kdAxis;
+
+    foreach( DataSet *dataSet, dataSets )
+        dataSet->setAttachedAxis( 0 );
 }
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )

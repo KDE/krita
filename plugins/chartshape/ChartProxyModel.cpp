@@ -91,9 +91,12 @@ public:
      * Extracts a list of data sets (with x data region, y data region, etc.
      * assigned) from the current d->selection.
      *
+     * Unless the list *dataSetsToRecycle is empty, it will reuse as many
+     * DataSet instances from there as possible and remove them from the list.
+     *
      * As a side effect, this method sets d->categoryDataRegion.
      */
-    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
+    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle );
 };
 
 ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
@@ -115,6 +118,8 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
 
 ChartProxyModel::Private::~Private()
 {
+    qDeleteAll( dataSets );
+    qDeleteAll( removedDataSets );
 }
 
 
@@ -151,7 +156,7 @@ void ChartProxyModel::Private::rebuildDataMap()
         return;
     q->beginResetModel();
     q->invalidateDataSets();
-    dataSets = createDataSetsFromRegion( removedDataSets );
+    dataSets = createDataSetsFromRegion( &removedDataSets );
     q->endResetModel();
 }
 
@@ -224,7 +229,7 @@ static CellRegion extractColumn( const CellRegion &region, int col, int rowOffse
     return result;
 }
 
-QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
+QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle )
 {
     if ( !selection.isValid() )
         return QList<DataSet*>();
@@ -313,8 +318,8 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     while ( !dataRegions.isEmpty() ) {
         // Get a data set instance we can use
         DataSet *dataSet;
-        if ( !dataSetsToRecycle.isEmpty() )
-            dataSet = dataSetsToRecycle.takeFirst();
+        if ( !dataSetsToRecycle->isEmpty() )
+            dataSet = dataSetsToRecycle->takeFirst();
         else
             dataSet = new DataSet( dataSetNumber );
 
@@ -388,7 +393,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
         // This might be data sets that were "instantiated" from the internal
         // table or from an arbitrary selection of other tables as specified
         // in the PlotArea's table:cell-range-address attribute (parsed above).
-        createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
+        createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets );
     }
 
     

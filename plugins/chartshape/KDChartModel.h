@@ -125,7 +125,7 @@ public slots:
     void setDataDimensions( int dataDimensions );
     int dataDimensions() const;
 
-    void addDataSet( DataSet *dataSet, bool silent = false );
+    void addDataSet( DataSet *dataSet );
     void removeDataSet( DataSet *dataSet, bool silent = false );
     QList<DataSet*> dataSets() const;
 

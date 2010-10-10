@@ -98,7 +98,7 @@ public:
      * Attaches a data set to this axis, adding it to a diagram
      * of its chart type, creating it if necessary
      */
-    bool attachDataSet( DataSet *dataSet, bool silent = false );
+    bool attachDataSet( DataSet *dataSet );
 
     /**
      * Detaches a data set from this axis, removing it from the diagram of

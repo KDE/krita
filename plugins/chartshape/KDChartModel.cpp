@@ -494,7 +494,7 @@ int KDChartModel::dataDimensions() const
     return d->dataDimensions;
 }
 
-void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
+void KDChartModel::addDataSet( DataSet *dataSet )
 {
     if ( d->dataSets.contains( dataSet ) ) {
         qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
@@ -505,11 +505,7 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
 
     int dataSetIndex = d->dataSetIndex( dataSet );
 
-    if ( silent ) {
-        d->dataSets.insert( dataSetIndex, dataSet );
-        d->biggestDataSetSize = d->calcMaxDataSetSize();
-    }
-    else if ( !d->dataSets.isEmpty() ) {
+    if ( !d->dataSets.isEmpty() ) {
         const int columnAboutToBeInserted = dataSetIndex * d->dataDimensions;
         if ( d->dataDirection == Qt::Vertical ) {
             beginInsertColumns( QModelIndex(), columnAboutToBeInserted,

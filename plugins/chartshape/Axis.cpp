@@ -1110,7 +1110,7 @@ QList<DataSet*> Axis::dataSets() const
     return d->dataSets;
 }
 
-bool Axis::attachDataSet( DataSet *dataSet, bool silent )
+bool Axis::attachDataSet( DataSet *dataSet )
 {
     Q_ASSERT( !d->dataSets.contains( dataSet ) );
     if ( d->dataSets.contains( dataSet ) )
@@ -1136,12 +1136,10 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
             return false;
 
         if ( model )
-            model->addDataSet( dataSet, silent );
+            model->addDataSet( dataSet );
 
-        if ( !silent ) {
-            layoutPlanes();
-            requestRepaint();
-        }
+        layoutPlanes();
+        requestRepaint();
     }
 
     return true;

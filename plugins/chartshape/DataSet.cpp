@@ -607,8 +607,10 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
             ma.setVisible( true );
 //             attr.setVisible( true );
         }
-        else
-            ma.setVisible( false );
+        // Do not overwrite visiblity in this case. It could very well have
+        // been set to 'visible' on purpose by e.g. loadOdf().
+        //else
+        //    ma.setVisible( false );
         break;
     }
 

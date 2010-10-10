@@ -58,4 +58,4 @@ Comment[zh_TW]=三角型顏色選擇器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritatrianglecolorselector
-X-Krita-Version=3
+X-Krita-Version=4

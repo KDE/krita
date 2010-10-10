@@ -118,8 +118,8 @@ public:
     KisAbstractUpdateScheduler* projection;
 
     bool startProjection;
-
 };
+
 KisImage::KisImage(KisUndoAdapter *adapter, qint32 width, qint32 height, const KoColorSpace * colorSpace, const QString& name, bool startProjection)
         : QObject(0)
         , KisShared()
@@ -660,17 +660,43 @@ qint32 KisImage::nHiddenLayers() const
     return visitor.count();
 }
 
+QRect KisImage::realNodeExtent(KisNodeSP rootNode, QRect currentRect)
+{
+    KisNodeSP node = rootNode->firstChild();
+
+    while(node) {
+        currentRect |= realNodeExtent(node, currentRect);
+        node = node->nextSibling();
+    }
+
+    // TODO: it would be better to count up changeRect inside
+    // node's extent() method
+    currentRect |= rootNode->changeRect(rootNode->extent());
+
+    return currentRect;
+}
+
+void KisImage::refreshHiddenArea(KisNodeSP rootNode, const QRect &preparedArea)
+{
+    QRect realNodeRect = realNodeExtent(rootNode);
+    if(!preparedArea.contains(realNodeRect)) {
+
+        QRegion dirtyRegion = realNodeRect;
+        dirtyRegion -= preparedArea;
+
+        foreach(const QRect &rc, dirtyRegion.rects()) {
+            refreshGraph(rootNode, rc, realNodeRect);
+        }
+    }
+}
+
 void KisImage::flatten()
 {
     KisGroupLayerSP oldRootLayer = m_d->rootLayer;
     KisGroupLayerSP newRootLayer =
         new KisGroupLayer(this, "root", OPACITY_OPAQUE_U8);
 
-    // - synchronous?
-    // - no =(
-    // - KisProjection::lock() should work like a barier
-    // - fixme?
-    //refreshGraph();
+    refreshHiddenArea(oldRootLayer, bounds());
 
     lock();
     KisPaintDeviceSP projectionCopy =
@@ -700,33 +726,36 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
     KisLayerSP prevLayer = dynamic_cast<KisLayer*>(layer->prevSibling().data());
     if (!prevLayer) return 0;
 
-    dbgImage << "Merge " << layer << " with " << prevLayer;
 
-    QRect layerExtent = layer->extent();
-    QRect prevLayerExtent = prevLayer->extent();
+    refreshHiddenArea(layer, bounds());
+    refreshHiddenArea(prevLayer, bounds());
+
+    QRect layerProjectionExtent = layer->projection()->extent();
+    QRect prevLayerProjectionExtent = prevLayer->projection()->extent();
+
+    lock();
     KisPaintDeviceSP mergedDevice = new KisPaintDevice(*prevLayer->projection());
+    unlock();
 
     KisPainter gc(mergedDevice);
     gc.setChannelFlags(layer->channelFlags());
-    gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOp()->id()));
+    gc.setCompositeOp(mergedDevice->colorSpace()->compositeOp(layer->compositeOpId()));
     gc.setOpacity(layer->opacity());
-    gc.bitBlt(layerExtent.topLeft(), layer->projection(), layerExtent);
-
-    // FIXME: "Merge Down"?
-    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
+    gc.bitBlt(layerProjectionExtent.topLeft(), layer->projection(), layerProjectionExtent);
 
     KisPaintLayerSP mergedLayer = new KisPaintLayer(this, prevLayer->name(), OPACITY_OPAQUE_U8, mergedDevice);
     Q_CHECK_PTR(mergedLayer);
+
 
     // Merge meta data
     QList<const KisMetaData::Store*> srcs;
     srcs.append(prevLayer->metaData());
     srcs.append(layer->metaData());
     QList<double> scores;
-    int layerPrevSiblingArea = prevLayerExtent.width() * prevLayerExtent.height();
-    int layerArea = layerExtent.width() * layerExtent.height();
-    double norm = qMax(layerPrevSiblingArea, layerArea);
-    scores.append(layerPrevSiblingArea / norm);
+    int prevLayerArea = prevLayerProjectionExtent.width() * prevLayerProjectionExtent.height();
+    int layerArea = layerProjectionExtent.width() * layerProjectionExtent.height();
+    double norm = qMax(prevLayerArea, layerArea);
+    scores.append(prevLayerArea / norm);
     scores.append(layerArea / norm);
     strategy->merge(mergedLayer->metaData(), srcs, scores);
 
@@ -735,6 +764,9 @@ KisLayerSP KisImage::mergeLayer(KisLayerSP layer, const KisMetaData::MergeStrate
 
     // XXX: merge the masks!
     // AAA: do you really think you need it? ;)
+
+    // FIXME: "Merge Down"?
+    undoAdapter()->beginMacro(i18n("Merge with Layer Below"));
 
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, mergedLayer, parent, layer));
     undoAdapter()->addCommand(new KisImageLayerRemoveCommand(this, prevLayer));
@@ -749,11 +781,8 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
 {
     if (!layer->firstChild()) return layer;
 
-    undoAdapter()->beginMacro(i18n("Flatten Layer"));
+    refreshHiddenArea(layer, bounds());
 
-    /**
-     * Make the copy operation synchronous
-     */
     lock();
     KisPaintDeviceSP mergedDevice = new KisPaintDevice(*layer->projection());
     unlock();
@@ -761,6 +790,8 @@ KisLayerSP KisImage::flattenLayer(KisLayerSP layer)
     KisPaintLayerSP newLayer = new KisPaintLayer(this, layer->name(), layer->opacity(), mergedDevice);
     newLayer->setCompositeOp(layer->compositeOp()->id());
 
+
+    undoAdapter()->beginMacro(i18n("Flatten Layer"));
     undoAdapter()->addCommand(new KisImageLayerAddCommand(this, newLayer, layer->parent(), layer));
 
     KisNodeSP node = layer->firstChild();
@@ -1060,10 +1091,15 @@ KisPerspectiveGrid* KisImage::perspectiveGrid()
 
 void KisImage::refreshGraph(KisNodeSP root)
 {
+    refreshGraph(root, bounds(), bounds());
+}
+
+void KisImage::refreshGraph(KisNodeSP root, const QRect &rc, const QRect &cropRect)
+{
     if (!root) root = m_d->rootLayer;
 
     if (!locked() && m_d->projection) {
-        m_d->projection->fullRefresh(root);
+        m_d->projection->fullRefresh(root, rc, cropRect);
     }
 }
 
@@ -1076,7 +1112,7 @@ void KisImage::updateProjection(KisNodeSP node, const QRect& rc)
 {
     if (!locked() && m_d->projection) {
         dbgImage << "KisImage: requested and update for" << node->name() << rc;
-        m_d->projection->updateProjection(node, rc);
+        m_d->projection->updateProjection(node, rc, bounds());
     }
 }
 

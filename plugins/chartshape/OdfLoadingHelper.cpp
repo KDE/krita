@@ -20,35 +20,24 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KCHART_ODF_LOADING_HELPER_H
-#define KCHART_ODF_LOADING_HELPER_H
-
-// Qt
-#include <QString>
+// Own
+#include "OdfLoadingHelper.h"
 
 // KOffice
-#include "KoSharedLoadingData.h"
-#include "KoXmlReader.h"
+#include "KoOdfStylesReader.h"
+#include "KoStyleStack.h"
 
-// KChart
-#include "TableSource.h"
+using namespace KChart;
 
-class KoStyleStack;
-class KoodfStylesReader;
-
-namespace KChart {
-
-class OdfLoadingHelper : public KoSharedLoadingData
+void OdfLoadingHelper::fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader &stylesReader,
+                                       const KoXmlElement& object, const char* nsURI,
+                                       const char* attrName, const char* family )
 {
-public:
-    TableSource *tableSource;
-    bool         chartUsesInternalModelOnly;
+    if ( !object.hasAttributeNS( nsURI, attrName ) )
+        return;
 
-    static void fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader& stylesReader,
-                                const KoXmlElement& object, const char* nsURI,
-                                const char* attrName, const char* family );
-};
-
-} // namespace KChart
-
-#endif // KCHART_ODF_LOADING_HELPER_H
+    const QString styleName = object.attributeNS( nsURI, attrName, QString() );
+    const KoXmlElement *style = stylesReader.findStyle( styleName, family, false );
+    if ( style )
+        styleStack.push( *style );
+}

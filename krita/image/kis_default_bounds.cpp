@@ -22,6 +22,9 @@
 #include "kis_default_bounds.h"
 #include "kis_paint_device.h"
 
+const QRect KisDefaultBounds::infiniteRect =
+    QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
+
 
 /******************************************************************/
 /*                  KisDefaultBounds                              */
@@ -49,8 +52,7 @@ QRect KisDefaultBounds::bounds() const
     /**
      * By default return infinite rect to cover everything
      */
-    return m_d->image ? m_d->image->bounds() :
-        QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX);
+    return m_d->image ? m_d->image->bounds() : infiniteRect;
 }
 
 

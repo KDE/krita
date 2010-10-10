@@ -824,10 +824,13 @@ void ChartConfigWidget::update()
 
     // We only want to update this widget according to the current
     // state of the shape
+    // Note that this does not recursively block signals but only those
+    // of ChartConfigWidget.
     blockSignals( true );
 
     // Update cartesian diagram-specific properties
-    if ( d->axes != d->shape->plotArea()->axes() ) {
+    // Always update, as e.g. name of axis could have changed
+    // if ( d->axes != d->shape->plotArea()->axes() ) {
         // Remove old items from the combo box
         d->ui.axes->clear();
         d->ui.dataSetAxes->clear();
@@ -837,26 +840,20 @@ void ChartConfigWidget::update()
 
         if ( !d->axes.isEmpty() ) {
             foreach ( Axis *axis, d->axes ) {
+                // This automatically calls ui_axisSelectionChanged()
+                // after first insertion
                 d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
                     d->dataSetAxes.append( axis );
                     d->ui.dataSetAxes->blockSignals( true );
                     QString title = axis->titleText();
+                    // TODO (post-2.3): Use "Y Axis" as default label instead
                     if ( title.isEmpty() )
                         title = i18n( "Axis %1", d->ui.dataSetAxes->count() + 1 );
                     d->ui.dataSetAxes->addItem( title );
                     d->ui.dataSetAxes->blockSignals( false );
                 }
             }
-
-            const Axis *selectedAxis = d->shape->plotArea()->axes().first();
-
-            d->ui.axisShowGridLines->setEnabled( true );
-            d->ui.axisShowGridLines->setChecked( selectedAxis->showMajorGrid() || selectedAxis->showMinorGrid() );
-            d->ui.axisShowTitle->setEnabled( true );
-            d->ui.axisShowTitle->setChecked( selectedAxis->title()->isVisible() );
-            d->ui.axisTitle->setEnabled( true );
-            d->ui.axisTitle->setText( selectedAxis->titleText() );
         } else {
             d->ui.axisShowGridLines->blockSignals( true );
             d->ui.axisShowGridLines->setChecked( false );
@@ -873,7 +870,7 @@ void ChartConfigWidget::update()
             d->ui.axisTitle->setEnabled( false );
             d->ui.axisTitle->blockSignals( false );
         }
-    }
+    // }
 
     // Update "Labels" section in "Plot Area" tab
     d->ui.showTitle->setChecked( d->shape->title()->isVisible() );
@@ -1414,7 +1411,14 @@ void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
     if( d->ui.axes->currentIndex() < 0 || d->ui.axes->currentIndex() >= d->axes.size() )
         return;
 
-    emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
+    const int index = d->ui.axes->currentIndex();
+
+    // TODO: This can surely be done better
+    int dataSetAxisIndex = d->dataSetAxes.indexOf( d->axes[index] );
+    d->ui.dataSetAxes->setItemText( dataSetAxisIndex, title );
+
+    d->ui.axes->setItemText( index, title );
+    emit axisTitleChanged( d->axes[ index ], title );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b )

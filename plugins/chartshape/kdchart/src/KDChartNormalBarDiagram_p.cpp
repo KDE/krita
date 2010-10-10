@@ -104,7 +104,7 @@ void NormalBarDiagram::paint(  PaintContext* ctx )
     double barWidth = 0;
     double maxDepth = 0;
     double width = boundRight.x() - boundLeft.x();
-    double groupWidth = width / (rowCount + 2);
+    double groupWidth = width / rowCount;
     double spaceBetweenBars = 0;
     double spaceBetweenGroups = 0;
 

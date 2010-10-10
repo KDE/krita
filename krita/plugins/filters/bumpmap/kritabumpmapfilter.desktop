@@ -84,4 +84,4 @@ Comment[zh_TW]=Bumpmap 的過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritabumpmap
-X-Krita-Version=3
+X-Krita-Version=4

@@ -23,8 +23,7 @@
 #include "kis_simple_update_queue.h"
 
 KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
-    : m_image(image),
-      m_workQueue(0)
+    : m_workQueue(0)
 {
     updateSettings();
 
@@ -32,7 +31,7 @@ KisUpdateScheduler::KisUpdateScheduler(KisImageWSP image)
     m_workQueue = new KisSimpleUpdateQueue();
 
     connect(&m_updaterContext, SIGNAL(sigContinueUpdate(const QRect&)),
-            m_image, SLOT(slotProjectionUpdated(const QRect&)),
+            image, SLOT(slotProjectionUpdated(const QRect&)),
             Qt::DirectConnection);
 
     connect(&m_updaterContext, SIGNAL(sigDoSomeUsefulWork()),
@@ -47,18 +46,16 @@ KisUpdateScheduler::~KisUpdateScheduler()
 {
 }
 
-void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc)
+void KisUpdateScheduler::updateProjection(KisNodeSP node, const QRect& rc, const QRect &cropRect)
 {
-    m_workQueue->addJob(node, rc, m_image->bounds());
+    m_workQueue->addJob(node, rc, cropRect);
     m_workQueue->processQueue(m_updaterContext);
 }
 
-void KisUpdateScheduler::fullRefresh(KisNodeSP root)
+void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRect &cropRect)
 {
-    const QRect cropRect = m_image->bounds();
     KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(cropRect);
-
-    walker->collectRects(root, cropRect);
+    walker->collectRects(root, rc);
 
     m_workQueue->executeJobSync(walker, m_updaterContext);
 }

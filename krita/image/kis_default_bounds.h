@@ -36,6 +36,9 @@ public:
 
     virtual QRect bounds() const;
 
+protected:
+    static const QRect infiniteRect;
+
 private:
     struct Private;
     Private * const m_d;

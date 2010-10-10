@@ -17,21 +17,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef TESTBORDER_H
-#define TESTBORDER_H
 
-#include <QObject>
-#include <QtTest/QtTest>
+#ifndef MOCKTEXTSHAPE_H
+#define MOCKTEXTSHAPE_H
 
-class TestBorder : public QObject
+#include <KoTextShapeData.h>
+#include <KoTextDocumentLayout.h>
+#include <KoShapeContainer.h>
+
+class MockTextShape : public KoShapeContainer
 {
-    Q_OBJECT
 public:
-    TestBorder() {}
-
-private slots:
-    void testBorder();
-
+    MockTextShape() {
+        KoTextShapeData *textShapeData = new KoTextShapeData();
+        setUserData(textShapeData);
+        layout = new KoTextDocumentLayout(textShapeData->document());
+        layout->addShape(this);
+        textShapeData->document()->setDocumentLayout(layout);
+    }
+    virtual void paintComponent(QPainter &, const KoViewConverter &) { }
+    virtual void saveOdf(KoShapeSavingContext &) const {}
+    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+        return true;
+    }
+    KoTextDocumentLayout *layout;
 };
 
 #endif

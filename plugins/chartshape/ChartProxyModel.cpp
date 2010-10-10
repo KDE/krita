@@ -81,7 +81,6 @@ public:
     QList<DataSet*>  removedDataSets;
     
     CellRegion       selection;
-    bool             rebuildDataMapAfterloading;
 
     /**
      * Discards old and creates new data sets from the current region selection.
@@ -92,16 +91,18 @@ public:
      * Extracts a list of data sets (with x data region, y data region, etc.
      * assigned) from the current d->selection.
      *
+     * Unless the list *dataSetsToRecycle is empty, it will reuse as many
+     * DataSet instances from there as possible and remove them from the list.
+     *
      * As a side effect, this method sets d->categoryDataRegion.
      */
-    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle );
+    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle );
 };
 
 ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
     : q( parent )
     , tableSource( source )
     , isLoading( false )
-    , rebuildDataMapAfterloading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -117,6 +118,8 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
 
 ChartProxyModel::Private::~Private()
 {
+    qDeleteAll( dataSets );
+    qDeleteAll( removedDataSets );
 }
 
 
@@ -153,7 +156,7 @@ void ChartProxyModel::Private::rebuildDataMap()
         return;
     q->beginResetModel();
     q->invalidateDataSets();
-    dataSets = createDataSetsFromRegion( removedDataSets );
+    dataSets = createDataSetsFromRegion( &removedDataSets );
     q->endResetModel();
 }
 
@@ -226,7 +229,7 @@ static CellRegion extractColumn( const CellRegion &region, int col, int rowOffse
     return result;
 }
 
-QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> dataSetsToRecycle )
+QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle )
 {
     if ( !selection.isValid() )
         return QList<DataSet*>();
@@ -315,8 +318,8 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     while ( !dataRegions.isEmpty() ) {
         // Get a data set instance we can use
         DataSet *dataSet;
-        if ( !dataSetsToRecycle.isEmpty() )
-            dataSet = dataSetsToRecycle.takeFirst();
+        if ( !dataSetsToRecycle->isEmpty() )
+            dataSet = dataSetsToRecycle->takeFirst();
         else
             dataSet = new DataSet( dataSetNumber );
 
@@ -390,8 +393,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
         // This might be data sets that were "instantiated" from the internal
         // table or from an arbitrary selection of other tables as specified
         // in the PlotArea's table:cell-range-address attribute (parsed above).
-        createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
-//         d->rebuildDataMapAfterloading = true;
+        createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets );
     }
 
     
@@ -449,21 +451,25 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
     QRect dataChangedRect = QRect( topLeftPoint,
                                    QSize( bottomRightPoint.x() - topLeftPoint.x() + 1,
                                           bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
+    // Precisely determine what data in what table changed so that we don't
+    // do unnecessary, expensive updates.
+    Table *table = d->tableSource->get( topLeft.model() );
+    CellRegion dataChangedRegion( table, dataChangedRect );
 
     foreach ( DataSet *dataSet, d->dataSets ) {
-        if ( dataSet->xDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->xDataRegion().intersects( dataChangedRegion ) )
             dataSet->xDataChanged( QRect() );
 
-        if ( dataSet->yDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->yDataRegion().intersects( dataChangedRegion ) )
             dataSet->yDataChanged( QRect() );
 
-        if ( dataSet->categoryDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->categoryDataRegion().intersects( dataChangedRegion ) )
             dataSet->categoryDataChanged( QRect() );
 
-        if ( dataSet->labelDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->labelDataRegion().intersects( dataChangedRegion ) )
             dataSet->labelDataChanged( QRect() );
 
-        if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->customDataRegion().intersects( dataChangedRegion ) )
             dataSet->customDataChanged( QRect() );
     }
 
@@ -547,8 +553,7 @@ void ChartProxyModel::endLoading()
     Q_ASSERT( d->isLoading );
     d->isLoading = false;
 
-    if ( d->rebuildDataMapAfterloading )
-        d->rebuildDataMap();
+    d->rebuildDataMap();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

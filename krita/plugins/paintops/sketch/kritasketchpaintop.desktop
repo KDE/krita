@@ -16,4 +16,4 @@ Name[x-test]=xxSketch brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritasketchpaintop
-X-Krita-Version=3
+X-Krita-Version=4

@@ -12,4 +12,4 @@ Name[x-test]=xxWatery Mixbrushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritawaterymixpaintop
-X-Krita-Version=3
+X-Krita-Version=4

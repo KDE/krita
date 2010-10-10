@@ -28,4 +28,4 @@ Comment[x-test]=xxPhong Bumpmap filterxx
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service
 X-KDE-Library=kritaphongbumpmap
-X-Krita-Version=3
+X-Krita-Version=4

@@ -143,8 +143,8 @@ public:
      * Tells the ChartShape what model to use as internal table. When
      * the shape is loaded from ODF, it sets it itself.
      *
-     * Use this method only if you created shape and model manually.
-     * This method will assume that there is no internal model set yet.
+     * This method will assume that @a model has already been added to this
+     * chart's TableSource.
      */
     void setInternalModel( QAbstractItemModel *model );
 

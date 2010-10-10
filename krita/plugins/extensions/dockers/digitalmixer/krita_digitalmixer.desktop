@@ -46,4 +46,4 @@ Comment[zh_TW]=數位混合器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritadigitalmixer
-X-Krita-Version=3
+X-Krita-Version=4

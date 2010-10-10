@@ -436,7 +436,6 @@ QRect KisLayer::updateProjection(const QRect& rect)
         m_d->safeProjection.freeDevice();
     } else {
         if (!updatedRect.isEmpty()) {
-
             KisPaintDeviceSP projection =
                 m_d->safeProjection.getDeviceLazy(originalDevice);
 
@@ -465,9 +464,10 @@ void KisLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
 
 KisPaintDeviceSP KisLayer::projection() const
 {
-    KisPaintDeviceSP projection = m_d->safeProjection.getDevice();
+    KisPaintDeviceSP originalDevice = original();
 
-    return projection ? projection : original();
+    return needProjection() || hasEffectMasks() ?
+        m_d->safeProjection.getDeviceLazy(originalDevice) : originalDevice;
 }
 
 QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const

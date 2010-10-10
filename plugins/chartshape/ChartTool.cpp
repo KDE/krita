@@ -250,7 +250,6 @@ void ChartTool::deactivate()
 QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
-    widget->open( d->shape );
     
     connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const CellRegion& ) ),
              this,   SLOT( setDataSetXDataRegion( DataSet*, const CellRegion& ) ) );

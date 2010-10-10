@@ -88,8 +88,10 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
 
     // Fill cells with data.
     QStandardItemModel  *m_chartData = new QStandardItemModel();
-    shape->setInternalModel( m_chartData );
     Table *internalTable = shape->tableSource()->add( "internal-model", m_chartData );
+    Q_ASSERT( !shape->internalModel() );
+    // setInternalModel() assumes that m_chartData has already been added to shape->tableSource().
+    shape->setInternalModel( m_chartData );
     // TODO (not implemented yet)
     // shape->tableSource()->setRenameOnNameClash( internalTable );
     m_chartData->setRowCount( 4 );

@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="27">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="Krita" version="30">
 
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>

@@ -26,4 +26,4 @@ Name[zh_TW]=Dyna 工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service
 X-KDE-Library=kritatooldyna
-X-Krita-Version=3
+X-Krita-Version=4

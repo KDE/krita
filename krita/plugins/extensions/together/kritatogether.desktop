@@ -70,4 +70,4 @@ Comment[zh_TW]=Together
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service
 X-KDE-Library=kritatogether
-X-Krita-Version=3
+X-Krita-Version=4

@@ -105,6 +105,7 @@
 #include "Layout.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
+#include "SingleModelHelper.h"
 
 
 // Define the protocol used here for embedded documents' URL
@@ -247,7 +248,7 @@ public:
     ~Private();
 
     bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement );
-    void showLabel( KoShape *label, bool doShow );
+    void setChildVisible( KoShape *label, bool doShow );
 
     // The components of a chart
     KoShape   *title;
@@ -260,6 +261,7 @@ public:
     ChartProxyModel     *proxyModel;	 /// What's presented to KDChart
     QAbstractItemModel  *internalModel;
     TableSource          tableSource;
+    SingleModelHelper   *internalModelHelper;
 
     bool usesInternalModelOnly; /// @see usesInternalModelOnly()
 
@@ -274,6 +276,7 @@ public:
 ChartShape::Private::Private( ChartShape *shape )
     : internalModel(0),
     resourceManager(0)
+    , internalModelHelper( 0 )
 {
     // Register the owner.
     this->shape = shape;
@@ -343,18 +346,18 @@ bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelEleme
 }
 
 //
-// Show a label, which means either the Title, Subtitle or Footer.
+// Show a child, which means either the Title, Subtitle, Footer or Axis Title.
 //
 // If there is too little room, then make space by shrinking the Plotarea.
 //
-void ChartShape::Private::showLabel( KoShape *label, bool doShow )
+void ChartShape::Private::setChildVisible( KoShape *child, bool doShow )
 {
-    Q_ASSERT( label );
+    Q_ASSERT( child );
 
-    if (label->isVisible() == doShow)
+    if ( child->isVisible() == doShow )
         return;
 
-    label->setVisible( doShow );
+    child->setVisible( doShow );
     // FIXME: Shouldn't there be a KoShape::VisibilityChanged for KoShape::shapeChanged()?
     shape->layout()->scheduleRelayout();
 }
@@ -591,17 +594,17 @@ Layout *ChartShape::layout() const
 
 void ChartShape::showTitle(bool doShow)
 {
-    d->showLabel( d->title, doShow );
+    d->setChildVisible( d->title, doShow );
 }
 
 void ChartShape::showSubTitle(bool doShow)
 {
-    d->showLabel( d->subTitle, doShow );
+    d->setChildVisible( d->subTitle, doShow );
 }
 
 void ChartShape::showFooter(bool doShow)
 {
-    d->showLabel( d->footer, doShow );
+    d->setChildVisible( d->footer, doShow );
 }
 
 QAbstractItemModel *ChartShape::internalModel() const
@@ -611,7 +614,11 @@ QAbstractItemModel *ChartShape::internalModel() const
 
 void ChartShape::setInternalModel( QAbstractItemModel *model )
 {
-    Q_ASSERT( !d->internalModel );
+    Table *table = d->tableSource.get( model );
+    Q_ASSERT( table );
+    delete d->internalModelHelper;
+    delete d->internalModel;
+    d->internalModelHelper = new SingleModelHelper( table, d->proxyModel );
     d->internalModel = model;
 }
 
@@ -1022,37 +1029,38 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     // 4. Load the title.
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::chart, "title" );
+    d->setChildVisible( d->title, !titleElem.isNull() );
     if ( !titleElem.isNull() ) {
         if ( !d->loadOdfLabel( d->title, titleElem ) )
             return false;
-        d->showLabel(d->title, true);
     }
 
     // 5. Load the subtitle.
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement,
                                                     KoXmlNS::chart, "subtitle" );
+    d->setChildVisible( d->subTitle, !subTitleElem.isNull() );
     if ( !subTitleElem.isNull() ) {
         if ( !d->loadOdfLabel( d->subTitle, subTitleElem ) )
             return false;
-        d->showLabel(d->subTitle, true);
     }
 
     // 6. Load the footer.
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement,
                                                   KoXmlNS::chart, "footer" );
+    d->setChildVisible( d->footer, !footerElem.isNull() );
     if ( !footerElem.isNull() ) {
         if ( !d->loadOdfLabel( d->footer, footerElem ) )
             return false;
-        d->showLabel(d->footer, true);
     }
 
     // 7. Load the legend.
     KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
                           "legend" );
+    d->setChildVisible( d->legend, !legendElem.isNull() );
     if ( !legendElem.isNull() ) {
         if ( !d->legend->loadOdf( legendElem, context ) )
             return false;
-    }    
+    }
     
     // 8. Sets the chart type
     setChartType( chartType );
@@ -1075,22 +1083,17 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
 
     Table *oldInternalTable = d->tableSource.get( d->internalModel );
     d->tableSource.remove( oldInternalTable->name() );
-    delete d->internalModel;
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
     // Create a table with data from document, add it as table source
     // and reset the proxy only with data from this new table.
     ChartTableModel *internalModel = new ChartTableModel;
-    d->internalModel = internalModel;
     internalModel->loadOdf( tableElement, context );
-    int rows = internalModel->rowCount();
-    int cols = internalModel->columnCount();
 
     QString tableName = tableElement.attributeNS( KoXmlNS::table, "name" );
-    Table *table = d->tableSource.add( tableName, internalModel );
+    d->tableSource.add( tableName, internalModel );
     // TODO: d->tableSource.setAvoidNameClash( tableName )
-    CellRegion region( table, QRect( 1, 1, cols, rows ) );
-    d->proxyModel->reset( region );
+    setInternalModel( internalModel );
 
     return true;
 }

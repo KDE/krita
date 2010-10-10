@@ -283,6 +283,9 @@ Axis::Private::~Private()
     delete kdGanttDiagramModel;
 
     delete kdAxis;
+
+    foreach( DataSet *dataSet, dataSets )
+        dataSet->setAttachedAxis( 0 );
 }
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
@@ -397,6 +400,7 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
         ;
     }
 
+    // FIXME: What's this supposed to do?
     if(diagram && diagram->model() != model)
         diagram->setModel( model );
 
@@ -1111,7 +1115,7 @@ QList<DataSet*> Axis::dataSets() const
     return d->dataSets;
 }
 
-bool Axis::attachDataSet( DataSet *dataSet, bool silent )
+bool Axis::attachDataSet( DataSet *dataSet )
 {
     Q_ASSERT( !d->dataSets.contains( dataSet ) );
     if ( d->dataSets.contains( dataSet ) )
@@ -1133,16 +1137,14 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
         if( ! diagram )
             return false;
         KDChartModel *model = (KDChartModel*)diagram->model();
+        Q_ASSERT( model );
         if( !model )
             return false;
 
-        if ( model )
-            model->addDataSet( dataSet, silent );
+        model->addDataSet( dataSet );
 
-        if ( !silent ) {
-            layoutPlanes();
-            requestRepaint();
-        }
+        layoutPlanes();
+        requestRepaint();
     }
 
     return true;
@@ -2088,6 +2090,8 @@ void Axis::deregisterKdAxis( KDChart::CartesianAxis *axis )
 
 void Axis::setThreeD( bool threeD )
 {
+    // FIXME: Setting KD Chart attributes does not belong here. They should be
+    // determined dynamically somehow.
     // KDChart
     if ( d->kdBarDiagram ) {
         KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );

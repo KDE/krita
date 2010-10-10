@@ -99,7 +99,7 @@ public:
     bool contains( const QPoint &point, bool proper = false ) const;
     bool contains( const QRect &rect, bool proper = false ) const;
     
-    bool intersects( const QRect &rect ) const;
+    bool intersects( const CellRegion &other ) const;
 
     CellRegion intersected( const QRect &rect ) const;
     

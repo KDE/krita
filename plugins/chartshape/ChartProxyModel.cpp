@@ -449,21 +449,25 @@ void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex
     QRect dataChangedRect = QRect( topLeftPoint,
                                    QSize( bottomRightPoint.x() - topLeftPoint.x() + 1,
                                           bottomRightPoint.y() - topLeftPoint.y() + 1 ) );
+    // Precisely determine what data in what table changed so that we don't
+    // do unnecessary, expensive updates.
+    Table *table = d->tableSource->get( topLeft.model() );
+    CellRegion dataChangedRegion( table, dataChangedRect );
 
     foreach ( DataSet *dataSet, d->dataSets ) {
-        if ( dataSet->xDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->xDataRegion().intersects( dataChangedRegion ) )
             dataSet->xDataChanged( QRect() );
 
-        if ( dataSet->yDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->yDataRegion().intersects( dataChangedRegion ) )
             dataSet->yDataChanged( QRect() );
 
-        if ( dataSet->categoryDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->categoryDataRegion().intersects( dataChangedRegion ) )
             dataSet->categoryDataChanged( QRect() );
 
-        if ( dataSet->labelDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->labelDataRegion().intersects( dataChangedRegion ) )
             dataSet->labelDataChanged( QRect() );
 
-        if ( dataSet->customDataRegion().intersects( dataChangedRect ) )
+        if ( dataSet->customDataRegion().intersects( dataChangedRegion ) )
             dataSet->customDataChanged( QRect() );
     }
 

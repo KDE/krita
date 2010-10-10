@@ -134,6 +134,8 @@ public:
     KDChart::PieAttributes pieAttributes;
     KDChart::DataValueAttributes dataValueAttributes;
 
+    // Note: Set section-specific attributes only if really necessary.
+    //       They will override the respective global attributes.
     QMap<int, QPen> pens;
     QMap<int, QBrush> brushes;
     QMap<int, KDChart::PieAttributes> sectionsPieAttributes;

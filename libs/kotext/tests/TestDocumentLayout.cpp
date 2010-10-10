@@ -1,4 +1,5 @@
 #include "TestDocumentLayout.h"
+#include "MockTextShape.h"
 #include <QtGui>
 
 #include <kdebug.h>

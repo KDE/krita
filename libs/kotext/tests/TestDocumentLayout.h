@@ -5,13 +5,9 @@
 #include <QPainter>
 #include <qtest_kde.h>
 
-#include <KoTextShapeData.h>
-#include <KoTextDocumentLayout.h>
-#include <KoShape.h>
-#include <KoViewConverter.h>
-
 class MockTextShape;
 class QTextDocument;
+class KoTextDocumentLayout;
 
 class TestDocumentLayout : public QObject
 {
@@ -31,27 +27,6 @@ private:
 private:
     MockTextShape *shape1;
     QTextDocument *doc;
-    KoTextDocumentLayout *layout;
-};
-
-class MockTextShape : public KoShape
-{
-public:
-    MockTextShape() {
-        KoTextShapeData *textShapeData = new KoTextShapeData();
-        setUserData(textShapeData);
-        layout = new KoTextDocumentLayout(textShapeData->document());
-        layout->addShape(this);
-        textShapeData->document()->setDocumentLayout(layout);
-    }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
-        return true;
-    }
     KoTextDocumentLayout *layout;
 };
 

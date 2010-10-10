@@ -81,7 +81,6 @@ public:
     QList<DataSet*>  removedDataSets;
     
     CellRegion       selection;
-    bool             rebuildDataMapAfterloading;
 
     /**
      * Discards old and creates new data sets from the current region selection.
@@ -101,7 +100,6 @@ ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source 
     : q( parent )
     , tableSource( source )
     , isLoading( false )
-    , rebuildDataMapAfterloading( false )
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
@@ -391,7 +389,6 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
         // table or from an arbitrary selection of other tables as specified
         // in the PlotArea's table:cell-range-address attribute (parsed above).
         createdDataSets = d->createDataSetsFromRegion( d->removedDataSets );
-//         d->rebuildDataMapAfterloading = true;
     }
 
     
@@ -551,8 +548,7 @@ void ChartProxyModel::endLoading()
     Q_ASSERT( d->isLoading );
     d->isLoading = false;
 
-    if ( d->rebuildDataMapAfterloading )
-        d->rebuildDataMap();
+    d->rebuildDataMap();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

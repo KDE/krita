@@ -2,6 +2,7 @@
  *  This file is part of KOffice tests
  *
  *  Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
+ *  Copyright (C) 2009-2010 Casper Boemann <casper.boemann@kogmbh.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

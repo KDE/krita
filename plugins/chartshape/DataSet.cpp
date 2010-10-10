@@ -99,6 +99,9 @@ public:
     // Returns an instance of DataValueAttributes with sane default values in
     // relation to KChart
     KDChart::DataValueAttributes defaultDataValueAttributes() const;
+    /// Copies Private::dataValueAttributes to this section if it doesn't
+    /// have its own DataValueAttributes copy yet.
+    void insertDataValueAttributeSectionIfNecessary( int section );
 
     QPen defaultPen() const;
 
@@ -242,6 +245,12 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
     return attr;
 }
 
+void DataSet::Private::insertDataValueAttributeSectionIfNecessary( int section )
+{
+    if ( !sectionsDataValueAttributes.contains( section ) )
+        sectionsDataValueAttributes[ section ] = dataValueAttributes;
+}
+
 void DataSet::Private::updateSize()
 {
     int newSize = 0;
@@ -274,7 +283,7 @@ void DataSet::Private::refreshCustomData()
     }
     if ( sectionsDataValueAttributes.empty() ){
         for ( i = 0; i < parent->size(); ++i ){
-          KDChart::DataValueAttributes attrs = defaultDataValueAttributes();
+          KDChart::DataValueAttributes attrs = dataValueAttributes;
           KDChart::MarkerAttributes mattr( attrs.markerAttributes() );
           mattr.setMarkerSize( QSizeF( parent->customData( i ).toDouble(), parent->customData( i ).toDouble() ) );
           attrs.setMarkerAttributes( mattr );
@@ -668,8 +677,7 @@ void DataSet::setPen( int section, const QPen &pen )
     d->pens[ section ] = pen;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
-    if ( !d->sectionsDataValueAttributes.contains( section ) )
-        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
+    d->insertDataValueAttributeSectionIfNecessary( section );
     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
     mas.setPen( pen );
     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
@@ -680,8 +688,7 @@ void DataSet::setBrush( int section, const QBrush &brush )
     d->brushes[ section ] = brush;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::BrushDataRole, section );
-    if ( !d->sectionsDataValueAttributes.contains( section ) )
-        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
+    d->insertDataValueAttributeSectionIfNecessary( section );
     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
     mas.setMarkerColor( brush.color() );
     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
@@ -984,8 +991,8 @@ KDChartModel *DataSet::kdChartModel() const
 
 void DataSet::setValueLabelType( ValueLabelType type, int section /* = -1 */ )
 {
-    if ( section >= 0 && !d->sectionsDataValueAttributes.contains( section ) )
-        d->sectionsDataValueAttributes[ section ] = d->defaultDataValueAttributes();
+    if ( section >= 0 )
+        d->insertDataValueAttributeSectionIfNecessary( section );
 
     // This is a reference, not a copy!
     KDChart::DataValueAttributes &attr = section >= 0 ?

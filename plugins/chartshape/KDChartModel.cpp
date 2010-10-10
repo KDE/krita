@@ -245,7 +245,7 @@ QVariant KDChartModel::data( const QModelIndex &index,
     // TODO (Johannes): Support for third data dimension
     // We need to implement zData in Dataset first.
 
-    // Should never happen
+    Q_ASSERT( "Error: Known data role wasn't handled." );
     return QVariant();
 }
 

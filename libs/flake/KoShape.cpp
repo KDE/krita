@@ -523,6 +523,8 @@ void KoShape::copySettings(const KoShape *shape)
         d->printable = shape->isPrintable();
 
     d->geometryProtected = shape->isGeometryProtected();
+    d->protectContent = shape->isContentProtected();
+    d->selectable = shape->isSelectable();
     d->keepAspect = shape->keepAspectRatio();
     d->localMatrix = shape->d_ptr->localMatrix;
 }

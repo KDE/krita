@@ -1140,8 +1140,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
         if( !model )
             return false;
 
-        if ( model )
-            model->addDataSet( dataSet );
+        model->addDataSet( dataSet );
 
         layoutPlanes();
         requestRepaint();

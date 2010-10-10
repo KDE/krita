@@ -1087,6 +1087,7 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
     // Create a table with data from document, add it as table source
     // and reset the proxy only with data from this new table.
     ChartTableModel *internalModel = new ChartTableModel;
+    internalModel->loadOdf( tableElement, context );
 
     QString tableName = tableElement.attributeNS( KoXmlNS::table, "name" );
     d->tableSource.add( tableName, internalModel );

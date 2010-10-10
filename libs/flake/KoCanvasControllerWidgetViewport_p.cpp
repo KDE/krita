@@ -155,6 +155,7 @@ void Viewport::handleDragEnterEvent(QDragEnterEvent *event)
         if (m_draggedShape->shapeId().isEmpty())
             m_draggedShape->setShapeId(factory->id());
         m_draggedShape->setZIndex(KoShapePrivate::MaxZIndex);
+        m_draggedShape->setAbsolutePosition(correctPosition(event->pos()));
 
         m_parent->canvas()->shapeManager()->addShape(m_draggedShape);
     }

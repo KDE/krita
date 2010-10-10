@@ -23,9 +23,9 @@
 
 #include <KoTextShapeData.h>
 #include <KoTextDocumentLayout.h>
-#include <KoShape.h>
+#include <KoShapeContainer.h>
 
-class MockTextShape : public KoShape
+class MockTextShape : public KoShapeContainer
 {
 public:
     MockTextShape() {
@@ -35,10 +35,7 @@ public:
         layout->addShape(this);
         textShapeData->document()->setDocumentLayout(layout);
     }
-    void paint(QPainter &painter, const KoViewConverter &converter) {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
+    virtual void paintComponent(QPainter &, const KoViewConverter &) { }
     virtual void saveOdf(KoShapeSavingContext &) const {}
     virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
         return true;

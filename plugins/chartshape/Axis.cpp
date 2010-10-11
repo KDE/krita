@@ -407,6 +407,9 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
     // from the create*Diagram-methods (well, if this method is the only one who's able to call
     // them?) xor remove the following lines and assume that this was done by the create*Diagram-
     // methods already.
+    // NOTE that each setModel call does lead to lot of stuff done in the backend what is the
+    // reason the additional diagram->model()!=model was added to be sure we don't do that
+    // additional work if not really needed.
     if(diagram && diagram->model() != model)
         diagram->setModel( model );
 

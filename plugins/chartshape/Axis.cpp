@@ -401,6 +401,12 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
     }
 
     // FIXME: What's this supposed to do?
+    // seems the idea was to be sure that we always set the diagram's model even for the case
+    // one of the create*Diagram-methods didn't do that already. This is a bit redundant and
+    // we could probably save some code/logic here but either removing all the setModel()'s
+    // from the create*Diagram-methods (well, if this method is the only one who's able to call
+    // them?) xor remove the following lines and assume that this was done by the create*Diagram-
+    // methods already.
     if(diagram && diagram->model() != model)
         diagram->setModel( model );
 

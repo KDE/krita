@@ -31,6 +31,6 @@ if(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
  add_subdirectory(shiva)
 endif(HAVE_OPENSHIVA AND HAVE_QTSHIVA)
 
-macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Language" "http://www.openshiva.org" FALSE "" "Required for Shiva based Generators and Filters")
-macro_log_feature(HAVE_QTSHIVA "QtShiva" "Qt bindings for the OpenShiva interpreter" "http://www.openshiva.org" FALSE "" "Required for Shiva based Generators and Filters")
+macro_log_feature(HAVE_OPENSHIVA "OpenShiva" "OpenShiva interpreter for the Shiva Kernel Language" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
+macro_log_feature(HAVE_QTSHIVA "QtShiva" "Qt bindings for the OpenShiva interpreter" "http://www.opengtl.org" FALSE "" "Required for Shiva based Generators and Filters")
 

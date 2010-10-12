@@ -462,6 +462,7 @@ bool Layout::nextParag()
         m_blockData->setCounterText(QString());
         m_blockData->setCounterSpacing(0.0);
         m_blockData->setCounterWidth(0.0);
+        m_blockData->setCounterIsImage(false);
     }
 
     bool pagebreak = m_format.pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore;

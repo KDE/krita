@@ -49,6 +49,7 @@
 #include <KDChartLegend>
 #include <KDChartCartesianAxis>
 #include <KDChartCartesianCoordinatePlane>
+#include <KDChartRadarCoordinatePlane>
 #include <KDChartGridAttributes>
 #include <KDChartBarDiagram>
 #include <KDChartLineDiagram>
@@ -57,6 +58,7 @@
 #include <KDChartStockDiagram>
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
+#include <KDChartRadarDiagram>
 #include <KDChartBarAttributes>
 #include <KDChartPieAttributes>
 #include <KDChartThreeDBarAttributes>
@@ -140,13 +142,15 @@ public:
     KDChart::CartesianAxis            *kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
     KDChart::PolarCoordinatePlane     *kdPolarPlane;
+    KDChart::RadarCoordinatePlane     *kdRadarPlane;
 
     KDChart::BarDiagram   *kdBarDiagram;
     KDChart::LineDiagram  *kdLineDiagram;
     KDChart::LineDiagram  *kdAreaDiagram;
     KDChart::PieDiagram   *kdCircleDiagram;
     KDChart::RingDiagram  *kdRingDiagram;
-    KDChart::PolarDiagram *kdRadarDiagram;
+    KDChart::PolarDiagram *kdPolarDiagram;
+    KDChart::RadarDiagram *kdRadarDiagram;
     KDChart::Plotter      *kdScatterDiagram;
     KDChart::StockDiagram *kdStockDiagram;
     KDChart::Plotter      *kdBubbleDiagram;
@@ -251,6 +255,7 @@ Axis::Private::~Private()
 
     delete kdPlane;
     delete kdPolarPlane;
+    delete kdRadarPlane;
 
     delete kdBarDiagram;
     delete kdBarDiagramModel;
@@ -726,7 +731,7 @@ void Axis::Private::createRadarDiagram()
     //kdRadarDiagramModel->setDataDimensions( 2 );
     //kdRadarDiagramModel->setDataDirection( Qt::Horizontal );
 
-    kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
+    kdRadarDiagram = new KDChart::RadarDiagram( plotArea->kdChart(), kdRadarPlane );
     kdRadarDiagram->setModel( kdRadarDiagramModel );
     kdRadarDiagram->setCloseDatasets(true);
     registerDiagram( kdRadarDiagram );
@@ -738,10 +743,10 @@ void Axis::Private::createRadarDiagram()
         kdRadarDiagram->setType( KDChart::PolarDiagram::Percent );
 #endif
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
-    kdPolarPlane->addDiagram( kdRadarDiagram );
+    kdRadarPlane->addDiagram( kdRadarDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
+    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdRadarPlane ) )
+        plotArea->kdChart()->addCoordinatePlane( kdRadarPlane );
 }
 
 void Axis::Private::createScatterDiagram()
@@ -953,6 +958,7 @@ Axis::Axis( PlotArea *parent )
     d->kdAxis->setBackgroundAttributes( batt );
     d->kdPlane      = new KDChart::CartesianCoordinatePlane();
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
+    d->kdRadarPlane = new KDChart::RadarCoordinatePlane();
     
     //disable non circular axis
     KDChart::GridAttributes gridAttributesNonCircular = d->kdPolarPlane->gridAttributes( false );
@@ -975,6 +981,7 @@ Axis::Axis( PlotArea *parent )
     gridAttributes = d->kdPolarPlane->gridAttributes( true );
     gridAttributes.setGridVisible( false );
     d->kdPolarPlane->setGridAttributes( true, gridAttributes );
+    // FIXME d->kdRadarPlane->setGridAttributes( gridAttributes );
     
 //     gridAttributes = d->kdPolarPlane->gridAttributes( plotArea()->chartType() != RadarChartType );
 //     gridAttributes.setGridVisible( false );
@@ -1043,10 +1050,12 @@ void Axis::setDimension( AxisDimension dimension )
     if ( dimension == ZAxisDimension ) {
         d->kdPolarPlane->setReferenceCoordinatePlane( 0 );
         d->kdPlane->setReferenceCoordinatePlane( 0 );
+        d->kdRadarPlane->setReferenceCoordinatePlane( 0 );
         d->title->setVisible( false );
     } else {
         d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
         d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
+        d->kdRadarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     }
 
     requestRepaint();
@@ -1603,6 +1612,21 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 //         d->kdPolarPlane->setGridAttributes( false, gridAttr );
 //     else
     d->kdPolarPlane->setGridAttributes( true, gridAttr );
+    
+    gridAttr = d->kdRadarPlane->globalGridAttributes();
+    gridAttr.setGridVisible( d->showMajorGrid );
+    gridAttr.setSubGridVisible( d->showMinorGrid );
+    if ( gridPen.style() != Qt::NoPen )
+        gridAttr.setGridPen( gridPen );
+    if ( subGridPen.style() != Qt::NoPen )
+        gridAttr.setSubGridPen( subGridPen );
+    d->kdRadarPlane->setGlobalGridAttributes( gridAttr );
+    KDChart::TextAttributes ta( d->kdRadarPlane->textAttributes() );
+    ta.setVisible( true );
+    ta.setFont( font() );
+    ta.setFontSize( 50 );
+    d->kdRadarPlane->setTextAttributes( ta );
+
 
     if ( !loadOdfChartSubtypeProperties( axisElement, context ) )
         return false;
@@ -1832,6 +1856,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
     else if ( isPolar( d->plotAreaChartType ) && isCartesian( newChartType ) ) {
         if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
+        else if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdRadarPlane ) )
+            d->plotArea->kdChart()->takeCoordinatePlane( d->kdRadarPlane );
     }
 
     // Get pointers to the new model and diagrams.  Create the new
@@ -2151,6 +2177,7 @@ void Axis::layoutPlanes()
 {
     d->kdPlane->layoutPlanes();
     d->kdPolarPlane->layoutPlanes();
+    d->kdRadarPlane->layoutPlanes();
 }
 
 void Axis::setGapBetweenBars( int percent )

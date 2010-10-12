@@ -66,6 +66,9 @@ set(kdchart_LIB_SRCS
     KDChartPolarCoordinatePlane.cpp
     KDChartPolarDiagram.cpp
     KDChartPolarGrid.cpp
+    KDChartRadarDiagram.cpp
+    KDChartRadarCoordinatePlane.cpp
+    KDChartRadarGrid.cpp
     KDChartPosition.cpp
     KDChartPrintingParameters.cpp
     KDChartRelativePosition.cpp

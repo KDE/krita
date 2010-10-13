@@ -126,7 +126,7 @@ void GoogleDocumentService::getDocument()
     if(gList.count() > 0)
         documentList = new DocumentListWindow(this, gList);
     else
-        QMessageBox msgBox(QMessageBox::NoIcon, "Office Viewer", "No Documents Found !!!");
+        QMessageBox msgBox(QMessageBox::NoIcon, i18n("Office Viewer"), i18n("No Documents Found !!!"));
 }
 
 void GoogleDocumentService::downloadDocument(GoogleDocument *doc)

@@ -53,6 +53,13 @@ QRect KisFixedPaintDevice::bounds() const
     return m_bounds;
 }
 
+
+int KisFixedPaintDevice::allocatedPixels() const
+{
+    return m_data.size() / m_colorSpace->pixelSize();
+}
+
+
 quint32 KisFixedPaintDevice::pixelSize() const
 {
     return m_colorSpace->pixelSize();
@@ -190,6 +197,7 @@ void KisFixedPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const qui
             memcpy(dabPointer, fillPixel, pixelSize);
             dabPointer += pixelSize;
         }
+        
     } else {
         int deviceWidth = bounds().width();
         quint8* rowPointer = dabPointer + ((y - bounds().y()) * deviceWidth + (x - bounds().x())) * pixelSize;

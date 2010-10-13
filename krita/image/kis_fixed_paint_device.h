@@ -62,6 +62,13 @@ public:
     QRect bounds() const;
 
     /**
+     * @return the amount of allocated pixels (you can fake the size with setRect/bounds)
+     * It is useful to know the accumulated memory size in pixels (not in bytes) for optimizations to avoid re-allocation.
+     */
+    int allocatedPixels() const;
+    
+    
+    /**
      * @return the pixelSize associated with this fixed paint device.
      */
     quint32 pixelSize() const;

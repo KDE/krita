@@ -54,6 +54,7 @@ void OnlineDocument::slotOnlineDocument()
         connect(m_gDoc, SIGNAL(receivedDocument(const QString &)), this,
                 SLOT(receivedOnlineDocument(const QString &)));
     }
+    delete login;
 }
 
 void OnlineDocument::receivedOnlineDocument(const QString & path)

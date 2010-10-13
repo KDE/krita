@@ -29,6 +29,7 @@ class GoogleContentHandler : public QXmlContentHandler
 {
 public:
     GoogleContentHandler();
+    virtual ~GoogleContentHandler();
 
     virtual bool characters ( const QString & ch );
     virtual bool endDocument ();

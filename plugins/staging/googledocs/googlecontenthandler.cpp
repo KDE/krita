@@ -29,6 +29,11 @@ GoogleContentHandler::GoogleContentHandler()
     m_docList = new GoogleDocumentList();
 }
 
+GoogleContentHandler::~GoogleContentHandler()
+{
+    delete m_docList;
+}
+
 bool GoogleContentHandler::characters ( const QString & ch )
 {
     if (!insideEntry) {

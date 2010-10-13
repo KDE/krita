@@ -16,14 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QtGui>
-#include <QtNetwork>
 #include <QMessageBox>
 
 #include "googledocumentservice.h"
 #include "googledocumentlist.h"
 #include "googledocument.h"
 #include "googlecontenthandler.h"
+
+#include <QDir>
+#include <QDebug>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 const QString GoogleDocumentService::GOOGLE_DOCUMENT_URL = "docs.google.com";
 const QString GoogleDocumentService::GOOGLE_SPREADSHEET_URL = "spreadsheets.google.com";

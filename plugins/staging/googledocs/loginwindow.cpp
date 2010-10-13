@@ -20,8 +20,6 @@
 #include "googledocumentservice.h"
 #include "documentlistwindow.h"
 
-#include <QtGui>
-#include <QX11Info>
 
 LoginWindow::LoginWindow(QWidget *parent)
         : QDialog(parent),

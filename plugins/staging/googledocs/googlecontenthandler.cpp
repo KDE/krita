@@ -16,11 +16,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QtXml>
 
 #include "googledocumentlist.h"
 #include "googledocument.h"
 #include "googlecontenthandler.h"
+#include <QDebug>
 
 GoogleContentHandler::GoogleContentHandler()
         : m_docList(0),

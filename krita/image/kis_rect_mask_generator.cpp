@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2007,2008,2009.2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,12 +18,13 @@
 
 #include "kis_rect_mask_generator.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QDomDocument>
 
 struct KisRectangleMaskGenerator::Private {
     double m_c;
+    double m_halfWidth, m_halfHeight;
 };
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
@@ -36,6 +37,8 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
         d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
         Q_ASSERT(!isnan(d->m_c));
     }
+    d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
+    d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;
 }
 
 KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
@@ -45,22 +48,32 @@ KisRectangleMaskGenerator::~KisRectangleMaskGenerator()
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
-
     if (KisMaskGenerator::d->empty) return 255;
+    
+    if(x > d->m_halfWidth || x < -d->m_halfWidth || y > d->m_halfHeight || y < -d->m_halfHeight) return 255;
+    
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();
     
     qreal fhTransformed = KisMaskGenerator::d->fh * softness();
     qreal fvTransformed = KisMaskGenerator::d->fv * softness();
-    
-    if (xr > fhTransformed || yr > fvTransformed) {
-        if (yr <= ((xr - fhTransformed) * d->m_c + fvTransformed)) {
-            return (uchar)(255 *(xr - 0.5 * fhTransformed) / (1.0 - 0.5 * fhTransformed));
+
+    if( xr > fhTransformed )
+    {
+        if( yr > xr )
+        {
+            return (uchar)(255 *(yr - fvTransformed) / (0.5 - fvTransformed));
         } else {
-            return (uchar)(255 *(yr - 0.5 * fvTransformed) / (1.0 - 0.5 * fvTransformed));
+            return (uchar)(255 *(xr - fhTransformed) / (0.5 - fhTransformed));
         }
-    } else {
+    } else if( yr > fvTransformed )
+    {
+        return (uchar)(255 *(yr - fvTransformed) / (0.5 - fvTransformed));
+    } else if(xr < fhTransformed && yr < fvTransformed )
+    {
         return 0;
+    } else {
+        return 255;
     }
 }
 

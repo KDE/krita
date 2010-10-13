@@ -37,6 +37,7 @@ KisMaskGenerator::KisMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal 
     d->fv = 0.5 * fv;
     d->softness = 1.0; // by default don't change fade/softness/hardness
     d->spikes = spikes;
+    d->cachedSpikesAngle = M_PI / d->spikes;
     d->type = type;
     init();
 }

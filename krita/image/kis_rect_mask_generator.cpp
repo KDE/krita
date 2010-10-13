@@ -16,11 +16,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_rect_mask_generator.h"
-
 #include <cmath>
 
 #include <QDomDocument>
+
+#include "kis_fast_math.h"
+
+#include "kis_rect_mask_generator.h"
+#include "kis_base_mask_generator.h"
 
 struct KisRectangleMaskGenerator::Private {
     double m_c;
@@ -30,8 +33,7 @@ struct KisRectangleMaskGenerator::Private {
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes)
         : KisMaskGenerator(radius, ratio, fh, fv, spikes, RECTANGLE, DefaultId), d(new Private)
 {
-    if (KisMaskGenerator::d->fv == 0 &&
-            KisMaskGenerator::d->fh == 0) {
+    if (KisMaskGenerator::d->fv == 0 && KisMaskGenerator::d->fh == 0) {
         d->m_c = 0;
     } else {
         d->m_c = (KisMaskGenerator::d->fv / KisMaskGenerator::d->fh);
@@ -55,6 +57,20 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
     double xr = qAbs(x /*- m_xcenter*/) / width();
     double yr = qAbs(y /*- m_ycenter*/) / height();
     
+    if (KisMaskGenerator::d->spikes > 2) {
+        double angle = (KisFastMath::atan2(yr, xr));
+
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
+            double sx = xr;
+            double sy = yr;
+
+            xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
+            yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
+
+            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
+        }
+    }
+
     qreal fhTransformed = KisMaskGenerator::d->fh * softness();
     qreal fvTransformed = KisMaskGenerator::d->fv * softness();
 

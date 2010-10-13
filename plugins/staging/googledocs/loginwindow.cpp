@@ -40,6 +40,11 @@ LoginWindow::LoginWindow(QWidget *parent)
     show();
 }
 
+LoginWindow::~LoginWindow()
+{
+    delete m_authDialog;
+}
+
 void LoginWindow::loginService()
 {
     if (0 == m_authDialog->comboBox->currentIndex()) {

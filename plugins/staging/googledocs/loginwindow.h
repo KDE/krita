@@ -31,6 +31,7 @@ class LoginWindow : public QDialog
 
 public:
     LoginWindow(QWidget *parent = 0);
+    ~LoginWindow();
     GoogleDocumentService * googleService() {  return gdoc; }
     void setShowProgressIndicator(bool visible);
 

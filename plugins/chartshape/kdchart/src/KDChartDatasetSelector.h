@@ -48,6 +48,7 @@ namespace KDChart {
 
     public:
         explicit DatasetSelectorWidget ( QWidget* parent = 0 );
+        ~DatasetSelectorWidget();
 
     public Q_SLOTS:
         void setSourceRowCount ( const int& rowCount );

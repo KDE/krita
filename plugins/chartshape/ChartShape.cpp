@@ -403,7 +403,9 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setChartSubType( NormalChartSubtype );
 
     // Create the Title, which is a standard TextShape.
-    d->title = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value( TextShapeId );
+    if ( textShapeFactory )
+        d->title = textShapeFactory->createDefaultShape( resourceManager );
     if ( !d->title ) {
         d->title = new TextLabelDummy;
         KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
@@ -412,6 +414,8 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
         KMessageBox::error( 0, i18n("The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape."),
                             i18n("Plugin Incompatible") );
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->title->setUserData( dataDummy );
     }
 
@@ -434,12 +438,15 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setInheritsTransform(d->title, true);
 
     // Create the Subtitle and add it to the shape.
-    d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    if ( textShapeFactory)
+        d->subTitle = textShapeFactory->createDefaultShape( resourceManager );
     if ( !d->subTitle ) {
         d->subTitle = new TextLabelDummy;
     }
     if ( dynamic_cast<TextLabelData*>( d->subTitle->userData() ) == 0 ) {
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->subTitle->setUserData( dataDummy );
     }
     addShape(d->subTitle);
@@ -458,12 +465,15 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setInheritsTransform(d->subTitle, true);
 
     // Create the Footer and add it to the shape.
-    d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    if ( textShapeFactory )
+        d->footer = textShapeFactory->createDefaultShape( resourceManager );
     if ( !d->footer ) {
         d->footer = new TextLabelDummy;
     }
     if ( dynamic_cast<TextLabelData*>( d->footer->userData() ) == 0 ) {
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->footer->setUserData( dataDummy );
     }
     addShape(d->footer);

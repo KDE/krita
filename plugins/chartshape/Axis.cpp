@@ -43,6 +43,7 @@
 #include <KoCharacterStyle.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfWorkaround.h>
+#include <KoTextDocumentLayout.h>
 
 // KDChart
 #include <KDChartChart>
@@ -247,6 +248,9 @@ Axis::Private::Private( Axis *axis )
     kdBubbleDiagramModel  = 0;
     kdSurfaceDiagramModel = 0;
     kdGanttDiagramModel   = 0;
+
+    title = 0;
+    titleData = 0;
 }
 
 Axis::Private::~Private()
@@ -987,7 +991,9 @@ Axis::Axis( PlotArea *parent )
 //     gridAttributes.setGridVisible( false );
 //     d->kdPolarPlane->setGridAttributes( plotArea()->chartType() != RadarChartType, gridAttributes );
 
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape(parent->parent()->resourceManager());
+    KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value( TextShapeId );
+    if ( textShapeFactory )
+        d->title = textShapeFactory->createDefaultShape( parent->parent()->resourceManager() );
     if ( d->title ) {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );
         if ( d->titleData == 0 ) {
@@ -1002,6 +1008,8 @@ Axis::Axis( PlotArea *parent )
     else {
         d->title = new TextLabelDummy;
         d->titleData = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( d->titleData->document() );
+        d->titleData->document()->setDocumentLayout( documentLayout );
         d->title->setUserData( d->titleData );
     }
     d->title->setSize( QSizeF( CM_TO_POINT( 3 ), CM_TO_POINT( 0.75 ) ) );

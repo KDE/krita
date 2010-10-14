@@ -52,6 +52,8 @@ public:
             double subPixelX = 0, double subPixelY = 0,
             qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR) const;
 
+    virtual QPainterPath outline() const;
+            
 protected:
     virtual void setImage(const QImage& image);
 

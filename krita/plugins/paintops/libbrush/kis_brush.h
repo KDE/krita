@@ -264,6 +264,7 @@ public:
     static KisBrushSP fromXML(const QDomElement& element);
 
     virtual const KisBoundary* boundary() const;
+    virtual QPainterPath outline() const;
 
     virtual void setScale(qreal _scale);
     qreal scale() const;

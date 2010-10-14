@@ -1675,54 +1675,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    KDChart::AbstractDiagram **oldDiagram = 0;
-
-    // Get pointers to the old model and diagram.
-    switch ( d->plotAreaChartType ) {
-    case BarChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
-        break;
-    case LineChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdLineDiagram;
-        break;
-    case AreaChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
-        break;
-
-    case CircleChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
-        break;
-    case RingChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdRingDiagram;
-        break;
-
-    case ScatterChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
-        break;
-    case RadarChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
-        break;
-
-    case StockChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdStockDiagram;
-        break;
-    case BubbleChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdBubbleDiagram;
-        break;
-    case SurfaceChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdSurfaceDiagram;
-        break;
-    case GanttChartType:
-        oldDiagram = (KDChart::AbstractDiagram**)&d->kdGanttDiagram;
-        break;
-
-    default:;
-        // FIXME: What should happen here?
-    }
-
-    // We need to know the old model so that we can remove the data sets
-    // from the old model that we added to the new model.
-    KDChartModel *oldModel = oldDiagram ? dynamic_cast<KDChartModel*>( (*oldDiagram)->model() ) : 0;
+    ChartType oldChartType = d->plotAreaChartType;
 
     // We need to have a coordinate plane that matches the chart type.
     // Choices are cartesian or polar.
@@ -1756,6 +1709,13 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         }
     }
 
+    KDChart::AbstractDiagram *oldDiagram = d->getDiagram( oldChartType );
+    Q_ASSERT( oldDiagram );
+    // We need to know the old model so that we can remove the data sets
+    // from the old model that we added to the new model.
+    KDChartModel *oldModel = dynamic_cast<KDChartModel*>( oldDiagram->model() );
+    Q_ASSERT( oldModel );
+
     foreach ( DataSet *dataSet, d->dataSets ) {
         if ( dataSet->chartType() != LastChartType )
             continue;
@@ -1771,33 +1731,25 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         dataSet->setPen(  newPen );
 #endif
         newModel->addDataSet( dataSet );
-        if ( oldModel ) {
-            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
-                                     ? oldModel->columnCount() : oldModel->rowCount();
-            if ( dataSetCount == oldModel->dataDimensions() ) {
-                // This if() is only necessary because we have some
-                // unsupported chart types that create a NULL
-                // oldDiagram;
-                if ( oldDiagram ) {
-                    KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
-                    if ( plane ) {
-                        plane->takeDiagram( (*oldDiagram) );
-                        if ( plane->diagrams().size() == 0 ) {
-                            d->plotArea->kdChart()->takeCoordinatePlane( plane );
-                        }
-                    }
-
-                    if ( d->plotArea->parent()->legend()->kdLegend() )
-                        d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
-                    if ( *oldDiagram )
-                        delete *oldDiagram;
+        const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
+                                 ? oldModel->columnCount() : oldModel->rowCount();
+        if ( dataSetCount == oldModel->dataDimensions() ) {
+            KDChart::AbstractCoordinatePlane *plane = oldDiagram->coordinatePlane();
+            if ( plane ) {
+                plane->takeDiagram( oldDiagram );
+                if ( plane->diagrams().size() == 0 ) {
+                    d->plotArea->kdChart()->takeCoordinatePlane( plane );
                 }
-                delete oldModel;
-                *oldDiagram = 0;
             }
-            else
-                oldModel->removeDataSet( dataSet );
+
+            if ( d->plotArea->parent()->legend()->kdLegend() )
+                d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
+            // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
+            d->deleteDiagram( oldChartType );
+            delete oldModel;
         }
+        else
+            oldModel->removeDataSet( dataSet );
     }
 
     d->plotAreaChartType = newChartType;

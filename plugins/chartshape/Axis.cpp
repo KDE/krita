@@ -442,6 +442,17 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     Q_ASSERT( diagram );
     Q_ASSERT( *diagram );
 
+    KDChart::AbstractCoordinatePlane *plane = (*diagram)->coordinatePlane();
+    if ( plane ) {
+        plane->takeDiagram( *diagram );
+        if ( plane->diagrams().size() == 0 )
+            plotArea->kdChart()->takeCoordinatePlane( plane );
+    }
+
+    KDChart::Legend *legend = plotArea->parent()->legend()->kdLegend();
+    if ( legend )
+        legend->removeDiagram( *diagram );
+
     deregisterDiagram( *diagram );
     delete *diagram;
 
@@ -1080,21 +1091,8 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
             // If there's only as many rows as needed for *one*
             // dataset, that means that the dataset we're removing is
             // the last one in the model --> delete model
-            if ( rowCount == oldModel->dataDimensions() ) {
-                Q_ASSERT( oldDiagram );
-                KDChart::AbstractCoordinatePlane *plane = oldDiagram->coordinatePlane();
-                if ( plane ) {
-                    plane->takeDiagram( oldDiagram );
-                    if ( plane->diagrams().size() == 0 ) {
-                        d->plotArea->kdChart()->takeCoordinatePlane( plane );
-                    }
-                }
-
-                if ( d->plotArea->parent()->legend()->kdLegend() ) {
-                    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
-                }
+            if ( rowCount == oldModel->dataDimensions() )
                 d->deleteDiagram( chartType );
-            }
             else
                 oldModel->removeDataSet( dataSet, silent );
         }
@@ -1734,16 +1732,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
                                  ? oldModel->columnCount() : oldModel->rowCount();
         if ( dataSetCount == oldModel->dataDimensions() ) {
-            KDChart::AbstractCoordinatePlane *plane = oldDiagram->coordinatePlane();
-            if ( plane ) {
-                plane->takeDiagram( oldDiagram );
-                if ( plane->diagrams().size() == 0 ) {
-                    d->plotArea->kdChart()->takeCoordinatePlane( plane );
-                }
-            }
-
-            if ( d->plotArea->parent()->legend()->kdLegend() )
-                d->plotArea->parent()->legend()->kdLegend()->removeDiagram( oldDiagram );
             // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
             d->deleteDiagram( oldChartType );
             delete oldModel;

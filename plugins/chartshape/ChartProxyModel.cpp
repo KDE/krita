@@ -150,10 +150,12 @@ void ChartProxyModel::reset( const CellRegion& region )
 
 void ChartProxyModel::Private::rebuildDataMap()
 {
-    // Don't do anything while we're loading from ODF.
-    // ChartProxyModel::endLoading() will get back to us.
-    if ( isLoading )
-        return;
+    // This was intended to speed up the loading process, by executing this
+    // method only once in endLoading(), however the approach is actually
+    // incorrect as it would potentially override a data set's regions
+    // set by "somebody" else in the meantime.
+    // if ( isLoading )
+    //     return;
     q->beginResetModel();
     q->invalidateDataSets();
     dataSets = createDataSetsFromRegion( &removedDataSets );
@@ -553,7 +555,9 @@ void ChartProxyModel::endLoading()
     Q_ASSERT( d->isLoading );
     d->isLoading = false;
 
-    d->rebuildDataMap();
+    // Doing this here is wrong, the data set's cell regions set in
+    // DataSet::loadOdf() would get overridden.
+    // d->rebuildDataMap();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )

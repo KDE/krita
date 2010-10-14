@@ -217,6 +217,13 @@ public:
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
 
+    /**
+     * Used by unit tests to disable popping up of message boxes.
+     *
+     * User interaction is enabled by default.
+     */
+    static void setEnableUserInteraction( bool enable );
+
     using KoShapeContainer::update;
     /// reimplemented
     void update() const;

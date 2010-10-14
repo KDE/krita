@@ -116,6 +116,9 @@
 
 namespace KChart {
 
+/// @see ChartShape::setEnableUserInteraction()
+static bool ENABLE_USER_INTERACTION = true;
+
 const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:bar",
     "chart:line",
@@ -406,13 +409,22 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value( TextShapeId );
     if ( textShapeFactory )
         d->title = textShapeFactory->createDefaultShape( resourceManager );
+    // Potential problem 1) No TextShape installed
     if ( !d->title ) {
         d->title = new TextLabelDummy;
-        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
-    }
+        if ( ENABLE_USER_INTERACTION )
+            KMessageBox::error( 0, i18n( "The plugin needed for displaying text labels in a chart is not available." ),
+                                   i18n( "Plugin Missing" ) );
+    // Potential problem 2) TextShape incompatible
+    } else if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 &&
+                ENABLE_USER_INTERACTION )
+            KMessageBox::error( 0, i18n( "The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape." ),
+                                   i18n( "Plugin Incompatible" ) );
+
+    // In both cases we need a KoTextShapeData instance to function. This is
+    // enough for unit tests, so there has to be no TextShape plugin doing the
+    // actual text rendering, we just need KoTextShapeData which is in the libs.
     if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 ) {
-        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape."),
-                            i18n("Plugin Incompatible") );
         TextLabelData *dataDummy = new TextLabelData;
         KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
         dataDummy->document()->setDocumentLayout( documentLayout );
@@ -1303,6 +1315,11 @@ void ChartShape::requestRepaint() const
 KoResourceManager *ChartShape::resourceManager() const
 {
     return d->resourceManager;
+}
+
+void ChartShape::setEnableUserInteraction( bool enable )
+{
+    ENABLE_USER_INTERACTION = enable;
 }
 
 } // Namespace KChart

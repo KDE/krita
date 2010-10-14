@@ -92,7 +92,7 @@ public:
     void registerDiagram( KDChart::AbstractDiagram *diagram );
     void deregisterDiagram( KDChart::AbstractDiagram *diagram );
 
-    KDChart::AbstractDiagram *createDiagramIfNeeded( ChartType chartType );
+    KDChart::AbstractDiagram *getDiagramAndCreateIfNeeded( ChartType chartType );
     KDChart::AbstractDiagram *getDiagram( ChartType chartType );
     void deleteDiagram( ChartType chartType );
 
@@ -290,7 +290,7 @@ void Axis::Private::deregisterDiagram( KDChart::AbstractDiagram *diagram )
     delete model;
 }
 
-KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartType )
+KDChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded( ChartType chartType )
 {
     KDChart::AbstractDiagram *diagram = 0;
 
@@ -1037,7 +1037,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
 
-        KDChart::AbstractDiagram *diagram = d->createDiagramIfNeeded( chartType );
+        KDChart::AbstractDiagram *diagram = d->getDiagramAndCreateIfNeeded( chartType );
         if( ! diagram )
             return false;
         KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
@@ -1676,7 +1676,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
     }
 
     KDChart::AbstractDiagram **oldDiagram = 0;
-    KDChart::AbstractDiagram *newDiagram = 0;
 
     // Get pointers to the old model and diagram.
     switch ( d->plotAreaChartType ) {
@@ -1738,69 +1737,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdRadarPlane );
     }
 
-    // Get pointers to the diagrams. Create new diagram if necessary.
-    switch ( newChartType ) {
-    case BarChartType:
-        if ( !d->kdBarDiagram )
-           d->createBarDiagram();
-        newDiagram = d->kdBarDiagram;
-        break;
-    case LineChartType:
-        if ( !d->kdLineDiagram )
-           d->createLineDiagram();
-        newDiagram = d->kdLineDiagram;
-        break;
-    case AreaChartType:
-        if ( !d->kdAreaDiagram )
-           d->createAreaDiagram();
-        newDiagram = d->kdAreaDiagram;
-        break;
-
-    case CircleChartType:
-        if ( !d->kdCircleDiagram )
-           d->createCircleDiagram();
-        newDiagram = d->kdCircleDiagram;
-        break;
-    case RingChartType:
-        if ( !d->kdRingDiagram )
-           d->createRingDiagram();
-        newDiagram = d->kdRingDiagram;
-        break;
-
-    case ScatterChartType:
-        if ( !d->kdScatterDiagram )
-           d->createScatterDiagram();
-        newDiagram = d->kdScatterDiagram;
-        break;
-    case RadarChartType:
-        if ( !d->kdRadarDiagram )
-           d->createRadarDiagram();
-        newDiagram = d->kdRadarDiagram;
-        break;
-
-    case StockChartType:
-        if ( !d->kdStockDiagram )
-           d->createStockDiagram();
-        newDiagram = d->kdStockDiagram;
-        break;
-    case BubbleChartType:
-        if ( !d->kdBubbleDiagram )
-           d->createBubbleDiagram();
-        newDiagram = d->kdBubbleDiagram;
-        break;
-    case SurfaceChartType:
-        if ( !d->kdSurfaceDiagram )
-           d->createSurfaceDiagram();
-        newDiagram = d->kdSurfaceDiagram;
-        break;
-    case GanttChartType:
-        if ( !d->kdGanttDiagram )
-           d->createGanttDiagram();
-        newDiagram = d->kdGanttDiagram;
-        break;
-    default:;
-        // FIXME: Implement more chart types
-    }
+    KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded( newChartType );
 
     KDChartModel *newModel = dynamic_cast<KDChartModel*>( newDiagram->model() );
     // FIXME: This causes a crash on unimplemented types. We should
@@ -1833,7 +1770,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         newPen.setStyle( newPenStyle );
         dataSet->setPen(  newPen );
 #endif
-        newModel->addDataSet( dataSet );        
+        newModel->addDataSet( dataSet );
         if ( oldModel ) {
             const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
                                      ? oldModel->columnCount() : oldModel->rowCount();

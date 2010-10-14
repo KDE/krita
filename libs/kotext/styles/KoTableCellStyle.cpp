@@ -310,7 +310,7 @@ void KoTableCellStyle::drawVerticalWave(BorderStyle style, QPainter &painter, qr
     }
 }
 
-void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) const
+void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds, QPainterPath *accumulatedBlankBorders) const
 {
     QRectF innerBounds = bounds;
 
@@ -329,6 +329,11 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         } else {
             painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
         }
+    } else if (accumulatedBlankBorders) {
+        // No border but we'd like to draw one for user convenience when on screen
+        accumulatedBlankBorders->moveTo(bounds.left(), bounds.top());
+        accumulatedBlankBorders->lineTo(bounds.right(), bounds.top());
+
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].outerPen;
@@ -336,6 +341,11 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         const qreal b = bounds.bottom() - pen.widthF() / 2.0;
         innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].spacing - pen.widthF());
         painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
+    } else if (accumulatedBlankBorders) {
+        // No border but we'd like to draw one for user convenience when on screen
+        accumulatedBlankBorders->moveTo(bounds.left(), bounds.bottom());
+        accumulatedBlankBorders->lineTo(bounds.right(), bounds.bottom());
+
     }
     if (d->edges[Left].outerPen.widthF() > 0) {
         QPen pen = d->edges[Left].outerPen;
@@ -343,6 +353,11 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         const qreal l = bounds.left() + pen.widthF() / 2.0;
         innerBounds.setLeft(bounds.left() + d->edges[Left].spacing + pen.widthF());
         painter.drawLine(QLineF(l, bounds.top() + d->edges[Top].outerPen.widthF(), l, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
+    } else if (accumulatedBlankBorders) {
+        // No border but we'd like to draw one for user convenience when on screen
+        accumulatedBlankBorders->moveTo(bounds.left(), bounds.top());
+        accumulatedBlankBorders->lineTo(bounds.left(), bounds.bottom());
+
     }
     if (d->edges[Right].outerPen.widthF() > 0) {
         QPen pen = d->edges[Right].outerPen;
@@ -350,6 +365,11 @@ void KoTableCellStyle::paintBorders(QPainter &painter, const QRectF &bounds) con
         const qreal r = bounds.right() - pen.widthF() / 2.0;
         innerBounds.setRight(bounds.right() - d->edges[Right].spacing - pen.widthF());
         painter.drawLine(QLineF(r, bounds.top() + d->edges[Top].outerPen.widthF(), r, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
+    } else if (accumulatedBlankBorders) {
+        // No border but we'd like to draw one for user convenience when on screen
+        accumulatedBlankBorders->moveTo(bounds.right(), bounds.top());
+        accumulatedBlankBorders->lineTo(bounds.right(), bounds.bottom());
+
     }
     paintDiagonalBorders(painter, bounds);
 

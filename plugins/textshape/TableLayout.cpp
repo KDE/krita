@@ -424,7 +424,7 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                     // Paint diagonal borders for current cell
                     cellStyle.paintDiagonalBorders(*painter, bRect);
                 } else { // separating border model
-                    cellStyle.paintBorders(*painter, cellBoundingRect(tableCell));
+                    cellStyle.paintBorders(*painter, cellBoundingRect(tableCell), accuBlankBorders);
                 }
             }
         }

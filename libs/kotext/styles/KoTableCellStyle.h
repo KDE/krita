@@ -199,8 +199,9 @@ public:
      *
      * @painter the painter to draw with.
      * @bounds the bounding rectangle to draw.
+     * @blanks a painterpath where blank borders should be added to.
      */
-    void paintBorders(QPainter &painter, const QRectF &bounds) const;
+    void paintBorders(QPainter &painter, const QRectF &bounds, QPainterPath *blanks) const;
 
     /**
      * Paint the diagonal borders.

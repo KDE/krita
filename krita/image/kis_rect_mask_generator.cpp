@@ -52,10 +52,8 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
 {
     if (KisMaskGenerator::d->empty) return 255;
     
-    if(x > d->m_halfWidth || x < -d->m_halfWidth || y > d->m_halfHeight || y < -d->m_halfHeight) return 255;
-    
-    double xr = qAbs(x /*- m_xcenter*/) / width();
-    double yr = qAbs(y /*- m_ycenter*/) / height();
+    double xr = qAbs(x /*- m_xcenter*/);
+    double yr = qAbs(y /*- m_ycenter*/);
     
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
@@ -70,6 +68,10 @@ quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const
             angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
         }
     }
+
+    if(xr > d->m_halfWidth || xr < -d->m_halfWidth || yr > d->m_halfHeight || yr < -d->m_halfHeight) return 255;
+    xr /= width();
+    yr /= height();
 
     qreal fhTransformed = KisMaskGenerator::d->fh * softness();
     qreal fvTransformed = KisMaskGenerator::d->fv * softness();

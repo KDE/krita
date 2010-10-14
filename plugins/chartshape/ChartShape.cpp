@@ -1092,8 +1092,12 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
 
-    Table *oldInternalTable = d->tableSource.get( d->internalModel );
-    d->tableSource.remove( oldInternalTable->name() );
+    // An internal model might have been set before in ChartShapeFactory.
+    if ( d->internalModel ) {
+        Table *oldInternalTable = d->tableSource.get( d->internalModel );
+        Q_ASSERT( oldInternalTable );
+        d->tableSource.remove( oldInternalTable->name() );
+    }
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
     // Create a table with data from document, add it as table source

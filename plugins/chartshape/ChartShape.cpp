@@ -890,16 +890,10 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
-    proxyModel()->beginLoading();
-
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfAllAttributes );
-    bool result = loadOdfFrame( element, context );
-
-    proxyModel()->endLoading();
-
-    return result;
+    return loadOdfFrame( element, context );
 }
 
 // Used to load the actual contents from the ODF frame that surrounds
@@ -919,6 +913,8 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
 bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
                                   KoShapeLoadingContext &context )
 {
+    proxyModel()->beginLoading();
+
     // The shared data will automatically be deleted in the destructor
     // of KoShapeLoadingContext
     OdfLoadingHelper *helper = new OdfLoadingHelper;
@@ -1081,6 +1077,8 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
     requestRepaint();
 
     styleStack.restore();
+
+    proxyModel()->endLoading();
 
     return true;
 }

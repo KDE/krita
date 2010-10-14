@@ -364,44 +364,35 @@ KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartT
  */
 KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
 {
-    KDChart::AbstractDiagram *diagram = 0;
-        switch ( chartType ) {
+    switch ( chartType ) {
         case BarChartType:
-            diagram = (KDChart::AbstractDiagram*)kdBarDiagram;
-            break;
+            return kdBarDiagram;
         case LineChartType:
-            diagram = (KDChart::AbstractDiagram*)kdLineDiagram;
-            break;
+            return kdLineDiagram;
         case AreaChartType:
-            diagram = (KDChart::AbstractDiagram*)kdAreaDiagram;
-            break;
+            return kdAreaDiagram;
         case CircleChartType:
-            diagram = (KDChart::AbstractDiagram*)kdCircleDiagram;
-            break;
+            return kdCircleDiagram;
         case RingChartType:
-            diagram = (KDChart::AbstractDiagram*)kdRingDiagram;
-            break;
+            return kdRingDiagram;
         case RadarChartType:
-            diagram = (KDChart::AbstractDiagram*)kdRadarDiagram;
-            break;
+            return kdRadarDiagram;
         case ScatterChartType:
-            diagram = (KDChart::AbstractDiagram*)kdScatterDiagram;
-            break;
+            return kdScatterDiagram;
         case StockChartType:
-            diagram = (KDChart::AbstractDiagram*)kdStockDiagram;
-            break;
+            return kdStockDiagram;
         case BubbleChartType:
-            diagram = (KDChart::AbstractDiagram*)kdBubbleDiagram;
-            break;
+            return kdBubbleDiagram;
         case SurfaceChartType:
-            diagram = (KDChart::AbstractDiagram*)kdSurfaceDiagram;
-            break;
+            return kdSurfaceDiagram;
         case GanttChartType:
-            diagram = (KDChart::AbstractDiagram*)kdGanttDiagram;
-            break;
-        default:;
-        }
-    return diagram;
+            return kdGanttDiagram;
+        case LastChartType:
+            return 0;
+        // Compiler warning for unhandled chart type is intentional.
+    }
+    Q_ASSERT( "Unhandled chart type" );
+    return 0;
 }
 
 
@@ -443,8 +434,9 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     case GanttChartType:
         diagram = (KDChart::AbstractDiagram**)&kdGanttDiagram;
         break;
-    default:;
-        // FIXME: Error handling?
+    case LastChartType:
+        Q_ASSERT( "There is no diagram with type LastChartType" );
+    // Compiler warning for unhandled chart type is intentional.
     }
 
     Q_ASSERT( diagram );

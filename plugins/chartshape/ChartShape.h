@@ -212,7 +212,7 @@ public:
     bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
 
     bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
-    bool loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfChartElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;

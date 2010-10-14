@@ -910,8 +910,8 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
     return false;
 }
 
-bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
-                                  KoShapeLoadingContext &context )
+bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
+                                      KoShapeLoadingContext &context )
 {
     proxyModel()->beginLoading();
 

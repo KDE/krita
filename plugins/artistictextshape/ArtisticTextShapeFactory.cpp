@@ -44,7 +44,16 @@ KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
 
 bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
 {
-    return ( e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw );
+    if (!(e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw)) {
+        return false;
+    }
+
+    QString drawEngine = e.attributeNS( KoXmlNS::draw, "engine", "" );
+    if ( drawEngine.isEmpty() || drawEngine != "svg:text" ) {
+        return false;
+    }
+
+    return true;
 }
 
 #include <ArtisticTextShapeFactory.moc>

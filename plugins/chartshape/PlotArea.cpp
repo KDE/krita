@@ -574,12 +574,11 @@ void PlotArea::setVertical( bool vertical )
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                         KoShapeLoadingContext &context )
 {
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
+//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    KoStyleStack& globalStack = context.odfLoadingContext().styleStack();    
+    KoStyleStack styleStack;
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
-
-    styleStack.clear();
 
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.
@@ -633,7 +632,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // chart types like line charts, stock charts, etc.
     QString seriesSource;
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        globalStack.save();
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
+        OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),  plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
@@ -788,10 +789,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
-
-    styleStack.restore();
     
     requestRepaint();
+    globalStack.restore();
     
     return true;
 }

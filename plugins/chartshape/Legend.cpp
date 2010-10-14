@@ -57,6 +57,7 @@
 #include "PlotArea.h"
 #include "ScreenConversions.h"
 #include "Layout.h"
+#include "OdfLoadingHelper.h"
 
 using namespace KChart;
 
@@ -426,11 +427,12 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 bool Legend::loadOdf( const KoXmlElement &legendElement,
                       KoShapeLoadingContext &context )
 {
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
+//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+//     styleStack.save();
+    KoStyleStack styleStack;
 
     if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
+        OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(), legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
 
@@ -512,9 +514,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
                                                        "title", QString() ) );
         }
 
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-            styleStack.clear();
-            context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {          
+            OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(), legendElement, KoXmlNS::chart, "style-name", "chart" );
 
             styleStack.setTypeProperties( "text" );
 
@@ -533,8 +534,6 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
     //d->chart->replaceLegend( d->legend, oldLegend );
 
     d->pixmapRepaintRequested = true;
-
-    styleStack.restore();
 
     return true;
 }

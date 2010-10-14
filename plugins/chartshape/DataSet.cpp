@@ -1089,6 +1089,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack& globalStack = odfLoadingContext.styleStack();
+    globalStack.save();
+    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
     KoStyleStack styleStack;
 
     OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
@@ -1231,6 +1234,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         ++loadedDataPointCount;
     }
+    globalStack.restore();
     return true;
 }
 

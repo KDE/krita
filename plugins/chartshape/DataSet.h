@@ -179,7 +179,13 @@ public:
 
     QVariant xData( int index ) const;
     QVariant yData( int index ) const;
+
+    /**
+     * Used for bubble width in bubble charts. May also be referred to as
+     * 'z data' in some cases.
+     */
     QVariant customData( int index ) const;
+
     QVariant categoryData( int index ) const;
     QVariant labelData() const;
 

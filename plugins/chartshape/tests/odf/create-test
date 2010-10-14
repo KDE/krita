@@ -1,0 +1,79 @@
+#!/bin/bash
+
+pwd | grep "koffice/plugins/chartshape/tests/odf$" > /dev/null
+# If grep returns 1 (instead of 0), the string wasn't found in pwd's output
+if [ $? -eq 1 ]; then
+    echo "Error: This script must be run from koffice/plugins/chartshape/tests/odf"
+    exit
+fi
+if [ -z $2 ]; then
+    echo "Usage: $0 test-document.[odt|ods|odp] test-name"
+    exit
+fi
+
+# The document to create the test case from, e.g. "/path/to/test-doc.odt"
+doc=$1
+# Extract document name
+doc_name=`echo $doc | sed "s/.*\///"`
+# The name of the test case, e.g. "mytest"
+name=$2
+uppercase_name=`echo $name | tr [:lower:] [:upper:] | tr - _`
+
+if [ -d $name ]; then
+	echo "A test case with the name \"$name\" already exists. Aborting."
+	exit
+fi
+
+# 1) Create new test folder from template/
+cp -r template/ "$name"
+
+# 2) TODO: Replace template's placeholders
+sed -i "" "s/@@NAME@@/$name/g" "$name/CMakeLists.txt"
+sed -i "" "s/@@UPPERCASE_NAME@@/$uppercase_name/g" "$name/TestLoading.h"
+
+echo "========= Info ========="
+echo "Don't forget to fill in @@COPYRIGHT@@ in TestLoading.h and TestLoading.cpp."
+
+# 3) Keep a copy or original document
+cp "$doc" "$name/"
+
+doc_path="$name/doc"
+mkdir $doc_path
+
+echo ""
+echo "========= Extracting $doc_name ========="
+# 4) Unzip document
+unzip "$doc" -d "$doc_path/orig"
+
+# 5) Find chart document
+# If Object* is expended to a valid directory name, this means there is only
+# one embedded object, which we will assume is the chart.
+chart_doc_path=`echo "$doc_path/orig/"Object_*`
+if [ ! -d "$chart_doc_path" ]; then
+	chart_doc_path=`echo "$doc_path/orig/"Object\ *`
+fi
+if [ -d "$chart_doc_path" ]; then
+	mv "$chart_doc_path/content.xml" "$doc_path/content.xml"
+	mv "$chart_doc_path/styles.xml" "$doc_path/styles.xml"
+	if [ -e "$chart_doc_path/meta.xml" ]; then
+		mv "$chart_doc_path/meta.xml" "$doc_path/meta.xml"
+	else
+		if [ -e "$doc_path/orig/meta.xml" ]; then
+			mv "$doc_path/orig/meta.xml" "$doc_path/meta.xml"
+			echo "Warning: No meta.xml found in chart document. Instead the embedding document's meta.xml was used. This should work, but might lead to problems in the loading process."
+		else
+			echo "Warning: No meta.xml found. Workarounds for ODF bugs in other office suites don't work if the document's creator is unknown."
+		fi
+	fi
+else
+	echo ""
+	echo "========= Process not yet completed ========="
+	echo "There is more than one embedded object in this document. Look in $doc_path/orig and find the chart document's directory, e.g. \"Object 3\". Then copy the meta.xml, styles.xml and content.xml from there to $doc_path/. After that you can safely remove $doc_path/orig/ and you're done."
+	exit
+fi
+
+# 6) Clean up
+rm -rf "$doc_path/orig"
+
+echo ""
+echo "========= Successfully created test case \"$name\"! ========="

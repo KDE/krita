@@ -927,7 +927,8 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
 
     // Get access to sheets in KSpread
     QAbstractItemModel *sheetAccessModel = 0;
-    if ( resourceManager()->hasResource( 75751149 ) ) { // duplicated from kspread
+    if ( resourceManager() &&
+         resourceManager()->hasResource( 75751149 ) ) { // duplicated from kspread
         QVariant var = resourceManager()->resource( 75751149 );
         sheetAccessModel = static_cast<QAbstractItemModel*>( var.value<void*>() );
         if ( sheetAccessModel ) {

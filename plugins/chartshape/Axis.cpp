@@ -58,7 +58,6 @@
 #include <KDChartPlotter>
 #include <KDChartStockDiagram>
 #include <KDChartRingDiagram>
-#include <KDChartPolarDiagram>
 #include <KDChartRadarDiagram>
 #include <KDChartBarAttributes>
 #include <KDChartPieAttributes>
@@ -150,7 +149,6 @@ public:
     KDChart::LineDiagram  *kdAreaDiagram;
     KDChart::PieDiagram   *kdCircleDiagram;
     KDChart::RingDiagram  *kdRingDiagram;
-    KDChart::PolarDiagram *kdPolarDiagram;
     KDChart::RadarDiagram *kdRadarDiagram;
     KDChart::Plotter      *kdScatterDiagram;
     KDChart::StockDiagram *kdStockDiagram;
@@ -167,18 +165,6 @@ public:
     //       roundtrip.
     KDChart::BarDiagram   *kdSurfaceDiagram;
     KDChart::BarDiagram   *kdGanttDiagram;
-
-    KDChartModel *kdBarDiagramModel;
-    KDChartModel *kdLineDiagramModel;
-    KDChartModel *kdAreaDiagramModel;
-    KDChartModel *kdCircleDiagramModel;
-    KDChartModel *kdRingDiagramModel;
-    KDChartModel *kdRadarDiagramModel;
-    KDChartModel *kdScatterDiagramModel;
-    KDChartModel *kdStockDiagramModel;
-    KDChartModel *kdBubbleDiagramModel;
-    KDChartModel *kdSurfaceDiagramModel;
-    KDChartModel *kdGanttDiagramModel;
 
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
@@ -237,18 +223,6 @@ Axis::Private::Private( Axis *axis )
     kdSurfaceDiagram = 0;
     kdGanttDiagram   = 0;
 
-    kdBarDiagramModel     = 0;
-    kdLineDiagramModel    = 0;
-    kdAreaDiagramModel    = 0;
-    kdCircleDiagramModel  = 0;
-    kdRingDiagramModel    = 0;
-    kdRadarDiagramModel   = 0;
-    kdScatterDiagramModel = 0;
-    kdStockDiagramModel   = 0;
-    kdBubbleDiagramModel  = 0;
-    kdSurfaceDiagramModel = 0;
-    kdGanttDiagramModel   = 0;
-
     title = 0;
     titleData = 0;
 }
@@ -262,34 +236,15 @@ Axis::Private::~Private()
     delete kdRadarPlane;
 
     delete kdBarDiagram;
-    delete kdBarDiagramModel;
-
     delete kdAreaDiagram;
-    delete kdAreaDiagramModel;
-
     delete kdCircleDiagram;
-    delete kdCircleDiagramModel;
-
     delete kdRingDiagram;
-    delete kdRingDiagramModel;
-
     delete kdRadarDiagram;
-    delete kdRadarDiagramModel;
-
     delete kdScatterDiagram;
-    delete kdScatterDiagramModel;
-
     delete kdStockDiagram;
-    delete kdStockDiagramModel;
-
     delete kdBubbleDiagram;
-    delete kdBubbleDiagramModel;
-
     delete kdSurfaceDiagram;
-    delete kdSurfaceDiagramModel;
-
     delete kdGanttDiagram;
-    delete kdGanttDiagramModel;
 
     delete kdAxis;
 
@@ -299,8 +254,8 @@ Axis::Private::~Private()
 
 void Axis::Private::registerDiagram( KDChart::AbstractDiagram *diagram )
 {
-    KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
-    Q_ASSERT( model );
+    KDChartModel *model = new KDChartModel;
+    diagram->setModel( model );
 
     QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
                       model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
@@ -331,96 +286,73 @@ void Axis::Private::deregisterDiagram( KDChart::AbstractDiagram *diagram )
                          plotArea, SLOT( plotAreaUpdate() ) );
     QObject::disconnect( diagram, SIGNAL( dataHidden() ),
                          plotArea, SLOT( plotAreaUpdate() ) );
+
+    delete model;
 }
 
 KDChart::AbstractDiagram *Axis::Private::createDiagramIfNeeded( ChartType chartType )
 {
     KDChart::AbstractDiagram *diagram = 0;
-    KDChartModel *model = 0;
 
     switch ( chartType ) {
     case BarChartType:
         if ( !kdBarDiagram )
             createBarDiagram();
-        model   = kdBarDiagramModel;
         diagram = kdBarDiagram;
         break;
     case LineChartType:
         if ( !kdLineDiagram )
             createLineDiagram();
-        model   = kdLineDiagramModel;
         diagram = kdLineDiagram;
         break;
     case AreaChartType:
         if ( !kdAreaDiagram )
             createAreaDiagram();
-        model   = kdAreaDiagramModel;
         diagram = kdAreaDiagram;
         break;
     case CircleChartType:
         if ( !kdCircleDiagram )
             createCircleDiagram();
-        model   = kdCircleDiagramModel;
         diagram = kdCircleDiagram;
         break;
     case RingChartType:
         if ( !kdRingDiagram )
             createRingDiagram();
-        model   = kdRingDiagramModel;
         diagram = kdRingDiagram;
         break;
     case RadarChartType:
         if ( !kdRadarDiagram )
             createRadarDiagram();
-        model   = kdRadarDiagramModel;
         diagram = kdRadarDiagram;
         break;
     case ScatterChartType:
         if ( !kdScatterDiagram )
             createScatterDiagram();
-        model   = kdScatterDiagramModel;
         diagram = kdScatterDiagram;
         break;
     case StockChartType:
         if ( !kdStockDiagram )
             createStockDiagram();
-        model   = kdStockDiagramModel;
         diagram = kdStockDiagram;
         break;
     case BubbleChartType:
         if ( !kdBubbleDiagram )
             createBubbleDiagram();
-        model   = kdBubbleDiagramModel;
         diagram = kdBubbleDiagram;
         break;
     case SurfaceChartType:
         if ( !kdSurfaceDiagram )
             createSurfaceDiagram();
-        model   = kdSurfaceDiagramModel;
         diagram = kdSurfaceDiagram;
         break;
     case GanttChartType:
         if ( !kdGanttDiagram )
             createGanttDiagram();
-        model   = kdGanttDiagramModel;
         diagram = kdGanttDiagram;
         break;
     default:
         ;
     }
-
-    // FIXME: What's this supposed to do?
-    // seems the idea was to be sure that we always set the diagram's model even for the case
-    // one of the create*Diagram-methods didn't do that already. This is a bit redundant and
-    // we could probably save some code/logic here but either removing all the setModel()'s
-    // from the create*Diagram-methods (well, if this method is the only one who's able to call
-    // them?) xor remove the following lines and assume that this was done by the create*Diagram-
-    // methods already.
-    // NOTE that each setModel call does lead to lot of stuff done in the backend what is the
-    // reason the additional diagram->model()!=model was added to be sure we don't do that
-    // additional work if not really needed.
-    if(diagram && diagram->model() != model)
-        diagram->setModel( model );
 
     adjustAllDiagrams();
 
@@ -476,67 +408,51 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
 void Axis::Private::deleteDiagram( ChartType chartType )
 {
     KDChart::AbstractDiagram **diagram = 0;
-    KDChartModel **model = 0;
 
     switch ( chartType ) {
     case BarChartType:
         diagram = (KDChart::AbstractDiagram**)&kdBarDiagram;
-        model   = &kdBarDiagramModel;
         break;
     case LineChartType:
         diagram = (KDChart::AbstractDiagram**)&kdLineDiagram;
-        model   = &kdLineDiagramModel;
         break;
     case AreaChartType:
         diagram = (KDChart::AbstractDiagram**)&kdAreaDiagram;
-        model   = &kdAreaDiagramModel;
         break;
     case CircleChartType:
         diagram = (KDChart::AbstractDiagram**)&kdCircleDiagram;
-        model   = &kdCircleDiagramModel;
         break;
     case RingChartType:
         diagram = (KDChart::AbstractDiagram**)&kdRingDiagram;
-        model   = &kdRingDiagramModel;
         break;
     case RadarChartType:
         diagram = (KDChart::AbstractDiagram**)&kdRadarDiagram;
-        model   = &kdRadarDiagramModel;
         break;
     case ScatterChartType:
         diagram = (KDChart::AbstractDiagram**)&kdScatterDiagram;
-        model   = &kdScatterDiagramModel;
         break;
     case StockChartType:
         diagram = (KDChart::AbstractDiagram**)&kdStockDiagram;
-        model   = &kdStockDiagramModel;
         break;
     case BubbleChartType:
         diagram = (KDChart::AbstractDiagram**)&kdBubbleDiagram;
-        model   = &kdBubbleDiagramModel;
         break;
     case SurfaceChartType:
         diagram = (KDChart::AbstractDiagram**)&kdSurfaceDiagram;
-        model   = &kdSurfaceDiagramModel;
         break;
     case GanttChartType:
         diagram = (KDChart::AbstractDiagram**)&kdGanttDiagram;
-        model   = &kdGanttDiagramModel;
         break;
     default:;
         // FIXME: Error handling?
     }
 
-    Q_ASSERT( model );
-    Q_ASSERT( *model );
     Q_ASSERT( diagram );
     Q_ASSERT( *diagram );
 
     deregisterDiagram( *diagram );
     delete *diagram;
-    delete *model;
 
-    *model = 0;
     *diagram = 0;
 
     adjustAllDiagrams();
@@ -545,17 +461,13 @@ void Axis::Private::deleteDiagram( ChartType chartType )
 
 void Axis::Private::createBarDiagram()
 {
-    Q_ASSERT( kdBarDiagramModel == 0 );
     Q_ASSERT( kdBarDiagram == 0 );
 
-    kdBarDiagramModel = new KDChartModel;
-
     kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
-    kdBarDiagram->setModel( kdBarDiagramModel );
+    registerDiagram( kdBarDiagram );
     // By 'vertical', KDChart means the orientation of a chart's bars,
     // not the orientation of the x axis.
     kdBarDiagram->setOrientation( plotArea->isVertical() ? Qt::Horizontal : Qt::Vertical );
-    registerDiagram( kdBarDiagram );
     kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
 
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -591,13 +503,9 @@ void Axis::Private::createBarDiagram()
 
 void Axis::Private::createLineDiagram()
 {
-    Q_ASSERT( kdLineDiagramModel == 0 );
     Q_ASSERT( kdLineDiagram == 0 );
 
-    kdLineDiagramModel = new KDChartModel;
-
     kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
-    kdLineDiagram->setModel( kdLineDiagramModel );
     registerDiagram( kdLineDiagram );
 
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -629,18 +537,14 @@ void Axis::Private::createLineDiagram()
 
 void Axis::Private::createAreaDiagram()
 {
-    Q_ASSERT( kdAreaDiagramModel == 0 );
     Q_ASSERT( kdAreaDiagram == 0 );
 
-    kdAreaDiagramModel = new KDChartModel;
-
     kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+    registerDiagram( kdAreaDiagram );
     KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
     // Draw the area under the lines. This makes this diagram an area chart.
     attr.setDisplayArea( true );
     kdAreaDiagram->setLineAttributes( attr );
-    kdAreaDiagram->setModel( kdAreaDiagramModel );
-    registerDiagram( kdAreaDiagram );
     kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
 
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -672,15 +576,13 @@ void Axis::Private::createAreaDiagram()
 
 void Axis::Private::createCircleDiagram()
 {
-    Q_ASSERT( kdCircleDiagramModel == 0);
     Q_ASSERT( kdCircleDiagram == 0 );
 
-    kdCircleDiagramModel = new KDChartModel;
-    kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
-
     kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
-    kdCircleDiagram->setModel( kdCircleDiagramModel );
     registerDiagram( kdCircleDiagram );
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdCircleDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDirection( Qt::Horizontal );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
     kdPolarPlane->addDiagram( kdCircleDiagram );
@@ -700,15 +602,13 @@ void Axis::Private::createCircleDiagram()
 
 void Axis::Private::createRingDiagram()
 {
-    Q_ASSERT( kdRingDiagramModel == 0 );
     Q_ASSERT( kdRingDiagram == 0 );
 
-    kdRingDiagramModel = new KDChartModel;
-    kdRingDiagramModel->setDataDirection( Qt::Horizontal );
-
     kdRingDiagram = new KDChart::RingDiagram( plotArea->kdChart(), kdPolarPlane );
-    kdRingDiagram->setModel( kdRingDiagramModel );
     registerDiagram( kdRingDiagram );
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdRingDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDirection( Qt::Horizontal );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
     kdPolarPlane->addDiagram( kdRingDiagram );
@@ -728,17 +628,14 @@ void Axis::Private::createRingDiagram()
 
 void Axis::Private::createRadarDiagram()
 {
-    Q_ASSERT( kdRadarDiagramModel == 0 );
     Q_ASSERT( kdRadarDiagram == 0 );
 
-    kdRadarDiagramModel = new KDChartModel;
     //kdRadarDiagramModel->setDataDimensions( 2 );
     //kdRadarDiagramModel->setDataDirection( Qt::Horizontal );
 
     kdRadarDiagram = new KDChart::RadarDiagram( plotArea->kdChart(), kdRadarPlane );
-    kdRadarDiagram->setModel( kdRadarDiagramModel );
-    kdRadarDiagram->setCloseDatasets(true);
     registerDiagram( kdRadarDiagram );
+    kdRadarDiagram->setCloseDatasets(true);
 
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
@@ -755,17 +652,17 @@ void Axis::Private::createRadarDiagram()
 
 void Axis::Private::createScatterDiagram()
 {
-    Q_ASSERT( kdScatterDiagramModel == 0 );
     Q_ASSERT( kdScatterDiagram == 0 );
     Q_ASSERT( plotArea );
 
-    kdScatterDiagramModel = new KDChartModel;
-    kdScatterDiagramModel->setDataDimensions( 2 );
-
     kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
-    kdScatterDiagram->setModel( kdScatterDiagramModel );
-    kdScatterDiagram->setPen( Qt::NoPen );
     registerDiagram( kdScatterDiagram );
+
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdScatterDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDimensions( 2 );
+
+    kdScatterDiagram->setPen( Qt::NoPen );
 
     if ( isVisible )
         kdScatterDiagram->addAxis( kdAxis );
@@ -804,13 +701,9 @@ void Axis::Private::createScatterDiagram()
 
 void Axis::Private::createStockDiagram()
 {
-    Q_ASSERT( kdStockDiagramModel == 0 );
     Q_ASSERT( kdStockDiagram == 0 );
 
-    kdStockDiagramModel = new KDChartModel;
-
     kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
-    kdStockDiagram->setModel( kdStockDiagramModel );
     registerDiagram( kdStockDiagram );
 
 #if 0  // Stacked and Percent not supported by KDChart.
@@ -840,17 +733,15 @@ void Axis::Private::createStockDiagram()
 
 void Axis::Private::createBubbleDiagram()
 {
-    Q_ASSERT( kdBubbleDiagramModel == 0 );
     Q_ASSERT( kdBubbleDiagram == 0 );
     Q_ASSERT( plotArea );
 
-    kdBubbleDiagramModel = new KDChartModel;
-    kdBubbleDiagramModel->setDataDimensions( 2 );
-
     kdBubbleDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
-    kdBubbleDiagram->setModel( kdBubbleDiagramModel );
-    
     registerDiagram( kdBubbleDiagram );
+
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdBubbleDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDimensions( 2 );
     
     kdPlane->addDiagram( kdBubbleDiagram );    
 
@@ -899,9 +790,7 @@ void Axis::Private::createSurfaceDiagram()
         ...
     }
 #else // fallback to bar diagram for now
-    if (!kdBarDiagramModel) createBarDiagram();
-    kdSurfaceDiagramModel = kdBarDiagramModel;
-    kdBarDiagramModel = 0;
+    if ( !kdBarDiagram ) createBarDiagram();
     kdSurfaceDiagram = kdBarDiagram;
     kdBarDiagram = 0;
 #endif
@@ -922,9 +811,7 @@ void Axis::Private::createGanttDiagram()
         ...
     }
 #else // fallback to bar diagram for now
-    if (!kdBarDiagramModel) createBarDiagram();
-    kdGanttDiagramModel = kdBarDiagramModel;
-    kdBarDiagramModel = 0;
+    if ( !kdBarDiagram ) createBarDiagram();
     kdGanttDiagram = kdBarDiagram;
     kdBarDiagram = 0;
 #endif
@@ -1796,64 +1683,55 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
-    KDChartModel **oldModel = 0;
-    KDChartModel *newModel = 0;
     KDChart::AbstractDiagram **oldDiagram = 0;
     KDChart::AbstractDiagram *newDiagram = 0;
 
     // Get pointers to the old model and diagram.
     switch ( d->plotAreaChartType ) {
     case BarChartType:
-        oldModel = &d->kdBarDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
         break;
     case LineChartType:
-        oldModel = &d->kdLineDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdLineDiagram;
         break;
     case AreaChartType:
-        oldModel = &d->kdAreaDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
         break;
 
     case CircleChartType:
-        oldModel = &d->kdCircleDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
         break;
     case RingChartType:
-        oldModel = &d->kdRingDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdRingDiagram;
         break;
 
     case ScatterChartType:
-        oldModel = &d->kdScatterDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
         break;
     case RadarChartType:
-        oldModel = &d->kdRadarDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
         break;
 
     case StockChartType:
-        oldModel = &d->kdStockDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdStockDiagram;
         break;
     case BubbleChartType:
-        oldModel = &d->kdBubbleDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdBubbleDiagram;
         break;
     case SurfaceChartType:
-        oldModel = &d->kdSurfaceDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdSurfaceDiagram;
         break;
     case GanttChartType:
-        oldModel = &d->kdGanttDiagramModel;
         oldDiagram = (KDChart::AbstractDiagram**)&d->kdGanttDiagram;
         break;
 
     default:;
         // FIXME: What should happen here?
     }
+
+    // We need to know the old model so that we can remove the data sets
+    // from the old model that we added to the new model.
+    KDChartModel *oldModel = oldDiagram ? dynamic_cast<KDChartModel*>( (*oldDiagram)->model() ) : 0;
 
     // We need to have a coordinate plane that matches the chart type.
     // Choices are cartesian or polar.
@@ -1868,82 +1746,71 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
             d->plotArea->kdChart()->takeCoordinatePlane( d->kdRadarPlane );
     }
 
-    // Get pointers to the new model and diagrams.  Create the new
-    // diagram if necessary.
+    // Get pointers to the diagrams. Create new diagram if necessary.
     switch ( newChartType ) {
     case BarChartType:
         if ( !d->kdBarDiagram )
            d->createBarDiagram();
-        newModel = d->kdBarDiagramModel;
         newDiagram = d->kdBarDiagram;
         break;
     case LineChartType:
         if ( !d->kdLineDiagram )
            d->createLineDiagram();
-        newModel = d->kdLineDiagramModel;
         newDiagram = d->kdLineDiagram;
         break;
     case AreaChartType:
         if ( !d->kdAreaDiagram )
            d->createAreaDiagram();
-        newModel = d->kdAreaDiagramModel;
         newDiagram = d->kdAreaDiagram;
         break;
 
     case CircleChartType:
         if ( !d->kdCircleDiagram )
            d->createCircleDiagram();
-        newModel = d->kdCircleDiagramModel;
         newDiagram = d->kdCircleDiagram;
         break;
     case RingChartType:
         if ( !d->kdRingDiagram )
            d->createRingDiagram();
-        newModel = d->kdRingDiagramModel;
         newDiagram = d->kdRingDiagram;
         break;
 
     case ScatterChartType:
         if ( !d->kdScatterDiagram )
            d->createScatterDiagram();
-        newModel = d->kdScatterDiagramModel;
         newDiagram = d->kdScatterDiagram;
         break;
     case RadarChartType:
         if ( !d->kdRadarDiagram )
            d->createRadarDiagram();
-        newModel = d->kdRadarDiagramModel;
         newDiagram = d->kdRadarDiagram;
         break;
 
     case StockChartType:
         if ( !d->kdStockDiagram )
            d->createStockDiagram();
-        newModel = d->kdStockDiagramModel;
         newDiagram = d->kdStockDiagram;
         break;
     case BubbleChartType:
         if ( !d->kdBubbleDiagram )
            d->createBubbleDiagram();
-        newModel = d->kdBubbleDiagramModel;
         newDiagram = d->kdBubbleDiagram;
         break;
     case SurfaceChartType:
         if ( !d->kdSurfaceDiagram )
            d->createSurfaceDiagram();
-        newModel = d->kdSurfaceDiagramModel;
         newDiagram = d->kdSurfaceDiagram;
         break;
     case GanttChartType:
         if ( !d->kdGanttDiagram )
            d->createGanttDiagram();
-        newModel = d->kdGanttDiagramModel;
         newDiagram = d->kdGanttDiagram;
         break;
     default:;
         // FIXME: Implement more chart types
     }
 
+    KDChartModel *newModel = dynamic_cast<KDChartModel*>( newDiagram->model() );
     // FIXME: This causes a crash on unimplemented types. We should
     //        handle that in some other way.
     Q_ASSERT( newModel );
@@ -1975,10 +1842,10 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         dataSet->setPen(  newPen );
 #endif
         newModel->addDataSet( dataSet );        
-        if ( oldModel && *oldModel ) {
-            const int dataSetCount = (*oldModel)->dataDirection() == Qt::Vertical
-                                     ? (*oldModel)->columnCount() : (*oldModel)->rowCount();
-            if ( dataSetCount == (*oldModel)->dataDimensions() ) {
+        if ( oldModel ) {
+            const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
+                                     ? oldModel->columnCount() : oldModel->rowCount();
+            if ( dataSetCount == oldModel->dataDimensions() ) {
                 // This if() is only necessary because we have some
                 // unsupported chart types that create a NULL
                 // oldDiagram;
@@ -1996,12 +1863,11 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
                     if ( *oldDiagram )
                         delete *oldDiagram;
                 }
-                delete *oldModel;
-                *oldModel = 0;
+                delete oldModel;
                 *oldDiagram = 0;
             }
             else
-                (*oldModel)->removeDataSet( dataSet );
+                oldModel->removeDataSet( dataSet );
         }
     }
 

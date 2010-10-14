@@ -378,9 +378,11 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
-    invalidateDataSets();
+    // For every data set, there must be an explicit <chart:series> element,
+    // which we will load later.
+    d->dataSets.clear();
+    d->removedDataSets.clear();
 
-    QList<DataSet*> createdDataSets;
     // A cell range for all data is optional.
     // If cell ranges are in addition specified for one or more of these
     // data series, they'll be overwritten by these values.
@@ -391,13 +393,21 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     {
         QString cellRangeAddress = element.attributeNS( KoXmlNS::table, "cell-range-address" );
         d->selection = CellRegion( d->tableSource, cellRangeAddress );
-        // This is what we'll use as basis for the data sets we "produce" from ODF.
-        // This might be data sets that were "instantiated" from the internal
-        // table or from an arbitrary selection of other tables as specified
-        // in the PlotArea's table:cell-range-address attribute (parsed above).
-        createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets );
+    // Otherwise use all data from internal table
+    } else if ( helper->chartUsesInternalModelOnly ) {
+        QList<Table*> tables = helper->tableSource->tableMap().values();
+        Q_ASSERT( tables.count() == 1 );
+        Table *internalTable = tables.first();
+        Q_ASSERT( internalTable->model() );
+        int rowCount = internalTable->model()->rowCount();
+        int colCount = internalTable->model()->columnCount();
+        d->selection = CellRegion( internalTable, QRect( 1, 1, colCount, rowCount ) );
     }
-
+    // This is what we'll use as basis for the data sets we "produce" from ODF.
+    // This might be data sets that were "instantiated" from the internal
+    // table or from an arbitrary selection of other tables as specified
+    // in the PlotArea's table:cell-range-address attribute (parsed above).
+    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets );
     
     int loadedDataSetCount = 0;
 

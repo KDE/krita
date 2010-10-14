@@ -24,6 +24,12 @@ if [ -d $name ]; then
 	exit
 fi
 
+echo $name | grep -v [\ \;\,\\\/] > /dev/null
+if [ $? -eq 1 ]; then
+	echo "The test name must not contain spaces or any other special characters. Aborting"
+	exit
+fi
+
 # 1) Create new test folder from template/
 cp -r template/ "$name"
 
@@ -39,6 +45,11 @@ cp "$doc" "$name/"
 
 doc_path="$name/doc"
 mkdir $doc_path
+
+echo "add_subdirectory( $name )" >> CMakeLists.txt
+
+echo ""
+echo "========= Added test case to ./CMakeLists.txt ========="
 
 echo ""
 echo "========= Extracting $doc_name ========="

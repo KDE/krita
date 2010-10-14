@@ -39,6 +39,8 @@ SingleModelHelper::SingleModelHelper( Table *table, ChartProxyModel *proxyModel 
     Q_ASSERT( proxyModel );
 
     QAbstractItemModel *model = table->model();
+    connect( model, SIGNAL( modelReset() ),
+             this,  SLOT( slotModelStructureChanged() ) );
     connect( model, SIGNAL( rowsInserted( QModelIndex, int, int ) ),
              this,  SLOT( slotModelStructureChanged() ) );
     connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),

@@ -1049,12 +1049,9 @@ bool Axis::attachDataSet( DataSet *dataSet )
             chartType = d->plotAreaChartType;
 
         KDChart::AbstractDiagram *diagram = d->getDiagramAndCreateIfNeeded( chartType );
-        if( ! diagram )
-            return false;
+        Q_ASSERT( diagram );
         KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
         Q_ASSERT( model );
-        if( !model )
-            return false;
 
         model->addDataSet( dataSet );
 

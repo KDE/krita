@@ -764,24 +764,26 @@ void DataSet::setUpperErrorLimit( qreal limit )
 
 QVariant DataSet::xData( int index ) const
 {
-    const QVariant data = d->data( d->xDataRegion, index );
-    return data.isValid() ? data : index + 1;
+    // No fall-back necessary. x data region (part of 'domain' in ODF terms)
+    // must be specified if needed. See ODF v1.1 §10.9.1
+    return d->data( d->xDataRegion, index );
 }
 
 QVariant DataSet::yData( int index ) const
 {
-    const QVariant data = d->data( d->yDataRegion, index );
-    // FIXME: There should be no fallback here.. If there's no data,
-    // then we should return an invalid value nonetheless.
-    return data.isValid() ? data : index + 1;
-//     return d->data( d->yDataRegion, index );
+    // No fall-back necessary. y data region must be specified if needed.
+    // (may also be part of 'domain' in ODF terms, but only in case of
+    // scatter and bubble charts)
+    return d->data( d->yDataRegion, index );
 }
 
 QVariant DataSet::customData( int index ) const
 {
-    const QVariant data = d->data( d->customDataRegion, index );
-    return data.isValid() ? data : index + 1;
-//     return d->data( d->customDataRegion, index );
+    // No fall-back necessary. ('custom' [1]) data region (part of 'domain' in
+    // ODF terms) must be specified if needed. See ODF v1.1 §10.9.1
+    return d->data( d->customDataRegion, index );
+    // [1] In fact, 'custom' data only refers to the bubble width of bubble
+    // charts at the moment.
 }
 
 QVariant DataSet::categoryData( int index ) const

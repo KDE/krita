@@ -162,6 +162,13 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
 
     QRectF toPaintRect = converter.viewToDocument(painter.clipRegion().boundingRect());
     toPaintRect = transform().mapRect(toPaintRect);
+    // We'll use this clipRect to see if our child shapes lie within it.
+    // Because shape->boundingRect() uses absoluteTransformation(0) we'll
+    // use that as well to have the same (absolute) reference transformation
+    // of our and the child's bounding boxes.
+    QTransform absTrans = absoluteTransformation(0);
+    QRectF clipRect = absTrans.map(outline()).boundingRect();
+
 
     foreach(KoShape *shape, sortedObjects) {
         //kDebug(30006) <<"KoShapeContainer::painting shape:" << shape->shapeId() <<"," << shape->boundingRect();
@@ -170,7 +177,8 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         if (!isClipped(shape))  // the shapeManager will have to draw those, or else we can't do clipRects
             continue;
         // don't try to draw a child shape that is not in the clipping rect of the painter.
-        if (!toPaintRect.intersects(shape->boundingRect()))
+        if (!clipRect.intersects(shape->boundingRect()))
+
             continue;
 
         painter.save();

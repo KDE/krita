@@ -1731,11 +1731,9 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         newModel->addDataSet( dataSet );
         const int dataSetCount = oldModel->dataDirection() == Qt::Vertical
                                  ? oldModel->columnCount() : oldModel->rowCount();
-        if ( dataSetCount == oldModel->dataDimensions() ) {
+        if ( dataSetCount == oldModel->dataDimensions() )
             // We need to call this method so set it sets d->kd[TYPE]Diagram to NULL
             d->deleteDiagram( oldChartType );
-            delete oldModel;
-        }
         else
             oldModel->removeDataSet( dataSet );
     }

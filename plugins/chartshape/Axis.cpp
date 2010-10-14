@@ -1085,17 +1085,15 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         KDChartModel *oldModel = dynamic_cast<KDChartModel*>( oldDiagram->model() );
         Q_ASSERT( oldModel );
 
-        if ( oldModel ) {
-            const int rowCount = oldModel->dataDirection() == Qt::Vertical
-                                     ? oldModel->columnCount() : oldModel->rowCount();
-            // If there's only as many rows as needed for *one*
-            // dataset, that means that the dataset we're removing is
-            // the last one in the model --> delete model
-            if ( rowCount == oldModel->dataDimensions() )
-                d->deleteDiagram( chartType );
-            else
-                oldModel->removeDataSet( dataSet, silent );
-        }
+        const int rowCount = oldModel->dataDirection() == Qt::Vertical
+                                 ? oldModel->columnCount() : oldModel->rowCount();
+        // If there's only as many rows as needed for *one*
+        // dataset, that means that the dataset we're removing is
+        // the last one in the model --> delete model
+        if ( rowCount == oldModel->dataDimensions() )
+            d->deleteDiagram( chartType );
+        else
+            oldModel->removeDataSet( dataSet, silent );
 
         dataSet->setKdChartModel( 0 );
         dataSet->setAttachedAxis( 0 );

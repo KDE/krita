@@ -1098,10 +1098,17 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                                       n, KoXmlNS::chart, "style-name", "chart" );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
-    // If we exclusively use the chart's internal model then all data
-    // is taken from there and each data set is automatically assigned
-    // the rows it belongs to. See ChartProxyModel::loadOdf()
-//     const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+    // OOo assumes that if we use an internal model only, the columns are
+    // interpreted as consecutive data series. Thus we can (and must) ignore
+    // any chart:cell-range-address attribute associated with a series or
+    // data point. Instead the regions are used that are automatically
+    // assigned by SingleModelHelper whenever the structure of the internal
+    // model changes.
+    bool ignoreCellRanges = false;
+#ifndef NWORKAROUND_ODF_BUGS
+    if ( context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice )
+        ignoreCellRanges = helper->chartUsesInternalModelOnly;
+#endif
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1130,7 +1137,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         while ( !cn.isNull() ){
             KoXmlElement elem = cn.toElement();
             const QString name = elem.tagName();
-            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") /*&& !ignoreCellRanges*/ ) {
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
                     setYDataRegion( CellRegion( helper->tableSource, region ) );
@@ -1148,7 +1155,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
     }
 
-    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) /*&& !ignoreCellRanges*/ ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
         if ( bubbleChart )
@@ -1156,7 +1163,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         else
             setYDataRegion( region );
     }
-    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) /*&& !ignoreCellRanges*/ ) {
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
         setLabelDataRegion( CellRegion( helper->tableSource, region ) );
     }

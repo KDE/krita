@@ -25,7 +25,7 @@ tests/
 ===========================================
 Quick Guide to Writing an ODF Unit Test
 ===========================================
-1) Find a document you want to base the test on
+1) Find a document you want to base the test on (it must be ODF)
 
 2) Find a name for your new test, e.g. IHateWritingUnitTestsButIAmAfraidYourGonnaWhipMe
 

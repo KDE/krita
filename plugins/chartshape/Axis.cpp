@@ -1040,7 +1040,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
         KDChart::AbstractDiagram *diagram = d->createDiagramIfNeeded( chartType );
         if( ! diagram )
             return false;
-        KDChartModel *model = (KDChartModel*)diagram->model();
+        KDChartModel *model = dynamic_cast<KDChartModel*>( diagram->model() );
         Q_ASSERT( model );
         if( !model )
             return false;
@@ -1071,7 +1071,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 
         KDChart::AbstractDiagram *oldDiagram = d->getDiagram( chartType );
         Q_ASSERT( oldDiagram );
-        KDChartModel *oldModel = (KDChartModel*)oldDiagram->model();
+        KDChartModel *oldModel = dynamic_cast<KDChartModel*>( oldDiagram->model() );
         Q_ASSERT( oldModel );
 
         if ( oldModel ) {

@@ -212,10 +212,17 @@ public:
     bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
 
     bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
-    bool loadOdfEmbedded( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfChartElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+
+    /**
+     * Used by unit tests to disable popping up of message boxes.
+     *
+     * User interaction is enabled by default.
+     */
+    static void setEnableUserInteraction( bool enable );
 
     using KoShapeContainer::update;
     /// reimplemented

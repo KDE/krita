@@ -104,7 +104,7 @@ bool ChartDocument::loadOdf( KoOdfReadStore &odfStore )
     KoOdfLoadingContext odfLoadingContext( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext context(odfLoadingContext, d->parent->resourceManager());
 
-    return d->parent->loadOdfEmbedded( chartElement, context );
+    return d->parent->loadOdfChartElement( chartElement, context );
 }
 
 bool ChartDocument::loadXML( const KoXmlDocument &doc, KoStore *)

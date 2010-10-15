@@ -25,7 +25,6 @@
 
 #include "documentlistwindow.h"
 
-class GoogleDocumentList;
 class GoogleDocument;
 class GoogleContentHandler;
 class DocumentListWindow;

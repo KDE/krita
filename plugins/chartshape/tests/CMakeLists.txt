@@ -24,3 +24,5 @@ target_link_libraries( TestKDChartModel ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_L
 target_link_libraries( TestTableSource ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} )
 target_link_libraries( TestCellRegion ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTTEST_LIBRARY} )
 
+add_subdirectory( odf )
+

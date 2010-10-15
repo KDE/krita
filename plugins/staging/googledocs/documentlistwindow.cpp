@@ -41,6 +41,11 @@ DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, QList<Goo
     show();
 }
 
+DocumentListWindow::~DocumentListWindow()
+{
+    delete m_docListDialog;
+}
+
 void DocumentListWindow::fetchDocument()
 {
     int index = m_docListDialog->listWidget->currentRow();

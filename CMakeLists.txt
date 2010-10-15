@@ -364,7 +364,7 @@ if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite
     ##
-    set(SQLITE_RECOMMENDED_VERSION "3.6.23")
+    set(SQLITE_RECOMMENDED_VERSION "3.7.3")
     find_package(KofficeSqlite 3.6.16)
     macro_log_feature(SQLITE_FOUND "SQLite" "Embedded SQL database engine" "http://www.sqlite.org"
                       FALSE ${SQLITE_MIN_VERSION} "Required by Kexi (for its default database driver).")

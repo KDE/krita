@@ -2,8 +2,8 @@
  * \mainpage
  * Pigment is a Color Manipulation System with pluggable color spaces. Color spaces
  * can be based on the <a href="http://www.littlecms.com">LCMS library</a>, or using
- * the <a href="http://www.openctl.org">OpenCTL</a> implmenetation of the Color
- * Transformation Language. But that is not a requirement. 
+ * the <a href="http://www.opengtl.org">OpenCTL</a> implmenetation of the Color
+ * Transformation Langboth are optional.
  *
  * Pigment color spaces offers support for many common manipulations and for
  * pixel composition. Pigment works on arrays of bytes: the color spaces interpret

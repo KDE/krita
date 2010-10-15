@@ -20,7 +20,6 @@
 #include "googledocument.h"
 
 #include <stdio.h>
-#include <QtCore>
 
 GoogleDocumentList::GoogleDocumentList()
 {

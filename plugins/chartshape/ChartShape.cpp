@@ -116,6 +116,9 @@
 
 namespace KChart {
 
+/// @see ChartShape::setEnableUserInteraction()
+static bool ENABLE_USER_INTERACTION = true;
+
 const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:bar",
     "chart:line",
@@ -403,15 +406,28 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setChartSubType( NormalChartSubtype );
 
     // Create the Title, which is a standard TextShape.
-    d->title = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value( TextShapeId );
+    if ( textShapeFactory )
+        d->title = textShapeFactory->createDefaultShape( resourceManager );
+    // Potential problem 1) No TextShape installed
     if ( !d->title ) {
         d->title = new TextLabelDummy;
-        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
-    }
+        if ( ENABLE_USER_INTERACTION )
+            KMessageBox::error( 0, i18n( "The plugin needed for displaying text labels in a chart is not available." ),
+                                   i18n( "Plugin Missing" ) );
+    // Potential problem 2) TextShape incompatible
+    } else if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 &&
+                ENABLE_USER_INTERACTION )
+            KMessageBox::error( 0, i18n( "The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape." ),
+                                   i18n( "Plugin Incompatible" ) );
+
+    // In both cases we need a KoTextShapeData instance to function. This is
+    // enough for unit tests, so there has to be no TextShape plugin doing the
+    // actual text rendering, we just need KoTextShapeData which is in the libs.
     if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 ) {
-        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape."),
-                            i18n("Plugin Incompatible") );
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->title->setUserData( dataDummy );
     }
 
@@ -434,12 +450,15 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setInheritsTransform(d->title, true);
 
     // Create the Subtitle and add it to the shape.
-    d->subTitle = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    if ( textShapeFactory)
+        d->subTitle = textShapeFactory->createDefaultShape( resourceManager );
     if ( !d->subTitle ) {
         d->subTitle = new TextLabelDummy;
     }
     if ( dynamic_cast<TextLabelData*>( d->subTitle->userData() ) == 0 ) {
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->subTitle->setUserData( dataDummy );
     }
     addShape(d->subTitle);
@@ -458,12 +477,15 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     setInheritsTransform(d->subTitle, true);
 
     // Create the Footer and add it to the shape.
-    d->footer = KoShapeRegistry::instance()->value(TextShapeId)->createDefaultShape(resourceManager);
+    if ( textShapeFactory )
+        d->footer = textShapeFactory->createDefaultShape( resourceManager );
     if ( !d->footer ) {
         d->footer = new TextLabelDummy;
     }
     if ( dynamic_cast<TextLabelData*>( d->footer->userData() ) == 0 ) {
         TextLabelData *dataDummy = new TextLabelData;
+        KoTextDocumentLayout *documentLayout = new KoTextDocumentLayout( dataDummy->document() );
+        dataDummy->document()->setDocumentLayout( documentLayout );
         d->footer->setUserData( dataDummy );
     }
     addShape(d->footer);
@@ -880,16 +902,10 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
 bool ChartShape::loadOdf( const KoXmlElement &element,
                           KoShapeLoadingContext &context )
 {
-    proxyModel()->beginLoading();
-
     // Load common attributes of (frame) shapes.  If you change here,
     // don't forget to also change in saveOdf().
     loadOdfAttributes( element, context, OdfAllAttributes );
-    bool result = loadOdfFrame( element, context );
-
-    proxyModel()->endLoading();
-
-    return result;
+    return loadOdfFrame( element, context );
 }
 
 // Used to load the actual contents from the ODF frame that surrounds
@@ -906,9 +922,11 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
     return false;
 }
 
-bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
-                                  KoShapeLoadingContext &context )
+bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
+                                      KoShapeLoadingContext &context )
 {
+    proxyModel()->beginLoading();
+
     // The shared data will automatically be deleted in the destructor
     // of KoShapeLoadingContext
     OdfLoadingHelper *helper = new OdfLoadingHelper;
@@ -917,7 +935,8 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
 
     // Get access to sheets in KSpread
     QAbstractItemModel *sheetAccessModel = 0;
-    if ( resourceManager()->hasResource( 75751149 ) ) { // duplicated from kspread
+    if ( resourceManager() &&
+         resourceManager()->hasResource( 75751149 ) ) { // duplicated from kspread
         QVariant var = resourceManager()->resource( 75751149 );
         sheetAccessModel = static_cast<QAbstractItemModel*>( var.value<void*>() );
         if ( sheetAccessModel ) {
@@ -1071,6 +1090,8 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement,
 
     styleStack.restore();
 
+    proxyModel()->endLoading();
+
     return true;
 }
 
@@ -1081,8 +1102,12 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement,
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
 
-    Table *oldInternalTable = d->tableSource.get( d->internalModel );
-    d->tableSource.remove( oldInternalTable->name() );
+    // An internal model might have been set before in ChartShapeFactory.
+    if ( d->internalModel ) {
+        Table *oldInternalTable = d->tableSource.get( d->internalModel );
+        Q_ASSERT( oldInternalTable );
+        d->tableSource.remove( oldInternalTable->name() );
+    }
 
     // FIXME: Make model->loadOdf() return a bool, and use it here.
     // Create a table with data from document, add it as table source
@@ -1290,6 +1315,11 @@ void ChartShape::requestRepaint() const
 KoResourceManager *ChartShape::resourceManager() const
 {
     return d->resourceManager;
+}
+
+void ChartShape::setEnableUserInteraction( bool enable )
+{
+    ENABLE_USER_INTERACTION = enable;
 }
 
 } // Namespace KChart

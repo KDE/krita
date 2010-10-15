@@ -764,24 +764,26 @@ void DataSet::setUpperErrorLimit( qreal limit )
 
 QVariant DataSet::xData( int index ) const
 {
-    const QVariant data = d->data( d->xDataRegion, index );
-    return data.isValid() ? data : index + 1;
+    // No fall-back necessary. x data region (part of 'domain' in ODF terms)
+    // must be specified if needed. See ODF v1.1 §10.9.1
+    return d->data( d->xDataRegion, index );
 }
 
 QVariant DataSet::yData( int index ) const
 {
-    const QVariant data = d->data( d->yDataRegion, index );
-    // FIXME: There should be no fallback here.. If there's no data,
-    // then we should return an invalid value nonetheless.
-    return data.isValid() ? data : index + 1;
-//     return d->data( d->yDataRegion, index );
+    // No fall-back necessary. y data region must be specified if needed.
+    // (may also be part of 'domain' in ODF terms, but only in case of
+    // scatter and bubble charts)
+    return d->data( d->yDataRegion, index );
 }
 
 QVariant DataSet::customData( int index ) const
 {
-    const QVariant data = d->data( d->customDataRegion, index );
-    return data.isValid() ? data : index + 1;
-//     return d->data( d->customDataRegion, index );
+    // No fall-back necessary. ('custom' [1]) data region (part of 'domain' in
+    // ODF terms) must be specified if needed. See ODF v1.1 §10.9.1
+    return d->data( d->customDataRegion, index );
+    // [1] In fact, 'custom' data only refers to the bubble width of bubble
+    // charts at the moment.
 }
 
 QVariant DataSet::categoryData( int index ) const
@@ -1090,16 +1092,26 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack& globalStack = odfLoadingContext.styleStack();
+    globalStack.save();
+    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
     KoStyleStack styleStack;
 
     OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
                                       n, KoXmlNS::chart, "style-name", "chart" );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
-    // If we exclusively use the chart's internal model then all data
-    // is taken from there and each data set is automatically assigned
-    // the rows it belongs to. See ChartProxyModel::loadOdf()
-    const bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+    // OOo assumes that if we use an internal model only, the columns are
+    // interpreted as consecutive data series. Thus we can (and must) ignore
+    // any chart:cell-range-address attribute associated with a series or
+    // data point. Instead the regions are used that are automatically
+    // assigned by SingleModelHelper whenever the structure of the internal
+    // model changes.
+    bool ignoreCellRanges = false;
+#ifndef NWORKAROUND_ODF_BUGS
+    if ( context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice )
+        ignoreCellRanges = helper->chartUsesInternalModelOnly;
+#endif
 
     {
         QBrush brush(Qt::NoBrush);
@@ -1232,6 +1244,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         ++loadedDataPointCount;
     }
+    globalStack.restore();
     return true;
 }
 

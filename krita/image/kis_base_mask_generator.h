@@ -31,6 +31,8 @@ class QDomDocument;
 const KoID DefaultId("default", i18n("Default")); ///< generate Krita default mask generator
 const KoID SoftId("soft", i18n("Soft brush")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
 
+static const int OVERSAMPLING = 4;
+
 /**
  * This is the base class for mask shapes
  * You should subclass it if you want to create a new
@@ -97,6 +99,7 @@ protected:
         qreal softness;
         qreal fh, fv;
         int spikes;
+        qreal cachedSpikesAngle;
         qreal cs, ss;
         bool empty;
         Type type;

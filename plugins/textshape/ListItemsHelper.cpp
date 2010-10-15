@@ -424,6 +424,8 @@ void ListItemsHelper::recalculate()
         default:  // others we ignore.
             calcWidth = false;
         }
+
+        data->setCounterIsImage(listStyle == KoListStyle::ImageItem);
         data->setPartialCounterText(partialCounterText);
         data->setCounterIndex(index);
         item += partialCounterText;

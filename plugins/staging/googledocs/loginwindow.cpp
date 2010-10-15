@@ -20,8 +20,6 @@
 #include "googledocumentservice.h"
 #include "documentlistwindow.h"
 
-#include <QtGui>
-#include <QX11Info>
 
 LoginWindow::LoginWindow(QWidget *parent)
         : QDialog(parent),
@@ -40,6 +38,11 @@ LoginWindow::LoginWindow(QWidget *parent)
 
     m_authDialog->userEdit->setFocus();
     show();
+}
+
+LoginWindow::~LoginWindow()
+{
+    delete m_authDialog;
 }
 
 void LoginWindow::loginService()

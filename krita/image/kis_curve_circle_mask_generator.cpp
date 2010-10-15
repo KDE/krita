@@ -20,18 +20,19 @@
 
 #include <QDomDocument>
 #include <QVector>
+#include <QPointF>
 
 #include <KoColorSpaceConstants.h>
 
 #include "kis_fast_math.h"
 
+#include "kis_base_mask_generator.h"
 #include "kis_curve_circle_mask_generator.h"
 #include "kis_cubic_curve.h"
-#include <QPointF>
 
 struct KisCurveCircleMaskGenerator::Private {
     qreal xcoef, ycoef;
-    qreal cachedSpikesAngle;
+    qreal curveResolution;
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
     QString curve;
@@ -43,8 +44,8 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
 {
     d->xcoef = 2.0 / width();
     d->ycoef = 2.0 / (KisMaskGenerator::d->ratio * width());
-    d->cachedSpikesAngle = M_PI / KisMaskGenerator::d->spikes;
-    d->curveData = curve.floatTransfer( width() + 2);
+    d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
+    d->curveData = curve.floatTransfer( d->curveResolution + 2);
     d->curvePoints = curve.points();
     d->curve = curve.toString();
     d->dirty = false;
@@ -62,19 +63,19 @@ quint8 KisCurveCircleMaskGenerator::valueAt(qreal x, qreal y) const
     if (KisMaskGenerator::d->spikes > 2) {
         double angle = (KisFastMath::atan2(yr, xr));
 
-        while (angle > d->cachedSpikesAngle ){
+        while (angle > KisMaskGenerator::d->cachedSpikesAngle ){
             double sx = xr, sy = yr;
 
             xr = KisMaskGenerator::d->cs * sx - KisMaskGenerator::d->ss * sy;
             yr = KisMaskGenerator::d->ss * sx + KisMaskGenerator::d->cs * sy;
 
-            angle -= 2 * d->cachedSpikesAngle;
+            angle -= 2 * KisMaskGenerator::d->cachedSpikesAngle;
         }
     }
 
     qreal dist = norme(xr * d->xcoef, yr * d->ycoef);
     if (dist <= 1.0){
-        qreal distance = dist * width();
+        qreal distance = dist * d->curveResolution;
     
         quint16 alphaValue = distance;
         qreal alphaValueF = distance - alphaValue;
@@ -101,7 +102,7 @@ void KisCurveCircleMaskGenerator::setSoftness(qreal softness)
     if (!d->dirty && softness == 1.0) return;
     d->dirty = true;
     KisMaskGenerator::setSoftness(softness);
-    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, width() + 2, d->curveData);
+    KisCurveCircleMaskGenerator::transformCurveForSoftness(softness,d->curvePoints, d->curveResolution+2, d->curveData);
 }
 
 void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector< qreal >& result)

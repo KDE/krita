@@ -1206,3 +1206,8 @@ qreal KisBrush::angle() const
 {
   return d->angle;
 }
+
+QPainterPath KisBrush::outline() const
+{
+    return boundary()->path();
+}

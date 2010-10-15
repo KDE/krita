@@ -32,6 +32,7 @@
 #include "kis_paint_device.h"
 
 #include "kis_mask_generator.h"
+#include "kis_boundary.h"
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
@@ -339,4 +340,23 @@ void KisAutoBrush::setImage(const QImage& image)
 {
     m_image = image;
     clearScaledBrushes();
+}
+
+QPainterPath KisAutoBrush::outline() const
+{
+    bool simpleOutline = (d->density < 1.0);
+    if (simpleOutline){
+        QPainterPath path;
+        QRectF brushBoundingbox(0,0,width(), height());
+        if (maskGenerator()->type() == KisMaskGenerator::CIRCLE){
+            path.addEllipse(brushBoundingbox);
+        }else // if (maskGenerator()->type() == KisMaskGenerator::RECTANGLE)
+        {
+            path.addRect(brushBoundingbox);
+        }
+        
+        return path;
+    }
+    
+    return KisBrush::boundary()->path();
 }

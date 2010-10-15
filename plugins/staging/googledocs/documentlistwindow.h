@@ -32,6 +32,7 @@ class DocumentListWindow : public QDialog
 
 public:
     DocumentListWindow(GoogleDocumentService *service, QList<GoogleDocument *> & gList);
+    ~DocumentListWindow();
     QString currentDocument();
 
 private slots:

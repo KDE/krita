@@ -90,6 +90,12 @@ public:
     /// return the partial text for this paragraphs counter
     QString partialCounterText() const;
 
+    /// Set if the counter is a image or not
+    void setCounterIsImage(bool isImage);
+
+    /// return if the counter is a image or not
+    bool counterIsImage() const;
+
     /**
      * The actual position of the counter can be set, in actual (text) document coordinates.
      * @param position the location of the top/left of the counter text line.

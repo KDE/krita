@@ -16,14 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <QtGui>
-#include <QtNetwork>
 #include <QMessageBox>
 
 #include "googledocumentservice.h"
 #include "googledocumentlist.h"
 #include "googledocument.h"
 #include "googlecontenthandler.h"
+
+#include <QDir>
+#include <QDebug>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 const QString GoogleDocumentService::GOOGLE_DOCUMENT_URL = "docs.google.com";
 const QString GoogleDocumentService::GOOGLE_SPREADSHEET_URL = "spreadsheets.google.com";
@@ -126,7 +129,7 @@ void GoogleDocumentService::getDocument()
     if(gList.count() > 0)
         documentList = new DocumentListWindow(this, gList);
     else
-        QMessageBox msgBox(QMessageBox::NoIcon, "Office Viewer", "No Documents Found !!!");
+        QMessageBox msgBox(QMessageBox::NoIcon, i18n("Office Viewer"), i18n("No Documents Found !!!"));
 }
 
 void GoogleDocumentService::downloadDocument(GoogleDocument *doc)

@@ -88,7 +88,7 @@ private:
         MergeList,
         RemoveList
     };
-    void extractTextBlocks(const QTextCursor &cursor, int level);
+    bool extractTextBlocks(const QTextCursor &cursor, int level, KoListStyle::Style newStyle = KoListStyle::None);
     int detectLevel(const QTextBlock &block, int givenLevel);
     void initList(KoListStyle *style);
     bool formatsEqual(const KoListLevelProperties &llp, const QTextListFormat &format);

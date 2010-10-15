@@ -46,8 +46,12 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/FontDia.cpp
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
-    ../dialogs/SimpleStyleWidget.cpp
+    ../dialogs/SimpleParagraphWidget.cpp
+    ../dialogs/ListStyleButton.cpp
+    ../dialogs/SimpleTableWidget.cpp
+    ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
     ../dialogs/FontTab.cpp
     ../dialogs/CharacterHighlighting.cpp
@@ -163,11 +167,15 @@ set(TestTextTool_test_SRCS
     ../dialogs/ParagraphIndentSpacing.cpp
     ../dialogs/ParagraphLayout.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
-    ../dialogs/SimpleStyleWidget.cpp
     ../dialogs/StyleManager.cpp
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/SimpleCharacterWidget.cpp
+    ../dialogs/SimpleParagraphWidget.cpp
+    ../dialogs/ListStyleButton.cpp
+    ../dialogs/SimpleTableWidget.cpp
+    ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
     ../dialogs/TableDialog.cpp
     ../dialogs/TrackedChangeManager.cpp
@@ -206,7 +214,11 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
-    ../dialogs/SimpleStyleWidget.cpp
+    ../dialogs/SimpleCharacterWidget.cpp
+    ../dialogs/SimpleParagraphWidget.cpp
+    ../dialogs/ListStyleButton.cpp
+    ../dialogs/SimpleTableWidget.cpp
+    ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
     ../dialogs/FontTab.cpp
     ../dialogs/CharacterHighlighting.cpp

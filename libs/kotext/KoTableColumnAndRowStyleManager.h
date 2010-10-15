@@ -22,9 +22,13 @@
 
 #include "kotext_export.h"
 
+#include <QMetaType>
+#include <QExplicitlySharedDataPointer>
+
 class KoTableColumnStyle;
 class KoTableRowStyle;
 class KoTableCellStyle;
+class QTextTable;
 
 /**
  * Manages all column and row styles for a single table.
@@ -35,14 +39,25 @@ class KoTableCellStyle;
  * The main purpose of this manager is simply to keep track of which styles are in
  * which column (and in which row).
  *
+ * It's explicitly shared (for the same table)
  * TODO:
  *  - Eliminate duplicates.
  */
 class KOTEXT_EXPORT KoTableColumnAndRowStyleManager
 {
 public:
+    /// constructor @see getManager for how to create a class the correct way
     explicit KoTableColumnAndRowStyleManager();
-    ~KoTableColumnAndRowStyleManager();
+
+    virtual ~KoTableColumnAndRowStyleManager();
+
+    /// Convenience function to get the KoTableColumnAndRowStyleManager for a table (or create one)
+    static KoTableColumnAndRowStyleManager getManager(QTextTable *table);
+
+    /// Constructor
+    KoTableColumnAndRowStyleManager(const KoTableColumnAndRowStyleManager &rhs);
+    /// assign operator
+    KoTableColumnAndRowStyleManager &operator=(const KoTableColumnAndRowStyleManager &rhs);
 
     /**
      * Set the column style for the column \a column to \a columnStyle.
@@ -51,6 +66,25 @@ public:
      * @param columnStyle a column style.
      */
     void setColumnStyle(int column, const KoTableColumnStyle &columnStyle);
+
+    /**
+     * Insert a number of columns before the column \a column to \a columnStyle.
+     *
+     * @param column the columns are inserted before this column.
+     * @param numberColumns how many columns to insert.
+     * @param columnStyle the column style of the new columns.
+     * @see QTextTable::insertColumns for the analog method for the table data.
+     */
+    void insertColumns(int column, int numberColumns, const KoTableColumnStyle &columnStyle);
+
+    /**
+     * Remove a number of columns  \a column to \a columnStyle.
+     *
+     * @param column this and possibly following columns are removed.
+     * @param numberColumns how many columns to remove.
+     * @see QTextTable::removeColumns for the analog method for the table data.
+     */
+    void removeColumns(int column, int numberColumns);
 
     /**
      * Get the column style for the column \a column.
@@ -67,6 +101,25 @@ public:
      * @param rowStyle a row style.
      */
     void setRowStyle(int row, const KoTableRowStyle &rowStyle);
+
+    /**
+     * Insert a number of rows above the row \a row to \a rowStyle.
+     *
+     * @param row the rows are inserted above this row.
+     * @param numberRows how many rows to insert.
+     * @param rowStyle the row style of the new rows.
+     * @see QTextTable::insertRows for the analog method for the table data.
+     */
+    void insertRows(int row, int numberRows, const KoTableRowStyle &rowStyle);
+
+    /**
+     * Remove a number of rows  \a row to \a rowStyle.
+     *
+     * @param row this and possibly following rows are removed.
+     * @param numberRows how many rows to remove.
+     * @see QTextTable::removeRows for the analog method for the table data.
+     */
+    void removeRows(int row, int numberRows);
 
     /**
      * Get the row style for the row \a column.
@@ -99,7 +152,7 @@ public:
      * @return the default cell style for \a column.
      */
     KoTableCellStyle* defaultColumnCellStyle(int column) const;
-    
+
     /**
      * Set the default cell style for the column \a column.
      *
@@ -110,8 +163,10 @@ public:
 
 private:
     class Private;
-    Private* const d;
+    QExplicitlySharedDataPointer<Private> d;
 };
+
+Q_DECLARE_METATYPE(KoTableColumnAndRowStyleManager)
 
 #endif // KOTABLECOLUMNANDROWSTYLEMANAGER_H
 

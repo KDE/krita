@@ -37,6 +37,9 @@
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableColumnStyle.h"
+#include "styles/KoTableRowStyle.h"
+#include "KoTableColumnAndRowStyleManager.h"
 
 #include <KLocale>
 #include <KUndoStack>
@@ -50,6 +53,7 @@
 #include <QTextDocumentFragment>
 #include <QTextFormat>
 #include <QTextTable>
+#include <QTextTableCell>
 #include <QTimer>
 #include <QString>
 #include <QUndoCommand>
@@ -891,6 +895,132 @@ void KoTextEditor::insertTable(int rows, int columns)
             cell.setFormat(format);
         }
     }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::insertTableRowAbove()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Above"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int row = cell.row();
+        table->insertRows(row, 1);
+        carsManager.insertRows(row, 1, carsManager.rowStyle(row));
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::insertTableRowBelow()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Below"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int row = cell.row() +1;
+        if (row == table->rows()) {
+            table->appendRows(1);
+            carsManager.setRowStyle(row, carsManager.rowStyle(row-1));
+
+            // Copy the cells styles.
+            for (int col = 0; col < table->columns(); ++col) {
+                QTextTableCell cell = table->cellAt(row-1, col);
+                QTextCharFormat format = cell.format();
+                cell = table->cellAt(row, col);
+                cell.setFormat(format);
+            }
+        } else {
+            table->insertRows(row, 1);
+            carsManager.insertRows(row, 1, carsManager.rowStyle(row-1));
+        }
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::insertTableColumnLeft()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Left"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int column = cell.column();
+        table->insertColumns(column, 1);
+        carsManager.insertColumns(column, 1, carsManager.columnStyle(column));
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::insertTableColumnRight()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Right"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int column = cell.column()+1;
+        if (column == table->columns()) {
+            table->appendColumns(1);
+            carsManager.setColumnStyle(column, carsManager.columnStyle(column-1));
+            // Copy the cells style. for the bottomright cell which Qt doesn't
+            QTextTableCell cell = table->cellAt(table->rows()-1, column-1);
+            QTextCharFormat format = cell.format();
+            cell = table->cellAt(table->rows()-1, column);
+            cell.setFormat(format);
+        } else {
+            table->insertColumns(column, 1);
+            carsManager.insertColumns(column, 1, carsManager.columnStyle(column-1));
+        }
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::deleteTableColumn()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Column"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int column = cell.column();
+        table->removeColumns(column, 1);
+        carsManager.removeColumns(column, 1);
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::deleteTableRow()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Row"));
+
+    QTextTable *table = d->caret.currentTable();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        int row = cell.row();
+        table->removeRows(row, 1);
+        carsManager.removeRows(row, 1);
+    }
+
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

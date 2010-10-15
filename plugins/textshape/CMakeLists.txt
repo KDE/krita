@@ -33,7 +33,9 @@ SET ( textshape_SRCS
     TableLayoutData.cpp
 
     dialogs/StylesWidget.cpp
-    dialogs/SimpleStyleWidget.cpp
+    dialogs/SimpleCharacterWidget.cpp
+    dialogs/SimpleParagraphWidget.cpp
+    dialogs/SimpleTableWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp
     dialogs/ParagraphDecorations.cpp
@@ -56,6 +58,8 @@ SET ( textshape_SRCS
     dialogs/FormattingPreview.cpp
     dialogs/StyleManagerWelcome.cpp
     dialogs/TableDialog.cpp
+    dialogs/QuickTableButton.cpp
+    dialogs/ListStyleButton.cpp
     dialogs/ChangeConfigureDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
@@ -74,7 +78,9 @@ SET ( textshape_SRCS
 )
 
 kde4_add_ui_files(textshape_SRCS
-    dialogs/SimpleStyleWidget.ui
+    dialogs/SimpleCharacterWidget.ui
+    dialogs/SimpleParagraphWidget.ui
+    dialogs/SimpleTableWidget.ui
     dialogs/StylesWidget.ui
     dialogs/ParagraphLayout.ui
     dialogs/ParagraphIndentSpacing.ui

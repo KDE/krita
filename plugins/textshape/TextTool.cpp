@@ -23,7 +23,9 @@
 
 #include "TextTool.h"
 #include "TextEditingPluginContainer.h"
-#include "dialogs/SimpleStyleWidget.h"
+#include "dialogs/SimpleCharacterWidget.h"
+#include "dialogs/SimpleParagraphWidget.h"
+#include "dialogs/SimpleTableWidget.h"
 #include "dialogs/StylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
@@ -182,6 +184,12 @@ TextTool::TextTool(KoCanvasBase *canvas)
         i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
     connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
+
+    action = new KAction(KIcon("format-list-unordered"),  i18n("Bullet list"), this);
+    addAction("format_bulletlist", action);
+
+    action = new KAction(KIcon("format-list-ordered"),  i18n("Numbered list"), this);
+    addAction("format_numberlist", action);
 
     action = new KAction(i18n("Increase Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Greater);
@@ -358,6 +366,30 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+
+    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Insert Row Above"), this);
+    addAction("insert_tablerow_above", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+
+    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
+    addAction("insert_tablerow_below", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
+    addAction("insert_tablecolumn_left", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Insert Column Right"), this);
+    addAction("insert_tablecolumn_right", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+
+    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Delete Column"), this);
+    addAction("delete_tablecolumn", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+
+    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Delete Row"), this);
+    addAction("delete_tablerow", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
@@ -1497,36 +1529,41 @@ KoToolSelection* TextTool::selection()
     return m_textEditor.data();
 }
 
-QWidget *TextTool::createOptionWidget()
+QMap<QString, QWidget *> TextTool::createOptionWidgets()
 {
-    QTabWidget *widget = new QTabWidget();
-    SimpleStyleWidget *ssw = new SimpleStyleWidget(this, widget);
-    widget->addTab(ssw, i18n("Abc"));
-    StylesWidget *styles = new StylesWidget(widget);
-    widget->addTab(styles, i18n("Styles"));
+    QMap<QString, QWidget *> widgets;
+    SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
+    SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
+    StylesWidget *styw = new StylesWidget(0);
+    SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
-    connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)), ssw, SLOT(setCurrentFormat(const QTextCharFormat &)));
+    // Connect to/with simple character widget (docker)
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    // Connect to/with simple paragraph widget (docker)
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), spw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(this, SIGNAL(blockChanged(const QTextBlock&)), spw, SLOT(setCurrentBlock(const QTextBlock&)));
+    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(spw, SIGNAL(insertTableQuick(int, int)), this, SLOT(insertTableQuick(int, int)));
 
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styles, SLOT(setStyleManager(KoStyleManager *)));
-    connect(this, SIGNAL(charFormatChanged(const QTextCharFormat &)),
-            styles, SLOT(setCurrentFormat(const QTextCharFormat &)));
-    connect(this, SIGNAL(blockFormatChanged(const QTextBlockFormat &)),
-            styles, SLOT(setCurrentFormat(const QTextBlockFormat &)));
 
-    connect(styles, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)),
-            this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(styles, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
-            this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(styles, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    // Connect to/with simple styles widget (docker)
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(styw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(styw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(styw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     updateStyleManager();
     if (m_textShape)
         updateActions();
-    return widget;
+    widgets.insert(i18n("Character"), scw);
+    widgets.insert(i18n("Paragraph"), spw);
+    widgets.insert(i18n("Styles"), styw);
+    widgets.insert(i18n("Table"), stw);
+    return widgets;
 }
 
 void TextTool::returnFocusToCanvas()
@@ -1776,6 +1813,40 @@ void TextTool::insertTable()
     delete dia;
 }
 
+void TextTool::insertTableQuick(int rows, int columns)
+{
+    m_textEditor.data()->insertTable(rows, columns);
+}
+
+void TextTool::insertTableRowAbove()
+{
+    m_textEditor.data()->insertTableRowAbove();
+}
+
+void TextTool::insertTableRowBelow()
+{
+    m_textEditor.data()->insertTableRowBelow();
+}
+
+void TextTool::insertTableColumnLeft()
+{
+    m_textEditor.data()->insertTableColumnLeft();
+}
+
+void TextTool::insertTableColumnRight()
+{
+    m_textEditor.data()->insertTableColumnRight();
+}
+
+void TextTool::deleteTableColumn()
+{
+    m_textEditor.data()->deleteTableColumn();
+}
+
+void TextTool::deleteTableRow()
+{
+    m_textEditor.data()->deleteTableRow();
+}
 
 void TextTool::formatParagraph()
 {

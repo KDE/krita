@@ -55,22 +55,22 @@ void TableLayout::setTable(QTextTable *table)
 {
     Q_ASSERT(table);
 
-    if (table == m_table)
-        return; // we are already set
+    if (table != m_table) {
+        // We are not already set
+        TableLayoutData *tableLayoutData;
+        if (!m_tableLayoutDataMap.contains(table)) {
+            // Set up new table layout data.
+            tableLayoutData = new TableLayoutData();
+            m_tableLayoutDataMap.insert(table, tableLayoutData);
+            connect(table, SIGNAL(destroyed(QObject *)), this, SLOT(tableDestroyed(QObject *)));
+        } else {
+            // Table layout data already in map.
+            tableLayoutData = m_tableLayoutDataMap.value(table);
+        }
 
-    TableLayoutData *tableLayoutData;
-    if (!m_tableLayoutDataMap.contains(table)) {
-        // Set up new table layout data.
-        tableLayoutData = new TableLayoutData();
-        m_tableLayoutDataMap.insert(table, tableLayoutData);
-        connect(table, SIGNAL(destroyed(QObject *)), this, SLOT(tableDestroyed(QObject *)));
-    } else {
-        // Table layout data already in map.
-        tableLayoutData = m_tableLayoutDataMap.value(table);
+        m_table = table;
+        m_tableLayoutData = tableLayoutData;
     }
-
-    m_table = table;
-    m_tableLayoutData = tableLayoutData;
 
     // Resize geometry vectors for the table.
     m_tableLayoutData->m_rowPositions.resize(m_table->rows());
@@ -138,11 +138,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     tableRect.columnWidths.resize(m_table->columns());
 
     // Get the column and row style manager.
-    KoTableColumnAndRowStyleManager *carsManager =
-    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
-            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-    if (!carsManager)
-        carsManager = new KoTableColumnAndRowStyleManager();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     // Column widths.
     qreal availableWidth = tableWidth; // Width available for columns.
@@ -150,7 +146,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
     for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
-        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle columnStyle = carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
             relativeWidthColumns.append(col);
@@ -161,7 +157,6 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
             availableWidth -= columnStyle.columnWidth();
         } else {
             // Neither width nor relative width specified.
-            kWarning(32600) << "Neither column-width nor rel-column-width specified";
             tableRect.columnWidths[col] = 0.0;
             relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
             ++numNonStyleColumns;
@@ -176,7 +171,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
-        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle columnStyle = carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             tableRect.columnWidths[col] =
                 qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
@@ -217,7 +212,6 @@ void TableLayout::layoutRow(int row)
     if (!isValid()) {
         return;
     }
-
     if (row < 0 || row >= m_table->rows()) {
         return;
     }
@@ -231,12 +225,7 @@ void TableLayout::layoutRow(int row)
     QTextTableFormat tableFormat = m_table->format();
 
     // Get the column and row style manager.
-    KoTableColumnAndRowStyleManager *carsManager =
-    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
-            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-
-    if (!carsManager)
-        carsManager = new KoTableColumnAndRowStyleManager();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     /*
      * Implementation Note:
@@ -260,7 +249,7 @@ void TableLayout::layoutRow(int row)
      * cells that should contribute to the row height.
      */
 
-    KoTableRowStyle rowStyle = carsManager->rowStyle(row);
+    KoTableRowStyle rowStyle = carsManager.rowStyle(row);
 
     // Adjust row height.
     qreal minimumRowHeight = rowStyle.minimumRowHeight();

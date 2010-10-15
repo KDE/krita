@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,10 +17,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLESTYLEWIDGET_H
-#define SIMPLESTYLEWIDGET_H
+#ifndef SIMPLECHARACTERWIDGET_H
+#define SIMPLECHARACTERWIDGET_H
 
-#include <ui_SimpleStyleWidget.h>
+#include <ui_SimpleCharacterWidget.h>
 #include <KoListStyle.h>
 
 #include <QWidget>
@@ -28,43 +29,26 @@
 class TextTool;
 class KoStyleManager;
 
-class SimpleStyleWidget : public QWidget
+class SimpleCharacterWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SimpleStyleWidget(TextTool *tool, QWidget *parent = 0);
+    explicit SimpleCharacterWidget(TextTool *tool, QWidget *parent = 0);
 
 public slots:
-    void setCurrentBlock(const QTextBlock &block);
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format);
 
 signals:
     void doneWithFocus();
 
-private slots:
-    void listStyleChanged(int row);
-    void directionChangeRequested();
-    void applyAgainPressed();
-
 private:
-    enum DirectionButtonState {
-        LTR,
-        RTL,
-        Auto
-    };
-
-    void updateDirection(DirectionButtonState state);
-    void fillListsCombobox();
-
-    Ui::SimpleStyleWidget widget;
+    Ui::SimpleCharacterWidget widget;
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     bool m_comboboxHasBidiItems;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
-    DirectionButtonState m_directionButtonState;
-    KoListStyle::Style m_quickApplyListStyle;
 };
 
 #endif

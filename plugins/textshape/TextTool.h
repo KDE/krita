@@ -102,7 +102,9 @@ public:
     /// reimplemented from superclass
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
-    virtual QWidget *createOptionWidget();
+    virtual QMap<QString, QWidget *> createOptionWidgets();
+//    virtual QWidget * createOptionWidget();
+
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
     /// reimplemented from superclass
@@ -195,6 +197,20 @@ private slots:
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
+    /// insert a table of given dimensions
+    void insertTableQuick(int rows, int columns);
+    /// insert a row above
+    void insertTableRowAbove();
+    /// insert a row below
+    void insertTableRowBelow();
+    /// insert a column left
+    void insertTableColumnLeft();
+    /// insert a column right
+    void insertTableColumnRight();
+    /// delete a column
+    void deleteTableColumn();
+    /// delete a row
+    void deleteTableRow();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     //When enabled, display changes

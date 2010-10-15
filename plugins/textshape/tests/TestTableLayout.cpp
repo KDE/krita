@@ -24,7 +24,6 @@ void TestTableLayout::init()
     m_table = 0;
     m_layout = 0;
     m_styleManager = 0;
-    m_tableColumnAndRowStyleManager = 0;
     m_textLayout = 0;
     m_shape = 0;
     m_defaultTableStyle = 0;
@@ -74,32 +73,30 @@ void TestTableLayout::initTest(int rows, int columns,
         m_defaultTableStyle->applyStyle(tableFormat);
     }
 
-    // Column and row style manager.
-    m_tableColumnAndRowStyleManager = new KoTableColumnAndRowStyleManager();
-    Q_ASSERT(m_tableColumnAndRowStyleManager);
-    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(m_tableColumnAndRowStyleManager)));
-
     // Table.
     QTextCursor cursor(m_doc);
     m_table = cursor.insertTable(rows, columns, tableFormat);
     Q_ASSERT(m_table);
 
+    // Column and row style manager.
+    m_tableColumnAndRowStyleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+
     // Column styles.
     m_defaultColumnStyle.setRelativeColumnWidth(50.0);
     for (int col = 0; col < columns; ++col) {
         if (columnStyles.value(col)) {
-            m_tableColumnAndRowStyleManager->setColumnStyle(col, *(columnStyles.at(col)));
+            m_tableColumnAndRowStyleManager.setColumnStyle(col, *(columnStyles.at(col)));
         } else {
-            m_tableColumnAndRowStyleManager->setColumnStyle(col, m_defaultColumnStyle);
+            m_tableColumnAndRowStyleManager.setColumnStyle(col, m_defaultColumnStyle);
         }
     }
 
     // Row styles.
     for (int row = 0; row < rows; ++row) {
         if (rowStyles.value(row)) {
-            m_tableColumnAndRowStyleManager->setRowStyle(row, *(rowStyles.at(row)));
+            m_tableColumnAndRowStyleManager.setRowStyle(row, *(rowStyles.at(row)));
         } else {
-            m_tableColumnAndRowStyleManager->setRowStyle(row, m_defaultRowStyle);
+            m_tableColumnAndRowStyleManager.setRowStyle(row, m_defaultRowStyle);
         }
     }
 
@@ -149,7 +146,6 @@ void TestTableLayout::cleanupTest()
 {
     delete m_table;
     delete m_styleManager;
-    delete m_tableColumnAndRowStyleManager;
     delete m_defaultTableStyle;
     delete m_defaultCellStyle;
 }

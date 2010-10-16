@@ -276,7 +276,9 @@ void PlotArea::proxyModelStructureChanged()
     // there should be exactly one x axis and one region for categories.
     // See note in Axis::setCategoryDataRegion()
     // Categories might have been inserted or removed from the proxy model.
-//     xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
+    // FIXME: Bjoern, you uncommented this. What's the reason for that?
+    // This needs to be here for categories to correctly appear on the x axis.
+    xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
 
     // Now add the new list of data sets to the axis they belong to
     foreach( DataSet *dataSet, dataSets ) {

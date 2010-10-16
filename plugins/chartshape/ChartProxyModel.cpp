@@ -287,10 +287,18 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     int rowOffset = firstRowIsLabel ? 1 : 0;
     int colOffset = firstColumnIsLabel ? 1 : 0;
 
+    bool extractXData = dataDimensions > 1 &&
+                        // Checks if the remaining data regions would fit exactly to the
+                        // remaining data sets. If not, skip x data. This is only the case
+                        // for bubble charts, (the only case of regionsPerDataSet == 2), so
+                        // skipping x data will allow the last data set to also be assigned
+                        // a bubble width region. This is exactly what OOo does.
+                        (dataRegions.size() - 1) % regionsPerDataSet == 0;
+
     // When x data is present, it occupies the first non-header row/column
-    if ( dataDimensions > 1 && dataDirection == Qt::Horizontal )
+    if ( extractXData && dataDirection == Qt::Horizontal )
         rowOffset++;
-    if ( dataDimensions > 1 && dataDirection == Qt::Vertical )
+    if ( extractXData && dataDirection == Qt::Vertical )
         colOffset++;
 
     // This is the logic that extracts all the subregions from selection
@@ -316,7 +324,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     CellRegion xData;
     if ( !dataRegions.isEmpty() && useCategories )
         categoryDataRegion = dataRegions.takeFirst();
-    if ( !dataRegions.isEmpty() && dataDimensions > 1 )
+    if ( !dataRegions.isEmpty() && extractXData )
         xData = dataRegions.takeFirst();
 
     int dataSetNumber = 0;

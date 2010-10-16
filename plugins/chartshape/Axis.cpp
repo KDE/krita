@@ -761,20 +761,6 @@ void Axis::Private::createBubbleDiagram()
     //kdBubbleDiagram->setPen( QPen( Qt::black, 0.0 ) );
     kdBubbleDiagram->setPen( Qt::NoPen );
 
-    KDChart::DataValueAttributes dva( kdBubbleDiagram->dataValueAttributes() );
-    dva.setVisible( true );
-    
-    KDChart::TextAttributes ta( dva.textAttributes() );
-    ta.setVisible( false );
-    dva.setTextAttributes( ta );
-
-    KDChart::MarkerAttributes ma( dva.markerAttributes() );
-    ma.setVisible( true );
-    ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-    dva.setMarkerAttributes( ma );
-
-    kdBubbleDiagram->setDataValueAttributes( dva );
-
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBubbleDiagram );
 }
 

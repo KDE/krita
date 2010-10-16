@@ -382,10 +382,15 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     Q_ASSERT( d->isLoading );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    bool ignoreCellRanges = false;
+// Some OOo documents save incorrect cell ranges. For those this fix was intended.
+// Find out which documents exactly and only use fix for as few cases as possible.
+#if 0
     // If we exclusively use the chart's internal model then all data
     // is taken from there and each data set is automatically assigned
     // the rows it belongs to.
     bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
+#endif
 
     beginResetModel();
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();

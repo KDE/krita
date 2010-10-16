@@ -1150,9 +1150,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     // assigned by SingleModelHelper whenever the structure of the internal
     // model changes.
     bool ignoreCellRanges = false;
+// Some OOo documents save incorrect cell ranges. For those this fix was intended.
+// Find out which documents exactly and only use fix for as few cases as possible.
+#if 0
 #ifndef NWORKAROUND_ODF_BUGS
     if ( context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice )
         ignoreCellRanges = helper->chartUsesInternalModelOnly;
+#endif
 #endif
 
     {

@@ -558,9 +558,32 @@ void AbstractDiagram::paintMarker( QPainter* painter,
     if ( !ma.isVisible() ) return;
 
     const PainterSaver painterSaver( painter );
-    // the size of the marker - unscaled
-    const QSizeF maSize( ma.markerSize().width() / painter->matrix().m11(), 
-                         ma.markerSize().height() / painter->matrix().m22() );
+
+    QSizeF maSize = ma.markerSize();
+    const qreal diagramWidth = d->diagramSize.width();
+    const qreal diagramHeight = d->diagramSize.height();
+
+    switch( ma.markerSizeMode() ) {
+    case MarkerAttributes::AbsoluteSize:
+        // Unscaled, i.e. without the painter's "zoom"
+        maSize.rwidth()  /= painter->matrix().m11();
+        maSize.rheight() /= painter->matrix().m22();
+        break;
+    case MarkerAttributes::AbsoluteSizeScaled:
+        // Keep maSize as is. It is specified directly in pixels and desired
+        // to be effected by the painter's "zoom".
+        break;
+    case MarkerAttributes::RelativeToDiagramWidth:
+        maSize *= diagramWidth;
+        break;
+    case MarkerAttributes::RelativeToDiagramHeight:
+        maSize *= diagramHeight;
+        break;
+    case MarkerAttributes::RelativeToDiagramWidthHeightMin:
+        maSize *= qMin( diagramWidth, diagramHeight );
+        break;
+    }
+
     QBrush indexBrush( brush( index ) );
     QPen indexPen( ma.pen() );
     if ( ma.markerColor().isValid() )

@@ -116,9 +116,6 @@ public:
     // ----------------------------------------------------------------
     // Data specific to each chart type
 
-    // table:cell-range-address, ODF v1.2, $18.595
-    CellRegion cellRangeAddress;
-
     // 1. Bar charts
     // FIXME: OpenOffice stores these attributes in the axes' elements.
     // The specs don't say anything at all about what elements can have
@@ -375,11 +372,6 @@ bool PlotArea::isThreeD() const
     return d->threeD;
 }
 
-CellRegion PlotArea::cellRangeAddress() const
-{
-    return d->cellRangeAddress;
-}
-
 bool PlotArea::isVertical() const
 {
     return d->vertical;
@@ -556,11 +548,6 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
-void PlotArea::setCellRangeAddress( const CellRegion &region )
-{
-    d->cellRangeAddress = region;
-}
-
 void PlotArea::setVertical( bool vertical )
 {
     d->vertical = vertical;
@@ -618,12 +605,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         yAxis->setPosition( LeftAxisPosition );
         yAxis->setVisible( false );
         addAxis( yAxis );
-    }
-
-    CellRegion cellRangeAddress;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
-        cellRangeAddress = CellRegion( helper->tableSource, plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
-//         setCellRangeAddress( cellRangeAddress );
     }
 
     // Find out about things that are in the plotarea style.
@@ -736,8 +717,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
     }
-
-    setCellRangeAddress( cellRangeAddress );
     
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the
@@ -824,7 +803,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     bodyWriter.addAttributePt( "svg:x", p.x() );
     bodyWriter.addAttributePt( "svg:y", p.y() );
 
-    bodyWriter.addAttribute( "table:cell-range-address", d->cellRangeAddress.toString() );
+    CellRegion cellRangeAddress = d->shape->proxyModel()->cellRangeAddress();
+    bodyWriter.addAttribute( "table:cell-range-address", cellRangeAddress.toString() );
 
     // About the data:
     //   Save if the first row / column contain headers.

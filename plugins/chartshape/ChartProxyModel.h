@@ -77,6 +77,16 @@ public:
     void reset( const CellRegion &region );
 
     /**
+     * The CellRegion that data in this proxy model is taken from.
+     *
+     * In ODF, this is an attribute of the PlotArea, but here the proxy model
+     * manages all data sets, thus it's also responsible for this attribute.
+     *
+     * See table:cell-range-address, ODF v1.2, §19.595
+     */
+    CellRegion cellRangeAddress() const;
+
+    /**
     * Load series from ODF
     */
     bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );

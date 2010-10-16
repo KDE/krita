@@ -39,6 +39,7 @@ namespace KChart {
 
 class ChartShape;
 class Table;
+class Axis;
 
 /**
  * Base class for every ODF-loading related unit test.
@@ -87,6 +88,9 @@ protected:
     void testTitleText( const QString &text );
     void testSubTitleText( const QString &text );
     void testFooterText( const QString &text );
+
+    // 5) Axes
+    void testAxisTitle( Axis *axis, const QString &text );
 
     Table* internalTable();
 

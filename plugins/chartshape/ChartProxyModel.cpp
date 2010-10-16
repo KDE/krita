@@ -148,6 +148,11 @@ void ChartProxyModel::reset( const CellRegion& region )
     d->rebuildDataMap();
 }
 
+CellRegion ChartProxyModel::cellRangeAddress() const
+{
+    return d->selection;
+}
+
 void ChartProxyModel::Private::rebuildDataMap()
 {
     // This was intended to speed up the loading process, by executing this

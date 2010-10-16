@@ -801,9 +801,15 @@ void DataSet::setUpperErrorLimit( qreal limit )
 
 QVariant DataSet::xData( int index ) const
 {
-    // No fall-back necessary. x data region (part of 'domain' in ODF terms)
-    // must be specified if needed. See ODF v1.1 §10.9.1
-    return d->data( d->xDataRegion, index );
+    // Sometimes a bubble chart is created with a table with 4 columns.
+    // What we do here is assign the 2 columns per data set, so we have
+    // 2 data sets in total afterwards. The first column is y data, the second
+    // bubble width. Same for the second data set. So there is nothing left
+    // for x data. Instead use a fall-back to the data points index.
+    QVariant data = d->data( d->xDataRegion, index );
+    if ( data.isValid() )
+        return data;
+    return QVariant( index + 1 );
 }
 
 QVariant DataSet::yData( int index ) const
@@ -1168,7 +1174,10 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
     }
     
+    // FIXME: Maybe it's easier to understand this if we simply have a counter
+    // 'loadedDomainElements' that is either 0, 1 or 2.
     bool maybeCompleteDataDefinition = false;
+    // FIXME: This variable is unused.
     bool fullDataDefinition = false;
     
     if ( n.hasChildNodes() ){
@@ -1179,13 +1188,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
                     fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
-                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
                     maybeCompleteDataDefinition = true;
                 }
                 

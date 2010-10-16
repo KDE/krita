@@ -1193,22 +1193,75 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     bodyWriter.endElement(); // chart:chart
 }
 
+static void saveOdfDataRow( KoXmlWriter &bodyWriter, QAbstractItemModel *table, int row )
+{
+    bodyWriter.startElement( "table:table-row" );
+    const int cols = table->columnCount();
+    for ( int col = 0; col < cols; ++col ) {
+        //QVariant value( internalModel.cellVal( row, col ) );
+        QModelIndex  index = table->index( row, col );
+        QVariant     value = table->data( index );
+
+        QString  valType;
+        QString  valStr;
+
+        switch ( value.type() ) {
+        case QVariant::Invalid:
+            break;
+        case QVariant::String:
+            valType = "string";
+            valStr  = value.toString();
+            break;
+        case QVariant::Double:
+            valType = "float";
+            valStr  = QString::number( value.toDouble(), 'g', DBL_DIG );
+            break;
+        case QVariant::DateTime:
+
+            valType = "date";
+            valStr  = ""; /* like in saveXML, but why? */
+            break;
+        default:
+            kDebug(35001) <<"ERROR: cell" << row <<"," << col
+                          << " has unknown type." << endl;
+        }
+
+        // Add the value type and the string to the XML tree.
+        bodyWriter.startElement( "table:table-cell" );
+        if ( !valType.isEmpty() ) {
+            bodyWriter.addAttribute( "office:value-type", valType );
+            if ( value.type() == QVariant::Double )
+                bodyWriter.addAttribute( "office:value", valStr );
+
+            bodyWriter.startElement( "text:p" );
+            bodyWriter.addTextNode( valStr );
+            bodyWriter.endElement(); // text:p
+        }
+
+        bodyWriter.endElement(); // table:table-cell
+    }
+
+    bodyWriter.endElement(); // table:table-row
+}
+
 void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 {
     Q_UNUSED( mainStyles );
 
     // FIXME: Move this method to a sane place
     QAbstractItemModel *internalModel = d->internalModel;
+    Table *internalTable = d->tableSource.get( internalModel );
+    Q_ASSERT( internalTable );
 
     // Only save the data if we actually have some.
     if ( !internalModel )
         return;
 
-    const int cols = internalModel->columnCount();
     const int rows = internalModel->rowCount();
+    const int cols = internalModel->columnCount();
 
     bodyWriter.startElement( "table:table" );
-    bodyWriter.addAttribute( "table:name", "local-table" );
+    bodyWriter.addAttribute( "table:name", internalTable->name() );
 
     // Exactly one header column, always.
     bodyWriter.startElement( "table:table-header-columns" );
@@ -1223,72 +1276,18 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.endElement(); // table:table-column
     bodyWriter.endElement(); // table:table-columns
 
-    // Exactly one header row, always.
+    int row = 0;
+
     bodyWriter.startElement( "table:table-header-rows" );
-    bodyWriter.startElement( "table:table-row" );
-
-    // The first column in header row is just the header column - no title needed
-    bodyWriter.startElement( "table:table-cell" );
-    bodyWriter.addAttribute( "office:value-type", "string" );
-    bodyWriter.startElement( "text:p" );
-    // FIXME: Shouldn't we actually save the headers here?
-    bodyWriter.endElement(); // text:p
-    bodyWriter.endElement(); // table:table-cell
-
-    bodyWriter.endElement(); // table:table-row
+    if ( rows > 0 )
+        saveOdfDataRow( bodyWriter, internalModel, row++ );
     bodyWriter.endElement(); // table:table-header-rows
 
     // Here start the actual data rows.
     bodyWriter.startElement( "table:table-rows" );
     //QStringList::const_iterator rowLabelIt = m_rowLabels.begin();
-    for ( int row = 0; row < rows ; ++row ) {
-        bodyWriter.startElement( "table:table-row" );
-        for ( int col = 0; col < cols; ++col ) {
-            //QVariant value( internalModel.cellVal( row, col ) );
-            QModelIndex  index = internalModel->index( row, col );
-            QVariant     value = internalModel->data( index );
-
-            QString  valType;
-            QString  valStr;
-
-            switch ( value.type() ) {
-            case QVariant::Invalid:
-                break;
-            case QVariant::String:
-                valType = "string";
-                valStr  = value.toString();
-                break;
-            case QVariant::Double:
-                valType = "float";
-                valStr  = QString::number( value.toDouble(), 'g', DBL_DIG );
-                break;
-            case QVariant::DateTime:
-
-                valType = "date";
-                valStr  = ""; /* like in saveXML, but why? */
-                break;
-            default:
-                kDebug(35001) <<"ERROR: cell" << row <<"," << col
-                              << " has unknown type." << endl;
-            }
-
-            // Add the value type and the string to the XML tree.
-            bodyWriter.startElement( "table:table-cell" );
-            if ( !valType.isEmpty() ) {
-                bodyWriter.addAttribute( "office:value-type", valType );
-                if ( value.type() == QVariant::Double )
-                    bodyWriter.addAttribute( "office:value", valStr );
-
-                bodyWriter.startElement( "text:p" );
-                bodyWriter.addTextNode( valStr );
-                bodyWriter.endElement(); // text:p
-            }
-
-            bodyWriter.endElement(); // table:table-cell
-        }
-
-        bodyWriter.endElement(); // table:table-row
-    }
+    for ( ; row < rows ; ++row )
+        saveOdfDataRow( bodyWriter, internalModel, row );
 
     bodyWriter.endElement(); // table:table-rows
     bodyWriter.endElement(); // table:table

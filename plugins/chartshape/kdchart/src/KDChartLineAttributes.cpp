@@ -41,6 +41,7 @@ private:
     bool displayArea;
     uint transparency;
     int areaBoundingDataset;
+    bool visible;
 };
 
 
@@ -49,6 +50,7 @@ LineAttributes::Private::Private()
     , displayArea( false )
     , transparency( 255 )
     , areaBoundingDataset( -1 )
+    , visible( true )
 {
 }
 
@@ -127,6 +129,16 @@ void LineAttributes::setAreaBoundingDataset( int dataset )
 int LineAttributes::areaBoundingDataset() const
 {
     return d->areaBoundingDataset;
+}
+
+void LineAttributes::setVisible( bool visible )
+{
+    d->visible = visible;
+}
+
+bool LineAttributes::isVisible() const
+{
+    return d->visible;
 }
 
 #if !defined(QT_NO_DEBUG_STREAM)

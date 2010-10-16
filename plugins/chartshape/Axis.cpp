@@ -756,10 +756,11 @@ void Axis::Private::createBubbleDiagram()
             if ( axis->isVisible() )
                 kdBubbleDiagram->addAxis( axis->kdAxis() );
     }
-    
+
      // disable the connecting line
-    //kdBubbleDiagram->setPen( QPen( Qt::black, 0.0 ) );
-    kdBubbleDiagram->setPen( Qt::NoPen );
+    KDChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
+    la.setVisible( false );
+    kdBubbleDiagram->setLineAttributes( la );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBubbleDiagram );
 }

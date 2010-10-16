@@ -68,8 +68,6 @@ private slots:
     void setChartSubType( ChartSubtype subtype );
     void setThreeDMode( bool threeD );
     void setDataDirection( Qt::Orientation );
-    void setFirstRowIsLabel( bool b );
-    void setFirstColumnIsLabel( bool b );
     void setShowTitle( bool show );
     void setShowSubTitle( bool show );
     void setShowFooter( bool show );

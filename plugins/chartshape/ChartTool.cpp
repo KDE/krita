@@ -522,23 +522,6 @@ void ChartTool::setDataDirection( Qt::Orientation direction )
     d->shape->relayout();
 }
 
-void ChartTool::setFirstRowIsLabel( bool b )
-{
-    Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->proxyModel()->setFirstRowIsLabel( b );
-    d->shape->relayout();
-}
-
-void ChartTool::setFirstColumnIsLabel( bool b )
-{
-    Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->proxyModel()->setFirstColumnIsLabel( b );
-
-    d->shape->relayout();
-}
-
 
 void ChartTool::setLegendTitle( const QString &title )
 {

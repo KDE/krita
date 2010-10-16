@@ -120,14 +120,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
         return;
 
     // Disconnect the old proxy model.
-    if ( m_proxyModel ) {
-        disconnect( m_proxyModel,    SIGNAL( modelReset() ),
-                    this,            SLOT( updateDialog() ) );
-        disconnect( firstRowIsLabel, SIGNAL( clicked( bool ) ),
-                    m_proxyModel,    SLOT( setFirstRowIsLabel( bool ) ) );
-        disconnect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                    m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
-    }
+    m_proxyModel->disconnect( this );
 
     m_proxyModel = proxyModel;
 
@@ -135,10 +128,6 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
     if ( m_proxyModel ) {
         connect( m_proxyModel,       SIGNAL( modelReset() ),
                  this,               SLOT( updateDialog() ) );
-        connect( firstRowIsLabel,    SIGNAL( clicked( bool ) ),
-                 m_proxyModel,       SLOT( setFirstRowIsLabel( bool ) ) );
-        connect( firstColumnIsLabel, SIGNAL( clicked( bool ) ),
-                 m_proxyModel,       SLOT( setFirstColumnIsLabel( bool ) ) );
     }
 
     updateDialog();
@@ -153,9 +142,6 @@ void TableEditorDialog::updateDialog()
 {
     if ( !m_proxyModel )
         return;
-
-    firstRowIsLabel->setChecked( m_proxyModel->firstRowIsLabel() );
-    firstColumnIsLabel->setChecked( m_proxyModel->firstColumnIsLabel() );
 
     switch ( m_proxyModel->dataDirection() ) {
     case Qt::Horizontal:

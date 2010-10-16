@@ -588,16 +588,15 @@ void TestProxyModel::testThreeDimensions()
     QCOMPARE( dataSets[0]->size(), 5 );
     QCOMPARE( dataSets[1]->size(), 5 );
 
-    QCOMPARE( dataSets[0]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
-    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( m_table, QRect( 1, 2, 5, 1 ) ) );
-    QCOMPARE( dataSets[0]->customDataRegion(), CellRegion( m_table, QRect( 1, 3, 5, 1 ) ) );
+    QCOMPARE( dataSets[0]->xDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[0]->yDataRegion(), CellRegion( &m_source, "Table1.$A$1:$E$1" ) );
+    QCOMPARE( dataSets[0]->customDataRegion(), CellRegion( &m_source, "Table1.$A$2:$E$2" ) );
     QCOMPARE( dataSets[0]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[0]->categoryDataRegion(), CellRegion() );
 
-    QCOMPARE( dataSets[1]->xDataRegion(), CellRegion( m_table, QRect( 1, 1, 5, 1 ) ) );
-    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( m_table, QRect( 1, 4, 5, 1 ) ) );
-    // Since there's only four rows, not the necessary five, this region must be empty
-    QCOMPARE( dataSets[1]->customDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->xDataRegion(), CellRegion() );
+    QCOMPARE( dataSets[1]->yDataRegion(), CellRegion( &m_source, "Table1.$A$3:$E$3" ) );
+    QCOMPARE( dataSets[1]->customDataRegion(), CellRegion( &m_source, "Table1.$A$4:$E$4" ) );
     QCOMPARE( dataSets[1]->labelDataRegion(), CellRegion() );
     QCOMPARE( dataSets[1]->categoryDataRegion(), CellRegion() );
 }

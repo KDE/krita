@@ -111,7 +111,7 @@ void TableEditorDialog::init()
     m_tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
 
     // Initialize the contents of the controls
-    updateDialog();
+    slotUpdateDialog();
 }
 
 void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
@@ -127,10 +127,10 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
     // Connect the new proxy model.
     if ( m_proxyModel ) {
         connect( m_proxyModel,       SIGNAL( modelReset() ),
-                 this,               SLOT( updateDialog() ) );
+                 this,               SLOT( slotUpdateDialog() ) );
     }
 
-    updateDialog();
+    slotUpdateDialog();
 }
 
 void TableEditorDialog::setModel( QAbstractItemModel *model )
@@ -138,7 +138,7 @@ void TableEditorDialog::setModel( QAbstractItemModel *model )
     m_tableView->setModel( model );
 }
 
-void TableEditorDialog::updateDialog()
+void TableEditorDialog::slotUpdateDialog()
 {
     if ( !m_proxyModel )
         return;

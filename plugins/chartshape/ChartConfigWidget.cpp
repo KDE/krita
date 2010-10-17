@@ -1099,26 +1099,6 @@ void ChartConfigWidget::createActions()
 {
 }
 
-void ChartConfigWidget::selectDataset( int dataset )
-{
-    if ( dataset >= 0 ) {
-        d->ui.datasetColorLabel->setEnabled( true );
-        d->ui.datasetColor->setEnabled( true );
-
-        d->ui.datasetColor->blockSignals( true );
-        //d->ui.datasetColor->setColor( d->shape->plotArea()->kdDiagram()->brush( dataset ).color() );
-        d->ui.datasetColor->blockSignals( false );
-
-        d->ui.datasetShowValues->blockSignals( true );
-        //d->ui.datasetShowValues->setChecked( d->shape->plotArea()->kdDiagram()->dataValueAttributes( dataset ).isVisible() );
-        d->ui.datasetShowValues->blockSignals( false );
-    } else {
-        d->ui.datasetColorLabel->setEnabled( false );
-        d->ui.datasetColor->setEnabled( false );
-    }
-    d->selectedDataSet = dataset;
-}
-
 void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
 {
     if ( b )

@@ -96,7 +96,6 @@ public slots:
     void setLegendFixedPosition( int buttonGroupIndex );
     //void setLegendShowTitle( bool toggled );
     void updateFixedPosition( Position position );
-    void selectDataset( int dataset );
     
     void ui_axisSelectionChanged( int index );
     void ui_axisTitleChanged( const QString& title );

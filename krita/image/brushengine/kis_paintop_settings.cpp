@@ -59,10 +59,10 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
     d->settingsWidget = widget;
 }
 
-void KisPaintOpSettings::mousePressEvent(KoPointerEvent *e)
-{
-    e->ignore();
+bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers){
+    return true; // ignore the event by default
 }
+
 
 KisPaintOpSettingsSP KisPaintOpSettings::clone() const
 {

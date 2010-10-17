@@ -59,21 +59,24 @@ QPointF KisDuplicateOpSettings::offset() const
     return m_offset;
 }
 
-void KisDuplicateOpSettings::mousePressEvent(KoPointerEvent *e)
+bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers)
 {
-    if (e->modifiers() == Qt::ControlModifier) {
-        m_position = m_image->documentToPixel(e->point);
+    bool ignoreEvent = true;
+    if (modifiers == Qt::ControlModifier) {
+        m_position = info.pos();
         m_isOffsetNotUptodate = true;
-        e->accept();
+        ignoreEvent = false;
     } else {
         if (m_isOffsetNotUptodate) {
-            m_offset = m_image->documentToPixel(e->point) - m_position;
+            m_offset = info.pos() - m_position;
             m_isOffsetNotUptodate = false;
         }
-        e->ignore();
+        ignoreEvent = true;
     }
-
+    
+    return ignoreEvent;
 }
+
 
 void KisDuplicateOpSettings::activate()
 {

@@ -127,13 +127,13 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     // don't process tablet events for stylus middle and right mouse button
     // they will be re-send as mouse events with the correct button. there is no possibility to get the button from the QTabletEvent.
     if(qFuzzyIsNull(event->pressure()) && d->tabletPressed==false && event->type()!=QEvent::TabletMove) {
-        kDebug()<<"don't accept tablet event: "<< point;
+        //kDebug()<<"don't accept tablet event: "<< point;
         return;
     }
     else {
         // Accept the tablet events as they are useless to parent widgets and they will
         // get re-send as mouseevents if we don't accept them.
-        kDebug()<<"accept tablet event: "<< point;
+        //kDebug()<<"accept tablet event: "<< point;
         event->accept();
     }
 

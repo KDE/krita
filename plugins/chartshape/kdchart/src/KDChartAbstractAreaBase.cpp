@@ -134,7 +134,7 @@ void AbstractAreaBase::paintBackgroundAttributes( QPainter& painter, const QRect
         const QPointF newTopLeft( painter.deviceMatrix().map( rect.topLeft() ) );
         painter.setBrushOrigin( newTopLeft );
         painter.setBrush( attributes.brush() );
-        painter.drawRect( rect.adjusted( 0, 0, -1, -1 ) );
+        painter.drawRect( rect );
     }
     /* next draw the backPixmap over the brush */
     if( !attributes.pixmap().isNull() &&
@@ -186,7 +186,7 @@ void AbstractAreaBase::paintFrameAttributes( QPainter& painter, const QRect& rec
     const QBrush oldBrush( painter.brush() );
     painter.setPen(  PrintingParameters::scalePen( attributes.pen() ) );
     painter.setBrush( Qt::NoBrush );
-    painter.drawRect( rect.adjusted( 0, 0, -1, -1 ) );
+    painter.drawRect( rect );
     painter.setBrush( oldBrush );
     painter.setPen( oldPen );
 }

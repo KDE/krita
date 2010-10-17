@@ -1024,6 +1024,33 @@ void KoTextEditor::deleteTableRow()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+void KoTextEditor::mergeTableCells()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Merge Cells"));
+
+    QTextTable *table = d->caret.currentTable();
+
+    if (table) {
+        table->mergeCells(d->caret);
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::splitTableCells()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Split Cells"));
+
+    QTextTable *table = d->caret.currentTable();
+
+    if (table) {
+        QTextTableCell cell = table->cellAt(d->caret);
+        table->splitCell(cell.row(), cell.column(),  cell.rowSpan(), cell.columnSpan());
+    }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
 void KoTextEditor::insertText(const QString &text)
 {
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Key Press"));

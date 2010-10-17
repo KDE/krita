@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>148</width>
-    <height>56</height>
+    <width>160</width>
+    <height>57</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -40,7 +40,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="6">
+     <item row="0" column="7">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -71,6 +71,20 @@
       <widget class="QToolButton" name="deleteColumn">
        <property name="autoRaise">
         <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QToolButton" name="mergeCells">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QToolButton" name="splitCells">
+       <property name="text">
+        <string>...</string>
        </property>
       </widget>
      </item>

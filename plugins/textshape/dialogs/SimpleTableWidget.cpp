@@ -36,6 +36,8 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.addColumnRight->setDefaultAction(tool->action("insert_tablecolumn_right"));
     widget.deleteRow->setDefaultAction(tool->action("delete_tablerow"));
     widget.deleteColumn->setDefaultAction(tool->action("delete_tablecolumn"));
+    widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
+    widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)

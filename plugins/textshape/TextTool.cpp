@@ -391,6 +391,14 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("delete_tablerow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
+    action  = new KAction(KIcon("merge"), i18n("Merge Cells"), this);
+    addAction("merge_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
+
+    action  = new KAction(KIcon("spli"), i18n("Split Cells"), this);
+    addAction("split_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
@@ -1846,6 +1854,16 @@ void TextTool::deleteTableColumn()
 void TextTool::deleteTableRow()
 {
     m_textEditor.data()->deleteTableRow();
+}
+
+void TextTool::mergeTableCells()
+{
+    m_textEditor.data()->mergeTableCells();
+}
+
+void TextTool::splitTableCells()
+{
+    m_textEditor.data()->splitTableCells();
 }
 
 void TextTool::formatParagraph()

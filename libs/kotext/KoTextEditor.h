@@ -225,6 +225,16 @@ public slots:
      */
     void deleteTableRow();
 
+     /**
+     * Merge table cells (selected by the cursor).
+     */
+    void mergeTableCells();
+
+     /**
+     * Split table cells (selected by the cursor) that were previously merged.
+     */
+    void splitTableCells();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);

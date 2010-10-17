@@ -211,6 +211,10 @@ private slots:
     void deleteTableColumn();
     /// delete a row
     void deleteTableRow();
+    /// merge table cells
+    void mergeTableCells();
+    /// split previous merged table cells
+    void splitTableCells();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     //When enabled, display changes

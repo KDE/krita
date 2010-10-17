@@ -830,6 +830,23 @@ void ChartConfigWidget::setThreeDMode( bool threeD )
     update();
 }
 
+/**
+ * Only some chart types support a 3D mode in KD Chart.
+ */
+static bool supportsThreeD( ChartType type )
+{
+    switch ( type ) {
+    case BarChartType:
+    case LineChartType:
+    case AreaChartType:
+    case CircleChartType:
+        return true;
+    default:
+        break;
+    }
+    return false;
+}
+
 void ChartConfigWidget::update()
 {
     if ( !d->shape )
@@ -955,7 +972,12 @@ void ChartConfigWidget::update()
     }
 
     // If the "3D" checkbox is checked, then adapt the chart to that.
-    d->ui.threeDLook->setChecked( d->shape->isThreeD() );
+    bool enableThreeDOption = supportsThreeD( d->type );
+    d->threeDMode = enableThreeDOption && d->shape->isThreeD();
+    d->shape->setThreeD( d->threeDMode );
+    d->ui.threeDLook->setChecked( d->threeDMode );
+    d->ui.threeDLook->setEnabled( enableThreeDOption );
+
     if ( d->shape->legend() ) {
         d->ui.legendTitle->blockSignals( true );
         d->ui.legendTitle->setText( d->shape->legend()->title() );

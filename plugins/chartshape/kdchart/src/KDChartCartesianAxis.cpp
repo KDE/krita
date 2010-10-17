@@ -595,20 +595,20 @@ void CartesianAxis::paintCtx( PaintContext* context )
     switch( position() )
     {
     case Top:
-        rulerRef.setX( areaGeoRect.topLeft().x() );
-        rulerRef.setY( areaGeoRect.topLeft().y() + areaGeoRect.height() );
+        rulerRef.setX( areaGeoRect.x() );
+        rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
         break;
     case Bottom:
-        rulerRef.setX( areaGeoRect.bottomLeft().x() );
-        rulerRef.setY( areaGeoRect.bottomLeft().y() - areaGeoRect.height() );
+        rulerRef.setX( areaGeoRect.x() );
+        rulerRef.setY( areaGeoRect.y() );
         break;
     case Right:
-        rulerRef.setX( areaGeoRect.bottomRight().x() - areaGeoRect.width() );
-        rulerRef.setY( areaGeoRect.bottomRight().y() );
+        rulerRef.setX( areaGeoRect.x() );
+        rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
         break;
     case Left:
-        rulerRef.setX( areaGeoRect.bottomLeft().x() + areaGeoRect.width() );
-        rulerRef.setY( areaGeoRect.bottomLeft().y() );
+        rulerRef.setX( areaGeoRect.x() + areaGeoRect.width() );
+        rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
         break;
     }
 

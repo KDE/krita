@@ -549,6 +549,9 @@ void Axis::Private::createAreaDiagram()
     attr.setDisplayArea( true );
     kdAreaDiagram->setLineAttributes( attr );
     kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
+    // KD Chart by default draws the first data set as last line in a normal
+    // line diagram, we however want the first series to appear in front.
+    kdAreaDiagram->setReverseDatasetOrder( true );
 
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );

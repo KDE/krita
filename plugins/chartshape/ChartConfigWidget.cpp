@@ -36,6 +36,7 @@
 #include <KIconLoader>
 #include <KDebug>
 #include <KMessageBox>
+#include <KColorButton>
 
 // KOffice
 #include <interfaces/KoChartModel.h>
@@ -388,8 +389,10 @@ ChartConfigWidget::ChartConfigWidget()
              this,             SIGNAL( showLegendChanged( bool ) ) );
 
     // "Datasets" tab
-    connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
-             this, SLOT( datasetColorSelected( const QColor& ) ) );
+    connect( d->ui.datasetBrush, SIGNAL( changed( const QColor& ) ),
+             this, SLOT( datasetBrushSelected( const QColor& ) ) );
+    connect( d->ui.datasetPen, SIGNAL( changed( const QColor& ) ),
+             this, SLOT( datasetPenSelected( const QColor& ) ) );
     connect( d->ui.datasetShowValues, SIGNAL( toggled( bool ) ),
              this, SLOT( ui_datasetShowValuesChanged( bool ) ) );
     connect( d->ui.gapBetweenBars, SIGNAL( valueChanged( int ) ),
@@ -803,18 +806,28 @@ void ChartConfigWidget::chartSubTypeSelected( int type )
     emit chartSubTypeChanged( d->subtype );
 }
 
-void ChartConfigWidget::datasetColorSelected( const QColor& color )
+void ChartConfigWidget::datasetBrushSelected( const QColor& color )
 {
     if ( d->selectedDataSet < 0 )
         return;
 
-    emit datasetColorChanged( d->dataSets[ d->selectedDataSet ], color );
+    emit datasetBrushChanged( d->dataSets[ d->selectedDataSet ], color );
+}
+
+void ChartConfigWidget::datasetPenSelected( const QColor& color )
+{
+    if ( d->selectedDataSet < 0 )
+        return;
+
+    emit datasetPenChanged( d->dataSets[ d->selectedDataSet ], color );
 }
 
 void ChartConfigWidget::setThreeDMode( bool threeD )
 {
     d->threeDMode = threeD;
     emit threeDModeToggled( threeD );
+
+    update();
 }
 
 void ChartConfigWidget::update()
@@ -948,6 +961,11 @@ void ChartConfigWidget::update()
         d->ui.legendTitle->setText( d->shape->legend()->title() );
         d->ui.legendTitle->blockSignals( false );
     }
+
+    // "Fill" property of data set doesn't make sense for 2D line
+    // charts, there's nothing to fill.
+    bool enableFill = d->type != LineChartType || d->threeDMode;
+    d->ui.datasetBrush->setEnabled( enableFill );
 
     blockSignals( false );
 }
@@ -1271,9 +1289,13 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index )
     d->ui.dataSetAxes->setCurrentIndex( d->dataSetAxes.indexOf( dataSet->attachedAxis() ) );
     d->ui.dataSetAxes->blockSignals( false );
 
-    d->ui.datasetColor->blockSignals( true );
-    d->ui.datasetColor->setColor( dataSet->color() );
-    d->ui.datasetColor->blockSignals( false );
+    d->ui.datasetBrush->blockSignals( true );
+    d->ui.datasetBrush->setColor( dataSet->brush().color() );
+    d->ui.datasetBrush->blockSignals( false );
+
+    d->ui.datasetPen->blockSignals( true );
+    d->ui.datasetPen->setColor( dataSet->pen().color() );
+    d->ui.datasetPen->blockSignals( false );
 
     d->ui.datasetShowValues->blockSignals( true );
     d->ui.datasetShowValues->setChecked( dataSet->valueLabelType() == DataSet::RealValueLabel );

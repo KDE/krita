@@ -76,7 +76,8 @@ public slots:
     void slotShowCellRegionDialog();
 
     void dataSetChartTypeSelected( QAction *action );
-    void datasetColorSelected( const QColor& color );
+    void datasetBrushSelected( const QColor& color );
+    void datasetPenSelected( const QColor& color );
     void ui_datasetShowValuesChanged( bool b );
     void ui_datasetShowLabelsChanged( bool b );
     void ui_dataSetSelectionChanged( int index );
@@ -130,7 +131,8 @@ signals:
     void dataSetCategoryDataRegionChanged( DataSet *dataSet, const CellRegion &region );
     void dataSetLabelDataRegionChanged( DataSet *dataSet, const CellRegion &region );
     
-    void datasetColorChanged( DataSet *dataSet, const QColor& color );
+    void datasetPenChanged( DataSet *dataSet, const QColor& color );
+    void datasetBrushChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );
     void datasetShowLabelsChanged( DataSet *dataSet, bool b );
     void dataSetAxisChanged( DataSet *dataSet, Axis *axis );

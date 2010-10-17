@@ -83,7 +83,8 @@ private slots:
     void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );
     void setDataSetShowValues( DataSet *dataSet, bool b );
     void setDataSetShowLabels( DataSet *dataSet, bool b );
-    void setDataSetColor( DataSet *dataSet, const QColor& color );
+    void setDataSetPen( DataSet *dataSet, const QColor& color );
+    void setDataSetBrush( DataSet *dataSet, const QColor& color );
     void setDataSetAxis( DataSet *dataSet, Axis *axis );
     
     // Plot Area

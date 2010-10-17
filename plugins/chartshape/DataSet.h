@@ -124,7 +124,6 @@ public:
     QBrush brush( int section ) const;
     KDChart::PieAttributes pieAttributes( int section ) const;
     KDChart::DataValueAttributes dataValueAttributes( int section = -1 ) const;
-    QColor color() const;
     int    number() const;
 
     bool showMeanValue() const;
@@ -159,7 +158,6 @@ public:
     void setBrush( const QBrush &brush );
     void setPen( int section, const QPen &pen );
     void setBrush( int section, const QBrush &brush );
-    void setColor( const QColor &color );
 
     void setPieExplodeFactor( int factor );
     void setPieExplodeFactor( int section, int factor );

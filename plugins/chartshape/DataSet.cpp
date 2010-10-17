@@ -723,21 +723,6 @@ void DataSet::setPieExplodeFactor( int section, int factor )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PieAttributesRole, section);
 }
 
-QColor DataSet::color() const
-{
-    return brush().color();
-}
-
-void DataSet::setColor( const QColor &color )
-{
-    QBrush brush = d->brush;
-    brush.setColor( color );
-    setBrush( brush );
-    QPen pen = d->pen;
-    pen.setColor( color );
-    setPen( pen );
-}
-
 int DataSet::number() const
 {
     return d->num;

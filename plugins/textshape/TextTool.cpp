@@ -109,6 +109,8 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_changeTipTimer(this),
         m_changeTipCursorPos(0)
 {
+    setTextMode(true);
+
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -1460,11 +1462,6 @@ QRectF TextTool::textRect(int startPosition, int endPosition) const
     if (line1.textStart() + block.position() == line2.textStart() + block2.position())
         return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
     return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
-}
-
-bool TextTool::isInTextMode() const
-{
-    return true;
 }
 
 KoToolSelection* TextTool::selection()

@@ -300,7 +300,7 @@ public:
       * @return returns true, if the tool is in text mode. that means, that there is
       *   any kind of textual input and all single key shortcuts should be eaten.
       */
-    virtual bool isInTextMode() const;
+    bool isInTextMode() const;
 
 public slots:
 
@@ -444,6 +444,12 @@ protected:
     * @return the handle rectangle in document coordinates
     */
     QRectF handlePaintRect(const QPointF &position) const;
+
+    /**
+      * You should set the text mode to true in subclasses, if this tool is in text input mode, eg if the users
+      * are able to type. If you don't set it, then single key shortcuts will get the key event and not this tool.
+      */
+    void setTextMode(bool value);
 
 protected:
     KoToolBase(KoToolBasePrivate &dd);

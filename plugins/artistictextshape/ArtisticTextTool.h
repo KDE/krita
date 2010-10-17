@@ -53,7 +53,6 @@ public:
     virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
-    virtual bool isInTextMode() const;
 
 protected:
     void enableTextCursor( bool enable );

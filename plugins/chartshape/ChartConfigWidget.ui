@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -627,7 +627,7 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
    <item row="0" column="0" rowspan="2">
-    <widget class="QPushButton" name="chartTypeMenu">
+    <widget class="QToolButton" name="chartTypeMenu">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
@@ -636,14 +636,14 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="minimumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>48</width>
+       <height>36</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>50</width>
-       <height>50</height>
+       <width>48</width>
+       <height>36</height>
       </size>
      </property>
      <property name="layoutDirection">
@@ -661,6 +661,9 @@ p, li { white-space: pre-wrap; }
        <width>24</width>
        <height>24</height>
       </size>
+     </property>
+     <property name="popupMode">
+      <enum>QToolButton::InstantPopup</enum>
      </property>
     </widget>
    </item>

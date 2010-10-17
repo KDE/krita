@@ -55,6 +55,15 @@ CartesianCoordinatePlane::Private::Private()
     , horizontalMax(0)
     , verticalMin(0)
     , verticalMax(0)
+    , drawingAreaMarginLeft( 1 )
+    , drawingAreaMarginTop( 1 )
+    // (Why -3? We save 1px on each side for the antialiased drawing, and
+    // respect the way QPainter calculates the width of a painted rect (the
+    // size is the rectangle size plus the pen width). This way, most clipping
+    // for regular pens should be avoided. When pens with a penWidth or larger
+    // than 1 are used, this may not be sufficient.
+    , drawingAreaMarginRight( -3 )
+    , drawingAreaMarginBottom( -3 )
     , autoAdjustHorizontalRangeToData(67)
     , autoAdjustVerticalRangeToData(  67)
     , autoAdjustGridToZoom( true )
@@ -325,15 +334,20 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
 QRectF CartesianCoordinatePlane::drawingArea() const
 {
     // the rectangle the diagrams cover in the *plane*:
-    // (Why -3? We save 1px on each side for the antialiased drawing, and
-    // respect the way QPainter calculates the width of a painted rect (the
-    // size is the rectangle size plus the pen width). This way, most clipping
-    // for regular pens should be avoided. When pens with a penWidth or larger
-    // than 1 are used, this may not be sufficient.
     const QRect rect( areaGeometry() );
-    return QRectF ( rect.left()+1, rect.top()+1, rect.width() - 3, rect.height() - 3 );
+    return QRectF ( rect.left()   + d->drawingAreaMarginLeft,
+                    rect.top()    + d->drawingAreaMarginTop,
+                    rect.width()  + d->drawingAreaMarginRight,
+                    rect.height() + d->drawingAreaMarginBottom );
 }
 
+void CartesianCoordinatePlane::setDrawingAreaMargins( qreal left, qreal top, qreal right, qreal bottom )
+{
+    d->drawingAreaMarginLeft   = left;
+    d->drawingAreaMarginTop    = top;
+    d->drawingAreaMarginRight  = right;
+    d->drawingAreaMarginBottom = bottom;
+}
 
 QRectF CartesianCoordinatePlane::logicalArea() const
 {

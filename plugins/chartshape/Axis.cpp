@@ -843,6 +843,10 @@ Axis::Axis( PlotArea *parent )
     d->kdPlane      = new KDChart::CartesianCoordinatePlane();
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
     d->kdRadarPlane = new KDChart::RadarCoordinatePlane();
+
+    // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
+    // between axes and plot area frame.
+    d->kdPlane->setDrawingAreaMargins( 0, 0, 0, 0 );
     
     //disable non circular axis
     KDChart::GridAttributes gridAttributesNonCircular = d->kdPolarPlane->gridAttributes( false );

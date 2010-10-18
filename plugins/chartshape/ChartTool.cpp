@@ -265,8 +265,10 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
              this,   SLOT( setDataSetChartSubType( DataSet*, ChartSubtype ) ) );
-    connect( widget, SIGNAL( datasetColorChanged( DataSet*, const QColor& ) ),
-             this, SLOT( setDataSetColor( DataSet*, const QColor& ) ) );
+    connect( widget, SIGNAL( datasetBrushChanged( DataSet*, const QColor& ) ),
+             this, SLOT( setDataSetBrush( DataSet*, const QColor& ) ) );
+    connect( widget, SIGNAL( datasetPenChanged( DataSet*, const QColor& ) ),
+             this, SLOT( setDataSetPen( DataSet*, const QColor& ) ) );
     connect( widget, SIGNAL( datasetShowValuesChanged( DataSet*, bool ) ),
              this, SLOT( setDataSetShowValues( DataSet*, bool ) ) );
     connect( widget, SIGNAL( datasetShowLabelsChanged( DataSet*, bool ) ),
@@ -430,12 +432,20 @@ void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
 }
 
 
-void ChartTool::setDataSetColor( DataSet *dataSet, const QColor& color )
+void ChartTool::setDataSetBrush( DataSet *dataSet, const QColor& color )
 {
     if ( !dataSet )
         return;
 
-    dataSet->setColor( color );
+    dataSet->setBrush( QBrush( color ) );
+    d->shape->update();
+}
+void ChartTool::setDataSetPen( DataSet *dataSet, const QColor& color )
+{
+    if ( !dataSet )
+        return;
+
+    dataSet->setPen( QPen( color ) );
     d->shape->update();
 }
 
@@ -519,23 +529,6 @@ void ChartTool::setDataDirection( Qt::Orientation direction )
         return;
 
     d->shape->proxyModel()->setDataDirection( direction );
-    d->shape->relayout();
-}
-
-void ChartTool::setFirstRowIsLabel( bool b )
-{
-    Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->proxyModel()->setFirstRowIsLabel( b );
-    d->shape->relayout();
-}
-
-void ChartTool::setFirstColumnIsLabel( bool b )
-{
-    Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->proxyModel()->setFirstColumnIsLabel( b );
-
     d->shape->relayout();
 }
 

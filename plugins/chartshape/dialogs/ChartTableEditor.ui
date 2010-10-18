@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>531</width>
+    <width>506</width>
     <height>368</height>
    </rect>
   </property>
@@ -14,33 +14,10 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout">
-   <item row="1" column="1">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Data Area</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QCheckBox" name="firstRowIsLabel">
-        <property name="text">
-         <string>Use first row for labels</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QCheckBox" name="firstColumnIsLabel">
-        <property name="text">
-         <string>Use first column for labels</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="3">
+   <item row="0" column="0" colspan="2">
     <layout class="QVBoxLayout" name="tableViewContainer"/>
    </item>
-   <item row="1" column="2">
+   <item row="1" column="1">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Data Format</string>

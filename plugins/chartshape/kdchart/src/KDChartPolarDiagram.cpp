@@ -232,8 +232,9 @@ void PolarDiagram::paint( PaintContext* ctx,
     }
 }
 
-void PolarDiagram::resize ( const QSizeF& )
+void PolarDiagram::resize ( const QSizeF& size )
 {
+    d->diagramSize = size;
 }
 
 /*virtual*/

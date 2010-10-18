@@ -116,9 +116,6 @@ public:
     // ----------------------------------------------------------------
     // Data specific to each chart type
 
-    // table:cell-range-address, ODF v1.2, $18.595
-    CellRegion cellRangeAddress;
-
     // 1. Bar charts
     // FIXME: OpenOffice stores these attributes in the axes' elements.
     // The specs don't say anything at all about what elements can have
@@ -279,7 +276,9 @@ void PlotArea::proxyModelStructureChanged()
     // there should be exactly one x axis and one region for categories.
     // See note in Axis::setCategoryDataRegion()
     // Categories might have been inserted or removed from the proxy model.
-//     xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
+    // FIXME: Bjoern, you uncommented this. What's the reason for that?
+    // This needs to be here for categories to correctly appear on the x axis.
+    xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
 
     // Now add the new list of data sets to the axis they belong to
     foreach( DataSet *dataSet, dataSets ) {
@@ -373,11 +372,6 @@ ChartSubtype PlotArea::chartSubType() const
 bool PlotArea::isThreeD() const
 {
     return d->threeD;
-}
-
-CellRegion PlotArea::cellRangeAddress() const
-{
-    return d->cellRangeAddress;
 }
 
 bool PlotArea::isVertical() const
@@ -556,11 +550,6 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
-void PlotArea::setCellRangeAddress( const CellRegion &region )
-{
-    d->cellRangeAddress = region;
-}
-
 void PlotArea::setVertical( bool vertical )
 {
     d->vertical = vertical;
@@ -618,12 +607,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         yAxis->setPosition( LeftAxisPosition );
         yAxis->setVisible( false );
         addAxis( yAxis );
-    }
-
-    CellRegion cellRangeAddress;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
-        cellRangeAddress = CellRegion( helper->tableSource, plotAreaElement.attributeNS( KoXmlNS::table, "cell-range-address" ) );
-//         setCellRangeAddress( cellRangeAddress );
     }
 
     // Find out about things that are in the plotarea style.
@@ -736,8 +719,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         proxyModel()->setFirstRowIsLabel( false );
         proxyModel()->setFirstColumnIsLabel( false );
     }
-
-    setCellRangeAddress( cellRangeAddress );
     
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the
@@ -824,7 +805,8 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     bodyWriter.addAttributePt( "svg:x", p.x() );
     bodyWriter.addAttributePt( "svg:y", p.y() );
 
-    bodyWriter.addAttribute( "table:cell-range-address", d->cellRangeAddress.toString() );
+    CellRegion cellRangeAddress = d->shape->proxyModel()->cellRangeAddress();
+    bodyWriter.addAttribute( "table:cell-range-address", cellRangeAddress.toString() );
 
     // About the data:
     //   Save if the first row / column contain headers.
@@ -1126,6 +1108,9 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
     // Only paint the actual chart if there is a certain minimal size,
     // because otherwise kdchart will crash.
     QRect kdchartRect = ScreenConversions::scaleFromPtToPx(paintRect);
+    // Turn off clipping so that border (or "frame") drawn by KDChart::Chart
+    // is not not cut off.
+    painter.setClipping( false );
     if (kdchartRect.width() > 10 && kdchartRect.height() > 10) {
         d->kdChart->paint(&painter, kdchartRect);
     }

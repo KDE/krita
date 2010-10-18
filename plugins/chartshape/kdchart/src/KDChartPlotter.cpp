@@ -371,6 +371,7 @@ void Plotter::paint( PaintContext* ctx )
 
 void Plotter::resize ( const QSizeF& size )
 {
+    d->diagramSize = size;
     d->setCompressorResolution( size, coordinatePlane() );
     setDataBoundariesDirty();
 }

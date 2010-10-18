@@ -42,6 +42,7 @@ private:
     bool threeD;
     QMap<uint,MarkerStyle> markerStylesMap;
     MarkerStyle markerStyle;
+    MarkerSizeMode markerSizeMode;
     QSizeF markerSize;
     QColor markerColor;
     QPen markerPen;
@@ -51,6 +52,7 @@ MarkerAttributes::Private::Private()
     : visible( false ),
       threeD( false ),
       markerStyle( MarkerSquare ),
+      markerSizeMode( AbsoluteSize ),
       markerSize( 10, 10 ),
       markerPen( Qt::black )
 {
@@ -153,6 +155,16 @@ void MarkerAttributes::setMarkerSize( const QSizeF& size )
 QSizeF MarkerAttributes::markerSize() const
 {
     return d->markerSize;
+}
+
+void MarkerAttributes::setMarkerSizeMode( MarkerSizeMode mode )
+{
+    d->markerSizeMode = mode;
+}
+
+MarkerAttributes::MarkerSizeMode MarkerAttributes::markerSizeMode() const
+{
+    return d->markerSizeMode;
 }
 
 void MarkerAttributes::setMarkerColor( const QColor& color )

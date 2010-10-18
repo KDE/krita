@@ -78,6 +78,18 @@ public:
     void setAreaBoundingDataset( int dataset );
     int areaBoundingDataset() const;
 
+    /**
+     * Determines if lines are to be drawn or not. This property does not
+     * effect visibility of markers and text labels.
+     *
+     * This is useful for e.g. bubble charts where you need circular markers
+     * but want no connecting lines to be drawn.
+     *
+     * By default lines are drawn, i.e. this property is true.
+     */
+    void setVisible( bool visible );
+    bool isVisible() const;
+
     void setDisplayArea( bool display );
     bool displayArea() const;
     /*allows viewing the covered areas*/

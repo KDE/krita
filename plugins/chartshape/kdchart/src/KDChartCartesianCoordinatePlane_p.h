@@ -105,6 +105,11 @@ public:
     qreal verticalMin;
     qreal verticalMax;
 
+    qreal drawingAreaMarginLeft;
+    qreal drawingAreaMarginTop;
+    qreal drawingAreaMarginRight;
+    qreal drawingAreaMarginBottom;
+
     // autoAdjustHorizontalRangeToData determines if and how much the horizontal range is adjusted.
     // A value of 100 means that the fixed horizontal range will be used (e.g. set by the user),
     // otherwise the value will be the percentage of the diagram's horizontal range that is to be

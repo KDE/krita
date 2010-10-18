@@ -129,10 +129,13 @@ void Plotter::PlotterType::paintElements(
     while ( itline.hasNext() ) {
         const LineAttributesInfo& lineInfo = itline.next();
         const QModelIndex& index = lineInfo.index;
+        const LineAttributes la = diagram()->lineAttributes( index );
         const ThreeDLineAttributes td = diagram()->threeDLineAttributes( index );
         const ValueTrackerAttributes vt = diagram()->valueTrackerAttributes( index );
 
-        if( td.isEnabled() ){
+        if ( !la.isVisible() ) {
+            // Do not draw lines, but do draw text and markers
+        } else if( td.isEnabled() ){
             paintThreeDLines( ctx, index, lineInfo.value, lineInfo.nextValue, td.depth() );
         } else {
             const QBrush br( diagram()->brush( index ) );

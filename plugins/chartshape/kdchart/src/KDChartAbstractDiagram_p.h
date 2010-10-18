@@ -500,6 +500,8 @@ namespace KDChart {
         mutable QPair<QPointF,QPointF> databoundaries;
         mutable bool databoundariesDirty;
         ReverseMapper reverseMapper;
+        /// The size of the diagram set by AbstractDiagram::resize()
+        QSizeF diagramSize;
 
         QMap< Qt::Orientation, QString > unitSuffix;
         QMap< Qt::Orientation, QString > unitPrefix;

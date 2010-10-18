@@ -42,6 +42,7 @@
 #include "Legend.h"
 #include "DataSet.h"
 #include "TableSource.h"
+#include "Axis.h"
 
 // KD Chart
 #include <KDChartAbstractDiagram>
@@ -161,6 +162,16 @@ void TestLoadingBase::testFooterText( const QString &text )
 {
     QVERIFY( m_chart->footer() );
     KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( m_chart->footer()->userData() );
+    QVERIFY( data );
+    QVERIFY( data->document() );
+    QCOMPARE( data->document()->toPlainText(), text );
+}
+
+void TestLoadingBase::testAxisTitle( Axis *axis, const QString &text )
+{
+    QVERIFY( axis );
+    QVERIFY( axis->title() );
+    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( axis->title()->userData() );
     QVERIFY( data );
     QVERIFY( data->document() );
     QCOMPARE( data->document()->toPlainText(), text );

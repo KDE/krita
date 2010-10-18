@@ -187,6 +187,8 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
+
+    setTextMode(true);
 }
 
 ArtisticTextTool::~ArtisticTextTool()
@@ -339,11 +341,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
     } else {
         event->ignore();
     }
-}
-
-bool ArtisticTextTool::isInTextMode() const
-{
-    return true;
 }
 
 void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)

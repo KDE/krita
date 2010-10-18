@@ -263,8 +263,9 @@ void RadarDiagram::paint( PaintContext* ctx,
     }
 }
 
-void RadarDiagram::resize ( const QSizeF& )
+void RadarDiagram::resize ( const QSizeF& size )
 {
+    d->diagramSize = size;
 }
 
 /*virtual*/

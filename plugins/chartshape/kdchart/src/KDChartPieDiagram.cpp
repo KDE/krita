@@ -108,8 +108,9 @@ void PieDiagram::resizeEvent ( QResizeEvent*)
 {
 }
 
-void PieDiagram::resize ( const QSizeF& )
+void PieDiagram::resize ( const QSizeF& size )
 {
+    d->diagramSize = size;
 }
 
 static QRectF buildReferenceRect( const PolarCoordinatePlane* plane )

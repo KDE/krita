@@ -56,6 +56,19 @@ namespace KDChart {
                            MarkerFastCross = 7,
                            NoMarker = 8 };
 
+        enum MarkerSizeMode {
+            /// the marker size is directly specified in pixels
+            AbsoluteSize = 0,
+            /// the marker size is specified in pixels, but scaled by the
+            /// painter's zoom level
+            AbsoluteSizeScaled = 1,
+            /// the marker size is relative to the diagram's width
+            RelativeToDiagramWidth  = 2,
+            /// the marker size is relative to the diagram's height
+            RelativeToDiagramHeight = 3,
+            /// the marker size is relative to the diagram's min(width, height)
+            RelativeToDiagramWidthHeightMin = 4 };
+
         void setVisible( bool visible );
         bool isVisible() const;
 
@@ -78,6 +91,20 @@ namespace KDChart {
          */
         void setMarkerSize( const QSizeF& size );
         QSizeF markerSize() const;
+
+        /**
+         * With this method you can change the way the actual marker size is
+         * calculated.
+         *
+         * By default, the marker size is absolute (equiv. to @a mode = AbsoluteSize)
+         * and specifies the size in pixels.
+         *
+         * In any other case, the size specified will be relative to what is
+         * specified in @a mode, e.g. the diagram's width. A marker width or
+         * height of 1.0 is then 100% of the diagram's width.
+         */
+        void setMarkerSizeMode( MarkerSizeMode mode );
+        MarkerSizeMode markerSizeMode() const;
 
         void setMarkerColor( const QColor& color );
         QColor markerColor() const;

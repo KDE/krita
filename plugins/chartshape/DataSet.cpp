@@ -103,6 +103,21 @@ public:
     /// have its own DataValueAttributes copy yet.
     void insertDataValueAttributeSectionIfNecessary( int section );
 
+    /**
+     * FIXME: Refactor (post-2.3)
+     *        1) Maximum bubble width should be determined in ChartProxyModel
+     *        2) Actual marker size and other KDChart::MarkerAttributes should
+     *           be set by some kind of adapter for KD Chart, e.g. KDChartModel.
+     *
+     * This determines the maximum bubble size of *all* data points in
+     * the diagram this data set belongs to so that the actual value used to
+     * draw the bubbles is relative to this value.
+     *
+     * For more info on how bubble sizes are calculated, see
+     * http://qa.openoffice.org/issues/show_bug.cgi?id=64689
+     */
+    qreal maxBubbleSize() const;
+
     QPen defaultPen() const;
 
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
@@ -558,6 +573,18 @@ KDChart::PieAttributes DataSet::pieAttributes( int section ) const
     return pieAttributes();
 }
 
+qreal DataSet::Private::maxBubbleSize() const
+{
+    // TODO: Improve performance by caching. This is currently O(n^2).
+    qreal max = 0.0;
+    Q_ASSERT( kdChartModel );
+    QList<DataSet*> dataSets = kdChartModel->dataSets();
+    foreach( DataSet *dataSet, dataSets )
+        for ( int i = 0; i < dataSet->size(); i++ )
+            max = qMax( max, dataSet->customData( i ).toReal() );
+    return max;
+}
+
 KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 */ ) const
 {
     KDChart::DataValueAttributes attr( d->dataValueAttributes );
@@ -580,16 +607,26 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
         ma.setVisible( true );
         break;
     case BubbleChartType:
+    {
         Q_ASSERT( attachedAxis() );
         Q_ASSERT( attachedAxis()->plotArea() );
         ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerCircle );        
         ma.setThreeD( attachedAxis()->plotArea()->isThreeD() );
+        qreal maxSize = d->maxBubbleSize();
         if ( section >= 0 ) {
             qreal bubbleWidth = customData( section ).toReal();
+            // All bubble sizes are relative to the maximum bubble size
+            if ( maxSize != 0.0 )
+                bubbleWidth /= maxSize;
+            // Whereas the maximum size is relative to 1/4 * min(dw, dh),
+            // with dw, dh being the width and height of the diagram
+            bubbleWidth *= 0.25;
+            ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
             ma.setMarkerSize( QSizeF( bubbleWidth, bubbleWidth ) );
         }
         ma.setVisible( true );        
         break;
+    }
     default:
         // TODO: Make markers customizable even for other types
         if ( d->symbolsActivated )
@@ -686,21 +723,6 @@ void DataSet::setPieExplodeFactor( int section, int factor )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PieAttributesRole, section);
 }
 
-QColor DataSet::color() const
-{
-    return brush().color();
-}
-
-void DataSet::setColor( const QColor &color )
-{
-    QBrush brush = d->brush;
-    brush.setColor( color );
-    setBrush( brush );
-    QPen pen = d->pen;
-    pen.setColor( color );
-    setPen( pen );
-}
-
 int DataSet::number() const
 {
     return d->num;
@@ -764,9 +786,15 @@ void DataSet::setUpperErrorLimit( qreal limit )
 
 QVariant DataSet::xData( int index ) const
 {
-    // No fall-back necessary. x data region (part of 'domain' in ODF terms)
-    // must be specified if needed. See ODF v1.1 §10.9.1
-    return d->data( d->xDataRegion, index );
+    // Sometimes a bubble chart is created with a table with 4 columns.
+    // What we do here is assign the 2 columns per data set, so we have
+    // 2 data sets in total afterwards. The first column is y data, the second
+    // bubble width. Same for the second data set. So there is nothing left
+    // for x data. Instead use a fall-back to the data points index.
+    QVariant data = d->data( d->xDataRegion, index );
+    if ( data.isValid() )
+        return data;
+    return QVariant( index + 1 );
 }
 
 QVariant DataSet::yData( int index ) const
@@ -1108,9 +1136,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     // assigned by SingleModelHelper whenever the structure of the internal
     // model changes.
     bool ignoreCellRanges = false;
+// Some OOo documents save incorrect cell ranges. For those this fix was intended.
+// Find out which documents exactly and only use fix for as few cases as possible.
+#if 0
 #ifndef NWORKAROUND_ODF_BUGS
     if ( context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice )
         ignoreCellRanges = helper->chartUsesInternalModelOnly;
+#endif
 #endif
 
     {
@@ -1132,7 +1164,10 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
     }
     
+    // FIXME: Maybe it's easier to understand this if we simply have a counter
+    // 'loadedDomainElements' that is either 0, 1 or 2.
     bool maybeCompleteDataDefinition = false;
+    // FIXME: This variable is unused.
     bool fullDataDefinition = false;
     
     if ( /*bubbleChart &&*/ n.hasChildNodes() ){
@@ -1143,13 +1178,13 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
                 if ( maybeCompleteDataDefinition ){
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
-                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
                     fullDataDefinition = true;
                 }else{
                     const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );                    
                     // as long as there is not default table for missing data series the same region is used twice
                     // to ensure the diagram is displayed, even if not as expected from o office or ms office
-                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
                     maybeCompleteDataDefinition = true;
                 }
                 

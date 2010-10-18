@@ -28,6 +28,7 @@
 
 #include "kis_shared.h"
 #include "kis_properties_configuration.h"
+#include "kis_paint_information.h"
 
 
 class KoPointerEvent;
@@ -60,10 +61,10 @@ public:
     /**
      * This function is called by a tool when the mouse is pressed. It's useful if
      * the paintop needs mouse interaction for instance in the case of the duplicate op.
-     * If the tool is supposed to ignore the event, the paint op should call e->accept();
-     * and if the tool is supposed to use the event e->ignore(); should be called.
+     * If the tool is supposed to ignore the event, the paint op should return false
+     * and if the tool is supposed to use the event, return true.
      */
-    virtual void mousePressEvent(KoPointerEvent *e);
+    virtual bool mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers);
 
     /**
      * Clone the current settings object. Override this if your settings instance doesn't

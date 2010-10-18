@@ -260,6 +260,12 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
     return r;
 }
 
+void KoToolBase::setTextMode(bool value)
+{
+    Q_D(KoToolBase);
+    d->isInTextMode=value;
+}
+
 QStringList KoToolBase::supportedPasteMimeTypes() const
 {
     return QStringList();
@@ -297,7 +303,8 @@ bool KoToolBase::isReadWrite() const
 
 bool KoToolBase::isInTextMode() const
 {
-    return false;
+    Q_D(const KoToolBase);
+    return d->isInTextMode;
 }
 
 #include <KoToolBase.moc>

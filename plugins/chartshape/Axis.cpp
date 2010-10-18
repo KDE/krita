@@ -549,6 +549,9 @@ void Axis::Private::createAreaDiagram()
     attr.setDisplayArea( true );
     kdAreaDiagram->setLineAttributes( attr );
     kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
+    // KD Chart by default draws the first data set as last line in a normal
+    // line diagram, we however want the first series to appear in front.
+    kdAreaDiagram->setReverseDatasetOrder( true );
 
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );
@@ -757,24 +760,11 @@ void Axis::Private::createBubbleDiagram()
             if ( axis->isVisible() )
                 kdBubbleDiagram->addAxis( axis->kdAxis() );
     }
-    
+
      // disable the connecting line
-    //kdBubbleDiagram->setPen( QPen( Qt::black, 0.0 ) );
-    kdBubbleDiagram->setPen( Qt::NoPen );
-
-    KDChart::DataValueAttributes dva( kdBubbleDiagram->dataValueAttributes() );
-    dva.setVisible( true );
-    
-    KDChart::TextAttributes ta( dva.textAttributes() );
-    ta.setVisible( false );
-    dva.setTextAttributes( ta );
-
-    KDChart::MarkerAttributes ma( dva.markerAttributes() );
-    ma.setVisible( true );
-    ma.setMarkerStyle( KDChart::MarkerAttributes::MarkerRing );
-    dva.setMarkerAttributes( ma );
-
-    kdBubbleDiagram->setDataValueAttributes( dva );
+    KDChart::LineAttributes la = kdBubbleDiagram->lineAttributes();
+    la.setVisible( false );
+    kdBubbleDiagram->setLineAttributes( la );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBubbleDiagram );
 }
@@ -854,6 +844,10 @@ Axis::Axis( PlotArea *parent )
     d->kdPlane      = new KDChart::CartesianCoordinatePlane();
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
     d->kdRadarPlane = new KDChart::RadarCoordinatePlane();
+
+    // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
+    // between axes and plot area frame.
+    d->kdPlane->setDrawingAreaMargins( 0, 0, 0, 0 );
     
     //disable non circular axis
     KDChart::GridAttributes gridAttributesNonCircular = d->kdPolarPlane->gridAttributes( false );

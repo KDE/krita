@@ -137,8 +137,16 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
      * FIXME: we need some better way to implement modifiers
      * for a paintop level
      */
-    currentPaintOpPreset()->settings()->mousePressEvent(e);
-    if (e->isAccepted()) return;
+    bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
+                                                         pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
+                                                         KisVector2D::Zero(),
+                                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed()),e->modifiers());
+    if (!ignoreEvent){
+        e->accept();
+        return;
+    }else{
+        e->ignore();
+    }
 
 
     if(mode() == KisTool::HOVER_MODE &&

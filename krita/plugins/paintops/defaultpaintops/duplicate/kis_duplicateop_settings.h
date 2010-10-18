@@ -43,7 +43,7 @@ public:
     bool paintIncremental();
 
     QPointF offset() const;
-    void mousePressEvent(KoPointerEvent *e);
+    virtual bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers);
     void activate();
 
     void fromXML(const QDomElement& elt);

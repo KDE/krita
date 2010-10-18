@@ -295,8 +295,9 @@ void RingDiagram::drawOnePie( QPainter* painter,
     }
 }
 
-void RingDiagram::resize( const QSizeF& )
+void RingDiagram::resize( const QSizeF& size )
 {
+    d->diagramSize = size;
 }
 
 /**

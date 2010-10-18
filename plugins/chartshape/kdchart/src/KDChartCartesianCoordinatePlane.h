@@ -389,6 +389,20 @@ namespace KDChart {
         QRectF diagramArea() const;
 
         /**
+         * Margins that will be added to geometry() for internal layouting
+         * methods. For historical reasons the the default is (1, 1, -3, -3).
+         *
+         * Use this method if data points or lines are just slightly cut off
+         * at the edge of the coordinate plane. This does not play nicely in
+         * conjunction with KDChart::Chart however, especially if you draw a
+         * frame around the coordinate plane as there will be odd offsets
+         * at the sides between axis (or axis ticks) and the chart's frame.
+         *
+         * To avoid the latter, problem, set all margins to 0.
+         */
+        void setDrawingAreaMargins( qreal left, qreal top, qreal right, qreal bottom );
+
+        /**
          * Returns the visible part of the diagram area, i.e.
          * \code diagramArea().intersected( drawingArea() ) \endcode
          * \sa diagramArea

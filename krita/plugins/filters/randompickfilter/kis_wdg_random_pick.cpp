@@ -45,6 +45,7 @@ KisWdgRandomPick::KisWdgRandomPick(KisFilter* /*nfilter*/, QWidget* parent)
 
 KisWdgRandomPick::~KisWdgRandomPick()
 {
+    delete m_widget;
 }
 
 void KisWdgRandomPick::setConfiguration(const KisPropertiesConfiguration* config)

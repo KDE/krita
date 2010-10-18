@@ -31,6 +31,7 @@ class KisWdgUnsharp : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgUnsharp(QWidget * parent);
+    virtual ~KisWdgUnsharp();
     inline const Ui_WdgUnsharp* widget() const {
         return m_widget;
     }

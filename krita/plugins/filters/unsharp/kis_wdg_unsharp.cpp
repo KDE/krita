@@ -41,6 +41,11 @@ KisWdgUnsharp::KisWdgUnsharp(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgUnsharp::~KisWdgUnsharp()
+{
+    delete m_widget;
+}
+
 void KisWdgUnsharp::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;

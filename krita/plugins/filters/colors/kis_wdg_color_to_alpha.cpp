@@ -41,6 +41,11 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(paren
     connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgColorToAlpha::~KisWdgColorToAlpha()
+{
+    delete m_widget;
+}
+
 void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* config)
 {
     QVariant value;

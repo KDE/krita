@@ -44,6 +44,7 @@ KisWdgWave::KisWdgWave(KisFilter* /*nfilter*/, QWidget* parent)
 
 KisWdgWave::~KisWdgWave()
 {
+    delete m_widget;
 }
 
 void KisWdgWave::setConfiguration(const KisPropertiesConfiguration* config)

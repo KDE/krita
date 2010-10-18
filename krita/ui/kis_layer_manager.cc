@@ -680,16 +680,15 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisSelectedTransaction transaction(i18n("Scale Layer"), layer);
-
     KoProgressUpdater* updater = m_view->createProgressUpdater();
     KoUpdaterPtr u = updater->startSubtask();
 
-    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0, 0, 0.0, 0, 0, u, filterStrategy);
-    worker.run();
+    m_view->image()->undoAdapter()->beginMacro(i18n("Scale Layer"));
 
-    transaction.commit(m_view->image()->undoAdapter());
+    KisTransformVisitor visitor(m_view->image(), sx, sy, 0.0, 0.0, 0.0, 0, 0, u, filterStrategy);
+    layer->accept(visitor);
 
+    m_view->image()->undoAdapter()->endMacro();
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();

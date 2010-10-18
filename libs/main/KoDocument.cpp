@@ -867,14 +867,11 @@ bool KoDocument::saveNativeFormat(const QString & file)
         delete store;
         return false;
     }
-    bool success;
     if (oasis) {
-        success = saveNativeFormatODF(store, mimeType);
+        return saveNativeFormatODF(store, mimeType);
     } else {
-        success = saveNativeFormatKOffice(store);
+        return saveNativeFormatKOffice(store);
     }
-    delete store;
-    return success;
 }
 
 bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)

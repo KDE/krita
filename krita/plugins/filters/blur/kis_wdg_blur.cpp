@@ -51,6 +51,11 @@ KisWdgBlur::KisWdgBlur(QWidget * parent) : KisConfigWidget(parent)
     connect(widget()->cbShape, SIGNAL(activated(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgBlur::~KisWdgBlur()
+{
+    delete m_widget;
+}
+
 KisPropertiesConfiguration* KisWdgBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("blur", 1);

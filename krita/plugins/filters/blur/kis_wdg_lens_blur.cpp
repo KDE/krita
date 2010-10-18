@@ -46,6 +46,11 @@ KisWdgLensBlur::KisWdgLensBlur(QWidget * parent) : KisConfigWidget(parent)
     connect(m_widget->irisRotationSlider, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgLensBlur::~KisWdgLensBlur()
+{
+    delete m_widget;
+}
+
 KisPropertiesConfiguration* KisWdgLensBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("lens blur", 1);
@@ -73,4 +78,4 @@ void KisWdgLensBlur::setConfiguration(const KisPropertiesConfiguration* config)
     }
 }
 
-#include "kis_wdg_lens_blur.moc" 
+#include "kis_wdg_lens_blur.moc"

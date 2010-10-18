@@ -31,6 +31,7 @@ class KisWdgMotionBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgMotionBlur(QWidget * parent);
+    virtual ~KisWdgMotionBlur();
     inline const Ui_WdgMotionBlur* widget() const {
         return m_widget;
     }

@@ -48,6 +48,11 @@ KisWdgMotionBlur::KisWdgMotionBlur(QWidget * parent) : KisConfigWidget(parent)
     connect(m_widget->blurLength, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgMotionBlur::~KisWdgMotionBlur()
+{
+    delete m_widget;
+}
+
 KisPropertiesConfiguration* KisWdgMotionBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("motion blur", 1);
@@ -94,4 +99,4 @@ void KisWdgMotionBlur::angleDialChanged(int v)
     m_widget->blurAngleSlider->setValue(absoluteValue);
 }
 
-#include "kis_wdg_motion_blur.moc" 
+#include "kis_wdg_motion_blur.moc"

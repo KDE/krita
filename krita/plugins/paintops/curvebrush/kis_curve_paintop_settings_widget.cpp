@@ -34,6 +34,7 @@ KisCurvePaintOpSettingsWidget:: KisCurvePaintOpSettingsWidget(QWidget* parent)
 
 KisCurvePaintOpSettingsWidget::~ KisCurvePaintOpSettingsWidget()
 {
+    delete m_options;
 }
 
 void  KisCurvePaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration * config)

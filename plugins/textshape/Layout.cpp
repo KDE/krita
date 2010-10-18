@@ -291,6 +291,11 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             line = m_block.layout()->createLine(); //TODO should probably not create this line
             entireParagraphMoved = true;
         } else {
+//FIXME sebsauer 2010-10-18; this leads to crashes cause the clearLayout() will also invalidate m_block and other
+//state-variables what will then lead to a crash if they are accessed later (what they are in various places). See
+//here for example the document attached to BKO bug #248343 . So, this code introduced in r1178051 to fix layout
+//problems needs to be reworked to proper handle the state-variables.
+#if 0
             // unfortunately we can't undo a single line, so we undo entire paragraph
             // and redo all previous lines
             QList<LineKeeper> lineKeeps;
@@ -313,6 +318,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             if(lineKeeps.isEmpty()) {
                 entireParagraphMoved = true;
             }
+#endif
         }
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());

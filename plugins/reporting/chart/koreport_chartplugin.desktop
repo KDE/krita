@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KoReport_Chart
+Name[ca]=KoReport_Diagrama
 Name[da]=KoReport_Chart
 Name[en_GB]=KoReport_Chart
 Name[es]=Gráfica de KoReport
@@ -17,6 +18,7 @@ Name[uk]=Діаграма KoReport
 Name[x-test]=xxKoReport_Chartxx
 Name[zh_TW]=KoReport_Chart
 Comment=KoReport Chart PLugin
+Comment[ca]=Connector de diagrames KoReport
 Comment[da]=Diagram-plugin til KoReport
 Comment[es]=Complemento de gráficas de KoReport
 Comment[et]=KoReporti diagrammi plugin

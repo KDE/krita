@@ -41,6 +41,12 @@ if(OPENEXR_FOUND)
     add_definitions(${OPENEXR_DEFINITIONS})
 endif(OPENEXR_FOUND)
 
+check_cxx_compiler_flag("-fopenmp" OPENMP_FOUND)
+if(OPENMP_FOUND)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
+    message("OpenMP found")
+endif(OPENMP_FOUND)
+
 if(WIN32)
     if(MSVC)
         # C4522: 'class' : multiple assignment operators specified

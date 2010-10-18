@@ -365,4 +365,20 @@ void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
     }
 }
 
+KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
+{
+    KisNodeSP node = currentNode();
+    if (!node || node->systemLocked() || node->inherits("KisSelectionMask")) {
+        return NONE;
+    }
+    if (node->inherits("KisShapeLayer")) {
+        return VECTOR;
+    }
+    if (node->paintDevice()) {
+        return PAINT;
+    }
+    return NONE;
+}
+
+
 #include "kis_tool_paint.moc"

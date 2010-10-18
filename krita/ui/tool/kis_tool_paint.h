@@ -115,6 +115,15 @@ protected:
     qreal pressureToCurve(qreal pressure){
         return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
     }
+    
+    enum NodePaintAbility {
+        NONE,
+        PAINT,
+        VECTOR
+    };
+    
+    /// Checks if and how the tool can paint on the current node
+    NodePaintAbility nodePaintAbility();
 
 
 public slots:

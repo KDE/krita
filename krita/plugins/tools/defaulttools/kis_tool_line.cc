@@ -156,11 +156,13 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
             image()->actionRecorder()->addAction(linePaintAction);
         }
 #endif
+        NodePaintAbility nodeAbility = nodePaintAbility();
+        if (nodeAbility == NONE) {
+           return; 
+        }
 
-        if (!currentNode()->inherits("KisShapeLayer")) {
-            KisPaintDeviceSP device;
-
-            if (currentNode() && (device = currentNode()->paintDevice())) {
+        if (nodeAbility == PAINT) {      
+                KisPaintDeviceSP device = currentNode()->paintDevice();
                 delete m_painter;
                 m_painter = new KisPainter(device, currentSelection());
                 Q_CHECK_PTR(m_painter);
@@ -177,7 +179,6 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
 
                 delete m_painter;
                 m_painter = 0;
-            }
         }
         else {
             KoPathShape* path = new KoPathShape();

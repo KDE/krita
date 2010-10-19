@@ -957,12 +957,11 @@ void Axis::setPosition( AxisPosition position )
 {
     d->position = position;
 
-    // FIXME: In KChart 2.1, we will have horizontal bar diagrams.
-    // That means that e.g. LeftAxisPosition != YAxisDimension!
+    bool chartIsVertical = d->plotArea->isVertical();
     if ( position == LeftAxisPosition || position == RightAxisPosition )
-        setDimension( YAxisDimension );
+        setDimension( chartIsVertical ? XAxisDimension : YAxisDimension );
     else if ( position == TopAxisPosition || position == BottomAxisPosition )
-        setDimension( XAxisDimension );
+        setDimension( chartIsVertical ? YAxisDimension : XAxisDimension );
 
     if ( position == LeftAxisPosition )
         d->title->rotate( -90 - d->title->rotation() );
@@ -1429,6 +1428,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 
         if ( axisElement.hasAttributeNS( KoXmlNS::chart, "dimension" ) ) {
             const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension", QString() );
+            // FIXME: position and dimension should be handled independently
             if ( dimension == "x" )
                 setPosition( BottomAxisPosition );
             else if ( dimension == "y" )

@@ -88,7 +88,8 @@ public:
      * PlotArea and ChartProxyModel. Only one should hold this property.
      */
     void setCategoryDataRegion( const CellRegion &region );
-	
+
+    // FIXME: Make setPosition() not call setDimension()
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
     void setShowLabels( bool show );

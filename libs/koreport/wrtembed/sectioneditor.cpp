@@ -236,7 +236,7 @@ void SectionEditor::init(KoReportDesigner * rw)
             QStringList keys = rw->fieldKeys();
             int idx = keys.indexOf( m_reportSectionDetail->groupSection(i)->column() );
             QString column = names.value( idx );
-            lbGroups->insertItem(column);
+            lbGroups->addItem(column);
         }
     }
 }
@@ -266,7 +266,7 @@ void SectionEditor::cbFootAny_toggled(bool yes)
 void SectionEditor::btnEdit_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentItem();
+        int idx = lbGroups->currentRow();
         if (idx < 0) return;
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         DetailGroupSectionDialog * dgsd = new DetailGroupSectionDialog(this);
@@ -306,8 +306,7 @@ void SectionEditor::btnEdit_clicked()
                     QMessageBox::warning(this, i18n("Error Encountered"),
                                          i18n("Unable to add a new group because its name would not be unique"));
                 } else {
-
-                    lbGroups->changeItem(dgsd->cbColumn->currentText(), idx);
+                    lbGroups->item(idx)->setText(dgsd->cbColumn->currentText());
                     rsdg->setColumn(column);
                     rsdg->setGroupHeaderVisible(showgh);
                     rsdg->setGroupFooterVisible(showgf);
@@ -351,8 +350,8 @@ void SectionEditor::btnAdd_clicked()
         }
         ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup(name, m_reportSectionDetail, m_reportSectionDetail);
         m_reportSectionDetail->insertSection(m_reportSectionDetail->groupSectionCount(), rsdg);
-        lbGroups->insertItem(name);
-        lbGroups->setCurrentItem(lbGroups->count() - 1);
+        lbGroups->addItem(name);
+        lbGroups->setCurrentRow(lbGroups->count() - 1);
         btnEdit_clicked();
     }
 }
@@ -361,9 +360,12 @@ void SectionEditor::btnAdd_clicked()
 void SectionEditor::btnRemove_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentItem();
+        int idx = lbGroups->currentRow();
         if (idx != -1) {
-            lbGroups->removeItem(idx);
+            QListWidgetItem *itm = lbGroups->takeItem(idx);
+	    if (itm) {
+		delete itm;
+	    }
             m_reportSectionDetail->removeSection(idx, true);
         }
     }
@@ -373,11 +375,11 @@ void SectionEditor::btnRemove_clicked()
 void SectionEditor::btnMoveUp_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentItem();
+        int idx = lbGroups->currentRow();
         if (idx <= 0) return;
-        QString s = lbGroups->currentText();
-        lbGroups->removeItem(idx);
-        lbGroups->insertItem(s, idx - 1);
+        QString s = lbGroups->currentItem()->text();
+        lbGroups->takeItem(idx);
+        lbGroups->insertItem(idx - 1, s);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();
@@ -392,11 +394,11 @@ void SectionEditor::btnMoveUp_clicked()
 void SectionEditor::brnMoveDown_clicked()
 {
     if (m_reportSectionDetail) {
-        int idx = lbGroups->currentItem();
+        int idx = lbGroups->currentRow();
         if (idx == (int)(lbGroups->count() - 1)) return;
-        QString s = lbGroups->currentText();
-        lbGroups->removeItem(idx);
-        lbGroups->insertItem(s, idx + 1);
+        QString s = lbGroups->currentItem()->text();
+        lbGroups->takeItem(idx);
+        lbGroups->insertItem (idx + 1, s);
         ReportSectionDetailGroup * rsdg = m_reportSectionDetail->groupSection(idx);
         bool showgh = rsdg->groupHeaderVisible();
         bool showgf = rsdg->groupFooterVisible();

@@ -185,6 +185,11 @@ Table *TestLoadingBase::internalTable()
     return m_chart->tableSource()->get( internalModel );
 }
 
+TableSource *TestLoadingBase::tableSource()
+{
+    return m_chart->tableSource();
+}
+
 namespace QTest {
     template<>
     char *toString( const KChart::CellRegion &region ) {

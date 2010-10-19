@@ -22,6 +22,7 @@
 
 #include <KDebug>
 
+#define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {
@@ -29,6 +30,18 @@ namespace Libemf
 
 // ================================================================
 //                         Class OutputPainterStrategy
+
+
+void OutputPainterStrategy::printPainterTransform(const char *leadText)
+{
+    QTransform  transform;
+
+    unsetWindowViewport();
+    transform = m_painter->transform();
+    setWindowViewport();
+
+    kDebug(31000) << leadText << transform << m_painter->transform();
+}
 
 
 OutputPainterStrategy::OutputPainterStrategy()
@@ -107,6 +120,10 @@ void OutputPainterStrategy::init( const Header *header )
                   << header->millimeters().height();
 #endif
 
+#if DEBUG_PAINTER_TRANSFORM
+    printPainterTransform("before save");
+#endif
+
     // This is restored in cleanup().
     m_painter->save();
 
@@ -130,12 +147,18 @@ void OutputPainterStrategy::init( const Header *header )
     // topleft of the EMF will be the top left of the shape.
     m_painter->scale( scaleX, scaleY );
     m_painter->translate(-header->bounds().left(), -header->bounds().top());
+#if DEBUG_PAINTER_TRANSFORM
+    printPainterTransform("after fitting into shape");
+#endif
 
     // Calculate translation if we should center the EMF in the
     // area and keep the aspect ratio.
     if ( m_keepAspectRatio ) {
         m_painter->translate((m_outputSize.width() / scaleX - headerBoundsSize.width()) / 2,
                              (m_outputSize.height() / scaleY - headerBoundsSize.height()) / 2);
+#if DEBUG_PAINTER_TRANSFORM
+        printPainterTransform("after translation for keeping center in the shape");
+#endif
     }
 
     // For calculations of window / viewport during the painting
@@ -234,8 +257,12 @@ void OutputPainterStrategy::saveDC()
     kDebug(31000);
 #endif
 
+    unsetWindowViewport();
+
     m_painter->save();
     ++m_painterSaves;
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::restoreDC( const qint32 savedDC )
@@ -243,6 +270,8 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
 #if DEBUG_EMFPAINT
     kDebug(31000) << savedDC;
 #endif
+
+    unsetWindowViewport();
 
     // Note that savedDC is always negative
     for (int i = 0; i < -savedDC; ++i) {
@@ -255,6 +284,8 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
             break;
         }
     }
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::setMetaRgn()
@@ -272,9 +303,12 @@ void OutputPainterStrategy::setMetaRgn()
 // the viewport in relation to the paintdevice and not the shape.  So
 // instead, we have to redo the calculations ourselves here.
 
+
 // Set Window and Viewport
 void OutputPainterStrategy::setWindowViewport()
 {
+    // If neither the window nor viewport extension is set, then there
+    // is no way to perform the calculation.  Just give up.
     if (!m_windowExtIsSet && m_viewportExtIsSet)
         return;
 
@@ -803,6 +837,8 @@ void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11,
     kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
+    unsetWindowViewport();
+
     QTransform matrix( M11, M12, M21, M22, Dx, Dy);
 
     if ( mode == MWT_IDENTITY ) {
@@ -818,6 +854,8 @@ void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11,
     } else {
 	qWarning() << "Unimplemented transform mode" << mode;
     }
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
@@ -827,9 +865,13 @@ void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
     kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
 
+    unsetWindowViewport();
+
     QTransform matrix( M11, M12, M21, M22, Dx, Dy);
 
     m_painter->setWorldTransform( matrix );
+
+    setWindowViewport();
 }
 
 void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )

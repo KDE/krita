@@ -137,6 +137,8 @@ public:
     void stretchDiBits( StretchDiBitsRecord &stretchDiBitsRecord );
 
 private:
+    void printPainterTransform(const char *leadText);
+
     /// For debugging purposes: Draw the boundary box.
     void paintBounds(const Header *header);
 
@@ -178,7 +180,6 @@ private:
 
     Header                  *m_header;   // Save to be able to retain scaling.
 
-    QPainter                *m_painter;
     int                      m_painterSaves; // The number of times that save() was called.
     QSize                    m_outputSize;
     bool                     m_keepAspectRatio;
@@ -187,6 +188,8 @@ private:
 
     QPainterPath *m_path;
     bool          m_currentlyBuildingPath;
+
+    QPainter                *m_painter;
 
     // Everything that has to do with window and viewport calculation
     QPoint        m_windowOrg;
@@ -205,7 +208,18 @@ private:
     QImage *m_image;
 
     // ----------------------------------------------------------------
-    //                     The graphics context
+    //                     The playback device context
+
+    // The Playback Device Context (PDC) contains the following:
+    //  - bitmap
+    //  - brush	(part of the painter)
+    //  - palette
+    //  - font	(part of the painter)
+    //  - pen	(part of the painter)
+    //  - region
+    //  - drawing mode
+    //  - mapping mode
+    // FIXME: what more?  textalign?  textpen?
 
     /**
        The current text pen

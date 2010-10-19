@@ -402,11 +402,10 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 
     beginResetModel();
 
-    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
-    KoStyleStack styleStack;
     if ( element.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        OdfLoadingHelper::fillStyleStack( styleStack, stylesReader, element,
-                                          KoXmlNS::chart, "style-name", "chart" );
+        KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( element, KoXmlNS::chart, "style-name", "chart" );
 
         // Data direction: It's in the plotarea style.
         if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
@@ -516,10 +515,10 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 
             ++loadedDataSetCount;
         } else if ( n.localName() == "stock-range-line" ) {
-            KoStyleStack styleStack;
+            KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+            styleStack.clear();
 
-            OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),
-                                              n, KoXmlNS::chart, "style-name", "chart" );
+            context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
             if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
                 KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
                 brushLoaded = false;

@@ -545,10 +545,7 @@ void PlotArea::setVertical( bool vertical )
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                         KoShapeLoadingContext &context )
 {
-//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    KoStyleStack& globalStack = context.odfLoadingContext().styleStack();    
-    KoStyleStack styleStack;
-    globalStack.save();
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
 
     // The exact position defined in ODF overwrites the default layout position
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
@@ -610,9 +607,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        globalStack.save();
+        styleStack.clear();
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
-        OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),  plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
         styleStack.setTypeProperties( "graphic" );
         styleStack.setTypeProperties( "chart" );
@@ -686,9 +682,8 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
         else if (d->chartType == StockChartType && n.localName() == "stock-range-line" ) {
             if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                styleStack.clear();
                 context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
-
-                KoStyleStack  &styleStack = context.odfLoadingContext().styleStack();
 
                 // stroke-color
                 const QString strokeColor = styleStack.property( KoXmlNS::svg, "stroke-color" );
@@ -696,8 +691,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                 //QPen( QColor( strokeColor) );
 
                 // FIXME: svg:stroke-width
-
-                styleStack.pop();
             }
         }
         else if ( n.localName() != "axis" && n.localName() != "series" ) {
@@ -706,7 +699,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     }
     
     requestRepaint();
-    globalStack.restore();
     
     return true;
 }

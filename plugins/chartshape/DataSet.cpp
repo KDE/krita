@@ -1119,13 +1119,9 @@ bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
-    KoStyleStack& globalStack = odfLoadingContext.styleStack();
-    globalStack.save();
+    KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.clear();
     odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
-    KoStyleStack styleStack;
-
-    OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
-                                      n, KoXmlNS::chart, "style-name", "chart" );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     // OOo assumes that if we use an internal model only, the columns are
@@ -1254,8 +1250,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
             continue;
 
         styleStack.clear();
-        OdfLoadingHelper::fillStyleStack( styleStack, odfLoadingContext.stylesReader(),
-                                          m, KoXmlNS::chart, "style-name", "chart" );
+        odfLoadingContext.fillStyleStack( m, KoXmlNS::chart, "style-name", "chart" );
 
         QBrush brush(Qt::NoBrush);
         QPen pen(Qt::NoPen);
@@ -1278,7 +1273,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
 
         ++loadedDataPointCount;
     }
-    globalStack.restore();
     return true;
 }
 

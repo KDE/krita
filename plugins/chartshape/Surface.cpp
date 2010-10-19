@@ -151,7 +151,6 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
 {
     // Get the current style stack and save it's state.
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
 
     bool brushLoaded = false;
     
@@ -160,9 +159,8 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
-//         styleStack.clear();
-        context.odfLoadingContext().fillStyleStack( surfaceElement, 
-                                                    KoXmlNS::chart, "style-name", "chart" );
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( surfaceElement, KoXmlNS::chart, "style-name", "chart" );
         
         styleStack.setTypeProperties( "graphic" );
         
@@ -219,10 +217,6 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         }
     }
 #endif
-
-    // Restore the style stack to what it was before entering this
-    // function.
-    styleStack.restore();
     
     return true;
 }

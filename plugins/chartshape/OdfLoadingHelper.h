@@ -49,10 +49,6 @@ public:
     // the chart, we however let ChartProxyModel determine it, thus we need
     // a way to tell it that it will find it in the axis.
     bool         categoryRegionSpecifiedInXAxis;
-
-    static void fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader& stylesReader,
-                                const KoXmlElement& object, const char* nsURI,
-                                const char* attrName, const char* family );
 };
 
 } // namespace KChart

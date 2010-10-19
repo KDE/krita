@@ -1211,8 +1211,6 @@ Qt::Orientation Axis::orientation()
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     d->title->setVisible( false );
@@ -1255,6 +1253,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 }
 
                 if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                    styleStack.clear();
                     context.odfLoadingContext().fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
                     styleStack.setTypeProperties( "text" );
 
@@ -1293,6 +1292,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 }
 
                 if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                    styleStack.clear();
                     context.odfLoadingContext().fillStyleStack( n, KoXmlNS::style, "style-name", "chart" );
                     styleStack.setTypeProperties( "graphic" );
                     if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
@@ -1324,6 +1324,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     }
 
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "text" );
 
@@ -1386,13 +1387,11 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     ta.setFontSize( 50 );
     d->kdRadarPlane->setTextAttributes( ta );
 
-
+    // Style of axis is still in styleStack
     if ( !loadOdfChartSubtypeProperties( axisElement, context ) )
         return false;
 
     requestRepaint();
-
-    styleStack.restore();
 
     return true;
 }

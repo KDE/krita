@@ -126,6 +126,10 @@ qreal EnhancedPathFormula::evaluate()
     }
 
     QStack<QVariant> stack;
+    // stack.reserve(3) here so that the stack is not resized all the time
+    // this reduces the number of a/de/re-llocations for documents with 
+    // a lot of enhanced path shapes quite a lot.
+    stack.reserve(3);
     int index = 0;
 
     if (!m_valid) {

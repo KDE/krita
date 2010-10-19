@@ -100,6 +100,12 @@ public:
         Q_UNUSED(documentResources);
         return 0;
     }
+
+    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const {
+        Q_UNUSED(e);
+        Q_UNUSED(context);
+        return false;
+    }
 };
 
 #endif

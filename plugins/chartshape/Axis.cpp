@@ -66,6 +66,7 @@
 #include <KDChartThreeDLineAttributes>
 #include <KDChartDataValueAttributes>
 #include <KDChartBackgroundAttributes>
+#include <KDChartRulerAttributes>
 
 // KChart
 #include "PlotArea.h"
@@ -230,6 +231,10 @@ Axis::Private::Private( Axis *axis, AxisDimension dim )
 
     title = 0;
     titleData = 0;
+
+    KDChart::RulerAttributes attr = kdAxis->rulerAttributes();
+    attr.setShowRulerLine( true );
+    kdAxis->setRulerAttributes( attr );
 }
 
 Axis::Private::~Private()

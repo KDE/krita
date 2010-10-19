@@ -32,7 +32,7 @@ public:
     CommentShapeFactory(QObject* parent);
     virtual ~CommentShapeFactory();
 
-    virtual bool supports(const KoXmlElement& element) const;
+    virtual bool supports(const KoXmlElement& element, KoShapeLoadingContext &context) const;
     virtual KoShape* createDefaultShape(KoResourceManager* documentResources = 0) const;
 };
 

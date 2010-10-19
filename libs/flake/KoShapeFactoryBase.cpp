@@ -97,14 +97,6 @@ QList<QPair<QString, QStringList> > KoShapeFactoryBase::odfElements() const
     return d->odfElements;
 }
 
-bool KoShapeFactoryBase::supports(const KoXmlElement & e) const
-{
-    Q_UNUSED(e);
-    // XXX: Remove this and replace with a pure virtual once
-    // everything has implemented it.
-    return false;
-}
-
 void KoShapeFactoryBase::addTemplate(const KoShapeTemplate &params)
 {
     KoShapeTemplate tmplate = params;

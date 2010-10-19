@@ -101,22 +101,22 @@ void TestKoShapeFactory::testOdfElement()
     KoXmlElement contentElement = doc.documentElement();
     KoXmlElement bodyElement = contentElement.firstChild().toElement();
 
-    KoXmlElement textElement = bodyElement.firstChild().firstChild().toElement();
-    QVERIFY(textElement.tagName() == "p");
-    QCOMPARE(factory->supports(textElement), false);
-
-    KoXmlElement pathElement = bodyElement.firstChild().lastChild().toElement();
-    QVERIFY(pathElement.tagName() == "path");
-    QCOMPARE(factory->supports(pathElement), true);
-
-    KoShape *shape = factory->createDefaultShape();
-    QVERIFY(shape);
-
     // XXX: When loading is implemented, these no doubt have to be
     // sensibly filled.
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext odfContext(stylesReader, 0);
     KoShapeLoadingContext shapeContext(odfContext, 0);
+
+    KoXmlElement textElement = bodyElement.firstChild().firstChild().toElement();
+    QVERIFY(textElement.tagName() == "p");
+    QCOMPARE(factory->supports(textElement, shapeContext), false);
+
+    KoXmlElement pathElement = bodyElement.firstChild().lastChild().toElement();
+    QVERIFY(pathElement.tagName() == "path");
+    QCOMPARE(factory->supports(pathElement, shapeContext), true);
+
+    KoShape *shape = factory->createDefaultShape();
+    QVERIFY(shape);
 
     QVERIFY(shape->loadOdf(pathElement, shapeContext));
 

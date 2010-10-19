@@ -33,6 +33,7 @@
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeLoadingContext.h>
 
 // Chart shape
 #include "ChartToolFactory.h"
@@ -75,8 +76,9 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
 }
 
 
-bool ChartShapeFactory::supports( const KoXmlElement &element ) const
+bool ChartShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
         && element.tagName() == "object";
 }

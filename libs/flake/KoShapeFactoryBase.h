@@ -35,6 +35,7 @@ class KoShape;
 class KoProperties;
 class KoShapeConfigFactoryBase;
 class KoShapeConfigWidgetBase;
+class KoShapeLoadingContext;
 class KoDataCenterBase;
 class KoResourceManager;
 
@@ -175,7 +176,7 @@ public:
 
     /// returns true if this shapeFactory is able to load the ODF type
     /// started at argument element. ('draw:line' / 'draw:frame' / etc)
-    virtual bool supports(const KoXmlElement &element) const;
+    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const = 0;
 
     /**
      * The hidden boolean requests if the shape should be hidden in the

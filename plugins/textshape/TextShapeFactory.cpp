@@ -31,6 +31,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
+#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 #include <KUndoStack>
@@ -106,8 +107,9 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     return shape;
 }
 
-bool TextShapeFactory::supports(const KoXmlElement & e) const
+bool TextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return (e.localName() == "text-box" && e.namespaceURI() == KoXmlNS::draw) ||
         (e.localName() == "table" && e.namespaceURI() == KoXmlNS::table);
 }

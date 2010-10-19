@@ -25,6 +25,7 @@
 
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
+#include <KoShapeLoadingContext.h>
 #include "VideoCollection.h"
 
 #include <klocale.h>
@@ -51,8 +52,9 @@ KoShape *VideoShapeFactory::createDefaultShape(KoResourceManager *documentResour
     return defaultShape;
 }
 
-bool VideoShapeFactory::supports(const KoXmlElement &e) const
+bool VideoShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 

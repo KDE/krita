@@ -21,6 +21,7 @@
 #include "SpiralShape.h"
 #include "SpiralShapeConfigWidget.h"
 #include <KoLineBorder.h>
+#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 
@@ -42,6 +43,13 @@ KoShape *SpiralShapeFactory::createDefaultShape(KoResourceManager *) const
     spiral->setShapeId(KoPathShapeId);
 
     return spiral;
+}
+
+bool SpiralShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+{
+    Q_UNUSED(e);
+    Q_UNUSED(context);
+    return false;
 }
 
 QList<KoShapeConfigWidgetBase*> SpiralShapeFactory::createShapeOptionPanels()

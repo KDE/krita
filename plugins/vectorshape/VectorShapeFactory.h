@@ -39,7 +39,7 @@ public:
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 
     /// Reimplemented
-    virtual bool supports(const KoXmlElement & e) const;
+    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
 
     QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
 };

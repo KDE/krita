@@ -106,3 +106,10 @@ KoShape *CollectionShapeFactory::createDefaultShape(KoResourceManager *documentR
     delete data;
     return shape;
 }
+
+bool CollectionShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
+{
+    Q_UNUSED(e);
+    Q_UNUSED(context);
+    return false;
+}

@@ -25,6 +25,7 @@
 
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
+#include <KoShapeLoadingContext.h>
 #include "KoImageCollection.h"
 
 #include <klocale.h>
@@ -49,8 +50,9 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
     return defaultShape;
 }
 
-bool PictureShapeFactory::supports(const KoXmlElement &e) const
+bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(e);
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 

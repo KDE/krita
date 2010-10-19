@@ -24,6 +24,7 @@
 //#include "TreeShapeConfigWidget.h"
 
 #include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -47,8 +48,9 @@ KoShape *TreeShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     return defaultShape;
 }
 
-bool TreeShapeFactory::supports(const KoXmlElement &e) const
+bool TreeShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     kDebug() << ((e.localName() == "tree") && (e.namespaceURI() == KoXmlNS::draw));
     return ((e.localName() == "tree") && (e.namespaceURI() == KoXmlNS::draw));
 }

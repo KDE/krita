@@ -28,6 +28,7 @@
 #include <KoXmlNS.h>
 #include <klocale.h>
 #include <KoLineBorder.h>
+#include <KoShapeLoadingContext.h>
 
 KoConnectionShapeFactory::KoConnectionShapeFactory(QObject* parent)
         : KoShapeFactoryBase(parent, KOCONNECTIONSHAPEID, i18n("Tie"))
@@ -46,7 +47,7 @@ KoShape* KoConnectionShapeFactory::createDefaultShape(KoResourceManager *) const
     return shape;
 }
 
-bool KoConnectionShapeFactory::supports(const KoXmlElement & e) const
+bool KoConnectionShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
     return (e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw);
 }

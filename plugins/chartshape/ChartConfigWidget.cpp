@@ -848,6 +848,15 @@ static bool supportsThreeD( ChartType type )
     return false;
 }
 
+static QString nonEmptyAxisTitle( Axis *axis, int index )
+{
+    QString title = axis->titleText();
+    if ( title.isEmpty() )
+        // TODO (post-2.3): Use "X Axis" or "Y Axis" as default labels instead
+        title = i18n( "Axis %1", index + 1 );
+    return title;
+}
+
 void ChartConfigWidget::update()
 {
     if ( !d->shape )
@@ -871,16 +880,13 @@ void ChartConfigWidget::update()
 
         if ( !d->axes.isEmpty() ) {
             foreach ( Axis *axis, d->axes ) {
+                QString title = nonEmptyAxisTitle( axis, d->axes.indexOf( axis ) );
                 // This automatically calls ui_axisSelectionChanged()
                 // after first insertion
-                d->ui.axes->addItem( axis->titleText() );
+                d->ui.axes->addItem( title );
                 if ( axis->dimension() == YAxisDimension ) {
                     d->dataSetAxes.append( axis );
                     d->ui.dataSetAxes->blockSignals( true );
-                    QString title = axis->titleText();
-                    // TODO (post-2.3): Use "Y Axis" as default label instead
-                    if ( title.isEmpty() )
-                        title = i18n( "Axis %1", d->ui.dataSetAxes->count() + 1 );
                     d->ui.dataSetAxes->addItem( title );
                     d->ui.dataSetAxes->blockSignals( false );
                 }
@@ -1437,13 +1443,16 @@ void ChartConfigWidget::ui_axisTitleChanged( const QString& title )
         return;
 
     const int index = d->ui.axes->currentIndex();
+    Axis *axis = d->axes[index];
+
+    emit axisTitleChanged( axis, title );
+
+    QString nonEmptyTitle = nonEmptyAxisTitle( axis, index );
 
     // TODO: This can surely be done better
-    int dataSetAxisIndex = d->dataSetAxes.indexOf( d->axes[index] );
-    d->ui.dataSetAxes->setItemText( dataSetAxisIndex, title );
-
-    d->ui.axes->setItemText( index, title );
-    emit axisTitleChanged( d->axes[ index ], title );
+    int dataSetAxisIndex = d->dataSetAxes.indexOf( axis );
+    d->ui.dataSetAxes->setItemText( dataSetAxisIndex, nonEmptyTitle );
+    d->ui.axes->setItemText( index, nonEmptyTitle );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b )

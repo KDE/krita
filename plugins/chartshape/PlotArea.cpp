@@ -202,6 +202,11 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     kdRadarPlane->setGridAttributes( false, polarGridAttributes );
     kdRadarPlane->setGridAttributes( true, polarGridAttributes );
 
+    // By default we use a cartesian chart (bar chart), so the polar planes
+    // are not needed yet. They will be added on demand in setChartType().
+    kdChart->takeCoordinatePlane( kdPolarPlane );
+    kdChart->takeCoordinatePlane( kdRadarPlane );
+
     shape->proxyModel()->setDataDimensions( 1 );
 }
 
@@ -277,6 +282,7 @@ void PlotArea::plotAreaInit()
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdCartesianPlanePrimary );
     d->kdCartesianPlaneSecondary->setReferenceCoordinatePlane( d->kdCartesianPlanePrimary );
+    d->kdRadarPlane->setReferenceCoordinatePlane( d->kdPolarPlane );
 
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible( false );
@@ -486,6 +492,11 @@ void PlotArea::setChartType( ChartType type )
     // Lots of things to do if the old and new types of coordinate
     // systems don't match.
     if ( !isPolar( d->chartType ) && isPolar( type ) ) {
+        // First remove reference coordinate plane
+        d->kdChart->takeCoordinatePlane( d->kdCartesianPlaneSecondary );
+        d->kdChart->takeCoordinatePlane( d->kdCartesianPlanePrimary );
+        d->kdChart->addCoordinatePlane( d->kdPolarPlane );
+        d->kdChart->addCoordinatePlane( d->kdRadarPlane );
         foreach ( Axis *axis, d->axes ) {
             if ( !axis->title()->isVisible() )
                 continue;
@@ -495,6 +506,11 @@ void PlotArea::setChartType( ChartType type )
         }
     }
     else if ( isPolar( d->chartType ) && !isPolar( type ) ) {
+        // First remove reference coordinate plane
+        d->kdChart->takeCoordinatePlane( d->kdRadarPlane );
+        d->kdChart->takeCoordinatePlane( d->kdPolarPlane );
+        d->kdChart->addCoordinatePlane( d->kdCartesianPlanePrimary );
+        d->kdChart->addCoordinatePlane( d->kdCartesianPlaneSecondary );
         foreach ( KoShape *title, d->automaticallyHiddenAxisTitles ) {
             title->setVisible( true );
         }

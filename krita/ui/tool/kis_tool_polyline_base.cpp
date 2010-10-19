@@ -50,7 +50,7 @@ KisToolPolylineBase::KisToolPolylineBase(KoCanvasBase * canvas, const QCursor & 
 
 void KisToolPolylineBase::mousePressEvent(KoPointerEvent *event)
 {
-    if (!currentNode() || currentNode()->systemLocked()) {
+    if (nodePaintAbility() == NONE) {
         return;
     }
 

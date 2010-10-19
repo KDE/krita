@@ -27,6 +27,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoColorBackground.h>
+#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 
@@ -136,8 +137,9 @@ KoShape *StarShapeFactory::createShape(const KoProperties *params, KoResourceMan
     return star;
 }
 
-bool StarShapeFactory::supports(const KoXmlElement & e) const
+bool StarShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     if (e.localName() == "regular-polygon" && e.namespaceURI() == KoXmlNS::draw)
         return true;
     return (e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw

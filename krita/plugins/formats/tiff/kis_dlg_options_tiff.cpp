@@ -47,6 +47,7 @@ KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
 
 KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
 {
+    delete optionswdg;
 }
 
 void KisDlgOptionsTIFF::activated(int index)

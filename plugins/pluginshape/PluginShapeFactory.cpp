@@ -26,6 +26,7 @@
 #include "PluginShape.h"
 
 #include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
 #include "KoShapeControllerBase.h"
 
 #include <klocale.h>
@@ -48,8 +49,9 @@ KoShape *PluginShapeFactory::createDefaultShape(KoResourceManager *documentResou
     return defaultShape;
 }
 
-bool PluginShapeFactory::supports(const KoXmlElement &e) const
+bool PluginShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return e.localName() == "plugin" && e.namespaceURI() == KoXmlNS::draw;
 }
 

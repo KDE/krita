@@ -107,7 +107,7 @@ namespace KDChart
 
         T data( const QModelIndex& index ) const
         {
-            if( !index.isValid() || index.parent() != m_rootIndex )
+            if( !index.isValid() || index.parent() != m_rootIndex || index.row() >= m_model->rowCount(m_rootIndex) || index.column() >= m_model->columnCount(m_rootIndex) )
                 return ModelDataCachePrivate::nan< T >();
 
             if( index.row() >= m_data.count() )
@@ -115,12 +115,10 @@ namespace KDChart
                 qWarning( "KDChart didn't got signal rowsInserted, resetModel or layoutChanged, "
                           "but an index with a row outside of the known bounds." );
                           
-                Q_ASSERT_X( index.row() < m_model->rowCount(m_rootIndex), "ModelDataCache::data", "Invalid row-index. Are you sure your model's index-method doesn't produce invalid QModelIndex's?" );
-
                 // apparently, data were added behind our back (w/o signals)
                 const_cast< ModelDataCache< T, ROLE >* >( this )->rowsInserted( m_rootIndex, 
                                                                                 m_data.count(), 
-                                                                                qMax(m_data.count(), m_model->rowCount( m_rootIndex ) - 1) );
+                                                                                m_model->rowCount( m_rootIndex ) - 1 );
                 Q_ASSERT( index.row() < m_data.count() );
             }
 
@@ -129,12 +127,10 @@ namespace KDChart
                 qWarning( "KDChart didn't got signal columnsInserted, resetModel or layoutChanged, "
                           "but an index with a column outside of the known bounds." );
                           
-                Q_ASSERT_X( index.column() < m_model->columnCount(m_rootIndex), "ModelDataCache::data", "Invalid column-index. Are you sure your model's index-method doesn't produce invalid QModelIndex's?" );
-
                 // apparently, data were added behind our back (w/o signals)
                 const_cast< ModelDataCache< T, ROLE >* >( this )->columnsInserted( m_rootIndex, 
                                                                                    m_data.first().count(), 
-                                                                                   qMax(m_data.first().count(), m_model->columnCount( m_rootIndex ) - 1) );
+                                                                                   m_model->columnCount( m_rootIndex ) - 1 );
                 Q_ASSERT( index.column() < m_data.first().count() );
             }
 
@@ -145,6 +141,9 @@ namespace KDChart
         {
             if( row < 0 || column < 0 )
                 return ModelDataCachePrivate::nan< T >();
+
+            Q_ASSERT( row < m_model->rowCount(m_rootIndex) );
+            Q_ASSERT( column < m_model->columnCount(m_rootIndex) );
 
             Q_ASSERT( row < m_data.count() );
             Q_ASSERT( column < m_data.first().count() );
@@ -211,11 +210,12 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex )
+            if( parent != m_rootIndex || start >= m_model->columnCount(m_rootIndex) )
                 return;
 
             Q_ASSERT( start <= end );
-
+            Q_ASSERT( end - start + 1 <= m_model->columnCount(m_rootIndex) );
+            
             const int rowCount = m_data.count();
             for( int row = 0; row < rowCount; ++row )
             {
@@ -230,10 +230,11 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex )
+            if( parent != m_rootIndex || start >= m_model->columnCount(m_rootIndex) )
                 return;
 
             Q_ASSERT( start <= end );
+            Q_ASSERT( end - start + 1 <= m_model->columnCount(m_rootIndex) );
 
             const int rowCount = m_data.count();
             for( int row = 0; row < rowCount; ++row )
@@ -298,12 +299,12 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex )
+            if( parent != m_rootIndex || start >= m_model->rowCount(m_rootIndex) )
                 return;
 
-            Q_ASSERT( start >= 0 && start <= m_data.size() );
             Q_ASSERT( start <= end );
-
+            Q_ASSERT( end - start + 1 <= m_model->rowCount(m_rootIndex) );
+            
             m_data.insert( start, end - start + 1, QVector< T >( m_model->columnCount( m_rootIndex ) ) );
             m_cacheValid.insert( start, end - start + 1, QVector< bool >( m_model->columnCount( m_rootIndex ), false ) );
 
@@ -315,10 +316,11 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex )
+            if( parent != m_rootIndex || start >= m_model->rowCount(m_rootIndex) )
                 return;
 
             Q_ASSERT( start <= end );
+            Q_ASSERT( end - start + 1 <= m_model->rowCount(m_rootIndex) );
 
             m_data.remove( start, end - start + 1 );
             m_cacheValid.remove( start, end - start + 1 );
@@ -333,7 +335,6 @@ namespace KDChart
             m_model = 0;
             modelReset();
         }
-
 
     private:
         QAbstractItemModel* m_model;

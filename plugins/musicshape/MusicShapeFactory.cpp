@@ -25,6 +25,7 @@
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoShapeLoadingContext.h>
 
 #include "MusicShape.h"
 #include "MusicToolFactory.h"
@@ -69,7 +70,8 @@ KoShape *MusicShapeFactory::createDefaultShape(KoResourceManager *) const
     return shape;
 }
 
-bool MusicShapeFactory::supports(const KoXmlElement & e) const
+bool MusicShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return ( e.localName() == "shape" ) && ( e.namespaceURI() == "http://www.koffice.org/music" );
 }

@@ -641,16 +641,26 @@ void KisLayerManager::rotateLayerRight90()
 
 void KisLayerManager::mirrorLayerX()
 {
-    KisPaintDeviceSP dev = activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = activeLayer();
+    
+    if (layer->inherits("KisShapeLayer")) {
+        m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer X"));
 
-    KisTransaction transaction(i18n("Mirror Layer X"), dev);
+        KisTransformVisitor visitor(m_view->image(), -1.0, 1.0, 0.0, 0.0, 0.0, m_view->image()->width(), 0, 0, 0);
+        layer->accept(visitor);
 
-    QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
-    m_activeLayer->setDirty(dirty);
+        m_view->image()->undoAdapter()->endMacro();
+    } else {
+        KisPaintDeviceSP dev = activeDevice();
+        if (!dev) return;
 
-    transaction.commit(m_view->image()->undoAdapter());
+        KisTransaction transaction(i18n("Mirror Layer X"), dev);
 
+        QRect dirty = KisTransformWorker::mirrorX(dev, m_view->selection());
+        m_activeLayer->setDirty(dirty);
+
+        transaction.commit(m_view->image()->undoAdapter());
+    }
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -658,16 +668,26 @@ void KisLayerManager::mirrorLayerX()
 
 void KisLayerManager::mirrorLayerY()
 {
-    KisPaintDeviceSP dev = activeDevice();
-    if (!dev) return;
+    KisLayerSP layer = activeLayer();
+    
+    if (layer->inherits("KisShapeLayer")) {
+        m_view->image()->undoAdapter()->beginMacro(i18n("Mirror Layer Y"));
 
-    KisTransaction transaction(i18n("Mirror Layer Y"), dev);
+        KisTransformVisitor visitor(m_view->image(), 1.0, -1.0, 0.0, 0.0, 0.0, 0, m_view->image()->height(), 0, 0);
+        layer->accept(visitor);
 
-    QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
-    m_activeLayer->setDirty(dirty);
+        m_view->image()->undoAdapter()->endMacro();
+    } else {
+        KisPaintDeviceSP dev = activeDevice();
+        if (!dev) return;
 
-    transaction.commit(m_view->image()->undoAdapter());
+        KisTransaction transaction(i18n("Mirror Layer Y"), dev);
 
+        QRect dirty = KisTransformWorker::mirrorY(dev, m_view->selection());
+        m_activeLayer->setDirty(dirty);
+
+        transaction.commit(m_view->image()->undoAdapter());
+    }
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();
@@ -680,16 +700,15 @@ void KisLayerManager::scaleLayer(double sx, double sy, KisFilterStrategy *filter
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    KisSelectedTransaction transaction(i18n("Scale Layer"), layer);
-
     KoProgressUpdater* updater = m_view->createProgressUpdater();
     KoUpdaterPtr u = updater->startSubtask();
 
-    KisTransformWorker worker(layer->paintDevice(), sx, sy, 0, 0, 0, 0, 0.0, 0, 0, u, filterStrategy);
-    worker.run();
+    m_view->image()->undoAdapter()->beginMacro(i18n("Scale Layer"));
 
-    transaction.commit(m_view->image()->undoAdapter());
+    KisTransformVisitor visitor(m_view->image(), sx, sy, 0.0, 0.0, 0.0, 0, 0, u, filterStrategy);
+    layer->accept(visitor);
 
+    m_view->image()->undoAdapter()->endMacro();
     m_doc->setModified(true);
     layersUpdated();
     m_view->canvas()->update();

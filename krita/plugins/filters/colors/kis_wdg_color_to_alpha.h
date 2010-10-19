@@ -31,6 +31,7 @@ class KisWdgColorToAlpha : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgColorToAlpha(QWidget * parent);
+    virtual ~KisWdgColorToAlpha();
     inline const Ui_WdgColorToAlphaBase* widget() const {
         return m_widget;
     }

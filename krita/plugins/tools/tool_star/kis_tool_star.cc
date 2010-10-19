@@ -70,7 +70,7 @@ void KisToolStar::mousePressEvent(KoPointerEvent *event)
     if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
                        Qt::LeftButton, Qt::NoModifier)) {
 
-        if (!currentNode() || currentNode()->systemLocked())
+        if (nodePaintAbility() == NONE)
             return;
 
         setMode(KisTool::PAINT_MODE);

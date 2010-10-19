@@ -155,7 +155,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
        !specialModifierActive()) {
 
 
-        if (!currentNode() || !currentNode()->paintDevice() || currentNode()->systemLocked())
+        if (nodePaintAbility() != PAINT)
             return;
 
         setMode(KisTool::PAINT_MODE);

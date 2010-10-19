@@ -430,6 +430,10 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     int loadedDataSetCount = 0;
 
     KoXmlElement n;
+    QPen p;
+    QBrush brush;
+    bool penLoaded = false;
+    bool brushLoaded = false;
     forEachElement ( n, element ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
@@ -445,8 +449,49 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
             }
             d->dataSets.append( dataSet );
             dataSet->loadOdf( n, context );
+            if ( penLoaded )
+                dataSet->setPen( p );
+            if ( brushLoaded )
+                dataSet->setBrush( brush );
 
             ++loadedDataSetCount;
+        } else if ( n.localName() == "stock-range-line" ) {
+            KoStyleStack styleStack;
+
+            OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),
+                                              n, KoXmlNS::chart, "style-name", "chart" );
+            if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+                KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+                brushLoaded = false;
+                penLoaded = false;
+
+                styleStack.setTypeProperties( "graphic" );
+
+                if ( styleStack.hasProperty( KoXmlNS::svg, "stroke-color" ) ) {
+                    QString stroke = "solid";/*styleStack.property( KoXmlNS::svg, "stroke-color" );*/
+                    p = KoOdfGraphicStyles::loadOdfStrokeStyle( styleStack, stroke, odfLoadingContext.stylesReader() );
+                    penLoaded = true;
+                    Q_FOREACH( DataSet* set, d->dataSets )
+                    {
+                        set->setPen( p );
+                    }
+                }
+
+                if ( styleStack.hasProperty( KoXmlNS::draw, "fill" ) ) {
+                    QString fill = styleStack.property( KoXmlNS::draw, "fill" );
+                    if ( fill == "solid" || fill == "hatch" ) {
+                        brush = KoOdfGraphicStyles::loadOdfFillStyle( styleStack, fill, odfLoadingContext.stylesReader() );
+                        brushLoaded = true;
+                    } else if ( fill == "gradient" ) {
+                        brush = KoOdfGraphicStyles::loadOdfGradientStyle( styleStack, odfLoadingContext.stylesReader(), QSizeF( 5.0, 60.0 ) );
+                        brushLoaded = true;
+                    }
+                    Q_FOREACH( DataSet* set, d->dataSets )
+                    {
+                        set->setBrush( brush );
+                    }
+                }
+            }
         } else {
             qWarning() << "ChartProxyModel::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }

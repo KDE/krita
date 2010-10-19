@@ -23,6 +23,7 @@
 
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
+#include <KoShapeLoadingContext.h>
 
 #include <klocale.h>
 
@@ -42,8 +43,9 @@ KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
     return text;
 }
 
-bool ArtisticTextShapeFactory::supports(const KoXmlElement & e) const
+bool ArtisticTextShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     if (!(e.localName() == "custom-shape" && e.namespaceURI() == KoXmlNS::draw)) {
         return false;
     }

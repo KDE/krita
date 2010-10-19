@@ -840,6 +840,7 @@ static bool supportsThreeD( ChartType type )
     case LineChartType:
     case AreaChartType:
     case CircleChartType:
+    case BubbleChartType:
         return true;
     default:
         break;

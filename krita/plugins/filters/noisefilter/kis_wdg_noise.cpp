@@ -45,6 +45,7 @@ KisWdgNoise::KisWdgNoise(KisFilter* /*nfilter*/, QWidget* parent)
 
 KisWdgNoise::~KisWdgNoise()
 {
+    delete m_widget;
 }
 
 void KisWdgNoise::setConfiguration(const KisPropertiesConfiguration* config)

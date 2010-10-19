@@ -24,6 +24,7 @@
 #include <KoXmlNS.h>
 #include <KoResourceManager.h>
 #include <KoOdfDocument.h>
+#include <KoShapeLoadingContext.h>
 
 CommentShapeFactory::CommentShapeFactory()
 : KoShapeFactoryBase(COMMENTSHAPEID, i18n("Comment"))
@@ -41,7 +42,8 @@ KoShape* CommentShapeFactory::createDefaultShape(KoResourceManager* documentReso
     return new CommentShape(documentResources);
 }
 
-bool CommentShapeFactory::supports(const KoXmlElement& element) const
+bool CommentShapeFactory::supports(const KoXmlElement& element, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return element.localName() == "annotation" && element.namespaceURI() == KoXmlNS::officeooo; //TODO change accordingly
 }

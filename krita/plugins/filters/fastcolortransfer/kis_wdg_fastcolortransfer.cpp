@@ -37,6 +37,7 @@ KisWdgFastColorTransfer::KisWdgFastColorTransfer(QWidget * parent) : KisConfigWi
 
 KisWdgFastColorTransfer::~KisWdgFastColorTransfer()
 {
+    delete m_widget;
 }
 
 void KisWdgFastColorTransfer::setConfiguration(const KisPropertiesConfiguration* config)

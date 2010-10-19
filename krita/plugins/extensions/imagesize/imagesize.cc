@@ -163,7 +163,7 @@ void ImageSize::slotLayerSize()
 
     KisConfig cfg;
 
-    KisPaintDeviceSP dev = m_view->activeDevice();
+    KisPaintDeviceSP dev = m_view->activeLayer()->projection();
     Q_ASSERT(dev);
     QRect rc = dev->exactBounds();
 
@@ -231,7 +231,7 @@ void ImageSize::slotSelectionScale()
 void ImageSize::slotNodeChanged(const KisNodeSP node)
 {
     Q_UNUSED(node);
-    m_scaleLayerAction->setEnabled(m_view->activeDevice());
+    m_scaleLayerAction->setEnabled(m_view->activeLayer());
 }
 
 #include "imagesize.moc"

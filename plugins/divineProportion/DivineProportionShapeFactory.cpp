@@ -21,6 +21,7 @@
 #include "Intro.h"
 
 #include <klocale.h>
+#include <KoShapeLoadingContext.h>
 
 DivineProportionShapeFactory::DivineProportionShapeFactory()
     : KoShapeFactoryBase(DivineProportionShape_SHAPEID, i18n("DivineProportion"))
@@ -42,3 +43,12 @@ QList<KoShapeConfigWidgetBase*> DivineProportionShapeFactory::createShapeOptionP
     answer.append(new Intro());
     return answer;
 }
+
+bool DivineProportionShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+{
+    Q_UNUSED(e);
+    Q_UNUSED(context);
+    return false;
+}
+
+#include <DivineProportionShapeFactory.moc>

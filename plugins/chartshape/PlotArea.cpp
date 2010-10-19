@@ -566,6 +566,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 //     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     KoStyleStack& globalStack = context.odfLoadingContext().styleStack();    
     KoStyleStack styleStack;
+    globalStack.save();
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
@@ -614,8 +615,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
     QString seriesSource;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        globalStack.save();
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {        
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
         OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),  plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 

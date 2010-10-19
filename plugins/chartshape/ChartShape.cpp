@@ -951,7 +951,7 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     styleStack.save();
 
-    styleStack.clear();
+    //styleStack.clear();
     if ( chartElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( chartElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );

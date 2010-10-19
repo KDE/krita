@@ -31,6 +31,7 @@ class KisWdgBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgBlur(QWidget * parent);
+    virtual ~KisWdgBlur();
     inline const Ui_WdgBlur* widget() const {
         return m_widget;
     }

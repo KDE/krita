@@ -51,7 +51,7 @@ public:
     ChartShapeFactory();
     ~ChartShapeFactory() {}
 
-    bool supports( const KoXmlElement &element ) const;
+    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
 
     virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
     virtual void newDocumentResourceManager(KoResourceManager *manager);

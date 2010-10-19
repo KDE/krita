@@ -37,7 +37,9 @@ KisWdgColor::KisWdgColor(QWidget* parent)
 
 KisWdgColor::~KisWdgColor()
 {
+    delete m_widget;
 }
+
 
 void KisWdgColor::setConfiguration(const KisPropertiesConfiguration* config)
 {

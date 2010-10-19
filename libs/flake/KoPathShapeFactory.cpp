@@ -21,6 +21,7 @@
 #include "KoLineBorder.h"
 #include "KoImageCollection.h"
 #include "KoResourceManager.h"
+#include "KoShapeLoadingContext.h"
 
 #include <klocale.h>
 
@@ -49,16 +50,19 @@ KoShape *KoPathShapeFactory::createDefaultShape(KoResourceManager *) const
     return path;
 }
 
-bool KoPathShapeFactory::supports(const KoXmlElement & e) const
+bool KoPathShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
-    if (e.localName() == "path" && e.namespaceURI() == KoXmlNS::draw)
-        return true;
-    if (e.localName() == "line" && e.namespaceURI() == KoXmlNS::draw)
-        return true;
-    if (e.localName() == "polyline" && e.namespaceURI() == KoXmlNS::draw)
-        return true;
-    if (e.localName() == "polygon" && e.namespaceURI() == KoXmlNS::draw)
-        return true;
+    Q_UNUSED(context);
+    if (e.namespaceURI() == KoXmlNS::draw) {
+        if (e.localName() == "path")
+            return true;
+        if (e.localName() == "line")
+            return true;
+        if (e.localName() == "polyline")
+            return true;
+        if (e.localName() == "polygon")
+            return true;
+    }
 
     return false;
 }

@@ -31,12 +31,13 @@ class KisWdgGaussianBlur : public KisConfigWidget
     Q_OBJECT
 public:
     KisWdgGaussianBlur(QWidget * parent);
+    virtual ~KisWdgGaussianBlur();
     inline const Ui_WdgGaussianBlur* widget() const {
         return m_widget;
     }
     virtual void setConfiguration(const KisPropertiesConfiguration*);
     virtual KisPropertiesConfiguration* configuration() const;
-    
+
 private slots:
     void horizontalRadiusChanged(int);
     void verticalRadiusChanged(int);

@@ -32,6 +32,7 @@ struct KisCurveRectangleMaskGenerator::Private {
     int curveResolution;
     QString curve;
     bool dirty;
+    qreal m_halfWidth, m_halfHeight;
 };
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve &curve)
@@ -42,6 +43,9 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
     d->curvePoints = curve.points();
     d->curve = curve.toString();
     d->dirty = false;
+    d->m_halfWidth = KisMaskGenerator::d->diameter * 0.5;
+    d->m_halfHeight = d->m_halfWidth * KisMaskGenerator::d->ratio;
+
 }
 
 KisCurveRectangleMaskGenerator::~KisCurveRectangleMaskGenerator()
@@ -73,8 +77,12 @@ quint8 KisCurveRectangleMaskGenerator::valueAt(qreal x, qreal y) const
         }
     }
 
-    xr = qAbs(xr / width());
-    yr = qAbs(yr / height());
+    if(xr > d->m_halfWidth || xr < -d->m_halfWidth || yr > d->m_halfHeight || yr < -d->m_halfHeight) {
+        return 255;
+    }
+    
+    xr = qAbs(xr) / width();
+    yr = qAbs(yr) / height();
     
     if (xr > 1.0 || yr > 1.0){
         return 255;

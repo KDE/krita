@@ -51,6 +51,11 @@ KisWdgGaussianBlur::KisWdgGaussianBlur(QWidget * parent) : KisConfigWidget(paren
     connect(m_widget->verticalRadius, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
+KisWdgGaussianBlur::~KisWdgGaussianBlur()
+{
+    delete m_widget;
+}
+
 KisPropertiesConfiguration* KisWdgGaussianBlur::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("gaussian blur", 1);
@@ -93,4 +98,4 @@ void KisWdgGaussianBlur::aspectLockChanged(bool v)
     }
 }
 
-#include "kis_wdg_gaussian_blur.moc" 
+#include "kis_wdg_gaussian_blur.moc"

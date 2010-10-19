@@ -27,6 +27,7 @@
 // KOffice
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
+#include <KoShapeLoadingContext.h>
 
 
 // KDE
@@ -51,8 +52,9 @@ KoShape *VectorShapeFactory::createDefaultShape(KoResourceManager */*documentRes
     return shape;
 }
 
-bool VectorShapeFactory::supports(const KoXmlElement & e) const
+bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 

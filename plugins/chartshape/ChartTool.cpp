@@ -298,8 +298,8 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( showFooterChanged( bool ) ),
              this,   SLOT( setShowFooter( bool ) ) );
 
-    connect( widget, SIGNAL( axisAdded( AxisPosition, const QString& ) ),
-             this,   SLOT( addAxis( AxisPosition, const QString& ) ) );
+    connect( widget, SIGNAL( axisAdded( AxisDimension, const QString& ) ),
+             this,   SLOT( addAxis( AxisDimension, const QString& ) ) );
     connect( widget, SIGNAL( axisRemoved( Axis* ) ),
              this,   SLOT( removeAxis( Axis* ) ) );
     connect( widget, SIGNAL( axisTitleChanged( Axis*, const QString& ) ),
@@ -621,15 +621,12 @@ void ChartTool::setLegendShowFrame( bool show )
 }
 
 
-void ChartTool::addAxis( AxisPosition position, const QString& title )
+void ChartTool::addAxis( AxisDimension dimension, const QString& title )
 {
     Q_ASSERT( d->shape );
 
-    Axis *axis = new Axis( d->shape->plotArea() );
-    axis->setPosition( position );
+    Axis *axis = new Axis( d->shape->plotArea(), dimension );
     axis->setTitleText( title );
-    
-    d->shape->plotArea()->addAxis( axis );
     d->shape->update();
 }
 

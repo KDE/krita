@@ -48,7 +48,7 @@
 #include <KDebug>
 
 // KDChart
-#include <KDChartAbstractCoordinatePlane>
+#include <KDChartCartesianCoordinatePlane>
 #include <KDChartBackgroundAttributes>
 #include <KDChartFrameAttributes>
 
@@ -72,7 +72,7 @@ public:
     QBrush   brush;
     QPen     framePen;
 
-    KDChart::AbstractCoordinatePlane *kdPlane;
+    KDChart::CartesianCoordinatePlane *kdPlane;
 };
 
 Surface::Private::Private(PlotArea *parent)
@@ -96,7 +96,7 @@ Surface::Surface( PlotArea *parent )
     // FIXME: Make this class capable of storing floor-specific
     // attributes as well. Right now, it's really only used
     // and designed to load and save the chart's wall.
-    d->kdPlane = d->plotArea->kdPlane();
+    d->kdPlane = d->plotArea->kdCartesianPlane();
     Q_ASSERT( d->kdPlane );
 }
 

@@ -29,6 +29,13 @@
 
 using namespace KChart;
 
+OdfLoadingHelper::OdfLoadingHelper()
+    : tableSource( 0 )
+    , chartUsesInternalModelOnly( true )
+    , categoryRegionSpecifiedInXAxis( false )
+{
+}
+
 void OdfLoadingHelper::fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader &stylesReader,
                                        const KoXmlElement& object, const char* nsURI,
                                        const char* attrName, const char* family )

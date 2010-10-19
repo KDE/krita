@@ -94,9 +94,11 @@ public:
      * Unless the list *dataSetsToRecycle is empty, it will reuse as many
      * DataSet instances from there as possible and remove them from the list.
      *
-     * As a side effect, this method sets d->categoryDataRegion.
+     * As a side effect, this method sets d->categoryDataRegion if
+     * overrideCategories is true.
      */
-    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle );
+    QList<DataSet*> createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle,
+                                              bool overrideCategories = true );
 };
 
 ChartProxyModel::Private::Private( ChartProxyModel *parent, TableSource *source )
@@ -236,7 +238,8 @@ static CellRegion extractColumn( const CellRegion &region, int col, int rowOffse
     return result;
 }
 
-QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle )
+QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSet*> *dataSetsToRecycle,
+                                                                    bool overrideCategories )
 {
     if ( !selection.isValid() )
         return QList<DataSet*>();
@@ -320,10 +323,15 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
             (dataDirection == Qt::Vertical && firstColumnIsLabel);
 
     // Regions shared by all data sets: categories and x-data
-    categoryDataRegion = CellRegion(); // member variable
+    if ( overrideCategories )
+        categoryDataRegion = CellRegion();
     CellRegion xData;
-    if ( !dataRegions.isEmpty() && useCategories )
-        categoryDataRegion = dataRegions.takeFirst();
+    if ( !dataRegions.isEmpty() && useCategories ) {
+        if ( overrideCategories )
+            categoryDataRegion = dataRegions.takeFirst();
+        else
+            dataRegions.removeFirst();
+    }
     if ( !dataRegions.isEmpty() && extractXData )
         xData = dataRegions.takeFirst();
 
@@ -393,8 +401,58 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
 #endif
 
     beginResetModel();
-    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
+
+    KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
+    KoStyleStack styleStack;
+    if ( element.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        OdfLoadingHelper::fillStyleStack( styleStack, stylesReader, element,
+                                          KoXmlNS::chart, "style-name", "chart" );
+
+        // Data direction: It's in the plotarea style.
+        if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
+            QString seriesSource = styleStack.property( KoXmlNS::chart, "series-source" );
+            // Check if the direction for data series is vertical or horizontal.
+            if ( seriesSource == "rows" )
+                d->dataDirection = Qt::Horizontal;
+            else if ( seriesSource == "columns" )
+                d->dataDirection = Qt::Vertical;
+            // Otherwise leave our default value
+        }
+    }
+
+    // Find out if the data table contains labels as first row and/or column.
+    // This is in the plot-area element itself.
+
+    // Do not ignore the data-source-has-labels in any case, even if a
+    // category data region is specified for an axis, as the first
+    // column still has to be exluded from the actual data region if
+    // e.g. data-source-has-labels is set to "column" If an axis
+    // contains the chart:categories element, the category data region
+    // will automatically be set on every data set attached to that
+    // axis. See Axis::attachDataSet().
+    if ( element.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
+        const QString dataSourceHasLabels
+            = element.attributeNS( KoXmlNS::chart, "data-source-has-labels" );
+        if ( dataSourceHasLabels == "both" ) {
+            d->firstRowIsLabel = true;
+            d->firstColumnIsLabel = true;
+        } else if ( dataSourceHasLabels == "row" ) {
+            d->firstRowIsLabel = true;
+            d->firstColumnIsLabel = false;
+        } else if ( dataSourceHasLabels == "column" ) {
+            d->firstRowIsLabel = false;
+            d->firstColumnIsLabel = true;
+        } else {
+            // dataSourceHasLabels == "none" or wrong value
+            d->firstRowIsLabel = false;
+            d->firstColumnIsLabel = false;
+        }
+    }
+    else {
+        // No info about if first row / column contains labels.
+        d->firstRowIsLabel = false;
+        d->firstColumnIsLabel = false;
+    }
 
     // For every data set, there must be an explicit <chart:series> element,
     // which we will load later.
@@ -421,11 +479,13 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
         int colCount = internalTable->model()->columnCount();
         d->selection = CellRegion( internalTable, QRect( 1, 1, colCount, rowCount ) );
     }
+
     // This is what we'll use as basis for the data sets we "produce" from ODF.
     // This might be data sets that were "instantiated" from the internal
     // table or from an arbitrary selection of other tables as specified
     // in the PlotArea's table:cell-range-address attribute (parsed above).
-    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets );
+    QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets,
+                                                                   !helper->categoryRegionSpecifiedInXAxis );
     
     int loadedDataSetCount = 0;
 
@@ -500,7 +560,6 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     //rebuildDataMap();
     endResetModel();
 
-    styleStack.restore();
     return true;
 }
 

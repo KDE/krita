@@ -1465,17 +1465,13 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b )
 
 void ChartConfigWidget::ui_axisAdded()
 {
-    AxisPosition position;
-    if ( d->newAxisDialog.positionIsTop->isChecked() )
-        position = TopAxisPosition;
-    else if ( d->newAxisDialog.positionIsBottom->isChecked() )
-        position = BottomAxisPosition;
-    else if ( d->newAxisDialog.positionIsLeft->isChecked() )
-        position = LeftAxisPosition;
+    AxisDimension dimension;
+    if ( d->newAxisDialog.dimensionIsX->isChecked() )
+        dimension = XAxisDimension;
     else
-        position = RightAxisPosition;
+        dimension = YAxisDimension;
 
-    emit axisAdded( position, d->newAxisDialog.title->text() );
+    emit axisAdded( dimension, d->newAxisDialog.title->text() );
     update();
 
     if( d->ui.axes->count() > 0 )

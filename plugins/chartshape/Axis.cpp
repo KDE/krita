@@ -84,10 +84,14 @@ using namespace KChart;
 class Axis::Private
 {
 public:
-    Private( Axis *axis );
+    Private( Axis *axis, AxisDimension dim );
     ~Private();
 
     void adjustAllDiagrams();
+    /// Updates the axis potition in the chart's layout
+    /// FIXME: We should instead implement a generic layout position method
+    /// and have the layout find out about our position when it changes.
+    void updatePosition();
 
     void registerDiagram( KDChart::AbstractDiagram *diagram );
     void deregisterDiagram( KDChart::AbstractDiagram *diagram );
@@ -114,8 +118,7 @@ public:
 
     PlotArea *plotArea;
 
-    AxisPosition  position;
-    AxisDimension dimension;
+    const AxisDimension dimension;
 
     KoShape *title;
     TextLabelData *titleData;
@@ -139,7 +142,7 @@ public:
     /// TODO: Save to ODF
     QFont font;
 
-    KDChart::CartesianAxis            *kdAxis;
+    KDChart::CartesianAxis            *const kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
     KDChart::PolarCoordinatePlane     *kdPolarPlane;
     KDChart::RadarCoordinatePlane     *kdRadarPlane;
@@ -169,8 +172,6 @@ public:
     ChartType     plotAreaChartType;
     ChartSubtype  plotAreaChartSubType;
 
-    CellRegion categoryDataRegion;
-
     // If KDChart::LineDiagram::centerDataPoints() property is set to true,
     // the data points drawn in a line (i.e., also an area) diagram start at
     // an offset of 0.5, that is, in the middle of a column in the diagram.
@@ -191,10 +192,14 @@ public:
 };
 
 
-Axis::Private::Private( Axis *axis )
+Axis::Private::Private( Axis *axis, AxisDimension dim )
     : q( axis )
+    , dimension( dim )
+    , kdPlane( 0 )
+    , kdPolarPlane( 0 )
+    , kdRadarPlane( 0 )
+    , kdAxis( new KDChart::CartesianAxis )
 {
-    position = LeftAxisPosition;
     centerDataPoints = false;
 
     gapBetweenBars = 0;
@@ -230,10 +235,6 @@ Axis::Private::Private( Axis *axis )
 Axis::Private::~Private()
 {
     Q_ASSERT( plotArea );
-
-    delete kdPlane;
-    delete kdPolarPlane;
-    delete kdRadarPlane;
 
     delete kdBarDiagram;
     delete kdAreaDiagram;
@@ -830,50 +831,23 @@ void Axis::Private::adjustAllDiagrams()
 //                             class Axis
 
 
-Axis::Axis( PlotArea *parent )
-    : d( new Private( this ) )
+Axis::Axis( PlotArea *parent, AxisDimension dimension )
+    : d( new Private( this, dimension ) )
 {
     Q_ASSERT( parent );
 
+    parent->addAxis( this );
+
     d->plotArea = parent;
-    d->kdAxis       = new KDChart::CartesianAxis();
     KDChart::BackgroundAttributes batt( d->kdAxis->backgroundAttributes() );
     batt.setBrush( QBrush( Qt::white ) );
     d->kdAxis->setBackgroundAttributes( batt );
-    d->kdPlane      = new KDChart::CartesianCoordinatePlane();
-    d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
-    d->kdRadarPlane = new KDChart::RadarCoordinatePlane();
-
-    // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
-    // between axes and plot area frame.
-    d->kdPlane->setDrawingAreaMargins( 0, 0, 0, 0 );
-    
-    //disable non circular axis
-    KDChart::GridAttributes gridAttributesNonCircular = d->kdPolarPlane->gridAttributes( false );
-    gridAttributesNonCircular.setGridVisible( false );
-    d->kdPolarPlane->setGridAttributes( false, gridAttributesNonCircular );
+    d->kdPlane = parent->kdCartesianPlane( this );
+    d->kdPolarPlane = parent->kdPolarPlane();
+    d->kdRadarPlane = parent->kdRadarPlane();
 
     d->plotAreaChartType    = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
-
-    KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
-    gridAttributes.setGridVisible( false );
-    gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
-    d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
-
-    gridAttributes = d->kdPlane->gridAttributes( Qt::Vertical );
-    gridAttributes.setGridVisible( false );
-    gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
-    d->kdPlane->setGridAttributes( Qt::Vertical, gridAttributes );
-
-    gridAttributes = d->kdPolarPlane->gridAttributes( true );
-    gridAttributes.setGridVisible( false );
-    d->kdPolarPlane->setGridAttributes( true, gridAttributes );
-    // FIXME d->kdRadarPlane->setGridAttributes( gridAttributes );
-    
-//     gridAttributes = d->kdPolarPlane->gridAttributes( plotArea()->chartType() != RadarChartType );
-//     gridAttributes.setGridVisible( false );
-//     d->kdPolarPlane->setGridAttributes( plotArea()->chartType() != RadarChartType, gridAttributes );
 
     KoShapeFactoryBase *textShapeFactory = KoShapeRegistry::instance()->value( TextShapeId );
     if ( textShapeFactory )
@@ -908,6 +882,8 @@ Axis::Axis( PlotArea *parent )
              this,        SLOT( setGapBetweenSets( int ) ) );
     connect( d->plotArea, SIGNAL( pieAngleOffsetChanged( qreal ) ),
              this,        SLOT( setPieAngleOffset( qreal ) ) );
+
+    d->updatePosition();
 }
 
 Axis::~Axis()
@@ -925,72 +901,6 @@ Axis::~Axis()
 PlotArea* Axis::plotArea() const
 {
     return d->plotArea;
-}
-
-AxisPosition Axis::position() const
-{
-    return d->position;
-}
-
-void Axis::setDimension( AxisDimension dimension )
-{
-    d->dimension = dimension;
-
-    // We don't support z axes yet, so hide them.
-    // They are only kept to not lose them when saving a document
-    // that previously had a z axis.
-    if ( dimension == ZAxisDimension ) {
-        d->kdPolarPlane->setReferenceCoordinatePlane( 0 );
-        d->kdPlane->setReferenceCoordinatePlane( 0 );
-        d->kdRadarPlane->setReferenceCoordinatePlane( 0 );
-        d->title->setVisible( false );
-    } else {
-        d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
-        d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
-        d->kdRadarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
-    }
-
-    requestRepaint();
-}
-
-void Axis::setPosition( AxisPosition position )
-{
-    d->position = position;
-
-    bool chartIsVertical = d->plotArea->isVertical();
-    if ( position == LeftAxisPosition || position == RightAxisPosition )
-        setDimension( chartIsVertical ? XAxisDimension : YAxisDimension );
-    else if ( position == TopAxisPosition || position == BottomAxisPosition )
-        setDimension( chartIsVertical ? YAxisDimension : XAxisDimension );
-
-    if ( position == LeftAxisPosition )
-        d->title->rotate( -90 - d->title->rotation() );
-    else if ( position == RightAxisPosition )
-        d->title->rotate( 90 - d->title->rotation() );
-
-    // KDChart
-    d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
-
-    Position layoutPosition;
-    switch ( position ) {
-        case TopAxisPosition:
-            layoutPosition = TopPosition;
-            break;
-        case BottomAxisPosition:
-            layoutPosition = BottomPosition;
-            break;
-        case LeftAxisPosition:
-            layoutPosition = StartPosition;
-            break;
-        case RightAxisPosition:
-            layoutPosition = EndPosition;
-            break;
-    }
-    Layout *layout = plotArea()->parent()->layout();
-    layout->setPosition( title(), layoutPosition );
-    layout->layout();
-
-    requestRepaint();
 }
 
 KoShape *Axis::title() const
@@ -1031,10 +941,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
 
     d->dataSets.append( dataSet );
 
-    if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegion( d->categoryDataRegion );
-    }
-    else if ( dimension() == YAxisDimension ) {
+    if ( dimension() == YAxisDimension ) {
         dataSet->setAttachedAxis( this );
 
         ChartType chartType = dataSet->chartType();
@@ -1062,10 +969,7 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         return false;
     d->dataSets.removeAll( dataSet );
 
-    if ( dimension() == XAxisDimension ) {
-        dataSet->setCategoryDataRegion( CellRegion() );
-    }
-    else if ( dimension() == YAxisDimension ) {
+    if ( dimension() == YAxisDimension ) {
         ChartType chartType = dataSet->chartType();
         if ( chartType == LastChartType )
             chartType = d->plotAreaChartType;
@@ -1166,7 +1070,7 @@ void Axis::setMinorIntervalDivisor( int divisor )
     KDChart::GridAttributes attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setGridSubStepWidth( (divisor != 0) ? (d->majorInterval / divisor) : 0.0 );
     d->kdPlane->setGridAttributes( orientation(), attributes );
-    
+
     attributes = d->kdPolarPlane->gridAttributes( true );
     attributes.setGridSubStepWidth( (divisor != 0) ? (d->majorInterval / divisor) : 0.0 );
     d->kdPolarPlane->setGridAttributes( true, attributes );
@@ -1298,22 +1202,10 @@ void Axis::setShowLabels( bool show )
 
 Qt::Orientation Axis::orientation()
 {
-    if ( d->position == BottomAxisPosition || d->position == TopAxisPosition )
-        return Qt::Horizontal;
-    return Qt::Vertical;
-}
-
-CellRegion Axis::categoryDataRegion() const
-{
-    return d->categoryDataRegion;
-}
-
-void Axis::setCategoryDataRegion( const CellRegion &region )
-{
-    d->categoryDataRegion = region;
-
-    foreach( DataSet *dataSet, d->dataSets )
-        dataSet->setCategoryDataRegion( region );
+    bool chartIsVertical = d->plotArea->isVertical();
+    bool horizontal = d->dimension == (chartIsVertical ? YAxisDimension
+                                                       : XAxisDimension );
+    return horizontal ? Qt::Horizontal : Qt::Vertical;
 }
 
 bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
@@ -1416,7 +1308,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             else if ( n.localName() == "categories" ) {
                 if ( n.hasAttributeNS( KoXmlNS::table, "cell-range-address" ) ) {
                     const CellRegion region = CellRegion( helper->tableSource, n.attributeNS( KoXmlNS::table, "cell-range-address" ) );
-                    setCategoryDataRegion( region );
+                    helper->categoryRegionSpecifiedInXAxis = true;
+                    plotArea()->proxyModel()->setCategoryDataRegion( region );
                 }
             }
         }
@@ -1426,16 +1319,8 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             //setTitleText( name );
         }
 
-        if ( axisElement.hasAttributeNS( KoXmlNS::chart, "dimension" ) ) {
-            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension", QString() );
-            // FIXME: position and dimension should be handled independently
-            if ( dimension == "x" )
-                setPosition( BottomAxisPosition );
-            else if ( dimension == "y" )
-                setPosition( LeftAxisPosition );
-            else if ( dimension == "z" )
-                setDimension( ZAxisDimension );
-        }
+        // NOTE: chart:dimension already handled by PlotArea before and passed
+        // explicitly in the constructor.
     }
 
     if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
@@ -1816,6 +1701,37 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
     default:;
         // FIXME: Implement more chart types
     }
+}
+
+void Axis::plotAreaIsVerticalChanged()
+{
+    d->updatePosition();
+}
+
+void Axis::Private::updatePosition()
+{
+    // Is the first x or y axis?
+    bool first = (dimension == XAxisDimension) ? plotArea->xAxis() == q
+                                               : plotArea->yAxis() == q;
+
+    Position position;
+    if ( q->orientation() == Qt::Horizontal )
+        position = first ? BottomPosition : TopPosition;
+    else
+        position = first ? StartPosition : EndPosition;
+
+    if ( position == StartPosition )
+        title->rotate( -90 - title->rotation() );
+    else if ( position == EndPosition )
+        title->rotate( 90 - title->rotation() );
+
+    // KDChart
+    kdAxis->setPosition( PositionToKDChartAxisPosition( position ) );
+    Layout *layout = plotArea->parent()->layout();
+    layout->setPosition( title, position );
+    layout->layout();
+
+    q->requestRepaint();
 }
 
 void Axis::registerKdAxis( KDChart::CartesianAxis *axis )

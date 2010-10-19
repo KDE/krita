@@ -50,11 +50,10 @@ class CHARTSHAPELIB_EXPORT Axis : public QObject
     Q_OBJECT
     
 public:
-    Axis( PlotArea *parent );
+    Axis( PlotArea *parent, AxisDimension dimension );
     ~Axis();
 	
     PlotArea *plotArea() const;
-    AxisPosition position() const;
     KoShape *title() const;
     QString titleText() const;
     bool showLabels() const;
@@ -77,23 +76,8 @@ public:
     QFont font() const;
     bool isVisible() const;
 
-    CellRegion categoryDataRegion() const;
-
-    /**
-     * Sets the cell region to use for categories in this axis.
-     *
-     * FIXME: This only applies to an x axis. Also, there's always exactly
-     * one region for categories in an entire chart (TODO: verify).
-     * Right now there's four (!) classes holding this region: Axis, DataSet,
-     * PlotArea and ChartProxyModel. Only one should hold this property.
-     */
-    void setCategoryDataRegion( const CellRegion &region );
-
-    // FIXME: Make setPosition() not call setDimension()
-    void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
     void setShowLabels( bool show );
-    void setDimension( AxisDimension dimension );
 
     /**
      * Attaches a data set to this axis, adding it to a diagram
@@ -141,7 +125,8 @@ public:
     
     void plotAreaChartTypeChanged( ChartType chartType );
     void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
-    
+    void plotAreaIsVerticalChanged();
+
     void registerKdAxis( KDChart::CartesianAxis *axis );
     void deregisterKdAxis( KDChart::CartesianAxis *axis );
     

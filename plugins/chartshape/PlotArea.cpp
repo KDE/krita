@@ -51,9 +51,10 @@
 #include <KDChartAbstractDiagram>
 
 #include <KDChartAbstractCartesianDiagram>
-#include <KDChartAbstractCoordinatePlane>
 #include <KDChartBarAttributes>
+#include <KDChartCartesianCoordinatePlane>
 #include <KDChartPolarCoordinatePlane>
+#include <KDChartRadarCoordinatePlane>
 // Attribute Classes
 #include <KDChartFrameAttributes>
 #include <KDChartDataValueAttributes>
@@ -133,8 +134,11 @@ public:
     // The embedded KD Chart
 
     // The KD Chart parts
-    KDChart::Chart                    *kdChart;
-    KDChart::AbstractCoordinatePlane  *kdPlane;
+    KDChart::Chart                    *const kdChart;
+    KDChart::CartesianCoordinatePlane *const kdCartesianPlanePrimary;
+    KDChart::CartesianCoordinatePlane *const kdCartesianPlaneSecondary;
+    KDChart::PolarCoordinatePlane     *const kdPolarPlane;
+    KDChart::RadarCoordinatePlane     *const kdRadarPlane;
     QList<KDChart::AbstractDiagram*>   kdDiagrams;
     
     // Caching: We can rerender faster if we cache KDChart's output
@@ -165,19 +169,49 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     ,pieAngleOffset( 90.0 )
     // KD Chart stuff
     ,kdChart( new KDChart::Chart() )
-    ,kdPlane( new KDChart::CartesianCoordinatePlane( kdChart ) )
+    , kdCartesianPlanePrimary( new KDChart::CartesianCoordinatePlane( kdChart ) )
+    , kdCartesianPlaneSecondary( new KDChart::CartesianCoordinatePlane( kdChart ) )
+    , kdPolarPlane( new KDChart::PolarCoordinatePlane( kdChart ) )
+    , kdRadarPlane( new KDChart::RadarCoordinatePlane( kdChart ) )
     // Cache    
     ,paintPixmap( true )
     ,pixmapRepaintRequested( true )
-{       
+{
+    // --- Prepare Primary Cartesian Coordinate Plane ---
+    KDChart::GridAttributes gridAttributes;
+    gridAttributes.setGridVisible( false );
+    gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
+    kdCartesianPlanePrimary->setGridAttributes( Qt::Horizontal, gridAttributes );
+    kdCartesianPlanePrimary->setGridAttributes( Qt::Vertical, gridAttributes );
+    // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
+    // between axes and plot area frame.
+    kdCartesianPlanePrimary->setDrawingAreaMargins( 0, 0, 0, 0 );
+
+    // --- Prepare Secondary Cartesian Coordinate Plane ---
+    kdCartesianPlaneSecondary->setGridAttributes( Qt::Horizontal, gridAttributes );
+    kdCartesianPlaneSecondary->setGridAttributes( Qt::Vertical, gridAttributes );
+    kdCartesianPlaneSecondary->setDrawingAreaMargins( 0, 0, 0, 0 );
+
+    // --- Prepare Polar Coordinate Plane ---
+    KDChart::GridAttributes polarGridAttributes;
+    polarGridAttributes.setGridVisible( false );
+    kdPolarPlane->setGridAttributes( false, polarGridAttributes );
+    kdPolarPlane->setGridAttributes( true, polarGridAttributes );
+
+    // --- Prepare Radar Coordinate Plane ---
+    kdRadarPlane->setGridAttributes( false, polarGridAttributes );
+    kdRadarPlane->setGridAttributes( true, polarGridAttributes );
+
     shape->proxyModel()->setDataDimensions( 1 );
 }
 
 PlotArea::Private::~Private()
 {
-    foreach( Axis *axis, axes )
-        delete axis;
-    delete kdPlane;
+    qDeleteAll( axes );
+    delete kdCartesianPlanePrimary;
+    delete kdCartesianPlaneSecondary;
+    delete kdPolarPlane;
+    delete kdRadarPlane;
     delete kdChart;
     delete wall;
     delete floor;
@@ -199,13 +233,9 @@ void PlotArea::Private::initAxes()
     }
     // There need to be at least these two axes. Do not delete, but
     // hide them instead.
-    Axis *xAxis = new Axis( q );
-    Axis *yAxis = new Axis( q );
-    xAxis->setPosition( BottomAxisPosition );
-    yAxis->setPosition( LeftAxisPosition );
+    Axis *xAxis = new Axis( q, XAxisDimension );
+    Axis *yAxis = new Axis( q, YAxisDimension );
     yAxis->setShowMajorGrid( true );
-    q->addAxis( xAxis );
-    q->addAxis( yAxis );
 }
 
 PlotArea::PlotArea( ChartShape *parent )
@@ -245,7 +275,8 @@ PlotArea::~PlotArea()
 void PlotArea::plotAreaInit()
 {
     d->kdChart->resize( size().toSize() );
-    d->kdChart->replaceCoordinatePlane( d->kdPlane );
+    d->kdChart->replaceCoordinatePlane( d->kdCartesianPlanePrimary );
+    d->kdCartesianPlaneSecondary->setReferenceCoordinatePlane( d->kdCartesianPlanePrimary );
 
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible( false );
@@ -259,7 +290,8 @@ void PlotArea::plotAreaInit()
 
 void PlotArea::proxyModelStructureChanged()
 {
-    Q_ASSERT( xAxis() && yAxis() );
+    Q_ASSERT( xAxis() );
+    Q_ASSERT( yAxis() );
     QMap<DataSet*, Axis*> attachedAxes;
     QList<DataSet*> dataSets = proxyModel()->dataSets();
 
@@ -271,14 +303,6 @@ void PlotArea::proxyModelStructureChanged()
     // clear all axes of data sets
     foreach( Axis *axis, axes() )
         axis->clearDataSets();
-
-    // FIXME: Maybe this shouldn't be a property of an axis. After all
-    // there should be exactly one x axis and one region for categories.
-    // See note in Axis::setCategoryDataRegion()
-    // Categories might have been inserted or removed from the proxy model.
-    // FIXME: Bjoern, you uncommented this. What's the reason for that?
-    // This needs to be here for categories to correctly appear on the x axis.
-    xAxis()->setCategoryDataRegion( proxyModel()->categoryDataRegion() );
 
     // Now add the new list of data sets to the axis they belong to
     foreach( DataSet *dataSet, dataSets ) {
@@ -310,7 +334,7 @@ QList<DataSet*> PlotArea::dataSets() const
 Axis *PlotArea::xAxis() const
 {
     foreach( Axis *axis, d->axes ) {
-        if ( axis->orientation() == Qt::Horizontal )
+        if ( axis->dimension() == XAxisDimension )
             return axis;
     }
 
@@ -320,7 +344,7 @@ Axis *PlotArea::xAxis() const
 Axis *PlotArea::yAxis() const
 {
     foreach( Axis *axis, d->axes ) {
-        if ( axis->orientation() == Qt::Vertical )
+        if ( axis->dimension() == YAxisDimension )
             return axis;
     }
 
@@ -402,29 +426,24 @@ qreal PlotArea::pieAngleOffset() const
 bool PlotArea::addAxis( Axis *axis )
 {
     if ( d->axes.contains( axis ) ) {
-    	qWarning() << "PlotArea::addAxis(): Trying to add already added axis.";
-    	return false;
+        qWarning() << "PlotArea::addAxis(): Trying to add already added axis.";
+        return false;
     }
 
     if ( !axis ) {
-    	qWarning() << "PlotArea::addAxis(): Pointer to axis is NULL!";
-    	return false;
+        qWarning() << "PlotArea::addAxis(): Pointer to axis is NULL!";
+        return false;
     }
     d->axes.append( axis );
-    
-    if ( axis->dimension() == XAxisDimension ) {
-        // set the categoryDataRegion of the proxyModel. This will then be used on
-        // ChartProxyModel::createDataSetsFromRegion to create the dataSets.
-        if ( !proxyModel()->categoryDataRegion().isValid() && axis->categoryDataRegion().isValid() )
-            proxyModel()->setCategoryDataRegion( axis->categoryDataRegion() );
 
+    if ( axis->dimension() == XAxisDimension ) {
         // let each axis know about the other axis
         foreach ( Axis *_axis, d->axes ) {
             if ( _axis->isVisible() )
                 _axis->registerKdAxis( axis->kdAxis() );
         }
     }
-    
+
     requestRepaint();
 
     return true;
@@ -433,41 +452,30 @@ bool PlotArea::addAxis( Axis *axis )
 bool PlotArea::removeAxis( Axis *axis )
 {
     if ( !d->axes.contains( axis ) ) {
-    	qWarning() << "PlotArea::removeAxis(): Trying to remove non-added axis.";
-    	return false;
+        qWarning() << "PlotArea::removeAxis(): Trying to remove non-added axis.";
+        return false;
     }
 
     if ( !axis ) {
-    	qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
-    	return false;
+        qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
+        return false;
     }
-    
+
     if ( axis->title() )
         d->automaticallyHiddenAxisTitles.removeAll( axis->title() );
 
     d->axes.removeAll( axis );
-    
+
     if ( axis->dimension() == XAxisDimension ) {
-        // If the axis is removed we probably need to update the used categoryDataRegion too.
-        if ( proxyModel()->categoryDataRegion().isValid() && proxyModel()->categoryDataRegion() == axis->categoryDataRegion() ) {
-            proxyModel()->setCategoryDataRegion( CellRegion() );
-            foreach ( Axis *_axis, d->axes ) {
-                 if ( _axis->dimension() == XAxisDimension && _axis->categoryDataRegion().isValid()) {
-                     proxyModel()->setCategoryDataRegion( _axis->categoryDataRegion() );
-                     break;
-                 }
-            }
-        }
-        
         foreach ( Axis *_axis, d->axes )
             _axis->deregisterKdAxis( axis->kdAxis() );
     }
-    
+
     // This also removes the axis' title, which is a shape as well
     delete axis;
-    
+
     requestRepaint();
-    
+
     return true;
 }
 
@@ -526,7 +534,8 @@ void PlotArea::setThreeD( bool threeD )
 void PlotArea::setVertical( bool vertical )
 {
     d->vertical = vertical;
-    // TODO: Propagate
+    foreach( Axis *axis, d->axes )
+        axis->plotAreaIsVerticalChanged();
 }
 
 // ----------------------------------------------------------------
@@ -540,6 +549,15 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     KoStyleStack& globalStack = context.odfLoadingContext().styleStack();    
     KoStyleStack styleStack;
     globalStack.save();
+
+    // The exact position defined in ODF overwrites the default layout position
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
+         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+        parent()->layout()->setPosition( this, FloatingPosition );
+
+    loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
@@ -563,32 +581,36 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             continue;
 
         if ( n.localName() == "axis" ) {
-            Axis *axis = new Axis( this );
+            if ( !n.hasAttributeNS( KoXmlNS::chart, "dimension" ) )
+                // We have to know what dimension the axis is supposed to be..
+                continue;
+            const QString dimension = n.attributeNS( KoXmlNS::chart, "dimension", QString() );
+            AxisDimension dim;
+            if      ( dimension == "x" ) dim = XAxisDimension;
+            else if ( dimension == "y" ) dim = YAxisDimension;
+            else if ( dimension == "z" ) dim = ZAxisDimension;
+            else continue;
+            Axis *axis = new Axis( this, dim );
             axis->loadOdf( n, context );
-            addAxis( axis );
         }
     }
 
     // 2 axes are mandatory, check that we have them.
     if ( !xAxis() ) {
-        Axis *xAxis = new Axis( this );
-        xAxis->setPosition( BottomAxisPosition );
+        Axis *xAxis = new Axis( this, XAxisDimension );
         xAxis->setVisible( false );
-        addAxis( xAxis );
     }
     if ( !yAxis() ) {
-        Axis *yAxis = new Axis( this );
-        yAxis->setPosition( LeftAxisPosition );
+        Axis *yAxis = new Axis( this, YAxisDimension );
         yAxis->setVisible( false );
-        addAxis( yAxis );
     }
 
     // Find out about things that are in the plotarea style.
     // 
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
-    QString seriesSource;
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {        
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        globalStack.save();
         context.odfLoadingContext().fillStyleStack( plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
         OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(),  plotAreaElement, KoXmlNS::chart, "style-name", "chart" );
 
@@ -622,12 +644,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         if ( styleStack.hasProperty( KoXmlNS::chart, "vertical" ) )
             setVertical( styleStack.property( KoXmlNS::chart, "vertical" ) == "true" );
 
-        // Data direction: It's in the plotarea style.
-        if ( styleStack.hasProperty( KoXmlNS::chart, "series-source" ) ) {
-            seriesSource = styleStack.property( KoXmlNS::chart, "series-source" );
-            kDebug(35001) << "series-source=" << seriesSource;
-        }
-
         // Special properties for various chart types
 #if 0
         switch () {
@@ -636,61 +652,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
                 ;
         }
 #endif
-    }
-
-    // Check if the direction for data series is vertical or horizontal.
-    if ( seriesSource == "rows" )
-        proxyModel()->setDataDirection( Qt::Horizontal );
-    else if ( seriesSource == "columns" )
-        proxyModel()->setDataDirection( Qt::Vertical );
-    else
-        // By default, OOo creates consecutive data series column-wise;
-        // by adopting that behaviour we avoid extra special-handling of
-        // documents created by OOo.
-        proxyModel()->setDataDirection( Qt::Vertical );
-
-    // The exact position defined in ODF overwrites the default layout position
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "x" ) ||
-         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) ||
-         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) ||
-         plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
-        parent()->layout()->setPosition( this, FloatingPosition );
-
-    loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
-    
-    // Find out if the data table contains labels as first row and/or column.
-    // This is in the plot-area element itself.
-
-    // Do not ignore the data-source-has-labels in any case, even if a
-    // category data region is specified for an axis, as the first
-    // column still has to be exluded from the actual data region if
-    // e.g. data-source-has-labels is set to "column" If an axis
-    // contains the chart:categories element, the category data region
-    // will automatically be set on every data set attached to that
-    // axis. See Axis::attachDataSet().
-    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "data-source-has-labels" ) ) {
-        const QString  dataSourceHasLabels
-            = plotAreaElement.attributeNS( KoXmlNS::chart,
-                                        "data-source-has-labels" );
-        if ( dataSourceHasLabels == "both" ) {
-            proxyModel()->setFirstRowIsLabel( true );
-            proxyModel()->setFirstColumnIsLabel( true );
-        } else if ( dataSourceHasLabels == "row" ) {
-            proxyModel()->setFirstRowIsLabel( true );
-            proxyModel()->setFirstColumnIsLabel( false );
-        } else if ( dataSourceHasLabels == "column" ) {
-            proxyModel()->setFirstRowIsLabel( false );
-            proxyModel()->setFirstColumnIsLabel( true );
-        } else {
-            // dataSourceHasLabels == "none" or wrong value
-            proxyModel()->setFirstRowIsLabel( false );
-            proxyModel()->setFirstColumnIsLabel( false );
-        }
-    }
-    else {
-        // No info about if first row / column contains labels.
-        proxyModel()->setFirstRowIsLabel( false );
-        proxyModel()->setFirstColumnIsLabel( false );
     }
     
     // Now, after the axes, load the datasets.
@@ -954,9 +915,26 @@ ChartShape *PlotArea::parent() const
     return d->shape;
 }
 
-KDChart::AbstractCoordinatePlane *PlotArea::kdPlane() const
+KDChart::CartesianCoordinatePlane *PlotArea::kdCartesianPlane( Axis *axis ) const
 {
-    return d->kdPlane;
+    if ( axis ) {
+        Q_ASSERT( d->axes.contains( axis ) );
+        // Only a secondary y axis gets the secondary plane
+        if ( axis->dimension() == YAxisDimension && axis != yAxis() )
+            return d->kdCartesianPlaneSecondary;
+    }
+
+    return d->kdCartesianPlanePrimary;
+}
+
+KDChart::PolarCoordinatePlane *PlotArea::kdPolarPlane() const
+{
+    return d->kdPolarPlane;
+}
+
+KDChart::RadarCoordinatePlane *PlotArea::kdRadarPlane() const
+{
+    return d->kdRadarPlane;
 }
 
 KDChart::Chart *PlotArea::kdChart() const
@@ -1096,8 +1074,10 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
 
 void PlotArea::relayout() const
 {
-    Q_ASSERT( d->kdPlane );
-    d->kdPlane->relayout();
+    d->kdCartesianPlanePrimary->relayout();
+    d->kdCartesianPlaneSecondary->relayout();
+    d->kdPolarPlane->relayout();
+    d->kdRadarPlane->relayout();
     update();
 }
 

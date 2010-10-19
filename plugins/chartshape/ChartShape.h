@@ -163,6 +163,7 @@ public:
      * For the first case, this method returns false, for the latter true.
      */
     bool usesInternalModelOnly() const;
+    void setUsesInternalModelOnly( bool doesSo );
 
     ChartType     chartType() const;
     ChartSubtype  chartSubType() const;

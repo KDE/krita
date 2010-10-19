@@ -635,6 +635,11 @@ bool ChartShape::usesInternalModelOnly() const
     return d->usesInternalModelOnly;
 }
 
+void ChartShape::setUsesInternalModelOnly( bool doesSo )
+{
+    d->usesInternalModelOnly = doesSo;
+}
+
 
 // ----------------------------------------------------------------
 //                         getters and setters

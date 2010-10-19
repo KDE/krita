@@ -41,8 +41,14 @@ namespace KChart {
 class OdfLoadingHelper : public KoSharedLoadingData
 {
 public:
+    OdfLoadingHelper();
+
     TableSource *tableSource;
     bool         chartUsesInternalModelOnly;
+    // In ODF the x axis determines the cell-range-address for categories in
+    // the chart, we however let ChartProxyModel determine it, thus we need
+    // a way to tell it that it will find it in the axis.
+    bool         categoryRegionSpecifiedInXAxis;
 
     static void fillStyleStack( KoStyleStack &styleStack, const KoOdfStylesReader& stylesReader,
                                 const KoXmlElement& object, const char* nsURI,

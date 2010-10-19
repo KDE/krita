@@ -29,38 +29,21 @@
 
 namespace KChart {
 
-KDChart::CartesianAxis::Position AxisPositionToKDChartAxisPosition( AxisPosition position )
+KDChart::CartesianAxis::Position PositionToKDChartAxisPosition( Position position )
 {
     switch ( position ) {
-    case BottomAxisPosition:
+    case BottomPosition:
         return KDChart::CartesianAxis::Bottom;
-    case TopAxisPosition:
+    case TopPosition:
         return KDChart::CartesianAxis::Top;
-    case RightAxisPosition:
+    case EndPosition:
         return KDChart::CartesianAxis::Right;
-    case LeftAxisPosition:
+    case StartPosition:
         return KDChart::CartesianAxis::Left;
     }
     
     Q_ASSERT( "Unknown KDChart::CartesianAxis::Position!" );
     return KDChart::CartesianAxis::Bottom;
-}
-
-AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position position )
-{
-    switch ( position ) {
-    case KDChart::CartesianAxis::Bottom:
-        return BottomAxisPosition;
-    case KDChart::CartesianAxis::Top:
-        return TopAxisPosition;
-    case KDChart::CartesianAxis::Right:
-        return RightAxisPosition;
-    case KDChart::CartesianAxis::Left:
-        return LeftAxisPosition;
-    }
-    
-    Q_ASSERT( "Unknown AxisPosition!" );
-    return BottomAxisPosition;
 }
 
 // Used to save e.g. legend-position attribute to ODF. Do not change these strings.

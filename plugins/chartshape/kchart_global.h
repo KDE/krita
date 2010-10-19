@@ -58,13 +58,6 @@ enum ChartSubtype {
     PercentChartSubtype
 };
 
-enum AxisPosition {
-    BottomAxisPosition,
-    TopAxisPosition,
-    RightAxisPosition,
-    LeftAxisPosition
-};
-
 enum AxisDimension {
     XAxisDimension,
     YAxisDimension,

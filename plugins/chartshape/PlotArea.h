@@ -29,6 +29,12 @@
 // ChartShape
 #include "ChartShape.h"
 
+namespace KDChart {
+    class CartesianCoordinatePlane;
+    class PolarCoordinatePlane;
+    class RadarCoordinatePlane;
+}
+
 
 namespace KChart {
 
@@ -51,6 +57,8 @@ namespace KChart {
 
 class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
 {
+    friend class Surface;
+    friend class Axis;
     Q_OBJECT
     
 public:
@@ -73,7 +81,9 @@ public:
     bool            removeAxis( Axis *axis );
 
     ThreeDScene *threeDScene() const;
+    // TODO: Rename this into primaryXAxis()
     Axis *xAxis() const;
+    // TODO: Rename this into primaryYAxis()
     Axis *yAxis() const;
     Axis *secondaryXAxis() const;
     Axis *secondaryYAxis() const;
@@ -137,10 +147,6 @@ public:
 
     void paint( QPainter &painter, const KoViewConverter &converter );
     
-    // FIXME: Internal representation -- should be private
-    KDChart::AbstractCoordinatePlane *kdPlane() const;
-    KDChart::Chart *kdChart() const;
-    
     bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
     
@@ -158,6 +164,12 @@ signals:
 
 private:
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
+
+    // For class Axis
+    KDChart::CartesianCoordinatePlane *kdCartesianPlane( Axis *axis = 0 ) const;
+    KDChart::PolarCoordinatePlane *kdPolarPlane() const;
+    KDChart::RadarCoordinatePlane *kdRadarPlane() const;
+    KDChart::Chart *kdChart() const;
     
     class Private;
     Private *const d;

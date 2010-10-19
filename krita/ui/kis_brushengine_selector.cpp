@@ -137,7 +137,7 @@ KisBrushEngineSelector::KisBrushEngineSelector(KisView2 * view, QWidget *parent)
             this, SLOT(resourceSelected(KoResource*)));
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
-            this, SLOT(nodeChanged(const KisNodeSP)));
+            this, SLOT(slotCurrentNodeChanged(const KisNodeSP)));
 
 
 

@@ -492,33 +492,6 @@ void PlotArea::setChartType( ChartType type )
         }
         d->automaticallyHiddenAxisTitles.clear();
     }
-
-    // Set the dimensionality of the data points.
-    int dimensions = 1;
-    switch ( type ) {
-    case BarChartType:
-    case LineChartType:
-    case AreaChartType:
-    case CircleChartType:
-    case RingChartType:
-    case RadarChartType:
-    case StockChartType:
-    case GanttChartType:
-        dimensions = 1;
-        break;
-    case ScatterChartType:
-    case SurfaceChartType:
-        dimensions = 2;
-        break;
-    case BubbleChartType:
-        dimensions = 3;
-        break;
-    case LastChartType:
-    default:
-        dimensions = 1;         // Shouldn't happen
-    }
-
-    d->shape->proxyModel()->setDataDimensions( dimensions );
     
     d->chartType = type;
     

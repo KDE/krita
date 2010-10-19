@@ -90,8 +90,6 @@ extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
 
 extern const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ];
 
-extern bool isPolar( ChartType type );
-extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 extern QColor defaultDataSetColor( int dataSetNum );
 

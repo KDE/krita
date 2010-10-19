@@ -232,7 +232,7 @@ KoShape *KoShapeRegistry::Private::createShapeInternal(const KoXmlElement &fullE
     // Higher numbers are more specific, map is sorted by keys.
     for (int i = factories.size() - 1; i >= 0; --i) {
         KoShapeFactoryBase * factory = factories[i];
-        if (factory->supports(element)) {
+        if (factory->supports(element, context)) {
             KoShape *shape = factory->createDefaultShape(context.documentResourceManager());
 
             if (shape->shapeId().isEmpty())

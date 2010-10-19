@@ -463,16 +463,17 @@ void EnhancedPathShape::parsePathData(const QString &data)
     bool separator = true;
     for (int i = 0; i < data.length(); ++i) {
         QChar ch = data.at(i);
-        if (separator && (ch.unicode() == 'M' || ch.unicode() == 'L'
-            || ch.unicode() == 'C' || ch.unicode() == 'Z'
-            || ch.unicode() == 'N' || ch.unicode() == 'F'
-            || ch.unicode() == 'S' || ch.unicode() == 'T'
-            || ch.unicode() == 'U' || ch.unicode() == 'A'
-            || ch.unicode() == 'B' || ch.unicode() == 'W'
-            || ch.unicode() == 'V' || ch.unicode() == 'X'
-            || ch.unicode() == 'Y' || ch.unicode() == 'Q')) {
+        ushort uni_ch = ch.unicode();
+        if (separator && (uni_ch == 'M' || uni_ch == 'L'
+            || uni_ch == 'C' || uni_ch == 'Z'
+            || uni_ch == 'N' || uni_ch == 'F'
+            || uni_ch == 'S' || uni_ch == 'T'
+            || uni_ch == 'U' || uni_ch == 'A'
+            || uni_ch == 'B' || uni_ch == 'W'
+            || uni_ch == 'V' || uni_ch == 'X'
+            || uni_ch == 'Y' || uni_ch == 'Q')) {
             if (start != -1) { // process last chars
-                addCommand(data.mid(start, i - start));
+                addCommand(data.mid(start, i - start), false);
             }
             start = i;
         }

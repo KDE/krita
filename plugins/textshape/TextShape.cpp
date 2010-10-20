@@ -438,6 +438,10 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     }
     style.addProperty("draw:textarea-vertical-align", verticalAlign);
 
+    if (KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize) {
+        style.addProperty("draw:fit-to-size", "true");
+    }
+
     return KoShape::saveStyle(style, context);
 }
 
@@ -459,10 +463,10 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
         alignment = Qt::AlignVCenter;
     }
 
+    m_textShapeData->setVerticalAlignment(alignment);
+
     const bool fittosize = styleStack.property(KoXmlNS::draw, "fit-to-size") == "true";
     KoTextDocument(m_textShapeData->document()).setResizeMethod(fittosize ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
-
-    m_textShapeData->setVerticalAlignment(alignment);
 }
 
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

@@ -1328,7 +1328,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         // explicitly in the constructor.
     }
 
-    if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+    if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) { 
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "text" );
@@ -1353,6 +1353,26 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setShowLabels( styleStack.property( KoXmlNS::chart, "display-label" ) != "false" );
         if ( styleStack.hasProperty( KoXmlNS::chart, "visible" ) )
             setVisible( styleStack.property( KoXmlNS::chart, "visible" )  != "false" );
+        if ( styleStack.hasProperty( KoXmlNS::chart, "minimum" ) ) {
+            const qreal minimum = styleStack.property( KoXmlNS::chart, "minimum" ).toDouble();
+            const qreal maximum = orientation() == Qt::Vertical
+                                    ? d->kdPlane->verticalRange().second
+                                    : d->kdPlane->horizontalRange().second;
+            if ( orientation() == Qt::Vertical )
+                d->kdPlane->setVerticalRange( qMakePair( minimum, maximum ) );
+            else
+                d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
+        }
+        if ( styleStack.hasProperty( KoXmlNS::chart, "maximum" ) ) {
+            const qreal minimum = orientation() == Qt::Vertical
+                                    ? d->kdPlane->verticalRange().first
+                                    : d->kdPlane->horizontalRange().first;
+            const qreal maximum = styleStack.property( KoXmlNS::chart, "maximum" ).toDouble();
+            if ( orientation() == Qt::Vertical )
+                d->kdPlane->setVerticalRange( qMakePair( minimum, maximum ) );
+            else
+                d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
+        }
     } else {
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }

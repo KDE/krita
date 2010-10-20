@@ -273,6 +273,7 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
     QRectF rect(0,0,0,0);
     for (QTextFrame::iterator it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
+        if (!block.isValid()) continue;
         QTextLayout *layout = block.layout();
         QRectF r = layout->boundingRect();
         if(rect.isNull()) {

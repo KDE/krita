@@ -106,7 +106,8 @@ public:
             : inlineTextObjectManager(0),
             scheduled(false),
             parent(parent_),
-            resizeMethod(KoTextDocument::NoResize)
+            resizeMethod(KoTextDocument::NoResize),
+            fitToSizeFactor(1.0)
     {
     }
 
@@ -146,6 +147,7 @@ public:
     KoTextDocumentLayout *parent;
     KoTextDocument::ResizeMethod resizeMethod;
     KoPostscriptPaintDevice *paintDevice;
+    qreal fitToSizeFactor;
 };
 
 void KoTextDocumentLayout::Private::adjustSize()
@@ -543,6 +545,16 @@ void KoTextDocumentLayout::setResizeMethod(KoTextDocument::ResizeMethod method)
 KoTextDocument::ResizeMethod KoTextDocumentLayout::resizeMethod() const
 {
     return d->resizeMethod;
+}
+
+void KoTextDocumentLayout::setFitToSizeFactor(const qreal &factor)
+{
+    d->fitToSizeFactor = factor;
+}
+
+qreal KoTextDocumentLayout::fitToSizeFactor() const
+{
+    return d->fitToSizeFactor;
 }
 
 #include <KoTextDocumentLayout.moc>

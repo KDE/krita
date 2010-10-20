@@ -85,8 +85,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false),
         m_allTimeMinimumLeft(0),
-        m_maxLineHeight(0),
-        m_scaleFactor(1.0)
+        m_maxLineHeight(0)
 {
     m_frameStack.reserve(5); // avoid reallocs
     setTabSpacing(MM_TO_POINT(15));
@@ -972,6 +971,7 @@ void Layout::resetPrivate()
     m_currentMasterPage.clear();
     m_dropCapsPositionAdjust = 0;
     m_dropCapsAffectedLineWidthAdjust = 0;
+    m_parent->setFitToSizeFactor(1.0);
 
     shapeNumber = 0;
     int lastPos = -1;
@@ -1053,7 +1053,8 @@ void Layout::resetPrivate()
     QSizeF documentSize = m_parent->documentSize();
     qreal scaleWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
     qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
-    m_scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional
+    qreal scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional
+    m_parent->setFitToSizeFactor(scaleFactor);
     
     if (! nextParag())
         shapeNumber++;
@@ -1146,7 +1147,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
 
     QRect clipRect = painter->clipRegion().boundingRect();
-    qreal revscale = (1.0-m_scaleFactor+1.0);
+    qreal revscale = (1.0 - m_parent->fitToSizeFactor() + 1.0);
     //clipRect.setTop(clipRect.top() * revscale);
     //clipRect.setLeft(clipRect.left() * revscale);
     clipRect.setWidth(clipRect.width() * revscale);

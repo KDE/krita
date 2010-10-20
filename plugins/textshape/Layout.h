@@ -185,7 +185,6 @@ private:
     // bookkeeping for drawing outside borders
     qreal m_allTimeMinimumLeft;
     qreal m_maxLineHeight;
-    qreal m_scaleFactor;
 };
 
 #endif

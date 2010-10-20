@@ -227,6 +227,16 @@ public:
      */
     KoTextDocument::ResizeMethod resizeMethod() const;
 
+    /**
+     * Set the scale factor used if the defined \a resizeMethod() is KoTextDocument::ShrinkToFitResize .
+     */
+    void setFitToSizeFactor(const qreal &factor);
+
+    /**
+     * Returns the scale factor used if the defined \a resizeMethod() is KoTextDocument::ShrinkToFitResize .
+     */
+    qreal fitToSizeFactor() const;
+
 signals:
     void shapeAdded(KoShape *shape);
     /**

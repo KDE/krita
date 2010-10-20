@@ -190,13 +190,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     if (m_textViewConverter != &converter) {
         m_textViewConverter->setViewConverter(&converter);
-
-        const QSizeF documentSize = lay->documentSize();
-        const QSizeF shapeSize = size();
-        const qreal shrinkWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
-        const qreal shrinkHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
-        const qreal shrinkFactor = qMin(shrinkWidth, shrinkHeight); // shrink proportional
-        m_textViewConverter->setShrinkFactor(shrinkFactor);
+        m_textViewConverter->setShrinkFactor(lay->fitToSizeFactor());
     }
 
     applyConversion(painter, *m_textViewConverter);

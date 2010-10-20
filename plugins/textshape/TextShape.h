@@ -43,7 +43,7 @@ class TextShape;
 
 /**
  * The TextViewConverter is used within the TextShape and the TextTool as kind of decorator for
- * the defined KoViewConverter and silently adjusts the zoom with the defined shrinkFactor.
+ * the defined KoViewConverter and transparently adjusts the zoom with the defined shrinkFactor.
  */
 class TextViewConverter : public KoViewConverter
 {

@@ -46,3 +46,5 @@ const char* const KoXmlNS::xhtml = "http://www.w3.org/1999/xhtml";
 
 const char* const KoXmlNS::koffice = "http://www.koffice.org/2005/";
 const char* const KoXmlNS::officeooo = "http://openoffice.org/2009/office";
+
+const char* const KoXmlNS::delta = "http://www.deltaxml.com/ns/track-changes/delta-namespace";

@@ -301,6 +301,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
         forEachElement(tag, bodyElem) {
             if (! tag.isNull()) {
                 const QString localName = tag.localName();
+                if (tag.namespaceURI() == KoXmlNS::delta) {
+                    if (d->changeTracker && localName == "tracked-changes")
+                        d->changeTracker->loadOdfChanges(tag);
+                }
 
                 if (tag.namespaceURI() == KoXmlNS::text) {
                     if (usedParagraph)

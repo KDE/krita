@@ -238,17 +238,14 @@ KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager()
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 {
-    // nobody calls this code and I have no way of implementing it anyway...
-    Q_UNUSED(block);
-    //kWarning() << "KoTextDocumentLayout::blockBoundingRect is not implemented";
-    return QRectF(0, 0, 10, 10);
+    QTextLayout *layout = block.layout();
+    return layout->boundingRect();
 }
 
 QSizeF KoTextDocumentLayout::documentSize() const
 {
-    // nobody calls this code and I have no way of implementing it anyway...
-    //kWarning() << "KoTextDocumentLayout::documentSize is not implemented";
-    return QSizeF(10, 10);
+    QTextFrame *frame = document()->rootFrame();
+    return frameBoundingRect(frame).size();
 }
 
 QRectF KoTextDocumentLayout::expandVisibleRect(const QRectF &rect) const
@@ -270,10 +267,21 @@ void KoTextDocumentLayout::draw(QPainter * painter, const KoTextDocumentLayout::
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame *frame) const
 {
-    Q_UNUSED(frame);
-    // nobody calls this code and I have no way of implementing it anyway...
-    //kWarning() << "KoTextDocumentLayout::frameBoundingRect is not implemented";
-    return QRectF(0, 0, 10, 10);
+    QRectF rect(0,0,0,0);
+    for (QTextFrame::iterator it = frame->begin(); !(it.atEnd()); ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextLayout *layout = block.layout();
+        QRectF r = layout->boundingRect();
+        if(rect.isNull()) {
+            rect = r;
+        } else {
+            if(r.left() < rect.left()) rect.setLeft(r.left());
+            if(r.top() < rect.top()) rect.setTop(r.top());
+            if(r.right() > rect.right()) rect.setRight(r.right());
+            if(r.bottom() > rect.bottom()) rect.setBottom(r.bottom());
+        }
+    }
+    return rect;
 }
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const

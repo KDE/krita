@@ -23,6 +23,7 @@
 #include <kis_view2.h>
 #include <canvas/kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_image.h>
 
 #include "kis_specific_color_selector_widget.h"
 
@@ -43,6 +44,7 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
     m_colorSelector->setColor(view->resourceProvider()->fgColor());
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
+    connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
 }
 
 

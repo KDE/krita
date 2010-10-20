@@ -390,7 +390,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     Q_ASSERT( d->isLoading );
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
-    bool ignoreCellRanges = false;
+    bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
 // Some OOo documents save incorrect cell ranges. For those this fix was intended.
 // Find out which documents exactly and only use fix for as few cases as possible.
 #if 0

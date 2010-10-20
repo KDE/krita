@@ -54,8 +54,8 @@ public:
     const KoViewConverter* viewConverter() const { return m_converter; }
     void setViewConverter(const KoViewConverter* converter) { m_converter = converter; }
 
-    qreal shrinkFactor() const { return m_shrinkfactor; }
-    void setShrinkFactor(qreal shrinkfactor) { m_shrinkfactor = shrinkfactor; }
+    qreal fitToSizeFactor() const { return m_shrinkfactor; }
+    void setFitToSizeFactor(qreal shrinkfactor) { m_shrinkfactor = shrinkfactor; }
 
     virtual QPointF documentToView(const QPointF &documentPoint) const;
     virtual QPointF viewToDocument(const QPointF &viewPoint) const;

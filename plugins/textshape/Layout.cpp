@@ -1148,8 +1148,6 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
     QRect clipRect = painter->clipRegion().boundingRect();
     qreal revscale = (1.0 - m_parent->fitToSizeFactor() + 1.0);
-    //clipRect.setTop(clipRect.top() * revscale);
-    //clipRect.setLeft(clipRect.left() * revscale);
     clipRect.setWidth(clipRect.width() * revscale);
     clipRect.setHeight(clipRect.height() * revscale);
     painter->setClipRegion( QRegion(clipRect) );
@@ -1194,12 +1192,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
         }
 
         QTextLayout *layout = block.layout();
-
         QRectF layoutrect = layout->boundingRect();
-        //layoutrect.setTop(layoutrect.top() * revscale);
-        //layoutrect.setLeft(layoutrect.left() * revscale);
-        layoutrect.setWidth(layoutrect.width() * revscale);
-        layoutrect.setHeight(layoutrect.height() * revscale);
 
         if (!painter->hasClipping() || clipRegion.intersects(layoutrect.toRect())) {
             started = true;
@@ -1220,7 +1213,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             painter->save();
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush)
-                painter->fillRect(layout->boundingRect(), bg);
+                painter->fillRect(layoutrect, bg);
             paintStrategy->applyStrategy(painter);
             painter->save();
             drawListItem(painter, block, context.imageCollection);

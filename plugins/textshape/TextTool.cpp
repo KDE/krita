@@ -610,7 +610,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         shapeMatrix.scale(zoomX, zoomY);
         painter.setTransform(shapeMatrix * painter.transform());
         painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
-        painter.translate(0, -data->documentOffset());
+        painter.translate(0, -data->documentOffset() * m_textShape->textViewConverter()->fitToSizeFactor());
         if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
                 || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
             QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));

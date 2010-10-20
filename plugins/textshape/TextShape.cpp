@@ -92,12 +92,35 @@ TextViewConverter::~TextViewConverter()
 {
 }
 
-QPointF TextViewConverter::documentToView(const QPointF &documentPoint) const { return m_converter->documentToView(documentPoint); }
-QPointF TextViewConverter::viewToDocument(const QPointF &viewPoint) const { return m_converter->viewToDocument(viewPoint); }
-QRectF TextViewConverter::documentToView(const QRectF &documentRect) const { return m_converter->documentToView(documentRect); }
-QRectF TextViewConverter::viewToDocument(const QRectF &viewRect) const { return m_converter->viewToDocument(viewRect); }
-QSizeF TextViewConverter::documentToView(const QSizeF& documentSize) const { return m_converter->documentToView(documentSize); }
-QSizeF TextViewConverter::viewToDocument(const QSizeF& viewSize) const { return m_converter->viewToDocument(viewSize); }
+QPointF TextViewConverter::documentToView(const QPointF &documentPoint) const
+{
+    return m_converter->documentToView(documentPoint);
+}
+
+QPointF TextViewConverter::viewToDocument(const QPointF &viewPoint) const
+{
+    return m_converter->viewToDocument(viewPoint);
+}
+
+QRectF TextViewConverter::documentToView(const QRectF &documentRect) const
+{
+    return m_converter->documentToView(documentRect);
+}
+
+QRectF TextViewConverter::viewToDocument(const QRectF &viewRect) const
+{
+    return m_converter->viewToDocument(viewRect);
+}
+
+QSizeF TextViewConverter::documentToView(const QSizeF& documentSize) const
+{
+    return m_converter->documentToView(documentSize);
+}
+
+QSizeF TextViewConverter::viewToDocument(const QSizeF& viewSize) const
+{
+    return m_converter->viewToDocument(viewSize);
+}
 
 qreal TextViewConverter::documentToViewX(qreal documentX) const
 {
@@ -190,7 +213,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     if (m_textViewConverter != &converter) {
         m_textViewConverter->setViewConverter(&converter);
-        m_textViewConverter->setShrinkFactor(lay->fitToSizeFactor());
+        m_textViewConverter->setFitToSizeFactor(lay->fitToSizeFactor());
     }
 
     applyConversion(painter, *m_textViewConverter);
@@ -238,13 +261,9 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     context.viewConverter = m_textViewConverter;
     context.imageCollection = m_imageCollection;
 
-    QRectF rect = outlineRect();
-    //rect.setWidth(rect.width() * shrinkFactor);
-    //rect.setHeight(rect.height() * shrinkFactor);
-
-    painter.setClipRect(rect, Qt::IntersectClip);
+    painter.setClipRect(outlineRect(), Qt::IntersectClip);
     painter.save();
-    painter.translate(0, -m_textShapeData->documentOffset());
+    painter.translate(0, -m_textShapeData->documentOffset() * lay->fitToSizeFactor());
     lay->draw(&painter, context);
     painter.restore();
 
@@ -267,6 +286,9 @@ QRectF TextShape::outlineRect() const
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
         rect = lay->expandVisibleRect(rect);
+        qreal fitToSizeFactorRev = (1.0-lay->fitToSizeFactor()+1.0);
+        rect.setWidth(rect.width() * fitToSizeFactorRev);
+        rect.setHeight(rect.height() * fitToSizeFactorRev);
     }
     return rect;
 }

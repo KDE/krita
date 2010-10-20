@@ -179,6 +179,7 @@ KoXmlWriter* KoOdfWriteStore::manifestWriter(const char* mimeType)
         d->manifestWriter->startDocument("manifest:manifest");
         d->manifestWriter->startElement("manifest:manifest");
         d->manifestWriter->addAttribute("xmlns:manifest", KoXmlNS::manifest);
+        d->manifestWriter->addAttribute("manifest:version", "1.2");
         d->manifestWriter->addManifestEntry("/", mimeType);
     }
     return d->manifestWriter;

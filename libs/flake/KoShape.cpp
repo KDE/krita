@@ -1062,7 +1062,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
         if (element.hasAttributeNS(KoXmlNS::draw, "style-name")) {
             context.odfLoadingContext().fillStyleStack(element, KoXmlNS::draw, "style-name", "graphic");
         }
-        else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
+        if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
             context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
         }
         loadStyle(element, context);

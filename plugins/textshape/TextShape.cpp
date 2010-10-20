@@ -390,7 +390,7 @@ bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &cont
             kDebug(32500) << "graphic style not found:" << element.attributeNS(KoXmlNS::draw, "style-name");
         }
     }
-    else if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
+    if (element.hasAttributeNS(KoXmlNS::presentation, "style-name")) {
         style = context.odfLoadingContext().stylesReader().findStyle(
                     element.attributeNS(KoXmlNS::presentation, "style-name"), "presentation",
                     context.odfLoadingContext().useStylesAutoStyles());

@@ -106,7 +106,8 @@ public:
             : inlineTextObjectManager(0),
             scheduled(false),
             parent(parent_),
-            resizeMethod(KoTextDocument::NoResize) {
+            resizeMethod(KoTextDocument::NoResize)
+    {
     }
 
     ~Private()
@@ -149,7 +150,7 @@ public:
 
 void KoTextDocumentLayout::Private::adjustSize()
 {
-    if (parent->resizeMethod() == KoTextDocument::NoResize)
+    if (parent->resizeMethod() != KoTextDocument::AutoResize)
         return;
 
     if (parent->shapes().isEmpty())

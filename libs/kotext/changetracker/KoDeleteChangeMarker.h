@@ -81,8 +81,6 @@ public:
     ///reimplemented
     virtual void saveOdf(KoShapeSavingContext &context);
 
-    void setDeleteChangeXml(QString &deleteChangeXml);
-
     KoListStyle *getDeletedListStyle(KoListStyle::ListIdType id);
 
     void setDeletedListStyle(KoListStyle::ListIdType, KoListStyle *style);

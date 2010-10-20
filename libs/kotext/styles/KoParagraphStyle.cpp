@@ -1561,9 +1561,9 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         } else if (key == KoParagraphStyle::TabStopDistance) {
             style.addPropertyPt("style:tab-stop-distance", tabStopDistance(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::MasterPageName) {
-            style.addProperty("style:master-page-name", masterPageName());
+            style.addAttribute("style:master-page-name", masterPageName());
         } else if (key == KoParagraphStyle::DefaultOutlineLevel) {
-            style.addProperty("style:default-outline-level", defaultOutlineLevel());
+            style.addAttribute("style:default-outline-level", defaultOutlineLevel());
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

@@ -79,8 +79,6 @@ void KisToolRectangle::finishRect(const QRectF &rect)
 
         painter.beginTransaction(i18n("Rectangle"));
         setupPainter(&painter);
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
         painter.paintRect(rect);
         painter.endTransaction(image()->undoAdapter());
 

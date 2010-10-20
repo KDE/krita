@@ -30,7 +30,7 @@
 #include <QCursor>
 #include <QFont>
 #include <QImage>
-#include <q3filedialog.h>
+
 #include <QToolTip>
 #include <QApplication>
 #include <QDesktopWidget>

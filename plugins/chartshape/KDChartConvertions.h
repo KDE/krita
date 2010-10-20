@@ -33,8 +33,7 @@
 namespace KChart
 {
 
-extern KDChart::CartesianAxis::Position AxisPositionToKDChartAxisPosition( AxisPosition position );
-extern AxisPosition KDChartAxisPositionToAxisPosition( KDChart::CartesianAxis::Position position );
+extern KDChart::CartesianAxis::Position PositionToKDChartAxisPosition( Position position );
 
 extern QString PositionToString( Position position );
 extern KDChartEnums::PositionValue PositionToKDChartPositionValue( Position position );

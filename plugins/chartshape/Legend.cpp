@@ -427,20 +427,15 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 bool Legend::loadOdf( const KoXmlElement &legendElement,
                       KoShapeLoadingContext &context )
 {
-//     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-//     styleStack.save();
-    KoStyleStack styleStack;
+    KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
+    styleStack.clear();
 
+    // FIXME: If the style isn't present we shouldn't care about it at all
+    // and move everything related to the legend style in this if clause
     if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
-        OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(), legendElement, KoXmlNS::chart, "style-name", "chart" );
+        context.odfLoadingContext().fillStyleStack( legendElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
     }
-
-    // TODO: Read optional attributes
-    // 1. Legend expansion
-    // 2. Advanced legend styling
-    //KDChart::Legend  *oldKdchartLegend = d->kdchartLegend;
-    //d->kdLegend = new KDChart::Legend( d->diagram, d->chart );
 
     if ( !legendElement.isNull() ) {
         QString lp;
@@ -514,14 +509,10 @@ bool Legend::loadOdf( const KoXmlElement &legendElement,
                                                        "title", QString() ) );
         }
 
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {          
-            OdfLoadingHelper::fillStyleStack( styleStack, context.odfLoadingContext().stylesReader(), legendElement, KoXmlNS::chart, "style-name", "chart" );
+        styleStack.setTypeProperties( "text" );
 
-            styleStack.setTypeProperties( "text" );
-
-            if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
-                setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
-            }
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) ) {
+            setFontSize( KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "font-size" ) ) );
         }
     }
     else {

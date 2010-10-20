@@ -33,6 +33,10 @@ namespace KDChart {
 
 /**
   * @brief A set of attributes controlling the appearance of axis rulers
+  *
+  * As the naming of this class suggests, it can not be used to modify the
+  * grid of an axis, see e.g. @a CartesianCoordinatePlane::gridAttributes()
+  * instead.
   */
 class KDCHART_EXPORT RulerAttributes
 {
@@ -42,6 +46,31 @@ public:
 	RulerAttributes &operator= ( const RulerAttributes& );
 
     ~RulerAttributes();
+
+    /**
+      * Sets the pen used to draw all axis elements. This can be overwritten
+      * for individual elements using e.g. @a setTickMarkPen().
+      *
+      * The default is a cosmetic black pen.
+      */
+    void setPen( const QPen& pen );
+    QPen pen() const;
+
+    /**
+      * Use this to specify if the axis line (the one perpendicular to the
+      * tick marks, reaching from one end of the axis to the other) is to be
+      * drawn or not.
+      *
+      * By default, the ruler line is not drawn.
+      *
+      * This line is drawn exactly where the first or last grid line is drawn,
+      * for the grid that has the same line orientation as the axis that these
+      * attributes belong to.
+      *
+      * Thus, by default you will see this grid line instead if it is drawn.
+      */
+    void setShowRulerLine( bool show );
+    bool showRulerLine() const;
     
     /**
       * Sets the pen used to draw the tick marks

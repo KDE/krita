@@ -1,4 +1,5 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <comment> * OpenRPT report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
@@ -16,8 +17,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see http://www.gnu.org/licenses/.</comment>
  <class>SectionEditor</class>
- <widget class="QDialog" name="SectionEditor" >
-  <property name="geometry" >
+ <widget class="QDialog" name="SectionEditor">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -25,95 +26,71 @@
     <height>442</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Section Editor</string>
   </property>
-  <property name="sizeGripEnabled" >
+  <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QGridLayout" >
-     <property name="leftMargin" >
+    <layout class="QGridLayout">
+     <property name="margin">
       <number>0</number>
      </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <property name="horizontalSpacing" >
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="verticalSpacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QCheckBox" name="cbReportHeader" >
-       <property name="text" >
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="cbReportHeader">
+       <property name="text">
         <string>Report Header</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1" >
-      <widget class="QGroupBox" name="gbPageFooter" >
-       <property name="title" >
+     <item row="1" column="1">
+      <widget class="QGroupBox" name="gbPageFooter">
+       <property name="title">
         <string>Page Footer</string>
        </property>
-       <layout class="QGridLayout" >
-        <property name="leftMargin" >
+       <layout class="QGridLayout">
+        <property name="margin">
          <number>11</number>
         </property>
-        <property name="topMargin" >
-         <number>11</number>
-        </property>
-        <property name="rightMargin" >
-         <number>11</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>11</number>
-        </property>
-        <property name="horizontalSpacing" >
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="verticalSpacing" >
-         <number>6</number>
-        </property>
-        <item row="1" column="0" >
-         <widget class="QCheckBox" name="cbFootEven" >
-          <property name="text" >
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="cbFootEven">
+          <property name="text">
            <string>Even Page(s)</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" >
-         <widget class="QCheckBox" name="cbFootFirst" >
-          <property name="text" >
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="cbFootFirst">
+          <property name="text">
            <string>First Page</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" >
-         <widget class="QCheckBox" name="cbFootLast" >
-          <property name="text" >
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="cbFootLast">
+          <property name="text">
            <string>Last Page</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" >
-         <widget class="QCheckBox" name="cbFootOdd" >
-          <property name="text" >
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="cbFootOdd">
+          <property name="text">
            <string>Odd Page(s)</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" >
-         <widget class="QCheckBox" name="cbFootAny" >
-          <property name="text" >
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="cbFootAny">
+          <property name="text">
            <string>Any Page(s)</string>
           </property>
          </widget>
@@ -121,68 +98,56 @@
        </layout>
       </widget>
      </item>
-     <item row="0" column="1" >
-      <widget class="QCheckBox" name="cbReportFooter" >
-       <property name="text" >
+     <item row="0" column="1">
+      <widget class="QCheckBox" name="cbReportFooter">
+       <property name="text">
         <string>Report Footer</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="0" >
-      <widget class="QGroupBox" name="gbPageHeader" >
-       <property name="title" >
+     <item row="1" column="0">
+      <widget class="QGroupBox" name="gbPageHeader">
+       <property name="title">
         <string>Page Header</string>
        </property>
-       <layout class="QGridLayout" >
-        <property name="leftMargin" >
+       <layout class="QGridLayout">
+        <property name="margin">
          <number>11</number>
         </property>
-        <property name="topMargin" >
-         <number>11</number>
-        </property>
-        <property name="rightMargin" >
-         <number>11</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>11</number>
-        </property>
-        <property name="horizontalSpacing" >
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="verticalSpacing" >
-         <number>6</number>
-        </property>
-        <item row="0" column="1" >
-         <widget class="QCheckBox" name="cbHeadLast" >
-          <property name="text" >
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="cbHeadLast">
+          <property name="text">
            <string>Last Page</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" >
-         <widget class="QCheckBox" name="cbHeadOdd" >
-          <property name="text" >
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="cbHeadOdd">
+          <property name="text">
            <string>Odd Page(s)</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0" >
-         <widget class="QCheckBox" name="cbHeadFirst" >
-          <property name="text" >
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="cbHeadFirst">
+          <property name="text">
            <string>First Page</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" >
-         <widget class="QCheckBox" name="cbHeadEven" >
-          <property name="text" >
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="cbHeadEven">
+          <property name="text">
            <string>Even Pages(s)</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="0" >
-         <widget class="QCheckBox" name="cbHeadAny" >
-          <property name="text" >
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="cbHeadAny">
+          <property name="text">
            <string>Any Pages(s)</string>
           </property>
          </widget>
@@ -193,90 +158,72 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="GroupBox1" >
-     <property name="title" >
+    <widget class="QGroupBox" name="GroupBox1">
+     <property name="title">
       <string>Group Sections</string>
      </property>
-     <layout class="QHBoxLayout" >
-      <property name="spacing" >
+     <layout class="QHBoxLayout">
+      <property name="spacing">
        <number>6</number>
       </property>
-      <property name="leftMargin" >
-       <number>11</number>
-      </property>
-      <property name="topMargin" >
-       <number>11</number>
-      </property>
-      <property name="rightMargin" >
-       <number>11</number>
-      </property>
-      <property name="bottomMargin" >
+      <property name="margin">
        <number>11</number>
       </property>
       <item>
-       <widget class="Q3ListBox" name="lbGroups" />
+       <widget class="QListWidget" name="lbGroups"/>
       </item>
       <item>
-       <layout class="QVBoxLayout" >
-        <property name="spacing" >
+       <layout class="QVBoxLayout">
+        <property name="spacing">
          <number>6</number>
         </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
-         <widget class="QPushButton" name="btnAdd" >
-          <property name="text" >
+         <widget class="QPushButton" name="btnAdd">
+          <property name="text">
            <string>&amp;Add</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnEdit" >
-          <property name="text" >
+         <widget class="QPushButton" name="btnEdit">
+          <property name="text">
            <string>&amp;Edit</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnRemove" >
-          <property name="text" >
+         <widget class="QPushButton" name="btnRemove">
+          <property name="text">
            <string>Delete</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="btnMoveUp" >
-          <property name="text" >
+         <widget class="QPushButton" name="btnMoveUp">
+          <property name="text">
            <string>Move &amp;Up</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="brnMoveDown" >
-          <property name="text" >
+         <widget class="QPushButton" name="brnMoveDown">
+          <property name="text">
            <string>Move &amp;Down</string>
           </property>
          </widget>
         </item>
         <item>
          <spacer>
-          <property name="orientation" >
+          <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <property name="sizeType" >
+          <property name="sizeType">
            <enum>QSizePolicy::Expanding</enum>
           </property>
-          <property name="sizeHint" >
+          <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
             <height>40</height>
@@ -290,31 +237,22 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin">
       <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>20</height>
@@ -323,14 +261,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonOk" >
-       <property name="text" >
+      <widget class="QPushButton" name="buttonOk">
+       <property name="text">
         <string>&amp;Close</string>
        </property>
-       <property name="autoDefault" >
+       <property name="autoDefault">
         <bool>true</bool>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
@@ -339,14 +277,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
-  <customwidgets>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
-   <header>q3listbox.h</header>
-  </customwidget>
- </customwidgets>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>cbReportHeader</tabstop>
   <tabstop>cbReportFooter</tabstop>

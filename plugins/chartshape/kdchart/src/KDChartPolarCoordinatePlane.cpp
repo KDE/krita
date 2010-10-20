@@ -142,7 +142,8 @@ void PolarCoordinatePlane::addDiagram ( AbstractDiagram* diagram )
 void PolarCoordinatePlane::paint ( QPainter* painter )
 {
     AbstractDiagramList diags = diagrams();
-    if ( d->coordinateTransformations.size() == diags.size() )
+    if ( diags.count() > 0 &&
+         d->coordinateTransformations.size() == diags.size() )
     {
         PaintContext ctx;
         ctx.setPainter ( painter );

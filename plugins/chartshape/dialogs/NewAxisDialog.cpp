@@ -27,6 +27,9 @@ NewAxisDialog::NewAxisDialog( QWidget *parent )
     : QDialog( parent )
 {
     setupUi( this );
+    // FIXME: Translate (post-2.3) by putting these strings into the .ui file
+    dimensionIsX->setText( "X" );
+    dimensionIsY->setText( "Y" );
 }
 
 NewAxisDialog::~NewAxisDialog()

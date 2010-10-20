@@ -46,8 +46,8 @@ enum ChartType {
 const int NUM_CHARTTYPES = int ( LastChartType );
 
 bool isPolar( ChartType type );
-
 bool isCartesian( ChartType type );
+int numDimensions( ChartType type );
 
 
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
@@ -56,13 +56,6 @@ enum ChartSubtype {
     NormalChartSubtype,         // For bar, line, area and radar charts
     StackedChartSubtype,
     PercentChartSubtype
-};
-
-enum AxisPosition {
-    BottomAxisPosition,
-    TopAxisPosition,
-    RightAxisPosition,
-    LeftAxisPosition
 };
 
 enum AxisDimension {

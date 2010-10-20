@@ -11,6 +11,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/plugins/chartshape
 ########### Flake Plugin library ###############
 
 SET (chartshape_LIB_SRCS
+    kchart_global.cpp
     KDChartConvertions.cpp
     Axis.cpp
     DataSet.cpp

@@ -36,4 +36,4 @@ install(TARGETS krita%{APPNAMELC}export  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_%{APPNAMELC}_import.desktop krita_%{APPNAMELC}_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_%{APPNAMELC}.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_%{APPNAMELC}.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

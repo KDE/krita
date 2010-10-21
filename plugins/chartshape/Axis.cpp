@@ -1411,7 +1411,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         gridAttr.setSubGridPen( subGridPen );
     d->kdRadarPlane->setGlobalGridAttributes( gridAttr );
     KDChart::TextAttributes ta( d->kdRadarPlane->textAttributes() );
-    ta.setVisible( true );
+    ta.setVisible( helper->categoryRegionSpecifiedInXAxis );
     ta.setFont( font() );
     ta.setFontSize( 50 );
     d->kdRadarPlane->setTextAttributes( ta );

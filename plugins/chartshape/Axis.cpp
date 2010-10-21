@@ -447,11 +447,6 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     Q_ASSERT( diagram );
     Q_ASSERT( *diagram );
 
-    KDChart::AbstractCoordinatePlane *plane = (*diagram)->coordinatePlane();
-    if ( plane ) {
-        plane->takeDiagram( *diagram );
-    }
-
     KDChart::Legend *legend = plotArea->parent()->legend()->kdLegend();
     if ( legend )
         legend->removeDiagram( *diagram );

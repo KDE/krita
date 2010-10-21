@@ -1007,9 +1007,9 @@ QStringList AbstractDiagram::itemRowLabels() const
         const int rowCount = attributesModel()->rowCount(attributesModelRootIndex());
         for( int i = 0; i < rowCount; ++i ){
             //qDebug() << "item row label: " << attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString();
-            ret << unitPrefix( i, Qt::Horizontal, true ) +
+            ret << unitPrefix( i, d->abscissaOrientation(), true ) +
                    attributesModel()->headerData( i, Qt::Vertical, Qt::DisplayRole ).toString() +
-                   unitSuffix( i, Qt::Horizontal, true );
+                   unitSuffix( i, d->abscissaOrientation(), true );
         }
     }
     return ret;

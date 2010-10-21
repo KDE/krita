@@ -487,6 +487,28 @@ namespace KDChart {
             attributesModel->resetHeaderData( column, Qt::Horizontal, role );
         }
 
+        /**
+         * @return the orientation an x-axis of this diagram has to have.
+         *
+         * Note: In most cases, this is Qt::Horizontal though it may be
+         * overridden in certain chart types, like a lying bar diagram, where
+         * the x-axis is vertically aligned.
+         */
+        virtual Qt::Orientation abscissaOrientation() const {
+            return Qt::Horizontal;
+        }
+
+        /**
+         * @return the orientation a y-axis of this diagram has to have.
+         *
+         * Note: In most cases, this is Qt::Vertical though it may be
+         * overridden in certain chart types, like a lying bar diagram, where
+         * the y-axis is horizontally aligned.
+         */
+        virtual Qt::Orientation ordinateOrientation() const {
+            return Qt::Vertical;
+        }
+
     protected:
         void init();
         void init( AbstractCoordinatePlane* plane );

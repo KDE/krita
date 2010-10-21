@@ -32,6 +32,18 @@ BarDiagram::Private::Private( const Private& rhs )
 {
 }
 
+Qt::Orientation BarDiagram::Private::abscissaOrientation() const
+{
+    if ( orientation == Qt::Horizontal )
+        return Qt::Vertical;
+    return Qt::Horizontal;
+}
+
+Qt::Orientation BarDiagram::Private::ordinateOrientation() const
+{
+    return orientation;
+}
+
 void BarDiagram::BarDiagramType::paintBars( PaintContext* ctx, const QModelIndex& index, const QRectF& bar, double& maxDepth )
 {
     QRectF isoRect;

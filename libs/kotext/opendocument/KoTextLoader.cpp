@@ -129,6 +129,7 @@ public:
     QStack<int> changeStack;
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
+    QMap<QString, QString> insertionTextIdMap;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
@@ -208,7 +209,16 @@ void KoTextLoader::Private::splitStack(int id)
 
 void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
-    QString id = element.attributeNS(KoXmlNS::text, "change-id");
+    QString id;
+    if (element.localName() == "change-start") {
+        //This is a ODF 1.1 Change
+        id = element.attributeNS(KoXmlNS::text, "change-id");
+    } else {
+        //This is a ODF 1.2 Change
+        id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
+        QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-idref");
+        insertionTextIdMap.insert(textEndId, id);
+    }
     int changeId = changeTracker->getLoadedChangeId(id);
     if (!changeId)
         return;
@@ -223,9 +233,18 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 
 void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
 {
-    QString id = element.attributeNS(KoXmlNS::text, "change-id");
-    int changeId = changeTracker->getLoadedChangeId(id);
-
+    QString id;
+    int changeId;
+    if (element.localName() == "change-end") {
+        //This is a ODF 1.1 Change
+        id = element.attributeNS(KoXmlNS::text, "change-id");
+    } else {
+        // This is a ODF 1.2 Change
+        QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-id");
+        id = insertionTextIdMap.value(textEndId);
+        insertionTextIdMap.remove(textEndId);
+    }
+    changeId = changeTracker->getLoadedChangeId(id);
     splitStack(changeId);
 }
 
@@ -866,6 +885,12 @@ void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
             QTextCharFormat format;
             format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
             cursor.mergeCharFormat(format);
+        } else {
+            QTextCharFormat format = cursor.charFormat();
+            if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                cursor.setCharFormat(format);
+            }
         }
         cursor.insertText(text);
 
@@ -892,11 +917,16 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         const QString localName(ts.localName());
         const bool isTextNS = ts.namespaceURI() == KoXmlNS::text;
         const bool isDrawNS = ts.namespaceURI() == KoXmlNS::draw;
+        const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
 //        const bool isOfficeNS = ts.namespaceURI() == KoXmlNS::office;
         if (node.isText()) {
             bool isLastNode = node.nextSibling().isNull();
             loadText(node.toText().data(), cursor, stripLeadingSpace,
                      isLastNode);
+        } else if (isDeltaNS && localName == "inserted-text-start") {
+            d->openChangeRegion(ts);
+        } else if (isDeltaNS && localName == "inserted-text-end") {
+            d->closeChangeRegion(ts);
         } else if (isTextNS && localName == "change-start") { // text:change-start
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {

@@ -135,8 +135,12 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
         KisConvolutionPainter horizPainter(interm, dstInfo.selection());
         horizPainter.setChannelFlags(channelFlags);
         horizPainter.setProgress(progressUpdater);
-        horizPainter.applyMatrix(kernelHoriz, src, srcTopLeft, srcTopLeft, size, BORDER_REPEAT);
-
+        horizPainter.applyMatrix(kernelHoriz, src, 
+                                 srcTopLeft - QPoint(0, verticalRadius), 
+                                 srcTopLeft - QPoint(0, verticalRadius), 
+                                 size + QSize(0, 2 * verticalRadius), BORDER_REPEAT);
+        
+        
         KisConvolutionPainter verticalPainter(dst, dstInfo.selection());
         verticalPainter.setChannelFlags(channelFlags);
         verticalPainter.setProgress(progressUpdater);

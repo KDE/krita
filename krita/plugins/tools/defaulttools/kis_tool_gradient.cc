@@ -264,19 +264,8 @@ void KisToolGradient::mouseReleaseEvent(KoPointerEvent *event)
             qApp->setOverrideCursor(Qt::BusyCursor);
 
             KisGradientPainter painter(device, currentSelection());
-            if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-                painter.setChannelFlags(l->channelFlags());
-                if (l->alphaLocked()) {
-                    painter.setLockAlpha(l->alphaLocked());
-                }
-            }
-
             painter.beginTransaction(i18n("Gradient"));
-
-            painter.setPaintColor(currentFgColor());
-            painter.setGradient(currentGradient());
-            painter.setOpacity(m_opacity);
-            painter.setCompositeOp(m_compositeOp);
+            setupPainter(&painter);
 
             KisCanvas2 * canvas = dynamic_cast<KisCanvas2 *>(this->canvas());
             KoProgressUpdater * updater = canvas->view()->createProgressUpdater(KoProgressUpdater::Unthreaded);

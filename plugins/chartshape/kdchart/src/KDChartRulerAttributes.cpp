@@ -39,10 +39,14 @@ class RulerAttributes::Private
 public:
     Private();
 private:
+    QPen pen;
     QPen tickMarkPen;
     QPen majorTickMarkPen;
     QPen minorTickMarkPen;
+
+    bool showRulerLine;
     
+    bool tickMarkPenIsSet;
     bool majorTickMarkPenIsSet;
     bool minorTickMarkPenIsSet;
 
@@ -58,11 +62,16 @@ RulerAttributes::Private::Private()
     : tickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
     , majorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
     , minorTickMarkPen( QColor( 0x00, 0x00, 0x00 ) )
+    , pen( Qt::black )
 {
+    pen.setCapStyle( Qt::FlatCap );
     tickMarkPen.setCapStyle( Qt::FlatCap );
     majorTickMarkPen.setCapStyle( Qt::FlatCap );
     minorTickMarkPen.setCapStyle( Qt::FlatCap );
 
+    showRulerLine = false;
+
+    tickMarkPenIsSet = false;
     majorTickMarkPenIsSet = false;
     minorTickMarkPenIsSet = false;
 
@@ -83,20 +92,41 @@ RulerAttributes::RulerAttributes( const RulerAttributes& r )
 {
 }
 
+void RulerAttributes::setPen( const QPen& pen )
+{
+        d->pen = pen;
+}
+
+QPen RulerAttributes::pen() const
+{
+        return d->pen;
+}
+
+void RulerAttributes::setShowRulerLine( bool show )
+{
+    d->showRulerLine = show;
+}
+
+bool RulerAttributes::showRulerLine() const
+{
+    return d->showRulerLine;
+}
+
 void RulerAttributes::setTickMarkPen( const QPen& pen )
 {
-	d->tickMarkPen = pen;
+    d->tickMarkPen = pen;
+    d->tickMarkPenIsSet = true;
 }
 
 QPen RulerAttributes::tickMarkPen() const
 {
-	return d->tickMarkPen;
+    return d->tickMarkPenIsSet ? d->tickMarkPen : d->pen;
 }
 
 void RulerAttributes::setMajorTickMarkPen( const QPen& pen )
 {
-	d->majorTickMarkPen = pen;
-	d->majorTickMarkPenIsSet = true;
+        d->majorTickMarkPen = pen;
+        d->majorTickMarkPenIsSet = true;
 }
 
 bool RulerAttributes::majorTickMarkPenIsSet() const
@@ -106,7 +136,7 @@ bool RulerAttributes::majorTickMarkPenIsSet() const
 
 QPen RulerAttributes::majorTickMarkPen() const
 {
-	return d->majorTickMarkPenIsSet ? d->majorTickMarkPen : d->tickMarkPen;
+    return d->majorTickMarkPenIsSet ? d->majorTickMarkPen : tickMarkPen();
 }
 
 void RulerAttributes::setMinorTickMarkPen( const QPen& pen )
@@ -122,7 +152,7 @@ bool RulerAttributes::minorTickMarkPenIsSet() const
 
 QPen RulerAttributes::minorTickMarkPen() const
 {
-	return d->minorTickMarkPenIsSet ? d->minorTickMarkPen : d->tickMarkPen;
+        return d->minorTickMarkPenIsSet ? d->minorTickMarkPen : tickMarkPen();
 }
 
 void RulerAttributes::setTickMarkPen( qreal value, const QPen& pen )
@@ -139,7 +169,7 @@ QPen RulerAttributes::tickMarkPen( qreal value ) const
 		if ( qAbs( value - it.key() ) < std::numeric_limits< float >::epsilon() )
 			return it.value();
 	}
-	return d->tickMarkPen;
+        return tickMarkPen();
 }
 
 RulerAttributes::TickMarkerPensMap RulerAttributes::tickMarkPens() const

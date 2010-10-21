@@ -48,7 +48,7 @@
 #include <KDebug>
 
 // KDChart
-#include <KDChartAbstractCoordinatePlane>
+#include <KDChartCartesianCoordinatePlane>
 #include <KDChartBackgroundAttributes>
 #include <KDChartFrameAttributes>
 
@@ -72,7 +72,7 @@ public:
     QBrush   brush;
     QPen     framePen;
 
-    KDChart::AbstractCoordinatePlane *kdPlane;
+    KDChart::CartesianCoordinatePlane *kdPlane;
 };
 
 Surface::Private::Private(PlotArea *parent)
@@ -96,7 +96,7 @@ Surface::Surface( PlotArea *parent )
     // FIXME: Make this class capable of storing floor-specific
     // attributes as well. Right now, it's really only used
     // and designed to load and save the chart's wall.
-    d->kdPlane = d->plotArea->kdPlane();
+    d->kdPlane = d->plotArea->kdCartesianPlane();
     Q_ASSERT( d->kdPlane );
 }
 
@@ -151,7 +151,6 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
 {
     // Get the current style stack and save it's state.
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
 
     bool brushLoaded = false;
     
@@ -160,9 +159,8 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         KDChart::FrameAttributes frameAttributes = d->kdPlane->frameAttributes();
         
         // Add the chart style to the style stack.
-//         styleStack.clear();
-        context.odfLoadingContext().fillStyleStack( surfaceElement, 
-                                                    KoXmlNS::chart, "style-name", "chart" );
+        styleStack.clear();
+        context.odfLoadingContext().fillStyleStack( surfaceElement, KoXmlNS::chart, "style-name", "chart" );
         
         styleStack.setTypeProperties( "graphic" );
         
@@ -219,10 +217,6 @@ bool Surface::loadOdf( const KoXmlElement &surfaceElement,
         }
     }
 #endif
-
-    // Restore the style stack to what it was before entering this
-    // function.
-    styleStack.restore();
     
     return true;
 }

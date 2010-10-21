@@ -76,7 +76,7 @@ class CHARTSHAPELIB_EXPORT CellRegion
 public:
     CellRegion();
     CellRegion( const CellRegion& region );
-    CellRegion( TableSource *source, const QString& region );
+    CellRegion( TableSource *source, const QString& regions );
     CellRegion( Table *table, const QPoint &point );
     CellRegion( Table *table, const QRect &rect );
     CellRegion( Table *table, const QVector<QRect> &rects );

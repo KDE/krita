@@ -19,4 +19,4 @@ install(TARGETS kritapdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  krita_pdf_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_pdf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_pdf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

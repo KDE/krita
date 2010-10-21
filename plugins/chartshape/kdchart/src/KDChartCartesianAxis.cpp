@@ -582,6 +582,8 @@ void CartesianAxis::paintCtx( PaintContext* context )
 
     // - find the reference point at which to start drawing and the increment (line distance);
     QPointF rulerRef;
+    // Point at the other end of the axis
+    QPointF rulerRef2;
     const QRect areaGeoRect( areaGeometry() );
     const QRect geoRect( geometry() );
     QRectF rulerRect;
@@ -591,25 +593,40 @@ void CartesianAxis::paintCtx( PaintContext* context )
     //for debugging: if( isAbscissa() )ptr->drawRect(areaGeoRect.adjusted(0,0,-1,-1));
     //qDebug() << "         " << (isAbscissa() ? "Abscissa":"Ordinate") << "axis painting with geometry" << areaGeoRect;
 
+    // The "major" ruler line perpendicular to all tick mark lines
+    QLineF rulerLine;
     // FIXME references are of course different for all locations:
     switch( position() )
     {
     case Top:
         rulerRef.setX( areaGeoRect.x() );
         rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
+        rulerRef2 = rulerRef;
+        rulerRef2.rx() += areaGeoRect.width();
         break;
     case Bottom:
         rulerRef.setX( areaGeoRect.x() );
         rulerRef.setY( areaGeoRect.y() );
+        rulerRef2 = rulerRef;
+        rulerRef2.rx() += areaGeoRect.width();
         break;
     case Right:
         rulerRef.setX( areaGeoRect.x() );
         rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
+        rulerRef2 = rulerRef;
+        rulerRef2.ry() -= areaGeoRect.height();
         break;
     case Left:
         rulerRef.setX( areaGeoRect.x() + areaGeoRect.width() );
         rulerRef.setY( areaGeoRect.y() + areaGeoRect.height() );
+        rulerRef2 = rulerRef;
+        rulerRef2.ry() -= areaGeoRect.height();
         break;
+    }
+
+    if ( rulerAttr.showRulerLine() ) {
+        ptr->setPen( rulerAttr.pen() );
+        ptr->drawLine( QLineF( rulerRef, rulerRef2 ) );
     }
 
     // set up the lines to paint:

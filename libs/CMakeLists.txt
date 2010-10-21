@@ -10,4 +10,8 @@ if (SHOULD_BUILD_SCRIPTING)
 endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
 add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
-add_subdirectory( koreport )
+
+# only build koreport if possible
+if (SHOULD_BUILD_KOREPORT)
+    macro_optional_add_subdirectory( koreport )
+endif (SHOULD_BUILD_KOREPORT)

@@ -137,8 +137,6 @@ void KisToolStar::mouseReleaseEvent(KoPointerEvent *event)
             KisPainter painter(device, currentSelection());
             painter.beginTransaction(i18n("Star"));
             setupPainter(&painter);
-            painter.setOpacity(m_opacity);
-            painter.setCompositeOp(m_compositeOp);
 
             painter.paintPolygon(coord);
 

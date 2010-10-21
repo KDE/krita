@@ -94,7 +94,7 @@ KisPainter::StrokeStyle KisToolShape::strokeStyle(void)
 
 void KisToolShape::setupPainter(KisPainter * painter)
 {
-    KisTool::setupPainter(painter);
+    KisToolPaint::setupPainter(painter);
     painter->setFillStyle(fillStyle());
     painter->setStrokeStyle(strokeStyle());
 }

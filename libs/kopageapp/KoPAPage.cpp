@@ -54,7 +54,9 @@ void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
 
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:name", paContext.pageName( this ) );
-    paContext.xmlWriter().addAttribute( "koffice:name", name() );
+    if (!name().isEmpty() && name() != paContext.pageName( this )) {
+        paContext.xmlWriter().addAttribute( "koffice:name", name() );
+    }
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
     paContext.xmlWriter().addAttribute( "draw:style-name", saveOdfPageStyle( paContext ) );

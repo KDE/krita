@@ -142,7 +142,7 @@ signals:
     
     void showLegendChanged( bool b );
 
-    void axisAdded( AxisPosition, const QString& title );    
+    void axisAdded( AxisDimension, const QString& title );
     void axisRemoved( Axis *axis );
     void axisShowTitleChanged( Axis *axis, bool b );
     void axisTitleChanged( Axis *axis, const QString& title );

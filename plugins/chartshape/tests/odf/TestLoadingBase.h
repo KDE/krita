@@ -39,6 +39,7 @@ namespace KChart {
 
 class ChartShape;
 class Table;
+class TableSource;
 class Axis;
 
 /**
@@ -61,7 +62,7 @@ public:
     TestLoadingBase();
 
 protected slots:
-    void initTestCase();
+    virtual void initTestCase();
 
 protected:
     // Helper methods to be used by test functions
@@ -93,6 +94,7 @@ protected:
     void testAxisTitle( Axis *axis, const QString &text );
 
     Table* internalTable();
+    TableSource* tableSource();
 
     ChartShape *m_chart;
 };

@@ -147,25 +147,6 @@ const ChartSubtype  defaultSubtypes[ NUM_CHARTTYPES ] = {
     NoChartSubtype          // Gantt
 };
 
-bool isPolar( ChartType type )
-{
-    switch ( type )
-    {
-    case CircleChartType:
-    case RingChartType:
-    case RadarChartType:
-        return true;
-    default:
-        return false;
-    }
-    return false;
-}
-
-bool isCartesian( ChartType type )
-{
-    return !isPolar( type );
-}
-
 
 QString saveOdfFont( KoGenStyles& mainStyles,
                      const QFont& font,
@@ -654,6 +635,11 @@ bool ChartShape::usesInternalModelOnly() const
     return d->usesInternalModelOnly;
 }
 
+void ChartShape::setUsesInternalModelOnly( bool doesSo )
+{
+    d->usesInternalModelOnly = doesSo;
+}
+
 
 // ----------------------------------------------------------------
 //                         getters and setters
@@ -699,6 +685,7 @@ void ChartShape::reset( const QString &region,
 void ChartShape::setChartType( ChartType type )
 {
     Q_ASSERT( d->plotArea );
+    d->proxyModel->setDataDimensions( numDimensions( type ) );
     d->plotArea->setChartType( type );
     emit chartTypeChanged( type );
 }
@@ -949,9 +936,7 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     context.addSharedData( OdfLoadingHelperId, helper );
 
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
-    styleStack.save();
-
-    //styleStack.clear();
+    styleStack.clear();
     if ( chartElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         context.odfLoadingContext().fillStyleStack( chartElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "graphic" );
@@ -991,30 +976,7 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
             chartType = (ChartType)type;
             // Set the dimensionality of the data points, we can not call
             // setType here as we bubble charts requires that the datasets already exist
-            int dimensions = 1;
-            switch ( chartType ) {
-            case BarChartType:
-            case LineChartType:
-            case AreaChartType:
-            case CircleChartType:
-            case RingChartType:
-            case RadarChartType:
-            case StockChartType:
-            case GanttChartType:
-                dimensions = 1;
-                break;
-            case ScatterChartType:
-            case SurfaceChartType:
-                dimensions = 2;
-                break;
-            case BubbleChartType:
-                dimensions = 3;
-                break;
-            case LastChartType:
-            default:
-                dimensions = 1;         // Shouldn't happen
-            }
-            proxyModel()->setDataDimensions( dimensions );
+            proxyModel()->setDataDimensions( numDimensions( chartType ) );
             knownType = true;
             break;
         }
@@ -1087,8 +1049,6 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     d->legend->update();
 
     requestRepaint();
-
-    styleStack.restore();
 
     proxyModel()->endLoading();
 

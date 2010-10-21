@@ -67,8 +67,6 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
 
         painter.beginTransaction(i18n("Ellipse"));
         setupPainter(&painter);
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
         painter.paintEllipse(rect);
         painter.endTransaction(image()->undoAdapter());
 

@@ -44,6 +44,11 @@ namespace KChart {
 
 /**
  * @brief The ChartProxyModel is a factory for the DataSet's and decorates the ChartTableModel.
+ *
+ * TODO: Rename this class to something more meaningful (and correct) like
+ * "DataProvider" and maybe split it up into one class that handles the
+ * QAbstractItemModel part, and another one that handles CellRegions for
+ * all the data points.
  */
 class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractTableModel
 {

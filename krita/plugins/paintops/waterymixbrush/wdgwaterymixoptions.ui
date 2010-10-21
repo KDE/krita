@@ -16,9 +16,6 @@
     <height>56</height>
    </size>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>

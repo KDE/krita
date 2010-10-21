@@ -86,7 +86,7 @@ protected:
 
     void startTrip(KisNodeSP startWith) {
 
-        bool changeRectVaries;
+        bool changeRectVaries = false;
         QRect changeRect = calculateChangeRect(startWith, requestedRect(), &changeRectVaries);
         setExplicitChangeRect(changeRect, changeRectVaries);
 

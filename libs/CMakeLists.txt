@@ -13,5 +13,5 @@ add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
 
 # only build koreport if possible
 if (SHOULD_BUILD_KOREPORT)
-    macro_optional_add_subdirectory( koreport )
+    add_subdirectory( koreport )
 endif (SHOULD_BUILD_KOREPORT)

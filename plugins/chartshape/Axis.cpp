@@ -447,10 +447,6 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     Q_ASSERT( diagram );
     Q_ASSERT( *diagram );
 
-    KDChart::Legend *legend = plotArea->parent()->legend()->kdLegend();
-    if ( legend )
-        legend->removeDiagram( *diagram );
-
     deregisterDiagram( *diagram );
     delete *diagram;
 

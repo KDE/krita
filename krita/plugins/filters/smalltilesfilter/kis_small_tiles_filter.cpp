@@ -98,6 +98,7 @@ void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
     if (tile.isNull()) return;
 
     KisPainter gc(dst);
+    gc.setCompositeOp(COMPOSITE_COPY);
 
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);
@@ -130,3 +131,5 @@ KisFilterConfiguration* KisSmallTilesFilter::factoryConfiguration(const KisPaint
     config->setProperty("numberOfTiles", 2);
     return config;
 }
+
+

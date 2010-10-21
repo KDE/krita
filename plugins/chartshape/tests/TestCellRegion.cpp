@@ -25,6 +25,7 @@
 
 // Qt
 #include <QtTest>
+#include <QDebug>
 
 // KChart
 #include "CellRegion.h"
@@ -79,17 +80,32 @@ void TestCellRegion::testFromStringWithSpecialCharactersSingleTable()
     QCOMPARE( region.table(), m_source.get( "table-one" ) );
 }
 
-void TestCellRegion::testToStringMultibleTables()
+void TestCellRegion::testListOfRegions()
+{
+    CellRegion region( &m_source, QString( "$Table1.$A$1:$F$13 $Table1.$A$15:$F$26" ) );
+    QCOMPARE( region.table(), m_source.get( "Table1" ) );
+    const QVector< QRect > rects = region.rects();
+    QVector< QRect > compareRects;
+    compareRects.push_back( QRect( QPoint( 1, 1 ), QPoint( 6, 13 ) ) );
+    compareRects.push_back( QRect( QPoint( 1, 15 ), QPoint( 6, 26 ) ) );
+    QCOMPARE( rects.count(), compareRects.count() );
+    for ( int i = 0; i < compareRects.count() && i < rects.count(); ++i )
+    {
+        QCOMPARE( rects[i], compareRects[i] );
+    }
+}
+
+void TestCellRegion::testToStringMultipleTables()
 {
     QCOMPARE( m_region2.toString(), QString( "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
-void TestCellRegion::testFromStringMultibleTables()
+void TestCellRegion::testFromStringMultipleTables()
 {
     QCOMPARE( m_region2, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
-void TestCellRegion::testTableNameChangeMultibleTables()
+void TestCellRegion::testTableNameChangeMultipleTables()
 {
     m_source.rename( "Table1", "AGoodCookCanCookGoodCookies" );
     QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
@@ -97,13 +113,13 @@ void TestCellRegion::testTableNameChangeMultibleTables()
     QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$DoubleBubbleGumBubblesDouble.$A$2:$E$7" ) );
 }
 
-void TestCellRegion::testToStringWithSpecialCharactersMultibleTables()
+void TestCellRegion::testToStringWithSpecialCharactersMultipleTables()
 {
     m_source.rename( "Table1", "table-one" );
     QCOMPARE( m_region2.toString(), QString( "$'table-one'.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
-void TestCellRegion::testFromStringWithSpecialCharactersMultibleTables()
+void TestCellRegion::testFromStringWithSpecialCharactersMultipleTables()
 {
     m_source.rename( "Table1", "table-one" );
     CellRegion region( &m_source, QString( "$'table-one'.$B$3:$K$13" ) );

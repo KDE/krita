@@ -183,22 +183,19 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     KDChart::GridAttributes gridAttributes;
     gridAttributes.setGridVisible( false );
     gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_10_50 );
-    kdCartesianPlanePrimary->setGridAttributes( Qt::Horizontal, gridAttributes );
-    kdCartesianPlanePrimary->setGridAttributes( Qt::Vertical, gridAttributes );
+    kdCartesianPlanePrimary->setGlobalGridAttributes( gridAttributes );
     // Disable odd default of (1, 1, -3, -3) which only produces weird offsets
     // between axes and plot area frame.
     kdCartesianPlanePrimary->setDrawingAreaMargins( 0, 0, 0, 0 );
 
     // --- Prepare Secondary Cartesian Coordinate Plane ---
-    kdCartesianPlaneSecondary->setGridAttributes( Qt::Horizontal, gridAttributes );
-    kdCartesianPlaneSecondary->setGridAttributes( Qt::Vertical, gridAttributes );
+    kdCartesianPlaneSecondary->setGlobalGridAttributes( gridAttributes );
     kdCartesianPlaneSecondary->setDrawingAreaMargins( 0, 0, 0, 0 );
 
     // --- Prepare Polar Coordinate Plane ---
     KDChart::GridAttributes polarGridAttributes;
     polarGridAttributes.setGridVisible( false );
-    kdPolarPlane->setGridAttributes( false, polarGridAttributes );
-    kdPolarPlane->setGridAttributes( true, polarGridAttributes );
+    kdPolarPlane->setGlobalGridAttributes( polarGridAttributes );
 
     // --- Prepare Radar Coordinate Plane ---
     KDChart::GridAttributes radarGridAttributes;

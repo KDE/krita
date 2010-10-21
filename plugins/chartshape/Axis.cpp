@@ -64,7 +64,6 @@
 #include <KDChartThreeDBarAttributes>
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
-#include <KDChartDataValueAttributes>
 #include <KDChartBackgroundAttributes>
 #include <KDChartRulerAttributes>
 
@@ -675,19 +674,6 @@ void Axis::Private::createScatterDiagram()
     KDChart::ThreeDLineAttributes attributes( kdScatterDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
     kdScatterDiagram->setThreeDLineAttributes( attributes );
-    
-    KDChart::DataValueAttributes dva( kdScatterDiagram->dataValueAttributes() );
-    dva.setVisible( true );
-    
-    KDChart::TextAttributes ta( dva.textAttributes() );
-    ta.setVisible( true );
-    dva.setTextAttributes( ta );
-
-    KDChart::MarkerAttributes ma( dva.markerAttributes() );
-    ma.setVisible( true );
-    dva.setMarkerAttributes( ma );
-
-    kdScatterDiagram->setDataValueAttributes( dva );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
 }

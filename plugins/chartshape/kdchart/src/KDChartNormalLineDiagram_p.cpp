@@ -61,7 +61,25 @@ const QPair< QPointF, QPointF > NormalLineDiagram::calculateDataBoundaries() con
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-            const double value = ISNAN( point.value ) ? 0.0 : point.value;
+            double value = point.value;
+
+            if ( ISNAN( value ) ) {
+                const QModelIndex &index = diagram()->model()->index( row, column );
+                const LineAttributes &attr = diagram()->lineAttributes( index );
+                switch ( attr.missingValuesPolicy() ) {
+                // In these cases the bounds aren't effected at all by this point
+                case LineAttributes::MissingValuesAreBridged:
+                    // same as MissingValuesHideSegments because the value of
+                    // this (missing) value simply does not effect the bounds
+                case LineAttributes::MissingValuesHideSegments:
+                    continue;
+                case LineAttributes::MissingValuesShownAsZero:
+                    value = 0;
+                    break;
+                case LineAttributes::MissingValuesPolicyIgnored:
+                    break;
+                }
+            }
 
             if ( ISNAN( yMin ) ) {
                     yMin = value;

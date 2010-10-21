@@ -47,4 +47,4 @@ target_link_libraries(kritapsdexport kritaui )
 #install( FILES  krita_psd_import.desktop 
 #               krita_psd_export.desktop  
 #DESTINATION ${SERVICES_INSTALL_DIR})
-#install( FILES  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+#install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

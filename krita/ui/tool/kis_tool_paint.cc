@@ -355,6 +355,12 @@ void KisToolPaint::updateTabletPressureSamples()
     m_pressureSamples = curve.floatTransfer(LEVEL_OF_PRESSURE_RESOLUTION + 1);
 }
 
+void KisToolPaint::setupPainter(KisPainter* painter)
+{
+    KisTool::setupPainter(painter);
+    painter->setOpacity(m_opacity);
+    painter->setCompositeOp(m_compositeOp);
+}
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)
 {

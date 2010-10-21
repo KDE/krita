@@ -63,16 +63,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
 
         KisPainter painter(device, currentSelection());
         painter.beginTransaction(i18n("Polyline"));
-        if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-            painter.setChannelFlags(l->channelFlags());
-            if (l->alphaLocked()) {
-                painter.setLockAlpha(l->alphaLocked());
-            }
-        }
-        painter.setPaintColor(currentFgColor());
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
-        painter.setPaintOpPreset(currentPaintOpPreset(), currentImage()); // Painter takes ownership
+        setupPainter(&painter);
 
         QPointF start, end;
         QVector<QPointF>::const_iterator it;

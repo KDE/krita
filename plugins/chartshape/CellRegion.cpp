@@ -125,7 +125,7 @@ CellRegion::CellRegion( const CellRegion &region )
     *this = region;
 }
 
-CellRegion::CellRegion( TableSource *source, const QString& region )
+CellRegion::CellRegion( TableSource *source, const QString& regions )
     : d( new Private() )
 {
     // A dollar sign before a part of the address means that this part
@@ -133,38 +133,41 @@ CellRegion::CellRegion( TableSource *source, const QString& region )
     // all occurences of '$', and handle relative and absolute addresses in
     // the same way.
     // See ODF specs $8.3.1 "Referencing Table Cells"
-    QString searchStr = QString( region ).remove( "$" );
-    QRegExp regEx;
+    QStringList regionsList = regions.split( " ", QString::SkipEmptyParts );
+    Q_FOREACH( const QString& region, regionsList ) {
+      QString searchStr = QString( region ).remove( "$" );
+      QRegExp regEx;
 
-    QStringList regionList = searchStr.split( ";" );
-    foreach( QString region, regionList ) {
-        const bool isPoint = !region.contains( ':' );
-        if ( isPoint )
-            regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
-        else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
-            regEx = QRegExp ( "(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
+      QStringList regionList = searchStr.split( ";" );
+      Q_FOREACH( QString region, regionList ) {
+          const bool isPoint = !region.contains( ':' );
+          if ( isPoint )
+              regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
+          else // support range-notations like Sheet1.D2:Sheet1.F2 Sheet1.D2:F2 D2:F2
+              regEx = QRegExp ( "(|.*\\.)([A-Z]+)([0-9]+)\\:(|.*\\.)([A-Z]+)([0-9]+)" );
 
-        // Check if region string is valid (e.g. not empty)
-        if ( regEx.indexIn( region ) >= 0 ) {
-            // It is possible for a cell-range-address as defined in ODF to contain
-            // refernces to cells of more than one sheet. This, however, we ignore
-            // here. We do not support more than one table in a cell region.
-            // Also we do not support regions spanned over different sheets. For us
-            // everything is either on no sheet or on the same sheet.
-            QString sheetName = regEx.cap( 1 );
-            if ( sheetName.endsWith( "." ) )
-                sheetName = sheetName.left( sheetName.length() - 1 );
-            // TODO: Support for multiple tables in one region
-            d->table = source->get( unformatTableName( sheetName ) );
+          // Check if region string is valid (e.g. not empty)
+          if ( regEx.indexIn( region ) >= 0 ) {
+              // It is possible for a cell-range-address as defined in ODF to contain
+              // refernces to cells of more than one sheet. This, however, we ignore
+              // here. We do not support more than one table in a cell region.
+              // Also we do not support regions spanned over different sheets. For us
+              // everything is either on no sheet or on the same sheet.
+              QString sheetName = regEx.cap( 1 );
+              if ( sheetName.endsWith( "." ) )
+                  sheetName = sheetName.left( sheetName.length() - 1 );
+              // TODO: Support for multiple tables in one region
+              d->table = source->get( unformatTableName( sheetName ) );
 
-            QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
-            if ( isPoint ) {
-                d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
-            } else {
-                QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
-                d->rects.append( QRect( topLeft, bottomRight ) );
-            }
-        }
+              QPoint topLeft( rangeStringToInt( regEx.cap(2) ), regEx.cap(3).toInt() );
+              if ( isPoint ) {
+                  d->rects.append( QRect( topLeft, QSize( 1, 1 ) ) );
+              } else {
+                  QPoint bottomRight( rangeStringToInt( regEx.cap(5) ), regEx.cap(6).toInt() );
+                  d->rects.append( QRect( topLeft, bottomRight ) );
+              }
+          }
+      }
     }
 }
 

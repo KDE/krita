@@ -35,4 +35,4 @@ target_link_libraries(kritagifexport kritaui ${GIF_LIBRARIES})
 
 install( FILES  krita_gif_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 #install( FILES  krita_gif_export.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  krita_gif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_gif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -109,6 +109,9 @@ protected:
     virtual QString quickHelp() const {
         return QString();
     }
+    
+    /// Reimplemented
+    virtual void setupPainter(KisPainter* painter);
 
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 

@@ -188,8 +188,6 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
         painter.beginTransaction(i18n("Path"));
 
         setupPainter(&painter);
-        painter.setOpacity(m_opacity);
-        painter.setCompositeOp(m_compositeOp);
         painter.paintPainterPath(mapedOutline);
         painter.endTransaction(image->undoAdapter());
 

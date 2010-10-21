@@ -117,6 +117,8 @@ AbstractDiagram::AbstractDiagram ( QWidget* parent, AbstractCoordinatePlane* pla
 AbstractDiagram::~AbstractDiagram()
 {
     emit aboutToBeDestroyed();
+    if ( d->plane )
+        d->plane->takeDiagram( this );
     delete _d;
 }
 

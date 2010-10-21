@@ -83,7 +83,8 @@ using namespace KChart;
 
 const int MAX_PIXMAP_SIZE = 1000;
 
-Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> )
+Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> );
+typedef QList<KDChart::AbstractCoordinatePlane*> CoordinatePlaneList;
 
 class PlotArea::Private
 {
@@ -92,6 +93,7 @@ public:
     ~Private();
 
     void initAxes();
+    CoordinatePlaneList coordinatePlanesForChartType( ChartType type );
 
     PlotArea *q;
     // The parent chart shape
@@ -199,8 +201,9 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     kdPolarPlane->setGridAttributes( true, polarGridAttributes );
 
     // --- Prepare Radar Coordinate Plane ---
-    kdRadarPlane->setGridAttributes( false, polarGridAttributes );
-    kdRadarPlane->setGridAttributes( true, polarGridAttributes );
+    KDChart::GridAttributes radarGridAttributes;
+    polarGridAttributes.setGridVisible( true );
+    kdRadarPlane->setGlobalGridAttributes( radarGridAttributes );
 
     // By default we use a cartesian chart (bar chart), so the polar planes
     // are not needed yet. They will be added on demand in setChartType().
@@ -282,7 +285,6 @@ void PlotArea::plotAreaInit()
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdCartesianPlanePrimary );
     d->kdCartesianPlaneSecondary->setReferenceCoordinatePlane( d->kdCartesianPlanePrimary );
-    d->kdRadarPlane->setReferenceCoordinatePlane( d->kdPolarPlane );
 
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible( false );
@@ -485,18 +487,45 @@ bool PlotArea::removeAxis( Axis *axis )
     return true;
 }
 
+CoordinatePlaneList PlotArea::Private::coordinatePlanesForChartType( ChartType type )
+{
+    CoordinatePlaneList result;
+    switch ( type ) {
+    case BarChartType:
+    case LineChartType:
+    case AreaChartType:
+    case ScatterChartType:
+    case GanttChartType:
+    case SurfaceChartType:
+    case StockChartType:
+    case BubbleChartType:
+        result.append( kdCartesianPlanePrimary );
+        result.append( kdCartesianPlaneSecondary );
+        break;
+    case CircleChartType:
+    case RingChartType:
+        result.append( kdPolarPlane );
+        break;
+    case RadarChartType:
+        result.append( kdRadarPlane );
+        break;
+    case LastChartType:
+        Q_ASSERT( "There's no coordinate plane for LastChartType" );
+        break;
+    }
 
+    Q_ASSERT( !result.isEmpty() );
+    return result;
+}
 
 void PlotArea::setChartType( ChartType type )
 {
+    if ( d->chartType == type )
+        return;
+
     // Lots of things to do if the old and new types of coordinate
     // systems don't match.
     if ( !isPolar( d->chartType ) && isPolar( type ) ) {
-        // First remove reference coordinate plane
-        d->kdChart->takeCoordinatePlane( d->kdCartesianPlaneSecondary );
-        d->kdChart->takeCoordinatePlane( d->kdCartesianPlanePrimary );
-        d->kdChart->addCoordinatePlane( d->kdPolarPlane );
-        d->kdChart->addCoordinatePlane( d->kdRadarPlane );
         foreach ( Axis *axis, d->axes ) {
             if ( !axis->title()->isVisible() )
                 continue;
@@ -506,16 +535,24 @@ void PlotArea::setChartType( ChartType type )
         }
     }
     else if ( isPolar( d->chartType ) && !isPolar( type ) ) {
-        // First remove reference coordinate plane
-        d->kdChart->takeCoordinatePlane( d->kdRadarPlane );
-        d->kdChart->takeCoordinatePlane( d->kdPolarPlane );
-        d->kdChart->addCoordinatePlane( d->kdCartesianPlanePrimary );
-        d->kdChart->addCoordinatePlane( d->kdCartesianPlaneSecondary );
         foreach ( KoShape *title, d->automaticallyHiddenAxisTitles ) {
             title->setVisible( true );
         }
         d->automaticallyHiddenAxisTitles.clear();
     }
+
+    CoordinatePlaneList planesToRemove;
+    // First remove secondary cartesian plane as it references the primary
+    // plane, otherwise KD Chart will come down crashing on us. Note that
+    // removing a plane that's not in the chart is not a problem.
+    planesToRemove << d->kdCartesianPlaneSecondary << d->kdCartesianPlanePrimary
+                   << d->kdPolarPlane << d->kdRadarPlane;
+    foreach( KDChart::AbstractCoordinatePlane *plane, planesToRemove )
+        d->kdChart->takeCoordinatePlane( plane );
+    CoordinatePlaneList newPlanes = d->coordinatePlanesForChartType( type );
+    foreach( KDChart::AbstractCoordinatePlane *plane, newPlanes )
+        d->kdChart->addCoordinatePlane( plane );
+    Q_ASSERT( d->kdChart->coordinatePlanes() == newPlanes );
     
     d->chartType = type;
     

@@ -451,8 +451,6 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     KDChart::AbstractCoordinatePlane *plane = (*diagram)->coordinatePlane();
     if ( plane ) {
         plane->takeDiagram( *diagram );
-        if ( plane->diagrams().size() == 0 )
-            plotArea->kdChart()->takeCoordinatePlane( plane );
     }
 
     KDChart::Legend *legend = plotArea->parent()->legend()->kdLegend();
@@ -488,9 +486,6 @@ void Axis::Private::createBarDiagram()
         kdBarDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdBarDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() )
     {
@@ -525,9 +520,6 @@ void Axis::Private::createLineDiagram()
     if ( isVisible )
         kdLineDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdLineDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
@@ -572,9 +564,6 @@ void Axis::Private::createAreaDiagram()
         kdAreaDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdAreaDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
@@ -603,9 +592,6 @@ void Axis::Private::createCircleDiagram()
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
     kdPolarPlane->addDiagram( kdCircleDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
-
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdCircleDiagram->threeDPieAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
@@ -628,9 +614,6 @@ void Axis::Private::createRingDiagram()
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
     kdPolarPlane->addDiagram( kdRingDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
 
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdRingDiagram->threeDPieAttributes() );
@@ -661,9 +644,6 @@ void Axis::Private::createRadarDiagram()
 #endif
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
     kdRadarPlane->addDiagram( kdRadarDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdRadarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdRadarPlane );
 }
 
 void Axis::Private::createScatterDiagram()
@@ -683,9 +663,6 @@ void Axis::Private::createScatterDiagram()
     if ( isVisible )
         kdScatterDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdScatterDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
     
     foreach ( Axis *axis, plotArea->axes() ) {
@@ -733,9 +710,6 @@ void Axis::Private::createStockDiagram()
         kdStockDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdStockDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
@@ -759,10 +733,7 @@ void Axis::Private::createBubbleDiagram()
     Q_ASSERT( model );
     model->setDataDimensions( 2 );
     
-    kdPlane->addDiagram( kdBubbleDiagram );    
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );    
+    kdPlane->addDiagram( kdBubbleDiagram );
     
     foreach ( Axis *axis, plotArea->axes() ) {
         //if ( axis->dimension() == XAxisDimension )
@@ -1576,19 +1547,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
     }
 
     ChartType oldChartType = d->plotAreaChartType;
-
-    // We need to have a coordinate plane that matches the chart type.
-    // Choices are cartesian or polar.
-    if ( isCartesian( d->plotAreaChartType ) && isPolar( newChartType ) ) {
-        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
-    }
-    else if ( isPolar( d->plotAreaChartType ) && isCartesian( newChartType ) ) {
-        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
-        else if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdRadarPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdRadarPlane );
-    }
 
     KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded( newChartType );
 

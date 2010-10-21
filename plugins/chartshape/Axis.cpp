@@ -541,6 +541,10 @@ void Axis::Private::createLineDiagram()
     attributes.setEnabled( plotArea->isThreeD() );
     kdLineDiagram->setThreeDLineAttributes( attributes );
 
+    KDChart::LineAttributes lineAttr = kdLineDiagram->lineAttributes();
+    lineAttr.setMissingValuesPolicy( KDChart::LineAttributes::MissingValuesHideSegments );
+    kdLineDiagram->setLineAttributes( lineAttr );
+
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
 }
 

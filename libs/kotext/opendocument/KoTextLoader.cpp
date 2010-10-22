@@ -446,14 +446,15 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     // Some paragraph have id's defined which we need to store so that we can eg
     // attach text animations to this specific paragraph later on
-    if (element.hasAttributeNS(KoXmlNS::text, "id") && d->shape) {
+    QString id(element.attributeNS(KoXmlNS::text, "id"));
+    if (!id.isEmpty() && d->shape) {
         QTextBlock block = cursor.block();
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         if (!data) {
             data = new KoTextBlockData();
             block.setUserData(data);
         }
-        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), element.attributeNS(KoXmlNS::text, "id"));
+        d->context.addShapeSubItemId(d->shape, QVariant::fromValue(data), id);
     }
 
     // attach Rdf to cursor.block()

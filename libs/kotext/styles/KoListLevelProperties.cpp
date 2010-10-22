@@ -495,23 +495,29 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             continue;
         const QString localName = property.localName();
         if (localName == "list-level-properties") {
-            if (property.hasAttributeNS(KoXmlNS::text, "space-before"))
-                setIndent(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "space-before")));
+            QString spaceBefore(property.attributeNS(KoXmlNS::text, "space-before"));
+            if (!spaceBefore.isEmpty())
+                setIndent(KoUnit::parseValue(spaceBefore));
 
-            if (property.hasAttributeNS(KoXmlNS::text, "min-label-width"))
-                setMinimumWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-width")));
+            QString minLableWidth(property.attributeNS(KoXmlNS::text, "min-label-width"));
+            if (!minLableWidth.isEmpty())
+                setMinimumWidth(KoUnit::parseValue(minLableWidth));
 
-            if (property.hasAttributeNS(KoXmlNS::fo, "text-align"))
-                setAlignment(KoText::alignmentFromString(property.attributeNS(KoXmlNS::fo, "text-align")));
+            QString textAlign(property.attributeNS(KoXmlNS::fo, "text-align"));
+            if (!textAlign.isEmpty())
+                setAlignment(KoText::alignmentFromString(textAlign));
 
-            if (property.hasAttributeNS(KoXmlNS::text, "min-label-distance"))
-                setMinimumDistance(KoUnit::parseValue(property.attributeNS(KoXmlNS::text, "min-label-distance")));
+            QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
+            if (!minLableDistance.isEmpty())
+                setMinimumDistance(KoUnit::parseValue(minLableDistance));
 
-            if (property.hasAttributeNS(KoXmlNS::fo, "width"))
-                setWidth(KoUnit::parseValue(property.attributeNS(KoXmlNS::fo, "width")));
+            QString width(property.attributeNS(KoXmlNS::fo, "width"));
+            if (!width.isEmpty())
+                setWidth(KoUnit::parseValue(width));
 
-            if (property.hasAttributeNS(KoXmlNS::fo, "height"))
-                setHeight(KoUnit::parseValue(property.attributeNS(KoXmlNS::fo, "height")));
+            QString height(property.attributeNS(KoXmlNS::fo, "height"));
+            if (!height.isEmpty())
+                setHeight(KoUnit::parseValue(height));
         } else if (localName == "text-properties") {
             // TODO
         }

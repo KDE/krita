@@ -93,7 +93,12 @@ KisPopupPalette::KisPopupPalette(KoFavoriteResourceManager* manager, QWidget *pa
     connect(this, SIGNAL(sigTriggerTimer()), this, SLOT(slotTriggerTimer()));
     connect(m_timer, SIGNAL(timeout()), this, SLOT(slotEnableChangeFGColor()));
     connect(this, SIGNAL(sigEnableChangeFGColor(bool)), m_resourceManager, SIGNAL(sigEnableChangeColor(bool)));
-
+    
+    m_colorChangeTimer = new QTimer(this);
+    m_colorChangeTimer->setInterval(50);
+    m_colorChangeTimer->setSingleShot(true);
+    connect(m_colorChangeTimer, SIGNAL(timeout()), this, SLOT(slotColorChangeTimeout()));
+    
     setMouseTracking(true);
     setHoveredBrush(-1);
     setHoveredColor(-1);
@@ -116,8 +121,13 @@ void KisPopupPalette::setSelectedColor(int x) { m_selectedColor = x; }
 
 void KisPopupPalette::slotChangefGColor(const QColor& newColor)
 {
-    KoColor color (newColor, KoColorSpaceRegistry::instance()->rgb16(0));
-    emit sigChangefGColor(color);
+    m_colorChangeTimer->start();
+}
+
+void KisPopupPalette::slotColorChangeTimeout()
+{
+    KoColor color ( m_triangleColorSelector->color(), KoColorSpaceRegistry::instance()->rgb16(0));
+    emit sigChangefGColor(color);    
 }
 
 void KisPopupPalette::slotTriggerTimer()

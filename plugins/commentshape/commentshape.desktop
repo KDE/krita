@@ -14,6 +14,7 @@ Name[pt_BR]=Forma de Comentário
 Name[sv]=Kommentarform
 Name[uk]=Форма-коментар
 Name[x-test]=xxComment Shapexx
+Name[zh_TW]=註解元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=commentshape

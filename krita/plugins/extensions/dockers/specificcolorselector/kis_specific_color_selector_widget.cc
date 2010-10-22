@@ -18,6 +18,7 @@
 #include "kis_specific_color_selector_widget.h"
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QTimer>
 
 #include <klocale.h>
 
@@ -35,6 +36,9 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) 
     m_layout = new QVBoxLayout(this);
     setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
     m_updateAllowed = true;
+    m_delayTimer = new QTimer(this);
+    m_delayTimer->setInterval(50);
+    connect(m_delayTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -87,8 +91,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
 
 void KisSpecificColorSelectorWidget::update()
 {
-    if (m_updateAllowed)
-        emit(colorChanged(m_color));
+    m_delayTimer->start();
 }
 
 void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
@@ -97,4 +100,11 @@ void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
     m_color.fromKoColor(c);
     emit(updated());
     m_updateAllowed = true;
+}
+
+void KisSpecificColorSelectorWidget::updateTimeout()
+{
+    if (m_updateAllowed)
+        emit(colorChanged(m_color));
+    m_delayTimer->stop();
 }

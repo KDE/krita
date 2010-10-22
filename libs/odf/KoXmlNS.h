@@ -56,6 +56,7 @@ public:
     static const char* const officeooo;
     
     static const char* const delta;
+    static const char* const split;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

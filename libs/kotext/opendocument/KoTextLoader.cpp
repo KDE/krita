@@ -130,6 +130,7 @@ public:
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
     QMap<QString, QString> insertionTextIdMap;
+    QMap<QString, int> splitPositionMap;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
@@ -377,15 +378,43 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         loadDeleteChangeOutsidePorH(id, cursor);
                         usedParagraph = false;
                     } else if (localName == "p") {    // text paragraph
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->openChangeRegion(tag);
+                        if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
+                            d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
+
+                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
+                            QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
+                            if (insertionType == "insert-with-content")
+                                d->openChangeRegion(tag);
+                            if (insertionType == "split") {
+                                QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
+                                QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
+                                markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                d->splitPositionMap.remove(splitId);
+                            }
+                        }
+
                         loadParagraph(tag, cursor);
+
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                             d->closeChangeRegion(tag);
                     } else if (localName == "h") {  // heading
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->openChangeRegion(tag);
+                        if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
+                            d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
+
+                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
+                            QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
+                            if (insertionType == "insert-with-content")
+                                d->openChangeRegion(tag);
+                            if (insertionType == "split") {
+                                QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
+                                QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
+                                markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                d->splitPositionMap.remove(splitId);
+                            }
+                        }
+
                         loadHeading(tag, cursor);
+
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                             d->closeChangeRegion(tag);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
@@ -1512,6 +1541,23 @@ void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
                     }
                 }
             }
+        }
+    }
+}
+
+void KoTextLoader::markBlockSeparators(QTextCursor& cursor,int from, const QString& id)
+{
+    int to = cursor.position() - 1;
+    QTextCursor editCursor(cursor);
+    QTextDocument *document = cursor.document();
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+    QTextCharFormat format;
+    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    
+    for (int i=from; i<=to; i++) {
+        if (document->characterAt(i) == QChar::ParagraphSeparator) {
+            editCursor.setPosition(i);
+            editCursor.mergeCharFormat(format);
         }
     }
 }

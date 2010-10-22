@@ -48,3 +48,4 @@ const char* const KoXmlNS::koffice = "http://www.koffice.org/2005/";
 const char* const KoXmlNS::officeooo = "http://openoffice.org/2009/office";
 
 const char* const KoXmlNS::delta = "http://www.deltaxml.com/ns/track-changes/delta-namespace";
+const char* const KoXmlNS::split = "http://www.deltaxml.com/ns/track-changes/split-namespace";

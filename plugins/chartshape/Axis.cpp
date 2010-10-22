@@ -1286,7 +1286,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context.odfLoadingContext() );
+        charStyle.loadOdf( context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );

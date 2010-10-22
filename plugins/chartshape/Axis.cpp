@@ -469,8 +469,10 @@ void Axis::Private::createBarDiagram()
 
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
-    else if ( plotAreaChartSubType == PercentChartSubtype )
+    else if ( plotAreaChartSubType == PercentChartSubtype ) {
         kdBarDiagram->setType( KDChart::BarDiagram::Percent );
+        kdBarDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+    }
 
     if ( isVisible )
         kdBarDiagram->addAxis( kdAxis );

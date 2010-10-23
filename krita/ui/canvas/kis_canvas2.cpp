@@ -124,6 +124,10 @@ KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShape
     connect(view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), SLOT(documentOffsetMoved(const QPoint&)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(this, SIGNAL(canvasDestroyed(QWidget *)), this, SLOT(slotCanvasDestroyed(QWidget *)));
+
+    KisShapeController *kritaShapeController = dynamic_cast<KisShapeController*>(sc);
+    connect(kritaShapeController, SIGNAL(selectionChanged()),
+            globalShapeManager()->selection(), SIGNAL(selectionChanged()));
 }
 
 KisCanvas2::~KisCanvas2()
@@ -252,7 +256,7 @@ KoShapeManager* KisCanvas2::shapeManager() const
     if (!m_d->view->layerManager()) return m_d->shapeManager;
 
     KisLayerSP activeLayer = m_d->view->layerManager()->activeLayer();
-    if (activeLayer) {
+    if (activeLayer && activeLayer->isEditable()) {
         KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(activeLayer.data());
         if (shapeLayer) {
             return shapeLayer->shapeManager();

@@ -77,6 +77,34 @@
 
 #include "kis_shape_layer_paste.h"
 
+
+#include <SimpleShapeContainerModel.h>
+class ShapeLayerContainerModel : public SimpleShapeContainerModel
+{
+public:
+    ShapeLayerContainerModel(KisShapeLayer *parent) : q(parent) {}
+
+    void add(KoShape *child) {
+        QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
+
+        SimpleShapeContainerModel::add(child);
+        q->shapeManager()->addShape(child);
+        q->setDirty(updatedRect);
+    }
+
+    void remove(KoShape *child) {
+        QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
+
+        q->shapeManager()->remove(child);
+        SimpleShapeContainerModel::remove(child);
+        q->setDirty(updatedRect);
+    }
+
+private:
+    KisShapeLayer *q;
+};
+
+
 class KisShapeLayer::Private
 {
 public:
@@ -88,13 +116,15 @@ public:
     KoShapeControllerBase* controller;
 };
 
+
 KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
                              KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
-        : KisExternalLayer(image, name, opacity)
-        , m_d(new Private())
+    : KisExternalLayer(image, name, opacity),
+      KoShapeLayer(new ShapeLayerContainerModel(this)),
+      m_d(new Private())
 {
     KoShapeContainer::setParent(parent);
     initShapeLayer(controller);
@@ -102,7 +132,7 @@ KisShapeLayer::KisShapeLayer(KoShapeContainer * parent,
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         : KisExternalLayer(_rhs)
-        , KoShapeLayer() //no _rhs here otherwise both layer have the same KoShapeContainerModel
+        , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
     kDebug() << "copying rhs" << &_rhs << "to" << this;
@@ -127,6 +157,16 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
 
 KisShapeLayer::~KisShapeLayer()
 {
+    /**
+     * Small hack alert: we set the image to null to disable
+     * updates those will be emitted on shape deletion
+     */
+    setImage(0);
+
+    foreach(KoShape *shape, shapes()) {
+        shape->setParent(0);
+    }
+
     delete m_d->converter;
     delete m_d->canvas;
     delete m_d;
@@ -222,9 +262,26 @@ bool KisShapeLayer::accept(KisNodeVisitor& visitor)
     return visitor.visit(this);
 }
 
-KoShapeManager *KisShapeLayer::shapeManager() const
+KoShapeManager* KisShapeLayer::shapeManager() const
 {
     return m_d->canvas->shapeManager();
+}
+
+KoViewConverter* KisShapeLayer::converter() const
+{
+    return m_d->converter;
+}
+
+bool KisShapeLayer::visible(bool recursive) const
+{
+    Q_ASSERT(KisExternalLayer::visible() == KoShapeLayer::isVisible());
+    return KisExternalLayer::visible(recursive);
+}
+
+void KisShapeLayer::setVisible(bool visible)
+{
+    KisExternalLayer::setVisible(visible);
+    KoShapeLayer::setVisible(visible);
 }
 
 bool KisShapeLayer::saveLayer(KoStore * store) const

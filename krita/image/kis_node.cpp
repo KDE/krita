@@ -131,6 +131,11 @@ KisNodeSP KisNode::parent() const
     return m_d->parent;
 }
 
+KisBaseNodeSP KisNode::parentCallback() const
+{
+    return parent();
+}
+
 void KisNode::setParent(KisNodeWSP parent)
 {
     m_d->parent = parent;

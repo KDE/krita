@@ -20,6 +20,7 @@
 
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
+#include <KoShapeUserData.h>
 
 #include <kis_selection_component.h>
 #include <kis_types.h>
@@ -31,8 +32,15 @@ class KisShapeSelectionCanvas;
 class KisShapeSelectionModel;
 
 /**
- *
+ * The marker class.
+ * It is added to the shape's user data to show this shape
+ * is a part of a shape selection
  */
+class KisShapeSelectionMarker : public KoShapeUserData
+{
+};
+
+
 class KRITAUI_EXPORT KisShapeSelection : public KoShapeLayer, public KisSelectionComponent
 {
     KisShapeSelection(const KisShapeSelection& rhs);

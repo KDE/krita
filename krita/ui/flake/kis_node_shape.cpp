@@ -49,7 +49,6 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
 
     setShapeId(KIS_NODE_SHAPE_ID);
     KoShape::setParent(parent);
-    parent->addShape(this);
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));

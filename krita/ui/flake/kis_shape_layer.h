@@ -73,10 +73,6 @@ public:
         return false;
     }
 
-    // KoShapeContainer overrides
-    void addChild(KoShape *object, bool update = true);
-    void removeChild(KoShape *object);
-
     // KisExternalLayer implementation
     QIcon icon() const;
 

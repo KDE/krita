@@ -233,7 +233,7 @@ void KisShapeController::addShape(KoShape* shape)
             canvas->view()->nodeManager()->activateNode(shapeLayer);
         }
 
-        shapeLayer->addChild(shape);
+        shapeLayer->addShape(shape);
     }
 
     m_d->doc->setModified(true);

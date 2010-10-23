@@ -85,19 +85,17 @@ public:
     ShapeLayerContainerModel(KisShapeLayer *parent) : q(parent) {}
 
     void add(KoShape *child) {
-        QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
+        // QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
 
         SimpleShapeContainerModel::add(child);
         q->shapeManager()->addShape(child);
-        q->setDirty(updatedRect);
     }
 
     void remove(KoShape *child) {
-        QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
+        // QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
 
         q->shapeManager()->remove(child);
         SimpleShapeContainerModel::remove(child);
-        q->setDirty(updatedRect);
     }
 
 private:
@@ -135,8 +133,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
-    kDebug() << "copying rhs" << &_rhs << "to" << this;
-
     KoShapeContainer::setParent(_rhs.KoShapeContainer::parent());
     initShapeLayer(_rhs.m_d->controller);
 
@@ -150,9 +146,6 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     KisShapeLayerShapePaste paste(this, m_d->controller);
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
-    if (!success) {
-        warnUI << "Could not paste shape layer";
-    }
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -190,27 +183,6 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 {
     return node->inherits("KisMask");
-}
-
-void KisShapeLayer::addChild(KoShape *object, bool update)
-{
-    KoShapeLayer::addShape(object);
-    m_d->canvas->shapeManager()->addShape(object);
-
-    if (update) {
-        QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();   
-        setDirty(updatedRect);
-    }
-}
-
-void KisShapeLayer::removeChild(KoShape *object)
-{
-    QRect updatedRect = m_d->converter->documentToView(object->boundingRect()).toRect();
-
-    m_d->canvas->shapeManager()->remove(object);
-    KoShapeLayer::removeShape(object);
-
-    setDirty(updatedRect);
 }
 
 QIcon KisShapeLayer::icon() const
@@ -452,7 +424,7 @@ bool KisShapeLayer::loadLayer(KoStore* store)
     forEachElement(child, page) {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
         if (shape) {
-            addChild(shape);
+            addShape(shape);
         }
     }
 

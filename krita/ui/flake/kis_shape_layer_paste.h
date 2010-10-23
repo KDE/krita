@@ -50,7 +50,7 @@ public:
                     shapeLayer->addShape(shape);
                 } else {
                     KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(m_container);
-                    shapeSelection->addChild(shape);
+                    shapeSelection->addShape(shape);
                 }
             }
         }

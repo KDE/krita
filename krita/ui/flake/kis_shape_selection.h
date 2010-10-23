@@ -68,9 +68,6 @@ public:
 
     virtual void setDirty();
 
-    void addChild(KoShape *object);
-    void removeChild(KoShape *object);
-
     virtual QPainterPath selectionOutline();
 
     KoShapeManager *shapeManager() const;

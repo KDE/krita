@@ -20,6 +20,7 @@
 #include "kis_debug.h"
 
 #include "KoShapeContainer.h"
+#include "KoShapeManager.h"
 
 #include "kis_paint_device.h"
 #include "kis_shape_selection.h"
@@ -48,6 +49,7 @@ void KisShapeSelectionModel::add(KoShape *child)
     child->setBorder(0);
     child->setBackground(0);
     m_shapeMap.insert(child, child->boundingRect());
+    m_shapeSelection->shapeManager()->addShape(child);
     m_shapeSelection->setDirty();
 
     QRect updateRect = child->boundingRect().toAlignedRect();
@@ -73,6 +75,7 @@ void KisShapeSelectionModel::remove(KoShape *child)
     m_shapeMap.remove(child);
 
     if (m_shapeSelection) {
+        m_shapeSelection->shapeManager()->remove(child);
         m_shapeSelection->setDirty();
     }
 

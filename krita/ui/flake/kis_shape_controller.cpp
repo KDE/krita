@@ -215,7 +215,7 @@ void KisShapeController::addShape(KoShape* shape)
                 selection->setShapeSelection(new KisShapeSelection(m_d->image, selection));
             }
             KisShapeSelection * shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-            shapeSelection->addChild(shape);
+            shapeSelection->addShape(shape);
         }
 
     } else {

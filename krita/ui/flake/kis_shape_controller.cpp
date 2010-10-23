@@ -185,25 +185,6 @@ void KisShapeController::setImage(KisImageWSP image)
     m_d->image = image;
 }
 
-void KisShapeController::removeShape(KoShape* shape)
-{
-    // Nodes have their own way of death through slotNodeRemoved()
-    Q_ASSERT(!dynamic_cast<KisNodeShape*>(shape) &&
-             !dynamic_cast<KisLayerContainerShape*>(shape));
-
-    // Remove children shapes if any
-    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
-    if (container) {
-        foreach(KoShape * child, container->shapes()) {
-            removeShape(child);
-        }
-    }
-
-    shape->setParent(0);
-
-    m_d->doc->setModified(true);
-}
-
 static inline bool belongsToShapeSelection(KoShape* shape) {
     return dynamic_cast<KisShapeSelectionMarker*>(shape->userData());
 }
@@ -254,6 +235,25 @@ void KisShapeController::addShape(KoShape* shape)
 
         shapeLayer->addChild(shape);
     }
+
+    m_d->doc->setModified(true);
+}
+
+void KisShapeController::removeShape(KoShape* shape)
+{
+    // Nodes have their own way of death through slotNodeRemoved()
+    Q_ASSERT(!dynamic_cast<KisNodeShape*>(shape) &&
+             !dynamic_cast<KisLayerContainerShape*>(shape));
+
+    // Remove children shapes if any
+    KoShapeContainer * container = dynamic_cast<KoShapeContainer*>(shape);
+    if (container) {
+        foreach(KoShape * child, container->shapes()) {
+            removeShape(child);
+        }
+    }
+
+    shape->setParent(0);
 
     m_d->doc->setModified(true);
 }

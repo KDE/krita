@@ -65,8 +65,18 @@ KisMetaData::Value exivValueToKMDValue(const Exiv2::Value::AutoPtr value, bool f
     case Exiv2::comment: // look at kexiv2 for the problem about decoding correctly that tag
         return KisMetaData::Value(value->toString().c_str());
     case Exiv2::unsignedRational:
+        if(value->size() < 2)
+        {
+          dbgFile << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+          return KisMetaData::Value();
+        }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::signedRational:
+        if(value->size() < 2)
+        {
+          dbgFile << "Invalid size :" << value->size() << " value =" << value->toString().c_str();
+          return KisMetaData::Value();
+        }
         return KisMetaData::Value(KisMetaData::Rational(value->toRational().first , value->toRational().second));
     case Exiv2::date:
     case Exiv2::time:

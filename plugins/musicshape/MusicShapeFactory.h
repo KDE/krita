@@ -21,6 +21,7 @@
 
 
 #include <KoShapeFactoryBase.h>
+#include <QVariantList>
 
 class KoShape;
 

@@ -959,36 +959,7 @@ void DataSet::categoryDataChanged( const QRect &region ) const
 
 int DataSet::dimension() const
 {
-    const ChartType chartType = d->effectiveChartType();
-    // FIXME BUG: Ring, Surface
-    switch ( chartType ) {
-    case BarChartType:
-    case AreaChartType:
-    case LineChartType:
-    case CircleChartType:
-    case RadarChartType:
-    case SurfaceChartType:
-        return 1;
-
-    case RingChartType:
-    case ScatterChartType:
-    case GanttChartType:
-        return 2;
-
-    case BubbleChartType:
-        return 3;
-
-    case StockChartType:
-        return 4;
-
-        // We can only determine the dimension if
-        // a chart type is set
-    case LastChartType:
-        return 0;
-    }
-
-    // Avoid warnings from the compiler.
-    return 0;
+    return numDimensions( d->effectiveChartType() );
 }
 
 void DataSet::setKdChartModel( KDChartModel *model )

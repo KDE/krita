@@ -382,6 +382,9 @@ void RGBToHSL(float r, float g, float b, float *h, float *s, float *l)
         *h = (r == m ? 3.0 + g2 : 5.0 - r2);
 
     *h *= 60;
+    if (*h == 360.) {
+        *h = 0;
+    }
 }
 
 void HSLToRGB(float h, float sl, float l, float *r, float *g, float *b)

@@ -133,6 +133,17 @@ private:
     void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
 
     /**
+    * Insert the delete change marker for the changeId at the current cursor position
+    */ 
+    void insertDeleteChangeMarker(QTextCursor &cursor, const QString &id);
+
+    /**
+    * Post Processing of delete change after loading it. This is called after loading <delete:removed-content>
+    * This method sets the change-id on deleted content and replaces it with a Delete Change Marker.
+    */
+    void processDeleteChange(QTextCursor &cursor, const QString &id, int startPosition);
+
+    /**
     * Load the deleted change outside of a \p or a \h and store it in the Delete Change Marker
     */
     void loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor);

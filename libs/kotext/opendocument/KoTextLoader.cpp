@@ -214,18 +214,19 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
     if (element.localName() == "change-start") {
         //This is a ODF 1.1 Change
         id = element.attributeNS(KoXmlNS::text, "change-id");
-    } else if(element.localName() == "inserted-text-start"){
+    } else if(element.localName() == "inserted-text-start") {
         //This is a ODF 1.2 Change
         id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-idref");
         insertionTextIdMap.insert(textEndId, id);
-    } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != ""){
+    } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
         if (insertionType == "insert-with-content") {
             id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         }
     } else {
     }
+
     int changeId = changeTracker->getLoadedChangeId(id);
     if (!changeId)
         return;
@@ -996,6 +997,13 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             d->openChangeRegion(ts);
         } else if (isDeltaNS && localName == "inserted-text-end") {
             d->closeChangeRegion(ts);
+        } else if (isDeltaNS && localName == "removed-content") {
+            QString changeId = ts.attributeNS(KoXmlNS::delta, "removal-change-idref");
+            insertDeleteChangeMarker(cursor, changeId);
+            int deleteStartPosition = cursor.position();
+            bool stripLeadingSpace = true;
+            loadSpan(ts,cursor,&stripLeadingSpace);
+            processDeleteChange(cursor, changeId, deleteStartPosition);
         } else if (isTextNS && localName == "change-start") { // text:change-start
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {
@@ -1251,6 +1259,49 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
             }
         }
 
+        int endPosition = cursor.position();
+
+        //Set the char format to the changeId
+        cursor.setPosition(startPosition);
+        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+        QTextCharFormat format;
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        cursor.mergeCharFormat(format);
+
+        //Get the QTextDocumentFragment from the selection and store it in the changeElement
+        QTextDocumentFragment deletedFragment = KoChangeTracker::generateDeleteFragment(cursor, changeElement->getDeleteChangeMarker());
+        changeElement->setDeleteData(deletedFragment);
+
+        //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
+        cursor.removeSelectedText();
+    }
+}
+
+void KoTextLoader::insertDeleteChangeMarker(QTextCursor &cursor, const QString &id)
+{
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+    if (changeId) {
+        if (d->changeStack.count())
+            d->changeTracker->setParent(changeId, d->changeStack.top());
+        KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+        deleteChangemarker->setChangeId(changeId);
+        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+        changeElement->setDeleteChangeMarker(deleteChangemarker);
+        changeElement->setEnabled(true);
+        changeElement->setChangeType(KoGenChange::DeleteChange);
+        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+        if (layout) {
+            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+            textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+        }
+    }
+}
+
+void KoTextLoader::processDeleteChange(QTextCursor &cursor, const QString &id, int startPosition)
+{
+    int changeId = d->changeTracker->getLoadedChangeId(id);
+    if (changeId) {
+        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
         int endPosition = cursor.position();
 
         //Set the char format to the changeId

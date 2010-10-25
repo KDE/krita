@@ -230,7 +230,7 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex || start >= m_model->columnCount(m_rootIndex) )
+            if( parent != m_rootIndex )
                 return;
 
             Q_ASSERT( start <= end );
@@ -316,7 +316,7 @@ namespace KDChart
         {
             Q_ASSERT( m_model != 0 );
 
-            if( parent != m_rootIndex || start >= m_model->rowCount(m_rootIndex) )
+            if( parent != m_rootIndex )
                 return;
 
             Q_ASSERT( start <= end );

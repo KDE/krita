@@ -88,28 +88,22 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
 void KisSelectionToolHelper::addSelectionShape(KoShape* shape)
 {
+    /**
+     * Mark a shape that it belongs to a shape selection
+     */
+    if(!shape->userData()) {
+        shape->setUserData(new KisShapeSelectionMarker);
+    }
+
     KisUndoAdapter *undoAdapter = m_layer->image()->undoAdapter();
     undoAdapter->beginMacro(m_name);
 
-    bool hasSelection = m_layer->selection();
-
-    if (!hasSelection)
+    if (!m_layer->selection()) {
         undoAdapter->addCommand(new KisSetGlobalSelectionCommand(m_image, 0));
+    }
 
     KisSelectionSP selection = m_layer->selection();
-    KisSelectionTransaction transaction(m_name, m_image, m_layer->selection());
-
-    KisShapeSelection* shapeSelection;
-    if (!selection->hasShapeSelection()) {
-        shapeSelection = new KisShapeSelection(m_image, selection);
-        selection->setShapeSelection(shapeSelection);
-    } else {
-        shapeSelection = static_cast<KisShapeSelection*>(selection->shapeSelection());
-    }
-    KoShapeControllerBase* controller = m_canvas->view()->document()->shapeController();
-    KisShapeController* kiscontroller = dynamic_cast<KisShapeController*>(controller);
-    if (kiscontroller)
-        kiscontroller->prepareAddingSelectionShape();
+    KisSelectionTransaction transaction(m_name, m_image, selection);
 
     transaction.commit(undoAdapter);
 

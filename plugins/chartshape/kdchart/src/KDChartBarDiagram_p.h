@@ -88,6 +88,11 @@ public:
     BarDiagramType* stackedLyingDiagram;
     BarDiagramType* percentLyingDiagram;
 
+    // reimplemented from AbstractDiagram::Private
+    Qt::Orientation abscissaOrientation() const;
+    // reimplemented from AbstractDiagram::Private
+    Qt::Orientation ordinateOrientation() const;
+
 /* refactoring */
 /*
     BarType barType;

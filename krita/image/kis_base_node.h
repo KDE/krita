@@ -237,7 +237,7 @@ public:
      * selection masks where visible and active properties are
      * different)) in the graph
      */
-    bool visible() const;
+    virtual bool visible(bool recursive = false) const;
 
     /**
      * Set the visible status of this node. Visible nodes are active
@@ -250,7 +250,7 @@ public:
      * Toggling the visibility of a node will not automatically lead
      * to recomposition.
      */
-    void setVisible(bool v);
+    virtual void setVisible(bool v);
 
     /**
      * Return the locked status of this node. Locked nodes cannot be
@@ -335,6 +335,19 @@ public:
     virtual QRect exactBounds() const {
         return QRect();
     }
+
+protected:
+
+    /**
+     * FIXME: This method is a workaround for getting parent node
+     * on a level of KisBaseNode. In fact, KisBaseNode should inherit
+     * KisNode (in terms of current Krita) to be able to traverse
+     * the node stack
+     */
+    virtual KisBaseNodeSP parentCallback() const {
+        return 0;
+    }
+
 signals:
     /**
      * This signal is emitted when the visibility of the layer is changed with \ref setVisible.

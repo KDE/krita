@@ -537,12 +537,12 @@ void KDChartModel::addDataSet( DataSet *dataSet )
         }
     }
     else {
-        d->dataSets.append( dataSet );
-        d->biggestDataSetSize = d->calcMaxDataSetSize();
-
         // If we had no datasets before, we haven't had a valid
         // structure yet.  Thus, emit the modelReset() signal.
-        reset();
+        beginResetModel();
+        d->dataSets.append( dataSet );
+        d->biggestDataSetSize = d->calcMaxDataSetSize();
+        endResetModel();
     }
 }
 

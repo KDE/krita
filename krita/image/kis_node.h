@@ -228,6 +228,8 @@ private:
 
 protected:
 
+    KisBaseNodeSP parentCallback() const;
+
     /**
      * Re-implement this method if your node type has to do something
      * before it is removed.

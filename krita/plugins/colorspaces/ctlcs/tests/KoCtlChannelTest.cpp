@@ -35,9 +35,8 @@ void KoCtlChannelTest::test()
     quint8 rgbu81[3];
     c8.singleChannelPixel(rgbu81, rgbu8);
     QCOMPARE(rgbu81[1], rgbu8[1]);
-    c8.scaleFromF32(rgbu8, 0.5);
+    c8.scaleFromF32(rgbu8, 127.0/255.0);
     QCOMPARE(rgbu8[0], quint8(100));
-    QEXPECT_FAIL("", "Expected 0.5 to be scaled to 127, but we get 128", Continue);
     QCOMPARE(rgbu8[1], quint8(127));
     QCOMPARE(rgbu8[2], quint8(200));
     c8.scaleFromU8(rgbu8, 34);
@@ -47,11 +46,10 @@ void KoCtlChannelTest::test()
 
     float rgbf32[] = { 1.0, 0.12, -1.0 };
     quint8* rgbf32_ptr = reinterpret_cast<quint8*>(rgbf32);
-    KoCtlChannelImpl<float> c32(4, 3 * sizeof(quint8));
+    KoCtlChannelImpl<float> c32(4, 3 * sizeof(float));
     QCOMPARE(c32.channelValueText(rgbf32_ptr), QString("0.12"));
     QCOMPARE(c32.normalisedChannelValueText(rgbf32_ptr), QString("0.12"));
-    QEXPECT_FAIL("", "Expected c32.scaleToU8(rgbf32_ptr) to return 30, but it returned 31", Continue);
-    QCOMPARE(c32.scaleToU8(rgbf32_ptr), quint8(0.12 * 0xFF));
+    QCOMPARE(c32.scaleToU8(rgbf32_ptr), quint8(float2int(0.12 * 255)));
     QCOMPARE(c32.scaleToU16(rgbf32_ptr), quint16(0.12 * 0xFFFF));
     QCOMPARE(c32.scaleToF32(rgbf32_ptr), 0.12f);
     float rgbf321[3];

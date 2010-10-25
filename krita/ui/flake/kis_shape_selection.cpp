@@ -269,25 +269,12 @@ bool KisShapeSelection::loadSelection(KoStore* store)
     forEachElement(child, page) {
         KoShape * shape = KoShapeRegistry::instance()->createShapeFromOdf(child, shapeContext);
         if (shape) {
-            addChild(shape);
+            addShape(shape);
         }
     }
 
     return true;
 
-}
-
-
-void KisShapeSelection::addChild(KoShape *object)
-{
-    KoShapeLayer::addShape(object);
-    m_canvas->shapeManager()->addShape(object);
-}
-
-void KisShapeSelection::removeChild(KoShape *object)
-{
-    m_canvas->shapeManager()->remove(object);
-    KoShapeLayer::removeShape(object);
 }
 
 QPainterPath KisShapeSelection::selectionOutline()

@@ -49,7 +49,6 @@ KisNodeShape::KisNodeShape(KoShapeContainer * parent, KisNodeSP node)
 
     setShapeId(KIS_NODE_SHAPE_ID);
     KoShape::setParent(parent);
-    parent->addShape(this);
 
     connect(node, SIGNAL(visibilityChanged(bool)), SLOT(setNodeVisible(bool)));
     connect(node, SIGNAL(userLockingChanged(bool)), SLOT(editabilityChanged()));
@@ -123,16 +122,6 @@ void KisNodeShape::setPosition(const QPointF & position)
     }
 }
 
-
-void KisNodeShape::addChild(KoShape * shape)
-{
-    KisNodeShape* nodeShape = dynamic_cast<KisNodeShape*>(shape);
-    if (!nodeShape) return;
-
-    if (!m_d->node->allowAsChild(nodeShape->node())) return;
-
-    KoShapeContainer::addShape(shape);
-}
 
 void KisNodeShape::saveOdf(KoShapeSavingContext & /*context*/) const
 {

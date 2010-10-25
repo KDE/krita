@@ -96,6 +96,7 @@ private:
     KoTriangleColorSelector* m_triangleColorSelector;
 
     QTimer* m_timer;
+    QTimer* m_colorChangeTimer;
 
 signals:
     void sigChangeActivePaintop(int);
@@ -112,7 +113,8 @@ signals:
 
 private slots:
     void slotChangefGColor(const QColor& newColor);
-
+    void slotColorChangeTimeout();
+    
     void slotTriggerTimer();
     void slotEnableChangeFGColor();
 };

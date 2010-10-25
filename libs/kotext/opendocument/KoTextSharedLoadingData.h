@@ -152,7 +152,6 @@ public:
      */
     KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml) const;
 
-
     /**
      * Get the document-wide configuration for footnotes -- this contains information
      * about numbering style, starting number etc.
@@ -165,6 +164,18 @@ public:
      */
     KoOdfNotesConfiguration endnotesConfiguration() const;
 
+    /**
+     * Set the appication default style
+     *
+     * This is done so the application default style needs to be loaded only once.
+     * The ownership of the style is transfered to this class.
+     */
+    void setApplicationDefaultStyle(KoCharacterStyle *applicationDefaultStyle);
+
+    /**
+     * Get the application default style
+     */
+    KoCharacterStyle *applicationDefaultStyle() const;
 
 protected:
     /**
@@ -190,9 +201,9 @@ private:
     void addDefaultParagraphStyle(KoShapeLoadingContext &context, const KoXmlElement *styleElem, const KoXmlElement *appDefault, KoStyleManager *styleManager);
 
     // helper functions for loading of character styles
-    void addCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                             KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,

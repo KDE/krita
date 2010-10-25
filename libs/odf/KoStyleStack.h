@@ -96,29 +96,41 @@ public:
     void push(const KoXmlElement& style);
 
     /**
-     * Check if any of the styles on the stack has an attribute called 'name'-'detail'
+     * Check if any of the styles on the stack has an attribute called 'localName'
+     */
+    bool hasProperty(const QString &nsURI, const QString &localName) const;
+
+    /**
+     * Check if any of the styles on the stack has an attribute called 'localname'-'detail'
      * where detail is e.g. left, right, top or bottom.
      * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
      */
-    bool hasProperty(const char* nsURI, const char* localName, const char* detail = 0) const;
+    bool hasProperty(const QString &nsURI, const QString &localName, const QString &detail) const;
 
     /**
-     * Search for the attribute called 'name', starting on top of the stack,
+     * Search for the attribute called 'localName', starting on top of the stack,
      * and return it.
      */
-    QString property(const char* nsURI, const char* localName, const char* detail = 0) const;
+    QString property(const QString &nsURI, const QString &localName) const;
+
+    /**
+     * Search for the attribute called 'localName'-'detail', starting on top of the stack,
+     * and return it, where detail is e.g. left, right, top or bottom.
+     * This allows to also find 'name' alone (e.g. padding implies padding-left, padding-right etc.)
+     */
+    QString property(const QString &nsURI, const QString &localName, const  QString &detail) const;
 
     /**
      * Check if any of the styles on the stack has a child element called 'localName' in the namespace 'nsURI'.
      */
-    bool hasChildNode(const char* nsURI, const char* localName) const;
+    bool hasChildNode(const QString &nsURI, const QString &localName) const;
 
     /**
      * Search for a child element which has a child element called 'localName'
      * in the namespace 'nsURI' starting on top of the stack,
      * and return it.
      */
-    KoXmlElement childNode(const char* nsURI, const char* localName) const;
+    KoXmlElement childNode(const QString &nsURI, const QString &localName) const;
 
     /**
      * Special case for the current font size, due to special handling of fo:font-size="115%".
@@ -151,7 +163,10 @@ public:
 private:
     bool isUserStyle(const KoXmlElement& e, const QString& family) const;
 
-private:
+    inline bool hasProperty(const QString &nsURI, const QString &localName, const QString *detail) const;
+
+    inline QString property(const QString &nsURI, const QString &localName, const QString *detail) const;
+
     /// For save/restore: stack of "marks". Each mark is an index in m_stack.
     QStack<int> m_marks;
 

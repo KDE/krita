@@ -118,6 +118,9 @@ void AbstractCoordinatePlane::takeDiagram ( AbstractDiagram* diagram )
         disconnect( diagram, SIGNAL( modelsChanged() ), this, SLOT( layoutPlanes() ) );
         disconnect( diagram, SIGNAL( modelDataChanged() ), this, SLOT( update()) );
         layoutDiagrams();
+        // Make sure any reference to the diagram in our layout is removed
+        // before the caller deletes the diagram.
+        layoutPlanes();
         update();
     }
 }

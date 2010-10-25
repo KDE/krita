@@ -33,6 +33,8 @@
 #include <KoXmlReader.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
+#include <KoShapeLoadingContext.h>
+#include "KoTextSharedLoadingData.h"
 
 #include <KDebug>
 
@@ -77,7 +79,7 @@ public:
     }
 
     //Overload the hard-coded default with defaultstyles.xml properties if defined
-    void setApplicationDefaults(KoOdfLoadingContext &context);
+    void setApplicationDefaults(KoShapeLoadingContext &context);
 
     //This should be called after all charFormat properties are merged to the cursor.
     void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
@@ -96,19 +98,30 @@ KoCharacterStyle::Private::Private()
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
 }
 
-void KoCharacterStyle::Private::setApplicationDefaults(KoOdfLoadingContext &context)
-{
-    KoStyleStack defaultStyleStack;
-    const KoXmlElement *appDef = context.defaultStylesReader().defaultStyle("paragraph");
-    if (appDef) {
-        defaultStyleStack.push(*appDef);
-        defaultStyleStack.setTypeProperties("text");
-        KoCharacterStyle defStyle;
-        defStyle.loadOdfProperties(defaultStyleStack);
 
-        QList<int> keys = defStyle.d->stylesPrivate.keys();
-        foreach(int key, keys) {
-            hardCodedDefaultStyle.add(key, defStyle.value(key));
+void KoCharacterStyle::Private::setApplicationDefaults(KoShapeLoadingContext &context)
+{
+    KoSharedLoadingData *sharedData = context.sharedData(KOTEXT_SHARED_LOADING_ID);
+    KoTextSharedLoadingData *textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
+    if (textSharedData) {
+        KoCharacterStyle *applicationDefaultStyle(textSharedData->applicationDefaultStyle());
+        if (applicationDefaultStyle == 0) {
+            const KoXmlElement *appDef = context.odfLoadingContext().defaultStylesReader().defaultStyle("paragraph");
+            if (appDef) {
+                applicationDefaultStyle = new KoCharacterStyle();
+                KoStyleStack defaultStyleStack;
+                defaultStyleStack.push(*appDef);
+                defaultStyleStack.setTypeProperties("text");
+                applicationDefaultStyle->loadOdfProperties(defaultStyleStack);
+                textSharedData->setApplicationDefaultStyle(applicationDefaultStyle);
+            }
+        }
+
+        if (applicationDefaultStyle) {
+            const QMap<int, QVariant> props = applicationDefaultStyle->d->stylesPrivate.properties();
+            for (QMap<int, QVariant>::const_iterator it = props.begin(); it != props.end(); ++it) {
+                hardCodedDefaultStyle.add(it.key(), it.value());
+            }
         }
     }
 }
@@ -804,9 +817,10 @@ int KoCharacterStyle::textScale() const
 }
 
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext &context)
-void KoCharacterStyle::loadOdf(KoOdfLoadingContext &context)
+void KoCharacterStyle::loadOdf(KoShapeLoadingContext &scontext)
 {
-    d->setApplicationDefaults(context);
+    d->setApplicationDefaults(scontext);
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     KoStyleStack &styleStack = context.styleStack();
     loadOdfProperties(styleStack);
 

@@ -252,12 +252,12 @@ void RadarDiagram::paint( PaintContext* ctx,
             PainterSaver painterSaver( ctx->painter() );
             ctx->painter()->setRenderHint ( QPainter::Antialiasing );
             ctx->painter()->setBrush( brush );
-            QPen p( ctx->painter()->pen() );
-            p.setColor( brush.color() ); // FIXME use DatasetPenRole
-            p.setWidth( 2 );// FIXME properties
-            ctx->painter()->drawPolyline( polygon );
-            ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
-            ctx->painter()->drawPolyline( polygon );
+            QPen p( model()->headerData( iCol, Qt::Horizontal, KDChart::DatasetPenRole ).value< QPen >() );
+            if ( p.style() != Qt::NoPen )
+            {
+                ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
+                ctx->painter()->drawPolyline( polygon );
+            }
         }
         d->paintDataValueTextsAndMarkers( this, ctx, d->dataValueInfoList, true );
     }

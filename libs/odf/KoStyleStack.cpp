@@ -93,31 +93,56 @@ void KoStyleStack::push(const KoXmlElement& style)
 #endif
 }
 
-QString KoStyleStack::property(const char* nsURI, const char* name, const char* detail) const
+QString KoStyleStack::property(const QString &nsURI, const QString &name) const
+{
+    return property(nsURI, name, 0);
+}
+QString KoStyleStack::property(const QString &nsURI, const QString &name, const QString &detail) const
+{
+    return property(nsURI, name, &detail);
+}
+
+inline QString KoStyleStack::property(const QString &nsURI, const QString &name, const QString *detail) const
 {
     QString fullName(name);
     if (detail) {
         fullName += '-';
-        fullName += detail;
+        fullName += *detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
         --it;
         KoXmlElement properties = KoXml::namedItemNS(*it, m_styleNSURI, m_propertiesTagName);
-        if (detail && properties.hasAttributeNS(nsURI, fullName))
-            return properties.attributeNS(nsURI, fullName, QString());
-        if (properties.hasAttributeNS(nsURI, name))
-            return properties.attributeNS(nsURI, name, QString());
+        if (detail) {
+            QString attribute(properties.attributeNS(nsURI, fullName));
+            if (!attribute.isEmpty()) {
+                return attribute;
+            }
+        }
+        QString attribute(properties.attributeNS(nsURI, name));
+        if (!attribute.isEmpty()) {
+            return attribute;
+        }
     }
     return QString();
 }
 
-bool KoStyleStack::hasProperty(const char* nsURI, const char* name, const char* detail) const
+bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name) const
+{
+    return hasProperty(nsURI, name, 0);
+}
+
+bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name, const QString &detail) const
+{
+    return hasProperty(nsURI, name, &detail);
+}
+
+inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name, const QString *detail) const
 {
     QString fullName(name);
     if (detail) {
         fullName += '-';
-        fullName += detail;
+        fullName += *detail;
     }
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
@@ -159,7 +184,7 @@ qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
     return percent * defaultFontPointSize;
 }
 
-bool KoStyleStack::hasChildNode(const char* nsURI, const char* localName) const
+bool KoStyleStack::hasChildNode(const QString &nsURI, const QString &localName) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
     while (it != m_stack.begin()) {
@@ -172,7 +197,7 @@ bool KoStyleStack::hasChildNode(const char* nsURI, const char* localName) const
     return false;
 }
 
-KoXmlElement KoStyleStack::childNode(const char* nsURI, const char* localName) const
+KoXmlElement KoStyleStack::childNode(const QString &nsURI, const QString &localName) const
 {
     QList<KoXmlElement>::ConstIterator it = m_stack.end();
 

@@ -40,7 +40,8 @@ Plugin::Plugin(QObject *parent, const QStringList&)
     KoDockRegistry::instance()->add(new StyleDockerFactory());
     KoDockRegistry::instance()->add(new ShadowDockerFactory());
     KoDockRegistry::instance()->add(new ShapeSelectorFactory());
-    KoDockRegistry::instance()->add(new ColorDockerFactory());
+    // TODO color docker isn't finished and connected'
+//     KoDockRegistry::instance()->add(new ColorDockerFactory());
     KoDockRegistry::instance()->add(new ShapeCollectionDockerFactory());
 }
 

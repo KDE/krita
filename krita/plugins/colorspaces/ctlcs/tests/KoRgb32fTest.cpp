@@ -91,8 +91,7 @@ void KoRgb32fTest::testConversion()
     p32f.alpha = 1.0;
     QCOMPARE(qint32(rgb32f->opacityU8(p32fPtr)), 255);
     p32f.alpha = 0.5;
-    QEXPECT_FAIL("", "Expected 0.5 to be scaled to 127, but we get 128", Continue);
-    QCOMPARE(qint32(rgb32f->opacityU8(p32fPtr)), 127);
+    QCOMPARE(qint32(rgb32f->opacityU8(p32fPtr)), qint32(float2int(255 * 0.5)));
 
     // Test setAlpha
     rgb32f->setOpacity(p32fPtr, quint8(255), 1);

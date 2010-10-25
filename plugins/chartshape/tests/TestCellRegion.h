@@ -46,11 +46,12 @@ private slots:
     void testToStringWithSpecialCharactersSingleTable();
     void testFromStringWithSpecialCharactersSingleTable();
     void testTableNameChangeSingleTable();
-    void testToStringMultibleTables();
-    void testFromStringMultibleTables();
-    void testToStringWithSpecialCharactersMultibleTables();
-    void testFromStringWithSpecialCharactersMultibleTables();
-    void testTableNameChangeMultibleTables();
+    void testToStringMultipleTables();
+    void testFromStringMultipleTables();
+    void testToStringWithSpecialCharactersMultipleTables();
+    void testFromStringWithSpecialCharactersMultipleTables();
+    void testTableNameChangeMultipleTables();
+    void testListOfRegions();
 
 private:
     TableSource m_source;

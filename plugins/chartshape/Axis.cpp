@@ -64,7 +64,6 @@
 #include <KDChartThreeDBarAttributes>
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
-#include <KDChartDataValueAttributes>
 #include <KDChartBackgroundAttributes>
 #include <KDChartRulerAttributes>
 
@@ -448,17 +447,6 @@ void Axis::Private::deleteDiagram( ChartType chartType )
     Q_ASSERT( diagram );
     Q_ASSERT( *diagram );
 
-    KDChart::AbstractCoordinatePlane *plane = (*diagram)->coordinatePlane();
-    if ( plane ) {
-        plane->takeDiagram( *diagram );
-        if ( plane->diagrams().size() == 0 )
-            plotArea->kdChart()->takeCoordinatePlane( plane );
-    }
-
-    KDChart::Legend *legend = plotArea->parent()->legend()->kdLegend();
-    if ( legend )
-        legend->removeDiagram( *diagram );
-
     deregisterDiagram( *diagram );
     delete *diagram;
 
@@ -481,15 +469,14 @@ void Axis::Private::createBarDiagram()
 
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
-    else if ( plotAreaChartSubType == PercentChartSubtype )
+    else if ( plotAreaChartSubType == PercentChartSubtype ) {
         kdBarDiagram->setType( KDChart::BarDiagram::Percent );
+        kdBarDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+    }
 
     if ( isVisible )
         kdBarDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdBarDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() )
@@ -526,9 +513,6 @@ void Axis::Private::createLineDiagram()
         kdLineDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdLineDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
@@ -540,6 +524,10 @@ void Axis::Private::createLineDiagram()
     KDChart::ThreeDLineAttributes attributes( kdLineDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
     kdLineDiagram->setThreeDLineAttributes( attributes );
+
+    KDChart::LineAttributes lineAttr = kdLineDiagram->lineAttributes();
+    lineAttr.setMissingValuesPolicy( KDChart::LineAttributes::MissingValuesHideSegments );
+    kdLineDiagram->setLineAttributes( lineAttr );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
 }
@@ -567,9 +555,6 @@ void Axis::Private::createAreaDiagram()
     if ( isVisible )
         kdAreaDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdAreaDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
@@ -599,9 +584,6 @@ void Axis::Private::createCircleDiagram()
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
     kdPolarPlane->addDiagram( kdCircleDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
-
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdCircleDiagram->threeDPieAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
@@ -624,9 +606,6 @@ void Axis::Private::createRingDiagram()
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRingDiagram );
     kdPolarPlane->addDiagram( kdRingDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
 
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdRingDiagram->threeDPieAttributes() );
@@ -657,10 +636,6 @@ void Axis::Private::createRadarDiagram()
 #endif
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
     kdRadarPlane->addDiagram( kdRadarDiagram );
-    //kdPolarPlane->resetGridAttributes( false );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdRadarPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdRadarPlane );
 }
 
 void Axis::Private::createScatterDiagram()
@@ -681,9 +656,6 @@ void Axis::Private::createScatterDiagram()
         kdScatterDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdScatterDiagram );
 
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
-
     
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
@@ -695,19 +667,6 @@ void Axis::Private::createScatterDiagram()
     KDChart::ThreeDLineAttributes attributes( kdScatterDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
     kdScatterDiagram->setThreeDLineAttributes( attributes );
-    
-    KDChart::DataValueAttributes dva( kdScatterDiagram->dataValueAttributes() );
-    dva.setVisible( true );
-    
-    KDChart::TextAttributes ta( dva.textAttributes() );
-    ta.setVisible( true );
-    dva.setTextAttributes( ta );
-
-    KDChart::MarkerAttributes ma( dva.markerAttributes() );
-    ma.setVisible( true );
-    dva.setMarkerAttributes( ma );
-
-    kdScatterDiagram->setDataValueAttributes( dva );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
 }
@@ -729,9 +688,6 @@ void Axis::Private::createStockDiagram()
     if ( isVisible )
         kdStockDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdStockDiagram );
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
     Q_ASSERT( plotArea );
     foreach ( Axis *axis, plotArea->axes() ) {
@@ -756,10 +712,7 @@ void Axis::Private::createBubbleDiagram()
     Q_ASSERT( model );
     model->setDataDimensions( 2 );
     
-    kdPlane->addDiagram( kdBubbleDiagram );    
-
-    if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
-        plotArea->kdChart()->addCoordinatePlane( kdPlane );    
+    kdPlane->addDiagram( kdBubbleDiagram );
     
     foreach ( Axis *axis, plotArea->axes() ) {
         //if ( axis->dimension() == XAxisDimension )
@@ -1335,7 +1288,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context.odfLoadingContext() );
+        charStyle.loadOdf( context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );
@@ -1408,7 +1361,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         gridAttr.setSubGridPen( subGridPen );
     d->kdRadarPlane->setGlobalGridAttributes( gridAttr );
     KDChart::TextAttributes ta( d->kdRadarPlane->textAttributes() );
-    ta.setVisible( true );
+    ta.setVisible( helper->categoryRegionSpecifiedInXAxis );
     ta.setFont( font() );
     ta.setFontSize( 50 );
     d->kdRadarPlane->setTextAttributes( ta );
@@ -1574,19 +1527,6 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 
     ChartType oldChartType = d->plotAreaChartType;
 
-    // We need to have a coordinate plane that matches the chart type.
-    // Choices are cartesian or polar.
-    if ( isCartesian( d->plotAreaChartType ) && isPolar( newChartType ) ) {
-        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
-    }
-    else if ( isPolar( d->plotAreaChartType ) && isCartesian( newChartType ) ) {
-        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
-        else if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdRadarPlane ) )
-            d->plotArea->kdChart()->takeCoordinatePlane( d->kdRadarPlane );
-    }
-
     KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded( newChartType );
 
     KDChartModel *newModel = dynamic_cast<KDChartModel*>( newDiagram->model() );
@@ -1647,7 +1587,9 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
 {
     d->plotAreaChartSubType = subType;
-
+    if ( d->kdBarDiagram ) {
+        d->kdBarDiagram->setUnitSuffix("", d->kdBarDiagram->orientation());
+    }
     switch ( d->plotAreaChartType ) {
     case BarChartType:
         if ( d->kdBarDiagram ) {
@@ -1656,11 +1598,14 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::BarDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::BarDiagram::Percent; break;
+                type = KDChart::BarDiagram::Percent;
+                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
+                break;
             default:
                 type = KDChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType( type );
+            
         }
         break;
     case LineChartType:
@@ -1670,7 +1615,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent; break;
+                type = KDChart::LineDiagram::Percent;
+                d->kdLineDiagram->setUnitSuffix("%", Qt::Vertical);
+                break;
             default:
                 type = KDChart::LineDiagram::Normal;
             }
@@ -1684,7 +1631,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent; break;
+                type = KDChart::LineDiagram::Percent;
+                d->kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
+                break;
             default:
                 type = KDChart::LineDiagram::Normal;
             }

@@ -469,8 +469,10 @@ void Axis::Private::createBarDiagram()
 
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdBarDiagram->setType( KDChart::BarDiagram::Stacked );
-    else if ( plotAreaChartSubType == PercentChartSubtype )
+    else if ( plotAreaChartSubType == PercentChartSubtype ) {
         kdBarDiagram->setType( KDChart::BarDiagram::Percent );
+        kdBarDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+    }
 
     if ( isVisible )
         kdBarDiagram->addAxis( kdAxis );
@@ -1286,7 +1288,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         styleStack.setTypeProperties( "text" );
 
         KoCharacterStyle charStyle;
-        charStyle.loadOdf( context.odfLoadingContext() );
+        charStyle.loadOdf( context );
         setFont( charStyle.font() );
 
         styleStack.setTypeProperties( "chart" );
@@ -1585,7 +1587,9 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
 {
     d->plotAreaChartSubType = subType;
-
+    if ( d->kdBarDiagram ) {
+        d->kdBarDiagram->setUnitSuffix("", d->kdBarDiagram->orientation());
+    }
     switch ( d->plotAreaChartType ) {
     case BarChartType:
         if ( d->kdBarDiagram ) {
@@ -1594,11 +1598,14 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::BarDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::BarDiagram::Percent; break;
+                type = KDChart::BarDiagram::Percent;
+                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
+                break;
             default:
                 type = KDChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType( type );
+            
         }
         break;
     case LineChartType:
@@ -1609,6 +1616,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
                 type = KDChart::LineDiagram::Percent; break;
+                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
             default:
                 type = KDChart::LineDiagram::Normal;
             }
@@ -1623,6 +1631,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
                 type = KDChart::LineDiagram::Percent; break;
+                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
             default:
                 type = KDChart::LineDiagram::Normal;
             }

@@ -64,7 +64,7 @@ void KisShapeSelectionTest::testAddChild()
 
     KisShapeSelection * shapeSelection = new KisShapeSelection(image, selection);
     selection->setShapeSelection(shapeSelection);
-    shapeSelection->addChild(shape);
+    shapeSelection->addShape(shape);
 
     QCOMPARE(pixelSelection->selected(25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 150, 150));

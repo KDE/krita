@@ -74,7 +74,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->close();
     path->normalize();
     KisShapeSelection* shapeSelection = new KisShapeSelection(image, vectorSelection);
-    shapeSelection->addChild(path);
+    shapeSelection->addShape(path);
     vectorSelection->setShapeSelection(shapeSelection);
 
     return vectorSelection;
@@ -146,7 +146,7 @@ KisDoc2* createCompleteDocument()
     path->close();
     path->normalize();
     KisShapeLayerSP shapeLayer = new KisShapeLayer(parentContainer, doc->shapeController(), image, "shapeLayer1", 75);
-    shapeLayer->addChild(path);
+    shapeLayer->addShape(path);
     image->addNode(shapeLayer, group1);
     image->addNode(adjustmentLayer2, group1);
 

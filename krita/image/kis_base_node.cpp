@@ -168,9 +168,13 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h)
 
 }
 
-bool KisBaseNode::visible() const
+bool KisBaseNode::visible(bool recursive) const
 {
-    return m_d->properties.boolProperty("visible", true);
+    bool isVisible = m_d->properties.boolProperty("visible", true);
+    KisBaseNodeSP parentNode = parentCallback();
+
+    return recursive && isVisible && parentNode ?
+        parentNode->visible() : isVisible;
 }
 
 void KisBaseNode::setVisible(bool visible)
@@ -205,7 +209,7 @@ void KisBaseNode::setSystemLocked(bool locked, bool update)
 
 bool KisBaseNode::isEditable() const
 {
-    return (visible() && !userLocked() && !systemLocked());
+    return (visible(true) && !userLocked() && !systemLocked());
 }
 
 #include "kis_base_node.moc"

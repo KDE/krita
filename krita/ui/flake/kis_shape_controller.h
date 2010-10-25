@@ -53,34 +53,27 @@ public:
     void setInitialShapeForView(KisView2 * view);
     virtual QMap<QString, KoDataCenterBase *> dataCenterMap() const;
 
-    // Prepares the shape controller to add the next shape to a shape selection
-    void prepareAddingSelectionShape();
-private:
+signals:
+    void selectionChanged();
 
+protected:
     void addShape(KoShape* shape);
     void removeShape(KoShape* shape);
 
 private slots:
-
     friend class KisShapeControllerTest;
     friend class KisDoc2;
-    // These slots keep track of changes in the layer stack and make
-    // sure that the shape stack doesn't get out of sync
-    void slotNodeAdded(KisNode* node, int index);
-    void slotNodeRemoved(KisNode*node, int index);
+
+    void slotNodeAdded(KisNode *parentNode, int index);
+    void slotNodeRemoved(KisNode *parentNode, int index);
     void slotLayersChanged(KisGroupLayerSP rootLayer);
 
-    void slotNotifySelectionChanged(QList<KoShape*> shapes);
-
 private:
-
     int layerMapSize();
 
 private:
-
     class Private;
     Private * const m_d;
-
 };
 
 #endif

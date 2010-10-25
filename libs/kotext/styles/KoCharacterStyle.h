@@ -35,7 +35,7 @@
 class StylePrivate;
 class QTextBlock;
 class KoStyleStack;
-class KoOdfLoadingContext;
+class KoShapeLoadingContext;
 class KoGenStyle;
 
 /**
@@ -324,7 +324,7 @@ public:
      * Load the style from the \a KoStyleStack style stack using the
      * OpenDocument format.
      */
-    void loadOdf(KoOdfLoadingContext &context);
+    void loadOdf(KoShapeLoadingContext &context);
 
     /// return true if this style has a non-default value set for the Property
     bool hasProperty(int key) const;

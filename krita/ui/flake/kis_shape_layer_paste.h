@@ -47,10 +47,10 @@ public:
                 KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
                 if (shapeLayer) {
                     //don't update as the setDirty call would create shared pointer that would delete the layer
-                    shapeLayer->addChild(shape, false);
+                    shapeLayer->addShape(shape);
                 } else {
                     KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(m_container);
-                    shapeSelection->addChild(shape);
+                    shapeSelection->addShape(shape);
                 }
             }
         }

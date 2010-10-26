@@ -34,32 +34,33 @@
 #include "kis_image.h"
 #include "kis_layer.h"
 
-struct KisMask::Private {
-    class PerThreadPaintDevice {
-    public:
-        KisPaintDeviceSP device(KisPaintDeviceSP projection) {
-            if(!m_storage.hasLocalData()) {
-                // XXX: this leaks!
-                m_storage.setLocalData(new KisPaintDeviceSP(new KisPaintDevice(projection->colorSpace())));
-            }
-            KisPaintDeviceSP device = *m_storage.localData();
-            device->prepareClone(projection);
+#include "tiles3/kis_lockless_stack.h"
 
+struct KisMask::Private {
+    class CachedPaintDevice {
+    public:
+        KisPaintDeviceSP getDevice(KisPaintDeviceSP prototype) {
+            KisPaintDeviceSP device;
+
+            if(!m_stack.pop(device)) {
+                device = new KisPaintDevice(prototype->colorSpace());
+            }
+
+            device->prepareClone(prototype);
             return device;
         }
 
-        ~PerThreadPaintDevice() {
-            // In case current thread used the storage too...
-            if(m_storage.hasLocalData()) {
-                m_storage.setLocalData(0);
-            }
+        void putDevice(KisPaintDeviceSP device) {
+            device->clear();
+            m_stack.push(device);
         }
+
     private:
-        QThreadStorage<KisPaintDeviceSP *> m_storage;
+        KisLocklessStack<KisPaintDeviceSP> m_stack;
     };
 
     mutable KisSelectionSP selection;
-    PerThreadPaintDevice paintDeviceCache;
+    CachedPaintDevice paintDeviceCache;
 };
 
 KisMask::KisMask(const QString & name)
@@ -195,7 +196,7 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         if(!m_d->selection->selectedRect().intersects(rc))
             return;
 
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.device(projection);
+        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
 
         QRect updatedRect = decorateRect(projection, cacheDevice, rc);
 
@@ -204,13 +205,18 @@ void KisMask::apply(KisPaintDeviceSP projection, const QRect & rc) const
         gc.setOpacity(opacity());
         gc.setSelection(m_d->selection);
         gc.bitBlt(updatedRect.topLeft(), cacheDevice, updatedRect);
+
+        m_d->paintDeviceCache.putDevice(cacheDevice);
+
     } else {
-        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.device(projection);
+        KisPaintDeviceSP cacheDevice = m_d->paintDeviceCache.getDevice(projection);
         cacheDevice->makeCloneFromRough(projection, rc);
         projection->clear(rc);
 
         // FIXME: how about opacity and compositeOp?
         decorateRect(cacheDevice, projection, rc);
+
+        m_d->paintDeviceCache.putDevice(cacheDevice);
     }
 }
 

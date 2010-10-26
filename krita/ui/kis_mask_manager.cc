@@ -179,14 +179,14 @@ void KisMaskManager::createFilterMask(KisNodeSP parent, KisNodeSP above)
     m_commandsAdapter->addNode(mask, parent, above);
 
     /**
-     * FIXME: We'll use layer's paint device for creation of a thumbnail.
+     * FIXME: We'll use layer's original for creation of a thumbnail.
      * Actually, we can't use it's projection as newly created mask
      * may be going to be inserted in the middle of the masks stack
      */
-    KisPaintDeviceSP paintDevice = layer->paintDevice();
+    KisPaintDeviceSP originalDevice = layer->original();
 
 
-    KisDlgAdjustmentLayer dialog(mask, mask, paintDevice, m_view->image(),
+    KisDlgAdjustmentLayer dialog(mask, mask, originalDevice, m_view->image(),
                                  mask->name(), i18n("New Filter Mask"),
                                  m_view, "dlgfiltermask");
 

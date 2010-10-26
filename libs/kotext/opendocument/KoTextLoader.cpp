@@ -342,6 +342,15 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                 if (tag.namespaceURI() == KoXmlNS::delta) {
                     if (d->changeTracker && localName == "tracked-changes")
                         d->changeTracker->loadOdfChanges(tag);
+                    else if (d->changeTracker && localName == "removed-content") {
+                        QString changeId = tag.attributeNS(KoXmlNS::delta, "removal-change-idref");
+                        insertDeleteChangeMarker(cursor, changeId);
+                        int deleteStartPosition = cursor.position();
+                        cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                        loadBody(tag, cursor, true);
+                        processDeleteChange(cursor, changeId, deleteStartPosition);
+                    } else {
+                    }
                 }
 
                 if (tag.namespaceURI() == KoXmlNS::text) {

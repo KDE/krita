@@ -131,6 +131,11 @@ private:
     * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
     */
     void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
+    
+    /**
+    * Load the contents of delta:merge. Called from loadSpan
+    */
+    void loadMerge(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Insert the delete change marker for the changeId at the current cursor position

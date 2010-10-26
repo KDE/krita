@@ -1013,6 +1013,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             bool stripLeadingSpace = true;
             loadSpan(ts,cursor,&stripLeadingSpace);
             processDeleteChange(cursor, changeId, deleteStartPosition);
+        } else if (isDeltaNS && localName == "merge") {
+            loadMerge(ts, cursor);
         } else if (isTextNS && localName == "change-start") { // text:change-start
             d->openChangeRegion(ts);
         } else if (isTextNS && localName == "change-end") {
@@ -1284,6 +1286,36 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
         //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
         cursor.removeSelectedText();
     }
+}
+
+void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
+{
+    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
+    const QTextCharFormat defaultCharFormat = cursor.charFormat();
+    QString changeId = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
+    insertDeleteChangeMarker(cursor, changeId);
+    int deleteStartPosition = cursor.position();
+    
+    for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        KoXmlElement ts = node.toElement();
+        const QString localName(ts.localName());
+        const bool isDeltaNS = ts.namespaceURI() == KoXmlNS::delta;
+        
+        if (isDeltaNS && localName == "leading-partial-content") {
+            bool stripLeadingSpaces = false;
+            loadSpan(ts, cursor, &stripLeadingSpaces);
+        } else if (isDeltaNS && localName == "intermediate-content") {
+            if (ts.hasChildNodes()) {
+                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                loadBody(ts, cursor, false);
+            }
+        } else if (isDeltaNS && localName == "trailing-partial-content") {
+            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+            loadBody(ts, cursor, false);
+        }
+    }
+
+    processDeleteChange(cursor, changeId, deleteStartPosition);
 }
 
 void KoTextLoader::insertDeleteChangeMarker(QTextCursor &cursor, const QString &id)

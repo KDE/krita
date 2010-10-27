@@ -70,6 +70,14 @@ void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
 
 void KoGenChange::writeChange(KoXmlWriter *writer, const QString &name) const
 {
+    writer->startElement("delta:change-transaction");
+    writer->addAttribute("delta:change-id", name);
+    if (!m_changeMetaData.isEmpty()) {
+        writer->startElement("delta:change-info");
+        writeChangeMetaData(writer);
+        writer->endElement(); // delta:change-info
+    }   
+    writer->endElement(); // delta:change-transaction 
 }
 
 bool KoGenChange::operator<(const KoGenChange &other) const

@@ -107,9 +107,16 @@ public:
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
 {
-    Q_UNUSED(format);
     if (!changeTracker /*&& changeTracker->isEnabled()*/)
         return;//The change tracker exist and we are allowed to save tracked changes
+
+    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) { //There is a tracked change
+        KoGenChange change;
+        changeTracker->saveInlineChange(changeId, change);
+        QString changeName = sharedData->genChanges().insert(change);
+        changeTransTable.insert(changeId, changeName);
+    }
 }
 
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)

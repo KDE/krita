@@ -128,7 +128,7 @@ const KoGenChange* KoGenChanges::change(const QString& name) const
 
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
-    xmlWriter->startElement("text:tracked-changes");
+    xmlWriter->startElement("delta:tracked-changes");
 
     QMap<KoGenChange, QString> changesList = changes();
     QMap<KoGenChange, QString>::const_iterator it = changesList.constBegin();

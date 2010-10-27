@@ -119,9 +119,9 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module, const QStringL
                 if (! a->isEnabled())
                     continue;
                 a->addObject(d->module);
-                KoScriptingDockerFactory *f = new KoScriptingDockerFactory(view, d->module, a);
-                if (mainwindow) mainwindow->createDockWidget(f);
-                kDebug(41011) << "Adding scripting docker with id=" << f->id();
+                KoScriptingDockerFactory f(view, d->module, a);
+                if (mainwindow) mainwindow->createDockWidget(&f);
+                kDebug(41011) << "Adding scripting docker with id=" << f.id();
             }
         }
     }

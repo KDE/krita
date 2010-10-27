@@ -904,9 +904,9 @@ void KoTextEditor::insertTableRowAbove()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Above"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int row = cell.row();
         table->insertRows(row, 1);
@@ -921,9 +921,9 @@ void KoTextEditor::insertTableRowBelow()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Below"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int row = cell.row() +1;
         if (row == table->rows()) {
@@ -951,9 +951,9 @@ void KoTextEditor::insertTableColumnLeft()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Left"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int column = cell.column();
         table->insertColumns(column, 1);
@@ -968,9 +968,9 @@ void KoTextEditor::insertTableColumnRight()
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Right"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int column = cell.column()+1;
         if (column == table->columns()) {
@@ -995,13 +995,22 @@ void KoTextEditor::deleteTableColumn()
     d->updateState(KoTextEditor::Private::Custom, i18n("Delete Column"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
-        QTextTableCell cell = table->cellAt(d->caret);
-        int column = cell.column();
-        table->removeColumns(column, 1);
-        carsManager.removeColumns(column, 1);
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+        int selectionRow;
+        int selectionColumn;
+        int selectionRowSpan;
+        int selectionColumnSpan;
+        if(d->caret.hasComplexSelection()) {
+            d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+        } else {
+            QTextTableCell cell = table->cellAt(d->caret);
+            selectionColumn = cell.column();
+            selectionColumnSpan = 1;
+        }
+        table->removeColumns(selectionColumn, selectionColumnSpan);
+        carsManager.removeColumns(selectionColumn, selectionColumnSpan);
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1012,13 +1021,22 @@ void KoTextEditor::deleteTableRow()
     d->updateState(KoTextEditor::Private::Custom, i18n("Delete Row"));
 
     QTextTable *table = d->caret.currentTable();
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     if (table) {
-        QTextTableCell cell = table->cellAt(d->caret);
-        int row = cell.row();
-        table->removeRows(row, 1);
-        carsManager.removeRows(row, 1);
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
+        int selectionRow;
+        int selectionColumn;
+        int selectionRowSpan;
+        int selectionColumnSpan;
+        if(d->caret.hasComplexSelection()) {
+            d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+        } else {
+            QTextTableCell cell = table->cellAt(d->caret);
+            selectionRow = cell.row();
+            selectionRowSpan = 1;
+        }
+        table->removeRows(selectionRow, selectionRowSpan);
+        carsManager.removeRows(selectionRow, selectionRowSpan);
     }
 
     d->updateState(KoTextEditor::Private::NoOp);

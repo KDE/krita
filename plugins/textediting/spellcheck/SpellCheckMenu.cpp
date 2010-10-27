@@ -28,7 +28,8 @@
 #include <QSignalMapper>
 
 SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck)
-    : m_spellCheck(spellCheck),
+    : QObject(spellCheck),
+    m_spellCheck(spellCheck),
     m_speller(speller),
     m_suggestionsMenuAction(0),
     m_ignoreWordAction(0),

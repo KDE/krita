@@ -310,7 +310,7 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
         l.append(
             DataDimension(
                 r.left(), r.right(),
-                diagramIsVertical ? ( dgr->datasetDimension() > 1 ) : true,
+                diagramIsVertical ? ( dgr->datasetDimension() > diagrams().first()->datasetDimension() ) : true,
                 axesCalcModeX(),
                 gaH.gridGranularitySequence(),
                 gaH.gridStepWidth(),

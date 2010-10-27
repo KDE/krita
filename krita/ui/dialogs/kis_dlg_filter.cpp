@@ -73,7 +73,7 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
         d->uiFilterDialog.pushButtonCreateMaskEffect->hide();
     }
     d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
-    d->uiFilterDialog.filterSelection->setPaintDevice(d->node->paintDevice());
+    d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.filterSelection->setImage(d->image);
 
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));

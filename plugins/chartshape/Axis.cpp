@@ -1615,8 +1615,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent; break;
-                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
+                type = KDChart::LineDiagram::Percent;
+                d->kdLineDiagram->setUnitSuffix("%", Qt::Vertical);
+                break;
             default:
                 type = KDChart::LineDiagram::Normal;
             }
@@ -1630,8 +1631,9 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
             case StackedChartSubtype:
                 type = KDChart::LineDiagram::Stacked; break;
             case PercentChartSubtype:
-                type = KDChart::LineDiagram::Percent; break;
-                d->kdBarDiagram->setUnitSuffix("%", d->kdBarDiagram->orientation());
+                type = KDChart::LineDiagram::Percent;
+                d->kdAreaDiagram->setUnitSuffix("%", Qt::Vertical);
+                break;
             default:
                 type = KDChart::LineDiagram::Normal;
             }

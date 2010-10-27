@@ -203,7 +203,7 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     kdChartModel( 0 ),
     size( 0 ),
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
-    symbolsActivated( false ),
+    symbolsActivated( true ),
     symbolID( 0 )
 {
 }
@@ -576,6 +576,9 @@ KDChart::PieAttributes DataSet::pieAttributes( int section ) const
 qreal DataSet::Private::maxBubbleSize() const
 {
     // TODO: Improve performance by caching. This is currently O(n^2).
+    // this is not in O( n^2 ), its quite linear on the number of datapoints
+    // hoever it could be constant for any then the first case by implementing
+    // cashing
     qreal max = 0.0;
     Q_ASSERT( kdChartModel );
     QList<DataSet*> dataSets = kdChartModel->dataSets();
@@ -600,12 +603,12 @@ KDChart::DataValueAttributes DataSet::dataValueAttributes( int section /* = -1 *
 
     // The chart type is a property of the plot area, check that.
     switch ( d->effectiveChartType() ) {
-    case ScatterChartType:
-        // TODO: Marker type should be customizable
-        // TODO: Marker size should be customizable
-        ma.setMarkerStyle( defaultMarkerTypes[ number() % numDefaultMarkerTypes ] );
-        ma.setVisible( true );
-        break;
+//     case ScatterChartType:
+//         // TODO: Marker type should be customizable
+//         // TODO: Marker size should be customizable
+//         ma.setMarkerStyle( defaultMarkerTypes[ number() % numDefaultMarkerTypes ] );
+//         ma.setVisible( true );
+//         break;
     case BubbleChartType:
     {
         Q_ASSERT( attachedAxis() );
@@ -657,15 +660,15 @@ void DataSet::setPen( const QPen &pen )
     d->penIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
-    KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
-    ma.setPen( pen );
-    d->dataValueAttributes.setMarkerAttributes( ma );
-    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
-          it != d->sectionsDataValueAttributes.end(); ++it ){
-        KDChart::MarkerAttributes mattr( it->markerAttributes() );
-        mattr.setMarkerColor( pen.color() );
-        it->setMarkerAttributes( mattr );
-    }
+//     KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
+//     ma.setPen( pen );
+//     d->dataValueAttributes.setMarkerAttributes( ma );
+//     for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+//           it != d->sectionsDataValueAttributes.end(); ++it ){
+//         KDChart::MarkerAttributes mattr( it->markerAttributes() );
+//         mattr.setMarkerColor( pen.color() );
+//         it->setMarkerAttributes( mattr );
+//     }
     
 }
 
@@ -675,15 +678,15 @@ void DataSet::setBrush( const QBrush &brush )
     d->brushIsSet = true;
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this );
-    KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
-    ma.setMarkerColor( brush.color() );
-    d->dataValueAttributes.setMarkerAttributes( ma );
-    for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
-          it != d->sectionsDataValueAttributes.end(); ++it ){
-        KDChart::MarkerAttributes mattr( it->markerAttributes() );
-        mattr.setMarkerColor( brush.color() );
-        it->setMarkerAttributes( mattr );
-    }
+//     KDChart::MarkerAttributes ma( d->dataValueAttributes.markerAttributes() );
+//     ma.setMarkerColor( brush.color() );
+//     d->dataValueAttributes.setMarkerAttributes( ma );
+//     for ( QMap< int, KDChart::DataValueAttributes >::iterator it = d->sectionsDataValueAttributes.begin();
+//           it != d->sectionsDataValueAttributes.end(); ++it ){
+//         KDChart::MarkerAttributes mattr( it->markerAttributes() );
+//         mattr.setMarkerColor( brush.color() );
+//         it->setMarkerAttributes( mattr );
+//     }
 }
 
 void DataSet::setPieExplodeFactor( int factor )
@@ -699,9 +702,9 @@ void DataSet::setPen( int section, const QPen &pen )
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::PenDataRole, section );
     d->insertDataValueAttributeSectionIfNecessary( section );
-    KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
-    mas.setPen( pen );
-    d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
+//     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
+//     mas.setPen( pen );
+//     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
 }
 
 void DataSet::setBrush( int section, const QBrush &brush )
@@ -710,9 +713,9 @@ void DataSet::setBrush( int section, const QBrush &brush )
     if ( d->kdChartModel )
         d->kdChartModel->dataSetChanged( this, KDChartModel::BrushDataRole, section );
     d->insertDataValueAttributeSectionIfNecessary( section );
-    KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
-    mas.setMarkerColor( brush.color() );
-    d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
+//     KDChart::MarkerAttributes mas( d->sectionsDataValueAttributes[ section ].markerAttributes() );
+//     mas.setMarkerColor( brush.color() );
+//     d->sectionsDataValueAttributes[ section ].setMarkerAttributes( mas );
 }
 
 void DataSet::setPieExplodeFactor( int section, int factor )
@@ -792,7 +795,7 @@ QVariant DataSet::xData( int index ) const
     // bubble width. Same for the second data set. So there is nothing left
     // for x data. Instead use a fall-back to the data points index.
     QVariant data = d->data( d->xDataRegion, index );
-    if ( data.isValid() )
+    if ( data.isValid() && data.canConvert< double >() && data.convert( QVariant::Double ) )
         return data;
     return QVariant( index + 1 );
 }
@@ -1089,6 +1092,7 @@ static DataSet::ValueLabelType valueLabelTypeFromString( const QString &format )
 bool DataSet::loadOdf( const KoXmlElement &n,
                        KoShapeLoadingContext &context )
 {
+    d->symbolsActivated = false;
     KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
     KoStyleStack &styleStack = odfLoadingContext.styleStack();
     styleStack.clear();

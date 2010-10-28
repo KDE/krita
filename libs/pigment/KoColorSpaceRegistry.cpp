@@ -107,7 +107,7 @@ void KoColorSpaceRegistry::init()
 
 
     dbgPigment << "Loaded the following colorspaces:";
-    foreach(const KoID id, listKeys()) {
+    foreach(const KoID& id, listKeys()) {
         dbgPigment << "\t" << id.id() << "," << id.name();
     }
 }
@@ -572,7 +572,7 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
 {
     QReadLocker l(&d->registrylock);
     QList<KoID> answer;
-    foreach(const QString key, d->colorsSpaceFactoryRegistry.keys()) {
+    foreach(const QString& key, d->colorsSpaceFactoryRegistry.keys()) {
         answer.append(KoID(key, d->colorsSpaceFactoryRegistry.get(key)->name()));
     }
 

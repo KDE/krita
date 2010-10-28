@@ -60,7 +60,7 @@ public:
     static const QString koffice;
     static const QString officeooo;
 
-    static const char* nsURI2NS(const char* nsURI);
+    static const char* nsURI2NS(const QString nsURI);
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

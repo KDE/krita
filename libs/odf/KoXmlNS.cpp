@@ -48,3 +48,60 @@ const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 
 const QString KoXmlNS::koffice = "http://www.koffice.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
+
+const char* KoXmlNS::nsURI2NS(const QString nsURI)
+{
+    if (nsURI == KoXmlNS::office)
+        return "office";
+    else if (nsURI == KoXmlNS::meta)
+        return "meta";
+    else if (nsURI == KoXmlNS::config)
+        return "config";
+    else if (nsURI == KoXmlNS::text)
+        return "text";
+    else if (nsURI == KoXmlNS::table)
+        return "table";
+    else if (nsURI == KoXmlNS::draw)
+        return "draw";
+    else if (nsURI == KoXmlNS::presentation)
+        return "presentation";
+    else if (nsURI == KoXmlNS::dr3d)
+        return "dr3d";
+    else if (nsURI == KoXmlNS::chart)
+        return "chart";
+    else if (nsURI == KoXmlNS::form)
+        return "form";
+    else if (nsURI == KoXmlNS::script)
+        return "script";
+    else if (nsURI == KoXmlNS::style)
+        return "style";
+    else if (nsURI == KoXmlNS::number)
+        return "number";
+    else if (nsURI == KoXmlNS::manifest)
+        return "manifest";
+    else if (nsURI == KoXmlNS::anim)
+        return "anim";
+    else if (nsURI == KoXmlNS::math)
+        return "math";
+    else if (nsURI == KoXmlNS::svg)
+        return "svg";
+    else if (nsURI == KoXmlNS::fo)
+        return "fo";
+    else if (nsURI == KoXmlNS::dc)
+        return "dc";
+    else if (nsURI == KoXmlNS::xlink)
+        return "xlink";
+    else if (nsURI == KoXmlNS::VL)
+        return "VL";
+    else if (nsURI == KoXmlNS::smil)
+        return "smil";
+    else if (nsURI == KoXmlNS::xhtml)
+        return "xhtml";
+    else if (nsURI == KoXmlNS::koffice)
+        return "koffice";
+    else if (nsURI == KoXmlNS::officeooo)
+        return "officeooo";
+
+    // Shouldn't happen.
+    return "";
+}

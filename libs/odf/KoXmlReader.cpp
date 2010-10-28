@@ -139,7 +139,7 @@ uint qHash(const KoQName& qname)
 // likely there is very few namespaced attributes per element
 static inline uint qHash(const KoXmlStringPair &p)
 {
-    return qHash(p.first[0].unicode()) ^ 0x1477;
+    return qHash(p.second[0].unicode()) ^ 0x1477;
 
     // in case of doubt, use this:
     // return qHash(p.first)^qHash(p.second);
@@ -1355,18 +1355,12 @@ bool KoXmlNodeData::hasAttribute(const QString& name) const
 void KoXmlNodeData::setAttributeNS(const QString& nsURI,
                                    const QString& name, const QString& value)
 {
-    QString prefix;
-    QString localName = name;
     int i = name.indexOf(':');
     if (i != -1) {
-        localName = name.mid(i + 1);
-        prefix = name.left(i);
+        QString localName(name.mid(i + 1));
+        KoXmlStringPair key(nsURI, localName);
+        attrNS.insert(key, value);
     }
-
-    if (prefix.isNull()) return;
-
-    KoXmlStringPair key(nsURI, localName);
-    attrNS[ key ] = value;
 }
 
 QString KoXmlNodeData::attributeNS(const QString& nsURI, const QString& name,

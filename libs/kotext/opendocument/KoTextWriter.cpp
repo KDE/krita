@@ -78,11 +78,13 @@ public:
     rdfData(0)
     {
         writer = &context.xmlWriter();
+        changeStack.push(0);
     }
 
     ~Private() {}
 
     void saveChange(QTextCharFormat format);
+    void saveChange(int changeId);
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
@@ -91,6 +93,7 @@ public:
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0);
+    int checkForBlockChange(const QTextBlock &block);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -112,11 +115,16 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
 
     int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
     if (changeId) { //There is a tracked change
-        KoGenChange change;
-        changeTracker->saveInlineChange(changeId, change);
-        QString changeName = sharedData->genChanges().insert(change);
-        changeTransTable.insert(changeId, changeName);
+        saveChange(changeId);
     }
+}
+
+void KoTextWriter::Private::saveChange(int changeId)
+{
+    KoGenChange change;
+    changeTracker->saveInlineChange(changeId, change);
+    QString changeName = sharedData->genChanges().insert(change);
+    changeTransTable.insert(changeId, changeName);
 }
 
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
@@ -283,11 +291,24 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+    int blockChangeId = checkForBlockChange(block);
     if (outlineLevel > 0) {
         writer->startElement("text:h", false);
         writer->addAttribute("text:outline-level", outlineLevel);
     } else {
         writer->startElement("text:p", false);
+    }
+
+    bool changePushedToStack = false;
+    if (blockChangeId && (changeStack.top() != blockChangeId)) {
+        saveChange(blockChangeId);
+        changeStack.push(blockChangeId);
+        changePushedToStack = true;
+        KoChangeTrackerElement *changeElement = changeTracker->elementById(blockChangeId);
+        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(blockChangeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
+        }
     }
 
     QString styleName = saveParagraphStyle(block);
@@ -404,9 +425,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addAttribute("xlink:href", charFormat.anchorHref());
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     writer->startElement("text:span", false);
-                    int changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
                     writer->addAttribute("text:style-name", styleName);
-                    if (changeId) {
+                    int changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
+                    if (changeId && (changeStack.top() != changeId)) {
                         //This is a change
                         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
                         if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
@@ -438,7 +459,52 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
         inlineObject->saveOdf(context);
     }
+
+    if (changePushedToStack)
+        changeStack.pop();
+    
     writer->endElement();
+}
+
+//Check if the whole Block is a part of a single change
+//If so return the changeId else return 0 
+int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
+{
+    int changeId = 0;
+    QTextBlock::iterator it;
+    for (it = block.begin(); !(it.atEnd()); ++it) {
+        QTextFragment currentFragment = it.fragment();
+        if (currentFragment.isValid()) {
+            QTextCharFormat charFormat = currentFragment.charFormat();
+            int currentChangeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
+            if (!currentChangeId) {
+                // Encountered a fragment that is not a change
+                // So break out of loop and return 0
+                changeId = 0;
+                break;
+            } else {
+                // This Fragment is a change fragment. Continue further.
+                if (changeId == 0) {
+                    //First fragment and it is a change-fragment
+                    //Store it and continue 
+                    changeId = currentChangeId;
+                    continue;
+                } else {
+                    if (currentChangeId == changeId) {
+                        //Change Fragment and it is the same as the first change.
+                        //continue looking
+                        continue; 
+                    } else {
+                        //A Change Fragment but not same as the first change fragment
+                        //Break-out of loop and return 0
+                        changeId = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return changeId;
 }
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)

@@ -39,6 +39,7 @@ PluginShapeFactory::PluginShapeFactory(QObject *parent)
     //setIcon("video-x-generic");
     setOdfElementNames(KoXmlNS::draw, QStringList("plugin"));
     setLoadingPriority(9);
+    setHidden(true);
 }
 
 KoShape *PluginShapeFactory::createDefaultShape(KoResourceManager *documentResources) const

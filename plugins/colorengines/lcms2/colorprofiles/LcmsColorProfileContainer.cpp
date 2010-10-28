@@ -144,6 +144,8 @@ LcmsColorProfileContainer::~LcmsColorProfileContainer()
     delete d;
 }
 
+#define _BUFFER_SIZE_ 1000
+
 bool LcmsColorProfileContainer::init()
 {
     if (d->profile) cmsCloseProfile(d->profile);
@@ -157,16 +159,16 @@ bool LcmsColorProfileContainer::init()
 #endif
 
     if (d->profile) {
-        wchar_t buffer[500];
+        wchar_t buffer[_BUFFER_SIZE_];
         d->colorSpaceSignature = cmsGetColorSpace(d->profile);
         d->deviceClass = cmsGetDeviceClass(d->profile);
-        cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        cmsGetProfileInfo(d->profile, cmsInfoDescription, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->productDescription = QString::fromWCharArray(buffer);
         d->valid = true;
-        cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        cmsGetProfileInfo(d->profile, cmsInfoModel, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->name = QString::fromWCharArray(buffer);
 
-        cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, 500);
+        cmsGetProfileInfo(d->profile, cmsInfoManufacturer, cmsNoLanguage, cmsNoCountry, buffer, _BUFFER_SIZE_);
         d->manufacturer = QString::fromWCharArray(buffer);
         
         // Check if the profile can convert (something->this)

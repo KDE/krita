@@ -3,8 +3,10 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
+ * Copyright (C) 2007-2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2009-2010 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1831,6 +1833,15 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
             painter->setPen(Qt::gray);
             painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, data->counterPosition().y() + fm.height()));
 #endif
+            painter->save();
+            QColor bulletColor = listFormat.colorProperty(KoListStyle::BulletColor);
+            if (bulletColor.isValid()) {
+                painter->setBrush(bulletColor);
+                painter->setPen(QPen(bulletColor));
+            }
+            else {
+                bulletColor = QColor(Qt::black);
+            }
 
             qreal width = fm.xHeight();
             qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
@@ -1841,11 +1852,11 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
             qreal x = qMax(qreal(1), data->counterPosition().x() + fm.width(listFormat.stringProperty(KoListStyle::ListItemPrefix)));
             switch (listStyle) {
             case KoListStyle::SquareItem: {
-                painter->fillRect(QRectF(x, y, width, width), QBrush(Qt::black));
+                painter->fillRect(QRectF(x, y, width, width), QBrush(bulletColor));
             }
             break;
             case KoListStyle::DiscItem:
-                painter->setBrush(QBrush(Qt::black));
+                painter->setBrush(bulletColor);
                 // fall through!
             case KoListStyle::CircleItem: {
                 painter->drawEllipse(QRectF(x, y, width, width));
@@ -1858,7 +1869,7 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
             case KoListStyle::RhombusItem: {
                 painter->translate(QPointF(x + (width / 2.0), y));
                 painter->rotate(45.0);
-                painter->fillRect(QRectF(0, 0, width, width), QBrush(Qt::black));
+                painter->fillRect(QRectF(0, 0, width, width), QBrush(bulletColor));
             }
             break;
             case KoListStyle::RightArrowItem: {
@@ -1895,6 +1906,9 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
                 break;
             default:; // others we ignore.
             }
+
+            painter->restore();
+
         } else if (listStyle == KoListStyle::ImageItem && imageCollection) {
             QFontMetricsF fm(cf.font(), m_parent->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -136,7 +137,8 @@ public:
         MinimumDistance, ///< The minimum distance, in pt, between the counter and the text
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
-        BulletImageKey ///< Bullet image stored as a key for lookup in the imageCollection
+        BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
+        BulletColor     ///< color of the counter
     };
 
     /**

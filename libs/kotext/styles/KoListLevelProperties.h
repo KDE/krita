@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -81,6 +82,10 @@ public:
     void setBulletCharacter(QChar character);
     /// return the character to be used as the counter of the listitem
     QChar bulletCharacter() const;
+    /// set the color to be used as the counter of the listitem
+    void setBulletColor(QColor color);
+    /// return the color to be used as the counter of the listitem
+    QColor bulletColor() const;
     /// set the size, in percent, of the bullet counter relative to the fontsize of the counter
     void setRelativeBulletSize(int percent);
     /// return the size, in percent, of the bullet counter relative to the fontsize of the counter
@@ -168,6 +173,7 @@ private:
     bool propertyBoolean(int key) const;
     qreal propertyDouble(int key) const;
     QString propertyString(int key) const;
+    QColor propertyColor(int key) const;
 
     class Private;
     Private * const d;

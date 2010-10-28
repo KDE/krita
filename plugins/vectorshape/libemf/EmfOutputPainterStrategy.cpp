@@ -32,18 +32,6 @@ namespace Libemf
 //                         Class OutputPainterStrategy
 
 
-void OutputPainterStrategy::printPainterTransform(const char *leadText)
-{
-    QTransform  transform;
-
-    unsetWindowViewport();
-    transform = m_painter->transform();
-    setWindowViewport();
-
-    kDebug(31000) << leadText << transform << m_painter->transform();
-}
-
-
 OutputPainterStrategy::OutputPainterStrategy()
     : m_header( 0 )
     , m_path( 0 )
@@ -121,7 +109,7 @@ void OutputPainterStrategy::init( const Header *header )
 #endif
 
 #if DEBUG_PAINTER_TRANSFORM
-    printPainterTransform("before save");
+    printPainterTransform("In init, before save:");
 #endif
 
     // This is restored in cleanup().
@@ -160,6 +148,9 @@ void OutputPainterStrategy::init( const Header *header )
         printPainterTransform("after translation for keeping center in the shape");
 #endif
     }
+
+    m_outputTransform = m_painter->transform();
+    m_internalTransform = QTransform();
 
     // For calculations of window / viewport during the painting
     m_windowOrg = QPoint(0, 0);
@@ -304,6 +295,18 @@ void OutputPainterStrategy::setMetaRgn()
 // instead, we have to redo the calculations ourselves here.
 
 
+// Unset Window and Viewport.  This has to be called before we can
+// reset the window or viewport origin or extension.
+void OutputPainterStrategy::unsetWindowViewport()
+{
+    if (!m_windowViewportIsSet)
+        return;
+
+    m_painter->translate(-m_viewportOrg);
+    m_painter->scale(qreal(1.0) / m_windowViewportScaleX, qreal(1.0) / m_windowViewportScaleY);
+    m_painter->translate(m_windowOrg);
+}
+
 // Set Window and Viewport
 void OutputPainterStrategy::setWindowViewport()
 {
@@ -322,24 +325,19 @@ void OutputPainterStrategy::setWindowViewport()
         m_windowViewportScaleY = qreal(1.0);
     }
 
+    m_painter->setTransform(QTransform());
     m_painter->translate(-m_windowOrg);
     m_painter->scale(m_windowViewportScaleX, m_windowViewportScaleY);
     m_painter->translate(m_viewportOrg);
 
     m_windowViewportIsSet = true;
+
+    // Apply the output transform.
+    QTransform currentMatrix = m_painter->worldTransform();
+    QTransform newMatrix = currentMatrix * m_outputTransform;
+    m_painter->setWorldTransform( newMatrix );
 }
 
-// Unset Window and Viewport.  This has to be called before we can
-// reset the window or viewport origin or extension.
-void OutputPainterStrategy::unsetWindowViewport()
-{
-    if (!m_windowViewportIsSet)
-        return;
-
-    m_painter->translate(-m_viewportOrg);
-    m_painter->scale(qreal(1.0) / m_windowViewportScaleX, qreal(1.0) / m_windowViewportScaleY);
-    m_painter->translate(m_windowOrg);
-}
 
 void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 {
@@ -834,8 +832,13 @@ void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11,
                                                   float M21, float M22, float Dx, float Dy )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
+    if (mode == MWT_IDENTITY)
+        kDebug(31000) << "Identity matrix";
+    else
+        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
+
+    return;
 
     unsetWindowViewport();
 
@@ -1270,6 +1273,19 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 
 // ----------------------------------------------------------------
 //                         Private functions
+
+
+void OutputPainterStrategy::printPainterTransform(const char *leadText)
+{
+    QTransform  transform;
+
+    unsetWindowViewport();
+    transform = m_painter->transform();
+    setWindowViewport();
+
+    kDebug(31000) << leadText << "excl window: " << transform
+                  << "incl window: " << m_painter->transform();
+}
 
 
 qreal OutputPainterStrategy::angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint )

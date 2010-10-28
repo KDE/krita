@@ -61,7 +61,7 @@ public:
     * \param ns The namespace. E.g. KoXmlNS::draw
     * \param element The tag-name. E.g. "image"
     */
-    KoFrameShape(const char *ns, const char *element);
+    KoFrameShape(const QString &ns, const QString &tag);
 
     /**
     * Destructor.

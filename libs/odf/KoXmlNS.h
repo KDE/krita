@@ -20,40 +20,45 @@
 #ifndef KOXMLNS_H
 #define KOXMLNS_H
 
+#include <QString>
+
 #include "koodf_export.h"
 /**
- * Repository of XML namespaces used for OASIS documents.
+ * Repository of XML namespaces used for ODF documents.
+ * 
+ * Please make sure that you do not use the variables provided by this class in
+ * the destructor of a static object.
  */
 class KOODF_EXPORT KoXmlNS
 {
 public:
-    static const char* const office;
-    static const char* const meta;
-    static const char* const config;
-    static const char* const text;
-    static const char* const table;
-    static const char* const draw;
-    static const char* const presentation;
-    static const char* const dr3d;
-    static const char* const chart;
-    static const char* const form;
-    static const char* const script;
-    static const char* const style;
-    static const char* const number;
-    static const char* const manifest;
-    static const char* const anim;
+    static const QString office;
+    static const QString meta;
+    static const QString config;
+    static const QString text;
+    static const QString table;
+    static const QString draw;
+    static const QString presentation;
+    static const QString dr3d;
+    static const QString chart;
+    static const QString form;
+    static const QString script;
+    static const QString style;
+    static const QString number;
+    static const QString manifest;
+    static const QString anim;
 
-    static const char* const math;
-    static const char* const svg;
-    static const char* const fo;
-    static const char* const dc;
-    static const char* const xlink;
-    static const char* const VL;
-    static const char* const smil;
-    static const char* const xhtml;
+    static const QString math;
+    static const QString svg;
+    static const QString fo;
+    static const QString dc;
+    static const QString xlink;
+    static const QString VL;
+    static const QString smil;
+    static const QString xhtml;
 
-    static const char* const koffice;
-    static const char* const officeooo;
+    static const QString koffice;
+    static const QString officeooo;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

@@ -19,30 +19,30 @@
 
 #include "KoXmlNS.h"
 
-const char* const KoXmlNS::office = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";
-const char* const KoXmlNS::meta = "urn:oasis:names:tc:opendocument:xmlns:meta:1.0";
-const char* const KoXmlNS::config = "urn:oasis:names:tc:opendocument:xmlns:config:1.0";
-const char* const KoXmlNS::text = "urn:oasis:names:tc:opendocument:xmlns:text:1.0";
-const char* const KoXmlNS::table = "urn:oasis:names:tc:opendocument:xmlns:table:1.0";
-const char* const KoXmlNS::draw = "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0";
-const char* const KoXmlNS::presentation = "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0";
-const char* const KoXmlNS::dr3d = "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0";
-const char* const KoXmlNS::chart = "urn:oasis:names:tc:opendocument:xmlns:chart:1.0";
-const char* const KoXmlNS::form = "urn:oasis:names:tc:opendocument:xmlns:form:1.0";
-const char* const KoXmlNS::script = "urn:oasis:names:tc:opendocument:xmlns:script:1.0";
-const char* const KoXmlNS::style = "urn:oasis:names:tc:opendocument:xmlns:style:1.0";
-const char* const KoXmlNS::number = "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0";
-const char* const KoXmlNS::manifest = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
-const char* const KoXmlNS::anim = "urn:oasis:names:tc:opendocument:xmlns:animation:1.0";
+const QString KoXmlNS::office("urn:oasis:names:tc:opendocument:xmlns:office:1.0");
+const QString KoXmlNS::meta("urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+const QString KoXmlNS::config("urn:oasis:names:tc:opendocument:xmlns:config:1.0");
+const QString KoXmlNS::text("urn:oasis:names:tc:opendocument:xmlns:text:1.0");
+const QString KoXmlNS::table("urn:oasis:names:tc:opendocument:xmlns:table:1.0");
+const QString KoXmlNS::draw("urn:oasis:names:tc:opendocument:xmlns:drawing:1.0");
+const QString KoXmlNS::presentation("urn:oasis:names:tc:opendocument:xmlns:presentation:1.0");
+const QString KoXmlNS::dr3d("urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0");
+const QString KoXmlNS::chart("urn:oasis:names:tc:opendocument:xmlns:chart:1.0");
+const QString KoXmlNS::form("urn:oasis:names:tc:opendocument:xmlns:form:1.0");
+const QString KoXmlNS::script("urn:oasis:names:tc:opendocument:xmlns:script:1.0");
+const QString KoXmlNS::style("urn:oasis:names:tc:opendocument:xmlns:style:1.0");
+const QString KoXmlNS::number("urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0");
+const QString KoXmlNS::manifest("urn:oasis:names:tc:opendocument:xmlns:manifest:1.0");
+const QString KoXmlNS::anim("urn:oasis:names:tc:opendocument:xmlns:animation:1.0");
 
-const char* const KoXmlNS::math = "http://www.w3.org/1998/Math/MathML";
-const char* const KoXmlNS::svg = "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0";
-const char* const KoXmlNS::fo = "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0";
-const char* const KoXmlNS::dc = "http://purl.org/dc/elements/1.1/";
-const char* const KoXmlNS::xlink = "http://www.w3.org/1999/xlink";
-const char* const KoXmlNS::VL = "http://openoffice.org/2001/versions-list";
-const char* const KoXmlNS::smil = "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0";
-const char* const KoXmlNS::xhtml = "http://www.w3.org/1999/xhtml";
+const QString KoXmlNS::math("http://www.w3.org/1998/Math/MathML");
+const QString KoXmlNS::svg("urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0");
+const QString KoXmlNS::fo("urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0");
+const QString KoXmlNS::dc("http://purl.org/dc/elements/1.1/");
+const QString KoXmlNS::xlink("http://www.w3.org/1999/xlink");
+const QString KoXmlNS::VL("http://openoffice.org/2001/versions-list");
+const QString KoXmlNS::smil("urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0");
+const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 
-const char* const KoXmlNS::koffice = "http://www.koffice.org/2005/";
-const char* const KoXmlNS::officeooo = "http://openoffice.org/2009/office";
+const QString KoXmlNS::koffice("http://www.koffice.org/2005/");
+const QString KoXmlNS::officeooo("http://openoffice.org/2009/office");

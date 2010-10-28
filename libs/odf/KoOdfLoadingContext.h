@@ -86,7 +86,7 @@ public:
      * @param attrName the name of the attribute to read
      * @param family the style family used for this object
      */
-    void fillStyleStack(const KoXmlElement &element, const char *nsURI, const char *attrName, const char *family);
+    void fillStyleStack(const KoXmlElement &element, const QString &nsURI, const QString &attrName, const QString &family);
 
     /**
      * Add @p style to the stack, as well as all its parent styles
@@ -102,7 +102,7 @@ public:
      *
      * Usually you would call fillStyleStack() instead.
      */
-    void addStyles(const KoXmlElement *style, const char *family, bool usingStylesAutoStyles = false);
+    void addStyles(const KoXmlElement *style, const QString &family, bool usingStylesAutoStyles = false);
 
     /// Set to true while loading headers and footers, to remember to use auto styles
     /// from styles.xml

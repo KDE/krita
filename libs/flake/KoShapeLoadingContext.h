@@ -54,18 +54,18 @@ public:
      * AdditionalAttributeData( KoXmlNS::presentation, "placeholder", presentation:placeholder" )
      */
     struct AdditionalAttributeData {
-        AdditionalAttributeData(const char *const ns, const char *const tag, const char *name)
+        AdditionalAttributeData(const QString &ns, const QString &tag, const QString &name)
                 : ns(ns)
                 , tag(tag)
                 , name(name) {
         }
 
-        const char * const ns;
-        const char * const tag;
-        const char * const name;
+        const QString ns;
+        const QString tag;
+        const QString name;
 
         bool operator==(const AdditionalAttributeData &other) const {
-            return (qstrcmp(name, other.name) == 0);
+            return name == other.name;
         }
     };
 

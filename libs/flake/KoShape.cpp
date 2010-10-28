@@ -1360,9 +1360,9 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
     }
 
     if (attributes & OdfAdditionalAttributes) {
-        QMap<QByteArray, QString>::const_iterator it(d->additionalAttributes.constBegin());
+        QMap<QString, QString>::const_iterator it(d->additionalAttributes.constBegin());
         for (; it != d->additionalAttributes.constEnd(); ++it) {
-            context.xmlWriter().addAttribute(it.key(), it.value());
+            context.xmlWriter().addAttribute(it.key().toUtf8(), it.value());
         }
     }
 }
@@ -1453,25 +1453,25 @@ KoSnapData KoShape::snapData() const
     return KoSnapData();
 }
 
-void KoShape::setAdditionalAttribute(const char *name, const QString &value)
+void KoShape::setAdditionalAttribute(const QString &name, const QString &value)
 {
     Q_D(KoShape);
     d->additionalAttributes.insert(name, value);
 }
 
-void KoShape::removeAdditionalAttribute(const char *name)
+void KoShape::removeAdditionalAttribute(const QString &name)
 {
     Q_D(KoShape);
     d->additionalAttributes.remove(name);
 }
 
-bool KoShape::hasAdditionalAttribute(const char *name) const
+bool KoShape::hasAdditionalAttribute(const QString &name) const
 {
     Q_D(const KoShape);
     return d->additionalAttributes.contains(name);
 }
 
-QString KoShape::additionalAttribute(const char *name) const
+QString KoShape::additionalAttribute(const QString &name) const
 {
     Q_D(const KoShape);
     return d->additionalAttributes.value(name);

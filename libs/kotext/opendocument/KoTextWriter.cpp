@@ -404,7 +404,17 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addAttribute("xlink:href", charFormat.anchorHref());
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     writer->startElement("text:span", false);
+                    int changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
                     writer->addAttribute("text:style-name", styleName);
+                    if (changeId) {
+                        //This is a change
+                        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
+                        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
+                            QString changeName = changeTransTable.value(changeId);
+                            writer->addAttribute("delta:insertion-change-idref", changeName);
+                            writer->addAttribute("delta:insertion-type", "insert-with-content");
+                        }
+                    }
                 }
 
                 QString text = currentFragment.text();

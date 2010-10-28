@@ -794,14 +794,14 @@ public:
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      * @param value The value of the attribute
      */
-    void setAdditionalAttribute(const char *name, const QString &value);
+    void setAdditionalAttribute(const QString &name, const QString &value);
 
     /**
      * Remove additional attribute
      *
      * @param name The name of the attribute in the following form prefix:tag e.g. presentation:placeholder
      */
-    void removeAdditionalAttribute(const char *name);
+    void removeAdditionalAttribute(const QString &name);
 
     /**
      * Check if additional attribute is set
@@ -810,7 +810,7 @@ public:
      *
      * @return true if there is a attribute with prefix:tag set, false otherwise
      */
-    bool hasAdditionalAttribute(const char *name) const;
+    bool hasAdditionalAttribute(const QString &name) const;
 
     /**
      * Get additional attribute
@@ -819,7 +819,7 @@ public:
      *
      * @return The value of the attribute if it exists or a null string if not found.
      */
-    QString additionalAttribute(const char *name) const;
+    QString additionalAttribute(const QString &name) const;
 
     void setAdditionalStyleAttribute(const char *name, const QString &value);
 

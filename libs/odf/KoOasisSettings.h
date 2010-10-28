@@ -176,7 +176,7 @@ private:
     friend class IndexedMap;
     friend class NamedMap;
     const KoXmlElement m_settingsElement;
-    const char *m_configNsUri;
+    const QString m_configNsUri;
 
     class Private;
     Private * const d;

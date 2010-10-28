@@ -550,7 +550,10 @@ void Axis::Private::createAreaDiagram()
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdAreaDiagram->setType( KDChart::LineDiagram::Stacked );
     else if ( plotAreaChartSubType == PercentChartSubtype )
+    {
         kdAreaDiagram->setType( KDChart::LineDiagram::Percent );
+        kdAreaDiagram->setUnitSuffix("%", kdBarDiagram->orientation());
+    }
 
     if ( isVisible )
         kdAreaDiagram->addAxis( kdAxis );

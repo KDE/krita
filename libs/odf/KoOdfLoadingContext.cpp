@@ -91,7 +91,7 @@ void KoOdfLoadingContext::setManifestFile(const QString& fileName) {
     (void)oasisStore.loadAndParse(fileName, d->manifestDoc, dummy);
 }
 
-void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const char* nsURI, const char* attrName, const char* family)
+void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const QString &nsURI, const QString &attrName, const QString &family)
 {
     // find all styles associated with an object and push them on the stack
     if (object.hasAttributeNS(nsURI, attrName)) {
@@ -105,7 +105,7 @@ void KoOdfLoadingContext::fillStyleStack(const KoXmlElement& object, const char*
     }
 }
 
-void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* family, bool usingStylesAutoStyles)
+void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const QString &family, bool usingStylesAutoStyles)
 {
     Q_ASSERT(style);
     if (!style) return;
@@ -120,14 +120,14 @@ void KoOdfLoadingContext::addStyles(const KoXmlElement* style, const char* famil
         else {
             kWarning(32500) << "Parent style not found: " << family << parentStyleName << usingStylesAutoStyles;
             //we are handling a non compliant odf file. let's at the very least load the application default, and the eventual odf default
-            if (family) {
+            if (!family.isEmpty()) {
                 const KoXmlElement* def = d->stylesReader.defaultStyle(family);
                 if (def) {   // then, the default style for this family
                     d->styleStack.push(*def);
                 }
             }
         }
-    } else if (family) {
+    } else if (!family.isEmpty()) {
         const KoXmlElement* def = d->stylesReader.defaultStyle(family);
         if (def) {   // then, the default style for this family
             d->styleStack.push(*def);

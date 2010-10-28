@@ -1386,6 +1386,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
     tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));
+    if (d->changeTracker && d->changeStack.count()) {
+        tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+    }
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
     int rows = 0;
     int columns = 0;

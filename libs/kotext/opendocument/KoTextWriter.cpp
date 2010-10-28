@@ -510,6 +510,22 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     writer->startElement("table:table");
+    
+    QTextTableFormat format = table->format();
+    bool changePushedToStack = false;
+
+    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId && (changeStack.top() != changeId)) {
+        saveChange(changeId);
+        changeStack.push(changeId);
+        changePushedToStack = true;
+        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
+        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
+        }
+    }
+    
     for (int c = 0 ; c < table->columns() ; c++) {
         writer->startElement("table:table-column");
         writer->endElement(); // table:table-column
@@ -538,6 +554,9 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         writer->endElement(); // table:table-row
     }
     writer->endElement(); // table:table
+
+    if (changePushedToStack)
+        changeStack.pop();
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)

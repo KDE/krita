@@ -121,6 +121,8 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
 
 void KoTextWriter::Private::saveChange(int changeId)
 {
+    if(changeTransTable.value(changeId).length())
+        return;
     KoGenChange change;
     changeTracker->saveInlineChange(changeId, change);
     QString changeName = sharedData->genChanges().insert(change);

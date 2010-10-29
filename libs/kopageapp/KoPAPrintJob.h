@@ -24,6 +24,8 @@
 
 #include <QPrinter>
 
+#include "kopageapp_export.h"
+
 class KoPAView;
 class KoPAPageBase;
 class KoPAPageProvider;
@@ -32,8 +34,9 @@ class KoPAPageProvider;
  * For now we print to the center of the page honoring the margins.
  * The page is zoomed to be as big as possible.
  */
-class KoPAPrintJob : public KoPrintJob
+class KOPAGEAPP_EXPORT KoPAPrintJob : public KoPrintJob
 {
+    Q_OBJECT
 public:
     KoPAPrintJob(KoPAView * view);
     virtual ~KoPAPrintJob();
@@ -44,7 +47,7 @@ public:
 public slots:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
-private:
+protected:
     QPrinter m_printer;
     QList<KoPAPageBase*> m_pages;
     KoPAPageProvider *m_pageProvider;

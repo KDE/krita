@@ -101,7 +101,7 @@ void TestColorConversion::testRGBHSL()
     float r, g, b, h, s, l;
 
     RGBToHSL(1, 0, 0, &h, &s, &l);
-    QCOMPARE(h, 360.0f);
+    QCOMPARE(h, 0.0f);
     QCOMPARE(s, 1.0f);
     QCOMPARE(l, 0.5f);
 

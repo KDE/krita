@@ -28,7 +28,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoViewConverter.h>
 
-#include "kis_image.h"
 #include "kis_node.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -60,6 +59,8 @@ void KisPaintOpSettings::setOptionsWidget(KisPaintOpSettingsWidget* widget)
 }
 
 bool KisPaintOpSettings::mousePressEvent(const KisPaintInformation &pos, Qt::KeyboardModifiers modifiers){
+    Q_UNUSED(pos);
+    Q_UNUSED(modifiers);
     return true; // ignore the event by default
 }
 
@@ -214,4 +215,3 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
     path = m.map(path);
     return path;
 }
-

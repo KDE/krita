@@ -104,12 +104,12 @@ bool CommentShape::loadOdf(const KoXmlElement& element, KoShapeLoadingContext& c
                 QStringList creatorNames = m_creator.split(' ');
                 QString initials;
                 if(KoApplication::isLeftToRight()) {
-                    foreach(QString name, creatorNames) {
+                    foreach(const QString& name, creatorNames) {
                         initials += name.left(1);
                     }
                 }
                 else {
-                    foreach(QString name, creatorNames) {
+                    foreach(const QString& name, creatorNames) {
                         initials += name.right(1);
                     }
                 }

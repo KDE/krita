@@ -190,6 +190,8 @@ private:
     bool          m_currentlyBuildingPath;
 
     QPainter                *m_painter;
+    QTransform               m_outputTransform; // The transform that the painter already had
+    QTransform               m_internalTransform; // The transform inside the EMF.
 
     // Everything that has to do with window and viewport calculation
     QPoint        m_windowOrg;
@@ -202,6 +204,14 @@ private:
     qreal         m_windowViewportScaleY;
     bool          m_windowViewportIsSet;
 
+#if 0
+    // This matrix is needed because the window / viewport calculation
+    // is not the last one in the chain. After that one comes the
+    // transform that the painter already has when the painting
+    // starts, and that one has to be saved and reapplied again after
+    // the window / viewport calculation is redone.
+    QTransform    m_outputTransform;
+#endif
     /**
        The image we are painting to
     */

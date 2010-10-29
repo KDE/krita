@@ -585,8 +585,8 @@ QList<KoID> KoColorSpaceRegistry::listKeys() const
 {
     QReadLocker l(&d->registrylock);
     QList<KoID> answer;
-    foreach(const QString& key, d->colorsSpaceFactoryRegistry.keys()) {
-        answer.append(KoID(key, d->colorsSpaceFactoryRegistry.get(key)->name()));
+    foreach(const QString& key, d->colorSpaceFactoryRegistry.keys()) {
+        answer.append(KoID(key, d->colorSpaceFactoryRegistry.get(key)->name()));
     }
 
     return answer;

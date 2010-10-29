@@ -22,7 +22,7 @@
 
 #include <KDebug>
 
-#define DEBUG_PAINTER_TRANSFORM 0
+#define DEBUG_PAINTER_TRANSFORM 1
 
 namespace Libemf
 {
@@ -248,10 +248,19 @@ void OutputPainterStrategy::saveDC()
     kDebug(31000);
 #endif
 
+    // A little trick here: Save the worldTransform in the painter.
+    // If we didn't do this, we would have to create a separate stack
+    // for these.
+    //
+    // FIXME: We should collect all the parts of the DC that are not
+    //        stored in the painter and save them separately.
+    QTransform  savedTransform = m_painter->worldTransform();
+    m_painter->setWorldTransform(m_worldTransform);
+
     m_painter->save();
     ++m_painterSaves;
 
-    recalculateWorldTransform();
+    m_painter->setWorldTransform(savedTransform);
 }
 
 void OutputPainterStrategy::restoreDC( const qint32 savedDC )
@@ -272,6 +281,9 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
         }
     }
 
+    // We used a trick in saveDC() and stored the worldTransform in
+    // the painter.  Now restore the full transformation.
+    m_worldTransform = m_painter->worldTransform();
     recalculateWorldTransform();
 }
 
@@ -939,6 +951,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
                   << "ascent = " << fm.ascent() << " height = " << fm.height()
                   << "leading = " << fm.leading();
+    kDebug(31000) << "actual point = " << x << y;
 #endif
 
     // Use the special pen defined by mTextPen for text.

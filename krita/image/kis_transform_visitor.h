@@ -35,6 +35,12 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 #include "generator/kis_generator_layer.h"
+#include "kis_pixel_selection.h"
+#include "kis_transparency_mask.h"
+#include "kis_selection_mask.h"
+#include "kis_transformation_mask.h"
+#include "kis_clone_layer.h"
+#include "kis_filter_mask.h"
 
 class KoUpdater;
 class KisFilterStrategy;
@@ -69,6 +75,7 @@ public:
         QUndoCommand* command = layer->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
         if (command)
             undoAdapter->addCommand(command);
+        visitAll(layer);
         return true;
     }
 
@@ -78,6 +85,7 @@ public:
      */
     bool visit(KisPaintLayer *layer) {
         transformPaintDevice(layer);
+        visitAll(layer);
         return true;
     }
 
@@ -96,30 +104,37 @@ public:
     virtual bool visit(KisAdjustmentLayer* layer) {
         transformPaintDevice(layer);
         layer->resetCache();
+        visitAll(layer);
         return true;
     }
 
     bool visit(KisGeneratorLayer* layer) {
         transformPaintDevice(layer);
+        visitAll(layer);
         return true;
     }
 
     bool visit(KisNode*) {
         return true;
     }
-    bool visit(KisCloneLayer*) {
+    bool visit(KisCloneLayer* layer) {
+        visitAll(layer);
         return true;
     }
-    bool visit(KisFilterMask*) {
+    bool visit(KisFilterMask* mask) {
+        transformMask(mask);
         return true;
     }
-    bool visit(KisTransparencyMask*) {
+    bool visit(KisTransparencyMask* mask) {
+        transformMask(mask);
         return true;
     }
-    bool visit(KisTransformationMask*) {
+    bool visit(KisTransformationMask* mask) {
+        transformMask(mask);
         return true;
     }
-    bool visit(KisSelectionMask*) {
+    bool visit(KisSelectionMask* mask) {
+        transformMask(mask);
         return true;
     }
 
@@ -136,6 +151,26 @@ private:
 
         transaction.commit(m_image->undoAdapter());
         node->setDirty();
+    }
+    
+    void transformMask(KisMask* mask) {
+        KisSelectionSP selection = mask->selection();
+        if(selection->hasPixelSelection()) {
+            KisSelectionTransaction transaction(QString(), m_image, selection);
+
+            KisPaintDeviceSP dev = selection->getOrCreatePixelSelection().data();
+            KisTransformWorker tw(dev, m_sx, m_sy, 0.0, 0.0, 0.0, 0.0, m_angle, m_tx, m_ty, m_progress, m_filter, true);
+            tw.run();
+
+            transaction.commit(m_image->undoAdapter());
+        }
+        if (selection->hasShapeSelection()) {
+            QUndoCommand* command = selection->shapeSelection()->transform(m_sx, m_sy, 0.0, 0.0, m_angle, m_tx, m_ty);
+            if (command)
+                m_image->undoAdapter()->addCommand(command);
+        }
+        
+        selection->updateProjection();
     }
 
 private:

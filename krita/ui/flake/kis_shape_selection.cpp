@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <QPainter>
 #include <QTimer>
+#include <QUndoCommand>
 
 #include <ktemporaryfile.h>
 
@@ -44,7 +45,7 @@
 #include <KoShapeController.h>
 #include <KoShapeSavingContext.h>
 #include <KoStoreDevice.h>
-
+#include <KoShapeTransformCommand.h>
 
 #include "kis_painter.h"
 #include "kis_paint_device.h"
@@ -53,6 +54,7 @@
 #include "kis_selection.h"
 #include "kis_shape_selection_canvas.h"
 #include "kis_shape_layer_paste.h"
+#include "kis_image_view_converter.h"
 
 #include <kis_debug.h>
 
@@ -64,6 +66,7 @@ KisShapeSelection::KisShapeSelection(KisImageWSP image, KisSelectionWSP selectio
     setShapeId("KisShapeSelection");
     setSelectable(false);
     m_dirty = false;
+    m_converter = new KisImageViewConverter(image);
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->addShape(this);
 
@@ -73,6 +76,7 @@ KisShapeSelection::~KisShapeSelection()
 {
     m_model->setShapeSelection(0);
     delete m_canvas;
+    delete m_converter;
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
@@ -397,6 +401,37 @@ void KisShapeSelection::moveY(qint32 y)
             shape->setPosition(QPointF(pos.x(), pos.y() + y/m_image->yRes()));
         }
     }
+}
+
+// TODO same code as in shape layer, refactor!
+QUndoCommand* KisShapeSelection::transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey) {
+
+    Q_UNUSED(xshear);
+    Q_UNUSED(yshear);
+    QPointF transF =  m_converter->viewToDocument(QPoint(translatex, translatey));
+    QList<KoShape*> shapes = m_canvas->shapeManager()->shapes();
+    if(shapes.isEmpty())
+        return 0;
+
+    QTransform matrix;
+    matrix.translate(transF.x(), transF.y());
+    matrix.scale(xscale,yscale);
+    matrix.rotate(angle*180/M_PI);
+
+    QList<QTransform> oldTransformations;
+    QList<QTransform> newTransformations;
+
+    // this code won't work if there are shapes, that inherit the transformation from the parent container.
+    // the chart and tree shapes are examples for that, but they aren't used in krita and there are no other shapes like that.
+    foreach(const KoShape* shape, shapes) {
+        QTransform oldTransform = shape->transformation();
+        oldTransformations.append(oldTransform);
+
+
+        newTransformations.append(oldTransform*matrix);
+    }
+
+    return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
 }
 
 

@@ -81,7 +81,7 @@ bool KisKraSaveVisitor::visit(KisExternalLayer * layer)
         m_store->popDirectory();
     }
     m_count++;
-    return result || visitAllInverse(layer);
+    return result && visitAllInverse(layer);
 }
 
 bool KisKraSaveVisitor::visit(KisPaintLayer *layer)

@@ -1139,6 +1139,59 @@ qreal Layout::topMargin()
     return 0.0;
 }
 
+QRectF Layout::selectionBoundingBox(QTextCursor &cursor)
+{
+    return selectionBoundingBoxFrame(m_parent->document()->rootFrame(), cursor);
+}
+
+QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
+{
+    QRectF retval(-5E6,0,105E6,1);
+    if(cursor.position() == -1)
+        return retval;
+
+    QTextFrame::iterator it;
+    for (it = frame->begin(); !(it.atEnd()); ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+
+        if (table) {
+            m_tableLayout.setTable(table);
+            if(!m_tableLayout.isDirty() && cursor.selectionStart() >= table->firstPosition()
+                        && cursor.selectionEnd() <= table->lastPosition()) {
+                // TODO return tablerects of selected cells
+                retval.setTop(m_tableLayout.cellBoundingRect(table->cellAt(table->firstPosition())).y());
+                retval.setBottom(m_tableLayout.cellBoundingRect(table->cellAt(table->lastPosition())).bottom());
+                return retval;
+            }
+        } /*else if (subFrame) {
+            // right now we don't care about sections
+            textRectFrame(QTextFrame *frame, QTextCursor &cursor);
+            continue;
+        } */else {
+            if (!block.isValid())
+                continue;
+        }
+        if(cursor.selectionStart() >= block.position()
+            && cursor.selectionStart() < block.position() + block.length()) {
+                // TODO set top of rect
+            QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());
+            if (line.isValid())
+                retval.setTop(line.y());
+        }
+        if(cursor.selectionEnd() >= block.position()
+            && cursor.selectionEnd() < block.position() + block.length()) {
+                // TODO set bottom of rect
+            QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
+            if (line.isValid())
+                retval.setBottom
+                (line.y() + line.height());
+        }
+    }
+    return retval;
+}
+
 void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     drawFrame(m_parent->document()->rootFrame(), painter, context, 0);
@@ -1179,7 +1232,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
         if (table) {
             m_tableLayout.setTable(table);
-            m_tableLayout.drawBackground(painter);
+            m_tableLayout.drawBackground(painter, context);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
             QPainterPath accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
@@ -1231,6 +1284,9 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
                 if (end < block.position() || begin > block.position() + block.length())
                     continue; // selection does not intersect this block.
+                if (selection.cursor.hasComplexSelection()) {
+                    continue; // selections of several table cells are covered within drawBorders above.
+                }
                 if (!m_changeTracker
                     || m_changeTracker->displayChanges()
                     || !m_changeTracker->containsInlineChanges(selection.format)

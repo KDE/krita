@@ -76,6 +76,9 @@ public:
     virtual void registerInlineObject(const QTextInlineObject &inlineObject);
     virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point);
 
+    /// calc a bounding box rect of the selection
+    virtual QRectF selectionBoundingBox(QTextCursor &cursor);
+
     /// paint the document
     virtual void draw(QPainter *painter, const KoTextDocumentLayout::PaintContext & context);
 
@@ -102,6 +105,10 @@ private:
     void cleanupShapes();
     void cleanupShape(KoShape *daShape);
     void nextShape();
+    /// Calculate the selection bounding box for a frame .It may call itself recursively
+    /// to traverse the entire document structure. Called initially by selectionBoundingBox(..)
+    /// on the root frame
+    QRectF selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor);
     void drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumentLayout::PaintContext & context, int inTable);
     void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
     void drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);

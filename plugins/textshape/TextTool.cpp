@@ -43,6 +43,7 @@
 #include "commands/DeleteCommand.h"
 
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
@@ -369,27 +370,33 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Insert Row Above"), this);
+    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+    action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
 
-    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Insert Row Below"), this);
+    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+    action->setToolTip(i18n("Insert Row Below"));
     addAction("insert_tablerow_below", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Insert Column Left"), this);
+    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+    action->setToolTip(i18n("Insert Column Left"));
     addAction("insert_tablecolumn_left", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
 
-    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Insert Column Right"), this);
+    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+    action->setToolTip(i18n("Insert Column Right"));
     addAction("insert_tablecolumn_right", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
 
-    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Delete Column"), this);
+    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Column"), this);
+    action->setToolTip(i18n("Delete Column"));
     addAction("delete_tablecolumn", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
 
-    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Delete Row"), this);
+    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Row"), this);
+    action->setToolTip(i18n("Delete Row"));
     addAction("delete_tablerow", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
 
@@ -397,7 +404,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("merge_tablecells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
 
-    action  = new KAction(KIcon("spli"), i18n("Split Cells"), this);
+    action  = new KAction(KIcon("split"), i18n("Split Cells"), this);
     addAction("split_tablecells", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
@@ -613,7 +620,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.translate(0, -data->documentOffset() * m_textShape->textViewConverter()->fitToSizeFactor());
         if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
                 || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
-            QRectF clip = textRect(qMax(data->position(), selectStart), qMin(data->endPosition(), selectEnd));
+            QRectF clip = textRect(*m_textEditor.data()->cursor());
             painter.save();
             painter.setClipRect(clip, Qt::IntersectClip);
             data->document()->documentLayout()->draw(&painter, pc);
@@ -691,15 +698,14 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
     const bool canMoveCaret = !m_textEditor.data()->hasSelection() || event->button() !=  Qt::RightButton;
     if (canMoveCaret) {
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
-        if (m_textEditor.data()->hasSelection() && !shiftPressed)
+        if (m_textEditor.data()->hasSelection())
             repaintSelection(); // will erase selection
         else if (! m_textEditor.data()->hasSelection())
             repaintCaret();
-        int prevPosition = m_textEditor.data()->position();
         int position = pointToPosition(event->point);
         m_textEditor.data()->setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         if (shiftPressed) // altered selection.
-            repaintSelection(prevPosition, m_textEditor.data()->position());
+            repaintSelection();
         else
             repaintCaret();
 
@@ -931,10 +937,12 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
     if (position == m_textEditor.data()->position()) return;
     if (position >= 0) {
-        repaintCaret();
-        int prevPos = m_textEditor.data()->position();
+        if (m_textEditor.data()->hasSelection())
+            repaintSelection(); // will erase selection
+        else
+            repaintCaret();
         m_textEditor.data()->setPosition(position, QTextCursor::KeepAnchor);
-        repaintSelection(prevPos, m_textEditor.data()->position());
+        repaintSelection();
     }
 
     updateSelectionHandler();
@@ -1075,12 +1083,20 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             // Goto end of the document. Default: Ctrl-End
             QTextBlock last = m_textShapeData->document()->end().previous();
             destinationPosition = last.position() + last.length() - 1;
-        } else if (hit(item, KStandardShortcut::Prior)) // page up
+        } else if (hit(item, KStandardShortcut::Prior)) { // page up
             // Scroll up one page. Default: Prior
-            moveOperation = QTextCursor::StartOfLine; // TODO
-        else if (hit(item, KStandardShortcut::Next))
+            QPointF point = caretRect(textEditor->position()).topLeft();
+            qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
+            point.setY(point.y() - moveDistance);
+            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+        }
+        else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
-            moveOperation = QTextCursor::StartOfLine; // TODO
+            QPointF point = caretRect(textEditor->position()).topLeft();
+            qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
+            point.setY(point.y() + moveDistance);
+            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+        }
         else if (hit(item, KStandardShortcut::BeginningOfLine))
             // Goto beginning of current line. Default: Home
             moveOperation = QTextCursor::StartOfLine;
@@ -1123,9 +1139,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     if (moveOperation != QTextCursor::NoMove || destinationPosition != -1) {
         useCursor(Qt::BlankCursor);
         bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
-        if (textEditor->hasSelection() && !shiftPressed)
+        if (textEditor->hasSelection())
             repaintSelection(); // will erase selection
-        else if (! textEditor->hasSelection())
+        else
             repaintCaret();
         QTextBlockFormat format = textEditor->blockFormat();
 
@@ -1158,7 +1174,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
         if (shiftPressed) // altered selection.
-            repaintSelection(prevPosition, textEditor->position());
+            repaintSelection();
         else
             repaintCaret();
         updateActions();
@@ -1189,7 +1205,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     switch (query) {
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
-        QRectF rect = textRect(textEditor->position(), textEditor->position());
+        QRectF rect = caretRect(textEditor->position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(m_textShape->textViewConverter());
         qreal zoomX, zoomY;
@@ -1270,7 +1286,7 @@ void TextTool::ensureCursorVisible()
         }
     }
 
-    QRectF cursorPos = textRect(textEditor->position(), textEditor->position());
+    QRectF cursorPos = caretRect(textEditor->position());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // So take bottom of last paragraph.
@@ -1447,6 +1463,13 @@ void TextTool::repaintCaret()
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0)
         return;
+    QRectF repaintRect = caretRect(textEditor->position());
+    if (repaintRect.isValid()) {
+        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
+        canvas()->updateCanvas(repaintRect);
+    }
+
+#if 0
     QTextBlock block = textEditor->block();
     if (block.isValid()) {
         QTextLine tl = block.layout()->lineForTextPosition(textEditor->position() - block.position());
@@ -1462,6 +1485,7 @@ void TextTool::repaintCaret()
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
         canvas()->updateCanvas(repaintRect);
     }
+#endif
 }
 
 void TextTool::repaintSelection()
@@ -1469,15 +1493,13 @@ void TextTool::repaintSelection()
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0)
         return;
-    repaintSelection(textEditor->position(), textEditor->anchor());
+    repaintSelection(*textEditor->cursor());
 }
 
-void TextTool::repaintSelection(int startPosition, int endPosition)
+void TextTool::repaintSelection(QTextCursor &cursor)
 {
-    if (startPosition == endPosition)
-        return;
-    if (startPosition > endPosition)
-        qSwap(startPosition, endPosition);
+    int startPosition = cursor.selectionStart();
+    int endPosition = cursor.selectionEnd();
     QList<TextShape *> shapes;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
@@ -1496,7 +1518,7 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
     }
 
     // loop over all shapes that contain the text and update per shape.
-    QRectF repaintRect = textRect(startPosition, endPosition);
+    QRectF repaintRect = textRect(cursor);
     foreach (TextShape *ts, shapes) {
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
@@ -1504,34 +1526,22 @@ void TextTool::repaintSelection(int startPosition, int endPosition)
         canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
 }
-
-QRectF TextTool::textRect(int startPosition, int endPosition) const
+QRectF TextTool::caretRect(int position) const
 {
-    Q_ASSERT(startPosition >= 0);
-    Q_ASSERT(endPosition >= 0);
-    if (startPosition > endPosition)
-        qSwap(startPosition, endPosition);
-    QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
+    QTextBlock block = m_textShapeData->document()->findBlock(position);
     if (!block.isValid())
         return QRectF();
-    QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
+    QTextLine line1 = block.layout()->lineForTextPosition(position - block.position());
     if (!line1.isValid())
         return QRectF();
-    qreal startX = line1.cursorToX(startPosition - block.position());
-    if (startPosition == endPosition)
-        return QRectF(startX, line1.y(), 1, line1.height());
+    qreal startX = line1.cursorToX(position - block.position());
+    return QRectF(startX, line1.y(), 1, line1.height());
+}
 
-    QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
-    if (!block2.isValid())
-        return QRectF();
-    QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
-    if (! line2.isValid())
-        return QRectF();
-    qreal endX = line2.cursorToX(endPosition - block2.position());
-
-    if (line1.textStart() + block.position() == line2.textStart() + block2.position())
-        return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
-    return QRectF(-5E6, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
+QRectF TextTool::textRect(QTextCursor &cursor) const
+{
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    return lay->selectionBoundingBox(cursor);
 }
 
 KoToolSelection* TextTool::selection()
@@ -1927,7 +1937,7 @@ void TextTool::selectAll()
     QTextBlock lastBlock = m_textShapeData->document()->end().previous();
     textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
-    repaintSelection(0, textEditor->anchor());
+    repaintSelection();
     if (selectionLength != qAbs(textEditor->position() - textEditor->anchor())) // it actually changed
         emit selectionChanged(true);
 }

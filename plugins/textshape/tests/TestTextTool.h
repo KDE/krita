@@ -29,7 +29,7 @@ class TestTextTool : public QObject
     Q_OBJECT
 
 private slots:
-    void testTextRect();
+    void testCaretRect();
 };
 
 #endif

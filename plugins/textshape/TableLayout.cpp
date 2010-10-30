@@ -39,15 +39,14 @@
 
 #include <kdebug.h>
 
-TableLayout::TableLayout(QTextTable *table) : m_dirty(true)
+TableLayout::TableLayout(QTextTable *table)
 {
     setTable(table);
 }
 
 TableLayout::TableLayout() :
     m_table(0),
-    m_tableLayoutData(0),
-    m_dirty(true)
+    m_tableLayoutData(0)
 {
 }
 
@@ -79,8 +78,6 @@ void TableLayout::setTable(QTextTable *table)
     for (int row = 0; row < m_table->rows(); ++row) {
         m_tableLayoutData->m_contentHeights[row].resize(m_table->columns());
     }
-
-    m_dirty = true;
 }
 
 QTextTable *TableLayout::table() const
@@ -199,8 +196,6 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     m_tableLayoutData->m_tableRects.append(tableRect);
     m_tableLayoutData->m_rowPositions[fromRow] = tableRect.rect.top(); //Initialize the position of first row of tableRect
-
-    m_dirty = false;
 }
 
 void TableLayout::layoutRow(int row)
@@ -299,7 +294,8 @@ void TableLayout::layoutRow(int row)
         m_tableLayoutData->m_rowPositions[row+1] =
             m_tableLayoutData->m_rowPositions[row ] + // Position of this row.
             m_tableLayoutData->m_rowHeights[row];    // Height of this row.
-    }
+    } else
+        m_tableLayoutData->m_dirty = false; //we have reached the end and the table should now be fully laied out
 
     // Adjust table rect height for new height.
     m_tableLayoutData->m_tableRects.last().rect.setHeight(m_tableLayoutData->m_rowPositions[row]
@@ -307,7 +303,7 @@ void TableLayout::layoutRow(int row)
         - m_tableLayoutData->m_rowPositions[m_tableLayoutData->m_tableRects.last().fromRow]);//FIXME review when breaking inside a row
 }
 
-void TableLayout::drawBackground(QPainter *painter) const
+void TableLayout::drawBackground(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) const
 {
     if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
@@ -334,6 +330,25 @@ void TableLayout::drawBackground(QPainter *painter) const
 
                 KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
                 cellStyle.paintBackground(*painter, cellBoundingRect(tableCell));
+
+                // possibly draw the selection of the entire cell
+                foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+                    if (selection.cursor.hasComplexSelection()) {
+                        int selectionRow;
+                        int selectionColumn;
+                        int selectionRowSpan;
+                        int selectionColumnSpan;
+                        selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                        if (row >= selectionRow && column>=selectionColumn
+                            && row < selectionRow + selectionRowSpan
+                            && column < selectionColumn + selectionColumnSpan) {
+                            painter->fillRect(cellBoundingRect(tableCell), selection.format.background());
+                        }
+                    } else if (selection.cursor.selectionStart()  < m_table->firstPosition()
+                        && selection.cursor.selectionEnd() > m_table->lastPosition()) {
+                        painter->fillRect(cellBoundingRect(tableCell), selection.format.background());
+                    }
+                }
             }
         }
     }
@@ -555,7 +570,7 @@ qreal TableLayout::yAfterTable() const
 
 bool TableLayout::isDirty() const
 {
-    return m_dirty;
+    return isValid() && m_tableLayoutData->m_dirty;
 }
 
 bool TableLayout::isValid() const

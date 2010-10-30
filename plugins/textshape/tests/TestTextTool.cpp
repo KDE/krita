@@ -24,7 +24,7 @@
 
 #include <tests/MockShapes.h>
 
-void TestTextTool::testTextRect()
+void TestTextTool::testCaretRect()
 {
     TextTool tool(new MockCanvas());
 
@@ -38,15 +38,15 @@ void TestTextTool::testTextRect()
     QTextCursor cursor(qobject_cast<KoTextShapeData*>(shape1->userData())->document());
     cursor.insertText("foo\n");
 
-    QCOMPARE(tool.textRect(0,0), QRectF()); // invalid
-    QCOMPARE(tool.textRect(14,14), QRectF()); // invalid
+    QCOMPARE(tool.caretRect(0), QRectF()); // invalid
+    QCOMPARE(tool.caretRect(14), QRectF()); // invalid
 
     shape1->layout->layout();
 
-    QCOMPARE(tool.textRect(0, 0).topLeft(), QPointF());
+    QCOMPARE(tool.caretRect(0).topLeft(), QPointF());
     // second line should be lower.
     // bug 213238
-    QVERIFY(tool.textRect(4, 4).topLeft().y() > 0);
+    QVERIFY(tool.caretRect(4).topLeft().y() > 0);
 }
 
 QTEST_KDEMAIN(TestTextTool, GUI)

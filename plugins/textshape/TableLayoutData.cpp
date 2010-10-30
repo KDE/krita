@@ -20,6 +20,7 @@
 #include "TableLayoutData.h"
 
 TableLayoutData::TableLayoutData()
+  : m_dirty(true)
 {
 }
 

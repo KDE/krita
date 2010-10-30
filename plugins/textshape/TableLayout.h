@@ -193,7 +193,7 @@ public:
      *
      * @param painter a pointer to the QPainter to draw the table with.
      */
-    void drawBackground(QPainter *painter) const;
+    void drawBackground(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) const;
 
     /**
      * Draw the table borders using the given QPainter.
@@ -310,8 +310,6 @@ private:
     TableLayoutData *m_tableLayoutData; /**< The current table layout data. */
 
     QMap<QTextTable *, TableLayoutData *> m_tableLayoutDataMap;  /**< The map of table layout data objects. */
-
-    bool m_dirty;        /**< Table layout is dirty. */
 };
 
 #endif // TABLELAYOUT_H

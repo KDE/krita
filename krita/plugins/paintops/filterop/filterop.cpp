@@ -24,6 +24,8 @@
 #include <kis_debug.h>
 #include <kpluginfactory.h>
 
+#include <KoCompositeOp.h>
+
 #include <kis_paintop_registry.h>
 #include "kis_simple_paintop_factory.h"
 #include "kis_filterop.h"
@@ -37,10 +39,12 @@ FilterOp::FilterOp(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     //setComponentData(FilterOpFactory::componentData());
+    QStringList whiteList;
+    whiteList << COMPOSITE_COPY;
 
     // This is not a gui plugin; only load it when the doc is created.
     KisPaintOpRegistry *r = KisPaintOpRegistry::instance();
-    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), KisPaintOpFactory::categoryStable(), "krita-filterop.png"));
+    r->add(new KisSimplePaintOpFactory<KisFilterOp, KisFilterOpSettings, KisFilterOpSettingsWidget>("filter", i18n("Filter Brush"), KisPaintOpFactory::categoryStable(), "krita-filterop.png", QString(), whiteList));
 
 }
 

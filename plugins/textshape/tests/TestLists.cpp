@@ -31,27 +31,28 @@ void TestDocumentLayout::testBasicList()
     style.applyStyle(block); // make this a listStyle
 
     m_layout->layout();
+    QTextLayout *blockLayout = m_block.layout();
 
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     block = m_doc->begin().next();
     QVERIFY(block.isValid());
-    m_blockLayout = block.layout(); // parag 2
+    blockLayout = block.layout(); // parag 2
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
     QVERIFY(data);
     qreal counterSpacing = data->counterSpacing();
     QVERIFY(counterSpacing > 0.);
     // 12 is hardcoded to be the width of a discitem (taken from the default font):
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
     block = block.next();
     QVERIFY(block.isValid());
-    m_blockLayout = block.layout(); // parag 3
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
-    QVERIFY(m_blockLayout->lineCount() > 1);
-    QCOMPARE(m_blockLayout->lineAt(1).x(), 12.0 + counterSpacing); // make sure not only the first line is indented
+    blockLayout = block.layout(); // parag 3
+    QCOMPARE(blockLayout->lineAt(0).x(), 12.0 + counterSpacing);
+    QVERIFY(blockLayout->lineCount() > 1);
+    QCOMPARE(blockLayout->lineAt(1).x(), 12.0 + counterSpacing); // make sure not only the first line is indented
     block = block.next();
     QVERIFY(block.isValid());
-    m_blockLayout = block.layout(); // parag 4
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    blockLayout = block.layout(); // parag 4
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
 }
 
 void TestDocumentLayout::testNumberedList()
@@ -86,9 +87,10 @@ void TestDocumentLayout::testNumberedList()
         block = block.next();
     }
     m_layout->layout();
+    QTextLayout *blockLayout = m_block.layout();
 
 
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     QTextBlock blok = m_doc->begin().next();
     qreal indent = blok.layout()->lineAt(0).x();
     QVERIFY(indent > 0.0);
@@ -108,8 +110,9 @@ void TestDocumentLayout::testNumberedList()
         block = block.next();
     }
     m_layout->layout();
+    blockLayout = m_block.layout();
 
-    QCOMPARE(m_blockLayout->lineAt(0).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     blok = m_doc->begin().next();
     qreal indent2 = blok.layout()->lineAt(0).x();
     QVERIFY(indent2 > indent); // since it takes an extra digit

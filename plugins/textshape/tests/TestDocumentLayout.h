@@ -107,7 +107,7 @@ private:
     MockTextShape *m_shape1;
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
-    QTextLayout *m_blockLayout;
+    QTextBlock m_block;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
     Layout *m_textLayout;

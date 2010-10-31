@@ -265,10 +265,9 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
 
     int oldFootnoteDocLength = -1;
     const qreal footnoteHeight = findFootnote(line, &oldFootnoteDocLength);
-
     if (!m_newShape
-            // In case the text shape automatically resizes itself to fit all contents, every line will fit,
-            // so just lay them out (i.e. do not return true)
+            // In case the text shape automatically resizes itself to fit all contents,
+            // every line will fit, so don't bother
             && m_parent->resizeMethod() == KoTextDocument::NoResize
             // line does not fit.
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
@@ -290,14 +289,8 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             m_data->setEndPosition(m_block.position() - 1);
             m_block.layout()->endLayout();
             m_block.layout()->beginLayout();
-            line = m_block.layout()->createLine(); //TODO should probably not create this line
             entireParagraphMoved = true;
         } else {
-//FIXME sebsauer 2010-10-18; this leads to crashes cause the clearLayout() will also invalidate m_block and other
-//state-variables what will then lead to a crash if they are accessed later (what they are in various places). See
-//here for example the document attached to BKO bug #248343 . So, this code introduced in r1178051 to fix layout
-//problems needs to be reworked to proper handle the state-variables.
-#if 0
             // unfortunately we can't undo a single line, so we undo entire paragraph
             // and redo all previous lines
             QList<LineKeeper> lineKeeps;
@@ -320,21 +313,21 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             if(lineKeeps.isEmpty()) {
                 entireParagraphMoved = true;
             }
-#endif
         }
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());
+        int textPosOfNextLine = m_data->position();
         m_data->wipe();
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
         if (m_data)
-            m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart()));
+            m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)
             m_endOfDemoText = false;
-        return true;
+        return false; // add didn't succeed
     }
 
     // add linespacing
@@ -404,7 +397,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
     repaintRect.setWidth(shape->size().width()); // where lines were before layout.
     shape->update(repaintRect);
 
-    return false;
+    return true; // line successfully added
 }
 
 bool Layout::nextParag()

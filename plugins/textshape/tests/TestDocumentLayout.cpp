@@ -88,7 +88,7 @@ void TestDocumentLayout::testLineBreaking()
 void TestDocumentLayout::testMultiFrameLineBreaking()
 {
     initForNewTest(m_loremIpsum);
-    m_shape1->setSize(QSizeF(200, 48)); // fits 3 lines.
+    m_shape1->setSize(QSizeF(200, 47)); // fits 3 lines.
     KoShape *shape2 = new MockTextShape();
     shape2->setSize(QSizeF(120, 1000));
     m_layout->addShape(shape2);

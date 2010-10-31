@@ -79,7 +79,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager();
 
     /// Returns the bounding rectangle of block.
-    virtual QRectF blockBoundingRect(const QTextBlock & block) const;
+    QRectF blockBoundingRect(const QTextBlock & block) const;
     /**
      * Returns the total size of the document. This is useful to display
      * widgets since they can use to information to update their scroll bars
@@ -94,6 +94,9 @@ public:
      * the vertical dimensions are never touched or relied upon
      */
     QRectF expandVisibleRect(const QRectF &rect) const;
+
+    /// Calc a bounding box rect of the selection
+    virtual QRectF selectionBoundingBox(QTextCursor &cursor);
 
     /// Draws the layout on the given painter with the given context.
     virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
@@ -169,6 +172,8 @@ public:
         /// when a line is added, update internal vars. Inner shapes possibly intersect and split line into more parts. Set processingLine true, when current line is part of line and not last part of line. So baseline will be same for all parts of line. Return true if line does not fit in shape.
         /// expand a bounding rect by excessive indents (indents outside the shape)
         virtual QRectF expandVisibleRect(const QRectF &rect) const = 0;
+        /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
+        /// in shape and returns false. In that case you should try over with a new createLine
         virtual bool addLine(QTextLine &line, bool processingLine = false) = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
@@ -176,6 +181,8 @@ public:
         virtual bool previousParag() = 0;
         /// Return the y position of the offset for the current shape (See KoTextShapeData::documentOffset() )
         virtual qreal documentOffsetInShape() = 0;
+        /// Calc a bounding box rect of the selection
+        virtual QRectF selectionBoundingBox(QTextCursor &cursor) = 0;
         /**
          * Paint the document.
          * Paint the whole document, at least within the cliprect as set on the painter.

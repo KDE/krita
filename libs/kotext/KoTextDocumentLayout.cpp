@@ -70,7 +70,7 @@ public:
         return rect;
     }
     bool addLine(QTextLine &, bool) {
-        return false;
+        return true;
     }
     bool nextParag() {
         return false;
@@ -81,6 +81,11 @@ public:
     qreal documentOffsetInShape() {
         return 0;
     }
+
+    QRectF selectionBoundingBox(QTextCursor &cursor) {
+        return QRectF();
+    }
+
     void draw(QPainter *, const KoTextDocumentLayout::PaintContext &) {}
 
     bool setFollowupShape(KoShape *) {
@@ -255,6 +260,12 @@ QRectF KoTextDocumentLayout::expandVisibleRect(const QRectF &rect) const
 {
     return m_state->expandVisibleRect(rect);
 }
+
+QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor)
+{
+    return m_state->selectionBoundingBox(cursor);
+}
+
 
 void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
 {
@@ -506,14 +517,10 @@ void KoTextDocumentLayout::layout()
         else
             line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
-        while (m_state->addLine(line)) {
-            if (m_state->shape == 0) { // shape is full!
-                line.setPosition(QPointF(0, m_state->y() + 20));
-                emit finishedLayout();
-                return; // done!
-            }
-            line.setLineWidth(m_state->width());
-            line.setPosition(QPointF(m_state->x(), m_state->y()));
+        m_state->addLine(line);
+        if (m_state->shape == 0) { // shape is full!
+            emit finishedLayout();
+            return; // done!
         }
     }
 }

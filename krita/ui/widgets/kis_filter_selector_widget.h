@@ -21,14 +21,21 @@
 #define _KIS_FILTER_SELECTOR_WIDGET_H_
 
 #include <QWidget>
+#include <QTreeView>
+#include <QDebug>
+#include <QResizeEvent>
+#include <QSize>
 
 #include <kis_types.h>
 
 class QModelIndex;
 class KisFilterConfiguration;
+class QAbstractItemModel;
+class QHideEvent;
+class QShowEvent;
 
 /**
- *
+ * XXX
  */
 class KisFilterSelectorWidget : public QWidget
 {
@@ -51,6 +58,48 @@ signals:
 private:
     struct Private;
     Private* const d;
+};
+
+
+class KisFilterTree: public QTreeView {
+
+public:
+
+    KisFilterTree(QWidget *parent) : QTreeView(parent) {}
+
+    void setFilterModel(QAbstractItemModel * model)
+    {
+        m_model = model;
+    }
+
+protected:
+
+    void resizeEvent(QResizeEvent *event)
+    {
+        if (event->size().width() > 10) {
+            setModel(m_model);
+        }
+        else {
+            setModel(0);
+        }
+    }
+
+    void showEvent(QShowEvent * event)
+    {
+        setModel(m_model);
+        QTreeView::showEvent(event);
+    }
+
+    void hideEvent(QHideEvent * event)
+    {
+        setModel(0);
+        QTreeView::hideEvent(event);
+    }
+
+private:
+
+    QAbstractItemModel *m_model;
+
 };
 
 #endif

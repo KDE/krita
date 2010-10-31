@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>333</width>
-    <height>128</height>
+    <width>390</width>
+    <height>137</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,7 +29,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="filtersSelector">
+        <widget class="KisFilterTree" name="filtersSelector">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
@@ -130,6 +130,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisFilterTree</class>
+   <extends>QTreeView</extends>
+   <header>kis_filter_selector_widget.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

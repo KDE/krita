@@ -94,7 +94,7 @@ void KisFilterSelectorWidget::setPaintDevice(KisPaintDeviceSP _paintDevice)
     d->paintDevice = _paintDevice;
     d->thumb = d->paintDevice->createThumbnailDevice(100, 100);
     d->filtersModel = new KisFiltersModel(d->thumb);
-    d->uiFilterSelector.filtersSelector->setModel(d->filtersModel);
+    d->uiFilterSelector.filtersSelector->setFilterModel(d->filtersModel);
     d->uiFilterSelector.filtersSelector->header()->setVisible(false);
 }
 

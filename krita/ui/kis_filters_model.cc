@@ -163,12 +163,10 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
         if (role == Qt::DecorationRole) {
-#if 1
             Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
             Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
             if (filter) {
                 if (!d->previewCache.contains(filter->filter)) {
-//                     KisPaintDeviceSP target = new KisPaintDevice( d->thumb->colorSpace() );
                     KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
 
                     QRect rc = target->exactBounds();
@@ -183,11 +181,8 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
                 }
                 return d->previewCache[ filter->filter ];
             } else {
-#endif
                 return QVariant();
-#if 1
             }
-#endif
         } else if (role == Qt::DisplayRole) {
             Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
             return QVariant(node->displayRole());

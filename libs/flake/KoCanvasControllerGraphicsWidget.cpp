@@ -76,6 +76,7 @@ void KoCanvasControllerGraphicsWidget::scrollContentsBy(int dx, int dy)
 
 QSize KoCanvasControllerGraphicsWidget::viewportSize() const
 {
+    return QSize();
 }
 
 void KoCanvasControllerGraphicsWidget::setDrawShadow(bool drawShadow)
@@ -88,22 +89,27 @@ void KoCanvasControllerGraphicsWidget::setCanvas(KoCanvasBase *canvas)
 
 KoCanvasBase *KoCanvasControllerGraphicsWidget::canvas() const
 {
+    return 0;
 }
 
 int KoCanvasControllerGraphicsWidget::visibleHeight() const
 {
+    return 0;
 }
 
 int KoCanvasControllerGraphicsWidget::visibleWidth() const
 {
+    return 0;
 }
 
 int KoCanvasControllerGraphicsWidget::canvasOffsetX() const
 {
+    return 0;
 }
 
 int KoCanvasControllerGraphicsWidget::canvasOffsetY() const
 {
+    return 0;
 }
 
 void KoCanvasControllerGraphicsWidget::ensureVisible(const QRectF &rect, bool smooth)
@@ -140,6 +146,7 @@ void KoCanvasControllerGraphicsWidget::setPreferredCenter(const QPoint &viewPoin
 
 QPoint KoCanvasControllerGraphicsWidget::preferredCenter() const
 {
+    return QPoint();
 }
 
 void KoCanvasControllerGraphicsWidget::pan(const QPoint &distance)
@@ -152,6 +159,7 @@ void KoCanvasControllerGraphicsWidget::setMargin(int margin)
 
 QPoint KoCanvasControllerGraphicsWidget::scrollBarValue() const
 {
+    return QPoint();
 }
 
 void KoCanvasControllerGraphicsWidget::setScrollBarValue(const QPoint &value)
@@ -164,6 +172,7 @@ void KoCanvasControllerGraphicsWidget::updateDocumentSize(const QSize &sz, bool 
 
 QCursor KoCanvasControllerGraphicsWidget::setCursor(const QCursor &cursor)
 {
+    return QCursor();
 }
 
 void KoCanvasControllerGraphicsWidget::setZoomWithWheel(bool)

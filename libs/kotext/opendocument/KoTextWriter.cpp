@@ -91,8 +91,9 @@ public:
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
+    void saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
-    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0);
+    void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     int checkForBlockChange(const QTextBlock &block);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
@@ -584,12 +585,44 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
     writer->endElement(); // table:table-of-content
 }
 
-void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame)
+void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles)
+{
+    QTextList *textList;
+    textList = block.textList();
+
+    int headingLevel = 0, numberedParagraphLevel = 0;
+    QTextBlockFormat blockFormat = block.blockFormat();
+    headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+    numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
+
+    KoTextDocument textDocument(block.document());
+    KoList *list = textDocument.list(block);
+
+    do {
+        if (!headingLevel) {
+            if (numberedParagraphLevel) {
+                writer->startElement("text:numbered-paragraph", false);
+                writer->addAttribute("text:level", numberedParagraphLevel);
+                writer->addAttribute("text:style-name", listStyles.value(textList));
+                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
+                writer->endElement(); 
+            }
+        }
+        
+        block = block.next();
+        blockFormat = block.blockFormat();
+        headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+        numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
+        textList = block.textList();
+    } while (textDocument.list(block) == list);
+
+    return;
+}
+
+void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
     KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
-    QList<QTextList*> textLists; // Store the current lists being stored.
-    KoList *currentList = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
         QTextCursor cursor(block);
@@ -610,102 +643,16 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             block = block.next();
             continue;
         }
-        QTextBlockFormat blockFormat = block.blockFormat();
-        QTextList *textList = block.textList();
-        int headingLevel = 0, numberedParagraphLevel = 0;
-        if (textList) {
-            headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
-            numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
-        }
-        
-        if (textList && !headingLevel && !numberedParagraphLevel) {
-            if (!textLists.contains(textList)) {
-                KoList *list = textDocument.list(block);
-                if (currentList != list) {
-                    while (!textLists.isEmpty()) {
-                        textLists.removeLast();
-                        writer->endElement(); // </text:list>
-                        if (!textLists.isEmpty()) {
-                            writer->endElement(); // </text:list-element>
-                        }
-                    }
-                    currentList = list;
-                } else if (!textLists.isEmpty()) { // sublists should be written within a list-item
-                    writer->startElement("text:list-item", false);
-                }
-
-                writer->startElement("text:list", false);
-
-                writer->addAttribute("text:style-name", listStyles[textList]);
-                if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-                    writer->addAttribute("text:continue-numbering",
-                                         textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
-                textLists.append(textList);
-            } else if (textList != textLists.last()) {
-                while ((!textLists.isEmpty()) && (textList != textLists.last())) {
-                    textLists.removeLast();
-                    writer->endElement(); // </text:list>
-                    writer->endElement(); // </text:list-element>
-                }
-            }
-            const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)
-                                    || blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
-                writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
-
-            if (KoListStyle::isNumberingStyle(textList->format().style())) {
-                if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
-                    writer->startElement("text:number", false);
-                    writer->addTextSpan(blockData->counterText());
-                    writer->endElement();
-                }
-            }
-        } else {
-            // Close any remaining list...
-            while (!textLists.isEmpty()) {
-                textLists.removeLast();
-                writer->endElement(); // </text:list>
-                if (!textLists.isEmpty()) {
-                    writer->endElement(); // </text:list-element>
-                }
-            }
-
-            if (textList && numberedParagraphLevel) {
-                writer->startElement("text:numbered-paragraph", false);
-                writer->addAttribute("text:level", numberedParagraphLevel);
-                writer->addAttribute("text:style-name", listStyles.value(textList));
-            }
+        if (cursor.currentList() != currentList) {
+            saveList(block, listStyles);
+            block = cursor.currentList()->item(cursor.currentList()->count() - 1);
+            block = block.next();
+            continue;
         }
 
         saveParagraph(block, from, to);
-
-        if (!textLists.isEmpty() || numberedParagraphLevel) {
-            // we are generating a text:list-item. Look forward and generate unnumbered list items.
-            while (true) {
-                QTextBlock nextBlock = block.next();
-                if (!nextBlock.isValid() || !((to == -1) || (nextBlock.position() < to)))
-                    break;
-                if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
-                    break;
-                block = nextBlock;
-                saveParagraph(block, from, to);
-            }
-        }
-
-        // We must check if we need to close a previously-opened text:list node.
-        if ((block.textList() && !headingLevel) || numberedParagraphLevel)
-            writer->endElement();
-
         block = block.next();
     } // while
-
-    // Close any remaining lists
-    while (!textLists.isEmpty()) {
-        textLists.removeLast();
-        writer->endElement(); // </text:list>
-        if (!textLists.isEmpty()) {
-            writer->endElement(); // </text:list-element>
-        }
-    }
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

@@ -253,6 +253,16 @@ public:
     qreal cellContentY(const QTextTableCell &cell) const;
 
     /**
+     * Get the content X of a given cell.
+     *
+     * @param cell the cell.
+     * @return the x pos where content starts.
+     *
+     * \sa position(), setPosition()
+     */
+    qreal cellContentX(const QTextTableCell &cell) const;
+
+    /**
      * Get the bounding rectangle of a given row.
      *
      * @param row the row.

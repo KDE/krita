@@ -151,7 +151,7 @@ qreal Layout::x()
         result += m_dropCapsAffectedLineWidthAdjust;
     m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, result);
     if (m_inTable) {
-        result += m_tableLayout.cellContentRect(m_tableCell).x();
+        result += m_tableLayout.cellContentX(m_tableCell);
     }
     return result;
 }

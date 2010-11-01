@@ -466,11 +466,34 @@ qreal TableLayout::cellContentY(const QTextTableCell &cell) const
     Q_ASSERT(cell.isValid());
 
     /*
+     * Get the cell style and return the y pos adjusted for
+     * borders and paddings.
+     */
+    KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+    return m_tableLayoutData->m_rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
+}
+
+qreal TableLayout::cellContentX(const QTextTableCell &cell) const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(cell.isValid());
+
+    Q_ASSERT(isValid());
+    Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
+    TableRect tableRect = m_tableLayoutData->m_tableRects.last();
+    int i = m_tableLayoutData->m_tableRects.size()-1;
+    while (tableRect.fromRow > cell.row()) {
+        --i;
+        tableRect =  m_tableLayoutData->m_tableRects[i];
+    }
+    Q_ASSERT(cell.column() + cell.columnSpan() <=  tableRect.columnPositions.size());
+
+    /*
      * Get the cell style and return the bounding rect adjusted for
      * borders and paddings by calling KoTableCellStyle::contentRect().
      */
     KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
-    return m_tableLayoutData->m_rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
+    return tableRect.columnPositions[cell.column()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
 }
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const

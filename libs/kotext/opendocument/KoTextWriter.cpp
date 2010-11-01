@@ -598,12 +598,33 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
 
+    bool listStarted = false;
+    if (!headingLevel && !numberedParagraphLevel) {
+        listStarted = true;
+        writer->startElement("text:list", false);
+        writer->addAttribute("text:style-name", listStyles[textList]);
+        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
+            writer->addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+    }
+
     do {
         if (!headingLevel) {
             if (numberedParagraphLevel) {
                 writer->startElement("text:numbered-paragraph", false);
                 writer->addAttribute("text:level", numberedParagraphLevel);
                 writer->addAttribute("text:style-name", listStyles.value(textList));
+                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
+                writer->endElement(); 
+            } else {
+                const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
+                writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
+                if (KoListStyle::isNumberingStyle(textList->format().style())) {
+                    if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
+                        writer->startElement("text:number", false);
+                        writer->addTextSpan(blockData->counterText());
+                        writer->endElement();
+                    }
+                }
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
                 writer->endElement(); 
             }
@@ -616,6 +637,8 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
         textList = block.textList();
     } while (textDocument.list(block) == list);
 
+    if (listStarted)
+        writer->endElement();
     return;
 }
 

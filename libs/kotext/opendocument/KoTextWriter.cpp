@@ -626,6 +626,14 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
                     }
                 }
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
+                // we are generating a text:list-item. Look forward and generate unnumbered list items.
+                while (true) {
+                    QTextBlock nextBlock = block.next();
+                    if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+                        break;
+                    block = nextBlock;
+                    saveParagraph(block, block.position(), block.position() + block.length() - 1);
+                }
                 writer->endElement(); 
             }
         }
@@ -666,6 +674,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             block = block.next();
             continue;
         }
+
         if (cursor.currentList() != currentList) {
             saveList(block, listStyles);
             block = cursor.currentList()->item(cursor.currentList()->count() - 1);

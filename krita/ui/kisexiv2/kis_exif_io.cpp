@@ -480,15 +480,14 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
     Q_ASSERT(xmpSchema);
     for (Exiv2::ExifMetadata::const_iterator it = exifData.begin();
             it != exifData.end(); ++it) {
-        dbgFile << "Reading info for key" << it->key().c_str();
         if (it->key() == "Exif.Photo.StripOffsets"
                 || it->key() == "RowsPerStrip"
                 || it->key() == "StripByteCounts"
                 || it->key() == "JPEGInterchangeFormat"
-                || it->key() == "JPEGInterchangeFormatLength") {
+                || it->key() == "JPEGInterchangeFormatLength"
+                || it->tagName() == "0x0000" ) {
             dbgFile << it->key().c_str() << " is ignored";
-        }
-        if (it->key() == "Exif.Photo.MakerNote") {
+        } else if (it->key() == "Exif.Photo.MakerNote") {
             const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
             store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue(), false)));
         } else if (it->key() == "Exif.Image.DateTime") { // load as xmp:ModifyDate

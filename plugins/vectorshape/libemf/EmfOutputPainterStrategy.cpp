@@ -22,7 +22,7 @@
 
 #include <KDebug>
 
-#define DEBUG_PAINTER_TRANSFORM 0
+#define DEBUG_PAINTER_TRANSFORM 1
 
 namespace Libemf
 {
@@ -150,7 +150,7 @@ void OutputPainterStrategy::init( const Header *header )
     }
 
     m_outputTransform = m_painter->transform();
-    m_internalTransform = QTransform();
+    m_worldTransform = QTransform();
 
     // For calculations of window / viewport during the painting
     m_windowOrg = QPoint(0, 0);
@@ -248,12 +248,19 @@ void OutputPainterStrategy::saveDC()
     kDebug(31000);
 #endif
 
-    unsetWindowViewport();
+    // A little trick here: Save the worldTransform in the painter.
+    // If we didn't do this, we would have to create a separate stack
+    // for these.
+    //
+    // FIXME: We should collect all the parts of the DC that are not
+    //        stored in the painter and save them separately.
+    QTransform  savedTransform = m_painter->worldTransform();
+    m_painter->setWorldTransform(m_worldTransform);
 
     m_painter->save();
     ++m_painterSaves;
 
-    setWindowViewport();
+    m_painter->setWorldTransform(savedTransform);
 }
 
 void OutputPainterStrategy::restoreDC( const qint32 savedDC )
@@ -261,8 +268,6 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
 #if DEBUG_EMFPAINT
     kDebug(31000) << savedDC;
 #endif
-
-    unsetWindowViewport();
 
     // Note that savedDC is always negative
     for (int i = 0; i < -savedDC; ++i) {
@@ -276,7 +281,10 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
         }
     }
 
-    setWindowViewport();
+    // We used a trick in saveDC() and stored the worldTransform in
+    // the painter.  Now restore the full transformation.
+    m_worldTransform = m_painter->worldTransform();
+    recalculateWorldTransform();
 }
 
 void OutputPainterStrategy::setMetaRgn()
@@ -286,30 +294,36 @@ void OutputPainterStrategy::setMetaRgn()
 
 
 // ----------------------------------------------------------------
-//                     Window and Viewport
+//                 World Transform, Window and Viewport
 
 
-// It would have been nice to be able to use the setWindow() and
-// setViewport() methods of QPainter directly, but these will place
-// the viewport in relation to the paintdevice and not the shape.  So
-// instead, we have to redo the calculations ourselves here.
+// General note about coordinate spaces and transforms:
+//
+// There are several coordinate spaces in use when drawing an EMF file:
+//  1. The object space, in which the objects' coordinates are expressed inside the EMF.
+//     In general there are several of these.
+//  2. The page space, which is where they end up being painted in the EMF picture.
+//     The union of these form the bounding box of the EMF.
+//  3. (possibly) the output space, where the EMF picture itself is placed
+//     and/or scaled, rotated, etc
+//
+// The transform between spaces 1. and 2. is called the World Transform.
+// The world transform can be changed either through calls to change
+// the window or viewport or through calls to setWorldTransform() or
+// modifyWorldTransform().
+//
+// The transform between spaces 2. and 3. is the transform that the QPainter
+// already contains when it is given to us.  We need to save this and reapply
+// it after the world transform has changed. We call this transform the Output
+// Transform in lack of a better word. (Some sources call it the Device Transform.)
+//
 
-
-// Unset Window and Viewport.  This has to be called before we can
-// reset the window or viewport origin or extension.
-void OutputPainterStrategy::unsetWindowViewport()
-{
-    if (!m_windowViewportIsSet)
-        return;
-
-    m_painter->translate(-m_viewportOrg);
-    m_painter->scale(qreal(1.0) / m_windowViewportScaleX, qreal(1.0) / m_windowViewportScaleY);
-    m_painter->translate(m_windowOrg);
-}
 
 // Set Window and Viewport
-void OutputPainterStrategy::setWindowViewport()
+void OutputPainterStrategy::recalculateWorldTransform()
 {
+    m_worldTransform = QTransform();
+
     // If neither the window nor viewport extension is set, then there
     // is no way to perform the calculation.  Just give up.
     if (!m_windowExtIsSet && m_viewportExtIsSet)
@@ -325,11 +339,13 @@ void OutputPainterStrategy::setWindowViewport()
         m_windowViewportScaleY = qreal(1.0);
     }
 
-    m_painter->setTransform(QTransform());
-    m_painter->translate(-m_windowOrg);
-    m_painter->scale(m_windowViewportScaleX, m_windowViewportScaleY);
-    m_painter->translate(m_viewportOrg);
+    // Calculate the world transform...
+    m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
+    m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
+    m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
 
+    // ...and apply it to the painter
+    m_painter->setTransform(m_worldTransform);
     m_windowViewportIsSet = true;
 
     // Apply the output transform.
@@ -345,11 +361,11 @@ void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
-    unsetWindowViewport();
+    //unsetWindowViewport();
 
     m_windowOrg = origin;
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
 
 void OutputPainterStrategy::setWindowExtEx( const QSize &size )
@@ -358,12 +374,12 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
     kDebug(31000) << size;
 #endif
 
-    unsetWindowViewport();
+    //unsetWindowViewport();
 
     m_windowExt = size;
     m_windowExtIsSet = true;
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
 
 void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
@@ -372,11 +388,11 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
-    unsetWindowViewport();
+    //unsetWindowViewport();
 
     m_viewportOrg = origin;
 
-    setWindowViewport();
+    recalculateWorldTransform();
 }
 
 void OutputPainterStrategy::setViewportExtEx( const QSize &size )
@@ -385,22 +401,53 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
     kDebug(31000) << size;
 #endif
 
-    unsetWindowViewport();
-
     m_viewportExt = size;
     m_viewportExtIsSet = true;
 
-#if 0
-    m_painter->setViewport(QRect(m_viewportOrg, m_viewportExt));
+    recalculateWorldTransform();
+}
 
-    // If the window size is not set, then set it using the viewport size.
-    // This will most likely be changed by a call to setWindowExt soon anyway.
-    if (!m_windowExtIsSet) {
-        m_painter->setWindow(QRect(m_windowOrg, m_viewportExt));
-    }
-#else
-    setWindowViewport();
+
+
+void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11, float M12,
+                                                  float M21, float M22, float Dx, float Dy )
+{
+#if DEBUG_EMFPAINT
+    if (mode == MWT_IDENTITY)
+        kDebug(31000) << "Identity matrix";
+    else
+        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
 #endif
+
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+
+    if ( mode == MWT_IDENTITY ) {
+        m_worldTransform = QTransform();
+    } else if ( mode == MWT_LEFTMULTIPLY ) {
+        m_worldTransform = matrix * m_worldTransform;
+    } else if ( mode == MWT_RIGHTMULTIPLY ) {
+        m_worldTransform = m_worldTransform * matrix;
+    } else if ( mode == MWT_SET ) {
+        m_worldTransform = matrix;
+    } else {
+	qWarning() << "Unimplemented transform mode" << mode;
+    }
+
+    recalculateWorldTransform();
+}
+
+void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
+                                               float M22, float Dx, float Dy )
+{
+#if DEBUG_EMFPAINT
+    kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
+#endif
+
+    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
+
+    m_worldTransform = matrix;
+
+    recalculateWorldTransform();
 }
 
 
@@ -828,55 +875,6 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
     m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
 }
 
-void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11, float M12,
-                                                  float M21, float M22, float Dx, float Dy )
-{
-#if DEBUG_EMFPAINT
-    if (mode == MWT_IDENTITY)
-        kDebug(31000) << "Identity matrix";
-    else
-        kDebug(31000) << mode << M11 << M12 << M21 << M22 << Dx << Dy;
-#endif
-
-    return;
-
-    unsetWindowViewport();
-
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
-
-    if ( mode == MWT_IDENTITY ) {
-        m_painter->setWorldTransform( QTransform() );
-    } else if ( mode == MWT_LEFTMULTIPLY ) {
-	m_painter->setWorldTransform( matrix, true );
-    } else if ( mode == MWT_RIGHTMULTIPLY ) {
-        QTransform currentMatrix = m_painter->worldTransform();
-        QTransform newMatrix = currentMatrix * matrix;
-        m_painter->setWorldTransform( newMatrix );
-    } else if ( mode == MWT_SET ) {
-	m_painter->setWorldTransform( matrix );
-    } else {
-	qWarning() << "Unimplemented transform mode" << mode;
-    }
-
-    setWindowViewport();
-}
-
-void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
-                                               float M22, float Dx, float Dy )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << M11 << M12 << M21 << M22 << Dx << Dy;
-#endif
-
-    unsetWindowViewport();
-
-    QTransform matrix( M11, M12, M21, M22, Dx, Dy);
-
-    m_painter->setWorldTransform( matrix );
-
-    setWindowViewport();
-}
-
 void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
 {
 #if DEBUG_EMFPAINT
@@ -953,6 +951,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
                   << "ascent = " << fm.ascent() << " height = " << fm.height()
                   << "leading = " << fm.leading();
+    kDebug(31000) << "actual point = " << x << y;
 #endif
 
     // Use the special pen defined by mTextPen for text.
@@ -1279,12 +1278,10 @@ void OutputPainterStrategy::printPainterTransform(const char *leadText)
 {
     QTransform  transform;
 
-    unsetWindowViewport();
-    transform = m_painter->transform();
-    setWindowViewport();
+    recalculateWorldTransform();
 
-    kDebug(31000) << leadText << "excl window: " << transform
-                  << "incl window: " << m_painter->transform();
+    kDebug(31000) << leadText << "world transform " << m_worldTransform
+                  << "incl output transform: " << m_painter->transform();
 }
 
 

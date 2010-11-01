@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -193,6 +194,13 @@ public:
      * The default implementation returns 0, which silently cancels printing.
      */
     virtual KoPrintJob * createPrintJob();
+
+    /**
+     * In order to export the document represented by this view a new print job should
+     * be constructed that is capable of doing the printing.
+     * The default implementation call createPrintJob.
+     */
+    virtual KoPrintJob * createPdfPrintJob();
 
     /**
      * @return the KoMainWindow in which this view is currently.

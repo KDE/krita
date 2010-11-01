@@ -120,7 +120,6 @@ void KisToolDyna::initPaint(KoPointerEvent *e)
         return;
     }
 
-    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
     if (currentPaintOpPreset()->settings()->isAirbrushing()) {
         m_timer->start(m_rate);
     }

@@ -30,6 +30,8 @@
 class KoStore;
 class KisShapeSelectionCanvas;
 class KisShapeSelectionModel;
+class KisImageViewConverter;
+class QUndoCommand;
 
 /**
  * The marker class.
@@ -74,7 +76,9 @@ public:
     
     void moveX(qint32 x);
     void moveY(qint32 y);
-
+    
+    QUndoCommand* transform(double  xscale, double  yscale, double  xshear, double  yshear, double angle, qint32  translatex, qint32  translatey);
+        
 
 protected:
 
@@ -87,6 +91,7 @@ private:
     KisImageWSP m_image;
     QPainterPath m_outline;
     bool m_dirty;
+    KisImageViewConverter* m_converter;
     KisShapeSelectionCanvas* m_canvas;
     KisShapeSelectionModel* m_model;
 

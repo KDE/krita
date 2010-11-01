@@ -2,6 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 2000-2006 David Faure <faure@kde.org>
    Copyright (C) 2007, 2009 Thomas zander <zander@kde.org>
+   Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1341,8 +1342,7 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
         }
         pdfFileName = url.toLocalFile();
     }
-
-    KoPrintJob *printJob = rootView()->createPrintJob();
+    KoPrintJob *printJob = rootView()->createPdfPrintJob();
     if (printJob == 0)
         return 0;
     d->applyDefaultSettings(printJob->printer());

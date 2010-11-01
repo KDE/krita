@@ -44,7 +44,7 @@
 
 #include "kis_brush_registry.h"
 
-#define MAXIMUM_SCALE 2
+#define MAXIMUM_SCALE 4
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {
@@ -614,6 +614,9 @@ KisQImagemaskSP KisBrush::createMask(double scale, double subPixelX, double subP
         KisQImagemaskSP scaledAboveMask = scaleMask(aboveBrush, scale, subPixelX, subPixelY);
         KisQImagemaskSP scaledBelowMask = scaleMask(belowBrush, scale, subPixelX, subPixelY);
 
+        Q_ASSERT( scale < aboveBrush->scale());
+        Q_ASSERT( scale > belowBrush->scale());
+        
         double t = (scale - belowBrush->scale()) / (aboveBrush->scale() - belowBrush->scale());
 
         outputMask = KisQImagemask::interpolate(scaledBelowMask, scaledAboveMask, t);

@@ -122,6 +122,7 @@ QString KoCTLCompositeOp::idForFile(const std::string& _file)
         return COMPOSITE_DARKEN;
     }
     qFatal("No id for: %s", _file.c_str());
+    return QString::null; // Make gcc 4.5.1 happy
 }
 
 QString KoCTLCompositeOp::descriptionForFile(const std::string& _file)
@@ -134,6 +135,7 @@ QString KoCTLCompositeOp::descriptionForFile(const std::string& _file)
         return i18n("Alpha darken");
     }
     qFatal("No description for: %s", _file.c_str());
+    return QString::null; // Make gcc 4.5.1 happy
 }
 
 QString KoCTLCompositeOp::categoryForFile(const std::string& _file)
@@ -144,4 +146,5 @@ QString KoCTLCompositeOp::categoryForFile(const std::string& _file)
         return KoCompositeOp::categoryMix();
     }
     qFatal("No category for: %s", _file.c_str());
+    return QString::null; // Make gcc 4.5.1 happy
 }

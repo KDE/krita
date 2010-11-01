@@ -587,8 +587,8 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
 
 void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles)
 {
-    QTextList *textList;
-    textList = block.textList();
+    QTextList *textList, *topLevelTextList;
+    topLevelTextList = textList = block.textList();
 
     int headingLevel = 0, numberedParagraphLevel = 0;
     QTextBlockFormat blockFormat = block.blockFormat();
@@ -597,6 +597,7 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
 
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
+    int topListLevel = KoList::level(block);
 
     bool listStarted = false;
     if (!headingLevel && !numberedParagraphLevel) {
@@ -625,14 +626,21 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
                         writer->endElement();
                     }
                 }
-                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
-                // we are generating a text:list-item. Look forward and generate unnumbered list items.
-                while (true) {
-                    QTextBlock nextBlock = block.next();
-                    if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
-                        break;
-                    block = nextBlock;
-                    saveParagraph(block, block.position(), block.position() + block.length() - 1);
+                
+                if (textList == topLevelTextList) {
+                    writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
+                    // we are generating a text:list-item. Look forward and generate unnumbered list items.
+                    while (true) {
+                        QTextBlock nextBlock = block.next();
+                        if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+                            break;
+                        block = nextBlock;
+                        saveParagraph(block, block.position(), block.position() + block.length() - 1);
+                    }
+                } else {
+                    //This is a sub-list
+                    saveList(block, listStyles);
+                    block = textList->item(textList->count() - 1);
                 }
                 writer->endElement(); 
             }
@@ -643,7 +651,7 @@ void KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QStri
         headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
         numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
         textList = block.textList();
-    } while (textDocument.list(block) == list);
+    } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
 
     if (listStarted)
         writer->endElement();

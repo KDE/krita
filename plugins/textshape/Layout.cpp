@@ -316,7 +316,6 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
         }
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());
-        int textPosOfNextLine = m_data->position();
         m_data->wipe();
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();

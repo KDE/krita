@@ -25,15 +25,15 @@
 class KoFrameShape::Private
 {
 public:
-    Private(const char * ns, const char * tag)
+    Private(const QString &ns, const QString &tag)
             : ns(ns)
             , tag(tag) {}
 
-    const char * ns;
-    const char * tag;
+    const QString ns;
+    const QString tag;
 };
 
-KoFrameShape::KoFrameShape(const char * ns, const char * tag)
+KoFrameShape::KoFrameShape(const QString &ns, const QString &tag)
         : d(new Private(ns, tag))
 {
 }

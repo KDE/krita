@@ -139,7 +139,7 @@ CellRegion::CellRegion( TableSource *source, const QString& regions )
       QRegExp regEx;
 
       QStringList regionList = searchStr.split( ";" );
-      Q_FOREACH( QString region, regionList ) {
+      Q_FOREACH( const QString &region, regionList ) {
           const bool isPoint = !region.contains( ':' );
           if ( isPoint )
               regEx = QRegExp( "(|.*\\.)([A-Z]+)([0-9]+)" );
@@ -189,7 +189,7 @@ CellRegion::CellRegion( Table *table, const QVector<QRect> &rects )
     : d( new Private() )
 {
     d->table = table;
-    foreach( QRect rect, rects )
+    foreach( const QRect& rect, rects )
         add( rect );
 }
 

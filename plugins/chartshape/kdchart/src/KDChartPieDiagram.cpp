@@ -628,9 +628,12 @@ void PieDiagram::draw3DEffect( QPainter* painter,
 
     // No need to save the brush, will be changed on return from this
     // method anyway.
-    if( threeDAttrs.useShadowColors() ){
-        const QPen pen = this->pen( model()->index( 0, pie, rootIndex() ) );
-        painter->setBrush( QBrush( pen.color() ) );
+    const QBrush brush = this->brush( model()->index( 0, pie, rootIndex() ) );
+    if( threeDAttrs.useShadowColors() ){        
+        painter->setBrush( QBrush( brush.color().darker() ) );
+    }
+    else{
+        painter->setBrush( brush );
     }
     //painter->setBrush( QBrush( threeDAttrs.dataShadow1Color( pie ),
     //            params()->shadowPattern() ) );

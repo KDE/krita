@@ -215,8 +215,8 @@ void KoReportItemChart::populateData()
         if (!src.isEmpty()) {
             KoReportData *curs = m_reportData->data(src);
             if (curs) {
-                QStringList keys = m_links.keys();
-                foreach(QString field, keys) {
+                const QStringList keys = m_links.keys();
+                foreach(const QString& field, keys) {
                     kDebug() << "Adding Expression:" << field << m_links[field];
                     curs->addExpression(field, m_links[field], '=');
                 }

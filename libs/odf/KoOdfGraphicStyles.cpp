@@ -261,7 +261,7 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyle(const KoStyleStack &styleStack, 
     return loadOdfGradientStyleByName(stylesReader, styleName, size);
 }
 
-qreal percent(const KoXmlElement &element, const char *ns, const char *type, const QString &defaultValue, qreal absolute)
+qreal percent(const KoXmlElement &element, const QString &ns, const QString &type, const QString &defaultValue, qreal absolute)
 {
     qreal tmp = 0.0;
     QString value = element.attributeNS(ns, type, defaultValue);

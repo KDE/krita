@@ -74,6 +74,9 @@ public:
      *
      */
     virtual void setParameter(int id, const QVariant& parameter);
+
+    /// @return true
+    virtual bool isValid() const { return true; }
 };
 
 #endif

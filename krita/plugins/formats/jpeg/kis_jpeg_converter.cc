@@ -213,6 +213,12 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     if (profile && !profile->isSuitableForOutput()) {
         transform = KoColorSpaceRegistry::instance()->colorSpace(modelId, Integer8BitsColorDepthID.id(), profile)->createColorConverter(cs);
     }
+    // Apparently an invalid transform was created from the profile. See bug https://bugs.kde.org/show_bug.cgi?id=255451.
+    // After 2.3: warn the user!
+    if (transform && !transform->isValid()) {
+        delete transform;
+        transform = 0;
+    }
 
     // Creating the KisImageWSP
     if (! m_image) {

@@ -96,7 +96,6 @@ void KisToolBrush::initPaint(KoPointerEvent *e)
         return;
     }
 
-    m_painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
     if (m_isAirbrushing) {
         m_timer->start(m_rate);
     }

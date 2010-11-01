@@ -1,4 +1,4 @@
 
-install(FILES
-    VanishingPoints.rb
-    DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/decorations )
+# install(FILES
+#    VanishingPoints.rb
+#    DESTINATION ${DATA_INSTALL_DIR}/krita/scripts/decorations )

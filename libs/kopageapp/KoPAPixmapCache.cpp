@@ -57,7 +57,7 @@ void KoPAPixmapCache::clear( bool all )
         QMap<QString, QList<QSize> >::iterator it( m_keySize.begin() );
 
         for ( ; it != m_keySize.end(); ++it ) {
-            foreach( QSize size, it.value() ) {
+            foreach( const QSize& size, it.value() ) {
                 QString k = generateKey( it.key(), size );
                 QPixmapCache::remove( k );
             }
@@ -84,7 +84,7 @@ void KoPAPixmapCache::remove( const QString & key )
     QMap<QString, QList<QSize> >::iterator it( m_keySize.find( key ) );
 
     if ( it != m_keySize.end() ) {
-        foreach( QSize size, it.value() ) {
+        foreach( const QSize& size, it.value() ) {
             QString k = generateKey( key, size );
             QPixmapCache::remove( k );
         }

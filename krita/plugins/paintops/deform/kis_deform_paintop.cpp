@@ -104,11 +104,14 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
                 pt.setY(pt.y() + (  ( m_sizeProperties.diameter * drand48() ) - m_sizeProperties.diameter * 0.5) * m_sizeProperties.jitterMovementAmount);
         }
 
-        qreal rotation = m_sizeProperties.rotation + m_rotationOption.apply(info);
-        qreal scale = m_sizeProperties.scale * KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        qreal rotation = m_rotationOption.apply(info);
+        qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
         
         setCurrentRotation(rotation);
         setCurrentScale(scale);
+        
+        rotation += m_sizeProperties.rotation;
+        scale *= m_sizeProperties.scale;
 
         QPointF pos = pt - m_deformBrush.hotSpot(scale,rotation);
 

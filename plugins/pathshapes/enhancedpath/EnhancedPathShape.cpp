@@ -106,8 +106,8 @@ void EnhancedPathShape::setSize(const QSizeF &newSize)
     KoParameterShape::setSize(newSize);
 
     // calculate scaling factors from viewbox size to shape size
-    qreal xScale = newSize.width()/m_viewBound.width();
-    qreal yScale = newSize.height()/m_viewBound.height();
+    qreal xScale = m_viewBound.width() == 0 ? 1 : newSize.width()/m_viewBound.width();
+    qreal yScale = m_viewBound.height() == 0 ? 1 : newSize.height()/m_viewBound.height();
 
     // create view matrix, take mirroring into account
     m_viewMatrix.reset();

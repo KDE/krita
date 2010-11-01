@@ -37,7 +37,7 @@ KisWdgColorToAlpha::KisWdgColorToAlpha(QWidget * parent) : KisConfigWidget(paren
 {
     m_widget = new Ui_WdgColorToAlphaBase();
     m_widget->setupUi(this);
-    connect(m_widget->colorTarget, SIGNAL(changed(const QColor&)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_widget->colorSelector, SIGNAL(colorChanged(const QColor&)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_widget->intThreshold, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
 }
 
@@ -50,7 +50,7 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
 {
     QVariant value;
     if (config->getProperty("targetcolor", value)) {
-        m_widget->colorTarget->setColor(value.value<QColor>());
+        m_widget->colorSelector->setQColor(value.value<QColor>());
     }
     if (config->getProperty("threshold", value)) {
         m_widget->intThreshold->setValue(value.toInt());
@@ -60,7 +60,7 @@ void KisWdgColorToAlpha::setConfiguration(const KisPropertiesConfiguration* conf
 KisPropertiesConfiguration* KisWdgColorToAlpha::configuration() const
 {
     KisFilterConfiguration* config = new KisFilterConfiguration("colortoalpha", 1);
-    config->setProperty("targetcolor", widget()->colorTarget->color());
+    config->setProperty("targetcolor", widget()->colorSelector->color());
     config->setProperty("threshold", widget()->intThreshold->value());
     return config;
 }

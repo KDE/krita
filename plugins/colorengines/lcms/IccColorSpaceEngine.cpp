@@ -42,7 +42,7 @@ public:
                           renderingIntent);
     }
     ~KoLcmsColorConversionTransformation() {
-        cmsDeleteTransform(m_transform);
+        if (m_transform) cmsDeleteTransform(m_transform);
     }
 public:
     virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const {
@@ -63,6 +63,10 @@ public:
             numPixels--;
         }
 
+    }
+    bool isValid() const {
+        qDebug() << "Checking transform " << m_transform;
+        return m_transform != 0;
     }
 private:
     cmsHTRANSFORM createTransform(

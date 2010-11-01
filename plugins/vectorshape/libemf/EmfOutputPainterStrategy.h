@@ -142,9 +142,9 @@ private:
     /// For debugging purposes: Draw the boundary box.
     void paintBounds(const Header *header);
 
-    // For setting and unsetting window and viewport.
-    void setWindowViewport();
-    void unsetWindowViewport();
+    /// Recalculate the world transform and then apply it to the painter
+    /// This must be called at the end of every function that changes the transform.
+    void recalculateWorldTransform();
 
     /**
        Select a stock object.
@@ -190,6 +190,8 @@ private:
     bool          m_currentlyBuildingPath;
 
     QPainter                *m_painter;
+    QTransform               m_worldTransform; // The transform inside the EMF.
+    QTransform               m_outputTransform; // The transform that the painter already had
 
     // Everything that has to do with window and viewport calculation
     QPoint        m_windowOrg;
@@ -202,6 +204,14 @@ private:
     qreal         m_windowViewportScaleY;
     bool          m_windowViewportIsSet;
 
+#if 0
+    // This matrix is needed because the window / viewport calculation
+    // is not the last one in the chain. After that one comes the
+    // transform that the painter already has when the painting
+    // starts, and that one has to be saved and reapplied again after
+    // the window / viewport calculation is redone.
+    QTransform    m_outputTransform;
+#endif
     /**
        The image we are painting to
     */

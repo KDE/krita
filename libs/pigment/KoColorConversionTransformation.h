@@ -67,6 +67,10 @@ public:
      * @param nPixels the number of pixels in the buffers.
      */
     virtual void transform(const quint8 *src, quint8 *dst, qint32 nPixels) const = 0;
+    /**
+     * @return false if the  transformation is not valid
+     */
+    virtual bool isValid() const { return true; }
 private:
     void setSrcColorSpace(const KoColorSpace*) const;
     void setDstColorSpace(const KoColorSpace*) const;

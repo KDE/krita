@@ -63,6 +63,7 @@ private:
     QVector<QVector<qreal> > m_contentHeights;  /**< Cell content heights. */
     QList<TableRect> m_tableRects; /**< Rects occupied by table, typically one per shape the table is in. */
     bool m_dirty;
+    qreal m_minX;
 };
 
 #endif // TABLELAYOUTDATA_H

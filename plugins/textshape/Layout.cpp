@@ -146,12 +146,12 @@ qreal Layout::x()
     qreal result = m_newParag ? resolveTextIndent() : 0.0;
     result += m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent());
     result += m_borderInsets.left + m_shapeBorder.left;
-//    if (m_block.layout()->lineCount() > 1)
     if (m_dropCapsNChars == 0)
         result += m_dropCapsAffectedLineWidthAdjust;
     m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, result);
     if (m_inTable) {
         result += m_tableLayout.cellContentX(m_tableCell);
+        m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, m_tableLayout.tableMinX());
     }
     return result;
 }

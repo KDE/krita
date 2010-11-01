@@ -21,6 +21,7 @@
 
 TableLayoutData::TableLayoutData()
   : m_dirty(true)
+  ,m_minX(0)
 {
 }
 

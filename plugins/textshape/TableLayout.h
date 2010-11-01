@@ -222,7 +222,14 @@ public:
      *
      * @return the list of rectangles.
      */
-    QList<QRectF> tableRects() const;
+//    QList<QRectF> tableRects() const;
+
+    /**
+     * Get the left edge position of the table minimum if spanning several tableRects
+     *
+     * @return x.
+     */
+    qreal tableMinX() const;
 
     /**
      * Get the bounding rectangle of a given cell.

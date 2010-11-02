@@ -95,6 +95,7 @@ public:
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     int checkForBlockChange(const QTextBlock &block);
+    int checkForListItemChange(const QTextBlock &block);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -510,6 +511,13 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
     return changeId;
 }
 
+//Check if the whole list-item is a part of a single change
+//If so return the changeId else return 0 
+int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
+{
+    return checkForBlockChange(block);
+}
+
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     writer->startElement("table:table");
@@ -619,6 +627,20 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
             } else {
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
+
+                int listItemChangeId = checkForListItemChange(block);
+                bool changePushedToStack = false;
+                if (listItemChangeId && (changeStack.top() != listItemChangeId)) {
+                    saveChange(listItemChangeId);
+                    changeStack.push(listItemChangeId);
+                    changePushedToStack = true;
+                    KoChangeTrackerElement *changeElement = changeTracker->elementById(listItemChangeId);
+                    if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
+                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
+                        writer->addAttribute("delta:insertion-type", "insert-with-content");
+                    }
+                }
+
                 if (KoListStyle::isNumberingStyle(textList->format().style())) {
                     if (KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData())) {
                         writer->startElement("text:number", false);
@@ -645,6 +667,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     block = block.previous();
                 }
                 writer->endElement(); 
+                if (changePushedToStack)
+                    changeStack.pop();
             }
         }
         

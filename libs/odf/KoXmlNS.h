@@ -60,8 +60,8 @@ public:
     static const QString koffice;
     static const QString officeooo;
     
-    static const char* const delta;
-    static const char* const split;
+    static const QString delta;
+    static const QString split;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

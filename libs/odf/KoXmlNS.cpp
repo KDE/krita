@@ -47,5 +47,5 @@ const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 const QString KoXmlNS::koffice("http://www.koffice.org/2005/");
 const QString KoXmlNS::officeooo("http://openoffice.org/2009/office");
 
-const char* const KoXmlNS::delta = "http://www.deltaxml.com/ns/track-changes/delta-namespace";
-const char* const KoXmlNS::split = "http://www.deltaxml.com/ns/track-changes/split-namespace";
+const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-namespace");
+const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");

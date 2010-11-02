@@ -96,6 +96,7 @@ public:
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     int checkForBlockChange(const QTextBlock &block);
     int checkForListItemChange(const QTextBlock &block);
+    int checkForListChange(const QTextBlock &block);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -518,6 +519,29 @@ int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
     return checkForBlockChange(block);
 }
 
+//Check if the whole list is a part of a single change
+//If so return the changeId else return 0 
+int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
+{
+    QTextBlock block(listBlock);
+    QTextList *textList;
+    textList = block.textList();
+
+    KoTextDocument textDocument(block.document());
+    KoList *list = textDocument.list(block);
+    int topListLevel = KoList::level(block);
+   
+    int listChangeId = 0;
+    do {
+        listChangeId = checkForBlockChange(block);
+        if (!listChangeId)
+            break;
+        block = block.next();
+    } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
+
+    return listChangeId;
+}
+
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     writer->startElement("table:table");
@@ -608,12 +632,25 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int topListLevel = KoList::level(block);
 
     bool listStarted = false;
+    bool listChangePushedToStack = false;
     if (!headingLevel && !numberedParagraphLevel) {
         listStarted = true;
         writer->startElement("text:list", false);
         writer->addAttribute("text:style-name", listStyles[textList]);
         if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
             writer->addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+
+        int listChangeId = checkForListChange(block);
+        if (listChangeId && (changeStack.top() != listChangeId)) {
+            saveChange(listChangeId);
+            changeStack.push(listChangeId);
+            listChangePushedToStack = true;
+            KoChangeTrackerElement *changeElement = changeTracker->elementById(listChangeId);
+            if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
+                writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listChangeId));
+                writer->addAttribute("delta:insertion-type", "insert-with-content");
+            }
+        }
     }
 
     do {
@@ -679,8 +716,11 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         textList = block.textList();
     } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
 
-    if (listStarted)
+    if (listStarted) {
         writer->endElement();
+        if (listChangePushedToStack)
+            changeStack.pop();
+    }
     return block;
 }
 

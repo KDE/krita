@@ -157,10 +157,17 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
         case KoTextWriter::Private::ParagraphOrHeader:
             changeId = checkForBlockChange(block);
             break;
+        case KoTextWriter::Private::ListItem:
+            changeId = checkForListItemChange(block);
+            break;
+        case KoTextWriter::Private::List:
+            changeId = checkForListChange(block);
+            break;
     }
 
     if (changeId && (changeStack.top() != changeId)) {
         changeStack.push(changeId);
+        saveChange(changeId);
     } else {
         changeId = 0;
     }
@@ -664,7 +671,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int topListLevel = KoList::level(block);
 
     bool listStarted = false;
-    bool listChangePushedToStack = false;
+    int listChangeId = 0;
     if (!headingLevel && !numberedParagraphLevel) {
         listStarted = true;
         writer->startElement("text:list", false);
@@ -672,16 +679,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
             writer->addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
 
-        int listChangeId = checkForListChange(block);
-        if (listChangeId && (changeStack.top() != listChangeId)) {
-            saveChange(listChangeId);
-            changeStack.push(listChangeId);
-            listChangePushedToStack = true;
-            KoChangeTrackerElement *changeElement = changeTracker->elementById(listChangeId);
-            if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
-                writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listChangeId));
-                writer->addAttribute("delta:insertion-type", "insert-with-content");
-            }
+        listChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
+        if (listChangeId && changeTracker->elementById(listChangeId)->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listChangeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
         }
     }
 
@@ -697,17 +698,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
 
-                int listItemChangeId = checkForListItemChange(block);
-                bool changePushedToStack = false;
-                if (listItemChangeId && (changeStack.top() != listItemChangeId)) {
-                    saveChange(listItemChangeId);
-                    changeStack.push(listItemChangeId);
-                    changePushedToStack = true;
-                    KoChangeTrackerElement *changeElement = changeTracker->elementById(listItemChangeId);
-                    if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
-                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
-                        writer->addAttribute("delta:insertion-type", "insert-with-content");
-                    }
+                int listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::ListItem);
+                if (listItemChangeId && changeTracker->elementById(listItemChangeId)->getChangeType() == KoGenChange::InsertChange) {
+                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
+                    writer->addAttribute("delta:insertion-type", "insert-with-content");
                 }
 
                 if (KoListStyle::isNumberingStyle(textList->format().style())) {
@@ -736,8 +730,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     block = block.previous();
                 }
                 writer->endElement(); 
-                if (changePushedToStack)
-                    changeStack.pop();
+                if (listItemChangeId)
+                   closeChangeRegion();
             }
             block = block.next();
             blockFormat = block.blockFormat();
@@ -749,8 +743,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
     if (listStarted) {
         writer->endElement();
-        if (listChangePushedToStack)
-            changeStack.pop();
+        if (listChangeId)
+            closeChangeRegion();
     }
     return block;
 }
@@ -781,11 +775,11 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
 
         if (cursor.currentList() != currentList) {
-            QTextBlock &nextBlockToProcess = saveList(block, listStyles);
-            if (nextBlockToProcess != block) {
-                block = nextBlockToProcess;
+            int previousBlockNumber = block.blockNumber();
+            block = saveList(block, listStyles);
+            int blockNumberToProcess = block.blockNumber();
+            if (blockNumberToProcess != previousBlockNumber)
                 continue;
-            } /* else it means that the block was a header. So continue to process below */
         }
 
         saveParagraph(block, from, to);

@@ -74,8 +74,11 @@ install(FILES
     KoPAPageContainerModel.h
     KoPAUtil.h
     KoPAView.h
+    KoPAPage.h
+    KoPAMasterPage.h
     KoPAViewBase.h
     KoPAViewMode.h
+    KoPAViewModeNormal.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

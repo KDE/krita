@@ -126,6 +126,12 @@ public:
         ChildChanged ///< a child of a container was changed/removed. This is propagated to all parents
     };
 
+    /// See QGraphicsItem::CacheMode
+    enum CacheMode {
+        NoCache, ///< no cache -- the default
+        ScaledCache, ///< cache at every zoomlevel
+    };
+
     /**
      * @brief Constructor
      */
@@ -492,9 +498,9 @@ public:
      * normalized.
      * <p>This method will return immediately and only request a repaint. Successive calls
      * will be merged into an appropriate repaint action.
-     * @param shape the rectangle (in pt) to queue for repaint.
+     * @param rect the rectangle (in pt) to queue for repaint.
      */
-    virtual void update(const QRectF &shape) const;
+    virtual void update(const QRectF &rect) const;
 
     /**
      * This is a method used to sort a list using the STL sorting methods.
@@ -731,11 +737,11 @@ public:
      * In this case it can be shown on screen probably partially but it should really not be printed
      * until it is fully done processing.
      * Warning! This method can be blocking for a long time
-     * @param asynchronous If set to true the processing will can take place in a different thread and the 
-     *                     function will not block until the shape is finised. 
-     *                     In case of printing Flake will call this method from a non-main thread and only 
+     * @param asynchronous If set to true the processing will can take place in a different thread and the
+     *                     function will not block until the shape is finised.
+     *                     In case of printing Flake will call this method from a non-main thread and only
      *                     start printing it when the in case of printing method returned.
-     *                     If set to false the processing needs to be done synchronously and will 
+     *                     If set to false the processing needs to be done synchronously and will
      *                     block until the result is finished.
      */
     virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous = true) const;
@@ -873,6 +879,17 @@ public:
      */
     KoShapePrivate *priv();
 
+    /**
+     * Returns the cache mode for this shape. The default mode is NoCache (i.e.,
+     * cache is disabled and all painting is immediate).
+     */
+    CacheMode cacheMode() const;
+
+    /**
+     * Set the shape's cache mode to @param mode.
+     */
+    void setCacheMode(CacheMode cacheMode);
+
 protected:
     /// constructor
     KoShape(KoShapePrivate &);
@@ -955,6 +972,8 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
+
+    friend class KoShapeManagerCachedPaintingStrategy;
     KoShapePrivate *d_ptr;
 
 private:

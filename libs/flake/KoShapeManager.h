@@ -73,6 +73,7 @@ public:
     KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &shapes);
     virtual ~KoShapeManager();
 
+
     /**
      * Remove all previously owned shapes and make the argument list the new shapes
      * to be managed by this manager.
@@ -202,6 +203,11 @@ signals:
     void selectionContentChanged();
 
 private:
+
+    friend class KoShapeManagerPaintingStrategy;
+    KoCanvasBase *canvas();
+
+
     class Private;
     Private * const d;
     Q_PRIVATE_SLOT(d, void updateTree())

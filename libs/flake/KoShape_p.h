@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,48 @@
 #define KOSHAPEPRIVATE_H
 
 #include "KoShape.h"
+
+#include <QPixmapCache>
+#include <QPoint>
+#include <QPaintDevice>
+
+#include <KoCanvasBase.h>
+
+/**
+ * Contains the information needed for caching the contents of a shape.
+ *
+ * There are two possibilities: one cache made at 100% zoom at 72 dpi,
+ * or a cache for every zoomlevel at the current resolution. The cache
+ * is one big QPixMap for the entire shape.
+ */
+class KoShapeCache
+{
+public:
+    struct DeviceData {
+        DeviceData() : allExposed(true) {}
+        ~DeviceData()
+        {
+            QPixmapCache::remove(key);
+        }
+
+        // index into the global pixmap cache
+        QPixmapCache::Key key;
+
+        // List of logical exposed rects in document coordinates
+        // These are the rects that are queued for updating, not
+        // the rects that have already been painted.
+        QVector<QRectF> exposed;
+
+        // true if the whole shape has been exposed and asked to redraw
+        bool allExposed;
+    };
+
+    // Map the cache to the canvas it is shown on (in QGraphicsView this is QPaintDevice)
+    QMap<KoShapeManager *, DeviceData *> deviceData;
+
+    // Empty cache
+    void purge();
+};
 
 class KoShapePrivate
 {
@@ -79,6 +122,25 @@ public:
     int selectable : 1;
     int detectCollision : 1;
     int protectContent : 1;
+
+    KoShape::CacheMode cacheMode;
+
+    KoShapeCache *cache;
+
+    /**
+     * @return the shape cache if there is one, else 0
+     */
+    KoShapeCache *maybeShapeCache() const;
+
+    /**
+     * return the shape cache if there is one, else create on
+     */
+    KoShapeCache *shapeCache() const;
+
+    /**
+     * purge and remove the shape cache
+     */
+    void removeShapeCache();
 
     Q_DECLARE_PUBLIC(KoShape)
 };

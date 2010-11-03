@@ -476,7 +476,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));
         painter.restore();
     }
-    if (! forPrint) {
+    if (!forPrint) {
         painter.setRenderHint(QPainter::Antialiasing, false);
         shape->paintDecorations(painter, converter, d->canvas);
     }
@@ -632,6 +632,11 @@ void KoShapeManager::setPaintingStrategy(KoShapeManagerPaintingStrategy *strateg
 {
     delete d->strategy;
     d->strategy = strategy;
+}
+
+KoCanvasBase *KoShapeManager::canvas()
+{
+    return d->canvas;
 }
 
 #include <KoShapeManager.moc>

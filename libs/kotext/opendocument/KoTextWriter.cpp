@@ -685,8 +685,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         }
     }
 
-    do {
-        if (!headingLevel) {
+    if (!headingLevel) {
+        do {
             if (numberedParagraphLevel) {
                 writer->startElement("text:numbered-paragraph", false);
                 writer->addAttribute("text:level", numberedParagraphLevel);
@@ -739,14 +739,13 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 if (changePushedToStack)
                     changeStack.pop();
             }
-        }
-        
-        block = block.next();
-        blockFormat = block.blockFormat();
-        headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
-        numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
-        textList = block.textList();
-    } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
+            block = block.next();
+            blockFormat = block.blockFormat();
+            headingLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
+            numberedParagraphLevel = blockFormat.intProperty(KoParagraphStyle::ListLevel);
+            textList = block.textList();
+        } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
+    }
 
     if (listStarted) {
         writer->endElement();
@@ -782,8 +781,11 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         }
 
         if (cursor.currentList() != currentList) {
-            block = saveList(block, listStyles);
-            continue;
+            QTextBlock &nextBlockToProcess = saveList(block, listStyles);
+            if (nextBlockToProcess != block) {
+                block = nextBlockToProcess;
+                continue;
+            } /* else it means that the block was a header. So continue to process below */
         }
 
         saveParagraph(block, from, to);

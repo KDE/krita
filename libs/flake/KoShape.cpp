@@ -636,7 +636,6 @@ QPointF KoShape::position() const
     Q_D(const KoShape);
     QPointF center(0.5*size().width(), 0.5*size().height());
     return d->localMatrix.map(center) - center;
-    //return d->localMatrix.map(QPointF(0,0));
 }
 
 void KoShape::addConnectionPoint(const QPointF &point)

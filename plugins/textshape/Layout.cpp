@@ -1441,7 +1441,7 @@ static void drawDecorationWords(QPainter *painter, const QTextLine &line, const 
         } else if (wordBeginX == -1) {
             wordBeginX = line.cursorToX(j);
         }
-    +j;
+    ++j;
     }
     if (wordBeginX != -1) {
         if (decorText.isEmpty())

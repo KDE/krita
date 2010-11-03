@@ -83,8 +83,18 @@ public:
 
     ~Private() {}
 
+    enum ElementType {
+        Span,
+        ParagraphOrHeader,
+        ListItem,
+        List,
+        NumberedParagraph
+    };
+
     void saveChange(QTextCharFormat format);
     void saveChange(int changeId);
+    int openChangeRegion(int position, ElementType elementType);
+    void closeChangeRegion();
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
@@ -130,6 +140,31 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTracker->saveInlineChange(changeId, change);
     QString changeName = sharedData->genChanges().insert(change);
     changeTransTable.insert(changeId, changeName);
+}
+
+int KoTextWriter::Private::openChangeRegion(int position, ElementType elementType)
+{
+    int changeId = 0;
+    switch (elementType) {
+        case KoTextWriter::Private::Span:
+            QTextCursor cursor(document);
+            cursor.setPosition(position);
+            QTextCharFormat charFormat = cursor.charFormat();
+            changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
+        break;
+    }
+
+    if (changeId && (changeStack.top() != changeId)) {
+        changeStack.push(changeId);
+    }
+
+    return changeId;
+}
+
+void KoTextWriter::Private::closeChangeRegion()
+{
+    changeStack.pop();
+    return;
 }
 
 KoTextWriter::KoTextWriter(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData)
@@ -423,6 +458,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
             } else {
+                int changeId = openChangeRegion(currentFragment.position(), KoTextWriter::Private::Span);
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
                 if (charFormat.isAnchor()) {
                     writer->startElement("text:a", false);
@@ -431,15 +467,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     writer->startElement("text:span", false);
                     writer->addAttribute("text:style-name", styleName);
-                    int changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
-                    if (changeId && (changeStack.top() != changeId)) {
-                        //This is a change
-                        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
-                        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
-                            QString changeName = changeTransTable.value(changeId);
-                            writer->addAttribute("delta:insertion-change-idref", changeName);
-                            writer->addAttribute("delta:insertion-type", "insert-with-content");
-                        }
+                    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                        writer->addAttribute("delta:insertion-type", "insert-with-content");
                     }
                 }
 
@@ -452,8 +482,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addTextSpan(text);
                 }
 
-                if ((!styleName.isEmpty() /*&& !identical*/) || charFormat.isAnchor())
+                if ((!styleName.isEmpty() /*&& !identical*/) || charFormat.isAnchor()) {
                     writer->endElement();
+                    if (changeId)
+                        closeChangeRegion();
+                }
             } // if (inlineObject)
 
             previousCharFormat = charFormat;

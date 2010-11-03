@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2005 David Faure <faure@kde.org>
    Copyright (C) 2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2010 KO GmbH <boud@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,50 +28,45 @@
 KoZoomHandler::KoZoomHandler()
     : KoViewConverter()
 {
-    // Note that this calls the method below, not the derived one
-    setZoomAndResolution( 100, KoDpi::dpiX(), KoDpi::dpiY() );
+    setZoom(1.0);
     setZoomMode( KoZoomMode::ZOOM_CONSTANT );
+    setDpi(KoDpi::dpiX(), KoDpi::dpiY());
+
 }
 
 KoZoomHandler::~KoZoomHandler()
 {
 }
 
-void KoZoomHandler::setZoomAndResolution(int zoom, int dpiX, int dpiY)
-{
-    // m_resolution[XY] is in pixel per pt
-    m_resolutionX = POINT_TO_INCH(static_cast<qreal>(dpiX));
-    m_resolutionY = POINT_TO_INCH(static_cast<qreal>(dpiY));
-    // avoid commulative rounding errors
-    if (qFuzzyCompare(m_resolutionX, 1))
-        m_resolutionX = 1;
-    if (qFuzzyCompare(m_resolutionY, 1))
-        m_resolutionY = 1;
-    setZoom(zoom / 100.0);
-    /*kDebug(30004) <<"KoZoomHandler::setZoomAndResolution" << zoom <<"" << dpiX <<"," << dpiY
-              << " m_resolutionX=" << m_resolutionX
-              << " m_zoomedResolutionX=" << m_zoomedResolutionX
-              << " m_resolutionY=" << m_resolutionY
-              << " m_zoomedResolutionY=" << m_zoomedResolutionY; */
-}
-
 void KoZoomHandler::setResolutionToStandard()
 {
-    setResolution( POINT_TO_INCH( qreal(KoDpi::dpiX())),
-                   POINT_TO_INCH( qreal(KoDpi::dpiY())) );
+    setDpi(KoDpi::dpiX(), KoDpi::dpiY());
+}
+
+void KoZoomHandler::setDpi(int dpiX, int dpiY) 
+{
+    setResolution(POINT_TO_INCH(static_cast<qreal>(dpiX)),
+                  POINT_TO_INCH(static_cast<qreal>(dpiY)));
 }
 
 void KoZoomHandler::setResolution( qreal resolutionX, qreal resolutionY )
 {
+
     m_resolutionX = resolutionX;
     m_resolutionY = resolutionY;
-    m_zoomedResolutionX = m_zoom * resolutionX;
-    m_zoomedResolutionY = m_zoom * resolutionY;
+
+    if (qFuzzyCompare(m_resolutionX, 1))
+        m_resolutionX = 1;
+    if (qFuzzyCompare(m_resolutionY, 1))
+        m_resolutionY = 1;
+
+    m_zoomedResolutionX = zoom() * resolutionX;
+    m_zoomedResolutionY = zoom() * resolutionY;
 }
 
 void KoZoomHandler::setZoomedResolution( qreal zoomedResolutionX, qreal zoomedResolutionY )
 {
-    // m_zoom doesn't matter, it's only used in setZoom() to calculated the zoomed resolutions
+    // zoom() doesn't matter, it's only used in setZoom() to calculated the zoomed resolutions
     // Here we know them. The whole point of this method is to allow a different zoom factor
     // for X and for Y, as can be useful for e.g. fullscreen kpresenter presentations.
     m_zoomedResolutionX = zoomedResolutionX;
@@ -79,13 +75,17 @@ void KoZoomHandler::setZoomedResolution( qreal zoomedResolutionX, qreal zoomedRe
 
 void KoZoomHandler::setZoom( qreal zoom )
 {
-    m_zoom = zoom;
-    if( m_zoom == 1.0 ) {
+    if (qFuzzyCompare(zoom, 1.0)) {
+        zoom = 1.0;
+    }
+
+    KoViewConverter::setZoom(zoom);
+    if( zoom == 1.0 ) {
         m_zoomedResolutionX = m_resolutionX;
         m_zoomedResolutionY = m_resolutionY;
     } else {
-        m_zoomedResolutionX = m_zoom * m_resolutionX;
-        m_zoomedResolutionY = m_zoom * m_resolutionY;
+        m_zoomedResolutionX = zoom * m_resolutionX;
+        m_zoomedResolutionY = zoom * m_resolutionY;
     }
 }
 

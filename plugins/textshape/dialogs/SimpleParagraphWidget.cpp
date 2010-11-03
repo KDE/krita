@@ -134,7 +134,8 @@ void SimpleParagraphWidget::updateDirection(DirectionButtonState state)
 void SimpleParagraphWidget::fillListButtons()
 {
     KoZoomHandler zoomHandler;
-    zoomHandler.setZoomAndResolution(160, 72, 72);
+    zoomHandler.setZoom(1.2);
+    zoomHandler.setDpi(72, 72);
 
     KoInlineTextObjectManager itom;
     TextShape textShape(&itom);

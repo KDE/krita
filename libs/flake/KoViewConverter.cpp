@@ -16,7 +16,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 #include "KoViewConverter.h"
 
 KoViewConverter::KoViewConverter()
@@ -94,7 +93,9 @@ qreal KoViewConverter::viewToDocumentY(qreal viewY) const
 
 void KoViewConverter::setZoom(qreal zoom)
 {
-    Q_ASSERT((int)zoom >= 0);
+    if (qFuzzyCompare(zoom, 0.0) || qFuzzyCompare(zoom, 1.0)) {
+        zoom = 1;
+    }
     m_zoomLevel = zoom;
 }
 

@@ -31,9 +31,8 @@
  * document does not work with postscript points (for instance raster
  * image pixels), you need to some additional converting yourself.
  *
- * An instance of KoZoomHandler operates at a given zoom (see
- * setZoomAndResolution() and setZoom()) so there is usually one
- * instance of KoZoomHandler per view.
+ * An instance of KoZoomHandler operates at a given zoom  and resolution
+ * so there is usually one instance of KoZoomHandler per view.
  */
 class KOWIDGETS_EXPORT KoZoomHandler : public KoViewConverter
 {
@@ -41,16 +40,7 @@ public:
 
     KoZoomHandler();
     virtual ~KoZoomHandler();
-
-    /**
-     * Change the zoom factor to @p zoom (e.g. 150 for 150%)
-     * and/or change the resolution of the output device, given in DPI.
-     * This is done on startup and when zooming.
-     * The same call combines both so that all the updating done behind
-     * the scenes is done only once, even if both zoom and DPI must be changed.
-     */
-    virtual void setZoomAndResolution(int zoom, int dpiX, int dpiY);
-
+    
     /**
      * @return the conversion factor between document and view, that
      * includes the zoom and also the DPI setting.
@@ -76,11 +66,18 @@ public:
      */
     inline qreal zoomFactorY() const { return m_zoomedResolutionY / m_resolutionY; }
 
+
+    /**
+     * Set resolution expressed in dots-per-inch
+     */
+    void setDpi(int dpiX, int dpiY);
+
     /**
      * Set a resolution for X and Y of the output device.
      * The zoom factor is not changed.
      *
-     * XXX: Is this also in dots per inch?
+     * This number should be the result of:
+     * POINT_TO_INCH(static_cast<qreal>(DOTS_PER_INCH))
      */
     void setResolution(qreal resolutionX, qreal resolutionY);
 
@@ -103,8 +100,6 @@ public:
      */
     void setZoom(qreal zoom);
 
-    inline qreal zoom() const { return m_zoom; }
-
     /**
      * Change the zoom mode
      * @param zoomMode the zoom mode.
@@ -114,7 +109,7 @@ public:
      * @return the global zoom factor (e.g. 100 for 100%).
      * Only use this to display to the user, don't use in calculations
      */
-    inline int zoomInPercent() const { return qRound(m_zoom * 100); }
+    inline int zoomInPercent() const { return qRound(KoViewConverter::zoom() * 100); }
     /**
      * @return the global zoom mode (e.g. KoZoomMode::ZOOM_WIDTH).
      * use this to determine how to zoom
@@ -219,8 +214,10 @@ public:
      */
     virtual void zoom(qreal *zoomX, qreal *zoomY) const;
 
+    using KoViewConverter::zoom;
+
 protected:
-    qreal m_zoom;
+
     KoZoomMode::Mode m_zoomMode;
 
     qreal m_resolutionX;

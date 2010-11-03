@@ -156,8 +156,19 @@ set_target_properties(komain PROPERTIES
 )
 install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
+########### plugin for the properties dialog ###############
+
+set(kodocinfopropspage_PART_SRCS KoDocInfoPropsFactory.cpp )
+
+kde4_add_plugin(kodocinfopropspage ${kodocinfopropspage_PART_SRCS})
+
+target_link_libraries(kodocinfopropspage  ${KDE4_KIO_LIBS} komain )
+
+install(TARGETS kodocinfopropspage DESTINATION ${PLUGIN_INSTALL_DIR} )
+
 ########### install files ###############
 
+install(FILES kodocinfopropspage.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
 install(FILES kofficedocker.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
 install(FILES koffice_shell.rc DESTINATION ${DATA_INSTALL_DIR}/koffice )
 install( FILES

@@ -51,7 +51,7 @@ public:
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
-        const QStringList &)
+        const QVariantList &)
         : KPropertiesDialogPlugin(props)
         , d(new KoDocumentInfoPropsPagePrivate)
 {

@@ -42,10 +42,8 @@ KoTextEditingRegistry* KoTextEditingRegistry::instance()
     return s_instance;
 }
 
-KoTextEditingRegistry::~KoTextEditingRegistry() 
+KoTextEditingRegistry::~KoTextEditingRegistry()
 {
     qDeleteAll(doubleEntries());
     qDeleteAll(values());
 }
-
-#include <KoTextEditingRegistry.moc>

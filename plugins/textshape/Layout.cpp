@@ -534,7 +534,7 @@ bool Layout::nextParag()
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();
-    option.setWrapMode(m_parent->resizeMethod() == KoTextDocument::NoResize ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
+    option.setWrapMode(m_parent->resizeMethod() != KoTextDocument::AutoResize ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
     qreal tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
     if (tabStopDistance > 0)
         option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
@@ -966,6 +966,7 @@ void Layout::resetPrivate()
     m_currentMasterPage.clear();
     m_dropCapsPositionAdjust = 0;
     m_dropCapsAffectedLineWidthAdjust = 0;
+    m_parent->setFitToSizeFactor(1.0);
 
     shapeNumber = 0;
     int lastPos = -1;
@@ -1042,6 +1043,15 @@ void Layout::resetPrivate()
     m_shapeBorder = shape->borderInsets();
     if (m_y == 0)
         m_y = m_shapeBorder.top;
+
+    if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize) {
+        QSizeF shapeSize = shape->size();
+        QSizeF documentSize = m_parent->documentSize();
+        qreal scaleWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
+        qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
+        qreal scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional
+        m_parent->setFitToSizeFactor(scaleFactor);
+    }
 
     if (! nextParag())
         shapeNumber++;

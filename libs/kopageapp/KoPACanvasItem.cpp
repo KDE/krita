@@ -61,7 +61,7 @@ void KoPACanvasItem::repaint()
 
 void KoPACanvasItem::updateSize()
 {
-    QSizeF size;
+    QSize size;
 
     if ( koPAView()->activePage() ) {
         KoPageLayout pageLayout = koPAView()->activePage()->pageLayout();
@@ -166,7 +166,7 @@ void KoPACanvasItem::inputMethodEvent(QInputMethodEvent *event)
 
 void KoPACanvasItem::resizeEvent( QGraphicsSceneResizeEvent * event )
 {
-    emit sizeChanged( event->newSize() );
+    emit sizeChanged( event->newSize().toSize() );
 }
 
 void KoPACanvasItem::showContextMenu( const QPoint& globalPos, const QList<QAction*>& actionList )

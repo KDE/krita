@@ -189,10 +189,6 @@ install( FILES
     KoStandardAction.h
     rdf/KoDocumentRdfBase.h
     komain_export.h
-    KoFilterEntry.h
-    KoFilterGraph.h
-    KoFilterVertex.h
-    PriorityQueue_p.h
 DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 if( Soprano_FOUND )

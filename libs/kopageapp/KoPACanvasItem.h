@@ -59,18 +59,18 @@ public slots:
 
 signals:
 
-    void documentSize(const QSizeF &size);
+    void documentSize(const QSize &size);
 
     /**
      * Emitted when the entire controller size changes
      * @param size the size in widget pixels.
      */
-    void sizeChanged( const QSizeF & size );
+    void sizeChanged( const QSize & size );
 
     /// Emitted when updateCanvas has been called.
     void canvasUpdated();
 
-public:
+protected:
     /// reimplemented method from superclass
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 

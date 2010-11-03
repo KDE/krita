@@ -63,6 +63,8 @@ public:
     virtual qreal docOffsetInShape() const;
     /// expand a bounding rect by excessive indents (indents outside the shape)
     QRectF expandVisibleRect(const QRectF &rect) const;
+	/// calculate the extra spacing needed for drawing
+	virtual qreal extraSpacing(QTextBlock const& block);
     /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
     /// in shape and returns false. In that case you should try over with a new createLine
     virtual bool addLine(QTextLine &line, bool processingLine = false);

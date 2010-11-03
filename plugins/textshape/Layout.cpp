@@ -1050,7 +1050,7 @@ void Layout::resetPrivate()
     qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
     qreal scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional
     m_parent->setFitToSizeFactor(scaleFactor);
-    
+
     if (! nextParag())
         shapeNumber++;
 }
@@ -1617,7 +1617,7 @@ void Layout::drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int sel
 
                         break;
                     }
-                +iter;
+                ++iter;
                 }
 
 

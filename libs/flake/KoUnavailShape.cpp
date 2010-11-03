@@ -79,7 +79,7 @@ OdfManifestEntry::~OdfManifestEntry()
 
 class OdfManifest
 {
-public: 
+public:
     OdfManifest();
     ~OdfManifest();
 
@@ -231,7 +231,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             if (fileName.startsWith(objectName)) {
                 OdfManifestEntry  *entry(d->manifest.fileEntries.value(fileName));
                 kDebug(30006) << fileName << entry->fullPath << entry->mediaType;
-                    
+
                 //manifestWriter.addManifestEntry(fileName, entry.mediaType); // TODO: version
                 // FIXME: Add the file here.
             }
@@ -319,8 +319,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
 
 
 // Load the actual contents inside the frame.
-bool KoUnavailShape::loadOdfFrameElement(const KoXmlElement & element,
-                                         KoShapeLoadingContext &context)
+bool KoUnavailShape::loadOdfFrameElement(const KoXmlElement & /*element*/,
+                                         KoShapeLoadingContext &/*context*/)
 {
     return true;
 }

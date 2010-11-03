@@ -39,41 +39,6 @@
 class KoInlineTextObjectManager;
 class KoPageProvider;
 class KoImageCollection;
-class TextShape;
-
-/**
- * The TextViewConverter is used within the TextShape and the TextTool as kind of decorator for
- * the defined KoViewConverter and transparently adjusts the zoom with the defined shrinkFactor.
- */
-class TextViewConverter : public KoViewConverter
-{
-public:
-    TextViewConverter(TextShape *textshape);
-    virtual ~TextViewConverter();
-
-    const KoViewConverter* viewConverter() const { return m_converter; }
-    void setViewConverter(const KoViewConverter* converter) { m_converter = converter; }
-
-    qreal fitToSizeFactor() const { return m_shrinkfactor; }
-    void setFitToSizeFactor(qreal shrinkfactor) { m_shrinkfactor = shrinkfactor; }
-
-    virtual QPointF documentToView(const QPointF &documentPoint) const;
-    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
-    virtual QRectF documentToView(const QRectF &documentRect) const;
-    virtual QRectF viewToDocument(const QRectF &viewRect) const;
-    virtual QSizeF documentToView(const QSizeF& documentSize) const;
-    virtual QSizeF viewToDocument(const QSizeF& viewSize) const;
-    virtual qreal documentToViewX(qreal documentX) const;
-    virtual qreal documentToViewY(qreal documentY) const;
-    virtual qreal viewToDocumentX(qreal viewX) const;
-    virtual qreal viewToDocumentY(qreal viewY) const;
-    virtual void zoom(qreal *zoomX, qreal *zoomY) const;
-    virtual void setZoom(qreal zoom);
-private:
-    TextShape *m_textshape;
-    const KoViewConverter *m_converter;
-    qreal m_shrinkfactor;
-};
 
 /**
  * A text shape.
@@ -152,10 +117,6 @@ public:
     // required for kpresenter hack
     void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
 
-    TextViewConverter* textViewConverter() const {
-        return m_textViewConverter;
-    }
-
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
 
@@ -180,7 +141,6 @@ private:
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;
-    TextViewConverter *m_textViewConverter;
 };
 
 #endif

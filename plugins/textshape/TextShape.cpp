@@ -80,94 +80,14 @@ struct Finalizer {
 
 #include <kdebug.h>
 
-TextViewConverter::TextViewConverter(TextShape *textshape)
-        : KoViewConverter()
-        , m_textshape(textshape)
-        , m_converter(0)
-        , m_shrinkfactor(1.0)
-{
-}
-
-TextViewConverter::~TextViewConverter()
-{
-}
-
-QPointF TextViewConverter::documentToView(const QPointF &documentPoint) const
-{
-    return m_converter->documentToView(documentPoint);
-}
-
-QPointF TextViewConverter::viewToDocument(const QPointF &viewPoint) const
-{
-    return m_converter->viewToDocument(viewPoint);
-}
-
-QRectF TextViewConverter::documentToView(const QRectF &documentRect) const
-{
-    return m_converter->documentToView(documentRect);
-}
-
-QRectF TextViewConverter::viewToDocument(const QRectF &viewRect) const
-{
-    return m_converter->viewToDocument(viewRect);
-}
-
-QSizeF TextViewConverter::documentToView(const QSizeF& documentSize) const
-{
-    return m_converter->documentToView(documentSize);
-}
-
-QSizeF TextViewConverter::viewToDocument(const QSizeF& viewSize) const
-{
-    return m_converter->viewToDocument(viewSize);
-}
-
-qreal TextViewConverter::documentToViewX(qreal documentX) const
-{
-    //return m_converter->documentToViewX(documentX) * m_shrinkfactor;
-    return m_converter->documentToViewX(documentX);
-}
-
-qreal TextViewConverter::documentToViewY(qreal documentY) const
-{
-    //return m_converter->documentToViewY(documentY) * m_shrinkfactor;
-    return m_converter->documentToViewY(documentY);
-}
-
-qreal TextViewConverter::viewToDocumentX(qreal viewX) const
-{
-    //return m_converter->viewToDocumentX(viewX) * m_shrinkfactor;
-    return m_converter->viewToDocumentX(viewX);
-}
-
-qreal TextViewConverter::viewToDocumentY(qreal viewY) const
-{
-    //return m_converter->viewToDocumentY(viewY) * m_shrinkfactor;
-    return m_converter->viewToDocumentY(viewY);
-}
-
-void TextViewConverter::zoom(qreal *zoomX, qreal *zoomY) const
-{
-    m_converter->zoom(zoomX, zoomY);
-    if (zoomX && zoomY && KoTextDocument(m_textshape->textShapeData()->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize) {
-        *zoomX *= m_shrinkfactor;
-        *zoomY *= m_shrinkfactor;
-    }
-}
-
-void TextViewConverter::setZoom(qreal zoom)
-{
-    const_cast<KoViewConverter*>(m_converter)->setZoom(zoom);
-}
 
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
         , m_footnotes(0)
         , m_demoText(false)
-        , m_pageProvider(0)
-        , m_imageCollection(0)
-        , m_textViewConverter(new TextViewConverter(this))
+        ,m_pageProvider(0)
+        ,m_imageCollection(0)
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -186,7 +106,6 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 TextShape::~TextShape()
 {
     delete m_footnotes;
-    delete m_textViewConverter;
 }
 
 void TextShape::setDemoText(bool on)
@@ -206,32 +125,29 @@ void TextShape::setDemoText(bool on)
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    QTextDocument *doc = m_textShapeData->document();
-    Q_ASSERT(doc);
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
-    Q_ASSERT(lay);
-
-    if (m_textViewConverter != &converter) {
-        m_textViewConverter->setViewConverter(&converter);
-        m_textViewConverter->setFitToSizeFactor(lay->fitToSizeFactor());
-    }
-
-    applyConversion(painter, *m_textViewConverter);
-
+    applyConversion(painter, converter);
     if (background()) {
         QPainterPath p;
         p.addRect(QRectF(QPointF(), size()));
         background()->paint(painter, p);
     }
+    QTextDocument *doc = m_textShapeData->document();
+    Q_ASSERT(doc);
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
 
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
-        if (! lay->hasLayouter()) {
+        if (lay == 0) {
+            kWarning(32500) << "Painting shape that doesn't have a kotext doc-layout, which can't work";
+            return;
+        }
+        else if (! lay->hasLayouter()) {
             lay->setLayout(new Layout(lay));
         }
         if (!m_pageProvider) {
             return;
         }
     }
+    Q_ASSERT(lay);
 
     if (m_pageProvider) {
         KoTextPage *page = m_pageProvider->page(this);
@@ -258,12 +174,12 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     QAbstractTextDocumentLayout::PaintContext pc;
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;
-    context.viewConverter = m_textViewConverter;
+    context.viewConverter = &converter;
     context.imageCollection = m_imageCollection;
 
     painter.setClipRect(outlineRect(), Qt::IntersectClip);
     painter.save();
-    painter.translate(0, -m_textShapeData->documentOffset() * lay->fitToSizeFactor());
+    painter.translate(0, -m_textShapeData->documentOffset());
     lay->draw(&painter, context);
     painter.restore();
 
@@ -286,9 +202,6 @@ QRectF TextShape::outlineRect() const
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
         rect = lay->expandVisibleRect(rect);
-        qreal fitToSizeFactorRev = (1.0-lay->fitToSizeFactor()+1.0);
-        rect.setWidth(rect.width() * fitToSizeFactorRev);
-        rect.setHeight(rect.height() * fitToSizeFactorRev);
     }
     return rect;
 }
@@ -438,10 +351,6 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     }
     style.addProperty("draw:textarea-vertical-align", verticalAlign);
 
-    if (KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize) {
-        style.addProperty("draw:fit-to-size", "true");
-    }
-
     return KoShape::saveStyle(style, context);
 }
 
@@ -464,9 +373,6 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     }
 
     m_textShapeData->setVerticalAlignment(alignment);
-
-    const bool fittosize = styleStack.property(KoXmlNS::draw, "fit-to-size") == "true";
-    KoTextDocument(m_textShapeData->document()).setResizeMethod(fittosize ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
 }
 
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

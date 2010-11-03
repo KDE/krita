@@ -145,19 +145,25 @@ void KoTextWriter::Private::saveChange(int changeId)
 int KoTextWriter::Private::openChangeRegion(int position, ElementType elementType)
 {
     int changeId = 0;
+    QTextCursor cursor(document);
+    cursor.setPosition(position);
+    QTextCharFormat charFormat = cursor.charFormat();
+    QTextBlock block = document->findBlock(position);
+
     switch (elementType) {
         case KoTextWriter::Private::Span:
-            QTextCursor cursor(document);
-            cursor.setPosition(position);
-            QTextCharFormat charFormat = cursor.charFormat();
             changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
-        break;
+            break;
+        case KoTextWriter::Private::ParagraphOrHeader:
+            changeId = checkForBlockChange(block);
+            break;
     }
 
     if (changeId && (changeStack.top() != changeId)) {
         changeStack.push(changeId);
+    } else {
+        changeId = 0;
     }
-
     return changeId;
 }
 
@@ -331,7 +337,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
-    int blockChangeId = checkForBlockChange(block);
+    int changeId = openChangeRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader);
     if (outlineLevel > 0) {
         writer->startElement("text:h", false);
         writer->addAttribute("text:outline-level", outlineLevel);
@@ -339,16 +345,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->startElement("text:p", false);
     }
 
-    bool changePushedToStack = false;
-    if (blockChangeId && (changeStack.top() != blockChangeId)) {
-        saveChange(blockChangeId);
-        changeStack.push(blockChangeId);
-        changePushedToStack = true;
-        KoChangeTrackerElement *changeElement = changeTracker->elementById(blockChangeId);
-        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(blockChangeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        }
+    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+        writer->addAttribute("delta:insertion-type", "insert-with-content");
     }
 
     QString styleName = saveParagraphStyle(block);
@@ -498,8 +497,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         inlineObject->saveOdf(context);
     }
 
-    if (changePushedToStack)
-        changeStack.pop();
+    if (changeId)
+        closeChangeRegion();
     
     writer->endElement();
 }

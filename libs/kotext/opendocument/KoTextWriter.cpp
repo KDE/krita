@@ -575,7 +575,16 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
 //If so return the changeId else return 0 
 int KoTextWriter::Private::checkForListItemChange(const QTextBlock &block)
 {
-    return checkForBlockChange(block);
+    QTextBlock listItemBlock = block;
+    int listItemChangeId = checkForBlockChange(listItemBlock);
+    while (listItemChangeId) {
+        QTextBlock nextBlock = listItemBlock.next();
+        if (!nextBlock.textList() || !nextBlock.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem))
+            break;
+        listItemBlock = nextBlock;
+        listItemChangeId = checkForBlockChange(listItemBlock);
+    }
+    return listItemChangeId;
 }
 
 //Check if the whole list is a part of a single change

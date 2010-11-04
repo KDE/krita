@@ -146,7 +146,7 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
 {
     int changeId = 0;
     QTextCursor cursor(document);
-    cursor.setPosition(position);
+    cursor.setPosition(position + 1);
     QTextCharFormat charFormat = cursor.charFormat();
     QTextBlock block = document->findBlock(position);
 

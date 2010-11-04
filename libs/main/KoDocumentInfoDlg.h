@@ -25,6 +25,7 @@
 
 class KoDocumentInfo;
 class KoDocumentRdf;
+class KPageWidgetItem;
 
 /**
  * @short The dialog that shows information about the document
@@ -59,8 +60,13 @@ public:
     /** The destructor */
     virtual ~KoDocumentInfoDlg();
 
+    QList<KPageWidgetItem*> pages() const;
+
     /** Returns true if the document was saved when the dialog was closed */
     bool isDocumentSaved();
+
+    /** Sets all fields to read-only mode. Used by the property dialog. */
+    void setReadOnly(bool ro);
 
 public slots:
     /** Connected to the okClicked() signal */

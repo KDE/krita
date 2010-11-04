@@ -1452,6 +1452,12 @@ void Axis::saveOdf( KoShapeSavingContext &context )
     bodyWriter.addAttributePt( "svg:y", d->title->position().y() );
     bodyWriter.addAttributePt( "svg:width", d->title->size().width() );
     bodyWriter.addAttributePt( "svg:height", d->title->size().height() );
+    if ( plotArea()->proxyModel()->categoryDataRegion().isValid() )
+    {
+        bodyWriter.startElement( "chart:categories" );
+          bodyWriter.addAttribute( "table:cell-range-address", plotArea()->proxyModel()->categoryDataRegion().toString() );
+        bodyWriter.endElement();
+    }
 
     bodyWriter.startElement( "text:p" );
     bodyWriter.addTextNode( d->titleData->document()->toPlainText() );

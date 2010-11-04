@@ -27,6 +27,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include "kis_paint_device.h"
+#include "kis_selection.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
 
@@ -290,6 +291,35 @@ void KisLayerTest::testMasksChangeRect()
      * resultRect = paintLayer1->changeRect(testRect, KisNode::N_FILTHY_PROJECTION);
      */
 
+}
+
+void KisLayerTest::testMoveLayerWithMaskThreaded()
+{
+    /**
+     * This test ensures that the layer's original() can be moved
+     * while its projection is still being updated
+     */
+
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 2000, 2000, colorSpace, "walker test");
+
+    KisLayerSP paintLayer = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8);
+    image->addNode(paintLayer, image->rootLayer());
+
+    paintLayer->paintDevice()->fill(image->bounds(), KoColor(Qt::black, colorSpace));
+
+    KisTransparencyMaskSP transpMask = new KisTransparencyMask();
+    transpMask->initSelection(0, paintLayer);
+    image->addNode(transpMask, paintLayer);
+
+    for(int i = 0; i < 500; i++) {
+        paintLayer->setDirty();
+
+        QTest::qSleep(1 + (qrand() & 63));
+
+        paintLayer->setX((i*67) % 1873);
+        paintLayer->setY((i*23) % 1873);
+    }
 }
 
 

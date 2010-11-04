@@ -84,13 +84,6 @@ class ShapeLayerContainerModel : public SimpleShapeContainerModel
 public:
     ShapeLayerContainerModel(KisShapeLayer *parent) : q(parent) {}
 
-    void add(KoShape *child) {
-        // QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
-
-        SimpleShapeContainerModel::add(child);
-        q->shapeManager()->addShape(child);
-    }
-
     void remove(KoShape *child) {
         // QRect updatedRect = q->converter()->documentToView(child->boundingRect()).toRect();
 

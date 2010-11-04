@@ -54,34 +54,17 @@ KoDocumentEntry::~KoDocumentEntry()
 
 KoDocument* KoDocumentEntry::createDoc(QString* errorMsg, KoDocument* parent) const
 {
-    // TODO use m_service->createInstance() to get better error handling,
-    // and use of non-deprecated API.
-    KLibFactory* factory = KLibLoader::self()->factory(QFile::encodeName(m_service->library()));
+    QString error;
+    KoDocument* doc = m_service->createInstance<KoDocument>(parent, QVariantList(), &error);
 
-    if (!factory) {
+    if (!doc) {
+        kWarning(30003) << error;
         if (errorMsg)
-            *errorMsg = KLibLoader::self()->lastErrorMessage();
-        kWarning(30003) << KLibLoader::self()->lastErrorMessage();
+            *errorMsg = error;
         return 0;
     }
 
-    QObject* obj;
-    if (factory->inherits("KParts::Factory"))
-        obj = static_cast<KParts::Factory*>(factory)->createPart(0, parent, "KoDocument");
-    else {
-        kWarning(30003) << "factory doesn't inherit KParts::Factory ! It is a " << factory->metaObject()->className(); // This shouldn't happen...
-        obj = factory->create(parent, "KoDocument");
-    }
-
-    if (!obj || !obj->inherits("KoDocument")) {
-        // TODO
-        //if ( errorMsg )
-        //    *errorMsg = i18n( "Document could not be created" );
-        delete obj;
-        return 0;
-    }
-
-    return static_cast<KoDocument*>(obj);
+    return doc;
 }
 
 KoDocumentEntry KoDocumentEntry::queryByMimeType(const QString & mimetype)

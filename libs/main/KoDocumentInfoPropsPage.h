@@ -32,7 +32,7 @@ class KOMAIN_TEST_EXPORT KoDocumentInfoPropsPage : public KPropertiesDialogPlugi
 
 public:
     explicit KoDocumentInfoPropsPage(KPropertiesDialog *props,
-                                     const QStringList & = QStringList());
+                                     const QVariantList & = QVariantList());
     virtual ~KoDocumentInfoPropsPage();
 
     virtual void applyChanges();

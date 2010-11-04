@@ -16,7 +16,6 @@ endif( QCA2_FOUND )
 set(komain_LIB_SRCS
     KoApplicationAdaptor.cpp
     KoApplication.cpp
-    KoDocInfoPropsFactory.cpp
     KoDockerManager.cpp
     KoDocumentAdaptor.cpp
     KoDocument.cpp

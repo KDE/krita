@@ -1538,10 +1538,28 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
 
         KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
         if (layout) {
+            if (element.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                d->openChangeRegion(element);
+
+            if (d->changeTracker && d->changeStack.count()) {
+                QTextCharFormat format;
+                format.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+                cursor.mergeCharFormat(format);
+            } else {
+                QTextCharFormat format = cursor.charFormat();
+                if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    cursor.setCharFormat(format);
+                }
+            }
+
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             if (textObjectManager) {
                 textObjectManager->insertInlineObject(cursor, anchor);
             }
+
+            if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                d->closeChangeRegion(element);
         }
     } else {
         d->textSharedData->shapeInserted(shape, element, d->context);

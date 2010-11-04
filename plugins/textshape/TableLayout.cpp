@@ -463,7 +463,7 @@ QTextTableCell TableLayout::hitTestTable(const QPointF &point) const
 
 qreal TableLayout::tableMinX() const
 {
-    return m_tableLayoutData->m_minX;
+    return m_tableLayoutData->m_minX-10; //-10 is just to add potential penwidths
 }
 
 qreal TableLayout::cellContentY(const QTextTableCell &cell) const

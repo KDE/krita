@@ -159,6 +159,9 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
         case KoTextWriter::Private::ParagraphOrHeader:
             changeId = checkForBlockChange(block);
             break;
+        case KoTextWriter::Private::NumberedParagraph:
+            changeId = checkForBlockChange(block);
+            break;
         case KoTextWriter::Private::ListItem:
             changeId = checkForListItemChange(block);
             break;
@@ -706,11 +709,22 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     if (!headingLevel) {
         do {
             if (numberedParagraphLevel) {
+                int changeId = openChangeRegion(block.position(), KoTextWriter::Private::NumberedParagraph);
                 writer->startElement("text:numbered-paragraph", false);
                 writer->addAttribute("text:level", numberedParagraphLevel);
                 writer->addAttribute("text:style-name", listStyles.value(textList));
+
+                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                    writer->addAttribute("delta:insertion-type", "insert-with-content");
+                }
+                
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
                 writer->endElement(); 
+                
+                if (changeId) {
+                    closeChangeRegion();
+                }
             } else {
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);

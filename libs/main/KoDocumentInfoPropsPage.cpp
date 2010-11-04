@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004, 2010 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,6 +20,8 @@
 
 #include "KoDocumentInfoPropsPage.h"
 
+#include "KoOdfReadStore.h"
+#include "KoStore.h"
 #include "KoDocumentInfo.h"
 #include "KoDocumentInfoDlg.h"
 #include <KoXmlReader.h>
@@ -44,14 +46,14 @@ public:
     KoDocumentInfo *m_info;
     KoDocumentInfoDlg *m_dlg;
     KUrl m_url;
-    KTar *m_src;
-    KTar *m_dst;
+    KoStore *m_src;
+    KoStore *m_dst;
 
     const KArchiveFile *m_docInfoFile;
 };
 
 KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
-        const QStringList &)
+        const QVariantList &)
         : KPropertiesDialogPlugin(props)
         , d(new KoDocumentInfoPropsPagePrivate)
 {
@@ -64,36 +66,41 @@ KoDocumentInfoPropsPage::KoDocumentInfoPropsPage(KPropertiesDialog *props,
 
     d->m_dst = 0;
 
-#ifdef __GNUC__
-#warning TODO port this to KoStore !!!
-#endif
-    d->m_src = new KTar(d->m_url.toLocalFile(), "application/x-gzip");
+    d->m_src = KoStore::createStore(d->m_url.toLocalFile(), KoStore::Read);
 
-    if (!d->m_src->open(QIODevice::ReadOnly))
-        return;
+    if (d->m_src->bad()) {
+        return; // the store will be deleted in the dtor
+    }
 
-    const KArchiveDirectory *root = d->m_src->directory();
-    if (!root)
-        return;
-
-    const KArchiveEntry *entry = root->entry("documentinfo.xml");
-
-    if (entry && entry->isFile()) {
-        d->m_docInfoFile = static_cast<const KArchiveFile *>(entry);
-
-        QByteArray data = d->m_docInfoFile->data();
-        QBuffer buffer(&data);
-        buffer.open(QIODevice::ReadOnly);
-
-        KoXmlDocument doc;
-        doc.setContent(&buffer);
-
-        d->m_info->load(doc);
+    // OASIS/OOo file format?
+    if (d->m_src->hasFile("meta.xml")) {
+        KoXmlDocument metaDoc;
+        KoOdfReadStore oasisStore(d->m_src);
+        QString lastErrorMessage;
+        if (oasisStore.loadAndParse("meta.xml", metaDoc, lastErrorMessage)) {
+            d->m_info->loadOasis(metaDoc);
+        }
+    }
+    // Old koffice file format?
+    else if (d->m_src->hasFile("documentinfo.xml")) {
+        if (d->m_src->open("documentinfo.xml")) {
+            KoXmlDocument doc;
+            if (doc.setContent(d->m_src->device()))
+                d->m_info->load(doc);
+        }
     }
 
     d->m_dlg = new KoDocumentInfoDlg(props, d->m_info);
-    connect(d->m_dlg, SIGNAL(changed()),
-            this, SIGNAL(changed()));
+    d->m_dlg->setReadOnly(true);
+    // "Steal" the pages from the document info dialog
+    Q_FOREACH(KPageWidgetItem* page, d->m_dlg->pages()) {
+        KPageWidgetItem* myPage = new KPageWidgetItem(page->widget(), page->header());
+        myPage->setIcon(page->icon());
+        props->addPage(myPage);
+    }
+
+    //connect(d->m_dlg, SIGNAL(changed()),
+    //        this, SIGNAL(changed()));
 }
 
 KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
@@ -107,6 +114,8 @@ KoDocumentInfoPropsPage::~KoDocumentInfoPropsPage()
 
 void KoDocumentInfoPropsPage::applyChanges()
 {
+    // TODO port this to KoStore!
+#if 0
     const KArchiveDirectory *root = d->m_src->directory();
     if (!root)
         return;
@@ -170,10 +179,12 @@ void KoDocumentInfoPropsPage::applyChanges()
 
     delete d->m_dst;
     d->m_dst = 0;
+#endif
 }
 
 void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *entry)
 {
+#if 0
     kDebug(30003) << "copy" << entry->name();
     if (entry->isFile()) {
         const KArchiveFile *file = static_cast<const KArchiveFile *>(entry);
@@ -198,6 +209,7 @@ void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *ent
         for (; it != end; ++it)
             copy(p, dir->entry(*it));
     }
+#endif
 }
 
 #include <KoDocumentInfoPropsPage.moc>

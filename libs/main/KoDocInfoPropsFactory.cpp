@@ -21,7 +21,15 @@
 
 #include <KoDocumentInfoPropsPage.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-typedef KGenericFactory<KoDocumentInfoPropsPage, KPropertiesDialog> PropsDlgFactory;
-K_EXPORT_COMPONENT_FACTORY(kodocinfopropspage, PropsDlgFactory("koffice"))
+static QObject* createDocInfoPropsPage(QWidget* w, QObject* parent, const QVariantList& args)
+{
+    Q_UNUSED(w);
+    KPropertiesDialog* props = qobject_cast<KPropertiesDialog *>(parent);
+    Q_ASSERT(props);
+    return new KoDocumentInfoPropsPage(props, args);
+}
+
+K_PLUGIN_FACTORY(PropsDlgFactory, registerPlugin<KoDocumentInfoPropsPage>(QString(), createDocInfoPropsPage);)
+K_EXPORT_PLUGIN(PropsDlgFactory("koffice"))

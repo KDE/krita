@@ -371,7 +371,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
 
         // Increment number at the very end!
         dataSetNumber++;
-    }
+    }  
 
     return createdDataSets;
 }
@@ -507,6 +507,10 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                 dataSet = new DataSet( d->dataSets.size() );
             }
             d->dataSets.append( dataSet );
+            if ( d->categoryDataRegion.isValid() )
+            {
+                dataSet->setCategoryDataRegion( d->categoryDataRegion );
+            }
             dataSet->loadOdf( n, context );
             if ( penLoaded )
                 dataSet->setPen( p );

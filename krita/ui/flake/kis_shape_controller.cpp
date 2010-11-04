@@ -234,6 +234,7 @@ void KisShapeController::addShape(KoShape* shape)
         }
 
         shapeLayer->addShape(shape);
+        shapeLayer->shapeManager()->addShape(shape);
     }
 
     m_d->doc->setModified(true);

@@ -738,7 +738,14 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
 
-                int listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::ListItem);
+                int listItemChangeId;
+                if (textList == topLevelTextList) {
+                    listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::ListItem);
+                } else {
+                    // This is a sub-list. So check for a list-change
+                    listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
+                }
+
                 if (listItemChangeId && changeTracker->elementById(listItemChangeId)->getChangeType() == KoGenChange::InsertChange) {
                     writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
                     writer->addAttribute("delta:insertion-type", "insert-with-content");

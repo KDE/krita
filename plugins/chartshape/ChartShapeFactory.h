@@ -29,6 +29,7 @@
 
 // KOffice
 #include <KoShapeFactoryBase.h>
+#include <QVariantList>
 
 
 class KoShape;
@@ -40,7 +41,7 @@ class ChartShapePlugin : public QObject
     Q_OBJECT
 public:
 
-    ChartShapePlugin( QObject * parent,  const QStringList & );
+    ChartShapePlugin( QObject * parent,  const QVariantList & );
     ~ChartShapePlugin() {}
 };
 

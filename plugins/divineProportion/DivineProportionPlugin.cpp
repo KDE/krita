@@ -23,11 +23,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(divineproportionshape, KGenericFactory<DivineProportionPlugin>( "DivineProportion" ) )
+K_PLUGIN_FACTORY(DivineProportionPluginFactory, registerPlugin<DivineProportionPlugin>();)
+K_EXPORT_PLUGIN(DivineProportionPluginFactory("DivineProportion"))
 
-DivineProportionPlugin::DivineProportionPlugin(QObject * parent, const QStringList &)
+DivineProportionPlugin::DivineProportionPlugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DivineProportionToolFactory());

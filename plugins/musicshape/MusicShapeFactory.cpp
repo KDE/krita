@@ -19,8 +19,9 @@
 #include <QStringList>
 #include <QFontDatabase>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
+#include <kdebug.h>
 #include <kstandarddirs.h>
 #include <KoProperties.h>
 #include <KoToolRegistry.h>

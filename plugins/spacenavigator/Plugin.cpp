@@ -21,11 +21,12 @@
 
 #include <KoInputDeviceHandlerRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(spacenavigator, KGenericFactory<Plugin>( "spacenavigator" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("spacenavigator"))
 
-Plugin::Plugin(QObject * parent, const QStringList &)
+Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice());

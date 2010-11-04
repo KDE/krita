@@ -21,11 +21,12 @@
 
 #include <KoDockRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kofficesimpletextedit, KGenericFactory<Plugin>( "koffice-simpletextedit" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("koffice-simpletextedit"))
 
-Plugin::Plugin( QObject *parent, const QStringList& )
+Plugin::Plugin( QObject *parent, const QVariantList& )
     : QObject(parent)
 {
     KoDockRegistry::instance()->add( new Factory() );

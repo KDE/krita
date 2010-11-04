@@ -20,13 +20,14 @@
 #define TEXTPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class TextPlugin : public QObject
 {
     Q_OBJECT
 
 public:
-    TextPlugin(QObject * parent, const QStringList &);
+    TextPlugin(QObject * parent, const QVariantList &);
     ~TextPlugin() {}
 };
 #endif

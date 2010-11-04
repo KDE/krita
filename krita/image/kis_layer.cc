@@ -48,10 +48,6 @@
 
 class KisSafeProjection {
 public:
-    KisPaintDeviceSP getDevice() {
-        return m_projection;
-    }
-
     KisPaintDeviceSP getDeviceLazy(KisPaintDeviceSP prototype) {
         QMutexLocker locker(&m_lock);
 
@@ -63,9 +59,6 @@ public:
             m_projection = m_reusablePaintDevice;
             m_projection->makeCloneFromRough(prototype, prototype->extent());
         }
-
-        m_projection->setX(prototype->x());
-        m_projection->setY(prototype->y());
 
         return m_projection;
     }

@@ -23,7 +23,7 @@
 #include "VectorShapePlugin.h"
 
 // KDE
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 // KOffice libs
 #include <KoShapeRegistry.h>
@@ -34,9 +34,10 @@
 #include "VectorShapeFactory.h"
 
 
-K_EXPORT_COMPONENT_FACTORY(vectorshape, KGenericFactory<VectorShapePlugin>( "VectorShape" ) )
+K_PLUGIN_FACTORY(VectorShapePluginFactory, registerPlugin<VectorShapePlugin>();)
+K_EXPORT_PLUGIN(VectorShapePluginFactory("VectorShape"))
 
-VectorShapePlugin::VectorShapePlugin(QObject * parent, const QStringList &)
+VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     //KoToolRegistry::instance()->add(new VectorToolFactory());

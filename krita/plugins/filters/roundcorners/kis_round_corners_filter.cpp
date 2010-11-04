@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>

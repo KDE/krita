@@ -20,12 +20,13 @@
 #define PLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class DivineProportionPlugin : public QObject {
     Q_OBJECT
 
 public:
-    DivineProportionPlugin(QObject * parent, const QStringList &);
+    DivineProportionPlugin(QObject * parent, const QVariantList &);
     ~DivineProportionPlugin() {}
 };
 #endif

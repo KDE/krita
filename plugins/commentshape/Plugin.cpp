@@ -24,11 +24,12 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( commentshape, KGenericFactory<Plugin>( "CommentShape" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("CommentShape"))
 
-Plugin::Plugin(QObject* parent, const QStringList&)
+Plugin::Plugin(QObject* parent, const QVariantList&)
 : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new CommentShapeFactory());

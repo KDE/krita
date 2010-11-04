@@ -27,14 +27,14 @@
 #include <kdebug.h>
 #include <kscan.h>
 #include <KoView.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kicon.h>
 #include <scan.moc>
 
-typedef KGenericFactory<Scan> ScanFactory;
-K_EXPORT_COMPONENT_FACTORY( kofficescan, ScanFactory( "kscan_plugin" ) )
+K_PLUGIN_FACTORY(ScanFactory, registerPlugin<Scan>();)
+K_EXPORT_PLUGIN(ScanFactory("kscan_plugin"))
 
-Scan::Scan(QObject *parent, const QStringList &)
+Scan::Scan(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent), scanDialog( 0 )
 {
     setComponentData(ScanFactory::componentData());

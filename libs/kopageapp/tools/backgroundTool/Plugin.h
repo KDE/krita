@@ -21,12 +21,13 @@
 #define PLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class Plugin : public QObject {
     Q_OBJECT
 
 public:
-    Plugin(QObject * parent, const QStringList &);
+    Plugin(QObject * parent, const QVariantList &);
 };
 
 #endif //PLUGIN_H

@@ -25,13 +25,13 @@
 
 // Qt
 #include <QObject>
-
+#include <QVariantList>
 
 class VectorShapePlugin : public QObject {
     Q_OBJECT
 
 public:
-    VectorShapePlugin(QObject * parent, const QStringList &);
+    VectorShapePlugin(QObject * parent, const QVariantList &);
     ~VectorShapePlugin() {}
 };
 

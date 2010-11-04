@@ -22,7 +22,7 @@
 
 #include "kis_painterlymixerdocker.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KIconLoader>
 #include <KLocale>
 

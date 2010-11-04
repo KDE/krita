@@ -21,11 +21,12 @@
 
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(paragraphtool, KGenericFactory<ParagraphPlugin>("ParagraphTool"))
+K_PLUGIN_FACTORY(ParagraphPluginFactory, registerPlugin<ParagraphPlugin>();)
+K_EXPORT_PLUGIN(ParagraphPluginFactory("ParagraphTool"))
 
-ParagraphPlugin::ParagraphPlugin(QObject * parent, const QStringList &)
+ParagraphPlugin::ParagraphPlugin(QObject * parent, const QVariantList &)
         : QObject(parent)
 {
     KoToolRegistry::instance()->add(new ParagraphToolFactory());

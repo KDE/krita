@@ -18,7 +18,7 @@
 
 #include "kis_ppm_export.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceConstants.h>

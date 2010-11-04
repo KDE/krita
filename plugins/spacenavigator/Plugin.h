@@ -25,7 +25,7 @@ class Plugin : public QObject {
     Q_OBJECT
 
 public:
-    Plugin(QObject * parent, const QStringList &);
+    Plugin(QObject * parent, const QVariantList &);
     ~Plugin() {}
 };
 #endif

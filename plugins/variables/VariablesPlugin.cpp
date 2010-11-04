@@ -21,14 +21,14 @@
 #include "DateVariableFactory.h"
 #include "PageVariableFactory.h"
 #include "InfoVariableFactory.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoInlineObjectRegistry.h>
 
-K_EXPORT_COMPONENT_FACTORY(textvariables,
-                           KGenericFactory<VariablesPlugin>("VariablesPlugin"))
+K_PLUGIN_FACTORY(VariablesPluginFactory, registerPlugin<VariablesPlugin>();)
+K_EXPORT_PLUGIN(VariablesPluginFactory("VariablesPlugin"))
 
-VariablesPlugin::VariablesPlugin(QObject *parent, const QStringList&)
+VariablesPlugin::VariablesPlugin(QObject *parent, const QVariantList&)
         : QObject(parent)
 {
     KoInlineObjectRegistry::instance()->add(new PageVariableFactory(parent));

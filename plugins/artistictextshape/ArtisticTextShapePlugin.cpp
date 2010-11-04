@@ -24,11 +24,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(artistictextshape, KGenericFactory<ArtisticTextShapePlugin>( "ArtisticTextShape" ) )
+K_PLUGIN_FACTORY(ArtisticTextShapePluginFactory, registerPlugin<ArtisticTextShapePlugin>();)
+K_EXPORT_PLUGIN(ArtisticTextShapePluginFactory("ArtisticTextShape"))
 
-ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QStringList & )
+ArtisticTextShapePlugin::ArtisticTextShapePlugin( QObject * parent, const QVariantList & )
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new ArtisticTextShapeFactory( parent ) );

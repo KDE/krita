@@ -22,12 +22,13 @@
 
 #include <KoShapeRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( pluginshape, KGenericFactory<Plugin>( "pluginshape" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("pluginshape"))
 
-Plugin::Plugin(QObject *parent, const QStringList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new PluginShapeFactory(parent) );

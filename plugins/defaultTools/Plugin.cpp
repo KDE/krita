@@ -24,11 +24,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(defaulttools, KGenericFactory<Plugin>( "koffice-defaulttools" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("koffice-defaulttools"))
 
-Plugin::Plugin(QObject * parent, const QStringList &)
+Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
     KoToolRegistry::instance()->add(new DefaultToolFactory(parent));

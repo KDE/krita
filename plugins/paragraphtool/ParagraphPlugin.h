@@ -20,13 +20,14 @@
 #define PARAGRAPHPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class ParagraphPlugin : public QObject
 {
     Q_OBJECT
 
 public:
-    ParagraphPlugin(QObject * parent, const QStringList &);
+    ParagraphPlugin(QObject * parent, const QVariantList &);
     ~ParagraphPlugin() {}
 };
 #endif

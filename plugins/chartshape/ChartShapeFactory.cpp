@@ -26,7 +26,7 @@
 
 // KDE
 #include <kiconloader.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <klocale.h>
 
 // KOffice
@@ -47,9 +47,10 @@
 
 using namespace KChart;
 
-K_EXPORT_COMPONENT_FACTORY( chartshape, KGenericFactory<ChartShapePlugin>( "ChartShape" ) )
+K_PLUGIN_FACTORY(ChartShapePluginFactory, registerPlugin<ChartShapePlugin>();)
+K_EXPORT_PLUGIN(ChartShapePluginFactory("ChartShape"))
 
-ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
+ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QVariantList& )
 {
     // Register the chart shape factory.
     KoShapeRegistry::instance()->add( new ChartShapeFactory( parent ) );

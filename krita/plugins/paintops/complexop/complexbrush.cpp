@@ -21,7 +21,7 @@
 #include "kis_complexop.h"
 #include "kis_complexop_settings.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <kis_paintop_registry.h>
 #include <QStringList>
 

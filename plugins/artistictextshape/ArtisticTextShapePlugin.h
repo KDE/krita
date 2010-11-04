@@ -21,13 +21,14 @@
 #define ARTISTICTEXTSHAPEPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
-class ArtisticTextShapePlugin : public QObject 
+class ArtisticTextShapePlugin : public QObject
 {
     Q_OBJECT
 
 public:
-    ArtisticTextShapePlugin( QObject * parent, const QStringList & );
+    ArtisticTextShapePlugin( QObject * parent, const QVariantList & );
     ~ArtisticTextShapePlugin();
 };
 

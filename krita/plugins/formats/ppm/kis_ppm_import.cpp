@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QFile>
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>

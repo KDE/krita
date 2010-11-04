@@ -311,6 +311,7 @@ int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accu
 int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     int position = -1;
+    bool basicallyFound = false;
     QTextFrame::iterator it = begin;
     for (it = begin; it != end; ++it) {
         QTextBlock block = it.currentBlock();
@@ -336,32 +337,45 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
             if (!block.isValid())
                 continue;
         }
+        if (basicallyFound) // a subsequent table or lines have now had their chance
+            return position;
+
         // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
         QTextLayout *layout = block.layout();
         if (point.y() > layout->boundingRect().bottom()) {
-            // just skip this block. position = block.position() + block.length() - 1;
+            // just skip this block.
             continue;
         }
+
         for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
             // kDebug(32500) <<" + line[" << line.textStart() <<"]:" << line.y() <<"-" << line.height();
             if (point.y() > line.y() + line.height()) {
-                position = line.textStart() + line.textLength();
+                position = block.position() + line.textStart() + line.textLength();
                 continue;
             }
-            if (accuracy == Qt::ExactHit && point.y() < line.y()) // between lines
+            if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
                 return -1;
+            }
             if (accuracy == Qt::ExactHit && // left or right of line
-                    (point.x() < line.x() || point.x() > line.x() + line.width()))
+                    (point.x() < line.x() || point.x() > line.x() + line.naturalTextWidth())) {
                 return -1;
-            if (point.x() > line.width() && layout->textOption().textDirection() == Qt::RightToLeft) {
+            }
+            if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
                 // totally right of RTL text means the position is the start of the text.
+                //TODO how about the other side?
                 return block.position() + line.textStart();
+            }
+            if (point.x() > line.x() + line.naturalTextWidth()) {
+                // right of line
+                basicallyFound = true;
+                position = block.position() + line.textStart() + line.textLength();
+                continue;
             }
             return block.position() + line.xToCursor(point.x());
         }
     }
-    return -1;
+    return position;
 }
 
 int KoTextDocumentLayout::pageCount() const

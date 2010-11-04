@@ -65,6 +65,7 @@ public:
     ~KoDocumentInfoDlgPrivate() {}
 
     KoDocumentInfo* m_info;
+    QList<KPageWidgetItem*> m_pages;
     Ui::KoDocumentInfoAboutWidget* m_aboutUi;
     Ui::KoDocumentInfoAuthorWidget* m_authorUi;
     KoDocumentRdf* m_rdf;
@@ -103,12 +104,17 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
     }
     KPageWidgetItem *page = new KPageWidgetItem(infodlg, i18n("General"));
     page->setHeader(i18n("General"));
+
+    // Ugly hack, the mimetype should be a parameter, instead
     KoDocument* doc = dynamic_cast< KoDocument* >(d->m_info->parent());
-    KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
-    if (! mime)
-        mime = KMimeType::defaultMimeTypePtr();
-    page->setIcon(KIcon(KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48)));
+    if (doc) {
+        KMimeType::Ptr mime = KMimeType::mimeType(doc->mimeType());
+        if (! mime)
+            mime = KMimeType::defaultMimeTypePtr();
+        page->setIcon(KIcon(KIconLoader::global()->loadMimeTypeIcon(mime->iconName(), KIconLoader::Desktop, 48)));
+    }
     addPage(page);
+    d->m_pages.append(page);
 
     initAboutTab();
 
@@ -119,6 +125,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
     page->setHeader(i18n("Author"));
     page->setIcon(KIcon("user-identity"));
     addPage(page);
+    d->m_pages.append(page);
 
     initAuthorTab();
 
@@ -134,6 +141,7 @@ KoDocumentInfoDlg::KoDocumentInfoDlg(QWidget* parent, KoDocumentInfo* docInfo, K
         page->setHeader(i18n("Rdf"));
         page->setIcon(KIcon("text-rdf"));
         addPage(page);
+        d->m_pages.append(page);
 #endif
     }
 }
@@ -521,6 +529,25 @@ void KoDocumentInfoDlg::slotSaveEncryption()
     d->m_applyToggleEncryption = false;
     // Detects when the user cancelled saving
     d->m_documentSaved = !doc->url().isEmpty();
+}
+
+QList<KPageWidgetItem*> KoDocumentInfoDlg::pages() const
+{
+    return d->m_pages;
+}
+
+void KoDocumentInfoDlg::setReadOnly(bool ro)
+{
+    d->m_aboutUi->meComments->setReadOnly(ro);
+
+    Q_FOREACH(KPageWidgetItem* page, d->m_pages) {
+        Q_FOREACH(QLineEdit* le, page->widget()->findChildren<QLineEdit *>()) {
+            le->setReadOnly(ro);
+        }
+        Q_FOREACH(QPushButton* le, page->widget()->findChildren<QPushButton *>()) {
+            le->setDisabled(ro);
+        }
+    }
 }
 
 #include <KoDocumentInfoDlg.moc>

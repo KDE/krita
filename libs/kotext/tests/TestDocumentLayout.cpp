@@ -99,6 +99,7 @@ void TestDocumentLayout::testHitTestSection()
 {
     // init a basic document with 3 parags.
     initForNewTest();
+    doc->setHtml("<p>lsdjflkdsjf lsdkjf lsdlflksejrl sdflsd flksjdf lksjrpdslfjfsdhtwkr[ivxxmvlwerponldsjf;dslflkjsorindfsn;epsdf</p><p>sldkfnwerpodsnf</p><p>sldkjfnpqwrdsf</p>");
     QTextCursor cursor;
     QTextBlock block = doc->begin();
     qreal offset = 50.0;

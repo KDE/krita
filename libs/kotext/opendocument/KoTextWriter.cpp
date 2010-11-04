@@ -32,6 +32,8 @@
 #include <QUuid>
 
 #include "KoInlineObject.h"
+#include "KoTextAnchor.h"
+#include "KoShape.h"
 #include "KoVariable.h"
 #include "KoInlineTextObjectManager.h"
 #include "styles/KoStyleManager.h"
@@ -438,7 +440,22 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
+                        int changeId = openChangeRegion(currentFragment.position(), KoTextWriter::Private::Span);
+                        KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
+                        if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                            textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                            textAnchor->shape()->setAdditionalAttribute("delta:insertion-type", "insert-with-content");
+                        }
+                        
                         inlineObject->saveOdf(context);
+                        
+                        if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                            textAnchor->shape()->removeAdditionalAttribute("delta:insertion-change-idref");
+                            textAnchor->shape()->removeAdditionalAttribute("delta:insertion-type");
+                        }
+                        
+                        if (changeId)
+                            closeChangeRegion();
                     }
 
                     if (saveSpan) {

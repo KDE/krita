@@ -18,7 +18,7 @@ set(kritatiffimport_PART_SRCS
     )
 
 
-kde4_add_plugin(kritatiffimport WITH_PREFIX ${kritatiffimport_PART_SRCS})
+kde4_add_plugin(kritatiffimport ${kritatiffimport_PART_SRCS})
 
 
 
@@ -37,7 +37,7 @@ set(kritatiffexport_PART_SRCS
 
 kde4_add_ui_files(kritatiffexport_PART_SRCS kis_wdg_options_tiff.ui )
 
-kde4_add_plugin(kritatiffexport WITH_PREFIX ${kritatiffexport_PART_SRCS})
+kde4_add_plugin(kritatiffexport ${kritatiffexport_PART_SRCS})
 
 
 

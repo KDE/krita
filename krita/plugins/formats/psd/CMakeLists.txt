@@ -26,7 +26,7 @@ set(kritapsdimport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdimport WITH_PREFIX ${kritapsdimport_PART_SRCS})
+kde4_add_plugin(kritapsdimport ${kritapsdimport_PART_SRCS})
 target_link_libraries(kritapsdimport kritaui )
 install(TARGETS kritapsdimport DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -38,7 +38,7 @@ set(kritapsdexport_PART_SRCS
     ${LIB_PSD_SRCS}
 )
 
-kde4_add_plugin(kritapsdexport WITH_PREFIX ${kritapsdexport_PART_SRCS})
+kde4_add_plugin(kritapsdexport ${kritapsdexport_PART_SRCS})
 target_link_libraries(kritapsdexport kritaui )
 install(TARGETS kritapsdexport DESTINATION ${PLUGIN_INSTALL_DIR})
 

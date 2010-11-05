@@ -28,6 +28,6 @@ Name[zh_TW]=Krita Gimp 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf
 X-KDE-Weight=1
-X-KDE-Library=libkritaxcfimport
+X-KDE-Library=kritaxcfimport
 X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

@@ -6,7 +6,7 @@ set(kritapngimport_PART_SRCS
     kis_png_import.cc
     )
 
-kde4_add_plugin(kritapngimport WITH_PREFIX ${kritapngimport_PART_SRCS})
+kde4_add_plugin(kritapngimport ${kritapngimport_PART_SRCS})
 
 
 
@@ -25,7 +25,7 @@ set(kritapngexport_PART_SRCS
 
 kde4_add_ui_files(kritapngexport_PART_SRCS kis_wdg_options_png.ui )
 
-kde4_add_plugin(kritapngexport WITH_PREFIX ${kritapngexport_PART_SRCS})
+kde4_add_plugin(kritapngexport ${kritapngexport_PART_SRCS})
 
 
 

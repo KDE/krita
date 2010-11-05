@@ -4,7 +4,7 @@ set(kritabmpexport_PART_SRCS
 
 kde4_add_ui_files(kritabmpexport_PART_SRCS )
 
-kde4_add_plugin(kritabmpexport WITH_PREFIX ${kritabmpexport_PART_SRCS})
+kde4_add_plugin(kritabmpexport ${kritabmpexport_PART_SRCS})
 
 target_link_libraries(kritabmpexport kritaui ${bmp_LIBRARIES})
 
@@ -19,7 +19,7 @@ set(kritabmpimport_PART_SRCS
 
 kde4_add_ui_files(kritabmpimport_PART_SRCS )
 
-kde4_add_plugin(kritabmpimport WITH_PREFIX ${kritabmpimport_PART_SRCS})
+kde4_add_plugin(kritabmpimport ${kritabmpimport_PART_SRCS})
 
 target_link_libraries(kritabmpimport kritaui ${bmp_LIBRARIES})
 

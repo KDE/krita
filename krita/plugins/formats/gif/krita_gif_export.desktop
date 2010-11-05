@@ -30,5 +30,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Import=application/x-krita
 X-KDE-Weight=1
-X-KDE-Library=libkritagifexport
+X-KDE-Library=kritagifexport
 NoDisplay=true

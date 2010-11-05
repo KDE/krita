@@ -29,6 +29,6 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-psd,image/photoshop,image/x-photoshop,image/x-vnd.adobe.photoshop,image/vnd.adobe.photoshop
 X-KDE-Import=application/x-krita
-X-KDE-Library=libkritapsdexport
+X-KDE-Library=kritapsdexport
 X-KDE-Weight=1
 NoDisplay=true

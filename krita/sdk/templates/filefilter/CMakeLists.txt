@@ -10,7 +10,7 @@ set(krita%{APPNAMELC}import_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(krita%{APPNAMELC}import WITH_PREFIX ${krita%{APPNAMELC}import_PART_SRCS})
+kde4_add_plugin(krita%{APPNAMELC}import ${krita%{APPNAMELC}import_PART_SRCS})
 
 
 
@@ -25,7 +25,7 @@ set(krita%{APPNAMELC}export_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(krita%{APPNAMELC}export WITH_PREFIX ${krita%{APPNAMELC}export_PART_SRCS})
+kde4_add_plugin(krita%{APPNAMELC}export ${krita%{APPNAMELC}export_PART_SRCS})
 
 
 target_link_libraries(krita%{APPNAMELC}export kritaui )

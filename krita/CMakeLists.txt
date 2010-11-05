@@ -103,7 +103,7 @@ add_subdirectory( pics )
 add_subdirectory( benchmarks )
 
 set(kritapart_PART_SRCS krita_part_init.cc)
-kde4_add_plugin(kritapart WITH_PREFIX ${kritapart_PART_SRCS})
+kde4_add_plugin(kritapart ${kritapart_PART_SRCS})
 target_link_libraries(kritapart kritaui)
 install(TARGETS kritapart DESTINATION ${PLUGIN_INSTALL_DIR})
 

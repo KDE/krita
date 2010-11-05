@@ -20,6 +20,7 @@
 #define PLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class Plugin : public QObject {
     Q_OBJECT

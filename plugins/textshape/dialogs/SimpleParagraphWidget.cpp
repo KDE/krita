@@ -37,7 +37,8 @@
 SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false),
-        m_tool(tool)
+        m_tool(tool),
+        m_directionButtonState(Auto)
 {
     widget.setupUi(this);
     widget.alignCenter->setDefaultAction(tool->action("format_aligncenter"));

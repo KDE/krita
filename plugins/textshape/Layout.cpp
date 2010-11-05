@@ -1258,7 +1258,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                     painter->fillRect(layout->boundingRect(), bg);
                     QRectF br = layout->boundingRect();
                     if (block.next().isValid())
-                            br.setHeight(br.height() + extraSpacing(block));
+                            br.setHeight(br.height() /*+ extraSpacing(block)*/);
                     painter->fillRect(br, bg);
             }
             paintStrategy->applyStrategy(painter);

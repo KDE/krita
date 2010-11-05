@@ -10,7 +10,7 @@ set(kritagifimport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritagifimport WITH_PREFIX ${kritagifimport_PART_SRCS})
+kde4_add_plugin(kritagifimport ${kritagifimport_PART_SRCS})
 
 target_link_libraries(kritagifimport kritaui ${GIF_LIBRARIES})
 
@@ -23,7 +23,7 @@ set(kritagifexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_plugin(kritagifexport WITH_PREFIX ${kritagifexport_PART_SRCS})
+kde4_add_plugin(kritagifexport ${kritagifexport_PART_SRCS})
 
 
 target_link_libraries(kritagifexport kritaui ${GIF_LIBRARIES})

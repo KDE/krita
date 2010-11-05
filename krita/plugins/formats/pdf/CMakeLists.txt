@@ -9,7 +9,7 @@ set(kritapdfimport_PART_SRCS kis_pdf_import.cpp kis_pdf_import_widget.cpp )
 
 kde4_add_ui_files(kritapdfimport_PART_SRCS pdfimportwidgetbase.ui )
 
-kde4_add_plugin(kritapdfimport WITH_PREFIX ${kritapdfimport_PART_SRCS})
+kde4_add_plugin(kritapdfimport ${kritapdfimport_PART_SRCS})
 
 
 

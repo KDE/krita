@@ -30,6 +30,6 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-portable-pixmap,image/x-portable-graymap,image/x-portable-bitmap
 X-KDE-Import=application/x-krita
-X-KDE-Library=libkritappmexport
+X-KDE-Library=kritappmexport
 X-KDE-Weight=1
 NoDisplay=true

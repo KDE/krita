@@ -27,6 +27,6 @@ Name[zh_TW]=Krita 封裝 PostScript 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-eps
 X-KDE-Weight=1
-X-KDE-Library=libkritaepsimport
+X-KDE-Library=kritaepsimport
 X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

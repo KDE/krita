@@ -29,7 +29,7 @@ class LcmsEnginePlugin : public QObject
 
 public:
 
-    LcmsEnginePlugin(QObject *parent, const QStringList &);
+    LcmsEnginePlugin(QObject *parent, const QVariantList &);
 };
 
 #endif // KO_LCMS_ENGINE_PLUGIN_H

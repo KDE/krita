@@ -58,7 +58,7 @@ void lcms2LogErrorHandlerFunction(cmsContext ContextID, cmsUInt32Number ErrorCod
 K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
 K_EXPORT_PLUGIN(LcmsEnginePluginFactory("koffice"))
 
-LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
+LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";

@@ -99,6 +99,8 @@ public:
     int getLoadedChangeId(QString odfId);
 
     static QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    static void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    static int fragmentLength(QTextDocumentFragment fragment);
 private:
     static bool checkListDeletion(QTextList *list, QTextCursor &cursor);
     class Private;

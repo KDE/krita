@@ -126,9 +126,9 @@ void ShowChangesCommand::insertDeletedChanges()
             f.clearProperty(KoCharacterStyle::InlineInstanceId);
             caret.setCharFormat(f);
             int insertPosition = caret.position();
-            insertDeleteFragment(caret, element->getDeleteChangeMarker());
-            checkAndAddAnchoredShapes(insertPosition, fragmentLength(element->getDeleteData()));
-            numAddedChars += fragmentLength(element->getDeleteData());
+            KoChangeTracker::insertDeleteFragment(caret, element->getDeleteChangeMarker());
+            checkAndAddAnchoredShapes(insertPosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
+            numAddedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
         }
     }
 }
@@ -177,11 +177,11 @@ void ShowChangesCommand::removeDeletedChanges()
             QTextCharFormat f;
             int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
             caret.setPosition(deletePosition);
-            int deletedLength = fragmentLength(element->getDeleteData());
+            int deletedLength = KoChangeTracker::fragmentLength(element->getDeleteData());
             caret.setPosition(deletePosition + deletedLength, QTextCursor::KeepAnchor);
-            checkAndRemoveAnchoredShapes(deletePosition, fragmentLength(element->getDeleteData()));
+            checkAndRemoveAnchoredShapes(deletePosition, KoChangeTracker::fragmentLength(element->getDeleteData()));
             caret.removeSelectedText();
-            numDeletedChars += fragmentLength(element->getDeleteData());
+            numDeletedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
         }
     }
 }
@@ -205,139 +205,6 @@ void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)
             m_shapeCommands.push_front(shapeCommand);
         }
     }
-}
-
-void ShowChangesCommand::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker)
-{
-    QTextDocumentFragment fragment =  KoTextDocument(cursor.document()).changeTracker()->elementById(marker->changeId())->getDeleteData();
-    QTextDocument tempDoc;
-    QTextCursor tempCursor(&tempDoc);
-    tempCursor.insertFragment(fragment);
-
-    bool deletedListItem = false;
-    
-    for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
-        tempCursor.setPosition(currentBlock.position());
-        QTextList *textList = tempCursor.currentList();
-        KoList *currentList = KoTextDocument(cursor.document()).list(cursor.block());
-
-        if (textList) {
-            if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
-                //Found a Deleted List in the fragment. Create a new KoList.
-                KoListStyle::ListIdType listId;
-                if (sizeof(KoListStyle::ListIdType) == sizeof(uint))
-                    listId = textList->format().property(KoListStyle::ListId).toUInt();
-                else
-                    listId = textList->format().property(KoListStyle::ListId).toULongLong();
-                KoListStyle *style = marker->getDeletedListStyle(listId);
-                currentList = new KoList(cursor.document(), style);    
-            }
-            
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
-            if (deletedListItem && currentBlock != tempDoc.begin()) {
-                // Found a deleted list item in the fragment. So insert a new list-item
-                int deletedListItemLevel = KoList::level(currentBlock);
-                cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
-                if(!currentList) {
-                    //This happens when a part of a paragraph and a succeeding list-item are deleted together
-                    //So go to the next block and insert it in the list there.
-                    QTextCursor tmp(cursor);
-                    tmp.setPosition(tmp.block().next().position());
-                    currentList = KoTextDocument(tmp.document()).list(tmp.block());
-                } 
-                currentList->add(cursor.block(), deletedListItemLevel);
-            }
-        } else if (tempCursor.currentTable()) {
-            QTextTable *deletedTable = tempCursor.currentTable();
-            int numRows = deletedTable->rows();
-            int numColumns = deletedTable->columns();
-            QTextTable *insertedTable = cursor.insertTable(numRows, numColumns, deletedTable->format());
-            for (int i=0; i<numRows; i++) {
-                for (int j=0; j<numColumns; j++) {
-                    tempCursor.setPosition(deletedTable->cellAt(i,j).firstCursorPosition().position());
-                    tempCursor.setPosition(deletedTable->cellAt(i,j).lastCursorPosition().position(), QTextCursor::KeepAnchor);
-                    insertedTable->cellAt(i,j).setFormat(deletedTable->cellAt(i,j).format().toTableCellFormat());
-                    cursor.setPosition(insertedTable->cellAt(i,j).firstCursorPosition().position());
-                    cursor.insertFragment(tempCursor.selection());
-                }
-            }
-            tempCursor.setPosition(deletedTable->cellAt(numRows-1,numColumns-1).lastCursorPosition().position());
-            currentBlock = tempCursor.block();
-            //Move the cursor outside of table
-            cursor.setPosition(cursor.position() + 1);
-            continue;
-        } else {
-            // This block does not contain a list. So no special work here. 
-            if (currentBlock != tempDoc.begin())
-                cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
-        }
-
-        /********************************************************************************************************************/
-        /*This section of code is a work-around for a bug in the Qt. This work-around is safe. If and when the bug is fixed */
-        /*the if condition would never be true and the code would never get executed                                        */
-        /********************************************************************************************************************/
-        if ((KoList::level(cursor.block()) != KoList::level(currentBlock)) && currentBlock.text().length()) {
-            if (!currentList) {
-                QTextCursor tmp(cursor);
-                tmp.setPosition(tmp.block().previous().position());
-                currentList = KoTextDocument(tmp.document()).list(tmp.block());
-            }
-            currentList->add(cursor.block(), KoList::level(currentBlock));
-        }
-        /********************************************************************************************************************/
-        
-        // Finally insert all the contents of the block into the main document.
-        QTextBlock::iterator it;
-        for (it = currentBlock.begin(); !(it.atEnd()); ++it) {
-            QTextFragment currentFragment = it.fragment();
-            if (currentFragment.isValid())
-                cursor.insertText(currentFragment.text(), currentFragment.charFormat());
-        }
-    }
-}
-
-int ShowChangesCommand::fragmentLength(QTextDocumentFragment fragment)
-{
-    QTextDocument tempDoc;
-    QTextCursor tempCursor(&tempDoc);
-    tempCursor.insertFragment(fragment);
-    int length = 0;
-    bool deletedListItem = false;
-    for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
-        tempCursor.setPosition(currentBlock.position());
-        if (tempCursor.currentList()) {
-            deletedListItem = currentBlock.blockFormat().property(KoDeleteChangeMarker::DeletedListItem).toBool();
-            if (currentBlock != tempDoc.begin() && deletedListItem)
-                length += 1; //For the Block separator
-        } else if (tempCursor.currentTable()) {
-            QTextTable *deletedTable = tempCursor.currentTable();
-            int numRows = deletedTable->rows();
-            int numColumns = deletedTable->columns();
-            for (int i=0; i<numRows; i++) {
-                for (int j=0; j<numColumns; j++) {
-                    length += 1;
-                    length += (deletedTable->cellAt(i,j).lastCursorPosition().position() - deletedTable->cellAt(i,j).firstCursorPosition().position());
-                }
-            }
-            tempCursor.setPosition(deletedTable->cellAt(numRows-1,numColumns-1).lastCursorPosition().position());
-            currentBlock = tempCursor.block();
-            length += 1;
-            continue;
-        } else {
-            if (currentBlock != tempDoc.begin())
-                length += 1; //For the Block Separator
-        }
-        
-
-        QTextBlock::iterator it;
-        for (it = currentBlock.begin(); !(it.atEnd()); ++it) {
-            QTextFragment currentFragment = it.fragment();
-            if (currentFragment.isValid())
-                length += currentFragment.text().length();
-        }
-    }
-    
-    return length;
 }
 
 ShowChangesCommand::~ShowChangesCommand()

@@ -314,13 +314,13 @@ QTextCursor* KoTextEditor::cursor()
     return &(d->caret);
 }
 
-void KoTextEditor::addCommand(QUndoCommand *command)
+void KoTextEditor::addCommand(QUndoCommand *command, bool addCommandToStack)
 {
     d->updateState(KoTextEditor::Private::Custom, (!command->text().isEmpty())?command->text():i18n("Text"));
     //kDebug() << "will push the custom command: " << command->text();
     d->headCommand = command;
     QUndoStack *stack = KoTextDocument(d->document).undoStack();
-    if (stack)
+    if (stack && addCommandToStack)
         stack->push(command);
     else
         command->redo();

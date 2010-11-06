@@ -37,6 +37,32 @@
 #include <kis_categorized_item_delegate.h>
 #include <qstyleditemdelegate.h>
 
+class KisPaintopOptionDelegate : public QStyledItemDelegate {
+
+public:
+    KisPaintopOptionDelegate(QObject* parent = 0): QStyledItemDelegate(parent), m_minimumItemHeight(0)
+    {
+    }
+    
+    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+    {
+        //on first calling this calculates the mininmal height of the items
+        if(m_minimumItemHeight == 0) {
+            for(int i = 0; i < index.model()->rowCount(); i++) {
+                QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
+                m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
+            }
+        }
+        
+        QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
+        sizeHint.setHeight(m_minimumItemHeight);
+        return sizeHint;
+    }
+
+private:
+    mutable int m_minimumItemHeight;
+};
+
 class KisPaintOpOptionsWidget::Private
 {
 
@@ -62,7 +88,7 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     m_d->proxyModel->setCategorizedModel(true);
     m_d->proxyModel->setSortRole(KisPaintOpOptionsModel::SortingRole);
     m_d->optionsList->setModel(m_d->proxyModel);
-    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new QStyledItemDelegate));
+    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new KisPaintopOptionDelegate));
     m_d->optionsList->setFixedWidth(128);
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     policy.setHorizontalStretch(0);

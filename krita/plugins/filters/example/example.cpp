@@ -59,7 +59,6 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

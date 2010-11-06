@@ -58,8 +58,6 @@
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
-
 }
 
 void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,

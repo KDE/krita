@@ -89,7 +89,6 @@ ColorsFilters::~ColorsFilters()
 
 KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Auto Contrast"))
 {
-    setSupportsPreview(true);
     setSupportsPainting(false);
     setSupportsThreading(false);
     setColorSpaceIndependence(TO_LAB16);
@@ -249,7 +248,6 @@ KisDesaturateFilter::KisDesaturateFilter()
 KisDesaturateFilter::~KisDesaturateFilter()
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }

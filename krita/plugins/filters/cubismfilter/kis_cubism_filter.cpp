@@ -69,7 +69,6 @@
 KisCubismFilter::KisCubismFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Cubism..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
 //     setSupportsThreading(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
 }

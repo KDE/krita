@@ -111,9 +111,6 @@ public:
      */
     bool supportsPainting() const;
 
-    /// This filter can be displayed in a preview dialog
-    bool supportsPreview() const;
-
     /// This filter can be used in adjustment layers
     bool supportsAdjustmentLayers() const;
 
@@ -144,7 +141,6 @@ public:
 protected:
 
     void setSupportsPainting(bool v);
-    void setSupportsPreview(bool v);
     void setSupportsAdjustmentLayers(bool v);
     void setSupportsIncrementalPainting(bool v);
     void setSupportsThreading(bool v);

@@ -67,7 +67,6 @@ KisColorGenerator::KisColorGenerator() : KisGenerator(id(), KoID("basic"), i18n(
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

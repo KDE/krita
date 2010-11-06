@@ -37,7 +37,6 @@ KisScriptFilter::KisScriptFilter(Kross::Action* action) : KisFilter(KoID(action-
 {
     d->action->addObject(this, "KritaFilter", Kross::ChildrenInterface::AutoConnectSignals);
     setSupportsPainting(d->action->property("supportsPainting").toBool());
-    setSupportsPreview(d->action->property("supportsPreview").toBool());
     setSupportsIncrementalPainting(d->action->property("supportsIncrementalPainting").toBool());
     setSupportsAdjustmentLayers(d->action->property("supportsAdjustmentLayers").toBool());
     setSupportsThreading(false);

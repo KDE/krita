@@ -70,7 +70,6 @@ KisFilterNoise::KisFilterNoise() : KisFilter(id(), categoryOther(), i18n("&Rando
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

@@ -20,9 +20,6 @@ public:
     virtual void process(const KisPaintDeviceSP src, const QPoint& srcTopLeft, KisPaintDeviceSP dst, const QPoint& dstTopLeft, const QSize& size, KisFilterConfiguration* config);
     virtual ColorSpaceIndependence colorSpaceIndependence() const { return FULLY_INDEPENDENT; }
     static inline KoID id() { return KoID("%{APPNAMELC}", i18n("%{APPNAME}")); }
-    virtual bool supportsPainting() const { return true; }
-    virtual bool supportsPreview() const { return true; }
-    virtual bool supportsIncrementalPainting() const { return false; }
 };
 
 #endif

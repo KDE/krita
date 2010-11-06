@@ -381,7 +381,6 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }

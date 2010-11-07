@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -715,23 +715,22 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
 }
 
 void KoTextEditor::insertFrameBreak()
-{//TODO split newLine method in two.
+{
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
     QTextBlock block = d->caret.block();
-    /*
-    if(d->caret->position() == block.position() && block.length() > 0) { // start of parag
-        QTextBlockFormat bf = d->caret->blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
-        d->caret->setBlockFormat(bf);
-} else { */
-    QTextBlockFormat bf = d->caret.blockFormat();
-    //       if(d->caret->position() != block.position() + block.length() -1 ||
-    //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
-    newLine();
-    bf = d->caret.blockFormat();
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
-    d->caret.setBlockFormat(bf);
-    //}
+    if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
+        QTextBlockFormat bf = d->caret.blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        d->caret.insertBlock(bf);
+        if (block.textList())
+            block.textList()->remove(block);
+    } else {
+        QTextBlockFormat bf = d->caret.blockFormat();
+        newLine();
+        bf = d->caret.blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
+        d->caret.setBlockFormat(bf);
+    }
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

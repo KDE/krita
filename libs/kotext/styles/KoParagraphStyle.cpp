@@ -190,7 +190,6 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
-    format.clearProperty(QTextFormat::PageBreakPolicy); //this should not be inherited according to odf
 
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();

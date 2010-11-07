@@ -314,7 +314,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     // Init parameters
     opj_cparameters_t parameters;
     opj_set_default_encoder_parameters(&parameters);
-    parameters.cp_comment = "Created by Krita";
+    parameters.cp_comment = (char*)"Created by Krita";
     parameters.subsampling_dx = 1;
     parameters.subsampling_dy = 1;
     parameters.cp_disto_alloc = 1;
@@ -322,7 +322,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
     parameters.numresolution = options.numberresolution;
     dbgFile << 100 - options.rate;
     parameters.tcp_rates[0] = options.rate;
-    
+
 
     // Set the colorspace information
     OPJ_COLOR_SPACE clrspc;
@@ -402,7 +402,7 @@ KisImageBuilder_Result jp2Converter::buildFile(const KUrl& uri, KisPaintLayerSP 
             }
         }
     }
-    
+
     // coding format
     parameters.decod_format = getFileFormat(uri); // TODO isn't there some magic code ?
 

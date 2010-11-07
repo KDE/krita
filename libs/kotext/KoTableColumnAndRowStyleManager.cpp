@@ -68,13 +68,11 @@ KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
 KoTableColumnAndRowStyleManager KoTableColumnAndRowStyleManager::getManager(QTextTable *table)
 {
     QTextTableFormat tableFormat = table->format();
-qDebug()<<"getmanager";
+
     if (tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager)) {
-qDebug()<<"getmanager returning from format";
         return  tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<KoTableColumnAndRowStyleManager>();
     } else {
         KoTableColumnAndRowStyleManager carsManager;
-qDebug()<<"getmanager returning new one";
 
         QVariant var;
         var.setValue(carsManager);

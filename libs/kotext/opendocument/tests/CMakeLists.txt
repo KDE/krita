@@ -6,9 +6,9 @@ add_definitions(-DFILES_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/data/\\"")
 
 ########### next target ###############
 
-set(TestLoadStyle_test_SRCS TestLoadStyle.cpp)
-kde4_add_unit_test(TestLoadStyle TESTNAME kotext-odf-TestLoadStyle ${TestLoadStyle_test_SRCS})
-target_link_libraries(TestLoadStyle kotext ${QT_QTTEST_LIBRARY})
+#set(TestLoadStyle_test_SRCS TestLoadStyle.cpp)
+#kde4_add_unit_test(TestLoadStyle TESTNAME kotext-odf-TestLoadStyle ${TestLoadStyle_test_SRCS})
+#target_link_libraries(TestLoadStyle kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

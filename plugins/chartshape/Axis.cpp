@@ -733,44 +733,27 @@ void Axis::Private::createBubbleDiagram()
 
 void Axis::Private::createSurfaceDiagram()
 {
-    // This is a so far a by KDChart unsupported chart type.
-#if 0
-    // The model.
-    if ( kdSurfaceDiagramModel == 0 ) {
-        kdSurfaceDiagramModel = new KDChartModel;
-        //kdSurfaceDiagramModel->setDataDimensions( 2 );
-    }
+    Q_ASSERT( !kdSurfaceDiagram );
 
-    // No KDChart::Diagram since KDChart doesn't support this type
-    if ( kdSurfaceDiagram == 0 ) {
-        ...
-    }
-#else // fallback to bar diagram for now
-    if ( !kdBarDiagram ) createBarDiagram();
-    kdSurfaceDiagram = kdBarDiagram;
-    kdBarDiagram = 0;
-#endif
+    // This is a so far a by KDChart unsupported chart type.
+    // Fall back to bar diagram for now.
+    kdSurfaceDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
+    registerDiagram( kdSurfaceDiagram );
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdSurfaceDiagram );
+    kdPlane->addDiagram( kdSurfaceDiagram );
 }
 
 void Axis::Private::createGanttDiagram()
 {
     // This is a so far a by KDChart unsupported chart type (through KDGantt got merged into KDChart with 2.3)
-#if 0
-    // The model.
-    if ( kdGanttDiagramModel == 0 ) {
-        kdGanttDiagramModel = new KDChartModel;
-        //kdGanttDiagramModel->setDataDimensions( 2 );
-    }
+    Q_ASSERT( !kdGanttDiagram );
 
-    // No KDChart::Diagram since KDChart doesn't support this type
-    if ( kdGanttDiagram == 0 ) {
-        ...
-    }
-#else // fallback to bar diagram for now
-    if ( !kdBarDiagram ) createBarDiagram();
-    kdGanttDiagram = kdBarDiagram;
-    kdBarDiagram = 0;
-#endif
+    // This is a so far a by KDChart unsupported chart type.
+    // Fall back to bar diagram for now.
+    kdGanttDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
+    registerDiagram( kdGanttDiagram );
+    plotArea->parent()->legend()->kdLegend()->addDiagram( kdGanttDiagram );
+    kdPlane->addDiagram( kdGanttDiagram );
 }
 
 /**

@@ -55,7 +55,7 @@ KoShape *RectangleShapeFactory::createDefaultShape(KoResourceManager *) const
     return rect;
 }
 
-bool RectangleShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
+bool RectangleShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &/*context*/) const
 {
     Q_UNUSED(e);
     return (e.localName() == "rect" && e.namespaceURI() == KoXmlNS::draw);

@@ -45,6 +45,12 @@ public:
     bool applyToDocument() const;
     void showApplyToDocument(bool on);
 
+    void showUnitchooser(bool on);
+    void setUnit(const KoUnit &unit);
+
+signals:
+    void unitChanged(const KoUnit &unit);
+
 private slots:
     void setPageLayout(const KoPageLayout &layout);
 

@@ -26,12 +26,12 @@
 class KisCategoryDrawer : public KCategoryDrawer
 {
 public:
-    virtual void drawCategory ( const QModelIndex& index, int sortRole, const QStyleOption& option, QPainter* painter ) const
+    virtual void drawCategory ( const QModelIndex& index, int /*sortRole*/, const QStyleOption& option, QPainter* painter ) const
     {
         painter->setRenderHint(QPainter::Antialiasing);
         const QString category = index.model()->data(index, KCategorizedSortFilterProxyModel::CategoryDisplayRole).toString();
-        
-        QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomLeft());         
+
+        QLinearGradient gradient(option.rect.topLeft(), option.rect.bottomLeft());
         if (index.row() != 0) {
             gradient.setColorAt(0, Qt::transparent);
         }
@@ -39,13 +39,13 @@ public:
         gradient.setColorAt(0.8, option.palette.background());
         gradient.setColorAt(1, Qt::transparent);
         painter->fillRect(option.rect, gradient);
-         
+
         QFont font(QApplication::font());
         font.setBold(true);
         const QFontMetrics fontMetrics = QFontMetrics(font);
-         
+
         QRect textRect = option.rect.adjusted(5, 0, 0, 0);
- 
+
         painter->save();
         painter->setFont(font);
         painter->setPen(option.palette.text().color());

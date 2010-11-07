@@ -127,6 +127,8 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     destroyImageTextureTiles();
     updateTextureFormat();
+    m_texturesInfo.imageRect = m_image->bounds();
+
 
     const int lastCol = xToCol(m_image->width());
     const int lastRow = yToRow(m_image->height());
@@ -134,15 +136,16 @@ void KisOpenGLImageTextures::createImageTextureTiles()
 
     // Default color is transparent black
     const int pixelSize = 4;
-    QByteArray emptyTileData(m_texturesInfo.width * m_texturesInfo.height * pixelSize, 0);
+    QByteArray emptyTileData((m_texturesInfo.width) * (m_texturesInfo.height) * pixelSize, 0);
 
     for (int row = 0; row <= lastRow; row++) {
         for (int col = 0; col <= lastCol; col++) {
-            QRect tileRect(col * m_texturesInfo.width,
-                           row * m_texturesInfo.height,
-                           m_texturesInfo.width, m_texturesInfo.height);
+            QRect tileRect(col * m_texturesInfo.effectiveWidth,
+                           row * m_texturesInfo.effectiveHeight,
+                           m_texturesInfo.effectiveWidth,
+                           m_texturesInfo.effectiveHeight);
 
-            KisTextureTile *tile = new KisTextureTile(tileRect,
+            KisTextureTile *tile = new KisTextureTile(tileRect & m_texturesInfo.imageRect,
                                                       &m_texturesInfo,
                                                       emptyTileData.constData());
             m_textureTiles.append(tile);
@@ -169,10 +172,23 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
     QRect updateRect = rect & m_image->bounds();
     if (updateRect.isEmpty()) return info;
 
-    int firstColumn = xToCol(updateRect.left());
-    int lastColumn = xToCol(updateRect.right());
-    int firstRow = yToRow(updateRect.top());
-    int lastRow = yToRow(updateRect.bottom());
+
+    /**
+     * Why the rect is artificial? That's easy!
+     * It does not represent any real piece of the image. It is
+     * intentionally stretched to get through the overlappping
+     * stripes of neutrality and poke neighbouring tiles.
+     * Thanks to the rect we get the coordinates of all the tiles
+     * involved into update process
+     */
+
+    QRect artificialRect = stretchRect(updateRect, m_texturesInfo.border);
+
+    int firstColumn = xToCol(artificialRect.left());
+    int lastColumn = xToCol(artificialRect.right());
+    int firstRow = yToRow(artificialRect.top());
+    int lastRow = yToRow(artificialRect.bottom());
+
 
     qint32 numItems = (lastColumn - firstColumn + 1) * (lastRow - firstRow + 1);
     info->tileList.reserve(numItems);
@@ -182,8 +198,10 @@ KisOpenGLImageTextures::updateCache(const QRect& rect)
 
             KisTextureTile *tile = getTextureTileCR(col, row);
 
-            KisTextureTileUpdateInfo tileInfo(tile->tileRectInImagePixels(),
+            KisTextureTileUpdateInfo tileInfo(tile,
+                                              tile->textureRectInImagePixels(),
                                               updateRect);
+
             tileInfo.retrieveData(m_image);
             info->tileList.append(tileInfo);
         }
@@ -224,8 +242,7 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info)
         }
 
         tileInfo.convertTo(dstCS);
-        KisTextureTile *tile = getTextureTile(tileInfo.tileRect().x(), tileInfo.tileRect().y());
-        tile->update(tileInfo);
+        tileInfo.relatedTile()->update(tileInfo);
         tileInfo.destroy();
 
         KIS_OPENGL_PRINT_ERROR();
@@ -351,6 +368,11 @@ void KisOpenGLImageTextures::getTextureSize(KisGLTexturesInfo *texturesInfo)
 
     texturesInfo->width = qMin(preferredTextureSize, maxTextureSize);
     texturesInfo->height = qMin(preferredTextureSize, maxTextureSize);
+
+    texturesInfo->border = 1;
+
+    texturesInfo->effectiveWidth = texturesInfo->width - 2 * texturesInfo->border;
+    texturesInfo->effectiveHeight = texturesInfo->height - 2 * texturesInfo->border;
 }
 
 void KisOpenGLImageTextures::updateTextureFormat()

@@ -116,11 +116,11 @@ public:
 
 public:
     inline int xToCol(int x) {
-        return x / m_texturesInfo.width;
+        return x / m_texturesInfo.effectiveWidth;
     }
 
     inline int yToRow(int y) {
-        return y / m_texturesInfo.height;
+        return y / m_texturesInfo.effectiveHeight;
     }
 
     inline KisTextureTile* getTextureTileCR(int col, int row) {

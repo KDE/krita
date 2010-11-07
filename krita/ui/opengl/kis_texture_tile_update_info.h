@@ -25,6 +25,8 @@
 #include "kis_image.h"
 #include "kis_paint_device.h"
 
+class KisTextureTile;
+
 class KisTextureTileUpdateInfo;
 typedef QVector<KisTextureTileUpdateInfo> KisTextureTileUpdateInfoList;
 
@@ -35,7 +37,8 @@ public:
         m_patchPixels = 0;
     }
 
-    KisTextureTileUpdateInfo(QRect tileRect, QRect updateRect) {
+    KisTextureTileUpdateInfo(KisTextureTile *tile, QRect tileRect, QRect updateRect) {
+        m_textureTile = tile;
         m_tileRect = tileRect;
         m_patchRect = m_tileRect & updateRect;
         m_patchPixels = 0;
@@ -50,7 +53,6 @@ public:
 
     void retrieveData(KisImageWSP image) {
         m_patchColorSpace = image->projection()->colorSpace();
-
         m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
@@ -71,28 +73,37 @@ public:
         m_patchPixels = dstBuffer;
     }
 
-    inline quint8* data() {
+    inline quint8* data() const {
         return m_patchPixels;
     }
 
-    inline bool isEntireTileUpdated() {
+    inline bool isEntireTileUpdated() const {
         return m_patchRect == m_tileRect;
     }
 
-    inline QPoint patchOffset() {
+    inline QPoint patchOffset() const {
         return QPoint(m_patchRect.x() - m_tileRect.x(),
                       m_patchRect.y() - m_tileRect.y());
     }
 
-    inline QSize patchSize() {
+    inline QSize patchSize() const {
         return m_patchRect.size();
     }
 
-    inline QRect tileRect() {
+    inline QRect tileRect() const {
         return m_tileRect;
     }
 
+    KisTextureTile *relatedTile() const {
+        return m_textureTile;
+    }
+
+    quint32 pixelSize() const {
+        return m_patchColorSpace->pixelSize();
+    }
+
 private:
+    KisTextureTile *m_textureTile;
     QRect m_tileRect;
     QRect m_patchRect;
     const KoColorSpace* m_patchColorSpace;

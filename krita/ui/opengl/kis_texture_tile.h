@@ -18,101 +18,46 @@
 #ifndef KIS_TEXTURE_TILE_H_
 #define KIS_TEXTURE_TILE_H_
 
+#include <opengl/kis_opengl.h>
+
 #ifdef HAVE_OPENGL
 
 #include "kis_texture_tile_update_info.h"
+
+#include <QRect>
+#include <QRectF>
+#include <opengl/kis_opengl.h>
 
 
 struct KisGLTexturesInfo {
     int width;
     int height;
 
+    int effectiveWidth;
+    int effectiveHeight;
+
+    int border;
+
     GLint format;
     GLint type;
+
+    QRect imageRect;
 };
 
+inline QRect stretchRect(const QRect &rc, int delta)
+{
+    return rc.adjusted(-delta, -delta, delta, delta);
+}
 
 class KisTextureTile
 {
 public:
     KisTextureTile(QRect imageRect, const KisGLTexturesInfo *texturesInfo,
-                   const GLvoid *fillData)
+                   const GLvoid *fillData);
+    ~KisTextureTile();
 
-        : m_tileRectInImagePixels(imageRect), m_texturesInfo(texturesInfo)
-    {
-        m_textureRectInImagePixels =
-            m_tileRectInImagePixels/*.adjusted(-1,-1,1,1)*/;
-
-//        m_tileRectInTexturePixels = QRectF(0.0, 0.0, 1.0, 1.0);
-
-        glGenTextures(1, &m_textureId);
-        glBindTexture(GL_TEXTURE_2D, m_textureId);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0,
-                     m_texturesInfo->format,
-                     m_texturesInfo->height, m_texturesInfo->width, 0,
-                     GL_BGRA, GL_UNSIGNED_BYTE, fillData);
-    }
-
-    ~KisTextureTile() {
-        glDeleteTextures(1, &m_textureId);
-    }
-
-    inline void update(KisTextureTileUpdateInfo updateInfo) {
-        glBindTexture(GL_TEXTURE_2D, m_textureId);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-        if (updateInfo.isEntireTileUpdated()) {
-            glTexImage2D(GL_TEXTURE_2D, 0,
-                         m_texturesInfo->format,
-                         m_texturesInfo->height, m_texturesInfo->width, 0,
-                         GL_BGRA, m_texturesInfo->type,
-                         updateInfo.data());
-        } else {
-            QPoint patchOffset = updateInfo.patchOffset();
-            QSize patchSize = updateInfo.patchSize();
-            glTexSubImage2D(GL_TEXTURE_2D, 0,
-                            patchOffset.x(), patchOffset.y(),
-                            patchSize.width(), patchSize.height(),
-                            GL_BGRA, m_texturesInfo->type,
-                            updateInfo.data());
-        }
-
-    }
-
-    inline void drawPoints() {
-        /**
-         * We create a float rect here to workaround Qt's
-         * "history reasons" in calculation of right()
-         * and bottom() coordinates of integer rects.
-         */
-        QRectF imageRect(m_tileRectInImagePixels);
-        QPointF pt;
-
-        glBegin(GL_QUADS);
-
-        pt = imageRect.topLeft();
-        glTexCoord2f(0.0, 0.0);
-        glVertex2f(pt.x(), pt.y());
-
-        pt = imageRect.topRight();
-        glTexCoord2f(1.0, 0.0);
-        glVertex2f(pt.x(), pt.y());
-
-        pt = imageRect.bottomRight();
-        glTexCoord2f(1.0, 1.0);
-        glVertex2f(pt.x(), pt.y());
-
-        pt = imageRect.bottomLeft();
-        glTexCoord2f(0.0, 1.0);
-        glVertex2f(pt.x(), pt.y());
-
-        glEnd();
-    }
-
-//    inline QRectF tileRectInTexturePixels() {
-//        return m_tileRectInTexturePixels;
-//    }
+    void update(const KisTextureTileUpdateInfo &updateInfo);
+    void drawPoints();
 
     inline QRect tileRectInImagePixels() {
         return m_tileRectInImagePixels;
@@ -122,16 +67,18 @@ public:
         return m_textureId;
     }
 
-//    inline QRect textureRectInImagePixels() {
-//        return m_textureRectInImagePixels;
-//    }
+    inline QRect textureRectInImagePixels() {
+        return m_textureRectInImagePixels;
+    }
 
+private:
+    void repeatStripes(const KisTextureTileUpdateInfo &updateInfo);
 
 private:
     GLuint m_textureId;
 
     QRect m_tileRectInImagePixels;
-//    QRectF m_tileRectInTexturePixels;
+    QRectF m_tileRectInTexturePixels;
     QRect m_textureRectInImagePixels;
 
     const KisGLTexturesInfo *m_texturesInfo;

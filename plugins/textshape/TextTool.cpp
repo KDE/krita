@@ -983,7 +983,6 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
             editingPluginEvents();
         }
-        ensureCursorVisible();
     } else if (rw && (event->key() == Qt::Key_Tab)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList()) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;

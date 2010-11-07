@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2004-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
@@ -122,10 +122,10 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 {
     KoOdfLoadingContext &context = shapeContext.odfLoadingContext();
 
-    addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text").values(), ContentDotXml);
-    addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text", true).values(), StylesDotXml);
-    // only add styles of office:styles to the style manager
     addCharacterStyles(shapeContext, context.stylesReader().customStyles("text").values(), ContentDotXml | StylesDotXml, styleManager);
+    addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text", true).values(), StylesDotXml);
+    addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text").values(), ContentDotXml);
+    // only add styles of office:styles to the style manager
 
     addListStyles(shapeContext, context.stylesReader().autoStyles("list").values(), ContentDotXml);
     addListStyles(shapeContext, context.stylesReader().autoStyles("list", true).values(), StylesDotXml);
@@ -239,30 +239,37 @@ QList<QPair<QString, KoParagraphStyle *> > KoTextSharedLoadingData::loadParagrap
 void KoTextSharedLoadingData::addCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
         int styleTypes, KoStyleManager *styleManager)
 {
-    QList<QPair<QString, KoCharacterStyle *> > characterStyles(loadCharacterStyles(context, styleElements));
+    QList<OdfCharStyle> characterStyles(loadCharacterStyles(context, styleElements));
 
-    QList<QPair<QString, KoCharacterStyle *> >::iterator it(characterStyles.begin());
-    for (; it != characterStyles.end(); ++it) {
+    foreach (const OdfCharStyle &odfStyle, characterStyles) {
         if (styleTypes & ContentDotXml) {
-            d->characterContentDotXmlStyles.insert(it->first, it->second);
+            d->characterContentDotXmlStyles.insert(odfStyle.odfName, odfStyle.style);
         }
         if (styleTypes & StylesDotXml) {
-            d->characterStylesDotXmlStyles.insert(it->first, it->second);
+            d->characterStylesDotXmlStyles.insert(odfStyle.odfName, odfStyle.style);
         }
 
-        // TODO check if it a know style set the styleid so that the custom styles are kept during copy and paste
-        // in case styles are not added to the style manager they have to be deleted after loading to avoid leaking memeory
         if (styleManager) {
-            styleManager->add(it->second);
+            styleManager->add(odfStyle.style);
         } else {
-            d->characterStylesToDelete.append(it->second);
+            if (!odfStyle.parentStyle.isEmpty()) { // an auto style with a parent.
+                // lets find the parent and set the styleId of that one on the auto-style too.
+                // this will have the effect that whereever the autostyle is applied, it will
+                // cause the parent style-id to be applied. So we don't loose this info.
+                KoCharacterStyle *parent = characterStyle(odfStyle.parentStyle, false);
+                if (!parent)
+                    parent = characterStyle(odfStyle.parentStyle, true); // try harder
+                if (parent)
+                    odfStyle.style->setStyleId(parent->styleId());
+            }
+            d->characterStylesToDelete.append(odfStyle.style);
         }
     }
 }
 
-QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacterStyles(KoShapeLoadingContext &shapeContext, QList<KoXmlElement*> styleElements)
+QList<KoTextSharedLoadingData::OdfCharStyle> KoTextSharedLoadingData::loadCharacterStyles(KoShapeLoadingContext &shapeContext, QList<KoXmlElement*> styleElements)
 {
-    QList<QPair<QString, KoCharacterStyle *> > characterStyles;
+    QList<OdfCharStyle> characterStyles;
     KoOdfLoadingContext &context = shapeContext.odfLoadingContext();
 
     foreach(KoXmlElement *styleElem, styleElements) {
@@ -274,6 +281,7 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
         if (displayName.isEmpty()) {
             displayName = name;
         }
+        QString parent = styleElem->attributeNS(KoXmlNS::style, "parent-style-name");
 
         kDebug(32500) << "styleName =" << name << "styleDisplayName =" << displayName;
 
@@ -285,10 +293,13 @@ QList<QPair<QString, KoCharacterStyle *> > KoTextSharedLoadingData::loadCharacte
         KoCharacterStyle *characterStyle = new KoCharacterStyle();
         characterStyle->setName(displayName);
         characterStyle->loadOdf(shapeContext);
-
         context.styleStack().restore();
 
-        characterStyles.append(QPair<QString, KoCharacterStyle *>(name, characterStyle));
+        OdfCharStyle answer;
+        answer.odfName = name;
+        answer.parentStyle = parent;
+        answer.style = characterStyle;
+        characterStyles.append(answer);
     }
     return characterStyles;
 }

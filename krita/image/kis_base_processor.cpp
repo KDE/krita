@@ -48,7 +48,6 @@ struct KisBaseProcessor::Private {
     Private()
             : bookmarkManager(0)
             , supportsPainting(false)
-            , supportsPreview(true)
             , supportsAdjustmentLayers(false)
             , supportsIncrementalPainting(true)
             , supportsThreading(true)
@@ -61,7 +60,6 @@ struct KisBaseProcessor::Private {
     KoID category; // The category in the filter menu this filter fits
     QString entry; // the i18n'ed accelerated menu text
     bool supportsPainting;
-    bool supportsPreview;
     bool supportsAdjustmentLayers;
     bool supportsIncrementalPainting;
     bool supportsThreading;
@@ -144,11 +142,6 @@ bool KisBaseProcessor::supportsPainting() const
     return d->supportsPainting;
 }
 
-bool KisBaseProcessor::supportsPreview() const
-{
-    return d->supportsPreview;
-}
-
 bool KisBaseProcessor::supportsAdjustmentLayers() const
 {
     return d->supportsAdjustmentLayers;
@@ -173,18 +166,17 @@ void KisBaseProcessor::setSupportsPainting(bool v)
 {
     d->supportsPainting = v;
 }
-void KisBaseProcessor::setSupportsPreview(bool v)
-{
-    d->supportsPreview = v;
-}
+
 void KisBaseProcessor::setSupportsAdjustmentLayers(bool v)
 {
     d->supportsAdjustmentLayers = v;
 }
+
 void KisBaseProcessor::setSupportsIncrementalPainting(bool v)
 {
     d->supportsIncrementalPainting = v;
 }
+
 void KisBaseProcessor::setSupportsThreading(bool v)
 {
     d->supportsThreading = v;

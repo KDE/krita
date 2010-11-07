@@ -46,8 +46,8 @@ public:
                 kDebug() << "Adding " << shape << "with parent" << shape->parent() << "to container" << m_container;
                 KisShapeLayer* shapeLayer = dynamic_cast<KisShapeLayer*>(m_container);
                 if (shapeLayer) {
+                    //don't update as the setDirty call would create shared pointer that would delete the layer
                     shapeLayer->addShape(shape);
-                    shapeLayer->shapeManager()->addShape(shape);
                 } else {
                     KisShapeSelection* shapeSelection = dynamic_cast<KisShapeSelection*>(m_container);
                     shapeSelection->addShape(shape);

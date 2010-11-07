@@ -220,3 +220,16 @@ QString KoUnit::unitName(KoUnit _unit)
     if (_unit.m_unit == Pixel) return QString::fromLatin1("px");
     return QString::fromLatin1("pt");
 }
+
+#ifndef QT_NO_DEBUG_STREAM
+QDebug operator<<(QDebug debug, const KoUnit &unit)
+{
+#ifndef NDEBUG
+    debug.nospace() << KoUnit::unitName(unit);
+#else
+    Q_UNUSED(unit);
+#endif
+    return debug.space();
+
+}
+#endif

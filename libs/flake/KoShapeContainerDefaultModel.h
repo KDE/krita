@@ -34,34 +34,24 @@ public:
     KoShapeContainerDefaultModel();
     virtual ~KoShapeContainerDefaultModel();
 
-    /// reimplemented
-    virtual void add(KoShape *child);
+    virtual void add(KoShape *shape);
 
-    /// Only allows free movement of non-locked shapes.
-    void proposeMove(KoShape *shape, QPointF &move);
+    virtual void proposeMove(KoShape *shape, QPointF &move);
 
-    /// reimplemented
-    virtual void setClipped(const KoShape *child, bool clipping);
+    virtual void setClipped(const KoShape *shape, bool clipping);
 
-    /// reimplemented
-    virtual bool isClipped(const KoShape *child) const;
+    virtual bool isClipped(const KoShape *shape) const;
 
-    /// reimplemented
     virtual void setInheritsTransform(const KoShape *shape, bool inherit);
 
-    /// reimplemented
     virtual bool inheritsTransform(const KoShape *shape) const;
 
-    // reimplemented
-    virtual void remove(KoShape *child);
+    virtual void remove(KoShape *shape);
 
-    /// reimplemented
     virtual int count() const;
 
-    /// reimplemented
     virtual QList<KoShape*> shapes() const;
 
-    /// reimplemented
     virtual bool isChildLocked(const KoShape *child) const;
 
     /// empty implementation.
@@ -72,4 +62,4 @@ private:
     Private * const d;
 };
 
-#endif /* KOCHILDRENDATA_H */
+#endif

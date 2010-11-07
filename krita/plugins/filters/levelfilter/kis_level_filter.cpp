@@ -49,7 +49,6 @@ KisLevelFilter::KisLevelFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Levels"))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }

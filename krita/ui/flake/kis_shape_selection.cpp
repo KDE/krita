@@ -84,6 +84,7 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
 {
     m_dirty = rhs.m_dirty;
     m_image = rhs.m_image;
+    m_converter = new KisImageViewConverter(m_image);
     m_canvas = new KisShapeSelectionCanvas();
     m_canvas->shapeManager()->addShape(this);
 

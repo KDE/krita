@@ -108,6 +108,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_opengl.cpp 
     opengl/kis_opengl_canvas2.cpp
     opengl/kis_opengl_image_textures.cpp
+    opengl/kis_texture_tile.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
     recorder/kis_recorded_action_editor_factory.cc

@@ -25,7 +25,6 @@ KisFilterDodgeBurn::KisFilterDodgeBurn(const QString& id, const QString& prefix,
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

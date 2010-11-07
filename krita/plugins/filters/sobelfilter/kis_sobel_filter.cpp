@@ -78,7 +78,6 @@
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n("&Sobel..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
     setSupportsThreading(false); // TODO Sobel doesn't support threading on image with height > 512
 }
 

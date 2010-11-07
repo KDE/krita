@@ -60,7 +60,6 @@
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
 }
 
 void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,

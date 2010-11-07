@@ -31,7 +31,6 @@ KisHSVAdjustmentFilter::KisHSVAdjustmentFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&HSV Adjustment..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

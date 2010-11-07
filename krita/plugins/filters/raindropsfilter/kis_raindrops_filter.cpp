@@ -61,7 +61,6 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryAr
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
-    setSupportsPreview(true);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

@@ -25,6 +25,7 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QVariant>
+#include <QtCore/QDebug>
 #include <math.h> // for floor
 #include "koodf_export.h"
 
@@ -197,10 +198,18 @@ public:
     /// parse common %KOffice and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
+    QString toString() {
+        return KoUnit::unitName(*this);
+    }
+
 private:
     Unit m_unit;
     qreal m_pixelConversion;
 };
+
+#ifndef QT_NO_DEBUG_STREAM
+KOODF_EXPORT QDebug operator<<(QDebug, const KoUnit &);
+#endif
 
 Q_DECLARE_METATYPE(KoUnit)
 

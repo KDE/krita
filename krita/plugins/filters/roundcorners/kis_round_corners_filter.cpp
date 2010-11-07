@@ -52,7 +52,6 @@
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
 
 }
 

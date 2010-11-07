@@ -94,7 +94,8 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
 
 
         if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-            dev = currentImage()->mergedImage();
+            currentImage()->lock();
+            dev = currentImage()->projection();
         }
 
         if (m_radius == 1) {
@@ -154,7 +155,9 @@ void KisToolColorPicker::pickColor(const QPointF& pos)
                 canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, m_pickedColor);
         }
 
-
+        if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
+            currentImage()->unlock();
+        }
 }
 
 

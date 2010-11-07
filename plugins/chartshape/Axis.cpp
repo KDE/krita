@@ -195,10 +195,10 @@ public:
 Axis::Private::Private( Axis *axis, AxisDimension dim )
     : q( axis )
     , dimension( dim )
+    , kdAxis( new KDChart::CartesianAxis )
     , kdPlane( 0 )
     , kdPolarPlane( 0 )
     , kdRadarPlane( 0 )
-    , kdAxis( new KDChart::CartesianAxis )
 {
     centerDataPoints = false;
 
@@ -212,7 +212,7 @@ Axis::Private::Private( Axis *axis, AxisDimension dim )
 
     majorInterval = 2;
     minorIntervalDivisor = 1;
-    
+
     showMajorGrid = false;
     showMinorGrid = false;
 
@@ -659,7 +659,7 @@ void Axis::Private::createScatterDiagram()
         kdScatterDiagram->addAxis( kdAxis );
     kdPlane->addDiagram( kdScatterDiagram );
 
-    
+
     foreach ( Axis *axis, plotArea->axes() ) {
         if ( axis->dimension() == XAxisDimension )
             if ( axis->isVisible() )
@@ -714,9 +714,9 @@ void Axis::Private::createBubbleDiagram()
     KDChartModel *model = dynamic_cast<KDChartModel*>( kdBubbleDiagram->model() );
     Q_ASSERT( model );
     model->setDataDimensions( 2 );
-    
+
     kdPlane->addDiagram( kdBubbleDiagram );
-    
+
     foreach ( Axis *axis, plotArea->axes() ) {
         //if ( axis->dimension() == XAxisDimension )
             if ( axis->isVisible() )
@@ -1080,7 +1080,7 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
                                   ? KDChart::AbstractCoordinatePlane::Logarithmic
                                   : KDChart::AbstractCoordinatePlane::Linear );
     d->kdPlane->layoutPlanes();
-    
+
     requestRepaint();
 }
 
@@ -1102,7 +1102,7 @@ void Axis::setShowMajorGrid( bool showGrid )
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setGridVisible( d->showMajorGrid );
     d->kdPlane->setGridAttributes( orientation(), attributes );
-    
+
     attributes = d->kdPolarPlane->gridAttributes( true );
     attributes.setGridVisible( d->showMajorGrid );
     d->kdPolarPlane->setGridAttributes( true, attributes );
@@ -1123,7 +1123,7 @@ void Axis::setShowMinorGrid( bool showGrid )
     KDChart::GridAttributes  attributes = d->kdPlane->gridAttributes( orientation() );
     attributes.setSubGridVisible( d->showMinorGrid );
     d->kdPlane->setGridAttributes( orientation(), attributes );
-    
+
     attributes = d->kdPolarPlane->gridAttributes( true );
     attributes.setSubGridVisible( d->showMinorGrid );
     d->kdPolarPlane->setGridAttributes( true, attributes );
@@ -1159,7 +1159,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     d->title->setVisible( false );
-    
+
     QPen gridPen(Qt::NoPen);
     QPen subGridPen(Qt::NoPen);
 
@@ -1268,7 +1268,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         // explicitly in the constructor.
     }
 
-    if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) { 
+    if ( axisElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         styleStack.clear();
         context.odfLoadingContext().fillStyleStack( axisElement, KoXmlNS::chart, "style-name", "chart" );
         styleStack.setTypeProperties( "text" );
@@ -1337,7 +1337,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 //         d->kdPolarPlane->setGridAttributes( false, gridAttr );
 //     else
     d->kdPolarPlane->setGridAttributes( true, gridAttr );
-    
+
     gridAttr = d->kdRadarPlane->globalGridAttributes();
     gridAttr.setGridVisible( d->showMajorGrid );
     gridAttr.setSubGridVisible( d->showMinorGrid );
@@ -1533,7 +1533,7 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         foreach ( DataSet *dataSet, d->dataSets ) {
             if ( dataSet->chartType() != LastChartType ) {
                 dataSet->setChartType( LastChartType );
-                dataSet->setChartSubType( NoChartSubtype );                
+                dataSet->setChartSubType( NoChartSubtype );
             }
         }
     }
@@ -1597,7 +1597,7 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
                 type = KDChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType( type );
-            
+
         }
         break;
     case LineChartType:

@@ -51,7 +51,7 @@ public:
     void retrieveData(KisImageWSP image) {
         m_patchColorSpace = image->projection()->colorSpace();
 
-        m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height()*2);
+        m_patchPixels = m_patchColorSpace->allocPixelBuffer(m_patchRect.width() * m_patchRect.height());
         image->projection()->readBytes(m_patchPixels,
                                        m_patchRect.x(), m_patchRect.y(),
                                        m_patchRect.width(), m_patchRect.height());

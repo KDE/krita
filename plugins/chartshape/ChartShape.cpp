@@ -258,9 +258,10 @@ public:
 
 
 ChartShape::Private::Private( ChartShape *shape )
-    : internalModel(0),
-    resourceManager(0)
+    : internalModel(0)
     , internalModelHelper( 0 )
+    , resourceManager(0)
+
 {
     // Register the owner.
     this->shape = shape;
@@ -320,7 +321,7 @@ bool ChartShape::Private::loadOdfLabel( KoShape *label, KoXmlElement &labelEleme
     // 3. set the size
     QSizeF size = shape->size();
     QRect r = QFontMetrics( doc->defaultFont() ).boundingRect(
-                    labelData->shapeMargins().left, labelData->shapeMargins().top,                         
+                    labelData->shapeMargins().left, labelData->shapeMargins().top,
                     qMax( CM_TO_POINT( 5 ), qreal(size.width() - pos.x() * 2.0 - labelData->shapeMargins().right) ),
                     qMax( CM_TO_POINT( 0.6 ), qreal(size.height() - labelData->shapeMargins().bottom) ),
                     Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, doc->toPlainText() );
@@ -962,7 +963,7 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
 
     Q_ASSERT( d->plotArea );
 
-    
+
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS( KoXmlNS::chart,
                                                          "class", QString() );
@@ -989,7 +990,7 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
         //setErrorMessage( i18n( "Unknown chart type %1" ,chartClass ) );
         return false;
     }
-    
+
 
     // 2. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
@@ -1042,10 +1043,10 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
         if ( !d->legend->loadOdf( legendElem, context ) )
             return false;
     }
-    
+
     // 8. Sets the chart type
     setChartType( chartType );
-    
+
     d->legend->update();
 
     requestRepaint();

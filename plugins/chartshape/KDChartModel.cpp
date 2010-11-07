@@ -264,7 +264,7 @@ void KDChartModel::dataSetChanged( DataSet *dataSet )
     emit headerDataChanged( dataDirection(), first, last );
 }
 
-void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole role, int first /* = -1 */, int last /* = -1 */ )
+void KDChartModel::dataSetChanged( DataSet *dataSet, DataRole /*role*/, int first /* = -1 */, int last /* = -1 */ )
 {
     Q_ASSERT( d->dataSets.contains( dataSet ) );
     if ( !d->dataSets.contains( dataSet ) )

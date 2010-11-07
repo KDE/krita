@@ -47,7 +47,7 @@ ModelObserver::ModelObserver( QAbstractItemModel *source )
              this,   SLOT( slotModelReset() ) );
 }
 
-void ModelObserver::slotRowsInserted( const QModelIndex & parent, int start, int end )
+void ModelObserver::slotRowsInserted( const QModelIndex & /*parent*/, int start, int end )
 {
     Q_ASSERT( start <= end );
 
@@ -56,7 +56,7 @@ void ModelObserver::slotRowsInserted( const QModelIndex & parent, int start, int
     qDebug() << "m_numRows: " << m_numRows;
 }
 
-void ModelObserver::slotColumnsInserted( const QModelIndex & parent, int start, int end )
+void ModelObserver::slotColumnsInserted( const QModelIndex & /*parent*/, int start, int end )
 {
     Q_ASSERT( start <= end );
 
@@ -65,7 +65,7 @@ void ModelObserver::slotColumnsInserted( const QModelIndex & parent, int start, 
     qDebug() << "m_numCols: " << m_numCols;
 }
 
-void ModelObserver::slotRowsRemoved( const QModelIndex & parent, int start, int end )
+void ModelObserver::slotRowsRemoved( const QModelIndex & /*parent*/, int start, int end )
 {
     Q_ASSERT( start <= end );
     Q_ASSERT( end < m_numRows );
@@ -75,7 +75,7 @@ void ModelObserver::slotRowsRemoved( const QModelIndex & parent, int start, int 
     qDebug() << "m_numRows: " << m_numRows;
 }
 
-void ModelObserver::slotColumnsRemoved( const QModelIndex & parent, int start, int end )
+void ModelObserver::slotColumnsRemoved( const QModelIndex & /*parent*/, int start, int end )
 {
     Q_ASSERT( start <= end );
     Q_ASSERT( end < m_numCols );

@@ -104,18 +104,18 @@ public:
 
     ChartType     chartType;
     ChartSubtype  chartSubtype;
-    
+
     Surface       *wall;
     Surface       *floor;       // Only used in 3D charts
-    
+
     // The axes
     QList<Axis*>     axes;
     QList<KoShape*>  automaticallyHiddenAxisTitles;
-    
+
     // 3D properties
     bool          threeD;
     ThreeDScene  *threeDScene;
-    
+
     // ----------------------------------------------------------------
     // Data specific to each chart type
 
@@ -127,7 +127,7 @@ public:
     bool  vertical;
     int   gapBetweenBars;
     int   gapBetweenSets;
-    
+
     // 2. Pie charts
     // TODO: Load+Save
     qreal pieAngleOffset;       // in degrees
@@ -142,7 +142,7 @@ public:
     KDChart::PolarCoordinatePlane     *const kdPolarPlane;
     KDChart::RadarCoordinatePlane     *const kdRadarPlane;
     QList<KDChart::AbstractDiagram*>   kdDiagrams;
-    
+
     // Caching: We can rerender faster if we cache KDChart's output
     QImage   image;
     bool     paintPixmap;
@@ -175,7 +175,7 @@ PlotArea::Private::Private( PlotArea *q, ChartShape *parent )
     , kdCartesianPlaneSecondary( new KDChart::CartesianCoordinatePlane( kdChart ) )
     , kdPolarPlane( new KDChart::PolarCoordinatePlane( kdChart ) )
     , kdRadarPlane( new KDChart::RadarCoordinatePlane( kdChart ) )
-    // Cache    
+    // Cache
     ,paintPixmap( true )
     ,pixmapRepaintRequested( true )
 {
@@ -238,7 +238,7 @@ void PlotArea::Private::initAxes()
     }
     // There need to be at least these two axes. Do not delete, but
     // hide them instead.
-    Axis *xAxis = new Axis( q, XAxisDimension );
+//    Axis *xAxis = new Axis( q, XAxisDimension );
     Axis *yAxis = new Axis( q, YAxisDimension );
     yAxis->setShowMajorGrid( true );
 }
@@ -249,7 +249,7 @@ PlotArea::PlotArea( ChartShape *parent )
     , d( new Private( this, parent ) )
 {
     setShapeId( ChartShapeId );
-    
+
     Q_ASSERT( d->shape );
     Q_ASSERT( d->shape->proxyModel() );
 
@@ -286,10 +286,10 @@ void PlotArea::plotAreaInit()
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
     attr.setVisible( false );
     d->kdChart->setFrameAttributes( attr );
-    
+
     d->wall = new Surface( this );
     //d->floor = new Surface( this );
-    
+
     d->initAxes();
 }
 
@@ -550,34 +550,34 @@ void PlotArea::setChartType( ChartType type )
     foreach( KDChart::AbstractCoordinatePlane *plane, newPlanes )
         d->kdChart->addCoordinatePlane( plane );
     Q_ASSERT( d->kdChart->coordinatePlanes() == newPlanes );
-    
+
     d->chartType = type;
-    
+
     foreach ( Axis *axis, d->axes ) {
         axis->plotAreaChartTypeChanged( type );
     }
-    
+
     requestRepaint();
 }
 
 void PlotArea::setChartSubType( ChartSubtype subType )
 {
     d->chartSubtype = subType;
-    
+
     foreach ( Axis *axis, d->axes ) {
         axis->plotAreaChartSubTypeChanged( subType );
     }
-    
+
     requestRepaint();
 }
 
 void PlotArea::setThreeD( bool threeD )
 {
     d->threeD = threeD;
-    
+
     foreach( Axis *axis, d->axes )
         axis->setThreeD( threeD );
-    
+
     requestRepaint();
 }
 
@@ -606,7 +606,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
 
-    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+//    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.
@@ -653,7 +653,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
     }
 
     // Find out about things that are in the plotarea style.
-    // 
+    //
     // These things include chart subtype, special things for some
     // chart types like line charts, stock charts, etc.
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
@@ -699,7 +699,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         }
 #endif
     }
-    
+
     // Now, after the axes, load the datasets.
     // Note that this only contains properties of the datasets, the
     // actual data is not stored here.
@@ -747,9 +747,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
             qWarning() << "PlotArea::loadOdf(): Unknown tag name " << n.localName();
         }
     }
-    
+
     requestRepaint();
-    
+
     return true;
 }
 
@@ -758,22 +758,22 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
     KoXmlWriter &bodyWriter = context.xmlWriter();
     //KoGenStyles &mainStyles = context.mainStyles();
     bodyWriter.startElement( "chart:plot-area" );
-    
+
     // FIXME: Somehow this style gets the name gr2 instead of ch2.
     //        Fix that as well.
     KoGenStyle plotAreaStyle( KoGenStyle::ChartAutoStyle, "chart" );
-    
+
     // Data direction
     const Qt::Orientation direction = proxyModel()->dataDirection();
-    plotAreaStyle.addProperty( "chart:series-source",  
+    plotAreaStyle.addProperty( "chart:series-source",
                                ( direction == Qt::Horizontal )
                                ? "rows" : "columns" );
     // Save chart subtype
     saveOdfSubType( bodyWriter, plotAreaStyle );
-    
+
     bodyWriter.addAttribute( "chart:style-name",
                              saveStyle( plotAreaStyle, context ) );
-    
+
     const QSizeF s( size() );
     const QPointF p( position() );
     bodyWriter.addAttributePt( "svg:width",  s.width() );
@@ -807,7 +807,7 @@ void PlotArea::saveOdf( KoShapeSavingContext &context ) const
             axis->saveOdf( context );
         }
     }
-    
+
     // Save data series
     d->shape->proxyModel()->saveOdf( context );
 
@@ -988,7 +988,7 @@ bool PlotArea::registerKdDiagram( KDChart::AbstractDiagram *diagram )
 {
     if ( d->kdDiagrams.contains( diagram ) )
         return false;
-    
+
     d->kdDiagrams.append( diagram );
     return true;
 }
@@ -1028,15 +1028,15 @@ void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter 
 
     // Only use a pixmap with sane sizes
     d->paintPixmap = false;//paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
-    
+
     if ( d->paintPixmap ) {
         d->image = QImage( paintRectSize, QImage::Format_RGB32 );
-    
+
         // Copy the painter's render hints, such as antialiasing
         QPainter pixmapPainter( &d->image );
         pixmapPainter.setRenderHints( painter.renderHints() );
         pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
-    
+
         // scale the painter's coordinate system to fit the current zoom level
         applyConversion( pixmapPainter, converter );
 
@@ -1053,12 +1053,12 @@ void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
 
     // First of all, scale the painter's coordinate system to fit the current zoom level
     applyConversion( painter, converter );
-    
+
     // Calculate the clipping rect
     QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
     //clipRect.intersect( paintRect );
     painter.setClipRect( paintRect );
-    
+
     // Paint the background
     if ( background() ) {
         QPainterPath p;

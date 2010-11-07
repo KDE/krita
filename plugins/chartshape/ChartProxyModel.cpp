@@ -72,14 +72,14 @@ public:
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
     int              dataDimensions;
-    
+
     CellRegion categoryDataRegion;
 
     QVector< CellRegion > dataSetRegions;
-    
+
     QList<DataSet*>  dataSets;
     QList<DataSet*>  removedDataSets;
-    
+
     CellRegion       selection;
 
     /**
@@ -371,7 +371,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
 
         // Increment number at the very end!
         dataSetNumber++;
-    }  
+    }
 
     return createdDataSets;
 }
@@ -485,7 +485,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     // in the PlotArea's table:cell-range-address attribute (parsed above).
     QList<DataSet*> createdDataSets = d->createDataSetsFromRegion( &d->removedDataSets,
                                                                    !helper->categoryRegionSpecifiedInXAxis );
-    
+
     int loadedDataSetCount = 0;
 
     KoXmlElement n;
@@ -633,13 +633,13 @@ QModelIndex ChartProxyModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-int ChartProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
+int ChartProxyModel::rowCount( const QModelIndex &/*parent  = QModelIndex() */ ) const
 {
     return d->dataSets.count();
 }
 
 
-int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
+int ChartProxyModel::columnCount( const QModelIndex &/*parent = QModelIndex() */ ) const
 {
     // FIXME: Replace this by the actual column count once the proxy is properly being used.
     return INT_MAX;
@@ -653,7 +653,7 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     d->firstRowIsLabel = b;
     d->rebuildDataMap();
 }
- 
+
 
 void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {

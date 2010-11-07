@@ -331,7 +331,39 @@ void KoTextEditor::addCommand(QUndoCommand *command)
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
-        d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
+        // clear the ChangeTrackerId from the passed in selection, without recursively registring
+        // change tracking again  ;)
+        int start = qMin(selection.position(), selection.anchor());
+        int end = qMax(selection.position(), selection.anchor());
+
+        QTextBlock block = selection.block();
+        if (block.position() > start)
+            block = block.document()->findBlock(start);
+
+        while (block.isValid() && block.position() < end) {
+            QTextBlock::iterator iter = block.begin();
+            while (! iter.atEnd()) {
+                QTextFragment fragment = iter.fragment();
+                if (fragment.position() > end)
+                    break;
+                if (fragment.position() + fragment.length() <= start) {
+                    iter++;
+                    continue;
+                }
+
+                QTextCursor cursor(block);
+                cursor.setPosition(fragment.position());
+                QTextCharFormat fm = cursor.charFormat();
+                fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                int to = qMin(end, fragment.position() + fragment.length());
+                cursor.setPosition(to, QTextCursor::KeepAnchor);
+                cursor.setCharFormat(fm);
+                iter++;
+            }
+            block = block.next();
+        }
+
+
         return;
     }
 #ifndef NDEBUG

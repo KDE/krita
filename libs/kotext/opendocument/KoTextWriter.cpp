@@ -713,12 +713,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int listChangeId = 0;
     if (!headingLevel && !numberedParagraphLevel) {
         listStarted = true;
+        listChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
         writer->startElement("text:list", false);
         writer->addAttribute("text:style-name", listStyles[textList]);
         if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
             writer->addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
 
-        listChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
         if (listChangeId && changeTracker->elementById(listChangeId)->getChangeType() == KoGenChange::InsertChange) {
             writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listChangeId));
             writer->addAttribute("delta:insertion-type", "insert-with-content");
@@ -746,8 +746,6 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 }
             } else {
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
-                writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
-
                 int listItemChangeId;
                 if (textList == topLevelTextList) {
                     listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::ListItem);
@@ -755,6 +753,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     // This is a sub-list. So check for a list-change
                     listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
                 }
+
+                writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
 
                 if (listItemChangeId && changeTracker->elementById(listItemChangeId)->getChangeType() == KoGenChange::InsertChange) {
                     writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
@@ -786,9 +786,9 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
                 }
-                writer->endElement(); 
                 if (listItemChangeId)
                    closeChangeRegion();
+                writer->endElement(); 
             }
             block = block.next();
             blockFormat = block.blockFormat();
@@ -799,9 +799,9 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     if (listStarted) {
-        writer->endElement();
         if (listChangeId)
             closeChangeRegion();
+        writer->endElement();
     }
     return block;
 }

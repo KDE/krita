@@ -90,7 +90,8 @@ public:
         ParagraphOrHeader,
         ListItem,
         List,
-        NumberedParagraph
+        NumberedParagraph,
+        Table
     };
 
     void saveChange(QTextCharFormat format);
@@ -171,6 +172,11 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
             break;
         case KoTextWriter::Private::List:
             changeId = checkForListChange(block);
+            break;
+        case KoTextWriter::Private::Table:
+            cursor.setPosition(position);
+            QTextTableFormat tableFormat = cursor.currentTable()->format();
+            changeId = tableFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
             break;
     }
 
@@ -622,21 +628,12 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
+    int changeId = openChangeRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
     writer->startElement("table:table");
     
-    QTextTableFormat format = table->format();
-    bool changePushedToStack = false;
-
-    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
-    if (changeId && (changeStack.top() != changeId)) {
-        saveChange(changeId);
-        changeStack.push(changeId);
-        changePushedToStack = true;
-        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
-        if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        }
+    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+        writer->addAttribute("delta:insertion-type", "insert-with-content");
     }
     
     for (int c = 0 ; c < table->columns() ; c++) {
@@ -668,8 +665,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
     writer->endElement(); // table:table
 
-    if (changePushedToStack)
-        changeStack.pop();
+    if (changeId)
+        closeChangeRegion();
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)

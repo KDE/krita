@@ -77,7 +77,6 @@
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
 #include "Layout.h"
-#include "OdfLoadingHelper.h"
 
 using namespace KChart;
 
@@ -236,10 +235,9 @@ void PlotArea::Private::initAxes()
             automaticallyHiddenAxisTitles.removeAll( axis->title() );
         delete axis;
     }
-    // There need to be at least these two axes. Do not delete, but
-    // hide them instead.
-    Axis *xAxis = new Axis( q, XAxisDimension );
-    Q_UNUSED(xAxis);
+    // There need to be at least these two axes. Their constructor will
+    // automatically add them to the plot area as child shape.
+    new Axis( q, XAxisDimension );
     Axis *yAxis = new Axis( q, YAxisDimension );
     yAxis->setShowMajorGrid( true );
 }
@@ -606,8 +604,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement,
         parent()->layout()->setPosition( this, FloatingPosition );
 
     loadOdfAttributes( plotAreaElement, context, OdfAllAttributes );
-
-//    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
 
     // First step is to load the axis. Datasets are attached to an
     // axis and we need the axis to check for categories.

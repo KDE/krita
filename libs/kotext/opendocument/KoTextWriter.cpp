@@ -180,12 +180,21 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
     } else {
         changeId = 0;
     }
+
+    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
+        writer->startElement("delta:removed-content", false);
+        writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
+    }
+
     return changeId;
 }
 
 void KoTextWriter::Private::closeChangeRegion()
 {
-    changeStack.pop();
+    int changeId = changeStack.pop();
+    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
+        writer->endElement(); //delta:removed-content
+    }
     return;
 }
 

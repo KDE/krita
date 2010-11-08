@@ -49,6 +49,7 @@ KoShape* KoConnectionShapeFactory::createDefaultShape(KoResourceManager *) const
 
 bool KoConnectionShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
+    Q_UNUSED(context);
     return (e.localName() == "connector" && e.namespaceURI() == KoXmlNS::draw);
 }
 

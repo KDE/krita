@@ -137,9 +137,11 @@ void KoResourceItemChooser::slotButtonClicked( int button )
             }
         }
         if (column == 0) {
-            row = qBound(0, --row, row);
+            int rowMin = --row;
+            row = qBound(0, rowMin, row);
         }
-        column = qBound(0, --column, column);
+        int columnMin = --column;
+        column = qBound(0, columnMin, column);
         setCurrentItem(row, column);
         activated(d->model->index(row, column));
     }

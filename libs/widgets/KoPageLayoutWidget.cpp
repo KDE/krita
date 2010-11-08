@@ -125,6 +125,8 @@ void KoPageLayoutWidget::unitChanged(int row)
 
 void KoPageLayoutWidget::setUnit(const KoUnit &unit)
 {
+    if (d->unit == unit)
+        return;
     d->unit = unit;
 
     d->widget.width->setUnit(unit);

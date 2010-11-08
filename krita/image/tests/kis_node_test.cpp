@@ -52,9 +52,9 @@ public:
     virtual void nodeHasBeenMoved(KisNode *, int, int) {
         afterMove = true;
     }
-        
-    virtual void nodeChanged(KisNode* node) {
-    
+
+    virtual void nodeChanged(KisNode*) {
+
     }
 
     bool beforeInsertRow;
@@ -357,7 +357,7 @@ void KisNodeTest::testChildNodes()
 
 void KisNodeTest::testDirtyRegion()
 {
-#if 0 // Rewrite     
+#if 0 // Rewrite
     KisNodeSP root = new TestNodeA();
     root->setDirty(QRect(0, 0, 100, 100));
     root->setDirty(QRect(50, 50, 100, 100));

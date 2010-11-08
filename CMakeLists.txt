@@ -216,6 +216,14 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_LCMS FALSE)
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
 
+macro_optional_find_package(LCMS2)
+if(LCMS2_FOUND)
+    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+    set(HAVE_LCMS TRUE)
+endif(LCMS2_FOUND)
+
+    
+
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
 #Set the build of TextShape changetraker

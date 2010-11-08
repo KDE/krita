@@ -25,7 +25,7 @@
 #include "kis_ks_colorspace_engine.h"
 #include "kis_ksf32_colorspace.h"
 
-#include <KGenericFactory>
+#include <KPluginFactory>
 #include <KGlobal>
 #include <KLocale>
 #include <KStandardDirs>

@@ -53,6 +53,6 @@ Name[zh_TW]=Krita PNG 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/png
 X-KDE-Weight=1
-X-KDE-Library=libkritapngimport
+X-KDE-Library=kritapngimport
 X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

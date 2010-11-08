@@ -32,7 +32,7 @@
 
 #include <klocale.h>
 #include <kiconloader.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -58,7 +58,6 @@
 KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Small Tiles..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
     setSupportsThreading(false);
 }

@@ -23,11 +23,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY( kopabackgroundtool, KGenericFactory<Plugin>( "kopageapplication-backgroundtool" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("kopageapplication-backgroundtool"))
 
-Plugin::Plugin( QObject* parent, const QStringList& )
+Plugin::Plugin( QObject* parent, const QVariantList& )
 : QObject( parent )
 {
     KoToolRegistry::instance()->add( new KoPABackgroundToolFactory( parent ) );

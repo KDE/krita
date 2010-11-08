@@ -1341,13 +1341,16 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
                     && qAbs(matrix.m12()) < 1E-5        // 0
                     && qAbs(matrix.m21()) < 1E-5        // 0
                     && qAbs(matrix.m22() - 1) < 1E-5) { // 1
-                context.xmlWriter().addAttribute("svg:x", QString("%1pt").arg(matrix.dx()));
-                context.xmlWriter().addAttribute("svg:y", QString("%1pt").arg(matrix.dy()));
+                context.xmlWriter().addAttributePt("svg:x", matrix.dx());
+                context.xmlWriter().addAttributePt("svg:y", matrix.dy());
             } else {
                 QString m = QString("matrix(%1 %2 %3 %4 %5pt %6pt)")
-                            .arg(matrix.m11()).arg(matrix.m12())
-                            .arg(matrix.m21()).arg(matrix.m22())
-                            .arg(matrix.dx()) .arg(matrix.dy());
+                            .arg(matrix.m11(), 0, 'f', 11)
+                            .arg(matrix.m12(), 0, 'f', 11)
+                            .arg(matrix.m21(), 0, 'f', 11)
+                            .arg(matrix.m22(), 0, 'f', 11)
+                            .arg(matrix.dx(), 0, 'f', 11)
+                            .arg(matrix.dy(), 0, 'f', 11);
                 context.xmlWriter().addAttribute("draw:transform", m);
             }
         }

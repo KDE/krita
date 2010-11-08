@@ -48,7 +48,6 @@ ShivaGenerator::ShivaGenerator(OpenShiva::Source* kernel) : KisGenerator(KoID(ke
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

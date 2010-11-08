@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 
 #include <kis_doc2.h>
@@ -58,8 +58,6 @@
 KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Oilpaint..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
-
 }
 
 void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,

@@ -182,7 +182,7 @@ void KoDocumentInfoPropsPage::applyChanges()
 #endif
 }
 
-void KoDocumentInfoPropsPage::copy(const QString &path, const KArchiveEntry *entry)
+void KoDocumentInfoPropsPage::copy(const QString &/*path*/, const KArchiveEntry */*entry*/)
 {
 #if 0
     kDebug(30003) << "copy" << entry->name();

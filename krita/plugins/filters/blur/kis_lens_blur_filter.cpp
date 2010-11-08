@@ -46,7 +46,6 @@
 KisLensBlurFilter::KisLensBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Lens Blur..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(true);
     setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);

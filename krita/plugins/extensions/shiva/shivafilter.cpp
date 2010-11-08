@@ -41,7 +41,6 @@ ShivaFilter::ShivaFilter(OpenShiva::Source* kernel) : KisFilter(KoID(kernel->nam
 {
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(false);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(false);
 }
 

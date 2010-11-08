@@ -91,10 +91,7 @@ KisFilterBumpmap::KisFilterBumpmap()
 {
     setColorSpaceIndependence(TO_LAB16);
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(true);
-
-
 }
 
 namespace

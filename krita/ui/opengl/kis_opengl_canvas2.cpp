@@ -257,14 +257,22 @@ void KisOpenGLCanvas2::drawImage()
 
     makeCurrent();
 
-    for (int x = (wr.left() / m_d->openGLImageTextures->imageTextureTileWidth()) * m_d->openGLImageTextures->imageTextureTileWidth();
-        x <= wr.right();
-        x += m_d->openGLImageTextures->imageTextureTileWidth()) {
-        for (int y = (wr.top() / m_d->openGLImageTextures->imageTextureTileHeight()) * m_d->openGLImageTextures->imageTextureTileHeight();
-            y <= wr.bottom();
-            y += m_d->openGLImageTextures->imageTextureTileHeight()) {
+    int firstColumn = m_d->openGLImageTextures->xToCol(wr.left());
+    int lastColumn = m_d->openGLImageTextures->xToCol(wr.right());
+    int firstRow = m_d->openGLImageTextures->yToRow(wr.top());
+    int lastRow = m_d->openGLImageTextures->yToRow(wr.bottom());
 
-            glBindTexture(GL_TEXTURE_2D, m_d->openGLImageTextures->imageTextureTile(x, y));
+    for (int col = firstColumn; col <= lastColumn; col++) {
+        for (int row = firstRow; row <= lastRow; row++) {
+
+            KisTextureTile *tile =
+                m_d->openGLImageTextures->getTextureTileCR(col, row);
+
+            glBindTexture(GL_TEXTURE_2D, tile->textureId());
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
             if (scaleX > 2.0) {
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -273,21 +281,7 @@ void KisOpenGLCanvas2::drawImage()
                 glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             }
 
-            glBegin(GL_QUADS);
-
-            glTexCoord2f(0.0, 0.0);
-            glVertex2f(x, y);
-
-            glTexCoord2f(1.0, 0.0);
-            glVertex2f(x + m_d->openGLImageTextures->imageTextureTileWidth(), y);
-
-            glTexCoord2f(1.0, 1.0);
-            glVertex2f(x + m_d->openGLImageTextures->imageTextureTileWidth(), y + m_d->openGLImageTextures->imageTextureTileHeight());
-
-            glTexCoord2f(0.0, 1.0);
-            glVertex2f(x, y + m_d->openGLImageTextures->imageTextureTileHeight());
-
-            glEnd();
+            tile->drawPoints();
         }
     }
 

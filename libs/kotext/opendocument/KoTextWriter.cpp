@@ -121,6 +121,10 @@ public:
 
     QStack<int> changeStack;
     QMap<int, QString> changeTransTable;
+    // Things like bookmarks need to be properly turn down
+    // during a cut and paste operation when their end marker
+    // is not included in the selection.
+    QList<KoInlineObject*> pairedInlineObjectStack;
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -366,11 +370,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
-    // Things like bookmarks need to be properly turn down
-    // during a cut and paste operation when their end marker
-    // is not included in the selection.
-    QList<KoInlineObject*> pairedInlineObjectStack;
-
     // Write the fragments and their formats
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
     QTextCharFormat previousCharFormat;
@@ -520,8 +519,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     } // foreach(fragment)
 
     //kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
-    foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
-        inlineObject->saveOdf(context);
+    if (to !=-1 && to < block.position() + block.length()) {
+        foreach (KoInlineObject* inlineObject, pairedInlineObjectStack) {
+            inlineObject->saveOdf(context);
+        }
     }
 
     if (changeId)

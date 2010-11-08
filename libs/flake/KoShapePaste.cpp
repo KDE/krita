@@ -98,9 +98,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
         if (shape) {
             if (!cmd)
                 cmd = new QUndoCommand(i18n("Paste Shapes"));
-            if (! shape->parent()) {
-                shape->setParent(d->layer);
-            }
+
             KoShapeManager *sm = d->canvas->shapeManager();
             Q_ASSERT(sm);
             bool done = true;
@@ -131,6 +129,9 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
                 }
             } while (!done);
 
+            if (!shape->parent()) {
+                shape->setParent(d->layer);
+            }
             d->canvas->shapeController()->addShapeDirect(shape, cmd);
             d->pastedShapes << shape;
         }

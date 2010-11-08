@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -331,7 +331,39 @@ void KoTextEditor::addCommand(QUndoCommand *command, bool addCommandToStack)
 void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat& format, QTextFormat& prevFormat, bool applyToWholeBlock)
 {
     if (!KoTextDocument(d->document).changeTracker() || !KoTextDocument(d->document).changeTracker()->recordChanges()) {
-        d->clearCharFormatProperty(KoCharacterStyle::ChangeTrackerId);
+        // clear the ChangeTrackerId from the passed in selection, without recursively registring
+        // change tracking again  ;)
+        int start = qMin(selection.position(), selection.anchor());
+        int end = qMax(selection.position(), selection.anchor());
+
+        QTextBlock block = selection.block();
+        if (block.position() > start)
+            block = block.document()->findBlock(start);
+
+        while (block.isValid() && block.position() < end) {
+            QTextBlock::iterator iter = block.begin();
+            while (! iter.atEnd()) {
+                QTextFragment fragment = iter.fragment();
+                if (fragment.position() > end)
+                    break;
+                if (fragment.position() + fragment.length() <= start) {
+                    iter++;
+                    continue;
+                }
+
+                QTextCursor cursor(block);
+                cursor.setPosition(fragment.position());
+                QTextCharFormat fm = cursor.charFormat();
+                fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                int to = qMin(end, fragment.position() + fragment.length());
+                cursor.setPosition(to, QTextCursor::KeepAnchor);
+                cursor.setCharFormat(fm);
+                iter++;
+            }
+            block = block.next();
+        }
+
+
         return;
     }
 #ifndef NDEBUG
@@ -715,23 +747,22 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
 }
 
 void KoTextEditor::insertFrameBreak()
-{//TODO split newLine method in two.
+{
     d->updateState(KoTextEditor::Private::KeyPress, i18n("Insert Break"));
     QTextBlock block = d->caret.block();
-    /*
-    if(d->caret->position() == block.position() && block.length() > 0) { // start of parag
-        QTextBlockFormat bf = d->caret->blockFormat();
-        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysAfter);
-        d->caret->setBlockFormat(bf);
-} else { */
-    QTextBlockFormat bf = d->caret.blockFormat();
-    //       if(d->caret->position() != block.position() + block.length() -1 ||
-    //               bf.pageBreakPolicy() != QTextFormat::PageBreak_Auto) // end of parag or already a pagebreak
-    newLine();
-    bf = d->caret.blockFormat();
-    bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
-    d->caret.setBlockFormat(bf);
-    //}
+    if (d->caret.position() == block.position() && block.length() > 0) { // start of parag
+        QTextBlockFormat bf = d->caret.blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore);
+        d->caret.insertBlock(bf);
+        if (block.textList())
+            block.textList()->remove(block);
+    } else {
+        QTextBlockFormat bf = d->caret.blockFormat();
+        newLine();
+        bf = d->caret.blockFormat();
+        bf.setPageBreakPolicy(QTextFormat::PageBreak_AlwaysBefore); // TODO we should create an autostyle instead
+        d->caret.setBlockFormat(bf);
+    }
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

@@ -21,20 +21,18 @@
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_update_info.h"
 #include "opengl/kis_texture_tile_update_info.h"
+#include "opengl/kis_texture_tile.h"
+
 
 #ifdef HAVE_OPENGL
 
-#include <map>
-
-#include <QGLWidget>
-#include <QImage>
 #include <QObject>
 #include <QVector>
+#include <QMap>
 
 #include "krita_export.h"
 
 #include "kis_shared.h"
-#include "kis_types.h"
 
 
 #ifdef HAVE_GLEW
@@ -52,7 +50,6 @@ class KoColorProfile;
  */
 class KRITAUI_EXPORT KisOpenGLImageTextures : public QObject, public KisShared
 {
-
     Q_OBJECT
 
 public:
@@ -101,23 +98,6 @@ public:
     static const int BACKGROUND_TEXTURE_SIZE = BACKGROUND_TEXTURE_CHECK_SIZE * 2;
 
     /**
-     * Get the image texture containing the point (pixelX, pixelY).
-     * @param pixelX The x coordinate of the point to check
-     * @param pixelY The y coordinate of the point to check
-     */
-    GLuint imageTextureTile(int pixelX, int pixelY) const;
-
-    /**
-     * The width of the image textures.
-     */
-    int imageTextureTileWidth() const;
-
-    /**
-     * The height of the image textures.
-     */
-    int imageTextureTileHeight() const;
-
-    /**
      * Activate the high dynamic range image program. Call this before rendering
      * the image textures if the image has high dynamic range.
      */
@@ -134,83 +114,62 @@ public:
      */
     bool usingHDRExposureProgram() const;
 
-    /**
-     * Select selection visualization rendering.
-     *
-     * @param enable Set to true to enable selection visualization rendering.
-     */
-    void setSelectionDisplayEnabled(bool enable);
+public:
+    inline int xToCol(int x) {
+        return x / m_texturesInfo.effectiveWidth;
+    }
 
-    /**
-     * Update the image textures for the given image rectangle.
-     *
-     * @param imageRect The rectangle to update in image coordinates.
-     */
-    void update(const QRect& imageRect);
+    inline int yToRow(int y) {
+        return y / m_texturesInfo.effectiveHeight;
+    }
 
-signals:
-    /**
-     * Emitted whenever an action has caused the image to be recomposited.
-     *
-     * @param r  The rectangle that has been recomposited.
-     */
-    void sigImageUpdated(const QRect &r);
+    inline KisTextureTile* getTextureTileCR(int col, int row) {
+        return m_textureTiles[row * m_numCols + col];
+    }
 
-    /**
-     * Emitted whenever the image size changes.
-     *
-     * @param width  New image width
-     * @param height New image height
-     */
-    void sigSizeChanged(qint32 width, qint32 height);
+    inline KisTextureTile* getTextureTile(int x, int y) {
+        return getTextureTileCR(xToCol(x), yToRow(y));;
+    }
+
+public slots:
+    KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
+    void recalculateCache(KisUpdateInfoSP info);
+
+    void slotImageSizeChanged(qint32 w, qint32 h);
 
 protected:
     KisOpenGLImageTextures(KisImageWSP image, KoColorProfile *monitorProfile);
 
     void createImageTextureTiles();
     void destroyImageTextureTiles();
-    int imageTextureTileIndex(int x, int y) const;
-
-    void setImageTextureFormat();
 
     static void createHDRExposureProgramIfCan();
     static bool imageCanUseHDRExposureProgram(KisImageWSP image);
     static bool imageCanShareTextures(KisImageWSP image);
 
-public slots:
-    KisOpenGLUpdateInfoSP updateCache(const QRect& rect);
-    void recalculateCache(KisUpdateInfoSP info);
-
-    void slotImageUpdated(const QRect &rc);
-    void slotImageSizeChanged(qint32 w, qint32 h);
+private:
+    static void getTextureSize(KisGLTexturesInfo *texturesInfo);
+    void updateTextureFormat();
 
 private:
     KisImageWSP m_image;
     KoColorProfile *m_monitorProfile;
     float m_exposure;
-    bool m_displaySelection;
 
     GLuint m_backgroundTexture;
 
-    static const int PREFERRED_IMAGE_TEXTURE_WIDTH;
-    static const int PREFERRED_IMAGE_TEXTURE_HEIGHT;
-
-    QVector<GLuint> m_imageTextureTiles;
-    int m_imageTextureTileWidth;
-    int m_imageTextureTileHeight;
-    int m_numImageTextureTileColumns;
-
-    GLint m_imageTextureInternalFormat;
-    GLenum m_imageTextureType;
-
-    typedef std::map<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
-
-    static ImageTexturesMap imageTexturesMap;
+    KisGLTexturesInfo m_texturesInfo;
+    int m_numCols;
+    QVector<KisTextureTile*> m_textureTiles;
 
 #ifdef HAVE_GLEW
     bool m_usingHDRExposureProgram;
     static KisOpenGLHDRExposureProgram *HDRExposureProgram;
 #endif
+
+private:
+    typedef QMap<KisImageWSP, KisOpenGLImageTextures*> ImageTexturesMap;
+    static ImageTexturesMap imageTexturesMap;
 };
 
 #endif // HAVE_OPENGL

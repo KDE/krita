@@ -25,7 +25,7 @@ class OnlineDocument : public KParts::Plugin
 {
     Q_OBJECT
     public:
-        OnlineDocument(QObject *parent, const QStringList &);
+        OnlineDocument(QObject *parent, const QVariantList &);
         virtual ~OnlineDocument();
 
     private slots:

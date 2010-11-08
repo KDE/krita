@@ -37,7 +37,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 
 #include "KoIntegerMaths.h"
@@ -61,7 +61,6 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryAr
 {
     setSupportsPainting(false);
     setSupportsThreading(false);
-    setSupportsPreview(true);
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

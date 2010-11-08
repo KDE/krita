@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -190,7 +191,12 @@ private:
     // helper functions for loading of character styles
     void addCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                             KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoCharacterStyle *> > loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
+    struct OdfCharStyle {
+        QString odfName;
+        QString parentStyle;
+        KoCharacterStyle *style;
+    };
+    QList<OdfCharStyle> loadCharacterStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of list styles
     void addListStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,

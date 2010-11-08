@@ -6,7 +6,7 @@ set(kritappmimport_PART_SRCS
     kis_ppm_import.cpp
     )
 
-kde4_add_plugin(kritappmimport WITH_PREFIX ${kritappmimport_PART_SRCS})
+kde4_add_plugin(kritappmimport ${kritappmimport_PART_SRCS})
 
 target_link_libraries(kritappmimport kritaui )
 
@@ -20,7 +20,7 @@ set(kritappmexport_PART_SRCS
 
 kde4_add_ui_files(kritappmexport_PART_SRCS kis_wdg_options_ppm.ui )
 
-kde4_add_plugin(kritappmexport WITH_PREFIX ${kritappmexport_PART_SRCS})
+kde4_add_plugin(kritappmexport ${kritappmexport_PART_SRCS})
 
 target_link_libraries(kritappmexport kritaui  )
 

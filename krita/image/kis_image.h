@@ -371,12 +371,20 @@ public:
     }
 
     /**
-     * returns a paintdevice that contains the merged layers of this
-     * image, within the bounds of this image (with the colorspace and
-     * profile of this image) It will cause a synchronous update to the
-     * projection.
+     * Starting form 2.3 mergedImage() is declared deprecated.
+     * If you want to get a projection of the image, please use
+     * something like:
+     *
+     * image->lock();
+     * read_something_from_the_image(image->projection());
+     * image->unlock();
+     *
+     * or if you want to get a full refresh of the image graph
+     * performed beforehand (do you really want it?) (sure?) then
+     * you can add a call to image->refreshGraph() before locking
+     * the image.
      */
-    KisPaintDeviceSP mergedImage();
+    KDE_DEPRECATED KisPaintDeviceSP mergedImage();
 
     /**
      * @return the root node of the image node graph

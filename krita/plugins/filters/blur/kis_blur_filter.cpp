@@ -39,7 +39,6 @@
 KisBlurFilter::KisBlurFilter() : KisFilter(id(), categoryBlur(), i18n("&Blur..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
     setSupportsIncrementalPainting(true);
     setSupportsAdjustmentLayers(true);
     setColorSpaceIndependence(FULLY_INDEPENDENT);

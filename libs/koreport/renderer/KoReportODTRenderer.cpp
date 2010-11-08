@@ -35,7 +35,7 @@ KoReportODTRenderer::~KoReportODTRenderer()
     delete m_document;
 }
 
-bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocument* document, int page)
+bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocument* document, int /*page*/)
 {
     QTextTableFormat tableFormat;
     tableFormat.setCellPadding(5);
@@ -45,7 +45,7 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
     QTextTable *table = m_cursor.insertTable(1, 1, tableFormat);
 
     long renderedSections = 0;
-    
+
     for (long s = 0; s < document->sections(); s++) {
         OROSection *section = document->section(s);
         section->sortPrimatives(OROSection::SortX);
@@ -76,15 +76,15 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
                 QTextCharFormat format = cell.format();
                 format.setBackground(section->backgroundColor());
                 cell.setFormat(format);
-                
+
                 if (prim->type() == OROTextBox::TextBox) {
                     OROTextBox * tb = (OROTextBox*) prim;
                     m_cursor.insertText(tb->text());
                 } else if (prim->type() == OROImage::Image) {
                     OROImage * im = (OROImage*) prim;
-                    
+
                     m_cursor.insertImage(im->image().scaled(im->size().width(), im->size().height(), Qt::KeepAspectRatio));
-            
+
                 } else if (prim->type() == OROPicture::Picture) {
                     OROPicture * im = (OROPicture*) prim;
 
@@ -92,23 +92,23 @@ bool KoReportODTRenderer::render(const KoReportRendererContext& context, ORODocu
                     QPainter painter(&image);
                     im->picture()->play(&painter);
 
-                    
+
                     m_cursor.insertImage(image);
                 } else {
                     kDebug() << "unhandled primitive type";
                 }
                 m_cursor.movePosition(QTextCursor::NextCell);
-                
+
             }
             if (s < document->sections() - 1) {
                 table->appendRows(1);
             }
-            
+
             renderedSections++;
         }
     }
 
     QTextDocumentWriter writer(context.destinationUrl.toLocalFile());
-    return writer.write(m_document);  
+    return writer.write(m_document);
 }
 

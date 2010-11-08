@@ -29,6 +29,6 @@ Name[zh_TW]=Krita Gif 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/gif
 X-KDE-Weight=1
-X-KDE-Library=libkritagifimport
+X-KDE-Library=kritagifimport
 X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

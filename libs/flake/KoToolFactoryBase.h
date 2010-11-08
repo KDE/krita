@@ -37,7 +37,7 @@
  * An example usage would be:<pre>
 class MyToolFactory : public KoToolFactoryBase {
 public:
-    MyToolFactory(QObject *parent, const QStringList&)
+    MyToolFactory(QObject *parent, const QVariantList&)
         : KoToolFactoryBase(parent, "MyTool") {
         setToolTip(i18n("Create object"));
         setToolType("dynamic");
@@ -46,8 +46,8 @@ public:
     ~MyToolFactory() {}
     KoToolBase *createTool(KoCanvasBase *canvas);
 };
-K_EXPORT_COMPONENT_FACTORY(myLibrary,
-     KGenericFactory<MyToolFactory>("MyTool"))
+K_PLUGIN_FACTORY(MyToolFactoryFactory, registerPlugin<MyToolFactory>();)
+K_EXPORT_PLUGIN(MyToolFactoryFactory("MyTool"))
 </pre>
 
  */

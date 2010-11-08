@@ -24,11 +24,12 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(textshape, KGenericFactory<TextPlugin>("TextShape"))
+K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
+K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
-TextPlugin::TextPlugin(QObject * parent, const QStringList &)
+TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
         : QObject(parent)
 {
     KoToolRegistry::instance()->add(new TextToolFactory(parent));

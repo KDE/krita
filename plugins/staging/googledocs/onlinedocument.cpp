@@ -23,15 +23,15 @@
 #include <kurl.h>
 #include <KoView.h>
 #include <KoDocument.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <onlinedocument.moc>
 #include "loginwindow.h"
 #include "googledocumentservice.h"
 
-typedef KGenericFactory<OnlineDocument> OnlineDocumentFactory;
-K_EXPORT_COMPONENT_FACTORY( kofficegoogledocs, OnlineDocumentFactory( "googledocs_plugin" ) )
+K_PLUGIN_FACTORY(OnlineDocumentFactory, registerPlugin<OnlineDocument>();)
+K_EXPORT_PLUGIN(OnlineDocumentFactory("googledocs_plugin"))
 
-OnlineDocument::OnlineDocument(QObject *parent, const QStringList &)
+OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
     : KParts::Plugin(parent)
 {
     setComponentData(OnlineDocumentFactory::componentData());

@@ -26,12 +26,12 @@
 #include "ellipse/EllipseShapeFactory.h"
 #include "spiral/SpiralShapeFactory.h"
 #include "enhancedpath/EnhancedPathShapeFactory.h"
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(pathshapes,
-                           KGenericFactory<PathShapesPlugin>("PathShapes"))
+K_PLUGIN_FACTORY(PathShapesPluginFactory, registerPlugin<PathShapesPlugin>();)
+K_EXPORT_PLUGIN(PathShapesPluginFactory("PathShapes"))
 
-PathShapesPlugin::PathShapesPlugin(QObject *parent, const QStringList&)
+PathShapesPlugin::PathShapesPlugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add(new StarShapeFactory(parent));

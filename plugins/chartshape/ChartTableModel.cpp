@@ -65,7 +65,7 @@ QHash<QString, QVector<QRect> > ChartTableModel::cellRegion() const
     return QHash<QString, QVector<QRect> >();
 }
 
-bool ChartTableModel::setCellRegion( const QString& regionName )
+bool ChartTableModel::setCellRegion( const QString& /*regionName*/ )
 {
 #if 0 // FIXME: What does this code do?
     int result = 0;
@@ -145,7 +145,7 @@ bool ChartTableModel::loadOdf( const KoXmlElement &tableElement,
                     if ( column >= columnCount() )
                         setColumnCount( columnCount() + 1 );
 
-                    const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );                    
+                    const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
 
                     QString valueString = __n.attributeNS( KoXmlNS::office, "value" );
                     const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();

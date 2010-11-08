@@ -23,12 +23,13 @@
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 
-K_EXPORT_COMPONENT_FACTORY( pictureshape, KGenericFactory<Plugin>( "PictureShape" ) )
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("PictureShape"))
 
-Plugin::Plugin(QObject *parent, const QStringList &)
+Plugin::Plugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
     KoShapeRegistry::instance()->add( new PictureShapeFactory(parent) );

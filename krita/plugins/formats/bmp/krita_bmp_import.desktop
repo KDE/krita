@@ -28,5 +28,5 @@ X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Import=image/bmp
 X-KDE-Weight=1
-X-KDE-Library=libkritabmpimport
+X-KDE-Library=kritabmpimport
 NoDisplay=true

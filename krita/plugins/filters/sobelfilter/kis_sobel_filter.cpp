@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 
 #include <kis_doc2.h>
@@ -78,7 +78,6 @@
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n("&Sobel..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
     setSupportsThreading(false); // TODO Sobel doesn't support threading on image with height > 512
 }
 

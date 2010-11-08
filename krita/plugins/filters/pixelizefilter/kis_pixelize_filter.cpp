@@ -36,7 +36,7 @@
 #include <kiconloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 
 #include <KoProgressUpdater.h>
@@ -60,7 +60,6 @@
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
 {
     setSupportsPainting(true);
-    setSupportsPreview(true);
 }
 
 void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,

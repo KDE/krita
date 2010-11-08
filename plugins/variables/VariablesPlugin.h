@@ -20,13 +20,14 @@
 #define KOVARIABLESPLUGIN_H
 
 #include <QObject>
+#include <QVariantList>
 
 class VariablesPlugin : public QObject
 {
     Q_OBJECT
 
 public:
-    VariablesPlugin(QObject * parent,  const QStringList &);
+    VariablesPlugin(QObject * parent, const QVariantList &);
     ~VariablesPlugin() {}
 };
 

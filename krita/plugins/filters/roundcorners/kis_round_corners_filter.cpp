@@ -31,7 +31,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
@@ -52,7 +52,6 @@
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
 
 }
 

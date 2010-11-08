@@ -21,11 +21,11 @@
 
 #include <QHash>
 
-#include <QStringList>
+#include <QVariantList>
 #include <QDir>
 
 #include <kcomponentdata.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kservice.h>
@@ -50,10 +50,10 @@
 #include "colorspaces/gray_u16/GrayU16ColorSpace.h"
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
 
-typedef KGenericFactory<LcmsEnginePlugin> LcmsEnginePluginFactory;
-K_EXPORT_COMPONENT_FACTORY(kolcmsengine, LcmsEnginePluginFactory("koffice"))
+K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
+K_EXPORT_PLUGIN(LcmsEnginePluginFactory("koffice"))
 
-LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QStringList &)
+LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
     kDebug(31000) << "Initializing the lcms engine plugin";

@@ -36,7 +36,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kis_debug.h>
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 #include <knuminput.h>
 
 #include "KoIntegerMaths.h"
@@ -58,7 +58,6 @@
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {
     setSupportsPainting(false);
-    setSupportsPreview(true);
     setColorSpaceIndependence(TO_RGBA8);
 }
 

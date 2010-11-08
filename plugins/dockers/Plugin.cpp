@@ -27,11 +27,12 @@
 
 #include <KoDockRegistry.h>
 
-#include <kgenericfactory.h>
+#include <kpluginfactory.h>
 
-K_EXPORT_COMPONENT_FACTORY(kofficedockers, KGenericFactory<Plugin>("koffice-dockers"))
+K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
+K_EXPORT_PLUGIN(PluginFactory("koffice-dockers"))
 
-Plugin::Plugin(QObject *parent, const QStringList&)
+Plugin::Plugin(QObject *parent, const QVariantList&)
     : QObject(parent)
 {
     Q_UNUSED(parent);

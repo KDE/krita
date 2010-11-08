@@ -238,7 +238,8 @@ void PlotArea::Private::initAxes()
     }
     // There need to be at least these two axes. Do not delete, but
     // hide them instead.
-//    Axis *xAxis = new Axis( q, XAxisDimension );
+    Axis *xAxis = new Axis( q, XAxisDimension );
+    Q_UNUSED(xAxis);
     Axis *yAxis = new Axis( q, YAxisDimension );
     yAxis->setShowMajorGrid( true );
 }

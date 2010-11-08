@@ -32,16 +32,16 @@ class QWidget;
 class KisPaintInformation;
 class KisSensorSelector;
 
-const KoID FuzzyId("fuzzy", i18n("Fuzzy")); ///< generate a random number
-const KoID SpeedId("speed", i18n("Speed")); ///< generate a number depending on the speed of the cursor
-const KoID FadeId("fade", i18n("Fade")); ///< generate a number that increase every time you call it (e.g. per dab)
-const KoID DistanceId("distance", i18n("Distance")); ///< generate a number that increase with distance
-const KoID TimeId("time", i18n("Time")); ///< generate a number that increase with time
-const KoID DrawingAngleId("drawingangle", i18n("Drawing angle")); ///< number depending on the angle
-const KoID RotationId("rotation", i18n("Rotation")); ///< rotation coming from the device
-const KoID PressureId("pressure", i18n("Pressure")); ///< number depending on the pressure
-const KoID XTiltId("xtilt", i18n("X-Tilt")); ///< number depending on X-tilt
-const KoID YTiltId("ytilt", i18n("Y-Tilt")); ///< number depending on Y-tilt
+const KoID FuzzyId("fuzzy", ki18n("Fuzzy")); ///< generate a random number
+const KoID SpeedId("speed", ki18n("Speed")); ///< generate a number depending on the speed of the cursor
+const KoID FadeId("fade", ki18n("Fade")); ///< generate a number that increase every time you call it (e.g. per dab)
+const KoID DistanceId("distance", ki18n("Distance")); ///< generate a number that increase with distance
+const KoID TimeId("time", ki18n("Time")); ///< generate a number that increase with time
+const KoID DrawingAngleId("drawingangle", ki18n("Drawing angle")); ///< number depending on the angle
+const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from the device
+const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
+const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
+const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
 
 /**
  * Sensor are used to extract from KisPaintInformation a single

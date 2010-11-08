@@ -31,8 +31,8 @@
 #include "kis_debug.h"
 #include "kis_serializable_configuration.h"
 
-const KoID KisBookmarkedConfigurationManager::ConfigDefault = KoID("Default", i18n("Default"));
-const KoID KisBookmarkedConfigurationManager::ConfigLastUsed = KoID("Last Used", i18n("Last used"));
+const KoID KisBookmarkedConfigurationManager::ConfigDefault = KoID("Default", ki18n("Default"));
+const KoID KisBookmarkedConfigurationManager::ConfigLastUsed = KoID("Last Used", ki18n("Last used"));
 
 struct KisBookmarkedConfigurationManager::Private {
     QString configEntryGroup;

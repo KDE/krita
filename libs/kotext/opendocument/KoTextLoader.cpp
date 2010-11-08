@@ -219,6 +219,8 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-idref");
         insertionTextIdMap.insert(textEndId, id);
+    } else if(element.localName() == "removed-content") {
+        id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
         if (insertionType == "insert-with-content") {
@@ -251,6 +253,8 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-id");
         id = insertionTextIdMap.value(textEndId);
         insertionTextIdMap.remove(textEndId);
+    } else if(element.localName() == "removed-content") {
+        id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != ""){
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
         if (insertionType == "insert-with-content") {
@@ -347,7 +351,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         insertDeleteChangeMarker(cursor, changeId);
                         int deleteStartPosition = cursor.position();
                         cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                        d->openChangeRegion(tag);
                         loadBody(tag, cursor, true);
+                        d->closeChangeRegion(tag);
                         processDeleteChange(cursor, changeId, deleteStartPosition);
                     } else {
                     }

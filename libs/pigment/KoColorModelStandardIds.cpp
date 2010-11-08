@@ -22,16 +22,16 @@
 #include <klocale.h>
 
 
-const KoID AlphaColorModelID("A", i18n("Alpha"));
-const KoID RGBAColorModelID("RGBA", i18n("Red Green Blue"));
-const KoID XYZAColorModelID("XYZA", i18n("XYZ"));
-const KoID LABAColorModelID("LABA", i18n("L a* b*"));
-const KoID CMYKAColorModelID("CMYKA", i18n("Cyan Magenta Yellow Black"));
-const KoID GrayAColorModelID("GRAYA", i18n("Grayscale"));
-const KoID GrayColorModelID("GRAY", i18n("Grayscale (without transparency)"));
-const KoID YCbCrAColorModelID("YCbCrA", i18n("YCbCr"));
+const KoID AlphaColorModelID("A", ki18n("Alpha"));
+const KoID RGBAColorModelID("RGBA", ki18n("Red Green Blue"));
+const KoID XYZAColorModelID("XYZA", ki18n("XYZ"));
+const KoID LABAColorModelID("LABA", ki18n("L a* b*"));
+const KoID CMYKAColorModelID("CMYKA", ki18n("Cyan Magenta Yellow Black"));
+const KoID GrayAColorModelID("GRAYA", ki18n("Grayscale"));
+const KoID GrayColorModelID("GRAY", ki18n("Grayscale (without transparency)"));
+const KoID YCbCrAColorModelID("YCbCrA", ki18n("YCbCr"));
 
-const KoID Integer8BitsColorDepthID("U8", i18n("8 Bits"));
-const KoID Integer16BitsColorDepthID("U16", i18n("16 Bits"));
-const KoID Float16BitsColorDepthID("F16", i18n("16 Bits Float"));
-const KoID Float32BitsColorDepthID("F32", i18n("32 Bits Float"));
+const KoID Integer8BitsColorDepthID("U8", ki18n("8 Bits"));
+const KoID Integer16BitsColorDepthID("U16", ki18n("16 Bits"));
+const KoID Float16BitsColorDepthID("F16", ki18n("16 Bits Float"));
+const KoID Float32BitsColorDepthID("F32", ki18n("32 Bits Float"));

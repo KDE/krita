@@ -437,6 +437,7 @@ KoReportPreRenderer::KoReportPreRenderer(const QDomElement & pDocument) : d(new 
 
 KoReportPreRenderer::~KoReportPreRenderer()
 {
+    delete d;
 }
 
 void KoReportPreRenderer::setName(const QString &n)

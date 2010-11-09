@@ -708,10 +708,26 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
     KoXmlElement e;
     bool firstTime = true;
     forEachElement(e, element) {
-        if (!firstTime && !numberedParagraph)
-            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
-        firstTime = false;
-        loadListItem(e, cursor, level, isDeleteChange);
+        if (e.localName() == "removed-content") {
+            QString changeId = e.attributeNS(KoXmlNS::delta, "removal-change-idref");
+            insertDeleteChangeMarker(cursor, changeId);
+            int deleteStartPosition = cursor.position();
+            d->openChangeRegion(e);
+            KoXmlElement deletedElement;
+            forEachElement(deletedElement, e) {
+                if (!firstTime && !numberedParagraph)
+                    cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                firstTime = false;
+                loadListItem(deletedElement, cursor, level, isDeleteChange); 
+            }
+            d->closeChangeRegion(e);
+            processDeleteChange(cursor, changeId, deleteStartPosition);
+        } else {
+            if (!firstTime && !numberedParagraph)
+                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+            firstTime = false;
+            loadListItem(e, cursor, level, isDeleteChange);
+        }
     }
 
     /*******************************ODF Bug Work-Around Code Changes***********************************/
@@ -728,7 +744,12 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
 
 void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level, bool isDeleteChange)
 { 
-    const bool numberedParagraph = e.parentNode().toElement().localName() == "numbered-paragraph";
+    bool numberedParagraph = e.parentNode().toElement().localName() == "numbered-paragraph";
+    
+    if (!numberedParagraph && e.parentNode().toElement().localName() == "removed-content") {
+        numberedParagraph = e.parentNode().parentNode().toElement().localName() == "numbered-paragraph"; 
+    }
+
     if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
         return;
 

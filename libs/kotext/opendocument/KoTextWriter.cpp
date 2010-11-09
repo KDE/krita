@@ -408,7 +408,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
-            if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+            const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData());
+            if (blockData && (it == block.begin())) {
                 writer->addAttribute("text:id", context.subId(blockData));
             }
             //kDebug(30015) << "from:" << from << " to:" << to;

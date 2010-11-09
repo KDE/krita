@@ -111,6 +111,11 @@ private:
     void loadList(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);
 
     /**
+    * Load a list-item into the cursor
+    */
+    void loadListItem(KoXmlElement &e, QTextCursor &cursor, int level, bool isDeleteChange);
+
+    /**
     * Load the section from the \p element into the \p cursor .
     */
     void loadSection(const KoXmlElement &element, QTextCursor &cursor);

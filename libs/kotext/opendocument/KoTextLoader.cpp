@@ -708,86 +708,10 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
     KoXmlElement e;
     bool firstTime = true;
     forEachElement(e, element) {
-        if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
-            continue;
-
-        const bool listHeader = e.tagName() == "list-header";
-
-        if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
-            continue;
-
-        if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-            d->openChangeRegion(e);
-
-        bool listItemValid = false;
-        if (e.hasAttribute("id")) {
-            QString xmlId = e.attribute("id", QString());
-            listItemValid = isValidListItem(xmlId);
-        }
-
         if (!firstTime && !numberedParagraph)
             cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
         firstTime = false;
-
-        QTextBlock current = cursor.block();
-
-        QTextBlockFormat blockFormat;
-
-        if (numberedParagraph) {
-            if (e.localName() == "p") {
-                loadParagraph(e, cursor);
-            } else if (e.localName() == "h") {
-                loadHeading(e, cursor);
-            }
-            blockFormat.setProperty(KoParagraphStyle::ListLevel, level);
-        } else {
-            loadBody(e, cursor, isDeleteChange);
-        }
-
-        if (!current.textList()) {
-            if (!d->currentList->style()->hasLevelProperties(level)) {
-                KoListLevelProperties llp;
-                // Look if one of the lower levels are defined to we can copy over that level.
-                for(int i = level - 1; i >= 0; --i) {
-                    if(d->currentList->style()->hasLevelProperties(i)) {
-                        llp = d->currentList->style()->levelProperties(i);
-                        break;
-                    }
-                }
-                llp.setLevel(level);
-                // TODO make the 10 configurable
-                llp.setIndent(level * 10.0);
-                d->currentList->style()->setLevelProperties(llp);
-            }
-
-            d->currentList->add(current, level);
-        }
-
-        if (listHeader)
-            blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
-
-        if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
-            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
-            blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
-        }
-
-
-        // mark intermediate paragraphs as unnumbered items
-        QTextCursor c(current);
-        c.mergeBlockFormat(blockFormat);
-        while (c.block() != cursor.block()) {
-            c.movePosition(QTextCursor::NextBlock);
-            if (c.block().textList()) // a sublist
-                break;
-            blockFormat = c.blockFormat();
-            blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
-            c.setBlockFormat(blockFormat);
-            d->currentList->add(c.block(), level);
-        }
-        
-        if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-            d->closeChangeRegion(e);
-        kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+        loadListItem(e, cursor, level, isDeleteChange);
     }
 
     /*******************************ODF Bug Work-Around Code Changes***********************************/
@@ -800,6 +724,88 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
         d->currentList = 0;
     }
     /***************************************************************************************************/
+}
+
+void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level, bool isDeleteChange)
+{ 
+    const bool numberedParagraph = e.parentNode().toElement().localName() == "numbered-paragraph";
+    if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
+        return;
+
+    const bool listHeader = e.tagName() == "list-header";
+
+    if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
+        return;
+
+    if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+        d->openChangeRegion(e);
+
+    bool listItemValid = false;
+    if (e.hasAttribute("id")) {
+        QString xmlId = e.attribute("id", QString());
+        listItemValid = isValidListItem(xmlId);
+    }
+
+
+    QTextBlock current = cursor.block();
+
+    QTextBlockFormat blockFormat;
+
+    if (numberedParagraph) {
+        if (e.localName() == "p") {
+            loadParagraph(e, cursor);
+        } else if (e.localName() == "h") {
+            loadHeading(e, cursor);
+        }
+        blockFormat.setProperty(KoParagraphStyle::ListLevel, level);
+    } else {
+        loadBody(e, cursor, isDeleteChange);
+    }
+
+    if (!current.textList()) {
+        if (!d->currentList->style()->hasLevelProperties(level)) {
+            KoListLevelProperties llp;
+            // Look if one of the lower levels are defined to we can copy over that level.
+            for(int i = level - 1; i >= 0; --i) {
+                if(d->currentList->style()->hasLevelProperties(i)) {
+                    llp = d->currentList->style()->levelProperties(i);
+                    break;
+                }
+            }
+            llp.setLevel(level);
+           // TODO make the 10 configurable
+            llp.setIndent(level * 10.0);
+            d->currentList->style()->setLevelProperties(llp);
+        }
+
+        d->currentList->add(current, level);
+    }
+
+    if (listHeader)
+        blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
+
+    if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
+        int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
+        blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
+    }
+
+
+    // mark intermediate paragraphs as unnumbered items
+    QTextCursor c(current);
+    c.mergeBlockFormat(blockFormat);
+    while (c.block() != cursor.block()) {
+        c.movePosition(QTextCursor::NextBlock);
+        if (c.block().textList()) // a sublist
+            break;
+        blockFormat = c.blockFormat();
+        blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
+        c.setBlockFormat(blockFormat);
+        d->currentList->add(c.block(), level);
+    }
+        
+    if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+        d->closeChangeRegion(e);
+    kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
 }
 
 /*************************************ODF Bug Work-Around Code*******************************************/

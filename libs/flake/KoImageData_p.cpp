@@ -28,6 +28,7 @@
 #include <QCryptographicHash>
 #include <QFileInfo>
 #include <KDebug>
+#include <QBuffer>
 
 KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
     : collection(0),
@@ -84,8 +85,11 @@ bool KoImageDataPrivate::saveData(QIODevice &device)
     case KoImageDataPrivate::StateImageLoaded:
     case KoImageDataPrivate::StateImageOnly: {
         // save image
-        QImageWriter writer(&device, suffix.toLatin1());
-        return writer.write(image);
+        QBuffer buffer;
+        QImageWriter writer(&buffer, suffix.toLatin1());
+        bool result = writer.write(image);
+        device.write(buffer.data(), buffer.size());
+        return result;
       }
     }
     return false;

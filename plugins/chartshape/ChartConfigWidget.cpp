@@ -36,7 +36,6 @@
 #include <KIconLoader>
 #include <KDebug>
 #include <KMessageBox>
-#include <KColorButton>
 
 // KOffice
 #include <interfaces/KoChartModel.h>

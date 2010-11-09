@@ -223,7 +223,7 @@ public:
                     else if (channelPixelValue < m_minClamp[k])
                         channelPixelValue = m_minClamp[k];
 
-                    fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue + 0.5);
+                    fromDoubleFuncPtr[k](data, convChannelList[k]->pos(), channelPixelValue);
 
                     ++m_channelPtr[k];
                 }

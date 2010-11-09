@@ -133,18 +133,16 @@ void KisConvolutionPainterTest::testPureConvolution()
     }
     dev->writeBytes((const quint8*)deviceData.constData(), imageRect);
 
-
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, 0, factor);
     KisConvolutionPainter gc(dev);
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
 
-
     QByteArray resultData(25 * pixelSize, 0);
     dev->readBytes((quint8*)resultData.data(), imageRect);
 
-    QCOMPARE(deviceData, resultData);
+    QCOMPARE(resultData, deviceData);
 }
 
 void KisConvolutionPainterTest::testMaskConvolution()

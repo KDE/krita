@@ -73,6 +73,12 @@ inline double toDouble(const quint8* data, int channelpos)
 template<typename T>
 void fromDouble(quint8* data, int channelpos, double v)
 {
+    *((T*)(data + channelpos)) = (T)qRound(v);
+}
+
+template<typename T>
+void fromDoubleF(quint8* data, int channelpos, double v)
+{
     *((T*)(data + channelpos)) = (T)v;
 }
 
@@ -183,11 +189,11 @@ bool KisMathToolbox::getFromDoubleChannelPtr(QList<KoChannelInfo *> cis, QVector
             break;
 #ifdef HAVE_OPENEXR
         case KoChannelInfo::FLOAT16:
-            f[k] = fromDouble<half>;
+            f[k] = fromDoubleF<half>;
             break;
 #endif
         case KoChannelInfo::FLOAT32:
-            f[k] = fromDouble<float>;
+            f[k] = fromDoubleF<float>;
             break;
         case KoChannelInfo::INT8:
             f[k] = fromDouble<qint8>;

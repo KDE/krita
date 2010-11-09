@@ -95,8 +95,7 @@ void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) cons
         QRect r1 = dev->extent();
         KisTransaction transaction(d->filter->name(), dev);
 
-        // Ugly hack to get at the image without bloating the node interface
-        KisImageWSP image;
+        KisImageWSP image = info.image();
         r1 = r1.intersected(image->bounds());
         if (layer && layer->selectionMask()) {
             r1 = r1.intersected(layer->selectionMask()->exactBounds());

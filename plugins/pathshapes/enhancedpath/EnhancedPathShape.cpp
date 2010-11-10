@@ -341,6 +341,13 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
 
+        if (m_mirrorHorizontally) {
+            context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
+        }
+        if (m_mirrorVertically) {
+            context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
+        }
+        
         QString modifiers;
         foreach (qreal modifier, m_modifiers)
             modifiers += QString::number(modifier) + ' ';
@@ -368,12 +375,6 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             parent()->saveOdfChildElements(context);
         context.xmlWriter().endElement(); // draw:custom-shape
 
-        if (m_mirrorHorizontally) {
-            context.xmlWriter().addAttribute("draw:mirror-horizontal", "true");
-        }
-        if (m_mirrorVertically) {
-            context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
-        }
     } else {
         KoPathShape::saveOdf(context);
     }

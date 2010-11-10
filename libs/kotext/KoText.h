@@ -91,7 +91,7 @@ enum Direction {
 
 /**
  * Text resources per koffice-document.
- * \sa KoResourceManager KoShapeCollection::resourceManager()
+ * \sa KoResourceManager KoShapeController::resourceManager()
  */
 enum DocumentResource {
     ChangeTracker = KoDocumentResource::KoTextStart + 1, ///< KoChangeTracker

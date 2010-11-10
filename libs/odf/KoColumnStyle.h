@@ -20,6 +20,7 @@
 #define KOCOLUMNSTYLE_H
 
 #include "KoStyle.h"
+#include "koodf_export.h"
 
 /**
  * A \class KoColumnStyle represents a style to be applied to one or more columns.
@@ -27,30 +28,46 @@
  * As all the styles it can be shared
  */
 
-class KoColumnStyle : public KoStyle
+class KOODF_EXPORT KoColumnStyle : public KoStyle
 {
-public:
     KoColumnStyle();
+public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoColumnStyle)
+
     ~KoColumnStyle();
 
-    void setBreakBefore(bool breakBefore);
-    bool breakBefore() const;
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
+    void setBreakBefore(BreakType breakBefore);
+    BreakType breakBefore() const;
 
-    void setBreakAfter(bool breakAfter);
-    bool breakAfter() const;
+    void setBreakAfter(BreakType breakAfter);
+    BreakType breakAfter() const;
 
-    enum WidthType{
+    enum WidthType {
         MinimumWidth,
         ExactWidth,
         OptimalWidth
     };
     void setWidth(qreal width);
-    void setWidthType(WidthType type);
     qreal width() const;
+    void setWidthType(WidthType type);
+    WidthType widthType() const;
+
+protected:
+    virtual void prepareStyle(KoGenStyle& style) const;
+    virtual QString defaultPrefix() const;
+    virtual KoGenStyle::Type styleType() const;
+    virtual KoGenStyle::Type automaticstyleType() const;
+    virtual const char* styleFamilyName() const;
 
 private:
-    bool m_breakAfter;
-    bool m_breakBefore;
+    BreakType m_breakAfter;
+    BreakType m_breakBefore;
     qreal m_width;
     WidthType m_widthType;
 };

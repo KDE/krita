@@ -182,6 +182,12 @@ public slots:
     void setShowTabs(bool show);
 
     /**
+     * Set whether the tabs is relative to the paragraph indent
+     * @param relative tabs are relative to pragraph indent if true, default is false.
+     */
+    void setRelativeTabs(bool relative);
+
+    /**
      * Update the tabs
      * @param tabs a list of tabs that is shown on the ruler the first selection border in points
      */

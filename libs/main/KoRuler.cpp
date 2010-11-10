@@ -157,11 +157,11 @@ void HorizontalPaintingStrategy::drawTabs(const KoRulerPrivate *d, QPainter &pai
     foreach (const KoRuler::Tab & t, d->tabs) {
         qreal x;
         if (d->rightToLeft)
-            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - t.position)
-                    + d->offset;
+            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
+                    - (d->relativeTabs ? d->paragraphIndent : 0) - t.position) + d->offset;
         else
-            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart() + t.position)
-                    + d->offset;
+            x = d->viewConverter->documentToViewX(d->effectiveActiveRangeStart()
+                    + (d->relativeTabs ? d->paragraphIndent : 0) + t.position) + d->offset;
 
         polygon.clear();
         switch (t.type) {
@@ -627,6 +627,7 @@ KoRulerPrivate::KoRulerPrivate(KoRuler *parent, const KoViewConverter *vc, Qt::O
     paragraphIndent(0),
     endIndent(0),
     showTabs(false),
+    relativeTabs(false),
     tabMoved(false),
     originalIndex(-1),
     currentIndex(0),
@@ -935,6 +936,11 @@ void KoRuler::updateSelectionBorders(qreal first, qreal second)
 void KoRuler::setShowTabs(bool show)
 {
     d->showTabs = show;
+}
+
+void KoRuler::setRelativeTabs(bool relative)
+{
+    d->relativeTabs = relative;
 }
 
 void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs)

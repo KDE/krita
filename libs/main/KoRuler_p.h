@@ -150,6 +150,7 @@ public:
     qreal endIndent;
 
     bool showTabs;
+    bool relativeTabs;
     bool tabMoved; // set to true on first move of a selected tab
     QList<KoRuler::Tab> tabs;
     int originalIndex; //index of selected tab before we started dragging it.

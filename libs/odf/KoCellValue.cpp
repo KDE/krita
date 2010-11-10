@@ -34,7 +34,9 @@ void KoCellValue::saveOdf(KoXmlWriter& writer) const
 {
     QString stringType;
 
-    writer.addAttribute("office:value-type", type());
+    if(!type().isEmpty()) {
+        writer.addAttribute("office:value-type", type());
+    }
 
     QPair<QString, QString> attribute;
     foreach(attribute, attributes()) {

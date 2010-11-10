@@ -154,7 +154,7 @@ private:
             const int fragmentToLineOffset) const;
 
     void updateFrameStack();
-    void updateShrinkToFit(KoShape *shape);
+    void setShrinkToFit(KoShape *shape);
 
 private:
     KoStyleManager *m_styleManager;

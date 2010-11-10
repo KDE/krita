@@ -928,7 +928,8 @@ void Layout::cleanupShapes()
     QList<KoShape*> shapes = m_parent->shapes();
 
     if (!shapes.isEmpty()) {
-        updateShrinkToFit(shapes.first());
+        if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize)
+            setShrinkToFit(shapes.first());
 
         int i = shapeNumber + 1;
         while (i < shapes.count())
@@ -1070,10 +1071,8 @@ void Layout::resetPrivate()
         shapeNumber++;
 }
 
-void Layout::updateShrinkToFit(KoShape *shape)
+void Layout::setShrinkToFit(KoShape *shape)
 {
-    if (m_parent->resizeMethod() != KoTextDocument::ShrinkToFitResize)
-        return;
     //Q_ASSERT(!static_cast<KoTextShapeData*>(shape->userData())->isDirty());
     QSizeF shapeSize = shape->size();
     QSizeF documentSize = m_parent->documentSize();

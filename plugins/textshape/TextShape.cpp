@@ -283,7 +283,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     painter.setClipRect(cliprect, Qt::IntersectClip);
 
     painter.save();
-    painter.translate(0, -m_textShapeData->documentOffset() * lay->fitToSizeFactor());
+    painter.translate(0, -m_textShapeData->documentOffset());
     lay->draw(&painter, context);
     painter.restore();
 

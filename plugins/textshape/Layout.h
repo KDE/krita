@@ -154,6 +154,7 @@ private:
             const int fragmentToLineOffset) const;
 
     void updateFrameStack();
+    void updateShrinkToFit(KoShape *shape);
 
 private:
     KoStyleManager *m_styleManager;
@@ -196,6 +197,7 @@ private:
     qreal m_allTimeMinimumLeft;
     qreal m_maxLineHeight;
     bool m_relativeTabs;
+    qreal m_scaleFactor;
 };
 
 #endif

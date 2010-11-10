@@ -88,7 +88,8 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false),
         m_allTimeMinimumLeft(0),
-        m_maxLineHeight(0)
+        m_maxLineHeight(0),
+        m_scaleFactor(1.0)
 {
     m_frameStack.reserve(5); // avoid reallocs
     setTabSpacing(MM_TO_POINT(15));
@@ -140,7 +141,7 @@ qreal Layout::width()
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     if (m_dropCapsNChars == 0)
         ptWidth -= m_dropCapsAffectedLineWidthAdjust;
-    return ptWidth;
+    return ptWidth / m_scaleFactor;
 }
 
 qreal Layout::x()
@@ -160,7 +161,7 @@ qreal Layout::x()
 
 qreal Layout::y()
 {
-    return m_y;
+    return m_y * m_parent->fitToSizeFactor();
 }
 
 qreal Layout::resolveTextIndent()
@@ -924,10 +925,15 @@ void Layout::nextShape()
 // and the end of text, make sure the rest of the frames have something sane to show.
 void Layout::cleanupShapes()
 {
-    int i = shapeNumber + 1;
-    QList<KoShape *> shapes = m_parent->shapes();
-    while (i < shapes.count())
-        cleanupShape(shapes[i++]);
+    QList<KoShape*> shapes = m_parent->shapes();
+
+    if (!shapes.isEmpty()) {
+        updateShrinkToFit(shapes.first());
+
+        int i = shapeNumber + 1;
+        while (i < shapes.count())
+            cleanupShape(shapes[i++]);
+    }
 }
 
 void Layout::cleanupShape(KoShape *daShape)
@@ -983,6 +989,8 @@ void Layout::resetPrivate()
     shapeNumber = 0;
     int lastPos = -1;
     QList<KoShape *> shapes = m_parent->shapes();
+
+    // search for the first shape that needs to be recalculated
     foreach(KoShape *shape, shapes) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         Q_ASSERT(data);
@@ -1032,16 +1040,18 @@ void Layout::resetPrivate()
                 // subtract the top margins as well.
                 m_y -= topMargin();
             }
-            break;
+            break; // job done, abort the loop now
         }
         m_y = data->documentOffset() + shape->size().height() + 10;
         lastPos = data->endPosition();
         shapeNumber++;
     }
     Q_ASSERT(shapeNumber >= 0);
+    // abort if nothing left to do
     if (shapes.count() == 0 || shapes.count() <= shapeNumber)
         return;
     Q_ASSERT(shapeNumber < shapes.count());
+    // set current shape
     shape = shapes[shapeNumber];
     m_data = qobject_cast<KoTextShapeData*>(shape->userData());
     m_textShape = dynamic_cast<TextShape*>(shape);
@@ -1056,17 +1066,21 @@ void Layout::resetPrivate()
     if (m_y == 0)
         m_y = m_shapeBorder.top;
 
-    if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize) {
-        QSizeF shapeSize = shape->size();
-        QSizeF documentSize = m_parent->documentSize();
-        qreal scaleWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
-        qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
-        qreal scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional
-        m_parent->setFitToSizeFactor(scaleFactor);
-    }
-
     if (! nextParag())
         shapeNumber++;
+}
+
+void Layout::updateShrinkToFit(KoShape *shape)
+{
+    if (m_parent->resizeMethod() != KoTextDocument::ShrinkToFitResize)
+        return;
+    //Q_ASSERT(!static_cast<KoTextShapeData*>(shape->userData())->isDirty());
+    QSizeF shapeSize = shape->size();
+    QSizeF documentSize = m_parent->documentSize();
+    qreal scaleWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
+    qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
+    m_scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional down
+    m_parent->setFitToSizeFactor(m_scaleFactor);
 }
 
 void Layout::updateBorders()

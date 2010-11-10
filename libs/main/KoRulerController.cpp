@@ -22,6 +22,7 @@
 #include "styles/KoParagraphStyle.h"
 
 #include <KoResourceManager.h>
+#include <KoTextDocument.h>
 
 #include <KDebug>
 
@@ -80,6 +81,7 @@ public:
         ruler->setEndIndent(format.rightMargin());
         ruler->setRightToLeft(block.layout()->textOption().textDirection() == Qt::RightToLeft);
         ruler->setShowTabs(true);
+        ruler->setRelativeTabs(relativeTabs());
 
         QList<KoRuler::Tab> tabs;
         QVariant variant = format.property(KoParagraphStyle::TabPositions);
@@ -176,6 +178,16 @@ public:
         if (doc == 0)
             return QTextBlock();
         return doc->findBlock(resourceManager->intResource(KoText::CurrentTextPosition));
+    }
+
+    bool relativeTabs() {
+        QVariant docVar = resourceManager->resource(KoText::CurrentTextDocument);
+        if (docVar.isNull())
+            return false;
+        KoTextDocument *doc = static_cast<KoTextDocument*>(docVar.value<void*>());
+        if (doc == 0)
+            return false;
+        return doc->relativeTabs();
     }
 
     void tabChangeInitiated() {

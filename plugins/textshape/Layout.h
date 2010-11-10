@@ -195,6 +195,7 @@ private:
     // bookkeeping for drawing outside borders
     qreal m_allTimeMinimumLeft;
     qreal m_maxLineHeight;
+    bool m_relativeTabs;
 };
 
 #endif

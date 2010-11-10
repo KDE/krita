@@ -152,6 +152,22 @@ public:
     ResizeMethod resizeMethod() const;
 
     /**
+     * Specifies if tabs are relative to paragraph indent.
+     *
+     * By default it's false.
+     */
+    void setRelativeTabs(bool relative);
+
+    /**
+     * Returns if tabs are placed relative to paragraph indent.
+     *
+     * By default, this is false.
+     *
+     * @see setRelativeTabs
+     */
+    bool relativeTabs() const;
+
+    /**
      * Clears the text in the document. Unlike QTextDocument::clear(), this
      * function does not clear the resources of the QTextDocument.
      */
@@ -182,6 +198,7 @@ public:
 
 private:
     QTextDocument *m_document;
+    bool m_relativeTabs;
 };
 
 #endif // KOTEXTDOCUMENT_H

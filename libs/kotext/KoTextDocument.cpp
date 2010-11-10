@@ -49,6 +49,7 @@ const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenu
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
+    , m_relativeTabs(false)
 {
     Q_ASSERT(m_document);
 }
@@ -259,4 +260,14 @@ KoTextDocument::ResizeMethod KoTextDocument::resizeMethod() const
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
     Q_ASSERT(layout);
     return layout->resizeMethod();
+}
+
+void KoTextDocument::setRelativeTabs(bool relative)
+{
+    m_relativeTabs = relative;
+}
+
+bool KoTextDocument::relativeTabs() const
+{
+    return m_relativeTabs;
 }

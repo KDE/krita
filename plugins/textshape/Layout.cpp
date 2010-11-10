@@ -98,6 +98,7 @@ bool Layout::start()
 {
     m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     m_changeTracker = KoTextDocument(m_parent->document()).changeTracker();
+    m_relativeTabs = KoTextDocument(m_parent->document()).relativeTabs();
     if (m_reset)
         resetPrivate();
     else if (shape)
@@ -544,18 +545,29 @@ bool Layout::nextParag()
     // tabs
     QList<QTextOption::Tab> tabs;
     QVariant variant = m_format.property(KoParagraphStyle::TabPositions);
+    qreal tabOffset = - x();
+    if (m_relativeTabs) {
+        tabOffset += (m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent())) ;
+    }
     if (!variant.isNull()) {
-        const qreal tabOffset = x();
         foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
 
             // conversion here is required because Qt thinks in device units and we don't
-            tab.position = (koTab.position - tabOffset) * qt_defaultDpiY() / 72.;
+            tab.position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
         }
+    } else {
+        // Since we might have tabs relative to first indent we need to always specify
+        // first tab (relative to the indent naturally)
+        QTextOption::Tab tab;
+
+        // conversion of taboffset is required because Qt thinks in device units and we don't
+        tab.position = m_defaultTabSizing + tabOffset * qt_defaultDpiY() / 72.;
+        tabs.append(tab);
     }
     option.setTabs(tabs);
 

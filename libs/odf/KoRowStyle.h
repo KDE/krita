@@ -16,24 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOSTYLE_H
-#define KOSTYLE_H
+#ifndef KOROWSTYLE_H
+#define KOROWSTYLE_H
 
 #include "KoStyle.h"
+#include "koodf_export.h"
+
+#include <QColor>
 
 /**
- * A \class KoRowStyle represents a style of a row to be applied to one or more row.
+ * A \class KoRowStyle represents a style of a row to be applied to one or more rows.
  * 
  * As all the styles it can be shared
  */
 
-class KoRowStyle : public KoStyle
+class KOODF_EXPORT KoRowStyle : public KoStyle
 {
-public:
     KoRowStyle();
+
+public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoRowStyle)
     ~KoRowStyle();
 
-    void setBackgroundColor(QColor color);
+    void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
     enum HeightType{
@@ -45,27 +50,45 @@ public:
     void setHeightType(HeightType type);
     qreal height() const;
 
-    void setBreakBefore(bool breakBefore);
-    bool breakBefore() const;
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
+    void setBreakBefore(BreakType breakBefore);
+    BreakType breakBefore() const;
 
-    void setBreakAfter(bool breakAfter);
-    bool breakAfter() const;
+    void setBreakAfter(BreakType breakAfter);
+    BreakType breakAfter() const;
 
-    void setKeepTogether(bool keepTogether);
-    bool keepTogether() const;
+    enum KeepTogetherType {
+        DontKeepTogether,
+        AutoKeepTogether,
+        AlwaysKeeptogether
+    };
+    void setKeepTogether(KeepTogetherType keepTogether);
+    KeepTogetherType keepTogether() const;
 
-    void setBackgroundImage(Image image);
-    Image backgroundImage() const;
+//     void setBackgroundImage(Image image);
+//     Image backgroundImage() const;
+
+protected:
+    virtual KoGenStyle::Type automaticstyleType() const;
+    virtual QString defaultPrefix() const;
+    virtual void prepareStyle(KoGenStyle& style) const;
+    virtual const char* styleFamilyName() const;
+    virtual KoGenStyle::Type styleType() const;
 
 private:
     QColor m_backgroundColor;
-    Image* m_image;
+//     Image* m_image;
 
     qreal m_height;
     HeightType m_heightType;
-    bool m_breakAfter;
-    bool m_breakBhefore;
-    bool m_keepTogether;
+    BreakType m_breakAfter;
+    BreakType m_breakBefore;
+    KeepTogetherType m_keepTogether;
 };
 
 #endif

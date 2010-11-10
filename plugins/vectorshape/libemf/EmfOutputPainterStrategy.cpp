@@ -326,9 +326,10 @@ void OutputPainterStrategy::recalculateWorldTransform()
 
     // If neither the window nor viewport extension is set, then there
     // is no way to perform the calculation.  Just give up.
-    if (!m_windowExtIsSet && m_viewportExtIsSet)
+    if (!m_windowExtIsSet && !m_viewportExtIsSet)
         return;
 
+    // FIXME: Check windowExt == 0 in any direction
     if (m_windowExtIsSet && m_viewportExtIsSet) {
         // Both window and viewport are set.
         m_windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
@@ -342,10 +343,13 @@ void OutputPainterStrategy::recalculateWorldTransform()
     // Calculate the world transform...
     m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
     m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
-    m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
+    if (m_viewportExtIsSet)
+        m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
+    else
+        m_worldTransform.translate(m_windowOrg.x(), m_windowOrg.y());
 
     // ...and apply it to the painter
-    m_painter->setTransform(m_worldTransform);
+    m_painter->setWorldTransform(m_worldTransform);
     m_windowViewportIsSet = true;
 
     // Apply the output transform.
@@ -942,7 +946,8 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
 
     // Vertical align.
     if ((m_textAlignMode & TA_BASELINE) == TA_BASELINE)
-        y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
+        //y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
+        y -= (height - fm.descent());
     else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
     }

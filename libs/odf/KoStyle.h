@@ -7,7 +7,8 @@
 #include <QString>
 #include <QSharedPointer>
 
-class KoStyle {
+class KoStyle
+{
 public:
     KoStyle();
     virtual ~KoStyle();

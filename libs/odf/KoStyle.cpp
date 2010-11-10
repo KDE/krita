@@ -1,4 +1,5 @@
 #include "KoStyle.h"
+#include "KoGenStyles.h"
 
 KoStyle::KoStyle()
 : m_autoStyle(false)

@@ -33,11 +33,7 @@ KoBorder* KoCellStyle::borders()
     return m_borders;
 }
 
-QString KoCellStyle::save(KoGenStyles& styles) const
+void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
-    KoGenStyle style;
     m_borders->saveOdf(style);
-
-    return styles.insert(style);
 }
-

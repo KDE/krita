@@ -31,7 +31,7 @@ public:
     KoBorder* borders();
 
 protected:
-    virtual QString save(KoGenStyles& styles) const;
+    virtual void prepareStyle( KoGenStyle& style ) const;
 
 private:
     KoBorder* m_borders;

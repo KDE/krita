@@ -23,6 +23,13 @@ class KoCell;
 class KoXmlWriter;
 class KoGenStyles;
 
+/**
+ * A \class KoCellChild represents all the elements that can be contained
+ * inside a Cell.
+ * 
+ * \see ODF1.2 table:table-cell §9.1.4
+ */
+
 class KoCellChild
 {
     friend class KoCell;

@@ -21,6 +21,13 @@
 
 #include "KoStyle.h"
 
+/**
+ * A \class KoTableStyle represents a style for a Table in
+ * a ODF document.
+ * 
+ * As all the styles it can be shared. 
+ **/
+
 class KoTableStyle : public KoStyle
 {
 public:

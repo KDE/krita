@@ -22,6 +22,12 @@
 #include "KoStyle.h"
 #include "KoBorder.h"
 
+/**
+ * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
+ * 
+ * As all the styles it can be shared
+ */
+
 class KoCellStyle : public KoStyle
 {
 public:

@@ -21,6 +21,12 @@
 
 #include "KoStyle.h"
 
+/**
+ * A \class KoRowStyle represents a style of a row to be applied to one or more row.
+ * 
+ * As all the styles it can be shared
+ */
+
 class KoRowStyle : public KoStyle
 {
 public:

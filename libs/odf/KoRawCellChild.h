@@ -30,7 +30,7 @@
  * 
  * It's porpuse is to allow the user to insert custom elements or elements for
  * which the appropiate class has not been provided.
- * 
+ *
  * \note The class will insert its content "blindly," so, invalid XML or ODF *can* be created.
  * It's the user's responsability to ensure that it's not the case.
  * \note KoRawCellData takes ownership of the given buffer.

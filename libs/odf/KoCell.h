@@ -45,10 +45,6 @@ class KOODF_EXPORT KoCell
 public:
     ~KoCell();
 
-<<<<<<< HEAD
-    void setStyle(KoCellStyle* style);
-    KoCellStyle* style() const;
-=======
     /**
      * Set the this Cell style to the given style.
      */
@@ -59,11 +55,23 @@ public:
      * It's null if no style has been set.
      */
     KoCellStyle::Ptr style() const;
->>>>>>> c56441c... Fix KoCell.
 
+    /**
+     * Sets the value as defined by element office:value of ODF.
+     * \see ODF1.2 office:value §19.386.
+     */
     void setValue(KoCellValue* value);
     KoCellValue* value() const;
 
+    /**
+     * A \class KoCellChild represents all the items that can be 
+     * contained inside a KoCell.
+     * \see ODF1.2 table:table-cell §9.1.4
+     * 
+     * \note The cell takes ownership of the given KoCellChild.
+     * \note The order in which the elements are written to ODF
+     * is the same in which they were inserted.
+     */
     void appendChild(KoCellChild* child);
 
     /**

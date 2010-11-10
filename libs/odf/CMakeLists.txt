@@ -46,7 +46,6 @@ set(koodf_LIB_SRCS
     KoOdfNumberDefinition.cpp
     KoOdfLineNumberingConfiguration.cpp
     KoCell.cpp
-    KoCell.cpp
     KoCellChild.cpp
     KoCellValue.cpp
     KoDummyCellValue.cpp
@@ -56,6 +55,9 @@ set(koodf_LIB_SRCS
     KoRow.cpp
     KoStyle.cpp
     KoTable.cpp
+    KoColumnStyle.cpp
+    KoRowStyle.cpp
+    KoTableStyle.cpp
 )
 
 kde4_add_library(koodf SHARED ${koodf_LIB_SRCS})

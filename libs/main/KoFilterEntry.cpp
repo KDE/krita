@@ -74,7 +74,7 @@ KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
         return 0;
     }
 
-    QObject* obj = factory->create(parent, "KoFilter");
+    QObject* obj = factory->create<KoFilter>(parent);
     if (!obj || !obj->inherits("KoFilter")) {
         delete obj;
         return 0;

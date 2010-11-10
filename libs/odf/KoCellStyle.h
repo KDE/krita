@@ -30,14 +30,21 @@
 
 class KoCellStyle : public KoStyle
 {
-public:
     KoCellStyle();
+
+public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoCellStyle)
+
     virtual ~KoCellStyle();
 
     KoBorder* borders();
 
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
+    virtual QString defaultPrefix() const;
+    virtual KoGenStyle::Type styleType() const;
+    virtual KoGenStyle::Type automaticstyleType() const;
+    virtual const char* styleFamilyName() const;
 
 private:
     KoBorder* m_borders;

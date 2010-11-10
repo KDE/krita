@@ -20,6 +20,13 @@
 #include "KoGenStyle.h"
 #include "KoGenStyles.h"
 
+namespace {
+    QString prefix = "cell";
+    const char* familyName = "table-cell";
+}
+
+KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoCellStyle)
+
 KoCellStyle::KoCellStyle()
 {
 }
@@ -31,6 +38,26 @@ KoCellStyle::~KoCellStyle()
 KoBorder* KoCellStyle::borders()
 {
     return m_borders;
+}
+
+QString KoCellStyle::defaultPrefix() const
+{
+    return prefix;
+}
+
+KoGenStyle::Type KoCellStyle::styleType() const
+{
+    return KoGenStyle::TableCellStyle;
+}
+
+KoGenStyle::Type KoCellStyle::automaticstyleType() const
+{
+    return KoGenStyle::TableCellAutoStyle;
+}
+
+const char* KoCellStyle::styleFamilyName() const
+{
+    return familyName;
 }
 
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const

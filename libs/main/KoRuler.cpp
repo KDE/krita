@@ -331,7 +331,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     else
         x = d->effectiveActiveRangeStart() + d->firstLineIndent + d->paragraphIndent;
     // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
-    x = int(d->viewConverter->documentToViewX(x) + qMax(0, d->offset) +0.5);
+    x = int(d->viewConverter->documentToViewX(x) + d->offset + 0.5);
     polygon << QPointF(x+6.5, 0.5)
         << QPointF(x+0.5, 8.5)
         << QPointF(x-5.5, 0.5)
@@ -344,7 +344,7 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     else
         x = d->effectiveActiveRangeStart() + d->paragraphIndent;
     // convert and use the +0.5 to go to nearest integer so that the 0.5 added below ensures sharp lines
-    x = int(d->viewConverter->documentToViewX(x) + qMax(0, d->offset) +0.5);
+    x = int(d->viewConverter->documentToViewX(x) + d->offset + 0.5);
     const int bottom = d->ruler->height();
     polygon.clear();
     polygon << QPointF(x+6.5, bottom - 0.5)
@@ -357,10 +357,10 @@ void HorizontalPaintingStrategy::drawIndents(const KoRulerPrivate *d, QPainter &
     qreal diff;
     if (d->rightToLeft)
         diff = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd()
-                     - d->paragraphIndent) + qMax(0, d->offset) - x;
+                     - d->paragraphIndent) + d->offset - x;
     else
         diff = d->viewConverter->documentToViewX(d->effectiveActiveRangeEnd() - d->endIndent)
-                + qMax(0, d->offset) - x;
+                + d->offset - x;
     polygon.translate(diff, 0);
     painter.drawPolygon(polygon);
 }

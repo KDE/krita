@@ -113,8 +113,12 @@ const char* KoColumnStyle::styleFamilyName() const
 
 void KoColumnStyle::prepareStyle(KoGenStyle& style) const
 {
-    style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
-    style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
+    if(m_breakAfter != NoBreak) {
+        style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
+    }
+    if(m_breakBefore != NoBreak) {
+        style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
+    }
 
     switch(m_widthType) {
         case MinimumWidth:

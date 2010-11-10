@@ -20,6 +20,9 @@
 #define KOTABLESTYLE_H
 
 #include "KoStyle.h"
+#include "koodf_export.h"
+
+#include <QColor>
 
 /**
  * A \class KoTableStyle represents a style for a Table in
@@ -28,50 +31,65 @@
  * As all the styles it can be shared. 
  **/
 
-class KoTableStyle : public KoStyle
+class KOODF_EXPORT KoTableStyle : public KoStyle
 {
-public:
     KoTableStyle();
-    ~TableStyle();
 
-    void setBackgroundColor(QColor color);
+public:
+    KOSTYLE_DECLARE_SHARED_POINTER(KoTableStyle)
+
+    ~KoTableStyle();
+
+    void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
-    void setBreakBefore(bool breakBefore);
-    bool breakBefore() const;
+    enum BreakType {
+        NoBreak,
+        AutoBreak,
+        ColumnBreak,
+        PageBreak
+    };
+    void setBreakBefore(BreakType breakBefore);
+    BreakType breakBefore() const;
 
-    void setBreakAfter(bool breakAfter);
-    bool breakAfter() const;
+    void setBreakAfter(BreakType breakAfter);
+    BreakType breakAfter() const;
 
     void setAllowBreakBetweenRows(bool allow);
     bool allowBreakBetweenRows() const;
 
-    void setMargins(qreal left, qreal top, qreal right, qreal bottom);
     void setLeftMargin(qreal left);
+    qreal leftMargin() const;
+
     void setTopMargin(qreal top);
+    qreal topMargin() const;
+
     void setRightMargin(qreal right);
+    qreal rightMargin() const;
+
     void setBottomMargin(qreal bottom);
+    qreal bottomMargin() const;
 
     enum WidthUnit {
-        Percentage,
-        Points
+        PercentageUnit,
+        PointsUnit
     };
-    void setWidth(qreal width, WidthUnit unit = Points);
+    void setWidth(qreal width, WidthUnit unit = PointsUnit);
     qreal width() const;
     WidthUnit widthUnit() const;
 
     enum HorizontalAlign {
-        Center,
-        Left,
-        Margins,
-        Right
+        CenterAlign,
+        LeftAlign,
+        MarginsAlign,
+        RightAlign
     };
     void setHorizontalAlign(HorizontalAlign align);
     HorizontalAlign horizontalAlign() const;
 
     enum BorderModel {
-        Collapsing,
-        Separating
+        CollapsingModel,
+        SeparatingModel
     };
     void setBorderModel(BorderModel bordelModel);
     BorderModel borderModel() const;
@@ -84,11 +102,15 @@ public:
 
 protected:
     virtual void prepareStyle(KoGenStyle& style) const;
+    virtual KoGenStyle::Type automaticstyleType() const;
+    virtual KoGenStyle::Type styleType() const;
+    virtual const char* styleFamilyName() const;
+    virtual QString defaultPrefix() const;
 
 private:
     QColor m_backgroundColor;
-    bool m_breakAfter;
-    bool m_breakBefore;
+    BreakType m_breakAfter;
+    BreakType m_breakBefore;
     bool m_allowBreakBetweenRows;
 
     qreal m_leftMargin;
@@ -96,8 +118,8 @@ private:
     qreal m_rightMargin;
     qreal m_bottomMargin;
 
-    qreal width;
-    WidthUnit unit;
+    qreal m_width;
+    WidthUnit m_widthUnit;
 
     HorizontalAlign m_horizontalAlign;
     BorderModel m_borderModel;

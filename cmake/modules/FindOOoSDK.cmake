@@ -13,6 +13,16 @@
 
 # look for cppuhelper/bootstrap.hxx
 
+find_path(OOOSDK_URE_DIR
+	NAMES share/misc/types.rdb 
+	PATHS /opt/openoffice.org/ure
+	      /usr/lib/ure
+	      /usr/lib64/openoffice.org/ure
+)
+if (NOT OOOSDK_URE_DIR)
+	set(OOOSDK_ERROR "Could not find share/misc/types.rdb for OOoSDK.")
+endif (NOT OOOSDK_URE_DIR)
+
 find_path(OOOSDK_DIR
 	NAMES sdk/bin/cppumaker program/offapi.rdb
 	PATHS /opt/openoffice.org/basis3.2
@@ -32,11 +42,31 @@ if (OOOSDK_DIR)
 			"Could not find cppuhelper/bootstrap.hxx for OOoSDK.")
 	endif (NOT CPPUHELPER_INCLUDE_DIR)
 
-	find_library(OOOSDK_LIBRARIES
+	find_library(OOOSDK_LIBRARIES1
 		NAMES uno_cppuhelpergcc3
-		PATHS ${OOOSDK_DIR}/sdk/lib
+		PATHS ${OOOSDK_URE_DIR}/lib
+		      ${OOOSDK_DIR}/sdk/lib
 		      /usr/lib/ure/lib
 	)
+	find_library(OOOSDK_LIBRARIES2
+		NAMES uno_sal
+		PATHS ${OOOSDK_URE_DIR}/lib
+		      ${OOOSDK_DIR}/sdk/lib
+		      /usr/lib/ure/lib
+	)
+	find_library(OOOSDK_LIBRARIES3
+		NAMES uno_salhelpergcc3
+		PATHS ${OOOSDK_URE_DIR}/lib
+		      ${OOOSDK_DIR}/sdk/lib
+		      /usr/lib/ure/lib
+	)
+	find_library(OOOSDK_LIBRARIES4
+		NAMES uno_cppu
+		PATHS ${OOOSDK_URE_DIR}/lib
+		      ${OOOSDK_DIR}/sdk/lib
+		      /usr/lib/ure/lib
+	)
+	set(OOOSDK_LIBRARIES ${OOOSDK_LIBRARIES1} ${OOOSDK_LIBRARIES2} ${OOOSDK_LIBRARIES3} ${OOOSDK_LIBRARIES4})
 	if (NOT OOOSDK_LIBRARIES)
 		set(OOOSDK_ERROR "Could not find uno_cppuhelpergcc3 for OOoSDK.")
 	endif (NOT OOOSDK_LIBRARIES)
@@ -44,16 +74,6 @@ else (OOOSDK_DIR)
 	set(OOOSDK_ERROR "Could not find sdk/bin/cppumaker
 		or program/offapi.rdb for OOoSDK.")
 endif (OOOSDK_DIR)
-
-find_path(OOOSDK_URE_DIR
-	NAMES share/misc/types.rdb 
-	PATHS /opt/openoffice.org/ure
-	      /usr/lib/ure
-	      /usr/lib64/openoffice.org/ure
-)
-if (NOT OOOSDK_URE_DIR)
-	set(OOOSDK_ERROR "Could not find share/misc/types.rdb for OOoSDK.")
-endif (NOT OOOSDK_URE_DIR)
 
 if(CPPUHELPER_INCLUDE_DIR AND OOOSDK_URE_DIR AND OOOSDK_LIBRARIES)
 	set(OOOSDK_FOUND true)

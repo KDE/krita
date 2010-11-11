@@ -338,6 +338,9 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
         context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
 
+        if (parent())
+            parent()->saveOdfChildElements(context);
+        
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
 
@@ -371,8 +374,6 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
 
         context.xmlWriter().endElement(); // draw:enhanced-geometry
         saveOdfCommonChildElements(context);
-        if (parent())
-            parent()->saveOdfChildElements(context);
         context.xmlWriter().endElement(); // draw:custom-shape
 
     } else {

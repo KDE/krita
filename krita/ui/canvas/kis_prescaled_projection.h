@@ -55,8 +55,8 @@ class KisCoordinatesConverter;
  *
  * <ul>
  *   <li>Qt's smooth scaling
- *   <li>Our own smooth scaling (similar to Blitz, port to using Blitz)
- *   <li>Our own sampling (similar to Blitz, port to using Blitz)
+ *   <li>Our own smooth scaling 
+ *   <li>Our own sampling 
  *   <li>nearest-neighbour sampling on KisImage directly (doesn't need
  *       a QImage of the visible area)
  * </ul>

@@ -197,7 +197,6 @@ public:
     bool useNearestNeighbour();
     void setUseNearestNeighbour(bool useNearestNeigbour);
 
-    // Use Blitz sampling on a QImage
     bool useSampling();
     void setSampling(bool sampling);
 

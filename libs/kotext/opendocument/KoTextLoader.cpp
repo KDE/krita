@@ -699,6 +699,8 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
 bool KoTextLoader::isValidList(const QString& xmlId) const
 {
     #ifdef SHOULD_BUILD_RDF
+    if (!d->rdfData)
+        return true;
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
 
@@ -730,6 +732,8 @@ bool KoTextLoader::isValidList(const QString& xmlId) const
 bool KoTextLoader::isValidListItem(const QString& xmlId) const
 {
     #ifdef SHOULD_BUILD_RDF
+    if (!d->rdfData)
+        return true;
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
 
@@ -761,6 +765,8 @@ bool KoTextLoader::isValidListItem(const QString& xmlId) const
 int KoTextLoader::listLevel(const QString& xmlId) const
 {
     #ifdef SHOULD_BUILD_RDF
+    if (!d->rdfData)
+        return 0;
     Soprano::Model *model = d->rdfData->model();
     Soprano::Node wildCardNode;
 

@@ -364,6 +364,7 @@ void Viewport::resetLayout()
     if (m_drawShadow)
       update();
 
+    emit sizeChanged();
 #if 0
      kDebug(30006) <<"View port geom:" << geometry();
      if (m_canvas)

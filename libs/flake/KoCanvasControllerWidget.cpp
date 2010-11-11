@@ -219,6 +219,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
 
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
+    connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetX()));
     connect(proxyObject, SIGNAL(moveDocumentOffset(const QPoint&)), d->viewportWidget, SLOT(documentOffsetMoved(const QPoint&)));
 }
 
@@ -515,6 +516,7 @@ void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget 
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
+    qDebug() << "newsize of canvas"<<sz;
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
         setPreferredCenterFractionX(documentSize().width() * preferredCenterFractionX() / sz.width());
@@ -528,11 +530,9 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalcul
     d->resetScrollBars();
     d->ignoreScrollSignals = oldIgnoreScrollSignals;
 
-    // in case the document got so small a slider dissapeared; emit the new offset.
-    if (horizontalScrollBar()->isHidden())
-        updateCanvasOffsetX();
-    if (verticalScrollBar()->isHidden())
-        updateCanvasOffsetY();
+    // Always emit the new offset.
+    updateCanvasOffsetX();
+    updateCanvasOffsetY();
 }
 
 void KoCanvasControllerWidget::setZoomWithWheel(bool zoom)

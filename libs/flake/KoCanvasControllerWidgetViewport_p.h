@@ -50,6 +50,9 @@ public:
 public slots:
     void documentOffsetMoved(const QPoint &);
 
+signals:
+    void sizeChanged();
+
 public:
 
     void handleDragEnterEvent(QDragEnterEvent *event);

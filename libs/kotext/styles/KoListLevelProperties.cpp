@@ -456,6 +456,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         case KoOdfNumberDefinition::Empty:
             setStyle(KoListStyle::CustomCharItem);
             setBulletCharacter(QChar());
+            break;
         case KoOdfNumberDefinition::AlphabeticLowerCase:
             setStyle(KoListStyle::AlphaLowerItem);
             break;

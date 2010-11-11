@@ -53,6 +53,7 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
 bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
     Q_UNUSED(e);
+    Q_UNUSED(context);
     return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
 }
 

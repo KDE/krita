@@ -195,6 +195,7 @@ private:
     bool m_restartingFirstCellAfterTableBreak; /** We are in a re-layout that was a result of a break in a table. only true first cell after */
     // bookkeeping for drawing outside borders
     qreal m_allTimeMinimumLeft;
+    qreal m_allTimeMaximumRight;
     qreal m_maxLineHeight;
     bool m_relativeTabs;
     qreal m_scaleFactor;

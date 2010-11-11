@@ -232,6 +232,13 @@ public:
     qreal tableMinX() const;
 
     /**
+     * Get the right edge position of the table maximum if spanning several tableRects
+     *
+     * @return x.
+     */
+    qreal tableMaxX() const;
+
+    /**
      * Get the bounding rectangle of a given cell.
      *
      * @param cell the cell.

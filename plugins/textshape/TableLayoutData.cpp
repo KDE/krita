@@ -22,6 +22,7 @@
 TableLayoutData::TableLayoutData()
   : m_dirty(true)
   ,m_minX(0)
+  ,m_maxX(0)
 {
 }
 

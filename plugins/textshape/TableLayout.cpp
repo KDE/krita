@@ -195,6 +195,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     }
 
     m_tableLayoutData->m_minX = qMin(m_tableLayoutData->m_minX, tableRect.columnPositions[0]);
+    m_tableLayoutData->m_maxX = qMax(m_tableLayoutData->m_maxX, columnPosition);
     m_tableLayoutData->m_tableRects.append(tableRect);
     m_tableLayoutData->m_rowPositions[fromRow] = tableRect.rect.top(); //Initialize the position of first row of tableRect
 }
@@ -464,6 +465,11 @@ QTextTableCell TableLayout::hitTestTable(const QPointF &point) const
 qreal TableLayout::tableMinX() const
 {
     return m_tableLayoutData->m_minX-10; //-10 is just to add potential penwidths
+}
+
+qreal TableLayout::tableMaxX() const
+{
+    return m_tableLayoutData->m_maxX+10; //10 is just to add potential penwidths
 }
 
 qreal TableLayout::cellContentY(const QTextTableCell &cell) const

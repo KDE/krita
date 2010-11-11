@@ -64,6 +64,7 @@ private:
     QList<TableRect> m_tableRects; /**< Rects occupied by table, typically one per shape the table is in. */
     bool m_dirty;
     qreal m_minX;
+    qreal m_maxX;
 };
 
 #endif // TABLELAYOUTDATA_H

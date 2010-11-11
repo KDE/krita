@@ -88,6 +88,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_restartingAfterTableBreak(false),
         m_restartingFirstCellAfterTableBreak(false),
         m_allTimeMinimumLeft(0),
+        m_allTimeMaximumRight(0),
         m_maxLineHeight(0),
         m_scaleFactor(1.0)
 {
@@ -131,6 +132,10 @@ qreal Layout::width()
     if (m_dropCapsNChars>0)
         return m_dropCapsAffectedLineWidthAdjust+10;
     qreal ptWidth = m_inTable ? m_tableLayout.cellContentRect(m_tableCell).width() : shape->size().width();
+    m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_format.rightMargin() + shape->size().width());
+    if (m_inTable) {
+        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+    }
     if (m_newParag)
         ptWidth -= resolveTextIndent();
     if (m_blockData)
@@ -184,7 +189,8 @@ qreal Layout::docOffsetInShape() const
 
 QRectF Layout::expandVisibleRect(const QRectF &rect) const
 {
-    return rect.adjusted(m_allTimeMinimumLeft, 0.0, 50.0, 0.0);
+    qreal rightAdjust = qMax(m_allTimeMaximumRight - rect.right(), 0.0);
+    return rect.adjusted(m_allTimeMinimumLeft, 0.0, rightAdjust, 0.0);
 }
 
 //local type for temporary use in addLine

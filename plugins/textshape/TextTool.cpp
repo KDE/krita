@@ -320,6 +320,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
 
+    m_shrinkToFitAction = new KAction(KIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
+    addAction("shrink_to_fit", m_shrinkToFitAction);
+    m_shrinkToFitAction->setCheckable(true);
+    connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
+    
     action = new KAction(i18n("Default Format"), this);
     addAction("text_default", action);
     action->setToolTip(i18n("Change text attributes to their default values"));
@@ -1329,6 +1334,8 @@ void TextTool::updateActions()
     m_actionFormatSub->setChecked(sub);
     m_actionFormatFontSize->setFontSize(qRound(cf.fontPointSize()));
     m_actionFormatFontFamily->setFont(cf.font().family());
+    
+    m_shrinkToFitAction->setChecked(m_textShapeData && KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
@@ -2144,6 +2151,15 @@ void TextTool::setTextColor(const KoColor &color)
 void TextTool::setBackgroundColor(const KoColor &color)
 {
     m_textEditor.data()->setTextBackgroundColor(color.toQColor());
+}
+
+void TextTool::setShrinkToFit(bool enabled)
+{
+    if (!m_textShapeData)
+        return;
+    Q_ASSERT(m_textShapeData->document());
+    KoTextDocument document(m_textShapeData->document());
+    document.setResizeMethod(enabled ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
 }
 
 void TextTool::shapeAddedToDoc(KoShape *shape)

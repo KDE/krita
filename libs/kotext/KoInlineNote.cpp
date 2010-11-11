@@ -252,8 +252,10 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         writer->addTextNode(d->label);
         writer->endElement();
 
+        writer->startElement("text:note-body", false);
         KoTextWriter textWriter(context);
         textWriter.write(document, 0);
+        writer->endElement();
 
         writer->endElement();
     }

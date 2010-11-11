@@ -396,7 +396,7 @@ KDChart::AbstractDiagram *Axis::Private::getDiagram( ChartType chartType )
             return 0;
         // Compiler warning for unhandled chart type is intentional.
     }
-    Q_ASSERT( "Unhandled chart type" );
+    Q_ASSERT( !"Unhandled chart type" );
     return 0;
 }
 

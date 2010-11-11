@@ -116,14 +116,14 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
 
     QList<QString> whiteList;
     foreach(KSharedPtr<KService> service, serviceNames) {
-        int errCode = 0;
-        QObject * plugin = KService::createInstance<QObject>(service, this, QStringList(), &errCode);
+        QString error = 0;
+        QObject * plugin = service->createInstance<QObject>(this, QVariantList(), &error);
         if (plugin) {
             whiteList << service->library();
             kDebug(30003) << "Loaded plugin" << service->name();
             delete plugin;
         } else {
-            kWarning(30003) << "Loading plugin" << service->name() << "failed, " << KLibLoader::errorString(errCode) << "(" << errCode << ")";
+            kWarning(30003) << "Loading plugin" << service->name() << "failed, " << error;
         }
     }
 

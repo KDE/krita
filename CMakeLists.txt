@@ -169,12 +169,6 @@ macro_optional_find_package(Eigen2)
 macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita")
 
 ##
-## Test for blitz
-##
-macro_optional_find_package(Blitz)
-macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
-
-##
 ## Test for QCA2
 ##
 macro_optional_find_package(QCA2)
@@ -355,9 +349,9 @@ if(NOT Boost_FOUND)
 endif(NOT Boost_FOUND)
 
 ### Krita: pigment, blitz, eigen2, exiv2
-if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 
 ### KPlato: kdepimlibs
 if(NOT KdepimLibs_FOUND)

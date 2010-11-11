@@ -312,7 +312,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     transpMask->initSelection(0, paintLayer);
     image->addNode(transpMask, paintLayer);
 
-    for(int i = 0; i < 500; i++) {
+    for(int i = 0; i < 100; i++) {
         paintLayer->setDirty();
 
         QTest::qSleep(1 + (qrand() & 63));

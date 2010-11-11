@@ -33,6 +33,7 @@ private slots:
     void testCreation();
     void testIdentityConvolution();
     void testIdentityConvolutionOnColorChannels();
+    void testPureConvolution();
     void testMaskConvolution();
     void testMaskConvolutionOnColorChannels();
 

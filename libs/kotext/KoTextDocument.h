@@ -183,7 +183,8 @@ public:
         TextEditor,
         FootNotesConfiguration,
         EndNotesConfiguration,
-        LineNumberingConfiguration
+        LineNumberingConfiguration,
+        RelativeTabs
     };
 
     static const QUrl StyleManagerURL;
@@ -195,10 +196,10 @@ public:
     static const QUrl FootNotesConfigurationURL;
     static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
+    static const QUrl RelativeTabsURL;
 
 private:
     QTextDocument *m_document;
-    bool m_relativeTabs;
 };
 
 #endif // KOTEXTDOCUMENT_H

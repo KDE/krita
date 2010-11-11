@@ -184,10 +184,10 @@ public:
         QVariant docVar = resourceManager->resource(KoText::CurrentTextDocument);
         if (docVar.isNull())
             return false;
-        KoTextDocument *doc = static_cast<KoTextDocument*>(docVar.value<void*>());
+        QTextDocument *doc = static_cast<QTextDocument*>(docVar.value<void*>());
         if (doc == 0)
             return false;
-        return doc->relativeTabs();
+        return KoTextDocument(doc).relativeTabs();
     }
 
     void tabChangeInitiated() {

@@ -46,10 +46,10 @@ const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotesconfiguration");
 const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
+const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
-    , m_relativeTabs(false)
 {
     Q_ASSERT(m_document);
 }
@@ -264,10 +264,15 @@ KoTextDocument::ResizeMethod KoTextDocument::resizeMethod() const
 
 void KoTextDocument::setRelativeTabs(bool relative)
 {
-    m_relativeTabs = relative;
+    QVariant v(relative);
+    m_document->addResource(KoTextDocument::RelativeTabs, RelativeTabsURL, v);
 }
 
 bool KoTextDocument::relativeTabs() const
 {
-    return m_relativeTabs;
+    QVariant resource = m_document->resource(KoTextDocument::RelativeTabs, RelativeTabsURL);
+    if (resource.isValid())
+        return resource.toBool();
+    else
+        return true;
 }

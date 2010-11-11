@@ -1334,8 +1334,10 @@ void TextTool::updateActions()
     m_actionFormatSub->setChecked(sub);
     m_actionFormatFontSize->setFontSize(qRound(cf.fontPointSize()));
     m_actionFormatFontFamily->setFont(cf.font().family());
-    
-    m_shrinkToFitAction->setChecked(m_textShapeData && KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize);
+
+    KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
+    m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {

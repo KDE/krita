@@ -59,6 +59,7 @@ public:
 
     static const QString koffice;
     static const QString officeooo;
+    static const QString ooo;
 
     static const char* nsURI2NS(const QString nsURI);
 private:

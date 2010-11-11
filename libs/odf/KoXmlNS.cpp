@@ -48,6 +48,7 @@ const QString KoXmlNS::xhtml("http://www.w3.org/1999/xhtml");
 
 const QString KoXmlNS::koffice = "http://www.koffice.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
+const QString KoXmlNS::ooo = "http://openoffice.org/2004/office";
 
 const char* KoXmlNS::nsURI2NS(const QString nsURI)
 {

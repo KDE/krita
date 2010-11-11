@@ -109,6 +109,11 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
         writer->addAttribute("xmlns:koffice", KoXmlNS::koffice);
         writer->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
     }
+
+    if (qstrcmp(rootElementName, "office:document-settings") == 0) {
+        writer->addAttribute("xmlns:ooo", KoXmlNS::ooo);
+    }
+
     writer->addAttribute("office:version", "1.2");
 
     writer->addAttribute("xmlns:dc", KoXmlNS::dc);

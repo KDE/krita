@@ -20,7 +20,11 @@
  */
 
 #include "kis_filters_model.h"
+
+#include <QFutureWatcher>
 #include <QPixmap>
+#include <QSignalMapper>
+#include <QtConcurrentRun>
 
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_registry.h>
@@ -66,6 +70,9 @@ struct KisFiltersModel::Private {
     QList<QString> categoriesKeys;
     KisPaintDeviceSP thumb;
     QHash<const KisFilter*, QImage> previewCache;
+    QSignalMapper* previewCacheWatcher;
+    QHash<int, QFutureWatcher<QImage>*> previewCacheFutureWatcher;
+    QHash<int, const KisFilter*> filterToWatcher;
 };
 
 KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
@@ -88,6 +95,8 @@ KisFiltersModel::KisFiltersModel(KisPaintDeviceSP thumb) : d(new Private)
         d->categories[ filter->menuCategory().id()].filters.append(filt);
     }
     qSort(d->categoriesKeys);
+    d->previewCacheWatcher = new QSignalMapper(this);
+    connect(d->previewCacheWatcher, SIGNAL(mapped(int)), SLOT(previewUpdated(int)));
 }
 
 KisFiltersModel::~KisFiltersModel()
@@ -159,6 +168,13 @@ QModelIndex KisFiltersModel::parent(const QModelIndex &child) const
     return QModelIndex(); // categories don't have parents
 }
 
+QImage generatePreview(const KisFilter* filter, KisPaintDeviceSP thumb)
+{
+    KisPaintDeviceSP target = new KisPaintDevice(*thumb);
+    filter->process(target, QRect(0, 0, 100, 100), filter->defaultConfiguration(thumb));
+    return target->convertToQImage(0);
+}
+
 QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
 {
     if (index.isValid()) {
@@ -167,17 +183,20 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
             Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
             if (filter) {
                 if (!d->previewCache.contains(filter->filter)) {
-                    KisPaintDeviceSP target = new KisPaintDevice(*d->thumb);
-
-                    QRect rc = target->exactBounds();
-                    dbgUI << "Previewing " << filter->name << " on: " << rc;
-                    KisConstProcessingInformation cpi(d->thumb, rc.topLeft());
-                    KisProcessingInformation cp(target, rc.topLeft());
-
-                    filter->filter->process(cpi, cp, rc.size()/*QSize(100, 100)*/, filter->filter->defaultConfiguration(d->thumb));
-                    dbgUI << "Resulting in: " << target->exactBounds();
-                    d->previewCache[ filter->filter ] = target->convertToQImage(0);
-                    dbgUI << "And in a qimage of size: " << d->previewCache[ filter->filter ].rect();
+            
+                    QFutureWatcher<QImage>* watcher = new QFutureWatcher<QImage>();
+                    connect(watcher, SIGNAL(finished()), d->previewCacheWatcher, SLOT(map()));
+                    watcher->setFuture(QtConcurrent::run(generatePreview, filter->filter, d->thumb));
+                    
+                    int filterToWatcherId = d->filterToWatcher.count();
+                    
+                    d->filterToWatcher[filterToWatcherId] = filter->filter;
+                    
+                    d->previewCacheWatcher->setMapping(watcher, filterToWatcherId);
+                    
+                    d->previewCacheFutureWatcher[filterToWatcherId] = watcher;
+                    
+                    d->previewCache[filter->filter] = QImage();
                 }
                 return d->previewCache[ filter->filter ];
             } else {
@@ -203,3 +222,14 @@ Qt::ItemFlags KisFiltersModel::flags(const QModelIndex & index) const
         return Qt::ItemIsEnabled;
     }
 }
+
+void KisFiltersModel::previewUpdated(int i)
+{
+  const KisFilter* filter = d->filterToWatcher[i];
+  d->previewCache[filter] = d->previewCacheFutureWatcher[i]->result();
+  delete d->previewCacheFutureWatcher[i];
+  d->previewCacheFutureWatcher.remove(i);
+  emit dataChanged(indexForFilter(filter->id()), indexForFilter(filter->id()));
+}
+
+#include "kis_filters_model.moc"

@@ -30,6 +30,7 @@ class KisFilterConfiguration;
  */
 class KisBookmarkedFilterConfigurationsModel : public KisBookmarkedConfigurationsModel
 {
+    Q_OBJECT
 public:
     /**
      * @param thumb a 100x100 thumbnail used to preview the filters
@@ -46,6 +47,8 @@ public:
      * @return the filter configuration
      */
     KisFilterConfiguration* configuration(const QModelIndex &index) const;
+private slots:
+    void previewUpdated(int i);
 private:
     struct Private;
     Private* const d;

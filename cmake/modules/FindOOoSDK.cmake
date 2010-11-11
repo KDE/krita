@@ -19,6 +19,7 @@ find_path(OOOSDK_DIR
 	      /usr/lib/openoffice/basis3.2
 	      /usr/lib/openoffice/basis3.1
 	      /usr/lib/openoffice/basis3.0
+	      /usr/lib64/openoffice.org/basis3.2
 )
 if (OOOSDK_DIR)
 	find_path(CPPUHELPER_INCLUDE_DIR
@@ -48,6 +49,7 @@ find_path(OOOSDK_URE_DIR
 	NAMES share/misc/types.rdb 
 	PATHS /opt/openoffice.org/ure
 	      /usr/lib/ure
+	      /usr/lib64/openoffice.org/ure
 )
 if (NOT OOOSDK_URE_DIR)
 	set(OOOSDK_ERROR "Could not find share/misc/types.rdb for OOoSDK.")

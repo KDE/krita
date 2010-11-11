@@ -123,10 +123,28 @@ public:
     /**
      * Return the current zoom level. 1.0 is 100%.
      */
-    qreal zoom() const;
+    virtual qreal zoom() const;
+
+    enum Option {
+        NoOption = 0,
+        //ForPrint, ///< Only actual content is drawn and no decorations.
+        OnlyBackgroundObjects ///< Only background objects are drawn. Used for ODF presentation:background-objects-visible
+    };
+    typedef QFlags<Option> Options;
+    
+    /**
+     * Set the options to \p opt .
+     */
+    virtual void setOptions(Options opt);
+
+    /**
+     * Return the options.
+     */
+    virtual Options options() const;
 
 private:
     qreal m_zoomLevel; // 1.0 is 100%
+    Options m_options;
 };
 
 #endif

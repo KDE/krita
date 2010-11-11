@@ -61,7 +61,10 @@ void KoPAViewModeNormal::paint(KoPACanvasBase* canvas, QPainter& painter, const 
     KoViewConverter * converter = m_view->viewConverter( m_canvas );
     m_view->activePage()->paintBackground( painter, *converter );
     if ( m_view->activePage()->displayMasterShapes() ) {
+        KoViewConverter::Options oldoptions = converter->options();
+        converter->setOptions(KoViewConverter::OnlyBackgroundObjects); // used for ODF presentation:background-objects-visible
         m_canvas->masterShapeManager()->paint( painter, *converter, false );
+        converter->setOptions(oldoptions);
     }
     m_canvas->shapeManager()->paint( painter, *converter, false );
 

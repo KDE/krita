@@ -103,3 +103,13 @@ qreal KoViewConverter::zoom() const
 {
     return m_zoomLevel;
 }
+
+void KoViewConverter::setOptions(KoViewConverter::Options opt)
+{
+    m_options = opt;
+}
+
+KoViewConverter::Options KoViewConverter::options() const
+{
+    return m_options;
+}

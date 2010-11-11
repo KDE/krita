@@ -66,6 +66,7 @@ public:
     virtual qreal viewToDocumentY(qreal viewY) const;
     virtual void zoom(qreal *zoomX, qreal *zoomY) const;
     virtual void setZoom(qreal zoom);
+    virtual qreal zoom() const;
 protected:
     bool isShrinkToFitEnabled() const;
     qreal fitToSizeFactor() const;

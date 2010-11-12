@@ -223,7 +223,7 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
-        if (insertionType == "insert-with-content") {
+        if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
             id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         }
     } else {
@@ -239,6 +239,8 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     changeElement->setEnabled(true);
+    if (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")
+        changeElement->setChangeType(KoGenChange::FormatChange);
 }
 
 void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
@@ -257,7 +259,7 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != ""){
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
-        if (insertionType == "insert-with-content") {
+        if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
             id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         }
     } else {

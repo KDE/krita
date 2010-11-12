@@ -329,32 +329,24 @@ void OutputPainterStrategy::recalculateWorldTransform()
     if (!m_windowExtIsSet && !m_viewportExtIsSet)
         return;
 
+    // Update the world transform if both window and viewport are set...
     // FIXME: Check windowExt == 0 in any direction
     if (m_windowExtIsSet && m_viewportExtIsSet) {
         // Both window and viewport are set.
         m_windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
         m_windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
-    } else {
-        // Only one of window and viewport ext is set: Use same width for window and viewport
-        m_windowViewportScaleX = qreal(1.0);
-        m_windowViewportScaleY = qreal(1.0);
-    }
 
-    // Calculate the world transform...
-    m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
-    m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
-    if (m_viewportExtIsSet)
+        m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
+        m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
         m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
-    else
-        m_worldTransform.translate(m_windowOrg.x(), m_windowOrg.y());
+    }
 
     // ...and apply it to the painter
     m_painter->setWorldTransform(m_worldTransform);
     m_windowViewportIsSet = true;
 
     // Apply the output transform.
-    QTransform currentMatrix = m_painter->worldTransform();
-    QTransform newMatrix = currentMatrix * m_outputTransform;
+    QTransform newMatrix = m_worldTransform * m_outputTransform;
     m_painter->setWorldTransform( newMatrix );
 }
 

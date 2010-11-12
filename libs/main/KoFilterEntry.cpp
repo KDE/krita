@@ -67,10 +67,11 @@ QList<KoFilterEntry::Ptr> KoFilterEntry::query(const QString & _constr)
 
 KoFilter* KoFilterEntry::createFilter(KoFilterChain* chain, QObject* parent)
 {
-    KLibFactory* factory = KLibLoader::self()->factory(QFile::encodeName(m_service->library()));
+    KPluginLoader loader(*m_service);
+    KLibFactory* factory = loader.factory();
 
     if (!factory) {
-        kWarning(30003) << KLibLoader::self()->lastErrorMessage();
+        kWarning(30003) << loader.errorString();
         return 0;
     }
 

@@ -20,7 +20,6 @@ target_link_libraries(kokross
     komain
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_KROSSCORE_LIBRARY}
-    ${KDE4_KNEWSTUFF2_LIBRARY}
     ${KDE4_KROSSUI_LIBS}
 )
 

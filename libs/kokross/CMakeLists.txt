@@ -16,15 +16,8 @@ set(kokross_LIB_SRCS
 )
 kde4_add_library(kokross SHARED ${kokross_LIB_SRCS})
 
-if(HAVE_GHNS)
-	set(extra_link_libraries
-    		${KDE4_KNEWSTUFF2_LIBRARY}
-	)
-endif(HAVE_GHNS)
-
 target_link_libraries(kokross
     komain
-    ${extra_link_libraries}
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_KROSSCORE_LIBRARY}
     ${KDE4_KROSSUI_LIBS}

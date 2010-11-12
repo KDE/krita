@@ -129,7 +129,7 @@ public:
     QStack<int> changeStack;
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
-    QMap<QString, QString> insertionTextIdMap;
+    QMap<QString, QString> endIdMap;
     QMap<QString, int> splitPositionMap;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
@@ -218,9 +218,13 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         //This is a ODF 1.2 Change
         id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-idref");
-        insertionTextIdMap.insert(textEndId, id);
+        endIdMap.insert(textEndId, id);
     } else if(element.localName() == "removed-content") {
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
+    } else if(element.localName() == "remove-leaving-content-start") {
+        id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
+        QString endId = element.attributeNS(KoXmlNS::delta, "end-element-idref");
+        endIdMap.insert(endId, id);
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
         if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
@@ -239,7 +243,8 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     changeElement->setEnabled(true);
-    if (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")
+    if ((element.localName() == "remove-leaving-content-start") || 
+        (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content"))
         changeElement->setChangeType(KoGenChange::FormatChange);
 }
 
@@ -253,10 +258,14 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
     } else if(element.localName() == "inserted-text-end"){
         // This is a ODF 1.2 Change
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-id");
-        id = insertionTextIdMap.value(textEndId);
-        insertionTextIdMap.remove(textEndId);
+        id = endIdMap.value(textEndId);
+        endIdMap.remove(textEndId);
     } else if(element.localName() == "removed-content") {
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
+    } else if(element.localName() == "remove-leaving-content-end"){
+        QString endId = element.attributeNS(KoXmlNS::delta, "end-element-id");
+        id = endIdMap.value(endId);
+        endIdMap.remove(endId);
     } else if(element.attributeNS(KoXmlNS::delta, "insertion-type") != ""){
         QString insertionType = element.attributeNS(KoXmlNS::delta, "insertion-type");
         if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
@@ -1046,6 +1055,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         } else if (isDeltaNS && localName == "inserted-text-start") {
             d->openChangeRegion(ts);
         } else if (isDeltaNS && localName == "inserted-text-end") {
+            d->closeChangeRegion(ts);
+        } else if (isDeltaNS && localName == "remove-leaving-content-start") {
+            d->openChangeRegion(ts);
+        } else if (isDeltaNS && localName == "remove-leaving-content-end") {
             d->closeChangeRegion(ts);
         } else if (isDeltaNS && localName == "removed-content") {
             QString changeId = ts.attributeNS(KoXmlNS::delta, "removal-change-idref");

@@ -190,11 +190,8 @@ void KoPAPage::paintPage( QPainter & painter, KoZoomHandler & zoomHandler )
 
     KoShapePainter shapePainter( getPaintingStrategy() );
     if ( displayMasterShapes() ) {
-        KoViewConverter::Options oldoptions = zoomHandler.options();
-        zoomHandler.setOptions(KoViewConverter::OnlyBackgroundObjects); // used for ODF presentation:background-objects-visible
         shapePainter.setShapes( masterPage()->shapes() );
         shapePainter.paint(painter, zoomHandler);
-        zoomHandler.setOptions(oldoptions);
     }
     shapePainter.setShapes( shapes() );
     shapePainter.paint(painter, zoomHandler);

@@ -177,11 +177,6 @@ void TextViewConverter::setZoom(qreal zoom)
     const_cast<KoViewConverter*>(m_converter)->setZoom(zoom);
 }
 
-qreal TextViewConverter::zoom() const
-{
-    return m_converter->zoom();
-}
-
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
@@ -274,32 +269,28 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         }
     }
 
-    bool onlyBackgroundObjects = converter.options().testFlag(KoViewConverter::OnlyBackgroundObjects);
-    if ( ! onlyBackgroundObjects) { // onlyBackgroundObjects means skipping the whole KoTextDocumentLayout
-        QAbstractTextDocumentLayout::PaintContext pc;
-        KoTextDocumentLayout::PaintContext context;
-        context.textContext = pc;
-        context.viewConverter = m_textViewConverter;
-        context.imageCollection = m_imageCollection;
+    QAbstractTextDocumentLayout::PaintContext pc;
+    KoTextDocumentLayout::PaintContext context;
+    context.textContext = pc;
+    context.viewConverter = m_textViewConverter;
+    context.imageCollection = m_imageCollection;
 
-        QRectF cliprect = outlineRect();
-        cliprect.setX(cliprect.x() / lay->fitToSizeFactor());
-        cliprect.setY(cliprect.y() / lay->fitToSizeFactor());
-        cliprect.setWidth(cliprect.width() / lay->fitToSizeFactor());
-        cliprect.setHeight(cliprect.height() / lay->fitToSizeFactor());
-        painter.setClipRect(cliprect, Qt::IntersectClip);
+    QRectF cliprect = outlineRect();
+    cliprect.setX(cliprect.x() / lay->fitToSizeFactor());
+    cliprect.setY(cliprect.y() / lay->fitToSizeFactor());
+    cliprect.setWidth(cliprect.width() / lay->fitToSizeFactor());
+    cliprect.setHeight(cliprect.height() / lay->fitToSizeFactor());
+    painter.setClipRect(cliprect, Qt::IntersectClip);
 
-        painter.save();
-        painter.translate(0, -m_textShapeData->documentOffset());
-        lay->draw(&painter, context);
-        painter.restore();
-        
-        if (m_footnotes) {
-            painter.translate(0, size().height() - m_footnotes->size().height());
-            m_footnotes->documentLayout()->draw(&painter, pc);
-        }
+    painter.save();
+    painter.translate(0, -m_textShapeData->documentOffset());
+    lay->draw(&painter, context);
+    painter.restore();
+
+    if (m_footnotes) {
+        painter.translate(0, size().height() - m_footnotes->size().height());
+        m_footnotes->documentLayout()->draw(&painter, pc);
     }
-
     m_paintRegion = QRegion();
 }
 

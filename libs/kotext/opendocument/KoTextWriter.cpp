@@ -511,6 +511,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                         writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
                         writer->addAttribute("delta:insertion-type", "insert-with-content");
+                    } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                        writer->addAttribute("delta:insertion-type", "insert-around-content");
                     }
                 }
 

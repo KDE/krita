@@ -22,7 +22,6 @@
 #include "kis_debug.h"
 
 #include <math.h>
-#include <qimageblitz.h>
 
 /****** Some helper functions *******/
 
@@ -115,32 +114,4 @@ void KisImagePatch::drawMe(QPainter &gc,
     dbgRender << ppVar(m_interestRect);
     dbgRender << ppVar(dstRect);
     dbgRender << "## EODM #############################";
-}
-
-#define ceiledSize(sz) QSize(ceil((sz).width()), ceil((sz).height()))
-
-void KisImagePatch::prescaleWithBlitz(QRectF dstRect)
-{
-    qreal scaleX = dstRect.width() / m_interestRect.width();
-    qreal scaleY = dstRect.height() / m_interestRect.height();
-
-    QSize newImageSize = QSize(ceil(m_image.width() * scaleX),
-                               ceil(m_image.height() * scaleY));
-
-    // Calculating new _aligned_ scale
-    scaleX = qreal(newImageSize.width()) / m_image.width();
-    scaleY = qreal(newImageSize.height()) / m_image.height();
-
-    m_scaleX *= scaleX;
-    m_scaleY *= scaleY;
-    scaleRect(m_interestRect, scaleX, scaleY);
-
-    m_image = Blitz::smoothScale(m_image,
-                                 newImageSize,
-                                 Qt::IgnoreAspectRatio);
-
-    dbgRender << "## PATCH.PRESCALEBLITZ ############";
-    dbgRender << ppVar(scaleX) << ppVar(scaleY);
-    dbgRender << ppVar(newImageSize);
-    dbgRender << "## EOB ############################";
 }

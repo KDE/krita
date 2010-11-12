@@ -1,5 +1,7 @@
 /*
- *  Copyright (c) 2007 Boudewijn Rempt boud@valdyas.org
+ *  This file is part of KOffice tests
+ *
+ *  Copyright (C) 2010 Thomas Zander <zander@kde.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,29 +17,35 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#ifndef TESTLOADSTYLE_H
+#define TESTLOADSTYLE_H
 
-#ifndef KIS_CONVOLUTION_PAINTER_TEST_H
-#define KIS_CONVOLUTION_PAINTER_TEST_H
+#include <QObject>
 
-#include <QtTest/QtTest>
+class QTextDocument;
+class KComponentData;
 
-class KisConvolutionPainterTest : public QObject
+#include <qtest_kde.h>
+
+class TestLoadStyle : public QObject
 {
     Q_OBJECT
-
-    // XXX: Currently unimplemented again
-    void testMaskConvolutionOnRedChannel();
+public:
+    TestLoadStyle();
+    ~TestLoadStyle();
 
 private slots:
+    void init();
+    void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
 
-    void testCreation();
-    void testIdentityConvolution();
-    void testIdentityConvolutionOnColorChannels();
-    void testPureConvolution();
-    void testMaskConvolution();
-    void testMaskConvolutionOnColorChannels();
+    void testLoadStyle();
 
+private:
+    QTextDocument *documentFromOdt(const QString &odt);
 
+    KComponentData *componentData;
 };
 
 #endif

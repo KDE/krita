@@ -28,8 +28,8 @@
 class QDomElement;
 class QDomDocument;
 
-const KoID DefaultId("default", i18n("Default")); ///< generate Krita default mask generator
-const KoID SoftId("soft", i18n("Soft brush")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
+const KoID DefaultId("default", ki18n("Default")); ///< generate Krita default mask generator
+const KoID SoftId("soft", ki18n("Soft brush")); ///< generate brush mask from former softbrush paintop, where softness is based on curve
 
 static const int OVERSAMPLING = 4;
 

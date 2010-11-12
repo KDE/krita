@@ -87,7 +87,7 @@ endif( Soprano_FOUND )
 
 kde4_add_library(kotext SHARED ${kotext_LIB_SRCS})
 
-target_link_libraries(kotext flake ${KDE4_KUTILS_LIBS})
+target_link_libraries(kotext flake)
 if( Soprano_FOUND )
     target_link_libraries(kotext ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )

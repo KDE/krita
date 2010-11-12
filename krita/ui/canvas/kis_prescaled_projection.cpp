@@ -388,7 +388,6 @@ void KisPrescaledProjection::updateScaledImage(KisPPUpdateInfoSP info)
 {
     QPainter gc(&m_d->prescaledQImage);
     gc.setCompositionMode(QPainter::CompositionMode_Source);
-//    gc.fillRect(viewRectFromImagePixels(info->dirtyImageRect).toAlignedRect(), QColor(255, 0, 0, 255));
     drawUsingBackend(gc, info);
 }
 
@@ -400,8 +399,6 @@ void KisPrescaledProjection::drawUsingBackend(QPainter &gc, KisPPUpdateInfoSP in
         m_d->projectionBackend->drawFromOriginalImage(gc, info);
     } else /* if info->transfer == KisPPUpdateInformation::PATCH */ {
         KisImagePatch patch = m_d->projectionBackend->getNearestPatch(info);
-
-        //patch.prescaleWithBlitz(viewportRect);
         patch.drawMe(gc, info->viewportRect, info->renderHints);
     }
 }

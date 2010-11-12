@@ -1,5 +1,4 @@
 include_directories( ${KOTEXT_INCLUDES}	
-	${BLITZ_INCLUDES} 
 	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
 	${CMAKE_CURRENT_SOURCE_DIR}/flake 
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
@@ -215,7 +214,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )
 
-target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${BLITZ_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
+target_link_libraries(kritaui ${KDE4_KDE3SUPPORT_LIBS} ${KDE4_THREADWEAVER_LIBRARIES} kritaimage komain kowidgets ${PNG_LIBRARIES} ${EXIV2_LIBRARIES})
 
 if(HAVE_OPENGL)
     target_link_libraries(kritaui ${OPENGL_LIBRARIES} ${QT_QTOPENGL_LIBRARY} ${OPENEXR_LIBRARIES})

@@ -33,6 +33,7 @@ class KisFilter;
  */
 class KisFiltersModel : public QAbstractItemModel
 {
+    Q_OBJECT
 public:
     KisFiltersModel(KisPaintDeviceSP thumb);
     ~KisFiltersModel();
@@ -44,6 +45,8 @@ public:
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags(const QModelIndex & index) const;
+private slots:
+    void previewUpdated(int i);
 private:
     struct Private;
     Private* const d;

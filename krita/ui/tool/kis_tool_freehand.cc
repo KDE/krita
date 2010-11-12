@@ -107,7 +107,11 @@ KisToolFreehand::~KisToolFreehand()
 
 void KisToolFreehand::deactivate()
 {
-    endPaint();
+    if(mode() == PAINT_MODE)
+    {
+        endPaint();
+        setMode(KisTool::HOVER_MODE);
+    }
     KisToolPaint::deactivate();
 }
 
@@ -246,8 +250,8 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
             paintAt(m_previousPaintInformation);
         }
 
-        setMode(KisTool::HOVER_MODE);
         endPaint();
+        setMode(KisTool::HOVER_MODE);
         e->accept();
     }
     else {

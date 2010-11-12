@@ -169,12 +169,6 @@ macro_optional_find_package(Eigen2)
 macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita")
 
 ##
-## Test for blitz
-##
-macro_optional_find_package(Blitz)
-macro_log_feature(BLITZ_FOUND "QImageBlitz" "Image effect library" "http://www.kde.org" FALSE "" "Required by Krita (available in kdesupport)")
-
-##
 ## Test for QCA2
 ##
 macro_optional_find_package(QCA2)
@@ -215,6 +209,14 @@ else(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
     set(HAVE_REQUIRED_LCMS_VERSION FALSE)
     set(HAVE_LCMS FALSE)
 endif(LCMS_FOUND AND NOT LCMS_VERSION LESS ${REQUIRED_LCMS_VERSION})
+
+macro_optional_find_package(LCMS2)
+if(LCMS2_FOUND)
+    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
+    set(HAVE_LCMS TRUE)
+endif(LCMS2_FOUND)
+
+    
 
 macro_log_feature(HAVE_REQUIRED_LCMS_VERSION "LittleCMS" "Color management engine" "http://www.littlecms.com" FALSE "1.18" "Required for color management and Krita")
 
@@ -347,9 +349,9 @@ if(NOT Boost_FOUND)
 endif(NOT Boost_FOUND)
 
 ### Krita: pigment, blitz, eigen2, exiv2
-if(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
-endif(NOT BLITZ_FOUND OR NOT EIGEN2_FOUND OR NOT EXIV2_FOUND)
+endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 
 ### KPlato: kdepimlibs
 if(NOT KdepimLibs_FOUND)

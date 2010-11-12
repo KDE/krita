@@ -67,13 +67,6 @@ public:
                 QPainter::RenderHints renderHints);
 
     /**
-     * Prescales an interestRect a bit with Blitz
-     * It's usefulness is dispulable and should be
-     * tested, so - FIXME
-     */
-    void prescaleWithBlitz(QRectF dstRect);
-
-    /**
      * Checks whether the patch can be used for drawing the image
      */
     bool isValid();

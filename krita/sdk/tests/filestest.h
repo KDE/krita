@@ -39,11 +39,12 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <ktemporaryfile.h>
+#include <QtCore/qfileinfo.h>
 
 namespace TestUtil
 {
 
-void testFiles(const QString& _dirname, const QStringList& exclusions)
+void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString())
 {
     QDir dirSources(_dirname);
     QStringList failuresFileInfo;
@@ -55,8 +56,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions)
             continue;
         }
         if (!sourceFileInfo.isHidden() && !sourceFileInfo.isDir()) {
-            qDebug() << "handling " << sourceFileInfo.fileName();
-            QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + ".png");
+            QFileInfo resultFileInfo(QString(FILES_DATA_DIR) + "/results/" + sourceFileInfo.fileName() + resultSuffix + ".png");
 
             if (!resultFileInfo.exists()) {
                 failuresFileInfo << resultFileInfo.fileName();

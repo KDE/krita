@@ -105,7 +105,6 @@ struct KisPainter::Private {
     KisPaintDeviceSP            polygon;
     qint32                      maskImageWidth;
     qint32                      maskImageHeight;
-    bool                        alphaLocked;
 };
 
 KisPainter::KisPainter()
@@ -149,7 +148,6 @@ void KisPainter::init()
     d->fillPainter = 0;
     d->maskImageWidth = 255;
     d->maskImageHeight = 255;
-    d->alphaLocked = false;
 
     KConfigGroup cfg = KGlobal::config()->group("");
     d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
@@ -2007,7 +2005,6 @@ void KisPainter::setChannelFlags(QBitArray channelFlags)
 {
     Q_ASSERT(d->channelFlags.isEmpty() || (uint)d->channelFlags.size() == d->colorSpace->channelCount());
     d->channelFlags = channelFlags;
-    setLockAlpha(d->alphaLocked);
 }
 
 QBitArray KisPainter::channelFlags()
@@ -2189,23 +2186,27 @@ void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 
 void KisPainter::setLockAlpha(bool protect)
 {
-    d->alphaLocked = protect;
-    if (d->channelFlags.isEmpty()) {
-        d->channelFlags = d->colorSpace->channelFlags(true, !d->alphaLocked, true, true);
+    if(d->channelFlags.isEmpty()) {
+        d->channelFlags = d->colorSpace->channelFlags(true, true, true, true);
+    }
+
+    QBitArray switcher =
+        d->colorSpace->channelFlags(protect, !protect, protect, protect);
+
+    if(protect) {
+        d->channelFlags &= switcher;
     }
     else {
-        Q_ASSERT((uint)d->channelFlags.size() == d->colorSpace->channelCount());
-        QList<KoChannelInfo*> channels = d->colorSpace->channels();
-        foreach (KoChannelInfo* channel, channels) {
-            if (channel->channelType() == KoChannelInfo::ALPHA) {
-                d->channelFlags.setBit(channel->index(), !d->alphaLocked);
-            }
-        }
+        d->channelFlags |= switcher;
     }
+
+    Q_ASSERT((uint)d->channelFlags.size() == d->colorSpace->channelCount());
 }
 
 bool KisPainter::alphaLocked() const
 {
-    return d->alphaLocked;
+    QBitArray switcher =
+        d->colorSpace->channelFlags(false, true, false, false);
+    return !(d->channelFlags & switcher).count(true);
 }
 

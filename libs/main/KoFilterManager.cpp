@@ -492,20 +492,20 @@ bool KoFilterManager::filterAvailable(KoFilterEntry::Ptr entry)
     if (!m_filterAvailable.contains(key)) {
         //kDebug( 30500 ) <<"Not cached, checking...";
 
-        KLibrary* library = KLibLoader::self()->library(QFile::encodeName(entry->service()->library()));
-        if (!library) {
+        KLibrary library(QFile::encodeName(entry->service()->library()));
+        if (library.fileName().isEmpty()) {
             kWarning(30500) << "Huh?? Couldn't load the lib: "
-                << KLibLoader::self()->lastErrorMessage() << endl;
+                << entry->service()->library();
             m_filterAvailable[ key ] = false;
             return false;
         }
 
         // This code is "borrowed" from klibloader ;)
-        QByteArray symname = "check_" + QString(library->objectName()).toLatin1();
-        KLibrary::void_function_ptr sym = library->resolveFunction(symname);
+        QByteArray symname = "check_" + QString(library.objectName()).toLatin1();
+        KLibrary::void_function_ptr sym = library.resolveFunction(symname);
         if (!sym) {
-            kWarning(30500) << "The library " << library->objectName()
-                << " does not offer a check_" << library->objectName()
+            kWarning(30500) << "The library " << library.objectName()
+                << " does not offer a check_" << library.objectName()
                 << " function." << endl;
             m_filterAvailable[key] = false;
         } else {

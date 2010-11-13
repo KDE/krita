@@ -53,6 +53,7 @@
 #include <KoProgressUpdater.h>
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
+#include <kis_random_accessor_ng.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
@@ -155,6 +156,9 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
         }
     }
 
+    KisRandomAccessorSP dstAccessor = dst->createRandomAccessorNG(dstTopLeft.x(), dstTopLeft.y());
+    KisRandomConstAccessorSP srcAccessor = src->createRandomConstAccessorNG(dstTopLeft.x(), dstTopLeft.y());
+    
     for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs) {
         NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
         halfSize = NewSize / 2;
@@ -264,8 +268,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
                             QColor originalColor;
 
-                            KisHLineConstIterator oldIt = src->createHLineConstIterator(srcTopLeft.x() + l, srcTopLeft.y() + k, 1, srcInfo.selection());
-                            cs->toQColor(oldIt.oldRawData(), &originalColor);
+                            srcAccessor->moveTo(srcTopLeft.x() + l, srcTopLeft.y() + k);
+                            cs->toQColor(srcAccessor->oldRawData(), &originalColor);
 
                             int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
                             int newGreen = CLAMP(originalColor.green() + Bright, 0, quint8_MAX);
@@ -274,8 +278,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            KisHLineIterator dstIt = dst->createHLineIterator(dstTopLeft.x() + n, dstTopLeft.y() + m, 1, dstInfo.selection());
-                            cs->fromQColor(newColor, dstIt.rawData());
+                            dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                            cs->fromQColor(newColor, dstAccessor->rawData());
                         }
                     }
                 }
@@ -301,8 +305,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
                             if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width)) {
                                 QColor color;
-                                KisHLineConstIterator dstIt = dst->createHLineConstIterator(dstTopLeft.x() + n, dstTopLeft.y() + m, 1);
-                                cs->toQColor(dstIt.rawData(), &color);
+                                dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                                cs->toQColor(dstAccessor->rawData(), &color);
 
                                 R += color.red();
                                 G += color.green();
@@ -318,8 +322,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-                        KisHLineIterator dstIt = dst->createHLineIterator(dstTopLeft.x() + n, dstTopLeft.y() + m, 1);
-                        cs->fromQColor(color, dstIt.rawData());
+                        dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                        cs->fromQColor(color, dstAccessor->rawData());
                     }
                 }
             }

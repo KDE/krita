@@ -82,9 +82,14 @@ void EnhancedPathShape::updatePath(const QSizeF &)
 
     m_viewBound = outline().boundingRect();
 
+    m_mirrorMatrix.reset();
+    m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
+    m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
+    m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+
     QTransform matrix;
     matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
-    matrix = m_viewMatrix * matrix;
+    matrix = m_mirrorMatrix * m_viewMatrix * matrix;
 
     KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
     for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
@@ -104,6 +109,7 @@ void EnhancedPathShape::updatePath(const QSizeF &)
 
 void EnhancedPathShape::setSize(const QSizeF &newSize)
 {
+    // handle offset
     KoParameterShape::setSize(newSize);
 
     // calculate scaling factors from viewbox size to shape size
@@ -112,9 +118,7 @@ void EnhancedPathShape::setSize(const QSizeF &newSize)
 
     // create view matrix, take mirroring into account
     m_viewMatrix.reset();
-    m_viewMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
-    m_viewMatrix.scale(m_mirrorHorizontally ? -xScale : xScale, m_mirrorVertically ? -yScale : yScale);
-    m_viewMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+    m_viewMatrix.scale(xScale, yScale);
 
     updatePath(newSize);
 }
@@ -130,7 +134,7 @@ QPointF EnhancedPathShape::normalize()
 
 QPointF EnhancedPathShape::shapeToViewbox(const QPointF &point) const
 {
-    return m_viewMatrix.inverted().map( point-m_viewBoxOffset );
+    return (m_mirrorMatrix * m_viewMatrix).inverted().map( point-m_viewBoxOffset );
 }
 
 void EnhancedPathShape::evaluateHandles()
@@ -425,6 +429,10 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             }
 
         }
+
+        setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
+        setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
+
         // load the enhanced path data
         QString path = enhancedGeometry.attributeNS(KoXmlNS::draw, "enhanced-path", "");
 #ifndef NWORKAROUND_ODF_BUGS
@@ -444,8 +452,6 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
             m_viewBox = m_viewBound;
         }
 
-        setMirrorHorizontally(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-horizontal") == "true");
-        setMirrorVertically(enhancedGeometry.attributeNS(KoXmlNS::draw, "mirror-vertical") == "true");
     }
 
     QSizeF size;
@@ -504,13 +510,16 @@ void EnhancedPathShape::setMirrorHorizontally(bool mirrorHorizontally)
 {
     if( m_mirrorHorizontally != mirrorHorizontally) {
         m_mirrorHorizontally = mirrorHorizontally;
+        updatePath(size());
     }
+
 }
 
 void EnhancedPathShape::setMirrorVertically(bool mirrorVertically)
 {
     if( m_mirrorVertically != mirrorVertically) {
         m_mirrorVertically = mirrorVertically;
+        updatePath(size());
     }
 }
 

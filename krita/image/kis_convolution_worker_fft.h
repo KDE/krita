@@ -104,7 +104,7 @@ public:
         for (quint32 i = 0; i < m_noOfChannels; ++i)
             m_channelFFT[i] = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * m_fftLength);
 
-        // fill in data
+        // fill in function
         QVector<PtrToDouble> toDoubleFuncPtr(m_noOfChannels);
 
         KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(src->colorSpace()->mathToolboxId().id());
@@ -249,21 +249,24 @@ private:
         // find central item
         QPoint offset((kernel->width() - 1) / 2, (kernel->height() - 1) / 2);
 
-        qint32 absXpos, absYpos;
+        qint32 xShift = m_fftWidth - offset.x();
+        qint32 yShift = m_fftHeight - offset.y();
+
+        quint32 absXpos, absYpos;
 
         for (quint32 y = 0; y < kernel->height(); y++)
         {
-            absYpos = y - offset.y();
-            if (absYpos < 0)
-                absYpos = m_fftHeight + absYpos;
+            absYpos = y + yShift;
+            if (absYpos >= m_fftHeight)
+                absYpos -= m_fftHeight;
 
             for (quint32 x = 0; x < kernel->width(); x++)
             {
-                absXpos = x - offset.x();
-                if (absXpos < 0)
-                    absXpos = m_fftWidth + absXpos;
+                absXpos = x + xShift;
+                if (absXpos >= m_fftWidth)
+                    absXpos -= m_fftWidth;
 
-                ((double*)m_kernelFFT)[(m_fftWidth + m_extraMem) * absYpos + absXpos] = (*(kernel->data()))(y, x);
+                ((double*)m_kernelFFT)[(m_fftWidth + m_extraMem) * absYpos + absXpos] = kernel->data()->coeff(y, x);
             }
         }
     }

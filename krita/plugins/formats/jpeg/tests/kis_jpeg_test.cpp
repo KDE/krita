@@ -25,14 +25,24 @@
 #include <qtest_kde.h>
 
 #include "filestest.h"
+#include "jpeglib.h"
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
 
+#ifndef JPEG_LIB_VERSION
+#error "JPEG_LIB_VERSION not set. libjpeg should set it."
+#endif
+
 void KisJpegTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    if (JPEG_LIB_VERSION == 80){
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList(), "_80");
+    }else {
+        TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    }
+
 }
 QTEST_KDEMAIN(KisJpegTest, GUI)
 

@@ -81,7 +81,7 @@ bool compareQImages(QPoint & pt, const QImage & image1, const QImage & image2, i
     if (w1 != w2 || h1 != h2) {
         pt.setX(-1);
         pt.setY(-1);
-        qDebug() << "Images have different sizes";
+        qDebug() << "Images have different sizes" << image1.size() << image2.size();
         return false;
     }
 

@@ -34,9 +34,76 @@
 #include <kis_mask_generator.h>
 #include "testutil.h"
 
-void KisConvolutionPainterTest::testCreation()
+KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray &initialData)
 {
-    KisConvolutionPainter test;
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    pixelSize = dev->pixelSize();
+
+    imageRect = QRect(0,0,5,5);
+    initialData.resize(25 * pixelSize);
+
+    quint8 *ptr = (quint8*) initialData.data();
+    for(int i = 0; i < 25; i++) {
+        KoColor pixel(QColor(i,i,i,255), dev->colorSpace());
+        memcpy(ptr, pixel.data(), pixelSize);
+
+        ptr += pixelSize;
+    }
+
+    dev->writeBytes((const quint8*)initialData.constData(), imageRect);
+
+    return dev;
+}
+
+Matrix<qreal, 3, 3> initSymmFilter(qreal &factor)
+{
+    Matrix<qreal, 3, 3> filter;
+    filter(0,0) = 1.0 / 21;
+    filter(0,1) = 3.0 / 21;
+    filter(0,2) = 1.0 / 21;
+
+    filter(1,0) = 3.0 / 21;
+    filter(1,1) = 5.0 / 21;
+    filter(1,2) = 3.0 / 21;
+
+    filter(2,0) = 1.0 / 21;
+    filter(2,1) = 3.0 / 21;
+    filter(2,2) = 1.0 / 21;
+
+    factor = 1.0;
+
+    return filter;
+}
+
+Matrix<qreal, 3, 3> initAsymmFilter(qreal &factor)
+{
+    Matrix<qreal, 3, 3> filter;
+    filter(0,0) = -1.0;
+    filter(1,0) = -2.0;
+    filter(2,0) = -1.0;
+
+    filter(0,1) = 0;
+    filter(1,1) = 0;
+    filter(2,1) = 0;
+
+    filter(0,2) = 1.0;
+    filter(1,2) = 2.0;
+    filter(2,2) = 1.0;
+
+    factor = 1.0;
+
+    return filter;
+}
+
+void printPixel(QString prefix, int pixelSize, quint8 *data) {
+    QString str = prefix;
+
+    for(int i = 0; i < pixelSize; i++) {
+        str += " ";
+        str += QString::number(data[i]);
+    }
+
+    qDebug() << str;
 }
 
 void KisConvolutionPainterTest::testIdentityConvolution()
@@ -57,7 +124,9 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     kernel->data()[7] = 0;
     kernel->data()[8] = 0;
     KisConvolutionPainter gc(dev);
+    gc.beginTransaction("");
     gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
+    gc.deleteTransaction();
 
     QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
 
@@ -68,155 +137,125 @@ void KisConvolutionPainterTest::testIdentityConvolution()
     }
 }
 
-void KisConvolutionPainterTest::testIdentityConvolutionOnColorChannels()
+void KisConvolutionPainterTest::testSymmConvolution()
 {
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    qreal factor = 1.0;
+    Matrix<qreal, 3, 3> filter = initSymmFilter(factor);
 
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
+    QRect imageRect;
+    int pixelSize = 0;
+    QByteArray initialData;
+    KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
 
-
-    KisConvolutionKernelSP kernel = new KisConvolutionKernel(3, 3, 0, 0);
-    kernel->data()[0] = 0;
-    kernel->data()[1] = 0;
-    kernel->data()[2] = 0;
-    kernel->data()[3] = 0;
-    kernel->data()[4] = 1;
-    kernel->data()[5] = 0;
-    kernel->data()[6] = 0;
-    kernel->data()[7] = 0;
-    kernel->data()[8] = 0;
-    KisConvolutionPainter gc(dev);
-
-    gc.setChannelFlags(dev->colorSpace()->channelFlags());
-    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
-
-    QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
-
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, qimage, resultImage)) {
-        resultImage.save("identity_convolution_identity_on_colorchannels.png");
-        QFAIL(QString("Identity kernel did change image, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-}
-
-void KisConvolutionPainterTest::testPureConvolution()
-{
-    Matrix<qreal, 3, 3> filter;
-    filter(0,0) = 1.0 / 21;
-    filter(0,1) = 3.0 / 21;
-    filter(0,2) = 1.0 / 21;
-
-    filter(1,0) = 3.0 / 21;
-    filter(1,1) = 5.0 / 21;
-    filter(1,2) = 3.0 / 21;
-
-    filter(2,0) = 1.0 / 21;
-    filter(2,1) = 3.0 / 21;
-    filter(2,2) = 1.0 / 21;
-
-    const qreal factor = 1.0;
-
-    QRect imageRect(0,0,5,5);
-
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    const qint32 pixelSize = dev->pixelSize();
-
-
-    QByteArray deviceData(25 * pixelSize, 0);
-    quint8 *ptr = (quint8*) deviceData.data();
-    for(int i = 0; i < 25; i++) {
-        KoColor pixel(QColor(i,i,i,255), dev->colorSpace());
-        memcpy(ptr, pixel.data(), pixelSize);
-
-        ptr += pixelSize;
-    }
-    dev->writeBytes((const quint8*)deviceData.constData(), imageRect);
 
     KisConvolutionKernelSP kernel =
         KisConvolutionKernel::fromMatrix(filter, 0, factor);
     KisConvolutionPainter gc(dev);
+    gc.beginTransaction("");
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
                    imageRect.size());
+    gc.deleteTransaction();
 
-    QByteArray resultData(25 * pixelSize, 0);
+    QByteArray resultData(initialData.size(), 0);
     dev->readBytes((quint8*)resultData.data(), imageRect);
 
-    QCOMPARE(resultData, deviceData);
+    QCOMPARE(resultData, initialData);
 }
 
-void KisConvolutionPainterTest::testMaskConvolution()
+void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 {
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage reference(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv.png");
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
+    qreal factor = 1.0;
+    Matrix<qreal, 3, 3> filter = initAsymmFilter(factor);
 
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 1.0, 5, 5, 2);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
+    QRect imageRect;
+    int pixelSize = -1;
+    QByteArray initialData;
+    KisPaintDeviceSP dev = initAsymTestDevice(imageRect, pixelSize, initialData);
 
+
+    KisConvolutionKernelSP kernel =
+        KisConvolutionKernel::fromMatrix(filter, 0.5, factor);
     KisConvolutionPainter gc(dev);
-    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
-
-    QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
-
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, reference, resultImage)) {
-        resultImage.save("mask_conv.png");
-        QFAIL(QString("Mask kernel failed, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-}
-
-void KisConvolutionPainterTest::testMaskConvolutionOnColorChannels()
-{
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage reference(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv_channelflags.png");
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
-
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 1.0, 5, 5, 2.0);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
-
-    KisConvolutionPainter gc(dev);
-    gc.setChannelFlags(dev->colorSpace()->channelFlags());
-    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
-
-    QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
-
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, reference, resultImage)) {
-        resultImage.save("mask_conv_channelflags.png");
-        QFAIL(QString("Mask on color channels failed, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
-    }
-}
-
-void KisConvolutionPainterTest::testMaskConvolutionOnRedChannel()
-{
-    QImage qimage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
-    QImage reference(QString(FILES_DATA_DIR) + QDir::separator() + "mask_conv_red.png");
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    dev->convertFromQImage(qimage, "", 0, 0);
-
-    KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(11, 1.0, 5, 5, 2.0);
-    KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
-
-    KisConvolutionPainter gc(dev);
-    QBitArray channelFlags = dev->colorSpace()->channelFlags();
-    channelFlags.setBit(0, false);
-    channelFlags.setBit(1, false);
-    channelFlags.setBit(2, true);
-    channelFlags.setBit(3, false);
-
+    gc.beginTransaction("");
     gc.setChannelFlags(channelFlags);
-    gc.applyMatrix(kernel, dev, QPoint(0, 0), QPoint(0, 0), QSize(qimage.width(), qimage.height()));
+    gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
+                   imageRect.size());
+    gc.deleteTransaction();
 
-    QImage resultImage = dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height());
 
-    QPoint errpoint;
-    if (!TestUtil::compareQImages(errpoint, reference, resultImage)) {
-        resultImage.save("mask_conv_red.png");
-        QFAIL(QString("Mask on red channel, first different pixel: %1,%2 ").arg(errpoint.x()).arg(errpoint.y()).toAscii());
+    QByteArray resultData(initialData.size(), 0);
+    dev->readBytes((quint8*)resultData.data(), imageRect);
+
+    QRect filteredRect = imageRect.adjusted(1, 1, -1, -1);
+    KoColor filteredPixel(QColor(120,120,120,128), dev->colorSpace());
+
+    quint8 *srcPtr = (quint8*) initialData.data();
+    quint8 *resPtr = (quint8*) resultData.data();
+
+    for(int row = 0; row < imageRect.height(); row++) {
+        for(int col = 0; col < imageRect.width(); col++) {
+
+            bool isFiltered = filteredRect.contains(col, row);
+
+            KoColor referencePixel(dev->colorSpace());
+            for(int j = 0; j < pixelSize; j++) {
+                referencePixel.data()[j] = isFiltered && channelFlags[j] ?
+                    filteredPixel.data()[j] : srcPtr[j];
+            }
+
+            if(memcmp(resPtr, referencePixel.data(), pixelSize)) {
+                printPixel("Actual:  ", pixelSize, resPtr);
+                printPixel("Expected:", pixelSize, referencePixel.data());
+                QFAIL("Failed to filter area");
+            }
+
+            srcPtr += pixelSize;
+            resPtr += pixelSize;
+        }
     }
+}
+
+void KisConvolutionPainterTest::testAsymmAllChannels()
+{
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    testAsymmConvolutionImp(channelFlags);
+}
+
+void KisConvolutionPainterTest::testAsymmSkipRed()
+{
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    channelFlags[0] = false;
+
+    testAsymmConvolutionImp(channelFlags);
+}
+
+void KisConvolutionPainterTest::testAsymmSkipGreen()
+{
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    channelFlags[1] = false;
+
+    testAsymmConvolutionImp(channelFlags);
+}
+
+void KisConvolutionPainterTest::testAsymmSkipBlue()
+{
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    channelFlags[2] = false;
+
+    testAsymmConvolutionImp(channelFlags);
+}
+
+void KisConvolutionPainterTest::testAsymmSkipAlpha()
+{
+    QBitArray channelFlags =
+        KoColorSpaceRegistry::instance()->rgb8()->channelFlags(true, true);
+    channelFlags[3] = false;
+
+    testAsymmConvolutionImp(channelFlags);
 }
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)

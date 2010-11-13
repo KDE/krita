@@ -228,7 +228,7 @@ public:
 
             for (quint32 pIndex = 0; pIndex < m_cacheSize; ++pIndex) {
                 qreal cacheValue = m_pixelPtrCache[pIndex][k];
-                interimConvoResult += m_kernelData[pIndex] * cacheValue;
+                interimConvoResult += m_kernelData[m_cacheSize - pIndex - 1] * cacheValue;
             }
 
             double channelPixelValue = (double)(interimConvoResult * m_kernelFactor + m_absoluteOffset[k]);

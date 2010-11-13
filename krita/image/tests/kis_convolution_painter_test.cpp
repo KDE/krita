@@ -174,7 +174,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 
 
     KisConvolutionKernelSP kernel =
-        KisConvolutionKernel::fromMatrix(filter, 0, factor);
+        KisConvolutionKernel::fromMatrix(filter, 0.5, factor);
     KisConvolutionPainter gc(dev);
     gc.beginTransaction("");
     gc.setChannelFlags(channelFlags);
@@ -187,9 +187,8 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
     dev->readBytes((quint8*)resultData.data(), imageRect);
 
     QRect filteredRect = imageRect.adjusted(1, 1, -1, -1);
-    KoColor filteredPixel(QColor(8,8,8,0), dev->colorSpace());
+    KoColor filteredPixel(QColor(120,120,120,128), dev->colorSpace());
 
-    const int numPixels = imageRect.width() * imageRect.height();
     quint8 *srcPtr = (quint8*) initialData.data();
     quint8 *resPtr = (quint8*) resultData.data();
 

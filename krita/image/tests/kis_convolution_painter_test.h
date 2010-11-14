@@ -41,6 +41,7 @@ private slots:
     void testAsymmSkipBlue();
     void testAsymmSkipAlpha();
 
+    void benchmarkConvolution();
 };
 
 #endif

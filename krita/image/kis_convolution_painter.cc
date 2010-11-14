@@ -66,6 +66,33 @@
 #endif
 
 
+template<class factory>
+KisConvolutionWorker<factory>* createWorker(const KisConvolutionKernelSP kernel,
+                                           KisPainter *painter,
+                                           KoUpdater *progress)
+{
+    KisConvolutionWorker<factory> *worker;
+
+#ifdef HAVE_FFTW3
+    #define THRESHOLD_SIZE 5
+
+    if(kernel->width() <= THRESHOLD_SIZE &&
+       kernel->height() <= THRESHOLD_SIZE) {
+
+        worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
+    }
+    else {
+        worker = new KisConvolutionWorkerFFT<factory>(painter, progress);
+    }
+#else
+    Q_UNUSED(kernel);
+    worker = new KisConvolutionWorkerSpatial<factory>(painter, progress);
+#endif
+
+    return worker;
+}
+
+
 KisConvolutionPainter::KisConvolutionPainter()
         : KisPainter()
 {
@@ -80,7 +107,6 @@ KisConvolutionPainter::KisConvolutionPainter(KisPaintDeviceSP device, KisSelecti
         : KisPainter(device, selection)
 {
 }
-
 
 void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, KisConvolutionBorderOp borderOp)
 {
@@ -104,11 +130,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
 
         if(dataRect.isValid()) {
             KisConvolutionWorker<RepeatIteratorFactory> *worker;
-            #ifdef HAVE_FFTW3
-            worker = new KisConvolutionWorkerFFT<RepeatIteratorFactory>(this, progressUpdater());
-            #else
-            worker = new KisConvolutionWorkerSpatial<RepeatIteratorFactory>(this, progressUpdater());
-            #endif
+            worker = createWorker<RepeatIteratorFactory>(kernel, this, progressUpdater());
             worker->execute(kernel, src, srcPos, dstPos, areaSize, dataRect);
             delete worker;
         }
@@ -117,11 +139,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
     return;
     case BORDER_DEFAULT_FILL : {
         KisConvolutionWorker<StandardIteratorFactory> *worker;
-        #ifdef HAVE_FFTW3
-        worker = new KisConvolutionWorkerFFT<StandardIteratorFactory>(this, progressUpdater());
-        #else
-        worker = new KisConvolutionWorkerSpatial<StandardIteratorFactory>(this, progressUpdater());
-        #endif
+        worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
         worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
         delete worker;
         break;
@@ -140,11 +158,7 @@ void KisConvolutionPainter::applyMatrix(const KisConvolutionKernelSP kernel, con
         areaSize -= QSize(kw - 1, kh - 1);
 
         KisConvolutionWorker<StandardIteratorFactory> *worker;
-        #ifdef HAVE_FFTW3
-        worker = new KisConvolutionWorkerFFT<StandardIteratorFactory>(this, progressUpdater());
-        #else
-        worker = new KisConvolutionWorkerSpatial<StandardIteratorFactory>(this, progressUpdater());
-        #endif
+        worker = createWorker<StandardIteratorFactory>(kernel, this, progressUpdater());
         worker->execute(kernel, src, srcPos, dstPos, areaSize, QRect());
         delete worker;
     }

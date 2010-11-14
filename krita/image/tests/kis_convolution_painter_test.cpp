@@ -55,7 +55,7 @@ KisPaintDeviceSP initAsymTestDevice(QRect &imageRect, int &pixelSize, QByteArray
     return dev;
 }
 
-Matrix<qreal, 3, 3> initSymmFilter(qreal &factor)
+Matrix<qreal, 3, 3> initSymmFilter(qreal &offset, qreal &factor)
 {
     Matrix<qreal, 3, 3> filter;
     filter(0,0) = 1.0 / 21;
@@ -70,12 +70,13 @@ Matrix<qreal, 3, 3> initSymmFilter(qreal &factor)
     filter(2,1) = 3.0 / 21;
     filter(2,2) = 1.0 / 21;
 
+    offset = 0.0;
     factor = 1.0;
 
     return filter;
 }
 
-Matrix<qreal, 3, 3> initAsymmFilter(qreal &factor)
+Matrix<qreal, 3, 3> initAsymmFilter(qreal &offset, qreal &factor)
 {
     Matrix<qreal, 3, 3> filter;
     filter(0,0) = -1.0;
@@ -90,6 +91,7 @@ Matrix<qreal, 3, 3> initAsymmFilter(qreal &factor)
     filter(1,2) = 2.0;
     filter(2,2) = 1.0;
 
+    offset = 0.5;
     factor = 1.0;
 
     return filter;
@@ -139,8 +141,9 @@ void KisConvolutionPainterTest::testIdentityConvolution()
 
 void KisConvolutionPainterTest::testSymmConvolution()
 {
+    qreal offset = 0.0;
     qreal factor = 1.0;
-    Matrix<qreal, 3, 3> filter = initSymmFilter(factor);
+    Matrix<qreal, 3, 3> filter = initSymmFilter(offset, factor);
 
     QRect imageRect;
     int pixelSize = 0;
@@ -149,7 +152,7 @@ void KisConvolutionPainterTest::testSymmConvolution()
 
 
     KisConvolutionKernelSP kernel =
-        KisConvolutionKernel::fromMatrix(filter, 0, factor);
+        KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
     gc.beginTransaction("");
     gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
@@ -164,8 +167,9 @@ void KisConvolutionPainterTest::testSymmConvolution()
 
 void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 {
+    qreal offset = 0.0;
     qreal factor = 1.0;
-    Matrix<qreal, 3, 3> filter = initAsymmFilter(factor);
+    Matrix<qreal, 3, 3> filter = initAsymmFilter(offset, factor);
 
     QRect imageRect;
     int pixelSize = -1;
@@ -174,7 +178,7 @@ void KisConvolutionPainterTest::testAsymmConvolutionImp(QBitArray channelFlags)
 
 
     KisConvolutionKernelSP kernel =
-        KisConvolutionKernel::fromMatrix(filter, 0.5, factor);
+        KisConvolutionKernel::fromMatrix(filter, offset, factor);
     KisConvolutionPainter gc(dev);
     gc.beginTransaction("");
     gc.setChannelFlags(channelFlags);
@@ -256,6 +260,50 @@ void KisConvolutionPainterTest::testAsymmSkipAlpha()
     channelFlags[3] = false;
 
     testAsymmConvolutionImp(channelFlags);
+}
+
+
+// #include <valgrind/callgrind.h>
+void KisConvolutionPainterTest::benchmarkConvolution()
+{
+    QImage referenceImage(QString(FILES_DATA_DIR) + QDir::separator() + "hakonepa.png");
+    QRect imageRect(QPoint(), referenceImage.size());
+
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+    dev->convertFromQImage(referenceImage, "", 0, 0);
+
+    qreal offset = 0.0;
+    qreal factor = 1.0;
+    Matrix<qreal, 3, 3> filter = initAsymmFilter(offset, factor);
+
+    int diameter = 1;
+
+    for (int i = 0; i < 10; i++) {
+
+        KisCircleMaskGenerator* kas = new KisCircleMaskGenerator(diameter, 1.0, 5, 5, 2);
+        KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
+
+        KisConvolutionPainter gc(dev);
+
+        QTime timer; timer.start();
+
+        // CALLGRIND_START_INSTRUMENTATION;
+
+        gc.beginTransaction("");
+        gc.applyMatrix(kernel, dev, imageRect.topLeft(), imageRect.topLeft(),
+                       imageRect.size());
+        gc.deleteTransaction();
+
+        // CALLGRIND_STOP_INSTRUMENTATION;
+
+        qDebug() << "Diameter:" << diameter << "time:" << timer.elapsed();
+
+        if(diameter < 10) {
+            diameter += 2;
+        } else {
+            diameter += 8;
+        }
+    }
 }
 
 QTEST_KDEMAIN(KisConvolutionPainterTest, GUI)

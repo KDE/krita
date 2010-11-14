@@ -44,12 +44,12 @@ Qt::PenStyle gs2style(quint32 s)
 QPen KisGridPainterConfiguration::mainPen()
 {
     KisConfig cfg;
-    return QPen(cfg.getGridMainColor(), 1, gs2style(cfg.getGridMainStyle()));
+    return QPen(cfg.getGridMainColor(), 0, gs2style(cfg.getGridMainStyle()));
 }
 QPen KisGridPainterConfiguration::subdivisionPen()
 {
     KisConfig cfg;
-    return QPen(cfg.getGridSubdivisionColor(), 1, gs2style(cfg.getGridSubdivisionStyle()));
+    return QPen(cfg.getGridSubdivisionColor(), 0, gs2style(cfg.getGridSubdivisionStyle()));
 }
 
 

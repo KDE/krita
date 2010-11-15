@@ -3,7 +3,7 @@
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -82,17 +82,17 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocum
 public:
 
     /**
-     *  Constructor.
-     * The first 3 arguments are the same as the ones passed to KParts::Factory::createPart.
+     * Constructor.
      *
      * @param parentWidget the parent widget, in case we create a wrapper widget
      *        (in single view mode).
-     *        Usually the first argument passed by KParts::Factory::createPart.
+     *        Usually passed by KPluginFactory::create.
      * @param parent may be another KoDocument, or anything else.
-     *        Usually the third argument of KParts::Factory::createPart.
-     * @param singleViewMode determines whether the document may only have one view. In this case
-     *        the @p parent must be a QWidget derived class. KoDocument will then create a wrapper widget
-     *        (KoViewWrapperWidget) which is a child of @p parentWidget.
+     *        Usually passed by KPluginFactory::create.
+     * @param singleViewMode determines whether the document may only have one view.
+     *        Usually passed by the derived factory, when KPluginFactory::create says the requested interface is not KoDocument.
+     *        In this case the @p parent must be a QWidget derived class.
+     *        KoDocument will then create a wrapper widget (KoViewWrapperWidget) which is a child of @p parentWidget.
      *        This widget can be retrieved by calling widget().
      */
     KoDocument(QWidget *parentWidget,

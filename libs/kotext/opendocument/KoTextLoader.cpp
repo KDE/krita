@@ -1479,83 +1479,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     else
                         tbl->resize(1, columns);
                 } else if (tblLocalName == "table-row") {
-                    QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
-                    if (!rowStyleName.isEmpty()) {
-                        KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
-                        if (rowStyle) {
-                            tcarManager->setRowStyle(rows, *rowStyle);
-                        }
-                    }
-
-                    QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
-                    if (!defaultCellStyleName.isEmpty()) {
-                        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
-                        tcarManager->setDefaultRowCellStyle(rows, cellStyle);
-                    }
-
-                    rows++;
-                    if (columns > 0)
-                        tbl->resize(rows, columns);
-                    else
-                        tbl->resize(rows, 1);
-                    // Added a row
-                    int currentCell = 0;
-                    KoXmlElement rowTag;
-                    forEachElement(rowTag, tblTag) {
-                        if (!rowTag.isNull()) {
-                            const QString rowLocalName = rowTag.localName();
-                            if (rowTag.namespaceURI() == KoXmlNS::table) {
-                                if (rowLocalName == "table-cell") {
-                                    // Ok, it's a cell...
-                                    const int currentRow = tbl->rows() - 1;
-                                    QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
-
-                                    // store spans until entire table have been loaded
-                                    int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
-                                    int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
-                                    spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
-
-                                    if (cell.isValid()) {
-                                        QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
-                                        KoTableCellStyle *cellStyle = 0;
-                                        if (!cellStyleName.isEmpty()) {
-                                            cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
-                                        } else if (tcarManager->defaultRowCellStyle(currentRow)) {
-                                            cellStyle = tcarManager->defaultRowCellStyle(currentRow);
-                                        } else if (tcarManager->defaultColumnCellStyle(currentCell)) {
-                                            cellStyle = tcarManager->defaultColumnCellStyle(currentCell);
-                                        }
-
-                                        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                        if (cellStyle)
-                                            cellStyle->applyStyle(cellFormat);
-                                        cell.setFormat(cellFormat);
-
-                                        // handle inline Rdf
-                                        // rowTag is the current table cell.
-                                        if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property")
-                                                || rowTag.hasAttribute("id")) {
-                                            KoTextInlineRdf* inlineRdf =
-                                                new KoTextInlineRdf((QTextDocument*)cursor.block().document(),
-                                                        cell);
-                                            inlineRdf->loadOdf(rowTag);
-                                            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                            cellFormat.setProperty(KoTableCellStyle::InlineRdf,
-                                                    QVariant::fromValue(inlineRdf));
-                                            cell.setFormat(cellFormat);
-                                        }
-
-                                        cursor = cell.firstCursorPosition();
-                                        loadBody(rowTag, cursor);
-                                    } else
-                                        kDebug(32500) << "Invalid table-cell row=" << currentRow << " column=" << currentCell;
-                                    currentCell++;
-                                } else if (rowLocalName == "covered-table-cell") {
-                                    currentCell++;
-                                }
-                            }
-                        }
-                    }
+                    loadTableRow(tblTag, tbl, spanStore, cursor, rows);
                 }
             }
         }
@@ -1566,6 +1490,92 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+}
+
+void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &rows)
+{
+    KoTableColumnAndRowStyleManager *tcarManager = reinterpret_cast<KoTableColumnAndRowStyleManager *>
+                                                   (tbl->format().property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+
+    int columns = tbl->columns();
+    QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
+    if (!rowStyleName.isEmpty()) {
+        KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
+        if (rowStyle) {
+            tcarManager->setRowStyle(rows, *rowStyle);
+        }
+    }
+
+    QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
+    if (!defaultCellStyleName.isEmpty()) {
+        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
+        tcarManager->setDefaultRowCellStyle(rows, cellStyle);
+    }
+
+    rows++;
+    if (columns > 0)
+        tbl->resize(rows, columns);
+    else
+        tbl->resize(rows, 1);
+
+    // Added a row
+    int currentCell = 0;
+    KoXmlElement rowTag;
+    forEachElement(rowTag, tblTag) {
+        if (!rowTag.isNull()) {
+            const QString rowLocalName = rowTag.localName();
+            if (rowTag.namespaceURI() == KoXmlNS::table) {
+                if (rowLocalName == "table-cell") {
+                    // Ok, it's a cell...
+                    const int currentRow = tbl->rows() - 1;
+                    QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
+
+                    // store spans until entire table have been loaded
+                    int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
+                    int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
+                    spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
+
+                    if (cell.isValid()) {
+                        QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
+                        KoTableCellStyle *cellStyle = 0;
+                        if (!cellStyleName.isEmpty()) {
+                            cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
+                        } else if (tcarManager->defaultRowCellStyle(currentRow)) {
+                            cellStyle = tcarManager->defaultRowCellStyle(currentRow);
+                        } else if (tcarManager->defaultColumnCellStyle(currentCell)) {
+                            cellStyle = tcarManager->defaultColumnCellStyle(currentCell);
+                        }
+
+                        QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                        if (cellStyle)
+                            cellStyle->applyStyle(cellFormat);
+                        cell.setFormat(cellFormat);
+
+                        // handle inline Rdf
+                        // rowTag is the current table cell.
+                        if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property")
+                                || rowTag.hasAttribute("id")) {
+                            KoTextInlineRdf* inlineRdf =
+                                new KoTextInlineRdf((QTextDocument*)cursor.block().document(),
+                                        cell);
+                            inlineRdf->loadOdf(rowTag);
+                            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                            cellFormat.setProperty(KoTableCellStyle::InlineRdf,
+                                    QVariant::fromValue(inlineRdf));
+                            cell.setFormat(cellFormat);
+                        }
+
+                        cursor = cell.firstCursorPosition();
+                        loadBody(rowTag, cursor);
+                    } else
+                        kDebug(32500) << "Invalid table-cell row=" << currentRow << " column=" << currentCell;
+                    currentCell++;
+                } else if (rowLocalName == "covered-table-cell") {
+                    currentCell++;
+                }
+            }
+        }
+    }
 }
 
 void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)

@@ -25,14 +25,14 @@
 
 #include <kparts/plugin.h>
 
-#include <KoFactory.h>
+#include <KPluginFactory>
 
 #include <krita_export.h>
 
 class KComponentData;
 class KAboutData;
 
-class KRITAUI_EXPORT KisFactory2 : public KoFactory
+class KRITAUI_EXPORT KisFactory2 : public KPluginFactory
 {
     Q_OBJECT
 
@@ -41,10 +41,7 @@ public:
     KisFactory2(QObject* parent = 0);
     ~KisFactory2();
 
-    virtual KParts::Part *createPartObject(QWidget *parentWidget = 0,
-                                           QObject *parent = 0,
-                                           const char *classname = "KoDocument",
-                                           const QStringList &args = QStringList());
+    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
 
     static KAboutData * aboutData();
     static const KComponentData &componentData();

@@ -190,7 +190,8 @@ bool KoOdfWorkaround::fixMissingStyle_DisplayLabel(const KoXmlElement &element, 
 
 void KoOdfWorkaround::setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context)
 {
-    if (context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice) {
+    KoOdfLoadingContext::GeneratorType type(context.odfLoadingContext().generatorType());
+    if (type == KoOdfLoadingContext::OpenOffice || type == KoOdfLoadingContext::MicrosoftOffice) {
         s_workaroundPresentationPlaceholderBug = fix;
     }
 }

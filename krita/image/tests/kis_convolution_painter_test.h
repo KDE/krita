@@ -21,23 +21,27 @@
 
 #include <QtTest/QtTest>
 
+class QBitArray;
+
 class KisConvolutionPainterTest : public QObject
 {
     Q_OBJECT
 
-    // XXX: Currently unimplemented again
-    void testMaskConvolutionOnRedChannel();
+private:
+    void testAsymmConvolutionImp(QBitArray channelFlags);
 
 private slots:
 
-    void testCreation();
     void testIdentityConvolution();
-    void testIdentityConvolutionOnColorChannels();
-    void testPureConvolution();
-    void testMaskConvolution();
-    void testMaskConvolutionOnColorChannels();
+    void testSymmConvolution();
 
+    void testAsymmAllChannels();
+    void testAsymmSkipRed();
+    void testAsymmSkipGreen();
+    void testAsymmSkipBlue();
+    void testAsymmSkipAlpha();
 
+    void benchmarkConvolution();
 };
 
 #endif

@@ -266,7 +266,7 @@ void KisToolFreehand::keyPressEvent(QKeyEvent *event)
         return;
     }
 
-    event->ignore();
+    event->accept();
 }
 
 void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
@@ -276,7 +276,7 @@ void KisToolFreehand::keyReleaseEvent(QKeyEvent* event)
         return;
     }
 
-    event->ignore();
+    event->accept();
 }
 
 void KisToolFreehand::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDocPoint)

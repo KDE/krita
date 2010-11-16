@@ -28,11 +28,14 @@ namespace {
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoCellStyle)
 
 KoCellStyle::KoCellStyle()
+: KoStyle()
+, m_borders(new KoBorder)
 {
 }
 
 KoCellStyle::~KoCellStyle()
 {
+    delete m_borders;
 }
 
 KoBorder* KoCellStyle::borders()

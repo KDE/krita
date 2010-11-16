@@ -30,6 +30,10 @@
 #include <KoTextDocumentLayout.h>
 #include <KoShape.h>
 
+#include <KoChangeTracker.h>
+#include <KoChangeTrackerElement.h>
+#include <KoGenChange.h>
+
 #include <QTextDocument>
 #include <QTextTable>
 #include <QTextLine>
@@ -347,6 +351,30 @@ void TableLayout::drawBackground(QPainter *painter) const
                 cellStyle.paintBackground(*painter, cellBoundingRect(tableCell));
             }
         }
+    }
+
+    // Draw a background to indicate a change-type
+    KoChangeTracker *changeTracker = KoTextDocument(m_table->document()).changeTracker();
+    if (changeTracker && changeTracker->displayChanges()) {
+        for (int row = 0; row < m_table->rows(); ++row) {
+            for (int column = 0; column < m_table->columns(); ++column) {
+                QTextTableCell tableCell = m_table->cellAt(row, column);
+                KoChangeTrackerElement *changeElement = changeTracker->elementById(tableCell.format().property(KoCharacterStyle::ChangeTrackerId).toInt());
+                if (changeElement && changeElement->isEnabled()) {
+                    switch(changeElement->getChangeType()) {
+                        case KoGenChange::InsertChange:
+                            painter->fillRect(cellBoundingRect(tableCell), changeTracker->getInsertionBgColor());
+                        break;
+                        case KoGenChange::FormatChange:
+                            painter->fillRect(cellBoundingRect(tableCell), changeTracker->getFormatChangeBgColor());
+                        break;
+                        case KoGenChange::DeleteChange:
+                            painter->fillRect(cellBoundingRect(tableCell), changeTracker->getDeletionBgColor());
+                        break;
+                    }
+                }
+            }
+        }   
     }
 
     painter->restore();

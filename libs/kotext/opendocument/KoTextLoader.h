@@ -166,11 +166,21 @@ private:
      * The table and its contents are placed in a new shape.
      */
     void loadTable(const KoXmlElement &element, QTextCursor& cursor);
+    
+    /**
+     * Loads a table column
+     */
+    void loadTableColumn(KoXmlElement &element, QTextTable *table, int &columns);
 
     /**
      * Loads a table-row into the cursor
      */
     void loadTableRow(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &rows);
+
+    /**
+     * Loads a table-cell into the cursor
+     */
+    void loadTableCell(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
 
     /**
      * Load a note \p element into the \p cursor.

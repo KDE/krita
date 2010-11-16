@@ -1472,7 +1472,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
                 KoXmlElement deltaTblTag;
                 forEachElement (deltaTblTag, tblTag) {
-                    if (!deltaTblTag.isNull() || (deltaTblTag.namespaceURI() != KoXmlNS::table)) {
+                    if (!deltaTblTag.isNull() && (deltaTblTag.namespaceURI() == KoXmlNS::table)) {
                         const QString deltaTblLocalName = deltaTblTag.localName();
                         if (deltaTblLocalName == "table-column") {
                             loadTableColumn(deltaTblTag, tbl, columns);
@@ -1565,6 +1565,25 @@ void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRe
                 } else if (rowLocalName == "covered-table-cell") {
                     currentCell++;
                 }
+            } else if (rowTag.namespaceURI() == KoXmlNS::delta) {
+                if (rowLocalName == "removed-content")
+                    d->openChangeRegion(rowTag);
+                
+                KoXmlElement deltaRowTag;
+                forEachElement (deltaRowTag, rowTag) {
+                    if (!deltaRowTag.isNull() && (deltaRowTag.namespaceURI() == KoXmlNS::table)) {
+                        const QString deltaRowLocalName = deltaRowTag.localName();
+                        if (deltaRowLocalName == "table-cell") {
+                            loadTableCell (deltaRowTag, tbl, spanStore, cursor, currentCell);
+                            currentCell++;
+                        } else if (deltaRowLocalName == "covered-table-cell") {
+                            currentCell++;
+                        }
+                    }
+                }
+
+                if (rowLocalName == "removed-content")
+                    d->closeChangeRegion(rowTag);
             }
         }
     }

@@ -246,6 +246,9 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
     if ((element.localName() == "remove-leaving-content-start") || 
         (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content"))
         changeElement->setChangeType(KoGenChange::FormatChange);
+
+    if (element.localName() == "removed-content")
+        changeElement->setChangeType(KoGenChange::DeleteChange);
 }
 
 void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
@@ -1463,6 +1466,24 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->closeChangeRegion(tblTag);
                 }
+            } else if(tblTag.namespaceURI() == KoXmlNS::delta) {
+                if (tblLocalName == "removed-content")
+                    d->openChangeRegion(tblTag);
+
+                KoXmlElement deltaTblTag;
+                forEachElement (deltaTblTag, tblTag) {
+                    if (!deltaTblTag.isNull() || (deltaTblTag.namespaceURI() != KoXmlNS::table)) {
+                        const QString deltaTblLocalName = deltaTblTag.localName();
+                        if (deltaTblLocalName == "table-column") {
+                            loadTableColumn(deltaTblTag, tbl, columns);
+                        } else if (deltaTblLocalName == "table-row") {
+                            loadTableRow(deltaTblTag, tbl, spanStore, cursor, rows);
+                        }
+                    }
+                }
+
+                if (tblLocalName == "removed-content")
+                    d->closeChangeRegion(tblTag);
             }
         }
     }
@@ -1556,6 +1577,9 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
     const int currentRow = tbl->rows() - 1;
     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
 
+    if (rowTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+        d->openChangeRegion(rowTag);
+
     // store spans until entire table have been loaded
     int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
     int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
@@ -1595,6 +1619,9 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         cursor = cell.firstCursorPosition();
         loadBody(rowTag, cursor);
     }
+
+    if (rowTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+        d->closeChangeRegion(rowTag);
 }
 
 void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)

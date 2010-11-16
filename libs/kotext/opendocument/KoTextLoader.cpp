@@ -1455,7 +1455,13 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                 if (tblLocalName == "table-column") {
                     loadTableColumn(tblTag, tbl, columns);
                 } else if (tblLocalName == "table-row") {
+                    if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                        d->openChangeRegion(tblTag);
+
                     loadTableRow(tblTag, tbl, spanStore, cursor, rows);
+
+                    if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                        d->closeChangeRegion(tblTag);
                 }
             }
         }
@@ -1569,6 +1575,11 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
         if (cellStyle)
             cellStyle->applyStyle(cellFormat);
+
+        if (d->changeTracker && d->changeStack.count()) {
+            cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
+        }
+
         cell.setFormat(cellFormat);
 
         // handle inline Rdf

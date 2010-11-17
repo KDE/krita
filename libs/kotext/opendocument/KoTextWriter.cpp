@@ -92,7 +92,9 @@ public:
         List,
         NumberedParagraph,
         Table,
-        TableRow
+        TableRow,
+        TableColumn,
+        TableCell
     };
 
     void saveChange(QTextCharFormat format);
@@ -112,6 +114,7 @@ public:
     int checkForListItemChange(const QTextBlock &block);
     int checkForListChange(const QTextBlock &block);
     int checkForTableRowChange(int position);
+    int checkForTableColumnChange(int position);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -177,6 +180,13 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
             break;
         case KoTextWriter::Private::TableRow:
             changeId = checkForTableRowChange(position);
+            break;
+        case KoTextWriter::Private::TableColumn:
+            changeId = checkForTableColumnChange(position);
+            break;
+        case KoTextWriter::Private::TableCell:
+            cursor.setPosition(position);
+            changeId = cursor.currentTable()->cellAt(position).format().property(KoCharacterStyle::ChangeTrackerId).toInt();
             break;
         case KoTextWriter::Private::Table:
             cursor.setPosition(position);
@@ -678,6 +688,49 @@ int KoTextWriter::Private::checkForTableRowChange(int position)
     return changeId;
 }
 
+//Check if the whole of table column is a part of a single change
+//If so return the changeId else return 0
+int KoTextWriter::Private::checkForTableColumnChange(int position)
+{
+    int changeId = 0;
+    QTextCursor cursor(document);
+    cursor.setPosition(position);
+    QTextTable *table = cursor.currentTable();
+
+    if (table) {
+        int column = table->cellAt(position).column();
+        for (int i=0; i<table->rows(); i++) {
+            int currentChangeId = table->cellAt(i,column).format().property(KoCharacterStyle::ChangeTrackerId).toInt();
+            if (!currentChangeId) {
+                // Encountered a cell that is not a change
+                // So break out of loop and return 0
+                changeId = 0;
+                break;
+            } else {
+                // This cell is a changed cell. Continue further.
+                if (changeId == 0) {
+                    //First cell and it is a changed-cell
+                    //Store it and continue 
+                    changeId = currentChangeId;
+                    continue;
+                } else {
+                    if (currentChangeId == changeId) {
+                        //Change found and it is the same as the first change.
+                        //continue looking
+                        continue; 
+                    } else {
+                        //A Change found but not same as the first change
+                        //Break-out of loop and return 0
+                        changeId = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return changeId;
+}
+
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     int changeId = openChangeRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
@@ -689,8 +742,18 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
     
     for (int c = 0 ; c < table->columns() ; c++) {
+        int changeId = openChangeRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn);
         writer->startElement("table:table-column");
+
+        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
+        }
+
         writer->endElement(); // table:table-column
+
+        if (changeId)
+            closeChangeRegion();
     }
     for (int r = 0 ; r < table->rows() ; r++) {
         int changeId = openChangeRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow);
@@ -703,10 +766,16 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
+            int changeId = openChangeRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell);
             if ((cell.row() == r) && (cell.column() == c)) {
                 writer->startElement("table:table-cell");
                 writer->addAttribute("rowSpan", cell.rowSpan());
                 writer->addAttribute("columnSpan", cell.columnSpan());
+        
+                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                    writer->addAttribute("delta:insertion-type", "insert-with-content");
+                }
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
@@ -717,8 +786,14 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
                 writer->startElement("table:covered-table-cell");
+                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+                    writer->addAttribute("delta:insertion-type", "insert-with-content");
+                }
             }
             writer->endElement(); // table:table-cell
+            if (changeId)
+                closeChangeRegion();
         }
         writer->endElement(); // table:table-row
         if (changeId)

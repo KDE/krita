@@ -53,6 +53,7 @@
 #include <KoTextBlockPaintStrategyBase.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoShapeContainerModel.h>
 
 #include <KDebug>
 #include <QTextList>
@@ -937,6 +938,14 @@ void Layout::cleanupShapes()
         int i = shapeNumber + 1;
         while (i < shapes.count())
             cleanupShape(shapes[i++]);
+        
+        if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize) {
+            // if Shrink-to-fit is enabled we need to let our model know when layouting is finally done
+            // so the ShrinkToFitShapeContainer is able to do it's job.
+            if (KoShapeContainer *c = shapes.first()->parent())
+                if (KoShapeContainerModel *m = c->model())
+                    m->containerChanged(c, KoShape::SizeChanged);
+        }
     }
 }
 

@@ -1481,9 +1481,6 @@ void KoMainWindow::slotRemoveView()
         kWarning() << "view not found in d->rootViews!";
     }
 
-    // Prevent the view's destroyed() signal from triggering GUI rebuilding (too early)
-    d->manager->setActivePart(0, 0);
-
     d->rootViews.removeAll(view);
     delete view;
     view = 0;

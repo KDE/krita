@@ -91,7 +91,8 @@ public:
         ListItem,
         List,
         NumberedParagraph,
-        Table
+        Table,
+        TableRow
     };
 
     void saveChange(QTextCharFormat format);
@@ -110,6 +111,7 @@ public:
     int checkForBlockChange(const QTextBlock &block);
     int checkForListItemChange(const QTextBlock &block);
     int checkForListChange(const QTextBlock &block);
+    int checkForTableRowChange(int position);
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -172,6 +174,9 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
             break;
         case KoTextWriter::Private::List:
             changeId = checkForListChange(block);
+            break;
+        case KoTextWriter::Private::TableRow:
+            changeId = checkForTableRowChange(position);
             break;
         case KoTextWriter::Private::Table:
             cursor.setPosition(position);
@@ -630,6 +635,49 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
     return listChangeId;
 }
 
+//Check if the whole of table row is a part of a singke change
+//If so return the changeId else return 0
+int KoTextWriter::Private::checkForTableRowChange(int position)
+{
+    int changeId = 0;
+    QTextCursor cursor(document);
+    cursor.setPosition(position);
+    QTextTable *table = cursor.currentTable();
+
+    if (table) {
+        int row = table->cellAt(position).row();
+        for (int i=0; i<table->columns(); i++) {
+            int currentChangeId = table->cellAt(row,i).format().property(KoCharacterStyle::ChangeTrackerId).toInt();
+            if (!currentChangeId) {
+                // Encountered a cell that is not a change
+                // So break out of loop and return 0
+                changeId = 0;
+                break;
+            } else {
+                // This cell is a changed cell. Continue further.
+                if (changeId == 0) {
+                    //First cell and it is a changed-cell
+                    //Store it and continue 
+                    changeId = currentChangeId;
+                    continue;
+                } else {
+                    if (currentChangeId == changeId) {
+                        //Change found and it is the same as the first change.
+                        //continue looking
+                        continue; 
+                    } else {
+                        //A Change found but not same as the first change
+                        //Break-out of loop and return 0
+                        changeId = 0;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return changeId;
+}
+
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     int changeId = openChangeRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
@@ -645,7 +693,14 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         writer->endElement(); // table:table-column
     }
     for (int r = 0 ; r < table->rows() ; r++) {
+        int changeId = openChangeRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow);
         writer->startElement("table:table-row");
+
+        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
+        }
+
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
             if ((cell.row() == r) && (cell.column() == c)) {
@@ -666,6 +721,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             writer->endElement(); // table:table-cell
         }
         writer->endElement(); // table:table-row
+        if (changeId)
+            closeChangeRegion();
     }
     writer->endElement(); // table:table
 

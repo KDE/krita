@@ -940,8 +940,10 @@ void Layout::cleanupShapes()
             cleanupShape(shapes[i++]);
         
         if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize) {
-            // if Shrink-to-fit is enabled we need to let our model know when layouting is finally done
-            // so the ShrinkToFitShapeContainer is able to do it's job.
+            // If Shrink-to-fit is enabled we need to let our model know when layouting is finally done
+            // so the ShrinkToFitShapeContainer is able to do it's job. This special-casing is needed
+            // cause if shrink-to-fit is enable we have to emit KoShape::SizeChanged even if the shape's
+            // size didn't change but only the content's size did to be able to recalc.
             if (KoShapeContainer *c = shapes.first()->parent())
                 if (KoShapeContainerModel *m = c->model())
                     m->containerChanged(c, KoShape::SizeChanged);

@@ -146,7 +146,7 @@ qreal Layout::width()
     ptWidth -= m_borderInsets.left + m_borderInsets.right + m_shapeBorder.right;
     if (m_dropCapsNChars == 0)
         ptWidth -= m_dropCapsAffectedLineWidthAdjust;
-    return ptWidth / m_scaleFactor;
+    return ptWidth;
 }
 
 qreal Layout::x()
@@ -166,7 +166,7 @@ qreal Layout::x()
 
 qreal Layout::y()
 {
-    return m_y * m_parent->fitToSizeFactor();
+    return m_y;
 }
 
 qreal Layout::resolveTextIndent()
@@ -934,9 +934,6 @@ void Layout::cleanupShapes()
     QList<KoShape*> shapes = m_parent->shapes();
 
     if (!shapes.isEmpty()) {
-        if (m_parent->resizeMethod() == KoTextDocument::ShrinkToFitResize)
-            setShrinkToFit(shapes.first());
-
         int i = shapeNumber + 1;
         while (i < shapes.count())
             cleanupShape(shapes[i++]);
@@ -991,7 +988,6 @@ void Layout::resetPrivate()
     m_currentMasterPage.clear();
     m_dropCapsPositionAdjust = 0;
     m_dropCapsAffectedLineWidthAdjust = 0;
-    m_parent->setFitToSizeFactor(1.0);
 
     shapeNumber = 0;
     int lastPos = -1;
@@ -1075,17 +1071,6 @@ void Layout::resetPrivate()
 
     if (! nextParag())
         shapeNumber++;
-}
-
-void Layout::setShrinkToFit(KoShape *shape)
-{
-    //Q_ASSERT(!static_cast<KoTextShapeData*>(shape->userData())->isDirty());
-    QSizeF shapeSize = shape->size();
-    QSizeF documentSize = m_parent->documentSize();
-    qreal scaleWidth = (documentSize.width() > 0.0) ? shapeSize.width() / documentSize.width() : 1.0;
-    qreal scaleHeight = (documentSize.height() > 0.0) ? shapeSize.height() / documentSize.height() : 1.0;
-    m_scaleFactor = qMin(scaleWidth, scaleHeight); // scale proportional down
-    m_parent->setFitToSizeFactor(m_scaleFactor);
 }
 
 void Layout::updateBorders()

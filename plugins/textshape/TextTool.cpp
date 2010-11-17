@@ -573,8 +573,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (m_textShapeData == 0)
         return;
 
-    m_textShape->textViewConverter()->setViewConverter(&converter);
-
     int selectStart = m_textEditor.data()->position();
     int selectEnd = m_textEditor.data()->anchor();
     if (selectEnd < selectStart)
@@ -592,7 +590,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                     || (data->position() <= selectStart && data->endPosition() >= selectEnd)))
                 continue;
             if (painter.hasClipping()) {
-                QRect rect = m_textShape->textViewConverter()->documentToView(ts->boundingRect()).toRect();
+                QRect rect = converter.documentToView(ts->boundingRect()).toRect();
                 if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
                     continue;
             }
@@ -603,7 +601,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         return;
 
     qreal zoomX, zoomY;
-    m_textShape->textViewConverter()->zoom(&zoomX, &zoomY);
+    converter.zoom(&zoomX, &zoomY);
 
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
@@ -618,7 +616,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             continue;
 
         painter.save();
-        QTransform shapeMatrix = ts->absoluteTransformation(m_textShape->textViewConverter());
+        QTransform shapeMatrix = ts->absoluteTransformation(&converter);
         shapeMatrix.scale(zoomX, zoomY);
         painter.setTransform(shapeMatrix * painter.transform());
         painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
@@ -1204,16 +1202,14 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     if (textEditor == 0)
         return QVariant();
 
-    m_textShape->textViewConverter()->setViewConverter(&converter);
-    
     switch (query) {
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
         QRectF rect = caretRect(textEditor->position());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
-        QTransform shapeMatrix = m_textShape->absoluteTransformation(m_textShape->textViewConverter());
+        QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
-        m_textShape->textViewConverter()->zoom(&zoomX, &zoomY);
+        converter.zoom(&zoomX, &zoomY);
         shapeMatrix.scale(zoomX, zoomY);
         rect = shapeMatrix.mapRect(rect);
 
@@ -1336,6 +1332,7 @@ void TextTool::updateActions()
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
+    
     m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
 
@@ -2157,11 +2154,7 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::setShrinkToFit(bool enabled)
 {
-    if (!m_textShapeData)
-        return;
-    Q_ASSERT(m_textShapeData->document());
-    KoTextDocument document(m_textShapeData->document());
-    document.setResizeMethod(enabled ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
+    m_textShape->setShrinkToFit(enabled);
 }
 
 void TextTool::shapeAddedToDoc(KoShape *shape)

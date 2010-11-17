@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "TextShape.h"
+#include "ShrinkToFitShapeContainer.h"
 #include <KoTextSharedLoadingData.h>
 
 #define synchronized(T) QMutex T; \
@@ -80,103 +81,6 @@ struct Finalizer {
 
 #include <kdebug.h>
 
-TextViewConverter::TextViewConverter(TextShape *textshape)
-        : KoViewConverter()
-        , m_textshape(textshape)
-        , m_converter(0)
-{
-}
-
-TextViewConverter::~TextViewConverter()
-{
-}
-
-bool TextViewConverter::isShrinkToFitEnabled() const
-{
-    return KoTextDocument(m_textshape->textShapeData()->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize;
-}
-
-qreal TextViewConverter::fitToSizeFactor() const
-{
-    return static_cast<KoTextDocumentLayout*>(m_textshape->textShapeData()->document()->documentLayout())->fitToSizeFactor();
-}
-
-QPointF TextViewConverter::documentToView(const QPointF &documentPoint) const
-{
-    QPointF p = m_converter->documentToView(documentPoint);
-    return p;
-}
-
-QPointF TextViewConverter::viewToDocument(const QPointF &viewPoint) const
-{
-    QPointF p = m_converter->viewToDocument(viewPoint);
-    return p;
-}
-
-QRectF TextViewConverter::documentToView(const QRectF &documentRect) const
-{
-    QRectF r = m_converter->documentToView(documentRect);
-    return r;
-}
-
-QRectF TextViewConverter::viewToDocument(const QRectF &viewRect) const
-{
-    QRectF r = m_converter->viewToDocument(viewRect);
-    return r;
-}
-
-QSizeF TextViewConverter::documentToView(const QSizeF& documentSize) const
-{
-    QSizeF s = m_converter->documentToView(documentSize);
-    return s;
-}
-
-QSizeF TextViewConverter::viewToDocument(const QSizeF& viewSize) const
-{
-    QSizeF s = m_converter->viewToDocument(viewSize);
-    return s;
-}
-
-qreal TextViewConverter::documentToViewX(qreal documentX) const
-{
-    //return m_converter->documentToViewX(documentX) * fitToSizeFactor();
-    return m_converter->documentToViewX(documentX);
-}
-
-qreal TextViewConverter::documentToViewY(qreal documentY) const
-{
-    //return m_converter->documentToViewY(documentY) * fitToSizeFactor();
-    return m_converter->documentToViewY(documentY);
-}
-
-qreal TextViewConverter::viewToDocumentX(qreal viewX) const
-{
-    //return m_converter->viewToDocumentX(viewX) * fitToSizeFactor();
-    return m_converter->viewToDocumentX(viewX);
-}
-
-qreal TextViewConverter::viewToDocumentY(qreal viewY) const
-{
-    //return m_converter->viewToDocumentY(viewY) * fitToSizeFactor();
-    return m_converter->viewToDocumentY(viewY);
-}
-
-void TextViewConverter::zoom(qreal *zoomX, qreal *zoomY) const
-{
-    m_converter->zoom(zoomX, zoomY);
-    if (isShrinkToFitEnabled()) {
-        if (zoomX)
-            *zoomX *= fitToSizeFactor();
-        if (zoomY)
-            *zoomY *= fitToSizeFactor();
-    }
-}
-
-void TextViewConverter::setZoom(qreal zoom)
-{
-    const_cast<KoViewConverter*>(m_converter)->setZoom(zoom);
-}
-
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
@@ -184,7 +88,6 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , m_demoText(false)
         , m_pageProvider(0)
         , m_imageCollection(0)
-        , m_textViewConverter(new TextViewConverter(this))
 {
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
@@ -203,7 +106,6 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 TextShape::~TextShape()
 {
     delete m_footnotes;
-    delete m_textViewConverter;
 }
 
 void TextShape::setDemoText(bool on)
@@ -228,9 +130,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(lay);
 
-    m_textViewConverter->setViewConverter(&converter);
-
-    applyConversion(painter, *m_textViewConverter);
+    applyConversion(painter, converter);
 
     if (background()) {
         QPainterPath p;
@@ -272,15 +172,10 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     QAbstractTextDocumentLayout::PaintContext pc;
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;
-    context.viewConverter = m_textViewConverter;
+    context.viewConverter = &converter;
     context.imageCollection = m_imageCollection;
 
-    QRectF cliprect = outlineRect();
-    cliprect.setX(cliprect.x() / lay->fitToSizeFactor());
-    cliprect.setY(cliprect.y() / lay->fitToSizeFactor());
-    cliprect.setWidth(cliprect.width() / lay->fitToSizeFactor());
-    cliprect.setHeight(cliprect.height() / lay->fitToSizeFactor());
-    painter.setClipRect(cliprect, Qt::IntersectClip);
+    painter.setClipRect(outlineRect(), Qt::IntersectClip);
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
@@ -541,9 +436,13 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
     return true;
 }
 
+//tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    return m_textShapeData->loadOdf(element, context, 0, this);
+    bool ok = m_textShapeData->loadOdf(element, context, 0, this);
+    if (ok)
+        ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
+    return ok;
 }
 
 QTextDocument *TextShape::footnoteDocument()
@@ -607,3 +506,22 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
         }
     }
 }
+
+//TODO turn this into a QUndoCommand to be ablt to undo/redo
+void TextShape::setShrinkToFit(bool enabled)
+{
+    KoTextDocument document(m_textShapeData->document());
+    document.setResizeMethod(enabled ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
+
+    if (enabled) {
+        if (!dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
+            ShrinkToFitShapeContainer::wrapShape(this);
+        }
+    } else {
+        if (ShrinkToFitShapeContainer *c = dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
+            c->unwrapShape(this);
+            delete c;
+        }
+    }
+}
+

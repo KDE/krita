@@ -262,7 +262,7 @@ void InsertDeleteChangesCommand::insertDeleteChanges()
     qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
 
     foreach (KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid()) {
+        if (element->isValid() && element->getDeleteChangeMarker()) {
             QTextCursor caret(element->getDeleteChangeMarker()->document());
             caret.setPosition(element->getDeleteChangeMarker()->position() + numAddedChars +  1);
             QTextCharFormat f = caret.charFormat();

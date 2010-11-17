@@ -57,8 +57,6 @@ KComponentData* KisFactory2::s_instance = 0;
 KisFactory2::KisFactory2(QObject* parent)
         : KPluginFactory(*aboutData(), parent)
 {
-    s_aboutData = newKritaAboutData();
-
     (void)componentData();
 }
 
@@ -92,6 +90,9 @@ QObject* KisFactory2::create( const char* iface, QWidget* parentWidget, QObject 
 
 KAboutData* KisFactory2::aboutData()
 {
+    if (!s_aboutData) {
+        s_aboutData = newKritaAboutData();
+    }
     return s_aboutData;
 }
 

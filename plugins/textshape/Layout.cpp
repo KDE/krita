@@ -1281,6 +1281,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
 
             painter->save();
             QBrush bg = paintStrategy->background(block.blockFormat().background());
+bg=QBrush(QColor("#ff0000"));
             if (bg != Qt::NoBrush) {
                     painter->fillRect(layout->boundingRect(), bg);
                     QRectF br = layout->boundingRect();

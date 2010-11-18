@@ -105,7 +105,7 @@ public:
 private:
     ShrinkToFitShapeContainer *q;
     ShrinkToFitShapeContainerPrivate *d;
-    qreal m_width, m_height;
+    qreal m_scaleX, m_scaleY;
 };
 
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
@@ -117,6 +117,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoReso
     setPosition(childShape->position());
     setSize(childShape->size());
     setZIndex(childShape->zIndex() /* +1 */ );
+    rotate(childShape->rotation());
     //setTransformation(childShape->transformation());
 
     if (childShape->parent()) {
@@ -194,42 +195,38 @@ void ShrinkToFitShapeContainer::unwrapShape(KoShape *shape)
     
     shape->setPosition(position());
     shape->setSize(size());
+    shape->rotate(rotation());
     shape->setSelectable(true);
-    //shape->setTransformation(transformation());
 }
 
 ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d)
     : q(q)
     , d(d)
-    , m_width(-1.0)
-    , m_height(-1.0)
+    , m_scaleX(1.0)
+    , m_scaleY(1.0)
 {
 }
 
 void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
     Q_ASSERT(container == q);
-
     if (type == KoShape::SizeChanged) {
-        if (m_width >= 0.0 && m_height >= 0.0) {
-            QTransform m;
-            m.scale(m_width, m_height);
-            d->childShape->applyTransformation(m.inverted()); // revert previous zoom
-        }
-
         KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(d->childShape->userData());
         Q_ASSERT(data);
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
         Q_ASSERT(lay);
         QSizeF shapeSize = q->size();
         QSizeF documentSize = lay->documentSize();
-        m_width = (documentSize.width() > 0.0) ? qMin(1.0, shapeSize.width() / documentSize.width()) : 1.0;
-        m_height = (documentSize.height() > 0.0) ? qMin(1.0, shapeSize.height() / documentSize.height()) : 1.0;
-        //scaleWidth = scaleHeight = qMin(scaleWidth, scaleHeight); // scale proportional
+        //if (documentSize.isEmpty()) return;
+        
+        m_scaleX = (documentSize.width() > 0.0) ? qMin(1.0, shapeSize.width() / documentSize.width()) : 1.0;
+        m_scaleY = (documentSize.height() > 0.0) ? qMin(1.0, shapeSize.height() / documentSize.height()) : 1.0;
+        
+        d->childShape->setSize(QSizeF(shapeSize.width() / m_scaleX, shapeSize.height() / m_scaleY));
 
         QTransform m;
-        m.scale(m_width, m_height);
-        d->childShape->applyTransformation(m); // apply new zoom
+        m.scale(m_scaleX, m_scaleY);
+        d->childShape->setTransformation(m);
     }
 }
 

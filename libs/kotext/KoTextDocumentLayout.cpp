@@ -356,7 +356,7 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
                 return -1;
             }
             if (accuracy == Qt::ExactHit && // left or right of line
-                    (point.x() < line.x() || point.x() > line.x() + line.naturalTextWidth())) {
+                    (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
                 return -1;
             }
             if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {

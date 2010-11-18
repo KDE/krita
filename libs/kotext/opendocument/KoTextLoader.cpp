@@ -433,7 +433,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
-    if (paragraphStyle) {
+    if (paragraphStyle && (cursor.position() == cursor.block().position())) {
         QTextBlock block = cursor.block();
         // Apply list style when loading a list but we don't have a list style
         paragraphStyle->applyStyle(block, d->currentList && !d->currentListStyle);

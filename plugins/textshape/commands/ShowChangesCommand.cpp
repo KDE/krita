@@ -172,7 +172,7 @@ void ShowChangesCommand::removeDeletedChanges()
     qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
 
     foreach(KoChangeTrackerElement *element, elementVector) {
-        if (element->isValid()) {
+        if (element->isValid() && element->getDeleteChangeMarker()) {
             QTextCursor caret(element->getDeleteChangeMarker()->document());
             QTextCharFormat f;
             int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;

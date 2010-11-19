@@ -74,8 +74,9 @@ public:
      * @param cursor the cursor which indicated the document and the position in that document
      *      where the inline object will be inserted.
      * @param object the inline object to insert.
+     * @param charFormat specifies char format which will be used to insert inline object
      */
-    void insertInlineObject(QTextCursor &cursor, KoInlineObject *object);
+    void insertInlineObject(QTextCursor &cursor, KoInlineObject *object, QTextCharFormat charFormat = QTextCharFormat());
 
     /**
      * Remove an inline object from this manager (as well as the document).

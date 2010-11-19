@@ -100,6 +100,12 @@ public:
         return coincide || !(verticalSide && horizontalSide);
     }
 
+    bool isNull(qreal precision) {
+        qreal dx = m_p1.x() - m_p0.x();
+        qreal dy = m_p1.y() - m_p0.y();
+        return dx * dx + dy * dy <= precision * precision;
+    }
+
 private:
     void init(KisVector2D p0, KisVector2D p1) {
         m_lineEquation =
@@ -132,7 +138,6 @@ struct KisPerspectiveGridManager::SubdivisionLinesInfo {
 
 KisPerspectiveGridManager::KisPerspectiveGridManager(KisView2 * parent)
         : KisCanvasDecoration("perspectiveGrid", i18n("Perspective grid"), parent)
-        , m_toggleEdition(false)
         , m_view(parent)
 {
 }
@@ -178,13 +183,11 @@ void KisPerspectiveGridManager::clearPerspectiveGrid()
 
 void KisPerspectiveGridManager::startEdition()
 {
-    m_toggleEdition = true;
     m_toggleGrid->setEnabled(false);
 }
 
 void KisPerspectiveGridManager::stopEdition()
 {
-    m_toggleEdition = false;
     if (m_view->resourceProvider()->currentImage()->perspectiveGrid()->hasSubGrids()) {
         m_toggleGrid->setEnabled(true);
         m_toggleGrid->setChecked(true);
@@ -226,16 +229,15 @@ void KisPerspectiveGridManager::drawSubdivisions(QPainter& gc, const Subdivision
         QPointF start = info.startPoint + i*info.shift;
         QPointF end =
             LineWrapper(start, info.intersection).intersects(*info.clipLine);
-
         gc.drawLine(start, end);
     }
 }
 
+#define SMALLEST_LINE 1e-10
+
 void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-
-    if (m_toggleEdition) return;
 
     KisImageWSP image = m_view->resourceProvider()->currentImage();
     Q_ASSERT(image);
@@ -264,23 +266,34 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updat
         LineWrapper lineBottom(*grid->bottomRight(), *grid->bottomLeft());
         LineWrapper lineLeft(*grid->bottomLeft(), *grid->topLeft());
 
-        QPointF horizIntersection = lineTop.intersects(lineBottom);
-        QPointF vertIntersection = lineLeft.intersects(lineRight);
+        QPointF horizIntersection;
+        QPointF vertIntersection;
 
-
+        bool linesNotNull = true;
         bool polygonIsConvex = true;
-        if(lineTop.contains(horizIntersection) ||
-           lineBottom.contains(horizIntersection) ||
-           lineLeft.contains(vertIntersection) ||
-           lineRight.contains(vertIntersection)) {
 
-            /**
-             * The grid is not convex, let's show the error to the user
-             */
-            polygonIsConvex = false;
+        if(lineTop.isNull(SMALLEST_LINE) ||
+           lineBottom.isNull(SMALLEST_LINE) ||
+           lineLeft.isNull(SMALLEST_LINE) ||
+           lineRight.isNull(SMALLEST_LINE)) {
+
+            linesNotNull = false;
         }
 
-        if(polygonIsConvex) {
+        if(linesNotNull) {
+            horizIntersection = lineTop.intersects(lineBottom);
+            vertIntersection = lineLeft.intersects(lineRight);
+
+            if(lineTop.contains(horizIntersection) ||
+               lineBottom.contains(horizIntersection) ||
+               lineLeft.contains(vertIntersection) ||
+               lineRight.contains(vertIntersection)) {
+
+                polygonIsConvex = false;
+            }
+        }
+
+        if(polygonIsConvex && linesNotNull) {
             gc.setPen(subdivisionPen);
 
             SubdivisionLinesInfo info;
@@ -293,7 +306,7 @@ void KisPerspectiveGridManager::drawDecoration(QPainter& gc, const QRectF& updat
             drawSubdivisions(gc, info);
         }
 
-        gc.setPen(polygonIsConvex ? mainPen : errorPen);
+        gc.setPen(polygonIsConvex && linesNotNull ? mainPen : errorPen);
         gc.drawLine(*grid->topLeft(), *grid->topRight());
         gc.drawLine(*grid->topRight(), *grid->bottomRight());
         gc.drawLine(*grid->bottomRight(), *grid->bottomLeft());

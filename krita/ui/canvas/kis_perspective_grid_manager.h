@@ -70,7 +70,6 @@ private:
     void drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info);
 
 private:
-    bool m_toggleEdition;
     KisView2* m_view;
     KToggleAction* m_toggleGrid;
     KAction* m_gridClear;

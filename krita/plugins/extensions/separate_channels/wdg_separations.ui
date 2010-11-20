@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="2">
-    <widget class="Q3ButtonGroup" name="grpSource">
+    <widget class="QGroupBox" name="grpSource">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
        <horstretch>0</horstretch>
@@ -64,7 +64,7 @@
     </widget>
    </item>
    <item row="1" column="2">
-    <widget class="Q3ButtonGroup" name="grpOutput">
+    <widget class="QGroupBox" name="grpOutput">
      <property name="title">
       <string>Output</string>
      </property>
@@ -90,7 +90,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="3">
-    <widget class="Q3ButtonGroup" name="grpAlpha">
+    <widget class="QGroupBox" name="grpAlpha">
      <property name="title">
       <string>Alpha Options</string>
      </property>
@@ -155,20 +155,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>radioCurrentLayer</tabstop>
   <tabstop>radioLayers</tabstop>

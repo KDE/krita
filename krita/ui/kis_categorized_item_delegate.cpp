@@ -18,17 +18,26 @@
 
 #include "kis_categorized_item_delegate.h"
 
+#include <kdeversion.h>
 #include <kcategorydrawer.h>
 #include <KCategorizedSortFilterProxyModel>
 #include <QPainter>
 #include <QApplication>
 
-class KisCategoryDrawer : public KCategoryDrawerV3
+#if KDE_IS_VERSION(4,5,0)
+    class KisCategoryDrawer : public KCategoryDrawerV3
+#else
+    class KisCategoryDrawer : public KCategoryDrawer
+#endif
 {
 public:
-
+#if KDE_IS_VERSION(4,5,0)
     KisCategoryDrawer(KCategorizedView *view = 0)
         : KCategoryDrawerV3(view)
+#else
+        KisCategoryDrawer()
+            : KCategoryDrawer()
+#endif
     {
     }
 

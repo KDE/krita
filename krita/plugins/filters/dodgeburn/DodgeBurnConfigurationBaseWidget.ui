@@ -12,7 +12,7 @@
   </property>
   <layout class="QVBoxLayout">
    <item>
-    <widget class="Q3ButtonGroup" name="buttonGroup1">
+    <widget class="QGroupBox" name="buttonGroup1">
      <property name="title">
       <string>Mode</string>
      </property>
@@ -93,20 +93,6 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

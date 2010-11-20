@@ -745,13 +745,10 @@ void KisView2::loadPlugins()
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
         dbgUI << "Load plugin " << service->name();
-        int errCode = 0;
-        QString error = 0;
-
+        QString error;
 
         KParts::Plugin* plugin =
                 dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
-        //KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
         if (plugin) {
             insertChildClient(plugin);
         } else {

@@ -549,12 +549,15 @@ void KisView2::slotLoadingFinished()
      * Cold-start of image-size signals
      */
     slotImageSizeChanged();
-    if (m_d->statusBar)
+    if (m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
-    if (m_d->resourceProvider)
+    }
+    if (m_d->resourceProvider) {
         m_d->resourceProvider->slotImageSizeChanged();
-    if (m_d->nodeManager)
+    }
+    if (m_d->nodeManager) {
         m_d->nodeManager->nodesUpdated();
+    }
 
     connectCurrentImage();
 

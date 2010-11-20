@@ -21,6 +21,8 @@
 #include <iostream>
 
 #include <QMimeData>
+#include <QDataStream>
+#include <QBuffer>
 
 #include <klocale.h>
 
@@ -391,13 +393,17 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList & indexes) const
     //dbgUI <<"KisNodeModel::mimeData";
     QMimeData* data = new QMimeData;
     QByteArray encoded;
-    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    QBuffer buf(&encoded);
+    buf.open(QIODevice::WriteOnly);
+    QDataStream stream(&buf);
 
     // encode the data
     QModelIndexList::ConstIterator it = indexes.begin();
     for (; it != indexes.end(); ++it) {
         stream << qVariantFromValue(qulonglong(it->internalPointer()));
     }
+
+    buf.close();
 
     data->setData("application/x-kritalayermodeldatalist", encoded);
     return data;
@@ -414,7 +420,7 @@ bool KisNodeModel::dropMimeData(const QMimeData * data, Qt::DropAction action, i
         return false;
     }
     QByteArray encoded = data->data("application/x-kritalayermodeldatalist");
-    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    QDataStream stream(encoded);
     QList<KisNode*> nodes;
     while (! stream.atEnd()) {
         QVariant v;

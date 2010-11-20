@@ -188,7 +188,7 @@ KisImageBuilder_Result PSDLoader::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, true, qApp->activeWindow())) {
+    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, qApp->activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 

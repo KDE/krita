@@ -131,7 +131,13 @@ QSize KoDockWidgetTitleBar::sizeHint() const
 
         height = qMax(height, fontHeight);
     }
-    return QSize(buttonWidth /*+ height*/ + 4*mw + 2*fw, height);
+
+    /*
+     *Calculate the width of title and add to the total width of the docker window when collapsed.
+     */
+    int titleWidth = q->fontMetrics().width(q->windowTitle());
+
+    return QSize(buttonWidth /*+ height*/ + 4*mw + 2*fw + titleWidth, height);
 }
 
 void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)

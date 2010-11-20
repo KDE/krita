@@ -35,9 +35,6 @@ namespace KoProperty
 {
 
 //! @internal
-static Property Set_nonConstNull;
-
-//! @internal
 class SetPrivate
 {
 public:
@@ -61,9 +58,9 @@ public:
         Property *p = property(name);
         if (p)
             return *p;
-        Set_nonConstNull.setName(0); //to ensure returned property is null
+        nonConstNull.setName(0); //to ensure returned property is null
         kWarning() << "PROPERTY" << name << "NOT FOUND";
-        return Set_nonConstNull;
+        return nonConstNull;
     }
 
     void addProperty(Property *property, QByteArray group/*, bool updateSortingKey*/)
@@ -207,6 +204,8 @@ public:
     //! Used in Set::informAboutClearing(Property*) to declare that the property wants
     //! to be informed that the set has been cleared (all properties are deleted)
     bool* informAboutClearing;
+
+    mutable Property nonConstNull;
 
 private:
     //! a list of properties, preserving their order, owner of Property objects

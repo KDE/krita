@@ -30,6 +30,7 @@ find_path(OOOSDK_DIR
 	      /usr/lib/openoffice/basis3.1
 	      /usr/lib/openoffice/basis3.0
 	      /usr/lib64/openoffice.org/basis3.2
+	      /usr/lib64/openoffice.org/basis3.3
 )
 if (OOOSDK_DIR)
 	find_path(CPPUHELPER_INCLUDE_DIR

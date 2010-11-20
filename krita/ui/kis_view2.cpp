@@ -556,13 +556,12 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-    image()->refreshGraph();
-
+    /**
+     * Cold-start of image-size signals
+     */
     slotImageSizeChanged();
-
-    if (m_d->statusBar) {
+    if (m_d->statusBar)
         m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
-    }
     if (m_d->resourceProvider)
         m_d->resourceProvider->slotImageSizeChanged();
     if (m_d->nodeManager)

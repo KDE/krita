@@ -97,25 +97,30 @@ void TestCellRegion::testListOfRegions()
 
 void TestCellRegion::testToStringMultipleTables()
 {
+    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2.toString(), QString( "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testFromStringMultipleTables()
 {
+    //QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testTableNameChangeMultipleTables()
 {
     m_source.rename( "Table1", "AGoodCookCanCookGoodCookies" );
+    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
     m_source.rename( "Table2", "DoubleBubbleGumBubblesDouble" );
+    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2.toString(), QString( "$AGoodCookCanCookGoodCookies.$B$3:$K$13;$DoubleBubbleGumBubblesDouble.$A$2:$E$7" ) );
 }
 
 void TestCellRegion::testToStringWithSpecialCharactersMultipleTables()
 {
     m_source.rename( "Table1", "table-one" );
+    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2.toString(), QString( "$'table-one'.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 

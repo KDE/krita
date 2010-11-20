@@ -22,10 +22,8 @@
 
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
-#include <q3button.h>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -63,17 +61,28 @@ DlgSeparate::~DlgSeparate()
 }
 enumSepAlphaOptions DlgSeparate::getAlphaOptions()
 {
-    return (enumSepAlphaOptions)m_page->grpAlpha->selectedId();
+    if (m_page->radioCopyAlpha) return COPY_ALPHA_TO_SEPARATIONS;
+    if (m_page->radioDiscardAlpha) return DISCARD_ALPHA;
+    if (m_page->radioSeparateAlpha) return CREATE_ALPHA_SEPARATION;
+
+    return COPY_ALPHA_TO_SEPARATIONS;
 }
 
 enumSepSource DlgSeparate::getSource()
 {
-    return (enumSepSource)m_page->grpSource->selectedId();
+    if (m_page->radioCopyAlpha) return CURRENT_LAYER;
+    if (m_page->radioAllLayers) return ALL_LAYERS;
+    //if (XXX) return VISIBLE_LAYERS;
+
+    return CURRENT_LAYER;
 }
 
 enumSepOutput DlgSeparate::getOutput()
 {
-    return (enumSepOutput)m_page->grpOutput->selectedId();
+    if (m_page->radioLayers) return TO_LAYERS;
+    if (m_page->radioImages) return TO_IMAGES;
+
+    return TO_LAYERS;
 }
 
 

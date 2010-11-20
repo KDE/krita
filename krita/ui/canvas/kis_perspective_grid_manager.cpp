@@ -94,8 +94,8 @@ public:
 
     bool contains(const QPointF &pt) const {
         bool coincide = pt == m_p0 || pt == m_p1;
-        bool verticalSide = pt.x() > m_p0.x() == pt.x() > m_p1.x();
-        bool horizontalSide = pt.y() > m_p0.y() == pt.y() > m_p1.y();
+        bool verticalSide = (pt.x() > m_p0.x()) == (pt.x() > m_p1.x());
+        bool horizontalSide = (pt.y() > m_p0.y()) ==  (pt.y() > m_p1.y());
 
         return coincide || !(verticalSide && horizontalSide);
     }

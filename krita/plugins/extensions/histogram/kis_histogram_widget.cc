@@ -23,7 +23,6 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QComboBox>
-#include <q3buttongroup.h>
 #include <QPushButton>
 #include <qscrollbar.h>
 

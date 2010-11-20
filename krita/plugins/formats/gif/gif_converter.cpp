@@ -274,7 +274,7 @@ KisImageBuilder_Result GifConverter::buildImage(const KUrl& uri)
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (!KIO::NetAccess::exists(uri, false, QApplication::activeWindow())) {
+    if (!KIO::NetAccess::exists(uri, KIO::NetAccess::SourceSide, QApplication::activeWindow())) {
         return KisImageBuilder_RESULT_NOT_EXIST;
     }
 

@@ -122,10 +122,10 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
 {
     KoOdfLoadingContext &context = shapeContext.odfLoadingContext();
 
+    // only add styles of office:styles to the style manager
     addCharacterStyles(shapeContext, context.stylesReader().customStyles("text").values(), ContentDotXml | StylesDotXml, styleManager);
     addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text", true).values(), StylesDotXml);
     addCharacterStyles(shapeContext, context.stylesReader().autoStyles("text").values(), ContentDotXml);
-    // only add styles of office:styles to the style manager
 
     addListStyles(shapeContext, context.stylesReader().autoStyles("list").values(), ContentDotXml);
     addListStyles(shapeContext, context.stylesReader().autoStyles("list", true).values(), StylesDotXml);

@@ -57,7 +57,6 @@ public:
     bool visit(KisTransformationMask *mask);
     bool visit(KisSelectionMask *mask);
 
-
 private:
 
     bool loadPaintDevice(KisPaintDeviceSP device, const QString& location);
@@ -66,6 +65,9 @@ private:
     bool loadMetaData(KisNode* node);
     KisSelectionSP loadSelection(const QString& location);
     QString getLocation(KisNode* node, const QString& suffix = "");
+
+    static KisNodeSP findNodeByName(const QString &name,
+                                    KisNodeSP rootNode);
 
 private:
     KisImageWSP m_image;

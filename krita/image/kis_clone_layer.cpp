@@ -163,9 +163,8 @@ bool KisCloneLayer::accept(KisNodeVisitor & v)
     return v.visit(this);
 }
 
-void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer, CopyLayerType type)
+void KisCloneLayer::setCopyFrom(KisLayerSP fromLayer)
 {
-    m_d->type = type;
     m_d->copyFrom = fromLayer;
 }
 

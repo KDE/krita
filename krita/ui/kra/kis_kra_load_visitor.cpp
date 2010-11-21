@@ -95,8 +95,6 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
     }
 
     result = visitAll(layer) && result;
-    layer->setDirty(m_image->bounds());
-
     return result;
 }
 
@@ -134,10 +132,7 @@ bool KisKraLoadVisitor::visit(KisPaintLayer *layer)
         }
     }
     bool result = visitAll(layer);
-
-    layer->setDirty(m_image->bounds());
     return result;
-
 }
 
 bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
@@ -147,8 +142,6 @@ bool KisKraLoadVisitor::visit(KisGroupLayer *layer)
     }
 
     bool result = visitAll(layer);
-
-    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -176,8 +169,6 @@ bool KisKraLoadVisitor::visit(KisAdjustmentLayer* layer)
     loadFilterConfiguration(layer->filter(), getLocation(layer, DOT_FILTERCONFIG));
 
     bool result = visitAll(layer);
-
-    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -200,10 +191,8 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
     loadFilterConfiguration(layer->generator(), getLocation(layer, DOT_FILTERCONFIG));
 
     layer->update();
-    
-    bool result = visitAll(layer);
 
-    layer->setDirty(m_image->bounds());
+    bool result = visitAll(layer);
     return result;
 }
 
@@ -241,8 +230,6 @@ bool KisKraLoadVisitor::visit(KisCloneLayer *layer)
 
     // Clone layers have no data except for their masks
     bool result = visitAll(layer);
-
-    layer->setDirty(m_image->bounds());
     return result;
 }
 
@@ -250,16 +237,12 @@ bool KisKraLoadVisitor::visit(KisFilterMask *mask)
 {
     mask->setSelection(loadSelection(getLocation(mask)));
     loadFilterConfiguration(mask->filter(), getLocation(mask, DOT_FILTERCONFIG));
-
-    mask->setDirty(m_image->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisTransparencyMask *mask)
 {
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_image->bounds());
-
     return true;
 }
 
@@ -267,14 +250,12 @@ bool KisKraLoadVisitor::visit(KisTransformationMask *mask)
 {
 
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_image->bounds());
     return true;
 }
 
 bool KisKraLoadVisitor::visit(KisSelectionMask *mask)
 {
     mask->setSelection(loadSelection(getLocation(mask)));
-    mask->setDirty(m_image->bounds());
     return true;
 }
 

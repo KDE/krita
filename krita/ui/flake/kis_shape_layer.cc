@@ -196,13 +196,6 @@ KisPaintDeviceSP KisShapeLayer::paintDevice() const
     return 0;
 }
 
-QRect KisShapeLayer::repaintOriginal(KisPaintDeviceSP original,
-                                     const QRect& rect)
-{
-    Q_UNUSED(original);
-    return rect;
-}
-
 qint32 KisShapeLayer::x() const
 {
     return m_d->x;

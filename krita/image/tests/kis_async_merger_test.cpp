@@ -19,6 +19,7 @@
 #include "kis_async_merger_test.h"
 
 #include "kis_merge_walker.h"
+#include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
 
 #include <qtest_kde.h>
@@ -28,6 +29,7 @@
 #include "kis_paint_layer.h"
 #include "kis_group_layer.h"
 #include "kis_adjustment_layer.h"
+#include "kis_filter_mask.h"
 #include "kis_selection.h"
 
 #include "filter/kis_filter.h"
@@ -164,6 +166,74 @@ void KisAsyncMergerTest::debugObligeChild()
     QVERIFY(groupLayer->original() == paintLayer1->projection());
 }
 
+    /*
+      +--------------+
+      |root          |
+      | paint 1      |
+      |  invert_mask |
+      | clone_of_1   |
+      +--------------+
+     */
+
+void KisAsyncMergerTest::testFullRefreshWithClones()
+{
+    const KoColorSpace *colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(0, 128, 128, colorSpace, "clones test");
+
+    KisPaintDeviceSP device1 = new KisPaintDevice(colorSpace);
+    device1->fill(image->bounds(), KoColor( Qt::white, colorSpace));
+
+    KisFilterSP filter = KisFilterRegistry::instance()->value("invert");
+    Q_ASSERT(filter);
+    KisFilterConfiguration *configuration = filter->defaultConfiguration(0);
+    Q_ASSERT(configuration);
+
+    KisLayerSP paintLayer1 = new KisPaintLayer(image, "paint1", OPACITY_OPAQUE_U8, device1);
+    KisFilterMaskSP invertMask1 = new KisFilterMask();
+    invertMask1->setFilter(configuration);
+
+    KisLayerSP cloneLayer1 = new KisCloneLayer(paintLayer1, image, "clone_of_1", OPACITY_OPAQUE_U8);
+    /**
+     * The clone layer must have a projection to allow us
+     * to read what it got from its source. Just shift it.
+     */
+    cloneLayer1->setX(10);
+    cloneLayer1->setY(10);
+
+    image->addNode(cloneLayer1, image->rootLayer());
+    image->addNode(paintLayer1, image->rootLayer());
+    image->addNode(invertMask1, paintLayer1);
+
+    QRect cropRect(image->bounds());
+
+    KisFullRefreshWalker walker(cropRect);
+    KisAsyncMerger merger;
+
+    walker.collectRects(image->rootLayer(), image->bounds());
+    merger.startMerge(walker);
+
+    QRect filledRect(10, 10,
+                     image->width() - cloneLayer1->x(),
+                     image->height() - cloneLayer1->y());
+
+    const int pixelSize = device1->pixelSize();
+    const int numPixels = filledRect.width() * filledRect.height();
+
+    QByteArray bytes(numPixels * pixelSize, 13);
+    cloneLayer1->projection()->readBytes((quint8*)bytes.data(), filledRect);
+
+    KoColor desiredPixel(Qt::black, colorSpace);
+    quint8 *srcPtr = (quint8*)bytes.data();
+    quint8 *dstPtr = desiredPixel.data();
+    for(int i = 0; i < numPixels; i++) {
+        if(memcmp(srcPtr, dstPtr, pixelSize)) {
+            qDebug() << "expected:" << dstPtr[0] << dstPtr[1] << dstPtr[2] << dstPtr[3];
+            qDebug() << "result:  " << srcPtr[0] << srcPtr[1] << srcPtr[2] << srcPtr[3];
+            QFAIL("Failed to compare pixels");
+        }
+        srcPtr += pixelSize;
+    }
+}
 
 QTEST_KDEMAIN(KisAsyncMergerTest, NoGUI)
 #include "kis_async_merger_test.moc"

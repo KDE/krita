@@ -1,7 +1,3 @@
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-  add_definitions( -DCPU_32_BITS )
-endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
-
 if(LCMS2_FOUND)
   add_definitions( -DHAVE_LCMS2 )
 endif(LCMS2_FOUND)

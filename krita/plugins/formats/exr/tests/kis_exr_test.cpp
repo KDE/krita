@@ -33,7 +33,11 @@
 
 void KisExrTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList()
+#ifndef CPU_32_BITS
+    , QString(), 1
+#endif
+    );
 }
 QTEST_KDEMAIN(KisExrTest, GUI)
 

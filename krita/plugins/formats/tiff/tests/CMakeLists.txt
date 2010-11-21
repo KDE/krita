@@ -1,3 +1,11 @@
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  add_definitions( -DCPU_32_BITS )
+endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+
+if(LCMS2_FOUND)
+  add_definitions( -DHAVE_LCMS2 )
+endif(LCMS2_FOUND)
+
 set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(  ${KOMAIN_INCLUDES}   ${CMAKE_SOURCE_DIR}/krita/sdk/tests )
 

@@ -45,7 +45,13 @@ void KisTiffTest::testFiles()
     if (!KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces).contains(YCbCrAColorModelID)) {
         excludes << "ycbcr-cat.tif";
     }
-
+#ifndef CPU_32_BITS
+    excludes << "flower-minisblack-06.tif";
+#endif
+    
+#ifdef HAVE_LCMS2
+    excludes << "flower-separated-contig-08.tif" << "flower-separated-contig-16.tif" << "flower-separated-planar-08.tif" << "flower-separated-planar-16.tif";
+#endif
     excludes << "text.tif";
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes);

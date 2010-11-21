@@ -27,8 +27,8 @@
 
 KisTransformationMask::KisTransformationMask()
         : KisEffectMask()
-        , m_xscale(0)
-        , m_yscale(0)
+        , m_xscale(1.0)
+        , m_yscale(1.0)
         , m_xshear(0)
         , m_yshear(0)
         , m_rotation(0)

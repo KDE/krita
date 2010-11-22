@@ -1,5 +1,9 @@
 project(kritafilters)
 
+if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  add_definitions( -DCPU_32_BITS )
+endif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+
 macro_optional_find_package(PNG)
 macro_log_feature(PNG_FOUND "png" "Official PNG reference library" "http://www.libpng.org/pub/png/libpng.html" FALSE "" "Required by the Krita PNG filter")
 

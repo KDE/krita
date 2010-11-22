@@ -57,8 +57,19 @@ public slots:
     void clearPerspectiveGrid();
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+
 private:
-    bool m_toggleEdition;
+    class LineWrapper;
+    struct SubdivisionLinesInfo;
+
+    SubdivisionLinesInfo getSubdivisionsInfo(const LineWrapper &l0,
+                                             const LineWrapper &l1,
+                                             const QPointF &focusPoint,
+                                             int numSubdivisions);
+
+    void drawSubdivisions(QPainter& gc, const SubdivisionLinesInfo &info);
+
+private:
     KisView2* m_view;
     KToggleAction* m_toggleGrid;
     KAction* m_gridClear;

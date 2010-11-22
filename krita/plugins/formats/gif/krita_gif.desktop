@@ -66,8 +66,7 @@ Path=
 StartupNotify=true
 Terminal=false
 X-DBUS-StartupType=Multi
-X-DBUS-ServiceName=org.koffice.krita
-X-KDE-StartupNotify=true
+X-DBUS-ServiceName=org.krita.krita
 X-KDE-SubstituteUID=false
 X-KDE-Username=
 

@@ -49,10 +49,10 @@ public:
      *       when changing this struct
      */
     enum PositionToFilthy {
-        N_ABOVE_FILTHY = 0x04,
-        N_FILTHY_PROJECTION = 0x10,
-        N_FILTHY = 0x20,
-        N_BELOW_FILTHY = 0x40
+        N_ABOVE_FILTHY = 0x08,
+        N_FILTHY_PROJECTION = 0x20,
+        N_FILTHY = 0x40,
+        N_BELOW_FILTHY = 0x80
     };
 
     /**

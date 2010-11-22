@@ -38,7 +38,6 @@
 #include <QPrintDialog>
 #include <QObject>
 
-#include <k3urldrag.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -339,9 +338,7 @@ void KisView2::dragEnterEvent(QDragEnterEvent *event)
     dbgUI << "KisView2::dragEnterEvent";
     // Only accept drag if we're not busy, particularly as we may
     // be showing a progress bar and calling qApp->processEvents().
-    if (K3URLDrag::canDecode(event) && QApplication::overrideCursor() == 0) {
-        event->accept();
-    } else if (event->mimeData()->hasImage()) {
+    if (event->mimeData()->hasImage()) {
         event->accept();
     } else {
         event->ignore();
@@ -378,55 +375,53 @@ void KisView2::dropEvent(QDropEvent *event)
         return;
     }
 
-    KUrl::List urls;
-    if (K3URLDrag::decode(event, urls)) {
-        if (urls.count() > 0) {
+    QList<QUrl> urls = event->mimeData()->urls();
+    if (urls.length() > 0) {
 
-            KMenu popup;
-            popup.setObjectName("drop_popup");
+        KMenu popup;
+        popup.setObjectName("drop_popup");
 
-            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
-            QAction *insertAsNewLayers = new QAction(i18n("Insert as New Layers"), &popup);
+        QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+        QAction *insertAsNewLayers = new QAction(i18n("Insert as New Layers"), &popup);
 
-            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
-            QAction *openInNewDocuments = new QAction(i18n("Open in New Documents"), &popup);
+        QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+        QAction *openInNewDocuments = new QAction(i18n("Open in New Documents"), &popup);
 
-            QAction *cancel = new QAction(i18n("Cancel"), &popup);
+        QAction *cancel = new QAction(i18n("Cancel"), &popup);
 
-            if (urls.count() == 1) {
-                if (!image().isNull()) {
-                    popup.addAction(insertAsNewLayer);
-                }
-                popup.addAction(openInNewDocument);
-            } else {
-                if (!image().isNull()) {
-                    popup.addAction(insertAsNewLayers);
-                }
-                popup.addAction(openInNewDocuments);
+        if (urls.count() == 1) {
+            if (!image().isNull()) {
+                popup.addAction(insertAsNewLayer);
             }
+            popup.addAction(openInNewDocument);
+        } else {
+            if (!image().isNull()) {
+                popup.addAction(insertAsNewLayers);
+            }
+            popup.addAction(openInNewDocuments);
+        }
 
-            popup.addSeparator();
-            popup.addAction(cancel);
+        popup.addSeparator();
+        popup.addAction(cancel);
 
-            QAction *action = popup.exec(QCursor::pos());
+        QAction *action = popup.exec(QCursor::pos());
 
-            if (action != 0 && action != cancel) {
-                for (KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it) {
-                    KUrl url = *it;
+        if (action != 0 && action != cancel) {
+            foreach(QUrl url, urls) {
 
-                    if (action == insertAsNewLayer || action == insertAsNewLayers) {
-                        m_d->imageManager->importImage(url);
-                    } else {
-                        Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
+                if (action == insertAsNewLayer || action == insertAsNewLayers) {
+                    m_d->imageManager->importImage(KUrl(url));
+                } else {
+                    Q_ASSERT(action == openInNewDocument || action == openInNewDocuments);
 
-                        if (shell() != 0) {
-                            shell()->openDocument(url);
-                        }
+                    if (shell() != 0) {
+                        shell()->openDocument(url);
                     }
                 }
             }
         }
     }
+
 }
 
 KoZoomController *KisView2::zoomController() const
@@ -550,17 +545,19 @@ KisUndoAdapter * KisView2::undoAdapter()
 
 void KisView2::slotLoadingFinished()
 {
-    image()->refreshGraph();
-
+    /**
+     * Cold-start of image-size signals
+     */
     slotImageSizeChanged();
-
     if (m_d->statusBar) {
         m_d->statusBar->imageSizeChanged(image()->width(), image()->height());
     }
-    if (m_d->resourceProvider)
+    if (m_d->resourceProvider) {
         m_d->resourceProvider->slotImageSizeChanged();
-    if (m_d->nodeManager)
+    }
+    if (m_d->nodeManager) {
         m_d->nodeManager->nodesUpdated();
+    }
 
     connectCurrentImage();
 
@@ -751,13 +748,14 @@ void KisView2::loadPlugins()
     for (iter = offers.constBegin(); iter != offers.constEnd(); ++iter) {
         KService::Ptr service = *iter;
         dbgUI << "Load plugin " << service->name();
-        int errCode = 0;
+        QString error;
+
         KParts::Plugin* plugin =
-                KService::createInstance<KParts::Plugin> (service, this, QStringList(), &errCode);
+                dynamic_cast<KParts::Plugin*>(service->createInstance<QObject>(this, QVariantList(), &error));
         if (plugin) {
             insertChildClient(plugin);
         } else {
-            errKrita << "Fail to create an instance for " << service->name() << " " << KLibLoader::errorString(errCode) << " " << KLibLoader::self()->lastErrorMessage();
+            errKrita << "Fail to create an instance for " << service->name() << " " << error;
         }
     }
 }

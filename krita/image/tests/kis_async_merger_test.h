@@ -28,6 +28,7 @@ class KisAsyncMergerTest : public QObject
 private slots:
     void testMerger();
     void debugObligeChild();
+    void testFullRefreshWithClones();
 private:
 };
 

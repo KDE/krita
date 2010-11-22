@@ -189,6 +189,19 @@ public:
 
             QRect applyRect = item.m_applyRect;
 
+            if(item.m_position & KisMergeWalker::N_EXTRA) {
+                // The type of layers that will not go to projection.
+
+                DEBUG_NODE_ACTION("Updating", "N_EXTRA", currentNode, applyRect);
+                KisUpdateOriginalVisitor originalVisitor(applyRect,
+                                                         m_currentProjection);
+                currentNode->accept(originalVisitor);
+                currentNode->updateProjection(applyRect);
+
+                continue;
+            }
+
+
             if(!m_currentProjection)
                 setupProjection(currentNode, applyRect, useTempProjections);
 

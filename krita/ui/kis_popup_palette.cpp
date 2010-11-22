@@ -40,21 +40,27 @@ public:
         QMouseEvent* mouseEvent = 0;
         switch(event->type())
         {
-            case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                                                Qt::LeftButton, event->modifiers());
-                                      m_dragging = true;
-                                      mousePressEvent(mouseEvent);
-                                      break;
-            case QEvent::TabletMove: mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                                                  (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
-                                     mouseMoveEvent(mouseEvent);
-                                     break;
-            case QEvent::TabletRelease: mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                                                    Qt::LeftButton, event->modifiers());
-                                        m_dragging = false;
-                                        mouseReleaseEvent(mouseEvent);
-                                        break;
-            default: break;
+        case QEvent::TabletPress:
+            mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                         Qt::LeftButton, Qt::LeftButton, event->modifiers());
+            m_dragging = true;
+            mousePressEvent(mouseEvent);
+            break;
+        case QEvent::TabletMove:
+            mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton,
+                                         (m_dragging) ? Qt::LeftButton : Qt::NoButton, event->modifiers());
+            mouseMoveEvent(mouseEvent);
+            break;
+        case QEvent::TabletRelease:
+            mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                         Qt::LeftButton,
+                                         Qt::LeftButton,
+                                         event->modifiers());
+            m_dragging = false;
+            mouseReleaseEvent(mouseEvent);
+            break;
+        default: break;
         }
         delete mouseEvent;
     }
@@ -374,7 +380,7 @@ void KisPopupPalette::mouseMoveEvent (QMouseEvent* event)
         int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
 
         if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal()
-            && isPointInPixmap(point, pos))
+                && isPointInPixmap(point, pos))
         {
             setHoveredBrush(pos);
         }
@@ -404,8 +410,8 @@ void KisPopupPalette::mousePressEvent(QMouseEvent* event)
         { //in favorite brushes area
             int pos = calculateIndex(point, m_resourceManager->favoriteBrushesTotal());
             if (pos >= 0 && pos < m_resourceManager->favoriteBrushesTotal()
-                && isPointInPixmap(point, pos))
-             {
+                    && isPointInPixmap(point, pos))
+            {
                 setSelectedBrush(pos);
                 update();
             }
@@ -453,19 +459,23 @@ void KisPopupPalette::tabletEvent(QTabletEvent* event)
     QMouseEvent* mouseEvent = 0;
     switch(event->type())
     {
-        case QEvent::TabletPress: mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
-                                                               Qt::LeftButton, event->modifiers());
-                                  mousePressEvent(mouseEvent);
-                                  break;
-        case QEvent::TabletMove: mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
-                                                              Qt::NoButton, event->modifiers());
-                                 mouseMoveEvent(mouseEvent);
-                                 break;
-        case QEvent::TabletRelease: mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
-                                                                 Qt::LeftButton, event->modifiers());
-                                    mouseReleaseEvent(mouseEvent);
-                                    break;
-        default: break;
+    case QEvent::TabletPress:
+
+        mouseEvent = new QMouseEvent(QEvent::MouseButtonPress, event->pos(),
+                                     Qt::LeftButton, Qt::LeftButton, event->modifiers());
+        mousePressEvent(mouseEvent);
+        break;
+    case QEvent::TabletMove:
+        mouseEvent = new QMouseEvent(QEvent::MouseMove, event->pos(),
+                                     Qt::NoButton, Qt::NoButton, event->modifiers());
+        mouseMoveEvent(mouseEvent);
+        break;
+    case QEvent::TabletRelease:
+        mouseEvent = new QMouseEvent(QEvent::MouseButtonRelease, event->pos(),
+                                     Qt::LeftButton, Qt::LeftButton, event->modifiers());
+        mouseReleaseEvent(mouseEvent);
+        break;
+    default: break;
     }
     delete mouseEvent;
 }

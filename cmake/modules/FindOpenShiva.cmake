@@ -1,7 +1,7 @@
 
 INCLUDE(FindPkgConfig)
 
-pkg_check_modules(OPENSHIVA OpenShiva>=0.9.12)
+pkg_check_modules(OPENSHIVA OpenShiva>=0.9.13)
 
 if (OPENSHIVA_FOUND)
     set(HAVE_OPENSHIVA TRUE)

@@ -21,10 +21,8 @@
 #include "dlg_compose.h"
 #include <QRadioButton>
 #include <QCheckBox>
-#include <q3buttongroup.h>
 #include <QLabel>
 #include <QComboBox>
-#include <q3button.h>
 
 #include <klocale.h>
 #include <knuminput.h>

@@ -18,14 +18,29 @@
 
 #include "kis_categorized_item_delegate.h"
 
-#include <KCategoryDrawer>
+#include <kdeversion.h>
+#include <kcategorydrawer.h>
 #include <KCategorizedSortFilterProxyModel>
 #include <QPainter>
 #include <QApplication>
 
-class KisCategoryDrawer : public KCategoryDrawer
+#if KDE_IS_VERSION(4,5,0)
+    class KisCategoryDrawer : public KCategoryDrawerV3
+#else
+    class KisCategoryDrawer : public KCategoryDrawer
+#endif
 {
 public:
+#if KDE_IS_VERSION(4,5,0)
+    KisCategoryDrawer(KCategorizedView *view = 0)
+        : KCategoryDrawerV3(view)
+#else
+        KisCategoryDrawer()
+            : KCategoryDrawer()
+#endif
+    {
+    }
+
     virtual void drawCategory ( const QModelIndex& index, int /*sortRole*/, const QStyleOption& option, QPainter* painter ) const
     {
         painter->setRenderHint(QPainter::Antialiasing);
@@ -35,8 +50,8 @@ public:
         if (index.row() != 0) {
             gradient.setColorAt(0, Qt::transparent);
         }
-        gradient.setColorAt(0.3, option.palette.background());
-        gradient.setColorAt(0.8, option.palette.background());
+        gradient.setColorAt(0.3, option.palette.background().color());
+        gradient.setColorAt(0.8, option.palette.background().color());
         gradient.setColorAt(1, Qt::transparent);
         painter->fillRect(option.rect, gradient);
 

@@ -742,7 +742,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
-    layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner, d->caret.charFormat());
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

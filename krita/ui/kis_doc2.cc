@@ -178,6 +178,7 @@ QByteArray KisDoc2::mimeType() const
 }
 
 void KisDoc2::slotLoadingFinished() {
+    image()->refreshGraph();
     setAutoSave(KisConfig().autoSaveInterval());
 }
 

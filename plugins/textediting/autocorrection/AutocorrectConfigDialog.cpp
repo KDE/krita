@@ -383,7 +383,7 @@ AutocorrectConfigDialog::~AutocorrectConfigDialog()
 CharSelectDialog::CharSelectDialog(QWidget *parent)
     : KDialog(parent)
 {
-    m_charSelect = new KCharSelect(this,
+    m_charSelect = new KCharSelect(this, 0,
             KCharSelect::FontCombo | KCharSelect::BlockCombos | KCharSelect::CharacterTable);
     setMainWidget(m_charSelect);
     setCaption(i18n("Select Character"));

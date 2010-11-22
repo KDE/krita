@@ -21,7 +21,9 @@
 
 #include "kis_node.h"
 #include "kis_types.h"
+#include "kis_clone_layer.h"
 #include "kis_base_rects_walker.h"
+
 
 class KRITAIMAGE_EXPORT KisFullRefreshWalker : public KisBaseRectsWalker
 {
@@ -115,6 +117,31 @@ protected:
             if(canHaveChildLayers(currentNode))
                 startTrip(currentNode);
         } while ((currentNode = currentNode->prevSibling()));
+    }
+
+    void registerNeedRect(KisNodeSP node, NodePosition position) {
+        KisBaseRectsWalker::registerNeedRect(node, position);
+
+        KisCloneLayerSP cloneLayer = qobject_cast<KisCloneLayer*>(node.data());
+        if(cloneLayer) {
+            /**
+             * We need to check whether the source of the clone is going
+             * to be updated after the clone itself. If so we need to
+             * pre-update it manually. This can be checked by the precedence
+             * of the source in the nodes stack
+             */
+            if(isRegistered(cloneLayer->copyFrom())) {
+                registerNeedRect(cloneLayer->copyFrom(), N_EXTRA | N_FILTHY);
+            }
+        }
+    }
+
+    bool isRegistered(KisNodeSP node) {
+        foreach(const JobItem &item, nodeStack()) {
+            if(item.m_node == node)
+                return true;
+        }
+        return false;
     }
 };
 

@@ -41,16 +41,17 @@ public:
         N_NORMAL     = 0x00,
         N_TOPMOST    = 0x01,
         N_BOTTOMMOST = 0x02,
+        N_EXTRA      = 0x04,
 
-        N_ABOVE_FILTHY = 0x04,
-        N_FILTHY_ORIGINAL   = 0x08, // not used actually
-        N_FILTHY_PROJECTION = 0x10,
-        N_FILTHY = 0x20,
-        N_BELOW_FILTHY = 0x40
+        N_ABOVE_FILTHY = 0x08,
+        N_FILTHY_ORIGINAL   = 0x10, // not used actually
+        N_FILTHY_PROJECTION = 0x20,
+        N_FILTHY = 0x40,
+        N_BELOW_FILTHY = 0x80
     };
 
-    #define GRAPH_POSITION_MASK     0x03
-    #define POSITION_TO_FILTHY_MASK 0x7C
+    #define GRAPH_POSITION_MASK     0x07
+    #define POSITION_TO_FILTHY_MASK 0xF8
 
     struct JobItem {
         KisNodeSP m_node;

@@ -32,7 +32,6 @@ IOBackendRegistry::~IOBackendRegistry()
     foreach(QString id, keys()) {
         delete get(id);
     }    
-    dbgRegistry << "deleting IOBackendRegistry";
 }
 
 

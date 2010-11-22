@@ -184,9 +184,6 @@ enum PropertyType {
 class KOPROPERTY_EXPORT Property
 {
 public:
-    //! A contant for null property
-    QT_STATIC_CONST Property null;
-
     /*! Data container for properties of list type. */
     class KOPROPERTY_EXPORT ListData
     {

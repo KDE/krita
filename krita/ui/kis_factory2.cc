@@ -55,10 +55,8 @@ KAboutData* KisFactory2::s_aboutData = 0;
 KComponentData* KisFactory2::s_instance = 0;
 
 KisFactory2::KisFactory2(QObject* parent)
-        : KoFactory(parent)
+        : KPluginFactory(*aboutData(), parent)
 {
-    s_aboutData = newKritaAboutData();
-
     (void)componentData();
 }
 
@@ -73,11 +71,12 @@ KisFactory2::~KisFactory2()
 /**
  * Create the document
  */
-KParts::Part* KisFactory2::createPartObject(QWidget *parentWidget,
-        QObject* parent,
-        const char* classname, const QStringList &)
+QObject* KisFactory2::create( const char* iface, QWidget* parentWidget, QObject *parent,
+                             const QVariantList& args, const QString& keyword )
 {
-    bool bWantKoDocument = (strcmp(classname, "KoDocument") == 0);
+    Q_UNUSED( args );
+    Q_UNUSED( keyword );
+    bool bWantKoDocument = ( strcmp( iface, "KoDocument" ) == 0 );
 
     KisDoc2 *doc = new KisDoc2(parentWidget, parent, !bWantKoDocument);
     Q_CHECK_PTR(doc);
@@ -91,6 +90,9 @@ KParts::Part* KisFactory2::createPartObject(QWidget *parentWidget,
 
 KAboutData* KisFactory2::aboutData()
 {
+    if (!s_aboutData) {
+        s_aboutData = newKritaAboutData();
+    }
     return s_aboutData;
 }
 

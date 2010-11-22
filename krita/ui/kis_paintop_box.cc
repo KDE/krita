@@ -128,10 +128,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     nodeChanged(view->activeNode());
     connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
 
-    m_brushChooser = new KisPopupButton(this);
-    //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
-    m_brushChooser->setText(i18n("Brush Editor"));
-    m_brushChooser->setToolTip(i18n("Choose and edit brush"));
+//     m_brushChooser = new KisPopupButton(this);
+//     //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
+//     m_brushChooser->setText(i18n("Brush Editor"));
+//     m_brushChooser->setToolTip(i18n("Choose and edit brush"));
 
     m_paletteButton = new QPushButton(i18n("Save to Palette"));
     connect(m_paletteButton, SIGNAL(clicked()), this, SLOT(slotSaveToFavouriteBrushes()));
@@ -148,7 +148,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(m_eraseModeButton);
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    m_layout->addWidget(m_brushChooser);
+//     m_layout->addWidget(m_brushChooser);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -157,8 +157,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
-    m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
-    m_brushChooser->setPopupWidget(m_brushEngineSelector);
+//     m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
+//     m_brushChooser->setPopupWidget(m_brushEngineSelector);
 
     m_colorspace = view->image()->colorSpace();
 

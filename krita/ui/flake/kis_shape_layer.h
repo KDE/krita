@@ -79,9 +79,6 @@ public:
     KisPaintDeviceSP original() const;
     KisPaintDeviceSP paintDevice() const;
 
-    QRect repaintOriginal(KisPaintDeviceSP original,
-                          const QRect& rect);
-
     qint32 x() const;
     qint32 y() const;
     void setX(qint32);

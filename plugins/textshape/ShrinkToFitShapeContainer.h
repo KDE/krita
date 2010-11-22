@@ -219,8 +219,8 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
         QSizeF documentSize = lay->documentSize();
         //if (documentSize.isEmpty()) return;
         
-        m_scaleX = (documentSize.width() > 0.0) ? qMin(1.0, shapeSize.width() / documentSize.width()) : 1.0;
-        m_scaleY = (documentSize.height() > 0.0) ? qMin(1.0, shapeSize.height() / documentSize.height()) : 1.0;
+        m_scaleX = (documentSize.width() > 0.0) ? qMin<qreal>(1.0, shapeSize.width() / documentSize.width()) : 1.0;
+        m_scaleY = (documentSize.height() > 0.0) ? qMin<qreal>(1.0, shapeSize.height() / documentSize.height()) : 1.0;
         
         d->childShape->setSize(QSizeF(shapeSize.width() / m_scaleX, shapeSize.height() / m_scaleY));
 

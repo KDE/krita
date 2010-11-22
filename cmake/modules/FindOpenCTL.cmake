@@ -1,7 +1,7 @@
      
 INCLUDE(FindPkgConfig)
 
-pkg_check_modules(OPENCTL OpenCTL>=0.9.12)
+pkg_check_modules(OPENCTL OpenCTL>=0.9.13)
 pkg_check_modules(OPENCTL_913 OpenCTL>=0.9.13)
 
 if (OPENCTL_FOUND)

@@ -267,6 +267,9 @@ void KisColorPatches::updateSettings()
     m_patchCount=cfg.readEntry(m_configPrefix+"Count", 15);
     m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
     m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
+    if(m_patchHeight == 0) {
+        m_patchHeight = 1;
+    }
 
     if(parentWidget()==0) {
         // this instance is a popup
@@ -325,6 +328,9 @@ int KisColorPatches::heightForWidth(int width) const
 
 int KisColorPatches::widthForHeight(int height) const
 {
+    if( height == 0 ) {
+        return 0;
+    }
     int numPatchesInACol = height/m_patchHeight;
     int numCols = (fieldCount()-1)/numPatchesInACol+1;
     return numCols*m_patchWidth;

@@ -44,7 +44,7 @@
 namespace TestUtil
 {
 
-void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString())
+void testFiles(const QString& _dirname, const QStringList& exclusions, const QString &resultSuffix = QString(), int fuzzy = 0)
 {
     QDir dirSources(_dirname);
     QStringList failuresFileInfo;
@@ -96,7 +96,7 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
             QPoint pt;
 
-            if (!TestUtil::compareQImages(pt, resultImage, sourceImage)) {
+            if (!TestUtil::compareQImages(pt, resultImage, sourceImage, fuzzy)) {
                 failuresCompare << sourceFileInfo.fileName() + ": " + QString("Pixel (%1,%2) has different values").arg(pt.x()).arg(pt.y()).toLatin1();
                 resultImage.save(sourceFileInfo.fileName() + ".png");
                 continue;

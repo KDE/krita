@@ -93,7 +93,7 @@ public:
     void setCopyFromName(const QString& layerName);
     QString copyFromName() const;
 
-    void setCopyFrom(KisLayerSP layer, CopyLayerType type);
+    void setCopyFrom(KisLayerSP layer);
     KisLayerSP copyFrom() const;
 
     void setCopyType(CopyLayerType type);

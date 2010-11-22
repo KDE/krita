@@ -190,7 +190,7 @@ qreal Layout::docOffsetInShape() const
 
 QRectF Layout::expandVisibleRect(const QRectF &rect) const
 {
-    qreal rightAdjust = qMax(m_allTimeMaximumRight - rect.right(), 0.0);
+    qreal rightAdjust = qMax<qreal>(m_allTimeMaximumRight - rect.right(), 0.0);
     return rect.adjusted(m_allTimeMinimumLeft, 0.0, rightAdjust, 0.0);
 }
 

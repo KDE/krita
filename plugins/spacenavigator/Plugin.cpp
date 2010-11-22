@@ -29,7 +29,7 @@ K_EXPORT_PLUGIN(PluginFactory("spacenavigator"))
 Plugin::Plugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
-    KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice());
+    KoInputDeviceHandlerRegistry::instance()->add(new SpaceNavigatorDevice(parent));
 }
 
 #include <Plugin.moc>

@@ -1071,7 +1071,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     if (textObjectManager) {
                         KoVariableManager *varManager = textObjectManager->variableManager();
                         if (varManager) {
-                            textObjectManager->insertInlineObject(cursor, obj);
+                            textObjectManager->insertInlineObject(cursor, obj, cursor.charFormat());
                         }
                     }
                 }

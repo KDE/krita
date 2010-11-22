@@ -117,11 +117,11 @@ void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const
         newList.append(newList.at(1));
         newList[1] = (newList.at(0) + newList.at(2)) * 0.5;
         // transoform it
-        newList[1].setY(qBound(0.0,newList.at(1).y() * softness,1.0));
+        newList[1].setY(qBound<qreal>(0.0,newList.at(1).y() * softness,1.0));
     }else{
         // transform all points except first and last
         for (int i = 1; i < size-1; i++){
-            newList[i].setY(qBound(0.0,newList.at(i).y() * softness,1.0));
+            newList[i].setY(qBound<qreal>(0.0,newList.at(i).y() * softness,1.0));
         }
     }
 

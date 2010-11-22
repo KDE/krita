@@ -94,7 +94,7 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_scaleFactor(1.0)
 {
     m_frameStack.reserve(5); // avoid reallocs
-    setTabSpacing(MM_TO_POINT(15));
+    setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 }
 
 bool Layout::start()
@@ -545,10 +545,13 @@ bool Layout::nextParag()
     QTextOption option = layout->textOption();
     option.setWrapMode(m_parent->resizeMethod() != KoTextDocument::AutoResize ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
     qreal tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
-    if (tabStopDistance > 0)
-        option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
-    else
+    if (tabStopDistance > 0) {
+        tabStopDistance *= qt_defaultDpiY() / 72.;
+        option.setTabStop(tabStopDistance);
+    } else {
         option.setTabStop(m_defaultTabSizing);
+        tabStopDistance = m_defaultTabSizing;
+    }
 
     // tabs
     QList<QTextOption::Tab> tabs;
@@ -557,25 +560,35 @@ bool Layout::nextParag()
     if (m_relativeTabs) {
         tabOffset += (m_isRtl ? m_format.rightMargin() : (m_format.leftMargin() + listIndent())) ;
     }
+    // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
+    qreal position = tabOffset * qt_defaultDpiY() / 72.;
+
     if (!variant.isNull()) {
         foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
             KoText::Tab koTab = tv.value<KoText::Tab>();
             QTextOption::Tab tab;
 
             // conversion here is required because Qt thinks in device units and we don't
-            tab.position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
+            position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
+            tab.position = position;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
         }
-    } else {
-        // Since we might have tabs relative to first indent we need to always specify
-        // first tab (relative to the indent naturally)
+    }
+
+    // Since we might have tabs relative to first indent we need to always specify a lot of
+    // regular interval tabs (relative to the indent naturally)
+    // So first figure out where the first regular interval tab should be.
+    position -= tabOffset * qt_defaultDpiY() / 72.;
+    position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset * qt_defaultDpiY() / 72.;
+    for(int i=0 ; i<16; ++i) { // let's just add 16 but we really should limit to pagewidth
         QTextOption::Tab tab;
 
-        // conversion of taboffset is required because Qt thinks in device units and we don't
-        tab.position = m_defaultTabSizing + tabOffset * qt_defaultDpiY() / 72.;
+        // conversion here is required because Qt thinks in device units and we don't
+        tab.position = position;
         tabs.append(tab);
+        position += tabStopDistance;
     }
     option.setTabs(tabs);
 

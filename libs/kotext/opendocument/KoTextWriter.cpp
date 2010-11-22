@@ -428,7 +428,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 writer->addAttribute("text:id", context.subId(blockData));
             }
             //kDebug(30015) << "from:" << from << " to:" << to;
-            if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+            KoTextInlineRdf* inlineRdf;
+            if ((inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) && (it == block.begin())) {
                 // Write xml:id here for Rdf
                 kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
                 inlineRdf->saveOdf(context, writer);

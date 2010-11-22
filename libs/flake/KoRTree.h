@@ -120,7 +120,7 @@ public:
      */
     QList<T> values() const;
 
-    void clear() {
+    virtual void clear() {
         delete m_root;
         m_root = createLeafNode(m_capacity + 1, 0, 0);
         m_leafMap.clear();
@@ -318,12 +318,12 @@ class LeafNode : virtual public Node
     QPair<Node *, Node *> splitNode(Node * node);
     QPair<int, int> pickSeeds(Node * node);
     QPair<int, int> pickNext(Node * node, QVector<bool> & marker, Node * group1, Node * group2);
-    void adjustTree(Node * node1, Node * node2);
+    virtual void adjustTree(Node * node1, Node * node2);
     void insertHelper(const QRectF& bb, const T& data, int id);
 
     // methods for delete
     void insert(Node * node);
-    void condenseTree(Node * node, QVector<Node *> & reinsert);
+    virtual void condenseTree(Node * node, QVector<Node *> & reinsert);
 
     int m_capacity;
     int m_minimum;

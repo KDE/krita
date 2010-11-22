@@ -108,6 +108,12 @@ private:
     void loadHeading(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
+    * Load changes that result in a change of tag-type into the cursor
+    * Returns the next Node to be processed
+    */
+    KoXmlNode loadTagTypeChanges(const KoXmlElement &element);
+
+    /**
     * Load the list from the \p element into the \p cursor .
     */
     void loadList(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);

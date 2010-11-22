@@ -352,9 +352,12 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     }
     else {
         startBody(KoXml::childNodesCount(bodyElem));
-        KoXmlElement tag;
 
-        forEachElement(tag, bodyElem) {
+        KoXmlElement tag;
+        for ( KoXmlNode _node = bodyElem.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+        if ( ( tag = _node.toElement() ).isNull() ) {
+            //Don't do anything
+        } else {
             if (! tag.isNull()) {
                 const QString localName = tag.localName();
                 if (tag.namespaceURI() == KoXmlNS::delta) {
@@ -369,6 +372,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         loadBody(tag, cursor, true);
                         d->closeChangeRegion(tag);
                         processDeleteChange(cursor, changeId, deleteStartPosition);
+                    } else if (d->changeTracker && localName == "remove-leaving-content-start"){
+                        _node = loadTagTypeChanges(tag);
                     } else {
                     }
                 }
@@ -408,45 +413,53 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         loadDeleteChangeOutsidePorH(id, cursor);
                         usedParagraph = false;
                     } else if (localName == "p") {    // text paragraph
-                        if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
-                            d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
+                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "insert-around-content") { 
+                            if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
+                                d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
 
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
-                            QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
-                            if (insertionType == "insert-with-content")
-                                d->openChangeRegion(tag);
-                            if (insertionType == "split") {
-                                QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
-                                QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
-                                markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
-                                d->splitPositionMap.remove(splitId);
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
+                                QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
+                                if (insertionType == "insert-with-content")
+                                    d->openChangeRegion(tag);
+                                if (insertionType == "split") {
+                                    QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
+                                    QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
+                                    markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                    d->splitPositionMap.remove(splitId);
+                                }
                             }
+
+                            loadParagraph(tag, cursor);
+
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                                d->closeChangeRegion(tag);
+                        } else {
+                            _node = loadTagTypeChanges(tag);
                         }
-
-                        loadParagraph(tag, cursor);
-
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->closeChangeRegion(tag);
                     } else if (localName == "h") {  // heading
-                        if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
-                            d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
+                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "insert-around-content") { 
+                            if (tag.attributeNS(KoXmlNS::split, "split001-idref") != "")
+                                d->splitPositionMap.insert(tag.attributeNS(KoXmlNS::split, "split001-idref"),cursor.position());
 
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
-                            QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
-                            if (insertionType == "insert-with-content")
-                                d->openChangeRegion(tag);
-                            if (insertionType == "split") {
-                                QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
-                                QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
-                                markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
-                                d->splitPositionMap.remove(splitId);
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
+                                QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
+                                if (insertionType == "insert-with-content")
+                                    d->openChangeRegion(tag);
+                                if (insertionType == "split") {
+                                    QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
+                                    QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
+                                    markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                    d->splitPositionMap.remove(splitId);
+                                }
                             }
+
+                            loadHeading(tag, cursor);
+
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                                d->closeChangeRegion(tag);
+                        } else {
+                            _node = loadTagTypeChanges(tag);
                         }
-
-                        loadHeading(tag, cursor);
-
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->closeChangeRegion(tag);
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                             || localName == "list" || localName == "numbered-paragraph") {  // OASIS
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
@@ -495,6 +508,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
         endBody();
     }
     cursor.endEditBlock();
+}
+
+KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& element)
+{
+    return element;
 }
 
 void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)

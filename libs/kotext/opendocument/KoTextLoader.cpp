@@ -89,6 +89,9 @@
 #include <QTime>
 #include <QString>
 
+#include <QByteArray>
+#include <QBuffer>
+#include <QTextStream>
 
 #include "KoTextLoader_p.h"
 // if defined then debugging is enabled
@@ -132,6 +135,14 @@ public:
     QMap<QString, QString> endIdMap;
     QMap<QString, int> splitPositionMap;
 
+    // For handling complex-deletes i.e delete changes that merges elements of different types
+    int openedElements;
+    QMap<QString, QString> deleteAroundContentMap;
+    void copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream);
+    void copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
+    void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
+    void copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren = false);
+
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
             textSharedData(0),
@@ -151,7 +162,8 @@ public:
             rdfData(0),
             shape(s),
             loadSpanLevel(0),
-            loadSpanInitialPos(0)
+            loadSpanInitialPos(0),
+            openedElements(0)
     {
         dt.start();
     }
@@ -510,9 +522,115 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     cursor.endEditBlock();
 }
 
-KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& element)
+KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem)
 {
-    return element;
+    KoXmlNode lastProcessedNode = elem;
+
+    QString generatedXml; 
+    QTextStream xmlStream(&generatedXml);
+    do {
+        KoXmlElement element;
+        bool isElementNode = lastProcessedNode.isElement();
+        if (isElementNode)
+            element = lastProcessedNode.toElement();
+
+        if (isElementNode && (element.localName() == "remove-leaving-content-start")) {
+            d->copyDeleteAroundContentStart(element, xmlStream);
+        } else if (isElementNode && (element.localName() == "remove-leaving-content-end")) {
+            d->copyDeleteAroundContentEnd(element, xmlStream);
+        } else if (isElementNode && (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
+            d->copyInsertAroundContent(element, xmlStream);
+        } else {
+            d->copyNode(element, xmlStream);
+        }
+        
+        lastProcessedNode = lastProcessedNode.nextSibling();        
+    } while(d->openedElements && !lastProcessedNode.isNull());
+
+    if (!d->openedElements) {
+        //Load the generated xml
+    }
+
+    return lastProcessedNode.previousSibling();
+}
+
+void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream)
+{
+    KoXmlElement element = node.firstChild().toElement();
+    QString changeEndId = node.toElement().attributeNS(KoXmlNS::delta, "end-element-idref");
+    QString nodeName  = element.namespaceURI() + ":" + element.localName();
+    
+    deleteAroundContentMap.insert(changeEndId, nodeName);
+    openedElements++;
+
+    xmlStream << "<" << nodeName;
+    QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+
+    QPair<QString, QString> attributeName;
+    foreach(attributeName, attributeNSNames) {
+        xmlStream << " " << attributeName.first << ":" << attributeName.second << "=";
+        xmlStream << "\"" << element.attributeNS(attributeName.first, attributeName.second) << "\"";
+    }
+    
+    xmlStream << ">";       
+}
+
+void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream)
+{
+    QString changeEndId = node.toElement().attributeNS(KoXmlNS::delta, "end-element-id");
+    QString nodeName = deleteAroundContentMap.value(changeEndId);
+    deleteAroundContentMap.remove(changeEndId);
+    openedElements--;
+    xmlStream << "</" << nodeName << ">";
+}
+
+void KoTextLoader::Private::copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream)
+{
+    copyNode(node, xmlStream, true);
+}
+
+void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren)
+{
+    if (node.isText()) {
+        xmlStream << node.toText().data(); 
+    } else if (node.isElement()) {
+        KoXmlElement element = node.toElement();
+        QString nodeName  = element.namespaceURI() + ":" + element.localName();
+        if (!copyOnlyChildren) {
+            xmlStream << "<" << nodeName;
+            QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+
+            QPair<QString, QString> attributeName;
+            foreach(attributeName, attributeNSNames) {
+                xmlStream << " " << attributeName.first << ":" << attributeName.second << "=";
+                xmlStream << "\"" << element.attributeNS(attributeName.first, attributeName.second) << "\"";
+            }
+            xmlStream << ">";       
+        }
+        
+        for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
+            KoXmlElement childElement;
+            bool isElementNode = node.isElement();
+            if (isElementNode)
+                childElement = node.toElement();
+
+
+            if (isElementNode && (childElement.localName() == "remove-leaving-content-start")) {
+                copyDeleteAroundContentStart(childElement, xmlStream);
+            } else if (isElementNode && (childElement.localName() == "remove-leaving-content-end")) {
+                copyDeleteAroundContentEnd(childElement, xmlStream);
+            } else if (isElementNode && (childElement.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
+                copyInsertAroundContent(childElement, xmlStream);
+            } else {
+                copyNode(node, xmlStream);
+            }
+        }
+
+        if (!copyOnlyChildren) {
+            xmlStream << "</" << nodeName << ">";
+        }
+    } else {
+    }
 }
 
 void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)

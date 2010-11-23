@@ -1196,6 +1196,7 @@ public:
     inline bool hasAttributeNS(const QString& nsURI, const QString& name) const;
     inline void clearAttributes();
     inline QStringList attributeNames() const;
+    inline QList<QPair<QString, QString> > attributeNSNames() const;
 
     // for text and CDATA
     QString data() const;
@@ -1387,6 +1388,14 @@ QStringList KoXmlNodeData::attributeNames() const
 {
     QStringList result;
     result = attr.keys();
+
+    return result;
+}
+
+QList<QPair<QString, QString> > KoXmlNodeData::attributeNSNames() const
+{
+    QList<QPair<QString, QString> > result;
+    result = attrNS.keys();
 
     return result;
 }
@@ -2045,6 +2054,14 @@ QStringList KoXmlNode::attributeNames() const
         d->loadChildren();
 
     return d->attributeNames();
+}
+
+QList<QPair<QString, QString> > KoXmlNode::attributeNSNames() const
+{
+    if (!d->loaded)
+        d->loadChildren();
+    
+    return d->attributeNSNames();
 }
 
 KoXmlNode KoXmlNode::firstChild() const

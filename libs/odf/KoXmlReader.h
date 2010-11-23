@@ -44,6 +44,7 @@ typedef QDomDocument KoXmlDocument;
 
 class QString;
 class QXmlStreamReader;
+template<class T1, class T2> class QPair;
 
 class KoXmlNode;
 class KoXmlText;
@@ -121,6 +122,7 @@ public:
 
     // workaround to get and iterate over all attributes
     QStringList attributeNames() const;
+    QList<QPair<QString, QString> > attributeNSNames() const;
 
     KoXmlNode namedItem(const QString& name) const;
     KoXmlNode namedItemNS(const QString& nsURI, const QString& name) const;

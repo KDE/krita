@@ -92,6 +92,7 @@ class ShrinkToFitShapeContainerModel : public SimpleShapeContainerModel
 {
 public:
     ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d);
+    bool isDirty() const { return m_isDirty; }
 
     // reimplemented
     virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
@@ -106,6 +107,7 @@ private:
     ShrinkToFitShapeContainer *q;
     ShrinkToFitShapeContainerPrivate *d;
     qreal m_scaleX, m_scaleY;
+    bool m_isDirty;
 };
 
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
@@ -204,6 +206,7 @@ ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeC
     , d(d)
     , m_scaleX(1.0)
     , m_scaleY(1.0)
+    , m_isDirty(true)
 {
 }
 
@@ -217,10 +220,15 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
         Q_ASSERT(lay);
         QSizeF shapeSize = q->size();
         QSizeF documentSize = lay->documentSize();
-        //if (documentSize.isEmpty()) return;
-        
-        m_scaleX = (documentSize.width() > 0.0) ? qMin<qreal>(1.0, shapeSize.width() / documentSize.width()) : 1.0;
-        m_scaleY = (documentSize.height() > 0.0) ? qMin<qreal>(1.0, shapeSize.height() / documentSize.height()) : 1.0;
+
+        if (documentSize.width() > 0.0 && documentSize.height() > 0.0) {
+            m_scaleX = qMin<qreal>(1.0, shapeSize.width() / documentSize.width());
+            m_scaleY = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
+            m_isDirty = false;
+        } else {
+            m_scaleX = m_scaleY = 1.0;
+            m_isDirty = true; // used on TextShape::markLayoutDone() for the initial relayout
+        }
         
         d->childShape->setSize(QSizeF(shapeSize.width() / m_scaleX, shapeSize.height() / m_scaleY));
 

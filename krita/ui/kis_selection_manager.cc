@@ -1,3 +1,4 @@
+
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -94,7 +95,6 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_selectAll(0),
         m_deselect(0),
         m_clear(0),
-        m_delete(0),
         m_reselect(0),
         m_invert(0),
         m_toNewLayer(0),
@@ -120,8 +120,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
 
 KisSelectionManager::~KisSelectionManager()
 {
-    while (!m_pluginActions.isEmpty())
-        delete m_pluginActions.takeFirst();
+    qDeleteAll(m_pluginActions);
 }
 
 void KisSelectionManager::setup(KActionCollection * collection)
@@ -145,11 +144,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_deselect = collection->addAction(KStandardAction::Deselect,  "deselect", this, SLOT(deselect()));
 
     m_clear = collection->addAction(KStandardAction::Clear,  "clear", this, SLOT(clear()));
-
-    m_delete = new KAction(KIcon("edit-delete"), i18n("D&elete Selection"), this);
-    collection->addAction("delete", m_delete);
-    m_delete->setShortcut(QKeySequence(Qt::Key_Delete));
-    connect(m_delete, SIGNAL(triggered()), this, SLOT(deleteSelection()));
+    m_clear->setShortcut(QKeySequence((Qt::Key_Delete)));
 
     m_reselect  = new KAction(i18n("&Reselect"), this);
     collection->addAction("reselect", m_reselect);
@@ -267,8 +262,8 @@ void KisSelectionManager::updateGUI()
 #endif
                     }
 
-        m_cut->setEnabled(enable);
     m_clear->setEnabled(enable);
+    m_cut->setEnabled(enable);
     m_fillForegroundColor->setEnabled(enable);
     m_fillBackgroundColor->setEnabled(enable);
     m_fillPattern->setEnabled(enable);
@@ -316,7 +311,6 @@ void KisSelectionManager::updateGUI()
 
     l = m_view->activeLayer();
     KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(l.data());
-
     bool shapePasteEnable = false;
     bool shapeCopyEnable = false;
     if (shapeLayer) {
@@ -340,16 +334,18 @@ void KisSelectionManager::updateGUI()
     m_pasteNew->setEnabled(!image.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
 
-    if (shapeLayer || ((m_view->selection()
-                        && m_view->selection()->hasShapeSelection()
-                       )
-                       &&   m_view->canvasBase()->shapeManager()->selection()->count() > 0
-                      )
-       ) {
-        m_delete->setEnabled(true);
-    } else
-        m_delete->setEnabled(false);
-
+    //Handle the clear action disponibility
+    
+    if (m_view->canvasBase()->shapeManager()->selection()->count() > 0) {
+        m_clear->setEnabled(true);
+    }
+    else if (shapeLayer && m_view->canvasBase()->shapeManager()->shapes().empty()){
+        m_clear->setEnabled(false);
+    }
+    else {
+        m_clear->setEnabled(true);
+    }
+        
     updateStatusBar();
 
 }
@@ -398,7 +394,8 @@ void KisSelectionManager::copy()
     KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer.data());
     if (shapeLayer) {
         m_view->canvasBase()->toolProxy()->copy();
-    } else {
+    } 
+    else {
 
         KisImageWSP image = m_view->image();
         if (!image) return;
@@ -582,28 +579,34 @@ void KisSelectionManager::clear()
     if (!image) return;
 
     KisPaintDeviceSP dev = m_view->activeDevice();
-    if (!dev) return;
 
-    KisSelectionSP sel = m_view->selection();
+    if(m_view->canvasBase()->shapeManager()->selection()->count()){
+        deleteSelection();
+    }else if(dev){
+        
+        KisSelectionSP sel = m_view->selection();
 
-    KisTransaction transaction(i18n("Clear"), dev);
+        KisTransaction transaction(i18n("Clear"), dev);
 
-    if (sel)
-        dev->clearSelection(sel);
-    else {
-        dev->clear();
-        dev->setDirty();
+        if (sel){
+            dev->clearSelection(sel);
+        }else{
+            dev->clear();
+            dev->setDirty();
+        }
+
+        updateGUI();
+
+        transaction.commit(image->undoAdapter());
+        dev->setDirty(image->bounds());
     }
-
-    transaction.commit(image->undoAdapter());
-
-    dev->setDirty(image->bounds());
 }
 
 void KisSelectionManager::deleteSelection()
 {
-    if (m_view->canvasBase()->shapeManager()->selection())
-        m_view->canvasBase()->toolProxy()->deleteSelection();
+    if (m_view->canvasBase()->shapeManager()->selection()){
+        m_view->canvasBase()->toolProxy()->deleteSelection();  
+    }
     updateGUI();
 }
 

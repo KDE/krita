@@ -66,7 +66,10 @@ public:
         delete caption;
         caption = 0;
         delete listData;
-        delete children;
+        if (children) {
+            qDeleteAll(*children);
+            delete children;
+        }
         delete relatedProperties;
         delete composed;
         delete sets;

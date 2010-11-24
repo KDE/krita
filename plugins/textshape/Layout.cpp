@@ -165,9 +165,11 @@ qreal Layout::x()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        result += m_tableLayout.cellContentX(m_tableCell);
-        m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, m_tableLayout.tableMinX());
+        if(table) {
+            m_tableLayout.setTable(table);
+            result += m_tableLayout.cellContentX(m_tableCell);
+            m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, m_tableLayout.tableMinX());
+        }
     }
     return result;
 }

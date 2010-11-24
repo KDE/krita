@@ -182,7 +182,7 @@ void ModelTest::hasIndex()
 
     int rows = model->rowCount();
     int columns = model->columnCount();
-
+    Q_UNUSED(columns);
     // check out of bounds
     Q_ASSERT(model->hasIndex(rows, columns) == false);
     Q_ASSERT(model->hasIndex(rows + 1, columns + 1) == false);
@@ -206,7 +206,7 @@ void ModelTest::index()
 
     int rows = model->rowCount();
     int columns = model->columnCount();
-
+    Q_UNUSED(columns);
     if (rows == 0)
         return;
 
@@ -416,6 +416,7 @@ void ModelTest::data()
     QVariant textAlignmentVariant = model->data(model->index(0, 0), Qt::TextAlignmentRole);
     if (textAlignmentVariant.isValid()) {
         int alignment = textAlignmentVariant.toInt();
+        Q_UNUSED(alignment);
         Q_ASSERT(alignment == Qt::AlignLeft ||
                  alignment == Qt::AlignRight ||
                  alignment == Qt::AlignHCenter ||
@@ -444,6 +445,7 @@ void ModelTest::data()
     QVariant checkStateVariant = model->data(model->index(0, 0), Qt::CheckStateRole);
     if (checkStateVariant.isValid()) {
         int state = checkStateVariant.toInt();
+        Q_UNUSED(state);
         Q_ASSERT(state == Qt::Unchecked ||
                  state == Qt::PartiallyChecked ||
                  state == Qt::Checked);

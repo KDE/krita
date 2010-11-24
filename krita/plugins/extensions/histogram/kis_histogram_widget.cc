@@ -51,12 +51,12 @@ KisHistogramWidget::~KisHistogramWidget()
 {
 }
 
-void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev)
+void KisHistogramWidget::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds)
 {
     grpType->disconnect(this);
     cmbChannel->disconnect(this);
 
-    m_histogramView->setPaintDevice(dev);
+    m_histogramView->setPaintDevice(dev, bounds);
     setActiveChannel(0); // So we have the colored one if there are colors
 
     // The channels

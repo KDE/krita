@@ -33,8 +33,23 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-    KisPaintDeviceSP pd = layer->projection();
-    m_dev = pd;
+    m_paintDevice = layer->projection();
+    m_bounds = layer->image()->bounds();
+    m_type = type;
+    m_producer = producer;
+    m_selection = false;
+    m_channel = 0;
+
+    updateHistogram();
+}
+
+// TODO: get rid of this, make all Histogram clients pass bounds (they can pass paintdev->exactBounds() if they want)
+KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
+                           KoHistogramProducerSP producer,
+                           const enumHistogramType type)
+{
+    m_paintDevice = paintdev;
+    m_bounds = m_paintDevice->exactBounds();
     m_type = type;
     m_producer = producer;
     m_selection = false;
@@ -44,15 +59,19 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
 }
 
 KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
+                           const QRect &bounds,
                            KoHistogramProducerSP producer,
                            const enumHistogramType type)
 {
-    m_dev = paintdev;
-    m_type = type;
+    m_paintDevice = paintdev;
+    m_bounds = bounds;
     m_producer = producer;
+    m_type = type;
+
     m_selection = false;
     m_channel = 0;
 
+    // TODO: Why does Krita crash when updateHistogram() is *not* called here?
     updateHistogram();
 }
 
@@ -64,10 +83,8 @@ void KisHistogram::updateHistogram()
 {
     if (!m_producer) return;
 
-    QRect r;
-    r = m_dev->exactBounds();
-    KisRectConstIteratorPixel srcIt = m_dev->createRectConstIterator(r.x(), r.y(), r.width(), r.height());
-    const KoColorSpace* cs = m_dev->colorSpace();
+    KisRectConstIteratorPixel srcIt = m_paintDevice->createRectConstIterator(m_bounds.left(), m_bounds.top(), m_bounds.width(), m_bounds.height());
+    const KoColorSpace* cs = m_paintDevice->colorSpace();
 
     // Let the producer do it's work
     m_producer->clear();

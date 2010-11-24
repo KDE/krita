@@ -42,7 +42,7 @@ public:
                  const char* name = 0);
     ~DlgHistogram();
 
-    void setPaintDevice(KisPaintDeviceSP dev);
+    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
 private slots:
     void okClicked();

@@ -20,6 +20,7 @@
 #define KIS_HISTOGRAM_
 
 #include <QVector>
+#include <QRect>
 
 #include "KoHistogramProducer.h"
 
@@ -111,6 +112,11 @@ public:
                  KoHistogramProducerSP producer,
                  const enumHistogramType type);
 
+    KisHistogram(KisPaintDeviceSP paintdev,
+                 const QRect &bounds,
+                 KoHistogramProducerSP producer,
+                 const enumHistogramType type);
+
     virtual ~KisHistogram();
 
     /** Updates the information in the producer */
@@ -176,16 +182,14 @@ private:
     QVector<Calculations> calculateForRange(double from, double to);
     Calculations calculateSingleRange(int channel, double from, double to);
 
-    KisPaintDeviceSP m_device;
+    const KisPaintDeviceSP m_paintDevice;
+    QRect m_bounds;
     KoHistogramProducerSP m_producer;
-
     enumHistogramType m_type;
 
     qint32 m_channel;
     double m_selFrom, m_selTo;
     bool m_selection;
-
-    const KisPaintDeviceSP m_dev;
 
     QVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };

@@ -56,7 +56,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
 
     m_backgroundColor->setValue(QColor(elemSource.attribute("fo:background-color")));
 
-    KoReportPluginManager &manager = KoReportPluginManager::self();
+    KoReportPluginManager* manager = KoReportPluginManager::self();
     
     QDomNodeList section = elemSource.childNodes();
     for (int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++) {
@@ -67,7 +67,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
             m_objects.append(line);
         } else {
             
-            KoReportPluginInterface *plugin = manager.plugin(elemThis.tagName());
+            KoReportPluginInterface *plugin = manager->plugin(elemThis.tagName());
             if (plugin) {
                 QObject *obj = plugin->createRendererInstance(elemThis);
                 

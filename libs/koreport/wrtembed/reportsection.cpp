@@ -189,8 +189,8 @@ void ReportSection::initFromXML(QDomNode & section)
             (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
         }
         else {
-            KoReportPluginManager &manager = KoReportPluginManager::self();
-            KoReportPluginInterface *plugin = manager.plugin(n);
+            KoReportPluginManager* manager = KoReportPluginManager::self();
+            KoReportPluginInterface *plugin = manager->plugin(n);
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {

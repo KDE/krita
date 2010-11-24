@@ -184,6 +184,7 @@ void KoReportDesigner::init()
 KoReportDesigner::~KoReportDesigner()
 {
     delete d;
+    delete m_sectionData;
 }
 
 ///The loading Code
@@ -862,8 +863,8 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
             }
             else {
-                KoReportPluginManager &pluginManager =  KoReportPluginManager::self();
-                KoReportPluginInterface *plug = pluginManager.plugin(m_sectionData->insertItem);
+                KoReportPluginManager* pluginManager = KoReportPluginManager::self();
+                KoReportPluginInterface *plug = pluginManager->plugin(m_sectionData->insertItem);
                 if (plug) {
                     QObject *obj = plug->createDesignerInstance(v->designer(), v->scene(), pos);
                     if (obj) {
@@ -1166,15 +1167,15 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     return unique;
 }
 
-QList<QAction*> KoReportDesigner::actions()
+QList<QAction*> KoReportDesigner::actions(QObject* parent)
 {
-    KoReportPluginManager &manager = KoReportPluginManager::self();
+    KoReportPluginManager* manager = KoReportPluginManager::self();
     QAction *act;
     QList<QAction*> actList;
 
-    actList = manager.actions();
+    actList = manager->actions();
     
-    act = new QAction(KIcon("line"), i18n("Line"), 0);
+    act = new QAction(KIcon("line"), i18n("Line"), parent);
     act->setObjectName("report:line");
     act->setData(9);
     actList << act;
@@ -1189,7 +1190,7 @@ QList<QAction*> KoReportDesigner::actions()
     foreach(QAction *a, actList) {
         ++i;
         if(a->data().toInt() >= 10) {
-            QAction *sep = new QAction("separator", 0);
+            QAction *sep = new QAction("separator", parent);
             sep->setSeparator(true);
             actList.insert(i-1, sep);
             break;

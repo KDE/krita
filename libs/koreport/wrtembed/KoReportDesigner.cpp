@@ -275,7 +275,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
         }
     }
     this->slotPageButton_Pressed();
-    emit(reportDataChanged());
+    emit reportDataChanged();
     setModified(false);
 }
 
@@ -370,7 +370,7 @@ void KoReportDesigner::setReportData(KoReportData* kodata)
         m_kordata = kodata;
         slotPageButton_Pressed();
         setModified(true);
-        emit(reportDataChanged());
+        emit reportDataChanged();
     }
 }
 
@@ -572,7 +572,7 @@ void KoReportDesigner::setModified(bool mod)
     m_modified = mod;
 
     if (m_modified) {
-        emit(dirty());
+        emit dirty();
     }
 }
 
@@ -897,14 +897,14 @@ unsigned int KoReportDesigner::selectionCount() const
 
 void KoReportDesigner::changeSet(KoProperty::Set *s)
 {
-    //Set the checked state of the report proerties button
+    //Set the checked state of the report properties button
     if (s == m_set)
         d->pageButton->setCheckState(Qt::Checked);
     else
         d->pageButton->setCheckState(Qt::Unchecked);
 
     m_itmset = s;
-    emit(propertySetChanged());
+    emit propertySetChanged();
 }
 
 //

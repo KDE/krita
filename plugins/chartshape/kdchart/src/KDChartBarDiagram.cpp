@@ -389,8 +389,11 @@ void BarDiagram::paint( PaintContext* ctx )
 
     // Only paint elements that are in the paint context's rectangle
     // (in this case boundaries of the diagram, see paintEvent())
-    ctx->painter()->setClipping( true );
-    ctx->painter()->setClipRect( ctx->rectangle() );
+    // HACK: If planes share axes, clipping does not work, at least in bar diagrams  (danders)
+    if ( plane == ctx->coordinatePlane() ) {
+        ctx->painter()->setClipping( true );
+        ctx->painter()->setClipRect( ctx->rectangle() );
+    }
 
     // paint different bar types Normal - Stacked - Percent - Default Normal
     d->implementor->paint( ctx );

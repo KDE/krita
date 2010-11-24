@@ -68,7 +68,16 @@ void CartesianGrid::drawGrid( PaintContext* context )
     //qDebug() << "KDChart::CartesianGrid::drawGrid( PaintContext* context ) called";
 
     CartesianCoordinatePlane* plane = dynamic_cast<CartesianCoordinatePlane*>(context->coordinatePlane());
-   
+    Q_ASSERT_X ( plane, "CartesianGrid::drawGrid",
+                 "Bad function call: PaintContext::coodinatePlane() NOT a cartesian plane." );
+    const GridAttributes gridAttrsX( plane->gridAttributes( Qt::Horizontal ) );
+    const GridAttributes gridAttrsY( plane->gridAttributes( Qt::Vertical ) );
+
+    //qDebug() << "OK:";
+    if ( !gridAttrsX.isGridVisible() && !gridAttrsY.isGridVisible() ) {
+        return;
+    }
+
     // This plane is used for tranlating the coordinates - not for the data boundaries
     PainterSaver p( context->painter() );
     plane = dynamic_cast< CartesianCoordinatePlane* >( plane->sharedAxisMasterPlane( context->painter() ) );
@@ -77,11 +86,6 @@ void CartesianGrid::drawGrid( PaintContext* context )
                  "Bad function call: PaintContext::coodinatePlane() NOT a cartesian plane." );
 
 
-    const GridAttributes gridAttrsX( plane->gridAttributes( Qt::Horizontal ) );
-    const GridAttributes gridAttrsY( plane->gridAttributes( Qt::Vertical ) );
-
-    //qDebug() << "OK:";
-    if ( !gridAttrsX.isGridVisible() && !gridAttrsY.isGridVisible() ) return;
     //qDebug() << "A";
 
     // important: Need to update the calculated mData,

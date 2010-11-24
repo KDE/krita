@@ -104,7 +104,7 @@ bool KRSectionData::xLessThan(KoReportItemBase* s1, KoReportItemBase* s2)
 
 void KRSectionData::createProperties()
 {
-    m_set = new KoProperty::Set(0, "Section");
+    m_set = new KoProperty::Set(this, "Section");
 
     m_height = new KoProperty::Property("height", KoUnit::unit("cm").fromUserValue(2.0), i18n("Height"));
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));

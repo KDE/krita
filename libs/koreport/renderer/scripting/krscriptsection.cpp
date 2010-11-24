@@ -60,7 +60,7 @@ void Section::setHeight(qreal h)
 
 QString Section::name()
 {
-    return m_section->m_name;
+    return m_section->objectName();
 }
 
 QObject* Section::objectByNumber(int i)

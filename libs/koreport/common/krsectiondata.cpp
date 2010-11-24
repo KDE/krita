@@ -2,6 +2,7 @@
  * Kexi report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,18 +32,15 @@
 
 KRSectionData::KRSectionData()
 {
-    createProperties();
+    createProperties(QDomElement());
 }
 
 KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData* report)
 {
     Q_UNUSED(report)
-    
-    createProperties();
-    m_name = elemSource.tagName();
-    setObjectName(m_name);
+    setObjectName(elemSource.tagName());
 
-    if (m_name != "report:section") {
+    if (objectName() != QLatin1String("report:section")) {
         m_valid = false;
         return;
     }
@@ -52,7 +50,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
         m_valid = false;
         return;
     }
-    m_height->setValue(KoUnit::parseValue(elemSource.attribute("svg:height", "2.0cm")));
+    createProperties(elemSource);
 
     m_backgroundColor->setValue(QColor(elemSource.attribute("fo:background-color")));
 
@@ -89,7 +87,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
 
 KRSectionData::~KRSectionData()
 {
-
+    delete m_set;
 }
 
 bool KRSectionData::zLessThan(KoReportItemBase* s1, KoReportItemBase* s2)
@@ -102,13 +100,15 @@ bool KRSectionData::xLessThan(KoReportItemBase* s1, KoReportItemBase* s2)
     return s1->position().toPoint().x() < s2->position().toPoint().x();
 }
 
-void KRSectionData::createProperties()
+void KRSectionData::createProperties(const QDomElement & elemSource)
 {
     m_set = new KoProperty::Set(this, "Section");
 
     m_height = new KoProperty::Property("height", KoUnit::unit("cm").fromUserValue(2.0), i18n("Height"));
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white, i18n("Background Color"));
     m_height->setOption("unit", "cm");
+    if (!elemSource.isNull())
+        m_height->setValue(KoUnit::parseValue(elemSource.attribute("svg:height", "2.0cm")));
 
     m_set->addProperty(m_height);
     m_set->addProperty(m_backgroundColor);
@@ -116,11 +116,12 @@ void KRSectionData::createProperties()
 
 QString KRSectionData::name() const
 {
-    return (m_name + '-' + sectionTypeString(m_type));
+    return (objectName() + '-' + sectionTypeString(m_type));
 }
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
+#warning use QMap
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -177,6 +178,7 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
+#warning use QMap
     KRSectionData::Section sec;
     kDebug() << "Determining section type for " << s;
 

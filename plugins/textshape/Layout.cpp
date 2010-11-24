@@ -135,8 +135,8 @@ qreal Layout::width()
     qreal ptWidth = shape->size().width();
     m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_format.rightMargin() + shape->size().width());
     if (m_inTable) {
-    QTextCursor tableFinder(m_block);
-    QTextTable *table = tableFinder.currentTable();
+        QTextCursor tableFinder(m_block);
+        QTextTable *table = tableFinder.currentTable();
         m_tableLayout.setTable(table);
         ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
         m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
@@ -163,6 +163,9 @@ qreal Layout::x()
         result += m_dropCapsAffectedLineWidthAdjust;
     m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, result);
     if (m_inTable) {
+        QTextCursor tableFinder(m_block);
+        QTextTable *table = tableFinder.currentTable();
+        m_tableLayout.setTable(table);
         result += m_tableLayout.cellContentX(m_tableCell);
         m_allTimeMinimumLeft = qMin(m_allTimeMinimumLeft, m_tableLayout.tableMinX());
     }

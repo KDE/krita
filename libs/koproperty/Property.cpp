@@ -630,6 +630,7 @@ Property::operator= (const Property & property)
         d->listData = new ListData(*property.d->listData); //QMap<QString, QVariant>(*(property.d->valueList));
     }
     if (property.d->composed) {
+        delete d->composed;
         d->composed = FactoryManager::self()->createComposedProperty(this);
         // updates all children value, using ComposedPropertyInterface
         setValue(property.value());
@@ -752,6 +753,9 @@ ComposedPropertyInterface* Property::composedProperty() const
 void
 Property::setComposedProperty(ComposedPropertyInterface *prop)
 {
+    if (d->composed == prop)
+        return;
+    delete d->composed;
     d->composed = prop;
 }
 

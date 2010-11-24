@@ -89,9 +89,8 @@
 #include <QTime>
 #include <QString>
 
-#include <QByteArray>
-#include <QBuffer>
 #include <QTextStream>
+#include <QXmlStreamReader>
 
 #include "KoTextLoader_p.h"
 // if defined then debugging is enabled
@@ -138,6 +137,7 @@ public:
     // For handling complex-deletes i.e delete changes that merges elements of different types
     int openedElements;
     QMap<QString, QString> deleteAroundContentMap;
+    QVector<QString> nameSpacesList;
     void copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream);
     void copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
@@ -385,7 +385,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         d->closeChangeRegion(tag);
                         processDeleteChange(cursor, changeId, deleteStartPosition);
                     } else if (d->changeTracker && localName == "remove-leaving-content-start"){
-                        _node = loadTagTypeChanges(tag);
+                        _node = loadTagTypeChanges(tag, cursor);
                     } else {
                     }
                 }
@@ -446,7 +446,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                             if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                                 d->closeChangeRegion(tag);
                         } else {
-                            _node = loadTagTypeChanges(tag);
+                            _node = loadTagTypeChanges(tag, cursor);
                         }
                     } else if (localName == "h") {  // heading
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "insert-around-content") { 
@@ -470,7 +470,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                             if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                                 d->closeChangeRegion(tag);
                         } else {
-                            _node = loadTagTypeChanges(tag);
+                            _node = loadTagTypeChanges(tag, cursor);
                         }
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                             || localName == "list" || localName == "numbered-paragraph") {  // OASIS
@@ -522,9 +522,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
     cursor.endEditBlock();
 }
 
-KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem)
+KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QTextCursor &cursor)
 {
     KoXmlNode lastProcessedNode = elem;
+    d->nameSpacesList.clear();
 
     QString generatedXml; 
     QTextStream xmlStream(&generatedXml);
@@ -547,8 +548,31 @@ KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem)
         lastProcessedNode = lastProcessedNode.nextSibling();        
     } while(d->openedElements && !lastProcessedNode.isNull());
 
+    QString docXml;
+    QTextStream docStream(&docXml);
+    
+    docStream << "<generated-xml";
+    for (int i=0; i<d->nameSpacesList.size();i++) {
+        docStream << " xmlns:ns" << i << "=";
+        docStream << "\"" << d->nameSpacesList.at(i) << "\"";
+    }
+    docStream << ">";
+    docStream << generatedXml;
+    docStream << "</generated-xml>";
+
     if (!d->openedElements) {
-        //Load the generated xml
+        //Parse and Load the generated xml
+        QString errorMsg;
+        int errorLine, errorColumn;
+        KoXmlDocument doc;
+
+        QXmlStreamReader reader(docXml);
+        reader.setNamespaceProcessing(true);
+
+        bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+        if (ok) {
+            loadBody(doc.documentElement(), cursor);     
+        }   
     }
 
     return lastProcessedNode.previousSibling();
@@ -558,7 +582,13 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
 {
     KoXmlElement element = node.firstChild().toElement();
     QString changeEndId = node.toElement().attributeNS(KoXmlNS::delta, "end-element-idref");
-    QString nodeName  = element.namespaceURI() + ":" + element.localName();
+    int index = nameSpacesList.indexOf(element.namespaceURI());
+    if (index == -1) {
+        nameSpacesList.append(element.namespaceURI());
+        index = nameSpacesList.size() - 1;
+    }
+    QString nodeName  = QString("ns%1") + ":" + element.localName();
+    nodeName = nodeName.arg(index);
     
     deleteAroundContentMap.insert(changeEndId, nodeName);
     openedElements++;
@@ -568,8 +598,14 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
 
     QPair<QString, QString> attributeName;
     foreach(attributeName, attributeNSNames) {
-        xmlStream << " " << attributeName.first << ":" << attributeName.second << "=";
-        xmlStream << "\"" << element.attributeNS(attributeName.first, attributeName.second) << "\"";
+        QString nameSpace = attributeName.first;
+        int index = nameSpacesList.indexOf(nameSpace);
+        if (index == -1) {
+            nameSpacesList.append(nameSpace);
+            index = nameSpacesList.size() - 1;
+        }
+        xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+        xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
     }
     
     xmlStream << ">";       
@@ -595,15 +631,27 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         xmlStream << node.toText().data(); 
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
-        QString nodeName  = element.namespaceURI() + ":" + element.localName();
+        int index = nameSpacesList.indexOf(element.namespaceURI());
+        if (index == -1) {
+            nameSpacesList.append(element.namespaceURI());
+            index = nameSpacesList.size() - 1;
+        }
+        QString nodeName  = QString("ns%1") + ":" + element.localName();
+        nodeName = nodeName.arg(index);
         if (!copyOnlyChildren) {
             xmlStream << "<" << nodeName;
             QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
 
             QPair<QString, QString> attributeName;
             foreach(attributeName, attributeNSNames) {
-                xmlStream << " " << attributeName.first << ":" << attributeName.second << "=";
-                xmlStream << "\"" << element.attributeNS(attributeName.first, attributeName.second) << "\"";
+                QString nameSpace = attributeName.first;
+                int index = nameSpacesList.indexOf(nameSpace);
+                if (index == -1) {
+                    nameSpacesList.append(nameSpace);
+                    index = nameSpacesList.size() - 1;
+                }
+                xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+                xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
             }
             xmlStream << ">";       
         }

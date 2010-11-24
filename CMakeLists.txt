@@ -254,6 +254,14 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 ## Generate a file for prefix information
 ##
 
+ #############################
+##############################
+## Add the benchmark target ##
+##############################
+#############################
+
+include(MacroKOfficeAddBenchmark)
+
  ####################
 #####################
 ## Define includes ##

@@ -226,11 +226,9 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);
-    if (d->horizontalAlignment == HorizontalOffset && d->verticalAlignment == VerticalOffset
-            && d->distance.x() == 0
-            && d->distance.y() < -fm.ascent() + d->shape->size().height() // not above line
-            && d->distance.y() < fm.descent()) { // not below line
+    if (d->verticalAlignment == VerticalOffset) {
         d->isPositionedInline = true;
+        d->distance.setX(0);
         object.setWidth(d->shape->size().width());
         object.setAscent(qMax((qreal) 0, -d->distance.y()));
         object.setDescent(qMax((qreal) 0, d->shape->size().height() + d->distance.y()));

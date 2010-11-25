@@ -350,9 +350,13 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     }
     style.addProperty("draw:textarea-vertical-align", verticalAlign);
 
-    if (KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize) {
+    KoTextDocument::ResizeMethod resize = KoTextDocument(m_textShapeData->document()).resizeMethod();
+    if (resize == KoTextDocument::AutoGrowWidth || resize == KoTextDocument::AutoGrowWidthAndHeight)
+        style.addProperty("draw:auto-grow-width", "true");
+    if (resize != KoTextDocument::AutoGrowHeight && resize != KoTextDocument::AutoGrowWidthAndHeight)
+        style.addProperty("draw:auto-grow-height", "false");
+    if (resize == KoTextDocument::ShrinkToFitResize)
         style.addProperty("draw:fit-to-size", "true");
-    }
 
     return KoShape::saveStyle(style, context);
 }
@@ -377,8 +381,20 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
 
     m_textShapeData->setVerticalAlignment(alignment);
 
-    const bool fittosize = styleStack.property(KoXmlNS::draw, "fit-to-size") == "true";
-    KoTextDocument(m_textShapeData->document()).setResizeMethod(fittosize ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
+    const QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
+    const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
+    const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
+    KoTextDocument::ResizeMethod resize = KoTextDocument::NoResize;
+    if (fitToSize == "true") {
+        resize = KoTextDocument::ShrinkToFitResize;
+    }
+    else if (autoGrowWidth == "true") {
+        resize = autoGrowHeight != "false" ? KoTextDocument::AutoGrowWidthAndHeight : KoTextDocument::AutoGrowWidth;
+    }
+    else if (autoGrowHeight != "false") {
+        resize = KoTextDocument::AutoGrowHeight;
+    }
+    KoTextDocument(m_textShapeData->document()).setResizeMethod(resize);
 }
 
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -517,21 +533,30 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     }
 }
 
-//TODO turn this into a QUndoCommand to be ablt to undo/redo
-void TextShape::setShrinkToFit(bool enabled)
+KoTextDocument::ResizeMethod TextShape::resizeMethod() const
 {
     KoTextDocument document(m_textShapeData->document());
-    document.setResizeMethod(enabled ? KoTextDocument::ShrinkToFitResize : KoTextDocument::NoResize);
+    return document.resizeMethod();
+}
 
-    if (enabled) {
-        if (!dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
-            ShrinkToFitShapeContainer::wrapShape(this);
-        }
-    } else {
+void TextShape::setResizeMethod(KoTextDocument::ResizeMethod resizemethod)
+{
+    KoTextDocument document(m_textShapeData->document());
+    if (document.resizeMethod() == resizemethod)
+        return; // nothing to do
+
+    if (document.resizeMethod() == KoTextDocument::ShrinkToFitResize) { // cleanup needed if the previous resizeMethod was ShrinkToFitResize
         if (ShrinkToFitShapeContainer *c = dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
             c->unwrapShape(this);
             delete c;
         }
     }
-}
 
+    document.setResizeMethod(resizemethod); 
+    
+    if (resizemethod == KoTextDocument::ShrinkToFitResize) {
+        if (!dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
+            ShrinkToFitShapeContainer::wrapShape(this);
+        }
+    }
+}

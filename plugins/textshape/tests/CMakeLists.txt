@@ -40,6 +40,7 @@ set(TestChangeListCommand_test_SRCS
     ../commands/ShowChangesCommand.cpp
     ../commands/AcceptChangeCommand.cpp
     ../commands/RejectChangeCommand.cpp
+    ../commands/AutoResizeCommand.cpp
     ../TextTool.cpp
     ../TextEditingPluginContainer.cpp
     ../ChangeTracker.cpp
@@ -149,6 +150,7 @@ set(TestTextTool_test_SRCS
     ../commands/TextCommandBase.cpp
     ../commands/TextCutCommand.cpp
     ../commands/TextPasteCommand.cpp
+    ../commands/AutoResizeCommand.cpp
     ../dialogs/ChangeConfigureDialog.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/CharacterHighlighting.cpp
@@ -207,6 +209,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../commands/ShowChangesCommand.cpp
     ../commands/AcceptChangeCommand.cpp
     ../commands/RejectChangeCommand.cpp
+    ../commands/AutoResizeCommand.cpp
     ../TextTool.cpp
     ../TextEditingPluginContainer.cpp
     ../ChangeTracker.cpp

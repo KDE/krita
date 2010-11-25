@@ -121,7 +121,8 @@ public:
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
 
-    void setShrinkToFit(bool enabled);
+    KoTextDocument::ResizeMethod resizeMethod() const;
+    void setResizeMethod(KoTextDocument::ResizeMethod resizemethod);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

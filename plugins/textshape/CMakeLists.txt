@@ -75,6 +75,7 @@ SET ( textshape_SRCS
     commands/DeleteCommand.cpp
     commands/AcceptChangeCommand.cpp
     commands/RejectChangeCommand.cpp
+    commands/AutoResizeCommand.cpp
 )
 
 kde4_add_ui_files(textshape_SRCS

@@ -231,7 +231,11 @@ private slots:
     void setTextColor(const KoColor &color);
     /// change background color of a selected text
     void setBackgroundColor(const KoColor &color);
-    /// Enable or disable shrink-to-fit.
+    /// Enable or disable grow-width-to-fit-text.
+    void setGrowWidthToFit(bool enabled);
+    /// Enable or disable grow-height-to-fit-text.
+    void setGrowHeightToFit(bool enabled);
+    /// Enable or disable shrink-to-fit-text.
     void setShrinkToFit(bool enabled);
     /// set Paragraph style of current selection. Exisiting style will be completely overridden.
     void setStyle(KoParagraphStyle *syle);
@@ -326,6 +330,8 @@ private:
     KAction *m_actionShowChanges;
     KAction *m_actionRecordChanges;
     KAction *m_configureChangeTracking;
+    KAction *m_growWidthAction;
+    KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
     KFontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;

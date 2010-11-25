@@ -155,30 +155,35 @@ public:
 
 void KoTextDocumentLayout::Private::adjustSize()
 {
-    if (parent->resizeMethod() != KoTextDocument::AutoResize)
-        return;
+    KoTextDocument::ResizeMethod resize = parent->resizeMethod();
+    if (resize != KoTextDocument::AutoResize && resize != KoTextDocument::AutoGrowWidth && resize != KoTextDocument::AutoGrowHeight && resize != KoTextDocument::AutoGrowWidthAndHeight)
+        return; // nothing to do for us
 
-    if (parent->shapes().isEmpty())
-        return;
-    // Limit auto-resizing to the first shape only (there won't be more
-    // with auto-resizing turned on, unless specifically set)
-    KoShape *shape = parent->shapes().first();
+    QSizeF documentSize = parent->documentSize();
+    foreach(KoShape *shape, parent->shapes()) {
+        QSizeF size = shape->size();
+        qreal width = 0;
+        qreal height = 0;
 
-    // Determine the maximum width of all text lines
-    qreal width = 0;
-    for (QTextBlock block = parent->document()->begin(); block.isValid(); block = block.next()) {
-        // The block layout's wrap mode must be QTextOption::NoWrap, thus the line count
-        // of a valid block must be 1 (otherwise this resizing scheme wouldn't work)
-        Q_ASSERT(block.layout()->lineCount() == 1);
-        QTextLine line = block.layout()->lineAt(0);
-        width = qMax(width, line.naturalTextWidth());
+        if (resize == KoTextDocument::AutoResize || resize == KoTextDocument::AutoGrowWidth || resize == KoTextDocument::AutoGrowWidthAndHeight) {
+            width = documentSize.width();
+            if (resize != KoTextDocument::AutoResize)
+                width = qMax(size.width(), width); // only grow but don't shrink
+        } else {
+            width = size.width();
+        }
+
+        if (resize == KoTextDocument::AutoResize || resize == KoTextDocument::AutoGrowHeight || resize == KoTextDocument::AutoGrowWidthAndHeight) {
+            height = documentSize.height();
+            if (resize != KoTextDocument::AutoResize)
+                height = qMax(size.height(), height); // only grow but don't shrink
+        } else {
+            height = size.height();
+        }
+
+        // and finally adjust the shapes size
+        shape->setSize(QSizeF(width, height));
     }
-
-    // Use position and height of last text line to calculate height
-    QTextLine line = parent->document()->lastBlock().layout()->lineAt(0);
-    qreal height = line.position().y() + line.height();
-
-    shape->setSize(QSizeF(width, height));
 }
 
 // ------------------- KoTextDocumentLayout --------------------

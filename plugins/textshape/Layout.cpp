@@ -285,9 +285,8 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
     int oldFootnoteDocLength = -1;
     const qreal footnoteHeight = findFootnote(line, &oldFootnoteDocLength);
     if (!m_newShape
-            // In case the text shape automatically resizes itself to fit all contents,
-            // every line will fit, so don't bother
-            && m_parent->resizeMethod() == KoTextDocument::NoResize
+            // In case the text shape automatically resizes itself or grows to fit all contents, every line will fit, so don't bother
+            && (m_parent->resizeMethod() == KoTextDocument::NoResize || m_parent->resizeMethod() == KoTextDocument::AutoGrowWidth)
             // line does not fit.
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
               < line.y() + line.height() + m_shapeBorder.bottom
@@ -552,7 +551,10 @@ bool Layout::nextParag()
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();
-    option.setWrapMode(m_parent->resizeMethod() != KoTextDocument::AutoResize ? QTextOption::WrapAtWordBoundaryOrAnywhere : QTextOption::NoWrap);
+    bool nowrap = m_parent->resizeMethod() == KoTextDocument::AutoResize ||
+                  m_parent->resizeMethod() == KoTextDocument::AutoGrowWidth ||
+                  m_parent->resizeMethod() == KoTextDocument::AutoGrowWidthAndHeight;
+    option.setWrapMode(nowrap ? QTextOption::NoWrap : QTextOption::WrapAtWordBoundaryOrAnywhere);
     qreal tabStopDistance =  m_format.property(KoParagraphStyle::TabStopDistance).toDouble();
     if (tabStopDistance > 0) {
         tabStopDistance *= qt_defaultDpiY() / 72.;

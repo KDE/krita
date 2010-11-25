@@ -41,6 +41,7 @@
 #include "commands/ShowChangesCommand.h"
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/DeleteCommand.h"
+#include "commands/AutoResizeCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -320,6 +321,16 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
     connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(const KoColor &)), this, SLOT(setBackgroundColor(const KoColor &)));
 
+    m_growWidthAction = new KAction(KIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
+    addAction("grow_to_fit_width", m_growWidthAction);
+    m_growWidthAction->setCheckable(true);
+    connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
+    
+    m_growHeightAction = new KAction(KIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
+    addAction("grow_to_fit_height", m_growHeightAction);
+    m_growHeightAction->setCheckable(true);
+    connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
+    
     m_shrinkToFitAction = new KAction(KIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
     addAction("shrink_to_fit", m_shrinkToFitAction);
     m_shrinkToFitAction->setCheckable(true);
@@ -1332,9 +1343,14 @@ void TextTool::updateActions()
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
-    
     m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
+    
+    m_growWidthAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
+    m_growWidthAction->setChecked(resizemethod == KoTextDocument::AutoGrowWidth || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
+
+    m_growHeightAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
+    m_growHeightAction->setChecked(resizemethod == KoTextDocument::AutoGrowHeight || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
@@ -2152,9 +2168,22 @@ void TextTool::setBackgroundColor(const KoColor &color)
     m_textEditor.data()->setTextBackgroundColor(color.toQColor());
 }
 
+void TextTool::setGrowWidthToFit(bool enabled)
+{
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowWidth, enabled));
+    updateActions();
+}
+
+void TextTool::setGrowHeightToFit(bool enabled)
+{
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowHeight, enabled));
+    updateActions();
+}
+
 void TextTool::setShrinkToFit(bool enabled)
 {
-    m_textShape->setShrinkToFit(enabled);
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::ShrinkToFitResize, enabled));
+    updateActions();
 }
 
 void TextTool::shapeAddedToDoc(KoShape *shape)

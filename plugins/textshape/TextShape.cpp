@@ -468,10 +468,9 @@ void TextShape::markLayoutDone()
         // so the ShrinkToFitShapeContainer is able to do it's job. This special-casing is needed
         // cause if shrink-to-fit is enable we have to emit KoShape::SizeChanged even if the shape's
         // size didn't change but only the content's size did to be able to recalc.
-        if (ShrinkToFitShapeContainer *c = dynamic_cast<ShrinkToFitShapeContainer*>(parent()))
-            if (ShrinkToFitShapeContainerModel *m = dynamic_cast<ShrinkToFitShapeContainerModel*>(c->model()))
-                if (m->isDirty())
-                    m->containerChanged(c, KoShape::SizeChanged);
+        if (ShrinkToFitShapeContainer *c = dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
+            c->maybeUpdateShrink();
+        }
     }
 }
 

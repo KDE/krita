@@ -143,6 +143,14 @@ public:
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
     void copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren = false);
 
+    //For handling delete changes    
+    KoDeleteChangeMarker *insertDeleteChangeMarker(QTextCursor &cursor, const QString &id);
+    void processDeleteChange(QTextCursor &cursor);
+
+    // For Merging consecutive delete changes into a single change
+    bool checkForDeleteMerge(QTextCursor &cursor, const QString &id, int startPosition);
+    QMap<KoDeleteChangeMarker *, QPair<int, int> > deleteChangeMarkerMap;
+
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
             textSharedData(0),
@@ -336,6 +344,9 @@ KoTextLoader::~KoTextLoader()
 
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, bool isDeleteChange)
 {
+    static int rootCallChecker = 0;
+    rootCallChecker++;
+
     cursor.beginEditBlock();
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
@@ -377,13 +388,17 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                         d->changeTracker->loadOdfChanges(tag);
                     else if (d->changeTracker && localName == "removed-content") {
                         QString changeId = tag.attributeNS(KoXmlNS::delta, "removal-change-idref");
-                        insertDeleteChangeMarker(cursor, changeId);
                         int deleteStartPosition = cursor.position();
                         cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
                         d->openChangeRegion(tag);
                         loadBody(tag, cursor, true);
                         d->closeChangeRegion(tag);
-                        processDeleteChange(cursor, changeId, deleteStartPosition);
+                        if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
+                            QTextCursor tempCursor(cursor);
+                            tempCursor.setPosition(deleteStartPosition);
+                            KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
+                            d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
+                        }
                     } else if (d->changeTracker && localName == "remove-leaving-content-start"){
                         _node = loadTagTypeChanges(tag, cursor);
                     } else {
@@ -518,6 +533,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
             processBody();
         }
         endBody();
+    }
+
+    rootCallChecker--;
+    if (rootCallChecker == 1) {
+        d->processDeleteChange(cursor);
     }
     cursor.endEditBlock();
 }
@@ -908,7 +928,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
     forEachElement(e, element) {
         if (e.localName() == "removed-content") {
             QString changeId = e.attributeNS(KoXmlNS::delta, "removal-change-idref");
-            insertDeleteChangeMarker(cursor, changeId);
             int deleteStartPosition = cursor.position();
             d->openChangeRegion(e);
             KoXmlElement deletedElement;
@@ -919,7 +938,12 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
                 loadListItem(deletedElement, cursor, level, isDeleteChange); 
             }
             d->closeChangeRegion(e);
-            processDeleteChange(cursor, changeId, deleteStartPosition);
+            if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
+                QTextCursor tempCursor(cursor);
+                tempCursor.setPosition(deleteStartPosition);
+                KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
+                d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
+            }
         } else {
             if (!firstTime && !numberedParagraph)
                 cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
@@ -1249,11 +1273,15 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             d->closeChangeRegion(ts);
         } else if (isDeltaNS && localName == "removed-content") {
             QString changeId = ts.attributeNS(KoXmlNS::delta, "removal-change-idref");
-            insertDeleteChangeMarker(cursor, changeId);
             int deleteStartPosition = cursor.position();
             bool stripLeadingSpace = true;
             loadSpan(ts,cursor,&stripLeadingSpace);
-            processDeleteChange(cursor, changeId, deleteStartPosition);
+            if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
+                QTextCursor tempCursor(cursor);
+                tempCursor.setPosition(deleteStartPosition);
+                KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
+                d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
+            }
         } else if (isDeltaNS && localName == "merge") {
             loadMerge(ts, cursor);
         } else if (isTextNS && localName == "change-start") { // text:change-start
@@ -1534,7 +1562,6 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
     QString changeId = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
-    insertDeleteChangeMarker(cursor, changeId);
     int deleteStartPosition = cursor.position();
     
     for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
@@ -1556,18 +1583,24 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
         }
     }
 
-    processDeleteChange(cursor, changeId, deleteStartPosition);
+    if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
+        QTextCursor tempCursor(cursor);
+        tempCursor.setPosition(deleteStartPosition);
+        KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
+        d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
+    }
 }
 
-void KoTextLoader::insertDeleteChangeMarker(QTextCursor &cursor, const QString &id)
+KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCursor &cursor, const QString &id)
 {
-    int changeId = d->changeTracker->getLoadedChangeId(id);
+    KoDeleteChangeMarker *retMarker = NULL;
+    int changeId = changeTracker->getLoadedChangeId(id);
     if (changeId) {
-        if (d->changeStack.count())
-            d->changeTracker->setParent(changeId, d->changeStack.top());
-        KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+        if (changeStack.count())
+            changeTracker->setParent(changeId, changeStack.top());
+        KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(changeTracker);
         deleteChangemarker->setChangeId(changeId);
-        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
         changeElement->setDeleteChangeMarker(deleteChangemarker);
         changeElement->setEnabled(true);
         changeElement->setChangeType(KoGenChange::DeleteChange);
@@ -1576,19 +1609,65 @@ void KoTextLoader::insertDeleteChangeMarker(QTextCursor &cursor, const QString &
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             textObjectManager->insertInlineObject(cursor, deleteChangemarker);
         }
+        retMarker = deleteChangemarker;
     }
+    return retMarker;
 }
 
-void KoTextLoader::processDeleteChange(QTextCursor &cursor, const QString &id, int startPosition)
+bool KoTextLoader::Private::checkForDeleteMerge(QTextCursor &cursor, const QString &id, int startPosition)
 {
-    int changeId = d->changeTracker->getLoadedChangeId(id);
+    bool result = false;
+    int changeId = changeTracker->getLoadedChangeId(id);
     if (changeId) {
-        KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
+        //Check if this change is at the beginning of the block and if there is a
+        //delete-change at the end of the previous block with the same change-id 
+        //If both the conditions are true, then merge both these deletions.
+        if ( startPosition == (cursor.block().position())) {
+            QTextCursor tempCursor(cursor);
+
+            tempCursor.setPosition(cursor.block().previous().position() + cursor.block().previous().length() - 1);
+            int prevChangeId = tempCursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+            
+            if ((prevChangeId) && (prevChangeId == changeId)) {
+                QPair<int, int> deleteMarkerRange = deleteChangeMarkerMap.value(changeElement->getDeleteChangeMarker());
+                deleteMarkerRange.second = cursor.position();
+                deleteChangeMarkerMap.insert(changeElement->getDeleteChangeMarker(), deleteMarkerRange);
+                result = true;
+            }
+        }
+
         int endPosition = cursor.position();
+        //Set the char format to the changeId
+        cursor.setPosition(startPosition);
+        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+        QTextCharFormat format;
+        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        cursor.mergeCharFormat(format);
+        cursor.clearSelection();
+    }
+   
+    return result; 
+}
+
+void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
+{
+    QList<KoDeleteChangeMarker *> markersList = deleteChangeMarkerMap.keys();
+
+    KoDeleteChangeMarker *marker;
+    foreach (marker, markersList) {
+        int changeId = marker->changeId();
+
+        KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
+        QPair<int, int> rangeValue = deleteChangeMarkerMap.value(marker);
+        int startPosition = rangeValue.first;
+        int endPosition = rangeValue.second;
 
         //Set the char format to the changeId
         cursor.setPosition(startPosition);
         cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+
         QTextCharFormat format;
         format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
         cursor.mergeCharFormat(format);
@@ -1597,7 +1676,6 @@ void KoTextLoader::processDeleteChange(QTextCursor &cursor, const QString &id, i
         QTextDocumentFragment deletedFragment = KoChangeTracker::generateDeleteFragment(cursor, changeElement->getDeleteChangeMarker());
         changeElement->setDeleteData(deletedFragment);
 
-        //Now Remove this from the document. Will be re-inserted whenever changes have to be seen
         cursor.removeSelectedText();
     }
 }

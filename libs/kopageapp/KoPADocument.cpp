@@ -326,9 +326,6 @@ bool KoPADocument::saveOdfSettings( KoStore * store )
     KoStoreDevice settingsDev( store );
     KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings" );
 
-    // add this so that OOo reads guides lines and grid data from ooo:view-settings
-    settingsWriter->addAttribute( "xmlns:ooo", "http://openoffice.org/2004/office" );
-
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");

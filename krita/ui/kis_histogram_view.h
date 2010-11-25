@@ -63,7 +63,7 @@ public:
 
     virtual ~KisHistogramView();
 
-    void setPaintDevice(KisPaintDeviceSP dev);
+    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
     void setHistogram(KisHistogramSP histogram);
 

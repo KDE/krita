@@ -60,7 +60,7 @@ void Section::setHeight(qreal h)
 
 QString Section::name()
 {
-    return m_section->m_name;
+    return m_section->objectName();
 }
 
 QObject* Section::objectByNumber(int i)
@@ -69,8 +69,8 @@ QObject* Section::objectByNumber(int i)
                 return new Scripting::Line(dynamic_cast<KoReportItemLine*>(m_section->m_objects[i]));
     }
     else {
-        KoReportPluginManager &manager = KoReportPluginManager::self();
-        KoReportPluginInterface *plugin = manager.plugin(m_section->m_objects[i]->typeName());
+        KoReportPluginManager* manager = KoReportPluginManager::self();
+        KoReportPluginInterface *plugin = manager->plugin(m_section->m_objects[i]->typeName());
         if (plugin) {
             QObject *obj = plugin->createScriptInstance(m_section->m_objects[i]);
             if (obj) {

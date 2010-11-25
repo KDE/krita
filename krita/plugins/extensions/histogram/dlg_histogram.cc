@@ -61,9 +61,9 @@ DlgHistogram::~DlgHistogram()
     delete m_page;
 }
 
-void DlgHistogram::setPaintDevice(KisPaintDeviceSP dev)
+void DlgHistogram::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds)
 {
-    m_page->setPaintDevice(dev);
+    m_page->setPaintDevice(dev, bounds);
 }
 
 void DlgHistogram::okClicked()

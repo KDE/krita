@@ -77,7 +77,7 @@ ReportSection::ReportSection(KoReportDesigner * rptdes, const char * name)
     Q_UNUSED(name)
 
     m_sectionData = new KRSectionData();
-    connect(m_sectionData->properties(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+    connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
     int dpiY = KoDpi::dpiY();
 
@@ -189,8 +189,8 @@ void ReportSection::initFromXML(QDomNode & section)
             (new KoReportDesignerItemLine(node, m_sceneView->designer(), m_scene))->setVisible(true);
         }
         else {
-            KoReportPluginManager &manager = KoReportPluginManager::self();
-            KoReportPluginInterface *plugin = manager.plugin(n);
+            KoReportPluginManager* manager = KoReportPluginManager::self();
+            KoReportPluginInterface *plugin = manager->plugin(n);
             if (plugin) {
                 QObject *obj = plugin->createDesignerInstance(node, m_reportDesigner, m_scene);
                 if (obj) {
@@ -245,7 +245,7 @@ void ReportSection::slotPageOptionsChanged(KoProperty::Set &set)
 void ReportSection::slotSceneClicked()
 {
     m_reportDesigner->setActiveScene(m_scene);
-    m_reportDesigner->changeSet(m_sectionData->properties());
+    m_reportDesigner->changeSet(m_sectionData->propertySet());
 }
 
 void ReportSection::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)

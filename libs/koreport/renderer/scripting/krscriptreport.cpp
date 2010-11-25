@@ -64,8 +64,8 @@ QObject* Report::objectByName(const QString &n)
                         return new Scripting::Line(dynamic_cast<KoReportItemLine*>(o));
             }
             else {
-                KoReportPluginManager &manager = KoReportPluginManager::self();
-                KoReportPluginInterface *plugin = manager.plugin(o->typeName());
+                KoReportPluginManager* manager = KoReportPluginManager::self();
+                KoReportPluginInterface *plugin = manager->plugin(o->typeName());
                 if (plugin) {
                     QObject *obj = plugin->createScriptInstance(o);
                     if (obj) {

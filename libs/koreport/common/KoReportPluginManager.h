@@ -30,7 +30,7 @@ class KoReportPluginManager : public QObject
 {
     Q_OBJECT
     public:
-        static KoReportPluginManager &self();
+        static KoReportPluginManager* self();
 
         KoReportPluginInterface* plugin(const QString& p) const;
         QList<QAction*> actions();

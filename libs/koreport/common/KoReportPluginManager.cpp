@@ -34,10 +34,10 @@
 #include "../items/image/KoReportImagePlugin.h"
 #include "../items/text/KoReportTextPlugin.h"
 
-KoReportPluginManager& KoReportPluginManager::self()
+KoReportPluginManager* KoReportPluginManager::self()
 {
-  static KoReportPluginManager instance; // only instantiated when self() is called
-  return instance;
+    K_GLOBAL_STATIC(KoReportPluginManager, instance) // only instantiated when self() is called
+    return instance;
 }
 
 KoReportPluginManager::KoReportPluginManager() : d(new KoReportPluginManagerPrivate())
@@ -60,7 +60,6 @@ KoReportPluginInterface* KoReportPluginManager::plugin(const QString& p) const
 QList<QAction*> KoReportPluginManager::actions()
 {
     QList<QAction*> actList;
-    QAction *act;
 
     KoReportDesigner designer(0);
     const QMap<QString, KoReportPluginInterface*> plugins = d->m_plugins;
@@ -68,7 +67,7 @@ QList<QAction*> KoReportPluginManager::actions()
     foreach(KoReportPluginInterface* plugin, plugins) {
         KoReportPluginInfo *info = plugin->info();
         if (info) {
-            act = new QAction(KIcon(info->icon()), info->name(), 0);
+            QAction *act = new QAction(KIcon(info->icon()), info->name(), this);
             act->setObjectName(info->className());
 
             //Store the order priority in the user data field
@@ -78,7 +77,6 @@ QList<QAction*> KoReportPluginManager::actions()
     }
     
     return actList;
-
 }
 
 

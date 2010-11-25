@@ -137,7 +137,7 @@ KRPos KoReportItemBase::position()
     return m_pos;
 }
 
-KoProperty::Set* KoReportItemBase::properties()
+KoProperty::Set* KoReportItemBase::propertySet() const
 {
  return m_set;
 }

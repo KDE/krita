@@ -142,6 +142,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs)
     KisShapeLayerShapePaste paste(this, m_d->controller);
     bool success = paste.paste(KoOdf::Text, mimeData);
     Q_ASSERT(success);
+    Q_UNUSED(success); // for release build
 }
 
 KisShapeLayer::~KisShapeLayer()

@@ -60,7 +60,7 @@ KisHistogramView::~KisHistogramView()
 {
 }
 
-void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev)
+void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds)
 {
     m_cs = dev->colorSpace();
 
@@ -72,7 +72,7 @@ void KisHistogramView::setPaintDevice(KisPaintDeviceSP dev)
     m_from = m_currentProducer->viewFrom();
     m_width = m_currentProducer->viewWidth();
 
-    m_histogram = new KisHistogram(dev, m_currentProducer, LINEAR);
+    m_histogram = new KisHistogram(dev, bounds, m_currentProducer, LINEAR);
 
     updateHistogram();
 }

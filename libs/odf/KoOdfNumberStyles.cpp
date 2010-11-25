@@ -66,10 +66,9 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
     QString format;
     int precision = -1;
     int leadingZ  = 1;
-#ifdef __GNUC__
-#warning Nothing changes thousandsSep - dead constant
-#endif
-    bool thousandsSep = false;
+
+    // Long-standing todo: thousandsSep
+    //bool thousandsSep = false;
     //todo negred
     //bool negRed = false;
     bool ok = false;
@@ -147,15 +146,15 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
                 if (ok)
                     leadingZ = d;
             }
-            if (thousandsSep && leadingZ <= 3) {
-                format += "#,";
-                for (i = leadingZ; i <= 3; ++i)
-                    format += '#';
-            }
+//            if (thousandsSep && leadingZ <= 3) {
+//                format += "#,";
+//                for (i = leadingZ; i <= 3; ++i)
+//                    format += '#';
+//            }
             for (i = 1; i <= leadingZ; ++i) {
                 format +=  '0';
-                if ((i % 3 == 0) && thousandsSep)
-                    format = + ',' ;
+//                if ((i % 3 == 0) && thousandsSep)
+//                    format = + ',' ;
             }
             if (precision > -1) {
                 format += '.';
@@ -187,16 +186,16 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
                     exp = 1;
             }
 
-            if (thousandsSep && leadingZ <= 3) {
-                format += "#,";
-                for (i = leadingZ; i <= 3; ++i)
-                    format += '#';
-            }
+//            if (thousandsSep && leadingZ <= 3) {
+//                format += "#,";
+//                for (i = leadingZ; i <= 3; ++i)
+//                    format += '#';
+//            }
 
             for (i = 1; i <= leadingZ; ++i) {
                 format += '0';
-                if ((i % 3 == 0) && thousandsSep)
-                    format += ',';
+//                if ((i % 3 == 0) && thousandsSep)
+//                    format += ',';
             }
 
             if (precision > -1) {

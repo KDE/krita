@@ -42,7 +42,7 @@ void KoReportDesignerItemText::init(QGraphicsScene * scene)
     if (scene)
         scene->addItem(this);
 
-    connect(properties(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
+    connect(propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
 
     KoReportDesignerItemRectBase::init(&m_pos, &m_size, m_set);

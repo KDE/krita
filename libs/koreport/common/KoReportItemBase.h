@@ -102,7 +102,7 @@ public:
     */
     virtual bool supportsSubQuery();
 
-    KoProperty::Set* properties();
+    KoProperty::Set* propertySet() const;
 
     KRPos position();
 

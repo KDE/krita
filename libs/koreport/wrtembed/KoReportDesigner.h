@@ -243,11 +243,10 @@ public:
     bool isEntityNameUnique(const QString &, KoReportItemBase* = 0) const;
 
     /**
-    @brief Return a list of actions that represent the netities that can be inserted into the report
-    @return QList of QActions
-    */
-
-    static QList<QAction*> actions();
+    @brief Returns a list of actions that represent the entities that can be inserted into the report.
+    Actions are created as children of @a parent.
+    @return list of QActions */
+    static QList<QAction*> actions(QObject* parent);
 
     
 public slots:

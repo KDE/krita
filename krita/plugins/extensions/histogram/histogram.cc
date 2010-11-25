@@ -98,9 +98,9 @@ void Histogram::slotActivated()
     if (layer) {
         KisPaintDeviceSP dev = layer->paintDevice();
 
-        if (dev)
-            dlgHistogram->setPaintDevice(dev);
-
+        if (dev) {
+            dlgHistogram->setPaintDevice(dev, layer->image()->bounds());
+        }
         if (dlgHistogram->exec() == QDialog::Accepted) {
             // Do nothing; this is an informational dialog
         }

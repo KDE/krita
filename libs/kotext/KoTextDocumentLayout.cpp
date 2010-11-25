@@ -132,11 +132,17 @@ public:
         if (shape == 0)
             return;
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
+        Q_ASSERT(data);
+        // clears the cached documentSize
+        documentSize = QSizeF();
+        // adjust the size of the shape before re-positioning
+        adjustSize();
+        // now adjust the position of the shape
         qreal offset = 0;
         if (data->verticalAlignment() == Qt::AlignVCenter) {
-            offset = (shape->size().height() - (parent->m_state->y() - data->documentOffset())) / 2.;
+            offset = (shape->size().height() - parent->documentSize().height()) / 2.;
         } else if (data->verticalAlignment() == Qt::AlignBottom) {
-            offset = shape->size().height() - (parent->m_state->y() - data->documentOffset());
+           offset = shape->size().height() - (parent->m_state->y() - data->documentOffset());
         }
         if (offset != 0) {
             data->setDocumentOffset(data->documentOffset() - offset);
@@ -151,6 +157,7 @@ public:
     KoTextDocumentLayout *parent;
     KoTextDocument::ResizeMethod resizeMethod;
     KoPostscriptPaintDevice *paintDevice;
+    QSizeF documentSize;
 };
 
 void KoTextDocumentLayout::Private::adjustSize()
@@ -198,7 +205,6 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextDocumentLay
         m_state = new LayoutStateDummy();
 
     connect (this, SIGNAL(finishedLayout()), this, SLOT(postLayoutHook()));
-    connect(this, SIGNAL(finishedLayout()), SLOT(adjustSize()));
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
@@ -255,8 +261,11 @@ QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const
 
 QSizeF KoTextDocumentLayout::documentSize() const
 {
-    QTextFrame *frame = document()->rootFrame();
-    return frameBoundingRect(frame).size();
+    if (!d->documentSize.isValid()) {
+        QTextFrame *frame = document()->rootFrame();
+        d->documentSize = frameBoundingRect(frame).size();
+    }
+    return d->documentSize;
 }
 
 QRectF KoTextDocumentLayout::expandVisibleRect(const QRectF &rect) const

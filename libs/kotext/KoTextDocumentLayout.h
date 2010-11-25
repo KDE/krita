@@ -269,7 +269,6 @@ protected:
 
 private:
     // Takes care of auto-resizing the text shape
-    Q_PRIVATE_SLOT(d, void adjustSize())
     Q_PRIVATE_SLOT(d, void relayoutPrivate())
     Q_PRIVATE_SLOT(d, void postLayoutHook())
 

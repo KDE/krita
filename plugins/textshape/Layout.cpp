@@ -285,8 +285,10 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
     int oldFootnoteDocLength = -1;
     const qreal footnoteHeight = findFootnote(line, &oldFootnoteDocLength);
     if (!m_newShape
-            // In case the text shape automatically resizes itself or grows to fit all contents, every line will fit, so don't bother
+            // In case the text shape automatically resizes itself or grows to fit all contents into the available height, every line will fit, so don't bother
             && (m_parent->resizeMethod() == KoTextDocument::NoResize || m_parent->resizeMethod() == KoTextDocument::AutoGrowWidth)
+            // If the vertical alignment is centered then KoTextDocumentLayout::Private::postLayoutHook will take care to proper position
+            && m_data->verticalAlignment() != Qt::AlignVCenter
             // line does not fit.
             && m_data->documentOffset() + shape->size().height() - footnoteHeight
               < line.y() + line.height() + m_shapeBorder.bottom

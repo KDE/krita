@@ -140,7 +140,7 @@ public:
         // now adjust the position of the shape
         qreal offset = 0;
         if (data->verticalAlignment() == Qt::AlignVCenter) {
-            offset = (shape->size().height() - parent->documentSize().height()) / 2.;
+           offset = (shape->size().height() - (parent->m_state->y() - data->documentOffset())) / 2.;
         } else if (data->verticalAlignment() == Qt::AlignBottom) {
            offset = shape->size().height() - (parent->m_state->y() - data->documentOffset());
         }

@@ -1014,8 +1014,14 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
     QString family = element->attributeNS(KoXmlNS::style, "family", "table-cell");
     context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
 
-    context.styleStack().setTypeProperties("table-cell");   // load all style attributes from "style:table-properties"
-    loadOdfProperties(context.styleStack());   // load the KoTableCellStyle from the stylestack
+    context.styleStack().setTypeProperties("table-cell");
+    loadOdfProperties(context.styleStack());
+
+    context.styleStack().setTypeProperties("graphic");
+    loadOdfProperties(context.styleStack());
+
+    context.styleStack().setTypeProperties("paragraph");
+    loadOdfProperties(context.styleStack());
     context.styleStack().restore();
 }
 

@@ -71,7 +71,7 @@
 
 // KoShapeCache
 
-/// Empty all cached pixmaps from the pixmap cache
+/// Empty all cached images from the image cache
 void KoShapeCache::purge()
 {
     qDeleteAll(deviceData);

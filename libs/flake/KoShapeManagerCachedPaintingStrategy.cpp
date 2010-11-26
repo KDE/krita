@@ -30,8 +30,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
-#include <QPixmap>
-#include <QPixmapCache>
+#include <QImage>
 #include <QTransform>
 #include <QRegion>
 
@@ -41,7 +40,7 @@
   We have two coordinate systems:
 
   * shape coordinate system: in pts. There are two origins: the internal 0,0 origin which is the
-    top-left of the cache pixmap, and the position of the shape on the canvas.
+    top-left of the cache image, and the position of the shape on the canvas.
   * view coordinate system: pts per inch multiplied by zoom
 
   The shape registers with areas of the shape's surface are exposed in shape update events. This uses
@@ -62,8 +61,8 @@
 /// This has an origin of 0,0
 static QRectF shapeBoundingRect(KoShape *shape)
 {
-    // First step, compute the rectangle used for the pixmap if there are effects
-    // -- they make the pixmap bigger. And then convert clip region to view coordinates.
+    // First step, compute the rectangle used for the image if there are effects
+    // -- they make the image bigger. And then convert clip region to view coordinates.
 
     QRectF rc;
 
@@ -76,43 +75,45 @@ static QRectF shapeBoundingRect(KoShape *shape)
     return rc;
 }
 
-/// Create an empty, transparent pixmap
-static QPixmap createCachePixmap(KoShape *shape, const KoViewConverter &viewConverter)
+/// Create an empty, transparent image
+static QImage createCacheimage(KoShape *shape, const KoViewConverter &viewConverter)
 {
     QRectF zoomedClipRect = viewConverter.documentToView(shapeBoundingRect(shape));
 
     // Initialize the buffer image
-    QPixmap pix(zoomedClipRect.size().toSize());
+    QImage pix(zoomedClipRect.size().toSize(), QImage::Format_ARGB32);
     pix.fill(Qt::transparent);
 
-    qDebug() << "Created empty pixmap for shape "
+    qDebug() << "Created empty image for shape "
              << shape << shape->shapeId()
              << "size" << pix.size();
     return pix;
 }
 
 /**
- * Ask the shape manager to paint (part of) the current shape onto the pixmap.
+ * Ask the shape manager to paint (part of) the current shape onto the image.
  * We need to setup the painter clipping very carefully to make this work correctly.
  *
  * @param shape the shape that is going to be painted
  * @shapeManager the shapeManager that provides the logic for painting shapes
  *               and their associated effects
  * @param viewConverter convert between view and shape (document coordinates)
- * @param pixmapExposed the exposed region of the shape in document coordinates
- * @param pix the cached pixmap
+ * @param imageExposed the exposed region of the shape in document coordinates
+ * @param pix the cached image
  */
 static void paintIntoCache(KoShape *shape,
                            KoShapeManager *shapeManager,
                            const KoViewConverter &viewConverter,
-                           QRegion pixmapExposed,
-                           QPixmap *pix)
+                           QRegion imageExposed,
+                           QImage *pix)
 {
-    qDebug() << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << pixmapExposed.boundingRect();
-    QPainter pixmapPainter(pix);
-    pixmapPainter.setClipRegion(pixmapExposed);
-    pixmapPainter.fillRect(pixmapExposed.boundingRect(), Qt::transparent);
-    shapeManager->paintShape(shape, pixmapPainter, viewConverter, false);
+    qDebug() << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
+    QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5);
+    QPainter imagePainter(pix);
+    imagePainter.eraseRect(rc);
+    imagePainter.fillRect(rc, Qt::transparent);
+    imagePainter.setClipRegion(imageExposed);
+    shapeManager->paintShape(shape, imagePainter, viewConverter, false);
 }
 
 // QRectF::intersects() returns false always if either the source or target
@@ -202,32 +203,32 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         qDebug() << "\tdevicedata all exposed" << deviceData->allExposed
                  << "exposed rects" << deviceData->exposed.size();
 
-        bool pixmapFound = !deviceData->pixmap.isNull();
+        bool imageFound = !deviceData->image.isNull();
 
-        qDebug() << "Found pixmap" << pixmapFound << "size" << deviceData->pixmap.size();
+        qDebug() << "Found image" << imageFound << "size" << deviceData->image.size();
 
         QSize viewShapeSize = viewConverter.documentToView(adjustedBoundingRect).toRect().size();
-        qDebug() << "\tShape size in view coordinates"  << viewShapeSize << "cached pixmap size" << deviceData->pixmap.size();
+        qDebug() << "\tShape size in view coordinates"  << viewShapeSize << "cached image size" << deviceData->image.size();
 
         // some parts or all of this shape need to repainted
         if (deviceData->allExposed                // complete repaint
                 || !deviceData->exposed.isEmpty() // part update of the shape requested
-                || viewShapeSize != deviceData->pixmap.size())   // zoomlevel changed
+                || viewShapeSize != deviceData->image.size())   // zoomlevel changed
         {
             qDebug() << "\tSome or all parts of this shape need to be repainted";
 
-            // Auto-adjust the pixmap size because the shape seems to have grown or shrunk.
-            if (viewShapeSize != deviceData->pixmap.size()) {
-                qDebug() << "\tAuto-adjust the pixmap size because the shape seems to have grown or shrunk." << viewShapeSize << deviceData->pixmap.size();
-                // exposed needs to cover the whole pixmap
-                deviceData->pixmap = createCachePixmap(shape, viewConverter);
+            // Auto-adjust the image size because the shape seems to have grown or shrunk.
+            if (viewShapeSize != deviceData->image.size()) {
+                qDebug() << "\tAuto-adjust the image size because the shape seems to have grown or shrunk." << viewShapeSize << deviceData->image.size();
+                // exposed needs to cover the whole image
+                deviceData->image = createCacheimage(shape, viewConverter);
                 deviceData->allExposed = true;
                 deviceData->exposed.clear();
             }
 
             // Will contain the exposed rects that overlap the painter's clipregion's rects in view
             // coordinates, translated  to the shape position = 0,0
-            QRegion pixmapExposed;
+            QRegion imageExposed;
 
             // this vector contains the areas that the shape wanted repainted but that are
             // outside the current qpainter's exposed regions' bounds.
@@ -240,7 +241,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
 
                 qDebug() << "\tFully exposed, do not clip, repainting " << rc;
 
-                pixmapExposed += rc;
+                imageExposed += rc;
 
                 deviceData->allExposed = false;
                 deviceData->exposed.clear();
@@ -257,7 +258,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
                     rc = viewConverter.documentToView(rc);
                     qDebug() << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
                     if (rc.intersects(painterClipRegionBounds)) {
-                        pixmapExposed += rc.toRect().adjusted(-1, -1, 1, 1);
+                        imageExposed += rc.toRect().adjusted(-1, -1, 1, 1);
                     }
                     else {
                         // this is exposed but not yet visible, so we do not cache it
@@ -269,11 +270,11 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
             }
 
             // Render the exposed areas.
-            paintIntoCache(shape, shapeManager(), viewConverter, pixmapExposed, &deviceData->pixmap);
+            paintIntoCache(shape, shapeManager(), viewConverter, imageExposed, &deviceData->image);
 
         }
         // Paint the cache on the original painter
-        painter.drawPixmap(viewConverter.documentToView(adjustedBoundingRect.topLeft()), deviceData->pixmap);
+        painter.drawImage(viewConverter.documentToView(adjustedBoundingRect.topLeft()), deviceData->image);
     }
 
     qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<";

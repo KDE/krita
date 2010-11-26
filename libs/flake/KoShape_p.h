@@ -40,19 +40,15 @@ class KoShapeCache
 public:
     struct DeviceData {
         DeviceData() : allExposed(true) {}
-        ~DeviceData()
-        {
-            QPixmapCache::remove(key);
-        }
 
-        // index into the global pixmap cache
-        QPixmapCache::Key key;
+        QPixmap pixmap;
 
         // List of logical exposed rects in document coordinates
         // These are the rects that are queued for updating, not
         // the rects that have already been painted.
         QVector<QRectF> exposed;
-
+        // region that has been cached into the pixmap already
+        QRegion painted; 
         // true if the whole shape has been exposed and asked to redraw
         bool allExposed;
     };

@@ -65,7 +65,6 @@
 #include <QList>
 #include <QMap>
 #include <QByteArray>
-#include <QPixmapCache>
 #include <kdebug.h>
 
 #include <limits>

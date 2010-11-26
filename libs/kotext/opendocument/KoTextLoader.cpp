@@ -526,7 +526,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     }
 
     rootCallChecker--;
-    if (rootCallChecker == 1) {
+    if (rootCallChecker == 0) {
         d->processDeleteChange(cursor);
     }
     cursor.endEditBlock();
@@ -919,7 +919,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 }
 
 void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
-{ 
+{
     bool numberedParagraph = e.parentNode().toElement().localName() == "numbered-paragraph";
     
     if (!numberedParagraph && e.parentNode().toElement().localName() == "removed-content") {

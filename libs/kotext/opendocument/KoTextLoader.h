@@ -39,7 +39,6 @@ class QTextCursor;
 class QTextTable;
 class QRect;
 class KoBookmarkManager;
-class KoDocumentRdfBase;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
@@ -72,7 +71,7 @@ public:
     *
     * @param context The context the KoTextLoader is called in
     */
-    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0, KoShape *shape = 0);
+    explicit KoTextLoader(KoShapeLoadingContext &context, KoShape *shape = 0);
 
     /**
     * Destructor.
@@ -85,7 +84,7 @@ public:
     * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
     * instance likes to load an ODF element.
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor);
 
 signals:
 
@@ -116,12 +115,12 @@ private:
     /**
     * Load the list from the \p element into the \p cursor .
     */
-    void loadList(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);
+    void loadList(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load a list-item into the cursor
     */
-    void loadListItem(KoXmlElement &e, QTextCursor &cursor, int level, bool isDeleteChange);
+    void loadListItem(KoXmlElement &e, QTextCursor &cursor, int level);
 
     /**
     * Load the section from the \p element into the \p cursor .
@@ -211,26 +210,6 @@ private:
     * Store the delete changes in the deleteChangeTable. Will be processed with "change" is encountered
     */
     void storeDeleteChanges(KoXmlElement &tag);
-
-    /**
-    * Checks whether a list should be treated as a valid list. A Delete change might have a list but should not be treated as such.
-    * This Information is obtained from the ODF Metadata
-    * **This is a work-around for a bug in the spec**
-    */
-    bool isValidList(const QString& xmlId) const;
-
-    /**
-    * Checks whether a list-item should be treated as a valid list-item. A Delete change might have a list-item but should not be treated as such.
-    * This Information is obtained from the ODF Metadata
-    * **This is a work-around for a bug in the spec**
-    */
-    bool isValidListItem(const QString& xmlId) const;
-
-    /**
-    * Find the level of a list from the Metadata.
-    * **This is a work-around for a bug in the spec**
-    */
-    int listLevel(const QString& xmlId) const;
 
     /**
     * This is called in case of a paragraph or a header split.

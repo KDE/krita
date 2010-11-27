@@ -37,7 +37,7 @@ class ReportScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
-    ReportScene(qreal w, qreal h, KoReportDesigner*);
+    ReportScene(qreal w, qreal h, KoReportDesigner* rd);
     virtual ~ReportScene();
     KoReportDesigner* document() {
         return m_rd;

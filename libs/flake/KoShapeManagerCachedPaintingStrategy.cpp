@@ -84,7 +84,7 @@ static QImage createCacheimage(KoShape *shape, const KoViewConverter &viewConver
     QImage pix(zoomedClipRect.size().toSize(), QImage::Format_ARGB32);
     pix.fill(Qt::transparent);
 
-    qDebug() << "Created empty image for shape "
+    kDebug(30006) << "Created empty image for shape "
              << shape << shape->shapeId()
              << "size" << pix.size();
     return pix;
@@ -107,13 +107,15 @@ static void paintIntoCache(KoShape *shape,
                            QRegion imageExposed,
                            QImage *pix)
 {
-    qDebug() << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
+    kDebug(30006) << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
+    //static int i = 0;
     QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5);
     QPainter imagePainter(pix);
     imagePainter.eraseRect(rc);
     imagePainter.fillRect(rc, Qt::transparent);
     imagePainter.setClipRegion(imageExposed);
     shapeManager->paintShape(shape, imagePainter, viewConverter, false);
+    //pix->save(QString("cache_%1").arg(++i));
 }
 
 // QRectF::intersects() returns false always if either the source or target
@@ -140,8 +142,8 @@ KoShapeManagerCachedPaintingStrategy::~KoShapeManagerCachedPaintingStrategy()
 
 void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &painter, const KoViewConverter &viewConverter, bool forPrint)
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>\n\tshape" << shape->shapeId() << "viewConverter zoom" << viewConverter.zoom();
-    qDebug() << "\tpainter clipregion" << painter.clipRegion().boundingRect();
+    kDebug(30006) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>\n\tshape" << shape->shapeId() << "viewConverter zoom" << viewConverter.zoom();
+    kDebug(30006) << "\tpainter clipregion" << painter.clipRegion().boundingRect();
 
     if (!shapeManager()) {
         return;
@@ -172,7 +174,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         // make it comparable to the exposed area of the painter.
         adjustedBoundingRect.translate(shape->position());
 
-        qDebug() << "\tshape->boundingRect" << boundingRect <<
+        kDebug(30006) << "\tshape->boundingRect" << boundingRect <<
                     "\n\tadjustedrect" << adjustedBoundingRect;
 
         // view coordinates
@@ -181,16 +183,16 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         // document coordinates
         QRectF painterShapeClippingBounds = viewConverter.viewToDocument(painterClippingBounds);
 
-        qDebug() << "\tpainterClippingBounds in view coordinates:" << painterClippingBounds
+        kDebug(30006) << "\tpainterClippingBounds in view coordinates:" << painterClippingBounds
                     << "in document coordinates:" << painterShapeClippingBounds;
 
         QRectF exposedRect = adjustedBoundingRect.intersected(painterShapeClippingBounds);
         if (exposedRect.isEmpty()) {
-            qDebug() << "\t\tNo exposed area for shape" << shape << shape->shapeId();
+            kDebug(30006) << "\t\tNo exposed area for shape" << shape << shape->shapeId();
             return;
         }
 
-        qDebug() << "\tIntersection of shape and painter clipping in document coordinates" << exposedRect;
+        kDebug(30006) << "\tIntersection of shape and painter clipping in document coordinates" << exposedRect;
 
         // get or create the devicedata object
         KoShapeCache *shapeCache = shape->d_ptr->shapeCache();
@@ -200,26 +202,26 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         }
         KoShapeCache::DeviceData *deviceData = shapeCache->deviceData[shapeManager()];
 
-        qDebug() << "\tdevicedata all exposed" << deviceData->allExposed
+        kDebug(30006) << "\tdevicedata all exposed" << deviceData->allExposed
                  << "exposed rects" << deviceData->exposed.size();
 
         bool imageFound = !deviceData->image.isNull();
 
-        qDebug() << "Found image" << imageFound << "size" << deviceData->image.size();
+        kDebug(30006) << "Found image" << imageFound << "size" << deviceData->image.size();
 
         QSize viewShapeSize = viewConverter.documentToView(adjustedBoundingRect).toRect().size();
-        qDebug() << "\tShape size in view coordinates"  << viewShapeSize << "cached image size" << deviceData->image.size();
+        kDebug(30006) << "\tShape size in view coordinates"  << viewShapeSize << "cached image size" << deviceData->image.size();
 
         // some parts or all of this shape need to repainted
         if (deviceData->allExposed                // complete repaint
                 || !deviceData->exposed.isEmpty() // part update of the shape requested
                 || viewShapeSize != deviceData->image.size())   // zoomlevel changed
         {
-            qDebug() << "\tSome or all parts of this shape need to be repainted";
+            kDebug(30006) << "\tSome or all parts of this shape need to be repainted";
 
             // Auto-adjust the image size because the shape seems to have grown or shrunk.
             if (viewShapeSize != deviceData->image.size()) {
-                qDebug() << "\tAuto-adjust the image size because the shape seems to have grown or shrunk." << viewShapeSize << deviceData->image.size();
+                kDebug(30006) << "\tAuto-adjust the image size because the shape seems to have grown or shrunk." << viewShapeSize << deviceData->image.size();
                 // exposed needs to cover the whole image
                 deviceData->image = createCacheimage(shape, viewConverter);
                 deviceData->allExposed = true;
@@ -239,7 +241,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
                 // XXX: optimize this by applying the painter clip region.
                 QRect rc(QPoint(0,0), viewShapeSize);
 
-                qDebug() << "\tFully exposed, do not clip, repainting " << rc;
+                kDebug(30006) << "\tFully exposed, do not clip, repainting " << rc;
 
                 imageExposed += rc;
 
@@ -250,13 +252,13 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
                 // get the bounding rect for the clip region
                 QRectF painterClipRegionBounds = painterClippingBounds.translated(-viewConverter.documentToView(shape->position()));
 
-                qDebug() << "\tTrying to do partial updates within bounds" << painterClipRegionBounds;
+                kDebug(30006) << "\tTrying to do partial updates within bounds" << painterClipRegionBounds;
 
                 const QVector<QRectF> &exposed = deviceData->exposed;
                 for (int i = 0; i < exposed.size(); ++i) {
                     QRectF rc = exposed.at(i);
                     rc = viewConverter.documentToView(rc);
-                    qDebug() << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
+                    kDebug(30006) << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
                     if (rc.intersects(painterClipRegionBounds)) {
                         imageExposed += rc.toRect().adjusted(-1, -1, 1, 1);
                     }
@@ -277,7 +279,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         painter.drawImage(viewConverter.documentToView(adjustedBoundingRect.topLeft()), deviceData->image);
     }
 
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    kDebug(30006) << "<<<<<<<<<<<<<<<<<<<<<<<<<<<";
 }
 
 void KoShapeManagerCachedPaintingStrategy::adapt(KoShape *shape, QRectF &rect)

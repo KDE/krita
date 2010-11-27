@@ -90,6 +90,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         , m_imageCollection(0)
 {
     setShapeId(TextShape_SHAPEID);
+    setCacheMode(KoShape::ScaledCache);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
@@ -552,8 +553,8 @@ void TextShape::setResizeMethod(KoTextDocument::ResizeMethod resizemethod)
         }
     }
 
-    document.setResizeMethod(resizemethod); 
-    
+    document.setResizeMethod(resizemethod);
+
     if (resizemethod == KoTextDocument::ShrinkToFitResize) {
         if (!dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
             ShrinkToFitShapeContainer::wrapShape(this);

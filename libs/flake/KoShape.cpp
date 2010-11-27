@@ -99,7 +99,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       selectable(true),
       detectCollision(false),
       protectContent(false),
-      cacheMode(KoShape::ScaledCache),
+      cacheMode(KoShape::NoCache),
       cache(0)
 {
     connectors.append(QPointF(0.5, 0.0));

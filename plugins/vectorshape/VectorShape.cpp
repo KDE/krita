@@ -60,7 +60,7 @@ VectorShape::VectorShape()
     , m_ownsBytes(false)
 {
     setShapeId(VectorShape_SHAPEID);
-
+    setCacheMode(KoShape::ScaledCache);
    // Default size of the shape.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 }
@@ -206,7 +206,7 @@ void VectorShape::drawEmf(QPainter &painter) const
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 #if 1
-    // Create a new painter output strategy.  Last param = true means keep aspect ratio. 
+    // Create a new painter output strategy.  Last param = true means keep aspect ratio.
     Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
 #else
@@ -290,7 +290,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         m_type = VectorTypeEmf;
     else
         m_type = VectorTypeNone;
-    
+
     // Return true if we managed to identify the type.
     return m_type != VectorTypeNone;
 }

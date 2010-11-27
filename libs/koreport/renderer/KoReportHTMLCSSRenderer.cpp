@@ -86,6 +86,7 @@ bool KoReportHTMLCSSRenderer::render(const KoReportRendererContext& context, ORO
     return status;
 }
 
+//! @todo use QTextStream for efficiency
 QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
 {
     QString html;
@@ -195,19 +196,25 @@ QString KoReportHTMLCSSRenderer::renderCSS(ORODocument *document)
         }
     }
 
-    html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
-    html += "<style type=\"text/css\">";
+    //! @todo add option for creating separate css file
+    html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
+        "<html>\n"
+        "<head>\n"
+        "<style type=\"text/css\">\n";
 
     for (int i = 0; i < styles.count(); ++i) {
         html += ".style" + QString::number(i) + '{' + styles[i] + "}\n";
     }
 
-    html += "</style>";
-    html += "<title>" + document->title() + "</title>";
-    html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
-    html += "</head><body>";
-    html += body;
-    html += "</body></html>";
+    html += "</style>\n"
+        "<title>" + document->title() + "</title>\n"
+        "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n"
+        "<meta name=\"generator\" content=\"Kexi\">\n"
+        "</head>\n"
+        "<body>\n"
+      + body
+      + "\n</body>\n"
+        "</html>\n";
 
     return html;
 }

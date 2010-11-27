@@ -158,12 +158,19 @@ QString KoReportHTMLTableRenderer::renderTable(ORODocument *document)
         }
     }
     body += "</table>\n";
-    html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
-    html += "<title>" + document->title() + "</title>";
-    html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
-    html += "</head><body>";
-    html += body;
-    html += "</body></html>";
+    html = QLatin1String("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"
+        "<html>\n"
+        "<head>\n"
+        "<title>")
+      + document->title()
+      + QLatin1String("</title>\n"
+        "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n"
+        "<meta name=\"generator\" content=\"Kexi\">\n"
+        "</head>\n"
+        "<body>\n")
+      + body
+      + QLatin1String("\n</body>\n"
+        "</html>\n");
 
     return html;
 }

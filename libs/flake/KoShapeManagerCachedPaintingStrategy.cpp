@@ -108,14 +108,17 @@ static void paintIntoCache(KoShape *shape,
                            QImage *pix)
 {
     kDebug(30006) << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
-    //static int i = 0;
-    QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5);
+//    static int i = 0;
+    QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5).intersected(pix->rect());
+    // really, really erase what's in here
+    for (int y = rc.y(); y <= rc.bottom(); ++y) {
+        uchar* line = pix->scanLine(y);
+        memset(line, 0, rc.width() * 4);
+     }
     QPainter imagePainter(pix);
-    imagePainter.eraseRect(rc);
-    imagePainter.fillRect(rc, Qt::transparent);
     imagePainter.setClipRegion(imageExposed);
     shapeManager->paintShape(shape, imagePainter, viewConverter, false);
-    //pix->save(QString("cache_%1").arg(++i));
+//    pix->save(QString("cache_%1.png").arg(++i));
 }
 
 // QRectF::intersects() returns false always if either the source or target

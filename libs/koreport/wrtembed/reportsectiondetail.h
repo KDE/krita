@@ -32,7 +32,7 @@ class ReportSectionDetail : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ReportSectionDetail(KoReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSectionDetail(KoReportDesigner * rptdes);
     virtual ~ReportSectionDetail();
 
     enum PageBreak {

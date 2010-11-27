@@ -71,11 +71,9 @@ static const char *arrow_xpm[] = {
 // ReportSection method implementations
 //
 
-ReportSection::ReportSection(KoReportDesigner * rptdes, const char * name)
+ReportSection::ReportSection(KoReportDesigner * rptdes)
         : QWidget(rptdes)
 {
-    Q_UNUSED(name)
-
     m_sectionData = new KRSectionData();
     connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));

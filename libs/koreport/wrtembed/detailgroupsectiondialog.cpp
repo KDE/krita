@@ -26,11 +26,9 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
+DetailGroupSectionDialog::DetailGroupSectionDialog(QWidget* parent, Qt::WindowFlags fl)
         : QDialog(parent, fl)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(modal);
     setupUi(this);
 
     // signals and slots connections

@@ -25,11 +25,9 @@
 //
 // ReportSectionDetail
 //
-ReportSectionDetail::ReportSectionDetail(KoReportDesigner * rptdes, const char * name)
+ReportSectionDetail::ReportSectionDetail(KoReportDesigner * rptdes)
         : QWidget(rptdes)
 {
-    Q_UNUSED(name);
-
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_pageBreak = BreakNone;
     m_vboxlayout = new QVBoxLayout(this);

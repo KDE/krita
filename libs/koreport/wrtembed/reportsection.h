@@ -56,7 +56,7 @@ class ReportSection : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ReportSection(KoReportDesigner * rptdes, const char * name = 0);
+    explicit ReportSection(KoReportDesigner * rptdes);
     virtual ~ReportSection();
 
     void setTitle(const QString & s);

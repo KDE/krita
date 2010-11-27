@@ -29,11 +29,10 @@
 //
 // ReportSectionDetailGroup
 //
-ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, ReportSectionDetail * rsd, QWidget * parent, const char * name)
+ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, ReportSectionDetail * rsd,
+                                                   QWidget * parent)
         : QObject(parent)
 {
-    Q_UNUSED(name);
-
     m_pageBreak = BreakNone;
     m_sort = Qt::AscendingOrder;
     KoReportDesigner * rd = 0;
@@ -41,7 +40,7 @@ ReportSectionDetailGroup::ReportSectionDetailGroup(const QString & column, Repor
     if (m_reportSectionDetail) {
         rd = rsd->reportDesigner();
     } else {
-        kDebug() << "Error RSD is null";
+        kWarning() << "Error: ReportSectionDetail is null";
     }
     m_groupHeader = new ReportSection(rd /*, _rsd*/);
     m_groupFooter = new ReportSection(rd /*, _rsd*/);

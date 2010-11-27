@@ -35,7 +35,7 @@ class ReportSectionDetailGroup : public QObject
 {
     Q_OBJECT
 public:
-    ReportSectionDetailGroup(const QString &, ReportSectionDetail *, QWidget * parent, const char * name = 0);
+    ReportSectionDetailGroup(const QString &, ReportSectionDetail *, QWidget * parent = 0);
     ~ReportSectionDetailGroup();
 
     enum PageBreak {

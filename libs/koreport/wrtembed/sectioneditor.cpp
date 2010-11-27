@@ -37,14 +37,10 @@
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  true to construct a modal dialog.
  */
-SectionEditor::SectionEditor(QWidget* parent, const char* name, bool modal, Qt::WFlags fl)
+SectionEditor::SectionEditor(QWidget* parent, Qt::WindowFlags fl)
         : QDialog(parent, fl)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(modal);
-
     setupUi(this);
-
 
     // signals and slots connections
     connect(buttonOk, SIGNAL(clicked()), this, SLOT(accept()));

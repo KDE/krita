@@ -23,6 +23,7 @@
 #include "TableLayoutData.h"
 
 #include <KoTableStyle.h>
+#include <KoTableBorderStyle.h>
 #include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
@@ -383,7 +384,7 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
             if (row == tableCell.row() && column == tableCell.column()) {
                 // This is an actual cell we want to draw, and not a covered one.
                 QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
-                KoTableCellStyle cellStyle(tfm);
+                KoTableBorderStyle cellStyle(tfm);
 
                 QRectF bRect = cellBoundingRect(tableCell,tfm);
                 if (collapsing) {
@@ -404,7 +405,7 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                             QRectF belowBRect = cellBoundingRect(tableCellBelow);
                             qreal x = qMax(bRect.x(), belowBRect.x());
                             qreal x2 = qMin(bRect.right(), belowBRect.right());
-                            KoTableCellStyle cellBelowStyle(tableCellBelow.format().toTableCellFormat());
+                            KoTableBorderStyle cellBelowStyle(tableCellBelow.format().toTableCellFormat());
                             cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
                         }
                     }
@@ -426,7 +427,7 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                             qreal y = qMax(bRect.y(), rightBRect.y());
                             qreal y2 = qMin(bRect.bottom(), rightBRect.bottom());
 
-                            KoTableCellStyle cellBelowRight(tableCellRight.format().toTableCellFormat());
+                            KoTableBorderStyle cellBelowRight(tableCellRight.format().toTableCellFormat());
                             cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
                         }
                     }

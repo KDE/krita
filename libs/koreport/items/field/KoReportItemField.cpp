@@ -219,12 +219,14 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     }
     
     tb->setText(str);
-    if (page) page->addPrimitive(tb);
+    if (page)
+        page->addPrimitive(tb);
 
-    OROPrimitive *clone = tb->clone();
-    clone->setPosition(m_pos.toScene());
-    if (section) section->addPrimitive(clone);
-
+    if (section) {
+        OROPrimitive *clone = tb->clone();
+        clone->setPosition(m_pos.toScene());
+        section->addPrimitive(clone);
+    }
     return 0; //Item doesnt stretch the section height
 }
 

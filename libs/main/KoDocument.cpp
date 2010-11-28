@@ -1261,6 +1261,11 @@ bool KoDocument::openUrl(const KUrl & _url)
             mainWindow->addRecentURL(_url);
         }
     }
+    if (ret) {
+        // Detect readonly local-files; remote files are assumed to be writable, unless we add a KIO::stat here (async).
+        KFileItem file(url, mimeType(), KFileItem::Unknown);
+        setReadWrite(file.isWritable());
+    }
     return ret;
 }
 

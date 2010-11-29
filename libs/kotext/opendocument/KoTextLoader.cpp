@@ -1449,24 +1449,29 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
 bool KoTextLoader::Private::checkForDeleteMerge(QTextCursor &cursor, const QString &id, int startPosition)
 {
     bool result = false;
+
     int changeId = changeTracker->getLoadedChangeId(id);
     if (changeId) {
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
         //Check if this change is at the beginning of the block and if there is a
         //delete-change at the end of the previous block with the same change-id 
         //If both the conditions are true, then merge both these deletions.
+        int prevChangeId = 0;
         if ( startPosition == (cursor.block().position())) {
             QTextCursor tempCursor(cursor);
-
             tempCursor.setPosition(cursor.block().previous().position() + cursor.block().previous().length() - 1);
-            int prevChangeId = tempCursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+            prevChangeId = tempCursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+        } else {
+            QTextCursor tempCursor(cursor);
+            tempCursor.setPosition(startPosition - 1);
+            prevChangeId = tempCursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+        }
             
-            if ((prevChangeId) && (prevChangeId == changeId)) {
-                QPair<int, int> deleteMarkerRange = deleteChangeMarkerMap.value(changeElement->getDeleteChangeMarker());
-                deleteMarkerRange.second = cursor.position();
-                deleteChangeMarkerMap.insert(changeElement->getDeleteChangeMarker(), deleteMarkerRange);
-                result = true;
-            }
+        if ((prevChangeId) && (prevChangeId == changeId)) {
+            QPair<int, int> deleteMarkerRange = deleteChangeMarkerMap.value(changeElement->getDeleteChangeMarker());
+            deleteMarkerRange.second = cursor.position();
+            deleteChangeMarkerMap.insert(changeElement->getDeleteChangeMarker(), deleteMarkerRange);
+            result = true;
         }
 
         int endPosition = cursor.position();

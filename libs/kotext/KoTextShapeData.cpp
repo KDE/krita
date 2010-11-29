@@ -217,7 +217,8 @@ KoTextPage* KoTextShapeData::page() const
 
 bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape)
 {
-    KoTextLoader loader(context, rdfData, shape);
+    Q_UNUSED(rdfData);
+    KoTextLoader loader(context, shape);
 
     QTextCursor cursor(document());
     loader.loadBody(element, cursor);   // now let's load the body from the ODF KoXmlElement.

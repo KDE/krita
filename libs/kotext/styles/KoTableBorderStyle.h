@@ -141,7 +141,7 @@ public:
      * @bounds the bounding rectangle to draw.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void paintBorders(QPainter &painter, const QRectF &bounds, QPainterPath *blanks) const;
+    void paintBorders(QPainter &painter, const QRectF &bounds, QVector<QLineF> *blanks) const;
 
     /**
      * Paint the diagonal borders.
@@ -160,7 +160,7 @@ public:
      * @w the width.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
+    void drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the border that is shared.
@@ -172,7 +172,7 @@ public:
      * @w the width.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedHorizontalBorder(QPainter &painter, const KoTableBorderStyle &styleBelow,  qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
+    void drawSharedHorizontalBorder(QPainter &painter, const KoTableBorderStyle &styleBelow,  qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the bottom border.
@@ -183,7 +183,7 @@ public:
      * @w the width.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *blanks = 0) const;
+    void drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the leftmost border.
@@ -194,7 +194,7 @@ public:
      * @h the height.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
+    void drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the border that is shared.
@@ -206,7 +206,7 @@ public:
      * @h the height.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawSharedVerticalBorder(QPainter &painter, const KoTableBorderStyle &styleRight,  qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
+    void drawSharedVerticalBorder(QPainter &painter, const KoTableBorderStyle &styleRight,  qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 
     /**
      * Paint the rightmost border.
@@ -217,7 +217,7 @@ public:
      * @h the height.
      * @blanks a painterpath where blank borders should be added to.
      */
-    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *blanks = 0) const;
+    void drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *blanks = 0) const;
 
     qreal leftBorderWidth() const;
     qreal rightBorderWidth() const;

@@ -201,7 +201,7 @@ public:
      * @param painter a pointer to the QPainter to draw the table with.
      * @param accuBlankBorders a painterpath that should accumulate blank borders.
      */
-    void drawBorders(QPainter *painter, QPainterPath *accuBlankBorders) const;
+    void drawBorders(QPainter *painter, QVector<QLineF> *accuBlankBorders) const;
 
     /**
      * Figures outDraw the table borders using the given QPainter.

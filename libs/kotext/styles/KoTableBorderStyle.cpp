@@ -262,7 +262,7 @@ bool KoTableBorderStyle::hasBorders() const
     return false;
 }
 
-void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
 
@@ -285,8 +285,7 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         }
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(bounds.left(), bounds.top());
-        accumulatedBlankBorders->lineTo(bounds.right(), bounds.top());
+        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.top(), bounds.right(), bounds.top()));
 
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
@@ -297,8 +296,7 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(bounds.left(), bounds.bottom());
-        accumulatedBlankBorders->lineTo(bounds.right(), bounds.bottom());
+        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.bottom(), bounds.right(), bounds.bottom()));
 
     }
     if (d->edges[Left].outerPen.widthF() > 0) {
@@ -309,8 +307,7 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(l, bounds.top() + d->edges[Top].outerPen.widthF(), l, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(bounds.left(), bounds.top());
-        accumulatedBlankBorders->lineTo(bounds.left(), bounds.bottom());
+        accumulatedBlankBorders->append(QLineF(bounds.left(), bounds.top(), bounds.left(), bounds.bottom()));
 
     }
     if (d->edges[Right].outerPen.widthF() > 0) {
@@ -321,8 +318,7 @@ void KoTableBorderStyle::paintBorders(QPainter &painter, const QRectF &bounds, Q
         painter.drawLine(QLineF(r, bounds.top() + d->edges[Top].outerPen.widthF(), r, bounds.bottom() - d->edges[Bottom].outerPen.widthF()));
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(bounds.right(), bounds.top());
-        accumulatedBlankBorders->lineTo(bounds.right(), bounds.bottom());
+        accumulatedBlankBorders->append(QLineF(bounds.right(), bounds.top(), bounds.right(), bounds.bottom()));
 
     }
     paintDiagonalBorders(painter, bounds);
@@ -390,7 +386,7 @@ void KoTableBorderStyle::paintDiagonalBorders(QPainter &painter, const QRectF &b
     }
 }
 
-void KoTableBorderStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
 
@@ -408,8 +404,7 @@ void KoTableBorderStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qre
         t = y + d->edges[Top].spacing + pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(x, t);
-        accumulatedBlankBorders->lineTo(x+w, t);
+        accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
     }
 
     // inner line
@@ -425,7 +420,7 @@ void KoTableBorderStyle::drawTopHorizontalBorder(QPainter &painter, qreal x, qre
     }
 }
 
-void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTableBorderStyle &styleBelow,  qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoTableBorderStyle &styleBelow,  qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
     const KoTableBorderStylePrivate *styleBelowD = static_cast<const KoTableBorderStylePrivate*>(styleBelow.d_func());
@@ -451,9 +446,7 @@ void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoT
             t = y + d->edges[Bottom].spacing + linewidth;
         } else if (accumulatedBlankBorders) {
             // No border but we'd like to draw one for user convenience when on screen
-            accumulatedBlankBorders->moveTo(x, t);
-            accumulatedBlankBorders->lineTo(x+w, t);
-
+            accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
         }
         // inner line
         if (d->edges[Bottom].innerPen.widthF() > 0) {
@@ -495,7 +488,7 @@ void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoT
     }
 }
 
-void KoTableBorderStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, qreal y, qreal w, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
 
@@ -513,8 +506,7 @@ void KoTableBorderStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, 
         t = y - d->edges[Bottom].spacing - pen.widthF();
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(x, t);
-        accumulatedBlankBorders->lineTo(x+w, t);
+        accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
 
     }
 
@@ -531,7 +523,7 @@ void KoTableBorderStyle::drawBottomHorizontalBorder(QPainter &painter, qreal x, 
     }
 }
 
-void KoTableBorderStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
 
@@ -551,8 +543,7 @@ void KoTableBorderStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, 
         l += d->edges[Left].spacing + pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(l, y);
-        accumulatedBlankBorders->lineTo(l, y+h);
+        accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
 
     }
 
@@ -569,7 +560,7 @@ void KoTableBorderStyle::drawLeftmostVerticalBorder(QPainter &painter, qreal x, 
     }
 }
 
-void KoTableBorderStyle::drawSharedVerticalBorder(QPainter &painter, const KoTableBorderStyle &styleRight,  qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawSharedVerticalBorder(QPainter &painter, const KoTableBorderStyle &styleRight,  qreal x, qreal y, qreal h, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
     const KoTableBorderStylePrivate *styleRightD = static_cast<const KoTableBorderStylePrivate*>(styleRight.d_func());
@@ -597,8 +588,7 @@ void KoTableBorderStyle::drawSharedVerticalBorder(QPainter &painter, const KoTab
             l += d->edges[Right].spacing + pen.widthF() / 2.0;
         } else if (accumulatedBlankBorders) {
             // No border but we'd like to draw one for user convenience when on screen
-            accumulatedBlankBorders->moveTo(l, y);
-            accumulatedBlankBorders->lineTo(l, y+h);
+            accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
 
         }
 
@@ -642,7 +632,7 @@ void KoTableBorderStyle::drawSharedVerticalBorder(QPainter &painter, const KoTab
     }
 }
 
-void KoTableBorderStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QPainterPath *accumulatedBlankBorders) const
+void KoTableBorderStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x, qreal y, qreal h, QVector<QLineF> *accumulatedBlankBorders) const
 {
     Q_D(const KoTableBorderStyle);
 
@@ -662,8 +652,7 @@ void KoTableBorderStyle::drawRightmostVerticalBorder(QPainter &painter, qreal x,
         l += d->edges[Right].spacing - pen.widthF() / 2.0;
     } else if (accumulatedBlankBorders) {
         // No border but we'd like to draw one for user convenience when on screen
-        accumulatedBlankBorders->moveTo(l, y);
-        accumulatedBlankBorders->lineTo(l, y+h);
+        accumulatedBlankBorders->append(QLineF(l, y, l, y+h));
 
     }
 

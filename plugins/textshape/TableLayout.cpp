@@ -495,9 +495,11 @@ qreal TableLayout::cellContentX(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
-
-    Q_ASSERT(isValid());
     Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
+    
+    if (m_tableLayoutData->m_tableRects.isEmpty())
+        return 0.0;
+    
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
     int i = m_tableLayoutData->m_tableRects.size()-1;
     while (tableRect.fromRow > cell.row()) {

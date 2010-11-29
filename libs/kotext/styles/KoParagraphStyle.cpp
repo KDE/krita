@@ -1111,14 +1111,18 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     QString lineHeight(styleStack.property(KoXmlNS::fo, "line-height"));
     if (!lineHeight.isEmpty()) {
         if (lineHeight != "normal") {
-            if (lineHeight.indexOf('%') > -1) { // percent value
+            if (lineHeight.indexOf('%') > -1) { // percent value is between 50% and 200%
                 bool ok;
-                int v = lineHeight.remove('%').toInt(&ok);
-                if (ok && v > 0)
-                    setLineHeightPercent(v);
+                const int percent = lineHeight.remove('%').toInt(&ok);
+                if (ok && percent >= 0) {
+                    setLineHeightPercent(percent);
+                }
             }
-            else  { // fixed value
-                setLineHeightAbsolute(KoUnit::parseValue(lineHeight));
+            else  { // fixed value is between 0.0201in and 3.9402in
+                const qreal value = KoUnit::parseValue(lineHeight, -1.0);
+                if (value >= 0.0) {
+                    setLineHeightAbsolute(value);
+                }
             }
         }
         else

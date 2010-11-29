@@ -923,30 +923,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             bool isLastNode = node.nextSibling().isNull();
             loadText(node.toText().data(), cursor, stripLeadingSpace,
                      isLastNode);
-        } else if (isTextNS && localName == "change-start") { // text:change-start
-            d->openChangeRegion(ts);
-        } else if (isTextNS && localName == "change-end") {
-            d->closeChangeRegion(ts);
-        } else if (isTextNS && localName == "change") {
-            QString id = ts.attributeNS(KoXmlNS::text, "change-id");
-            int changeId = d->changeTracker->getLoadedChangeId(id);
-            if (changeId) {
-                if (d->changeStack.count())
-                    d->changeTracker->setParent(changeId, d->changeStack.top());
-                KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
-                deleteChangemarker->setChangeId(changeId);
-                KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
-                changeElement->setDeleteChangeMarker(deleteChangemarker);
-                changeElement->setEnabled(true);
-                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-
-                if (layout) {
-                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                    textObjectManager->insertInlineObject(cursor, deleteChangemarker);
-                }
-
-                loadDeleteChangeWithinPorH(id, cursor);
-            }
         } else if (isTextNS && localName == "span") { // text:span
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(32500) << "  <span> localName=" << localName;
@@ -999,8 +975,31 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             kDebug(32500) << "  <line-break> Node localName=" << localName;
 #endif
             cursor.insertText(QChar(0x2028));
-        }
-        else if (isTextNS && localName == "meta") {
+        } else if (isTextNS && localName == "change-start") { // text:change-start
+            d->openChangeRegion(ts);
+        } else if (isTextNS && localName == "change-end") {
+            d->closeChangeRegion(ts);
+        } else if (isTextNS && localName == "change") {
+            QString id = ts.attributeNS(KoXmlNS::text, "change-id");
+            int changeId = d->changeTracker->getLoadedChangeId(id);
+            if (changeId) {
+                if (d->changeStack.count())
+                    d->changeTracker->setParent(changeId, d->changeStack.top());
+                KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
+                deleteChangemarker->setChangeId(changeId);
+                KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
+                changeElement->setDeleteChangeMarker(deleteChangemarker);
+                changeElement->setEnabled(true);
+                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+
+                if (layout) {
+                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                    textObjectManager->insertInlineObject(cursor, deleteChangemarker);
+                }
+
+                loadDeleteChangeWithinPorH(id, cursor);
+            }
+        } else if (isTextNS && localName == "meta") {
             kDebug(30015) << "loading a text:meta";
             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {

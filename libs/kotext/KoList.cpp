@@ -104,6 +104,7 @@ void KoList::add(const QTextBlock &block, int level)
     if (!block.isValid())
         return;
 
+    Q_ASSERT(level >= 0 && level <= 10);
     if (level == 0) { // fetch the first proper level we have
         level = 1; // if nothing works...
         for (int i = 1; i <= 10; i++) {
@@ -213,7 +214,6 @@ bool KoList::contains(QTextList *list) const
 void KoList::setContinueNumbering(int level, bool enable)
 {
     Q_ASSERT(level > 0 && level <= 10);
-    level = qMax(qMin(level, 10), 1);
 
     QBitArray bitArray = d->properties[ContinueNumbering].toBitArray();
     if (bitArray.isEmpty())
@@ -236,7 +236,6 @@ void KoList::setContinueNumbering(int level, bool enable)
 bool KoList::continueNumbering(int level) const
 {
     Q_ASSERT(level > 0 && level <= 10);
-    level = qMax(qMin(level, 10), 1);
 
     QBitArray bitArray = d->properties.value(ContinueNumbering).toBitArray();
     if (bitArray.isEmpty())

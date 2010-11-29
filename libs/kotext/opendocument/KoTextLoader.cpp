@@ -605,6 +605,11 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
     }
     /********************************************************************************************************************/
 
+    if (level < 0 || level > 10) { // should not happen but if it does then we should not crash/assert
+        kWarning() << "Out of bounds list-level=" << level;
+        level = qMin(0, qMax(10, level));
+    }
+    
     if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
         const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
         d->currentList->setContinueNumbering(level, continueNumbering == "true");

@@ -183,6 +183,7 @@ void KoReportDesigner::init()
 
 KoReportDesigner::~KoReportDesigner()
 {
+    delete d->zoom;
     delete d;
     delete m_sectionData;
 }

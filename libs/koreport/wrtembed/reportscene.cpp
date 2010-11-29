@@ -37,7 +37,7 @@
 
 
 ReportScene::ReportScene(qreal w, qreal h, KoReportDesigner *rd)
-        : QGraphicsScene(0, 0, w, h)
+        : QGraphicsScene(0, 0, w, h, rd)
 {
     m_rd = rd;
 

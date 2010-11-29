@@ -49,6 +49,7 @@ ComboBox::Options::~Options()
 
 ComboBox::ComboBox(const Property::ListData& listData, const Options& options, QWidget *parent)
         : KComboBox(parent)
+        , m_setValueEnabled(true)
         , m_options(options)
 {
 //    QHBoxLayout *l = new QHBoxLayout(this);

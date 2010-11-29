@@ -25,12 +25,10 @@
 
 #include <kdebug.h>
 
-ReportSceneView::ReportSceneView(KoReportDesigner * rw, QGraphicsScene *scene, QWidget * parent, const char * name)
+ReportSceneView::ReportSceneView(KoReportDesigner * designer, QGraphicsScene *scene, QWidget * parent)
+ : QGraphicsView(scene, parent)
 {
-    Q_UNUSED(name);
-    Q_UNUSED(parent);
-
-    m_reportDesigner = rw;
+    m_reportDesigner = designer;
 
     viewport()->setMouseTracking(true);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
@@ -39,7 +37,6 @@ ReportSceneView::ReportSceneView(KoReportDesigner * rw, QGraphicsScene *scene, Q
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setDragMode(QGraphicsView::RubberBandDrag);
-    setScene(scene);
     setFrameStyle(0);
     m_reportDesigner->setActiveScene(scene);
 

@@ -22,6 +22,7 @@ SET ( textshape_SRCS
     ToCGenerator.cpp
     Layout.cpp
     ListItemsHelper.cpp
+    ShrinkToFitShapeContainer.cpp
 
     ChangeTracker.cpp
     ChangeTrackingTool.cpp

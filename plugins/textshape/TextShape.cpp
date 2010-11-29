@@ -479,16 +479,6 @@ void TextShape::markLayoutDone()
     synchronized(m_mutex) {
         m_waiter.wakeAll();
     }
-
-    if (KoTextDocument(m_textShapeData->document()).resizeMethod() == KoTextDocument::ShrinkToFitResize) {
-        // If Shrink-to-fit is enabled we need to let our model know when layouting is finally done
-        // so the ShrinkToFitShapeContainer is able to do it's job. This special-casing is needed
-        // cause if shrink-to-fit is enable we have to emit KoShape::SizeChanged even if the shape's
-        // size didn't change but only the content's size did to be able to recalc.
-        if (ShrinkToFitShapeContainer *c = dynamic_cast<ShrinkToFitShapeContainer*>(parent())) {
-            c->maybeUpdateShrink();
-        }
-    }
 }
 
 void TextShape::update() const

@@ -1112,7 +1112,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!lineHeight.isEmpty()) {
         if (lineHeight != "normal") {
             if (lineHeight.indexOf('%') > -1) { // percent value
-                setLineHeightPercent(lineHeight.remove('%').toInt());
+                bool ok;
+                int v = lineHeight.remove('%').toInt(&ok);
+                if (ok && v > 0)
+                    setLineHeightPercent(v);
             }
             else  { // fixed value
                 setLineHeightAbsolute(KoUnit::parseValue(lineHeight));

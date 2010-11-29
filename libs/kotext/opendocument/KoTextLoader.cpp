@@ -390,6 +390,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
                         }
                     } else if (d->changeTracker && localName == "remove-leaving-content-start"){
+                        if (usedParagraph)
+                            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                        usedParagraph = true;
                         _node = loadTagTypeChanges(tag, cursor);
                     } else {
                     }

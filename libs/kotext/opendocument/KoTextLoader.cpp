@@ -874,10 +874,18 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         kDebug(32500) << "styleName =" << styleName << " currentListStyle = 0";
 #endif
 
-    // Iterate over list items and add them to the textlist
     KoXmlElement e;
+    QList<KoXmlElement> childElementsList;
+    for ( KoXmlNode _node = element.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+    if ( ( e = _node.toElement() ).isNull() ) {
+        //Don't do anything
+    } else {
+        childElementsList.append(e);
+    }
+
+    // Iterate over list items and add them to the textlist
     bool firstTime = true;
-    forEachElement(e, element) {
+    foreach (e, childElementsList) {
         if (e.localName() == "removed-content") {
             QString changeId = e.attributeNS(KoXmlNS::delta, "removal-change-idref");
             int deleteStartPosition = cursor.position();

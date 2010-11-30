@@ -181,6 +181,10 @@ void KoUnavailShape::draw(QPainter &painter) const
     QPixmap questionMark;
     questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
 
+    // The size of the image is:
+    //  - the size of the shape if  shapesize < 2cm
+    //  - 2 cm                  if  2cm <= shapesize <= 8cm
+    //  - shapesize / 4         if  shapesize > 8cm
     qreal  width = size().width();
     qreal  height = size().height();
     qreal  picSize = CM_TO_POINT(2); // Default size is 2 cm.
@@ -189,8 +193,7 @@ void KoUnavailShape::draw(QPainter &painter) const
     else if (width > CM_TO_POINT(8) && height > CM_TO_POINT(8))
         picSize = qMin(width, height) / qreal(4.0);
 
-    painter.drawPixmap((size().width() - picSize) / qreal(2.0),
-                       (size().height() - picSize) / qreal(2.0),
+    painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
                        picSize, picSize, questionMark);
 #endif
 }

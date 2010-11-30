@@ -1160,7 +1160,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));
-            kDebug(32500) << "tab position " << tab.position;
+            //kDebug(32500) << "tab position " << tab.position;
+
             // Tab stop positions in the XML are relative to the left-margin
             // Equivalently, relative to the left end of our textshape
             // Tab type (left/right/center/char)

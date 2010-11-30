@@ -1236,7 +1236,9 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     QString columnStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!columnStyleName.isEmpty()) {
                         KoTableColumnStyle *columnStyle = d->textSharedData->tableColumnStyle(columnStyleName, d->stylesDotXml);
-                        qDebug() << columnStyleName << "gave" <<  columnStyle << d->stylesDotXml;
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
+                        kDebug() << columnStyleName << "gave" <<  columnStyle << d->stylesDotXml;
+#endif
                         if (columnStyle) {
                             for (int c = columns; c < columns + repeatColumn; c++) {
                                 tcarManager.setColumnStyle(c, *columnStyle);

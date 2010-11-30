@@ -32,6 +32,7 @@
 #include <QStringList>
 
 // KDE
+#include <kstandarddirs.h>
 #include <KDebug>
 
 // KOffice
@@ -170,9 +171,28 @@ void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &
 
 void KoUnavailShape::draw(QPainter &painter) const
 {
-    // Draw a frame and a cross for now.  Any more advanced painting
-    // will have to come later.
+#if 0
+    // Draw a frame and a cross.
     drawNull(painter);
+#else
+    // Draw a nice question mark.
+
+    // Get the question mark "icon".
+    QPixmap questionMark;
+    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+
+    qreal  width = size().width();
+    qreal  height = size().height();
+    qreal  picSize = CM_TO_POINT(2); // Default size is 2 cm.
+    if (width < CM_TO_POINT(2) || height < CM_TO_POINT(2))
+        picSize = qMin(width, height);
+    else if (width > CM_TO_POINT(8) && height > CM_TO_POINT(8))
+        picSize = qMin(width, height) / qreal(4.0);
+
+    painter.drawPixmap((size().width() - picSize) / qreal(2.0),
+                       (size().height() - picSize) / qreal(2.0),
+                       picSize, picSize, questionMark);
+#endif
 }
 
 void KoUnavailShape::drawNull(QPainter &painter) const

@@ -107,8 +107,8 @@ static void paintIntoCache(KoShape *shape,
                            QRegion imageExposed,
                            QImage *pix)
 {
-    qDebug() << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect() << "cached image size" << pix->size();
-    static int i = 0;
+    kDebug(30006) << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect() << "cached image size" << pix->size();
+    //static int i = 0;
     QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5).intersected(pix->rect());
     // really, really erase what's in here
     for (int y = rc.y(); y <= rc.bottom(); ++y) {
@@ -118,7 +118,7 @@ static void paintIntoCache(KoShape *shape,
     QPainter imagePainter(pix);
     imagePainter.setClipRegion(imageExposed);
     shapeManager->paintShape(shape, imagePainter, viewConverter, false);
-    pix->save(QString("cache_%1.png").arg(++i));
+    //pix->save(QString("cache_%1.png").arg(++i));
 }
 
 // QRectF::intersects() returns false always if either the source or target
@@ -206,9 +206,6 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         }
         KoShapeCache::DeviceData *deviceData = shapeCache->deviceData[shapeManager()];
 
-        qDebug() << "\tdevicedata all exposed" << deviceData->allExposed
-                      << "exposed rects" << deviceData->exposed.size();
-
         bool imageFound = !deviceData->image.isNull();
 
         kDebug(30006) << "Found image" << imageFound << "size" << deviceData->image.size();
@@ -234,38 +231,31 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
 
             if (deviceData->allExposed) {
 
-                QRect rc = deviceData->image.rect();
-                qDebug() << "\tFully exposed, calculate tiles for area" << rc;
+                QRectF rc = adjustedBoundingRect;
+                kDebug(30006) << "\tFully exposed, calculate tiles for area" << rc;
 
-                const int UPDATE_SIZE = 60;
+                const int UPDATE_SIZE = 64;
+                deviceData->exposed.clear();
 
-                if (rc.width() < UPDATE_SIZE && rc.height() < UPDATE_SIZE) {
+                if (rc.height() < UPDATE_SIZE) {
                     deviceData->exposed << rc;
                 }
                 else {
-                    // Create a set of UPDATE_SIZE x UPDATE_SIZE rects that we can later check with the painter clip region
-                    int wleft = rc.width();
-                    int col = 0;
-                    while (wleft > 0) {
-                        int hleft = rc.height();
-                        int row = 0;
-                        while (hleft > 0) {
-                            QRect rc2(col, row,
-                                      qMin(wleft, UPDATE_SIZE),
-                                      qMin(hleft, UPDATE_SIZE));
-                            deviceData->exposed << rc2;
-                            hleft -= UPDATE_SIZE;
-                            row += UPDATE_SIZE;
-
-                        }
-                        wleft -= UPDATE_SIZE;
-                        col += UPDATE_SIZE;
+                    // Create a set of UPDATE_SIZE strips so we can only paint what we need
+                    int row = 0;
+                    int hleft = rc.height();
+                    int w = rc.width();
+                    while (hleft > 0) {
+                        QRectF rc2(0, row, w, qMin(hleft, UPDATE_SIZE));
+                        kDebug(30006) << "\t\t Created update rc" << rc2;
+                        deviceData->exposed << rc2;
+                        hleft -= UPDATE_SIZE;
+                        row += UPDATE_SIZE;
                     }
-
                 }
+                kDebug(30006) << "created" << deviceData->exposed.size() << "exposed update rects because we were fully exposed.";
                 deviceData->allExposed = false;
             }
-
 
             // Will contain the exposed rects that overlap the painter's clipregion's rects in view
             // coordinates, translated  to the shape position = 0,0
@@ -284,14 +274,13 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
             for (int i = 0; i < exposed.size(); ++i) {
                 QRectF rc = exposed.at(i);
                 rc = viewConverter.documentToView(rc);
-                kDebug(30006) << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
+                //kDebug(30006) << "\t\t" << i << ":exposed rect in view coor:" << rc << "in doc coor" << exposed.at(i) << "painter clip bounds" << painterClipRegionBounds << "intersects" << (rc.intersects(painterClipRegionBounds));
                 if (rc.intersects(painterClipRegionBounds)) {
                     imageExposed += rc.toRect().adjusted(-1, -1, 1, 1);
                 }
                 else {
                     // this is exposed but not yet visible, so we do not cache it
-                    qDebug() << "\t\t not rendering rect" << rc;
-                    remainingExposed << rc;
+                    remainingExposed << exposed.at(i);
                 }
             }
             deviceData->allExposed = false;

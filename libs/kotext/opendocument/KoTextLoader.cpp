@@ -301,7 +301,9 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
 //        d->changeTracker = dynamic_cast<KoChangeTracker *>(d->context.dataCenterMap().value("ChangeTracker"));
 //    Q_ASSERT(d->changeTracker);
 
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+#endif
 #if 0
     if ((document->isEmpty()) && (d->styleManager)) {
         QTextBlock block = cursor.block();
@@ -485,7 +487,10 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         inlineRdf->loadOdf(element);
         KoTextInlineRdf::attach(inlineRdf, cursor);
     }
+    
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat()) << d->currentList << d->currentListStyle;
+#endif
 
     bool stripLeadingSpace = true;
     loadSpan(element, cursor, &stripLeadingSpace);
@@ -543,7 +548,9 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         KoTextInlineRdf::attach(inlineRdf, cursor);
     }
 
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+#endif
 
     QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
 
@@ -703,7 +710,9 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
             c.setBlockFormat(blockFormat);
             d->currentList->add(c.block(), level);
         }
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
         kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+#endif
     }
 
     /*******************************ODF Bug Work-Around Code Changes***********************************/
@@ -839,7 +848,6 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
-    kDebug(32500) << "Loading a text:note element.";
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
     if (layout) {
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
@@ -847,7 +855,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             textObjectManager->insertInlineObject(cursor, note, cursor.charFormat());
         } else {
-            kDebug(32500) << "Error while loading the note !";
+            kWarning(32500) << "Error while loading the text note element!";
             delete note;
         }
     }
@@ -908,7 +916,9 @@ void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
 
 void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bool *stripLeadingSpace)
 {
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+#endif
     Q_ASSERT(stripLeadingSpace);
     if (d->loadSpanLevel++ == 0)
         d->loadSpanInitialPos = cursor.position();
@@ -1000,7 +1010,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 loadDeleteChangeWithinPorH(id, cursor);
             }
         } else if (isTextNS && localName == "meta") {
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(30015) << "loading a text:meta";
+#endif
             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
             if (layout) {
                 const QTextDocument *document = cursor.block().document();
@@ -1116,7 +1128,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     }
                 }
 #else
+#ifdef KOOPENDOCUMENTLOADER_DEBUG
                 kDebug(32500) << "Node '" << localName << "' unhandled";
+#endif
             }
 #endif
         }

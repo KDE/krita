@@ -393,7 +393,20 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         if (usedParagraph)
                             cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
                         usedParagraph = true;
-                        _node = loadTagTypeChanges(tag, cursor);
+                        QString generatedXmlString;
+                        _node = loadTagTypeChanges(tag,&generatedXmlString);
+                        //Parse and Load the generated xml
+                        QString errorMsg;
+                        int errorLine, errorColumn;
+                        KoXmlDocument doc;
+
+                        QXmlStreamReader reader(generatedXmlString);
+                        reader.setNamespaceProcessing(true);
+
+                        bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+                        if (ok) {
+                            loadBody(doc.documentElement(), cursor);     
+                        }   
                     } else {
                     }
                 }
@@ -527,7 +540,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     cursor.endEditBlock();
 }
 
-KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QTextCursor &cursor)
+KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QString *generatedXmlString)
 {
     KoXmlNode lastProcessedNode = elem;
     d->nameSpacesList.clear();
@@ -553,8 +566,7 @@ KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QTextCursor
         lastProcessedNode = lastProcessedNode.nextSibling();        
     } while(d->openedElements && !lastProcessedNode.isNull());
 
-    QString docXml;
-    QTextStream docStream(&docXml);
+    QTextStream docStream(generatedXmlString);
     
     docStream << "<generated-xml";
     for (int i=0; i<d->nameSpacesList.size();i++) {
@@ -564,21 +576,6 @@ KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QTextCursor
     docStream << ">";
     docStream << generatedXml;
     docStream << "</generated-xml>";
-
-    if (!d->openedElements) {
-        //Parse and Load the generated xml
-        QString errorMsg;
-        int errorLine, errorColumn;
-        KoXmlDocument doc;
-
-        QXmlStreamReader reader(docXml);
-        reader.setNamespaceProcessing(true);
-
-        bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
-        if (ok) {
-            loadBody(doc.documentElement(), cursor);     
-        }   
-    }
 
     return lastProcessedNode.previousSibling();
 }

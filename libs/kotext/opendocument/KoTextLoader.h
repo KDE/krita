@@ -110,7 +110,7 @@ private:
     * Load changes that result in a change of tag-type into the cursor
     * Returns the next Node to be processed
     */
-    KoXmlNode loadTagTypeChanges(const KoXmlElement &element, QTextCursor &cursor);
+    KoXmlNode loadTagTypeChanges(const KoXmlElement &element, QString *generatedXmlString);
 
     /**
     * Load the list from the \p element into the \p cursor .

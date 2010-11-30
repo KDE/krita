@@ -85,8 +85,8 @@ static QImage createCacheimage(KoShape *shape, const KoViewConverter &viewConver
     pix.fill(Qt::transparent);
 
     kDebug(30006) << "Created empty image for shape "
-             << shape << shape->shapeId()
-             << "size" << pix.size();
+                  << shape << shape->shapeId()
+                  << "size" << pix.size();
     return pix;
 }
 
@@ -107,18 +107,18 @@ static void paintIntoCache(KoShape *shape,
                            QRegion imageExposed,
                            QImage *pix)
 {
-    kDebug(30006) << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
-//    static int i = 0;
+    qDebug() << "paintIntoCache. Shape:" << shape << "Zoom:" << viewConverter.zoom() << "clip" << imageExposed.boundingRect();
+    static int i = 0;
     QRect rc = imageExposed.boundingRect().adjusted(5, 5, 5, 5).intersected(pix->rect());
     // really, really erase what's in here
     for (int y = rc.y(); y <= rc.bottom(); ++y) {
         uchar* line = pix->scanLine(y);
         memset(line, 0, rc.width() * 4);
-     }
+    }
     QPainter imagePainter(pix);
     imagePainter.setClipRegion(imageExposed);
     shapeManager->paintShape(shape, imagePainter, viewConverter, false);
-//    pix->save(QString("cache_%1.png").arg(++i));
+    pix->save(QString("cache_%1.png").arg(++i));
 }
 
 // QRectF::intersects() returns false always if either the source or target
@@ -147,6 +147,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
 {
     kDebug(30006) << ">>>>>>>>>>>>>>>>>>>>>>>>>>>\n\tshape" << shape->shapeId() << "viewConverter zoom" << viewConverter.zoom();
     kDebug(30006) << "\tpainter clipregion" << painter.clipRegion().boundingRect();
+
 
     if (!shapeManager()) {
         return;
@@ -178,7 +179,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         adjustedBoundingRect.translate(shape->position());
 
         kDebug(30006) << "\tshape->boundingRect" << boundingRect <<
-                    "\n\tadjustedrect" << adjustedBoundingRect;
+                         "\n\tadjustedrect" << adjustedBoundingRect;
 
         // view coordinates
         QRectF painterClippingBounds = painter.clipRegion().boundingRect();
@@ -187,7 +188,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         QRectF painterShapeClippingBounds = viewConverter.viewToDocument(painterClippingBounds);
 
         kDebug(30006) << "\tpainterClippingBounds in view coordinates:" << painterClippingBounds
-                    << "in document coordinates:" << painterShapeClippingBounds;
+                      << "in document coordinates:" << painterShapeClippingBounds;
 
         QRectF exposedRect = adjustedBoundingRect.intersected(painterShapeClippingBounds);
         if (exposedRect.isEmpty()) {
@@ -206,7 +207,7 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
         KoShapeCache::DeviceData *deviceData = shapeCache->deviceData[shapeManager()];
 
         kDebug(30006) << "\tdevicedata all exposed" << deviceData->allExposed
-                 << "exposed rects" << deviceData->exposed.size();
+                      << "exposed rects" << deviceData->exposed.size();
 
         bool imageFound = !deviceData->image.isNull();
 
@@ -235,38 +236,49 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
             // coordinates, translated  to the shape position = 0,0
             QRegion imageExposed;
 
-            // this vector contains the areas that the shape wanted repainted but that are
-            // outside the current qpainter's exposed regions' bounds.
-            QVector<QRectF> remainingExposed;
 
             if (deviceData->allExposed) {
                 // For now, repaint the whole shape, unclipped by the painterclipregion.
                 // XXX: optimize this by applying the painter clip region.
                 QRect rc(QPoint(0,0), viewShapeSize);
 
-                kDebug(30006) << "\tFully exposed, do not clip, repainting " << rc;
+                qDebug() << "\tFully exposed, do not clip, repainting " << rc;
 
-                imageExposed += rc;
+                imageExposed = painter.clipRegion().translated(-viewConverter.documentToView(shape->position()).toPoint());
+
+                QRegion remainingExposedRegion = QRegion(rc) - imageExposed;
+                QVector<QRect> remainingExposedRects = remainingExposedRegion.rects();
+                deviceData->exposed.clear();
+                foreach(QRect remainingRect, remainingExposedRects) {
+                    qDebug() << "\tall exposed, unpainted rect:" << remainingRect;
+                    deviceData->exposed << remainingRect;
+                }
 
                 deviceData->allExposed = false;
-                deviceData->exposed.clear();
+
             }
             else {
+                // this vector contains the areas that the shape wanted repainted but that are
+                // outside the current qpainter's exposed regions' bounds.
+                QVector<QRectF> remainingExposed;
+
                 // get the bounding rect for the clip region
                 QRectF painterClipRegionBounds = painterClippingBounds.translated(-viewConverter.documentToView(shape->position()));
 
-                kDebug(30006) << "\tTrying to do partial updates within bounds" << painterClipRegionBounds;
+                qDebug() << "\tTrying to do partial updates within bounds" << painterClipRegionBounds;
 
                 const QVector<QRectF> &exposed = deviceData->exposed;
                 for (int i = 0; i < exposed.size(); ++i) {
                     QRectF rc = exposed.at(i);
                     rc = viewConverter.documentToView(rc);
-                    kDebug(30006) << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
+                    qDebug() << "\t\tExposed rect in view coor:" << rc << "in doc coor" << exposed.at(i);
                     if (rc.intersects(painterClipRegionBounds)) {
+                        qDebug() << "\t\t\tnot clipped -- render";
                         imageExposed += rc.toRect().adjusted(-1, -1, 1, 1);
                     }
                     else {
                         // this is exposed but not yet visible, so we do not cache it
+                        qDebug() << "\t\t\tclipped -- do not render";
                         remainingExposed << rc;
                     }
                 }
@@ -275,8 +287,9 @@ void KoShapeManagerCachedPaintingStrategy::paint(KoShape *shape, QPainter &paint
             }
 
             // Render the exposed areas.
-            paintIntoCache(shape, shapeManager(), viewConverter, imageExposed, &deviceData->image);
-
+            if (!imageExposed.isEmpty()) {
+                paintIntoCache(shape, shapeManager(), viewConverter, imageExposed, &deviceData->image);
+            }
         }
         // Paint the cache on the original painter
         painter.drawImage(viewConverter.documentToView(adjustedBoundingRect.topLeft()), deviceData->image);

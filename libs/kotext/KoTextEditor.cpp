@@ -358,10 +358,16 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position());
                 QTextCharFormat fm = cursor.charFormat();
-                fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                int to = qMin(end, fragment.position() + fragment.length());
-                cursor.setPosition(to, QTextCursor::KeepAnchor);
-                cursor.setCharFormat(fm);
+                if (fm.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    int to = qMin(end, fragment.position() + fragment.length());
+                    cursor.setPosition(to, QTextCursor::KeepAnchor);
+                    cursor.setCharFormat(fm);
+
+                    //Changing the format invalidates the iterator. So, reset the iterator and start from the beginning.
+                    iter = block.begin();
+                    continue;
+                }
                 iter++;
             }
             block = block.next();

@@ -26,7 +26,6 @@
  */
 
 #include "KoTextLoader.h"
-
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
@@ -876,11 +875,37 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 
     KoXmlElement e;
     QList<KoXmlElement> childElementsList;
+
+    QString generatedXmlString;
+    KoXmlDocument doc;
+    QXmlStreamReader reader;
+
     for ( KoXmlNode _node = element.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
     if ( ( e = _node.toElement() ).isNull() ) {
         //Don't do anything
     } else {
-        childElementsList.append(e);
+        if ((e.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") || (e.localName() == "remove-leaving-content-start")) {
+            _node = loadTagTypeChanges(e,&generatedXmlString);
+
+            //Parse and Load the generated xml
+            QString errorMsg;
+            int errorLine, errorColumn;
+
+            reader.addData(generatedXmlString);
+            reader.setNamespaceProcessing(true);
+
+            bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+
+            QDomDocument dom;
+            if (ok) {
+                KoXmlElement childElement;
+                forEachElement (childElement, doc.documentElement()) {
+                    childElementsList.append(childElement);
+                }
+            }   
+        } else { 
+            childElementsList.append(e);
+        }
     }
 
     // Iterate over list items and add them to the textlist

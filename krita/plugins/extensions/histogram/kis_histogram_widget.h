@@ -45,7 +45,7 @@ public:
     KisHistogramWidget(QWidget *parent, const char *name);
     virtual ~KisHistogramWidget();
 
-    void setPaintDevice(KisPaintDeviceSP dev);
+    void setPaintDevice(KisPaintDeviceSP dev, const QRect &bounds);
 
 private slots:
     void setActiveChannel(int channel);

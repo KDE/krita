@@ -31,6 +31,8 @@ KRDetailSectionData::KRDetailSectionData()
 
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReportReportData *report)
 {
+    m_pageBreak = BreakNone;
+    m_detailSection = 0;
     m_valid = false;
     kDebug() << elemSource.tagName();
     if (elemSource.tagName() != "report:detail") {

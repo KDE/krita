@@ -62,7 +62,7 @@ class KisLevelConfigWidget : public KisConfigWidget
 {
     Q_OBJECT
 public:
-    KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev);
+    KisLevelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds);
     virtual ~KisLevelConfigWidget();
 
     virtual KisPropertiesConfiguration* configuration() const;

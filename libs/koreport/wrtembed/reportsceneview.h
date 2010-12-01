@@ -27,7 +27,7 @@ class ReportSceneView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    ReportSceneView(KoReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0, const char * name = 0);
+    ReportSceneView(KoReportDesigner *, QGraphicsScene * scene, QWidget * parent = 0);
     virtual ~ReportSceneView();
 
     KoReportDesigner * designer();

@@ -971,6 +971,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
                     if (ret) {
                         kDebug(30003) << "Successful Save As!";
                         addRecentURL(newURL);
+                        setReadWrite(true);
                     } else {
                         kDebug(30003) << "Failed Save As!";
                         pDoc->setUrl(oldURL);

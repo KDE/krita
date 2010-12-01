@@ -2,6 +2,7 @@
  * Kexi report writer and rendering engine
  * Copyright (C) 2001-2007 by OpenMFG, LLC (info@openmfg.com)
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2010 Jarosław Staniek <staniek@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -68,7 +69,7 @@ public:
     KRSectionData();
     KRSectionData(const QDomElement &, KoReportReportData* report);
     ~KRSectionData();
-    KoProperty::Set* properties() {
+    KoProperty::Set* propertySet() const {
         return m_set;
     }
 
@@ -101,17 +102,11 @@ protected:
     KoProperty::Property *m_height;
     KoProperty::Property *m_backgroundColor;
 
-public slots:
-    KoProperty::Set& propertySet() {
-        return *m_set;
-    }
-
 private:
-    void createProperties();
+    void createProperties(const QDomElement & elemSource);
 
     QList<KoReportItemBase*> m_objects;
 
-    QString m_name;
     Section m_type;
 
     static bool zLessThan(KoReportItemBase* s1, KoReportItemBase* s2);

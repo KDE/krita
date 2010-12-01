@@ -37,7 +37,7 @@
 
 
 ReportScene::ReportScene(qreal w, qreal h, KoReportDesigner *rd)
-        : QGraphicsScene(0, 0, w, h)
+        : QGraphicsScene(0, 0, w, h, rd)
 {
     m_rd = rd;
 
@@ -130,7 +130,7 @@ void ReportScene::mousePressEvent(QGraphicsSceneMouseEvent * e)
         clearSelection();
 
     //This will be caught by the section to display its properties, if an item is under the cursor then they will display their properties
-    emit(clicked());
+    emit clicked();
 
     QGraphicsScene::mousePressEvent(e);
 }
@@ -172,7 +172,7 @@ QPointF ReportScene::gridPoint(const QPointF& p)
 
 void ReportScene::focusOutEvent(QFocusEvent * focusEvent)
 {
-    emit(lostFocus());
+    emit lostFocus();
     QGraphicsScene::focusOutEvent(focusEvent);
 }
 

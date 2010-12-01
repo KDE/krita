@@ -1033,7 +1033,7 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
         if (secStyle)
             secStyle->applyStyle(sectionFormat);
     }
-    cursor.insertFrame(sectionFormat);
+        cursor.insertFrame(sectionFormat);
     // Get the cursor of the frame
     QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
@@ -1051,7 +1051,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem, d->context, d->styleManager, d->changeTracker)) {
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-            textObjectManager->insertInlineObject(cursor, note);
+            textObjectManager->insertInlineObject(cursor, note, cursor.charFormat());
         } else {
             kDebug(32500) << "Error while loading the note !";
             delete note;
@@ -1307,7 +1307,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         kWarning(32500) << "bookmark-end of non-existing bookmark - broken document?";
                     }
                 }
-                textObjectManager->insertInlineObject(cursor, bookmark);
+                textObjectManager->insertInlineObject(cursor, bookmark, cursor.charFormat());
             }
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
@@ -1340,7 +1340,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     if (textObjectManager) {
                         KoVariableManager *varManager = textObjectManager->variableManager();
                         if (varManager) {
-                            textObjectManager->insertInlineObject(cursor, obj);
+                            textObjectManager->insertInlineObject(cursor, obj, cursor.charFormat());
                         }
                     }
                 }

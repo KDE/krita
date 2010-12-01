@@ -12,6 +12,7 @@
 void TestKoColorSpaceRegistry::testConstruction()
 {
     KoColorSpaceRegistry* instance = KoColorSpaceRegistry::instance();
+    Q_UNUSED(instance);
     Q_ASSERT(instance);
 }
 

@@ -39,6 +39,7 @@ KoReportDesignerItemRectBase::KoReportDesignerItemRectBase(KoReportDesigner *r)
 
     m_ppos = 0;
     m_psize = 0;
+    m_grabAction = 0;
 
     setAcceptsHoverEvents(true);
 

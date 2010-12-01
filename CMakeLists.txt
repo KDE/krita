@@ -254,6 +254,14 @@ TEST_BIG_ENDIAN(CMAKE_WORDS_BIGENDIAN)
 ## Generate a file for prefix information
 ##
 
+ #############################
+##############################
+## Add the benchmark target ##
+##############################
+#############################
+
+include(MacroKOfficeAddBenchmark)
+
  ####################
 #####################
 ## Define includes ##
@@ -349,7 +357,7 @@ if(NOT Boost_FOUND)
     set(SHOULD_BUILD_KPRESENTER FALSE)
 endif(NOT Boost_FOUND)
 
-### Krita: pigment, blitz, eigen2, exiv2
+### Krita: pigment, eigen2, exiv2
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
    set(SHOULD_BUILD_KRITA FALSE)
 endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)

@@ -183,7 +183,9 @@ void KoReportDesigner::init()
 
 KoReportDesigner::~KoReportDesigner()
 {
+    delete d->zoom;
     delete d;
+    delete m_sectionData;
 }
 
 ///The loading Code
@@ -274,7 +276,7 @@ KoReportDesigner::KoReportDesigner(QWidget *parent, QDomElement data) : QWidget(
         }
     }
     this->slotPageButton_Pressed();
-    emit(reportDataChanged());
+    emit reportDataChanged();
     setModified(false);
 }
 
@@ -369,7 +371,7 @@ void KoReportDesigner::setReportData(KoReportData* kodata)
         m_kordata = kodata;
         slotPageButton_Pressed();
         setModified(true);
-        emit(reportDataChanged());
+        emit reportDataChanged();
     }
 }
 
@@ -571,7 +573,7 @@ void KoReportDesigner::setModified(bool mod)
     m_modified = mod;
 
     if (m_modified) {
-        emit(dirty());
+        emit dirty();
     }
 }
 
@@ -862,8 +864,8 @@ void KoReportDesigner::sectionMouseReleaseEvent(ReportSceneView * v, QMouseEvent
                 item = new KoReportDesignerItemLine(v->designer(), v->scene(), pos);
             }
             else {
-                KoReportPluginManager &pluginManager =  KoReportPluginManager::self();
-                KoReportPluginInterface *plug = pluginManager.plugin(m_sectionData->insertItem);
+                KoReportPluginManager* pluginManager = KoReportPluginManager::self();
+                KoReportPluginInterface *plug = pluginManager->plugin(m_sectionData->insertItem);
                 if (plug) {
                     QObject *obj = plug->createDesignerInstance(v->designer(), v->scene(), pos);
                     if (obj) {
@@ -896,14 +898,14 @@ unsigned int KoReportDesigner::selectionCount() const
 
 void KoReportDesigner::changeSet(KoProperty::Set *s)
 {
-    //Set the checked state of the report proerties button
+    //Set the checked state of the report properties button
     if (s == m_set)
         d->pageButton->setCheckState(Qt::Checked);
     else
         d->pageButton->setCheckState(Qt::Unchecked);
 
     m_itmset = s;
-    emit(propertySetChanged());
+    emit propertySetChanged();
 }
 
 //
@@ -1166,15 +1168,15 @@ bool KoReportDesigner::isEntityNameUnique(const QString &n, KoReportItemBase* ig
     return unique;
 }
 
-QList<QAction*> KoReportDesigner::actions()
+QList<QAction*> KoReportDesigner::actions(QObject* parent)
 {
-    KoReportPluginManager &manager = KoReportPluginManager::self();
+    KoReportPluginManager* manager = KoReportPluginManager::self();
     QAction *act;
     QList<QAction*> actList;
 
-    actList = manager.actions();
+    actList = manager->actions();
     
-    act = new QAction(KIcon("line"), i18n("Line"), 0);
+    act = new QAction(KIcon("line"), i18n("Line"), parent);
     act->setObjectName("report:line");
     act->setData(9);
     actList << act;
@@ -1189,7 +1191,7 @@ QList<QAction*> KoReportDesigner::actions()
     foreach(QAction *a, actList) {
         ++i;
         if(a->data().toInt() >= 10) {
-            QAction *sep = new QAction("separator", 0);
+            QAction *sep = new QAction("separator", parent);
             sep->setSeparator(true);
             actList.insert(i-1, sep);
             break;

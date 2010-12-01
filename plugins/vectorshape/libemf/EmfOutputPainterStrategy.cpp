@@ -284,7 +284,8 @@ void OutputPainterStrategy::restoreDC( const qint32 savedDC )
     // We used a trick in saveDC() and stored the worldTransform in
     // the painter.  Now restore the full transformation.
     m_worldTransform = m_painter->worldTransform();
-    recalculateWorldTransform();
+    QTransform newMatrix = m_worldTransform * m_outputTransform;
+    m_painter->setWorldTransform( newMatrix );
 }
 
 void OutputPainterStrategy::setMetaRgn()
@@ -328,6 +329,30 @@ void OutputPainterStrategy::recalculateWorldTransform()
     // is no way to perform the calculation.  Just give up.
     if (!m_windowExtIsSet && !m_viewportExtIsSet)
         return;
+
+    // Negative window extensions mean flip the picture.  Handle this here.
+    bool  flip = false;
+    qreal midpointX = 0.0;
+    qreal midpointY = 0.0;
+    qreal scaleX = 1.0;
+    qreal scaleY = 1.0;
+    if (m_windowExt.width() < 0) {
+        midpointX = m_windowOrg.x() + m_windowExt.width() / qreal(2.0);
+        scaleX = -1.0;
+        flip = true;
+    }
+    if (m_windowExt.height() < 0) {
+        midpointY = m_windowOrg.y() + m_windowExt.height() / qreal(2.0);
+        scaleY = -1.0;
+        flip = true;
+    }
+    if (flip) {
+        //kDebug(31000) << "Flipping" << midpointX << midpointY << scaleX << scaleY;
+        m_worldTransform.translate(midpointX, midpointY);
+        m_worldTransform.scale(scaleX, scaleY);
+        m_worldTransform.translate(-midpointX, -midpointY);
+        //kDebug(31000) << "After flipping for window" << mWorldTransform;
+    }
 
     // Update the world transform if both window and viewport are set...
     // FIXME: Check windowExt == 0 in any direction

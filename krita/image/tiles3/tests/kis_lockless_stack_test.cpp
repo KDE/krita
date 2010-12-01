@@ -85,6 +85,7 @@ public:
 
         bool result = m_stack.pop(value);
         Q_ASSERT(result);
+        Q_UNUSED(result); // for relesae build
 
         return value;
     }

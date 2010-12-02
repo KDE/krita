@@ -109,7 +109,7 @@ public:
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
-    QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles);
+    QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     int checkForBlockChange(const QTextBlock &block);
@@ -838,8 +838,9 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
     writer->endElement(); // table:table-of-content
 }
 
-QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles)
+QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level)
 {
+    Q_UNUSED(level);
     QTextList *textList, *topLevelTextList;
     topLevelTextList = textList = block.textList();
 
@@ -924,7 +925,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles);
+                    block = saveList(block, listStyles, ++level);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
@@ -976,7 +977,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (cursor.currentList() != currentList) {
             int previousBlockNumber = block.blockNumber();
-            block = saveList(block, listStyles);
+            block = saveList(block, listStyles, 1);
             int blockNumberToProcess = block.blockNumber();
             if (blockNumberToProcess != previousBlockNumber)
                 continue;

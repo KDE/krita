@@ -520,36 +520,65 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             continue;
         const QString localName = property.localName();
         if (localName == "list-level-properties") {
-            QString spaceBefore(property.attributeNS(KoXmlNS::text, "space-before"));
-            if (!spaceBefore.isEmpty())
-                setIndent(KoUnit::parseValue(spaceBefore));
+            QString mode(property.attributeNS(KoXmlNS::text, "list-level-position-and-space-mode"));
+            if (mode == "label-alignment") {
+                KoXmlElement p;
+                forEachElement(p, property) {
+                     if (p.namespaceURI() == KoXmlNS::style && p.localName() == "list-level-label-alignment") {
+                        // The <style:list-level-label-alignment> element and the fo:text-align attribute are used to define
+                        // the position and spacing of the list label and the list item. The values of the attributes for
+                        // text:space-before, text:min-label-width and text:min-label-distance are assumed to be 0.
 
-            QString minLableWidth(property.attributeNS(KoXmlNS::text, "min-label-width"));
-            if (!minLableWidth.isEmpty())
-                setMinimumWidth(KoUnit::parseValue(minLableWidth));
+                        QString textAlign(p.attributeNS(KoXmlNS::fo, "text-align"));
+                        if (!textAlign.isEmpty())
+                            setAlignment(KoText::alignmentFromString(textAlign));
 
-            QString textAlign(property.attributeNS(KoXmlNS::fo, "text-align"));
-            if (!textAlign.isEmpty())
-                setAlignment(KoText::alignmentFromString(textAlign));
+                        QString textindent(p.attributeNS(KoXmlNS::fo, "text-indent"));
+                        QString marginleft(p.attributeNS(KoXmlNS::fo, "margin-left"));
+                        qreal ti = textindent.isEmpty() ? 0 : KoUnit::parseValue(textindent);
+                        qreal ml = marginleft.isEmpty() ? 0 : KoUnit::parseValue(marginleft);
+                        setIndent(qMax(0.0, ti + ml));
+                
+                        setMinimumWidth(0);
+                        setMinimumDistance(0);
+                        
+                        //TODO support ODF 18.829 text:label-followed-by and 18.832 text:list-tab-stop-position
+                     }   
+                }
+            } else { // default is mode == "label-width-and-position"
+                // The text:space-before, text:min-label-width, text:minimum-label-distance and fo:text-align attributes
+                // are used to define the position and spacing of the list label and the list item.
 
-            QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
-            if (!minLableDistance.isEmpty())
-                setMinimumDistance(KoUnit::parseValue(minLableDistance));
+                QString spaceBefore(property.attributeNS(KoXmlNS::text, "space-before"));
+                if (!spaceBefore.isEmpty())
+                    setIndent(KoUnit::parseValue(spaceBefore));
 
-            QString width(property.attributeNS(KoXmlNS::fo, "width"));
-            if (!width.isEmpty())
-                setWidth(KoUnit::parseValue(width));
+                QString minLableWidth(property.attributeNS(KoXmlNS::text, "min-label-width"));
+                if (!minLableWidth.isEmpty())
+                    setMinimumWidth(KoUnit::parseValue(minLableWidth));
 
-            QString height(property.attributeNS(KoXmlNS::fo, "height"));
-            if (!height.isEmpty())
-                setHeight(KoUnit::parseValue(height));
+                QString textAlign(property.attributeNS(KoXmlNS::fo, "text-align"));
+                if (!textAlign.isEmpty())
+                    setAlignment(KoText::alignmentFromString(textAlign));
+
+                QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
+                if (!minLableDistance.isEmpty())
+                    setMinimumDistance(KoUnit::parseValue(minLableDistance));
+
+                QString width(property.attributeNS(KoXmlNS::fo, "width"));
+                if (!width.isEmpty())
+                    setWidth(KoUnit::parseValue(width));
+
+                QString height(property.attributeNS(KoXmlNS::fo, "height"));
+                if (!height.isEmpty())
+                    setHeight(KoUnit::parseValue(height));
+            }
         } else if (localName == "text-properties") {
             // TODO
             QString color(property.attributeNS(KoXmlNS::fo, "color"));
             if (!color.isEmpty())
                 setBulletColor(QColor(color));
-	
-	}
+        }
     }
 }
 

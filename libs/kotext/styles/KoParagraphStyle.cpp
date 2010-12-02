@@ -187,7 +187,7 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
-    bool hadbreak = format.hasProperty(QTextFormat::PageBreakPolicy);
+    bool hadBreak = format.hasProperty(QTextFormat::PageBreakPolicy);
 
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);

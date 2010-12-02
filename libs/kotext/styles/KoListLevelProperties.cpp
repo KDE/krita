@@ -530,8 +530,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         // text:space-before, text:min-label-width and text:min-label-distance are assumed to be 0.
 
                         QString textAlign(p.attributeNS(KoXmlNS::fo, "text-align"));
-                        if (!textAlign.isEmpty())
-                            setAlignment(KoText::alignmentFromString(textAlign));
+                        setAlignment(textAlign.isEmpty() ? Qt::AlignLeft : KoText::alignmentFromString(textAlign));
 
                         QString textindent(p.attributeNS(KoXmlNS::fo, "text-indent"));
                         QString marginleft(p.attributeNS(KoXmlNS::fo, "margin-left"));

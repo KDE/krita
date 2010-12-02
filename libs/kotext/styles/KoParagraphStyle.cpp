@@ -187,10 +187,16 @@ QColor KoParagraphStyle::propertyColor(int key) const
 
 void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
 {
+    bool hadbreak = format.hasProperty(QTextFormat::PageBreakPolicy);
+
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
     }
-
+    if (!hadBreak) {
+         // page preak should not be inherited according to odf, yet if it was there before we
+         // shouldn't remove
+         format.clearProperty(QTextFormat::PageBreakPolicy);
+    }
     const QMap<int, QVariant> props = d->stylesPrivate.properties();
     QMap<int, QVariant>::const_iterator it = props.begin();
     while (it != props.end()) {

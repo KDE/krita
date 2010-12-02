@@ -37,10 +37,10 @@ class KoReportData;
 // This class takes a report definition and prerenders the result to
 // an ORODocument that can be used to pass to any number of renderers.
 //
-class KOREPORT_EXPORT KoReportPreRenderer
+class KOREPORT_EXPORT KoReportPreRenderer : public QObject
 {
 public:
-    KoReportPreRenderer(const QDomElement&);
+    explicit KoReportPreRenderer(const QDomElement&);
 
     virtual ~KoReportPreRenderer();
 

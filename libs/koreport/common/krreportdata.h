@@ -41,8 +41,8 @@ class KoReportReportData : public QObject
     Q_OBJECT
 
 public:
-    explicit KoReportReportData(const QDomElement & elemSource);
-    KoReportReportData();
+    explicit KoReportReportData(const QDomElement & elemSource, QObject *parent = 0);
+    explicit KoReportReportData(QObject *parent = 0);
     ~KoReportReportData();
 
     bool isValid() const {

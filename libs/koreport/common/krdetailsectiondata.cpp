@@ -20,16 +20,19 @@
 
 #include "krdetailsectiondata.h"
 #include "krsectiondata.h"
+#include "krreportdata.h"
 
 #include <kdebug.h>
 
-KRDetailSectionData::KRDetailSectionData()
+KRDetailSectionData::KRDetailSectionData(QObject *parent)
+ : QObject(parent)
 {
     m_pageBreak = BreakNone;
     m_detailSection = 0;
 }
 
 KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource, KoReportReportData *report)
+ : QObject(report)
 {
     m_pageBreak = BreakNone;
     m_detailSection = 0;

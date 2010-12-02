@@ -152,8 +152,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
-    Q_UNUSED(image);
-    return new KisBrightnessContrastConfigWidget(parent, dev);
+    return new KisBrightnessContrastConfigWidget(parent, dev, image->bounds());
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)
@@ -177,7 +176,7 @@ KoColorTransformation* KisBrightnessContrastFilter::createTransformation(const K
     return adjustment;
 }
 
-KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f)
         : KisConfigWidget(parent, f)
 {
     int i;
@@ -219,7 +218,7 @@ KisBrightnessContrastConfigWidget::KisBrightnessContrastConfigWidget(QWidget * p
     m_page->vgradient->setPixmap(vgradientpix);
 
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    KisHistogram histogram(dev, producer, LINEAR);
+    KisHistogram histogram(dev, bounds, producer, LINEAR);
     QPixmap pix(256, height);
     pix.fill();
     QPainter p(&pix);

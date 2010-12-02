@@ -74,7 +74,7 @@ static const char *arrow_xpm[] = {
 ReportSection::ReportSection(KoReportDesigner * rptdes)
         : QWidget(rptdes)
 {
-    m_sectionData = new KRSectionData();
+    m_sectionData = new KRSectionData(this);
     connect(m_sectionData->propertySet(), SIGNAL(propertyChanged(KoProperty::Set&, KoProperty::Property&)),
             this, SLOT(slotPropertyChanged(KoProperty::Set&, KoProperty::Property&)));
     int dpiY = KoDpi::dpiY();

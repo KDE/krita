@@ -657,7 +657,7 @@ bool KoReportPreRenderer::setDom(const QDomElement &docReport)
 		return false;
 	}
 	
-        d->m_reportData = new KoReportReportData(docReport);
+        d->m_reportData = new KoReportReportData(docReport, this);
         d->m_valid = d->m_reportData->isValid();
     }
     return isValid();

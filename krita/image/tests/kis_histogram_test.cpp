@@ -24,6 +24,8 @@
 #include <KoHistogramProducer.h>
 #include "kis_paint_device.h"
 #include "kis_histogram.h"
+#include "kis_paint_layer.h"
+#include "kis_types.h"
 
 void KisHistogramTest::testCreation()
 {
@@ -32,7 +34,7 @@ void KisHistogramTest::testCreation()
     QList<QString> producers = KoHistogramProducerFactoryRegistry::instance()->keysCompatibleWith(cs);
     foreach (const QString &id, producers) {
         KoHistogramProducerSP producer = KoHistogramProducerFactoryRegistry::instance()->get(id)->generate();
-        KisHistogram test(dev, producer, LINEAR);
+        KisHistogram test(dev, QRect(0, 0, 100, 100), producer, LINEAR);
     }
 }
 

@@ -38,7 +38,7 @@ Histogram::Histogram(ConstPaintDevice* layer, KoHistogramProducerSP producer, co
         : QObject(layer)
 {
     setObjectName("KritaHistogram");
-    m_histogram = new KisHistogram(layer->paintDevice(), producer, type);
+    m_histogram = new KisHistogram(layer->paintDevice(), layer->paintDevice()->exactBounds(), producer, type);
 }
 
 Histogram::~Histogram()

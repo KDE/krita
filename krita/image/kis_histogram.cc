@@ -43,21 +43,6 @@ KisHistogram::KisHistogram(const KisPaintLayerSP layer,
     updateHistogram();
 }
 
-// TODO: get rid of this, make all Histogram clients pass bounds (they can pass paintdev->exactBounds() if they want)
-KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
-                           KoHistogramProducerSP producer,
-                           const enumHistogramType type)
-{
-    m_paintDevice = paintdev;
-    m_bounds = m_paintDevice->exactBounds();
-    m_type = type;
-    m_producer = producer;
-    m_selection = false;
-    m_channel = 0;
-
-    updateHistogram();
-}
-
 KisHistogram::KisHistogram(const KisPaintDeviceSP paintdev,
                            const QRect &bounds,
                            KoHistogramProducerSP producer,

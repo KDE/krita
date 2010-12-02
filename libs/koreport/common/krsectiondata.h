@@ -66,7 +66,7 @@ public:
         Detail
     };
 
-    KRSectionData();
+    explicit KRSectionData(QObject* parent = 0);
     KRSectionData(const QDomElement &, KoReportReportData* report);
     ~KRSectionData();
     KoProperty::Set* propertySet() const {

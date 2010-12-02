@@ -29,15 +29,17 @@ void KoReportReportData::init()
     m_reportHeader = m_reportFooter = 0;
 }
 
-KoReportReportData::KoReportReportData()
-        : m_detailSection(0)
+KoReportReportData::KoReportReportData(QObject *parent)
+        : QObject(parent)
+        , m_detailSection(0)
 {
     init();
     m_valid = true;
 }
 
-KoReportReportData::KoReportReportData(const QDomElement & elemSource)
-        : m_detailSection(0)
+KoReportReportData::KoReportReportData(const QDomElement & elemSource, QObject *parent)
+        : QObject(parent)
+        , m_detailSection(0)
 {
     m_valid = false;
     init();

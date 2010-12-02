@@ -98,7 +98,7 @@ class KisBrightnessContrastConfigWidget : public KisConfigWidget
 {
 
 public:
-    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f = 0);
+    KisBrightnessContrastConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f = 0);
     virtual ~KisBrightnessContrastConfigWidget() {}
 
     virtual KisBrightnessContrastFilterConfiguration * configuration() const;

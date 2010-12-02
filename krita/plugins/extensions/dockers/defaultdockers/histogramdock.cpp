@@ -172,7 +172,8 @@ void KisHistogramDocker::producerChanged(QAction *action)
 
     // use dummy layer as a source; we are not going to actually use or need it
     // All of these are SP, no need to delete them afterwards
-    m_histogram = new KisHistogram(new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8()),
+    KisPaintDeviceSP paintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+    m_histogram = new KisHistogram(paintDevice, paintDevice->exactBounds(),
                                    KoHistogramProducerSP(m_producer), LOGARITHMIC);
 
     kDebug() << "created histogram " << m_histogram;

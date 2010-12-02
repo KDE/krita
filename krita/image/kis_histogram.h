@@ -109,10 +109,6 @@ public:
                  const enumHistogramType type);
 
     KisHistogram(KisPaintDeviceSP paintdev,
-                 KoHistogramProducerSP producer,
-                 const enumHistogramType type);
-
-    KisHistogram(KisPaintDeviceSP paintdev,
                  const QRect &bounds,
                  KoHistogramProducerSP producer,
                  const enumHistogramType type);

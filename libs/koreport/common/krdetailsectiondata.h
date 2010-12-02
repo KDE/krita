@@ -35,8 +35,8 @@ class KRDetailSectionData : public QObject
 {
     Q_OBJECT
 public:
-    KRDetailSectionData();
-    KRDetailSectionData(const QDomElement &, KoReportReportData*);
+    explicit KRDetailSectionData(QObject *parent = 0);
+    KRDetailSectionData(const QDomElement &elemSource, KoReportReportData *report);
     ~KRDetailSectionData();
 
     enum PageBreak {

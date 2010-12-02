@@ -30,14 +30,15 @@
 #include "KoReportPluginManager.h"
 #include "KoReportItemLine.h"
 
-KRSectionData::KRSectionData()
+KRSectionData::KRSectionData(QObject* parent)
+ : QObject(parent)
 {
     createProperties(QDomElement());
 }
 
 KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData* report)
+ : QObject(report)
 {
-    Q_UNUSED(report)
     setObjectName(elemSource.tagName());
 
     if (objectName() != QLatin1String("report:section")) {

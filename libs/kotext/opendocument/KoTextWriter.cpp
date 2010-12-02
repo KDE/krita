@@ -77,7 +77,9 @@ public:
     layout(0),
     styleManager(0),
     changeTracker(0),
-    rdfData(0)
+    rdfData(0),
+    tagTypeChangeRegionOpened(false),
+    tagTypeChangeEndBlockNumber(-1)
     {
         writer = &context.xmlWriter();
         changeStack.push(0);
@@ -131,6 +133,13 @@ public:
     // during a cut and paste operation when their end marker
     // is not included in the selection.
     QList<KoInlineObject*> pairedInlineObjectStack;
+
+    //For saving of delete-changes that result in a tag type change
+    bool tagTypeChangeRegionOpened;
+    int tagTypeChangeEndBlockNumber;
+    int checkForTagTypeChanges(QTextBlock &block);
+    void openTagTypeChangeRegion();
+    void closeTagTypeChangeRegion();
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -973,9 +982,87 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 continue;
         }
 
+        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && !cursor.currentFrame() && !cursor.currentList()) {
+            tagTypeChangeEndBlockNumber = checkForTagTypeChanges(block);
+            if (tagTypeChangeEndBlockNumber != -1) {
+                tagTypeChangeRegionOpened = true;
+                openTagTypeChangeRegion();
+            }
+        }
+
         saveParagraph(block, from, to);
+
+        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber)) {
+            closeTagTypeChangeRegion();
+        }
+
         block = block.next();
     } // while
+}
+
+int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
+{
+    QTextBlock endBlock = block;
+    QTextCursor cursor(block);    
+    int endBlockNumber = -1;
+
+    int changeId = 0;
+    do {
+        if (!endBlock.next().isValid())
+            break;
+        
+        int lastFragmentChangeId = endBlock.end().fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+        int nextFragmentChangeId = endBlock.next().begin().fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+        
+        if ((lastFragmentChangeId) && (nextFragmentChangeId) \
+            && (lastFragmentChangeId == nextFragmentChangeId) \
+            && (changeTracker->elementById(lastFragmentChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
+            changeId = lastFragmentChangeId;
+            endBlock = endBlock.next();
+        } else {
+            changeId = 0;
+        }
+    } while(changeId);
+
+    if (endBlock.blockNumber() != block.blockNumber()) {
+        // Check For <p> and a <h> merge
+        bool outlineChange = false;
+        if (block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel) \
+            != endBlock.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)) {
+            outlineChange = true;
+        }
+
+        // Check for <p> or a <h> with a <list> merge
+        bool pWithListMerge = false;
+        if (!QTextCursor(block).currentList() && QTextCursor(endBlock).currentList()) {
+            pWithListMerge = true;
+        }
+
+        // Check for a <list> merge with <p> or a <h>
+        bool listWithPMerge = false;
+        if (QTextCursor(block).currentList() && !QTextCursor(endBlock).currentList()) {
+            listWithPMerge = true;
+        }
+
+        // Check For List-Item merge
+        bool listItemMerge = false;
+        if (QTextCursor(block).currentList() && QTextCursor(endBlock).currentList()) {
+            listItemMerge = true;
+        }
+
+        if (outlineChange || pWithListMerge || listWithPMerge || listItemMerge)
+            endBlockNumber = endBlock.blockNumber();
+    } 
+
+    return endBlockNumber;
+}
+
+void KoTextWriter::Private::openTagTypeChangeRegion()
+{
+}
+
+void KoTextWriter::Private::closeTagTypeChangeRegion()
+{
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

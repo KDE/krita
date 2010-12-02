@@ -840,7 +840,6 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
 
 QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level)
 {
-    Q_UNUSED(level);
     QTextList *textList, *topLevelTextList;
     topLevelTextList = textList = block.textList();
 
@@ -852,6 +851,17 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     KoTextDocument textDocument(block.document());
     KoList *list = textDocument.list(block);
     int topListLevel = KoList::level(block);
+
+    bool closeTagChangeRegion = false;
+    if ((level == 1) && (tagTypeChangeRegionOpened)) {
+        QTextBlock listBlock = block;
+        do {
+            if (listBlock.blockNumber() == tagTypeChangeEndBlockNumber) {
+                closeTagChangeRegion = true;
+            }
+            listBlock = listBlock.next();
+        } while(textDocument.list(listBlock) == list);
+    }
 
     bool listStarted = false;
     int listChangeId = 0;
@@ -947,6 +957,11 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
             closeChangeRegion();
         writer->endElement();
     }
+
+    if (closeTagChangeRegion) {
+        closeTagTypeChangeRegion();
+    }
+   
     return block;
 }
 
@@ -983,7 +998,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 continue;
         }
 
-        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && !cursor.currentFrame() && !cursor.currentList()) {
+        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && !cursor.currentList()) {
             tagTypeChangeEndBlockNumber = checkForTagTypeChanges(block);
             if (tagTypeChangeEndBlockNumber != -1) {
                 tagTypeChangeRegionOpened = true;

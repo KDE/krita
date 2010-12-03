@@ -142,7 +142,7 @@ void ToCGenerator::update()
     foreach (const QTextBlock &block, m_originalBlocksInToc) {
         KoShape *shape = layout->shapeForPosition(block.position());
         cursor.movePosition(QTextCursor::NextBlock);
-        Q_ASSERT(shape);
+        //Q_ASSERT(shape); // seems this can happen
         if (shape == 0)
             continue;
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());

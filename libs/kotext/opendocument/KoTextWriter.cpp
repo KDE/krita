@@ -140,6 +140,11 @@ public:
     int checkForTagTypeChanges(QTextBlock &block);
     void openTagTypeChangeRegion();
     void closeTagTypeChangeRegion();
+
+    KoXmlWriter *oldXmlWriter;
+    KoXmlWriter *newXmlWriter;
+    QByteArray generatedXmlArray;
+    QBuffer generatedXmlBuffer;
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -1075,10 +1080,28 @@ int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
 
 void KoTextWriter::Private::openTagTypeChangeRegion()
 {
+    //Save the current writer
+    oldXmlWriter = writer;
+
+    //Create a new KoXmlWriter pointing to a QBuffer
+    generatedXmlArray.clear();
+    generatedXmlBuffer.setBuffer(&generatedXmlArray);
+    newXmlWriter = new KoXmlWriter(&generatedXmlBuffer);
+
+    //Set our xmlWriter as the writer to be used
+    writer = newXmlWriter;
+    context.setXmlWriter(*newXmlWriter);
 }
 
 void KoTextWriter::Private::closeTagTypeChangeRegion()
 {
+    //delete the new writer
+    delete newXmlWriter;
+
+    //Restore the actual xml writer
+    writer = oldXmlWriter;
+    context.setXmlWriter(*oldXmlWriter);
+    qDebug() << QString(generatedXmlArray);
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

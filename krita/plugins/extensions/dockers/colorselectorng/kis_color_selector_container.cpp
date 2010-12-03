@@ -142,9 +142,9 @@ void KisColorSelectorContainer::reactOnLayerChange()
             m_minimalAction->setEnabled(true);
         }
         else {
-            m_colorSelAction->setEnabled(false);
-            m_mypaintAction->setEnabled(false);
-            m_minimalAction->setEnabled(false);
+//            m_colorSelAction->setEnabled(false);
+//            m_mypaintAction->setEnabled(false);
+//            m_minimalAction->setEnabled(false);
         }
     }
 }

@@ -221,7 +221,6 @@ void KoReportItemChart::populateData()
                     curs->addExpression(field, m_links[field], '=');
                 }
             }
-            
             if (curs && curs->open()) {
                 fn = curs->fieldNames();
                 //resize the data lists to match the number of columns
@@ -293,6 +292,9 @@ void KoReportItemChart::setLinkData(QString fld, QVariant val)
 
 void KoReportItemChart::setAxis(const QString& xa, const QString &ya)
 {
+    if (!m_chartWidget) {
+        return;
+    }
     Q_ASSERT(m_chartWidget);
 
     if (m_chartWidget->barDiagram() || m_chartWidget->lineDiagram()) {

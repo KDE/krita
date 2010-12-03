@@ -558,9 +558,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
                 if ((!styleName.isEmpty() /*&& !identical*/) || charFormat.isAnchor()) {
                     writer->endElement();
-                    if (changeId)
-                        closeChangeRegion();
                 }
+
+                if (changeId)
+                    closeChangeRegion();
             } // if (inlineObject)
 
             previousCharFormat = charFormat;

@@ -550,6 +550,12 @@ bool Layout::nextParag()
         }
     }
 
+    if (m_blockData == 0) {
+        m_blockData = new KoTextBlockData();
+        m_block.setUserData(m_blockData);
+    }
+    m_blockData->setEffectiveTop(m_y);
+
     m_y += topMargin();
     layout = m_block.layout();
     QTextOption option = layout->textOption();
@@ -1302,7 +1308,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                     painter->fillRect(layout->boundingRect(), bg);
                     QRectF br = layout->boundingRect();
                     if (block.next().isValid())
-                            br.setHeight(br.height() /*+ extraSpacing(block)*/);
+                            br.setHeight(br.height());
                     painter->fillRect(br, bg);
             }
             paintStrategy->applyStrategy(painter);
@@ -2239,43 +2245,5 @@ void Layout::updateFrameStack()
 void Layout::setTabSpacing(qreal spacing)
 {
     m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
-}
-
-qreal Layout::extraSpacing(QTextBlock const& block) {
-    QTextFormat format = block.blockFormat();
-    QTextLayout *layout = block.layout();
-    qreal height = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-
-    if (height == 0.0) { // not fixed lineheight
-        const bool useFontProperties = m_format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
-        if (useFontProperties)
-            height = layout->lineAt(layout->lineCount()-1).height();
-        else {
-            if (block.length()==0) // no text in parag.
-                height = block.charFormat().fontPointSize();
-            else {
-                // read max font height
-                QTextBlock::iterator fragmentIterator = block.begin();
-                height = qMax(height, fragmentIterator.fragment().charFormat().fontPointSize());
-                fragmentIterator++;
-                while (!fragmentIterator.atEnd()) {
-                    height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                    m_fragmentIterator++;
-                }
-            }
-            if (height < 0.01) height = 12; // default size for uninitialized styles.
-        }
-    }
-
-    qreal linespacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
-    if (linespacing == 0.0) { // unset
-        int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
-        if (percent != 0)
-            linespacing = height * ((percent - 100) / 100.0);
-        else if (linespacing == 0.0)
-            linespacing = height * 0.2; // default
-    }
-
-    return linespacing;
 }
 

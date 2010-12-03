@@ -45,7 +45,7 @@ class KoShapeLoadingContext;
  *
  * The anchored shape will be positioned (in supporting applications) based on the properties set on the
  * anchor.  The setAlignment(AnchorVertical) and setAlignment(AnchorHorizontal) calls will determine the
- * resulting position relative to the position the KoTextAnchor character.
+ * resulting position relative to the position of the KoTextAnchor character.
  *
  * Steps to use a KoTextAnchor are; <ol>
  * <li> Create a new instance with e.g. new KoTextAnchor(myshape);
@@ -58,34 +58,52 @@ class KoShapeLoadingContext;
 class KOTEXT_EXPORT KoTextAnchor : public KoInlineObject
 {
 public:
-    /// the vertical alignment options for the shape this anchor holds.
-    enum AnchorVertical {
-        TopOfPage,          ///< Align the anchors top to the top of the page
-        BottomOfPage,       ///< Align the anchors bottom to the bottom of the page
-        TopOfPageContent,   ///< Align the anchors top to the top of the page content (top margin of page)
-        BottomOfPageContent,///< Align the anchors bottom to the bottom of the content (bottom margin of page)
-        TopOfFrame,         ///< Align the anchors top to the top of the frame it is laid-out in.
-        BottomOfFrame,      ///< Align the anchors bottom to the bottom of the frame.
-        TopOfParagraph,     ///< Align the anchors top to the top of the paragraph it is anchored in.
-        BottomOfParagraph,  ///< Align the anchors bottom to the bottom of the paragraph it is anchord in.
-        AboveCurrentLine,   ///< Align the anchors top to the top of the line it is anchord in.
-        BelowCurrentLine,   ///< Align the anchors bottom to the bottom of the line it is anchord in.
-        VerticalOffset      ///< Move the anchor to be an exact vertical distance from the (baseline) of the anchor.
+    enum HorizontalPos {
+        HCenter,
+        HFromInside,
+        HFromLeft,
+        HInside,
+        HLeft,
+        HOutside,
+        HRight
     };
 
-    /// the horizontal alignment options for the shape this anchor holds.
-    enum AnchorHorizontal {
-        LeftOfPage,         ///< Align the anchors left to the left of the page
-        RightOfPage,        ///< Align the anchors right to the right of the page
-        CenterOfPage,       ///< Align the anchors center to the center of the page
-        Left,               ///< Align the anchors left to the left of the frame it is laid-out in.
-        Right,              ///< Align the anchors rigth to the rigth of the frame it is laid-out in.
-        Center,             ///< Align the anchors center to the center of the frame it is laid-out in.
-        ClosestToBinding,   ///< Like Left when on an odd page, or Right otherwise.
-        FurtherFromBinding, ///< Like Left when on an even page, or Right otherwise.
-        HorizontalOffset    ///< Move the anchor to be an exact horizontal distance from the the anchor.
+    enum HorizontalRel {
+        HChar,
+        HPage,
+        HPageContent,
+        HPageStartMargin,
+        HPageEndMargin,
+        HFrame,
+        HFrameContent,
+        HFrameEndMargin,
+        HFrameStartMargin,
+        HParagraph,
+        HParagraphContent,
+        HParagraphEndMargin,
+        HParagraphStartMargin
     };
 
+    enum VerticalPos {
+        VBelow,
+        VBottom,
+        VFromTop,
+        VMiddle,
+        VTop
+    };
+
+    enum VerticalRel {
+        VBaseline,
+        VChar,
+        VFrame,
+        VFrameContent,
+        VLine,
+        VPage,
+        VPageContent,
+        VParagraph,
+        VParagraphContent,
+        VText
+    };
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
@@ -98,26 +116,29 @@ public:
      */
     KoShape *shape() const;
 
-    /**
-     * The linked shape will be placed based on the combined horizontal and vertical alignments.
-     * Setting the alignment will trigger a relayout of the text and soon after reposition the
-     * anchored shape.
-     * @param horizontal the new horizontal alignment
-     */
-    void setAlignment(AnchorHorizontal horizontal);
-    /**
-     * The linked shape will be placed based on the combined horizontal and vertical alignments.
-     * Setting the alignment will trigger a relayout of the text and soon after reposition the
-     * anchored shape.
-     * @param vertical the new vertical alignment
-     */
-    void setAlignment(AnchorVertical vertical);
+    /// set the current vertical-pos
+    void setHorizontalPos(HorizontalPos);
 
-    /// return the current vertical aligment
-    AnchorVertical verticalAlignment() const;
+    /// return the current vertical-pos
+    HorizontalPos horizontalPos();
 
-    /// return the current horizontal aligment
-    AnchorHorizontal horizontalAlignment() const;
+    /// set the current vertical-rel
+    void setHorizontalRel(HorizontalRel);
+
+    /// return the current vertical-rel
+    HorizontalRel horizontalRel();
+
+    /// set the current horizontal-pos
+    void setVerticalPos(VerticalPos);
+
+    /// return the current horizontal-pos
+    VerticalPos verticalPos();
+
+    /// set the current horizontal-rel
+    void setVerticalRel(VerticalRel);
+
+    /// return the current horizontal-rel
+    VerticalRel verticalRel();
 
     /// returns the cursor position in the document where this anchor is positioned.
     int positionInDocument() const;
@@ -146,13 +167,17 @@ public:
     void saveOdf(KoShapeSavingContext &context);
 
     /**
-     * Returns true if the anchored frame is positioned as a big character in the text layout
-     * or false when it will not take any space as an inline object.
-     * An anchor with HorizontalOffset/VerticalOffset as alignment and an offset() that
-     * keeps it inside the text size it is placed on will act as a big character in the
-     * text flow potentially changing the ascent/descent of the line.
+     * Returns true if the anchored frame is positioned as a (potentially big) character in
+     * the text layout or false when it will not take any space as an inline object.
+     * An anchor which behaves as a characterin the text will potentially change the
+     * ascent/descent of the line.
      */
-    bool isPositionedInline() const;
+    bool behavesAsCharacter() const;
+
+    /**
+     * Set if the anchor shuld behave as a character
+     */
+    void setBehavesAsCharacter(bool);
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();

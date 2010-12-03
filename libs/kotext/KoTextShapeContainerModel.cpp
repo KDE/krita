@@ -187,35 +187,15 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
 
     QTextLayout *layout = 0;
     int anchorPosInParag = -1;
-    if (qAbs(newPosition.x()) < 10) { // align left
-        relation.anchor->setAlignment(KoTextAnchor::Left);
-        relation.anchor->setOffset(QPointF(0, relation.anchor->offset().y()));
-    } else if (qAbs(parentShapeRect.width() - newPosition.x() - child->size().width()) < 10.0) {
-        relation.anchor->setAlignment(KoTextAnchor::Right);
-        relation.anchor->setOffset(QPointF(0, relation.anchor->offset().y()));
-    } else if (qAbs(parentShapeRect.width() / 2.0 - (newPosition.x() + child->size().width() / 2.0)) < 10.0) {
-        relation.anchor->setAlignment(KoTextAnchor::Center);
-        relation.anchor->setOffset(QPointF(0, relation.anchor->offset().y()));
-    } else {
-        relation.anchor->setAlignment(KoTextAnchor::HorizontalOffset);
+
+    if (relation.anchor->behavesAsCharacter()) {
         QTextBlock block = relation.anchor->document()->findBlock(relation.anchor->positionInDocument());
         layout = block.layout();
         anchorPosInParag = relation.anchor->positionInDocument() - block.position();
         QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
-        relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag) + tl.x(),
-                    relation.anchor->offset().y()));
-    }
+        relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
+            + tl.x(), 0));
 
-    if (qAbs(newPosition.y()) < 10.0) { // TopOfFrame
-        kDebug(32500) <<"  TopOfFrame";
-        relation.anchor->setAlignment(KoTextAnchor::TopOfFrame);
-        relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), 0));
-    } else if (qAbs(parentShapeRect.height() - newPosition.y()) < 10.0) {
-        kDebug(32500) <<"  BottomOfFrame";
-        relation.anchor->setAlignment(KoTextAnchor::BottomOfFrame); // TODO
-        relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), 0));
-    } else { // need layout info..
-        relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), 0));
         // the rest of the code uses the shape baseline, at this time the bottom. So adjust
         newPosition.setY(newPosition.y() + child->size().height());
         if (layout == 0) {
@@ -226,31 +206,14 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         if (layout->lineCount() > 0) {
             KoTextShapeData *data = qobject_cast<KoTextShapeData*>(child->parent()->userData());
             Q_ASSERT(data);
-            QTextLine tl = layout->lineAt(0);
+            QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
             qreal y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
-            if (y >= -5 && y < 10) {
-                kDebug(32500) <<"  TopOfParagraph" << y;
-                relation.anchor->setAlignment(KoTextAnchor::TopOfParagraph);
-            } else {
-                tl = layout->lineAt(layout->lineCount() - 1);
-                y = newPosition.y() - tl.y() - data->documentOffset() - tl.ascent() - child->size().height();
-                if (y >= 0 && y < 10) {
-                    kDebug(32500) <<"  BottomOfParagraph" << y;
-                    relation.anchor->setAlignment(KoTextAnchor::BottomOfParagraph); // TODO
-                } else {
-                    tl = layout->lineForTextPosition(anchorPosInParag);
-                    y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
-                    if (y >= 0 && y < 10) {
-                        kDebug(32500) <<"  AboveCurrentLine";
-                        relation.anchor->setAlignment(KoTextAnchor::AboveCurrentLine);
-                    }
-                    else {
-                        relation.anchor->setAlignment(KoTextAnchor::VerticalOffset);
-                        relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), -y));
-                    }
-                }
-            }
+            relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), -y));
         }
+    } else {
+        //TODO pavolk: handle position type change: absolute to realtive, etc ..
+        child->setPosition(newPosition);
+        relation.anchor->setOffset(relation.anchor->offset() + move);
     }
 
     move.setX(0); // let the text layout move it.

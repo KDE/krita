@@ -113,10 +113,23 @@ public:
      * @param border the border used for this paragraph, or 0 if no border is needed (anymore).
      */
     void setBorder(KoTextBlockBorderData *border);
+
     /**
      * Return the border associated with this paragraph, or 0 if there is no border set.
      */
     KoTextBlockBorderData *border() const;
+
+    /**
+     * This is to set the effective top of block. Then follows margin and then the text
+     * @param margin the effective top of the block.
+     */
+    void setEffectiveTop(qreal y);
+
+    /**
+     * Return the effective top of the block. Useful when drawing paragraph background,
+     * or placing anchored shapes relative to this.
+     */
+    qreal effectiveTop() const;
 
     /**
      * sets a paintStrategy of this paragraph

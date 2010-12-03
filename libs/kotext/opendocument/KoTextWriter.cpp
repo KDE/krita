@@ -1008,7 +1008,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         saveParagraph(block, from, to);
 
-        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber)) {
+        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber) && !cursor.currentList()) {
             closeTagTypeChangeRegion();
         }
 

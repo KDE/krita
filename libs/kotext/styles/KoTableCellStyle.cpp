@@ -60,7 +60,7 @@ KoTableCellStyle::KoTableCellStyle(QObject *parent)
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
-    : KoTableBorderStyle(*new KoTableCellStylePrivate(), parent)
+    : KoTableBorderStyle(*new KoTableCellStylePrivate(), format, parent)
 {
     Q_D(KoTableCellStyle);
     d->stylesPrivate = format.properties();

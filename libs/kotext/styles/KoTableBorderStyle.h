@@ -225,10 +225,13 @@ public:
     qreal bottomBorderWidth() const;
 
 protected:
+    KoTableBorderStyle(KoTableBorderStylePrivate &dd, const QTextTableCellFormat &format, QObject *parent);
     KoTableBorderStyle(KoTableBorderStylePrivate &dd, QObject *parent);
     KoTableBorderStylePrivate *d_ptr;
 
 private:
+    void init(const QTextTableCellFormat &format);
+
     Q_DECLARE_PRIVATE(KoTableBorderStyle)
 };
 

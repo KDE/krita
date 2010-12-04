@@ -28,6 +28,23 @@
 
 KoTableBorderStylePrivate::KoTableBorderStylePrivate()
 {
+    edges[KoTableBorderStyle::Top].spacing = 0;
+    borderstyle[KoTableBorderStyle::Top] = KoTableBorderStyle::BorderNone;
+
+    edges[KoTableBorderStyle::Left].spacing = 0;
+    borderstyle[KoTableBorderStyle::Left] = KoTableBorderStyle::BorderNone;
+
+    edges[KoTableBorderStyle::Bottom].spacing = 0;
+    borderstyle[KoTableBorderStyle::Bottom] = KoTableBorderStyle::BorderNone;
+
+    edges[KoTableBorderStyle::Right].spacing = 0;
+    borderstyle[KoTableBorderStyle::Right] = KoTableBorderStyle::BorderNone;
+
+    edges[KoTableBorderStyle::TopLeftToBottomRight].spacing = 0;
+    borderstyle[KoTableBorderStyle::TopLeftToBottomRight] = KoTableBorderStyle::BorderNone;
+
+    edges[KoTableBorderStyle::BottomLeftToTopRight].spacing = 0;
+    borderstyle[KoTableBorderStyle::BottomLeftToTopRight] = KoTableBorderStyle::BorderNone;
 }
 
 KoTableBorderStylePrivate::~KoTableBorderStylePrivate()
@@ -38,38 +55,29 @@ KoTableBorderStyle::KoTableBorderStyle(QObject *parent)
     : QObject(parent)
     , d_ptr(new KoTableBorderStylePrivate())
 {
-    Q_D(KoTableBorderStyle);
-
-    //d->edges[Top].outerPen = format.penProperty(TopBorderOuterPen);
-    d->edges[Top].spacing = 0;
-   // d->edges[Top].innerPen = format.penProperty(TopBorderInnerPen);
-    d->borderstyle[Top] = BorderNone;
-
-   // d->edges[Left].outerPen = format.penProperty(LeftBorderOuterPen);
-    d->edges[Left].spacing = 0;
-   // d->edges[Left].innerPen = format.penProperty(LeftBorderInnerPen);
-    d->borderstyle[Left] = BorderNone;
-
-    //d->edges[Bottom].outerPen =format.penProperty(BottomBorderOuterPen);
-    d->edges[Bottom].spacing = 0;
-    //d->edges[Bottom].innerPen = format.penProperty(BottomBorderInnerPen);
-    d->borderstyle[Bottom] = BorderNone;
-
-    //d->edges[Right].outerPen = format.penProperty(RightBorderOuterPen);
-    d->edges[Right].spacing = 0;
-    //d->edges[Right].innerPen = format.penProperty(RightBorderInnerPen);
-    d->borderstyle[Right] = BorderNone;
-
-    d->edges[TopLeftToBottomRight].spacing = 0;
-    d->borderstyle[TopLeftToBottomRight] = BorderNone;
-
-    d->edges[BottomLeftToTopRight].spacing = 0;
-    d->borderstyle[BottomLeftToTopRight] = BorderNone;
 }
 
 KoTableBorderStyle::KoTableBorderStyle(const QTextTableCellFormat &format, QObject *parent)
     : QObject(parent)
     , d_ptr(new KoTableBorderStylePrivate())
+{
+    init(format);
+}
+
+KoTableBorderStyle::KoTableBorderStyle(KoTableBorderStylePrivate &dd, const QTextTableCellFormat &format, QObject *parent)
+    : QObject(parent)
+    , d_ptr(&dd)
+{
+    init(format);
+}
+
+KoTableBorderStyle::KoTableBorderStyle(KoTableBorderStylePrivate &dd, QObject *parent)
+    : QObject(parent)
+    , d_ptr(&dd)
+{
+}
+
+void KoTableBorderStyle::init(const QTextTableCellFormat &format)
 {
     Q_D(KoTableBorderStyle);
 
@@ -102,12 +110,6 @@ KoTableBorderStyle::KoTableBorderStyle(const QTextTableCellFormat &format, QObje
     d->edges[BottomLeftToTopRight].spacing = format.doubleProperty(BottomLeftToTopRightBorderSpacing);
     d->edges[BottomLeftToTopRight].innerPen = format.penProperty(BottomLeftToTopRightBorderInnerPen);
     d->borderstyle[BottomLeftToTopRight] = BorderStyle(format.intProperty(BottomLeftToTopRightBorderStyle));
-}
-
-KoTableBorderStyle::KoTableBorderStyle(KoTableBorderStylePrivate &dd, QObject *parent)
-    : QObject(parent)
-    , d_ptr(&dd)
-{
 }
 
 KoTableBorderStyle::~KoTableBorderStyle()
@@ -425,13 +427,25 @@ void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoT
     Q_D(const KoTableBorderStyle);
     const KoTableBorderStylePrivate *styleBelowD = static_cast<const KoTableBorderStylePrivate*>(styleBelow.d_func());
 
-    // First determine which style "wins" by comparing total width
-    qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
-    qreal thatWidth = styleBelowD->edges[Top].outerPen.widthF() + styleBelowD->edges[Top].spacing
-                                    + styleBelowD->edges[Top].innerPen.widthF();
-    if(thisWidth >= thatWidth) {
+    bool paintThis = true;
+    if (d->borderstyle[Bottom] == BorderNone) {
+        if (styleBelowD->borderstyle[Top] == BorderNone) {
+            return;
+        }
+        paintThis = false;
+    }
+    else {
+        if (styleBelowD->borderstyle[Top] != BorderNone) {
+            qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
+            qreal thatWidth = styleBelowD->edges[Top].outerPen.widthF() + styleBelowD->edges[Top].spacing
+                            + styleBelowD->edges[Top].innerPen.widthF();
+            paintThis = thisWidth > thatWidth;
+        }
+    }
+
+    if (paintThis) {
         // bottom style wins
-       qreal t=y;
+        qreal t=y;
         if (d->edges[Bottom].outerPen.widthF() > 0) {
             QPen pen = d->edges[Bottom].outerPen;
             const qreal linewidth = pen.widthF();

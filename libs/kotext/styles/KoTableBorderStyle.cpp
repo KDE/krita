@@ -430,6 +430,9 @@ void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoT
     bool paintThis = true;
     if (d->borderstyle[Bottom] == BorderNone) {
         if (styleBelowD->borderstyle[Top] == BorderNone) {
+            if (accumulatedBlankBorders) {
+                accumulatedBlankBorders->append(QLineF(x, y, x+w, y));
+            }
             return;
         }
         paintThis = false;
@@ -439,65 +442,36 @@ void KoTableBorderStyle::drawSharedHorizontalBorder(QPainter &painter, const KoT
             qreal thisWidth = d->edges[Bottom].outerPen.widthF() + d->edges[Bottom].spacing + d->edges[Bottom].innerPen.widthF();
             qreal thatWidth = styleBelowD->edges[Top].outerPen.widthF() + styleBelowD->edges[Top].spacing
                             + styleBelowD->edges[Top].innerPen.widthF();
-            paintThis = thisWidth > thatWidth;
+            paintThis = thisWidth >= thatWidth;
         }
     }
 
-    if (paintThis) {
-        // bottom style wins
-        qreal t=y;
-        if (d->edges[Bottom].outerPen.widthF() > 0) {
-            QPen pen = d->edges[Bottom].outerPen;
-            const qreal linewidth = pen.widthF();
+    const KoTableBorderStylePrivate::Edge &edge = paintThis ? d->edges[Bottom]: styleBelowD->edges[Top];
+    const BorderStyle borderStyle = paintThis ? d->borderstyle[Bottom]: d->borderstyle[Top];
+    qreal t=y;
 
-            painter.setPen(pen);
-            t += linewidth / 2.0;
-            if(isDrawn(d->borderstyle[Bottom])) {
-                drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
-            } else {
-                painter.drawLine(QLineF(x, t, x+w, t));
-            }
-            t = y + d->edges[Bottom].spacing + linewidth;
-        } else if (accumulatedBlankBorders) {
-            // No border but we'd like to draw one for user convenience when on screen
-            accumulatedBlankBorders->append(QLineF(x, t, x+w, t));
-        }
-        // inner line
-        if (d->edges[Bottom].innerPen.widthF() > 0) {
-            QPen pen = d->edges[Bottom].innerPen;
-            painter.setPen(pen);
-            t += pen.widthF() / 2.0;
-            if(isDrawn(d->borderstyle[Bottom])) {
-                drawHorizontalWave(d->borderstyle[Bottom], painter,x,w,t);
-            } else {
-                painter.drawLine(QLineF(x, t, x+w, t));
-            }
-        }
-    } else {
-        // top style wins
-        qreal t=y;
-        if (styleBelowD->edges[Top].outerPen.widthF() > 0) {
-            QPen pen = styleBelowD->edges[Top].outerPen;
+    if (edge.outerPen.widthF() > 0) {
+        QPen pen = edge.outerPen;
+        const qreal linewidth = pen.widthF();
 
-            painter.setPen(pen);
-            t += pen.widthF() / 2.0;
-            if(isDrawn(d->borderstyle[Top])) {
-                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
-            } else {
-                painter.drawLine(QLineF(x, t, x+w, t));
-            }
-            t = y + styleBelowD->edges[Top].spacing + pen.widthF();
+        painter.setPen(pen);
+        t += linewidth / 2.0;
+        if(isDrawn(borderStyle)) {
+            drawHorizontalWave(borderStyle, painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
         }
-        // inner line
-        if (styleBelowD->edges[Top].innerPen.widthF() > 0) {
-            QPen pen = styleBelowD->edges[Top].innerPen;
-            painter.setPen(pen);
-            t += pen.widthF() / 2.0;
-            if(isDrawn(d->borderstyle[Top])) {
-                drawHorizontalWave(d->borderstyle[Top], painter,x,w,t);
-            } else {
-                painter.drawLine(QLineF(x, t, x+w, t));
-            }
+        t = y + edge.spacing + linewidth;
+    }
+    // inner line
+    if (edge.innerPen.widthF() > 0) {
+        QPen pen = edge.innerPen;
+        painter.setPen(pen);
+        t += pen.widthF() / 2.0;
+        if(isDrawn(borderStyle)) {
+            drawHorizontalWave(borderStyle, painter,x,w,t);
+        } else {
+            painter.drawLine(QLineF(x, t, x+w, t));
         }
     }
 }

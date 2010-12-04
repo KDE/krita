@@ -63,7 +63,19 @@ const char* KoCellStyle::styleFamilyName() const
     return familyName;
 }
 
+QColor KoCellStyle::backgroundColor() const
+{
+    return m_backgroundColor;
+}
+
+void KoCellStyle::setBackgroundColor(const QColor& color)
+{
+    m_backgroundColor = color;
+}
+
+
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
     m_borders->saveOdf(style);
+    style.addProperty("fo:background-color", m_backgroundColor.name());
 }

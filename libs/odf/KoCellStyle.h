@@ -41,6 +41,9 @@ public:
 
     KoBorder* borders();
 
+    void setBackgroundColor(const QColor& color);
+    QColor backgroundColor() const;
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -50,6 +53,7 @@ protected:
 
 private:
     KoBorder* m_borders;
+    QColor m_backgroundColor;
 };
 
 #endif

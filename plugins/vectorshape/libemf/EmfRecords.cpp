@@ -377,9 +377,11 @@ EmrTextObject::EmrTextObject( QDataStream &stream, quint32 size, TextType textTy
 {
     stream >> m_referencePoint;
     size -= 8;
+    //kDebug(33100) << "Text ref. point:" << m_referencePoint;;
 
     stream >> m_charCount;
     size -= 4;
+    //kDebug(33100) << "Number of characters in string:" << m_charCount;;
 
     stream >> m_offString;
     size -= 4;
@@ -409,11 +411,29 @@ EmrTextObject::EmrTextObject( QDataStream &stream, quint32 size, TextType textTy
         m_textString = recordWChars( stream, m_charCount );
         size -= 2 * m_charCount;
         offDx -= 2 * m_charCount;
+
+        // If the number of characters is uneven, then we need to soak 2
+        // bytes to make it a full word.
+        if (m_charCount & 0x01) {
+            soakBytes( stream, 2 );
+            size -= 2;
+            offDx -= 2;
+        }
     } else {
         m_textString = recordChars( stream, m_charCount );
         size -= m_charCount;
         offDx -= m_charCount;
+
+        // If the number of characters is not a multiple of 4, then we need to soak some
+        // bytes to make it a full word.
+        int rest = m_charCount % 4;
+        if (rest != 0) {
+            soakBytes( stream, 4 - rest );
+            size -= 4 - rest;
+            offDx -= 4 - rest;
+        }
     }
+
     // TODO: parse the spacing array
     soakBytes( stream, size );
 }

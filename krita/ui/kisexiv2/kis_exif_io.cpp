@@ -406,7 +406,11 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 v = kmdIntOrderedArrayToExifArray(entry.value());
             } else if (exivKey == "Exif.Image.Artist") { // load as dc:creator
                 KisMetaData::Value creator = entry.value().asArray()[0];
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
                 v = kmdValueToExivValue(creator, Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+#else
+                v = kmdValueToExivValue(creator, exifKey.defaultTypeId());
+#endif
             } else if (exivKey == "Exif.Photo.OECF") {
                 v = kmdOECFStructureToExifOECF(entry.value());
             } else if (exivKey == "Exif.Photo.DeviceSettingDescription") {
@@ -419,13 +423,25 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 Q_ASSERT(entry.value().type() == KisMetaData::Value::LangArray);
                 QMap<QString, KisMetaData::Value> langArr = entry.value().asLangArray();
                 if (langArr.contains("x-default")) {
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
                     v = kmdValueToExivValue(langArr.value("x-default"), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+#else
+                    v = kmdValueToExivValue(langArr.value("x-default"), exifKey.defaultTypeId());
+#endif
                 } else if (langArr.size() > 0) {
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
                     v = kmdValueToExivValue(langArr.begin().value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+#else
+                    v = kmdValueToExivValue(langArr.begin().value(), exifKey.defaultTypeId());
+#endif
                 }
             } else {
                 dbgFile << exifKey.tag();
+#if EXIV2_MAJOR_VERSION == 0 && EXIV2_MINOR_VERSION <= 20
                 v = kmdValueToExivValue(entry.value(), Exiv2::ExifTags::tagType(exifKey.tag(), exifKey.ifdId()));
+#else
+                v = kmdValueToExivValue(entry.value(), exifKey.defaultTypeId());
+#endif
             }
             if (v && v->typeId() != Exiv2::invalidTypeId) {
                 dbgFile << "Saving key" << exivKey; // << " of KMD value" << entry.value();

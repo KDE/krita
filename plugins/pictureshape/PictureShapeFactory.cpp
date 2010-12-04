@@ -26,6 +26,7 @@
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
 #include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include "KoImageCollection.h"
 
 #include <klocale.h>
@@ -52,9 +53,20 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
 
 bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const
 {
-    Q_UNUSED(e);
-    Q_UNUSED(context);
-    return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
+    if (e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw) {
+        QString href = e.attribute("href");
+        if (!href.isEmpty()) {
+            // check the mimetype
+            if (href.startsWith("./")) {
+                href.remove(0,2);
+            }
+            QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+            if (mimetype.startsWith("image")) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 QList<KoShapeConfigWidgetBase*> PictureShapeFactory::createShapeOptionPanels()

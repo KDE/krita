@@ -77,5 +77,7 @@ void KoCellStyle::setBackgroundColor(const QColor& color)
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
     m_borders->saveOdf(style);
-    style.addProperty("fo:background-color", m_backgroundColor.name());
+    if(m_backgroundColor.isValid()) {
+        style.addProperty("fo:background-color", m_backgroundColor.name());
+    }
 }

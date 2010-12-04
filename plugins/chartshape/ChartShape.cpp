@@ -755,7 +755,7 @@ void ChartShape::paintDecorations( QPainter &painter,
 
 bool ChartShape::loadEmbeddedDocument( KoStore *store,
                                        const KoXmlElement &objectElement,
-                                       const KoXmlDocument &manifestDocument )
+                                       const KoOdfLoadingContext &loadingContext )
 {
     if ( !objectElement.hasAttributeNS( KoXmlNS::xlink, "href" ) ) {
         kError() << "Object element has no valid xlink:href attribute";
@@ -794,7 +794,7 @@ bool ChartShape::loadEmbeddedDocument( KoStore *store,
     if ( !path.endsWith( '/' ) )
         path += '/';
 
-    const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
+    const QString mimeType = loadingContext.mimeTypeForPath( path );
     //kDebug(35001) << "path for manifest file=" << path << "mimeType=" << mimeType;
     if ( mimeType.isEmpty() ) {
         //kDebug(35001) << "Manifest doesn't have media-type for" << path;
@@ -905,7 +905,7 @@ bool ChartShape::loadOdfFrameElement( const KoXmlElement &element,
     if ( element.tagName() == "object" )
         return loadEmbeddedDocument( context.odfLoadingContext().store(),
                                      element,
-                                     context.odfLoadingContext().manifestDocument() );
+                                     context.odfLoadingContext() );
 
     qWarning() << "Unknown frame element <" << element.tagName() << ">";
     return false;

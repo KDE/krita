@@ -55,6 +55,8 @@ class KoStore;
 class KoXmlWriter;
 class KoGenStyles;
 class KoOdfStylesReader;
+class KoOdfLoadingContext;
+
 
 // FIXME: Remove all mentions of KDChart from the public API.
 namespace KDChart {
@@ -210,7 +212,6 @@ public:
     bool loadOdfFrameElement( const KoXmlElement &element, KoShapeLoadingContext &context );
     bool loadOdfData( const KoXmlElement &tableElement, KoShapeLoadingContext &context );
 
-    bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
     bool loadOdfChartElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
@@ -237,6 +238,9 @@ signals:
     void chartTypeChanged( ChartType );
 
 private:
+    bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoOdfLoadingContext &loadingContext );
+
+
     class Private;
     Private *const d;
 };

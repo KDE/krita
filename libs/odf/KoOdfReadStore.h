@@ -104,11 +104,6 @@ public:
      */
     static bool loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QString &errorMessage, const QString& fileName);
 
-    /**
-     * Get mimetype from full path, using the manifest
-     */
-    static QString mimeForPath(const KoXmlDocument &doc, const QString &fullPath);
-
 private:
     class Private;
     Private * const d;

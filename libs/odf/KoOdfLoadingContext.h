@@ -29,6 +29,22 @@ class KoStore;
 #include <QtCore/QString>
 #include <kcomponentdata.h>
 
+// A class that holds a manifest:file-entry.
+class KOODF_EXPORT KoOdfManifestEntry
+{
+public:
+    KoOdfManifestEntry(const QString &fp, const QString &mt, const QString &v)
+        : fullPath(fp)
+        , mediaType(mt)
+        , version(v)
+    {
+    }
+
+    QString  fullPath;          // manifest:full-path
+    QString  mediaType;         // manifest:media-type
+    QString  version;           // manifest:version  (isNull==true if not present)
+};
+
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
  *
@@ -66,8 +82,6 @@ public:
     KoOdfStylesReader &defaultStylesReader();
 
     KoStyleStack &styleStack() const;
-
-    const KoXmlDocument &manifestDocument() const;
 
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
@@ -109,11 +123,24 @@ public:
     void setUseStylesAutoStyles(bool useStylesAutoStyles);
     bool useStylesAutoStyles() const;
 
+
+    /**
+     * @return the mimetype for the document in the given path using the manifest
+     * The mimetype is defined in the manifest.xml document.
+     */
+    QString mimeTypeForPath(const QString& path) const;
+
+    /**
+     * @return the full list of entries from the manifest file
+     */
+    QList<KoOdfManifestEntry*> manifestEntries() const;
+
 private:
     class Private;
     Private * const d;
     /// Parse and set generator and generatorType attributes from <meta:generator> attribute of meta.xml file
     void parseGenerator() const;
+    bool parseManifest(const KoXmlDocument &manifestDocument);
 };
 
 #endif /* KOOASISLOADINGCONTEXT_H */

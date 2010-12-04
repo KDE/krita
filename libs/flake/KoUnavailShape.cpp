@@ -47,73 +47,15 @@
 #include <KoShapeSavingContext.h>
 
 
-// ----------------------------------------------------------------
-//                         Helper classes
-
-
-// A class that holds a manifest:file-entry.
-//
-// It's probably not complete, but it does what it has to do for the unavail shape.
-
-class OdfManifestEntry
-{
-public:
-    OdfManifestEntry(const QString &fp, const QString &mt, const QString &v);
-    ~OdfManifestEntry();
-
-    QString  fullPath;          // manifest:full-path
-    QString  mediaType;         // manifest:media-type
-    QString  version;           // manifest:version  (isNull==true if not present)
-};
-
-OdfManifestEntry::OdfManifestEntry(const QString &fp, const QString &mt, const QString &v)
-    : fullPath(fp)
-    , mediaType(mt)
-    , version(v)
-{
-}
-
-OdfManifestEntry::~OdfManifestEntry()
-{
-}
-
-
-class OdfManifest
-{
-public:
-    OdfManifest();
-    ~OdfManifest();
-
-    QHash<QString, OdfManifestEntry *> fileEntries;
-};
-
-OdfManifest::OdfManifest()
-{
-}
-
-OdfManifest::~OdfManifest()
-{
-    qDeleteAll(fileEntries);
-}
-
-
-// ----------------------------------------------------------------
-//                         The private class
-
-
 class KoUnavailShape::Private
 {
 public:
     Private();
     ~Private();
 
-    bool parseManifest(const KoXmlDocument &manifestDocument);
-
     void saveXml(const KoXmlElement & element);
     void saveXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer);
     void saveFile(const QString &filename, KoShapeLoadingContext &context);
-
-    OdfManifest                        manifest;
 
     // Objects inside the frame.  We store:
     //  - The XML code for each object
@@ -121,6 +63,7 @@ public:
     QList<QByteArray>                  contents;      // A list of the XML trees in the frame
     QStringList                        objectNames;   // A list of objects names in the files
     QList<QPair<QString, QByteArray> > embeddedFiles; // List of <objectNames,contents> of embedded files.
+    KoOdfManifestEntry                *manifestEntry; // The manifest entry for this embedded object
 };
 
 KoUnavailShape::Private::Private()
@@ -252,10 +195,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
-                OdfManifestEntry  *entry(d->manifest.fileEntries.value(fileName));
-                kDebug(30006) << fileName << entry->fullPath << entry->mediaType;
-
-                //manifestWriter.addManifestEntry(fileName, entry.mediaType); // TODO: version
+                //manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); // TODO: version
                 // FIXME: Add the file here.
             }
         }
@@ -287,17 +227,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     kDebug(30006) << "Contents: " << d->contents;
     kDebug(30006) << "objectNames: " << d->objectNames;
 
-    // Parse the manifest.  To use the manifest is apparently the only way
-    // to find out if the link(s) that we get are directories or files.
-    if (!d->parseManifest(context.odfLoadingContext().manifestDocument()))
-        return false;
-
     kDebug(30006) << "MANIFEST: ";
-    OdfManifestEntry *entry;
-    foreach (entry, d->manifest.fileEntries) {
-        kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
-    }
-
+    QList<KoOdfManifestEntry*> manifestEntries = context.odfLoadingContext().manifestEntries();
     // Loop through the objects that were found in the frame and save
     // all the files associated with them.  Some of the objects are
     // files, and some are directories.  The directories are searched
@@ -316,15 +247,12 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             objectName = objectName.mid(2);
 
         QString dirName = objectName + '/';
-        bool    isDir   = d->manifest.fileEntries.contains(dirName);
 
         // If the object is a directory, then save all the files
         // inside it, otherwise save the file as it is.
-        if (isDir) {
+        if (!context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty()) {
             // The files can be found in the manifest.
-
-            OdfManifestEntry *entry;
-            foreach (entry, d->manifest.fileEntries) {
+            foreach (KoOdfManifestEntry *entry, manifestEntries) {
                 if (entry->fullPath.startsWith(dirName)) {
                     d->saveFile(entry->fullPath, context);
                 }
@@ -351,62 +279,6 @@ bool KoUnavailShape::loadOdfFrameElement(const KoXmlElement & /*element*/,
 
 // ----------------------------------------------------------------
 //                         Private functions
-
-
-bool KoUnavailShape::Private::parseManifest(const KoXmlDocument &manifestDocument)
-{
-    // First find the manifest:manifest node.
-    KoXmlNode  n = manifestDocument.firstChild();
-    kDebug(30006) << "Searching for manifest:manifest " << n.toElement().nodeName();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        if (!n.isElement()) {
-            kDebug(30006) << "NOT element";
-            continue;
-        } else {
-            kDebug(30006) << "element";
-        }
-
-        kDebug(30006) << "name:" << n.toElement().localName()
-                      << "namespace:" << n.toElement().namespaceURI();
-
-        if (n.toElement().localName() == "manifest"
-            && n.toElement().namespaceURI() == KoXmlNS::manifest)
-        {
-            kDebug(30006) << "found manifest:manifest";
-            break;
-        }
-    }
-    if (n.isNull()) {
-        kDebug(30006) << "Could not fine manifest:manifest";
-        return false;
-    }
-
-    // Now loop through the children of the manifest:manifest and
-    // store all the manifest:file-entry elements.
-    const KoXmlElement  manifestElement = n.toElement();
-    for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
-
-        if (!n.isElement())
-            continue;
-
-        KoXmlElement el = n.toElement();
-        if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
-            continue;
-
-        QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
-        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
-        QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
-
-        // Only if fullPath is valid, should we store this entry.
-        // If not, we don't bother to find out exactly what is wrong, we just skip it.
-        if (!fullPath.isNull()) {
-            manifest.fileEntries.insert(fullPath,
-                                        new OdfManifestEntry(fullPath, mediaType, version));
-        }
-    }
-
-    return true;
-}
 
 void KoUnavailShape::Private::saveXml(const KoXmlElement & element)
 {

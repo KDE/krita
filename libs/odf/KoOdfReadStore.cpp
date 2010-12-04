@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thorsten Zach3n <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -145,27 +145,4 @@ bool KoOdfReadStore::loadAndParse(QIODevice *fileDevice, KoXmlDocument &doc, QSt
         kDebug(30003) << "File" << fileName << " loaded and parsed";
     }
     return ok;
-}
-
-static QString normalizeFullPath(QString s)
-{
-    if (s.startsWith("./"))
-        s = s.mid(2);
-    if (s.endsWith("/"))
-        s = s.left(s.length()-1);
-    return s;
-}
-
-QString KoOdfReadStore::mimeForPath(const KoXmlDocument &doc, const QString &_fullPath)
-{
-    QString fullPath = normalizeFullPath(_fullPath);
-    KoXmlElement docElem = doc.documentElement();
-    KoXmlElement elem;
-    forEachElement(elem, docElem) {
-        if (elem.localName() == "file-entry" && elem.namespaceURI() == KoXmlNS::manifest) {
-            if (normalizeFullPath(elem.attributeNS(KoXmlNS::manifest, "full-path", QString())) == fullPath)
-                return elem.attributeNS(KoXmlNS::manifest, "media-type", QString());
-        }
-    }
-    return QString();
 }

@@ -27,6 +27,8 @@
 
 #include <kdebug.h>
 
+
+
 class KoOdfLoadingContext::Private
 {
 public:
@@ -39,6 +41,10 @@ public:
     {
     }
 
+    ~Private() {
+        qDeleteAll(manifestEntries);
+    }
+
     KoStore *store;
     KoOdfStylesReader &stylesReader;
     KoStyleStack styleStack;
@@ -49,6 +55,8 @@ public:
     bool useStylesAutoStyles;
 
     KoXmlDocument manifestDoc;
+    QHash<QString, KoOdfManifestEntry *> manifestEntries;
+
 
     KoOdfStylesReader defaultStylesReader;
     KoXmlDocument doc; // the doc needs to be kept around so it is possible to access the styles
@@ -77,6 +85,10 @@ KoOdfLoadingContext::KoOdfLoadingContext(KoOdfStylesReader &stylesReader, KoStor
         else {
             kWarning(30010) << "defaultstyles.xml not found";
         }
+    }
+
+    if (!parseManifest(d->manifestDoc)) {
+        kWarning(30010) << "could not parse manifest document";
     }
 }
 
@@ -218,11 +230,6 @@ KoStyleStack &KoOdfLoadingContext::styleStack() const
     return d->styleStack;
 }
 
-const KoXmlDocument &KoOdfLoadingContext::manifestDocument() const
-{
-    return d->manifestDoc;
-}
-
 void KoOdfLoadingContext::setUseStylesAutoStyles(bool useStylesAutoStyles)
 {
     d->useStylesAutoStyles = useStylesAutoStyles;
@@ -231,5 +238,75 @@ void KoOdfLoadingContext::setUseStylesAutoStyles(bool useStylesAutoStyles)
 bool KoOdfLoadingContext::useStylesAutoStyles() const
 {
     return d->useStylesAutoStyles;
+}
+
+QString KoOdfLoadingContext::mimeTypeForPath(const QString& path) const
+{
+    if (d->manifestEntries.contains(path)) {
+        return d->manifestEntries[path]->mediaType;
+    }
+    else {
+        return QString();
+    }
+}
+
+QList<KoOdfManifestEntry*> KoOdfLoadingContext::manifestEntries() const
+{
+    return d->manifestEntries.values();
+}
+\
+bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
+{
+    // First find the manifest:manifest node.
+    KoXmlNode  n = manifestDocument.firstChild();
+    kDebug(30006) << "Searching for manifest:manifest " << n.toElement().nodeName();
+    for (; !n.isNull(); n = n.nextSibling()) {
+        if (!n.isElement()) {
+            kDebug(30006) << "NOT element";
+            continue;
+        } else {
+            kDebug(30006) << "element";
+        }
+
+        kDebug(30006) << "name:" << n.toElement().localName()
+                      << "namespace:" << n.toElement().namespaceURI();
+
+        if (n.toElement().localName() == "manifest"
+            && n.toElement().namespaceURI() == KoXmlNS::manifest)
+        {
+            kDebug(30006) << "found manifest:manifest";
+            break;
+        }
+    }
+    if (n.isNull()) {
+        kDebug(30006) << "Could not find manifest:manifest";
+        return false;
+    }
+
+    // Now loop through the children of the manifest:manifest and
+    // store all the manifest:file-entry elements.
+    const KoXmlElement  manifestElement = n.toElement();
+    for (n = manifestElement.firstChild(); !n.isNull(); n = n.nextSibling()) {
+
+        if (!n.isElement())
+            continue;
+
+        KoXmlElement el = n.toElement();
+        if (!(el.localName() == "file-entry" && el.namespaceURI() == KoXmlNS::manifest))
+            continue;
+
+        QString fullPath  = el.attributeNS(KoXmlNS::manifest, "full-path", QString());
+        QString mediaType = el.attributeNS(KoXmlNS::manifest, "media-type", QString(""));
+        QString version   = el.attributeNS(KoXmlNS::manifest, "version", QString());
+
+        // Only if fullPath is valid, should we store this entry.
+        // If not, we don't bother to find out exactly what is wrong, we just skip it.
+        if (!fullPath.isNull()) {
+            d->manifestEntries.insert(fullPath,
+                                      new KoOdfManifestEntry(fullPath, mediaType, version));
+        }
+    }
+
+    return true;
 }
 

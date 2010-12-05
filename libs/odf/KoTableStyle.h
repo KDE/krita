@@ -97,8 +97,25 @@ public:
     void setDisplay(bool display);
     bool display() const;
 
-//     Image backgroundImage() const;
-//     void setBackgroundImage(Image image);
+    enum KeepWithNext {
+        AutoKeepWithNext,
+        AlwaysKeepWithNext,
+    };
+    void setKeepWithNext(KeepWithNext keepWithNext);
+    KeepWithNext keepWithNext() const;
+
+    enum WritingMode {
+        LrTbWrittingMode,
+        RlTbWrittingMode,
+        TbRlWrittingMode,
+        TbLrWrittingMode,
+        LrWrittingMode,
+        RlWrittingMode,
+        TbWrittingMode,
+        PageWrittingMode
+    };
+    void setWritingMode(WritingMode writingMode);
+    WritingMode writingMode() const;
 
 protected:
     virtual void prepareStyle(KoGenStyle& style) const;
@@ -123,12 +140,13 @@ private:
 
     HorizontalAlign m_horizontalAlign;
     BorderModel m_borderModel;
+    KeepWithNext m_keepWithNext;
+    WritingMode m_writingMode;
 
     bool m_display;
     //TODO style:page-number
     //TODO style:shadow
-    //TODO style:writing-mode
-    //
+    //TODO style:background-image
 };
 
 #endif

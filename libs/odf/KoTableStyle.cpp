@@ -21,6 +21,66 @@
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoTableStyle)
 
 namespace {
+    class BreakStyleMap : public QMap<KoTableStyle::BreakType, QString>
+    {
+    public:
+        BreakStyleMap()
+        {
+            insert(KoTableStyle::NoBreak, QString());
+            insert(KoTableStyle::AutoBreak, "auto");
+            insert(KoTableStyle::ColumnBreak, "column");
+            insert(KoTableStyle::PageBreak, "page");
+        }
+    } breakStyleMap;
+
+    class HorizontalAlignMap : public QMap<KoTableStyle::HorizontalAlign, QString>
+    {
+    public:
+        HorizontalAlignMap()
+        {
+            insert(KoTableStyle::CenterAlign, "center");
+            insert(KoTableStyle::LeftAlign, "left");
+            insert(KoTableStyle::MarginsAlign, "margins");
+            insert(KoTableStyle::RightAlign, "right");
+        }
+    } horizontalAlignMap;
+
+    class BorderModelMap : public QMap<KoTableStyle::BorderModel, QString>
+    {
+    public:
+        BorderModelMap()
+        {
+            insert(KoTableStyle::CollapsingModel, "collapsing");
+            insert(KoTableStyle::SeparatingModel, "separating");
+        }
+    } borderModelMap;
+
+    class KeepWithNextMap : public QMap<KoTableStyle::KeepWithNext, QString>
+    {
+    public:
+        KeepWithNextMap()
+        {
+            insert(KoTableStyle::AutoKeepWithNext, "auto");
+            insert(KoTableStyle::AlwaysKeepWithNext, "always");
+        }
+    } keepWithNextMap;
+
+    class WritingModeMap : public QMap<KoTableStyle::WritingMode, QString>
+    {
+    public:
+        WritingModeMap()
+        {
+            insert(KoTableStyle::LrTbWrittingMode, "lr-tb");
+            insert(KoTableStyle::RlTbWrittingMode, "rl-tb");
+            insert(KoTableStyle::TbRlWrittingMode, "tb-rl");
+            insert(KoTableStyle::TbLrWrittingMode, "tb-lr");
+            insert(KoTableStyle::LrWrittingMode, "lr");
+            insert(KoTableStyle::RlWrittingMode, "rl");
+            insert(KoTableStyle::TbWrittingMode, "tb");
+            insert(KoTableStyle::PageWrittingMode, "page");
+        }
+    } writingModeMap;
+
     QString prefix = "table";
     const char* familyName = "table";
 }
@@ -39,6 +99,8 @@ KoTableStyle::KoTableStyle()
 , m_widthUnit(PointsUnit)
 , m_horizontalAlign(LeftAlign)
 , m_borderModel(CollapsingModel)
+, m_keepWithNext(AutoKeepWithNext)
+, m_writingMode(PageWrittingMode)
 , m_display(true)
 {
 }
@@ -173,6 +235,26 @@ KoTableStyle::BorderModel KoTableStyle::borderModel() const
     return m_borderModel;
 }
 
+void KoTableStyle::setKeepWithNext(KoTableStyle::KeepWithNext keepWithNext)
+{
+    m_keepWithNext = keepWithNext;
+}
+
+KoTableStyle::KeepWithNext KoTableStyle::keepWithNext() const
+{
+    return m_keepWithNext;
+}
+
+void KoTableStyle::setWritingMode(KoTableStyle::WritingMode writingMode)
+{
+    m_writingMode = writingMode;
+}
+
+KoTableStyle::WritingMode KoTableStyle::writingMode() const
+{
+    return m_writingMode;
+}
+
 KoGenStyle::Type KoTableStyle::automaticstyleType() const
 {
     return KoGenStyle::TableAutoStyle;
@@ -195,4 +277,34 @@ QString KoTableStyle::defaultPrefix() const
 
 void KoTableStyle::prepareStyle(KoGenStyle& style) const
 {
+    if(m_backgroundColor.isValid()) {
+        style.addProperty("fo:background-color", m_backgroundColor.name());
+    }
+    style.addProperty("fo:break-after", breakStyleMap.value(m_breakAfter));
+    style.addProperty("fo:break-before", breakStyleMap.value(m_breakBefore));
+    style.addProperty("fo:keep-with-next", keepWithNextMap.value(m_keepWithNext));
+
+    style.addPropertyPt("fo:margin-top", m_topMargin);
+    style.addPropertyPt("fo:margin-right", m_rightMargin);
+    style.addPropertyPt("fo:margin-bottom", m_bottomMargin);
+    style.addPropertyPt("fo:margin-left", m_leftMargin);
+
+
+    switch(m_widthUnit) {
+        case PercentageUnit:
+            style.addPropertyPt("style:rel-width", m_width);
+            break;
+        case PointsUnit:
+            style.addPropertyPt("style:width", m_width);
+            break;
+    }
+
+    style.addProperty("style:may-break-between-rows", m_allowBreakBetweenRows ? "true" : "false");
+    style.addProperty("style:writing-mode", writingModeMap.value(m_writingMode));
+    style.addProperty("table:align", horizontalAlignMap.value(m_horizontalAlign));
+    style.addProperty("fo:border-model", borderModelMap.value(m_borderModel));
+
+    if(!m_display) {
+        style.addProperty("table:display", "false");
+    }
 }

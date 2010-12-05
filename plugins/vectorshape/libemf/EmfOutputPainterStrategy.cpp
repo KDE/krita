@@ -319,6 +319,34 @@ void OutputPainterStrategy::setMetaRgn()
 // Transform in lack of a better word. (Some sources call it the Device Transform.)
 //
 
+// An unanswered question:
+//
+// The file mp07_embedded_ppt.pptx in the test files contains the
+// following sequence of records:
+// - SetWorldTransform
+// - ModifyWorldTransform
+// - SetViewportOrg  <-- doesn't change anything
+// - SetWindowOrg    <-- doesn't change anything
+// - ExtTextOutw
+//
+// I was previously under the impression that whenever a
+// Set{Window,Viewport}{Org,Ext} record was encountered, the world
+// transform was supposed to be recalculated. But in this file, it
+// destroys the world transform. The question is which of the
+// following alternatives is true:
+// 
+// 1. The world transform should only be recalculated if the
+//    Set{Window,Viewport}{Org,Ext} record actually changes anything.
+//
+// 2. The transformations set by {Set,Modify}WorldTransform records
+//    should always be reapplied after a change in window or viewport.
+//
+// 3. Something else
+//
+// I have for now implemented option 1. See the FIXME's in
+// SetWindowOrg et al.
+//
+
 
 // Set Window and Viewport
 void OutputPainterStrategy::recalculateWorldTransform()
@@ -382,7 +410,11 @@ void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
-    //unsetWindowViewport();
+    // FIXME: See unanswered question at the start of this section.
+    if (m_windowOrg == origin) {
+        kDebug(31000) << "same origin as before";
+        return;
+    }
 
     m_windowOrg = origin;
 
@@ -395,7 +427,11 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
     kDebug(31000) << size;
 #endif
 
-    //unsetWindowViewport();
+    // FIXME: See unanswered question at the start of this section.
+    if (m_windowExt == size) {
+        kDebug(31000) << "same extension as before";
+        return;
+    }
 
     m_windowExt = size;
     m_windowExtIsSet = true;
@@ -409,7 +445,11 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
     kDebug(31000) << origin;
 #endif
 
-    //unsetWindowViewport();
+    // FIXME: See unanswered question at the start of this section.
+    if (m_viewportOrg == origin) {
+        kDebug(31000) << "same origin as before";
+        return;
+    }
 
     m_viewportOrg = origin;
 
@@ -421,6 +461,12 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
 #if DEBUG_EMFPAINT
     kDebug(31000) << size;
 #endif
+
+    // FIXME: See unanswered question at the start of this section.
+    if (m_viewportExt == size) {
+        kDebug(31000) << "same extension as before";
+        return;
+    }
 
     m_viewportExt = size;
     m_viewportExtIsSet = true;
@@ -454,7 +500,9 @@ void OutputPainterStrategy::modifyWorldTransform( const quint32 mode, float M11,
 	qWarning() << "Unimplemented transform mode" << mode;
     }
 
-    recalculateWorldTransform();
+    // Apply the output transform.
+    QTransform newMatrix = m_worldTransform * m_outputTransform;
+    m_painter->setWorldTransform( newMatrix );
 }
 
 void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
@@ -468,7 +516,9 @@ void OutputPainterStrategy::setWorldTransform( float M11, float M12, float M21,
 
     m_worldTransform = matrix;
 
-    recalculateWorldTransform();
+    // Apply the output transform.
+    QTransform newMatrix = m_worldTransform * m_outputTransform;
+    m_painter->setWorldTransform( newMatrix );
 }
 
 

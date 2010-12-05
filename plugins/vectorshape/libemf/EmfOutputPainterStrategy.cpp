@@ -412,7 +412,7 @@ void OutputPainterStrategy::setWindowOrgEx( const QPoint &origin )
 
     // FIXME: See unanswered question at the start of this section.
     if (m_windowOrg == origin) {
-        kDebug(31000) << "same origin as before";
+        //kDebug(31000) << "same origin as before";
         return;
     }
 
@@ -429,7 +429,7 @@ void OutputPainterStrategy::setWindowExtEx( const QSize &size )
 
     // FIXME: See unanswered question at the start of this section.
     if (m_windowExt == size) {
-        kDebug(31000) << "same extension as before";
+        //kDebug(31000) << "same extension as before";
         return;
     }
 
@@ -447,7 +447,7 @@ void OutputPainterStrategy::setViewportOrgEx( const QPoint &origin )
 
     // FIXME: See unanswered question at the start of this section.
     if (m_viewportOrg == origin) {
-        kDebug(31000) << "same origin as before";
+        //kDebug(31000) << "same origin as before";
         return;
     }
 
@@ -464,7 +464,7 @@ void OutputPainterStrategy::setViewportExtEx( const QSize &size )
 
     // FIXME: See unanswered question at the start of this section.
     if (m_viewportExt == size) {
-        kDebug(31000) << "same extension as before";
+        //kDebug(31000) << "same extension as before";
         return;
     }
 

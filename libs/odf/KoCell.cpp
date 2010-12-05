@@ -104,7 +104,7 @@ int KoCell::columnSpan() const
 
 void KoCell::setColumnSpan(int span)
 {
-    m_columnSpan = qMin(1, span);
+    m_columnSpan = qMax(1, span);
 }
 
 int KoCell::rowSpan() const
@@ -114,7 +114,7 @@ int KoCell::rowSpan() const
 
 void KoCell::setRowSpan(int span)
 {
-    m_rowSpan = qMin(1, span);
+    m_rowSpan = qMax(1, span);
 }
 
 bool KoCell::isProtected() const

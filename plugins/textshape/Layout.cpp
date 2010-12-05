@@ -240,6 +240,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
         height = 0.1;
     }
     bool useFixedLineHeight = height != 0.0;
+    QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {
         // QTextLine has its position at the top of the line. So if the ascent changes between lines in a parag
         // because of different font sizes, for example, we have to adjust the position to make the fixed
@@ -333,6 +334,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             if(lineKeeps.isEmpty()) {
                 entireParagraphMoved = true;
             }
+            m_fragmentIterator = preLineFragmentIterator;
         }
         if (m_data->endPosition() == -1) // no text at all fit in the shape!
             m_data->setEndPosition(m_data->position());

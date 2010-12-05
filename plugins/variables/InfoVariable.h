@@ -43,6 +43,9 @@ public:
     ///reimplemented
     bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
 
+    /// get the list of tags supported by this variable
+    static QStringList tags();
+
 private:
     KoInlineObject::Property m_type;
 };

@@ -31,8 +31,7 @@
 InfoVariableFactory::InfoVariableFactory()
         : KoInlineObjectFactoryBase("info", TextVariable)
 {
-    QStringList elementNames;
-    elementNames << "keywords" << "subject" << "title";
+    QStringList elementNames(InfoVariable::tags());
     setOdfElementNames(KoXmlNS::text, elementNames);
 }
 

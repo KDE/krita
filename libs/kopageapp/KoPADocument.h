@@ -315,6 +315,9 @@ protected:
     /// set the page count so it gets shown correctly in variables
     void updatePageCount();
 
+    /// set the url so it gets shown correctly in variables
+    void updateDocumentURL();
+
 private:
 
     friend class KoPAPastePage;

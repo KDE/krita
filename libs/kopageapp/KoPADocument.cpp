@@ -114,6 +114,8 @@ bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
 
 bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 {
+    updateDocumentURL();
+
     QPointer<KoUpdater> updater;
     if (progressUpdater()) {
         updater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdf");
@@ -231,7 +233,13 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
 
     //setModified( false );
 
-    return paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
+    bool retval = paContext.saveDataCenter( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter() );
+
+    if (retval) {
+        updateDocumentURL();
+    }
+
+    return retval;
 }
 
 QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoXmlElement*> masterStyles, KoPALoadingContext & context )
@@ -769,6 +777,15 @@ void KoPADocument::updatePageCount()
         QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
         KoInlineTextObjectManager *om = var.value<KoInlineTextObjectManager*>();
         om->setProperty( KoInlineObject::PageCount, pageCount() );
+    }
+}
+
+void KoPADocument::updateDocumentURL()
+{
+    if (resourceManager()->hasResource(KoText::InlineTextObjectManager)) {
+        QVariant var = resourceManager()->resource(KoText::InlineTextObjectManager);
+        KoInlineTextObjectManager *om = var.value<KoInlineTextObjectManager*>();
+        om->setProperty(KoInlineObject::DocumentURL, url().pathOrUrl());
     }
 }
 

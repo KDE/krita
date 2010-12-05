@@ -155,7 +155,7 @@ void KoRowStyle::prepareStyle(KoGenStyle& style) const
 
     switch(m_heightType) {
         case MinimumHeight:
-            style.addPropertyPt("style:min-row-hright", m_height);
+            style.addPropertyPt("style:min-row-height", m_height);
             break;
         case ExactHeight:
             style.addPropertyPt("style:row-height", m_height);

@@ -311,14 +311,18 @@ void TableLayout::drawBackground(QPainter *painter, const KoTextDocumentLayout::
     if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
     }
-
     painter->save();
-
-    // Draw table background.
+    // Draw table background and row backgrounds
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     foreach (TableRect tRect, m_tableLayoutData->m_tableRects) {
         painter->fillRect(tRect.rect, m_table->format().background());
+        QRectF tableRect = tRect.rect;
+        for (int row = tRect.fromRow; row < m_table->rows() && m_tableLayoutData->m_rowPositions[row] < tableRect.bottom(); ++row) {
+            QRectF rowRect(tableRect.x(), m_tableLayoutData->m_rowPositions[row], tableRect.width(), m_tableLayoutData->m_rowHeights[row]);
+            KoTableRowStyle rowStyle = carsManager.rowStyle(row);
+            painter->fillRect(rowRect, rowStyle.background());
+        }
     }
-
     // Draw cell backgrounds using their styles.
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
@@ -332,12 +336,10 @@ void TableLayout::drawBackground(QPainter *painter, const KoTextDocumentLayout::
                 // This is an actual cell we want to draw, and not a covered one.
                 QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
                 QRectF bRect(cellBoundingRect(tableCell,tfm));
-
                 QVariant background(tfm.property(KoTableBorderStyle::CellBackgroundBrush));
                 if (!background.isNull()) {
                     painter->fillRect(bRect, qvariant_cast<QBrush>(background));
                 }
-
                 // possibly draw the selection of the entire cell
                 foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
                     if (selection.cursor.hasComplexSelection()) {

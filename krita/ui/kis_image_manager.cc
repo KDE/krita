@@ -121,7 +121,7 @@ void KisImageManager::resizeCurrentImage(qint32 w, qint32 h, qint32 xOffset, qin
     m_view->image()->resizeWithOffset(w, h, xOffset, yOffset);
 }
 
-void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy)
+void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
 {
     if (!m_view->image()) return;
 
@@ -129,7 +129,7 @@ void KisImageManager::scaleCurrentImage(double sx, double sy, KisFilterStrategy 
     updater->start(100, "Scale Image");
     KoUpdaterPtr up = updater->startSubtask();
 
-    m_view->image()->scale(sx, sy, up, filterStrategy);
+    m_view->image()->scale(sx, sy, up, filterStrategy, scaleOnlyShapes);
     updater->deleteLater();
 }
 

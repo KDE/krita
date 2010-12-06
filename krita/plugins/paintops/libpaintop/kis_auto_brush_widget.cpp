@@ -229,6 +229,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
     
+    if(!aBrush->maskGenerator()->curveString().isEmpty()) {
+        KisCubicCurve curve;
+        curve.fromString(aBrush->maskGenerator()->curveString());
+        softnessCurve->setCurve(curve);  
+    }
 }
 
 

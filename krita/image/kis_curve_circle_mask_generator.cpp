@@ -35,7 +35,6 @@ struct KisCurveCircleMaskGenerator::Private {
     qreal curveResolution;
     QVector<qreal> curveData;
     QList<QPointF> curvePoints;
-    QString curve;
     bool dirty;
 };
 
@@ -47,8 +46,8 @@ KisCurveCircleMaskGenerator::KisCurveCircleMaskGenerator(qreal diameter, qreal r
     d->curveResolution = qRound( qMax(width(),height()) * OVERSAMPLING);
     d->curveData = curve.floatTransfer( d->curveResolution + 2);
     d->curvePoints = curve.points();
-    d->curve = curve.toString();
     d->dirty = false;
+    setCurveString(curve.toString());
 }
 
 KisCurveCircleMaskGenerator::~KisCurveCircleMaskGenerator()
@@ -93,7 +92,7 @@ void KisCurveCircleMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     KisMaskGenerator::toXML(doc, e);
     e.setAttribute("type", "circle");
-    e.setAttribute("softness_curve", d->curve);
+    e.setAttribute("softness_curve", curveString());
 }
 
 void KisCurveCircleMaskGenerator::setSoftness(qreal softness)

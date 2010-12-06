@@ -166,3 +166,13 @@ QList< KoID > KisMaskGenerator::maskGeneratorIds()
     ids << DefaultId << SoftId;
     return ids;
 }
+
+QString KisMaskGenerator::curveString() const
+{
+    return d->curveString;
+}
+
+void KisMaskGenerator::setCurveString(const QString& curveString)
+{
+    d->curveString = curveString;
+}

@@ -4,7 +4,6 @@ KOffice is a collection of office applications linked together by a
 common base.  This common base assures that all office application can
 work together and also share a common look and feel.
 
-
 KOffice is free software, mostly under LGPL 2+ but also under the GPL.
 See COPYING and COPYING.LIB for the details.  See also copyright and
 licensing notices in individual files.

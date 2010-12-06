@@ -4,6 +4,7 @@ set(kritarulerassistanttool_PART_SRCS
     RulerAssistant.cc
     EllipseAssistant.cc
     Ellipse.cc
+    SplineAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
     )

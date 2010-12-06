@@ -54,7 +54,8 @@ public:
 
     KisTransformVisitor(KisImageWSP image, qreal  xscale, qreal  yscale,
                         qreal  /*xshear*/, qreal  /*yshear*/, qreal angle,
-                        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
+                        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter,
+                        bool scaleOnlyShapes = false)
             : KisNodeVisitor()
             , m_sx(xscale)
             , m_sy(yscale)
@@ -63,7 +64,8 @@ public:
             , m_filter(filter)
             , m_angle(angle)
             , m_progress(progress)
-            , m_image(image) {
+            , m_image(image)
+            , m_scaleOnlyShapes(scaleOnlyShapes){
     }
 
     virtual ~KisTransformVisitor() {
@@ -142,6 +144,10 @@ public:
 private:
 
     void transformPaintDevice(KisNode * node) {
+        if(m_scaleOnlyShapes) {
+            return;
+        }
+        
         KisPaintDeviceSP dev = node->paintDevice();
 
         KisTransaction transaction(i18n("Rotate Node"), dev);
@@ -155,7 +161,7 @@ private:
     
     void transformMask(KisMask* mask) {
         KisSelectionSP selection = mask->selection();
-        if(selection->hasPixelSelection()) {
+        if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
             KisSelectionTransaction transaction(QString(), m_image, selection);
 
             KisPaintDeviceSP dev = selection->getOrCreatePixelSelection().data();
@@ -180,6 +186,7 @@ private:
     qreal m_angle;
     KoUpdater *m_progress;
     KisImageWSP m_image;
+    bool m_scaleOnlyShapes;
 };
 
 

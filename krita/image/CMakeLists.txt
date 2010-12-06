@@ -78,6 +78,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
    commands/kis_image_resize_command.cpp
+   commands/kis_image_set_resolution_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp

@@ -44,8 +44,8 @@ class KoUpdater;
  * runs due to the implementation -- @em don't use it in the constructor.
  * After the constructor, when running the @ref convert() method it's
  * guaranteed to be valid, so no need to check against 0.
- * 
- * @note If the code is compiled in debug mode, seting KOFFICE_DEBUG_FILTERS
+ *
+ * @note If the code is compiled in debug mode, setting KOFFICE_DEBUG_FILTERS
  * environment variable to any value disables deletion of temporary files while
  * importing/exporting. This is useful for testing purposes.
  *

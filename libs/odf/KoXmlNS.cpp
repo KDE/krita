@@ -50,6 +50,9 @@ const QString KoXmlNS::koffice = "http://www.koffice.org/2005/";
 const QString KoXmlNS::officeooo = "http://openoffice.org/2009/office";
 const QString KoXmlNS::ooo = "http://openoffice.org/2004/office";
 
+const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-namespace");
+const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");
+
 const char* KoXmlNS::nsURI2NS(const QString nsURI)
 {
     if (nsURI == KoXmlNS::office)
@@ -106,3 +109,4 @@ const char* KoXmlNS::nsURI2NS(const QString nsURI)
     // Shouldn't happen.
     return "";
 }
+

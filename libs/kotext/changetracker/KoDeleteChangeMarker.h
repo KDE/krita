@@ -81,19 +81,17 @@ public:
     ///reimplemented
     virtual void saveOdf(KoShapeSavingContext &context);
 
-    void setDeleteChangeXml(QString &deleteChangeXml);
-
     KoListStyle *getDeletedListStyle(KoListStyle::ListIdType id);
 
     void setDeletedListStyle(KoListStyle::ListIdType, KoListStyle *style);
+
+    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 protected:
 
     virtual void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
     virtual void resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
-
-    virtual void updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format);
 
 private:
 

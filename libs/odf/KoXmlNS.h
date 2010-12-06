@@ -62,6 +62,9 @@ public:
     static const QString ooo;
 
     static const char* nsURI2NS(const QString nsURI);
+    
+    static const QString delta;
+    static const QString split;
 private:
     KoXmlNS(); // don't create an instance of me :)
 };

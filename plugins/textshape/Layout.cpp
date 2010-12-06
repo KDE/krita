@@ -235,10 +235,6 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
     qreal objectHeight = 0.0;
-    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0 && line.ascent() == 0.0) {
-        // This is an anchor but not an inline anchor so set to some very small hight
-        height = 0.1;
-    }
     bool useFixedLineHeight = height != 0.0;
     QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {

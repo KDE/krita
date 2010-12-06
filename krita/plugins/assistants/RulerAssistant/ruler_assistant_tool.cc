@@ -21,6 +21,7 @@
 
 #include <KoToolRegistry.h>
 #include <RulerAssistant.h>
+#include <EllipseAssistant.h>
 
 K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
 K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
@@ -33,6 +34,7 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
     r->add(new KisRulerAssistantToolFactory());
 
     KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new EllipseAssistantFactory);
 }
 
 RulerAssistantToolPlugin::~RulerAssistantToolPlugin()

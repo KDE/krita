@@ -47,7 +47,7 @@ QString KoApplicationAdaptor::createDocument(const QString &nativeFormat)
 {
     KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(nativeFormat);
     if (entry.isEmpty()) {
-        KMessageBox::questionYesNo(0, i18n("Unknown KOffice MimeType %1. Check your installation.", nativeFormat));
+        KMessageBox::questionYesNo(0, i18n("Unknown Calligra MimeType %1. Check your installation.", nativeFormat));
         return QString();
     }
     KoDocument* doc = entry.createDoc(0);

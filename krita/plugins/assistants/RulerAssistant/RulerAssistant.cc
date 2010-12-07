@@ -52,7 +52,7 @@ QPointF RulerAssistant::project(const QPointF& pt) const
     return QPointF(xm, xm * a1 + b1);
 }
 
-QPointF RulerAssistant::adjustPosition(const QPointF& pt) const
+QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/) const
 {
     return project(pt);
 }

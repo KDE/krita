@@ -165,10 +165,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         setMode(KisTool::PAINT_MODE);
 
         initPaint(e);
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
+        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
                                                          e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
+        m_strokeBegin = e->point;
 
         e->accept();
     }
@@ -211,7 +212,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Actual painting
      */
-    QPointF pos = convertToPixelCoord(adjustPosition(e->point));
+    QPointF pos = convertToPixelCoord(adjustPosition(e->point, m_strokeBegin));
     QPointF dragVec = pos - m_previousPaintInformation.pos();
 
     KisPaintInformation info =
@@ -559,10 +560,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-QPointF KisToolFreehand::adjustPosition(const QPointF& point)
+QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point);
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;

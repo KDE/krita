@@ -75,8 +75,9 @@ public:
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
+     * @param strokeBegin the coordinates of the beginning of the stroke
      */
-    virtual QPointF adjustPosition(const QPointF& point) const = 0;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) const = 0;
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter) = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     const QList<KisPaintingAssistantHandleSP>& handles() const;

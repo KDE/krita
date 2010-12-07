@@ -615,7 +615,7 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
     openedElements++;
 
     xmlStream << "<" << nodeName;
-    QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+    QList<QPair<QString, QString> > attributeNSNames = element.attributeFullNames();
 
     QPair<QString, QString> attributeName;
     foreach(attributeName, attributeNSNames) {
@@ -661,7 +661,7 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         nodeName = nodeName.arg(index);
         if (!copyOnlyChildren) {
             xmlStream << "<" << nodeName;
-            QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+            QList<QPair<QString, QString> > attributeNSNames = element.attributeFullNames();
 
             QPair<QString, QString> attributeName;
             foreach(attributeName, attributeNSNames) {
@@ -1628,8 +1628,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         cursor.setBlockFormat(textBlockFormat);
     }
 
-    KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
-    tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));
     if (d->changeTracker && d->changeStack.count()) {
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, d->changeStack.top());
     }

@@ -1161,22 +1161,6 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
     } 
 }
 
-void KoTextWriter::Private::postProcessTagTypeChangeXml()
-{
-    QString generatedXmlString(generatedXmlArray);
-    QString errorMsg;
-    int errorLine, errorColumn;
-    KoXmlDocument doc; 
-
-    QXmlStreamReader reader(generatedXmlString);
-    reader.setNamespaceProcessing(true);
-
-    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
-    if (ok) {
-        loadBody(doc.documentElement(), cursor);     
-    }    
-}
-
 void KoTextWriter::write(QTextDocument *document, int from, int to)
 { 
     d->document = document;  

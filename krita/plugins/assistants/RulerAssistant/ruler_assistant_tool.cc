@@ -23,6 +23,7 @@
 #include "RulerAssistant.h"
 #include "EllipseAssistant.h"
 #include "SplineAssistant.h"
+#include "PerspectiveAssistant.h"
 
 K_PLUGIN_FACTORY(RulerAssistantToolFactory, registerPlugin<RulerAssistantToolPlugin>();)
 K_EXPORT_PLUGIN(RulerAssistantToolFactory("krita"))
@@ -37,6 +38,7 @@ RulerAssistantToolPlugin::RulerAssistantToolPlugin(QObject *parent, const QVaria
     KisPaintingAssistantFactoryRegistry::instance()->add(new RulerAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new EllipseAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new SplineAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new PerspectiveAssistantFactory);
 }
 
 RulerAssistantToolPlugin::~RulerAssistantToolPlugin()

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,8 +45,6 @@ KisExperimentOpOption::KisExperimentOpOption()
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();
     
-    connect(m_options->mirrorHorizontal, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
-    connect(m_options->mirrorVertical, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
     connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
@@ -62,8 +60,6 @@ KisExperimentOpOption::~KisExperimentOpOption()
 
 void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(EXPERIMENT_MIRROR_HORZ, m_options->mirrorHorizontal->isChecked());
-    setting->setProperty(EXPERIMENT_MIRROR_VERT, m_options->mirrorVertical->isChecked());
     setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, m_options->displaceCHBox->isChecked());
     setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
     setting->setProperty(EXPERIMENT_SPEED_ENABLED, m_options->speedCHBox->isChecked());
@@ -75,8 +71,6 @@ void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setti
 
 void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->mirrorHorizontal->setChecked( setting->getBool(EXPERIMENT_MIRROR_HORZ) );
-    m_options->mirrorVertical->setChecked( setting->getBool(EXPERIMENT_MIRROR_VERT) );
     m_options->displaceCHBox->setChecked( setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED) );
     m_options->displaceStrength->setValue( setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE) );
     m_options->speedCHBox->setChecked( setting->getBool(EXPERIMENT_SPEED_ENABLED) );

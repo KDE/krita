@@ -31,35 +31,5 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-bool KisExperimentPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt::KeyboardModifiers modifiers)
-{
-    if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
-        setProperty(MIRROR_X,info.pos().x());
-        setProperty(MIRROR_Y,info.pos().y());
-        return false;
-    }
-    return true;
-}
-
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
-{
-    QPainterPath path = KisPaintOpSettings::brushOutline(pos, mode, scale, rotation);
-    
-    QPointF mirrorPosition(getDouble(MIRROR_X),getDouble(MIRROR_Y));
-    int mirrorLineSize = 50;
-    
-    if (getBool(EXPERIMENT_MIRROR_HORZ)){
-        path.moveTo(mirrorPosition.x(), 0);
-        path.lineTo(mirrorPosition.x(), mirrorLineSize);
-    }
-    
-    if (getBool(EXPERIMENT_MIRROR_VERT)){
-        path.moveTo(0,mirrorPosition.y());
-        path.lineTo(mirrorLineSize,mirrorPosition.y());
-    }
-    
-    return path;
-}
-
 
 

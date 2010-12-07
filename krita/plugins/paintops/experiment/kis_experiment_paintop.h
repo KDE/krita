@@ -63,7 +63,6 @@ private:
     KisPressureOpacityOption m_opacityOption;
     ExperimentOption m_experimentOption;
 
-    QPointF m_mirrorPosition;
     int m_displacement; // 7
     int m_multiplier; 
     bool m_smoothing;

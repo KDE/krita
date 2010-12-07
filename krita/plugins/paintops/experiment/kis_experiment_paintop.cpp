@@ -62,8 +62,6 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *s
     m_multiplier = (m_experimentOption.speed * 0.01 * 35); // 0..35 [15 default according alchemy]
     m_smoothing = m_experimentOption.smoothing;
     
-    m_mirrorPosition = QPointF(settings->getDouble(MIRROR_X),settings->getDouble(MIRROR_Y));
-    
     m_path = QPainterPath();
     m_polygonMaskImage = QImage(256, 256, QImage::Format_ARGB32_Premultiplied);
     m_polygonDevice = new KisFixedPaintDevice(source()->colorSpace());
@@ -100,6 +98,8 @@ void KisExperimentPaintOp::clearPreviousDab()
 
 void KisExperimentPaintOp::clearPreviousDab2()
 {
+    if (m_previousDabs.size() == 0) return; 
+    
     QRect result = m_previousDabs[0];
     if (result.isEmpty()) return;
     
@@ -121,15 +121,6 @@ KisDistanceInformation KisExperimentPaintOp::paintLine(const KisPaintInformation
     if (!painter()) return kdi;
 
     if (m_isFirst){
-        int rectAreas = 4;
-        //int rectAreas = 1;
-        /*if (m_experimentOption.mirrorHorizontal && m_experimentOption.mirrorVertical){
-            rectAreas = 4;
-        } else if (m_experimentOption.mirrorHorizontal || m_experimentOption.mirrorVertical){
-            rectAreas = 2;
-        }*/
-        
-        m_previousDabs.resize(rectAreas);
         m_path.moveTo(pi1.pos());
         addPosition(pi2.pos());
     }else{
@@ -297,32 +288,11 @@ void KisExperimentPaintOp::fillPainterPath(const QPainterPath& path)
         delete [] alphaLine;
         
         painter()->bltFixed(fillRect.topLeft(),m_polygonDevice, polygonRect);
+        
         // save the area of the dab so that we can delete it next time
-        m_previousDabs[0] = QRect(fillRect.topLeft(),polygonRect.size());
+        m_previousDabs = regionsRenderMirrorMask(fillRect,m_polygonDevice);
+        m_previousDabs.append( QRect(fillRect.topLeft(),polygonRect.size()) );
        
-        int mirrorX = -(fillRect.topRight().x() - m_mirrorPosition.x()) + m_mirrorPosition.x();
-        int mirrorY = -(fillRect.bottomLeft().y() - m_mirrorPosition.y()) + m_mirrorPosition.y();
-        
-        // the dab is mirrored in-place 
-        if (m_experimentOption.mirrorHorizontal){
-            m_polygonDevice->mirror(true, false);
-            painter()->bltFixed(QPoint(mirrorX, fillRect.topLeft().y()), m_polygonDevice, polygonRect);
-            m_previousDabs[1] = QRect(QPoint(mirrorX,fillRect.topLeft().y() ),polygonRect.size());
-            m_polygonDevice->mirror(true, false);
-        }
-        
-        if (m_experimentOption.mirrorVertical){
-            m_polygonDevice->mirror(false, true);
-            painter()->bltFixed(QPoint(fillRect.topLeft().x(), mirrorY), m_polygonDevice, polygonRect);
-            m_previousDabs[2] = QRect(QPoint(fillRect.topLeft().x(),mirrorY ),polygonRect.size());
-            m_polygonDevice->mirror(false, true);
-        }        
-        
-        if (m_experimentOption.mirrorHorizontal && m_experimentOption.mirrorVertical){
-            m_polygonDevice->mirror(true, true);
-            painter()->bltFixed(QPoint(mirrorX, mirrorY), m_polygonDevice, polygonRect);
-            m_previousDabs[3] = QRect(QPoint(mirrorX,mirrorY ),polygonRect.size());
-        }
 }
 
 

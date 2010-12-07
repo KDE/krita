@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008-2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,8 +21,6 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-const QString EXPERIMENT_MIRROR_VERT = "Experiment/mirrorVertical";
-const QString EXPERIMENT_MIRROR_HORZ = "Experiment/mirrorHorizontal";
 const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
 const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";
 const QString EXPERIMENT_SMOOTHING = "Experiment/smoothing";
@@ -49,8 +47,6 @@ private:
 class ExperimentOption{
 
     public:
-        bool mirrorVertical;
-        bool mirrorHorizontal;
         bool isDisplacementEnabled;
         qreal displacement;
         bool isSpeedEnabled;
@@ -58,8 +54,6 @@ class ExperimentOption{
         bool smoothing;
         
         void readOptionSetting(const KisPropertiesConfiguration* setting){
-            mirrorHorizontal = setting->getBool(EXPERIMENT_MIRROR_HORZ);
-            mirrorVertical = setting->getBool(EXPERIMENT_MIRROR_VERT);
             isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
             displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE);
             isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);

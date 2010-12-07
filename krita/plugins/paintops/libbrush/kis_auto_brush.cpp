@@ -22,7 +22,9 @@
 #include <kis_debug.h>
 #include <math.h>
 
+#include <QRect>
 #include <QDomElement>
+#include <QtConcurrentMap>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -33,6 +35,83 @@
 
 #include "kis_mask_generator.h"
 #include "kis_boundary.h"
+
+struct MaskProcessor
+{
+    MaskProcessor(KisFixedPaintDeviceSP device, const KoColorSpace* cs, qreal randomness, qreal density,
+           double centerX, double centerY, double invScaleX, double invScaleY, double angle,
+           KisMaskGenerator* shape)
+    : m_device(device)
+    , m_cs(cs)
+    , m_randomness(randomness)
+    , m_density(density)
+    , m_pixelSize(cs->pixelSize())
+    , m_centerX(centerX)
+    , m_centerY(centerY)
+    , m_invScaleX(invScaleX)
+    , m_invScaleY(invScaleY)
+    , m_shape(shape)
+    {
+        
+        m_cosa = cos(angle);
+        m_sina = sin(angle);
+    }
+
+    void operator()(QRect& rect)
+    {
+        process(rect);
+    }
+    
+    void process(QRect& rect){
+//         kDebug() << "rect " << rect;
+        qreal random = 1.0;
+        quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
+        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
+        for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
+            for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
+
+                double x_ = (x - m_centerX) * m_invScaleX;
+                double y_ = (y - m_centerY) * m_invScaleY;
+                double maskX = m_cosa * x_ - m_sina * y_;
+                double maskY = m_sina * x_ + m_cosa * y_;
+
+                if (m_randomness!= 0.0){
+                    random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
+                }
+                
+                alphaValue = quint8( (OPACITY_OPAQUE_U8 - m_shape->valueAt(maskX, maskY)) * random);
+
+                // avoid computation of random numbers if density is full
+                if (m_density != 1.0){
+                    // compute density only for visible pixels of the mask
+                    if (alphaValue != OPACITY_TRANSPARENT_U8){
+                        if ( !(m_density >= drand48()) ){
+                            alphaValue = OPACITY_TRANSPARENT_U8;
+                        }
+                    }
+                }   
+
+                m_cs->setOpacity(dabPointer, alphaValue, 1);
+                dabPointer += m_pixelSize;
+            }//endfor x
+        }//endfor y
+    }
+
+    KisFixedPaintDeviceSP m_device;
+    const KoColorSpace* m_cs;
+    qreal m_randomness;
+    qreal m_density;
+    quint32 m_pixelSize;
+    double m_centerX;
+    double m_centerY;
+    double m_invScaleX;
+    double m_invScaleY;
+    double m_cosa;
+    double m_sina;
+    KisMaskGenerator* m_shape;
+};
+
+
 
 struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
@@ -200,22 +279,12 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             
         }//endfor y
         
-    }
-    else
+    } else
     {
-        double cosa = cos(angle);
-        double sina = sin(angle);
-        
-        qreal random = 1.0;
-        quint8 alphaValue = OPACITY_TRANSPARENT_U8;
         d->shape->setSoftness( softnessFactor );
+        
         for (int y = 0; y < dstHeight; y++) {
             for (int x = 0; x < dstWidth; x++) {
-
-                double x_ = (x - centerX) * invScaleX;
-                double y_ = (y - centerY) * invScaleY;
-                double maskX = cosa * x_ - sina * y_;
-                double maskY = sina * x_ + cosa * y_;
 
                 if (coloringInformation) {
                     if (color) {
@@ -225,34 +294,27 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                         coloringInformation->nextColumn();
                     }
                 }
-                
-                if (d->randomness != 0.0){
-                    random = (1.0 - d->randomness) + d->randomness * float(rand()) / RAND_MAX;
-                }
-                
-                alphaValue = quint8( (OPACITY_OPAQUE_U8 - d->shape->valueAt(maskX, maskY)) * random);
-
-                // avoid computation of random numbers if density is full
-                if (d->density != 1.0){
-                    // compute density only for visible pixels of the mask
-                    if (alphaValue != OPACITY_TRANSPARENT_U8){
-                        if ( !(d->density >= drand48()) ){
-                            alphaValue = OPACITY_TRANSPARENT_U8;
-                        }
-                    }
-                }   
-
-                cs->setOpacity(dabPointer, alphaValue, 1);
                 dabPointer += pixelSize;
-            }//endfor x
-            if (!color && coloringInformation) {
+             }//endfor x
+             if (!color && coloringInformation) {
                 coloringInformation->nextRow();
-            }
-            //TODO: this never happens probably? 
-            if (dstWidth < rowWidth) {
-                dabPointer += (pixelSize * (rowWidth - dstWidth));
-            }
+             }
         }//endfor y
+
+        MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
+        int jobs = QThread::idealThreadCount();
+        if(dstHeight > 100 && jobs >= 4) {
+            int splitter = dstHeight/jobs;
+            QVector<QRect> rects;
+            for(int i = 0; i < jobs - 1; i++) {
+                rects << QRect(0, i*splitter, dstWidth, splitter);
+            }
+            rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
+            QtConcurrent::blockingMap(rects, s);
+        } else {
+            QRect rect(0, 0, dstWidth, dstHeight);
+            s.process(rect);
+        }
     }//else 
 }
 

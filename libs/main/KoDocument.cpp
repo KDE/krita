@@ -1623,7 +1623,7 @@ bool KoDocument::loadNativeFormatFromStore(const QString& file)
     KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
 
     if (store->bad()) {
-        d->lastErrorMessage = i18n("Not a valid KOffice file: %1", file);
+        d->lastErrorMessage = i18n("Not a valid Calligra file: %1", file);
         delete store;
         QApplication::restoreOverrideCursor();
         return false;

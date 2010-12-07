@@ -30,7 +30,7 @@ KAboutData * newKritaAboutData()
     KAboutData * aboutData = new KAboutData("krita", 0,
                                             ki18n("Krita"),
                                             KOFFICE_VERSION_STRING,
-                                            ki18n("KOffice image manipulation application"),
+                                            ki18n("Digital Painting for Artists"),
                                             KAboutData::License_GPL,
                                             ki18n("(c) 1999-2010 The Krita team.\n"),
                                             KLocalizedString(),

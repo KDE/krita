@@ -254,6 +254,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+    renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     KisVector2D end = toKisVector2D(pi2.pos());

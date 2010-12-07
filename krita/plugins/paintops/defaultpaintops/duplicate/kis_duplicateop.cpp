@@ -307,6 +307,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sh = dstRect.height();
 
     painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
+    renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
 
     return spacing(scale);
 }

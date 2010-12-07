@@ -205,6 +205,7 @@ protected:
         HOVER_MODE,
         PAINT_MODE,
         SECONDARY_PAINT_MODE,
+        MIRROR_AXIS_SETUP_MODE,
         GESTURE_MODE,
         PAN_MODE,
         OTHER // not used now

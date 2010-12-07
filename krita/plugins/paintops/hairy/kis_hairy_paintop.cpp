@@ -137,6 +137,7 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
+    renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     KisVector2D end = toKisVector2D(pi2.pos());

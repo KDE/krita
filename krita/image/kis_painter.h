@@ -482,7 +482,9 @@ public:
      * will be deleted as soon as the KisPainter instance dies).
      */
     KisPaintOp* paintOp() const;
-
+    
+    void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
+    
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);
 

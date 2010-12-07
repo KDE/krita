@@ -118,6 +118,10 @@ public:
     qreal currentScale() const;
     qreal currentRotation() const;
     
+    void setMirrorInformation(const QPointF &axisCenter,bool mirrorHorizontaly,bool mirrorVerticaly);
+    QPointF axisCenter() const;
+    
+    
 protected:
 
     void setCurrentScale(qreal scale);
@@ -140,7 +144,13 @@ protected:
      * Return the paintdevice the painter this paintop is owned by
      */
     KisPaintDeviceSP source() const;
-
+    
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
+    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
 private:
     Private* const d;
 };

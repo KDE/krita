@@ -55,7 +55,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
-
+    
 };
 
 #endif // KIS_SPRAY_PAINTOP_H_

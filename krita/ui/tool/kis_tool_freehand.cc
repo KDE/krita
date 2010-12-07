@@ -332,7 +332,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
-
+    
     if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);

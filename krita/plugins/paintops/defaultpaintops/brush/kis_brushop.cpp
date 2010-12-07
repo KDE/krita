@@ -159,6 +159,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     m_sharpnessOption.applyTreshold( dab );
     
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
+    renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
     painter()->setPaintColor(origColor);
 

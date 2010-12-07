@@ -176,6 +176,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     
     // This is the line that renders the extracted colors to the screen, with maskDab giving it the brush shape
     painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
+    renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)),m_tempDev,extractionTopLeft.x(), extractionTopLeft.y(),maskDab);
     
     return spacing(scale);
 }

@@ -67,6 +67,7 @@
 #include <recorder/kis_recorded_paint_action.h>
 #include <kis_cubic_curve.h>
 #include "kis_color_picker_utils.h"
+#include <kis_paintop.h>
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
@@ -83,6 +84,9 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     updateTabletPressureSamples();
 
     m_supportOutline = false;
+    
+    m_mirrorMaskHorizontal = false;
+    m_mirrorMaskVertical = false;
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
 
@@ -143,6 +147,14 @@ void KisToolPaint::setMode(ToolMode mode)
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
 {
     if(mode() == KisTool::HOVER_MODE &&
+       (event->button() == Qt::LeftButton) &&
+       event->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier) &&
+       !specialModifierActive()) {
+        setMode(MIRROR_AXIS_SETUP_MODE);
+        useCursor(KisCursor::crossCursor());
+        m_axisCenter = convertToPixelCoord(event->point);
+    }
+    else if(mode() == KisTool::HOVER_MODE &&
        (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
        event->modifiers() & Qt::ControlModifier &&
        !specialModifierActive()) {
@@ -175,6 +187,9 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
                   m_toForegroundColor);
         event->accept();
     }
+    else if (mode() == KisTool::MIRROR_AXIS_SETUP_MODE){
+        m_axisCenter = convertToPixelCoord(event->point);
+    }
     else {
         KisTool::mouseMoveEvent(event);
     }
@@ -182,7 +197,7 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
 
 void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(mode() == KisTool::SECONDARY_PAINT_MODE) {
+    if(mode() == KisTool::SECONDARY_PAINT_MODE || mode() == KisTool::MIRROR_AXIS_SETUP_MODE) {
         setMode(KisTool::HOVER_MODE);
         resetCursorStyle();
         event->accept();
@@ -239,6 +254,12 @@ QWidget * KisToolPaint::createOptionWidget()
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
     connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
+    m_lblMirror = new QLabel(i18n("Mirror: "), optionWidget);
+    m_chbMirrorMaskHorizonatl = new QCheckBox(i18n("Horizontal"), optionWidget);
+    m_chbMirrorMaskVertical = new QCheckBox(i18n("Verical"), optionWidget);
+    connect(m_chbMirrorMaskHorizonatl,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskHorizontal(bool)));
+    connect(m_chbMirrorMaskVertical,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskVertical(bool)));
+    
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
@@ -251,6 +272,9 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
     m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
+    m_optionWidgetLayout->addWidget(m_lblMirror, 2, 0);
+    m_optionWidgetLayout->addWidget(m_chbMirrorMaskHorizonatl, 3, 0);
+    m_optionWidgetLayout->addWidget(m_chbMirrorMaskVertical, 3, 1);
 
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
@@ -294,6 +318,16 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 void KisToolPaint::slotSetOpacity(int opacityPerCent)
 {
     m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
+}
+
+void KisToolPaint::slotSetMirrorMaskHorizontal(bool mirrorMaskHorizontal)
+{
+    m_mirrorMaskHorizontal = mirrorMaskHorizontal;
+}
+
+void KisToolPaint::slotSetMirrorMaskVertical(bool mirrorMaskVertical)
+{
+    m_mirrorMaskVertical = mirrorMaskVertical;
 }
 
 
@@ -360,6 +394,11 @@ void KisToolPaint::setupPainter(KisPainter* painter)
     KisTool::setupPainter(painter);
     painter->setOpacity(m_opacity);
     painter->setCompositeOp(m_compositeOp);
+
+    if (m_axisCenter.isNull()){
+        m_axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
+    }
+    painter->setMirrorInformation(m_axisCenter,m_mirrorMaskHorizontal,m_mirrorMaskVertical);
 }
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)

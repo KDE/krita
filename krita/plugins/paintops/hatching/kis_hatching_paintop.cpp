@@ -194,6 +194,7 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
+    renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab,0,0, maskDab);
     painter()->setOpacity(origOpacity);
     
     /*-----It took me very long to realize the importance of this line, this is

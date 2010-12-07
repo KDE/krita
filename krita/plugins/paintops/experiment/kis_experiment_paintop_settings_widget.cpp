@@ -19,7 +19,6 @@
 
 #include "kis_experimentop_option.h"
 #include "kis_experiment_paintop_settings.h"
-#include "kis_experiment_shape_option.h"
 
 #include <kis_color_option.h>
 #include <kis_paintop_options_widget.h>
@@ -34,11 +33,9 @@ KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget*
         : KisPaintOpOptionsWidget(parent)
 {
     m_experimentOption =  new KisExperimentOpOption();
-    m_experimentShapeOption = new KisExperimentShapeOption();
     m_ColorOption = new KisColorOption();
     
     addPaintOpOption(m_experimentOption);
-    addPaintOpOption(m_experimentShapeOption);
     addPaintOpOption(m_ColorOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
@@ -60,13 +57,6 @@ KisPropertiesConfiguration*  KisExperimentPaintOpSettingsWidget::configuration()
 }
 void KisExperimentPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
-    if (qAbs(x) > qAbs(y)){
-        if (x > 0){
-            m_experimentOption->setDiameter( m_experimentOption->startSize() + qRound(x) );
-        }else{
-            m_experimentOption->setDiameter( m_experimentOption->startSize() + qRound(x) );
-        }
-    }else{
-    }
+    //m_experimentOption->setDiameter( m_experimentOption->startSize() + qRound(x) );
 }
 

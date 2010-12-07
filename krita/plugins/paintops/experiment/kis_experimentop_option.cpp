@@ -26,23 +26,32 @@ public:
     KisExperimentOpOptionsWidget(QWidget *parent = 0)
             : QWidget(parent) {
         setupUi(this);
-        // this allows to setup the component still in designer and it is needed for showing slider
-        spacingSpin->setRange(spacingSpin->minimum(), spacingSpin->maximum(), 0.25, spacingSpin->showSlider());
-        scaleSpin->setRange(scaleSpin->minimum(), scaleSpin->maximum(), 0.25, spacingSpin->showSlider());
+        displaceStrength->setRange(0.0,100.0,0);
+        displaceStrength->setSuffix(QChar(Qt::Key_Percent));
+        displaceStrength->setValue(42.0); 
+        displaceStrength->setSingleStep(1.0);
         
+        speed->setRange(0.0,100.0,0);
+        speed->setSuffix(QChar(Qt::Key_Percent));
+        speed->setValue(42.0); 
+        speed->setSingleStep(1.0);
+
     }
 };
 
 KisExperimentOpOption::KisExperimentOpOption()
-        : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::brushCategory(), false)
+        : KisPaintOpOption(i18n("Experiment option"), KisPaintOpOption::brushCategory(), false)
 {
     m_checkable = false;
     m_options = new KisExperimentOpOptionsWidget();
-    connect(m_options->startSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->endSPBox,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
-    connect(m_options->spacingSpin,SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     
-    connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMovementSpin, SLOT(setEnabled(bool)));
+    connect(m_options->mirrorHorizontal, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->mirrorVertical, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->displaceCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->displaceStrength, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->speedCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
+    connect(m_options->speed, SIGNAL(valueChanged(qreal)), SIGNAL(sigSettingChanged()));
+    connect(m_options->smoothCHBox, SIGNAL(toggled(bool)), SIGNAL(sigSettingChanged()));
     setConfigurationPage(m_options);
 }
 
@@ -51,57 +60,27 @@ KisExperimentOpOption::~KisExperimentOpOption()
     delete m_options;
 }
 
-
-
-int KisExperimentOpOption::endSize() const
-{
-    return m_options->startSPBox->value();
-}
-
-
-int KisExperimentOpOption::startSize() const
-{
-    return m_options->endSPBox->value();
-}
-
-
-bool KisExperimentOpOption::jitterMovement() const
-{
-    return m_options->jitterMoveBox->isChecked();
-}
-
-qreal KisExperimentOpOption::jitterMoveAmount() const
-{
-    return m_options->jitterMovementSpin->value();
-}
-
-qreal KisExperimentOpOption::spacing() const
-{
-    return m_options->spacingSpin->value();
-}
-
-qreal KisExperimentOpOption::scale() const
-{
-    return m_options->scaleSpin->value();
-}
-
 void KisExperimentOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    setting->setProperty(EXPERIMENT_START_SIZE, startSize());
-    setting->setProperty(EXPERIMENT_END_SIZE, endSize());
-    setting->setProperty(EXPERIMENT_SPACING, spacing());
+    setting->setProperty(EXPERIMENT_MIRROR_HORZ, m_options->mirrorHorizontal->isChecked());
+    setting->setProperty(EXPERIMENT_MIRROR_VERT, m_options->mirrorVertical->isChecked());
+    setting->setProperty(EXPERIMENT_DISPLACEMENT_ENABLED, m_options->displaceCHBox->isChecked());
+    setting->setProperty(EXPERIMENT_DISPLACEMENT_VALUE, m_options->displaceStrength->value());
+    setting->setProperty(EXPERIMENT_SPEED_ENABLED, m_options->speedCHBox->isChecked());
+    setting->setProperty(EXPERIMENT_SPEED_VALUE, m_options->speed->value());
+    setting->setProperty(EXPERIMENT_SMOOTHING, m_options->smoothCHBox->isChecked());
+    
+
 }
 
 void KisExperimentOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    m_options->startSPBox->setValue(setting->getDouble(EXPERIMENT_START_SIZE));
-    m_options->endSPBox->setValue(setting->getDouble(EXPERIMENT_END_SIZE));
-    m_options->spacingSpin->setValue(setting->getDouble(EXPERIMENT_SPACING));
+    m_options->mirrorHorizontal->setChecked( setting->getBool(EXPERIMENT_MIRROR_HORZ) );
+    m_options->mirrorVertical->setChecked( setting->getBool(EXPERIMENT_MIRROR_VERT) );
+    m_options->displaceCHBox->setChecked( setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED) );
+    m_options->displaceStrength->setValue( setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE) );
+    m_options->speedCHBox->setChecked( setting->getBool(EXPERIMENT_SPEED_ENABLED) );
+    m_options->speed->setValue( setting->getDouble(EXPERIMENT_SPEED_VALUE) );
+    m_options->smoothCHBox->setChecked( setting->getBool(EXPERIMENT_SMOOTHING) );
+    
 }
-
-
-void KisExperimentOpOption::setDiameter(int diameter) const
-{
-    m_options->startSPBox->setValue(diameter);
-}
-

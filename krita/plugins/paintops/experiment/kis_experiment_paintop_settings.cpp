@@ -24,30 +24,42 @@
 #include "kis_experimentop_option.h"
 #include "kis_experiment_shape_option.h"
 #include "kis_image.h"
+#include <kis_paintop_settings_widget.h>
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-
-QRectF KisExperimentPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
+bool KisExperimentPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt::KeyboardModifiers modifiers)
 {
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    width += 10;
-    height += 10;
-    QRectF rc = QRectF(0, 0, width, height);
-    return image->pixelToDocument(rc.translated(- QPoint(width * 0.5, height * 0.5))).translated(pos);
+    if (modifiers == (Qt::ControlModifier | Qt::ShiftModifier)) {
+        setProperty(MIRROR_X,info.pos().x());
+        setProperty(MIRROR_Y,info.pos().y());
+        return false;
+    }
+    return true;
 }
 
-void KisExperimentPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
+QPainterPath KisExperimentPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
-    if (_mode != CursorIsOutline) return;
-    qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    painter.setPen(QColor(255,128,255));
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos));
+    QPainterPath path = KisPaintOpSettings::brushOutline(pos, mode, scale, rotation);
+    
+    QPointF mirrorPosition(getDouble(MIRROR_X),getDouble(MIRROR_Y));
+    int mirrorLineSize = 50;
+    
+    if (getBool(EXPERIMENT_MIRROR_HORZ)){
+        path.moveTo(mirrorPosition.x(), 0);
+        path.lineTo(mirrorPosition.x(), mirrorLineSize);
+    }
+    
+    if (getBool(EXPERIMENT_MIRROR_VERT)){
+        path.moveTo(0,mirrorPosition.y());
+        path.lineTo(mirrorLineSize,mirrorPosition.y());
+    }
+    
+    return path;
 }
+
+
+

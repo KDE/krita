@@ -21,9 +21,14 @@
 #include <kis_paintop_option.h>
 #include <krita_export.h>
 
-const QString EXPERIMENT_START_SIZE = "Experiment/startSize";
-const QString EXPERIMENT_END_SIZE = "Experiment/endSize";
-const QString EXPERIMENT_SPACING = "Experiment/spacing";
+const QString EXPERIMENT_MIRROR_VERT = "Experiment/mirrorVertical";
+const QString EXPERIMENT_MIRROR_HORZ = "Experiment/mirrorHorizontal";
+const QString EXPERIMENT_DISPLACEMENT_ENABLED = "Experiment/displacementEnabled";
+const QString EXPERIMENT_DISPLACEMENT_VALUE = "Experiment/displacement";
+const QString EXPERIMENT_SMOOTHING = "Experiment/smoothing";
+const QString EXPERIMENT_SPEED_ENABLED = "Experiment/speedEnabled";
+const QString EXPERIMENT_SPEED_VALUE = "Experiment/speed";
+
 
 class KisExperimentOpOptionsWidget;
 
@@ -33,23 +38,34 @@ public:
     KisExperimentOpOption();
     ~KisExperimentOpOption();
 
-    int startSize() const;
-    int endSize() const;
-    
-    void setDiameter(int diameter) const;
-
-    qreal jitterMoveAmount() const;
-    qreal spacing() const;
-    qreal scale() const;
-
-    bool jitterMovement() const;
-
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
 private:
     KisExperimentOpOptionsWidget * m_options;
 
+};
+
+class ExperimentOption{
+
+    public:
+        bool mirrorVertical;
+        bool mirrorHorizontal;
+        bool isDisplacementEnabled;
+        qreal displacement;
+        bool isSpeedEnabled;
+        qreal speed;
+        bool smoothing;
+        
+        void readOptionSetting(const KisPropertiesConfiguration* setting){
+            mirrorHorizontal = setting->getBool(EXPERIMENT_MIRROR_HORZ);
+            mirrorVertical = setting->getBool(EXPERIMENT_MIRROR_VERT);
+            isDisplacementEnabled = setting->getBool(EXPERIMENT_DISPLACEMENT_ENABLED);
+            displacement = setting->getDouble(EXPERIMENT_DISPLACEMENT_VALUE);
+            isSpeedEnabled = setting->getBool(EXPERIMENT_SPEED_ENABLED);
+            speed = setting->getDouble(EXPERIMENT_SPEED_VALUE);
+            smoothing = setting->getBool(EXPERIMENT_SMOOTHING);
+        }
 };
 
 #endif

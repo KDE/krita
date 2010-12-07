@@ -30,6 +30,7 @@
 #include <QTextTableCellFormat>
 #include <QBuffer>
 #include <QUuid>
+#include <QXmlStreamReader>
 
 #include "KoInlineObject.h"
 #include "KoTextAnchor.h"
@@ -54,6 +55,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoXmlNS.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
 #include <changetracker/KoChangeTracker.h>
@@ -1104,12 +1106,48 @@ void KoTextWriter::Private::closeTagTypeChangeRegion()
     //Restore the actual xml writer
     writer = oldXmlWriter;
     context.setXmlWriter(*oldXmlWriter);
-    qDebug() << QString(generatedXmlArray);
+
+    //Post-Process and save the generated xml in the appropriate way.
+    postProcessTagTypeChangeXml();
 }
 
 void KoTextWriter::Private::postProcessTagTypeChangeXml()
 {
     QString generatedXmlString(generatedXmlArray);
+
+    //Generate the name-space definitions so that it can be parsed. Like what is office:text, office:delta etc
+    QString nameSpaceDefinitions;
+    QTextStream nameSpacesStream(&nameSpaceDefinitions);
+    
+    nameSpacesStream << "<generated-xml ";
+    nameSpacesStream << "xmlns:office=\"" << KoXmlNS::office << "\" ";
+    nameSpacesStream << "xmlns:meta=\"" << KoXmlNS::meta << "\" ";
+    nameSpacesStream << "xmlns:config=\"" << KoXmlNS::config << "\" ";
+    nameSpacesStream << "xmlns:text=\"" << KoXmlNS::text << "\" ";
+    nameSpacesStream << "xmlns:table=\"" << KoXmlNS::table << "\" ";
+    nameSpacesStream << "xmlns:draw=\"" << KoXmlNS::draw << "\" ";
+    nameSpacesStream << "xmlns:presentation=\"" << KoXmlNS::presentation << "\" ";
+    nameSpacesStream << "xmlns:dr3d=\"" << KoXmlNS::dr3d << "\" ";
+    nameSpacesStream << "xmlns:chart=\"" << KoXmlNS::chart << "\" ";
+    nameSpacesStream << "xmlns:form=\"" << KoXmlNS::form << "\" ";
+    nameSpacesStream << "xmlns:script=\"" << KoXmlNS::script << "\" ";
+    nameSpacesStream << "xmlns:style=\"" << KoXmlNS::style << "\" ";
+    nameSpacesStream << "xmlns:number=\"" << KoXmlNS::number << "\" ";
+    nameSpacesStream << "xmlns:math=\"" << KoXmlNS::math << "\" ";
+    nameSpacesStream << "xmlns:svg=\"" << KoXmlNS::svg << "\" ";
+    nameSpacesStream << "xmlns:fo=\"" << KoXmlNS::fo << "\" ";
+    nameSpacesStream << "xmlns:anim=\"" << KoXmlNS::anim << "\" ";
+    nameSpacesStream << "xmlns:smil=\"" << KoXmlNS::smil << "\" ";
+    nameSpacesStream << "xmlns:koffice=\"" << KoXmlNS::koffice << "\" ";
+    nameSpacesStream << "xmlns:officeooo=\"" << KoXmlNS::officeooo << "\" ";
+    nameSpacesStream << "xmlns:delta=\"" << KoXmlNS::delta << "\" ";
+    nameSpacesStream << "xmlns:split=\"" << KoXmlNS::split << "\" ";
+    nameSpacesStream << ">";
+
+    generatedXmlString.prepend(nameSpaceDefinitions);
+    generatedXmlString.append("</generated-xml>");
+
+    //Now Parse the generatedXML and if successful generate the final output
     QString errorMsg;
     int errorLine, errorColumn;
     KoXmlDocument doc; 
@@ -1119,8 +1157,8 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
 
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (ok) {
-        loadBody(doc.documentElement(), cursor);     
-    }    
+        qDebug() << "*************XML parsed successfully.....";
+    } 
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

@@ -93,6 +93,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_actLayerVis(false)
         , m_imageResizeToLayer(0)
         , m_flattenLayer(0)
+        , m_rasterizeLayer(0)
         , m_activeLayer(0)
         , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -143,6 +144,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
+    m_rasterizeLayer  = new KAction(i18n("Rasterize Layer"), this);
+    actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
+    connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
+    
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
@@ -180,6 +185,7 @@ void KisLayerManager::updateGUI()
     m_imageFlatten->setEnabled(nlayers > 1);
     m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
     m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
+    m_rasterizeLayer->setEnabled(enable && layer->inherits("KisShapeLayer"));
 
     m_imageResizeToLayer->setEnabled(activeLayer());
 
@@ -835,6 +841,32 @@ void KisLayerManager::flattenLayer()
     }
     m_view->updateGUI();
 }
+
+void KisLayerManager::rasterizeLayer()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+    
+    KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
+    KisPainter gc(paintLayer->paintDevice());
+    QRect rc = layer->projection()->exactBounds();
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
+    
+    m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
+    m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
+    
+    int childCount = layer->childCount();
+    for (int i = 0; i < childCount; i++) {
+        m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());
+    }
+    m_commandsAdapter->removeNode(layer);
+    m_commandsAdapter->endMacro();
+    updateGUI();
+}
+
 
 void KisLayerManager::layersUpdated()
 {

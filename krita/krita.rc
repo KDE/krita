@@ -102,6 +102,7 @@
   <Separator/>
   <Action name="merge_layer"/>
   <Action name="flatten_layer"/>
+  <Action name="rasterize_layer"/>
   <Action name="merge_all_shape_layers"/>
   <Action name="flatten_image"/>
 </Menu>

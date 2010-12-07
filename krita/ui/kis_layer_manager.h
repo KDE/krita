@@ -95,6 +95,7 @@ public slots:
     void flattenImage();
     void mergeLayer();
     void flattenLayer();
+    void rasterizeLayer();
 
     void layersUpdated();
 
@@ -139,6 +140,7 @@ private:
     bool m_actLayerVis;
     KAction *m_imageResizeToLayer;
     KAction *m_flattenLayer;
+    KAction *m_rasterizeLayer;
     KisLayerSP m_activeLayer;
     KisNodeCommandsAdapter* m_commandsAdapter;
 };

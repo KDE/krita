@@ -84,33 +84,53 @@ QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& s
     return project(pt, strokeBegin);
 }
 
+// draw a vanishing point marker
+inline void drawX(QPainter& gc, const QPointF& pt)
+{
+    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() - 5.0), QPointF(pt.x() + 5.0, pt.y() + 5.0));
+    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() + 5.0), QPointF(pt.x() + 5.0, pt.y() - 5.0));
+}
+
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
     Q_ASSERT(handles().size() == 4);
 
     QTransform initialTransform = converter->documentToWidgetTransform();
+    QPolygonF poly;
     gc.save();
     gc.setTransform(initialTransform);
-    QPolygonF poly;
     if (!quad(poly)) {
         gc.setPen(QColor(255, 0, 0, 125));
         gc.drawPolygon(poly);
+        gc.restore();
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
 
         QTransform transform;
         if (!QTransform::squareToQuad(poly, transform)) {
             qWarning("Failed to create perspective mapping");
+            // bail out
+            gc.restore();
+            return;
         }
         gc.setTransform(transform, true);
         for (int y = 0; y <= 8; ++y)
             gc.drawLine(QPointF(0.0, y * 0.125), QPointF(1.0, y * 0.125));
         for (int x = 0; x <= 8; ++x)
             gc.drawLine(QPointF(x * 0.125, 0.0), QPointF(x * 0.125, 1.0));
-    }
 
-    gc.restore();
+        gc.restore();
+        
+        // draw vanishing points
+        QPointF intersection(0, 0);
+        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+            drawX(gc, initialTransform.map(intersection));
+        }
+        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+            drawX(gc, initialTransform.map(intersection));
+        }
+    }
 }
 
 template <typename T> int sign(T a)

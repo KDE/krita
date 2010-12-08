@@ -42,6 +42,7 @@
 #include "commands/ChangeTrackedDeleteCommand.h"
 #include "commands/DeleteCommand.h"
 #include "commands/AutoResizeCommand.h"
+#include "FontSizeAction.h"
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
@@ -70,7 +71,6 @@
 #include <kdebug.h>
 #include <KRun>
 #include <KStandardShortcut>
-#include <KFontSizeAction>
 #include <KFontChooser>
 #include <KFontAction>
 #include <KAction>
@@ -304,9 +304,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setWhatsThis(i18n("Change the attributes of the currently selected characters."));
     connect(action, SIGNAL(triggered()), this, SLOT(selectFont()));
 
-    m_actionFormatFontSize = new KFontSizeAction(i18n("Font Size"), this);
+    m_actionFormatFontSize = new FontSizeAction(i18n("Font Size"), this);
     addAction("format_fontsize", m_actionFormatFontSize);
-    connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
+    connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(qreal)), this, SLOT(setFontSize(qreal)));
 
     m_actionFormatTextColor = new KoColorPopupAction(this);
     m_actionFormatTextColor->setIcon(KIcon("format-text-color"));
@@ -1339,7 +1339,7 @@ void TextTool::updateActions()
     }
     m_actionFormatSuper->setChecked(super);
     m_actionFormatSub->setChecked(sub);
-    m_actionFormatFontSize->setFontSize(qRound(cf.fontPointSize()));
+    m_actionFormatFontSize->setFontSize(cf.fontPointSize());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
     KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
@@ -1815,7 +1815,7 @@ void TextTool::setFontFamily(const QString &font)
     m_textEditor.data()->setFontFamily(font);
 }
 
-void TextTool::setFontSize (int size)
+void TextTool::setFontSize (qreal size)
 {
     if (!m_allowActions || !m_textEditor.data()) return;
     m_textEditor.data()->setFontSize(size);

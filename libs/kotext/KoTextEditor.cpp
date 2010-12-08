@@ -609,7 +609,7 @@ void KoTextEditor::setFontFamily(const QString &font)
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-void KoTextEditor::setFontSize(int size)
+void KoTextEditor::setFontSize(qreal size)
 {
     d->updateState(KoTextEditor::Private::Format, i18n("Set Font Size"));
     QTextCharFormat format;

@@ -104,7 +104,7 @@ public slots:
 
     void setFontFamily(const QString &font);
 
-    void setFontSize(int size);
+    void setFontSize(qreal size);
 
     void setTextColor(const QColor &color);
 

@@ -46,8 +46,8 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
-class KFontSizeAction;
 class KFontAction;
+class FontSizeAction;
 
 class QUndoCommand;
 
@@ -190,7 +190,7 @@ private slots:
     /// Set font family
     void setFontFamily(const QString &);
     /// Set Font size
-    void setFontSize(int size);
+    void setFontSize(qreal size);
     /// Default Format
     void setDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
@@ -333,7 +333,7 @@ private:
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
-    KFontSizeAction *m_actionFormatFontSize;
+    FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;

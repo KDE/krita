@@ -29,6 +29,7 @@ SET ( textshape_SRCS
     ChangeTrackingToolFactory.cpp
     TextChanges.cpp
     TextChange.cpp
+    FontSizeAction.cpp
 
     TableLayout.cpp
     TableLayoutData.cpp

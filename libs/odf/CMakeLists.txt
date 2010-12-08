@@ -87,6 +87,7 @@ install( FILES
     KoOdfStylesReader.h
     KoOdfNotesConfiguration.h
     KoOdfNumberStyles.h
+    KoOdfNumberDefinition.h
     KoOdfLineNumberingConfiguration.h
     KoOdfPaste.h
     KoOdfReadStore.h

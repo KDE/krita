@@ -43,28 +43,50 @@ PerspectiveAssistant::PerspectiveAssistant()
     initHandles(handles);
 }
 
+// squared distance from a point to a line
+inline qreal distsqr(const QPointF& pt, const QLineF& line)
+{
+    // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
+    
+    // magnitude of (p2 - p1) x (p1 - pt)
+    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
+    
+    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
+}
+
 QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(handles().size() == 4);
-    if (pt == strokeBegin) return pt;
+    if (snapLine.isNull()) {
+        QPolygonF poly;
+        if (!quad(poly)) return nullPoint;
+        // avoid problems with multiple assistants: only snap if starting in the grid
+        if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
+        
+        const qreal
+            dx = pt.x() - strokeBegin.x(),
+            dy = pt.y() - strokeBegin.y();
+        if (dx * dx + dy * dy < 4.0) {
+            // allow some movement before snapping
+            return strokeBegin;
+        }
+        
+        // construct transformation
+        QTransform transform;
+        if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
+        bool invertible;
+        const QTransform inverse = transform.inverted(&invertible);
+        if (!invertible) return nullPoint; // shouldn't happen
 
-    // construct transformation
-    QPolygonF poly;
-    if (!quad(poly)) return nullPoint;
-    // avoid problems with multiple assistants: only snap if starting in the grid
-    if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
-    QTransform transform;
-    if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
-    bool invertible;
-    const QTransform inverse = transform.inverted(&invertible);
-    if (!invertible) return nullPoint; // shouldn't happen
-
-    // figure out which direction to go
-    const QLineF line = inverse.map(QLineF(strokeBegin, pt));
-    // determine whether the horizontal or vertical line is closer to the point
-    bool vertical = qAbs(line.dy()) > qAbs(line.dx());
-    const QLineF snapLine = transform.map(QLineF(line.p1(), line.p1() + QPointF(!vertical, vertical))); // stupid trick: true = 1, false = 0
+        // figure out which direction to go
+        const QPointF start = inverse.map(strokeBegin);
+        const QLineF
+            verticalLine = QLineF(strokeBegin, transform.map(start + QPointF(0, 1))),
+            horizontalLine = QLineF(strokeBegin, transform.map(start + QPointF(1, 0)));
+        // determine whether the horizontal or vertical line is closer to the point
+        snapLine = distsqr(pt, verticalLine) < distsqr(pt, horizontalLine) ? verticalLine : horizontalLine;
+    }
 
     // snap to line
     const qreal
@@ -82,6 +104,11 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
 QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
 {
     return project(pt, strokeBegin);
+}
+
+void PerspectiveAssistant::endStroke()
+{
+    snapLine = QLineF();
 }
 
 // draw a vanishing point marker

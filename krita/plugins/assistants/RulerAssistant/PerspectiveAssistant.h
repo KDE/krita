@@ -22,17 +22,22 @@
 #include "kis_painting_assistant.h"
 #include <QObject>
 #include <QPolygonF>
+#include <QLineF>
 
 class PerspectiveAssistant : public KisPaintingAssistant
 {
 public:
     PerspectiveAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    virtual void endStroke();
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
     bool quad(QPolygonF& out) const;
+ 
+    // which direction to snap to (in transformed coordinates)
+    QLineF snapLine;
 };
 
 class PerspectiveAssistantFactory : public KisPaintingAssistantFactory

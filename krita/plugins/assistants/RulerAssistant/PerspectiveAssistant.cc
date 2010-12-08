@@ -52,6 +52,8 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
     // construct transformation
     QPolygonF poly;
     if (!quad(poly)) return nullPoint;
+    // avoid problems with multiple assistants: only snap if starting in the grid
+    if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
     QTransform transform;
     if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
     bool invertible;

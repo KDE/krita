@@ -85,7 +85,9 @@ install( FILES
     KoOdfLoadingContext.h
     KoOasisSettings.h
     KoOdfStylesReader.h
+    KoOdfNotesConfiguration.h
     KoOdfNumberStyles.h
+    KoOdfLineNumberingConfiguration.h
     KoOdfPaste.h
     KoOdfReadStore.h
     KoOdfWriteStore.h

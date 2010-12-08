@@ -655,7 +655,26 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             int posInParag = m_textEditor.data()->position() - block.position();
             if (posInParag <= block.layout()->preeditAreaPosition())
                 posInParag += block.layout()->preeditAreaText().length();
-            block.layout()->drawCursor(&painter, QPointF(), posInParag);
+            m_textEditor.data()->position();
+
+            // Lets draw the caret ourselves, as the Qt method doesn't take cursor
+            // charFormat into consideration.
+            QTextBlock block = m_textEditor.data()->block();
+            QTextCharFormat cursorFormat = m_textEditor.data()->charFormat();
+            QFontMetricsF fm(cursorFormat.font(), painter.device());
+            if (block.isValid()) {
+                QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
+                if (tl.isValid()) {
+                    QPointF caretBasePos;
+                    const int posInParag = m_textEditor.data()->position() - block.position();
+                    caretBasePos.setX(tl.cursorToX(posInParag));
+                    caretBasePos.setY(tl.y() + tl.ascent());
+                    painter.drawLine(caretBasePos.x(),
+                               caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
+                               caretBasePos.x(),
+                               caretBasePos.y() + qMin(tl.descent(), fm.descent()));
+                }
+            }
         }
 
         painter.restore();
@@ -1489,24 +1508,6 @@ void TextTool::repaintCaret()
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
         canvas()->updateCanvas(repaintRect);
     }
-
-#if 0
-    QTextBlock block = textEditor->block();
-    if (block.isValid()) {
-        QTextLine tl = block.layout()->lineForTextPosition(textEditor->position() - block.position());
-        QRectF repaintRect;
-        if (tl.isValid()) {
-            repaintRect = tl.rect();
-            const int posInParag = textEditor->position() - block.position();
-            repaintRect.setX(tl.cursorToX(posInParag) - 2);
-            if (posInParag != 0 || block.length() != 1)
-                repaintRect.setWidth(6);
-        }
-        repaintRect.moveTop(repaintRect.y() - m_textShapeData->documentOffset());
-        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
-        canvas()->updateCanvas(repaintRect);
-    }
-#endif
 }
 
 void TextTool::repaintSelection()

@@ -29,6 +29,7 @@
 
 #include <math.h>
 
+#include <limits>
 #include <iostream>
 
 PerspectiveAssistant::PerspectiveAssistant()
@@ -44,28 +45,26 @@ PerspectiveAssistant::PerspectiveAssistant()
 
 QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
 {
+    const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(handles().size() == 4);
     if (pt == strokeBegin) return pt;
+
+    // construct transformation
     QPolygonF poly;
-    if (!quad(poly)) return pt;
+    if (!quad(poly)) return nullPoint;
     QTransform transform;
-    if (!QTransform::squareToQuad(poly, transform)) return pt;
-    // determine whether the horizontal or vertical line is closer to the point
+    if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
     bool invertible;
     const QTransform inverse = transform.inverted(&invertible);
-    if (!invertible) return pt;
+    if (!invertible) return nullPoint; // shouldn't happen
+
+    // figure out which direction to go
     const QLineF line = inverse.map(QLineF(strokeBegin, pt));
+    // determine whether the horizontal or vertical line is closer to the point
     bool vertical = qAbs(line.dy()) > qAbs(line.dx());
     const QLineF snapLine = transform.map(QLineF(line.p1(), line.p1() + QPointF(!vertical, vertical))); // stupid trick: true = 1, false = 0
-/*    const qreal
-        a1 = (snapLine.y2() - snapLine.y1()) / (snapLine.x2() - snapLine.x1()),
-        b1 = snapLine.y1() - snapLine.x1() * a1,
-        a2 = (snapLine.x2() - snapLine.x1()) / (snapLine.y1() - snapLine.y2()),
-        b2 = pt.y() - a2 * pt.x(),
-        xm = (b2 - b1) / (a1 - a2);
-    const QPointF r(xm, xm * a1 + b1);
-    std::cerr << r.x() << ',' << r.y() << std::endl;*/
-    /* (dx^2*x + dy^2*x1 + dx*dy*(y - y1))/(dy^2+dx^2), (dx^2*y1 + dy^2*y + dx*dy(x - x1))/(dy^2+dx^2) */
+
+    // snap to line
     const qreal
         dx = snapLine.dx(),
         dy = snapLine.dy(),
@@ -75,7 +74,6 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
     QPointF r(dx2 * pt.x() + dy2 * snapLine.x1() + dx * dy * (pt.y() - snapLine.y1()),
               dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
     r *= invsqrlen;
-    std::cerr << r.x() << ',' << r.y() << std::endl;
     return r;
 }
 

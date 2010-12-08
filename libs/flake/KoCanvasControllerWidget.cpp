@@ -269,8 +269,8 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
         d->canvas->canvasWidget()->removeEventFilter(this);
     }
     canvas->setCanvasController(this);
-    d->viewportWidget->setCanvas(canvas->canvasWidget());
     d->canvas = canvas;
+    d->viewportWidget->setCanvas(canvas->canvasWidget());
     d->canvas->canvasWidget()->installEventFilter(this);
     d->canvas->canvasWidget()->setMouseTracking(true);
     setFocusProxy(d->canvas->canvasWidget());

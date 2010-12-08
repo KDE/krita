@@ -27,10 +27,10 @@ class PerspectiveAssistant : public KisPaintingAssistant
 {
 public:
     PerspectiveAssistant();
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) const;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
     bool quad(QPolygonF& out) const;
 };

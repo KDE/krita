@@ -62,7 +62,7 @@ void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assista
     d->updateAction();
 }
 
-QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const QPointF& strokeBegin) const
+QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (d->assistants.empty()) return point;
     if (d->assistants.count() == 1) {
@@ -73,7 +73,7 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const
     }
     QPointF best = point;
     double distance = DBL_MAX;
-    foreach(const KisPaintingAssistant* assistant, d->assistants) {
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
         QPointF pt = assistant->adjustPosition(point, strokeBegin);
         if (pt.x() != pt.x()) continue;
         double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
@@ -83,6 +83,13 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const
         }
     }
     return best;
+}
+
+void KisPaintingAssistantsManager::endStroke()
+{
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        assistant->endStroke();
+    }
 }
 
 void KisPaintingAssistantsManager::setup(KActionCollection * collection)

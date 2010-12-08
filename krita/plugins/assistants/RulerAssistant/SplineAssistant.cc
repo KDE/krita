@@ -84,7 +84,7 @@ QPointF SplineAssistant::project(const QPointF& pt) const
     return B(min_t, *handles()[0], *handles()[1], *handles()[2], *handles()[3]);
 }
 
-QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/) const
+QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
 {
     return project(pt);
 }

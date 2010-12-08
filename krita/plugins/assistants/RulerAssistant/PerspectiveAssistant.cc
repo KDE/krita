@@ -43,7 +43,7 @@ PerspectiveAssistant::PerspectiveAssistant()
     initHandles(handles);
 }
 
-QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
+QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
     Q_ASSERT(handles().size() == 4);
@@ -79,7 +79,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
     return r;
 }
 
-QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin) const
+QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin)
 {
     return project(pt, strokeBegin);
 }

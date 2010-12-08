@@ -27,7 +27,7 @@ class EllipseAssistant : public KisPaintingAssistant
 {
 public:
     EllipseAssistant();
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) const;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 private:
     QPointF project(const QPointF& pt) const;

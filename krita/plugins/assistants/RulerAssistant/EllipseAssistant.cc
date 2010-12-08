@@ -47,7 +47,7 @@ QPointF EllipseAssistant::project(const QPointF& pt) const
     return e.project(pt);
 }
 
-QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/) const
+QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
 {
     return project(pt);
 }

@@ -396,6 +396,11 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
+    
+    if (m_assistant) {
+        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
+    }
+    
 #ifdef ENABLE_RECORDING
     if (image() && m_pathPaintAction)
         image()->actionRecorder()->addAction(*m_pathPaintAction);

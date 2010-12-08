@@ -1367,6 +1367,9 @@ bool KoDocument::openFile()
             case KoFilter::PasswordProtected:
                 msg = i18n("Document is password protected"); break;
 
+            case KoFilter::InvalidFormat:
+                msg = i18n("Invalid file format"); break;
+
             case KoFilter::InternalError:
             case KoFilter::UnexpectedEOF:
             case KoFilter::UnexpectedOpcode:

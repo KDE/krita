@@ -71,7 +71,7 @@ public:
                             EmbeddedDocError, WrongFormat, NotImplemented,
                             ParsingError, InternalError, UnexpectedEOF,
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
-                            PasswordProtected,
+                            PasswordProtected, InvalidFormat,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 

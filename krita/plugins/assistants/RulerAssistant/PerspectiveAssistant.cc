@@ -30,7 +30,6 @@
 #include <math.h>
 
 #include <limits>
-#include <iostream>
 
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))

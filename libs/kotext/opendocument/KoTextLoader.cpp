@@ -853,7 +853,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem, d->context, d->styleManager, d->changeTracker)) {
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-            textObjectManager->insertInlineObject(cursor, note, cursor.charFormat());
+            textObjectManager->insertInlineObject(cursor, note);
         } else {
             kWarning(32500) << "Error while loading the text note element!";
             delete note;
@@ -1072,7 +1072,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                         kWarning(32500) << "bookmark-end of non-existing bookmark - broken document?";
                     }
                 }
-                textObjectManager->insertInlineObject(cursor, bookmark, cursor.charFormat());
+                textObjectManager->insertInlineObject(cursor, bookmark);
             }
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
@@ -1105,7 +1105,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     if (textObjectManager) {
                         KoVariableManager *varManager = textObjectManager->variableManager();
                         if (varManager) {
-                            textObjectManager->insertInlineObject(cursor, obj, cursor.charFormat());
+                            textObjectManager->insertInlineObject(cursor, obj);
                         }
                     }
                 }

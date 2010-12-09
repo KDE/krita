@@ -83,6 +83,7 @@ set(TestChangeListCommand_test_SRCS
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
 )
 
 
@@ -195,6 +196,7 @@ set(TestTextTool_test_SRCS
     ../TextTool.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
 )
 kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
 target_link_libraries(TestTextTool komain ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -256,6 +258,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
 )
 kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
 target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS} komain kotext ${QT_QTTEST_LIBRARY})

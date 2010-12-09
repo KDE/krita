@@ -2124,12 +2124,12 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         return 0;
     Q_ASSERT(oldLength);
     QString text = m_block.text();
-    int pos = text.indexOf(QChar(0xFFFC), line.textStart());
+    int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
     bool firstFootnote = true;
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
-        pos = text.indexOf(QChar(0xFFFC), pos + 1);
+        pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {

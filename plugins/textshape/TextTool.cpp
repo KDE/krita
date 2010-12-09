@@ -660,19 +660,29 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             // Lets draw the caret ourselves, as the Qt method doesn't take cursor
             // charFormat into consideration.
             QTextBlock block = m_textEditor.data()->block();
-            QTextCharFormat cursorFormat = m_textEditor.data()->charFormat();
-            QFontMetricsF fm(cursorFormat.font(), painter.device());
             if (block.isValid()) {
                 QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
                 if (tl.isValid()) {
-                    QPointF caretBasePos;
                     const int posInParag = m_textEditor.data()->position() - block.position();
-                    caretBasePos.setX(tl.cursorToX(posInParag));
-                    caretBasePos.setY(tl.y() + tl.ascent());
-                    painter.drawLine(caretBasePos.x(),
+                    qDebug() << "line of cursor" <<tl.ascent() << tl.descent() << tl.height()<<tl.textStart()<<tl.textLength();
+                    if (tl.ascent() > 0) {
+                        QPointF caretBasePos;
+                        QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
+                    qDebug() << "cursor" <<fm.ascent() << fm.descent();
+                        caretBasePos.setX(tl.cursorToX(posInParag));
+                        caretBasePos.setY(tl.y() + tl.ascent());
+                        painter.drawLine(caretBasePos.x(),
                                caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
                                caretBasePos.x(),
                                caretBasePos.y() + qMin(tl.descent(), fm.descent()));
+                    } else {
+                        //line only filled with characters-without-size (eg anchors)
+                        // layout will make sure line has height of block font
+                        QFontMetricsF fm(block.charFormat().font(), painter.device());
+                    qDebug() << "block" <<fm.ascent() << fm.descent();
+                        painter.drawLine(tl.x(), tl.y(),
+                                         tl.x(), tl.y() + fm.ascent() + fm.descent());
+                    }
                 }
             }
         }
@@ -1364,7 +1374,7 @@ void TextTool::updateActions()
     KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
     m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
     m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
-    
+
     m_growWidthAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
     m_growWidthAction->setChecked(resizemethod == KoTextDocument::AutoGrowWidth || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
 
@@ -1557,6 +1567,11 @@ QRectF TextTool::caretRect(int position) const
     if (!line1.isValid())
         return QRectF();
     qreal startX = line1.cursorToX(position - block.position());
+    if (line1.ascent()==0) {
+        // Block is empty from any visible content and has as such no height
+        // but in that case the block font defines line height
+        return QRectF(startX, line1.y(), 1, 24);
+    }
     return QRectF(startX, line1.y(), 1, line1.height());
 }
 

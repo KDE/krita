@@ -275,6 +275,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
                     }
                 }
             }
+            qDebug() << "end of while" <<height<<line.textStart()<<line.textLength();;
             if (height < 0.01) height = 12; // default size for uninitialized styles.
         }
     }

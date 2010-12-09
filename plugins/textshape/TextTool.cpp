@@ -664,11 +664,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
                 if (tl.isValid()) {
                     const int posInParag = m_textEditor.data()->position() - block.position();
-                    qDebug() << "line of cursor" <<tl.ascent() << tl.descent() << tl.height()<<tl.textStart()<<tl.textLength();
                     if (tl.ascent() > 0) {
                         QPointF caretBasePos;
                         QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
-                    qDebug() << "cursor" <<fm.ascent() << fm.descent();
                         caretBasePos.setX(tl.cursorToX(posInParag));
                         caretBasePos.setY(tl.y() + tl.ascent());
                         painter.drawLine(caretBasePos.x(),
@@ -679,7 +677,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                         //line only filled with characters-without-size (eg anchors)
                         // layout will make sure line has height of block font
                         QFontMetricsF fm(block.charFormat().font(), painter.device());
-                    qDebug() << "block" <<fm.ascent() << fm.descent();
                         painter.drawLine(tl.x(), tl.y(),
                                          tl.x(), tl.y() + fm.ascent() + fm.descent());
                     }

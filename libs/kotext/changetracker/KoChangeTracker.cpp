@@ -29,6 +29,8 @@
 #include <KoTextDocumentLayout.h>
 #include <KoList.h>
 #include <KoListStyle.h>
+#include <KoParagraphStyle.h>
+#include <KoStyleManager.h>
 
 //KDE includes
 #include <KDebug>
@@ -524,9 +526,16 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
     for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
         tempCursor.setPosition(currentBlock.position());
         QTextList *textList = tempCursor.currentList();
-        KoList *currentList = KoTextDocument(cursor.document()).list(cursor.block());
+        int outlineLevel = currentBlock.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
 
-        if (textList) {
+        KoList *currentList = KoTextDocument(cursor.document()).list(cursor.block());
+        int docOutlineLevel = cursor.block().blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
+        if (docOutlineLevel) {
+            //Even though we got a list, it is actually a list for storing headings. So don't consider it
+            currentList = NULL;
+        }
+
+        if (textList && !outlineLevel) {
             if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
                 //Found a Deleted List in the fragment. Create a new KoList.
                 KoListStyle::ListIdType listId;
@@ -575,6 +584,13 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
             // This block does not contain a list. So no special work here. 
             if (currentBlock != tempDoc.begin())
                 cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
+
+            if (outlineLevel) {
+                // This is a heading. So find the KoList for heading and add the block there
+                KoList *headingList = KoTextDocument(cursor.document()).headingList();
+                if (headingList)
+                    headingList->add(cursor.block(), outlineLevel);
+            }
         }
 
         /********************************************************************************************************************/

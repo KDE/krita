@@ -149,6 +149,12 @@ public:
     QBuffer generatedXmlBuffer;
 
     void postProcessTagTypeChangeXml();
+    void generateFinalXml(QString &outputXml, const KoXmlElement &element);
+    void handleParagraphWithHeaderMerge(QString &outputXml, const KoXmlElement &element);
+    void handleParagraphWithListItemMerge(QString &outputXml, const KoXmlElement &element);
+    void handleListItemWithParagraphMerge(QString &outputXml, const KoXmlElement &element);
+    void handleListWithListMerge(QString &outputXml, const KoXmlElement &element);
+    void handleListItemWithListItemMerge(QString &outputXml, const KoXmlElement &element);
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -863,7 +869,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int topListLevel = KoList::level(block);
 
     bool closeTagChangeRegion = false;
-    if ((level == 1) && (tagTypeChangeRegionOpened)) {
+    if ((level == 1) && (tagTypeChangeRegionOpened) && !headingLevel) {
         QTextBlock listBlock = block;
         do {
             if (listBlock.blockNumber() == tagTypeChangeEndBlockNumber) {
@@ -983,6 +989,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();
+        int blockOutlineLevel = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
+
         if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(KoText::TableOfContents)) {
             int frameBegin = cursorFrame->firstPosition();
             int frameEnd = cursorFrame->lastPosition();
@@ -1008,7 +1016,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 continue;
         }
 
-        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && !cursor.currentList()) {
+        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
             tagTypeChangeEndBlockNumber = checkForTagTypeChanges(block);
             if (tagTypeChangeEndBlockNumber != -1) {
                 tagTypeChangeRegionOpened = true;
@@ -1018,7 +1026,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         saveParagraph(block, from, to);
 
-        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber) && !cursor.currentList()) {
+        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
             closeTagTypeChangeRegion();
         }
 
@@ -1157,8 +1165,62 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
 
     bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
     if (ok) {
-        qDebug() << "*************XML parsed successfully.....";
+        //Generate the final XML output and save it
+        QString outputXml;
+        generateFinalXml(outputXml, doc.documentElement());
     } 
+}
+
+void KoTextWriter::Private::generateFinalXml(QString &outputXml, const KoXmlElement &element)
+{
+    QString firstChild = element.firstChild().toElement().localName();
+    QString secondChild = element.firstChild().nextSibling().toElement().localName();
+
+    if ((firstChild == "p") && (secondChild == "h")) {
+        handleParagraphWithHeaderMerge(outputXml, element);
+    } else if ((firstChild == "h") && (secondChild == "p")) {
+        handleParagraphWithHeaderMerge(outputXml, element);
+    } else if ((firstChild == "p") && (secondChild == "list")) {
+        handleParagraphWithListItemMerge(outputXml, element);
+    } else if ((firstChild == "h") && (secondChild == "list")) {
+        handleParagraphWithListItemMerge(outputXml, element);
+    } else if ((firstChild == "list") && (secondChild == "p")) {
+        handleListItemWithParagraphMerge(outputXml, element);
+    } else if ((firstChild == "list") && (secondChild == "h")) {
+        handleListItemWithParagraphMerge(outputXml, element);
+    } else if ((firstChild == "list") && (secondChild == "list")) {
+        handleListWithListMerge(outputXml, element);
+    } else if ((firstChild == "list") && (secondChild == "")) {
+        handleListItemWithListItemMerge(outputXml, element);
+    } else {
+        //Not Possible
+    }
+
+}
+
+void KoTextWriter::Private::handleParagraphWithHeaderMerge(QString &outputXml, const KoXmlElement &element)
+{
+    qDebug() << "*************handleParaWithHMerge*************";
+}
+
+void KoTextWriter::Private::handleParagraphWithListItemMerge(QString &outputXml, const KoXmlElement &element)
+{
+    qDebug() << "*************handlePWithListItemMerge***********";
+}
+
+void KoTextWriter::Private::handleListItemWithParagraphMerge(QString &outputXml, const KoXmlElement &element)
+{
+    qDebug() << "*************handleListItemWithParaMerge**********";
+}
+
+void KoTextWriter::Private::handleListWithListMerge(QString &outputXml, const KoXmlElement &element)
+{
+    qDebug() << "*************handleListWithListMerge***************";
+}
+
+void KoTextWriter::Private::handleListItemWithListItemMerge(QString &outputXml, const KoXmlElement &element)
+{
+    qDebug() << "*************handleListItemWithListItemMerge*********";
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

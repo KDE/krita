@@ -41,6 +41,7 @@ const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObj
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
+const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -113,6 +114,19 @@ KoChangeTracker *KoTextDocument::changeTracker() const
 {
     QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL);
     return resource.value<KoChangeTracker *>();
+}
+
+void KoTextDocument::setHeadingList(KoList *headingList)
+{
+    QVariant v;
+    v.setValue(headingList);
+    m_document->addResource(KoTextDocument::HeadingList, HeadingListURL, v);
+}
+
+KoList *KoTextDocument::headingList() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::HeadingList, HeadingListURL);
+    return resource.value<KoList *>();
 }
 
 void KoTextDocument::setUndoStack(KUndoStack *undoStack)

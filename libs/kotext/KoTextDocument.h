@@ -79,6 +79,12 @@ public:
     ///Returns the global undo stack
     KUndoStack *undoStack() const;
 
+    ///Sets the global heading list
+    void setHeadingList(KoList *list);
+
+    ///Returns the global heading list
+    KoList *headingList() const;
+
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
 
@@ -146,7 +152,8 @@ public:
         InlineTextManager,
         ChangeTrackerResource,
         UndoStack,
-        TextEditor
+        TextEditor,
+        HeadingList
     };
     static const QUrl StyleManagerURL;
     static const QUrl ListsURL;
@@ -154,6 +161,7 @@ public:
     static const QUrl ChangeTrackerURL;
     static const QUrl UndoStackURL;
     static const QUrl TextEditorURL;
+    static const QUrl HeadingListURL;
 
 private:
     QTextDocument *m_document;

@@ -844,6 +844,9 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
         KoListStyle *outlineStyle = d->styleManager->outlineStyle();
         if (outlineStyle) {
             KoList *list = d->list(block.document(), outlineStyle);
+            if (!KoTextDocument(block.document()).headingList()) {
+                KoTextDocument(block.document()).setHeadingList(list);
+            }
             list->applyStyle(block, outlineStyle, level);
         }
     }

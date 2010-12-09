@@ -535,7 +535,7 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
             currentList = NULL;
         }
 
-        if (textList && !outlineLevel) {
+        if (textList) {
             if (textList->format().property(KoDeleteChangeMarker::DeletedList).toBool() && !currentList) {
                 //Found a Deleted List in the fragment. Create a new KoList.
                 KoListStyle::ListIdType listId;
@@ -553,11 +553,17 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
                 int deletedListItemLevel = KoList::level(currentBlock);
                 cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
                 if(!currentList) {
-                    //This happens when a part of a paragraph and a succeeding list-item are deleted together
-                    //So go to the next block and insert it in the list there.
-                    QTextCursor tmp(cursor);
-                    tmp.setPosition(tmp.block().next().position());
-                    currentList = KoTextDocument(tmp.document()).list(tmp.block());
+                    if (!outlineLevel) {
+                        //This happens when a part of a paragraph and a succeeding list-item are deleted together
+                        //So go to the next block and insert it in the list there.
+                        QTextCursor tmp(cursor);
+                        tmp.setPosition(tmp.block().next().position());
+                        currentList = KoTextDocument(tmp.document()).list(tmp.block());
+                    } else {
+                        // This is a heading. So find the KoList for heading and add the block there
+                        KoList *headingList = KoTextDocument(cursor.document()).headingList();
+                        currentList = headingList;
+                    }
                 } 
                 currentList->add(cursor.block(), deletedListItemLevel);
             }
@@ -582,14 +588,8 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
             continue;
         } else {
             // This block does not contain a list. So no special work here. 
-            if (currentBlock != tempDoc.begin())
+            if (currentBlock != tempDoc.begin()) {
                 cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
-
-            if (outlineLevel) {
-                // This is a heading. So find the KoList for heading and add the block there
-                KoList *headingList = KoTextDocument(cursor.document()).headingList();
-                if (headingList)
-                    headingList->add(cursor.block(), outlineLevel);
             }
         }
 
@@ -611,8 +611,9 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
         QTextBlock::iterator it;
         for (it = currentBlock.begin(); !(it.atEnd()); ++it) {
             QTextFragment currentFragment = it.fragment();
-            if (currentFragment.isValid())
+            if (currentFragment.isValid()) {
                 cursor.insertText(currentFragment.text(), currentFragment.charFormat());
+            }
         }
     }
 }

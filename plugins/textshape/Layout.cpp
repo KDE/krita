@@ -1827,16 +1827,18 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                    qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
-                    x2 = qMin(line.naturalTextWidth() + line.cursorToX(line.textStart()), x2);
-
-                    // sometimes a fragment starts in the middle of a line, so calc offset
-                    int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
-
-                    drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    int p1 = currentFragment.position() - startOfBlock;
+                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
+                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+                        qreal x1 = line.cursorToX(p1);
+                        qreal x2 = line.cursorToX(p2);
+                        qreal xx2 = line.naturalTextWidth() + line.cursorToX(line.textStart());
+                        x2 = qMin(x2, xx2);
+                        drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    }
                 }
             }
         }

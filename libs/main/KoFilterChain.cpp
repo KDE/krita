@@ -372,6 +372,7 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
             m_inputFile.clear();
             return;
         }
+        document->setOutputMimeType(m_chainLinks.current()->from());
         if (!document->saveNativeFormat(m_inputTempFile->fileName())) {
             delete m_inputTempFile;
             m_inputTempFile = 0;

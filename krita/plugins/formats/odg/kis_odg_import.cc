@@ -81,14 +81,6 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     
     doc -> prepareForImport();
 
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisImageWSP image = new KisImage(doc->undoAdapter(), 500, 500, cs, "built image");
-    doc->setCurrentImage(image);
-    image->lock();
-    
-    KisLayerContainerShape *container =
-        dynamic_cast<KisLayerContainerShape*>(doc->shapeForNode(image->rootLayer().data()));
-    
     KoOdfReadStore odfStore(store);
     QString errorMessage;
 
@@ -128,26 +120,38 @@ KoFilter::ConversionStatus KisODGImport::convert(const QByteArray& from, const Q
     else if (! odfStore.styles().masterPages().empty())
         master = odfStore.styles().masterPages().begin().value();
 
+    qint32 width = 1000;
+    qint32 height = 1000;
     if (master) {
         const KoXmlElement *style = odfStore.styles().findStyle(
                                         master->attributeNS(KoXmlNS::style, "page-layout-name", QString()));
         KoPageLayout pageLayout;
         pageLayout.loadOdf(*style);
-//         setSize(QSizeF(pageLayout.width, pageLayout.height));
+        width = pageLayout.width;
+        height = pageLayout.height;
     }
     // We work fine without a master page
 
     KoOdfLoadingContext context(odfStore.styles(), odfStore.store());
     context.setManifestFile(QString("tar:/") + odfStore.store()->currentPath() + "META-INF/manifest.xml");
     KoShapeLoadingContext shapeContext(context, doc->shapeController()->resourceManager());
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageWSP image = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
+    doc->setCurrentImage(image);
+    image->lock();
+    
+    KisLayerContainerShape *container =
+        dynamic_cast<KisLayerContainerShape*>(doc->shapeForNode(image->rootLayer().data()));
+    
     
     KoXmlElement layerElement;
     forEachElement(layerElement, KoXml::namedItemNS(page, KoXmlNS::draw, "layer-set")) {
 
-        KisShapeLayerSP shapeLayer = new KisShapeLayer(container, doc->shapeController(), image,
+    KisShapeLayerSP shapeLayer = new KisShapeLayer(container, doc->shapeController(), image,
                                         i18n("Flake shapes"),
                                         OPACITY_OPAQUE_U8);
-        if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
+    if (!shapeLayer->loadOdf(layerElement, shapeContext)) {
             kWarning() << "Could not load shape layer!";
             return KoFilter::CreationError;
         }

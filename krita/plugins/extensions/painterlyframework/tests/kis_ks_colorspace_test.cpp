@@ -90,8 +90,8 @@ void KisKSColorSpaceTest::testRegistry()
 
     KisIlluminantProfile *p1 = new KisIlluminantProfile(d651);
     KisIlluminantProfile *p2 = new KisIlluminantProfile(d652);
-    p1->load();
-    p2->load();
+    QVERIFY(p1->load());
+    QVERIFY(p2->load());
     /*
         // First, load a colorspace with his default profile
         cs = f->colorSpace(KisKSF32ColorSpace<5>::ColorSpaceId().id(),0);

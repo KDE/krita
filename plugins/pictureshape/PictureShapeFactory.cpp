@@ -61,9 +61,10 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
                 href.remove(0,2);
             }
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-            if (mimetype.startsWith("image")) {
-                return true;
-            }
+            return mimetype.startsWith("image");
+        }
+        else {
+            return !KoXml::namedItemNS(e, KoXmlNS::office, "binary-data").isNull();
         }
     }
     return false;

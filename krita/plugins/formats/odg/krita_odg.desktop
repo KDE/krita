@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Krita
+Exec=krita %u
+MimeType=application/vnd.oasis.opendocument.graphics;
+Type=Application
+Icon=krita
+Categories=Qt;KDE;Office;Graphics;
+StartupNotify=true
+X-DBUS-StartupType=Multi
+X-DBUS-ServiceName=org.krita.krita
+NoDisplay=true

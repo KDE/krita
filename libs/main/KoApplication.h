@@ -20,8 +20,6 @@
 #ifndef __ko_app_h__
 #define __ko_app_h__
 
-namespace std { }
-using namespace std;
 #include <kapplication.h>
 #include "komain_export.h"
 

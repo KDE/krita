@@ -854,6 +854,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     // OLD: bool oasis = d->specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QByteArray mimeType = d->outputMimeType;
+    kDebug(30003) << "KoDocument::savingTo mimeType=" << mimeType;
     QByteArray nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" || mimeType.startsWith("application/vnd.oasis.opendocument"));
 

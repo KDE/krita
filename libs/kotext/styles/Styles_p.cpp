@@ -67,17 +67,14 @@ bool StylePrivate::isEmpty() const
 
 void StylePrivate::copyMissing(const StylePrivate &other)
 {
-    foreach(int key, other.m_properties.keys()) {
-        if (!m_properties.contains(key))
-            m_properties.insert(key, other.value(key));
-    }
+    copyMissing(other.m_properties);
 }
 
 void StylePrivate::copyMissing(const QMap<int, QVariant> &other)
 {
-    foreach(int key, other.keys()) {
-        if (! m_properties.contains(key))
-            m_properties.insert(key, other.value(key));
+    for (QMap<int,QVariant>::const_iterator it(other.constBegin()); it != other.constEnd(); ++it) {
+        if (!m_properties.contains(it.key()))
+            m_properties.insert(it.key(), it.value());
     }
 }
 

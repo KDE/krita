@@ -49,7 +49,7 @@ const QString KIS_SHAPE_LAYER_ID = "KisShapeLayer";
 
    XXX: what about removing shapes?
 */
-class KRITAUI_TEST_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer
+class KRITAUI_EXPORT KisShapeLayer : public KisExternalLayer, public KoShapeLayer
 {
     Q_OBJECT
 

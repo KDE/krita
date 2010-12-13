@@ -105,7 +105,7 @@ public:
         Q_ASSERT(model == theModel);
     }
 
-    QDebug printDebug(QDebug dbg) const
+    QDebug printDebug(QDebug dbg) 
     {
 #ifndef NDEBUG
         dbg.nospace() << "KoTextAnchor";
@@ -128,11 +128,14 @@ public:
     KoTextAnchor::HorizontalPos horizontalPos;
     KoTextAnchor::HorizontalRel horizontalRel;
     QString anchorType;
+    bool fakeAsChar;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
+    Q_D(KoTextAnchor);
+    d->fakeAsChar = false;
 }
 
 KoTextAnchor::~KoTextAnchor()
@@ -140,6 +143,12 @@ KoTextAnchor::~KoTextAnchor()
     Q_D(KoTextAnchor);
     if (d->model)
         d->model->removeAnchor(this);
+}
+
+void KoTextAnchor::fakeAsChar()
+{
+    Q_D(KoTextAnchor);
+    d->fakeAsChar = true;
 }
 
 KoShape *KoTextAnchor::shape() const
@@ -269,6 +278,11 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     } else {
         object.setWidth(0);
         object.setAscent(0);
+        object.setDescent(0);
+    }
+    if (d->fakeAsChar) {
+        qDebug() <<"DONG FAKE";
+        object.setAscent(d->shape->size().height());
         object.setDescent(0);
     }
 }
@@ -679,6 +693,8 @@ void KoTextAnchor::setBehavesAsCharacter(bool aschar)
 bool KoTextAnchor::behavesAsCharacter() const
 {
     Q_D(const KoTextAnchor);
+    if (d->fakeAsChar)
+        return true;
     return d->behaveAsCharacter;
 }
 

@@ -1368,6 +1368,9 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     // page anchored shapes are handled differently
     if (anchorType != "page") {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
+        //if (cursor.currentTable()) {
+            anchor->fakeAsChar();
+        //}
         anchor->loadOdf(element, d->context);
         d->textSharedData->shapeInserted(shape, element, d->context);
 

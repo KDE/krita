@@ -1187,7 +1187,13 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
 void KoTextWriter::Private::generateFinalXml(QString &outputXml, const KoXmlElement &element)
 {
     QString firstChild = element.firstChild().toElement().localName();
-    QString secondChild = element.firstChild().nextSibling().toElement().localName();
+    KoXmlElement secondChildElement = element.firstChild().nextSibling().toElement();
+    QString secondChild;
+
+    do {
+        secondChild = secondChildElement.localName();
+        secondChildElement = secondChildElement.nextSibling().toElement();
+    } while (secondChild == "removed-content");
 
     if ((firstChild == "p") && (secondChild == "h")) {
         handleParagraphWithHeaderMerge(outputXml, element);

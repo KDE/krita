@@ -536,7 +536,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         QString marginleft(p.attributeNS(KoXmlNS::fo, "margin-left"));
                         qreal ti = textindent.isEmpty() ? 0 : KoUnit::parseValue(textindent);
                         qreal ml = marginleft.isEmpty() ? 0 : KoUnit::parseValue(marginleft);
-                        setIndent(qMax(0.0, ti + ml));
+                        setIndent(qMax<qreal>(0.0, ti + ml));
                 
                         setMinimumWidth(0);
                         setMinimumDistance(0);

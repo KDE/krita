@@ -216,7 +216,7 @@ class KoViewWrapperWidget : public QWidget
 public:
     KoViewWrapperWidget(QWidget *parent)
             : QWidget(parent) {
-        KGlobal::locale()->insertCatalog("koffice");
+        KGlobal::locale()->insertCatalog("calligra");
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
         m_view = 0;

@@ -50,7 +50,7 @@ KoGlobal::KoGlobal()
 {
     if (KGlobal::locale()) {
         // Install the libkoffice* translations
-        KGlobal::locale()->insertCatalog("koffice");
+        KGlobal::locale()->insertCatalog("calligra");
     }
 
     // When runnint unittests, there is not necessarily a main component

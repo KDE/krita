@@ -868,6 +868,19 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     KoList *list = textDocument.list(block);
     int topListLevel = KoList::level(block);
 
+    if ((level == 1) && (!tagTypeChangeRegionOpened) && !headingLevel) {
+        QTextBlock listBlock = block;
+        do {
+            int endBlockNumber = checkForTagTypeChanges(listBlock);
+            if (endBlockNumber != -1) {
+                tagTypeChangeEndBlockNumber = endBlockNumber;
+                tagTypeChangeRegionOpened = true;
+                openTagTypeChangeRegion();
+            }
+            listBlock = listBlock.next();
+        } while(textDocument.list(listBlock) == list);
+    }
+
     bool closeTagChangeRegion = false;
     if ((level == 1) && (tagTypeChangeRegionOpened) && !headingLevel) {
         QTextBlock listBlock = block;

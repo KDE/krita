@@ -373,8 +373,7 @@ KoPAPageBase* KoPAView::activePage() const
 
 void KoPAView::updateReadWrite( bool readwrite )
 {
-    d->canvas->setReadWrite(readwrite);
-    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
+    Q_UNUSED(readwrite);
 }
 
 KoRuler* KoPAView::horizontalRuler()

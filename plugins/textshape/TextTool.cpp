@@ -433,7 +433,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     m_actionShowChanges = new KAction(i18n("Show Changes"), this);
     m_actionShowChanges->setCheckable(true);
-    addAction("edit_show_changes", m_actionShowChanges, KoToolBase::ReadOnlyAction);
+    addAction("edit_show_changes", m_actionShowChanges);
     connect(m_actionShowChanges, SIGNAL(triggered(bool)), this, SLOT(toggleShowChanges(bool)));
 
     m_actionRecordChanges = new KAction(i18n("Record Changes"), this);
@@ -453,7 +453,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action, KoToolBase::ReadOnlyAction);
+    addAction("edit_selectall", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
@@ -466,11 +466,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
-    addAction("detailed_debug_paragraphs", action, KoToolBase::ReadOnlyAction);
+    addAction("detailed_debug_paragraphs", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
     action = new KAction("Styles Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
-    addAction("detailed_debug_styles", action, KoToolBase::ReadOnlyAction);
+    addAction("detailed_debug_styles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
 
@@ -1056,10 +1056,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
 {
     int destinationPosition = -1; // for those cases where the moveOperation is not relevant;
     QTextCursor::MoveOperation moveOperation = QTextCursor::NoMove;
-    const bool rw = isReadWrite();
     KoTextEditor *textEditor = m_textEditor.data();
     Q_ASSERT(textEditor);
-    if (rw && event->key() == Qt::Key_Backspace) {
+    if (event->key() == Qt::Key_Backspace) {
         if (!textEditor->hasSelection() && textEditor->block().textList()
             && (textEditor->position() == textEditor->block().position())
             && !(m_actionRecordChanges->isChecked())) {
@@ -1082,19 +1081,19 @@ void TextTool::keyPressEvent(QKeyEvent *event)
                 textEditor->addCommand(new DeleteCommand(DeleteCommand::PreviousChar, this));
             editingPluginEvents();
         }
-    } else if (rw && (event->key() == Qt::Key_Tab)
+    } else if ((event->key() == Qt::Key_Tab)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList()) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::IncreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
         addCommand(cll);
         editingPluginEvents();
-    } else if (rw && (event->key() == Qt::Key_Backtab)
+    } else if ((event->key() == Qt::Key_Backtab)
         && ((!textEditor->hasSelection() && (textEditor->position() == textEditor->block().position())) || (textEditor->block().document()->findBlock(textEditor->anchor()) != textEditor->block().document()->findBlock(textEditor->position()))) && textEditor->block().textList() && !(m_actionRecordChanges->isChecked())) {
         ChangeListLevelCommand::CommandType type = ChangeListLevelCommand::DecreaseLevel;
         ChangeListLevelCommand *cll = new ChangeListLevelCommand(*textEditor->cursor(), type, 1);
         addCommand(cll);
         editingPluginEvents();
-    } else if (rw && event->key() == Qt::Key_Delete) {
+    } else if (event->key() == Qt::Key_Delete) {
         if (!textEditor->hasSelection() && event->modifiers() & Qt::ControlModifier) // delete next word.
             textEditor->movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         // the event only gets through when the Del is not used in the app
@@ -1163,12 +1162,12 @@ void TextTool::keyPressEvent(QKeyEvent *event)
 #endif
             event->ignore();
             return;
-        } else if (rw && (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
+        } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
             ensureCursorVisible();
-        } else if (rw && (event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
+        } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
             textEditor->insertText(event->text());
             ensureCursorVisible();
@@ -1217,8 +1216,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         else
             repaintCaret();
         updateActions();
-        if (rw)
-            editingPluginEvents();
+        editingPluginEvents();
         ensureCursorVisible();
     }
     if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.

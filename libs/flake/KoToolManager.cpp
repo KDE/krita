@@ -108,10 +108,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
     if (canvasses.contains(controller))
         origHash = canvasses.value(controller).first()->allTools;
 
-    bool readWrite = true;
-    if (controller->canvas())
-        readWrite = controller->canvas()->isReadWrite();
-
     QHash<QString, KoToolBase*> toolsHash;
     foreach(ToolHelper *tool, tools) {
         if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
@@ -126,7 +122,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
         kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
         KoToolBase *tl = tool->createTool(controller->canvas());
         Q_ASSERT(tl);
-        tl->setReadWrite(readWrite);
         uniqueToolIds.insert(tl, tool->uniqueId());
         toolsHash.insert(tool->id(), tl);
         tl->setObjectName(tool->id());
@@ -180,6 +175,7 @@ void KoToolManager::Private::setup()
 
 void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 {
+    Q_UNUSED(temporary);
     Q_ASSERT(tool);
     if (canvasData == 0)
         return;
@@ -203,9 +199,7 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(KAction *action, canvasData->activeTool->actions(
-                    canvasData->activeTool->isReadWrite() ? KoToolBase::ReadWriteAction
-                    : KoToolBase::ReadOnlyAction)) {
+        foreach(KAction *action, canvasData->activeTool->actions()) {
             action->setEnabled(false);
         }
         // repaint the decorations before we deactivate the tool as it might deleted
@@ -927,28 +921,6 @@ QString KoToolManager::activeToolId() const
 {
     if (!d->canvasData) return QString();
     return d->canvasData->activeToolId;
-}
-
-void KoToolManager::updateReadWrite(KoCanvasController *cc, bool readWrite)
-{
-    if (d->canvasData && d->canvasData->activeTool
-            && d->canvasData->activeTool->isReadWrite() != readWrite) {
-        KoToolBase *tl = d->canvasData->activeTool;
-        if (readWrite) { // enable all
-            foreach (KAction *action, tl->actions())
-                action->setEnabled(true);
-        } else { // disable all destructive actions
-            QList<KAction*> actionsToEnable = tl->actions(KoToolBase::ReadOnlyAction).values();
-            foreach (KAction *action, tl->actions()) {
-                action->setEnabled(actionsToEnable.contains(action));
-            }
-        }
-    }
-    foreach (CanvasData *data, d->canvasses.value(cc)) {
-        foreach (KoToolBase *tool, data->allTools) {
-            tool->setReadWrite(readWrite);
-        }
-    }
 }
 
 KoToolManager::Private *KoToolManager::priv()

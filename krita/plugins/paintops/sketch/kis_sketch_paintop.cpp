@@ -266,7 +266,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
 
 
-double KisSketchPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
     return paintLine(info, info).spacing;
 }

@@ -281,7 +281,6 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
         object.setDescent(0);
     }
     if (d->fakeAsChar) {
-        qDebug() <<"DONG FAKE";
         object.setAscent(d->shape->size().height());
         object.setDescent(0);
     }

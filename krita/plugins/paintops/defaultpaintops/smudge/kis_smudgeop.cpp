@@ -95,7 +95,7 @@ KisSmudgeOp::~KisSmudgeOp()
  of the current iteration.
 */
     
-double KisSmudgeOp::paintAt(const KisPaintInformation& info)
+qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
     

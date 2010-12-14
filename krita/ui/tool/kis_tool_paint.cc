@@ -256,7 +256,7 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_lblMirror = new QLabel(i18n("Mirror: "), optionWidget);
     m_chbMirrorMaskHorizonatl = new QCheckBox(i18n("Horizontal"), optionWidget);
-    m_chbMirrorMaskVertical = new QCheckBox(i18n("Verical"), optionWidget);
+    m_chbMirrorMaskVertical = new QCheckBox(i18n("Vertical"), optionWidget);
     connect(m_chbMirrorMaskHorizonatl,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskHorizontal(bool)));
     connect(m_chbMirrorMaskVertical,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskVertical(bool)));
     

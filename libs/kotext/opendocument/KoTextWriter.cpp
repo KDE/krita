@@ -1185,7 +1185,7 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
         QString outputXml;
         QTextStream outputXmlStream(&outputXml);
         generateFinalXml(outputXmlStream, doc.documentElement());
-        qDebug() << outputXml;
+        writer->addCompleteElement(outputXml.toUtf8());
     } 
 }
 
@@ -1245,6 +1245,7 @@ void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXm
     KoXmlElement childElement;
     forEachElement (childElement, element) {
         if (childElement.localName() == "removed-content") {
+            writeNode(outputXmlStream, childElement, false);
         } else {
             outputXmlStream << "<delta:remove-leaving-content-start";
             outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
@@ -1308,7 +1309,7 @@ void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlE
 void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren)
 {
     if (node.isText()) {
-       outputXmlStream  << node.toText().data();
+        outputXmlStream  << node.toText().data();
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
 

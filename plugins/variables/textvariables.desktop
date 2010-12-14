@@ -2,7 +2,6 @@
 Icon=
 Name=Text Variables
 Name[ca]=Variables de text
-Name[ca@valencia]=Variables de text
 Name[cs]=Proměnné textu
 Name[da]=Tekst-variable
 Name[de]=Textvariablen
@@ -14,6 +13,7 @@ Name[fa]=متغیرهای متن
 Name[fi]=Tekstimuuttujat
 Name[fr]=Variables texte
 Name[fy]=Tekst fariabelen
+Name[ga]=Athróga Téacs
 Name[gl]=Variables de Texto
 Name[hi]=पाठ वेरिएबल्स
 Name[hne]=पाठ वेरिएबल्स

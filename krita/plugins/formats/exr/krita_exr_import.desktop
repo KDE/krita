@@ -2,7 +2,6 @@
 Icon=
 Name=Krita exr Import Filter
 Name[ca]=Filtre d'importació exr per al Krita
-Name[ca@valencia]=Filtre d'importació exr per al Krita
 Name[da]=Exr-importfilter til Krita
 Name[de]=Krita exr-Importfilter
 Name[en_GB]=Krita exr Import Filter
@@ -19,9 +18,7 @@ Name[nl]=exr-importfilter voor Krita
 Name[pt]=Filtro de Importação de EXR para o Krita
 Name[pt_BR]=Filtro de Importação de EXR para o Krita
 Name[sv]=Krita exr-importfilter
-Name[uk]=Фільтр імпорту exr у Krita
 Name[wa]=Passete d' abagaedje exr di Krita
-Name[x-test]=xxKrita exr Import Filterxx
 Name[zh_CN]=Krita exr 导入过滤器
 Name[zh_TW]=Krita exr 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter

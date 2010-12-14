@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=KOffice Dockers plugin
 Name[ca]=Connector KOffice Dockers
-Name[ca@valencia]=Connector KOffice Dockers
 Name[cs]=Dokovací modul KOffice
 Name[da]=Docker-plugin til KOffice
 Name[de]=KOffice Docker-Modul
@@ -12,6 +11,7 @@ Name[et]=KOffice'i dokkide plugin
 Name[fa]=وصلۀ پیونددهنده‌های KOffice
 Name[fr]=Module externe de panneaux pour KOffice
 Name[fy]=KOffice Komponint Plugin
+Name[ga]=Breiseán Dugairí KOffice
 Name[gl]=Extensión Docker de KOffice
 Name[he]=תוסף Dockers של KOffice
 Name[hi]=केऑफ़िस डॉकर्स प्लगइन

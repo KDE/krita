@@ -4,7 +4,6 @@ X-KDE-ServiceType=Krita/Brush
 Comment=Brush plugin for Krita
 Comment[bg]=Приставка за четки за Krita
 Comment[ca]=Connector de pinzell per al Krita
-Comment[ca@valencia]=Connector de pinzell per al Krita
 Comment[da]=Penselplugin til Krita
 Comment[de]=Pinselmodul für Krita
 Comment[el]=Πρόσθετο πινέλου για το Krita
@@ -30,9 +29,7 @@ Comment[pt]='Plugin' de pincéis do Krita
 Comment[pt_BR]=Plug-in de pincéis do Krita
 Comment[sv]=Insticksprogram med pensel för Krita
 Comment[tr]=Krita için Fırça Eklentisi
-Comment[uk]=Додаток пензлів для Krita
 Comment[wa]=Tchôke-divins pincea po Krita
-Comment[x-test]=xxBrush plugin for Kritaxx
 Comment[zh_CN]=Krita 刷子插件
 Comment[zh_TW]=Krita 的筆刷外掛程式
 [PropertyDef::X-Krita-Version]

@@ -2,7 +2,6 @@
 Type=Service
 Name=Krita Gimp Import Filter
 Name[ca]=Filtre d'importació Gimp per al Krita
-Name[ca@valencia]=Filtre d'importació Gimp per al Krita
 Name[da]=GIMP-importfilter til Krita
 Name[de]=Krita Gimp-Importfilter
 Name[en_GB]=Krita Gimp Import Filter
@@ -20,9 +19,7 @@ Name[nl]=Gimp-importfilter voor Krita
 Name[pt]=Filtro de Importação de Gimp para o Krita
 Name[pt_BR]=Filtro de Importação de Gimp para o Krita
 Name[sv]=Krita Gimp-importfilter
-Name[uk]=Фільтр імпорту GIMP для Krita
 Name[wa]=Passete d' abagaedje Gimp di Krita
-Name[x-test]=xxKrita Gimp Import Filterxx
 Name[zh_CN]=Krita Gimp 导入过滤器
 Name[zh_TW]=Krita Gimp 匯入過濾程式
 X-KDE-Export=application/x-krita

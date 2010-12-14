@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=RulerAssistantTool
 Name[ca]=EinaAssistentRegla
-Name[ca@valencia]=EinaAssistentRegla
 Name[da]=LinealAssistentVærktøj
 Name[de]=Hilfslineal-Werkzeug
 Name[el]=Εργαλείο βοηθού κανόνα
@@ -21,9 +20,7 @@ Name[pt]=RulerAssistantTool
 Name[pt_BR]=RulerAssistantTool
 Name[sv]=Linjalguideverktyg
 Name[tr]=Cetvel Yardımcısı Aracı
-Name[uk]=RulerAssistantTool
 Name[wa]=Usteye macrea des riles
-Name[x-test]=xxRulerAssistantToolxx
 Name[zh_CN]=标尺助手工具
 Name[zh_TW]=尺規小助手工具
 X-KDE-ServiceTypes=Krita/Tool

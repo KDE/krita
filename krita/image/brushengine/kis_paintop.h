@@ -108,7 +108,7 @@ public:
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
-    static void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+    static void splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction);
 
     /**
      * returns the scale and rotation dynamically computed for the single dab

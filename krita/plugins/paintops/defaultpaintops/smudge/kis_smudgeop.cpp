@@ -95,7 +95,7 @@ KisSmudgeOp::~KisSmudgeOp()
  of the current iteration.
 */
     
-double KisSmudgeOp::paintAt(const KisPaintInformation& info)
+qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
     
@@ -118,7 +118,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     is where the dab will be positioned and the fractional part determines
     the sub-pixel positioning. */
     qint32 x, y;
-    double xFraction, yFraction;
+    qreal xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);

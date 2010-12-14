@@ -24,7 +24,7 @@
 #include <kpluginfactory.h>
 
 K_PLUGIN_FACTORY(PluginFactory, registerPlugin<Plugin>();)
-K_EXPORT_PLUGIN(PluginFactory("koffice-simpletextedit"))
+K_EXPORT_PLUGIN(PluginFactory("calligra-simpletextedit"))
 
 Plugin::Plugin( QObject *parent, const QVariantList& )
     : QObject(parent)

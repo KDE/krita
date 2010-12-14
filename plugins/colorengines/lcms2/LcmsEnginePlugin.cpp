@@ -56,7 +56,7 @@ void lcms2LogErrorHandlerFunction(cmsContext ContextID, cmsUInt32Number ErrorCod
 }
 
 K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
-K_EXPORT_PLUGIN(LcmsEnginePluginFactory("koffice"))
+K_EXPORT_PLUGIN(LcmsEnginePluginFactory("calligra"))
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

@@ -132,6 +132,8 @@ void KoReportDesignerItemChart::buildXML(QDomDocument & doc, QDomElement & paren
     addPropertyAsAttribute(&entity, m_yTitle);
     addPropertyAsAttribute(&entity, m_backgroundColor);
     addPropertyAsAttribute(&entity, m_displayLegend);
+    addPropertyAsAttribute(&entity, m_legendPosition);
+    addPropertyAsAttribute(&entity, m_legendOrientation);
     addPropertyAsAttribute(&entity, m_linkChild);
     addPropertyAsAttribute(&entity, m_linkMaster);
     entity.setAttribute("report:z-index", zValue());
@@ -164,7 +166,17 @@ void KoReportDesignerItemChart::slotPropertyChanged(KoProperty::Set &s, KoProper
     } else if (p.name() == "background-color") {
         setBackgroundColor(p.value().value<QColor>());
     } else if (p.name() == "display-legend") {
-        setLegend(p.value().toBool());
+        if (m_chartWidget && p.value().toBool()) {
+            populateData();
+        }
+    } else if (p.name() == "legend-position") {
+        if (m_chartWidget) {
+            populateData();
+        }
+    } else if (p.name() == "legend-orientation") {
+        if (m_chartWidget) {
+            populateData();
+        }
     } else if (p.name() == "chart-type") {
         if (m_chartWidget) {
             m_chartWidget->setType((KDChart::Widget::ChartType) m_chartType->value().toInt());

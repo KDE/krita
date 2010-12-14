@@ -149,12 +149,15 @@ public:
     QBuffer generatedXmlBuffer;
 
     void postProcessTagTypeChangeXml();
-    void generateFinalXml(QString &outputXml, const KoXmlElement &element);
-    void handleParagraphWithHeaderMerge(QString &outputXml, const KoXmlElement &element);
-    void handleParagraphWithListItemMerge(QString &outputXml, const KoXmlElement &element);
-    void handleListItemWithParagraphMerge(QString &outputXml, const KoXmlElement &element);
-    void handleListWithListMerge(QString &outputXml, const KoXmlElement &element);
-    void handleListItemWithListItemMerge(QString &outputXml, const KoXmlElement &element);
+    void generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element);
+    void handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
+    void handleParagraphWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
+    void handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
+    void handleListWithListMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
+    void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
+
+    void writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element);
+    void writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren = false);
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -1180,11 +1183,13 @@ void KoTextWriter::Private::postProcessTagTypeChangeXml()
     if (ok) {
         //Generate the final XML output and save it
         QString outputXml;
-        generateFinalXml(outputXml, doc.documentElement());
+        QTextStream outputXmlStream(&outputXml);
+        generateFinalXml(outputXmlStream, doc.documentElement());
+        qDebug() << outputXml;
     } 
 }
 
-void KoTextWriter::Private::generateFinalXml(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
     QString firstChild = element.firstChild().toElement().localName();
     KoXmlElement secondChildElement = element.firstChild().nextSibling().toElement();
@@ -1196,50 +1201,131 @@ void KoTextWriter::Private::generateFinalXml(QString &outputXml, const KoXmlElem
     } while (secondChild == "removed-content");
 
     if ((firstChild == "p") && (secondChild == "h")) {
-        handleParagraphWithHeaderMerge(outputXml, element);
+        handleParagraphWithHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "p")) {
-        handleParagraphWithHeaderMerge(outputXml, element);
+        handleParagraphWithHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "p") && (secondChild == "list")) {
-        handleParagraphWithListItemMerge(outputXml, element);
+        handleParagraphWithListItemMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "list")) {
-        handleParagraphWithListItemMerge(outputXml, element);
+        handleParagraphWithListItemMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "p")) {
-        handleListItemWithParagraphMerge(outputXml, element);
+        handleListItemWithParagraphMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "h")) {
-        handleListItemWithParagraphMerge(outputXml, element);
+        handleListItemWithParagraphMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "list")) {
-        handleListWithListMerge(outputXml, element);
+        handleListWithListMerge(outputXmlStream, element);
     } else if ((firstChild == "list") && (secondChild == "")) {
-        handleListItemWithListItemMerge(outputXml, element);
+        handleListItemWithListItemMerge(outputXmlStream, element);
     } else {
         //Not Possible
     }
 
 }
 
-void KoTextWriter::Private::handleParagraphWithHeaderMerge(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
-    qDebug() << "*************handleParaWithHMerge*************";
+    // Find the first child of the element
+    // This is needed because we need to determine whether the final element is going to a <p> or a <h>
+    KoXmlElement firstChildElement = element.firstChild().toElement();
+    QString firstChild = firstChildElement.localName();
+
+    // Find the Change-id
+    KoXmlElement removedContentElement = firstChildElement.lastChild().toElement();
+    QString changeId = removedContentElement.attributeNS(KoXmlNS::delta, "removal-change-idref");
+
+    //Start generating the XML
+    outputXmlStream << "<text:" << firstChild << " delta:insertion-change-idref=" << "\"" << changeId << "\"";
+    outputXmlStream << " delta:insertion-type=\"insert-around-content\"";
+    writeAttributes(outputXmlStream, firstChildElement);
+    outputXmlStream << ">";
+
+    //Start a counter for end-element-idref
+    int endIdCounter = 1;
+
+    KoXmlElement childElement;
+    forEachElement (childElement, element) {
+        if (childElement.localName() == "removed-content") {
+        } else {
+            outputXmlStream << "<delta:remove-leaving-content-start";
+            outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
+            outputXmlStream << " delta:end-element-idref=" << "\"end" << endIdCounter << "\">";
+
+            outputXmlStream << "<text:" << childElement.localName();
+            writeAttributes(outputXmlStream, childElement);
+            outputXmlStream << "/>";
+            
+            outputXmlStream << "</delta:remove-leaving-content-start>";
+
+            writeNode(outputXmlStream, childElement, true);
+
+            outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << endIdCounter << "\"/>";
+            endIdCounter++;
+        }
+    }
+
+    outputXmlStream << "</text:" << firstChild << ">";
+
 }
 
-void KoTextWriter::Private::handleParagraphWithListItemMerge(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::handleParagraphWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
     qDebug() << "*************handlePWithListItemMerge***********";
 }
 
-void KoTextWriter::Private::handleListItemWithParagraphMerge(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
     qDebug() << "*************handleListItemWithParaMerge**********";
 }
 
-void KoTextWriter::Private::handleListWithListMerge(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::handleListWithListMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
     qDebug() << "*************handleListWithListMerge***************";
 }
 
-void KoTextWriter::Private::handleListItemWithListItemMerge(QString &outputXml, const KoXmlElement &element)
+void KoTextWriter::Private::handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
     qDebug() << "*************handleListItemWithListItemMerge*********";
+}
+
+void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)
+{
+    QList<QPair<QString, QString> > attributes = element.attributeNSNames();
+
+    QPair<QString, QString> attributeNamePair;
+    foreach (attributeNamePair, attributes) {
+        if (attributeNamePair.first == KoXmlNS::text) {
+            outputXmlStream << " text:" << attributeNamePair.second << "=";
+            outputXmlStream << "\"" << element.attributeNS(KoXmlNS::text, attributeNamePair.second) << "\"";    
+        } else if (attributeNamePair.first == KoXmlNS::delta) {
+            outputXmlStream << " delta:" << attributeNamePair.second << "=";
+            outputXmlStream << "\"" << element.attributeNS(KoXmlNS::delta, attributeNamePair.second) << "\"";    
+        } else {
+            //To Be Added when needed
+        }
+    }
+}
+
+void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren)
+{
+    if (node.isText()) {
+       outputXmlStream  << node.toText().data();
+    } else if (node.isElement()) {
+        KoXmlElement element = node.toElement();
+
+        if (!writeOnlyChildren) {
+            outputXmlStream << "<" << element.prefix() << ":" << element.localName();
+            writeAttributes(outputXmlStream,element);
+            outputXmlStream << ">";
+        }    
+
+        for (KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling()) {
+            writeNode(outputXmlStream, node);
+        }
+
+        if (!writeOnlyChildren) {
+            outputXmlStream << "</" << element.prefix() << ":" << element.localName() << ">";
+        }
+    }
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)

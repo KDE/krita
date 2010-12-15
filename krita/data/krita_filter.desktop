@@ -39,8 +39,10 @@ Comment[ru]=Фильтр Krita
 Comment[sl]=Vstavek za filtriranje za Krito
 Comment[sv]=Insticksprogram med filter för Krita
 Comment[tr]=Krita için Filtre Eklentisi
+Comment[uk]=Додаток фільтра для Krita
 Comment[uz]=Krita uchun filter plagini
 Comment[wa]=Tchôke-divins passete po Krita
+Comment[x-test]=xxFilter plugin for Kritaxx
 Comment[zh_CN]=Krita 滤镜插件
 Comment[zh_TW]=Krita 的過濾器外掛程式
 [PropertyDef::X-Krita-Version]

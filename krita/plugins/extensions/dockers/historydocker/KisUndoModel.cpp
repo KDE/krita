@@ -178,7 +178,7 @@ void QUndoModel::addImage(int idx) {
     qDebug() << "value of stack count : " << m_stack->count() << " idx " << idx << "  ImageMap " << imageMap.contains(currentCommand);
         QList<const QUndoCommand*> list;
  
-    for(int i = idx; i <= 0; i--) {
+    for(int i = 0; i <= m_stack->count(); ++i) {
         list << m_stack->command(i);
     }
  

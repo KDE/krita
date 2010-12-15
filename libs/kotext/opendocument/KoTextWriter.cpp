@@ -1345,7 +1345,7 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
     forEachElement (childElement, element) {
         if (childElement.localName() == "removed-content") {
             writeNode(outputXmlStream, childElement, false);
-        } else if (childElement.localName() == "list-item") {
+        } else if ((childElement.localName() == "list-item") || (childElement.localName() == "list-header")) {
             generateListItemForPWithListMerge(outputXmlStream, childElement, mergeResultElement,\
                                               changeId, endIdCounter, !tagTypeChangeEnded);
             if (!tagTypeChangeEnded) {

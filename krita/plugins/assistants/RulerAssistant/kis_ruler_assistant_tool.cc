@@ -169,6 +169,13 @@ void KisRulerAssistantTool::createNewAssistant()
     m_canvas->updateCanvas();
 }
 
+void KisRulerAssistantTool::removeAllAssistants()
+{
+    m_canvas->view()->paintingAssistantManager()->removeAll();
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+    m_canvas->updateCanvas();
+}
+
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
     if (!m_optionsWidget) {
@@ -179,7 +186,8 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
-        connect(m_options.toolButton, SIGNAL(released()), SLOT(createNewAssistant()));
+        connect(m_options.toolButton, SIGNAL(clicked()), SLOT(createNewAssistant()));
+        connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;
 }

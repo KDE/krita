@@ -38,6 +38,7 @@ public:
     ~KisPaintingAssistantsManager();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);
+    void removeAll();
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void endStroke();
     void setup(KActionCollection * collection);

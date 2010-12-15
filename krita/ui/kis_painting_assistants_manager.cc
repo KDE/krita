@@ -63,6 +63,15 @@ void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assista
     d->updateAction();
 }
 
+void KisPaintingAssistantsManager::removeAll()
+{
+    foreach (KisPaintingAssistant* assistant, d->assistants) {
+        delete assistant;
+    }
+    d->assistants.clear();
+    d->updateAction();
+}
+
 QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (d->assistants.empty()) return point;

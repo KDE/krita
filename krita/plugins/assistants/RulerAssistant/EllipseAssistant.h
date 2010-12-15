@@ -29,6 +29,7 @@ public:
     EllipseAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
+    virtual QPointF deletePosition() const;
 private:
     QPointF project(const QPointF& pt) const;
     mutable Ellipse e;

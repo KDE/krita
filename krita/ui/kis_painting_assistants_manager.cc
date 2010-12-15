@@ -58,7 +58,17 @@ void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant)
 
 void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant)
 {
+    delete assistant;
     d->assistants.removeAll(assistant);
+    d->updateAction();
+}
+
+void KisPaintingAssistantsManager::removeAll()
+{
+    foreach (KisPaintingAssistant* assistant, d->assistants) {
+        delete assistant;
+    }
+    d->assistants.clear();
     d->updateAction();
 }
 
@@ -123,4 +133,9 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
         }
     }
     return hs;
+}
+
+QList<KisPaintingAssistant*> KisPaintingAssistantsManager::assistants()
+{
+    return d->assistants;
 }

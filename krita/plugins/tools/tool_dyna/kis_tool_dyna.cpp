@@ -278,7 +278,7 @@ KoPointerEvent KisToolDyna::filterEvent(KoPointerEvent* event)
 #endif
 
     m_pressure =  m_mouse.vel * 100;
-    m_pressure = qBound(0.0,m_pressure, 1.0);
+    m_pressure = qBound<qreal>(0.0,m_pressure, 1.0);
     
     m_odelx = delx;
     m_odely = dely;

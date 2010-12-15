@@ -90,6 +90,8 @@ protected:
 
     KoProperty::Property *m_backgroundColor;
     KoProperty::Property *m_displayLegend;
+    KoProperty::Property *m_legendPosition;
+    KoProperty::Property *m_legendOrientation;
 
     KoProperty::Property *m_linkMaster;
     KoProperty::Property *m_linkChild;

@@ -37,8 +37,18 @@ public:
 KisBaseNode::KisBaseNode()
     : m_d(new Private())
 {
+    /**
+     * Be cautions! These two calls are vital to warm-up KoProperties.
+     * We use it and its QMap in a threaded environment. This is not
+     * officially suported by Qt, but our environment guarantees, that
+     * there will be the only writer and several readers. Whilst the
+     * value of the QMap is boolean and there are no implicit-sharing
+     * calls provocated, it is safe to work with it in such an
+     * environment.
+     */
     setVisible(true);
     setUserLocked(false);
+
     setSystemLocked(false);
     m_d->linkedTo = 0;
     m_d->compositeOp = COMPOSITE_OVER;

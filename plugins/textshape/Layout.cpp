@@ -517,7 +517,7 @@ bool Layout::nextParag()
                 font = cursor.charFormat().font();
             }
             ListItemsHelper lih(textList, font);
-            lih.recalculate();
+            lih.recalculateBlock(m_block);
             m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         }
     } else if (m_blockData) { // make sure it is empty
@@ -1827,16 +1827,18 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                    qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
-                    x2 = qMin(line.naturalTextWidth() + line.cursorToX(line.textStart()), x2);
-
-                    // sometimes a fragment starts in the middle of a line, so calc offset
-                    int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
-
-                    drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    int p1 = currentFragment.position() - startOfBlock;
+                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
+                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+                        qreal x1 = line.cursorToX(p1);
+                        qreal x2 = line.cursorToX(p2);
+                        qreal xx2 = line.naturalTextWidth() + line.cursorToX(line.textStart());
+                        x2 = qMin(x2, xx2);
+                        drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    }
                 }
             }
         }
@@ -2122,12 +2124,12 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         return 0;
     Q_ASSERT(oldLength);
     QString text = m_block.text();
-    int pos = text.indexOf(QChar(0xFFFC), line.textStart());
+    int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
     bool firstFootnote = true;
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
-        pos = text.indexOf(QChar(0xFFFC), pos + 1);
+        pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {

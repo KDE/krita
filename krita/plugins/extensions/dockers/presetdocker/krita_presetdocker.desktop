@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Preset Docker
+Name[sv]=Förinställt dockningsfönster
+Name[uk]=Панель вибору налаштувань
+Name[x-test]=xxPreset Dockerxx
 Comment=Docker for selecting presets
+Comment[sv]=Dockningsfönster för valda förinställningar
+Comment[uk]=Панель для вибору налаштувань документів
+Comment[x-test]=xxDocker for selecting presetsxx
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritapresetdocker

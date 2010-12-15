@@ -33,6 +33,11 @@ class KisNodeProgressProxy;
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
  * and children and whether it can have children.
  *
+ * THREAD-SAFETY: All const methods of this class and setDirty calls
+ *                are considered to be thread-safe(!). All the others
+ *                especially add(), remove() and setParent() must be
+ *                protected externally.
+ *
  * NOTE: your subclasses must have the Q_OBJECT declaration, even if
  * you do not define new signals or slots.
  */

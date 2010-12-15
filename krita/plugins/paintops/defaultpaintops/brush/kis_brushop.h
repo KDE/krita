@@ -51,7 +51,7 @@ public:
     KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisBrushOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:

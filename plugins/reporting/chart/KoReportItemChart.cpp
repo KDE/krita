@@ -40,7 +40,7 @@
 #include <KDChartBackgroundAttributes>
 #include <KDChartAbstractDiagram>
 #include <KDChartAbstractCoordinatePlane>
-#include <KDChartChart>
+#include <KDChartPosition>
 
 typedef QVector<double> datalist;
 
@@ -73,6 +73,8 @@ KoReportItemChart::KoReportItemChart(QDomNode & element)
     m_yTitle->setValue(e.attribute("report:title-y-axis"));
     m_backgroundColor->setValue(e.attribute("report:background-color"));
     m_displayLegend->setValue(e.attribute("report:display-legend"));
+    m_legendPosition->setValue(e.attribute("report:legend-position"));
+    m_legendOrientation->setValue(e.attribute("report:legend-orientation"));
     m_linkMaster->setValue(e.attribute("report:link-master"));
     m_linkChild->setValue(e.attribute("report:link-child"));
 
@@ -129,6 +131,26 @@ void KoReportItemChart::createProperties()
 
     m_displayLegend = new KoProperty::Property("display-legend", true, i18n("Display Legend"), i18n("Display Legend"));
 
+    keys.clear();
+    strings.clear();
+    keys << (int)KDChartEnums::PositionNorth
+            << (int)KDChartEnums::PositionEast
+            << (int)KDChartEnums::PositionSouth
+            << (int)KDChartEnums::PositionWest;
+    QStringList names = KDChart::Position::printableNames();
+    foreach (const QVariant &pos, keys) {
+        strings << names[pos.toInt()-1];
+    }
+    subData = new KoProperty::Property::ListData(keys, strings);
+    m_legendPosition = new KoProperty::Property("legend-position", subData, (int)KDChartEnums::PositionEast, i18n("Legend Position"));
+
+    keys.clear();
+    strings.clear();
+    keys << Qt::Horizontal << Qt::Vertical;
+    strings << i18n("Horizontal") << i18n("Vertical");
+    subData = new KoProperty::Property::ListData(keys, strings);
+    m_legendOrientation = new KoProperty::Property("legend-orientation", subData, Qt::Vertical, i18n("Legend Orientation"));
+
     m_backgroundColor = new KoProperty::Property("background-color", Qt::white,
         i18n("Background Color"), i18n("Background Color"));
 
@@ -149,6 +171,8 @@ void KoReportItemChart::createProperties()
     m_set->addProperty(m_yTitle);
     m_set->addProperty(m_backgroundColor);
     m_set->addProperty(m_displayLegend);
+    m_set->addProperty(m_legendPosition);
+    m_set->addProperty(m_legendOrientation);
     m_set->addProperty(m_linkMaster);
     m_set->addProperty(m_linkChild);
 
@@ -346,8 +370,8 @@ void KoReportItemChart::setLegend(bool le, const QStringList &legends)
     //Add the legend
     if (m_chartWidget) {
         if (le && ! legends.isEmpty()) {
-            m_chartWidget->addLegend(KDChart::Position::East);
-            m_chartWidget->legend()->setOrientation(Qt::Horizontal);
+            m_chartWidget->addLegend(KDChart::Position((KDChartEnums::PositionValue)m_legendPosition->value().toInt()));
+            m_chartWidget->legend()->setOrientation((Qt::Orientation) m_legendOrientation->value().toInt());
             m_chartWidget->legend()->setTitleText("Legend");
             for (uint i = 1; i < (uint)legends.count(); ++i) {
                 m_chartWidget->legend()->setText(i - 1, legends[i]);

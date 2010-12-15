@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=Flake Plugin
 Name[ca]=Connector Flake
-Name[ca@valencia]=Connector Flake
 Name[da]=Flake-plugin
 Name[de]=Flake-Modul
 Name[el]=Πρόσθετο flake
@@ -40,7 +39,6 @@ Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
 Comment[ca]=Un connector que conté un conjunt d'una forma i una eina
-Comment[ca@valencia]=Un connector que conté un conjunt d'una forma i una eina
 Comment[da]=Et plugin som består af et sæt af en form og et værktøj
 Comment[de]=Ein Modul, das einen Satz an Objekten und ein Werkzeug enthält
 Comment[el]=Ένα πρόσθετο που περιέχει ένα σύνολο σχήματος και εργαλείου
@@ -49,6 +47,7 @@ Comment[es]=Un complemento que contiene un conjunto de una forma y una herramien
 Comment[et]=Kujundeid ja tööriistu sisaldav plugin
 Comment[fi]=Liitännäinen, joka sisältää hahmon ja vastaavan työkalun
 Comment[fr]=Un module externe qui contient un ensemble de formes et un outil
+Comment[ga]=Breiseán a bhfuil giuirléid agus uirlis ann
 Comment[gl]=Unha extensión que conten un conxunto de moldes en unha ferramenta
 Comment[hi]=एक प्लगइन जिसमें आकात तथा औजार का सेट है
 Comment[hne]=एक प्लगइन जेमां आकात अउ औजार के सेट हे

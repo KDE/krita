@@ -111,6 +111,9 @@ public:
     KoTextAnchor(KoShape *shape);
     virtual ~KoTextAnchor();
 
+    //make the anchor be as-char even if it's not
+    void fakeAsChar();
+
     /**
      * Return the shape that is linked to from the text anchor.
      */

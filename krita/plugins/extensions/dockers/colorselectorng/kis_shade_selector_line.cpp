@@ -139,9 +139,9 @@ void KisShadeSelectorLine::paintEvent(QPaintEvent *)
         while(hue<0) hue+=1.;
         while(hue>1) hue-=1.;
 
-        qreal saturation = qBound(0., m_color.saturationF()+(i*saturationStep)+m_saturationShift, 1.);
+        qreal saturation = qBound<qreal>(0., m_color.saturationF()+(i*saturationStep)+m_saturationShift, 1.);
 
-        qreal value = qBound(0., m_color.valueF()+(i*valueStep)+m_valueShift, 1.);
+        qreal value = qBound<qreal>(0., m_color.valueF()+(i*valueStep)+m_valueShift, 1.);
 
 
         koColor.fromQColor(QColor::fromHsvF(hue, saturation, value));

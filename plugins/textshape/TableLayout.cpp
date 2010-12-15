@@ -111,7 +111,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     qreal tableWidth = 0;
     if (tableFormat.width().rawValue() == 0 || tableFormat.alignment() == Qt::AlignJustify) {
         // We got a zero width value or alignment is justify, so use 100% of parent.
-        tableWidth = parentWidth;
+        tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
     } else {
         if (tableFormat.width().type() == QTextLength::FixedLength) {
             // Fixed length value, so use the raw value directly.
@@ -123,7 +123,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
         } else {
             // Unknown length type, so use 100% of parent.
             kWarning(32600) << "Unknown table width type";
-            tableWidth = parentWidth;
+            tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
         }
     }
 

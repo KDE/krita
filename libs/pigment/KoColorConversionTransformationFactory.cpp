@@ -24,6 +24,7 @@
 #include "KoColorProfile.h"
 #include "KoColorSpace.h"
 #include "DebugPigment.h"
+#include "KoColorSpaceRegistry.h"
 
 struct KoColorConversionTransformationFactory::Private {
     QString srcModelId;
@@ -40,8 +41,8 @@ KoColorConversionTransformationFactory::KoColorConversionTransformationFactory(Q
     d->srcDepthId = _srcDepthId;
     d->dstModelId = _dstModelId;
     d->dstDepthId = _dstDepthId;
-    d->srcProfile = _srcProfile;
-    d->dstProfile = _dstProfile;
+    d->srcProfile = KoColorSpaceRegistry::instance()->profileAlias(_srcProfile);
+    d->dstProfile = KoColorSpaceRegistry::instance()->profileAlias(_dstProfile);
 }
 
 KoColorConversionTransformationFactory::~KoColorConversionTransformationFactory()

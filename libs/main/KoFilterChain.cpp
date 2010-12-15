@@ -345,7 +345,8 @@ void KoFilterChain::finalizeIO()
     // Note: m_*input*Document as we already called manageIO()
     if (m_inputDocument &&
             static_cast<KoFilterManager::Direction>(filterManagerDirection()) == KoFilterManager::Export) {
-        kDebug(30500) << "Saving the output document to the export file";
+        kDebug(30500) << "Saving the output document to the export file " << m_chainLinks.current()->to();
+        m_inputDocument->setOutputMimeType(m_chainLinks.current()->to());
         m_inputDocument->saveNativeFormat(filterManagerExportFile());
         m_inputFile = filterManagerExportFile();
     }
@@ -371,6 +372,7 @@ void KoFilterChain::inputFileHelper(KoDocument* document, const QString& alterna
             m_inputFile.clear();
             return;
         }
+        document->setOutputMimeType(m_chainLinks.current()->from());
         if (!document->saveNativeFormat(m_inputTempFile->fileName())) {
             delete m_inputTempFile;
             m_inputTempFile = 0;

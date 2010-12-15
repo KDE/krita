@@ -51,4 +51,3 @@ bool DivineProportionShapeFactory::supports(const KoXmlElement & e, KoShapeLoadi
     return false;
 }
 
-#include <DivineProportionShapeFactory.moc>

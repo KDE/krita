@@ -111,6 +111,11 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     gc.restore();
 }
 
+QPointF SplineAssistant::deletePosition() const
+{
+    return B(0.5, *handles()[0], *handles()[1], *handles()[2], *handles()[3]);
+}
+
 SplineAssistantFactory::SplineAssistantFactory()
 {
 }

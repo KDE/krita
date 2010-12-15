@@ -85,7 +85,7 @@ public:
     bool isSignificant(int value) const {
         if (m_points.size() == 0) return true;
         const TimePoint& tp = m_points.last();
-        return tp.value != value || tp.time.msecsTo(QTime::currentTime()) > 250;
+        return tp.value != value && tp.time.msecsTo(QTime::currentTime()) > 250;
     }
 
 public slots:

@@ -103,6 +103,11 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
     gc.restore();
 }
 
+QPointF RulerAssistant::deletePosition() const
+{
+    return (*handles()[0] + *handles()[1]) * 0.5;
+}
+
 RulerAssistantFactory::RulerAssistantFactory()
 {
 }

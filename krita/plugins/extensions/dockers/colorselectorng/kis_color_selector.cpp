@@ -161,12 +161,12 @@ inline int iconSize(qreal width, qreal height) {
     qreal xm = width/2.;
     qreal ym = height/2.;
     if(xm>=2*ym || ym>=2*xm)
-        return qBound(5., radius, 32.);
+        return qBound<qreal>(5., radius, 32.);
 
     qreal a=-2;
     qreal b=2.*(xm+ym);
     qreal c=radius*radius-xm*xm-ym*ym;
-    return qBound(5., ((-b+sqrt(b*b-4*a*c))/(2*a)), 32.);
+    return qBound<qreal>(5., ((-b+sqrt(b*b-4*a*c))/(2*a)), 32.);
 }
 
 void KisColorSelector::resizeEvent(QResizeEvent* e) {

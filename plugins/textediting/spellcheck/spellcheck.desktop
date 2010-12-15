@@ -2,7 +2,6 @@
 Name=SpellCheck plugin
 Name[bg]=Проверка на правописа
 Name[ca]=Connector d'ortografia
-Name[ca@valencia]=Connector d'ortografia
 Name[cs]=Modul pro kontrolu pravopisu
 Name[da]=Plugin til stavekontrol
 Name[de]=Rechtschreibprüfung-Modul
@@ -13,6 +12,7 @@ Name[et]=Õigekirja kontrollimise plugin
 Name[fi]=Oikolukutyökalu
 Name[fr]=Module externe de Vérificateur orthographique
 Name[fy]=Staveringshifker plugin
+Name[ga]=Breiseán Litreora
 Name[gl]=Extensión do Corrector Ortográfico
 Name[he]=תוסף בודק איות
 Name[hi]=वर्तनीजांच प्लगइन

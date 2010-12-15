@@ -185,10 +185,15 @@ void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& t
     d->profileAlias[name] = to;
 }
 
+QString KoColorSpaceRegistry::profileAlias(const QString& _name) const
+{
+    return d->profileAlias.value(_name, _name);
+}
+
 const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & _name) const
 {
     QReadLocker l(&d->registrylock);
-    return d->profileMap.value( d->profileAlias.value(_name, _name) , 0);
+    return d->profileMap.value( profileAlias(_name), 0);
 }
 
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id) const

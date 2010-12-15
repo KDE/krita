@@ -370,6 +370,81 @@ void KisNodeTest::testDirtyRegion()
 #endif
 }
 
+#define NUM_CYCLES 100000
+#define NUM_THREADS 30
+
+class VisibilityKiller : public QRunnable {
+public:
+    VisibilityKiller(KisNodeSP victimNode, KisNodeSP nastyChild)
+        : m_victimNode(victimNode),
+          m_nastyChild(nastyChild)
+    {}
+
+    void run() {
+
+        int visibility = 0;
+
+        for(int i = 0; i < NUM_CYCLES; i++) {
+            if(i % 3 == 0) {
+                m_nastyChild->setVisible(visibility++ & 0x1);
+                // qDebug() << "visibility" << i << m_nastyChild->visible();
+            }
+            else if (i%3 == 1){
+                KoProperties props;
+                props.setProperty("visible", true);
+
+                QList<KisNodeSP> visibleNodes =
+                    m_victimNode->childNodes(QStringList("TestNodeB"), props);
+
+                foreach(KisNodeSP node, visibleNodes) {
+                    m_nastyChild->setVisible(visibility++ & 0x1);
+                }
+                // qDebug() << visibleNodes;
+            }
+            else {
+                Q_ASSERT(m_victimNode->firstChild());
+                Q_ASSERT(m_victimNode->lastChild());
+
+                m_victimNode->firstChild()->setVisible(visibility++ & 0x1);
+                m_victimNode->lastChild()->setVisible(visibility++ & 0x1);
+            }
+        }
+    }
+
+private:
+    KisNodeSP m_victimNode;
+    KisNodeSP m_nastyChild;
+};
+
+
+void KisNodeTest::propertiesStressTest() {
+    KisNodeSP root = new TestNodeA();
+
+    KisNodeSP a = new TestNodeA();
+    KisNodeSP b = new TestNodeB();
+    KisNodeSP c = new TestNodeC();
+    root->add(a, 0);
+    root->add(b, 0);
+    root->add(c, 0);
+    a->setVisible(true);
+    b->setVisible(true);
+    c->setVisible(true);
+    a->setUserLocked(true); 
+    b->setUserLocked(true);
+    c->setUserLocked(true);
+
+    QThreadPool threadPool;
+    threadPool.setMaxThreadCount(NUM_THREADS);
+
+    for(int i = 0; i< NUM_THREADS; i++) {
+        VisibilityKiller *killer = new VisibilityKiller(root, b);
+
+        threadPool.start(killer);
+    }
+
+    threadPool.waitForDone();
+}
+
 QTEST_KDEMAIN(KisNodeTest, NoGUI)
 #include "kis_node_test.moc"
 

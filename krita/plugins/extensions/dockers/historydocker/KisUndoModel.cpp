@@ -176,4 +176,17 @@ void QUndoModel::addImage(int idx) {
         imageMap[currentCommand] = image;
     }
     qDebug() << "value of stack count : " << m_stack->count() << " idx " << idx << "  ImageMap " << imageMap.contains(currentCommand);
+        QList<const QUndoCommand*> list;
+ 
+    for(int i = idx; i <= 0; i--) {
+        list << m_stack->command(i);
+    }
+ 
+    QMapIterator<const QUndoCommand*, QImage> i(imageMap);
+    while(i.hasNext()) {
+        i.next(); //find key // delete value
+        if(list.contains(i.key())) {
+            imageMap.remove(i.key());
+        }
+    }
 }

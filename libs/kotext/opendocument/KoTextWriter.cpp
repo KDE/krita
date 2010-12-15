@@ -153,7 +153,7 @@ public:
     void handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     void handleParagraphWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                       QString &mergeResultElement, QString &changeId, int &endIdCounter);
+                                       QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
     void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
     void handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
@@ -1312,25 +1312,32 @@ void KoTextWriter::Private::handleParagraphWithListItemMerge(QTextStream &output
             outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << endIdCounter << "\"/>";
             endIdCounter++;
         } else if (childElement.localName() == "list"){
-            generateListForPWithListMerge(outputXmlStream, childElement, firstChild, changeId, endIdCounter);
+            generateListForPWithListMerge(outputXmlStream, childElement, firstChild, changeId, endIdCounter, true);
         }
     }
 }
 
 void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter)
+                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter, \
+                                                          bool removeLeavingContent)
 {
     int listEndIdCounter = endIdCounter;
-    endIdCounter++;
-    outputXmlStream << "<delta:remove-leaving-content-start";
-    outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
-    outputXmlStream << " delta:end-element-idref=" << "\"end" << listEndIdCounter << "\">";
+    if (removeLeavingContent) {
+        endIdCounter++;
+        outputXmlStream << "<delta:remove-leaving-content-start";
+        outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
+        outputXmlStream << " delta:end-element-idref=" << "\"end" << listEndIdCounter << "\">";
 
-    outputXmlStream << "<text:" << element.localName();
-    writeAttributes(outputXmlStream, element);
-    outputXmlStream << "/>";
+        outputXmlStream << "<text:" << element.localName();
+        writeAttributes(outputXmlStream, element);
+        outputXmlStream << "/>";
             
-    outputXmlStream << "</delta:remove-leaving-content-start>";
+        outputXmlStream << "</delta:remove-leaving-content-start>";
+    } else {
+        outputXmlStream << "<text:" << element.localName();
+        writeAttributes(outputXmlStream, element);
+        outputXmlStream << ">";
+    }
 
     bool tagTypeChangeEnded = false;
     bool listStarted = false;
@@ -1358,7 +1365,11 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
     }
     if (listStarted)
         outputXmlStream << "</text:list>";
-    outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << listEndIdCounter << "\"/>";
+    if (removeLeavingContent) {
+        outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << listEndIdCounter << "\"/>";
+    } else {
+        outputXmlStream << "</text:" << element.localName() << ">";
+    }
 }
 
 void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
@@ -1410,7 +1421,7 @@ void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outpu
                 writeNode(outputXmlStream, childElement, false);
             }
         } else if (childElement.localName() == "list") {
-            generateListForPWithListMerge(outputXmlStream, childElement, mergeResultElement, changeId, endIdCounter);
+            generateListForPWithListMerge(outputXmlStream, childElement, mergeResultElement, changeId, endIdCounter, removeLeavingContent);
         } else {
             //Not Possible
         }

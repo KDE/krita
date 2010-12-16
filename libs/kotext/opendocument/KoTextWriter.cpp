@@ -895,6 +895,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 tagTypeChangeEndBlockNumber = endBlockNumber;
                 tagTypeChangeRegionOpened = true;
                 openTagTypeChangeRegion();
+                break;
             }
             listBlock = listBlock.next();
         } while(textDocument.list(listBlock) == list);

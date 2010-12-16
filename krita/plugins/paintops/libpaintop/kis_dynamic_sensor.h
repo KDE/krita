@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include "kis_serializable_configuration.h"
+#include "kis_curve_label.h"
 
 class QWidget;
 class KisPaintInformation;
@@ -98,8 +99,15 @@ public:
 
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
+    const KisCurveLabel& minimumLabel() const;
+    const KisCurveLabel& maximumLabel() const;
+    
+protected:
+    void setMinimumLabel(const KisCurveLabel& _label);
+    void setMaximumLabel(const KisCurveLabel& _label);
 private:
     const KoID& m_id;
+    KisCurveLabel m_minimumLabel, m_maximumLabel;
 };
 
 #endif

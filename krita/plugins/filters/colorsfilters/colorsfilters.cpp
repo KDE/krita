@@ -111,12 +111,13 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
     KisPaintDeviceSP dst = dstInfo.paintDevice();
     QPoint dstTopLeft = dstInfo.topLeft();
     QPoint srcTopLeft = srcInfo.topLeft();
+    QRect bounds(srcTopLeft, size);
     Q_ASSERT(src != 0);
     Q_ASSERT(dst != 0);
     Q_UNUSED(config);
     // initialize
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    KisHistogram histogram(src, src->exactBounds(), producer, LINEAR);
+    KisHistogram histogram(src, bounds, producer, LINEAR);
     int minvalue = int(255 * histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255 * histogram.calculations().getMax() + 0.5);
 

@@ -54,6 +54,7 @@ private slots:
 
     void transferCurve();
     void setSensor(KisDynamicSensor* sensor);
+    void updateSensorCurveLabels();
     
 private:
     QWidget* m_widget;

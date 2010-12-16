@@ -45,7 +45,6 @@
 #include "kis_fixed_paint_device.h"
 
 #define BEZIER_FLATNESS_THRESHOLD 0.5
-#define MAXIMUM_SCALE 2
 #include <kis_distance_information.h>
 
 struct KisPaintOp::Private {
@@ -89,7 +88,7 @@ KisFixedPaintDeviceSP KisPaintOp::cachedDab(const KoColorSpace *cs)
     return d->dab;
 }
 
-void KisPaintOp::splitCoordinate(double coordinate, qint32 *whole, double *fraction)
+void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction)
 {
     qint32 i = static_cast<qint32>(coordinate);
 
@@ -210,21 +209,6 @@ KisPainter* KisPaintOp::painter() const
 KisPaintDeviceSP KisPaintOp::source() const
 {
     return d->painter->device();
-}
-
-qreal KisPaintOp::scaleForPressure(qreal pressure)
-{
-    qreal scale = pressure / PRESSURE_DEFAULT;
-
-    if (scale < 0) {
-        scale = 0;
-    }
-
-    if (scale > MAXIMUM_SCALE) {
-        scale = MAXIMUM_SCALE;
-    }
-
-    return scale;
 }
 
 qreal KisPaintOp::currentRotation() const

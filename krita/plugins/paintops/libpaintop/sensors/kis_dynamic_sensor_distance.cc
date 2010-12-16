@@ -27,7 +27,8 @@
 
 KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_time(0.0), m_length(30), m_periodic(true)
 {
-
+    setMinimumLabel(i18n("0 px"));
+    setMaximumLabel(i18n("30 px"));
 }
 
 qreal KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
@@ -58,6 +59,7 @@ void KisDynamicSensorDistance::setPeriodic(bool periodic)
 void KisDynamicSensorDistance::setLength(int length)
 {
     m_length = length;
+    setMaximumLabel(i18n("%1 px", length));
 }
 
 QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)

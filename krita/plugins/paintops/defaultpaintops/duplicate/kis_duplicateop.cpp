@@ -125,7 +125,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return 1.0;
 
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = m_sizeOption.apply(info);
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 

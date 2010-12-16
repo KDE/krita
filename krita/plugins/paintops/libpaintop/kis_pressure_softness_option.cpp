@@ -22,6 +22,8 @@
 KisPressureSoftnessOption::KisPressureSoftnessOption()
         : KisCurveOption(i18n("Softness"), "Softness", KisPaintOpOption::brushCategory(), false )
 {
+    setMinimumLabel(i18n("Soft"));
+    setMaximumLabel(i18n("Hard"));
 }
 
 

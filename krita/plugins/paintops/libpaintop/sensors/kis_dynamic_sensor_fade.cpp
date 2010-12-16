@@ -29,6 +29,8 @@ static const int DEFAULT_LENGTH = 1000;
 
 KisDynamicSensorFade::KisDynamicSensorFade() : KisDynamicSensor(FadeId), m_counter(0), m_length(DEFAULT_LENGTH), m_periodic(false)
 {
+    setMinimumLabel(i18n("0"));
+    setLength(DEFAULT_LENGTH);
 }
 
 qreal KisDynamicSensorFade::parameter(const KisPaintInformation&  pi)
@@ -61,6 +63,7 @@ void KisDynamicSensorFade::setPeriodic(bool periodic)
 void KisDynamicSensorFade::setLength(int length)
 {
     m_length = length;
+    setMaximumLabel(i18n("%1", length));
 }
 
 QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)

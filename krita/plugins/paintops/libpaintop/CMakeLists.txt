@@ -12,6 +12,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_selection_widget.cpp
     kis_color_option.cpp
     kis_color_source.cpp
+    kis_curve_label.cpp
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
     kis_custom_brush_widget.cpp

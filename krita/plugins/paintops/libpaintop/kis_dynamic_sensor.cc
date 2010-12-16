@@ -25,6 +25,8 @@
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
+    setMinimumLabel(i18n("0.0"));
+    setMaximumLabel(i18n("1.0"));
 }
 
 KisDynamicSensor::~KisDynamicSensor() { }
@@ -104,4 +106,24 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
     Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
 
+}
+
+const KisCurveLabel& KisDynamicSensor::minimumLabel() const
+{
+    return m_minimumLabel;
+}
+
+const KisCurveLabel& KisDynamicSensor::maximumLabel() const
+{
+    return m_maximumLabel;
+}
+
+void KisDynamicSensor::setMinimumLabel(const KisCurveLabel& _label)
+{
+    m_minimumLabel = _label;
+}
+
+void KisDynamicSensor::setMaximumLabel(const KisCurveLabel& _label)
+{
+    m_maximumLabel = _label;
 }

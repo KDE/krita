@@ -40,7 +40,10 @@ public:
      * of the painter.
      */
     quint8 apply(KisPainter * painter, const KisPaintInformation& info) const;
-
+    
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    
 };
 
 #endif

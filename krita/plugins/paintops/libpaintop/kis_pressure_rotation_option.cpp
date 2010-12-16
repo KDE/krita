@@ -26,6 +26,8 @@
 KisPressureRotationOption::KisPressureRotationOption()
         : KisCurveOption(i18n("Rotation"), "Rotation", KisPaintOpOption::brushCategory(), false)
 {
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
 

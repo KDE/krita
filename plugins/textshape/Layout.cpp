@@ -517,7 +517,7 @@ bool Layout::nextParag()
                 font = cursor.charFormat().font();
             }
             ListItemsHelper lih(textList, font);
-            lih.recalculate();
+            lih.recalculateBlock(m_block);
             m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         }
     } else if (m_blockData) { // make sure it is empty

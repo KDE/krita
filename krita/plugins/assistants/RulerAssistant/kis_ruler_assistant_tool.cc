@@ -83,12 +83,19 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             if (norm2(event->point - *handle) < 10) {
                 m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                 m_handleDrag = handle;
-                break;
+                return;
             }
         }
-        if (!m_handleDrag) {
-            event->ignore();
+        foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
+            QPointF iconDeletePos = assistant->deletePosition();
+            if (QRectF(iconDeletePos - QPointF(16, 16), iconDeletePos + QPointF(16, 16)).contains(event->point)) {
+                m_canvas->view()->paintingAssistantManager()->removeAssistant(assistant);
+                m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+                m_canvas->updateCanvas();
+                return;
+            }
         }
+        event->ignore();
     }
     else {
         KisTool::mousePressEvent(event);
@@ -142,6 +149,12 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
         }
         _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(5, 5), QSizeF(10, 10)));
     }
+
+    KIcon iconDelete("edit-delete");
+    foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
+        QPointF iconDeletePos = _converter.documentToView(assistant->deletePosition());
+        _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconDelete.pixmap(32, 32));
+    }
 }
 
 void KisRulerAssistantTool::createNewAssistant()
@@ -156,6 +169,13 @@ void KisRulerAssistantTool::createNewAssistant()
     m_canvas->updateCanvas();
 }
 
+void KisRulerAssistantTool::removeAllAssistants()
+{
+    m_canvas->view()->paintingAssistantManager()->removeAll();
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+    m_canvas->updateCanvas();
+}
+
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
     if (!m_optionsWidget) {
@@ -166,7 +186,8 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
-        connect(m_options.toolButton, SIGNAL(released()), SLOT(createNewAssistant()));
+        connect(m_options.toolButton, SIGNAL(clicked()), SLOT(createNewAssistant()));
+        connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;
 }

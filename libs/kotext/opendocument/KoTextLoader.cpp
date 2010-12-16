@@ -129,6 +129,7 @@ public:
     QStack<int> changeStack;
     QMap<QString, int> changeTransTable;
     QMap<QString, KoXmlElement> deleteChangeTable;
+    bool inTable;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
@@ -150,6 +151,7 @@ public:
             shape(s),
             loadSpanLevel(0),
             loadSpanInitialPos(0)
+            ,inTable(false)
     {
         dt.start();
     }
@@ -1221,6 +1223,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
 
     QTextTable *tbl = cursor.insertTable(1, 1, tableFormat);
+    d->inTable = true;
+
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = 0;
     int columns = 0;
@@ -1347,6 +1351,8 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
+    d->inTable = false;
+
 }
 
 void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
@@ -1368,6 +1374,9 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     // page anchored shapes are handled differently
     if (anchorType != "page") {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
+        if (d->inTable) {
+            anchor->fakeAsChar();
+        }
         anchor->loadOdf(element, d->context);
         d->textSharedData->shapeInserted(shape, element, d->context);
 

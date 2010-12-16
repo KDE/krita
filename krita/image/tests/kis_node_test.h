@@ -119,6 +119,8 @@ private slots:
     void testSetDirty();
     void testChildNodes();
     void testDirtyRegion();
+
+    void propertiesStressTest();
 };
 
 #endif

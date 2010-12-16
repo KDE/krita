@@ -74,6 +74,11 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
     }
 }
 
+QPointF EllipseAssistant::deletePosition() const
+{
+    return (*handles()[0] + *handles()[1]) * 0.5;
+}
+
 EllipseAssistantFactory::EllipseAssistantFactory()
 {
 }

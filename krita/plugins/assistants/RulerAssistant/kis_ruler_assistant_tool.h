@@ -47,6 +47,7 @@ public slots:
     void deactivate();
 private slots:
     void createNewAssistant();
+    void removeAllAssistants();
 protected:
 
     virtual void paint(QPainter& gc, const KoViewConverter &converter);

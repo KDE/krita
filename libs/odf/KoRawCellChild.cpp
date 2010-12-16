@@ -31,5 +31,6 @@ KoRawCellChild::~KoRawCellChild()
 
 void KoRawCellChild::saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const
 {
+    Q_UNUSED(styles)
     writer.addCompleteElement(m_content);
 }

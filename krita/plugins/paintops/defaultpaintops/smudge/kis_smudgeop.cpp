@@ -105,7 +105,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info)) return 1.0;
 
     // Grow the brush (this includes the mask) according to pressure or other parameters
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    double scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
     setCurrentScale(scale);
     

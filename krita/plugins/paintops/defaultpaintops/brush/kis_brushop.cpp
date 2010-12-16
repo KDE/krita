@@ -103,7 +103,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info))
         return 1.0;
 
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     KisPaintDeviceSP device = painter()->device();

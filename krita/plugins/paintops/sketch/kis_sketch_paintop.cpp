@@ -130,7 +130,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
         drawConnection(prevMouse,mousePosition);
     }
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    double scale = m_sizeOption.apply(pi2);
     double rotation = m_rotationOption.apply(pi2);
     
     setCurrentScale(scale);

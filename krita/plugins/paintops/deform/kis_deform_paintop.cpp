@@ -105,7 +105,7 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         qreal rotation = m_rotationOption.apply(info);
-        qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        qreal scale = m_sizeOption.apply(info);
         
         setCurrentRotation(rotation);
         setCurrentScale(scale);

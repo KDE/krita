@@ -130,8 +130,6 @@ protected:
     */
     void setCurrentRotation(qreal rotation);
     
-    static qreal scaleForPressure(qreal pressure);
-
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);
 

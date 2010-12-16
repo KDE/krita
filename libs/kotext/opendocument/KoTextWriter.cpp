@@ -162,12 +162,13 @@ public:
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
 
     // FOr Handling <list-item> with <p> merges
+    int deleteStartDepth;
     void handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
     void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
-    bool checkForDeleteStartInListItem(KoXmlElement &element);
+    bool checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively = true);
 
     void handleListWithListMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
@@ -1449,6 +1450,8 @@ void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outpu
 
 void KoTextWriter::Private::handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
+    deleteStartDepth = 0;
+
     // Find the first <p> so that we can get the change-id
     KoXmlElement paragraphElement;
     forEachElement(paragraphElement, element) {
@@ -1487,8 +1490,11 @@ void KoTextWriter::Private::handleListItemWithParagraphMerge(QTextStream &output
             
             outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << paragraphEndIdCounter << "\"/>";
             outputXmlStream << "</text:p>";
-            outputXmlStream << "</text:list-item>";
-            outputXmlStream << "</text:list>";
+
+            for (int i=0; i < deleteStartDepth; i++) {
+                outputXmlStream << "</text:list-item>";
+                outputXmlStream << "</text:list>";
+            }
             break;
         } else {
         }
@@ -1500,6 +1506,21 @@ void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXml
                                                           QString &changeId, int &endIdCounter, \
                                                           bool removeLeavingContent)
 {
+    static int listDepth = 0;
+    listDepth++;
+
+    if (!deleteStartDepth) {
+        KoXmlElement childElement;
+        forEachElement(childElement, element) {
+            if (childElement.localName() == "list-item") {
+                bool startOfDeleteMerge = checkForDeleteStartInListItem(childElement, false);
+                if (startOfDeleteMerge) {
+                    deleteStartDepth = listDepth;
+                }
+            }
+        }
+    }
+
     int listEndIdCounter = endIdCounter;
     if (removeLeavingContent) {
         endIdCounter++;
@@ -1584,6 +1605,8 @@ void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outpu
                 writeNode(outputXmlStream, childElement, true);
             
                 outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << paragraphEndIdCounter << "\"/>";
+            } else if(childElement.localName() == "list") {
+                generateListForListWithPMerge(outputXmlStream, childElement, changeId, endIdCounter, removeLeavingContent);
             }
         }
         
@@ -1591,7 +1614,7 @@ void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outpu
     }
 }
 
-bool KoTextWriter::Private::checkForDeleteStartInListItem(KoXmlElement &element)
+bool KoTextWriter::Private::checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively)
 {
     bool returnValue = false;
     KoXmlElement childElement;
@@ -1601,7 +1624,18 @@ bool KoTextWriter::Private::checkForDeleteStartInListItem(KoXmlElement &element)
                 returnValue = true;
                 break;
             }
+        } else if ((childElement.localName() == "list") && (checkRecursively)) {
+            KoXmlElement listItem;
+            forEachElement(listItem, childElement) {
+                returnValue = checkForDeleteStartInListItem(listItem);
+                if (returnValue)
+                    break; 
+            }
+        } else {
         }
+    
+        if (returnValue)
+            break;
     }
 
     return returnValue;

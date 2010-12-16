@@ -65,7 +65,9 @@ bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext 
             // don't try to load image types
             return !mimetype.startsWith("image");
         }
+        return true;
     }
+
     return false;
 }
 

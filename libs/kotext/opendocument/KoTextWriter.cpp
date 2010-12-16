@@ -1512,7 +1512,7 @@ void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXml
     if (!deleteStartDepth) {
         KoXmlElement childElement;
         forEachElement(childElement, element) {
-            if (childElement.localName() == "list-item") {
+            if ((childElement.localName() == "list-item") || (childElement.localName() == "list-header")) {
                 bool startOfDeleteMerge = checkForDeleteStartInListItem(childElement, false);
                 if (startOfDeleteMerge) {
                     deleteStartDepth = listDepth;
@@ -1546,7 +1546,7 @@ void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXml
 
     KoXmlElement childElement;
     forEachElement(childElement, element) {
-        if (childElement.localName() == "list-item") {
+        if ((childElement.localName() == "list-item") || (childElement.localName() == "list-header")) {
             bool startOfDeleteMerge = checkForDeleteStartInListItem(childElement);
             generateListItemForListWithPMerge(outputXmlStream, childElement, changeId, endIdCounter, startOfDeleteMerge);
         } else if (childElement.localName() == "removed-content") {

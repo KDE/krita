@@ -55,7 +55,7 @@ KoOdfLineNumberingConfiguration::~KoOdfLineNumberingConfiguration()
 }
 
 KoOdfLineNumberingConfiguration::KoOdfLineNumberingConfiguration(const KoOdfLineNumberingConfiguration &other)
-    : d(new Private())
+    : QObject(), d(new Private())
 {
     d->lineNumberingEnabled = other.d->lineNumberingEnabled;
     d->numberFormat = other.d->numberFormat;

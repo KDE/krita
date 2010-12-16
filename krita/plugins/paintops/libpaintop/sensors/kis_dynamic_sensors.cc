@@ -18,12 +18,14 @@
 #include "kis_dynamic_sensors.h"
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
-
+    setMinimumLabel(QString()); // TODO use dice icon
+    setMaximumLabel(QString());
 }
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {
-
+    setMinimumLabel(i18n("Slow"));
+    setMaximumLabel(i18n("Fast"));
 }
 
 qreal KisDynamicSensorSpeed::parameter(const KisPaintInformation& info) {
@@ -36,11 +38,14 @@ qreal KisDynamicSensorSpeed::parameter(const KisPaintInformation& info) {
 
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId)
 {
-
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
 KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(RotationId)
 {
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
 qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
@@ -51,16 +56,19 @@ qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)
 {
-
+    setMinimumLabel(i18n("Low"));
+    setMaximumLabel(i18n("High"));
 }
 
 KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
 {
-
+    setMinimumLabel(i18n("-30°"));
+    setMaximumLabel(i18n("30°"));
 }
 
 KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
 {
-
+    setMinimumLabel(i18n("-30°"));
+    setMaximumLabel(i18n("30°"));
 }
 

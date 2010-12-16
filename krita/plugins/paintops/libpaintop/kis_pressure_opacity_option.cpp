@@ -26,6 +26,8 @@
 KisPressureOpacityOption::KisPressureOpacityOption()
         : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
 {
+    setMinimumLabel(i18n("Transparent"));
+    setMaximumLabel(i18n("Opaque"));
 }
 
 

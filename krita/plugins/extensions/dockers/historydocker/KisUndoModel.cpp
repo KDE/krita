@@ -1,6 +1,64 @@
+/* This file is part of the KDE project
+ * Copyright (C) 2010 Matus Talcik <matus.talcik@gmail.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
+/****************************************************************************
+**
+** Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Nokia Corporation (qt-info@nokia.com)
+**
+** This file is part of the QtGui module of the Qt Toolkit.
+**
+** $QT_BEGIN_LICENSE:LGPL$
+** No Commercial Usage
+** This file contains pre-release code and may not be distributed.
+** You may use this file in accordance with the terms and conditions
+** contained in the Technology Preview License Agreement accompanying
+** this package.
+**
+** GNU Lesser General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU Lesser
+** General Public License version 2.1 as published by the Free Software
+** Foundation and appearing in the file LICENSE.LGPL included in the
+** packaging of this file.  Please review the following information to
+** ensure the GNU Lesser General Public License version 2.1 requirements
+** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+**
+** In addition, as a special exception, Nokia gives you certain additional
+** rights.  These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
+**
+**
+**
+**
+**
+**
+**
+**
+** $QT_END_LICENSE$
+**
+****************************************************************************/
 #include "KisUndoModel.h"
 
-QUndoModel::QUndoModel(QObject *parent)
+KisUndoModel::KisUndoModel(QObject *parent)
     : QAbstractItemModel(parent)
 {
     m_stack = 0;
@@ -10,17 +68,17 @@ QUndoModel::QUndoModel(QObject *parent)
     m_emty_label = tr("<empty>");
 }
 
-QItemSelectionModel *QUndoModel::selectionModel() const
+QItemSelectionModel *KisUndoModel::selectionModel() const
 {
     return m_sel_model;
 }
 
-QUndoStack *QUndoModel::stack() const
+QUndoStack *KisUndoModel::stack() const
 {
     return m_stack;
 }
 
-void QUndoModel::setStack(QUndoStack *stack)
+void KisUndoModel::setStack(QUndoStack *stack)
 {
     if (m_stack == stack)
         return;
@@ -42,7 +100,7 @@ void QUndoModel::setStack(QUndoStack *stack)
     stackChanged();
 }
 
-void QUndoModel::stackDestroyed(QObject *obj)
+void KisUndoModel::stackDestroyed(QObject *obj)
 {
     if (obj != m_stack)
         return;
@@ -51,13 +109,13 @@ void QUndoModel::stackDestroyed(QObject *obj)
     stackChanged();
 }
 
-void QUndoModel::stackChanged()
+void KisUndoModel::stackChanged()
 {
     reset();
     m_sel_model->setCurrentIndex(selectedIndex(), QItemSelectionModel::ClearAndSelect);
 }
 
-void QUndoModel::setStackCurrentIndex(const QModelIndex &index)
+void KisUndoModel::setStackCurrentIndex(const QModelIndex &index)
 {
     if (m_stack == 0)
         return;
@@ -71,12 +129,12 @@ void QUndoModel::setStackCurrentIndex(const QModelIndex &index)
     m_stack->setIndex(index.row());
 }
 
-QModelIndex QUndoModel::selectedIndex() const
+QModelIndex KisUndoModel::selectedIndex() const
 {
     return m_stack == 0 ? QModelIndex() : createIndex(m_stack->index(), 0);
 }
 
-QModelIndex QUndoModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex KisUndoModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (m_stack == 0)
         return QModelIndex();
@@ -93,12 +151,12 @@ QModelIndex QUndoModel::index(int row, int column, const QModelIndex &parent) co
     return createIndex(row, column);
 }
 
-QModelIndex QUndoModel::parent(const QModelIndex&) const
+QModelIndex KisUndoModel::parent(const QModelIndex&) const
 {
     return QModelIndex();
 }
 
-int QUndoModel::rowCount(const QModelIndex &parent) const
+int KisUndoModel::rowCount(const QModelIndex &parent) const
 {
     if (m_stack == 0)
         return 0;
@@ -109,12 +167,12 @@ int QUndoModel::rowCount(const QModelIndex &parent) const
     return m_stack->count() + 1;
 }
 
-int QUndoModel::columnCount(const QModelIndex&) const
+int KisUndoModel::columnCount(const QModelIndex&) const
 {
     return 1;
 }
 
-QVariant QUndoModel::data(const QModelIndex &index, int role) const
+QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 {
     if (m_stack == 0)
         return QVariant();
@@ -130,9 +188,7 @@ QVariant QUndoModel::data(const QModelIndex &index, int role) const
             return m_emty_label;
         return m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
-        if (index.row() == m_stack->cleanIndex() && !m_clean_icon.isNull()) {
-            return m_clean_icon;
-        } else {
+        if(!index.row() == 0) {
             const QUndoCommand* currentCommand = m_stack->command(index.row() - 1);
             return imageMap[currentCommand];
         }
@@ -141,33 +197,37 @@ QVariant QUndoModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QString QUndoModel::emptyLabel() const
+QString KisUndoModel::emptyLabel() const
 {
     return m_emty_label;
 }
 
-void QUndoModel::setEmptyLabel(const QString &label)
+void KisUndoModel::setEmptyLabel(const QString &label)
 {
     m_emty_label = label;
     stackChanged();
 }
 
-void QUndoModel::setCleanIcon(const QIcon &icon)
+void KisUndoModel::setCleanIcon(const QIcon &icon)
 {
     m_clean_icon = icon;
     stackChanged();
 }
 
-QIcon QUndoModel::cleanIcon() const
+QIcon KisUndoModel::cleanIcon() const
 {
     return m_clean_icon;
 }
 
-void QUndoModel::setCanvas(KisCanvas2 *canvas) {
+void KisUndoModel::setCanvas(KisCanvas2 *canvas) {
     m_canvas = canvas;
 }
 
-void QUndoModel::addImage(int idx) {
+void KisUndoModel::addImage(int idx) {
+    if(m_stack == 0) {
+        return;
+    }
+
     const QUndoCommand* currentCommand = m_stack->command(idx-1);
     if( m_stack->count() == idx && !imageMap.contains(currentCommand)) {
         KisImageWSP historyImage = m_canvas->view()->image();
@@ -176,17 +236,18 @@ void QUndoModel::addImage(int idx) {
         imageMap[currentCommand] = image;
     }
     qDebug() << "value of stack count : " << m_stack->count() << " idx " << idx << "  ImageMap " << imageMap.contains(currentCommand);
-        QList<const QUndoCommand*> list;
- 
-    for(int i = 0; i <= m_stack->count(); ++i) {
+    QList<const QUndoCommand*> list;
+
+    for(int i = 0; i < m_stack->count(); ++i) {
         list << m_stack->command(i);
     }
- 
-    QMapIterator<const QUndoCommand*, QImage> i(imageMap);
-    while(i.hasNext()) {
-        i.next(); //find key // delete value
-        if(list.contains(i.key())) {
-            imageMap.remove(i.key());
+
+    for(QMap<const QUndoCommand*, QImage>:: iterator it = imageMap.begin(); it != imageMap.end();)
+    {
+        if(!list.contains(it.key())) {
+            it = imageMap.erase(it);
+        } else {
+            ++it;
         }
     }
 }

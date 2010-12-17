@@ -27,7 +27,7 @@
 
 #include "HistoryDock.h"
 
-K_EXPORT_COMPONENT_FACTORY(kofficehistorydocker, KGenericFactory<HistoryPlugin>("koffice-history-docker"))
+K_EXPORT_COMPONENT_FACTORY(kritahistorydocker, KGenericFactory<HistoryPlugin>("krita-history-docker"))
 
 class HistoryDockFactory : public KoDockFactoryBase
 {

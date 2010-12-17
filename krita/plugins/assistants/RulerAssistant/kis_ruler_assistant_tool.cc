@@ -31,7 +31,6 @@
 #include <kis_view2.h>
 
 #include <kis_painting_assistants_manager.h>
-#include <kis_coordinates_converter.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)), m_optionsWidget(0)
@@ -82,10 +81,10 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         m_handleDrag = 0;
         double minDist = 49.0;
 
-        QPointF mousePos = m_canvas->coordinatesConverter()->imageToViewport(event->point);
+        QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
 
         foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
-            double dist = norm2(mousePos - m_canvas->coordinatesConverter()->imageToViewport(*handle));
+            double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
             if (dist < minDist) {
                 minDist = dist;
                 m_handleDrag = handle;
@@ -98,9 +97,9 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         
         m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
-            QPointF iconPosition = m_canvas->coordinatesConverter()->imageToViewport(assistant->buttonPosition());
-            QRectF deleteRect(iconPosition - QPointF(30, 30), iconPosition - QPointF(14, 14));
-            QRectF moveRect(iconPosition - QPointF(16, 16), iconPosition + QPointF(16, 16));
+            QPointF iconPosition = m_canvas->viewConverter()->documentToView(assistant->buttonPosition());
+            QRectF deleteRect(iconPosition - QPointF(32, 32), QSizeF(16, 16));
+            QRectF moveRect(iconPosition - QPointF(16, 16), QSizeF(32, 32));
             if (moveRect.contains(mousePos)) {
                 m_assistantDrag = assistant;
                 m_mousePosition = event->point;

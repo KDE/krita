@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Round Corners Filter
 Name[ca]=Filtre de cantonades arrodonides
+Name[ca@valencia]=Filtre de cantonades arrodonides
 Name[da]=Filter til afrundede hjørner
 Name[de]=Runde-Ecken-Filter
 Name[en_GB]=Round Corners Filter
@@ -17,7 +18,6 @@ Name[pt_BR]=Filtro de Cantos Arredondados
 Name[sv]=Filter för rundade hörn
 Name[uk]=Фільтр заокруглених кутів
 Name[wa]=Passete rondès coines
-Name[x-test]=xxRound Corners Filterxx
 Name[zh_TW]=圓角過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service

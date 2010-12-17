@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Bracketing2HDR
 Name[ca]=Bracketing2HDR
+Name[ca@valencia]=Bracketing2HDR
 Name[da]=Bracketing-til-HDR
 Name[de]=BelichtungsreiheZuHDR
 Name[el]=Εγκυβωτισμός σε HDR
@@ -27,10 +28,10 @@ Name[ta]=எச்டிஆர்க்குள் அடை
 Name[tr]=Bracketing2HDR
 Name[uk]=Bracketing2HDR
 Name[wa]=Åtchetaedje viè HDR
-Name[x-test]=xxBracketing2HDRxx
 Name[zh_TW]=Bracketing2HDR
 Comment=Bracketing2HDR
 Comment[ca]=Bracketing2HDR
+Comment[ca@valencia]=Bracketing2HDR
 Comment[da]=Bracketing-til-HDR
 Comment[de]=BelichtungsreiheZuHDR
 Comment[el]=Εγκυβωτισμός σε HDR
@@ -57,7 +58,6 @@ Comment[ta]=எச்டிஆர்க்குள் அடை
 Comment[tr]=Bracketing2HDR
 Comment[uk]=Bracketing2HDR
 Comment[wa]=Åtchetaedje viè HDR
-Comment[x-test]=xxBracketing2HDRxx
 Comment[zh_TW]=Bracketing2HDR
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

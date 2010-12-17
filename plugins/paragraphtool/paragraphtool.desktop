@@ -2,6 +2,7 @@
 Name=Paragraph Tool
 Name[bg]=Инструмент за абзаци
 Name[ca]=Eina de paràgraf
+Name[ca@valencia]=Eina de paràgraf
 Name[cs]=Nástroj na odstavce
 Name[da]=Afsnitsværktøj
 Name[de]=Absatzwerkzeug
@@ -27,7 +28,6 @@ Name[sv]=Styckesverktyg
 Name[tr]=Paragraf Aracı
 Name[uk]=Інструмент абзаців
 Name[wa]=Usteye del hagnon
-Name[x-test]=xxParagraph Toolxx
 Name[zh_CN]=段落工具
 Name[zh_TW]=段落工具
 X-KDE-ServiceTypes=KOffice/Tool

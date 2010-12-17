@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Static Vector Shape
 Name[ca]=Forma de vector estàtic
+Name[ca@valencia]=Forma de vector estàtic
 Name[da]=Statisk vektor-form
 Name[de]=Statisches Vektor-Objekt
 Name[en_GB]=Static Vector Shape
@@ -17,7 +18,6 @@ Name[pt_BR]=Forma de Vetor Estático
 Name[sv]=Statisk vektorform
 Name[uk]=Статична векторна форма
 Name[wa]=Fôme di royes sitatikes
-Name[x-test]=xxStatic Vector Shapexx
 Name[zh_CN]=静态矢量形状
 Name[zh_TW]=靜態向量元件
 X-KDE-ServiceTypes=KOffice/Flake

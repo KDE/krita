@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/ViewPlugin
 Comment=GUI functionality for Krita
 Comment[bg]=Графичен интерфейс на Krita
 Comment[ca]=Funcionalitat d'interfície d'usuari per al Krita
+Comment[ca@valencia]=Funcionalitat d'interfície d'usuari per al Krita
 Comment[cy]=Swyddogaeth GUI ar gyfer Krita
 Comment[da]=GUI-funktionalitet for Krita
 Comment[de]=GUI-Funktionalität für Krita
@@ -38,8 +39,8 @@ Comment[sv]=Grafisk gränssnittsfunktion för Krita
 Comment[tr]=Krita için Arayüz işlevi
 Comment[uk]=Функціональність графічного інтерфейсу для Krita
 Comment[uz]=Krita grafik interfeysi
+Comment[uz@cyrillic]=Krita график интерфейси
 Comment[wa]=Fonccionalité d' eterface grafike po Krita
-Comment[x-test]=xxGUI functionality for Kritaxx
 Comment[zh_CN]=Krita 的图形界面模块
 Comment[zh_TW]=Krita 的 GUI 功能
 [PropertyDef::X-Krita-Version]

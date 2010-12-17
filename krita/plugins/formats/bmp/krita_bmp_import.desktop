@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Krita BMP Import Filter
 Name[ca]=Filtre d'importació BMP per al Krita
+Name[ca@valencia]=Filtre d'importació BMP per al Krita
 Name[da]=BMP-importfilter til Krita
 Name[de]=Krita BMP-Importfilter
 Name[en_GB]=Krita BMP Import Filter
@@ -19,7 +20,6 @@ Name[ru]=Фильтр импорта изображений BMP в Krita
 Name[sv]=Krita BMP-importfilter
 Name[uk]=Фільтр імпорту BMP для Krita
 Name[wa]=Passete d' abagaedje BMP di Krita
-Name[x-test]=xxKrita BMP Import Filterxx
 Name[zh_CN]=Krita BMP 导入过滤器
 Name[zh_TW]=Krita BMP 匯入過濾程式
 X-KDE-Export=application/x-krita

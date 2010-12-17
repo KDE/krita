@@ -2,6 +2,7 @@
 Name=Curves Tool
 Name[bg]=Инструмент криви
 Name[ca]=Eina de corbes
+Name[ca@valencia]=Eina de corbes
 Name[cs]=Nástroje křivek
 Name[da]=Kurveværktøj
 Name[de]=Kurvenwerkzeug
@@ -36,7 +37,6 @@ Name[sv]=Kurvverktyg
 Name[tr]=Kıvrım Aracı
 Name[uk]=Криві
 Name[wa]=Usteyes di coubes
-Name[x-test]=xxCurves Toolxx
 Name[zh_CN]=曲线工具
 Name[zh_TW]=曲線工具
 X-KDE-ServiceTypes=Krita/Tool

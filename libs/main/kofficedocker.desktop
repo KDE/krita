@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Docker Plugin
 Name[ca]=Connector KOffice Docker
+Name[ca@valencia]=Connector KOffice Docker
 Name[da]=Docker-plugin til KOffice
 Name[de]=KOffice Docker-Modul
 Name[el]=Πρόσθετο προσάρτησης του KOffice
@@ -29,13 +30,13 @@ Name[sv]=Koffice dockningsinsticksprogram
 Name[tr]=KOffice Docker Eklentisi
 Name[uk]=Додаток панелі для KOffice
 Name[wa]=Tchôke-divins båre di wårdaedje po KOffice
-Name[x-test]=xxKOffice Docker Pluginxx
 Name[zh_CN]=KOffice 停靠栏插件
 Name[zh_TW]=KOffice 嵌入外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Dock
 Comment=A plugin that contains a so called 'dockwidget'
 Comment[ca]=Un connector que en conté un anomenat «dockwidget»
+Comment[ca@valencia]=Un connector que conté un anomenat 'dockwidget'
 Comment[da]=Et plugin som indeholder en såkaldt 'dock-kontrol'
 Comment[de]=Ein Modul, das ein sogenanntes „dockwidget“ enthält
 Comment[el]=Ένα πρόσθετο που περιέχει ένα γραφικό συστατικό προσάρτησης
@@ -61,7 +62,6 @@ Comment[ta]=எசாருகள் என்பது'டாக்விட்
 Comment[tr]=Sözde dok parçacığı içeren bir eklenti
 Comment[uk]=Додаток, що містить так званий «віджет панелі»
 Comment[wa]=On tchôke-divins k' a çk on lome ene "ahesse båre di wårdaedje"
-Comment[x-test]=xxA plugin that contains a so called 'dockwidget'xx
 Comment[zh_CN]=一个包含所谓“停靠部件”的插件
 Comment[zh_TW]=包含「嵌入元件」的外掛程式
 [PropertyDef::X-Flake-MinVersion]

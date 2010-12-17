@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flake device definition
 Name[ca]=Definició d'aparell de floc
+Name[ca@valencia]=Definició d'aparell de floc
 Name[da]=Definition af flake-enhed
 Name[de]=Flake-Gerätedefinition
 Name[el]=Ορισμός συσκευής Flake
@@ -23,13 +24,13 @@ Name[sv]=Enhetsdefinition i Flake
 Name[tr]=Flake aygıt tanımlaması
 Name[uk]=Визначення інструмента елемента
 Name[wa]=Definixha d' en éndjin ploumion
-Name[x-test]=xxFlake device definitionxx
 Name[zh_CN]=Flake 设备定义
 Name[zh_TW]=Flake 裝置定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Device
 Comment=Definition of flake devices
 Comment[ca]=Definició d'aparells de floc
+Comment[ca@valencia]=Definició d'aparells de floc
 Comment[da]=Definition af flake-enheder
 Comment[de]=Definition von Flake-Geräten
 Comment[el]=Ορισμός των συσκευών Flake
@@ -53,7 +54,6 @@ Comment[ta]=இளைய வடிவக் கருவியின் வி�
 Comment[tr]=Izgara aygıtlarının tanımı
 Comment[uk]=Визначення пристроїв елементів
 Comment[wa]=Definixha d' éndjins ploumion
-Comment[x-test]=xxDefinition of flake devicesxx
 Comment[zh_CN]=Flake 设备的定义
 Comment[zh_TW]=Flake 裝置定義
 [PropertyDef::X-Flake-MinVersion]

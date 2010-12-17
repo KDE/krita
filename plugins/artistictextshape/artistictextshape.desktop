@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Artistic Text Shape
 Name[ca]=Forma de text artístic
+Name[ca@valencia]=Forma de text artístic
 Name[da]=Kunstnerisk tekst-form
 Name[de]=Künstlerisches Text-Objekt
 Name[el]=Καλλιτεχνικό σχήμα κειμένου
@@ -24,7 +25,6 @@ Name[sv]=Artistisk textform
 Name[tr]=Sanatsal Metin Şekli
 Name[uk]=Форма-художній текст
 Name[wa]=Fôme di tecse årtistike
-Name[x-test]=xxArtistic Text Shapexx
 Name[zh_CN]=艺术字形状
 Name[zh_TW]=藝術文字元件
 X-KDE-ServiceTypes=KOffice/Shape

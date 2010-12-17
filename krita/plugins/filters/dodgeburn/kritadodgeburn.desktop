@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Dodge and Burn Filter
 Name[ca]=Filtre d'aclarit i cremat
+Name[ca@valencia]=Filtre d'aclarit i cremat
 Name[da]=Undvig og brænd-filter
 Name[de]=Abwedeln-und-Nachbelichten-Filter
 Name[en_GB]=Dodge and Burn Filter
@@ -17,10 +18,10 @@ Name[pt_BR]=Filtro de Desvio e Queimadura
 Name[sv]=Skuggnings- och brännfilter
 Name[uk]=Фільтр комбінування з вигоранням
 Name[wa]=Passete raclairixhaedje et noerixhaedje
-Name[x-test]=xxDodge and Burn Filterxx
 Name[zh_TW]=曝光過濾器
 Comment=Dodge and Burn Filter
 Comment[ca]=Filtre d'aclarit i cremat
+Comment[ca@valencia]=Filtre d'aclarit i cremat
 Comment[da]=Undvig og brænd-filter
 Comment[de]=Abwedeln-und-Nachbelichten-Filter
 Comment[en_GB]=Dodge and Burn Filter
@@ -37,7 +38,6 @@ Comment[pt_BR]=Filtro de Desvio e Queimadura
 Comment[sv]=Skuggnings- och brännfilter
 Comment[uk]=Фільтр комбінування з вигоранням
 Comment[wa]=Passete di raclairixhaedje eyet d' noerixhaedje
-Comment[x-test]=xxDodge and Burn Filterxx
 Comment[zh_TW]=曝光過濾器
 X-KDE-ServiceTypes=Krita/Filter
 Type=Service

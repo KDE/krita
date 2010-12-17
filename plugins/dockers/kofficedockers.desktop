@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KOffice Dockers plugin
 Name[ca]=Connector KOffice Dockers
+Name[ca@valencia]=Connector KOffice Dockers
 Name[cs]=Dokovací modul KOffice
 Name[da]=Docker-plugin til KOffice
 Name[de]=KOffice Docker-Modul
@@ -31,7 +32,6 @@ Name[sv]=Koffice dockningsinsticksprogram
 Name[tr]=KOffice Dockers eklentisi
 Name[uk]=Додаток прив’язок KOffice
 Name[wa]=Tchôke-divins båres di wårdaedje di KOffice
-Name[x-test]=xxKOffice Dockers pluginxx
 Name[zh_CN]=KOffice 停靠栏插件
 Name[zh_TW]=KOffice 嵌入外掛程式
 X-KDE-ServiceTypes=KOffice/Dock

@@ -2,6 +2,7 @@
 Name=Shear Image Plugin
 Name[bg]=Приставка за отрязване на изображение
 Name[ca]=Connector de tall d'imatge
+Name[ca@valencia]=Connector de tall d'imatge
 Name[da]=Plugin til vridning af billeder
 Name[de]=„Bild neigen“-Modul
 Name[el]=Πρόσθετο στρέβλωσης εικόνας
@@ -33,7 +34,6 @@ Name[sv]=Insticksprogram för skjuva bild
 Name[tr]=Resmi Makasla Eklentisi
 Name[uk]=Додаток перекошення зображення
 Name[wa]=Tchôke-divins efet d' cizetes
-Name[x-test]=xxShear Image Pluginxx
 Name[zh_TW]=修剪圖片外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin
 Type=Service

@@ -2,6 +2,7 @@
 Name=Separate Channels Plugin
 Name[bg]=Приставка за отделни канали
 Name[ca]=Connector de canals separats
+Name[ca@valencia]=Connector de canals separats
 Name[da]=Plugin for separate kanaler
 Name[de]=„Kanäle trennen“-Modul
 Name[el]=Πρόσθετο διαχωρισμού καναλιών
@@ -36,8 +37,8 @@ Name[sv]=Insticksprogram för separata kanaler
 Name[tr]=Kanal Ayırma Eklentisi
 Name[uk]=Додаток розділення каналів
 Name[uz]=Kanallarni ajratish uchun plagin
+Name[uz@cyrillic]=Каналларни ажратиш учун плагин
 Name[wa]=Tchôke-divins di distroclaedje des canås
-Name[x-test]=xxSeparate Channels Pluginxx
 Name[zh_CN]=分离通道插件
 Name[zh_TW]=分離色頻外掛程式
 X-KDE-ServiceTypes=Krita/ViewPlugin

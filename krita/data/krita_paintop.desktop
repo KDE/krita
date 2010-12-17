@@ -4,6 +4,7 @@ X-KDE-ServiceType=Krita/Paintop
 Comment=Paint operation plugin for Krita
 Comment[bg]=Приставка за рисуване за Krita
 Comment[ca]=Connector d'operació de pintura per al Krita
+Comment[ca@valencia]=Connector d'operació de pintura per al Krita
 Comment[da]=Plugin med malehandlinger for Krita
 Comment[de]=Maloperationsmodul für Krita
 Comment[el]=Πρόσθετο λειτουργίας ζωγραφικής για το Krita
@@ -38,7 +39,6 @@ Comment[sv]=Insticksprogram med målningsåtgärder för Krita
 Comment[tr]=Krita için boyama işlevi eklentisi
 Comment[uk]=Додаток малювання для Krita
 Comment[wa]=Tchôke-divins operåcion d' pondaedje po Krita
-Comment[x-test]=xxPaint operation plugin for Kritaxx
 Comment[zh_CN]=Krita 的绘画操作插件
 Comment[zh_TW]=Krita 的繪畫操作外掛程式
 [PropertyDef::X-Krita-Version]

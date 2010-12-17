@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Picture Shape
 Name[ca]=Forma d'imatge
+Name[ca@valencia]=Forma d'imatge
 Name[da]=Billede-form
 Name[de]=Bild-Objekt
 Name[el]=Σχήμα εικόνας
@@ -29,7 +30,6 @@ Name[ta]=பட வடிவம்
 Name[tr]=Resim Şekli
 Name[uk]=Форма-зображення
 Name[wa]=Fômes imådje
-Name[x-test]=xxPicture Shapexx
 Name[zh_CN]=图片形状
 Name[zh_TW]=圖片元件
 X-KDE-ServiceTypes=KOffice/Shape

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Default Dockers
 Name[ca]=Amarradors per defecte
+Name[ca@valencia]=Amarradors per defecte
 Name[da]=Standard-dokkere
 Name[de]=Standarddocker
 Name[en_GB]=Default Dockers
@@ -19,7 +20,6 @@ Name[pt_BR]=Áreas de Ferramentas Padrão
 Name[sv]=Standarddockningsfönster
 Name[uk]=Типові панелі швартування
 Name[wa]=Prémetowès bårs di wårdaedje
-Name[x-test]=xxDefault Dockersxx
 Name[zh_TW]=預設嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

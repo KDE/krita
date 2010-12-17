@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shape definition
 Name[ca]=Definició de forma
+Name[ca@valencia]=Definició de forma
 Name[da]=Form-definition
 Name[de]=Objektdefinition
 Name[el]=Ορισμός σχήματος
@@ -29,13 +30,13 @@ Name[ta]=வடிவ வரையறை
 Name[tr]=Şekil tanımlaması
 Name[uk]=Визначення форми
 Name[wa]=Definixha del fôme
-Name[x-test]=xxShape definitionxx
 Name[zh_CN]=形状定义
 Name[zh_TW]=元件定義
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Shape
 Comment=Definition of a flake shape object
 Comment[ca]=Definició d'un objecte amb forma de floc
+Comment[ca@valencia]=Definició d'un objecte amb forma de floc
 Comment[da]=Definition af et flake-form-objekt
 Comment[de]=Definition eines Flake-Objektes
 Comment[el]=Καθορισμός ενός αντικειμένου σχήματος flake
@@ -62,7 +63,6 @@ Comment[ta]=ஒரு இளைய வடிவ வரையறை
 Comment[tr]=Izgara şekilli nesnenin tanımı
 Comment[uk]=Визначення об’єкта елемента форми
 Comment[wa]=Definixha d' on cayet d' fôme e ploumion
-Comment[x-test]=xxDefinition of a flake shape objectxx
 Comment[zh_CN]=Flake 形状对象的定义
 Comment[zh_TW]=Flake 元件物件定義
 [PropertyDef::X-Flake-MinVersion]

@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Shiva Kernel Language Support For Generators
 Name[ca]=Compatibilitat del llenguatge del nucli Shiva per a generadors
+Name[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva per a generadors
 Name[da]=Sprogunderstøttelse af Shiva-kerne til generatorer
 Name[de]=Shiva-Kernel-Sprachunterstützung für Generatoren
 Name[en_GB]=Shiva Kernel Language Support For Generators
@@ -17,10 +18,10 @@ Name[pt_BR]=Suporte à linguagem do kernel Shiva para geradores
 Name[sv]=Shiva språkstöd i kärnan för generering
 Name[uk]=Підтримка мови ядра Shiva для породжувачів
 Name[wa]=Sopoirt di lingaedje do nawea Shiva po les ahiveus
-Name[x-test]=xxShiva Kernel Language Support For Generatorsxx
 Name[zh_TW]=產生器使用之 Shiva 核心語言支援
 Comment=Shiva Kernel Language Support For Generators
 Comment[ca]=Compatibilitat del llenguatge del nucli Shiva per a generadors
+Comment[ca@valencia]=Compatibilitat del llenguatge del nucli Shiva per a generadors
 Comment[da]=Sprogunderstøttelse af Shiva-kerne til generatorer
 Comment[de]=Shiva-Kernel-Sprachunterstützung für Generatoren
 Comment[en_GB]=Shiva Kernel Language Support For Generators
@@ -37,7 +38,6 @@ Comment[pt_BR]=Suporte à linguagem do kernel Shiva para geradores
 Comment[sv]=Shiva språkstöd i kärnan för generering
 Comment[uk]=Підтримка мови ядра Shiva для породжувачів
 Comment[wa]=Sopoirt di lingaedje do nawea Shiva po les ahiveus
-Comment[x-test]=xxShiva Kernel Language Support For Generatorsxx
 Comment[zh_TW]=產生器使用之 Shiva 核心語言支援
 X-KDE-ServiceTypes=Krita/Generator
 Type=Service

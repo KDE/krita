@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Inline Text Object Plugin
 Name[ca]=Connector d'objecte de text a la línia
+Name[ca@valencia]=Connector d'objecte de text a la línia
 Name[da]=Plugin til indlejret tekstobjekt
 Name[de]=Mitfließendes-Textobjekt-Modul
 Name[el]=Πρόσθετο ενσωμάτωσης αντικειμένου κειμένου
@@ -26,13 +27,13 @@ Name[ta]=உள் வரியின் உரைப்பொருள் வ�
 Name[tr]=Satır Metni Nesnesi Eklentisi
 Name[uk]=Додаток рядкового текстового об’єкта
 Name[wa]=Tchôke-divins di cayets tecse dins l' messaedje
-Name[x-test]=xxInline Text Object Pluginxx
 Name[zh_CN]=内联文本对象插件
 Name[zh_TW]=內含文字物件外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Text-InlineObject
 Comment=Definition of a text object
 Comment[ca]=Definició d'objecte de text
+Comment[ca@valencia]=Definició d'objecte de text
 Comment[da]=Definition af et tekstobjekt
 Comment[de]=Definition eines Textobjektes
 Comment[el]=Ορισμός ενός αντικειμένου κειμένου
@@ -59,7 +60,6 @@ Comment[ta]=உரைப்பொருளின் வரையறை
 Comment[tr]=Bir metin nesnesinin tanımı
 Comment[uk]=Визначення текстового об’єкта
 Comment[wa]=Definixha d' on cayet tecse
-Comment[x-test]=xxDefinition of a text objectxx
 Comment[zh_CN]=文本对象的定义
 Comment[zh_TW]=定義文字物件
 [PropertyDef::X-KoText-MinVersion]

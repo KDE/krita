@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Text Shape
 Name[ca]=Forma de text
+Name[ca@valencia]=Forma de text
 Name[da]=Tekst-form
 Name[de]=Text-Objekt
 Name[el]=Σχήμα κειμένου
@@ -29,7 +30,6 @@ Name[ta]=உரை வடிவம்
 Name[tr]=Metin Şekli
 Name[uk]=Форма-текст
 Name[wa]=Fôme di tecse
-Name[x-test]=xxText Shapexx
 Name[zh_CN]=文本形状
 Name[zh_TW]=文字元件
 X-KDE-ServiceTypes=KOffice/Flake

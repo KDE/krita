@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Krita Gif Export Filter
 Name[ca]=Filtre d'exportació Gif per al Krita
+Name[ca@valencia]=Filtre d'exportació Gif per al Krita
 Name[da]=Gif-eksportfilter til Krita
 Name[de]=Krita Gif-Exportfilter
 Name[en_GB]=Krita Gif Export Filter
@@ -21,7 +22,6 @@ Name[ru]=Фильтр экспорта рисунков Krita в GIF
 Name[sv]=Krita GIF-exportfilter
 Name[uk]=Фільтр експорту GIF для Krita
 Name[wa]=Passete d' ebagaedje Gif di Krita
-Name[x-test]=xxKrita Gif Export Filterxx
 Name[zh_CN]=Krita GIF 导出过滤器
 Name[zh_TW]=Krita Gif 匯出過濾程式
 X-KDE-Export=image/gif

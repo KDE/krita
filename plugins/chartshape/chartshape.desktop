@@ -2,6 +2,7 @@
 Name=Chart Shape
 Name[bg]=Форма на диаграмата
 Name[ca]=Forma del diagrama
+Name[ca@valencia]=Forma del diagrama
 Name[cs]=Tvar grafu
 Name[da]=Diagram-form
 Name[de]=Diagramm-Objekt
@@ -34,7 +35,6 @@ Name[tg]=Шакли диаграмма
 Name[tr]=Çizelge Şekil
 Name[uk]=Форма діаграми
 Name[wa]=Fôme do grafike
-Name[x-test]=xxChart Shapexx
 Name[zh_CN]=图表形状
 Name[zh_TW]=圖表元件
 X-KDE-ServiceTypes=KOffice/Shape

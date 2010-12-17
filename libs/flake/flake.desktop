@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Flake Plugin
 Name[ca]=Connector Flake
+Name[ca@valencia]=Connector Flake
 Name[da]=Flake-plugin
 Name[de]=Flake-Modul
 Name[el]=Πρόσθετο flake
@@ -32,13 +33,13 @@ Name[sv]=Flake-insticksprogram
 Name[tr]=Flake Eklentisi
 Name[uk]=Додаток Flake
 Name[wa]=Tchôke-divins Flake
-Name[x-test]=xxFlake Pluginxx
 Name[zh_CN]=Flake 插件
 Name[zh_TW]=Flake 外掛程式
 Type=ServiceType
 X-KDE-ServiceType=KOffice/Flake
 Comment=A plugin that contains a set of a shape and a tool
 Comment[ca]=Un connector que conté un conjunt d'una forma i una eina
+Comment[ca@valencia]=Un connector que conté un conjunt d'una forma i una eina
 Comment[da]=Et plugin som består af et sæt af en form og et værktøj
 Comment[de]=Ein Modul, das einen Satz an Objekten und ein Werkzeug enthält
 Comment[el]=Ένα πρόσθετο που περιέχει ένα σύνολο σχήματος και εργαλείου
@@ -66,7 +67,6 @@ Comment[ta]=ஒரு வடிவம் மற்றும் கருவி�
 Comment[tr]=Bir şekil de bir aracı içeren bir eklenti
 Comment[uk]=Додаток, що містить набір з форми та інструмента
 Comment[wa]=On tchôke-divins k' a on hopea d' fômes eyet usteyes
-Comment[x-test]=xxA plugin that contains a set of a shape and a toolxx
 Comment[zh_CN]=一个包含一组形状和工具的插件
 Comment[zh_TW]=包含元件與工具集的外掛程式
 [PropertyDef::X-Flake-MinVersion]

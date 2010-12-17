@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Video Shape
 Name[ca]=Forma de vídeo
+Name[ca@valencia]=Forma de vídeo
 Name[da]=Video-form
 Name[de]=Video-Objekt
 Name[en_GB]=Video Shape
@@ -19,7 +20,6 @@ Name[pt_BR]=Forma de vídeo
 Name[sv]=Videoform
 Name[uk]=Форма-відео
 Name[wa]=Fômes videyo
-Name[x-test]=xxVideo Shapexx
 Name[zh_CN]=视频形状
 Name[zh_TW]=影像元件
 X-KDE-ServiceTypes=KOffice/Shape

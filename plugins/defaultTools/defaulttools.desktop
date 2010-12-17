@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Default Flake Tools
 Name[ca]=Eines de floc per defecte
+Name[ca@valencia]=Eines de floc per defecte
 Name[da]=Standard Flake-værktøjer
 Name[de]=Flake-Standardwerkzeuge
 Name[el]=Προκαθορισμένα εργαλεία Flake
@@ -28,7 +29,6 @@ Name[sv]=Flake standardverktyg
 Name[tr]=Öntanımlı Flake Araçları
 Name[uk]=Типові інструменти Flake
 Name[wa]=Prémetowe usteyes di ploumion
-Name[x-test]=xxDefault Flake Toolsxx
 Name[zh_CN]=默认 Flake 工具
 Name[zh_TW]=預設 Flake 工具
 X-KDE-ServiceTypes=KOffice/Flake

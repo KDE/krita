@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Deform brush
 Name[ca]=Pinzell deformat
+Name[ca@valencia]=Pinzell deformat
 Name[da]=Deformationspensel
 Name[de]=Verzerrungspinsel
 Name[el]=Πινέλο παραμόρφωσης
@@ -25,7 +26,6 @@ Name[sv]=Deformerande pensel
 Name[tr]=Bozma fırçası
 Name[uk]=Пензель викривлення
 Name[wa]=Disfoirmant pincea
-Name[x-test]=xxDeform brushxx
 Name[zh_TW]=變形筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

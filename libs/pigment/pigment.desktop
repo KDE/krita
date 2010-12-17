@@ -4,6 +4,7 @@ X-KDE-ServiceType=KOffice/ColorSpace
 Comment=A module implementing a complete colorspace for use with Pigment Color Manipulation System
 Comment[bg]=Модул, реализиращ пълна цветова гама за употреба с Pigment Color Manipulation System
 Comment[ca]=Un mòdul que implementa un espai de colors complet per a usar-lo amb el Sistema de Manipulació Pigment Color
+Comment[ca@valencia]=Un mòdul que implementa un espai de colors complet per a usar-lo amb el Sistema de Manipulació Pigment Color
 Comment[da]=Et modul som implementerer et komplet farveområde til brug med Pigment Color Manipulation System
 Comment[de]=Ein Modul, das einen kompletten Farbraum zur Benutzung mit dem „Pigment Color Manipulation System“ implementiert
 Comment[el]=Ένα άρθρωμα που υλοποιεί έναν πλήρη χρωματικό χώρο με χρήση του συστήματος χειρισμού χρωμάτων βαφής
@@ -26,7 +27,6 @@ Comment[ta]= தெளிவான வண்ணத்தைப் பயன்�
 Comment[tr]=Pigment Rengi ile kullanmak için tüm renk boşluğunu oluşturan bir modül
 Comment[uk]=Модуль впровадження повного простору кольорів для використання з системою керування кольорами пігментів (PCMS)
 Comment[wa]=On module ki dene en espåce di coleur complet as eployî avou l' Sistinme d' apougnaedje di pigmints d' coleurs
-Comment[x-test]=xxA module implementing a complete colorspace for use with Pigment Color Manipulation Systemxx
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int

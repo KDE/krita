@@ -2,6 +2,7 @@
 Name=Dropshadow
 Name[bg]=Сянка
 Name[ca]=Gota d'ombra
+Name[ca@valencia]=Gota d'ombra
 Name[da]=Faldskygge
 Name[de]=Schattenwurf
 Name[el]=Ρίψη σκιάς
@@ -33,8 +34,8 @@ Name[sv]=Fallskugga
 Name[tr]=Gölgelendir
 Name[uk]=Тінь
 Name[uz]=Soya tushirish
+Name[uz@cyrillic]=Соя тушириш
 Name[wa]=Ombion padzo
-Name[x-test]=xxDropshadowxx
 Name[zh_CN]=阴影
 Name[zh_TW]=Dropshadow
 X-KDE-ServiceTypes=Krita/ViewPlugin

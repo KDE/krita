@@ -224,7 +224,7 @@ void KisUndoModel::setCanvas(KisCanvas2 *canvas) {
 }
 
 void KisUndoModel::addImage(int idx) {
-    if(m_stack == 0) {
+    if(m_stack == 0 || m_stack->count() == 0) {
         return;
     }
 

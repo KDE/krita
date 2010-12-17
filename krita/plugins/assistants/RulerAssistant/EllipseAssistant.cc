@@ -74,7 +74,7 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
     }
 }
 
-QPointF EllipseAssistant::deletePosition() const
+QPointF EllipseAssistant::buttonPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

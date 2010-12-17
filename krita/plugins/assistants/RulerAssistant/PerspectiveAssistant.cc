@@ -159,7 +159,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     }
 }
 
-QPointF PerspectiveAssistant::deletePosition() const
+QPointF PerspectiveAssistant::buttonPosition() const
 {
     QPointF centroid(0, 0);
     for (int i = 0; i < 4; ++i) centroid += *handles()[i];

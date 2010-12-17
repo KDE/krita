@@ -28,7 +28,7 @@ public:
     SplineAssistant();
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
-    virtual QPointF deletePosition() const;
+    virtual QPointF buttonPosition() const;
 private:
     QPointF project(const QPointF& pt) const;
 };

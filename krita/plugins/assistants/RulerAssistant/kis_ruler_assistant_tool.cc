@@ -98,7 +98,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         
         m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
-            QPointF iconPosition = m_canvas->coordinatesConverter()->imageToViewport(assistant->deletePosition());
+            QPointF iconPosition = m_canvas->coordinatesConverter()->imageToViewport(assistant->buttonPosition());
             QRectF deleteRect(iconPosition - QPointF(30, 30), iconPosition - QPointF(14, 14));
             QRectF moveRect(iconPosition - QPointF(16, 16), iconPosition + QPointF(16, 16));
             if (moveRect.contains(mousePos)) {
@@ -181,7 +181,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
     QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
-        QPointF iconDeletePos = _converter.documentToView(assistant->deletePosition());
+        QPointF iconDeletePos = _converter.documentToView(assistant->buttonPosition());
         _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
         _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconMove);
     }

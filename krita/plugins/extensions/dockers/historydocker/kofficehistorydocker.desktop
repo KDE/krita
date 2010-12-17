@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KOffice Undo History Docker plugin
+Type=Service
+X-KDE-ServiceTypes=Krita/Dock
+X-KDE-Library=kofficehistorydocker
+X-Krita-Version=4

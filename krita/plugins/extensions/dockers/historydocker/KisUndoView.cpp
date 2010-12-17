@@ -1,0 +1,232 @@
+#include "qundostack.h"
+#include "KisUndoView.h"
+#include "KisUndoModel.h"
+
+#ifndef QT_NO_UNDOVIEW
+
+#include "qundogroup.h"
+#include <QtCore/qabstractitemmodel.h>
+#include <QtCore/qpointer.h>
+#include <QtGui/qicon.h>
+
+
+/*!
+    \class KisUndoView
+    \brief The KisUndoView class displays the contents of a QUndoStack.
+    \since 4.2
+
+    \ingroup advanced
+
+    KisUndoView is a QListView which displays the list of commands pushed on an undo stack.
+    The most recently executed command is always selected. Selecting a different command
+    results in a call to QUndoStack::setIndex(), rolling the state of the document
+    backwards or forward to the new command.
+
+    The stack can be set explicitly with setStack(). Alternatively, a QUndoGroup object can
+    be set with setGroup(). The view will then update itself automatically whenever the
+    active stack of the group changes.
+
+    \image KisUndoView.png
+*/
+
+class KisUndoViewPrivate
+{
+public:
+    KisUndoViewPrivate() :
+#ifndef QT_NO_UNDOGROUP
+        group(0),
+#endif
+        model(0) {}
+
+#ifndef QT_NO_UNDOGROUP
+    QPointer<QUndoGroup> group;
+#endif
+    QUndoModel *model;
+    KisUndoView* q;
+
+    void init(KisUndoView* view);
+};
+
+void KisUndoViewPrivate::init(KisUndoView* view)
+{
+    q = view;
+    model = new QUndoModel(q);
+    q->setModel(model);
+    q->setSelectionModel(model->selectionModel());
+}
+
+/*!
+    Constructs a new view with parent \a parent.
+*/
+
+KisUndoView::KisUndoView(QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+{
+    d->init(this);
+}
+
+/*!
+    Constructs a new view with parent \a parent and sets the observed stack to \a stack.
+*/
+
+KisUndoView::KisUndoView(QUndoStack *stack, QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+{
+    d->init(this);
+    setStack(stack);
+}
+
+#ifndef QT_NO_UNDOGROUP
+
+/*!
+    Constructs a new view with parent \a parent and sets the observed group to \a group.
+
+    The view will update itself autmiatically whenever the active stack of the group changes.
+*/
+
+KisUndoView::KisUndoView(QUndoGroup *group, QWidget *parent) : QListView(parent), d(new KisUndoViewPrivate)
+{
+    d->init(this);
+    setGroup(group);
+}
+
+#endif // QT_NO_UNDOGROUP
+
+/*!
+    Destroys this view.
+*/
+
+KisUndoView::~KisUndoView() {
+
+}
+
+/*!
+    Returns the stack currently displayed by this view. If the view is looking at a
+    QUndoGroup, this the group's active stack.
+
+    \sa setStack() setGroup()
+*/
+
+QUndoStack *KisUndoView::stack() const
+{
+
+    return d->model->stack();
+}
+
+/*!
+    Sets the stack displayed by this view to \a stack. If \a stack is 0, the view
+    will be empty.
+
+    If the view was previously looking at a QUndoGroup, the group is set to 0.
+
+    \sa stack() setGroup()
+*/
+
+void KisUndoView::setStack(QUndoStack *stack)
+{
+
+#ifndef QT_NO_UNDOGROUP
+    setGroup(0);
+#endif
+    d->model->setStack(stack);
+}
+
+#ifndef QT_NO_UNDOGROUP
+
+/*!
+    Sets the group displayed by this view to \a group. If \a group is 0, the view will
+    be empty.
+
+    The view will update itself autmiatically whenever the active stack of the group changes.
+
+    \sa group() setStack()
+*/
+
+void KisUndoView::setGroup(QUndoGroup *group)
+{
+
+
+    if (d->group == group)
+        return;
+
+    if (d->group != 0) {
+        disconnect(d->group, SIGNAL(activeStackChanged(QUndoStack*)),
+                d->model, SLOT(setStack(QUndoStack*)));
+    }
+
+    d->group = group;
+
+    if (d->group != 0) {
+        connect(d->group, SIGNAL(activeStackChanged(QUndoStack*)),
+                d->model, SLOT(setStack(QUndoStack*)));
+        d->model->setStack(d->group->activeStack());
+    } else {
+        d->model->setStack(0);
+    }
+}
+
+/*!
+    Returns the group displayed by this view.
+
+    If the view is not looking at group, this function returns 0.
+
+    \sa setGroup() setStack()
+*/
+
+QUndoGroup *KisUndoView::group() const
+{
+
+    return d->group;
+}
+
+#endif // QT_NO_UNDOGROUP
+
+/*!
+    \property KisUndoView::emptyLabel
+    \brief the label used for the empty state.
+
+    The empty label is the topmost element in the list of commands, which represents
+    the state of the document before any commands were pushed on the stack. The default
+    is the string "<empty>".
+*/
+
+void KisUndoView::setEmptyLabel(const QString &label)
+{
+
+    d->model->setEmptyLabel(label);
+}
+
+QString KisUndoView::emptyLabel() const
+{
+
+    return d->model->emptyLabel();
+}
+
+/*!
+    \property KisUndoView::cleanIcon
+    \brief the icon used to represent the clean state.
+
+    A stack may have a clean state set with QUndoStack::setClean(). This is usually
+    the state of the document at the point it was saved. KisUndoView can display an
+    icon in the list of commands to show the clean state. If this property is
+    a null icon, no icon is shown. The default value is the null icon.
+*/
+
+void KisUndoView::setCleanIcon(const QIcon &icon)
+{
+
+    d->model->setCleanIcon(icon);
+
+}
+
+QIcon KisUndoView::cleanIcon() const
+{
+
+    return d->model->cleanIcon();
+}
+
+void KisUndoView::setCanvas(KisCanvas2 *canvas) {
+    d->model->setCanvas(canvas);
+}
+
+#include "KisUndoView.moc"
+
+#endif // QT_NO_UNDOVIEW

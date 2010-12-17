@@ -40,6 +40,8 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
+#include "commands/DeleteTableRowCommand.h"
+#include "commands/DeleteTableColumnCommand.h"
 
 #include <KLocale>
 #include <KUndoStack>
@@ -1029,54 +1031,18 @@ void KoTextEditor::insertTableColumnRight()
 
 void KoTextEditor::deleteTableColumn()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Column"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        int selectionRow;
-        int selectionColumn;
-        int selectionRowSpan;
-        int selectionColumnSpan;
-        if(d->caret.hasComplexSelection()) {
-            d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
-        } else {
-            QTextTableCell cell = table->cellAt(d->caret);
-            selectionColumn = cell.column();
-            selectionColumnSpan = 1;
-        }
-        table->removeColumns(selectionColumn, selectionColumnSpan);
-        carsManager.removeColumns(selectionColumn, selectionColumnSpan);
+        addCommand(new DeleteTableColumnCommand(this, table));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::deleteTableRow()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Row"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        int selectionRow;
-        int selectionColumn;
-        int selectionRowSpan;
-        int selectionColumnSpan;
-        if(d->caret.hasComplexSelection()) {
-            d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
-        } else {
-            QTextTableCell cell = table->cellAt(d->caret);
-            selectionRow = cell.row();
-            selectionRowSpan = 1;
-        }
-        table->removeRows(selectionRow, selectionRowSpan);
-        carsManager.removeRows(selectionRow, selectionRowSpan);
+        addCommand(new DeleteTableRowCommand(this, table));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::mergeTableCells()

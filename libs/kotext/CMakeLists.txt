@@ -78,6 +78,9 @@ set(kotext_LIB_SRCS
     changetracker/KoChangeTrackerElement.cpp
     changetracker/KoDeleteChangeMarker.cpp
     KoTextDrag.cpp
+
+    commands/DeleteTableRowCommand.cpp
+    commands/DeleteTableColumnCommand.cpp
 )
 
 if( Soprano_FOUND )

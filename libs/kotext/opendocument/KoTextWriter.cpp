@@ -176,7 +176,7 @@ public:
     void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     QString findChangeIdForListItemMerge(const KoXmlElement &element);
     void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                       QString &changeId, int &endIdCounter, bool removeLeavingContent);
+                                       QString &changeId, int &endIdCounter, bool deleteStart, bool deleteEnd);
     void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
                                        QString &changeId, int &endIdCounter, bool deleteStart, bool deleteEnd);
     bool checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively = true);
@@ -1651,7 +1651,24 @@ bool KoTextWriter::Private::checkForDeleteStartInListItem(KoXmlElement &element,
 
 void KoTextWriter::Private::handleListWithListMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
-    qDebug() << "*************handleListWithListMerge***************";
+    int endIdCounter = 1;
+
+    KoXmlElement listElement = element.firstChild().toElement();
+    QString changeId = findChangeIdForListItemMerge(listElement);
+
+    KoXmlElement firstChildElement = element.firstChild().toElement();
+    generateListForListItemMerge(outputXmlStream, firstChildElement, changeId, endIdCounter, true, false);
+
+    KoXmlElement secondChildElement = element.firstChild().nextSibling().toElement();
+    QString secondChild = secondChildElement.localName();
+    while (secondChild == "removed-content")
+    {
+        writeNode(outputXmlStream, secondChildElement, false);
+        secondChildElement = secondChildElement.nextSibling().toElement();
+        secondChild = secondChildElement.localName();
+    };
+
+    generateListForListItemMerge(outputXmlStream, secondChildElement, changeId, endIdCounter, false, true);
 }
 
 void KoTextWriter::Private::handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
@@ -1660,14 +1677,14 @@ void KoTextWriter::Private::handleListItemWithListItemMerge(QTextStream &outputX
     KoXmlElement listElement = element.firstChild().toElement();
     QString changeId = findChangeIdForListItemMerge(listElement);
     
-    generateListForListItemMerge(outputXmlStream, listElement, changeId, endIdCounter, false);
+    generateListForListItemMerge(outputXmlStream, listElement, changeId, endIdCounter, false, false);
 }
 
 void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                         QString &changeId, int &endIdCounter, bool removeLeavingContent)
+                                                         QString &changeId, int &endIdCounter, bool deleteStart, bool deleteEnd)
 {
     int listEndIdCounter = endIdCounter;
-    if (removeLeavingContent) {
+    if (deleteStart || deleteEnd) {
         endIdCounter++;
         outputXmlStream << "<delta:remove-leaving-content-start";
         outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
@@ -1678,10 +1695,12 @@ void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlS
         outputXmlStream << "/>";
             
         outputXmlStream << "</delta:remove-leaving-content-start>";
-
-        outputXmlStream << "<text:list delta:insertion-change-idref=\"" << changeId << "\" delta:insertion-type = \"insert-around-content\"";
-        writeAttributes(outputXmlStream, element);
-        outputXmlStream << ">";
+        
+        if (deleteStart) {
+            outputXmlStream << "<text:list delta:insertion-change-idref=\"" << changeId << "\" delta:insertion-type = \"insert-around-content\"";
+            writeAttributes(outputXmlStream, element);
+            outputXmlStream << ">";
+        }
 
     } else {
         outputXmlStream << "<text:" << element.localName();
@@ -1706,10 +1725,13 @@ void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlS
         }
     }
     
-    if (removeLeavingContent) {
+    if (deleteStart || deleteEnd) {
         outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << listEndIdCounter << "\"/>";
+        if (deleteEnd) {
+            outputXmlStream << "</text:list>";
+        }
     } else {
-        outputXmlStream << "</text:" << element.localName() << ">";
+        outputXmlStream << "</text:list>";
     }
 }
 
@@ -1767,7 +1789,7 @@ void KoTextWriter::Private::generateListItemForListItemMerge(QTextStream &output
                     outputXmlStream << "</text:" << childElement.localName() << ">";
                 }
             } else if(childElement.localName() == "list") {
-                generateListForListWithPMerge(outputXmlStream, childElement, changeId, endIdCounter, (deleteStart || deleteEnd));
+                generateListForListItemMerge(outputXmlStream, childElement, changeId, endIdCounter, deleteStart ,deleteEnd);
             }
         }
         

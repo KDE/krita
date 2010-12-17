@@ -31,6 +31,7 @@
 #include <kis_view2.h>
 
 #include <kis_painting_assistants_manager.h>
+#include <kis_coordinates_converter.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
         : KisTool(canvas, KisCursor::arrowCursor()), m_canvas(dynamic_cast<KisCanvas2*>(canvas)), m_optionsWidget(0)
@@ -68,7 +69,7 @@ void KisRulerAssistantTool::deactivate()
 
 inline double norm2(const QPointF& p)
 {
-    return sqrt(p.x() * p.x() + p.y() * p.y());
+    return p.x() * p.x() + p.y() * p.y();
 }
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
@@ -79,16 +80,33 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         setMode(KisTool::PAINT_MODE);
 
         m_handleDrag = 0;
+        double minDist = 49.0;
+
+        QPointF mousePos = m_canvas->coordinatesConverter()->imageToViewport(event->point);
+
         foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
-            if (norm2(event->point - *handle) < 10) {
-                m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+            double dist = norm2(mousePos - m_canvas->coordinatesConverter()->imageToViewport(*handle));
+            if (dist < minDist) {
+                minDist = dist;
                 m_handleDrag = handle;
-                return;
             }
         }
+        if (m_handleDrag) {
+            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+            return;
+        }
+        
+        m_assistantDrag = 0;
         foreach(KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
-            QPointF iconDeletePos = assistant->deletePosition();
-            if (QRectF(iconDeletePos - QPointF(16, 16), iconDeletePos + QPointF(16, 16)).contains(event->point)) {
+            QPointF iconPosition = m_canvas->coordinatesConverter()->imageToViewport(assistant->deletePosition());
+            QRectF deleteRect(iconPosition - QPointF(30, 30), iconPosition - QPointF(14, 14));
+            QRectF moveRect(iconPosition - QPointF(16, 16), iconPosition + QPointF(16, 16));
+            if (moveRect.contains(mousePos)) {
+                m_assistantDrag = assistant;
+                m_mousePosition = event->point;
+                return;
+            }
+            if (deleteRect.contains(mousePos)) {
                 m_canvas->view()->paintingAssistantManager()->removeAssistant(assistant);
                 m_handles = m_canvas->view()->paintingAssistantManager()->handles();
                 m_canvas->updateCanvas();
@@ -109,6 +127,13 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         if (m_handleDrag) {
             *m_handleDrag = event->point;
             m_canvas->updateCanvas();
+        } else if (m_assistantDrag) {
+            QPointF adjust = event->point - m_mousePosition;
+            foreach(KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
+                *handle += adjust;
+            }
+            m_mousePosition = event->point;
+            m_canvas->updateCanvas();
         } else {
             event->ignore();
         }
@@ -125,6 +150,9 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
 
         if (m_handleDrag) {
             m_handleDrag = 0;
+            m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
+        } else if (m_assistantDrag) {
+            m_assistantDrag = 0;
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         } else {
             event->ignore();
@@ -147,13 +175,15 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
             _gc.setPen(handlesColor);
             _gc.setBrush(Qt::transparent);
         }
-        _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(5, 5), QSizeF(10, 10)));
+        _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
     }
-
-    KIcon iconDelete("edit-delete");
+    
+    QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);
+    QPixmap iconMove = KIcon("transform-move").pixmap(32, 32);
     foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
         QPointF iconDeletePos = _converter.documentToView(assistant->deletePosition());
-        _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconDelete.pixmap(32, 32));
+        _gc.drawPixmap(iconDeletePos - QPointF(32, 32), iconDelete);
+        _gc.drawPixmap(iconDeletePos - QPointF(16, 16), iconMove);
     }
 }
 

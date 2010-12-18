@@ -71,7 +71,7 @@ inline double norm2(const QPointF& p)
 void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 2);
+    if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 

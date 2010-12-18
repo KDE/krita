@@ -55,10 +55,18 @@ QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*str
 void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 3);
+    if (handles().size() < 2) return;
+    QTransform initialTransform = converter->documentToWidgetTransform();
+    if (handles().size() == 2) {
+        // just draw the axis
+        gc.save();
+        gc.setTransform(initialTransform);
+        gc.drawLine(*handles()[0], *handles()[1]);
+        gc.restore();
+        return;
+    }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         // valid ellipse
-        QTransform initialTransform = converter->documentToWidgetTransform();
 
         gc.save();
         gc.setTransform(initialTransform);

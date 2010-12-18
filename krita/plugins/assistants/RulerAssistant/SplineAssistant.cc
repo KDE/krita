@@ -75,13 +75,13 @@ QPointF SplineAssistant::project(const QPointF& pt) const
     // (this is a rather inefficient method)
     qreal min_t, d_min_t = std::numeric_limits<qreal>::max();
     for (qreal t = 0; t <= 1; t += 1e-3) {
-        qreal d_t = D(t, *handles()[0], *handles()[1], *handles()[2], *handles()[3], pt);
+        qreal d_t = D(t, *handles()[0], *handles()[2], *handles()[3], *handles()[1], pt);
         if (d_t < d_min_t) {
             d_min_t = d_t;
             min_t = t;
         }
     }
-    return B(min_t, *handles()[0], *handles()[1], *handles()[2], *handles()[3]);
+    return B(min_t, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
 }
 
 QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
@@ -92,20 +92,27 @@ QPointF SplineAssistant::adjustPosition(const QPointF& pt, const QPointF& /*stro
 void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 4);
+    if (handles().size() < 2) return;
+
     QTransform initialTransform = converter->documentToWidgetTransform();
+
+    QPointF pts[4];
+    pts[0] = *handles()[0];
+    pts[1] = *handles()[1];
+    pts[2] = (handles().size() >= 3) ? (*handles()[2]) : (*handles()[0]);
+    pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (*handles()[1]);
 
     gc.save();
     gc.setTransform(initialTransform);
     gc.setPen(QColor(0, 0, 0, 75));
     // Draw control lines
-    gc.drawLine(*handles()[0], *handles()[1]);
-    gc.drawLine(*handles()[2], *handles()[3]);
+    gc.drawLine(pts[0], pts[2]);
+    gc.drawLine(pts[1], pts[3]);
     gc.setPen(QColor(0, 0, 0, 125));
     // Draw the spline
     QPainterPath path;
-    path.moveTo(*handles()[0]);
-    path.cubicTo(*handles()[1], *handles()[2], *handles()[3]);
+    path.moveTo(pts[0]);
+    path.cubicTo(pts[2], pts[3], pts[1]);
     gc.drawPath(path);
     
     gc.restore();
@@ -113,7 +120,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
 
 QPointF SplineAssistant::buttonPosition() const
 {
-    return B(0.5, *handles()[0], *handles()[1], *handles()[2], *handles()[3]);
+    return B(0.5, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
 }
 
 SplineAssistantFactory::SplineAssistantFactory()

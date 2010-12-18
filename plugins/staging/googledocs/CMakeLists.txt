@@ -29,6 +29,6 @@ install(TARGETS kofficegoogledocs  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  googledocs-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/kpartplugins)
-install( FILES  googledocs-kword.rc  DESTINATION ${DATA_INSTALL_DIR}/kword/kpartplugins)
+install( FILES  googledocs-words.rc  DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)
 
 

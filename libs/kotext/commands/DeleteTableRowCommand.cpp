@@ -66,11 +66,12 @@ void DeleteTableRowCommand::redo()
             m_selectionRow = cell.row();
             m_selectionRowSpan = 1;
         }
-        m_table->removeRows(m_selectionRow, m_selectionRowSpan);
 
         for (int i = m_selectionRow; i < m_selectionRow + m_selectionRowSpan; ++i) {
             m_deletedStyles.append(carsManager.rowStyle(i));
         }
         carsManager.removeRows(m_selectionRow, m_selectionRowSpan);
+
+        m_table->removeRows(m_selectionRow, m_selectionRowSpan);
     }
 }

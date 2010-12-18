@@ -51,6 +51,7 @@ public:
     KisPaintingAssistantHandle(const KisPaintingAssistantHandle&);
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
+    QList<KisPaintingAssistantHandleSP> split();
     KisPaintingAssistantHandle& operator=(const QPointF&);
 private:
     void registerAssistant(KisPaintingAssistant*);

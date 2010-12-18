@@ -78,6 +78,17 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
     }
 }
 
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
+{
+    QList<KisPaintingAssistantHandleSP> newHandles;
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        KisPaintingAssistantHandleSP newHandle(new KisPaintingAssistantHandle(*this));
+        newHandles.append(newHandle);
+        assistant->replaceHandle(this, newHandle);
+    }
+    return newHandles;
+}
+
 
 struct KisPaintingAssistant::Private {
     QString id;

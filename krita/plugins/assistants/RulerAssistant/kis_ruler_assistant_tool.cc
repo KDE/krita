@@ -73,8 +73,8 @@ inline double norm2(const QPointF& p)
 
 void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
 {
-    if(PRESS_CONDITION(event, KisTool::HOVER_MODE,
-                       Qt::LeftButton, Qt::NoModifier)) {
+    if(PRESS_CONDITION_OM(event, KisTool::HOVER_MODE,
+                       Qt::LeftButton, Qt::ShiftModifier)) {
 
         setMode(KisTool::PAINT_MODE);
 
@@ -91,6 +91,10 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
             }
         }
         if (m_handleDrag) {
+            if (event->modifiers() & Qt::ShiftModifier) {
+                m_handleDrag = m_handleDrag->split()[0];
+                m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+            }
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
             return;
         }

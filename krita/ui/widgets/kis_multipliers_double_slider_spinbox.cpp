@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_multiplers_double_slider_spinbox.h"
+#include "kis_multipliers_double_slider_spinbox.h"
 
 #include "ui_wdgmultiplersdoublesliderspinbox.h"
 
@@ -33,7 +33,7 @@ struct KisMultipliersDoubleSliderSpinBox::Private {
 
 qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
 {
-    return form.comboBox->itemData(form.comboBox->currentIndex());
+    return form.comboBox->itemData(form.comboBox->currentIndex()).asDouble();
 }
 
 void KisMultipliersDoubleSliderSpinBox::Private::updateRange()
@@ -88,4 +88,4 @@ void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
     d->form.sliderSpinBox->setValue(value);
 }
 
-#include "kis_multiplers_double_slider_spinbox.moc"
+#include "kis_multipliers_double_slider_spinbox.moc"

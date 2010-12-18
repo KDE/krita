@@ -22,6 +22,7 @@
 #define KO_TOOL_DOCKER_H
 
 #include <QDockWidget>
+#include <QMap>
 
 class QWidget;
 
@@ -38,9 +39,9 @@ public:
 
 public slots:
     /**
-     * Update the option widget to the argument one, removing the currently set widget.
+     * Update the option widgets to the argument one, removing the currently set widget.
      */
-    void newOptionWidget(QWidget *widget);
+    void setOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap);
 
     /**
      * Returns whether the docker has an optionwidget attached

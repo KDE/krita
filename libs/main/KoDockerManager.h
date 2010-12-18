@@ -38,7 +38,7 @@ public:
     ~KoDockerManager();
 
 public slots:
-    void removeUnusedOptionWidgets();
+    //void removeUnusedOptionWidgets();
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */

@@ -94,14 +94,14 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     pts[0] = *handles()[0];
     pts[1] = *handles()[1];
     pts[2] = (handles().size() >= 3) ? (*handles()[2]) : (*handles()[0]);
-    pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (*handles()[1]);
+    pts[3] = (handles().size() >= 4) ? (*handles()[3]) : (handles().size() >= 3) ? (*handles()[2]) : (*handles()[1]);
 
     gc.save();
     gc.setTransform(initialTransform);
     gc.setPen(QColor(0, 0, 0, 75));
     // Draw control lines
     gc.drawLine(pts[0], pts[2]);
-    gc.drawLine(pts[1], pts[3]);
+    if (handles().size() >= 4) gc.drawLine(pts[1], pts[3]);
     gc.setPen(QColor(0, 0, 0, 125));
     // Draw the spline
     QPainterPath path;

@@ -43,6 +43,7 @@ public:
     bool paintIncremental();
 
     QPointF offset() const;
+    QPointF position() const;
     virtual bool mousePressEvent(const KisPaintInformation& pos, Qt::KeyboardModifiers modifiers);
     void activate();
 
@@ -55,8 +56,6 @@ public:
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
 
 public:
-
-    KisDuplicateOpSettingsWidget *m_options;
     QPointF m_offset;
     KisImageWSP m_image;
     bool m_isOffsetNotUptodate;

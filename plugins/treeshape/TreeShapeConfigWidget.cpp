@@ -31,10 +31,10 @@ TreeShapeConfigWidget::TreeShapeConfigWidget(TreeTool *tool, QWidget *parent)
     widget.setupUi(this);
 
     widget.treeType->clear();
-    widget.treeType->addItem(i18n("Org (Down)"));
-    widget.treeType->addItem(i18n("Org (Up)"));
-    widget.treeType->addItem(i18n("Org (Left)"));
-    widget.treeType->addItem(i18n("Org (Right)"));
+    widget.treeType->addItem(i18n("Organigram (Down)"));
+    widget.treeType->addItem(i18n("Organigram (Up)"));
+    widget.treeType->addItem(i18n("Organigram (Left)"));
+    widget.treeType->addItem(i18n("Organigram (Right)"));
 //     widget.treeType->addItem(i18n("Tree (Left)"));
 //     widget.treeType->addItem(i18n("Tree (Right)"));
 //     widget.treeType->addItem(i18n("Map (Clockwise)"));

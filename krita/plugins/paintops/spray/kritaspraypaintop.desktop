@@ -25,6 +25,7 @@ Name[sv]=Sprej
 Name[tr]=Püskürtme aracı
 Name[uk]=Аерограф
 Name[wa]=Sipritchoûle
+Name[x-test]=xxSprayxx
 Name[zh_TW]=噴霧
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

@@ -52,6 +52,7 @@ Name[uz]=Krita
 Name[uz@cyrillic]=Krita
 Name[wa]=Krita
 Name[xh]=Krita
+Name[x-test]=xxKritaxx
 Name[zh_CN]=Krita
 Name[zh_TW]=繪圖_Krita
 Exec=krita %u

@@ -19,6 +19,7 @@ Name[pt_BR]=Definição do efeito do filtro
 Name[sv]=Definition av filtereffekt
 Name[uk]=Визначення ефекту фільтрування
 Name[wa]=Definixha d' efet di passete
+Name[x-test]=xxFilter effect definitionxx
 Name[zh_CN]=滤镜效果定义
 Name[zh_TW]=過濾器效果定義
 Type=ServiceType
@@ -43,6 +44,7 @@ Comment[pt_BR]=Definição de um efeito de filtro Flake
 Comment[sv]=Definition av en Flake filtereffekt
 Comment[uk]=Визначення віджета ефекту фільтрування
 Comment[wa]=Definixha d' on efet d' passete di ploumion
+Comment[x-test]=xxDefinition of a flake filter effectxx
 Comment[zh_CN]=Flake 滤镜效果定义
 Comment[zh_TW]=Flake 過濾器效果定義
 [PropertyDef::X-Flake-Version]

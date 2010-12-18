@@ -18,6 +18,7 @@ Name[pt_BR]=Motor de Gerenciamento de Cores do LCMS para o Pigment
 Name[sv]=LCMS-färghanteringsverktyg för pigment
 Name[uk]=Рушій керування кольорами LCMS для Pigment
 Name[wa]=Éndjin d' manaedjmint del coleur LCMS po Pigmint
+Name[x-test]=xxLCMS Color Management Engine for Pigmentxx
 Name[zh_TW]=Pigment 的 LCMS 色彩管理引擎
 X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service

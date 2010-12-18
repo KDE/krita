@@ -29,6 +29,7 @@ Name[sv]=Verktygsdefinition i Flake
 Name[tr]=Flake araç tanımlaması
 Name[uk]=Визначення інструмента елемента
 Name[wa]=Definixha d' usteye ploumion
+Name[x-test]=xxFlake tool definitionxx
 Name[zh_CN]=Flake 工具定义
 Name[zh_TW]=Flake 工具定義
 Type=ServiceType
@@ -63,6 +64,7 @@ Comment[ta]=இளையக கருவிகளின் வரையறை
 Comment[tr]=Flake araçlarının tanımlaması
 Comment[uk]=Визначення інструментів елемента
 Comment[wa]=Definixha d' usteyes po les ploumions
+Comment[x-test]=xxDefinition of flake toolsxx
 Comment[zh_CN]=Flake 工具的定义
 Comment[zh_TW]=Flake 工具定義
 [PropertyDef::X-Flake-MinVersion]

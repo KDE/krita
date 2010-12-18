@@ -28,6 +28,7 @@ Name[sv]=Formkantdefinition
 Name[tr]=Şekil kenarlığı tanımlaması
 Name[uk]=Визначення границі форми
 Name[wa]=Definixha del boirdeure del fôme
+Name[x-test]=xxShape border definitionxx
 Name[zh_CN]=形状边框定义
 Name[zh_TW]=元件邊框定義
 Type=ServiceType
@@ -60,6 +61,7 @@ Comment[ta]=ஒரு வடிவ மூளைக்கான வரையற�
 Comment[tr]=Bir ızgara şekilli sınırın tanımı
 Comment[uk]=Визначення елемента границі форми
 Comment[wa]=Definixha d' ene boirdeure di fôme e ploumion
+Comment[x-test]=xxDefinition of a flake shape borderxx
 Comment[zh_CN]=Flake 形状边框的定义
 Comment[zh_TW]=Flake 元件邊框定義
 [PropertyDef::X-Flake-Version]

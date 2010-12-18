@@ -13,7 +13,7 @@ Comment[eo]=Filtrilkromaĵo por Krita
 Comment[es]=Complemento de filtrado para Krita
 Comment[et]=Krita filtriplugin
 Comment[eu]=Krita-ren iragazkia
-Comment[fa]=وصلۀ پالایه برای Krita
+Comment[fa]=وصله پالایه برای Krita
 Comment[fi]=Suodinliitännäinen Kritaan
 Comment[fr]=Module de filtres de Krita
 Comment[fy]=Filterplugin foar Krita
@@ -44,6 +44,7 @@ Comment[uk]=Додаток фільтра для Krita
 Comment[uz]=Krita uchun filter plagini
 Comment[uz@cyrillic]=Krita учун филтер плагини
 Comment[wa]=Tchôke-divins passete po Krita
+Comment[x-test]=xxFilter plugin for Kritaxx
 Comment[zh_CN]=Krita 滤镜插件
 Comment[zh_TW]=Krita 的過濾器外掛程式
 [PropertyDef::X-Krita-Version]

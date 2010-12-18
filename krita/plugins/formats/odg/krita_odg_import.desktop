@@ -2,10 +2,13 @@
 Type=Service
 Name=Krita ODG Import Filter
 Name[it]=Filtro di importazione ODG per Krita
+Name[nds]=ODG-Importfilter för Krita
 Name[pt]=Filtro de Importação de ODG para o Krita
 Name[pt_BR]=Filtro de Importação Krita ODG
 Name[sv]=Krita ODG-importfilter
 Name[uk]=Фільтр імпорту ODG для Krita
+Name[x-test]=xxKrita ODG Import Filterxx
+Name[zh_TW]=Krita ODG 匯入過濾程式
 X-KDE-Export=application/x-krita
 X-KDE-Import=application/vnd.oasis.opendocument.graphics
 X-KDE-Weight=1

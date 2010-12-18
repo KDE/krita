@@ -23,6 +23,7 @@ Name[sv]=Kurvpensel
 Name[tr]=Kıvrım fırçası
 Name[uk]=Викривлений пензель
 Name[wa]=Coube pincea
+Name[x-test]=xxCurve brushxx
 Name[zh_TW]=曲線筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

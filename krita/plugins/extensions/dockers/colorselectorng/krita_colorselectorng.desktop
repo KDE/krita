@@ -15,6 +15,7 @@ Name[pt_BR]=Seletor de Cores NG
 Name[sv]=Färgväljare
 Name[uk]=НовийВибірКольору
 Name[wa]=Tchoezixheu di coleur NG
+Name[x-test]=xxColorSelectorNGxx
 Name[zh_TW]=ColorSelectorNG
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

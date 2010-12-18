@@ -23,6 +23,7 @@ Name[ta]=வர்ணம் கலந்த முகப்புகள் (எ�
 Name[tr]=Resim Renk Boşlukları (LC ve QP çevrimleri, 32 ve 16  Bit Yüzen kanallar)
 Name[uk]=Простори кольорів палітри (перетворення LC та QP, 32- і 16-бітові дійсні канали)
 Name[wa]=Espåces di coleur pol pondaedje (coviersaedjes LC et QP, canås flottants 32 et 16 bites)
+Name[x-test]=xxPainterly Color Spaces (LC and QP conversions, 32- and 16- Bits Float channels)xx
 Name[zh_TW]=繪圖色彩空間（LC 與 QP 轉換，32 與 16 位元浮動色頻）
 X-KDE-ServiceTypes=KOffice/ColorSpace
 Type=Service

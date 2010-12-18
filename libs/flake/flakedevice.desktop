@@ -24,6 +24,7 @@ Name[sv]=Enhetsdefinition i Flake
 Name[tr]=Flake aygıt tanımlaması
 Name[uk]=Визначення інструмента елемента
 Name[wa]=Definixha d' en éndjin ploumion
+Name[x-test]=xxFlake device definitionxx
 Name[zh_CN]=Flake 设备定义
 Name[zh_TW]=Flake 裝置定義
 Type=ServiceType
@@ -54,6 +55,7 @@ Comment[ta]=இளைய வடிவக் கருவியின் வி�
 Comment[tr]=Izgara aygıtlarının tanımı
 Comment[uk]=Визначення пристроїв елементів
 Comment[wa]=Definixha d' éndjins ploumion
+Comment[x-test]=xxDefinition of flake devicesxx
 Comment[zh_CN]=Flake 设备的定义
 Comment[zh_TW]=Flake 裝置定義
 [PropertyDef::X-Flake-MinVersion]

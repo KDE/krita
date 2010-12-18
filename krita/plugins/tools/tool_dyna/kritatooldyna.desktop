@@ -21,6 +21,7 @@ Name[sv]=Dynaverktyg
 Name[tr]=Dyna Aracı
 Name[uk]=Дайна-інструмент
 Name[wa]=Usteye dinamike
+Name[x-test]=xxDyna Toolxx
 Name[zh_TW]=Dyna 工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service

@@ -35,6 +35,7 @@ Name[sv]=Perspektivrutnätsverktyg
 Name[tr]=Perspektif Izgara Aracı
 Name[uk]=Засіб ґратки перспективи
 Name[wa]=Usteye di grile di pespective
+Name[x-test]=xxPerspective Grid Toolxx
 Name[zh_TW]=透視格工具
 X-KDE-ServiceTypes=Krita/Tool
 Type=Service

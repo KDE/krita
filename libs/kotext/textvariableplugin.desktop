@@ -28,6 +28,7 @@ Name[sv]=Textvariabler
 Name[tr]=Metin Değişkeni Eklentisi
 Name[uk]=Додаток текстової змінної
 Name[wa]=Tchôke-divins variåve di tecse
+Name[x-test]=xxText Variable Pluginxx
 Name[zh_CN]=文本变量插件
 Name[zh_TW]=文字變數外掛程式
 Type=ServiceType
@@ -61,6 +62,7 @@ Comment[ta]=சொருகளானது உரை மாறிலிகளை
 Comment[tr]=Metin değişkenlerini içeren bir eklenti
 Comment[uk]=Додаток, що містить текстові змінні
 Comment[wa]=On tchôke-divins k' a des variåves di tecse
+Comment[x-test]=xxA plugin that contains text variablesxx
 Comment[zh_CN]=一个包含文本变量的插件
 Comment[zh_TW]=包含文字變數外掛程式
 [PropertyDef::X-KoText-MinVersion]

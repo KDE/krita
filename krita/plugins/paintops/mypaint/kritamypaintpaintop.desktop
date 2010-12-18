@@ -20,6 +20,7 @@ Name[pt_BR]=Pincel do MyPaint
 Name[sv]=MyPaint-pensel
 Name[uk]=Мій пензель
 Name[wa]=Pincea Pondeure da minne
+Name[x-test]=xxMyPaint brushxx
 Name[zh_TW]=MyPaint 筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

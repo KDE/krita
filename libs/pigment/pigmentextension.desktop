@@ -27,6 +27,7 @@ Comment[ta]= தெளிவான வண்ணத்தின் சிறி�
 Comment[tr]=Pigment Rengi ile kullanmak için renk boşluğunu oluşturan bir modül
 Comment[uk]=Модуль впровадження повного простору кольорів для використання з системою керування кольорами пігментів (PCMS)
 Comment[wa]=On module ki dene on stindaedje as en espåce di coleur do Sistinme d' apougnaedje di pigmints d' coleurs
+Comment[x-test]=xxA module implementing an extension to a colorspace of the Pigment Color Manipulation Systemxx
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int

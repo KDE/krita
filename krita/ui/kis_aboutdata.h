@@ -50,6 +50,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Danny Allen"), KLocalizedString() , "danny@dannyallen.co.uk");
     aboutData->addAuthor(ki18n("Dmitry Kazakov"), KLocalizedString() , "dimula73@gmail.com");
     aboutData->addAuthor(ki18n("Edward Apap"), KLocalizedString() , "schumifer@hotmail.com");
+    aboutData->addAuthor(ki18n("Geoffry Song"), KLocalizedString() , "goffrie@gmail.com");
     aboutData->addAuthor(ki18n("Hanisch Elián"), KLocalizedString() , "lambdae2@gmail.com");
     aboutData->addAuthor(ki18n("Emanuele Tamponi"), KLocalizedString(), "emanuele@valinor.it");
     aboutData->addAuthor(ki18n("Gábor Lehel"), KLocalizedString(), "<illissius@gmail.com>");
@@ -62,6 +63,7 @@ KAboutData * newKritaAboutData()
     aboutData->addAuthor(ki18n("Marc Pegon"), KLocalizedString(), "pe.marc@free.fr");
     aboutData->addAuthor(ki18n("Martin Renold"), ki18n("MyPaint shade selector"), "http://mypaint.intilinux.com/");
     aboutData->addAuthor(ki18n("Matthias Elter"), KLocalizedString(), "me@kde.org");
+    aboutData->addAuthor(ki18n("Matus Talcik"), KLocalizedString(), "matus.talcik@gmail.com");
     aboutData->addAuthor(ki18n("Melchior Franz"), KLocalizedString(), "mfranz@kde.org");
     aboutData->addAuthor(ki18n("Michael Koch"), KLocalizedString(), "koch@kde.org");
     aboutData->addAuthor(ki18n("Michael Thaler"), KLocalizedString(), "michael.thaler@physik.tu-muenchen.de");

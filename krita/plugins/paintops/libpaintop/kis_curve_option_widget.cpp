@@ -48,9 +48,9 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
     transferCurve();
-    connect(this, SIGNAL(sigSettingChanged()), SLOT(updateSensorCurveLabels()));
     setLabel(m_curveOptionWidget->label_ymin, curveOption->minimumLabel());
     setLabel(m_curveOptionWidget->label_ymax, curveOption->maximumLabel());
+    updateSensorCurveLabels();
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()
@@ -106,6 +106,7 @@ void KisCurveOptionWidget::setSensor(KisDynamicSensor* sensor)
 {
     m_curveOption->setSensor(sensor);
     emit sigSettingChanged();
+    updateSensorCurveLabels();
 }
 
 void KisCurveOptionWidget::updateSensorCurveLabels()

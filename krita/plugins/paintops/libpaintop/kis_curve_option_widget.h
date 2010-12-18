@@ -54,6 +54,8 @@ private slots:
 
     void transferCurve();
     void setSensor(KisDynamicSensor* sensor);
+
+private:
     void updateSensorCurveLabels();
     
 private:

@@ -94,7 +94,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         }
 
         m_handleDrag = 0;
-        double minDist = 49.0;
+        double minDist = 81.0;
 
         QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
 

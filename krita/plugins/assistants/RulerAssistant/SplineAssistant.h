@@ -29,6 +29,7 @@ public:
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
+    virtual int numHandles() const { return 4; }
 private:
     QPointF project(const QPointF& pt) const;
 };

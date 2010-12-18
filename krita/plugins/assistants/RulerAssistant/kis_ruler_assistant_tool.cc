@@ -248,18 +248,6 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     }
 }
 
-void KisRulerAssistantTool::createNewAssistant()
-{
-    QString key = m_options.comboBox->model()->index( m_options.comboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
-    dbgPlugins << ppVar(key) << m_options.comboBox->view()->currentIndex().row() << ppVar(m_options.comboBox->currentText());
-    QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
-                              m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(), m_canvas->image()->height())));
-    KisPaintingAssistant* assistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->paintingAssistant(imageArea);
-    m_canvas->view()->paintingAssistantManager()->addAssistant(assistant);
-    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
-    m_canvas->updateCanvas();
-}
-
 void KisRulerAssistantTool::removeAllAssistants()
 {
     m_canvas->view()->paintingAssistantManager()->removeAll();
@@ -272,12 +260,10 @@ QWidget *KisRulerAssistantTool::createOptionWidget()
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
-        m_options.toolButton->setIcon(KIcon("document-new"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
-        connect(m_options.toolButton, SIGNAL(clicked()), SLOT(createNewAssistant()));
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;

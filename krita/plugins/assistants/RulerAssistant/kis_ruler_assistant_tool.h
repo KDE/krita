@@ -46,7 +46,6 @@ public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 private slots:
-    void createNewAssistant();
     void removeAllAssistants();
 protected:
 

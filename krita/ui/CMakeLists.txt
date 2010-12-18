@@ -143,6 +143,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
+    widgets/kis_multiplers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_popup.cpp 
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
@@ -210,6 +211,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
+    forms/wdgmultiplersdoublesliderspinbox.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

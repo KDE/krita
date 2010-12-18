@@ -125,6 +125,21 @@ void KisRulerAssistantTool::mouseMoveEvent(KoPointerEvent *event)
     if(MOVE_CONDITION(event, KisTool::PAINT_MODE)) {
         if (m_handleDrag) {
             *m_handleDrag = event->point;
+
+            m_handleCombine = 0;
+            if (!(event->modifiers() & Qt::ShiftModifier)) {
+                double minDist = 49.0;
+                QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
+                foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+                    if (handle == m_handleDrag) continue;
+                    double dist = norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                    if (dist < minDist) {
+                        minDist = dist;
+                        m_handleCombine = handle;
+                    }
+                }
+            }
+
             m_canvas->updateCanvas();
         } else if (m_assistantDrag) {
             QPointF adjust = event->point - m_mousePosition;
@@ -148,7 +163,11 @@ void KisRulerAssistantTool::mouseReleaseEvent(KoPointerEvent *event)
         setMode(KisTool::HOVER_MODE);
 
         if (m_handleDrag) {
-            m_handleDrag = 0;
+            if (!(event->modifiers() & Qt::ShiftModifier) && m_handleCombine) {
+                m_handleCombine->mergeWith(m_handleDrag);
+                m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+            }
+            m_handleDrag = m_handleCombine = 0;
             m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
         } else if (m_assistantDrag) {
             m_assistantDrag = 0;
@@ -167,7 +186,7 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
     QColor handlesColor(0, 0, 0, 125);
 
     foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
-        if (handle == m_handleDrag) {
+        if (handle == m_handleDrag || handle == m_handleCombine) {
             _gc.setPen(handlesColor);
             _gc.setBrush(handlesColor);
         } else {

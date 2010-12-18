@@ -56,6 +56,7 @@ protected:
     KisCanvas2* m_canvas;
     QList<KisPaintingAssistantHandleSP> m_handles;
     KisPaintingAssistantHandleSP m_handleDrag;
+    KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistant* m_assistantDrag;
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;

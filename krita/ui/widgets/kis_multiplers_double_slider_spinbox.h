@@ -24,16 +24,32 @@
 
 class KisDoubleSliderSpinBox;
 
+/**
+ * This class add a combobox to a \ref KisDoubleSliderSpinBox which
+ * allows to define a multiplier to let the user change the range.
+ */
 class KisMultipliersDoubleSliderSpinBox : public QWidget {
+    Q_OBJECT
 public:
     KisMultipliersDoubleSliderSpinBox(QWidget* _parent);
     ~KisMultipliersDoubleSliderSpinBox();
     
-    KisDoubleSliderSpinBox* spinBox();
-    
     void addMultiplier(double v);
+    /**
+     * Set the range for the 1.0 multiplier
+     */
+    void setRange(qreal minimum, qreal maximum, int decimals = 0);
+    
+    ///Get the value, don't use value()
+    qreal value();
+
+    ///Set the value, don't use setValue()
+    void setValue(qreal value);
+signals:
+    void valueChanged(qreal value);
     
 private:
+    Q_PRIVATE_SLOT(d, void updateRange());
     struct Private;
     Private* const d;
 };

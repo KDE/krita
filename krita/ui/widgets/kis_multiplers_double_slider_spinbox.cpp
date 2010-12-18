@@ -22,12 +22,32 @@
 #include "ui_wdgmultiplersdoublesliderspinbox.h"
 
 struct KisMultipliersDoubleSliderSpinBox::Private {
+    qreal currentMultiplier();
+    /// Update the range of the slider depending on the currentMultiplier
+    void updateRange();
+    
     Ui::WdgMultipliersDoubleSliderSpinBox form;
+    qreal min, max;
+    int decimals;
 };
+
+qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
+{
+    return form.comboBox->itemData(form.comboBox->currentIndex());
+}
+
+void KisMultipliersDoubleSliderSpinBox::Private::updateRange()
+{
+    qreal m = currentMultiplier();
+    form.sliderSpinBox->setRange(m * min, m * max, decimals);
+}
 
 KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _parent) : QWidget(_parent), d(new Private)
 {
     d->form.setupUi(this);
+    addMultiplier(1.0);
+    connect(d->form.sliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(valueChanged(qreal)));
+    connect(d->form.comboBox, SIGNAL(activated(int)), SLOT(updateRange()));
 }
 
 KisMultipliersDoubleSliderSpinBox::~KisMultipliersDoubleSliderSpinBox()
@@ -35,12 +55,37 @@ KisMultipliersDoubleSliderSpinBox::~KisMultipliersDoubleSliderSpinBox()
     delete d;
 }
 
-KisDoubleSliderSpinBox* KisMultipliersDoubleSliderSpinBox::spinBox()
-{
-    return d->form.sliderSpinBox;
-}
-
 void KisMultipliersDoubleSliderSpinBox::addMultiplier(double v)
 {
-  
+  d->form.comboBox->addItem(i18n("x%1", v), v);
 }
+
+void KisMultipliersDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals)
+{
+    d->min = minimum;
+    d->max = maximum;
+    d->decimals = decimals;
+    d->updateRange();
+}
+
+qreal KisMultipliersDoubleSliderSpinBox::value()
+{
+    return d->form.sliderSpinBox->value();
+}
+
+void KisMultipliersDoubleSliderSpinBox::setValue(qreal value)
+{
+    for(int i = 0; i < d->form.comboBox->count(); ++i)
+    {
+        qreal m = d->form.comboBox->itemData(i).toDouble();
+        if(value >= m * d->min && value <= m * d->max)
+        {
+            d->form.comboBox->setCurrentIndex(i);
+            d->updateRange();
+            break;
+        }
+    }
+    d->form.sliderSpinBox->setValue(value);
+}
+
+#include "kis_multiplers_double_slider_spinbox.moc"

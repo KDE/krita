@@ -30,14 +30,8 @@
 #include <math.h>
 
 EllipseAssistant::EllipseAssistant()
-        : KisPaintingAssistant("ellipse", i18n("Ellipse assistant")),
-        e(QPointF(10, 100), QPointF(110, 100), QPointF(60, 70))
+        : KisPaintingAssistant("ellipse", i18n("Ellipse assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(e.major1()));
-    handles.push_back(new KisPaintingAssistantHandle(e.major2()));
-    handles.push_back(new KisPaintingAssistantHandle(e.point()));
-    initHandles(handles);
 }
 
 QPointF EllipseAssistant::project(const QPointF& pt) const

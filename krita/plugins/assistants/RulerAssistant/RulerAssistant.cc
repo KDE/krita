@@ -31,10 +31,6 @@
 RulerAssistant::RulerAssistant()
         : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(10, 10));
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    initHandles(handles);
 }
 
 QPointF RulerAssistant::project(const QPointF& pt) const

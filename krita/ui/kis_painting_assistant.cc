@@ -139,6 +139,13 @@ void KisPaintingAssistant::replaceHandle(KisPaintingAssistantHandleSP _handle, K
     _with->registerAssistant(this);
 }
 
+void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
+{
+    Q_ASSERT(!d->handles.contains(handle));
+    d->handles.append(handle);
+    handle->registerAssistant(this);
+}
+
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const
 {
     return d->handles;

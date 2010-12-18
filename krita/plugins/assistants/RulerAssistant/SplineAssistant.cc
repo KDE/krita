@@ -34,12 +34,6 @@
 SplineAssistant::SplineAssistant()
         : KisPaintingAssistant("spline", i18n("Spline assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    handles.push_back(new KisPaintingAssistantHandle(200, 100));
-    handles.push_back(new KisPaintingAssistantHandle(100, 200));
-    handles.push_back(new KisPaintingAssistantHandle(200, 200));
-    initHandles(handles);
 }
 
 // parametric form of a cubic spline (B(t) = (1-t)^3 P0 + 3 (1-t)^2 t P1 + 3 (1-t) t^2 P2 + t^3 P3)

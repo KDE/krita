@@ -34,12 +34,6 @@
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    handles.push_back(new KisPaintingAssistantHandle(100, 200));
-    handles.push_back(new KisPaintingAssistantHandle(200, 100));
-    handles.push_back(new KisPaintingAssistantHandle(200, 200));
-    initHandles(handles);
 }
 
 // squared distance from a point to a line

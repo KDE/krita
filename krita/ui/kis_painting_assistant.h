@@ -84,6 +84,7 @@ public:
     virtual QPointF buttonPosition() const = 0;
     virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
+    void addHandle(KisPaintingAssistantHandleSP handle);
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
 protected:

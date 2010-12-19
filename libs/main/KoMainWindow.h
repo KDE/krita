@@ -99,6 +99,11 @@ public:
     virtual KParts::PartManager *partManager();
 
     /**
+     * Move the toolbars into a dedicated dockWidget.
+     */
+    void moveToolbarsToDocker();
+
+    /**
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */

@@ -39,7 +39,6 @@ private:
     void repeatHLineIter(const KoColorSpace * cs);
     void repeatVLineIter(const KoColorSpace * cs);
 
-
 private slots:
 
     void vLineIter();
@@ -50,6 +49,7 @@ private slots:
     void randomAccessor();
     void repeatHLineIter();
     void repeatVLineIter();
+    void stressTest();
 };
 
 #endif

@@ -426,5 +426,128 @@ void KisIteratorTest::repeatVLineIter()
     allCsApplicator(&KisIteratorTest::repeatVLineIter);
 }
 
+#define NUM_CYCLES 10000
+#define NUM_THREADS 10
+
+class DataReaderThread : public QRunnable {
+public:
+    DataReaderThread(KisPaintDeviceSP device, const QRect &rect)
+        : m_device(device),
+          m_rect(rect)
+    {}
+
+    void run() {
+        for(int i = 0; i < NUM_CYCLES; i++) {
+            KisRandomAccessorPixel iter =
+                m_device->createRandomAccessor(m_rect.x(), m_rect.y());
+
+            qint32 rowsRemaining = m_rect.height();
+            qint32 y = m_rect.y();
+
+            while (rowsRemaining > 0) {
+                qint32 columnsRemaining = m_rect.width();
+                qint32 x = m_rect.x();
+
+                qint32 numContiguousRows = m_device->numContiguousRows(y, x, x + m_rect.width() - 1);
+                qint32 rows = qMin(numContiguousRows, rowsRemaining);
+
+                while (columnsRemaining > 0) {
+                    qint32 numContiguousColumns = m_device->numContiguousColumns(x, y, y + rows - 1);
+                    qint32 columns = qMin(numContiguousColumns, columnsRemaining);
+
+                    qint32 rowStride = m_device->rowStride(x, y);
+                    iter.moveTo(x, y);
+
+                    // qDebug() << "BitBlt:" << ppVar(x) << ppVar(y)
+                    //          << ppVar(columns) << ppVar(rows)
+                    //          << ppVar(rowStride);
+
+                    doBitBlt(iter.rawData(), rowStride, m_device->pixelSize(),
+                             rows, columns);
+
+                    x += columns;
+                    columnsRemaining -= columns;
+                }
+                y += rows;
+                rowsRemaining -= rows;
+            }
+        }
+    }
+
+private:
+
+    void doBitBltConst(const quint8* data, qint32 rowStride, qint32 pixelSize,
+                       qint32 rows, qint32 columns) {
+        for(int i = 0; i < rows; i++) {
+            Q_ASSERT(columns * pixelSize < 256);
+            quint8 tempData[256];
+            memcpy(tempData, data, columns * pixelSize);
+
+            data += rowStride;
+        }
+    }
+
+    void doBitBlt(quint8* data, qint32 rowStride, qint32 pixelSize,
+                  qint32 rows, qint32 columns) {
+        for(int i = 0; i < rows; i++) {
+            // Let's write something here...
+            memset(data, 0x13, columns * pixelSize);
+
+            data += rowStride;
+        }
+    }
+
+private:
+    KisPaintDeviceSP m_device;
+    QRect m_rect;
+};
+
+class NastyThread : public QRunnable {
+public:
+    NastyThread(KisPaintDeviceSP device)
+        : m_device(device)
+    {}
+
+    void run() {
+        for(int i = 0; i < NUM_CYCLES; i++) {
+            m_device->setX(-0x400 + (qrand() & 0x7FF));
+            m_device->setY(-0x400 + (qrand() & 0x7FF));
+            QTest::qSleep(10);
+        }
+    }
+
+private:
+    KisPaintDeviceSP m_device;
+};
+
+void KisIteratorTest::stressTest()
+{
+    const KoColorSpace * colorSpace = KoColorSpaceRegistry::instance()->rgb8();
+
+    QRect imageRect(0,0,2000,2000);
+
+    KisPaintDeviceSP device = new KisPaintDevice(colorSpace);
+    device->fill(imageRect, KoColor(Qt::red, colorSpace));
+
+
+    QThreadPool threadPool;
+    threadPool.setMaxThreadCount(NUM_THREADS);
+
+    for(int i = 0; i< NUM_THREADS; i++) {
+        QRect rc = QRect(double(i) / NUM_THREADS * 2000, 0, 2000 / NUM_THREADS, 2000);
+//        qDebug() << rc;
+
+        DataReaderThread *reader = new DataReaderThread(device, rc);
+        threadPool.start(reader);
+
+        if(!(i & 0x1)) {
+            NastyThread *nasty = new NastyThread(device);
+            threadPool.start(nasty);
+        }
+    }
+
+    threadPool.waitForDone();
+}
+
 QTEST_KDEMAIN(KisIteratorTest, NoGUI)
 #include "kis_iterator_test.moc"

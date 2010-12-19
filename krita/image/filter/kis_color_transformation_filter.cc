@@ -31,6 +31,7 @@
 #ifndef NDEBUG
 #include <QTime>
 #endif
+#include <kis_iterator_ng.h>
 
 typedef QPointer<KoUpdater> KoUpdaterPtr;
 
@@ -42,50 +43,35 @@ KisColorTransformationFilter::~KisColorTransformationFilter()
 {
 }
 
-void KisColorTransformationFilter::process(KisConstProcessingInformation srcInfo,
-                                           KisProcessingInformation dstInfo,
-                                           const QSize& size,
+void KisColorTransformationFilter::process(KisPaintDeviceSP device, 
+                                           const QRect& applyRect,
                                            const KisFilterConfiguration* config,
                                            KoUpdater* progressUpdater
                                            ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_UNUSED(config);
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.height());
+        progressUpdater->setRange(0, applyRect.height() * applyRect.width());
     }
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
+    Q_ASSERT(colorTransformation);
     if (!colorTransformation) return;
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), 0);
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), 0);
+    KisRectIteratorSP it = device->createRectIteratorNG(applyRect);
+    int p = 0;
+    int conseq;
+    do {
+    
+        conseq = it->nConseqPixels();
 
-    for (int row = 0; row < size.height(); ++row) {
-        while (! srcIt.isDone()) {
-            int srcItConseq = srcIt.nConseqHPixels();
-            int dstItConseq = dstIt.nConseqHPixels();
-            int conseqPixels = qMin(srcItConseq, dstItConseq);
+        colorTransformation->transform(it->oldRawData(), it->rawData(), conseq);
 
-            colorTransformation->transform(srcIt.oldRawData(), dstIt.rawData(), conseqPixels);
+        if (progressUpdater) progressUpdater->setValue(p += conseq);
 
-            // Update progress
-            srcIt += conseqPixels;
-            dstIt += conseqPixels;
-        }
-        if (progressUpdater) progressUpdater->setValue(row);
-
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
+    } while(it->nextPixels(conseq));
     delete colorTransformation;
-
 
 }

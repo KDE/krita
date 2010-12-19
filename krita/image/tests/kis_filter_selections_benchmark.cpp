@@ -161,13 +161,11 @@ void KisFilterSelectionsBenchmark::testUsualSelections(int num)
     KisTimeCounter timer;
 
     QRect filterRect = m_selection->selectedExactRect();
-    KisConstProcessingInformation src(m_device,  filterRect.topLeft(), m_selection);
-    KisProcessingInformation dst(projection, filterRect.topLeft(), 0);
 
     timer.restart();
     for (int i = 0; i < num; i++) {
         KisTransaction transac("", projection, 0);
-        m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
+        m_filter->process(m_device, projection, m_selection, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
 
@@ -186,13 +184,11 @@ void KisFilterSelectionsBenchmark::testNoSelections(int num)
     KisTimeCounter timer;
 
     QRect filterRect = m_selection->selectedExactRect();
-    KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
-    KisProcessingInformation dst(projection, filterRect.topLeft(), 0);
 
     timer.restart();
     for (int i = 0; i < num; i++) {
         KisTransaction transac("", projection, 0);
-        m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
+        m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
     }
     avTime = double(timer.elapsed()) / num;
 
@@ -246,11 +242,8 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
-        KisProcessingInformation dst(cacheDevice, filterRect.topLeft(), 0);
-
         KisTransaction transac("", cacheDevice, 0);
-        m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
+        m_filter->process(m_device, projection, 0, filterRect, m_configuration, 0);
 
         KisPainter painter(projection);
         painter.beginTransaction("");
@@ -280,11 +273,8 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
     for (int i = 0; i < num; i++) {
         KisPaintDeviceSP cacheDevice = new KisPaintDevice(projection->colorSpace());
 
-        KisConstProcessingInformation src(m_device,  filterRect.topLeft(), 0);
-        KisProcessingInformation dst(cacheDevice, filterRect.topLeft(), 0);
-
         KisTransaction transac("", cacheDevice, 0);
-        m_filter->process(src, dst, filterRect.size(), m_configuration, 0);
+        m_filter->process(m_device, cacheDevice, 0, filterRect, m_configuration, 0);
 
         KisPainter gc(projection);
         gc.beginTransaction("");

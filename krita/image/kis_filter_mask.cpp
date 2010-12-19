@@ -108,16 +108,12 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         return QRect();
     }
 
-    KisConstProcessingInformation srcInfo(src,  rc.topLeft(), 0);
-    KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);
-
     KoProgressUpdater updater(nodeProgressProxy());
     updater.start(100, filter->name());
 
     QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-    filter->process(srcInfo, dstInfo, rc.size(),
-                    m_d->filterConfig, updaterPtr);
+    filter->process(src, dst, 0, rc, m_d->filterConfig, updaterPtr);
 
     updaterPtr->setProgress(100);
 

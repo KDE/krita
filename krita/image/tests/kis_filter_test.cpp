@@ -41,13 +41,11 @@ public:
 
     using KisFilter::process;
 
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
+    void process(KisPaintDeviceSP src,
+                 const QRect& size,
                  const KisFilterConfiguration* config,
                  KoUpdater* progressUpdater) const {
         Q_UNUSED(src);
-        Q_UNUSED(dst);
         Q_UNUSED(size);
         Q_UNUSED(config);
         Q_UNUSED(progressUpdater);
@@ -79,10 +77,7 @@ void KisFilterTest::testWithProgressUpdater()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc, updater);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc, updater);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -108,10 +103,7 @@ void KisFilterTest::testSingleThreaded()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dev->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -140,10 +132,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisConstProcessingInformation srcCfg(src,  QPoint(0, 0), sel);
-    KisProcessingInformation dstCfg(dst, QPoint(0, 0), sel);
-
-    f->process(srcCfg, dstCfg, qimage.size(), kfc);
+    f->process(src, dst, sel, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
     if (!TestUtil::compareQImages(errpoint, inverted, dst->convertToQImage(0, 0, 0, qimage.width(), qimage.height()))) {
@@ -184,17 +173,13 @@ void KisFilterTest::testOldDataApiAfterCopy()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisConstProcessingInformation srcCfg(dst,  updateRect.topLeft(), 0);
-    KisProcessingInformation dstCfg(tmp, updateRect.topLeft(), 0);
-
-
     /**
      * This filter reads from oldRawData, so if we have some
      * weirdness with transactions it will read from old and non-cleared
      * version of the device and we will see a black square instead
      * of empty device in tmp
      */
-    f->process(srcCfg, dstCfg, updateRect.size(), kfc);
+    f->process(src, dst, 0, updateRect, kfc);
 
     /**
      * In theory, both devices: dst and tmp must be empty by now
@@ -236,13 +221,8 @@ void KisFilterTest::testBlurFilterApplicationRect()
     KisFilterConfiguration * kfc = f->defaultConfiguration(0);
     Q_ASSERT(kfc);
 
-    KisConstProcessingInformation src1Cfg(src1,  filterRect.topLeft(), 0);
-    KisProcessingInformation dst1Cfg(dst1, filterRect.topLeft(), 0);
-    KisConstProcessingInformation src2Cfg(src2,  filterRect.topLeft(), 0);
-    KisProcessingInformation dst2Cfg(dst2, filterRect.topLeft(), 0);
-
-    f->process(src1Cfg, dst1Cfg, filterRect.size(), kfc);
-    f->process(src2Cfg, dst2Cfg, filterRect.size(), kfc);
+    f->process(src1, dst1, 0, filterRect, kfc);
+    f->process(src2, dst2, 0, filterRect, kfc);
 
     KisPaintDeviceSP reference = new KisPaintDevice(cs);
     reference->fill(filterRect.left(),filterRect.top(),filterRect.width(),filterRect.height(), whitePixel);

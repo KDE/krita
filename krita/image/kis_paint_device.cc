@@ -848,7 +848,7 @@ KisRectIteratorSP KisPaintDevice::createRectIteratorNG(qint32 x, qint32 y, qint3
     return new KisRectIterator2(m_datamanager.data(), x, y, w, h, m_d->x, m_d->y, true);
 }
 
-KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect& r) const
+KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect& r)
 {
     return createRectIteratorNG(r.x(), r.y(), r.width(), r.height());
 }

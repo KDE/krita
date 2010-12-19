@@ -55,17 +55,14 @@ KisConfigWidget* ShivaFilter::createConfigurationWidget(QWidget* parent, const K
     return new ShivaGeneratorConfigWidget(m_source, parent);
 }
 
-void ShivaFilter::process(KisConstProcessingInformation srcInfo,
-                          KisProcessingInformation dstInfo,
-                          const QSize& size,
+void ShivaFilter::process(KisPaintDeviceSP dev,
+                          const QRect& size,
                           const KisFilterConfiguration* config,
                           KoUpdater* progressUpdater
                          ) const
 {
     Q_UNUSED(progressUpdater);
-    KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
+    QPoint dstTopLeft = size.topLeft();
 
     UpdaterProgressReport* report = 0;
     if (progressUpdater) {
@@ -73,8 +70,7 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
         report = new UpdaterProgressReport(progressUpdater);
     }
     
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    Q_ASSERT(!dev.isNull());
 //     Q_ASSERT(config);
     // TODO support for selection
     OpenShiva::Kernel kernel;
@@ -104,8 +100,8 @@ void ShivaFilter::process(KisConstProcessingInformation srcInfo,
         kernel.compile();
     }
     if (kernel.isCompiled()) {
-        ConstPaintDeviceImage pdisrc(src);
-        PaintDeviceImage pdi(dst);
+        ConstPaintDeviceImage pdisrc(dev);
+        PaintDeviceImage pdi(dev);
 #if OPENSHIVA_12
         std::list< GTLCore::AbstractImage* > inputs;
         GTLCore::Region region(dstTopLeft.x(), dstTopLeft.y() , size.width(), size.height());

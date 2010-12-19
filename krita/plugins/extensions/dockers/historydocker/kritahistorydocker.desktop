@@ -1,5 +1,9 @@
 [Desktop Entry]
 Name=Krita Undo History Docker plugin
+Name[pt]='Plugin' do Módulo Acoplável do Histórico de Anulações do Krita
+Name[sv]=Krita insticksprogram för ångringshistorik
+Name[uk]=Додаток панелі журналу скасування для Krita
+Name[x-test]=xxKrita Undo History Docker pluginxx
 Type=Service
 X-KDE-ServiceTypes=Krita/Dock
 X-KDE-Library=kritahistorydocker

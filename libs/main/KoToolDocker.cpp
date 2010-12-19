@@ -21,8 +21,11 @@
  */
 #include "KoToolDocker_p.h"
 
+#include <KoDockWidgetTitleBarButton.h>
+
 #include <klocale.h>
 #include <kdebug.h>
+#include <kicon.h>
 
 #include <QPointer>
 #include <QGridLayout>
@@ -30,10 +33,21 @@
 #include <QLabel>
 #include <QSet>
 #include <QAction>
+#include <QStyleOptionFrame>
 
 class KoToolDocker::Private {
 public:
-    Private(KoToolDocker *dock) : q(dock), tabbed(false) {}
+    Private(KoToolDocker *dock)
+            : q(dock)
+            ,tabbed(false)
+            ,openIcon(dock->style()->standardIcon(QStyle::SP_TitleBarShadeButton))
+            ,closeIcon(dock->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton))
+    {
+        if (openIcon.isNull())
+            openIcon = KIcon("arrow-down");
+        if (closeIcon.isNull())
+            closeIcon = KIcon("arrow-right");
+    }
 
     QMap<QString, QWidget *> currentWidgetMap;
     QSet<QWidget *> currentAuxWidgets;
@@ -44,6 +58,9 @@ public:
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
     bool tabbed;
+    KIcon openIcon, closeIcon;
+    QAbstractButton* floatButton;
+    QAbstractButton* collapseButton;
 
     void recreateLayout(const QMap<QString, QWidget *> &optionWidgetMap)
     {
@@ -63,7 +80,7 @@ public:
         case Qt::TopDockWidgetArea:
         case Qt::BottomDockWidgetArea:
         case Qt::TopDockWidgetArea+128: // we don't do tabbed at top
-        case Qt::BottomDockWidgetArea+128: // we don't do tabbed at top
+        case Qt::BottomDockWidgetArea+128: // we don't do tabbed at Bottom
             housekeeperLayout->setHorizontalSpacing(2);
             housekeeperLayout->setVerticalSpacing(0);
             iter = currentWidgetMap.constBegin();
@@ -87,6 +104,8 @@ public:
             break;
         case Qt::LeftDockWidgetArea:
         case Qt::RightDockWidgetArea:
+        case Qt::LeftDockWidgetArea+128:
+        case Qt::RightDockWidgetArea+128:
             housekeeperLayout->setHorizontalSpacing(0);
             housekeeperLayout->setVerticalSpacing(2);
             iter = currentWidgetMap.constBegin();
@@ -120,6 +139,23 @@ public:
         dockingArea = area;
         recreateLayout(currentWidgetMap);
     }
+
+    void toggleFloating()
+    {
+        q->setFloating(!q->isFloating());
+    }
+
+    void toggleCollapsed()
+    {
+        if (q == 0) // there does not *have* to be anything on the dockwidget.
+            return;
+        q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
+        if (q->widget()) {
+            q->widget()->setVisible(q->widget()->isHidden());
+            collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
+        }
+    }
+
 };
 
 KoToolDocker::KoToolDocker(QWidget *parent)
@@ -131,7 +167,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     //setFeatures(NoDockWidgetFeatures);
     setFeatures(AllDockWidgetFeatures);
-
+setFloating(true);
     setTitleBarWidget(new QWidget());
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
@@ -148,6 +184,16 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea->setFrameShape(QFrame::NoFrame);
 
     setWidget(d->scrollArea);
+
+    d->floatButton = new KoDockWidgetTitleBarButton(this);
+    d->floatButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, this));
+    connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
+    d->floatButton->setVisible(true);
+
+    d->collapseButton = new KoDockWidgetTitleBarButton(this);
+    d->collapseButton->setIcon(d->openIcon);
+    connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
+    d->collapseButton->setVisible(true);
 }
 
 KoToolDocker::~KoToolDocker()
@@ -163,6 +209,38 @@ bool KoToolDocker::hasOptionWidget()
 void KoToolDocker::setOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
 {
     d->recreateLayout(optionWidgetMap);
+}
+
+void KoToolDocker::resizeEvent(QResizeEvent*)
+{
+    int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
+    int mw = style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, this);
+    QFontMetrics titleFontMetrics = fontMetrics();
+    int fontHeight = titleFontMetrics.lineSpacing() + 2 * mw;
+
+    QStyleOptionDockWidgetV2 opt;
+    opt.initFrom(this);
+    opt.rect = QRect(QPoint(fw, fw), QSize(width() - (fw * 2) - 20, fontHeight));
+    opt.title = "";
+    opt.closable = false;
+    opt.floatable = true;
+
+    QRect floatRect = style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, this);
+    if (!floatRect.isNull())
+        //floatRect.setTop(fw);
+        d->floatButton->setGeometry(floatRect);
+
+    int top = fw;
+    if (!floatRect.isNull()) {
+        top = floatRect.y();
+    }
+
+    QSize size = d->collapseButton->size();
+    if (!floatRect.isNull()) {
+        size = d->floatButton->size();
+    }
+    QRect collapseRect = QRect(QPoint(fw, top), size);
+    d->collapseButton->setGeometry(collapseRect);
 }
 
 #include <KoToolDocker_p.moc>

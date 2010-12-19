@@ -35,7 +35,7 @@
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
-    ToolDockerFactory() { }
+    ToolDockerFactory() : KoDockFactoryBase() { }
 
     QString id() const {
         return "sharedtooldocker";
@@ -62,7 +62,7 @@ public:
 KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     : QObject(mainWindow), d( new Private() )
 {
-    ToolDockerFactory factory();
+    ToolDockerFactory factory;
     d->docker = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
     Q_ASSERT(d->docker);
 }

@@ -37,6 +37,8 @@ public:
     explicit KoToolDocker(QWidget *parent = 0);
     ~KoToolDocker();
 
+protected:
+    virtual void resizeEvent(QResizeEvent* event); ///< reimplemented from QWidget
 public slots:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.
@@ -49,6 +51,8 @@ public slots:
     bool hasOptionWidget();
 
 private:
+    Q_PRIVATE_SLOT(d, void toggleFloating())
+    Q_PRIVATE_SLOT(d, void toggleCollapsed())
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;

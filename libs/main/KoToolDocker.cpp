@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  *
+ * Copyright (c) 2010 Casper Boemann <cbo@boemann.dk>
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
@@ -26,39 +27,96 @@
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QLabel>
+#include <QSet>
 
 class KoToolDocker::Private {
 public:
-    Private(KoToolDocker *dock) : q(dock) {}
-
-    ~Private()
-    {
-/*        QMap<QString, QWidget*>::ConstIterator iter = currentWidgetMap.constBegin();
-        for (;iter != currentWidgetMap.constEnd(); ++iter) {
-            iter.value()->setParent(0);
-        }
-*/    }
+    Private(KoToolDocker *dock) : q(dock), tabbed(false) {}
 
     QMap<QString, QWidget *> currentWidgetMap;
+    QSet<QWidget *> currentAuxWidgets;
     QScrollArea *scrollArea;
+    QWidget *hiderWidget; // non current widgets are hidden by being children of this
     QWidget *housekeeperWidget;
     QGridLayout *housekeeperLayout;
     KoToolDocker *q;
+    Qt::DockWidgetArea dockingArea;
+    bool tabbed;
 
-    void locationChanged(Qt::DockWidgetArea area)
+    void recreateLayout(const QMap<QString, QWidget *> &optionWidgetMap)
     {
-        switch(area) {
+        QMap<QString, QWidget*>::ConstIterator iter = currentWidgetMap.constBegin();
+
+        for (;iter != currentWidgetMap.constEnd(); ++iter) {
+            iter.value()->setParent(hiderWidget);
+        }
+        qDeleteAll(currentAuxWidgets);
+        currentAuxWidgets.clear();
+
+        currentWidgetMap = optionWidgetMap;
+
+        // Now add option widgets to docker based on layout area and if it should be tabbed
+        // small hack with 128 to cover all in one switch
+        switch(dockingArea + (tabbed ? 128 : 0)) {
         case Qt::TopDockWidgetArea:
         case Qt::BottomDockWidgetArea:
+        case Qt::TopDockWidgetArea+128: // we don't do tabbed at top
+        case Qt::BottomDockWidgetArea+128: // we don't do tabbed at top
+            housekeeperLayout->setHorizontalSpacing(2);
+            housekeeperLayout->setVerticalSpacing(0);
+            iter = currentWidgetMap.constBegin();
+            for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
+                QFrame *s;
+                QLabel *l;
+                if (iter.value()->objectName().isEmpty()) {
+                    Q_ASSERT(!(iter.value()->objectName().isEmpty()));
+                    continue; // skip this docker in release build when assert don't crash
+                }
+                housekeeperLayout->addWidget(l = new QLabel(iter.key()), 0, 2*cnt);
+                currentAuxWidgets.insert(l);
+                housekeeperLayout->addWidget(iter.value(), 1, 2*cnt);
+                ++iter;
+                if (iter != currentWidgetMap.constEnd()) {
+                    housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
+                    s->setFrameShape(QFrame::VLine);
+                    currentAuxWidgets.insert(s);
+                }
+            }
             break;
         case Qt::LeftDockWidgetArea:
         case Qt::RightDockWidgetArea:
+            housekeeperLayout->setHorizontalSpacing(0);
+            housekeeperLayout->setVerticalSpacing(2);
+            iter = currentWidgetMap.constBegin();
+            for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
+                QFrame *s;
+                QLabel *l;
+                if (iter.value()->objectName().isEmpty()) {
+                    Q_ASSERT(!(iter.value()->objectName().isEmpty()));
+                    continue; // skip this docker in release build when assert don't crash
+                }
+                housekeeperLayout->addWidget(l = new QLabel(iter.key()), 3*cnt, 0);
+                currentAuxWidgets.insert(l);
+                housekeeperLayout->addWidget(iter.value(), 3*cnt+1, 0);
+                ++iter;
+                if (iter != currentWidgetMap.constEnd()) {
+                    housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
+                    s->setFrameShape(QFrame::HLine);
+                    currentAuxWidgets.insert(s);
+                }
+            }
             break;
         default:
             break;
         }
         housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
         housekeeperLayout->invalidate();
+    }
+
+    void locationChanged(Qt::DockWidgetArea area)
+    {
+        dockingArea = area;
+        recreateLayout(currentWidgetMap);
     }
 };
 
@@ -68,7 +126,8 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
-    setFeatures(NoDockWidgetFeatures);
+    //setFeatures(NoDockWidgetFeatures);
+    setFeatures(AllDockWidgetFeatures);
 
     setTitleBarWidget(new QWidget());
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -76,9 +135,10 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
     d->housekeeperWidget->setLayout(d->housekeeperLayout);
-    d->housekeeperLayout->setHorizontalSpacing(0);
-    d->housekeeperLayout->setVerticalSpacing(2);
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+
+    d->hiderWidget = new QWidget(d->housekeeperWidget);
+    d->hiderWidget->setVisible(false);
 
     d->scrollArea = new QScrollArea();
     d->scrollArea->setWidget(d->housekeeperWidget);
@@ -99,31 +159,7 @@ bool KoToolDocker::hasOptionWidget()
 
 void KoToolDocker::setOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
 {
-    QMap<QString, QWidget*>::ConstIterator iter = d->currentWidgetMap.constBegin();
-    for (;iter != d->currentWidgetMap.constEnd(); ++iter) {
-        iter.value()->setVisible(false);
-        iter.value()->setParent(0);
-    }
-
-    // Now add option widgets to docker
-    iter = optionWidgetMap.constBegin();
-    int cnt=0;
-    QFrame *s;
-    for (;iter != optionWidgetMap.constEnd(); ++iter) {
-        if (iter.value()->objectName().isEmpty()) {
-            kError(30004) << "tooldocker widget have no name " << iter.key();
-            Q_ASSERT(!(iter.value()->objectName().isEmpty()));
-            continue; // skip this docker in release build when assert don't crash
-        }
-        d->housekeeperLayout->addWidget(new QLabel(iter.key()), 3*cnt, 0);
-        d->housekeeperLayout->addWidget(iter.value(), 3*cnt+1, 0);
-        d->housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
-        s->setFrameShape(QFrame::HLine);
-        ++cnt;
-    }
-
-    d->currentWidgetMap = optionWidgetMap;
-    d->housekeeperLayout->invalidate();
+    d->recreateLayout(optionWidgetMap);
 }
 
 #include <KoToolDocker_p.moc>

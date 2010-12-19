@@ -35,24 +35,20 @@
 class ToolDockerFactory : public KoDockFactoryBase
 {
 public:
-    ToolDockerFactory(const QString &name) : m_id(name) { }
+    ToolDockerFactory() { }
 
     QString id() const {
-        return m_id;
+        return "sharedtooldocker";
     }
 
     QDockWidget* createDockWidget() {
         KoToolDocker * dockWidget = new KoToolDocker();
-        dockWidget->setObjectName(m_id);
         return dockWidget;
     }
 
     DockPosition defaultDockPosition() const {
         return DockRight;
     }
-
-private:
-    QString m_id;
 };
 
 
@@ -60,31 +56,19 @@ class KoDockerManager::Private
 {
 public:
     Private() {};
-    KoMainWindow* mainWindow;
     KoToolDocker *docker;
 };
 
 KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     : QObject(mainWindow), d( new Private() )
 {
-    d->mainWindow = mainWindow;
-    ToolDockerFactory factory("sharedtooldocker");
+    ToolDockerFactory factory();
     d->docker = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
     Q_ASSERT(d->docker);
-    d->docker->toggleViewAction()->setVisible(false); //always visible so no option in menu
-
-    KConfigGroup cfg = KGlobal::config()->group("DockerManager");
 }
 
 KoDockerManager::~KoDockerManager()
 {
-/*
-    KConfigGroup cfg = KGlobal::config()->group("DockerManager");
-    QStringList visibleList;
-    QStringList hiddenList;
-    QMapIterator<QString, KoToolDocker *> iter(d->toolDockerMap);
-    cfg.sync();
-*/
     delete d;
 }
 

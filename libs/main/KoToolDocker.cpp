@@ -20,14 +20,16 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KoToolDocker_p.h"
-#include <QPointer>
 
 #include <klocale.h>
 #include <kdebug.h>
+
+#include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QLabel>
 #include <QSet>
+#include <QAction>
 
 class KoToolDocker::Private {
 public:
@@ -121,11 +123,12 @@ public:
 };
 
 KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget("Tool Options", parent),
+    : QDockWidget("sharedtooldocker", parent),
     d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
+    toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     //setFeatures(NoDockWidgetFeatures);
     setFeatures(AllDockWidgetFeatures);
 

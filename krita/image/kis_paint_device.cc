@@ -848,10 +848,20 @@ KisRectIteratorSP KisPaintDevice::createRectIteratorNG(qint32 x, qint32 y, qint3
     return new KisRectIterator2(m_datamanager.data(), x, y, w, h, m_d->x, m_d->y, true);
 }
 
+KisRectIteratorSP KisPaintDevice::createRectIteratorNG(const QRect& r) const
+{
+    return createRectIteratorNG(r.x(), r.y(), r.width(), r.height());
+}
+
 KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const
 {
     KisDataManager* dm = const_cast< KisDataManager*>(m_datamanager.data()); // TODO: don't do this
     return new KisRectIterator2(dm, x, y, w, h, m_d->x, m_d->y, false);
+}
+
+KisRectConstIteratorSP KisPaintDevice::createRectConstIteratorNG(const QRect& r) const
+{
+    return createRectConstIteratorNG(r.x(), r.y(), r.width(), r.height());
 }
 
 KisHLineConstIteratorPixel  KisPaintDevice::createHLineConstIterator(qint32 x, qint32 y, qint32 w, const KisSelection * selection) const

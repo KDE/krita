@@ -31,10 +31,6 @@
 RulerAssistant::RulerAssistant()
         : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(10, 10));
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    initHandles(handles);
 }
 
 QPointF RulerAssistant::project(const QPointF& pt) const
@@ -71,7 +67,7 @@ inline double norm2(const QPointF& p)
 void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 2);
+    if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 

@@ -34,12 +34,6 @@
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    handles.push_back(new KisPaintingAssistantHandle(100, 200));
-    handles.push_back(new KisPaintingAssistantHandle(200, 100));
-    handles.push_back(new KisPaintingAssistantHandle(200, 200));
-    initHandles(handles);
 }
 
 // squared distance from a point to a line
@@ -120,14 +114,14 @@ inline void drawX(QPainter& gc, const QPointF& pt)
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 4);
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPolygonF poly;
     gc.save();
     gc.setTransform(initialTransform);
     if (!quad(poly)) {
-        gc.setPen(QColor(255, 0, 0, 125));
+        // color red for an invalid transform, but not for an incomplete one
+        gc.setPen((handles().size() == 4) ? QColor(255, 0, 0, 125) : QColor(0, 0, 0, 125));
         gc.drawPolygon(poly);
         gc.restore();
     } else {
@@ -178,8 +172,11 @@ inline qreal pdot(const QPointF& a, const QPointF& b)
 
 bool PerspectiveAssistant::quad(QPolygonF& poly) const
 {
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < handles().size(); ++i)
         poly.push_back(*handles()[i]);
+    if (handles().size() != 4) {
+        return false;
+    }
     int sum = 0;
     int signs[4];
     for (int i = 0; i < 4; ++i) {

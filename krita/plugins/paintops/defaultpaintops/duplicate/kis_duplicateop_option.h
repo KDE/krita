@@ -23,6 +23,7 @@
 
 const QString DUPLICATE_HEALING = "Duplicateop/Healing";
 const QString DUPLICATE_CORRECT_PERSPECTIVE = "Duplicateop/CorrectPerspective";
+const QString DUPLICATE_MOVE_SOURCE_POINT = "Duplicateop/MoveSourcePoint";
 
 class KisDuplicateOpOptionsWidget;
 
@@ -38,6 +39,9 @@ public:
 
     bool correctPerspective() const;
     void setPerspective(bool perspective);
+    
+    bool moveSourcePoint() const;
+    void setMoveSourcePoint(bool move);
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 

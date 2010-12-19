@@ -65,6 +65,7 @@ private:
     KisPressureSizeOption m_sizeOption;
     bool m_healing;
     bool m_perspectiveCorrection;
+    bool m_moveSourcePoint;
 };
 
 #endif // KIS_DUPLICATEOP_H_

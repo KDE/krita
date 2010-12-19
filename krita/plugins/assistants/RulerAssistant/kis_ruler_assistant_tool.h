@@ -46,7 +46,6 @@ public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();
 private slots:
-    void createNewAssistant();
     void removeAllAssistants();
 protected:
 
@@ -58,6 +57,7 @@ protected:
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
     KisPaintingAssistant* m_assistantDrag;
+    KisPaintingAssistant* m_newAssistant;
     QPointF m_mousePosition;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget;

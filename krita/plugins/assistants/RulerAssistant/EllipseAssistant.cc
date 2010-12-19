@@ -30,14 +30,8 @@
 #include <math.h>
 
 EllipseAssistant::EllipseAssistant()
-        : KisPaintingAssistant("ellipse", i18n("Ellipse assistant")),
-        e(QPointF(10, 100), QPointF(110, 100), QPointF(60, 70))
+        : KisPaintingAssistant("ellipse", i18n("Ellipse assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(e.major1()));
-    handles.push_back(new KisPaintingAssistantHandle(e.major2()));
-    handles.push_back(new KisPaintingAssistantHandle(e.point()));
-    initHandles(handles);
 }
 
 QPointF EllipseAssistant::project(const QPointF& pt) const
@@ -55,10 +49,19 @@ QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*str
 void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 3);
+    if (handles().size() < 2) return;
+    QTransform initialTransform = converter->documentToWidgetTransform();
+    if (handles().size() == 2) {
+        // just draw the axis
+        gc.save();
+        gc.setTransform(initialTransform);
+        gc.setPen(QColor(0, 0, 0, 125));
+        gc.drawLine(*handles()[0], *handles()[1]);
+        gc.restore();
+        return;
+    }
     if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
         // valid ellipse
-        QTransform initialTransform = converter->documentToWidgetTransform();
 
         gc.save();
         gc.setTransform(initialTransform);

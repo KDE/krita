@@ -32,6 +32,7 @@ public:
     virtual void endStroke();
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
+    virtual int numHandles() const { return 4; }
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral

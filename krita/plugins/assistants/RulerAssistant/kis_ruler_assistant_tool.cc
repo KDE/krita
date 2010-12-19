@@ -263,7 +263,7 @@ void KisRulerAssistantTool::removeAllAssistants()
 
 void KisRulerAssistantTool::loadAssistants()
 {
-    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("text/xml"));
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedGet(file);
     connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
@@ -305,7 +305,7 @@ void KisRulerAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    KUrl file = KFileDialog::getSaveUrl(KUrl(), QString("text/xml"));
+    KUrl file = KFileDialog::getSaveUrl(KUrl(), QString("*.krassistants"));
     if (file.isEmpty()) return;
     KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
     connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));

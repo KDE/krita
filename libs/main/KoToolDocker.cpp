@@ -167,7 +167,6 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
     //setFeatures(NoDockWidgetFeatures);
     setFeatures(AllDockWidgetFeatures);
-setFloating(true);
     setTitleBarWidget(new QWidget());
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 

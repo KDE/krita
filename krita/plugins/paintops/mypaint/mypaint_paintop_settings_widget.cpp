@@ -86,6 +86,7 @@ MyPaintSettingsWidget:: MyPaintSettingsWidget(QWidget* parent)
     m_options->lstBrushes->setCurrentIndex(m_model->index(0));
     connect(m_options->lstBrushes, SIGNAL(clicked(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
     connect(m_options->lstBrushes, SIGNAL(activated(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
+    brushSelected(m_model->index(0, 0));
 }
 
 
@@ -126,6 +127,7 @@ void MyPaintSettingsWidget::brushSelected(const QModelIndex& index)
     m_activeBrushFilename = m_model->data(index).toString();
     QFileInfo info(m_activeBrushFilename);
     m_options->lblBrushName->setText(info.baseName());
+    emit sigConfigurationUpdated();
 }
 
 MyPaintBrushResource* MyPaintSettingsWidget::brush() const

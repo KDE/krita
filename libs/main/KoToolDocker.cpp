@@ -22,6 +22,7 @@
 #include "KoToolDocker_p.h"
 
 #include <KoDockWidgetTitleBarButton.h>
+#include <KoDockWidgetTitleBar.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -34,19 +35,16 @@
 #include <QSet>
 #include <QAction>
 #include <QStyleOptionFrame>
+#include <QToolButton>
 
 class KoToolDocker::Private {
 public:
     Private(KoToolDocker *dock)
             : q(dock)
             ,tabbed(false)
-            ,openIcon(dock->style()->standardIcon(QStyle::SP_TitleBarShadeButton))
-            ,closeIcon(dock->style()->standardIcon(QStyle::SP_TitleBarUnshadeButton))
     {
-        if (openIcon.isNull())
-            openIcon = KIcon("arrow-down");
-        if (closeIcon.isNull())
-            closeIcon = KIcon("arrow-right");
+        lockIcon = KIcon("arrow-down");
+        unlockIcon = KIcon("arrow-right");
     }
 
     QMap<QString, QWidget *> currentWidgetMap;
@@ -58,9 +56,8 @@ public:
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
     bool tabbed;
-    KIcon openIcon, closeIcon;
-    QAbstractButton* floatButton;
-    QAbstractButton* collapseButton;
+    KIcon lockIcon;
+    KIcon unlockIcon;
 
     void recreateLayout(const QMap<QString, QWidget *> &optionWidgetMap)
     {
@@ -140,22 +137,15 @@ public:
         recreateLayout(currentWidgetMap);
     }
 
-    void toggleFloating()
+    void toggleLock()
     {
-        q->setFloating(!q->isFloating());
-    }
-
-    void toggleCollapsed()
-    {
-        if (q == 0) // there does not *have* to be anything on the dockwidget.
-            return;
-        q->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX); // will be overwritten again next
-        if (q->widget()) {
-            q->widget()->setVisible(q->widget()->isHidden());
-            collapseButton->setIcon(q->widget()->isHidden() ? closeIcon : openIcon);
+        qDebug()<<"TOGGLE";
+        if (1){//!q->titleBarWidget()) {
+            q->setTitleBarWidget(new KoDockWidgetTitleBar(q));
+        } else {
+            q->setTitleBarWidget(new QWidget());
         }
     }
-
 };
 
 KoToolDocker::KoToolDocker(QWidget *parent)
@@ -184,15 +174,11 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     setWidget(d->scrollArea);
 
-    d->floatButton = new KoDockWidgetTitleBarButton(this);
-    d->floatButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, this));
-    connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
-    d->floatButton->setVisible(true);
-
-    d->collapseButton = new KoDockWidgetTitleBarButton(this);
-    d->collapseButton->setIcon(d->openIcon);
-    connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
-    d->collapseButton->setVisible(true);
+    QToolButton *lockButton = new QToolButton(this);
+   // d->floatButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, this));
+    connect(lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
+    lockButton->setGeometry(QRect(50,5,50,20));
+    lockButton->setVisible(true);
 }
 
 KoToolDocker::~KoToolDocker()
@@ -224,22 +210,15 @@ void KoToolDocker::resizeEvent(QResizeEvent*)
     opt.closable = false;
     opt.floatable = true;
 
-    QRect floatRect = style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, this);
+/*    QRect floatRect = style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, this);
     if (!floatRect.isNull())
-        //floatRect.setTop(fw);
         d->floatButton->setGeometry(floatRect);
 
     int top = fw;
     if (!floatRect.isNull()) {
         top = floatRect.y();
     }
-
-    QSize size = d->collapseButton->size();
-    if (!floatRect.isNull()) {
-        size = d->floatButton->size();
-    }
-    QRect collapseRect = QRect(QPoint(fw, top), size);
-    d->collapseButton->setGeometry(collapseRect);
+*/
 }
 
 #include <KoToolDocker_p.moc>

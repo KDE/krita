@@ -42,10 +42,11 @@ public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap, QWidget *callingView);
+    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
 
 
 private:
+    Q_PRIVATE_SLOT(d, void makeDockVisible())
     class Private;
     Private * const d;
 };

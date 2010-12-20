@@ -57,6 +57,10 @@ class KoDockerManager::Private
 public:
     Private() {};
     KoToolDocker *docker;
+
+    void makeDockVisible()
+    {
+    }
 };
 
 KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
@@ -65,6 +69,7 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     ToolDockerFactory factory;
     d->docker = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
     Q_ASSERT(d->docker);
+    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(makeDockVisible()));
 }
 
 KoDockerManager::~KoDockerManager()
@@ -72,10 +77,8 @@ KoDockerManager::~KoDockerManager()
     delete d;
 }
 
-void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap, QWidget *callingView)
+void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
 {
-    Q_UNUSED(callingView);
-
     d->docker->setOptionWidgets(optionWidgetMap);
 }
 

@@ -423,7 +423,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     restoreWindowSize( config );
 
     d->dockerManager = new KoDockerManager(this);
-    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
 }
 
 KoMainWindow::~KoMainWindow()

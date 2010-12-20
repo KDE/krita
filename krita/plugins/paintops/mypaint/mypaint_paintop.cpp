@@ -40,7 +40,8 @@ MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImage
     m_surface = new MyPaintSurface(settings->node()->projection(), painter);
     MyPaintFactory *factory = static_cast<MyPaintFactory*>(KisPaintOpRegistry::instance()->get("mypaintbrush"));
     m_brush = factory->brush(settings->getString("filename"));
-    m_brush->set_base_value(BRUSH_RADIUS_LOGARITHMIC, 2.0); // Hack to get it working
+// //     kDebug() << "file " << settings->getString("filename");
+//     m_brush->set_base_value(BRUSH_RADIUS_LOGARITHMIC, 5.0); // Hack to get it working
     m_brush->new_stroke();
     QColor c = painter->paintColor().toQColor();
     qreal h, s, v, a;

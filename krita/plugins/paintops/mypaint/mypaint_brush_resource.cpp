@@ -237,7 +237,7 @@ public:
 
     void set_base_value(float value)
     {
-        if (base_value == value) return;
+//         if (base_value == value) return;
         base_value = value;
         parent_brush->set_base_value(brush_setting_definition->index, value);
     }

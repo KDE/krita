@@ -329,6 +329,7 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("angle", KisBrush::angle());
     e.setAttribute("randomness", d->randomness);
     e.setAttribute("density", d->density);
+    KisBrush::toXML(doc, e);
 }
 
 QImage KisAutoBrush::createBrushPreview()

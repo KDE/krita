@@ -40,8 +40,6 @@ MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImage
     m_surface = new MyPaintSurface(settings->node()->projection(), painter);
     MyPaintFactory *factory = static_cast<MyPaintFactory*>(KisPaintOpRegistry::instance()->get("mypaintbrush"));
     m_brush = factory->brush(settings->getString("filename"));
-// //     kDebug() << "file " << settings->getString("filename");
-//     m_brush->set_base_value(BRUSH_RADIUS_LOGARITHMIC, 5.0); // Hack to get it working
     m_brush->new_stroke();
     QColor c = painter->paintColor().toQColor();
     qreal h, s, v, a;
@@ -67,6 +65,7 @@ qreal MyPaint::paintAt(const KisPaintInformation& info)
                                            info.pos().y(),
                                            info.pressure(),
                                            qreal(m_eventTime.elapsed()) / 1000);
+    m_eventTime.restart();
     return 1.0;
 }
 
@@ -81,8 +80,8 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
     }
     m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
                                                        pi1.pos().x(), pi1.pos().y(),
-                                                       pi1.pressure(),
-                                                       qreal(m_eventTime.elapsed()) / 1000);
+                                                       0,
+                                                       0);
     if (m_mypaintThinksStrokeHasEnded) {
         m_brush->new_stroke();
     }
@@ -90,6 +89,8 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
                                                        pi2.pos().x(), pi2.pos().y(),
                                                        pi2.pressure(),
                                                        qreal(m_eventTime.elapsed()) / 1000);
+
+    m_eventTime.restart();
 
     // not sure what to do with these...
     KisVector2D end = toKisVector2D(pi2.pos());

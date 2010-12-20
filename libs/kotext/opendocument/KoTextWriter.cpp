@@ -181,8 +181,12 @@ public:
                                        QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd);
     bool checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively = true);
 
+    // Common methods
     void writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element);
     void writeNode(QTextStream &outputXmlStream, KoXmlNode &node, bool writeOnlyChildren = false);
+    void removeLeavingContentStart(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId, int endIdCounter);
+    void removeLeavingContentEnd(QTextStream &outputXmlStream, int endIdCounter);
+    void insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId);
 };
 
 void KoTextWriter::Private::saveChange(QTextCharFormat format)
@@ -1246,6 +1250,32 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
         //Not Possible
     }
 
+}
+
+void KoTextWriter::Private::removeLeavingContentStart(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId, int endIdCounter)
+{
+    outputXmlStream << "<delta:remove-leaving-content-start";
+    outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
+    outputXmlStream << " delta:end-element-idref=" << "\"end" << endIdCounter << "\">";
+
+    outputXmlStream << "<text:" << element.localName();
+    writeAttributes(outputXmlStream, element);
+    outputXmlStream << "/>";
+            
+    outputXmlStream << "</delta:remove-leaving-content-start>";
+}
+
+void KoTextWriter::Private::removeLeavingContentEnd(QTextStream &outputXmlStream, int endIdCounter)
+{
+    outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << endIdCounter << "\"/>";
+}
+
+void KoTextWriter::Private::insertAroundContent(QTextStream &outputXmlStream, KoXmlElement &element, QString &changeId)
+{
+    outputXmlStream << "<text:" << element.localName() << " delta:insertion-change-idref=" << "\"" << changeId << "\"";
+    outputXmlStream << " delta:insertion-type=\"insert-around-content\"";
+    writeAttributes(outputXmlStream, element);
+    outputXmlStream << ">";
 }
 
 void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)

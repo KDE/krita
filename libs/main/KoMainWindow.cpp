@@ -150,6 +150,7 @@ public:
             toolBarsDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
             toolBarsDock->setWidget(dockedToolBarsWidget);
             parent->addDockWidget(Qt::TopDockWidgetArea, toolBarsDock);
+            dockWidgets.push_back(toolBarsDock);
         }
         QList<KToolBar *> tmpList = parent->toolBars();
         toolBarList.append(tmpList);
@@ -164,7 +165,7 @@ public:
             foreach(KToolBar *toolBar, toolBarList) {
                 parent->addToolBar(toolBar);
             }
-            toolBarsDock = 0;
+            //toolBarsDock = 0;
             toolBarList.clear();
         }
     }
@@ -1670,6 +1671,7 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         }
         plugActionList("toolbarlist", d->toolbarList);
 
+        // This call is what actually puts the toolbars into the toolbars docker
         d->moveToolBarsToDocker();
 
         // Send the GUIActivateEvent only now, since it might show/hide toolbars too
@@ -1821,6 +1823,8 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
 
+    d->moveToolBarsToDocker();
+    
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 

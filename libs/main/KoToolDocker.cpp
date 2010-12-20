@@ -31,6 +31,7 @@
 #include <QPointer>
 #include <QGridLayout>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QLabel>
 #include <QSet>
 #include <QAction>
@@ -58,6 +59,7 @@ public:
     bool tabbed;
     KIcon lockIcon;
     KIcon unlockIcon;
+    QToolButton *lockButton;
 
     void recreateLayout(const QMap<QString, QWidget *> &optionWidgetMap)
     {
@@ -174,11 +176,10 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     setWidget(d->scrollArea);
 
-    QToolButton *lockButton = new QToolButton(this);
+    d->lockButton = new QToolButton(d->scrollArea);
    // d->floatButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, this));
-    connect(lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
-    lockButton->setGeometry(QRect(50,5,50,20));
-    lockButton->setVisible(true);
+    connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
+    d->lockButton->setVisible(true);
 }
 
 KoToolDocker::~KoToolDocker()
@@ -203,22 +204,7 @@ void KoToolDocker::resizeEvent(QResizeEvent*)
     QFontMetrics titleFontMetrics = fontMetrics();
     int fontHeight = titleFontMetrics.lineSpacing() + 2 * mw;
 
-    QStyleOptionDockWidgetV2 opt;
-    opt.initFrom(this);
-    opt.rect = QRect(QPoint(fw, fw), QSize(width() - (fw * 2) - 20, fontHeight));
-    opt.title = "";
-    opt.closable = false;
-    opt.floatable = true;
-
-/*    QRect floatRect = style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, this);
-    if (!floatRect.isNull())
-        d->floatButton->setGeometry(floatRect);
-
-    int top = fw;
-    if (!floatRect.isNull()) {
-        top = floatRect.y();
-    }
-*/
+    d->lockButton->move(d->scrollArea->width() - d->lockButton->sizeHint().width() -d->scrollArea->verticalScrollBar()->width() -4, fw + mw);
 }
 
 #include <KoToolDocker_p.moc>

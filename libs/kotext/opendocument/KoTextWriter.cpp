@@ -1290,10 +1290,7 @@ void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXm
     QString changeId = removedContentElement.attributeNS(KoXmlNS::delta, "removal-change-idref");
 
     //Start generating the XML
-    outputXmlStream << "<text:" << firstChild << " delta:insertion-change-idref=" << "\"" << changeId << "\"";
-    outputXmlStream << " delta:insertion-type=\"insert-around-content\"";
-    writeAttributes(outputXmlStream, firstChildElement);
-    outputXmlStream << ">";
+    insertAroundContent(outputXmlStream, firstChildElement, changeId);
 
     //Start a counter for end-element-idref
     int endIdCounter = 1;
@@ -1303,19 +1300,9 @@ void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXm
         if (childElement.localName() == "removed-content") {
             writeNode(outputXmlStream, childElement, false);
         } else {
-            outputXmlStream << "<delta:remove-leaving-content-start";
-            outputXmlStream << " delta:removal-change-idref=" << "\"" << changeId << "\"";
-            outputXmlStream << " delta:end-element-idref=" << "\"end" << endIdCounter << "\">";
-
-            outputXmlStream << "<text:" << childElement.localName();
-            writeAttributes(outputXmlStream, childElement);
-            outputXmlStream << "/>";
-            
-            outputXmlStream << "</delta:remove-leaving-content-start>";
-
+            removeLeavingContentStart(outputXmlStream, childElement, changeId, endIdCounter);
             writeNode(outputXmlStream, childElement, true);
-
-            outputXmlStream << "<delta:remove-leaving-content-end delta:end-element-id=\"end" << endIdCounter << "\"/>";
+            removeLeavingContentEnd(outputXmlStream, endIdCounter);
             endIdCounter++;
         }
     }

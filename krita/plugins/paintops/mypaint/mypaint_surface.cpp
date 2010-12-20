@@ -27,15 +27,17 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_random_accessor.h>
+#include <kis_painter.h>
 
 #include "mypaint_surface.h"
 
 #define TILE_SIZE 64
 #define CLAMP(x,l,u) ((x)<(l)?(l):((x)>(u)?(u):(x)))
 
-MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst)
+MyPaintSurface::MyPaintSurface(KisPaintDeviceSP src, KisPainter* painter)
     : m_src(src)
-    , m_dst(dst)
+    , m_dst(painter->device())
+    , m_painter(painter)
 {
     m_rgb16 = KoColorSpaceRegistry::instance()->rgb16();
     // fake a mypaint tile
@@ -156,7 +158,7 @@ bool MyPaintSurface::draw_dab (float x, float y,
             }
             m_rgb16->convertPixelsTo(m_dstRgb16Data, m_dstData, m_dst->colorSpace(), TILE_SIZE * TILE_SIZE);
             m_dst->writeBytes(m_dstData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-            m_dst->setDirty(QRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE));
+            m_painter->addDirtyRect(QRect(tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE));
         }
     }
 

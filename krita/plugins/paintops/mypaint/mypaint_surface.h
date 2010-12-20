@@ -1,4 +1,5 @@
-/*
+
+class KisPainter;/*
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -39,7 +40,7 @@ public:
      *      color present on dst, blended using ALPHA_DARKEN
      * dst; the surface we are drawing on
      */
-    MyPaintSurface(KisPaintDeviceSP src, KisPaintDeviceSP dst);
+    MyPaintSurface(KisPaintDeviceSP src, KisPainter* painter);
     virtual ~MyPaintSurface()
     {
         delete[] m_dstData;
@@ -67,6 +68,7 @@ private:
 
     KisPaintDeviceSP m_src;
     KisPaintDeviceSP m_dst;
+    KisPainter* m_painter;
 
     KoColor    m_color;
     QColor     m_qcolor;

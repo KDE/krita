@@ -43,9 +43,10 @@ public:
     Private(KoToolDocker *dock)
             : q(dock)
             ,tabbed(false)
+            ,hasTitle(false)
     {
-        lockIcon = KIcon("arrow-down");
-        unlockIcon = KIcon("arrow-right");
+        lockIcon = KIcon("object-locked");
+        unlockIcon = KIcon("object-unlocked");
     }
 
     QMap<QString, QWidget *> currentWidgetMap;
@@ -57,6 +58,7 @@ public:
     KoToolDocker *q;
     Qt::DockWidgetArea dockingArea;
     bool tabbed;
+    bool hasTitle;
     KIcon lockIcon;
     KIcon unlockIcon;
     QToolButton *lockButton;
@@ -141,12 +143,16 @@ public:
 
     void toggleLock()
     {
-        qDebug()<<"TOGGLE";
-        if (1){//!q->titleBarWidget()) {
+        if (!hasTitle) {
             q->setTitleBarWidget(new KoDockWidgetTitleBar(q));
+            hasTitle = true;
+            lockButton->setIcon(lockIcon);
         } else {
             q->setTitleBarWidget(new QWidget());
+            hasTitle = false;
+            lockButton->setIcon(unlockIcon);
         }
+        lockButton->move(q->width() - lockButton->width() - scrollArea->verticalScrollBar()->sizeHint().width() - (hasTitle ? 24 : 4), lockButton->y());
     }
 };
 
@@ -176,10 +182,12 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     setWidget(d->scrollArea);
 
-    d->lockButton = new QToolButton(d->scrollArea);
-   // d->floatButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarNormalButton, 0, this));
+    d->lockButton = new QToolButton(this);
+    d->lockButton->setIcon(d->lockIcon);
+    //d->lockButton->setFrame(QFrame:NoFrame);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
     d->lockButton->setVisible(true);
+    d->lockButton->resize(d->lockButton->sizeHint());
 }
 
 KoToolDocker::~KoToolDocker()
@@ -202,9 +210,7 @@ void KoToolDocker::resizeEvent(QResizeEvent*)
     int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
     int mw = style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, this);
     QFontMetrics titleFontMetrics = fontMetrics();
-    int fontHeight = titleFontMetrics.lineSpacing() + 2 * mw;
-
-    d->lockButton->move(d->scrollArea->width() - d->lockButton->sizeHint().width() -d->scrollArea->verticalScrollBar()->width() -4, fw + mw);
+    d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width() - (d->hasTitle ? 24 : 4), fw + mw);
 }
 
 #include <KoToolDocker_p.moc>

@@ -19,7 +19,7 @@
 
 #include "kis_multipliers_double_slider_spinbox.h"
 
-#include "ui_wdgmultiplersdoublesliderspinbox.h"
+#include "ui_wdgmultipliersdoublesliderspinbox.h"
 
 struct KisMultipliersDoubleSliderSpinBox::Private {
     qreal currentMultiplier();

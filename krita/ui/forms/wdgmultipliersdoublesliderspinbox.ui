@@ -25,7 +25,23 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="comboBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>52</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="insertPolicy">
+      <enum>QComboBox::InsertAlphabetically</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

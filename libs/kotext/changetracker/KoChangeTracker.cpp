@@ -449,6 +449,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
     cursor.mergeCharFormat(format);
 
     QTextBlock currentBlock = document->findBlock(cursor.anchor());
+    QTextBlock startBlock = currentBlock;
     QTextBlock endBlock = document->findBlock(cursor.position()).next();
 
     // First remove any left-over DeletedList set from previous deletes
@@ -464,6 +465,7 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
     }
 
     currentBlock = document->findBlock(cursor.anchor());
+    startBlock = currentBlock;
     endBlock = document->findBlock(cursor.position()).next();
 
     for (;currentBlock != endBlock; currentBlock = currentBlock.next()) {
@@ -490,6 +492,12 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
                 blockFormat.setProperty(KoDeleteChangeMarker::DeletedListItem, false);
                 editCursor.mergeBlockFormat(blockFormat);
             }
+        }
+        
+        if (currentBlock != startBlock) {
+            QTextBlockFormat blockFormat;
+            blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            editCursor.mergeBlockFormat(blockFormat);
         }
     }
     

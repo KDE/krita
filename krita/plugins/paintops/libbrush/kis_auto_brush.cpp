@@ -133,6 +133,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     setAngle(angle);
     QImage image = createBrushPreview();
     setImage(image);
+    m_idealThreadCountCached = QThread::idealThreadCount();
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -302,7 +303,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }//endfor y
 
         MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
-        int jobs = QThread::idealThreadCount();
+        int jobs = m_idealThreadCountCached;
         if(dstHeight > 100 && jobs >= 4) {
             int splitter = dstHeight/jobs;
             QVector<QRect> rects;

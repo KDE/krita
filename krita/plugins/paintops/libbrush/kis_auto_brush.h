@@ -77,6 +77,7 @@ private:
         return precomputedQuarter[y*width+x];
     }
     
+    int m_idealThreadCountCached;
     
 private:
 

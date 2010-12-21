@@ -1571,6 +1571,16 @@ bool KoTextLoader::Private::checkForDeleteMerge(QTextCursor &cursor, const QStri
             QTextCursor tempCursor(cursor);
             tempCursor.setPosition(cursor.block().previous().position() + cursor.block().previous().length() - 1);
             prevChangeId = tempCursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+
+            if (!prevChangeId) {
+                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
+                KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(tempCursor.charFormat()) : 0;
+                KoDeleteChangeMarker *deleteChangeMarker = dynamic_cast<KoDeleteChangeMarker *>(inlineObject);
+                if (deleteChangeMarker) {
+                    prevChangeId = deleteChangeMarker->changeId();
+                }
+            }
+
         } else {
             QTextCursor tempCursor(cursor);
             tempCursor.setPosition(startPosition - 1);
@@ -1586,13 +1596,15 @@ bool KoTextLoader::Private::checkForDeleteMerge(QTextCursor &cursor, const QStri
 
         int endPosition = cursor.position();
         //Set the char format to the changeId
-        cursor.setPosition(startPosition);
-        cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
+        if (startPosition != endPosition) {
+            cursor.setPosition(startPosition);
+            cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
 
-        QTextCharFormat format;
-        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-        cursor.mergeCharFormat(format);
-        cursor.clearSelection();
+            QTextCharFormat format;
+            format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            cursor.mergeCharFormat(format);
+            cursor.clearSelection();
+        }
     }
     return result; 
 }

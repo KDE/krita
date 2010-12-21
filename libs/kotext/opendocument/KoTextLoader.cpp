@@ -130,7 +130,7 @@ public:
     QMap<QString, QString> deleteAroundContentMap;
     QMap<QString, QString> deleteLeavingContentChangeIdMap;
     QVector<QString> nameSpacesList;
-    bool simpleDeleteMerge;
+    bool deleteMergeStarted;
     void copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream);
     void copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
@@ -164,7 +164,7 @@ public:
             loadSpanLevel(0),
             loadSpanInitialPos(0),
             openedElements(0),
-            simpleDeleteMerge(false)
+            deleteMergeStarted(false)
     {
         dt.start();
     }
@@ -651,12 +651,15 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
     
     xmlStream << ">";
 
-    if (simpleDeleteMerge && (nodeName.endsWith(":p") || nodeName.endsWith(":h"))) {
-        int deltaIndex = nameSpacesList.indexOf(KoXmlNS::delta);
-        xmlStream << "<" << "ns" << deltaIndex << ":removed-content ";
-        QString changeId = deleteLeavingContentChangeIdMap.value(changeEndId);
-        xmlStream << "ns" << deltaIndex << ":removal-change-idref=" << "\"" << changeId << "\"" << ">";
-        xmlStream << "</" << "ns" << deltaIndex << ":removed-content>";
+    if (deleteMergeStarted && (nodeName.endsWith(":p") || nodeName.endsWith(":h"))) {
+        KoXmlElement nextElement = node.nextSibling().toElement();
+        if (nextElement.localName() != "removed-content") { 
+            int deltaIndex = nameSpacesList.indexOf(KoXmlNS::delta);
+            xmlStream << "<" << "ns" << deltaIndex << ":removed-content ";
+            QString changeId = deleteLeavingContentChangeIdMap.value(changeEndId);
+            xmlStream << "ns" << deltaIndex << ":removal-change-idref=" << "\"" << changeId << "\"" << ">";
+            xmlStream << "</" << "ns" << deltaIndex << ":removed-content>";
+        }
     }
 }
 
@@ -668,7 +671,7 @@ void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QT
     openedElements--;
 
     if (nodeName.endsWith(":p") || nodeName.endsWith(":h")) {
-        if (!simpleDeleteMerge) {
+        if (!deleteMergeStarted) {
             //We are not already inside a simple delete merge
             //Check Whether the previous sibling is a removed-content. 
             //If not, then this is the starting p or h of a simple merge.
@@ -683,10 +686,10 @@ void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QT
                 QString changeId = deleteLeavingContentChangeIdMap.value(changeEndId);
                 xmlStream << "ns" << deltaIndex << ":removal-change-idref=" << "\"" << changeId << "\"" << ">";
                 xmlStream << "</" << "ns" << deltaIndex << ":removed-content>";
-                simpleDeleteMerge = true;
             }
+            deleteMergeStarted = true;
         } else {
-            simpleDeleteMerge = false;
+            deleteMergeStarted = false;
         }
     }
 

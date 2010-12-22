@@ -1091,16 +1091,19 @@ int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
         if (!endBlock.next().isValid())
             break;
         
-        int lastFragmentChangeId = endBlock.end().fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-        int nextFragmentChangeId = endBlock.next().begin().fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-        
-        if ((lastFragmentChangeId) && (nextFragmentChangeId) \
-            && (lastFragmentChangeId == nextFragmentChangeId) \
-            && (changeTracker->elementById(lastFragmentChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
-            changeId = lastFragmentChangeId;
-            endBlock = endBlock.next();
+        int nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+
+        if (!changeId) {
+            changeId = nextBlockChangeId;
+            if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
+                endBlock = endBlock.next();
+            }
         } else {
-            changeId = 0;
+            if (nextBlockChangeId == changeId) {
+                endBlock = endBlock.next();
+            } else {
+                changeId = 0;
+            }
         }
     } while(changeId);
 
@@ -1133,7 +1136,7 @@ int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
         if (outlineChange || pWithListMerge || listWithPMerge || listItemMerge)
             endBlockNumber = endBlock.blockNumber();
     } 
-
+   
     return endBlockNumber;
 }
 

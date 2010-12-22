@@ -31,6 +31,8 @@
 #include <QThread>
 
 #include "mypaint_brush_resource.h"
+#include <kis_paintop_registry.h>
+#include <kis_resource_server_provider.h>
 
 class MyPaintFactory::Private {
 public:
@@ -106,5 +108,28 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
     }
 }
 
+void MyPaintFactory::addPresets()
+{
+    KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
+    QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);
+    while (i.hasNext()) {
+        i.next();
+        
+        //Create a preset for every loaded brush
+        KisPaintOpSettingsSP s = settings(0);    
+        s->setProperty("paintop", id());
+        s->setProperty("filename", i.key());
+
+        KisPaintOpPreset* preset = new KisPaintOpPreset();
+        preset->setName(i.key());
+        preset->setSettings(s);
+        KoID paintOpID(id(), name());
+        preset->setPaintOp(paintOpID);
+        preset->setValid(true);
+        preset->setImage(i.value()->image());
+        
+        rserver->addResource(preset, false);
+    }
+}
 
 #include "mypaint_paintop_factory.moc"

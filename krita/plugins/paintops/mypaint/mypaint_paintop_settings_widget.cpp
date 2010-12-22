@@ -96,9 +96,7 @@ MyPaintSettingsWidget::~ MyPaintSettingsWidget()
 
 void  MyPaintSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
-    const_cast<KisPropertiesConfiguration*>(config)->dump();
-    // XXX: set the active brush
-    Q_UNUSED(config);
+    m_activeBrushFilename = config->getString("filename");
 }
 
 KisPropertiesConfiguration*  MyPaintSettingsWidget::configuration() const

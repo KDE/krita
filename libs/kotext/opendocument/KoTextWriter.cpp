@@ -1243,9 +1243,9 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
     } while (secondChild == "removed-content");
 
     if ((firstChild == "p") && (secondChild == "h")) {
-        handleParagraphWithHeaderMerge(outputXmlStream, element);
+        handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "p")) {
-        handleParagraphWithHeaderMerge(outputXmlStream, element);
+        handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "p") && (secondChild == "p")) {
         handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "p")) {

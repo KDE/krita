@@ -1248,7 +1248,7 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
         handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "p") && (secondChild == "p")) {
         handleParagraphOrHeaderMerge(outputXmlStream, element);
-    } else if ((firstChild == "h") && (secondChild == "p")) {
+    } else if ((firstChild == "h") && (secondChild == "h")) {
         handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "p") && (secondChild == "list")) {
         handleParagraphWithListItemMerge(outputXmlStream, element);
@@ -1323,6 +1323,7 @@ void KoTextWriter::Private::handleParagraphOrHeaderMerge(QTextStream &outputXmlS
     outputXmlStream << "<delta:intermediate-content>";
     KoXmlElement mergeEndElement = firstChildElement.nextSibling().toElement();
     while (mergeEndElement.localName() == "removed-content") {
+        writeNode(outputXmlStream, mergeEndElement, true);
         mergeEndElement = mergeEndElement.nextSibling().toElement();
     }
     outputXmlStream << "</delta:intermediate-content>";

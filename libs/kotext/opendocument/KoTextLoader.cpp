@@ -127,12 +127,12 @@ public:
 
     // For handling complex-deletes i.e delete changes that merges elements of different types
     int openedElements;
-    QMap<QString, QString> deleteAroundContentMap;
-    QMap<QString, QString> deleteLeavingContentChangeIdMap;
+    QMap<QString, QString> removeLeavingContentMap;
+    QMap<QString, QString> removeLeavingContentChangeIdMap;
     QVector<QString> nameSpacesList;
     bool deleteMergeStarted;
-    void copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream);
-    void copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
+    void copyRemoveLeavingContentStart(const KoXmlNode &node, QTextStream &xmlStream);
+    void copyRemoveLeavingContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
     void copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren = false);
 
@@ -590,9 +590,9 @@ KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QString *ge
             element = lastProcessedNode.toElement();
 
         if (isElementNode && (element.localName() == "remove-leaving-content-start")) {
-            d->copyDeleteAroundContentStart(element, xmlStream);
+            d->copyRemoveLeavingContentStart(element, xmlStream);
         } else if (isElementNode && (element.localName() == "remove-leaving-content-end")) {
-            d->copyDeleteAroundContentEnd(element, xmlStream);
+            d->copyRemoveLeavingContentEnd(element, xmlStream);
         } else if (isElementNode && (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
             d->copyInsertAroundContent(element, xmlStream);
         } else {
@@ -616,7 +616,7 @@ KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QString *ge
     return lastProcessedNode.previousSibling();
 }
 
-void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, QTextStream &xmlStream)
+void KoTextLoader::Private::copyRemoveLeavingContentStart(const KoXmlNode &node, QTextStream &xmlStream)
 {
     KoXmlElement element = node.firstChild().toElement();
     QString changeEndId = node.toElement().attributeNS(KoXmlNS::delta, "end-element-idref");
@@ -628,11 +628,11 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
     QString nodeName  = QString("ns%1") + ":" + element.localName();
     nodeName = nodeName.arg(index);
     
-    deleteAroundContentMap.insert(changeEndId, nodeName);
+    removeLeavingContentMap.insert(changeEndId, nodeName);
     openedElements++;
 
     QString changeId = node.toElement().attributeNS(KoXmlNS::delta, "removal-change-idref");
-    deleteLeavingContentChangeIdMap.insert(changeEndId, changeId);
+    removeLeavingContentChangeIdMap.insert(changeEndId, changeId);
 
     xmlStream << "<" << nodeName;
     QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
@@ -656,18 +656,18 @@ void KoTextLoader::Private::copyDeleteAroundContentStart(const KoXmlNode &node, 
         if (nextElement.localName() != "removed-content") { 
             int deltaIndex = nameSpacesList.indexOf(KoXmlNS::delta);
             xmlStream << "<" << "ns" << deltaIndex << ":removed-content ";
-            QString changeId = deleteLeavingContentChangeIdMap.value(changeEndId);
+            QString changeId = removeLeavingContentChangeIdMap.value(changeEndId);
             xmlStream << "ns" << deltaIndex << ":removal-change-idref=" << "\"" << changeId << "\"" << ">";
             xmlStream << "</" << "ns" << deltaIndex << ":removed-content>";
         }
     }
 }
 
-void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QTextStream &xmlStream)
+void KoTextLoader::Private::copyRemoveLeavingContentEnd(const KoXmlNode &node, QTextStream &xmlStream)
 {
     QString changeEndId = node.toElement().attributeNS(KoXmlNS::delta, "end-element-id");
-    QString nodeName = deleteAroundContentMap.value(changeEndId);
-    deleteAroundContentMap.remove(changeEndId);
+    QString nodeName = removeLeavingContentMap.value(changeEndId);
+    removeLeavingContentMap.remove(changeEndId);
     openedElements--;
 
     if (nodeName.endsWith(":p") || nodeName.endsWith(":h")) {
@@ -683,7 +683,7 @@ void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QT
                     deltaIndex = nameSpacesList.size() - 1;
                 }
                 xmlStream << "<" << "ns" << deltaIndex << ":removed-content ";
-                QString changeId = deleteLeavingContentChangeIdMap.value(changeEndId);
+                QString changeId = removeLeavingContentChangeIdMap.value(changeEndId);
                 xmlStream << "ns" << deltaIndex << ":removal-change-idref=" << "\"" << changeId << "\"" << ">";
                 xmlStream << "</" << "ns" << deltaIndex << ":removed-content>";
             }
@@ -693,7 +693,7 @@ void KoTextLoader::Private::copyDeleteAroundContentEnd(const KoXmlNode &node, QT
         }
     }
 
-    deleteLeavingContentChangeIdMap.remove(changeEndId);
+    removeLeavingContentChangeIdMap.remove(changeEndId);
     xmlStream << "</" << nodeName << ">";
 }
 
@@ -741,9 +741,9 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
 
 
             if (isElementNode && (childElement.localName() == "remove-leaving-content-start")) {
-                copyDeleteAroundContentStart(childElement, xmlStream);
+                copyRemoveLeavingContentStart(childElement, xmlStream);
             } else if (isElementNode && (childElement.localName() == "remove-leaving-content-end")) {
-                copyDeleteAroundContentEnd(childElement, xmlStream);
+                copyRemoveLeavingContentEnd(childElement, xmlStream);
             } else if (isElementNode && (childElement.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
                 copyInsertAroundContent(childElement, xmlStream);
             } else {

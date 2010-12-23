@@ -150,6 +150,9 @@ public:
 
     void postProcessDeleteMergeXml();
     void generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element);
+
+    // For Handling <p> with <p> or <h> with <h> merges
+    void handleParagraphOrHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     
     // For Handling <p> with <h> or <h> with <p> merges
     void handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
@@ -1243,6 +1246,10 @@ void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const
         handleParagraphWithHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "p")) {
         handleParagraphWithHeaderMerge(outputXmlStream, element);
+    } else if ((firstChild == "p") && (secondChild == "p")) {
+        handleParagraphOrHeaderMerge(outputXmlStream, element);
+    } else if ((firstChild == "h") && (secondChild == "p")) {
+        handleParagraphOrHeaderMerge(outputXmlStream, element);
     } else if ((firstChild == "p") && (secondChild == "list")) {
         handleParagraphWithListItemMerge(outputXmlStream, element);
     } else if ((firstChild == "h") && (secondChild == "list")) {
@@ -1285,6 +1292,11 @@ void KoTextWriter::Private::insertAroundContent(QTextStream &outputXmlStream, Ko
     outputXmlStream << " delta:insertion-type=\"insert-around-content\"";
     writeAttributes(outputXmlStream, element);
     outputXmlStream << ">";
+}
+
+void KoTextWriter::Private::handleParagraphOrHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
+{
+    qDebug() << "**********handleParagraphorHeaderMerge called*************";
 }
 
 void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)

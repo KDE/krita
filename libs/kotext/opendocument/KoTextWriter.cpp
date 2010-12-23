@@ -80,8 +80,8 @@ public:
     styleManager(0),
     changeTracker(0),
     rdfData(0),
-    tagTypeChangeRegionOpened(false),
-    tagTypeChangeEndBlockNumber(-1)
+    deleteMergeRegionOpened(false),
+    deleteMergeEndBlockNumber(-1)
     {
         writer = &context.xmlWriter();
         changeStack.push(0);
@@ -136,19 +136,19 @@ public:
     // is not included in the selection.
     QList<KoInlineObject*> pairedInlineObjectStack;
 
-    //For saving of delete-changes that result in a tag type change
-    bool tagTypeChangeRegionOpened;
-    int tagTypeChangeEndBlockNumber;
-    int checkForTagTypeChanges(QTextBlock &block);
-    void openTagTypeChangeRegion();
-    void closeTagTypeChangeRegion();
+    //For saving of delete-changes that result in a merge between two elements
+    bool deleteMergeRegionOpened;
+    int deleteMergeEndBlockNumber;
+    int checkForDeleteMerge(QTextBlock &block);
+    void openDeleteMergeRegion();
+    void closeDeleteMergeRegion();
 
     KoXmlWriter *oldXmlWriter;
     KoXmlWriter *newXmlWriter;
     QByteArray generatedXmlArray;
     QBuffer generatedXmlBuffer;
 
-    void postProcessTagTypeChangeXml();
+    void postProcessDeleteMergeXml();
     void generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element);
     
     // For Handling <p> with <h> or <h> with <p> merges
@@ -932,26 +932,26 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     KoList *list = textDocument.list(block);
     int topListLevel = KoList::level(block);
 
-    if ((level == 1) && (!tagTypeChangeRegionOpened) && !headingLevel) {
+    if ((level == 1) && (!deleteMergeRegionOpened) && !headingLevel) {
         QTextBlock listBlock = block;
         do {
-            int endBlockNumber = checkForTagTypeChanges(listBlock);
+            int endBlockNumber = checkForDeleteMerge(listBlock);
             if (endBlockNumber != -1) {
-                tagTypeChangeEndBlockNumber = endBlockNumber;
-                tagTypeChangeRegionOpened = true;
-                openTagTypeChangeRegion();
+                deleteMergeEndBlockNumber = endBlockNumber;
+                deleteMergeRegionOpened = true;
+                openDeleteMergeRegion();
                 break;
             }
             listBlock = listBlock.next();
         } while(textDocument.list(listBlock) == list);
     }
 
-    bool closeTagChangeRegion = false;
-    if ((level == 1) && (tagTypeChangeRegionOpened) && !headingLevel) {
+    bool closeDelMergeRegion = false;
+    if ((level == 1) && (deleteMergeRegionOpened) && !headingLevel) {
         QTextBlock listBlock = block;
         do {
-            if (listBlock.blockNumber() == tagTypeChangeEndBlockNumber) {
-                closeTagChangeRegion = true;
+            if (listBlock.blockNumber() == deleteMergeEndBlockNumber) {
+                closeDelMergeRegion = true;
             }
             listBlock = listBlock.next();
         } while(textDocument.list(listBlock) == list);
@@ -1052,8 +1052,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         writer->endElement();
     }
 
-    if (closeTagChangeRegion) {
-        closeTagTypeChangeRegion();
+    if (closeDelMergeRegion) {
+        closeDeleteMergeRegion();
     }
    
     return block;
@@ -1094,25 +1094,25 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 continue;
         }
 
-        if (!tagTypeChangeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
-            tagTypeChangeEndBlockNumber = checkForTagTypeChanges(block);
-            if (tagTypeChangeEndBlockNumber != -1) {
-                tagTypeChangeRegionOpened = true;
-                openTagTypeChangeRegion();
+        if (!deleteMergeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
+            deleteMergeEndBlockNumber = checkForDeleteMerge(block);
+            if (deleteMergeEndBlockNumber != -1) {
+                deleteMergeRegionOpened = true;
+                openDeleteMergeRegion();
             }
         }
 
         saveParagraph(block, from, to);
 
-        if (tagTypeChangeRegionOpened && (block.blockNumber() == tagTypeChangeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
-            closeTagTypeChangeRegion();
+        if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
+            closeDeleteMergeRegion();
         }
 
         block = block.next();
     } // while
 }
 
-int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
+int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
 {
     QTextBlock endBlock = block;
     QTextCursor cursor(block);    
@@ -1140,39 +1140,13 @@ int KoTextWriter::Private::checkForTagTypeChanges(QTextBlock &block)
     } while(changeId);
 
     if (endBlock.blockNumber() != block.blockNumber()) {
-        // Check For <p> and a <h> merge
-        bool outlineChange = false;
-        if (block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel) \
-            != endBlock.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)) {
-            outlineChange = true;
-        }
-
-        // Check for <p> or a <h> with a <list> merge
-        bool pWithListMerge = false;
-        if (!QTextCursor(block).currentList() && QTextCursor(endBlock).currentList()) {
-            pWithListMerge = true;
-        }
-
-        // Check for a <list> merge with <p> or a <h>
-        bool listWithPMerge = false;
-        if (QTextCursor(block).currentList() && !QTextCursor(endBlock).currentList()) {
-            listWithPMerge = true;
-        }
-
-        // Check For List-Item merge
-        bool listItemMerge = false;
-        if (QTextCursor(block).currentList() && QTextCursor(endBlock).currentList()) {
-            listItemMerge = true;
-        }
-
-        if (outlineChange || pWithListMerge || listWithPMerge || listItemMerge)
-            endBlockNumber = endBlock.blockNumber();
+        endBlockNumber = endBlock.blockNumber();
     } 
    
     return endBlockNumber;
 }
 
-void KoTextWriter::Private::openTagTypeChangeRegion()
+void KoTextWriter::Private::openDeleteMergeRegion()
 {
     //Save the current writer
     oldXmlWriter = writer;
@@ -1187,7 +1161,7 @@ void KoTextWriter::Private::openTagTypeChangeRegion()
     context.setXmlWriter(*newXmlWriter);
 }
 
-void KoTextWriter::Private::closeTagTypeChangeRegion()
+void KoTextWriter::Private::closeDeleteMergeRegion()
 {
     //delete the new writer
     delete newXmlWriter;
@@ -1197,10 +1171,10 @@ void KoTextWriter::Private::closeTagTypeChangeRegion()
     context.setXmlWriter(*oldXmlWriter);
 
     //Post-Process and save the generated xml in the appropriate way.
-    postProcessTagTypeChangeXml();
+    postProcessDeleteMergeXml();
 }
 
-void KoTextWriter::Private::postProcessTagTypeChangeXml()
+void KoTextWriter::Private::postProcessDeleteMergeXml()
 {
     QString generatedXmlString(generatedXmlArray);
 

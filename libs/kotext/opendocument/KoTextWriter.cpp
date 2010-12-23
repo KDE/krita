@@ -1296,7 +1296,53 @@ void KoTextWriter::Private::insertAroundContent(QTextStream &outputXmlStream, Ko
 
 void KoTextWriter::Private::handleParagraphOrHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)
 {
-    qDebug() << "**********handleParagraphorHeaderMerge called*************";
+    // Find the first child of the element
+    // This is needed because we need to determine whether the final element is going to a <p> or a <h>
+    KoXmlElement firstChildElement = element.firstChild().toElement();
+    QString firstChild = firstChildElement.localName();
+
+    // Find the Change-id
+    KoXmlElement removedContentElement = firstChildElement.lastChild().toElement();
+    QString changeId = removedContentElement.attributeNS(KoXmlNS::delta, "removal-change-idref");
+
+    outputXmlStream << "<text:" << firstChild;
+    writeAttributes(outputXmlStream, firstChildElement);
+    outputXmlStream << ">";
+    
+    for (KoXmlNode node = firstChildElement.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.toElement().localName() == "removed-content" && node.nextSibling().isNull()) {
+            outputXmlStream << "<delta:merge delta:removal-change-idref=\"" << changeId << "\">";
+            outputXmlStream << "<delta:leading-partial-content>";
+            writeNode(outputXmlStream, node, true); 
+            outputXmlStream << "</delta:leading-partial-content>";
+        } else {
+            writeNode(outputXmlStream, node);
+        }
+    }
+
+    outputXmlStream << "<delta:intermediate-content>";
+    KoXmlElement mergeEndElement = firstChildElement.nextSibling().toElement();
+    while (mergeEndElement.localName() == "removed-content") {
+        mergeEndElement = mergeEndElement.nextSibling().toElement();
+    }
+    outputXmlStream << "</delta:intermediate-content>";
+
+    for (KoXmlNode node = mergeEndElement.firstChild(); !node.isNull(); node = node.nextSibling()) {
+        if (node.isElement() && node.toElement().localName() == "removed-content" && node.previousSibling().isNull()) {
+            outputXmlStream << "<delta:trailing-partial-content>";
+            outputXmlStream << "<text:" << mergeEndElement.localName();
+            writeAttributes(outputXmlStream, mergeEndElement);
+            outputXmlStream << ">";
+            writeNode(outputXmlStream, node, true);
+            outputXmlStream << "</text:" << mergeEndElement.localName() << ">";    
+            outputXmlStream << "</delta:trailing-partial-content>";
+            outputXmlStream << "</delta:merge>";    
+        } else {
+            writeNode(outputXmlStream, node);
+        }
+    }
+
+    outputXmlStream << "</text:" << firstChild << ">";
 }
 
 void KoTextWriter::Private::handleParagraphWithHeaderMerge(QTextStream &outputXmlStream, const KoXmlElement &element)

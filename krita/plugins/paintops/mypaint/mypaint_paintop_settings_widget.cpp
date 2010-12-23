@@ -17,6 +17,7 @@
  */
 #include "mypaint_paintop_settings_widget.h"
 
+#include <math.h>
 #include <QtGui>
 #include <QStyledItemDelegate>
 #include <QVariant>
@@ -124,4 +125,10 @@ void MyPaintSettingsWidget::writeConfiguration( KisPropertiesConfiguration* conf
 MyPaintBrushResource* MyPaintSettingsWidget::brush() const
 {
     return m_model->brush(m_activeBrushFilename);
+}
+
+void MyPaintSettingsWidget::changePaintOpSize(qreal x, qreal y)
+{
+    float value = expf(m_options->radiusSlider->value()) + x;
+    m_options->radiusSlider->setValue(log(value));
 }

@@ -42,10 +42,6 @@ public:
 
     MyPaintBrushResource* brush() const;
 
-private slots:
-
-    void brushSelected(const QModelIndex&);
-
 private:
     Ui::WdgMyPaintOptions* m_options;
     MyBrushResourcesListModel* m_model;

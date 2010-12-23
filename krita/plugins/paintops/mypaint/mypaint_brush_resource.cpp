@@ -437,6 +437,11 @@ BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)
     return m_settings[settingDefinition->index];
 }
 
+float MyPaintBrushResource::setting_value_by_cname(const QString& cname)
+{
+    return setting_by_cname(cname)->base_value;
+}
+
 void MyPaintBrushResource::get_color_hsv(float* h, float* s, float* v)
 {
     *h = setting_by_cname("color_h")->base_value;
@@ -475,3 +480,5 @@ QRgb MyPaintBrushResource::get_color_rgb()
 bool MyPaintBrushResource::is_eraser() {
     return setting_by_cname("eraser")->base_value > 0.9;
 }
+
+

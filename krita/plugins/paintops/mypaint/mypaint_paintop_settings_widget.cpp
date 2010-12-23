@@ -80,13 +80,9 @@ MyPaintSettingsWidget:: MyPaintSettingsWidget(QWidget* parent)
 {
     m_options = new Ui::WdgMyPaintOptions();
     m_options->setupUi(this);
-    m_model = new MyBrushResourcesListModel(m_options->lstBrushes);
-    m_options->lstBrushes->setModel(m_model);
-    m_options->lstBrushes->setItemDelegate(new MyPaintBrushResourceDelegate(m_options->lstBrushes));
-    m_options->lstBrushes->setCurrentIndex(m_model->index(0));
-    connect(m_options->lstBrushes, SIGNAL(clicked(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
-    connect(m_options->lstBrushes, SIGNAL(activated(const QModelIndex&)), this, SLOT(brushSelected(const QModelIndex&)));
-    brushSelected(m_model->index(0, 0));
+    
+    m_options->radiusSlider->setRange(-2.0, 5.0, 2);
+    m_options->radiusSlider->setValue(2.0);
 }
 
 
@@ -97,6 +93,13 @@ MyPaintSettingsWidget::~ MyPaintSettingsWidget()
 void  MyPaintSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_activeBrushFilename = config->getString("filename");
+    
+    MyPaintBrushResource* brush;
+    MyPaintFactory *factory = static_cast<MyPaintFactory*>(KisPaintOpRegistry::instance()->get("mypaintbrush"));
+    brush = factory->brush(m_activeBrushFilename);
+    m_options->radiusSlider->setValue(brush->setting_value_by_cname("radius_logarithmic"));
+    
+    connect(m_options->radiusSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationUpdated()));
 }
 
 KisPropertiesConfiguration*  MyPaintSettingsWidget::configuration() const
@@ -111,21 +114,11 @@ KisPropertiesConfiguration*  MyPaintSettingsWidget::configuration() const
 
 void MyPaintSettingsWidget::writeConfiguration( KisPropertiesConfiguration* config ) const
 {
-    config->dump();
     config->setProperty( "paintop", "mypaintbrush"); // XXX: make this a const id string
     config->setProperty("filename", m_activeBrushFilename);
+    config->setProperty("radius_logarithmic", m_options->radiusSlider->value());
     // XXX: set current settings of the brush, not just the filename?
     config->dump();
-}
-
-
-void MyPaintSettingsWidget::brushSelected(const QModelIndex& index)
-{
-
-    m_activeBrushFilename = m_model->data(index).toString();
-    QFileInfo info(m_activeBrushFilename);
-    m_options->lblBrushName->setText(info.baseName());
-    emit sigConfigurationUpdated();
 }
 
 MyPaintBrushResource* MyPaintSettingsWidget::brush() const

@@ -232,7 +232,7 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-idref");
         endIdMap.insert(textEndId, id);
-    } else if(element.localName() == "removed-content") {
+    } else if((element.localName() == "removed-content") || (element.localName() == "merge")) {
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.localName() == "remove-leaving-content-start") {
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
@@ -260,7 +260,7 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content"))
         changeElement->setChangeType(KoGenChange::FormatChange);
 
-    if (element.localName() == "removed-content")
+    if ((element.localName() == "removed-content") || (element.localName() == "merge"))
         changeElement->setChangeType(KoGenChange::DeleteChange);
 }
 
@@ -276,7 +276,7 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
         QString textEndId = element.attributeNS(KoXmlNS::delta, "inserted-text-end-id");
         id = endIdMap.value(textEndId);
         endIdMap.remove(textEndId);
-    } else if(element.localName() == "removed-content") {
+    } else if((element.localName() == "removed-content") || (element.localName() == "merge")) {
         id = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     } else if(element.localName() == "remove-leaving-content-end"){
         QString endId = element.attributeNS(KoXmlNS::delta, "end-element-id");
@@ -1502,6 +1502,7 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
 {
     const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
     const QTextCharFormat defaultCharFormat = cursor.charFormat();
+    d->openChangeRegion(element);
     QString changeId = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     int deleteStartPosition = cursor.position();
     
@@ -1530,6 +1531,7 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
         KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
         d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
     }
+    d->closeChangeRegion(element);
 }
 
 KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCursor &cursor, const QString &id)

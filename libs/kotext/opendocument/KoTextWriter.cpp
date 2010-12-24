@@ -439,7 +439,7 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
     QTextCursor cursor(block);
-
+    
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
     int changeId = openChangeRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader);
@@ -1127,7 +1127,7 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
     QTextCursor cursor(block);    
     int endBlockNumber = -1;
 
-    int changeId = 0;
+    int changeId = 0, deleteChangeId = 0;
     do {
         if (!endBlock.next().isValid())
             break;
@@ -1135,7 +1135,7 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
         int nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
 
         if (!changeId) {
-            changeId = nextBlockChangeId;
+            deleteChangeId = changeId = nextBlockChangeId;
             if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
                 endBlock = endBlock.next();
             }
@@ -1149,7 +1149,13 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
     } while(changeId);
 
     if (endBlock.blockNumber() != block.blockNumber()) {
-        endBlockNumber = endBlock.blockNumber();
+        //Check that the last fragment of this block is not a part of this delete change. If so, it is not a delete merge.
+        QTextFragment lastFragment = (block.end()).fragment();
+        QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
+        int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+        if (lastFragmentChangeId != deleteChangeId) {
+            endBlockNumber = endBlock.blockNumber();
+        }
     } 
     return endBlockNumber;
 }

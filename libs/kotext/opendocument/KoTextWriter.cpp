@@ -663,7 +663,13 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
 {
     int changeId = 0;
-    QTextBlock::iterator it;
+    QTextBlock::iterator it = block.begin();
+
+    if (it.atEnd()) {
+        //This is a single fragment block. So just return the change-id of the fragment
+        changeId = it.fragment().charFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+    }
+
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         if (currentFragment.isValid()) {
@@ -1145,7 +1151,6 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
     if (endBlock.blockNumber() != block.blockNumber()) {
         endBlockNumber = endBlock.blockNumber();
     } 
-   
     return endBlockNumber;
 }
 

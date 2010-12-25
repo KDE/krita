@@ -30,7 +30,6 @@
 #include <klineedit.h>
 #include <kicon.h>
 
-#include <KoResource.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceModel.h>
 #include <KoResourceServerAdapter.h>

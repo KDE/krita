@@ -10,9 +10,6 @@
     <height>37</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="KisDoubleSliderSpinBox" name="sliderSpinBox" native="true">

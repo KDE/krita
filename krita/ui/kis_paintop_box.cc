@@ -177,6 +177,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
+	
+	connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
+			m_presetsPopup, SLOT(resourceSelected(KoResource*)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);

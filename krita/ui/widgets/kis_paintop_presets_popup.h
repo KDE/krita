@@ -28,6 +28,7 @@ class QString;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
 class KisCanvasResourceProvider;
+class KoResource;
 
 /**
  * Popup widget for presets with built-in functionality
@@ -59,13 +60,13 @@ public:
     QImage cutOutOverlay();
 
 protected:
-
     void contextMenuEvent(QContextMenuEvent *);
 
 public slots:
     void switchDetached();
     void hideScratchPad();
     void showScratchPad();
+	void resourceSelected(KoResource* resource);
 
 signals:
     void savePresetClicked();

@@ -241,5 +241,10 @@ void KisPaintOpPresetsPopup::showScratchPad()
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
 }
 
+void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+{
+	m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+}
+
 
 #include "kis_paintop_presets_popup.moc"

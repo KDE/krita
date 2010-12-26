@@ -171,15 +171,18 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
 
     connect(m_presetsPopup, SIGNAL(defaultPresetClicked()), this, SLOT(slotSetupDefaultPreset()));
+    
+    connect(m_presetsPopup, SIGNAL(presetNameLineEditChanged(QString)),
+            this, SLOT(slotWatchPresetNameLineEdit(QString)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
-	
-	connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
-			m_presetsPopup, SLOT(resourceSelected(KoResource*)));
+    
+    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
+            m_presetsPopup, SLOT(resourceSelected(KoResource*)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -411,27 +414,28 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
 
 void KisPaintopBox::slotSaveActivePreset()
 {
-    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
-    if (!preset)
+    KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
+    
+    if (!curPreset)
         return;
 
-    KisPaintOpPreset* newPreset = preset->clone();
-    newPreset->setImage(m_presetsPopup->cutOutOverlay());
-
+    KisPaintOpPreset* newPreset = curPreset->clone();
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
-
     QString name = m_presetsPopup->getPresetName();
+    QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    QFileInfo fileInfo;
-    fileInfo.setFile(saveLocation + name + newPreset->defaultFileExtension());
-
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
-        i++;
+    if (fileInfo.exists()) {
+        rServer->removeResource(rServer->getResourceByFilename(fileInfo.fileName()));
     }
+    
+//     int i = 1;
+//     while (fileInfo.exists()) {
+//         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
+//         i++;
+//     }
 
+    newPreset->setImage(m_presetsPopup->cutOutOverlay());
     newPreset->setFilename(fileInfo.filePath());
     newPreset->setName(name);
 
@@ -580,5 +584,12 @@ void KisPaintopBox::slotSaveToFavouriteBrushes()
         m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
     }
 }
+
+void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
+{
+    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
+}
+
 
 #include "kis_paintop_box.moc"

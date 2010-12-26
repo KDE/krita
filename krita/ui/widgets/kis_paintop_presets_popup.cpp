@@ -112,6 +112,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
+    
+    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
+            this, SIGNAL(presetNameLineEditChanged(QString)));
             
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
@@ -161,9 +164,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     }
 
     if (widget) {
-
-        
-        
         widget->setFont(m_d->smallFont);
 
         m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -173,6 +173,22 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->show();
     }
 }
+
+void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
+{
+    QPalette palette;
+    
+    if (change) {
+        palette.setColor(QPalette::Base, QColor(255,180,180));
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText("Overwrite Preset");
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+    else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText("Save to Presets");
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+}
+
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {

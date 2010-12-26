@@ -105,7 +105,6 @@ private:
     void setEnabledInternal(bool value);
 
 private slots:
-
     void updatePaintops();
     void nodeChanged(const KisNodeSP node);
     void eraseModeToggled(bool checked);
@@ -113,6 +112,7 @@ private slots:
     void slotSetCompositeMode(const QString& compositeOp);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
+    void slotWatchPresetNameLineEdit(const QString& text);
 
 private:
 

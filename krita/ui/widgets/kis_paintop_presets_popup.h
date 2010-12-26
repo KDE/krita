@@ -45,6 +45,12 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
+    
+    /**
+     * changes the "save to preset" button text to "override preset"
+     * and highlites the preset name lineedit
+     */
+    void changeSavePresetButtonText(bool change);
 
     /**
      * @return the name entered in the preset name lineedit
@@ -71,12 +77,14 @@ public slots:
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
+    void presetNameLineEditChanged(const QString& presetName);
 
 private slots:
     void fillScratchPadGradient();
     void fillScratchPadSolid();
     void fillScratchPadLayer();
     void slotCheckPresetValidity();
+    
 
 private:
 

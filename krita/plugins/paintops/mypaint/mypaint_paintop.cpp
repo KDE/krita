@@ -59,6 +59,7 @@ MyPaint::~MyPaint()
 
 qreal MyPaint::paintAt(const KisPaintInformation& info)
 {
+#if 0
     if (m_mypaintThinksStrokeHasEnded) {
         m_settings->brush()->new_stroke();
     }
@@ -68,6 +69,8 @@ qreal MyPaint::paintAt(const KisPaintInformation& info)
                                            info.pos().y(),
                                            info.pressure(),
                                            qreal(m_eventTime.elapsed()) / 1000);
+#endif
+
     m_eventTime.restart();
     return 1.0;
 }

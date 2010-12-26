@@ -33,6 +33,7 @@
 MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
+    , m_firstPoint(true)
 {
     Q_ASSERT(settings);
     Q_UNUSED(image);
@@ -48,6 +49,7 @@ MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImage
     m_brush->set_color_hsv((float)h, (float)s, (float)v);
     m_mypaintThinksStrokeHasEnded = false;
     m_eventTime.start(); // GTK puts timestamps in its events, Qt doesn't, so fake it.
+    kDebug() << "start paintop";
 }
 
 MyPaint::~MyPaint()
@@ -76,13 +78,13 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
 
     if (!painter()) return KisDistanceInformation();
 
-    if (m_mypaintThinksStrokeHasEnded) {
-        m_brush->new_stroke();
+    if(m_firstPoint){
+        m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
+                                                        pi1.pos().x(), pi1.pos().y(),
+                                                        0,
+                                                        10.0);
+        m_firstPoint = false;
     }
-    m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
-                                                       pi1.pos().x(), pi1.pos().y(),
-                                                       0,
-                                                       0);
     if (m_mypaintThinksStrokeHasEnded) {
         m_brush->new_stroke();
     }

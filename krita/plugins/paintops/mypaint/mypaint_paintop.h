@@ -52,6 +52,7 @@ private:
     MyPaintSurface* m_surface;
     const MyPaintSettings* m_settings;
     MyPaintBrushResource *m_brush;
+    bool m_firstPoint;
 };
 
 #endif // KIS_MYPAINTPAINTOP_H_

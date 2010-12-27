@@ -46,9 +46,6 @@ public:
     KisDistanceInformation paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, const KisDistanceInformation& savedDist);
 
 private:
-
-    QTime m_eventTime;
-    bool m_mypaintThinksStrokeHasEnded;
     MyPaintSurface* m_surface;
     const MyPaintSettings* m_settings;
     MyPaintBrushResource *m_brush;

@@ -68,12 +68,14 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
         m_brush->stroke_to(m_surface,
                            pi1.pos().x(), pi1.pos().y(),
                            0,
+                           0.0, 0.0,
                            10.0);
         m_firstPoint = false;
     }
     m_brush->stroke_to(m_surface,
                        pi2.pos().x(), pi2.pos().y(),
                        pi2.pressure(),
+                       0.0, 0.0,
                        qreal(pi2.currentTime() - pi1.currentTime()) / 1000);
 
     // not sure what to do with these...

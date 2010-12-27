@@ -129,8 +129,8 @@ public:
     virtual int count() const = 0;
 
     /**
-     * Create and return an iterator over all shapes added to this model
-     * @return an interator over all shapes
+     * Return the list of all shapes of this model
+     * @return the list of all shapes
      */
     virtual QList<KoShape*> shapes() const = 0;
 

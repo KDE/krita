@@ -92,6 +92,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       filterEffectStack(0),
       transparency(0.0),
       zIndex(0),
+      runThrough(0),
       visible(true),
       printable(true),
       geometryProtected(false),
@@ -442,6 +443,13 @@ QTransform KoShape::transformation() const
 
 bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
 {
+    if(s1->runThrough() > s2->runThrough()) {
+        return false;
+    }
+    if(s1->runThrough() < s2->runThrough()) {
+        return true;
+    }
+
     bool foundCommonParent = false;
     KoShape *parentShapeS1 = s1;
     KoShape *parentShapeS2 = s2;
@@ -778,6 +786,18 @@ void KoShape::setZIndex(int zIndex)
     Q_D(KoShape);
     notifyChanged();
     d->zIndex = zIndex;
+}
+
+int KoShape::runThrough()
+{
+    Q_D(const KoShape);
+    return d->runThrough;
+}
+
+void KoShape::setRunThrough(short int runThrough)
+{
+    Q_D(KoShape);
+    d->runThrough = runThrough;
 }
 
 void KoShape::setVisible(bool on)

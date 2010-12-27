@@ -76,8 +76,7 @@ private:
     inline quint8 valueAt(quint32 x, quint32 y, const QVector<quint8> &precomputedQuarter,int width) const{
         return precomputedQuarter[y*width+x];
     }
-    
-    
+        
 private:
 
     struct Private;

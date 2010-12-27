@@ -19,9 +19,15 @@
 #include <kis_ruler_assistant_tool.h>
 
 #include <qpainter.h>
+#include <qxmlstream.h>
 
 #include <kis_debug.h>
 #include <klocale.h>
+#include <kfiledialog.h>
+#include <kmessagebox.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <kio/jobuidelegate.h>
 
 #include <KoViewConverter.h>
 #include <KoPointerEvent.h>
@@ -255,15 +261,166 @@ void KisRulerAssistantTool::removeAllAssistants()
     m_canvas->updateCanvas();
 }
 
+void KisRulerAssistantTool::loadAssistants()
+{
+    KUrl file = KFileDialog::getOpenUrl(KUrl(), QString("*.krassistants"));
+    if (file.isEmpty()) return;
+    KIO::StoredTransferJob* job = KIO::storedGet(file);
+    connect(job, SIGNAL(result(KJob*)), SLOT(openFinish(KJob*)));
+    job->start();
+}
+
+void KisRulerAssistantTool::saveAssistants()
+{
+    QByteArray data;
+    QXmlStreamWriter xml(&data);
+    xml.writeStartDocument();
+    xml.writeStartElement("paintingassistant");
+    xml.writeStartElement("handles");
+    QMap<KisPaintingAssistantHandleSP, int> handleMap;
+    foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+        int id = handleMap.size();
+        handleMap.insert(handle, id);
+        xml.writeStartElement("handle");
+        xml.writeAttribute("id", QString::number(id));
+        xml.writeAttribute("x", QString::number(double(handle->x()), 'f', 3));
+        xml.writeAttribute("y", QString::number(double(handle->y()), 'f', 3));
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeStartElement("assistants");
+    foreach(const KisPaintingAssistant* assistant, m_canvas->view()->paintingAssistantManager()->assistants()) {
+        xml.writeStartElement("assistant");
+        xml.writeAttribute("type", assistant->id());
+        xml.writeStartElement("handles");
+        foreach(const KisPaintingAssistantHandleSP handle, assistant->handles()) {
+            xml.writeStartElement("handle");
+            xml.writeAttribute("ref", QString::number(handleMap.value(handle)));
+            xml.writeEndElement();
+        }
+        xml.writeEndElement();
+        xml.writeEndElement();
+    }
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
+
+    KUrl file = KFileDialog::getSaveUrl(KUrl(), QString("*.krassistants"));
+    if (file.isEmpty()) return;
+    KIO::StoredTransferJob* job = KIO::storedPut(data, file, -1);
+    connect(job, SIGNAL(result(KJob*)), SLOT(saveFinish(KJob*)));
+    job->start();
+}
+
+void KisRulerAssistantTool::openFinish(KJob* job)
+{
+    job->deleteLater();
+    if (job->error()) {
+        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+        return;
+    }
+    QByteArray data = dynamic_cast<KIO::StoredTransferJob*>(job)->data();
+    QXmlStreamReader xml(data);
+    QMap<int, KisPaintingAssistantHandleSP> handleMap;
+    KisPaintingAssistant* assistant = 0;
+    bool errors = false;
+    while (!xml.atEnd()) {
+        switch (xml.readNext()) {
+        case QXmlStreamReader::StartElement:
+            if (xml.name() == "handle") {
+                if (assistant && !xml.attributes().value("ref").isEmpty()) {
+                    KisPaintingAssistantHandleSP handle = handleMap.value(xml.attributes().value("ref").toString().toInt());
+                    if (handle) {
+                        assistant->addHandle(handle);
+                    } else {
+                        errors = true;
+                    }
+                } else {
+                    QString strId = xml.attributes().value("id").toString(),
+                            strX = xml.attributes().value("x").toString(),
+                            strY = xml.attributes().value("y").toString();
+                    if (!strId.isEmpty() && !strX.isEmpty() && !strY.isEmpty()) {
+                        int id = strId.toInt();
+                        double x = strX.toDouble(),
+                               y = strY.toDouble();
+                        if (!handleMap.contains(id)) {
+                            handleMap.insert(id, new KisPaintingAssistantHandle(x, y));
+                        } else {
+                            errors = true;
+                        }
+                    } else {
+                        errors = true;
+                    }
+                }
+            } else if (xml.name() == "assistant") {
+                QRectF imageArea = QRectF(pixelToView(QPoint(0, 0)),
+                                          m_canvas->image()->pixelToDocument(QPoint(m_canvas->image()->width(),
+                                                                                    m_canvas->image()->height())));
+                const KisPaintingAssistantFactory* factory = KisPaintingAssistantFactoryRegistry::instance()->get(xml.attributes().value("type").toString());
+                if (factory) {
+                    if (assistant) {
+                        errors = true;
+                        delete assistant;
+                    }
+                    assistant = factory->paintingAssistant(imageArea);
+                } else {
+                    errors = true;
+                }
+            }
+            break;
+        case QXmlStreamReader::EndElement:
+            if (xml.name() == "assistant") {
+                if (assistant) {
+                    if (assistant->handles().size() == assistant->numHandles()) {
+                        m_canvas->view()->paintingAssistantManager()->addAssistant(assistant);
+                    } else {
+                        errors = true;
+                        delete assistant;
+                    }
+                    assistant = 0;
+                }
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    if (assistant) {
+        errors = true;
+        delete assistant;
+    }
+    if (xml.hasError()) {
+        KMessageBox::sorry(0, xml.errorString());
+    }
+    if (errors) {
+        KMessageBox::sorry(0, i18n("Errors were encountered. Not all assistants were successfully loaded."));
+    }
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+    m_canvas->updateCanvas();
+}
+
+void KisRulerAssistantTool::saveFinish(KJob* job)
+{
+    if (job->error()) {
+        dynamic_cast<KIO::Job*>(job)->ui()->showErrorMessage();
+    }
+    job->deleteLater();
+}
+
 QWidget *KisRulerAssistantTool::createOptionWidget()
 {
     if (!m_optionsWidget) {
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
+        m_options.loadButton->setIcon(KIcon("document-open"));
+        m_options.saveButton->setIcon(KIcon("document-save"));
+        m_options.deleteButton->setIcon(KIcon("edit-delete"));
         foreach(const QString& key, KisPaintingAssistantFactoryRegistry::instance()->keys()) {
             QString name = KisPaintingAssistantFactoryRegistry::instance()->get(key)->name();
             m_options.comboBox->addItem(name, key);
         }
+        connect(m_options.saveButton, SIGNAL(clicked()), SLOT(saveAssistants()));
+        connect(m_options.loadButton, SIGNAL(clicked()), SLOT(loadAssistants()));
         connect(m_options.deleteButton, SIGNAL(clicked()), SLOT(removeAllAssistants()));
     }
     return m_optionsWidget;

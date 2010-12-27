@@ -485,6 +485,7 @@ void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("type", "gbr_brush");
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", spacing());
+    KisBrush::toXML(d, e);
 }
 
 void KisGbrBrush::setUseColorAsMask(bool useColorAsMask)

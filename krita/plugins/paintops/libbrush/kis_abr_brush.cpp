@@ -81,6 +81,7 @@ void KisAbrBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("name", name()); // legacy
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", spacing());
+    KisBrush::toXML(d, e);
 }
 
 QString KisAbrBrush::defaultFileExtension() const

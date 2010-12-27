@@ -267,6 +267,7 @@ public:
 
 protected:
     friend class KisPaintDeviceTest;
+    friend class DataReaderThread;
 
     /**
      * Checks whether a src paint device can be used as source

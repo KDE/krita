@@ -74,9 +74,10 @@ void TextPasteCommand::redo()
         // check for mime type
         const QMimeData *data = QApplication::clipboard()->mimeData(m_mode);
 
-        if (data->hasFormat(KoOdf::Text) || data->hasFormat(KoOdf::OpenOfficeClipboard) ) {
+        if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                        || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
             KoOdf::DocumentType odfType = KoOdf::Text;
-            if (!data->hasFormat(odfType)) {
+            if (!data->hasFormat(KoOdf::mimeType(odfType))) {
                 odfType = KoOdf::OpenOfficeClipboard;
             }
             bool weOwnRdfModel = true;

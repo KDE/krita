@@ -207,16 +207,16 @@ private:
     void endBody();
 
     /**
-    * Store the delete changes in the deleteChangeTable. Will be processed with "change" is encountered
+    * Store the delete changes in the deleteChangeTable. Will be processed when "change" is encountered
     */
     void storeDeleteChanges(KoXmlElement &tag);
 
     /**
     * This is called in case of a paragraph or a header split.
-    * Mark as the block separators from the start of the split till the end as an insertion type
+    * Mark the blocks from the start of the split till the end as an insertion type
     * and set the corresponding changeId in the charFormat
     */
-    void markBlockSeparators(QTextCursor &cursor, int from, const QString& changeId);
+    void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
 
     /**
      * This is called in loadSpan to allow Cut and Paste of bookmarks. This

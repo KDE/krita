@@ -459,7 +459,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                 if (insertionType == "split") {
                                     QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
                                     QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
-                                    markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                    markBlocksAsInserted(cursor, d->splitPositionMap.value(splitId), changeId);
                                     d->splitPositionMap.remove(splitId);
                                 }
                             }
@@ -496,7 +496,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                 if (insertionType == "split") {
                                     QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
                                     QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
-                                    markBlockSeparators(cursor, d->splitPositionMap.value(splitId), changeId);
+                                    markBlocksAsInserted(cursor, d->splitPositionMap.value(splitId), changeId);
                                     d->splitPositionMap.remove(splitId);
                                 }
                             }
@@ -2010,21 +2010,25 @@ void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
     }
 }
 
-void KoTextLoader::markBlockSeparators(QTextCursor& cursor,int from, const QString& id)
+void KoTextLoader::markBlocksAsInserted(QTextCursor& cursor,int from, const QString& id)
 {
     int to = cursor.position() - 1;
     QTextCursor editCursor(cursor);
     QTextDocument *document = cursor.document();
+
+    QTextBlock startBlock = document->findBlock(from);
+    QTextBlock endBlock = document->findBlock(to);
+
     int changeId = d->changeTracker->getLoadedChangeId(id);
-    QTextCharFormat format;
+
+    QTextBlockFormat format;
     format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-    
-    for (int i=from; i<=to; i++) {
-        if (document->characterAt(i) == QChar::ParagraphSeparator) {
-            editCursor.setPosition(i);
-            editCursor.mergeCharFormat(format);
-        }
-    }
+
+    do {
+        startBlock = startBlock.next();
+        editCursor.setPosition(startBlock.position());
+        editCursor.mergeBlockFormat(format);
+    } while(startBlock != endBlock);
 }
 
 #include <KoTextLoader.moc>

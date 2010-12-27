@@ -474,8 +474,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
                             if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
                                 QString insertionType = tag.attributeNS(KoXmlNS::delta, "insertion-type");
-                                if (insertionType == "insert-with-content")
+                                if (insertionType == "insert-with-content") {
                                     d->openChangeRegion(tag);
+                                }
+                                
                                 if (insertionType == "split") {
                                     QString splitId = tag.attributeNS(KoXmlNS::delta, "split-id");
                                     QString changeId = tag.attributeNS(KoXmlNS::delta, "insertion-change-idref");
@@ -2069,13 +2071,13 @@ void KoTextLoader::storeDeleteChanges(KoXmlElement &element)
 
 void KoTextLoader::markBlocksAsInserted(QTextCursor& cursor,int from, const QString& id)
 {
-    int to = cursor.position() - 1;
+    int to = cursor.position();
     QTextCursor editCursor(cursor);
     QTextDocument *document = cursor.document();
 
     QTextBlock startBlock = document->findBlock(from);
     QTextBlock endBlock = document->findBlock(to);
-
+   
     int changeId = d->changeTracker->getLoadedChangeId(id);
 
     QTextBlockFormat format;

@@ -80,6 +80,9 @@ public:
     styleManager(0),
     changeTracker(0),
     rdfData(0),
+    splitEndBlockNumber(-1),
+    splitRegionOpened(false),
+    spltIdCounter(1),
     deleteMergeRegionOpened(false),
     deleteMergeEndBlockNumber(-1)
     {
@@ -136,12 +139,21 @@ public:
     // is not included in the selection.
     QList<KoInlineObject*> pairedInlineObjectStack;
 
+    // For saving of paragraph or header splits    
+    int checkForSplit(const QTextBlock &block);
+    int splitEndBlockNumber;
+    bool splitRegionOpened;
+    bool spltIdCounter;
+
     //For saving of delete-changes that result in a merge between two elements
     bool deleteMergeRegionOpened;
     int deleteMergeEndBlockNumber;
-    int checkForDeleteMerge(QTextBlock &block);
+    int checkForDeleteMerge(const QTextBlock &block);
     void openDeleteMergeRegion();
     void closeDeleteMergeRegion();
+
+    //Method used by both split and merge
+    int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
 
     KoXmlWriter *oldXmlWriter;
     KoXmlWriter *newXmlWriter;
@@ -453,6 +465,15 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
         writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
         writer->addAttribute("delta:insertion-type", "insert-with-content");
+    }
+
+    if (!deleteMergeRegionOpened && !splitRegionOpened && !cursor.currentTable() && (!cursor.currentList() || outlineLevel)) {
+        qDebug() << "***********checkForSplit called for block " << block.text();
+        splitEndBlockNumber = checkForSplit(block);
+        qDebug() << "***********splitEndBlockNumber is " << splitEndBlockNumber;
+        if (splitEndBlockNumber != -1) {
+            splitRegionOpened = true;
+        }
     }
 
     QString styleName = saveParagraphStyle(block);
@@ -1111,6 +1132,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             }
         }
 
+
         saveParagraph(block, from, to);
 
         if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
@@ -1121,13 +1143,23 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     } // while
 }
 
-int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
+int KoTextWriter::Private::checkForSplit(const QTextBlock &block)
+{
+    return checkForMergeOrSplit(block, KoGenChange::InsertChange);
+}
+
+int KoTextWriter::Private::checkForDeleteMerge(const QTextBlock &block)
+{
+    return checkForMergeOrSplit(block, KoGenChange::DeleteChange);
+}
+
+int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType)
 {
     QTextBlock endBlock = block;
     QTextCursor cursor(block);    
     int endBlockNumber = -1;
 
-    int changeId = 0, deleteChangeId = 0;
+    int splitMergeChangeId = 0, changeId = 0;
     do {
         if (!endBlock.next().isValid())
             break;
@@ -1142,8 +1174,8 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
         }
         
         if (!changeId) {
-            deleteChangeId = changeId = nextBlockChangeId;
-            if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
+            splitMergeChangeId = changeId = nextBlockChangeId;
+            if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == changeType)) {
                 endBlock = endBlock.next();
             }
         } else {
@@ -1156,11 +1188,11 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
     } while(changeId);
 
     if (endBlock.blockNumber() != block.blockNumber()) {
-        //Check that the last fragment of this block is not a part of this delete change. If so, it is not a delete merge.
+        //Check that the last fragment of this block is not a part of this change. If so, it is not a merge or a split
         QTextFragment lastFragment = (block.end()).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-        if (lastFragmentChangeId != deleteChangeId) {
+        if (lastFragmentChangeId != splitMergeChangeId) {
             endBlockNumber = endBlock.blockNumber();
         }
     }

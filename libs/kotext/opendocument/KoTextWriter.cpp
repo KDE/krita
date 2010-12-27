@@ -1131,9 +1131,16 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
     do {
         if (!endBlock.next().isValid())
             break;
-        
-        int nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
 
+        int nextBlockChangeId;
+        QTextTable *currentTable;
+
+        if ((currentTable = QTextCursor(endBlock.next()).currentTable())) {
+            nextBlockChangeId = currentTable->format().intProperty(KoCharacterStyle::ChangeTrackerId);
+        } else {
+            nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+        }
+        
         if (!changeId) {
             deleteChangeId = changeId = nextBlockChangeId;
             if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == KoGenChange::DeleteChange)) {
@@ -1156,7 +1163,7 @@ int KoTextWriter::Private::checkForDeleteMerge(QTextBlock &block)
         if (lastFragmentChangeId != deleteChangeId) {
             endBlockNumber = endBlock.blockNumber();
         }
-    } 
+    }
     return endBlockNumber;
 }
 

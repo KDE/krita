@@ -82,7 +82,7 @@ public:
     rdfData(0),
     splitEndBlockNumber(-1),
     splitRegionOpened(false),
-    spltIdCounter(1),
+    splitIdCounter(1),
     deleteMergeRegionOpened(false),
     deleteMergeEndBlockNumber(-1)
     {
@@ -143,7 +143,7 @@ public:
     int checkForSplit(const QTextBlock &block);
     int splitEndBlockNumber;
     bool splitRegionOpened;
-    bool spltIdCounter;
+    bool splitIdCounter;
 
     //For saving of delete-changes that result in a merge between two elements
     bool deleteMergeRegionOpened;
@@ -468,12 +468,22 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
 
     if (!deleteMergeRegionOpened && !splitRegionOpened && !cursor.currentTable() && (!cursor.currentList() || outlineLevel)) {
-        qDebug() << "***********checkForSplit called for block " << block.text();
         splitEndBlockNumber = checkForSplit(block);
-        qDebug() << "***********splitEndBlockNumber is " << splitEndBlockNumber;
         if (splitEndBlockNumber != -1) {
             splitRegionOpened = true;
+            QString splitId = QString("split") + QString::number(splitIdCounter);
+            writer->addAttribute("split:split001-idref", splitId);
         }
+    }
+
+    if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
+        splitEndBlockNumber = 1;
+        QString splitId = QString("split") + QString::number(splitIdCounter);
+        writer->addAttribute("delta:split-id", splitId);
+        int changeId = block.begin().fragment().charFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+        writer->addAttribute("delta:insertion-type", "split");
+        splitIdCounter++;
     }
 
     QString styleName = saveParagraphStyle(block);
@@ -1177,6 +1187,8 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
             splitMergeChangeId = changeId = nextBlockChangeId;
             if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == changeType)) {
                 endBlock = endBlock.next();
+            } else {
+                changeId = 0;
             }
         } else {
             if (nextBlockChangeId == changeId) {

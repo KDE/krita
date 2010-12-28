@@ -737,25 +737,7 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
         if (!copyOnlyChildren) {
-<<<<<<< HEAD
-            xmlStream << "<" << nodeName;
-            QList<QPair<QString, QString> > attributeNSNames = element.attributeFullNames();
-
-            QPair<QString, QString> attributeName;
-            foreach(attributeName, attributeNSNames) {
-                QString nameSpace = attributeName.first;
-                int index = nameSpacesList.indexOf(nameSpace);
-                if (index == -1) {
-                    nameSpacesList.append(nameSpace);
-                    index = nameSpacesList.size() - 1;
-                }
-                xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
-                xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
-            }
-            xmlStream << ">";       
-=======
             copyTagStart(element, xmlStream);
->>>>>>> bridge-branch
         }
         
         for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {

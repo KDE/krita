@@ -25,13 +25,12 @@
 #include <QTextLine>
 #include <QRectF>
 
-class Line
+class TextLine
 {
 public:
-    Line();
+    TextLine();
     void createLine(KoTextDocumentLayout::LayoutState *state);
     void setRestartOnNextShape(bool restartOnNextShape);
-    bool isValid() const;
     void setOutlines(const QList<Outline*> &outlines);
     bool processingLine();
     void updateOutline(Outline *outline);

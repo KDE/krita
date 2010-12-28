@@ -174,7 +174,7 @@ public:
         virtual QRectF expandVisibleRect(const QRectF &rect) const = 0;
         /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
         /// in shape and returns false. In that case you should try over with a new createLine
-        virtual bool addLine(QTextLine &line, bool processingLine = false) = 0;
+        virtual bool addLine() = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
         /// revert layout to the previous paragraph. Return false if there is no previous paragraph.
@@ -211,6 +211,10 @@ public:
         virtual void updateRunAroundShape(KoShape *shape) = 0;
         /// Clear all registrations of shapest for run around
         virtual void unregisterAllRunAroundShapes() = 0;
+        /// Create a QTextLine and possibly some behind the scenes auxillary info
+        virtual QTextLine createLine() = 0;
+        /// Fiddle with the width of the current textline until it fits
+        virtual void fitLineForRunAround(const bool resetHorizontalPosition = false) = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

@@ -23,7 +23,7 @@
 const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
 #define MIN_WIDTH   0.01f
 
-Line::Line()
+TextLine::TextLine()
 {
     m_lineRect = QRectF();
     m_updateValidOutlines = false;
@@ -32,32 +32,27 @@ Line::Line()
     m_restartOnNextShape = false;
 }
 
-void Line::createLine(KoTextDocumentLayout::LayoutState *state) {
+void TextLine::createLine(KoTextDocumentLayout::LayoutState *state) {
     m_state = state;
     line = m_state->layout->createLine();
 }
 
-void Line::setRestartOnNextShape(bool restartOnNextShape)
+void TextLine::setRestartOnNextShape(bool restartOnNextShape)
 {
     m_restartOnNextShape = restartOnNextShape;
 }
 
-bool Line::isValid() const
-{
-    return line.isValid();
-}
-
-void Line::setOutlines(const QList<Outline*> &outlines)
+void TextLine::setOutlines(const QList<Outline*> &outlines)
 {
     m_outlines = &outlines;
 }
 
-bool Line::processingLine()
+bool TextLine::processingLine()
 {
     return m_processingLine;
 }
 
-void Line::updateOutline(Outline *outline)
+void TextLine::updateOutline(Outline *outline)
 {
     QRectF outlineLineRect = outline->cropToLine(m_lineRect);
     if (outlineLineRect.isValid()) {
@@ -65,7 +60,7 @@ void Line::updateOutline(Outline *outline)
     }
 }
 
-void Line::fit(const bool resetHorizontalPosition)
+void TextLine::fit(const bool resetHorizontalPosition)
 {
     if (resetHorizontalPosition) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
@@ -115,7 +110,7 @@ void Line::fit(const bool resetHorizontalPosition)
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
 }
 
-void Line::validateOutlines()
+void TextLine::validateOutlines()
 {
     m_validOutlines.clear();
     foreach (Outline *outline, *m_outlines) {
@@ -123,7 +118,7 @@ void Line::validateOutlines()
     }
 }
 
-void Line::validateOutline(Outline *outline)
+void TextLine::validateOutline(Outline *outline)
 {
     QRectF outlineLineRect = outline->cropToLine(m_lineRect);
     if (outlineLineRect.isValid()) {
@@ -131,7 +126,7 @@ void Line::validateOutline(Outline *outline)
     }
 }
 
-void Line::createLineParts()
+void TextLine::createLineParts()
 {
     m_lineParts.clear();
     if (m_validOutlines.isEmpty()) {
@@ -181,7 +176,7 @@ void Line::createLineParts()
     }
 }
 
-QRectF Line::minimizeHeightToLeastNeeded(const QRectF &lineRect)
+QRectF TextLine::minimizeHeightToLeastNeeded(const QRectF &lineRect)
 {
     QRectF lineRectBase = lineRect;
     // Get width of one char or shape (as-char).
@@ -196,7 +191,7 @@ QRectF Line::minimizeHeightToLeastNeeded(const QRectF &lineRect)
     return lineRectBase;
 }
 
-void Line::updateLineParts(const QRectF &lineRect)
+void TextLine::updateLineParts(const QRectF &lineRect)
 {
     if (m_lineRect != lineRect || m_updateValidOutlines) {
         m_lineRect = lineRect;
@@ -206,7 +201,7 @@ void Line::updateLineParts(const QRectF &lineRect)
     }
 }
 
-QRectF Line::getLineRectPart()
+QRectF TextLine::getLineRectPart()
 {
     //TODO korinpa: use binary search tree ?
     QRectF retVal;
@@ -219,7 +214,7 @@ QRectF Line::getLineRectPart()
     return retVal;
 }
 
-void Line::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
+void TextLine::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
     qreal width = m_textWidth;
     qreal maxWidth = minLineRectPart.width() - leftIndent;
     qreal height;
@@ -238,7 +233,7 @@ void Line::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent
     }
 }
 
-QRectF Line::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
+QRectF TextLine::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
     const qreal leftIndent = lineRect.left();
     QRectF minLineRect = minimizeHeightToLeastNeeded(lineRect);
     updateLineParts(minLineRect);
@@ -269,7 +264,7 @@ QRectF Line::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth
     return lineRectPart;
 }
 
-void Line::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
+void TextLine::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
     if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;

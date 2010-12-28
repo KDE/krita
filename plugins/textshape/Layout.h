@@ -24,6 +24,7 @@
 #include "TableLayout.h"
 
 #include "Outline.h"
+#include "TextLine.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextBlockData.h>
@@ -68,7 +69,7 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const;
     /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
     /// in shape and returns false. In that case you should try over with a new createLine
-    virtual bool addLine(QTextLine &line, bool processingLine = false);
+    virtual bool addLine();
     /// prepare for next paragraph; return false if there is no next parag.
     virtual bool nextParag();
     virtual bool previousParag();
@@ -111,6 +112,11 @@ public:
         qDeleteAll(m_outlines);
         m_outlines.clear();
     }
+
+    virtual QTextLine createLine();
+
+    virtual void fitLineForRunAround(const bool resetHorizontalPosition);
+
 private:
     friend class TestTableLayout; // to allow direct testing.
 
@@ -212,6 +218,7 @@ private:
     qreal m_scaleFactor;
 
     QList<Outline*> m_outlines;
+    TextLine m_textLine;
 };
 
 #endif

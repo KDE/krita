@@ -115,6 +115,7 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
+    qDeleteAll(m_outlines);
 }
 
 void Layout::reset()
@@ -2247,3 +2248,23 @@ void Layout::setTabSpacing(qreal spacing)
     m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }
 
+void Layout::registerRunAroundShape(KoShape *shape)
+{
+    QTransform matrix = shape->absoluteTransformation(0);
+    matrix = matrix * m_textShape->absoluteTransformation(0).inverted();
+    matrix.translate(0, documentOffsetInShape());
+    m_outlines.append(new Outline(shape, matrix));
+}
+
+void Layout::updateRunAroundShape(KoShape *shape)
+{
+    foreach (Outline *outline, m_outlines) {
+        if (outline->shape() == shape) {
+            QTransform matrix = shape->absoluteTransformation(0);
+            matrix = matrix * m_textShape->absoluteTransformation(0).inverted();
+            matrix.translate(0, documentOffsetInShape());
+            outline->changeMatrix(matrix);
+            //line.updateOutline(outline);
+        }
+    }
+}

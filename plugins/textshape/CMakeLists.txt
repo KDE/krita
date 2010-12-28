@@ -23,6 +23,8 @@ SET ( textshape_SRCS
     Layout.cpp
     ListItemsHelper.cpp
     ShrinkToFitShapeContainer.cpp
+    Outline.cpp
+    TextLine.cpp
 
     ChangeTracker.cpp
     ChangeTrackingTool.cpp

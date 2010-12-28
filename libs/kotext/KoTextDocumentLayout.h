@@ -205,6 +205,12 @@ public:
         virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point) = 0;
         /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
         virtual qreal maxLineHeight() const = 0;
+        /// Registers the shape as being relevant for run around at this moment in time
+        virtual void registerRunAroundShape(KoShape *shape) = 0;
+        /// Updates the registration of the shape for run around
+        virtual void updateRunAroundShape(KoShape *shape) = 0;
+        /// Clear all registrations of shapest for run around
+        virtual void unregisterAllRunAroundShapes() = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

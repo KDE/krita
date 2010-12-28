@@ -23,6 +23,8 @@
 
 #include "TableLayout.h"
 
+#include "Outline.h"
+
 #include <KoTextDocumentLayout.h>
 #include <KoTextBlockData.h>
 #include <KoInsets.h>
@@ -31,6 +33,7 @@
 #include <QTextBlock>
 #include <QTextTableCell>
 #include <QHash>
+#include <QList>
 #include <QWeakPointer>
 
 class KoStyleManager;
@@ -96,6 +99,17 @@ public:
     /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
     virtual qreal maxLineHeight() const {
         return m_maxLineHeight;
+    }
+    /// Registers the shape as being relevant for run around at this moment in time
+    virtual void registerRunAroundShape(KoShape *shape);
+
+    /// Updates the registration of the shape for run around
+    virtual void updateRunAroundShape(KoShape *shape);
+
+    /// Clear all registrations of shapest for run around
+    virtual void unregisterAllRunAroundShapes() {
+        qDeleteAll(m_outlines);
+        m_outlines.clear();
     }
 private:
     friend class TestTableLayout; // to allow direct testing.
@@ -196,6 +210,8 @@ private:
     qreal m_maxLineHeight;
     bool m_relativeTabs;
     qreal m_scaleFactor;
+
+    QList<Outline*> m_outlines;
 };
 
 #endif

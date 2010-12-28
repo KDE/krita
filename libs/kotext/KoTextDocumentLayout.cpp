@@ -102,6 +102,9 @@ public:
     qreal maxLineHeight() const {
         return 0;
     }
+    void registerRunAroundShape(KoShape *shape) {}
+    void updateRunAroundShape(KoShape *shape) {}
+    void unregisterAllRunAroundShapes() {}
 };
 
 class KoTextDocumentLayout::Private

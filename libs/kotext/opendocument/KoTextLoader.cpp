@@ -144,6 +144,10 @@ public:
     bool checkForDeleteMerge(QTextCursor &cursor, const QString &id, int startPosition);
     QMap<KoDeleteChangeMarker *, QPair<int, int> > deleteChangeMarkerMap;
 
+    // For Loading of list item splits
+    bool checkForListItemSplit(const KoXmlElement &element);
+    KoXmlNode loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString);
+
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
             : context(context),
             textSharedData(0),
@@ -966,7 +970,11 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         //Don't do anything
     } else {
         if ((e.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") || (e.localName() == "remove-leaving-content-start")) {
-            _node = loadDeleteMerges(e,&generatedXmlString);
+            if (!d->checkForListItemSplit(e)) {
+                _node = loadDeleteMerges(e,&generatedXmlString);
+            } else {
+                _node = d->loadListItemSplit(e, &generatedXmlString);
+            }
 
             //Parse and Load the generated xml
             QString errorMsg;
@@ -1102,6 +1110,40 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
         d->closeChangeRegion(e);
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
+}
+
+bool KoTextLoader::Private::checkForListItemSplit(const KoXmlElement &element)
+{
+    QString endId = element.attributeNS(KoXmlNS::delta, "end-element-idref");
+    int insertedListItems = 0;
+    KoXmlElement currentElement = element;
+    bool isSplitListItem = false;
+
+    while(true) {
+        currentElement = currentElement.nextSibling().toElement();
+
+        if (currentElement.isNull()) {
+            continue;
+        }
+
+        if ((currentElement.localName() == "list-item") && 
+            (currentElement.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
+            insertedListItems++;
+        }
+
+        if ((currentElement.localName() == "remove-leaving-content-end") && 
+            (currentElement.attributeNS(KoXmlNS::delta, "end-element-id") == endId)) {
+            break;
+        }
+    }
+
+    isSplitListItem = (insertedListItems > 1)?true:false;
+    return isSplitListItem;
+}
+
+KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString)
+{
+    return KoXmlNode();
 }
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)

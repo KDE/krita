@@ -71,6 +71,7 @@ void KoShapeContainer::addShape(KoShape *shape)
     Q_ASSERT(shape);
     if (shape->parent() == this && shapes().contains(shape))
         return;
+    // TODO add a method to create a default model depending on the shape container
     if (d->model == 0)
         d->model = new KoShapeContainerDefaultModel();
     if (shape->parent() && shape->parent() != this)

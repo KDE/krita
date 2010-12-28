@@ -416,7 +416,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
                         usedParagraph = true;
                         QString generatedXmlString;
-                        _node = loadTagTypeChanges(tag,&generatedXmlString);
+                        _node = loadDeleteMerges(tag,&generatedXmlString);
                         //Parse and Load the generated xml
                         QString errorMsg;
                         int errorLine, errorColumn;
@@ -492,7 +492,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                 d->closeChangeRegion(tag);
                         } else {
                             QString generatedXmlString;
-                            _node = loadTagTypeChanges(tag,&generatedXmlString);
+                            _node = loadDeleteMerges(tag,&generatedXmlString);
                             //Parse and Load the generated xml
                             QString errorMsg;
                             int errorLine, errorColumn;
@@ -529,7 +529,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                 d->closeChangeRegion(tag);
                         } else {
                             QString generatedXmlString;
-                            _node = loadTagTypeChanges(tag,&generatedXmlString);
+                            _node = loadDeleteMerges(tag,&generatedXmlString);
                             //Parse and Load the generated xml
                             QString errorMsg;
                             int errorLine, errorColumn;
@@ -598,7 +598,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     cursor.endEditBlock();
 }
 
-KoXmlNode KoTextLoader::loadTagTypeChanges(const KoXmlElement& elem, QString *generatedXmlString)
+KoXmlNode KoTextLoader::loadDeleteMerges(const KoXmlElement& elem, QString *generatedXmlString)
 {
     KoXmlNode lastProcessedNode = elem;
     d->nameSpacesList.clear();
@@ -996,7 +996,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         //Don't do anything
     } else {
         if ((e.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") || (e.localName() == "remove-leaving-content-start")) {
-            _node = loadTagTypeChanges(e,&generatedXmlString);
+            _node = loadDeleteMerges(e,&generatedXmlString);
 
             //Parse and Load the generated xml
             QString errorMsg;

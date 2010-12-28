@@ -439,6 +439,8 @@ void KisPaintopBox::slotSaveActivePreset()
     newPreset->setFilename(fileInfo.filePath());
     newPreset->setName(name);
 
+    m_presetsPopup->changeSavePresetButtonText(true);
+    
     rServer->addResource(newPreset);
 }
 

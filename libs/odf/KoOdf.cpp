@@ -36,7 +36,8 @@ DocumentData s_documentData[] = {
     { "application/vnd.oasis.opendocument.chart", "application/vnd.oasis.opendocument.chart-template", "office:chart" },
     { "application/vnd.oasis.opendocument.image", "application/vnd.oasis.opendocument.image-template", "office:image" },
     // TODO what is the element for a formula check if bodyContentElement is ok
-    { "application/vnd.oasis.opendocument.formula", "application/vnd.oasis.opendocument.formula-template", "office:XXX" }
+    { "application/vnd.oasis.opendocument.formula", "application/vnd.oasis.opendocument.formula-template", "office:XXX" },
+    { "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"", "", "office:text" }
 };
 //"application/vnd.oasis.opendocument.text-master"
 //"application/vnd.oasis.opendocument.text-web"

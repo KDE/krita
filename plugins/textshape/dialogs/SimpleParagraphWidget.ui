@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>207</width>
-    <height>55</height>
+    <width>209</width>
+    <height>57</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -19,6 +19,9 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
      <item row="0" column="6">
       <widget class="QToolButton" name="decreaseIndent">
        <property name="autoRaise">
@@ -46,8 +49,8 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>13</width>
-         <height>13</height>
+         <width>0</width>
+         <height>0</height>
         </size>
        </property>
       </spacer>
@@ -77,6 +80,16 @@
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="alignLeft">
+       <property name="autoRaise">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QToolButton" name="alignCenter">
        <property name="autoRaise">
@@ -93,13 +106,6 @@
      </item>
      <item>
       <widget class="QToolButton" name="alignBlock">
-       <property name="autoRaise">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="alignLeft">
        <property name="autoRaise">
         <bool>false</bool>
        </property>

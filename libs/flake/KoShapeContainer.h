@@ -192,8 +192,8 @@ public:
     virtual void update() const;
 
     /**
-     * Create and return an iterator over all child shapes.
-     * @return an interator over all child shapes.
+     * Return the list of all child shapes.
+     * @return the list of all child shapes
      */
     QList<KoShape*> shapes() const;
 

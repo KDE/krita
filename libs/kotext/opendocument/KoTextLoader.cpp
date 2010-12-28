@@ -135,6 +135,8 @@ public:
     void copyRemoveLeavingContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
     void copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren = false);
+    void copyTagStart(const KoXmlElement &element, QTextStream &xmlStream, bool ignoreChangeAttributes = false);
+    void copyTagEnd(const KoXmlElement &element, QTextStream &xmlStream);
 
     //For handling delete changes    
     KoDeleteChangeMarker *insertDeleteChangeMarker(QTextCursor &cursor, const QString &id);
@@ -734,14 +736,8 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         xmlStream << node.toText().data(); 
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
-        int index = nameSpacesList.indexOf(element.namespaceURI());
-        if (index == -1) {
-            nameSpacesList.append(element.namespaceURI());
-            index = nameSpacesList.size() - 1;
-        }
-        QString nodeName  = QString("ns%1") + ":" + element.localName();
-        nodeName = nodeName.arg(index);
         if (!copyOnlyChildren) {
+<<<<<<< HEAD
             xmlStream << "<" << nodeName;
             QList<QPair<QString, QString> > attributeNSNames = element.attributeFullNames();
 
@@ -757,6 +753,9 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
                 xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
             }
             xmlStream << ">";       
+=======
+            copyTagStart(element, xmlStream);
+>>>>>>> bridge-branch
         }
         
         for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
@@ -778,10 +777,47 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         }
 
         if (!copyOnlyChildren) {
-            xmlStream << "</" << nodeName << ">";
+            copyTagEnd(element, xmlStream);
         }
     } else {
     }
+}
+
+void KoTextLoader::Private::copyTagStart(const KoXmlElement &element, QTextStream &xmlStream, bool ignoreChangeAttributes)
+{
+    int index = nameSpacesList.indexOf(element.namespaceURI());
+    if (index == -1) {
+        nameSpacesList.append(element.namespaceURI());
+        index = nameSpacesList.size() - 1;
+    }
+    QString nodeName  = QString("ns%1") + ":" + element.localName();
+    nodeName = nodeName.arg(index);
+    xmlStream << "<" << nodeName;
+    QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+
+    QPair<QString, QString> attributeName;
+    foreach(attributeName, attributeNSNames) {
+        QString nameSpace = attributeName.first;
+        if (nameSpace == KoXmlNS::delta && ignoreChangeAttributes) {
+            continue;
+        }
+        int index = nameSpacesList.indexOf(nameSpace);
+        if (index == -1) {
+            nameSpacesList.append(nameSpace);
+            index = nameSpacesList.size() - 1;
+        }
+        xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+        xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
+    }
+    xmlStream << ">";       
+}
+
+void KoTextLoader::Private::copyTagEnd(const KoXmlElement &element, QTextStream &xmlStream)
+{
+    int index = nameSpacesList.indexOf(element.namespaceURI());
+    QString nodeName  = QString("ns%1") + ":" + element.localName();
+    nodeName = nodeName.arg(index);
+    xmlStream << "</" << nodeName << ">";
 }
 
 void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)
@@ -1171,9 +1207,61 @@ bool KoTextLoader::Private::checkForListItemSplit(const KoXmlElement &element)
     return isSplitListItem;
 }
 
-KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &element, QString *generatedXmlString)
+KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QString *generatedXmlString)
 {
-    return KoXmlNode();
+    KoXmlNode lastProcessedNode = elem;
+    nameSpacesList.clear();
+
+    QString generatedXml; 
+    QTextStream xmlStream(&generatedXml);
+    
+    QString endId = elem.attributeNS(KoXmlNS::delta, "end-element-idref");
+
+    while(true) {
+        KoXmlElement element;
+        lastProcessedNode = lastProcessedNode.nextSibling();        
+        bool isElementNode = lastProcessedNode.isElement();
+
+        if (isElementNode)
+            element = lastProcessedNode.toElement();
+
+        if (isElementNode && (element.localName() == "remove-leaving-content-start")) {
+            //Ignore this...
+        } else if (isElementNode && (element.localName() == "remove-leaving-content-end")) {
+            if(element.attributeNS(KoXmlNS::delta, "end-element-id") == endId) {
+                break;
+            }
+        } else if (isElementNode && (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
+            copyTagStart(element, xmlStream, true);
+            KoXmlElement childElement;
+            forEachElement(childElement, element) {
+                if (childElement.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") {
+                    copyTagStart(childElement, xmlStream, true);
+                    copyNode(childElement, xmlStream, true);
+                    copyTagEnd(childElement, xmlStream);
+                } else {
+                    copyNode(childElement, xmlStream);
+                }
+            }
+            copyTagEnd(element, xmlStream);
+        } else {
+            copyNode(element, xmlStream);
+        }
+    }
+    
+    QTextStream docStream(generatedXmlString);
+    qDebug() << generatedXml;
+    
+    docStream << "<generated-xml";
+    for (int i=0; i<nameSpacesList.size();i++) {
+        docStream << " xmlns:ns" << i << "=";
+        docStream << "\"" << nameSpacesList.at(i) << "\"";
+    }
+    docStream << ">";
+    docStream << generatedXml;
+    docStream << "</generated-xml>";
+
+    return lastProcessedNode;
 }
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)

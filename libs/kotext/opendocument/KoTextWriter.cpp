@@ -480,7 +480,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         splitEndBlockNumber = 1;
         QString splitId = QString("split") + QString::number(splitIdCounter);
         writer->addAttribute("delta:split-id", splitId);
-        int changeId = block.begin().fragment().charFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+        int changeId = block.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+        saveChange(changeId);
         writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
         writer->addAttribute("delta:insertion-type", "split");
         splitIdCounter++;

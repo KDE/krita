@@ -101,7 +101,9 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       cacheMode(KoShape::NoCache),
-      cache(0)
+      cache(0),
+      textRunAroundSide(KoShape::BiggestRunAroundSide),
+      textRunAroundDistance(1.0)
 {
     connectors.append(QPointF(0.5, 0.0));
     connectors.append(QPointF(1.0, 0.5));
@@ -762,6 +764,40 @@ QSet<KoEventAction *> KoShape::eventActions() const
 {
     Q_D(const KoShape);
     return d->eventActions;
+}
+
+KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundSide;
+}
+
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
+{
+    Q_D(KoShape);
+    d->textRunAroundSide = side;
+
+    if (side == RunThrough) {
+        if (runThrought == Background) {
+            setRunThrough(-1);
+        } else {
+            setRunThrough(1);
+        }
+    } else {
+        setRunThrough(0);
+    }
+}
+
+qreal KoShape::textRunAroundDistance() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundDistance;
+}
+
+void KoShape::setTextRunAroundDistance(qreal distance)
+{
+    Q_D(KoShape);
+    d->textRunAroundDistance = distance;
 }
 
 void KoShape::setBackground(KoShapeBackground *fill)
@@ -1478,6 +1514,34 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         for (; it != d->additionalAttributes.constEnd(); ++it) {
             context.xmlWriter().addAttribute(it.key().toUtf8(), it.value());
         }
+
+        QString value;
+        switch (textRunAroundSide()) {
+        case BiggestRunAroundSide:
+            value = "biggest";
+            break;
+        case LeftRunAroundSide:
+            value = "left";
+            break;
+        case RightRunAroundSide:
+            value = "right";
+            break;
+        case AutoRunAroundSide:
+            value = "dynamic";
+            break;
+        case BothRunAroundSide:
+            value = "parallel";
+            break;
+        case NoRunAround:
+            value = "none";
+            break;
+        case RunThrough:
+            value = "run-through";
+            break;
+        }
+        context.xmlWriter().addAttribute("style:wrap", value);
+
+        context.xmlWriter().addAttribute("fo:margin", QString::number(textRunAroundDistance()) + "pt");
     }
 }
 

@@ -122,6 +122,10 @@ public:
 
     KoShapeCache *cache;
 
+    KoShape::TextRunAroundSide textRunAroundSide;
+
+    qreal textRunAroundDistance;
+
     /**
      * @return the shape cache if there is one, else 0
      */

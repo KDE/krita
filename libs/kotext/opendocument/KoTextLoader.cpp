@@ -135,6 +135,8 @@ public:
     void copyRemoveLeavingContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
     void copyNode(const KoXmlNode &node, QTextStream &xmlStream, bool copyOnlyChildren = false);
+    void copyTagStart(const KoXmlElement &element, QTextStream &xmlStream);
+    void copyTagEnd(const KoXmlElement &element, QTextStream &xmlStream);
 
     //For handling delete changes    
     KoDeleteChangeMarker *insertDeleteChangeMarker(QTextCursor &cursor, const QString &id);
@@ -714,29 +716,8 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         xmlStream << node.toText().data(); 
     } else if (node.isElement()) {
         KoXmlElement element = node.toElement();
-        int index = nameSpacesList.indexOf(element.namespaceURI());
-        if (index == -1) {
-            nameSpacesList.append(element.namespaceURI());
-            index = nameSpacesList.size() - 1;
-        }
-        QString nodeName  = QString("ns%1") + ":" + element.localName();
-        nodeName = nodeName.arg(index);
         if (!copyOnlyChildren) {
-            xmlStream << "<" << nodeName;
-            QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
-
-            QPair<QString, QString> attributeName;
-            foreach(attributeName, attributeNSNames) {
-                QString nameSpace = attributeName.first;
-                int index = nameSpacesList.indexOf(nameSpace);
-                if (index == -1) {
-                    nameSpacesList.append(nameSpace);
-                    index = nameSpacesList.size() - 1;
-                }
-                xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
-                xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
-            }
-            xmlStream << ">";       
+            copyTagStart(element, xmlStream);
         }
         
         for ( KoXmlNode node = element.firstChild(); !node.isNull(); node = node.nextSibling() ) {
@@ -758,10 +739,44 @@ void KoTextLoader::Private::copyNode(const KoXmlNode &node, QTextStream &xmlStre
         }
 
         if (!copyOnlyChildren) {
-            xmlStream << "</" << nodeName << ">";
+            copyTagEnd(element, xmlStream);
         }
     } else {
     }
+}
+
+void KoTextLoader::Private::copyTagStart(const KoXmlElement &element, QTextStream &xmlStream)
+{
+    int index = nameSpacesList.indexOf(element.namespaceURI());
+    if (index == -1) {
+        nameSpacesList.append(element.namespaceURI());
+        index = nameSpacesList.size() - 1;
+    }
+    QString nodeName  = QString("ns%1") + ":" + element.localName();
+    nodeName = nodeName.arg(index);
+    xmlStream << "<" << nodeName;
+    QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+
+    QPair<QString, QString> attributeName;
+    foreach(attributeName, attributeNSNames) {
+        QString nameSpace = attributeName.first;
+        int index = nameSpacesList.indexOf(nameSpace);
+        if (index == -1) {
+            nameSpacesList.append(nameSpace);
+            index = nameSpacesList.size() - 1;
+        }
+        xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+        xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
+    }
+    xmlStream << ">";       
+}
+
+void KoTextLoader::Private::copyTagEnd(const KoXmlElement &element, QTextStream &xmlStream)
+{
+    int index = nameSpacesList.indexOf(element.namespaceURI());
+    QString nodeName  = QString("ns%1") + ":" + element.localName();
+    nodeName = nodeName.arg(index);
+    xmlStream << "</" << nodeName << ">";
 }
 
 void KoTextLoader::loadDeleteChangeOutsidePorH(QString id, QTextCursor &cursor)

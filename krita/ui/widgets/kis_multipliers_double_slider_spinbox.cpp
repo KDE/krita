@@ -33,7 +33,7 @@ struct KisMultipliersDoubleSliderSpinBox::Private {
 
 qreal KisMultipliersDoubleSliderSpinBox::Private::currentMultiplier()
 {
-    return form.comboBox->itemData(form.comboBox->currentIndex()).asDouble();
+    return form.comboBox->itemData(form.comboBox->currentIndex()).toDouble();
 }
 
 void KisMultipliersDoubleSliderSpinBox::Private::updateRange()

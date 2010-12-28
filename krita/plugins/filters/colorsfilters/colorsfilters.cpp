@@ -233,7 +233,7 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
         }
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     }
-    delete transfer;
+    delete[] transfer;
     delete adj;
 }
 

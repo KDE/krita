@@ -30,6 +30,7 @@
 #include "KoTextOnShapeContainer.h"
 #include "KoPathShapeLoader.h"
 #include "KoPathPoint.h"
+#include "KoShapeBackground.h"
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -640,6 +641,17 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
         if (shape == d->shape2)
             connectSecond(0, -1);
         break;
+    case BackgroundChanged:
+    {
+        // connection shape should not have a background
+        KoShapeBackground *fill = background();
+        if (fill) {
+            if (fill->deref())
+                delete fill;
+            setBackground(0);
+        }
+        return;
+    }
     default:
         return;
     }

@@ -179,12 +179,12 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
     QPalette palette;
     
     if (change) {
-        palette.setColor(QPalette::Base, QColor(255,180,180));
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setText("Overwrite Preset");
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
     }
     else {
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setText("Save to Presets");
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
         m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
     }
 }

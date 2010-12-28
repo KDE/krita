@@ -1509,6 +1509,7 @@ void TextTool::repaintCaret()
     if (textEditor == 0)
         return;
     QRectF repaintRect = caretRect(textEditor->position());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
         canvas()->updateCanvas(repaintRect);

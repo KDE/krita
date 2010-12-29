@@ -61,6 +61,10 @@ Type=Application
 Icon=krita
 Categories=Qt;KDE;Office;Graphics;
 StartupNotify=true
+X-KDE-ServiceTypes=Calligra/Application
+# application/vnd.oasis.opendocument.graphics is not on this list because Karbon has the default;
+# Krita will be used only in absence of Karbon
+X-Calligra-DefaultMimeTypes=
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.krita.krita
 NoDisplay=true

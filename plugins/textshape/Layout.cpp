@@ -115,7 +115,7 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
-    qDeleteAll(m_outlines);
+    unregisterAllRunAroundShapes();
 }
 
 QTextLine Layout::createLine()
@@ -2280,7 +2280,7 @@ void Layout::updateRunAroundShape(KoShape *shape)
             matrix = matrix * m_textShape->absoluteTransformation(0).inverted();
             matrix.translate(0, documentOffsetInShape());
             outline->changeMatrix(matrix);
-            //line.updateOutline(outline);
+            m_textLine.updateOutline(outline);
         }
     }
 }

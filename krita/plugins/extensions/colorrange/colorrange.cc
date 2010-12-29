@@ -113,7 +113,7 @@ void ColorRange::selectOpaque()
     KisHLineConstIterator deviter = device->createHLineConstIterator(x, y, w);
     KisHLineIterator selIter = tmpSel ->createHLineIterator(x, y, w);
 
-    for (int row = y; row < h - y; ++row) {
+    for (int row = y; row < h + y; ++row) {
         while (!deviter.isDone()) {
             *selIter.rawData() = cs->opacityU8(deviter.rawData());
             

@@ -153,7 +153,7 @@ public:
     void closeSplitMergeRegion();
 
     //For List Item Splits
-    void postProcessListItemSplit();
+    void postProcessListItemSplit(int changeId);
 
     //Method used by both split and merge
     int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
@@ -1096,7 +1096,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
                     splitRegionOpened = false;
                     closeSplitMergeRegion();
-                    postProcessListItemSplit();
+                    postProcessListItemSplit(block.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId));
                 }
             }
             block = block.next();
@@ -1121,10 +1121,56 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     return block;
 }
 
-void KoTextWriter::Private::postProcessListItemSplit()
+void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 {
+    saveChange(changeId);
+    QString change = changeTransTable.value(changeId);
+
     QString generatedXmlString(generatedXmlArray);
-    qDebug() << generatedXmlString;
+
+    //Add the name-space definitions so that this can be parsed
+    addNameSpaceDefinitions(generatedXmlString);
+
+    //Now Parse the generatedXML and if successful generate the final output
+    QString errorMsg;
+    int errorLine, errorColumn;
+    KoXmlDocument doc; 
+
+    QXmlStreamReader reader(generatedXmlString);
+    reader.setNamespaceProcessing(true);
+
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    
+    if (!ok)
+        return;
+
+    QString outputXml;
+    QTextStream outputXmlStream(&outputXml);
+
+    KoXmlElement rootElement = doc.documentElement();
+    KoXmlElement listItemElement = rootElement.firstChild().toElement();
+    removeLeavingContentStart(outputXmlStream, listItemElement, change, 1);
+
+    KoXmlElement pElement = rootElement.firstChild().firstChild().toElement();
+    removeLeavingContentStart(outputXmlStream, pElement, change, 2);
+
+    KoXmlElement childElement;
+    forEachElement(childElement, rootElement) {
+        if (childElement.localName() == "list-item") {
+            insertAroundContent(outputXmlStream, childElement, change);
+            KoXmlElement pElement = childElement.firstChild().toElement();
+            insertAroundContent(outputXmlStream, pElement, change);
+            writeNode(outputXmlStream, pElement, true);
+            outputXmlStream << "</text:p>";
+            outputXmlStream << "</text:list-item>";
+        } else {
+            writeNode(outputXmlStream, pElement);
+        }
+    }
+
+    removeLeavingContentEnd(outputXmlStream, 2);
+    removeLeavingContentEnd(outputXmlStream, 1);
+    writer->addCompleteElement(outputXml.toUtf8());
 }
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)

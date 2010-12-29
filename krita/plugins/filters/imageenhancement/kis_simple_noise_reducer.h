@@ -31,11 +31,10 @@ public:
     ~KisSimpleNoiseReducer();
 public:
     using KisFilter::process;
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
+    void process(KisPaintDeviceSP device,
+                const QRect& applyRect,
+                const KisFilterConfiguration* config,
+                KoUpdater* progressUpdater
                 ) const;
     virtual KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, const KisImageWSP image = 0) const;
 

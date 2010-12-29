@@ -150,7 +150,7 @@ FlakePluginsDisabled=formulashape,divineproportionshape,kexirelationdesignshape,
 ShapePluginsDisabled=musicshape,pictureshape,videoshape,chartshape,spreadsheetshape,pluginshape,treeshape
 TextEditingPluginsDisabled=thesaurustool,changecase,autocorrect,spellcheck
 TextInlinePluginsDisabled=textvariables,kprvariables
-ToolPluginsDisabled=paragraphtool,kopabackgroundtool,kpresentertoolanimation
+ToolPluginsDisabled=paragraphtool,kopabackgroundtool,calligrastagetoolanimation
 
 [favoriteList]
 favoriteBrushes=paintbrush,deformbrush,hairybrush,hatchingbrush,sketchbrush,smudge,spraybrush,

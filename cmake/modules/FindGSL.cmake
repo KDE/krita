@@ -69,7 +69,7 @@ IF (GSL_FOUND)
 ELSE (GSL_FOUND)
      if (GSL_FIND_REQUIRED)
 	MESSAGE (STATUS "GNU Scientific Library not found. "
-			"KSpread's solver plugin won't be compiled.")
+                        "Tables' solver plugin won't be compiled.")
      endif (GSL_FIND_REQUIRED)
 ENDIF (GSL_FOUND)
 

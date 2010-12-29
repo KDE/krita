@@ -78,8 +78,6 @@ KoStyleManager::KoStyleManager(QObject *parent)
 {
     d->defaultParagraphStyle = new KoParagraphStyle(this);
     d->defaultParagraphStyle->setName(i18n("Default"));
-    KoCharacterStyle *charStyle = d->defaultParagraphStyle->characterStyle();
-    charStyle->setName(i18n("Default"));
 
     add(d->defaultParagraphStyle);
 
@@ -238,7 +236,16 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (style->characterStyle()->name().isEmpty())
             style->characterStyle()->setName(style->name());
     }
-    // TODO add the list style too?
+    if (style->listStyle() && style->listStyle()->styleId() == 0)
+        add(style->listStyle());
+    KoParagraphStyle *root = style;
+    while (root->parentStyle()) {
+        root = root->parentStyle();
+        if (root->styleId() == 0)
+            add(root);
+    }
+    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
+        root->setParentStyle(d->defaultParagraphStyle);
 
     emit styleAdded(style);
 }

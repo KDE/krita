@@ -306,12 +306,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
 #endif
-#if 0
-    if ((document->isEmpty()) && (d->styleManager)) {
-        QTextBlock block = cursor.block();
-        d->styleManager->defaultParagraphStyle()->applyStyle(block);
-    }
-#endif
     bool usedParagraph = false; // set to true if we found a tag that used the paragraph, indicating that the next round needs to start a new one.
     if (bodyElem.namespaceURI() == KoXmlNS::table && bodyElem.localName() == "table") {
         loadTable(bodyElem, cursor);
@@ -400,6 +394,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
             processBody();
         }
         endBody();
+
+        if ((document->isEmpty()) && (d->styleManager)) {
+            QTextBlock block = document->begin();
+            d->styleManager->defaultParagraphStyle()->applyStyle(block);
+        }
     }
     cursor.endEditBlock();
 }

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  *
@@ -77,7 +77,7 @@ public:
         AlphaLowerItem = QTextListFormat::ListLowerAlpha,
         /// use alpha numbering (A, B, C, ... AA, AB, ...)
         UpperAlphaItem = QTextListFormat::ListUpperAlpha,
-        /// invalid list style
+        /// List style with no numbering
         None = 1,
         /// use lower roman counting.  (i, ii, iii, iv, ...)
         RomanLowerItem,

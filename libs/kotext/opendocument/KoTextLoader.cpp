@@ -1032,7 +1032,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
             reader.setNamespaceProcessing(true);
 
             bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
-
             QDomDocument dom;
             if (ok) {
                 KoXmlElement childElement;
@@ -1192,12 +1191,19 @@ bool KoTextLoader::Private::checkForListItemSplit(const KoXmlElement &element)
 KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QString *generatedXmlString)
 {
     KoXmlNode lastProcessedNode = elem;
+
     nameSpacesList.clear();
+    nameSpacesList.append(KoXmlNS::split);
+    nameSpacesList.append(KoXmlNS::delta);
 
     QString generatedXml; 
     QTextStream xmlStream(&generatedXml);
+
+    static int splitIdCounter = 0;
+    bool splitStarted = false;
     
     QString endId = elem.attributeNS(KoXmlNS::delta, "end-element-idref");
+    QString changeId = elem.attributeNS(KoXmlNS::delta, "removal-change-idref");
 
     while(true) {
         KoXmlElement element;
@@ -1219,6 +1225,22 @@ KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QSt
             forEachElement(childElement, element) {
                 if (childElement.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") {
                     copyTagStart(childElement, xmlStream, true);
+
+                    if (splitStarted) {
+                        generatedXml.remove((generatedXml.length() - 1), 1);
+                        xmlStream << " ns1:split-id=\"split" << splitIdCounter << "\"";
+                        xmlStream << " ns1:insertion-change-idref=\"" << changeId << "\"";
+                        xmlStream << " ns1:insertion-type=\"split\"";
+                        xmlStream << ">";
+                        splitStarted = false;
+                        splitIdCounter++;
+                    } else {
+                        generatedXml.remove((generatedXml.length() - 1), 1);
+                        xmlStream << " ns0:split001-idref=\"split" << splitIdCounter << "\"";
+                        xmlStream << ">";
+                        splitStarted = true;
+                    }
+
                     copyNode(childElement, xmlStream, true);
                     copyTagEnd(childElement, xmlStream);
                 } else {
@@ -1232,8 +1254,6 @@ KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QSt
     }
     
     QTextStream docStream(generatedXmlString);
-    qDebug() << generatedXml;
-    
     docStream << "<generated-xml";
     for (int i=0; i<nameSpacesList.size();i++) {
         docStream << " xmlns:ns" << i << "=";

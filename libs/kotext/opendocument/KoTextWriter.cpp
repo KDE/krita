@@ -152,6 +152,9 @@ public:
     void openSplitMergeRegion();
     void closeSplitMergeRegion();
 
+    //For List Item Splits
+    void postProcessListItemSplit();
+
     //Method used by both split and merge
     int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
 
@@ -998,6 +1001,9 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         } while(textDocument.list(listBlock) == list);
     }
 
+    bool splitRegionOpened = false;
+    int splitEndBlockNumber = -1;
+
     bool listStarted = false;
     int listChangeId = 0;
     if (!headingLevel && !numberedParagraphLevel) {
@@ -1034,6 +1040,13 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     closeChangeRegion();
                 }
             } else {
+                int endBlockNumber = checkForSplit(block);
+                if (!deleteMergeRegionOpened && !splitRegionOpened && (endBlockNumber != -1)) {
+                    openSplitMergeRegion();
+                    splitRegionOpened = true;
+                    splitEndBlockNumber = endBlockNumber;
+                }
+
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 int listItemChangeId;
                 if (textList == topLevelTextList) {
@@ -1078,6 +1091,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 if (listItemChangeId)
                    closeChangeRegion();
                 writer->endElement(); 
+
+                if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
+                    splitRegionOpened = false;
+                    closeSplitMergeRegion();
+                    postProcessListItemSplit();
+                }
             }
             block = block.next();
             blockFormat = block.blockFormat();
@@ -1099,6 +1118,12 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
    
     return block;
+}
+
+void KoTextWriter::Private::postProcessListItemSplit()
+{
+    QString generatedXmlString(generatedXmlArray);
+    qDebug() << generatedXmlString;
 }
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)

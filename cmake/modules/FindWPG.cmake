@@ -19,9 +19,10 @@ ELSE (LIBWPG_INCLUDE_DIR AND LIBWPG_LIBRARIES)
   IF (NOT WIN32)
     INCLUDE(FindPkgConfig)
     pkg_check_modules(LIBWPG libwpg-0.1)
+    pkg_check_modules(LIBWPG libwpg-0.2)
   ENDIF (NOT WIN32)
 
-  FIND_LIBRARY(LIBWPG_STREAM_LIBRARIES NAMES wpg-stream-0.1 libwpg-stream-0.1
+  FIND_LIBRARY(LIBWPG_STREAM_LIBRARIES NAMES libwpg-stream-0.1 wpg-stream-0.1 libwpd-stream-0.9 wpd-stream-0.9
     PATHS
     ${LIBWPG_LIBRARIES}
     )

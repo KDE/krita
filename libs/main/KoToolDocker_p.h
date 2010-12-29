@@ -52,6 +52,7 @@ public slots:
 
 private:
     Q_PRIVATE_SLOT(d, void toggleLock())
+    Q_PRIVATE_SLOT(d, void toggleTab())
     Q_PRIVATE_SLOT(d, void locationChanged(Qt::DockWidgetArea area))
 
     class Private;

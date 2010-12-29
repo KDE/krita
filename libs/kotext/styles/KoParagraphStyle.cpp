@@ -815,7 +815,11 @@ void KoParagraphStyle::setName(const QString &name)
 
 int KoParagraphStyle::styleId() const
 {
-    return propertyInt(StyleId);
+    // duplicate some code to avoid getting the parents style id
+    QVariant variant = d->stylesPrivate.value(StyleId);
+    if (variant.isNull())
+        return 0;
+    return variant.toInt();
 }
 
 void KoParagraphStyle::setStyleId(int id)
@@ -984,7 +988,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         d->name = name;
     }
     else {
-        d->name = element->attributeNS(KoXmlNS::style, "name", d-name);
+        d->name = element->attributeNS(KoXmlNS::style, "name", d->name);
     }
 
     context.styleStack().save();

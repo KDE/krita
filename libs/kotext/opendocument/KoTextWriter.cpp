@@ -149,8 +149,8 @@ public:
     bool deleteMergeRegionOpened;
     int deleteMergeEndBlockNumber;
     int checkForDeleteMerge(const QTextBlock &block);
-    void openDeleteMergeRegion();
-    void closeDeleteMergeRegion();
+    void openSplitMergeRegion();
+    void closeSplitMergeRegion();
 
     //Method used by both split and merge
     int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
@@ -980,7 +980,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
             if (endBlockNumber != -1) {
                 deleteMergeEndBlockNumber = endBlockNumber;
                 deleteMergeRegionOpened = true;
-                openDeleteMergeRegion();
+                openSplitMergeRegion();
                 break;
             }
             listBlock = listBlock.next();
@@ -1094,7 +1094,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     if (closeDelMergeRegion) {
-        closeDeleteMergeRegion();
+        closeSplitMergeRegion();
+        postProcessDeleteMergeXml();
     }
    
     return block;
@@ -1139,7 +1140,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             deleteMergeEndBlockNumber = checkForDeleteMerge(block);
             if (deleteMergeEndBlockNumber != -1) {
                 deleteMergeRegionOpened = true;
-                openDeleteMergeRegion();
+                openSplitMergeRegion();
             }
         }
 
@@ -1147,7 +1148,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         saveParagraph(block, from, to);
 
         if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
-            closeDeleteMergeRegion();
+            closeSplitMergeRegion();
+            postProcessDeleteMergeXml();
         }
 
         block = block.next();
@@ -1212,7 +1214,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
     return endBlockNumber;
 }
 
-void KoTextWriter::Private::openDeleteMergeRegion()
+void KoTextWriter::Private::openSplitMergeRegion()
 {
     //Save the current writer
     oldXmlWriter = writer;
@@ -1227,7 +1229,7 @@ void KoTextWriter::Private::openDeleteMergeRegion()
     context.setXmlWriter(*newXmlWriter);
 }
 
-void KoTextWriter::Private::closeDeleteMergeRegion()
+void KoTextWriter::Private::closeSplitMergeRegion()
 {
     //delete the new writer
     delete newXmlWriter;
@@ -1235,9 +1237,6 @@ void KoTextWriter::Private::closeDeleteMergeRegion()
     //Restore the actual xml writer
     writer = oldXmlWriter;
     context.setXmlWriter(*oldXmlWriter);
-
-    //Post-Process and save the generated xml in the appropriate way.
-    postProcessDeleteMergeXml();
 }
 
 void KoTextWriter::Private::postProcessDeleteMergeXml()

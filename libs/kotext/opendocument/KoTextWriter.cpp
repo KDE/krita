@@ -157,6 +157,7 @@ public:
 
     //Method used by both split and merge
     int checkForMergeOrSplit(const QTextBlock &block, KoGenChange::Type changeType);
+    void addNameSpaceDefinitions(QString &generatedXmlString);
 
     KoXmlWriter *oldXmlWriter;
     KoXmlWriter *newXmlWriter;
@@ -1268,6 +1269,29 @@ void KoTextWriter::Private::postProcessDeleteMergeXml()
 {
     QString generatedXmlString(generatedXmlArray);
 
+    //Add the name-space definitions so that this can be parsed
+    addNameSpaceDefinitions(generatedXmlString);
+
+    //Now Parse the generatedXML and if successful generate the final output
+    QString errorMsg;
+    int errorLine, errorColumn;
+    KoXmlDocument doc; 
+
+    QXmlStreamReader reader(generatedXmlString);
+    reader.setNamespaceProcessing(true);
+
+    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+    if (ok) {
+        //Generate the final XML output and save it
+        QString outputXml;
+        QTextStream outputXmlStream(&outputXml);
+        generateFinalXml(outputXmlStream, doc.documentElement());
+        writer->addCompleteElement(outputXml.toUtf8());
+    } 
+}
+
+void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
+{
     //Generate the name-space definitions so that it can be parsed. Like what is office:text, office:delta etc
     QString nameSpaceDefinitions;
     QTextStream nameSpacesStream(&nameSpaceDefinitions);
@@ -1299,23 +1323,6 @@ void KoTextWriter::Private::postProcessDeleteMergeXml()
 
     generatedXmlString.prepend(nameSpaceDefinitions);
     generatedXmlString.append("</generated-xml>");
-
-    //Now Parse the generatedXML and if successful generate the final output
-    QString errorMsg;
-    int errorLine, errorColumn;
-    KoXmlDocument doc; 
-
-    QXmlStreamReader reader(generatedXmlString);
-    reader.setNamespaceProcessing(true);
-
-    bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
-    if (ok) {
-        //Generate the final XML output and save it
-        QString outputXml;
-        QTextStream outputXmlStream(&outputXml);
-        generateFinalXml(outputXmlStream, doc.documentElement());
-        writer->addCompleteElement(outputXml.toUtf8());
-    } 
 }
 
 void KoTextWriter::Private::generateFinalXml(QTextStream &outputXmlStream, const KoXmlElement &element)

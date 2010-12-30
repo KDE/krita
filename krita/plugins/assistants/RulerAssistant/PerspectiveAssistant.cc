@@ -133,7 +133,21 @@ inline qreal localScale(const QTransform& transform, QPointF pt)
                 b = y + transform.m33(),
                 c = x + y + transform.m33(),
                 d = c * c;
-    return fabs(a)*fabs(a + transform.m23())*fabs(b)*fabs(b + transform.m13())/(d * d);
+    return fabs(a*(a + transform.m23())*b*(b + transform.m13()))/(d * d);
+}
+
+// returns the maximum local scale at the points (0,0),(0,1),(1,0),(1,1)
+inline qreal maxLocalScale(const QTransform& transform)
+{
+    const qreal a = fabs((transform.m33() + transform.m13()) * (transform.m33() + transform.m23())),
+                b = fabs((transform.m33()) * (transform.m13() + transform.m33() + transform.m23())),
+                d00 = transform.m33() * transform.m33(),
+                d11 = (transform.m33() + transform.m23() + transform.m13())*(transform.m33() + transform.m23() + transform.m13()),
+                s0011 = d00 > d11 ? a / d11 : a / d00,
+                d10 = (transform.m33() + transform.m13()) * (transform.m33() + transform.m13()),
+                d01 = (transform.m33() + transform.m23()) * (transform.m33() + transform.m23()),
+                s1001 = d10 > d01 ? b / d01 : b / d10;
+    return qMax(s0011, s1001);
 }
 
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
@@ -149,14 +163,7 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
         // point at infinity
         return 0.0;
     }
-    QPointF realPoint = inverse.map(pt);
-    const qreal corners[4] = {
-        localScale(transform, QPointF(0.0, 0.0)),
-        localScale(transform, QPointF(0.0, 1.0)),
-        localScale(transform, QPointF(1.0, 0.0)),
-        localScale(transform, QPointF(1.0, 1.0))};
-    const qreal max = std::max(std::max(corners[0], corners[1]), std::max(corners[2], corners[3]));
-    return localScale(transform, inverse.map(pt)) / max;
+    return localScale(transform, inverse.map(pt)) / maxLocalScale(transform);
 }
 
 // draw a vanishing point marker

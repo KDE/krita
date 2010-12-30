@@ -116,6 +116,8 @@ set(flake_SRCS
     KoFilterEffectLoadingContext.cpp
     KoTextOnShapeContainer.cpp
     KoTextShapeDataBase.cpp
+    KoTosContainer.cpp
+    KoTosContainerModel.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp

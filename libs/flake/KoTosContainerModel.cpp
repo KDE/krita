@@ -1,4 +1,26 @@
+/* This file is part of the KDE project
+   Copyright (C) 2010 Thorsten Zachmann <zachmann@kde.org>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
 #include "KoTosContainerModel.h"
+
+#include "KoTextShapeDataBase.h"
+#include "KoTosContainer.h"
 
 KoTosContainerModel::KoTosContainerModel()
 : m_textShape(0)
@@ -35,6 +57,7 @@ void KoTosContainerModel::setClipped(const KoShape *shape, bool clipping)
 
 bool KoTosContainerModel::isClipped(const KoShape *shape) const
 {
+    Q_UNUSED(shape)
     return false;
 }
 
@@ -46,6 +69,7 @@ void KoTosContainerModel::setInheritsTransform(const KoShape *shape, bool inheri
 
 bool KoTosContainerModel::inheritsTransform(const KoShape *shape) const
 {
+    Q_UNUSED(shape)
     return true;
 }
 
@@ -71,4 +95,13 @@ QList<KoShape*> KoTosContainerModel::shapes() const
 
 void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
+    if (type != KoShape::SizeChanged) {
+        return;
+    }
+    // TODO check if lock is needed lock = true;
+    KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(container);
+    if ( m_textShape && tosContainer && tosContainer->resizeBehavior() != KoTosContainer::TextFollowsPreferredTextRect ) {
+        m_textShape->setSize(tosContainer->size());
+    }
+    //lock = false;
 }

@@ -565,6 +565,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                             d->openChangeRegion(tag);
                         loadTable(tag, cursor);
+                        usedParagraph = false;
                         if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                             d->closeChangeRegion(tag);
                     } else {
@@ -1650,11 +1651,15 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
             loadSpan(ts, cursor, &stripLeadingSpaces);
         } else if (isDeltaNS && localName == "intermediate-content") {
             if (ts.hasChildNodes()) {
-                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                if (ts.firstChild().toElement().localName() != "table") {
+                    cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                }
                 loadBody(ts, cursor);
             }
         } else if (isDeltaNS && localName == "trailing-partial-content") {
-            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+            if (ts.previousSibling().lastChild().toElement().localName() != "table") {
+                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+            }
             loadBody(ts, cursor);
         }
     }

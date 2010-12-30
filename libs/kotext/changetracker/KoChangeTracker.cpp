@@ -494,6 +494,12 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
             }
         }
         
+        if (editCursor.currentTable()) {
+            QTextTableFormat tableFormat = editCursor.currentTable()->format();
+            tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+            editCursor.currentTable()->setFormat(tableFormat);
+        }
+        
         if (currentBlock != startBlock) {
             QTextBlockFormat blockFormat;
             blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);

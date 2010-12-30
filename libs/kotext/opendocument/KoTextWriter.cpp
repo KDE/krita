@@ -1276,7 +1276,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
 
     if (endBlock.blockNumber() != block.blockNumber()) {
         //Check that the last fragment of this block is not a part of this change. If so, it is not a merge or a split
-        QTextFragment lastFragment = (block.end()).fragment();
+        QTextFragment lastFragment = (endBlock.end()).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
         if (lastFragmentChangeId != splitMergeChangeId) {
@@ -1479,7 +1479,11 @@ void KoTextWriter::Private::handleParagraphOrHeaderMerge(QTextStream &outputXmlS
             outputXmlStream << "</delta:trailing-partial-content>";
             outputXmlStream << "</delta:merge>";    
         } else {
+            outputXmlStream << "<text:" << mergeEndElement.localName();
+            writeAttributes(outputXmlStream, mergeEndElement);
+            outputXmlStream << ">";
             writeNode(outputXmlStream, node);
+            outputXmlStream << "</text:" << mergeEndElement.localName() << ">";    
         }
     }
 

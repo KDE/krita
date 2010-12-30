@@ -83,7 +83,6 @@ public:
 
         if (tabbed) {
             QTabWidget *t;
-            QLabel *l;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);
             iter = currentWidgetMap.constBegin();
@@ -222,6 +221,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea = new QScrollArea();
     d->scrollArea->setWidget(d->housekeeperWidget);
     d->scrollArea->setFrameShape(QFrame::NoFrame);
+    d->scrollArea->setWidgetResizable(true);
 
     setWidget(d->scrollArea);
 

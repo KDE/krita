@@ -37,6 +37,7 @@
 #include <QAction>
 #include <QStyleOptionFrame>
 #include <QToolButton>
+#include <QTabWidget>
 
 class KoToolDocker::Private {
 public:
@@ -47,6 +48,8 @@ public:
     {
         lockIcon = KIcon("object-locked");
         unlockIcon = KIcon("object-unlocked");
+        tabIcon = KIcon("tab-new");
+        unTabIcon = KIcon("tab-close");
     }
 
     QMap<QString, QWidget *> currentWidgetMap;
@@ -61,7 +64,10 @@ public:
     bool hasTitle;
     KIcon lockIcon;
     KIcon unlockIcon;
+    KIcon tabIcon;
+    KIcon unTabIcon;
     QToolButton *lockButton;
+    QToolButton *tabButton;
 
     void recreateLayout(const QMap<QString, QWidget *> &optionWidgetMap)
     {
@@ -75,61 +81,73 @@ public:
 
         currentWidgetMap = optionWidgetMap;
 
-        // Now add option widgets to docker based on layout area and if it should be tabbed
-        // small hack with 128 to cover all in one switch
-        switch(dockingArea + (tabbed ? 128 : 0)) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-        case Qt::TopDockWidgetArea+128: // we don't do tabbed at top
-        case Qt::BottomDockWidgetArea+128: // we don't do tabbed at Bottom
-            housekeeperLayout->setHorizontalSpacing(2);
-            housekeeperLayout->setVerticalSpacing(0);
+        if (tabbed) {
+            QTabWidget *t;
+            housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
+            currentAuxWidgets.insert(t);
             iter = currentWidgetMap.constBegin();
             for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
-                QFrame *s;
-                QLabel *l;
                 if (iter.value()->objectName().isEmpty()) {
                     Q_ASSERT(!(iter.value()->objectName().isEmpty()));
                     continue; // skip this docker in release build when assert don't crash
                 }
-                housekeeperLayout->addWidget(l = new QLabel(iter.key()), 0, 2*cnt);
-                currentAuxWidgets.insert(l);
-                housekeeperLayout->addWidget(iter.value(), 1, 2*cnt);
+                t->addTab(iter.value(), iter.key());
+                iter.value()->show();
                 ++iter;
-                if (iter != currentWidgetMap.constEnd()) {
-                    housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
-                    s->setFrameShape(QFrame::VLine);
-                    currentAuxWidgets.insert(s);
-                }
             }
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-        case Qt::LeftDockWidgetArea+128:
-        case Qt::RightDockWidgetArea+128:
-            housekeeperLayout->setHorizontalSpacing(0);
-            housekeeperLayout->setVerticalSpacing(2);
-            iter = currentWidgetMap.constBegin();
-            for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
-                QFrame *s;
-                QLabel *l;
-                if (iter.value()->objectName().isEmpty()) {
-                    Q_ASSERT(!(iter.value()->objectName().isEmpty()));
-                    continue; // skip this docker in release build when assert don't crash
+        } else {
+            switch(dockingArea) {
+            case Qt::TopDockWidgetArea:
+            case Qt::BottomDockWidgetArea:
+                housekeeperLayout->setHorizontalSpacing(2);
+                housekeeperLayout->setVerticalSpacing(0);
+                iter = currentWidgetMap.constBegin();
+                for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
+                    QFrame *s;
+                    QLabel *l;
+                    if (iter.value()->objectName().isEmpty()) {
+                        Q_ASSERT(!(iter.value()->objectName().isEmpty()));
+                        continue; // skip this docker in release build when assert don't crash
+                    }
+                    housekeeperLayout->addWidget(l = new QLabel(iter.key()), 0, 2*cnt);
+                    currentAuxWidgets.insert(l);
+                    housekeeperLayout->addWidget(iter.value(), 1, 2*cnt);
+                    iter.value()->show();
+                    ++iter;
+                    if (iter != currentWidgetMap.constEnd()) {
+                        housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
+                        s->setFrameShape(QFrame::VLine);
+                        currentAuxWidgets.insert(s);
+                    }
                 }
-                housekeeperLayout->addWidget(l = new QLabel(iter.key()), 3*cnt, 0);
-                currentAuxWidgets.insert(l);
-                housekeeperLayout->addWidget(iter.value(), 3*cnt+1, 0);
-                ++iter;
-                if (iter != currentWidgetMap.constEnd()) {
-                    housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
-                    s->setFrameShape(QFrame::HLine);
-                    currentAuxWidgets.insert(s);
+                break;
+            case Qt::LeftDockWidgetArea:
+            case Qt::RightDockWidgetArea:
+                housekeeperLayout->setHorizontalSpacing(0);
+                housekeeperLayout->setVerticalSpacing(2);
+                iter = currentWidgetMap.constBegin();
+                for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
+                    QFrame *s;
+                    QLabel *l;
+                    if (iter.value()->objectName().isEmpty()) {
+                        Q_ASSERT(!(iter.value()->objectName().isEmpty()));
+                        continue; // skip this docker in release build when assert don't crash
+                    }
+                    housekeeperLayout->addWidget(l = new QLabel(iter.key()), 3*cnt, 0);
+                    currentAuxWidgets.insert(l);
+                    housekeeperLayout->addWidget(iter.value(), 3*cnt+1, 0);
+                    iter.value()->show();
+                    ++iter;
+                    if (iter != currentWidgetMap.constEnd()) {
+                        housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);
+                        s->setFrameShape(QFrame::HLine);
+                        currentAuxWidgets.insert(s);
+                    }
                 }
+                break;
+            default:
+                break;
             }
-            break;
-        default:
-            break;
         }
         housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
         housekeeperLayout->invalidate();
@@ -146,24 +164,48 @@ public:
         if (!hasTitle) {
             q->setTitleBarWidget(new KoDockWidgetTitleBar(q));
             hasTitle = true;
-            lockButton->setIcon(lockIcon);
+            lockButton->setIcon(unlockIcon);
+            tabButton->setVisible(true);
+            // parent hack to keep it clickable
+            tabButton->setParent(q);
+            tabButton->show();
+            lockButton->setParent(0);
+            lockButton->setParent(q);
+            lockButton->show();
         } else {
             q->setTitleBarWidget(new QWidget());
             hasTitle = false;
-            lockButton->setIcon(unlockIcon);
+            lockButton->setIcon(lockIcon);
+            tabButton->setVisible(false);
+            // parent hack to keep it clickable
+            tabButton->setParent(0);
+            lockButton->setParent(0);
+            lockButton->setParent(q);
+            lockButton->show();
         }
         lockButton->move(q->width() - lockButton->width() - scrollArea->verticalScrollBar()->sizeHint().width() - (hasTitle ? 24 : 4), lockButton->y());
+        tabButton->move(lockButton->x()  - tabButton->width() - 4, lockButton->y());
+    }
+    void toggleTab()
+    {
+        if (!tabbed) {
+            tabbed = true;
+            tabButton->setIcon(unTabIcon);
+        } else {
+            tabbed = false;
+            tabButton->setIcon(tabIcon);
+        }
+        recreateLayout(currentWidgetMap);
     }
 };
 
 KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget("sharedtooldocker", parent),
+    : QDockWidget(i18n("Tool Options"), parent),
     d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
-    //setFeatures(NoDockWidgetFeatures);
     setFeatures(AllDockWidgetFeatures);
     setTitleBarWidget(new QWidget());
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -179,15 +221,25 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->scrollArea = new QScrollArea();
     d->scrollArea->setWidget(d->housekeeperWidget);
     d->scrollArea->setFrameShape(QFrame::NoFrame);
+    d->scrollArea->setWidgetResizable(true);
 
     setWidget(d->scrollArea);
 
     d->lockButton = new QToolButton(this);
     d->lockButton->setIcon(d->lockIcon);
-    //d->lockButton->setFrame(QFrame:NoFrame);
+    d->lockButton->setAutoRaise(true);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
     d->lockButton->setVisible(true);
     d->lockButton->resize(d->lockButton->sizeHint());
+    d->hasTitle = false;
+
+    d->tabButton = new QToolButton(0); // parent hack in toggleLock to keep it clickable
+    d->tabButton->setIcon(d->tabIcon);
+    d->tabButton->setAutoRaise(true);
+    connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
+    d->tabButton->setVisible(false);
+    d->tabButton->resize(d->tabButton->sizeHint());
+    d->tabbed = false;
 }
 
 KoToolDocker::~KoToolDocker()
@@ -211,6 +263,7 @@ void KoToolDocker::resizeEvent(QResizeEvent*)
     int mw = style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, this);
     QFontMetrics titleFontMetrics = fontMetrics();
     d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width() - (d->hasTitle ? 24 : 4), fw + mw);
+    d->tabButton->move(d->lockButton->x()  - d->tabButton->width() - 4, d->lockButton->y());
 }
 
 #include <KoToolDocker_p.moc>

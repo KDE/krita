@@ -28,8 +28,8 @@
 #include "kis_coordinates_converter.h"
 
 #include <math.h>
-
 #include <limits>
+#include <algorithm>
 
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
@@ -102,6 +102,51 @@ QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& s
 void PerspectiveAssistant::endStroke()
 {
     snapLine = QLineF();
+}
+
+bool PerspectiveAssistant::contains(const QPointF& pt) const
+{
+    QPolygonF poly;
+    if (!quad(poly)) return false;
+    return poly.containsPoint(pt, Qt::OddEvenFill);
+}
+
+inline qreal lengthSquared(const QPointF& vector)
+{
+    return vector.x() * vector.x() + vector.y() * vector.y();
+}
+
+inline qreal distanceSquared(const QTransform& transform, QPointF pt, QPointF orig)
+{
+    const qreal epsilon = 1e-5, epsilonSquared = epsilon * epsilon;
+    qreal xSizeSquared = lengthSquared(transform.map(pt + QPointF(epsilon, 0.0)) - orig) / epsilonSquared;
+    qreal ySizeSquared = lengthSquared(transform.map(pt + QPointF(0.0, epsilon)) - orig) / epsilonSquared;
+    xSizeSquared /= lengthSquared(transform.map(QPointF(0.0, pt.y())) - transform.map(QPointF(1.0, pt.y())));
+    ySizeSquared /= lengthSquared(transform.map(QPointF(pt.x(), 0.0)) - transform.map(QPointF(pt.x(), 1.0)));
+    return xSizeSquared + ySizeSquared;
+}
+
+qreal PerspectiveAssistant::distance(const QPointF& pt) const
+{
+    QPolygonF poly;
+    if (!quad(poly)) return 1.0;
+    QTransform transform;
+    if (!QTransform::squareToQuad(poly, transform)) return 1.0;
+    bool invertible;
+    QTransform inverse = transform.inverted(&invertible);
+    if (!invertible) return 1.0;
+    if (inverse.m13() * pt.x() + inverse.m23() * pt.y() + inverse.m33() == 0.0) {
+        // point at infinity
+        return 0.0;
+    }
+    QPointF realPoint = inverse.map(pt);
+    const qreal corners[4] = {
+        distanceSquared(transform, QPointF(0.0, 0.0), transform.map(QPointF(0.0, 0.0))),
+        distanceSquared(transform, QPointF(0.0, 1.0), transform.map(QPointF(0.0, 1.0))),
+        distanceSquared(transform, QPointF(1.0, 0.0), transform.map(QPointF(1.0, 0.0))),
+        distanceSquared(transform, QPointF(1.0, 1.0), transform.map(QPointF(1.0, 1.0)))};
+    const qreal max = std::max(std::max(corners[0], corners[1]), std::max(corners[2], corners[3]));
+    return sqrt(distanceSquared(transform, realPoint, pt) / max);
 }
 
 // draw a vanishing point marker

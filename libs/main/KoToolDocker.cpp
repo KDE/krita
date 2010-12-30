@@ -83,14 +83,17 @@ public:
 
         if (tabbed) {
             QTabWidget *t;
+            QLabel *l;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);
+            iter = currentWidgetMap.constBegin();
             for (int cnt = 0; iter != currentWidgetMap.constEnd(); ++cnt) {
                 if (iter.value()->objectName().isEmpty()) {
                     Q_ASSERT(!(iter.value()->objectName().isEmpty()));
                     continue; // skip this docker in release build when assert don't crash
                 }
                 t->addTab(iter.value(), iter.key());
+                ++iter;
             }
         } else {
             switch(dockingArea) {

@@ -201,13 +201,12 @@ public:
 };
 
 KoToolDocker::KoToolDocker(QWidget *parent)
-    : QDockWidget("sharedtooldocker", parent),
+    : QDockWidget(i18n("Tool Options"), parent),
     d(new Private(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
-    //setFeatures(NoDockWidgetFeatures);
     setFeatures(AllDockWidgetFeatures);
     setTitleBarWidget(new QWidget());
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));

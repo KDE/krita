@@ -29,7 +29,6 @@
 
 #include <math.h>
 #include <limits>
-#include <algorithm>
 
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
@@ -136,18 +135,18 @@ inline qreal localScale(const QTransform& transform, QPointF pt)
     return fabs(a*(a + transform.m23())*b*(b + transform.m13()))/(d * d);
 }
 
-// returns the maximum local scale at the points (0,0),(0,1),(1,0),(1,1)
-inline qreal maxLocalScale(const QTransform& transform)
+// returns the reciprocal of the maximum local scale at the points (0,0),(0,1),(1,0),(1,1)
+inline qreal inverseMaxLocalScale(const QTransform& transform)
 {
     const qreal a = fabs((transform.m33() + transform.m13()) * (transform.m33() + transform.m23())),
                 b = fabs((transform.m33()) * (transform.m13() + transform.m33() + transform.m23())),
                 d00 = transform.m33() * transform.m33(),
                 d11 = (transform.m33() + transform.m23() + transform.m13())*(transform.m33() + transform.m23() + transform.m13()),
-                s0011 = d00 > d11 ? a / d11 : a / d00,
+                s0011 = qMin(d00, d11) / a,
                 d10 = (transform.m33() + transform.m13()) * (transform.m33() + transform.m13()),
                 d01 = (transform.m33() + transform.m23()) * (transform.m33() + transform.m23()),
-                s1001 = d10 > d01 ? b / d01 : b / d10;
-    return qMax(s0011, s1001);
+                s1001 = qMin(d10, d01) / b;
+    return qMin(s0011, s1001);
 }
 
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
@@ -163,7 +162,7 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
         // point at infinity
         return 0.0;
     }
-    return localScale(transform, inverse.map(pt)) / maxLocalScale(transform);
+    return localScale(transform, inverse.map(pt)) * inverseMaxLocalScale(transform);
 }
 
 // draw a vanishing point marker

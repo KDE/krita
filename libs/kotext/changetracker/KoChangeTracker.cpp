@@ -596,8 +596,12 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
             continue;
         } else {
             // This block does not contain a list. So no special work here. 
-            if (currentBlock != tempDoc.begin()) {
+            if ((currentBlock != tempDoc.begin()) && !(QTextCursor(currentBlock.previous()).currentTable())) {
                 cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
+            }
+
+            if (QTextCursor(currentBlock.previous()).currentTable()) {
+                cursor.mergeBlockFormat(currentBlock.blockFormat());
             }
         }
 
@@ -654,7 +658,7 @@ int KoChangeTracker::fragmentLength(QTextDocumentFragment fragment)
             length += 1;
             continue;
         } else {
-            if (currentBlock != tempDoc.begin())
+            if ((currentBlock != tempDoc.begin()) && !(QTextCursor(currentBlock.previous()).currentTable()))
                 length += 1; //For the Block Separator
         }
         

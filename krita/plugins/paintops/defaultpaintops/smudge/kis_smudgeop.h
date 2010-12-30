@@ -31,6 +31,7 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
+#include <kis_pressure_composite_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -56,8 +57,8 @@ private:
     KoColor m_color;
     
     KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
     KisPressureRateOption m_rateOption;
+    KisPressureCompositeOption m_compositeOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

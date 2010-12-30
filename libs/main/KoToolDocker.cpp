@@ -93,6 +93,7 @@ public:
                     continue; // skip this docker in release build when assert don't crash
                 }
                 t->addTab(iter.value(), iter.key());
+                iter.value()->show();
                 ++iter;
             }
         } else {
@@ -112,6 +113,7 @@ public:
                     housekeeperLayout->addWidget(l = new QLabel(iter.key()), 0, 2*cnt);
                     currentAuxWidgets.insert(l);
                     housekeeperLayout->addWidget(iter.value(), 1, 2*cnt);
+                    iter.value()->show();
                     ++iter;
                     if (iter != currentWidgetMap.constEnd()) {
                         housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
@@ -135,6 +137,7 @@ public:
                     housekeeperLayout->addWidget(l = new QLabel(iter.key()), 3*cnt, 0);
                     currentAuxWidgets.insert(l);
                     housekeeperLayout->addWidget(iter.value(), 3*cnt+1, 0);
+                    iter.value()->show();
                     ++iter;
                     if (iter != currentWidgetMap.constEnd()) {
                         housekeeperLayout->addWidget(s = new QFrame(), 3*cnt+2, 0);

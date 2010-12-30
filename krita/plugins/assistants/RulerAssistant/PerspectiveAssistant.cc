@@ -116,14 +116,24 @@ inline qreal lengthSquared(const QPointF& vector)
     return vector.x() * vector.x() + vector.y() * vector.y();
 }
 
-inline qreal distanceSquared(const QTransform& transform, QPointF pt, QPointF orig)
+inline qreal localScale(const QTransform& transform, QPointF pt)
 {
-    const qreal epsilon = 1e-5, epsilonSquared = epsilon * epsilon;
-    qreal xSizeSquared = lengthSquared(transform.map(pt + QPointF(epsilon, 0.0)) - orig) / epsilonSquared;
-    qreal ySizeSquared = lengthSquared(transform.map(pt + QPointF(0.0, epsilon)) - orig) / epsilonSquared;
-    xSizeSquared /= lengthSquared(transform.map(QPointF(0.0, pt.y())) - transform.map(QPointF(1.0, pt.y())));
-    ySizeSquared /= lengthSquared(transform.map(QPointF(pt.x(), 0.0)) - transform.map(QPointF(pt.x(), 1.0)));
-    return xSizeSquared + ySizeSquared;
+//    const qreal epsilon = 1e-5, epsilonSquared = epsilon * epsilon;
+//    qreal xSizeSquared = lengthSquared(transform.map(pt + QPointF(epsilon, 0.0)) - orig) / epsilonSquared;
+//    qreal ySizeSquared = lengthSquared(transform.map(pt + QPointF(0.0, epsilon)) - orig) / epsilonSquared;
+//    xSizeSquared /= lengthSquared(transform.map(QPointF(0.0, pt.y())) - transform.map(QPointF(1.0, pt.y())));
+//    ySizeSquared /= lengthSquared(transform.map(QPointF(pt.x(), 0.0)) - transform.map(QPointF(pt.x(), 1.0)));
+//  when taking the limit epsilon->0:
+//  xSizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+//  ySizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+//  xSize*ySize=(abs(m13*x+m33)*abs(m13*x+m33+m23)*abs(m23*y+m33)*abs(m23*y+m33+m13))/(m23*y+m13*x+m33)^4
+    const qreal x = transform.m13() * pt.x(),
+                y = transform.m23() * pt.y(),
+                a = x + transform.m33(),
+                b = y + transform.m33(),
+                c = x + y + transform.m33(),
+                d = c * c;
+    return fabs(a)*fabs(a + transform.m23())*fabs(b)*fabs(b + transform.m13())/(d * d);
 }
 
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
@@ -141,12 +151,12 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
     }
     QPointF realPoint = inverse.map(pt);
     const qreal corners[4] = {
-        distanceSquared(transform, QPointF(0.0, 0.0), transform.map(QPointF(0.0, 0.0))),
-        distanceSquared(transform, QPointF(0.0, 1.0), transform.map(QPointF(0.0, 1.0))),
-        distanceSquared(transform, QPointF(1.0, 0.0), transform.map(QPointF(1.0, 0.0))),
-        distanceSquared(transform, QPointF(1.0, 1.0), transform.map(QPointF(1.0, 1.0)))};
+        localScale(transform, QPointF(0.0, 0.0)),
+        localScale(transform, QPointF(0.0, 1.0)),
+        localScale(transform, QPointF(1.0, 0.0)),
+        localScale(transform, QPointF(1.0, 1.0))};
     const qreal max = std::max(std::max(corners[0], corners[1]), std::max(corners[2], corners[3]));
-    return sqrt(distanceSquared(transform, realPoint, pt) / max);
+    return localScale(transform, inverse.map(pt)) / max;
 }
 
 // draw a vanishing point marker

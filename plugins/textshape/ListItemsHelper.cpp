@@ -405,7 +405,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         break;
     case KoListStyle::None:
         calcWidth = false;
-        width =  10.0; // simple indenting
+        width =  0.0;
         break;
     case KoListStyle::Bengali:
     case KoListStyle::Gujarati:
@@ -441,10 +441,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     data->setCounterText(prefix + item + suffix);
     index++;
 
-    qreal counterSpacing = m_fm.width(' ');
-    counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), counterSpacing);
     width += m_fm.width(prefix + suffix); // same for all
-    width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+    qreal counterSpacing = 0;
+    if (listStyle != KoListStyle::None) {
+        counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
+        width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+    }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);
     //kDebug(32500);

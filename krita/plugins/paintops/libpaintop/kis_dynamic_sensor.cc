@@ -63,6 +63,8 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorFuzzy();
     } else if (id.id() == FadeId.id()) {
         return new KisDynamicSensorFade();
+    } else if (id.id() == PerspectiveId.id()) {
+        return new KisDynamicSensorPerspective();
     }
 
     dbgPlugins << "Unknown transform parameter :" << id.id();
@@ -91,7 +93,7 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId;
+    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId << PerspectiveId;
     return ids;
 }
 

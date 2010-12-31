@@ -1049,6 +1049,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
+        if (d->docToOpen) {
+            // The open pane is visible
+            d->docToOpen->deleteOpenPane();
+        }
         // Reshow the docker that were temporarely hidden before saving settings
         foreach(QDockWidget* dw, d->hiddenDockwidgets) {
             dw->show();

@@ -30,7 +30,7 @@
 #include <KoCompositeOp.h>
 
 KisPressureCompositeOption::KisPressureCompositeOption()
-        : KisCurveOption(i18n("Color"), "Color", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Color"), "Color", KisPaintOpOption::brushCategory(), false)
 {
     setMinimumLabel(i18n("Full Color"));
     setMaximumLabel(i18n("No Color"));
@@ -53,7 +53,7 @@ void KisPressureCompositeOption::readOptionSetting(const KisPropertiesConfigurat
         m_compositeOp = COMPOSITE_OVER;
 }
 
-QString KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const
+void KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const
 {
     if(!isChecked())
         return painter->compositeOp()->id();
@@ -64,9 +64,6 @@ QString KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, co
     opacity = qBound((qint32)OPACITY_TRANSPARENT_U8,
                      (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
                      (qint32)OPACITY_OPAQUE_U8);
-    
-    //qreal  opacity1 = (qreal)(painter->opacity() * computeValue(info));
-    //quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT_U8, opacity1, OPACITY_OPAQUE_U8));
     
     painter->setCompositeOp(m_compositeOp);
     painter->setOpacity(opacity);

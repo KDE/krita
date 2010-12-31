@@ -35,11 +35,10 @@ public:
     KisPressureCompositeOption();
 
     /**
-     * Set the composite mode and opacity of the painter based on the pressure
-     * and the curve (if checked) and return the old composite mode
-     * of the painter.
+     * Set the composite mode and opacity of the painter based on the user selection
+     * and the pressure curve (if checked)
      */
-    QString apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const;
+    void apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);

@@ -49,13 +49,7 @@ public:
     qreal paintAt(const KisPaintInformation& info);
 
 private:
-    bool m_firstRun;
-    // The "temporary paint device"
-    KisPaintDeviceSP m_tempDev;
-    // The size of the rectangle encompassing the whole data in the temporary device needs to be cached for speed
-    QRect m_wholeTempData;
-    KoColor m_color;
-    
+    KisPaintDeviceSP m_tempDev; // The temporary paint device
     KisPressureSizeOption m_sizeOption;
     KisPressureRateOption m_rateOption;
     KisPressureCompositeOption m_compositeOption;

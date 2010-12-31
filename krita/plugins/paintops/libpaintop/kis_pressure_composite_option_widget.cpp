@@ -46,6 +46,12 @@ KisPressureCompositeOptionWidget::KisPressureCompositeOptionWidget()
     m_compositeOpBox->addItem(COMPOSITE_SCREEN);
     m_compositeOpBox->addItem(COMPOSITE_ADD);
     m_compositeOpBox->addItem(COMPOSITE_SUBTRACT);
+    m_compositeOpBox->addItem(COMPOSITE_DIVIDE);
+    m_compositeOpBox->addItem(COMPOSITE_BURN);
+    m_compositeOpBox->addItem(COMPOSITE_DODGE);
+    m_compositeOpBox->addItem(COMPOSITE_COLOR);
+    m_compositeOpBox->addItem(COMPOSITE_HARD_LIGHT);
+    m_compositeOpBox->addItem(COMPOSITE_SOFT_LIGHT);
     
     m_rateSlider = new QSlider();
     m_rateSlider->setMinimum(0);

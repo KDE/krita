@@ -26,11 +26,15 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
+#include <ktoolbar.h>
 
 #include "KoToolDocker_p.h"
 
 #include "KoView.h"
 #include "KoMainWindow.h"
+
+#include <QList>
+#include <QGridLayout>
 
 class ToolDockerFactory : public KoDockFactoryBase
 {
@@ -51,25 +55,98 @@ public:
     }
 };
 
+class ToolBarsDockerFactory : public KoDockFactoryBase
+{
+public:
+    ToolBarsDockerFactory() : KoDockFactoryBase() { }
+
+    QString id() const {
+        return "ToolBarDocker";
+    }
+
+    QDockWidget* createDockWidget() {
+        return new QDockWidget(i18n("Tool Bars Docker"));
+    }
+
+    DockPosition defaultDockPosition() const {
+        return DockTop;
+    }
+};
 
 class KoDockerManager::Private
 {
 public:
-    Private() {};
-    KoToolDocker *docker;
-
-    void makeDockVisible()
+    Private(KoMainWindow *mw) :
+        dockedToolBarsLayout(0)
+        ,mainWindow(mw)
+        ,ignore(true)
     {
+    }
+
+    KoToolDocker *toolOptionsDocker;
+    QDockWidget *toolBarsDocker;
+    QGridLayout *dockedToolBarsLayout;
+    QList<KToolBar *> toolBarList;
+    KoMainWindow *mainWindow;
+    bool ignore;
+
+    void restoringDone()
+    {
+        ignore = false;
+        moveToolBars();
+    }
+
+    void moveToolBarsBack()
+    {
+        foreach(KToolBar *toolBar, toolBarList) {
+            mainWindow->addToolBar(toolBar);
+        }
+        toolBarList.clear();
+    }
+
+    void moveToolBars()
+    {
+        if(ignore)
+            return;
+
+        // Move toolbars to docker or back depending on visibllity of docker
+        if (toolBarsDocker->isVisible()) {
+            QList<KToolBar *> tmpList = mainWindow->toolBars();
+            toolBarList.append(tmpList);
+            foreach(KToolBar *toolBar, tmpList) {
+                dockedToolBarsLayout->addWidget(toolBar);
+        }
+        } else {
+            moveToolBarsBack();
+        }
     }
 };
 
 KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
-    : QObject(mainWindow), d( new Private() )
+    : QObject(mainWindow), d( new Private(mainWindow) )
 {
-    ToolDockerFactory factory;
-    d->docker = qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&factory));
-    Q_ASSERT(d->docker);
-    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(makeDockVisible()));
+    ToolDockerFactory toolDockerFactory;
+    ToolBarsDockerFactory toolBarsDockerFactory;
+    d->toolOptionsDocker =
+            qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
+    Q_ASSERT(d->toolOptionsDocker);
+    d->toolBarsDocker = mainWindow->createDockWidget(&toolBarsDockerFactory);
+    Q_ASSERT(d->toolBarsDocker);
+
+    QWidget *dockedToolBarsWidget = new QWidget();
+    d->dockedToolBarsLayout = new QGridLayout();
+    d->dockedToolBarsLayout->setHorizontalSpacing(2);
+    d->dockedToolBarsLayout->setVerticalSpacing(0);
+    dockedToolBarsWidget->setLayout(d->dockedToolBarsLayout);
+    d->toolBarsDocker->setAllowedAreas(Qt::TopDockWidgetArea);
+    d->toolBarsDocker->setFeatures(QDockWidget::DockWidgetClosable);
+    d->toolBarsDocker->setWidget(dockedToolBarsWidget);
+    d->toolBarsDocker->setTitleBarWidget(new QWidget());
+
+    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
+    connect(d->toolBarsDocker, SIGNAL(visibilityChanged(bool)), this, SLOT(moveToolBars()));
+    connect(mainWindow, SIGNAL(beforeHandlingToolBars()), this, SLOT(moveToolBarsBack()));
+    connect(mainWindow, SIGNAL(afterHandlingToolBars()), this, SLOT(moveToolBars()));
 }
 
 KoDockerManager::~KoDockerManager()
@@ -79,7 +156,7 @@ KoDockerManager::~KoDockerManager()
 
 void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
 {
-    d->docker->setOptionWidgets(optionWidgetMap);
+    d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
 }
 
 #include <KoDockerManager.moc>

@@ -94,6 +94,7 @@ public:
     {
         ignore = false;
         moveToolBars();
+        toolOptionsDocker->setVisible(true); // should always be visible
     }
 
     void moveToolBarsBack()

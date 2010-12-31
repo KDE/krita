@@ -105,7 +105,7 @@ public:
         Q_ASSERT(model == theModel);
     }
 
-    QDebug printDebug(QDebug dbg) 
+    virtual QDebug printDebug(QDebug dbg) const
     {
 #ifndef NDEBUG
         dbg.nospace() << "KoTextAnchor";

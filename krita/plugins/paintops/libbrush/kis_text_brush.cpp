@@ -34,6 +34,7 @@ void KisTextBrush::toXML(QDomDocument& doc, QDomElement& e) const
     e.setAttribute("spacing", spacing());
     e.setAttribute("text", m_txt);
     e.setAttribute("font", m_font.toString());
+    KisBrush::toXML(doc, e);
 }
 
 void KisTextBrush::updateBrush()

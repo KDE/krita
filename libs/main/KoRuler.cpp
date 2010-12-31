@@ -259,7 +259,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
 
         if(i == nextStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -10));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() -6));
 
             int number = qRound(stepCount * numberStep);
             if (adjustMillimeters)
@@ -268,9 +268,8 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
             int x = pos;
             if (d->rightToLeft) { // this is done in a hacky way with the fine tuning done above
                 numberText = QString::number(hackyLength - stepCount * numberStep);
-                x -= fontMetrics.width(numberText);
             }
-            painter.drawText(QPointF(x, rectangle.bottom() -6), numberText);
+            painter.drawText(QPointF(x-fontMetrics.width(numberText)/2, rectangle.bottom() -6), numberText);
 
             ++stepCount;
             nextStep = qRound(d->viewConverter->documentToViewX(
@@ -284,7 +283,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         }
         else if(i == nextHalfStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 6));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
 
             ++halfStepCount;
             nextHalfStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(
@@ -295,7 +294,7 @@ void HorizontalPaintingStrategy::drawMeasurements(const KoRulerPrivate *d, QPain
         }
         else if(i == nextQuarterStep) {
             if(pos != 0)
-                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 4));
+                painter.drawLine(QPointF(pos, rectangle.bottom()-1), QPointF(pos, rectangle.bottom() - 2));
 
             ++quarterStepCount;
             nextQuarterStep = qRound(d->viewConverter->documentToViewX(d->unit.fromUserValue(

@@ -4,6 +4,7 @@
  * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *   Contact: Suresh Chande suresh.chande@nokia.com
+ * Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -75,36 +76,38 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt
 
 void EnhancedPathShape::updatePath(const QSizeF &)
 {
-    clear();
+    if (isParametricShape()) {
+        clear();
 
-    foreach (EnhancedPathCommand *cmd, m_commands)
-        cmd->execute();
+        foreach (EnhancedPathCommand *cmd, m_commands)
+            cmd->execute();
 
-    m_viewBound = outline().boundingRect();
+        m_viewBound = outline().boundingRect();
 
-    m_mirrorMatrix.reset();
-    m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
-    m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
-    m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+        m_mirrorMatrix.reset();
+        m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
+        m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
+        m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
 
-    QTransform matrix;
-    matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
-    matrix = m_mirrorMatrix * m_viewMatrix * matrix;
+        QTransform matrix;
+        matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
+        matrix = m_mirrorMatrix * m_viewMatrix * matrix;
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->constBegin());
-        for (; it != (*pathIt)->constEnd(); ++it) {
-            (*it)->map(matrix);
+        KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+        for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+            KoSubpath::const_iterator it((*pathIt)->constBegin());
+            for (; it != (*pathIt)->constEnd(); ++it) {
+                (*it)->map(matrix);
+            }
         }
-    }
-    const int handleCount = m_enhancedHandles.count();
-    QList<QPointF> handles;
-    for (int i = 0; i < handleCount; ++i)
-        handles.append(matrix.map(m_enhancedHandles[i]->position()));
-    setHandles(handles);
+        const int handleCount = m_enhancedHandles.count();
+        QList<QPointF> handles;
+        for (int i = 0; i < handleCount; ++i)
+            handles.append(matrix.map(m_enhancedHandles[i]->position()));
+        setHandles(handles);
 
-    normalize();
+        normalize();
+    }
 }
 
 void EnhancedPathShape::setSize(const QSizeF &newSize)

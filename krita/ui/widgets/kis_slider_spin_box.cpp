@@ -428,6 +428,7 @@ void KisSliderSpinBox::setRange(int minimum, int maximum)
     d->minimum = minimum;
     d->maximum = maximum;
     d->validator->setRange(minimum, maximum, 0);
+    update();
 }
 
 int KisSliderSpinBox::value()
@@ -484,6 +485,7 @@ void KisDoubleSliderSpinBox::setRange(qreal minimum, qreal maximum, int decimals
     d->minimum = minimum * d->factor;
     d->maximum = maximum * d->factor;
     d->validator->setRange(minimum, maximum, decimals);
+    update();
 }
 
 qreal KisDoubleSliderSpinBox::value()

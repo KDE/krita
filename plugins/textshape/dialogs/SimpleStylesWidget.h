@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,39 +16,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <QWidget>
+#include <QList>
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
 
-#ifndef LISTSTYLEBUTTON_H
-#define LISTSTYLEBUTTON_H
+#include <ui_StylesWidget.h>
 
-#include <KoListStyle.h>
+class KoStyleManager;
+class KoParagraphStyle;
+class KoCharacterStyle;
+class StylesModel;
 
-#include <QToolButton>
-#include <QPixmap>
-#include <QMap>
-
-class QMenu;
-class QAction;
-
-class ListStyleButton : public QToolButton
+class SimpleStylesWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ListStyleButton( QWidget *parent = 0 );
+    explicit SimpleStylesWidget(QWidget *parent = 0);
 
-    QString example(KoListStyle::Style type) const;
-    void addItem(QPixmap pm, int id);
-
-signals:
-    void itemTriggered(int id);
-
-private slots:
-    void itemSelected(QAction *action);
+public slots:
+    void setStyleManager(KoStyleManager *sm);
+    void setCurrentFormat(const QTextBlockFormat &format);
+    void setCurrentFormat(const QTextCharFormat &format);
 
 private:
-    bool m_letterSynchronization;
-    QAction *m_lastAction ;
-    QMenu *m_menu;
-    QMap<QAction *, int > m_actionMap;
+    KoStyleManager *m_styleManager;
+    QTextBlockFormat m_currentBlockFormat;
+    QTextCharFormat m_currentCharFormat;
+    bool m_blockSignals;
 };
 
 #endif

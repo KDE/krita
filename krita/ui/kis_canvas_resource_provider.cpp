@@ -378,4 +378,19 @@ void KisCanvasResourceProvider::slotResetEnableFGChange(bool b)
     m_enablefGChange = b;
 }
 
+QList<KisAbstractPerspectiveGrid*> KisCanvasResourceProvider::perspectiveGrids() const
+{
+    return m_perspectiveGrids;
+}
+
+void KisCanvasResourceProvider::addPerspectiveGrid(KisAbstractPerspectiveGrid* grid)
+{
+    m_perspectiveGrids.append(grid);
+}
+
+void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid* grid)
+{
+    m_perspectiveGrids.removeOne(grid);
+}
+
 #include "kis_canvas_resource_provider.moc"

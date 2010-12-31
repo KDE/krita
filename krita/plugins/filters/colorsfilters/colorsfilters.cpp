@@ -187,7 +187,7 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
         pixelsProcessed += npix;
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
     } while(iter->nextPixel()  && !(progressUpdater && progressUpdater->interrupted()));
-    delete transfer;
+    delete[] transfer;
     delete adj;
 }
 

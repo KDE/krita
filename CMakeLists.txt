@@ -36,7 +36,7 @@ option(TINY "compile a tiny KOffice" OFF)
 IF (TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
-    set(SHOULD_BUILD_KSPREAD TRUE)
+    set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON FALSE)
     set(SHOULD_BUILD_KRITA FALSE)
     set(SHOULD_BUILD_KEXI FALSE)
@@ -52,7 +52,7 @@ IF (TINY)
 ELSE(TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
-    set(SHOULD_BUILD_KSPREAD TRUE)
+    set(SHOULD_BUILD_TABLES TRUE)
     set(SHOULD_BUILD_KARBON TRUE)
     set(SHOULD_BUILD_KRITA TRUE)
     set(SHOULD_BUILD_KEXI TRUE)
@@ -166,7 +166,7 @@ macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.or
 ## Test for eigen2
 ##
 macro_optional_find_package(Eigen2)
-macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by KSpread and Krita")
+macro_log_feature(EIGEN2_FOUND "Eigen" "C++ template library for linear algebra" "http://eigen.tuxfamily.org" FALSE "2.0" "Required by Tables and Krita")
 
 ##
 ## Test for QCA2
@@ -347,10 +347,10 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### KSpread: eigen2
-if(NOT EIGEN2_FOUND)
-    set(SHOULD_BUILD_KSPREAD FALSE)
-endif(NOT EIGEN2_FOUND)
+### Tables: eigen2, boost
+if(NOT EIGEN2_FOUND AND NOT Boost_FOUND)
+    set(SHOULD_BUILD_TABLES FALSE)
+endif(NOT EIGEN2_FOUND AND NOT Boost_FOUND)
 
 ### KPresenter: boost
 if(NOT Boost_FOUND)
@@ -431,9 +431,9 @@ if(SHOULD_BUILD_KPLATO)
     macro_optional_add_subdirectory(kplato)
 endif(SHOULD_BUILD_KPLATO)
 
-if(SHOULD_BUILD_KSPREAD)
-    macro_optional_add_subdirectory(kspread)
-endif(SHOULD_BUILD_KSPREAD)
+if(SHOULD_BUILD_TABLES)
+    macro_optional_add_subdirectory(tables)
+endif(SHOULD_BUILD_TABLES)
 
 if(SHOULD_BUILD_KRITA)
   macro_optional_add_subdirectory(krita)
@@ -467,7 +467,7 @@ endmacro(macro_display_application_enabled)
 message(STATUS "---------------- The following applications will be built ----------------" )
 
 macro_display_application_enabled(words ${SHOULD_BUILD_WORDS})
-macro_display_application_enabled(kspread ${SHOULD_BUILD_KSPREAD})
+macro_display_application_enabled(tables ${SHOULD_BUILD_TABLES})
 macro_display_application_enabled(kpresenter ${SHOULD_BUILD_KPRESENTER})
 macro_display_application_enabled(flow ${SHOULD_BUILD_FLOW})
 macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})

@@ -82,4 +82,5 @@ void KisSvgBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("type", "svg_brush");
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", spacing());
+    KisBrush::toXML(d, e);
 }

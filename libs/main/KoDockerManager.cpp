@@ -130,6 +130,8 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     d->toolOptionsDocker =
             qobject_cast<KoToolDocker*>(mainWindow->createDockWidget(&toolDockerFactory));
     Q_ASSERT(d->toolOptionsDocker);
+    d->toolOptionsDocker->setVisible(false);
+
     d->toolBarsDocker = mainWindow->createDockWidget(&toolBarsDockerFactory);
     Q_ASSERT(d->toolBarsDocker);
 
@@ -142,6 +144,7 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     d->toolBarsDocker->setFeatures(QDockWidget::DockWidgetClosable);
     d->toolBarsDocker->setWidget(dockedToolBarsWidget);
     d->toolBarsDocker->setTitleBarWidget(new QWidget());
+    d->toolBarsDocker->setVisible(false);
 
     connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
     connect(d->toolBarsDocker, SIGNAL(visibilityChanged(bool)), this, SLOT(moveToolBars()));

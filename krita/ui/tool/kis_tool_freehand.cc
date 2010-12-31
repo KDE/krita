@@ -144,12 +144,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
      */
     QPointF pos = adjustPosition(e->point, e->point);
     qreal perspective = 1.0;
-    foreach (const KisPaintingAssistant* assistant, static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->assistants()) {
-        const KisAbstractPerspectiveGrid* perspectiveGrid = dynamic_cast<const KisAbstractPerspectiveGrid*>(assistant);
-        if (!perspectiveGrid) continue;
-        if (!perspectiveGrid->contains(pos)) continue;
-        perspective = perspectiveGrid->distance(pos);
-        break;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(pos)) {
+            perspective = grid->distance(pos);
+            break;
+        }
     }
     bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
@@ -227,12 +226,11 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     QPointF dragVec = pos - m_previousPaintInformation.pos();
 
     qreal perspective = 1.0;
-    foreach (const KisPaintingAssistant* assistant, static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->assistants()) {
-        const KisAbstractPerspectiveGrid* perspectiveGrid = dynamic_cast<const KisAbstractPerspectiveGrid*>(assistant);
-        if (!perspectiveGrid) continue;
-        if (!perspectiveGrid->contains(adjusted)) continue;
-        perspective = perspectiveGrid->distance(adjusted);
-        break;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(adjusted)) {
+            perspective = grid->distance(adjusted);
+            break;
+        }
     }
 
     KisPaintInformation info =

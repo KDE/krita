@@ -84,21 +84,14 @@ KisRainDropsFilter::KisRainDropsFilter() : KisFilter(id(), KisFilter::categoryAr
  */
 
 
-void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
-                                 KisProcessingInformation dstInfo,
-                                 const QSize& size,
-                                 const KisFilterConfiguration* config,
-                                 KoUpdater* progressUpdater
-                                ) const
+void KisRainDropsFilter::process(KisPaintDeviceSP device,
+                const QRect& applyRect,
+                const KisFilterConfiguration* config,
+                KoUpdater* progressUpdater ) const
 {
-
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    Q_ASSERT(device);
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 DropSize = config->getInt("dropSize", 80);
@@ -106,7 +99,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
     quint32 fishEyes = config->getInt("fishEyes", 30);
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
+        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
     }
     int count = 0;
 
@@ -114,8 +107,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
     if (fishEyes > 100) fishEyes = 100;
 
-    int Width = size.width();
-    int Height = size.height();
+    int Width = applyRect.width();
+    int Height = applyRect.height();
 
     bool** BoolMatrix = CreateBoolArray(Width, Height);
 
@@ -137,7 +130,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
     bool      FindAnother = false;              // To search for good coordinates
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
 
 
     // XXX: move the seed to the config, so the filter can be used as
@@ -156,8 +149,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
         }
     }
 
-    KisRandomAccessorSP dstAccessor = dst->createRandomAccessorNG(dstTopLeft.x(), dstTopLeft.y());
-    KisRandomConstAccessorSP srcAccessor = src->createRandomConstAccessorNG(dstTopLeft.x(), dstTopLeft.y());
+    KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
     
     for (uint NumBlurs = 0; (NumBlurs <= number) && !(progressUpdater && progressUpdater->interrupted()); ++NumBlurs) {
         NewSize = (int)(rand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
@@ -268,8 +260,8 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
                             QColor originalColor;
 
-                            srcAccessor->moveTo(srcTopLeft.x() + l, srcTopLeft.y() + k);
-                            cs->toQColor(srcAccessor->oldRawData(), &originalColor);
+                            dstAccessor->moveTo(srcTopLeft.x() + l, srcTopLeft.y() + k);
+                            cs->toQColor(dstAccessor->oldRawData(), &originalColor);
 
                             int newRed = CLAMP(originalColor.red() + Bright, 0, quint8_MAX);
                             int newGreen = CLAMP(originalColor.green() + Bright, 0, quint8_MAX);
@@ -278,7 +270,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
                             QColor newColor;
                             newColor.setRgb(newRed, newGreen, newBlue);
 
-                            dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                            dstAccessor->moveTo(srcTopLeft.x() + n, srcTopLeft.y() + m);
                             cs->fromQColor(newColor, dstAccessor->rawData());
                         }
                     }
@@ -305,7 +297,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
 
                             if ((m >= 0) && (m < Height) && (n >= 0) && (n < Width)) {
                                 QColor color;
-                                dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                                dstAccessor->moveTo(srcTopLeft.x() + n, srcTopLeft.y() + m);
                                 cs->toQColor(dstAccessor->rawData(), &color);
 
                                 R += color.red();
@@ -322,7 +314,7 @@ void KisRainDropsFilter::process(KisConstProcessingInformation srcInfo,
                         QColor color;
 
                         color.setRgb((int)(R / BlurPixels), (int)(G / BlurPixels), (int)(B / BlurPixels));
-                        dstAccessor->moveTo(dstTopLeft.x() + n, dstTopLeft.y() + m);
+                        dstAccessor->moveTo(srcTopLeft.x() + n, srcTopLeft.y() + m);
                         cs->fromQColor(color, dstAccessor->rawData());
                     }
                 }

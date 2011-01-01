@@ -28,6 +28,7 @@
 #include <GTLCore/Region.h>
 #include "Version.h"
 #include <KoColorSpaceTraits.h>
+#include <kis_random_accessor_ng.h>
 
 GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
 {
@@ -82,12 +83,11 @@ GTLCore::PixelDescription csToPD(const KoColorSpace* cs)
 
 ConstPaintDeviceImage::ConstPaintDeviceImage(KisPaintDeviceSP device) : GTLCore::AbstractImage(csToPD(device->colorSpace())), m_device(device)
 {
-    m_accessor = new KisRandomConstAccessor(device->createRandomConstAccessor(0, 0));
+    m_accessor = device->createRandomConstAccessorNG(0, 0);
 }
 
 ConstPaintDeviceImage::~ConstPaintDeviceImage()
 {
-    delete m_accessor;
 }
 
 char* ConstPaintDeviceImage::data(int _x, int _y)
@@ -137,12 +137,11 @@ GTLCore::AbstractImage::Iterator* ConstPaintDeviceImage::createIterator()
 
 PaintDeviceImage::PaintDeviceImage(KisPaintDeviceSP device) : GTLCore::AbstractImage(csToPD(device->colorSpace())), m_device(device)
 {
-    m_accessor = new KisRandomAccessor(device->createRandomAccessor(0, 0));
+    m_accessor = device->createRandomAccessorNG(0, 0);
 }
 
 PaintDeviceImage::~PaintDeviceImage()
 {
-    delete m_accessor;
 }
 
 char* PaintDeviceImage::data(int _x, int _y)

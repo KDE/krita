@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
 
 #include <QPointer>
 #include <QGridLayout>
@@ -239,11 +241,16 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
     d->tabButton->setVisible(false);
     d->tabButton->resize(d->tabButton->sizeHint());
-    d->tabbed = false;
+
+    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    d->tabbed = cfg.readEntry("TabbedMode", false);
 }
 
 KoToolDocker::~KoToolDocker()
 {
+    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    cfg.writeEntry("TabbedMode", d->tabbed);
+
     delete d;
 }
 

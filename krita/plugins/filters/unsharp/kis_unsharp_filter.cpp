@@ -38,6 +38,7 @@
 
 #include "kis_wdg_unsharp.h"
 #include "ui_wdgunsharp.h"
+#include <kis_iterator_ng.h>
 
 KisUnsharpFilter::KisUnsharpFilter() : KisFilter(id(), categoryEnhance(), i18n("&Unsharp Mask..."))
 {
@@ -61,11 +62,10 @@ KisFilterConfiguration* KisUnsharpFilter::factoryConfiguration(const KisPaintDev
     return config;
 }
 
-void KisUnsharpFilter::process(KisConstProcessingInformation src,
-                               KisProcessingInformation dst,
-                               const QSize& areaSize,
-                               const KisFilterConfiguration* config,
-                               KoUpdater* progressUpdater
+void KisUnsharpFilter::process(KisPaintDeviceSP device,
+                              const QRect& applyRect,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
                               ) const
 {
 
@@ -93,7 +93,7 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMaskGenerator(kas);
 
-    KisPaintDeviceSP interm = new KisPaintDevice(*src.paintDevice());
+    KisPaintDeviceSP interm = new KisPaintDevice(*device);
     KoColorSpace * cs = interm->colorSpace();
     KoConvolutionOp * convolutionOp = cs->convolutionOp();
 
@@ -107,16 +107,15 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     }
     painter.setChannelFlags(channelFlags);
     painter.beginTransaction("convolution step");
-    painter.applyMatrix(kernel, interm, src.topLeft(), dst.topLeft(), areaSize, BORDER_REPEAT);
+    painter.applyMatrix(kernel, interm, applyRect.topLeft(), applyRect.topLeft(), applyRect.size(), BORDER_REPEAT);
     painter.deleteTransaction();
 
     if (progressUpdater && progressUpdater->interrupted()) {
         return;
     }
 
-    KisHLineIteratorPixel dstIt = dst.paintDevice()->createHLineIterator(dst.topLeft().x(), dst.topLeft().y(), areaSize.width());
-    KisHLineConstIteratorPixel srcIt = src.paintDevice()->createHLineConstIterator(src.topLeft().x(), src.topLeft().y(), areaSize.width());
-    KisHLineConstIteratorPixel intermIt = interm->createHLineConstIterator(src.topLeft().x(), src.topLeft().y(), areaSize.width());
+    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), applyRect.y(), applyRect.width());
+    KisHLineConstIteratorSP intermIt = interm->createHLineConstIteratorNG(applyRect.x(), applyRect.y(), applyRect.width());
 
     int cdepth = cs -> pixelSize();
     quint8 *colors[2];
@@ -131,33 +130,28 @@ void KisUnsharpFilter::process(KisConstProcessingInformation src,
     weights[0] = static_cast<qreal>(factor * (1. + amount));
     weights[1] = static_cast<qreal>(-factor * amount);
 
-    int steps = 100 / areaSize.width() * areaSize.height();
+    int steps = 100 / applyRect.width() * applyRect.height();
 
-    for (int j = 0; j < areaSize.height(); j++) {
-        while (! srcIt.isDone()) {
-            if (srcIt.isSelected()) {
-                quint8 diff = cs->difference(srcIt.oldRawData(), intermIt.rawData());
-                if (diff > threshold) {
-                    memcpy(colors[0], srcIt.oldRawData(), cdepth);
-                    memcpy(colors[1], intermIt.rawData(), cdepth);
-                    convolutionOp->convolveColors(colors, weights, dstIt.rawData(), factor, 0, 2.0, channelFlags);
-                } else {
-                    memcpy(dstIt.rawData(), srcIt.oldRawData(), cdepth);
-                }
+    for (int j = 0; j < applyRect.height(); j++) {
+        do {
+            quint8 diff = cs->difference(dstIt->oldRawData(), intermIt->oldRawData());
+            if (diff > threshold) {
+                memcpy(colors[0], dstIt->oldRawData(), cdepth);
+                memcpy(colors[1], intermIt->oldRawData(), cdepth);
+                convolutionOp->convolveColors(colors, weights, dstIt->rawData(), factor, 0, 2.0, channelFlags);
+            } else {
+                memcpy(dstIt->rawData(), dstIt->oldRawData(), cdepth);
             }
             ++pixelsProcessed;
             if (progressUpdater) filterUpdater->setProgress(steps * pixelsProcessed);
-            ++srcIt;
-            ++dstIt;
-            ++intermIt;
-        }
+            intermIt->nextPixel();
+        } while (dstIt->nextPixel());
 
         if (progressUpdater && progressUpdater->interrupted()) {
             return;
         }
-        srcIt.nextRow();
-        dstIt.nextRow();
-        intermIt.nextRow();
+        dstIt->nextRow();
+        intermIt->nextRow();
     }
     delete colors[0];
     delete colors[1];

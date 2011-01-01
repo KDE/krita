@@ -48,6 +48,7 @@
 
 
 // Krita/ui
+#include "kis_abstract_perspective_grid.h"
 #include "kis_config.h"
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
@@ -141,10 +142,18 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
      * FIXME: we need some better way to implement modifiers
      * for a paintop level
      */
+    QPointF pos = adjustPosition(e->point, e->point);
+    qreal perspective = 1.0;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(pos)) {
+            perspective = grid->distance(pos);
+            break;
+        }
+    }
     bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed()),e->modifiers());
+                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed()),e->modifiers());
     if (!ignoreEvent){
         e->accept();
         return;
@@ -168,7 +177,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
+                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed());
         m_strokeBegin = e->point;
 
         e->accept();
@@ -212,13 +221,22 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Actual painting
      */
-    QPointF pos = convertToPixelCoord(adjustPosition(e->point, m_strokeBegin));
+    QPointF adjusted = adjustPosition(e->point, m_strokeBegin);
+    QPointF pos = convertToPixelCoord(adjusted);
     QPointF dragVec = pos - m_previousPaintInformation.pos();
+
+    qreal perspective = 1.0;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(adjusted)) {
+            perspective = grid->distance(adjusted);
+            break;
+        }
+    }
 
     KisPaintInformation info =
         KisPaintInformation(pos, pressureToCurve(e->pressure()),
                             e->xTilt(), e->yTilt(), toKisVector2D(dragVec),
-                            e->rotation(), e->tangentialPressure(),
+                            e->rotation(), e->tangentialPressure(), perspective,
                             m_strokeTimeMeasure.elapsed());
 
     if (m_smooth) {

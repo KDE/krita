@@ -99,11 +99,6 @@ public:
     virtual KParts::PartManager *partManager();
 
     /**
-     * Move the toolbars into a dedicated dockWidget.
-     */
-    void moveToolbarsToDocker();
-
-    /**
      * The application should call this to show or hide a toolbar.
      * It also takes care of the corresponding action in the settings menu.
      */
@@ -193,6 +188,12 @@ signals:
 
     /// This signal is emitted right after the docker states have been succefully restored from config
     void restoringDone();
+
+    /// This signal is emitted right before we handle loading or saving of toolbars
+    void beforeHandlingToolBars();
+
+    /// This signal is emitted right after we handled loading or saving of toolbars
+    void afterHandlingToolBars();
 
 public slots:
 

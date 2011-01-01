@@ -128,46 +128,13 @@ public:
         readOnly = false;
         dockWidgetMenu = 0;
         dockerManager = 0;
-        toolBarsDock = 0;
-        dockedToolBarsLayout = 0;
     }
     ~KoMainWindowPrivate() {
         qDeleteAll(toolbarList);
     }
 
-    void moveToolBarsToDocker()
-    {
-        if(!toolBarsDock) {
-            toolBarsDock = new QDockWidget(parent);
-            toolBarsDock->setTitleBarWidget(new QWidget());
-            toolBarsDock->setObjectName("ToolBarDocker");
-            QWidget *dockedToolBarsWidget = new QWidget();
-            dockedToolBarsLayout = new QGridLayout();
-            dockedToolBarsLayout->setHorizontalSpacing(2);
-            dockedToolBarsLayout->setVerticalSpacing(0);
-            dockedToolBarsWidget->setLayout(dockedToolBarsLayout);
-            toolBarsDock->setAllowedAreas(Qt::TopDockWidgetArea);
-            toolBarsDock->setFeatures(QDockWidget::NoDockWidgetFeatures);
-            toolBarsDock->setWidget(dockedToolBarsWidget);
-            parent->addDockWidget(Qt::TopDockWidgetArea, toolBarsDock);
-            dockWidgets.push_back(toolBarsDock);
-        }
-        QList<KToolBar *> tmpList = parent->toolBars();
-        toolBarList.append(tmpList);
-        foreach(KToolBar *toolBar, tmpList) {
-            dockedToolBarsLayout->addWidget(toolBar);
-        }
-    }
-
     void moveToolBarsBack()
     {
-        if(toolBarsDock) {
-            foreach(KToolBar *toolBar, toolBarList) {
-                parent->addToolBar(toolBar);
-            }
-            //toolBarsDock = 0;
-            toolBarList.clear();
-        }
     }
 
     void applyDefaultSettings(QPrinter &printer) {
@@ -249,9 +216,6 @@ public:
     KActionMenu *dockWidgetMenu;
     QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
-    QDockWidget *toolBarsDock;
-    QGridLayout *dockedToolBarsLayout;
-    QList<KToolBar *> toolBarList;
     QList<QDockWidget *> dockWidgets;
     QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 };
@@ -1085,6 +1049,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
+        if (d->docToOpen) {
+            // The open pane is visible
+            d->docToOpen->deleteOpenPane();
+        }
         // Reshow the docker that were temporarely hidden before saving settings
         foreach(QDockWidget* dw, d->hiddenDockwidgets) {
             dw->show();
@@ -1604,8 +1572,9 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         //kDebug(30003) <<"no need to change the GUI";
         return;
     }
-        // move the ToolBars back so their status can be saved
-        d->moveToolBarsBack();
+
+    // important so dockermanager can move toolbars back
+    emit beforeHandlingToolBars();
 
 
     KXMLGUIFactory *factory = guiFactory();
@@ -1671,9 +1640,6 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         }
         plugActionList("toolbarlist", d->toolbarList);
 
-        // This call is what actually puts the toolbars into the toolbars docker
-        d->moveToolBarsToDocker();
-
         // Send the GUIActivateEvent only now, since it might show/hide toolbars too
         // (and this has priority over applyMainWindowSettings)
         KParts::GUIActivateEvent ev(true);
@@ -1683,6 +1649,8 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
+    // important so dockermanager can move toolbars where wanted
+    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 
@@ -1823,8 +1791,6 @@ QDockWidget* KoMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
 
-    d->moveToolBarsToDocker();
-    
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
 

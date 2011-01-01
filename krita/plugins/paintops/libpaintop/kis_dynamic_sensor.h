@@ -43,6 +43,7 @@ const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from 
 const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
 const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
 const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
+const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depending on the distance on the perspective grid
 
 /**
  * Sensor are used to extract from KisPaintInformation a single

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2010-2011 Casper Boemann <cbo@boemann.dk>
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kicon.h>
+#include <kconfiggroup.h>
+#include <kglobal.h>
 
 #include <QPointer>
 #include <QGridLayout>
@@ -81,7 +83,7 @@ public:
 
         currentWidgetMap = optionWidgetMap;
 
-        if (tabbed) {
+        if (tabbed && currentWidgetMap.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);
@@ -227,6 +229,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->lockButton = new QToolButton(this);
     d->lockButton->setIcon(d->lockIcon);
+    d->lockButton->setToolTip(i18n("Toggles showing a title bar"));
     d->lockButton->setAutoRaise(true);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
     d->lockButton->setVisible(true);
@@ -235,15 +238,21 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->tabButton = new QToolButton(0); // parent hack in toggleLock to keep it clickable
     d->tabButton->setIcon(d->tabIcon);
+    d->tabButton->setToolTip(i18n("Toggles organising the options in tabs or not"));
     d->tabButton->setAutoRaise(true);
     connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
     d->tabButton->setVisible(false);
     d->tabButton->resize(d->tabButton->sizeHint());
-    d->tabbed = false;
+
+    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    d->tabbed = cfg.readEntry("TabbedMode", false);
 }
 
 KoToolDocker::~KoToolDocker()
 {
+    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    cfg.writeEntry("TabbedMode", d->tabbed);
+
     delete d;
 }
 

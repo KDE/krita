@@ -50,6 +50,7 @@ class QDomElement;
  * @param movement: current position minus the last position of the call to paintAt
  * @param rotation
  * @param tangentialPressure
+ * @param perspective
  **/
 class KRITAIMAGE_EXPORT KisPaintInformation
 {
@@ -67,6 +68,7 @@ public:
                         const KisVector2D& movement = nullKisVector2D(),
                         qreal rotation = 0.0,
                         qreal tangentialPressure = 0.0,
+                        qreal perspective = 1.0,
                         int time = 0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
@@ -102,6 +104,9 @@ public:
 
     /// tangential pressure (i.e., rate for an airbrush device)
     qreal tangentialPressure() const;
+
+    /// reciprocal of distance on the perspective grid
+    qreal perspective() const;
     
     /// Number of ms since the beginning of the stroke
     int currentTime() const;

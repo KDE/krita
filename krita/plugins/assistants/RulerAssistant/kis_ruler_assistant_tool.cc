@@ -33,10 +33,12 @@
 #include <KoPointerEvent.h>
 
 #include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
 #include <kis_view2.h>
 
+#include <kis_abstract_perspective_grid.h>
 #include <kis_painting_assistants_manager.h>
 
 KisRulerAssistantTool::KisRulerAssistantTool(KoCanvasBase * canvas)
@@ -89,9 +91,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         if (m_newAssistant) {
             *m_newAssistant->handles().back() = event->point;
             if (m_newAssistant->handles().size() == m_newAssistant->numHandles()) {
-                m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
-                m_handles = m_canvas->view()->paintingAssistantManager()->handles();
-                m_newAssistant = 0;
+                addAssistant();
             } else {
                 m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
             }
@@ -131,8 +131,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
                 return;
             }
             if (deleteRect.contains(mousePos)) {
-                m_canvas->view()->paintingAssistantManager()->removeAssistant(assistant);
-                m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+                removeAssistant(assistant);
                 m_canvas->updateCanvas();
                 return;
             }
@@ -145,8 +144,7 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
         m_newAssistant = KisPaintingAssistantFactoryRegistry::instance()->get(key)->paintingAssistant(imageArea);
         m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         if (m_newAssistant->numHandles() <= 1) {
-            m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
-            m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+            addAssistant();
         } else {
             m_newAssistant->addHandle(new KisPaintingAssistantHandle(event->point));
         }
@@ -154,6 +152,29 @@ void KisRulerAssistantTool::mousePressEvent(KoPointerEvent *event)
     } else {
         KisTool::mousePressEvent(event);
     }
+}
+
+
+void KisRulerAssistantTool::addAssistant()
+{
+    m_canvas->view()->paintingAssistantManager()->addAssistant(m_newAssistant);
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
+    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant);
+    if (grid) {
+        m_canvas->view()->resourceProvider()->addPerspectiveGrid(grid);
+    }
+    m_newAssistant = 0;
+}
+
+
+void KisRulerAssistantTool::removeAssistant(KisPaintingAssistant* assistant)
+{
+    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant);
+    if (grid) {
+        m_canvas->view()->resourceProvider()->removePerspectiveGrid(grid);
+    }
+    m_canvas->view()->paintingAssistantManager()->removeAssistant(assistant);
+    m_handles = m_canvas->view()->paintingAssistantManager()->handles();
 }
 
 

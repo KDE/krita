@@ -1066,7 +1066,7 @@ void KoTextEditor::splitTableCells()
 
     if (table) {
         QTextTableCell cell = table->cellAt(d->caret);
-        table->splitCell(cell.row(), cell.column(),  cell.rowSpan(), cell.columnSpan());
+        table->splitCell(cell.row(), cell.column(),  1, 1);
     }
 
     d->updateState(KoTextEditor::Private::NoOp);

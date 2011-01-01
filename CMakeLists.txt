@@ -347,10 +347,10 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2
-if(NOT EIGEN2_FOUND)
+### Tables: eigen2, boost
+if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND)
+endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
 
 ### KPresenter: boost
 if(NOT Boost_FOUND)

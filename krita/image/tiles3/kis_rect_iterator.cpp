@@ -211,3 +211,13 @@ quint8 * KisRectIterator2::rawData()
 {
     return m_data + m_offset;
 }
+
+qint32 KisRectIterator2::x() const
+{
+    return m_x;
+}
+
+qint32 KisRectIterator2::y() const
+{
+    return m_y;
+}

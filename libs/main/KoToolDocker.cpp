@@ -229,6 +229,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->lockButton = new QToolButton(this);
     d->lockButton->setIcon(d->lockIcon);
+    d->lockButton->setToolTip(i18n("Toggles showing a title bar"));
     d->lockButton->setAutoRaise(true);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
     d->lockButton->setVisible(true);
@@ -237,6 +238,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 
     d->tabButton = new QToolButton(0); // parent hack in toggleLock to keep it clickable
     d->tabButton->setIcon(d->tabIcon);
+    d->tabButton->setToolTip(i18n("Toggles organising the options in tabs or not"));
     d->tabButton->setAutoRaise(true);
     connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
     d->tabButton->setVisible(false);

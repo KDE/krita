@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (c) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2010-2011 Casper Boemann <cbo@boemann.dk>
  * Copyright (c) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (c) 2006 Thomas Zander <zander@kde.org>
  *
@@ -83,7 +83,7 @@ public:
 
         currentWidgetMap = optionWidgetMap;
 
-        if (tabbed) {
+        if (tabbed && currentWidgetMap.size() > 1) {
             QTabWidget *t;
             housekeeperLayout->addWidget(t = new QTabWidget(), 0, 0);
             currentAuxWidgets.insert(t);

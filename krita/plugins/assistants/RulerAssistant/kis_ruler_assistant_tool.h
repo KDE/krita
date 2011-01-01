@@ -43,6 +43,9 @@ public:
     virtual void mouseReleaseEvent(KoPointerEvent *event);
 
     virtual QWidget *createOptionWidget();
+private:
+    void addAssistant();
+    void removeAssistant(KisPaintingAssistant *assistant);
 public slots:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     void deactivate();

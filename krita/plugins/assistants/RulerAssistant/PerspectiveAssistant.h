@@ -19,12 +19,13 @@
 #ifndef _PERSPECTIVE_ASSISTANT_H_
 #define _PERSPECTIVE_ASSISTANT_H_
 
+#include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
 #include <QObject>
 #include <QPolygonF>
 #include <QLineF>
 
-class PerspectiveAssistant : public KisPaintingAssistant
+class PerspectiveAssistant : public KisPaintingAssistant, public KisAbstractPerspectiveGrid
 {
 public:
     PerspectiveAssistant();
@@ -33,6 +34,9 @@ public:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
     virtual QPointF buttonPosition() const;
     virtual int numHandles() const { return 4; }
+
+    virtual bool contains(const QPointF& point) const;
+    virtual qreal distance(const QPointF& point) const;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral

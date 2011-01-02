@@ -105,10 +105,10 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistance(1.0)
 {
-    connectors.append(QPointF(0.5, 0.0));
-    connectors.append(QPointF(1.0, 0.5));
-    connectors.append(QPointF(0.5, 1.0));
-    connectors.append(QPointF(0.0, 0.5));
+    connectors[KoFlake::TopConnectionPoint] = defaultConnectionPoint(KoFlake::TopConnectionPoint);
+    connectors[KoFlake::RightConnectionPoint] = defaultConnectionPoint(KoFlake::RightConnectionPoint);
+    connectors[KoFlake::BottomConnectionPoint] = defaultConnectionPoint(KoFlake::BottomConnectionPoint);
+    connectors[KoFlake::LeftConnectionPoint] = defaultConnectionPoint(KoFlake::LeftConnectionPoint);
 }
 
 KoShapePrivate::~KoShapePrivate()
@@ -203,7 +203,22 @@ void KoShapePrivate::removeShapeCache()
     }
 }
 
-
+QPointF KoShapePrivate::defaultConnectionPoint(KoFlake::ConnectionPointId connectionPointId)
+{
+    switch(connectionPointId)
+    {
+        case KoFlake::TopConnectionPoint:
+            return QPointF(0.5, 0.0);
+        case KoFlake::RightConnectionPoint:
+            return QPointF(1.0, 0.5);
+        case KoFlake::BottomConnectionPoint:
+            return QPointF(0.5, 1.0);
+        case KoFlake::LeftConnectionPoint:
+            return QPointF(0.0, 0.5);
+        default:
+            return QPointF();
+    }
+}
 // static
 QString KoShapePrivate::getStyleProperty(const char *property, KoShapeLoadingContext &context)
 {
@@ -728,12 +743,46 @@ QPointF KoShape::position() const
     return d->localMatrix.map(center) - center;
 }
 
-void KoShape::addConnectionPoint(const QPointF &point)
+int KoShape::addConnectionPoint(const QPointF &point)
 {
     Q_D(KoShape);
     QSizeF s = size();
     // convert glue point from shape coordinates to factors of size
-    d->connectors.append(QPointF(point.x() / s.width(), point.y() / s.height()));
+    QPointF connectionPoint(point.x() / s.width(), point.y() / s.height());
+    // get next glue point id
+    int nextConnectionPointId = KoFlake::FirstCustomConnectionPoint;
+    if(d->connectors.size())
+        nextConnectionPointId = qMax(nextConnectionPointId, (--d->connectors.end()).key()+1);
+
+    // allow adding default connection point
+    if(connectionPoint == d->defaultConnectionPoint(KoFlake::TopConnectionPoint))
+        nextConnectionPointId = KoFlake::TopConnectionPoint;
+    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::RightConnectionPoint))
+        nextConnectionPointId = KoFlake::RightConnectionPoint;
+    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::BottomConnectionPoint))
+        nextConnectionPointId = KoFlake::BottomConnectionPoint;
+    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::LeftConnectionPoint))
+        nextConnectionPointId = KoFlake::LeftConnectionPoint;
+
+    d->connectors[nextConnectionPointId] = connectionPoint;
+
+    return nextConnectionPointId;
+}
+
+bool KoShape::hasConnectionPoint(int connectionPointId) const
+{
+    Q_D(const KoShape);
+    return d->connectors.contains(connectionPointId);
+}
+
+QPointF KoShape::connectionPoint(int connectionPointId) const
+{
+    Q_D(const KoShape);
+    QSizeF s = size();
+    QPointF p = d->connectors.value(connectionPointId, QPointF());
+    p.rx() *= s.width();
+    p.ry() *= s.height();
+    return p;
 }
 
 QList<QPointF> KoShape::connectionPoints() const
@@ -746,6 +795,18 @@ QList<QPointF> KoShape::connectionPoints() const
         points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
 
     return points;
+}
+
+void KoShape::removeConnectionPoint(int connectionPointId)
+{
+    Q_D(KoShape);
+    d->connectors.remove(connectionPointId);
+}
+
+void KoShape::clearConnectionPoints()
+{
+    Q_D(KoShape);
+    d->connectors.clear();
 }
 
 void KoShape::addEventAction(KoEventAction *action)
@@ -1012,13 +1073,6 @@ QTransform KoShape::transform() const
     return d->localMatrix;
 }
 
-void KoShape::removeConnectionPoint(int index)
-{
-    Q_D(KoShape);
-    if (index < d->connectors.count())
-        d->connectors.remove(index);
-}
-
 QString KoShape::name() const
 {
     Q_D(const KoShape);
@@ -1282,6 +1336,47 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
             d->eventActions = KoEventActionRegistry::instance()->createEventActionsFromOdf(eventActionsElement, context);
         }
         // load glue points (connection points)
+        KoXmlElement child;
+        forEachElement(child, element) {
+            if (child.namespaceURI() != KoXmlNS::draw)
+                continue;
+            if (child.localName() == "glue-point") {
+                const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
+                const int index = id.toInt();
+                if(id.isEmpty() || index < 4) {
+                    kWarning(30006) << "glue-point with no or invalid id";
+                    continue;
+                }
+                QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
+                QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
+                if(xStr.isEmpty() || yStr.isEmpty()) {
+                    kWarning(30006) << "glue-point with invald position";
+                    continue;
+                }
+                QPointF connectorPos;
+                const QRectF bbox = boundingRect();
+                if(child.hasAttributeNS(KoXmlNS::draw, "align")) {
+                    // absolute distances to the edge specified by align
+                    connectorPos.setX(KoUnit::parseValue(xStr));
+                    connectorPos.setY(KoUnit::parseValue(yStr));
+                    // TODO: convert position to percentage values taking align attribute into account
+                } else {
+                    // x and y are relative to drawing object center
+                    if(xStr.endsWith('%'))
+                        connectorPos.setX(xStr.remove('%').toDouble()/100.0);
+                    else
+                        connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
+                    if(yStr.endsWith('%'))
+                        connectorPos.setY(yStr.remove('%').toDouble()/100.0);
+                    else
+                        connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
+                    // convert position to be relative to top-left corner
+                    connectorPos += QPointF(0.5, 0.5);
+                }
+                d->connectors[index] = connectorPos;
+                kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
+            }
+        }
     }
 
     return true;

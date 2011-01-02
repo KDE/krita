@@ -89,7 +89,7 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    QVector<QPointF> connectors; ///< glue points in percent of size [0..1]
+    QMap<int, QPointF> connectors; ///< glue point id and position in percent of size [0..1]
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
@@ -141,6 +141,9 @@ public:
      * purge and remove the shape cache
      */
     void removeShapeCache();
+
+    /// Returns the specified default connection point
+    QPointF defaultConnectionPoint(KoFlake::ConnectionPointId connectionPointId);
 
     Q_DECLARE_PUBLIC(KoShape)
 };

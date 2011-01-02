@@ -318,8 +318,15 @@ public:
      *   are based around the zero-pos which is the top-left of the shape
      *   The point does not have to be inside the boundings rectangle.  The point is in pt,
      *   just like the rest of the KoShape class uses.
+     * @return the id of the new connection point
      */
-    void addConnectionPoint(const QPointF &point);
+    int addConnectionPoint(const QPointF &point);
+
+    /// Checks if a connection point with the specified id exists
+    bool hasConnectionPoint(int connectionPointId) const;
+
+    /// Returns connection point with specified connection point id
+    QPointF connectionPoint(int connectionPointId) const;
 
     /**
      * Return a list of the connection points that have been added to this shape.
@@ -327,6 +334,12 @@ public:
      * @return a list of the connectors that have been added to this shape.
      */
     QList<QPointF> connectionPoints() const;
+
+    /// Removes connection point with specified id
+    void removeConnectionPoint(int connectionPointId);
+
+    /// Removes all connection points
+    void clearConnectionPoints();
 
     /**
      * Add a event action
@@ -818,9 +831,6 @@ public:
 
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;
-
-    /// Removes connection point with given index
-    void removeConnectionPoint(int index);
 
     /**
      * Adds a shape which depends on this shape.

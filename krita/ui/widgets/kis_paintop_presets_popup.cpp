@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

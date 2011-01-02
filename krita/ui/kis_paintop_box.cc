@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

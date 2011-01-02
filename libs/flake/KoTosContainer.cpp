@@ -21,7 +21,7 @@
 
 #include "KoTosContainer.h"
 
-#include "KoShapeContainer_p.h"
+#include "KoTosContainer_p.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShapeLoadingContext.h"
@@ -30,18 +30,16 @@
 
 #include <QTextCursor>
 
-class KoTosContainerPrivate : public KoShapeContainerPrivate
+KoTosContainerPrivate::KoTosContainerPrivate(KoShapeContainer *q)
+: KoShapeContainerPrivate(q)
+, resizeBehavior(KoTosContainer::IndependentSizes)
 {
-public:
-    KoTosContainerPrivate(KoShapeContainer *q)
-    : KoShapeContainerPrivate(q)
-    , resizeBehavior(KoTosContainer::IndependentSizes)
-    {}
+}
 
-    virtual ~KoTosContainerPrivate() {}
+KoTosContainerPrivate::~KoTosContainerPrivate()
+{
+}
 
-    KoTosContainer::ResizeBehavior resizeBehavior;
-};
 
 KoTosContainer::KoTosContainer()
 {

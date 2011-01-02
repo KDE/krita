@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTONSHAPECONTAINER_H
-#define KOTEXTONSHAPECONTAINER_H
+#ifndef KOTOSCONTAINER_H
+#define KOTOSCONTAINER_H
 
 #include "KoShapeContainer.h"
 

@@ -23,11 +23,9 @@
 #include "KoConnectionShape_p.h"
 
 #include "KoViewConverter.h"
-#include "KoShapeContainer.h"
 #include "KoShapeLoadingContext.h"
 #include "KoShapeSavingContext.h"
 #include "KoConnectionShapeLoadingUpdater.h"
-#include "KoTextOnShapeContainer.h"
 #include "KoPathShapeLoader.h"
 #include "KoPathPoint.h"
 #include "KoShapeBackground.h"
@@ -313,9 +311,8 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     saveOdfAttributes(context, OdfViewbox);
 
     saveOdfCommonChildElements(context);
+    saveText(context);
 
-    if (parent())
-        parent()->saveOdfChildElements(context);
     context.xmlWriter().endElement();
 }
 
@@ -410,7 +407,7 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         updateConnections();
     }
 
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }

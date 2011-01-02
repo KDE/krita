@@ -23,7 +23,6 @@
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
@@ -342,7 +341,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
     setTransformation(QTransform());
 
     loadOdfAttributes(element, context, OdfAllAttributes);
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }
@@ -382,14 +381,14 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
 
             context.xmlWriter().addAttribute("draw:data", drawData);
 
+            saveOdfCommonChildElements(context);
+            saveText(context);
+
             // write a enhanced geometry element for compatibility with other applications
             context.xmlWriter().startElement("draw:enhanced-geometry");
             context.xmlWriter().addAttribute("draw:enhanced-path", toString(transformation()));
             context.xmlWriter().endElement(); // draw:enhanced-geometry
 
-            saveOdfCommonChildElements(context);
-            if (parent())
-                parent()->saveOdfChildElements(context);
             context.xmlWriter().endElement(); // draw:custom-shape
         }
         else {
@@ -405,8 +404,7 @@ void StarShape::saveOdf(KoShapeSavingContext & context) const
                 context.xmlWriter().addAttribute("draw:sharpness", QString("%1%").arg(percent));
             }
             saveOdfCommonChildElements(context);
-            if (parent())
-                parent()->saveOdfChildElements(context);
+            saveText(context);
             context.xmlWriter().endElement();
         }
     } else {

@@ -240,8 +240,3 @@ KoShapeContainerModel *KoShapeContainer::model() const
     Q_D(const KoShapeContainer);
     return d->model;
 }
-
-void KoShapeContainer::saveOdfChildElements(KoShapeSavingContext &context) const
-{
-    Q_UNUSED(context);
-}

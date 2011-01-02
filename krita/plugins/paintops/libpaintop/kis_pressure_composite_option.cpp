@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Silvio Heinrich <plassy@web.de>, (C) 2011
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -32,8 +32,8 @@
 KisPressureCompositeOption::KisPressureCompositeOption()
     : KisCurveOption(i18n("Color"), "Color", KisPaintOpOption::brushCategory(), false)
 {
-    setMinimumLabel(i18n("Full Color"));
-    setMaximumLabel(i18n("No Color"));
+    setMinimumLabel(i18n("No Color"));
+    setMaximumLabel(i18n("Full Color"));
 }
 
 void KisPressureCompositeOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
@@ -56,7 +56,7 @@ void KisPressureCompositeOption::readOptionSetting(const KisPropertiesConfigurat
 void KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const
 {
     if(!isChecked())
-        return painter->compositeOp()->id();
+        return;
     
     QString oldCompositeOp = painter->compositeOp()->id();
     
@@ -67,7 +67,5 @@ void KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, const
     
     painter->setCompositeOp(m_compositeOp);
     painter->setOpacity(opacity);
-
-    return oldCompositeOp;
 }
 

@@ -6,6 +6,7 @@
  *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -53,7 +54,8 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_rateOption.sensor()->reset();
     m_compositeOption.sensor()->reset();
 
-    m_tempDev = new KisPaintDevice(painter->device()->colorSpace());
+    m_tempDev  = new KisPaintDevice(painter->device()->colorSpace());
+    m_firstRun = true;
 }
 
 KisSmudgeOp::~KisSmudgeOp()
@@ -89,7 +91,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(point.x(), &x, &xFraction);
     splitCoordinate(point.y(), &y, &yFraction);
     
-    KisFixedPaintDeviceSP maskDab = cachedDab(painter()->device()->colorSpace());
+    KisFixedPaintDeviceSP maskDab = 0;
     
     // Extract the brush mask (maskDab) from brush with the correct scaled size
     if(brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
@@ -107,15 +109,22 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // GET the opacy calculated by the rate option (apply is misleading because the opacy will not be applied)
     quint8 newOpacity = m_rateOption.apply(OPACITY_OPAQUE_U8, info);
     
-    // set opacity calculated by the rate option
-    // then blit the temporary painting device on the canvas at the current brush position
-    // the alpha mask (maskDab) will be used here to only blit the pixels that lie in the area (shape) of the brush
-    painter()->setOpacity(newOpacity);
-    painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
+    if(!m_firstRun) {
+        // set opacity calculated by the rate option
+        // then blit the temporary painting device on the canvas at the current brush position
+        // the alpha mask (maskDab) will be used here to only blit the pixels that lie in the area (shape) of the brush
+        painter()->setOpacity(newOpacity / 2);
+        painter()->setCompositeOp(COMPOSITE_OVER);
+        painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
+        painter()->setOpacity(newOpacity);
+        painter()->setCompositeOp(COMPOSITE_COPY_OPACITY);
+        painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
+    }
+    else m_firstRun = false;
     
     // IMPORTANT: clear the temporary painting device to color black with zero opacity
     //            it will only clear the extents of the brush
-    m_tempDev->clear(maskDab->bounds());
+    m_tempDev->clear(QRect(0, 0, brush->width(), brush->height()));
     
     KisPainter copyPainter(m_tempDev);
     
@@ -124,7 +133,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // and blit it to the temporary painting device
     copyPainter.setCompositeOp(COMPOSITE_OVER);
     copyPainter.setOpacity(OPACITY_OPAQUE_U8);
-    copyPainter.bitBlt(0, 0, painter()->device(), x, y, maskDab->bounds().width(), maskDab->bounds().height());
+    copyPainter.bitBlt(0, 0, painter()->device(), x, y, brush->width(), brush->width());
     
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)
@@ -141,6 +150,5 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     
     copyPainter.end();
-    
     return spacing(scale);
 }

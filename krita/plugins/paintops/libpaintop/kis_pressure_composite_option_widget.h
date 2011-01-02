@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
+ * Copyright (C) Silvio Heinrich <plassy@web.de>, (C) 2011
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

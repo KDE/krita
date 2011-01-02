@@ -5,6 +5,7 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -49,6 +50,7 @@ public:
     qreal paintAt(const KisPaintInformation& info);
 
 private:
+    bool             m_firstRun;
     KisPaintDeviceSP m_tempDev; // The temporary paint device
     KisPressureSizeOption m_sizeOption;
     KisPressureRateOption m_rateOption;

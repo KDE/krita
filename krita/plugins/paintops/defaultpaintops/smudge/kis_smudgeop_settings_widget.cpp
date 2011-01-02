@@ -4,6 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

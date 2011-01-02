@@ -94,7 +94,6 @@ public:
                     continue; // skip this docker in release build when assert don't crash
                 }
                 t->addTab(iter.value(), iter.key());
-                iter.value()->show();
                 ++iter;
             }
         } else {

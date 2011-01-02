@@ -60,10 +60,10 @@ public:
      * Passing a null pointer as the first parameter will sever the connection.
      *
      * @param shape the shape to connect to or null to reset the connection
-     * @param connectionPointIndex the index of the connection point to connect to
+     * @param connectionPointId the id of the connection point to connect to
      * @return true if connection could be established, otherwise false
      */
-    bool connectFirst(KoShape *shape, int connectionPointIndex);
+    bool connectFirst(KoShape *shape, int connectionPointId);
 
     /**
     * Sets the second shape the connector is connected to
@@ -71,10 +71,10 @@ public:
     * Passing a null pointer as the first parameter will sever the connection.
     *
     * @param shape the shape to connect to or null to reset the connection
-    * @param connectionPointIndex the index of the connection point to connect to
+    * @param connectionPointId the id of the connection point to connect to
     * @return true if connection could be established, otherwise false
     */
-    bool connectSecond(KoShape *shape, int connectionPointIndex);
+    bool connectSecond(KoShape *shape, int connectionPointId);
 
     /**
      * Return the first shape this connection is attached to, or null if none.

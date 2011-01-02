@@ -50,8 +50,8 @@ KoConnectionShapePrivate::KoConnectionShapePrivate(KoConnectionShape *q)
     : KoParameterShapePrivate(q),
     shape1(0),
     shape2(0),
-    connectionPointIndex1(-1),
-    connectionPointIndex2(-1),
+    connectionPointId1(-1),
+    connectionPointId2(-1),
     connectionType(KoConnectionShape::Standard),
     forceUpdate(false),
     hasCustomPath(false)
@@ -200,9 +200,9 @@ qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2)
 
 bool KoConnectionShapePrivate::handleConnected(int handleId) const
 {
-    if (handleId == StartHandle && shape1 && connectionPointIndex1 >= 0)
+    if (handleId == StartHandle && shape1 && connectionPointId1 >= 0)
         return true;
-    if (handleId == EndHandle && shape2 && connectionPointIndex2 >= 0)
+    if (handleId == EndHandle && shape2 && connectionPointId2 >= 0)
         return true;
 
     return false;
@@ -214,10 +214,9 @@ void KoConnectionShape::updateConnections()
     bool updateHandles = false;
 
     if (d->handleConnected(StartHandle)) {
-        QList<QPointF> connectionPoints = d->shape1->connectionPoints();
-        if (d->connectionPointIndex1 < connectionPoints.count()) {
+        if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]));
+            QPointF p = documentToShape(d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1)));
             if (d->handles[StartHandle] != p) {
                 d->handles[StartHandle] = p;
                 updateHandles = true;
@@ -225,10 +224,9 @@ void KoConnectionShape::updateConnections()
         }
     }
     if (d->handleConnected(EndHandle)) {
-        QList<QPointF> connectionPoints = d->shape2->connectionPoints();
-        if (d->connectionPointIndex2 < connectionPoints.count()) {
+        if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
             // map connection point into our shape coordinates
-            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]));
+            QPointF p = documentToShape(d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2)));
             if (d->handles[EndHandle] != p) {
                 d->handles[EndHandle] = p;
                 updateHandles = true;
@@ -256,9 +254,7 @@ KoConnectionShape::KoConnectionShape()
 
     updatePath(QSizeF(140, 140));
 
-    int connectionPointCount = connectionPoints().size();
-    for (int i = 0; i < connectionPointCount; ++i)
-        removeConnectionPoint(0);
+    clearConnectionPoints();
 }
 
 KoConnectionShape::~KoConnectionShape()
@@ -293,7 +289,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
 
     if (d->shape1) {
         context.xmlWriter().addAttribute("draw:start-shape", context.drawId(d->shape1));
-        context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointIndex1);
+        context.xmlWriter().addAttribute("draw:start-glue-point", d->connectionPointId1);
     } else {
         QPointF p((d->handles[StartHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x1", p.x());
@@ -301,7 +297,7 @@ void KoConnectionShape::saveOdf(KoShapeSavingContext & context) const
     }
     if (d->shape2) {
         context.xmlWriter().addAttribute("draw:end-shape", context.drawId(d->shape2));
-        context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointIndex2);
+        context.xmlWriter().addAttribute("draw:end-glue-point", d->connectionPointId2);
     } else {
         QPointF p((d->handles[EndHandle] + position()) * context.shapeOffset(this));
         context.xmlWriter().addAttributePt("svg:x2", p.x());
@@ -335,24 +331,23 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         d->connectionType = Standard;
 
     // reset connection point indices
-    d->connectionPointIndex1 = -1;
-    d->connectionPointIndex2 = -1;
+    d->connectionPointId1 = -1;
+    d->connectionPointId2 = -1;
     // reset connected shapes
     d->shape1 = 0;
     d->shape2 = 0;
 
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
-        d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
+        d->connectionPointId1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
         QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", QString());
-        kDebug(30006) << "references start-shape" << shapeId1 << "at glue-point" << d->connectionPointIndex1;
+        kDebug(30006) << "references start-shape" << shapeId1 << "at glue-point" << d->connectionPointId1;
         d->shape1 = context.shapeById(shapeId1);
         if (d->shape1) {
             kDebug(30006) << "start-shape was already loaded";
             d->shape1->addDependee(this);
-            QList<QPointF> connectionPoints = d->shape1->connectionPoints();
-            if (d->connectionPointIndex1 < connectionPoints.count()) {
+            if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
                 kDebug(30006) << "connecting to start-shape";
-                d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]);
+                d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1));
                 kDebug(30006) << "start handle position =" << d->handles[StartHandle];
             }
         } else {
@@ -365,17 +360,16 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     }
 
     if (element.hasAttributeNS(KoXmlNS::draw, "end-shape")) {
-        d->connectionPointIndex2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
+        d->connectionPointId2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
         QString shapeId2 = element.attributeNS(KoXmlNS::draw, "end-shape", "");
-        kDebug(30006) << "references end-shape " << shapeId2 << "at glue-point" << d->connectionPointIndex2;
+        kDebug(30006) << "references end-shape " << shapeId2 << "at glue-point" << d->connectionPointId2;
         d->shape2 = context.shapeById(shapeId2);
         if (d->shape2) {
             kDebug(30006) << "end-shape was already loaded";
             d->shape2->addDependee(this);
-            QList<QPointF> connectionPoints = d->shape2->connectionPoints();
-            if (d->connectionPointIndex2 < connectionPoints.count()) {
+            if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
                 kDebug(30006) << "connecting to end-shape";
-                d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]);
+                d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2));
                 kDebug(30006) << "end handle position =" << d->handles[EndHandle];
             }
         } else {
@@ -430,22 +424,20 @@ void KoConnectionShape::finishLoadingConnection()
     Q_D(KoConnectionShape);
 
     if (d->hasCustomPath) {
-        const bool loadingFinished1 = d->connectionPointIndex1 >= 0 ? d->shape1 != 0 : true;
-        const bool loadingFinished2 = d->connectionPointIndex2 >= 0 ? d->shape2 != 0 : true;
+        const bool loadingFinished1 = d->connectionPointId1 >= 0 ? d->shape1 != 0 : true;
+        const bool loadingFinished2 = d->connectionPointId2 >= 0 ? d->shape2 != 0 : true;
         if (loadingFinished1 && loadingFinished2) {
             QPointF p1, p2;
             if (d->handleConnected(StartHandle)) {
-                QList<QPointF> connectionPoints = d->shape1->connectionPoints();
-                if (d->connectionPointIndex1 < connectionPoints.count()) {
-                    p1 = d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]);
+                if (d->shape1->hasConnectionPoint(d->connectionPointId1)) {
+                    p1 = d->shape1->absoluteTransformation(0).map(d->shape1->connectionPoint(d->connectionPointId1));
                 }
             } else {
                 p1 = d->handles[StartHandle];
             }
             if (d->handleConnected(EndHandle)) {
-                QList<QPointF> connectionPoints = d->shape2->connectionPoints();
-                if (d->connectionPointIndex2 < connectionPoints.count()) {
-                    p2 = d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]);
+                if (d->shape2->hasConnectionPoint(d->connectionPointId2)) {
+                    p2 = d->shape2->absoluteTransformation(0).map(d->shape2->connectionPoint(d->connectionPointId2));
                 }
             } else {
                 p2 = d->handles[EndHandle];
@@ -546,7 +538,7 @@ void KoConnectionShape::updatePath(const QSizeF &size)
     normalize();
 }
 
-bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointIndex1)
+bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -554,7 +546,7 @@ bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointIndex1
         return false;
 
     // check if the connection point does exist
-    if (shape1 && connectionPointIndex1 >= shape1->connectionPoints().count())
+    if (shape1 && !shape1->hasConnectionPoint(connectionPointId))
         return false;
 
     if (d->shape1)
@@ -563,12 +555,12 @@ bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointIndex1
     if (d->shape1)
         d->shape1->addDependee(this);
 
-    d->connectionPointIndex1 = connectionPointIndex1;
+    d->connectionPointId1 = connectionPointId;
 
     return true;
 }
 
-bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointIndex2)
+bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointId)
 {
     Q_D(KoConnectionShape);
     // refuse to connect to a shape that depends on us (e.g. a artistic text shape)
@@ -576,7 +568,7 @@ bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointIndex
         return false;
 
     // check if the connection point does exist
-    if (shape2 && connectionPointIndex2 >= shape2->connectionPoints().count())
+    if (shape2 && !shape2->hasConnectionPoint(connectionPointId))
         return false;
 
     if (d->shape2)
@@ -585,7 +577,7 @@ bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointIndex
     if (d->shape2)
         d->shape2->addDependee(this);
 
-    d->connectionPointIndex2 = connectionPointIndex2;
+    d->connectionPointId2 = connectionPointId;
 
     return true;
 }
@@ -599,7 +591,7 @@ KoShape *KoConnectionShape::firstShape() const
 int KoConnectionShape::firstConnectionIndex() const
 {
     Q_D(const KoConnectionShape);
-    return d->connectionPointIndex1;
+    return d->connectionPointId1;
 }
 
 KoShape *KoConnectionShape::secondShape() const
@@ -611,7 +603,7 @@ KoShape *KoConnectionShape::secondShape() const
 int KoConnectionShape::secondConnectionIndex() const
 {
     Q_D(const KoConnectionShape);
-    return d->connectionPointIndex2;
+    return d->connectionPointId2;
 }
 
 KoConnectionShape::Type KoConnectionShape::type() const

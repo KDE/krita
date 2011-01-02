@@ -48,8 +48,8 @@ public:
 
     KoShape *shape1;
     KoShape *shape2;
-    int connectionPointIndex1;
-    int connectionPointIndex2;
+    int connectionPointId1;
+    int connectionPointId2;
     KoConnectionShape::Type connectionType;
     bool forceUpdate;
     bool hasCustomPath;

@@ -344,14 +344,19 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (element.hasAttributeNS(KoXmlNS::draw, "start-shape")) {
         d->connectionPointIndex1 = element.attributeNS(KoXmlNS::draw, "start-glue-point", QString()).toInt();
         QString shapeId1 = element.attributeNS(KoXmlNS::draw, "start-shape", QString());
+        kDebug(30006) << "references start-shape" << shapeId1 << "at glue-point" << d->connectionPointIndex1;
         d->shape1 = context.shapeById(shapeId1);
         if (d->shape1) {
+            kDebug(30006) << "start-shape was already loaded";
             d->shape1->addDependee(this);
             QList<QPointF> connectionPoints = d->shape1->connectionPoints();
             if (d->connectionPointIndex1 < connectionPoints.count()) {
+                kDebug(30006) << "connecting to start-shape";
                 d->handles[StartHandle] = d->shape1->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex1]);
+                kDebug(30006) << "start handle position =" << d->handles[StartHandle];
             }
         } else {
+            kDebug(30006) << "start-shape not loaded yet, deferring connection";
             context.updateShape(shapeId1, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::First));
         }
     } else {
@@ -362,14 +367,19 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (element.hasAttributeNS(KoXmlNS::draw, "end-shape")) {
         d->connectionPointIndex2 = element.attributeNS(KoXmlNS::draw, "end-glue-point", "").toInt();
         QString shapeId2 = element.attributeNS(KoXmlNS::draw, "end-shape", "");
+        kDebug(30006) << "references end-shape " << shapeId2 << "at glue-point" << d->connectionPointIndex2;
         d->shape2 = context.shapeById(shapeId2);
         if (d->shape2) {
+            kDebug(30006) << "end-shape was already loaded";
             d->shape2->addDependee(this);
             QList<QPointF> connectionPoints = d->shape2->connectionPoints();
             if (d->connectionPointIndex2 < connectionPoints.count()) {
+                kDebug(30006) << "connecting to end-shape";
                 d->handles[EndHandle] = d->shape2->absoluteTransformation(0).map(connectionPoints[d->connectionPointIndex2]);
+                kDebug(30006) << "end handle position =" << d->handles[EndHandle];
             }
         } else {
+            kDebug(30006) << "end-shape not loaded yet, deferring connection";
             context.updateShape(shapeId2, new KoConnectionShapeLoadingUpdater(this, KoConnectionShapeLoadingUpdater::Second));
         }
     } else {

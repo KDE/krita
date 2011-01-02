@@ -181,6 +181,7 @@ public:
         list << new BrushSettingDefinition("change_color_hsv_s", i18n("change color satur. (HSV)"), false, -2.0, 0.0, 2.0, i18n("Change the color saturation using the HSV color model. HSV changes are applied before HSL.\n-1.0 more grayish\n 0.0 disable\n 1.0 more saturated"));
         list << new BrushSettingDefinition("smudge", i18n("smudge"), false, 0.0, 0.0, 1.0, i18n("Paint with the smudge color instead of the brush color. The smudge color is slowly changed to the color you are painting on.\n 0.0 do not use the smudge color\n 0.5 mix the smudge color with the brush color\n 1.0 use only the smudge color"));
         list << new BrushSettingDefinition("smudge_length", i18n("smudge length"), false, 0.0, 0.5, 1.0, i18n("This controls how fast the smudge color becomes the color you are painting on.\n0.0 immediately change the smudge color\n1.0 never change the smudge color"));
+        list << new BrushSettingDefinition("smudge_radius_log", i18n("smudge radius"), false, -1.6, 0.0, 1.6, i18n("This modifies the radius of the circle where color is picked up for smudging.\n 0.0 use the brush radius \n-0.7 half the brush radius\n+0.7 twice the brush radius\n+1.6 five times the brush radius (slow)"));
         list << new BrushSettingDefinition("eraser", i18n("eraser"), false, 0.0, 0.0, 1.0, i18n("how much this tool behaves like an eraser\n 0.0 normal painting\n 1.0 standard eraser\n 0.5 pixels go towards 50% transparency"));
 
         list << new BrushSettingDefinition("stroke_threshold", i18n("stroke threshold"), true, 0.0, 0.0, 0.5, i18n("How much pressure is needed to start a stroke. This affects the stroke input only. Mypaint does not need a minimal pressure to start drawing."));
@@ -198,6 +199,8 @@ public:
             dict[def->cname] = def;
             def->index = i++;
         }
+        Q_ASSERT(i == BRUSH_SETTINGS_COUNT);
+
     }
 
 };

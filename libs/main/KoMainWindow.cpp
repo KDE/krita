@@ -133,10 +133,6 @@ public:
         qDeleteAll(toolbarList);
     }
 
-    void moveToolBarsBack()
-    {
-    }
-
     void applyDefaultSettings(QPrinter &printer) {
         QString title = rootDoc->documentInfo()->aboutInfo("title");
         if (title.isEmpty()) {

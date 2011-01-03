@@ -1,7 +1,7 @@
 /*
  This file is part of the KDE project
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2010-2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,7 +18,7 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.*/
 
-#include "DeleteTableColumnCommand.h"
+#include "InsertTableRowCommand.h"
 
 #include <KoTextEditor.h>
 #include "KoTableColumnAndRowStyleManager.h"
@@ -29,48 +29,52 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t,
-                                             QUndoCommand *parent) :
+InsertTableRowCommand::InsertTableRowCommand(KoTextEditor *te, QTextTable *t, bool below,
+                                 QUndoCommand *parent) :
     QUndoCommand (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
+    ,m_below(below)
 {
-    setText(i18n("Delete Column"));
+    if(below) {
+        setText(i18n("Insert Row Below"));
+    } else {
+        setText(i18n("Insert Row Above"));
+    }
 }
 
-void DeleteTableColumnCommand::undo()
+void InsertTableRowCommand::undo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
-    for (int i = 0; i < m_selectionColumnSpan; ++i) {
-        carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
-    }
+
+    carsManager.removeRows(m_row, 1);
 
     QUndoCommand::undo();
 }
 
-void DeleteTableColumnCommand::redo()
+void InsertTableRowCommand::redo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     if (!m_first) {
-        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        carsManager.insertRows(m_row, 1, m_style);
         QUndoCommand::redo();
     } else {
         m_first = false;
-        int selectionRow;
-        int selectionRowSpan;
-        if(m_textEditor->hasComplexSelection()) {
-            m_textEditor->cursor()->selectedTableCells(&selectionRow, &selectionRowSpan, &m_selectionColumn, &m_selectionColumnSpan);
-        } else {
-            QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());
-            m_selectionColumn = cell.column();
-            m_selectionColumnSpan = 1;
-        }
-        m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        QTextTableCell cell = m_table->cellAt(*m_textEditor->cursor());
+        m_row = cell.row() + (m_below ? 1 : 0);
+        m_style = carsManager.rowStyle(cell.row());
+        m_table->insertRows(m_row, 1);
+        carsManager.insertRows(m_row, 1, m_style);
 
-        for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
-            m_deletedStyles.append(carsManager.columnStyle(i));
+        if (m_below && m_row == m_table->rows()-1) {
+            // Copy the cells styles. when Qt doesn't do it for us
+            for (int col = 0; col < m_table->columns(); ++col) {
+                QTextTableCell cell = m_table->cellAt(m_row - 1, col);
+                QTextCharFormat format = cell.format();
+                cell = m_table->cellAt(m_row, col);
+                cell.setFormat(format);
+            }
         }
-        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
     }
 }

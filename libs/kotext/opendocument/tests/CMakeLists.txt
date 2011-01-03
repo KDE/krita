@@ -23,6 +23,12 @@ kde4_add_executable(normalizeWhiteSpace ${normalizeWhiteSpace_SRCS})
 target_link_libraries(normalizeWhiteSpace kotext ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
+
+set(TestChangeTracking_test_SRCS TestChangeTracking.cpp)
+kde4_add_unit_test(TestChangeTracking TESTNAME kotext-odf-TestChangeTracking ${TestChangeTracking_test_SRCS})
+target_link_libraries(TestChangeTracking kotext ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
 if( Soprano_FOUND )
 set(TestChangeLoading_SRCS TestChangeLoading.cpp)
 kde4_add_unit_test(TestChangeLoading TESTNAME kotext-odf-TestChangeLoading ${TestChangeLoading_SRCS})

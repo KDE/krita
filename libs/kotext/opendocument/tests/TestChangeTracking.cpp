@@ -246,7 +246,28 @@ void TestChangeTracking::testChangeTracking_data()
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)
 {
-    return true;
+    KoStore *originalReadStore = KoStore::createStore(originalFileName, KoStore::Read, "", KoStore::Zip);
+    QString originalDocumentString;
+
+    QDomDocument originalDocument("originalDocument");
+    originalReadStore->open("content.xml");
+    originalDocument.setContent(originalReadStore->device());
+    QTextStream originalDocumentStream(&originalDocumentString);
+    originalDocumentStream << originalDocument.documentElement().namedItem("body");
+    originalReadStore->close();
+
+    KoStore *roundTripReadStore = KoStore::createStore(roundTripFileName, KoStore::Read, "", KoStore::Zip);
+    QString roundTripDocumentString;
+
+    QDomDocument roundTripDocument("roundTripDocument");
+    roundTripReadStore->open("content.xml");
+    roundTripDocument.setContent(roundTripReadStore->device());
+    QTextStream roundTripDocumentStream(&roundTripDocumentString);
+    roundTripDocumentStream << roundTripDocument.documentElement().namedItem("body");
+    roundTripReadStore->close();
+
+    bool returnValue = (originalDocumentString == roundTripDocumentString); 
+    return returnValue;
 }
 
 int main(int argc, char *argv[])

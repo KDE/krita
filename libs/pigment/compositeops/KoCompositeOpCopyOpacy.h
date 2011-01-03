@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Silvio Heinrich <plassy@web.de>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

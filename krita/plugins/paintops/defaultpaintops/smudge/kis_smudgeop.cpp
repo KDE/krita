@@ -87,7 +87,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     QPointF point = info.pos() - brush->hotSpot(scale, scale);
     
     qint32 x, y;
-    qreal xFraction, yFraction;
+    qreal xFraction, yFraction; // will not be used
     splitCoordinate(point.x(), &x, &xFraction);
     splitCoordinate(point.y(), &y, &yFraction);
     
@@ -96,11 +96,11 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // Extract the brush mask (maskDab) from brush with the correct scaled size
     if(brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         // This is for bitmap brushes
-        maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, 0.0, info, xFraction, yFraction);
+        maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, 0.0, info, 0.0, 0.0);
     } else {
         // This is for parametric brushes, those created in the Autobrush popup config dialogue
         maskDab = cachedDab();
-        brush->mask(maskDab, painter()->paintColor(), scale, scale, 0.0, info, xFraction, yFraction);
+        brush->mask(maskDab, painter()->paintColor(), scale, scale, 0.0, info, 0.0, 0.0);
     }
     
     // transforms the fixed paint device with the current brush to alpha color space (to use it as alpha/transparency mask)

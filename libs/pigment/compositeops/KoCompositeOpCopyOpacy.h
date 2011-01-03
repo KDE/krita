@@ -78,14 +78,13 @@ public:
                     if(useMask) {
                         channels_type blend = KoColorSpaceMaths<quint8,channels_type>::scaleToA(*mskRowItr);
                         value = KoColorSpaceMaths<channels_type>::blend(value, *dstRowItr, blend);
-                        value = (value > *dstRowItr) ? (value-1) : value;
                         ++mskRowItr;
                     }
                     
+                    value      = (value > *dstRowItr) ? (value-1) : value;
                     *dstRowItr = value;
                     srcRowItr += channels_nb;
                     dstRowItr += channels_nb;
-                    
                 }
                 
                 srcRowStart  += srcRowStride;
@@ -113,10 +112,10 @@ public:
                     if(useMask) {
                         channels_type blend = KoColorSpaceMaths<quint8,channels_type>::scaleToA(*mskRowItr);
                         value = KoColorSpaceMaths<channels_type>::blend(value, *dstRowItr, blend);
-                        value = (value > *dstRowItr) ? (value-1) : value;
                         ++mskRowItr;
                     }
                     
+                    value      = (value > *dstRowItr) ? (value-1) : value;
                     *dstRowItr = value;
                     dstRowItr += channels_nb;
                 }
@@ -127,7 +126,7 @@ public:
             }
         }
     }
-                                            
+    
 };
 
 #endif // KOCOMPOSITEOPCOPYOPACY_H_

@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "renderobjects.h"
-
+#include <kdebug.h>
 
 //
 // ORODocument
@@ -29,11 +29,11 @@ ORODocument::ORODocument(const QString & pTitle)
 
 ORODocument::~ORODocument()
 {
-    while (!m_pages.isEmpty()) {
-        OROPage * p = m_pages.takeFirst();
-        p->m_document = 0;
-        delete p;
-    }
+    qDeleteAll(m_pages);
+    m_pages.clear();
+
+    qDeleteAll(m_sections);
+    m_sections.clear();
 }
 
 void ORODocument::setTitle(const QString & pTitle)
@@ -94,11 +94,8 @@ OROPage::~OROPage()
         m_document = 0;
     }
 
-    while (!m_primitives.isEmpty()) {
-        OROPrimitive* p = m_primitives.takeFirst();
-        p->m_page = 0;
-        delete p;
-    }
+    qDeleteAll(m_primitives);
+    m_primitives.clear();
 }
 
 int OROPage::page() const
@@ -149,10 +146,9 @@ OROSection::~OROSection()
         m_document = 0;
     }
 
-    while (!m_primitives.isEmpty()) {
-        OROPrimitive* p = m_primitives.takeFirst();
-        delete p;
-    }
+    qDeleteAll(m_primitives);
+    m_primitives.clear();
+    
 }
 
 long OROSection::row() const
@@ -239,7 +235,7 @@ OROTextBox::OROTextBox()
     m_lineStyle.lineColor = Qt::black;
     m_lineStyle.weight = 0;
     m_lineStyle.style = Qt::NoPen;
-
+    
     m_requiresPostProcessing = false; 
 }
 

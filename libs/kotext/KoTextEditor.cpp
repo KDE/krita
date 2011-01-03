@@ -42,6 +42,8 @@
 #include "KoTableColumnAndRowStyleManager.h"
 #include "commands/DeleteTableRowCommand.h"
 #include "commands/DeleteTableColumnCommand.h"
+#include "commands/InsertTableRowCommand.h"
+#include "commands/InsertTableColumnCommand.h"
 
 #include <KLocale>
 #include <KUndoStack>
@@ -940,93 +942,34 @@ void KoTextEditor::insertTable(int rows, int columns)
 
 void KoTextEditor::insertTableRowAbove()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Above"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int row = cell.row();
-        table->insertRows(row, 1);
-        carsManager.insertRows(row, 1, carsManager.rowStyle(row));
+        addCommand(new InsertTableRowCommand(this, table, false));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableRowBelow()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Below"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int row = cell.row() +1;
-        if (row == table->rows()) {
-            table->appendRows(1);
-            carsManager.setRowStyle(row, carsManager.rowStyle(row-1));
-
-            // Copy the cells styles.
-            for (int col = 0; col < table->columns(); ++col) {
-                QTextTableCell cell = table->cellAt(row-1, col);
-                QTextCharFormat format = cell.format();
-                cell = table->cellAt(row, col);
-                cell.setFormat(format);
-            }
-        } else {
-            table->insertRows(row, 1);
-            carsManager.insertRows(row, 1, carsManager.rowStyle(row-1));
-        }
+        addCommand(new InsertTableRowCommand(this, table, true));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableColumnLeft()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Left"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int column = cell.column();
-        table->insertColumns(column, 1);
-        carsManager.insertColumns(column, 1, carsManager.columnStyle(column));
+        addCommand(new InsertTableColumnCommand(this, table, false));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableColumnRight()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Right"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int column = cell.column()+1;
-        if (column == table->columns()) {
-            table->appendColumns(1);
-            carsManager.setColumnStyle(column, carsManager.columnStyle(column-1));
-            // Copy the cells style. for the bottomright cell which Qt doesn't
-            QTextTableCell cell = table->cellAt(table->rows()-1, column-1);
-            QTextCharFormat format = cell.format();
-            cell = table->cellAt(table->rows()-1, column);
-            cell.setFormat(format);
-        } else {
-            table->insertColumns(column, 1);
-            carsManager.insertColumns(column, 1, carsManager.columnStyle(column-1));
-        }
+        addCommand(new InsertTableColumnCommand(this, table, true));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::deleteTableColumn()

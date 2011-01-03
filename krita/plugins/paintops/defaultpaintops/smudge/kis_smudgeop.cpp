@@ -112,8 +112,8 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if(!m_firstRun) {
         // set opacity calculated by the rate option
         // then blit the temporary painting device on the canvas at the current brush position
-        // the alpha mask (maskDab) will be used here to only blit the pixels that lie in the area (shape) of the brush
-        painter()->setOpacity(newOpacity / 2);
+        // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
+        painter()->setOpacity(newOpacity);
         painter()->setCompositeOp(COMPOSITE_OVER);
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
         painter()->setOpacity(newOpacity);

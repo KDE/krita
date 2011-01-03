@@ -128,3 +128,14 @@ qint32 KisRandomAccessor2::nConseqPixels() const
     qFatal("Not implemented.");
     return 0;
 }
+
+
+qint32 KisRandomAccessor2::x() const
+{
+    return m_lastX;
+}
+
+qint32 KisRandomAccessor2::y() const
+{
+    return m_lastY;
+}

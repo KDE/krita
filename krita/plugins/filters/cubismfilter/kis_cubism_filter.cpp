@@ -79,40 +79,23 @@ bool KisCubismFilter::workWith(const KoColorSpace* /*cs*/) const
 }
 
 
-void KisCubismFilter::process(KisConstProcessingInformation srcInfo,
-                              KisProcessingInformation dstInfo,
-                              const QSize& size,
+void KisCubismFilter::process(KisPaintDeviceSP device,
+                              const QRect& applyRect,
                               const KisFilterConfiguration* configuration,
                               KoUpdater* progressUpdater
                              ) const
 {
     Q_UNUSED(progressUpdater);
 
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src);
-    Q_ASSERT(dst);
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device);
     Q_ASSERT(configuration);
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 tileSize = configuration->getInt("tileSize", 1);
     quint32 tileSaturation = configuration->getInt("tileSaturation");
 
-    if (srcInfo.selection()) {
-
-        KisPaintDeviceSP dev = new KisPaintDevice(src->colorSpace());
-
-        cubism(src, srcTopLeft, dev, dstTopLeft, size, tileSize, tileSaturation);
-
-        KisPainter gc(dst);
-        gc.setSelection(srcInfo.selection());
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), dev, dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height());
-        gc.end();
-    } else {
-        cubism(src, srcTopLeft, dst, dstTopLeft, size, tileSize, tileSaturation);
-    }
+    cubism(device, srcTopLeft, device, srcTopLeft, applyRect.size(), tileSize, tileSaturation);
 }
 
 void KisCubismFilter::randomizeIndices(qint32 count, qint32* indices) const

@@ -60,34 +60,27 @@ KisOilPaintFilter::KisOilPaintFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsPainting(true);
 }
 
-void KisOilPaintFilter::process(KisConstProcessingInformation srcInfo,
-                                KisProcessingInformation dstInfo,
-                                const QSize& size,
-                                const KisFilterConfiguration* config,
-                                KoUpdater* progressUpdater
+void KisOilPaintFilter::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
                                ) const
 {
     Q_UNUSED(progressUpdater);
 
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(!device.isNull());
 #if 1
 
-    Q_UNUSED(dst);
-
-    qint32 width = size.width();
-    qint32 height = size.height();
+    qint32 width = applyRect.width();
+    qint32 height = applyRect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 brushSize = config->getInt("brushSize", 1);
     quint32 smooth = config->getInt("smooth", 30);
 
 
-    OilPaint(src, dst, srcTopLeft, dstTopLeft, width, height, brushSize, smooth);
+    OilPaint(device, device, srcTopLeft, applyRect.topLeft(), width, height, brushSize, smooth);
 #endif
 }
 

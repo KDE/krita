@@ -184,3 +184,13 @@ void KisHLineIterator2::preallocateTiles()
         fetchTileDataForCache(m_tilesCache[i], m_leftCol + i, m_row);
     }
 }
+
+qint32 KisHLineIterator2::x() const
+{
+    return m_x;
+}
+
+qint32 KisHLineIterator2::y() const
+{
+    return m_y;
+}

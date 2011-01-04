@@ -251,6 +251,10 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("ParagraphSplit-2")  << "ChangeTracking/text/split-paragraph-with-text-addition/split-para-with-added-text-tracked.odt";
     QTest::newRow("ParagraphSplit-3")  << "ChangeTracking/text/split-paragraph-by-table-addition/para-split-by-table-tracked.odt";
     QTest::newRow("ParagraphSplit-4")  << "ChangeTracking/text/split-paragraph-by-table-and-text/split-para-tracked.odt";
+    QTest::newRow("ParagraphMerge")  << "ChangeTracking/text/simple-paragraph-merge/simple-paragraph-merge-tracked.odt";
+    QTest::newRow("DifferentElementMerge")  << "ChangeTracking/text/different-element-merge/different-element-merge-tracked.odt";
+    QTest::newRow("MultipleParagraphMerge")  << "ChangeTracking/text/multiple-paragraph-merge/multiple-paragraph-merge-tracked.odt";
+    QTest::newRow("MergeAcrossTable")  << "ChangeTracking/text/paragraph-merge-across-table/merge-across-table-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

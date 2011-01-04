@@ -129,6 +129,7 @@ bool KisKraSaveVisitor::visit(KisCloneLayer *layer)
 
 bool KisKraSaveVisitor::visit(KisFilterMask *mask)
 {
+    if (!mask->filter()) return false;
     if (!saveSelection(mask)) return false;
     if (!saveFilterConfiguration(mask)) return false;
     m_count++;

@@ -227,6 +227,7 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
 
 void TestChangeTracking::testChangeTracking()
 {
+    
     QFETCH(QString, testcase);
     QString testFileName = testcase;
     testFileName.prepend(QString(FILES_DATA_DIR));
@@ -242,6 +243,9 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::addColumn<QString>("testcase");
 
     QTest::newRow("SimpleTextInsertion") << "ChangeTracking/text/simple-addition/simple-addition-tracked.odt";
+    QTest::newRow("SimpleTextDeletion")  << "ChangeTracking/text/simple-deletion/simple-deletion-tracked.odt";
+    QTest::newRow("NumberedParagraphAddition")  << "ChangeTracking/text/simple-numbered-paragraph-addition/simple-numbered-paragraph-addition-tracked.odt";
+    QTest::newRow("ParagraphAddition")  << "ChangeTracking/text/simple-paragraph-addition/simple-paragraph-addition-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)
@@ -253,7 +257,7 @@ bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &ro
     originalReadStore->open("content.xml");
     originalDocument.setContent(originalReadStore->device());
     QTextStream originalDocumentStream(&originalDocumentString);
-    originalDocumentStream << originalDocument.documentElement().namedItem("body");
+    originalDocumentStream << originalDocument.documentElement().namedItem("office:body");
     originalReadStore->close();
 
     KoStore *roundTripReadStore = KoStore::createStore(roundTripFileName, KoStore::Read, "", KoStore::Zip);
@@ -263,10 +267,10 @@ bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &ro
     roundTripReadStore->open("content.xml");
     roundTripDocument.setContent(roundTripReadStore->device());
     QTextStream roundTripDocumentStream(&roundTripDocumentString);
-    roundTripDocumentStream << roundTripDocument.documentElement().namedItem("body");
+    roundTripDocumentStream << roundTripDocument.documentElement().namedItem("office:body");
     roundTripReadStore->close();
 
-    bool returnValue = (originalDocumentString == roundTripDocumentString); 
+    bool returnValue = (originalDocumentString == roundTripDocumentString);
     return returnValue;
 }
 

@@ -92,9 +92,11 @@ public:
 
     void restoringDone()
     {
-        ignore = false;
-        moveToolBars();
-        toolOptionsDocker->setVisible(true); // should always be visible
+        if (ignore) {
+            ignore = false;
+            moveToolBars();
+            toolOptionsDocker->setVisible(true); // should always be visible
+        }
     }
 
     void moveToolBarsBack()

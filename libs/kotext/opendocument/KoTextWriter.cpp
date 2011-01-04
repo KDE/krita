@@ -481,7 +481,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
 
     if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
-        splitEndBlockNumber = 1;
+        splitRegionOpened = false;
+        splitEndBlockNumber = -1;
         QString splitId = QString("split") + QString::number(splitIdCounter);
         writer->addAttribute("delta:split-id", splitId);
         int changeId = block.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
@@ -676,7 +677,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         closeChangeRegion();
 
     QTextBlock nextBlock = block.next();
-    if (nextBlock.isValid()) {
+    if (nextBlock.isValid() && deleteMergeRegionOpened) {
         QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
         int changeId = nextBlockFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
@@ -1095,6 +1096,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
                 if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
                     splitRegionOpened = false;
+                    splitEndBlockNumber = -1;
                     closeSplitMergeRegion();
                     postProcessListItemSplit(block.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId));
                 }
@@ -1115,6 +1117,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
     if (closeDelMergeRegion) {
         closeSplitMergeRegion();
+        deleteMergeRegionOpened = false;
+        deleteMergeEndBlockNumber = -1;
         postProcessDeleteMergeXml();
     }
    
@@ -1221,6 +1225,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
             closeSplitMergeRegion();
+            deleteMergeRegionOpened = false;
+            deleteMergeEndBlockNumber = -1;
             postProcessDeleteMergeXml();
         }
 
@@ -1276,7 +1282,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
 
     if (endBlock.blockNumber() != block.blockNumber()) {
         //Check that the last fragment of this block is not a part of this change. If so, it is not a merge or a split
-        QTextFragment lastFragment = (endBlock.end()).fragment();
+        QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
         if (lastFragmentChangeId != splitMergeChangeId) {

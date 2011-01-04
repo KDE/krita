@@ -757,8 +757,14 @@ void Layout::handleTable()
 
             // Position the table. Use position of previous block if it's empty.
             QTextBlock prevBlock = m_block.previous();
-            QPointF pos = prevBlock.length() == 1 ? prevBlock.layout()->lineAt(0).position() : QPointF(x(), y());
 
+            QPointF pos;
+
+            if(prevBlock.length() == 1 && prevBlock.blockNumber() == 0) {
+                pos = prevBlock.layout()->lineAt(0).position();
+            } else {
+                pos = QPointF(x(), y());
+            }
             // Start the first rect of the table.
             //kDebug(32500) << "initial layout about to start at " << pos;
             m_tableLayout.startNewTableRect(pos, shape->size().width(), 0);

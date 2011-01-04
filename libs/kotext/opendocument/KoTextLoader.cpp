@@ -386,6 +386,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                 } else if (tag.namespaceURI() == KoXmlNS::table) {
                     if (localName == "table") {
                         loadTable(tag, cursor);
+                            usedParagraph = false;
                     } else {
                         kWarning(32500) << "KoTextLoader::loadBody unhandled table::" << localName;
                     }
@@ -1195,11 +1196,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
-    //add block before table,
-    if (cursor.block().blockNumber() != 0) {
-        cursor.insertBlock(QTextBlockFormat());
-    }
-
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
     if (!tableStyleName.isEmpty()) {
@@ -1346,7 +1342,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     cursor = tbl->lastCursorPosition();
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 1);
     d->inTable = false;
-
 }
 
 void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)

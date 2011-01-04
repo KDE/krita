@@ -246,6 +246,7 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("SimpleTextDeletion")  << "ChangeTracking/text/simple-deletion/simple-deletion-tracked.odt";
     QTest::newRow("NumberedParagraphAddition")  << "ChangeTracking/text/simple-numbered-paragraph-addition/simple-numbered-paragraph-addition-tracked.odt";
     QTest::newRow("ParagraphAddition")  << "ChangeTracking/text/simple-paragraph-addition/simple-paragraph-addition-tracked.odt";
+    QTest::newRow("ParagraphDeletion")  << "ChangeTracking/text/simple-paragraph-deletion/simple-paragraph-deletion-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

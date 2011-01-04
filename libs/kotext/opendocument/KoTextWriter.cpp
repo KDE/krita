@@ -1485,11 +1485,7 @@ void KoTextWriter::Private::handleParagraphOrHeaderMerge(QTextStream &outputXmlS
             outputXmlStream << "</delta:trailing-partial-content>";
             outputXmlStream << "</delta:merge>";    
         } else {
-            outputXmlStream << "<text:" << mergeEndElement.localName();
-            writeAttributes(outputXmlStream, mergeEndElement);
-            outputXmlStream << ">";
             writeNode(outputXmlStream, node);
-            outputXmlStream << "</text:" << mergeEndElement.localName() << ">";    
         }
     }
 

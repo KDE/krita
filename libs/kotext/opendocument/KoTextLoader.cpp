@@ -1782,9 +1782,13 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
     //add block before table,
-    if (cursor.block().blockNumber() != 0) {
-        cursor.insertBlock(QTextBlockFormat());
-    }
+    // **************This Should Be fixed: Just Commenting out for now***************
+    // An Empty block before a table would result in a <p></p> before a table
+    // After n round-trips we would end-up with n <p></p> before table. 
+    // ******************************************************************************
+    //if (cursor.block().blockNumber() != 0) {
+    //    cursor.insertBlock(QTextBlockFormat());
+    //}
 
     QTextTableFormat tableFormat;
     QString tableStyleName = tableElem.attributeNS(KoXmlNS::table, "style-name", "");
@@ -1795,12 +1799,16 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
     }
 
     // if table has master page style property, copy it to block before table, because this block belongs to table
-    QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
-    if (!masterStyle.isNull()) {
-        QTextBlockFormat textBlockFormat;
-        textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
-        cursor.setBlockFormat(textBlockFormat);
-    }
+    // **************This Should Be fixed: Just Commenting out for now***************
+    // An Empty block before a table would result in a <p></p> before a table
+    // After n round-trips we would end-up with n <p></p> before table. 
+    // ******************************************************************************
+    //QVariant masterStyle = tableFormat.property(KoTableStyle::MasterPageName);
+    //if (!masterStyle.isNull()) {
+    //    QTextBlockFormat textBlockFormat;
+    //    textBlockFormat.setProperty(KoParagraphStyle::MasterPageName,masterStyle);
+    //    cursor.setBlockFormat(textBlockFormat);
+    //}
 
     KoTableColumnAndRowStyleManager *tcarManager = new KoTableColumnAndRowStyleManager;
     tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, QVariant::fromValue(reinterpret_cast<void *>(tcarManager)));

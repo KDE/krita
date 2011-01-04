@@ -247,8 +247,10 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("NumberedParagraphAddition")  << "ChangeTracking/text/simple-numbered-paragraph-addition/simple-numbered-paragraph-addition-tracked.odt";
     QTest::newRow("ParagraphAddition")  << "ChangeTracking/text/simple-paragraph-addition/simple-paragraph-addition-tracked.odt";
     QTest::newRow("ParagraphDeletion")  << "ChangeTracking/text/simple-paragraph-deletion/simple-paragraph-deletion-tracked.odt";
-    QTest::newRow("ParagraphSplit")  << "ChangeTracking/text/simple-paragraph-split/simple-paragraph-split-tracked.odt";
+    QTest::newRow("ParagraphSplit-1")  << "ChangeTracking/text/simple-paragraph-split/simple-paragraph-split-tracked.odt";
     QTest::newRow("ParagraphSplit-2")  << "ChangeTracking/text/split-paragraph-with-text-addition/split-para-with-added-text-tracked.odt";
+    QTest::newRow("ParagraphSplit-3")  << "ChangeTracking/text/split-paragraph-by-table-addition/para-split-by-table-tracked.odt";
+    QTest::newRow("ParagraphSplit-4")  << "ChangeTracking/text/split-paragraph-by-table-and-text/split-para-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

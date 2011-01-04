@@ -62,8 +62,6 @@ KisSmudgeOp::~KisSmudgeOp()
 {
 }
 
-
-
 qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     // Simple error catching
@@ -103,20 +101,28 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
         brush->mask(maskDab, painter()->paintColor(), scale, scale, 0.0, info, 0.0, 0.0);
     }
     
-    // transforms the fixed paint device with the current brush to alpha color space (to use it as alpha/transparency mask)
+    // transforms the fixed paint device with the current brush to alpha color space
+    // to use it as an alpha/transparency mask
     maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     
-    // GET the opacy calculated by the rate option (apply is misleading because the opacy will not be applied)
-    quint8 newOpacity = m_rateOption.apply(OPACITY_OPAQUE_U8, info);
+    // save the old opacity value and composite mode
+    quint8               oldOpacity = painter()->opacity();
+    const KoCompositeOp* oldMode    = painter()->compositeOp();
     
     if(!m_firstRun) {
+        // set opacity calculated by the rate option (but fit the rate inbetween the range 0.0 - 0.5)
+        m_rateOption.apply(painter(), info, 0.0, 0.5);
+        
         // set opacity calculated by the rate option
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
-        painter()->setOpacity(newOpacity);
         painter()->setCompositeOp(COMPOSITE_OVER);
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
-        painter()->setOpacity(newOpacity);
+        
+        // apply the opacity rate calculated by the rate option for smudging the alpha channel
+        // (this time we use the full range of the rate value)
+        m_rateOption.apply(painter(), info);
+        
         painter()->setCompositeOp(COMPOSITE_COPY_OPACITY);
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
     }
@@ -138,9 +144,9 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)
     if(m_compositeOption.isChecked()) {
-        // this will apply the composite mode and the opacy (selected by the user)
-        // to copyPainter
-        m_compositeOption.apply(&copyPainter, OPACITY_OPAQUE_U8, info);
+        // this will apply the opacy and the composite mode (selected by the user) to copyPainter
+        m_compositeOption.applyOpacityRate(&copyPainter, info, 0.0, 0.5);
+        m_compositeOption.applyCompositeOp(&copyPainter);
         
         // paint a rectangle with the current color (foreground color)
         // into the temporary painting device
@@ -150,5 +156,10 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     
     copyPainter.end();
+    
+    // restore orginal opacy and composite mode values
+    painter()->setOpacity(oldOpacity);
+    painter()->setCompositeOp(oldMode);
+    
     return spacing(scale);
 }

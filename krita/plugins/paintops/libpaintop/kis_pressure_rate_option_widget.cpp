@@ -19,6 +19,8 @@
  */
 
 #include "kis_pressure_rate_option_widget.h"
+#include "kis_pressure_rate_option.h"
+#include <kis_slider_spin_box.h>
 
 #include <QWidget>
 #include <QCheckBox>
@@ -29,23 +31,23 @@
 
 #include <klocale.h>
 
-#include "kis_pressure_rate_option.h"
-
 KisPressureRateOptionWidget::KisPressureRateOptionWidget()
     : KisCurveOptionWidget(new KisPressureRateOption())
 {
     QWidget* w = new QWidget;
     QLabel* rateLabel = new QLabel(i18n("Rate: "));
-    m_rateSlider = new QSlider();
-    m_rateSlider->setMinimum(0);
-    m_rateSlider->setMaximum(100);
-    m_rateSlider->setPageStep(1);
-    m_rateSlider->setValue(90);
-    m_rateSlider->setOrientation(Qt::Horizontal);
-    connect(m_rateSlider, SIGNAL(valueChanged(int)),SLOT(rateChanged(int)));
+    m_rateSlider = new KisDoubleSliderSpinBox();
+    m_rateSlider->setRange(0.0, 1.0, 2);
+    m_rateSlider->setSingleStep(0.01);
+    m_rateSlider->setValue(0.3);
+    m_rateSlider->setSuffix("%");
+    
+    connect(m_rateSlider, SIGNAL(valueChanged(qreal)),SLOT(rateChanged(qreal)));
+    
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(rateLabel);
     hl->addWidget(m_rateSlider);
+    hl->setStretchFactor(m_rateSlider, 1);
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->addLayout(hl);
@@ -62,7 +64,7 @@ void KisPressureRateOptionWidget::readOptionSetting(const KisPropertiesConfigura
     m_rateSlider->setValue(static_cast<KisPressureRateOption*>(curveOption())->rate());
 }
 
-void KisPressureRateOptionWidget::rateChanged(int rate)
+void KisPressureRateOptionWidget::rateChanged(qreal rate)
 {
     static_cast<KisPressureRateOption*>(curveOption())->setRate(rate);
     emit sigSettingChanged();

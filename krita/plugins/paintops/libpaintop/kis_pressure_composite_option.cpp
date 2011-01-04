@@ -47,25 +47,26 @@ void KisPressureCompositeOption::readOptionSetting(const KisPropertiesConfigurat
 {
     KisCurveOption::readOptionSetting(setting);
     m_compositeOp = setting->getString("CompositeOp");
-    m_rate        = setting->getInt("CompositeRateValue");
+    m_rate        = setting->getDouble("CompositeRateValue");
     
     if(m_compositeOp == "") //TODO: test if compositeOp is valid instead of just testing for an empty string
         m_compositeOp = COMPOSITE_OVER;
 }
 
-void KisPressureCompositeOption::apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const
+
+void KisPressureCompositeOption::applyOpacityRate(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax) const
 {
     if(!isChecked())
         return;
     
-    QString oldCompositeOp = painter->compositeOp()->id();
+    qreal  rate    = scaleMin + (scaleMax - scaleMin) * m_rate; // scale m_rate into the range scaleMin - scaleMax
+    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
     
-    opacity = (m_rate * 255) / 100;
-    opacity = qBound((qint32)OPACITY_TRANSPARENT_U8,
-                     (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
-                     (qint32)OPACITY_OPAQUE_U8);
-    
-    painter->setCompositeOp(m_compositeOp);
     painter->setOpacity(opacity);
 }
 
+void KisPressureCompositeOption::applyCompositeOp(KisPainter* painter) const
+{
+    if(isChecked())
+        painter->setCompositeOp(m_compositeOp);
+}

@@ -20,6 +20,7 @@
 #include "kis_pressure_composite_option_widget.h"
 #include "kis_pressure_composite_option.h"
 
+#include <kis_slider_spin_box.h>
 #include <KoCompositeOp.h>
 
 #include <QWidget>
@@ -31,6 +32,8 @@
 #include <QGridLayout>
 
 #include <klocale.h>
+
+const static int MAX_SLIDER_VALUE = 1000;
 
 KisPressureCompositeOptionWidget::KisPressureCompositeOptionWidget()
     : KisCurveOptionWidget(new KisPressureCompositeOption())
@@ -52,21 +55,21 @@ KisPressureCompositeOptionWidget::KisPressureCompositeOptionWidget()
     m_compositeOpBox->addItem(COMPOSITE_HARD_LIGHT);
     m_compositeOpBox->addItem(COMPOSITE_SOFT_LIGHT);
     
-    m_rateSlider = new QSlider();
-    m_rateSlider->setMinimum(0);
-    m_rateSlider->setMaximum(100);
-    m_rateSlider->setPageStep(1);
-    m_rateSlider->setValue(90);
-    m_rateSlider->setOrientation(Qt::Horizontal);
+    m_rateSlider = new KisDoubleSliderSpinBox();
+    m_rateSlider->setRange(0.0, 1.0, 2);
+    m_rateSlider->setValue(0.3);
+    m_rateSlider->setSingleStep(0.01);
+    m_rateSlider->setSuffix("%");
     
     connect(m_compositeOpBox, SIGNAL(activated(QString)), this, SLOT(compositeOpChanged(QString)));
-    connect(m_rateSlider, SIGNAL(valueChanged(int)), this, SLOT(rateChanged(int)));
+    connect(m_rateSlider, SIGNAL(valueChanged(qreal)), this, SLOT(rateChanged(qreal)));
     
     QGridLayout* gridLayout = new QGridLayout();
     gridLayout->addWidget(modeLabel, 0, 0);
     gridLayout->addWidget(m_compositeOpBox, 0, 1);
     gridLayout->addWidget(rateLabel, 1, 0);
     gridLayout->addWidget(m_rateSlider, 1, 1);
+    gridLayout->setColumnStretch(1, 1);
 
     QVBoxLayout* vBoxLayout = new QVBoxLayout;
     vBoxLayout->addLayout(gridLayout);
@@ -102,7 +105,7 @@ void KisPressureCompositeOptionWidget::compositeOpChanged(const QString& composi
     emit sigSettingChanged();
 }
 
-void KisPressureCompositeOptionWidget::rateChanged(int rate)
+void KisPressureCompositeOptionWidget::rateChanged(qreal rate)
 {
     static_cast<KisPressureCompositeOption*>(curveOption())->setRate(rate);
     emit sigSettingChanged();

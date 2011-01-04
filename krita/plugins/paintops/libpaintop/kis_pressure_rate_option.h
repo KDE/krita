@@ -27,6 +27,7 @@
 
 class QSlider;
 class KisPropertiesConfiguration;
+class KisPainter;
 
 /**
  * The pressure opacity option defines a curve that is used to
@@ -39,21 +40,19 @@ public:
 
     /**
      * Set the opacity of the painter based on the rate
-     * and the curve (if checked) and return the old opacity
-     * of the painter.
+     * and the curve (if checked)
      */
-    quint8 apply(quint8 opacity, const KisPaintInformation& info) const;
+    void apply(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    void setRate(int rate);
-    
-    int rate() const;
+    void setRate(qreal rate) { m_rate = rate; }
+    qreal rate() const { return m_rate; }
     
 private:
-    int m_rate;
+    qreal m_rate;
 };
 
 #endif

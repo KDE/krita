@@ -23,7 +23,7 @@
 #include "kis_curve_option_widget.h"
 
 class QComboBox;
-class QSlider;
+class KisDoubleSliderSpinBox;
 
 class PAINTOP_EXPORT KisPressureCompositeOptionWidget : public KisCurveOptionWidget
 {
@@ -36,11 +36,11 @@ public:
     
 private slots:
      void compositeOpChanged(const QString& compositeOp);
-     void rateChanged(int rate);
+     void rateChanged(qreal rate);
     
 private:
     QComboBox* m_compositeOpBox;
-    QSlider*   m_rateSlider;
+    KisDoubleSliderSpinBox* m_rateSlider;
 };
 
 #endif // KIS_PRESSURE_COMPOSITE_OPTION_WIDGET_H

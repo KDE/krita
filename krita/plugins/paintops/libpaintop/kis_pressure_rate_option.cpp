@@ -22,7 +22,7 @@
 
 #include <klocale.h>
 
-#include <kis_paint_device.h>
+#include <kis_painter.h>
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
@@ -33,44 +33,26 @@ KisPressureRateOption::KisPressureRateOption()
 {
 }
 
-void KisPressureRateOption::setRate(int rate)
-{
-    m_rate = rate;
-}
-
-int KisPressureRateOption::rate() const
-{
-    return m_rate;
-}
-
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty("RateValue", m_rate);
-    setting->setProperty("RateVersion", "2");
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    if (setting->getString("RateVersion", "1") == "1") {
-        m_rate = setting->getInt("RatePressure");
-        setChecked(true);
-    } else {
-        m_rate = setting->getInt("RateValue");
-    }
+    m_rate = setting->getDouble("RateValue");
 }
 
-quint8 KisPressureRateOption::apply(quint8 opacity, const KisPaintInformation& info) const
+void KisPressureRateOption::apply(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax) const
 {
-    opacity = (m_rate * 255) / 100;
+    if(!isChecked())
+        return;
+    
+    qreal  rate    = scaleMin + (scaleMax - scaleMin) * m_rate;
+    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(m_rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
 
-    if (isChecked()) {
-        opacity = qBound((qint32)OPACITY_TRANSPARENT_U8,
-                         (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
-                         (qint32)OPACITY_OPAQUE_U8);
-    }
-
-    return opacity;
+    painter->setOpacity(opacity);
 }
 

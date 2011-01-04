@@ -38,7 +38,8 @@ public:
      * Set the composite mode and opacity of the painter based on the user selection
      * and the pressure curve (if checked)
      */
-    void apply(KisPainter* painter, qint8 opacity, const KisPaintInformation& info) const;
+    void applyOpacityRate(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0) const;
+    void applyCompositeOp(KisPainter* painter) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
@@ -46,12 +47,12 @@ public:
     void setCompositeOp(const QString& compositeOp) { m_compositeOp = compositeOp; }
     QString getCompositeOp() { return m_compositeOp; }
     
-    void setRate(int rate) { m_rate = rate; }
-    int getRate() { return m_rate; }
+    void setRate(qreal rate) { m_rate = qBound(0.0, rate, 1.0); }
+    qreal getRate() const { return m_rate; }
     
 private:
     QString m_compositeOp;
-    int     m_rate;
+    qreal   m_rate;
 };
 
 #endif // KIS_PRESSURE_COMPOSITE_OPTION_H

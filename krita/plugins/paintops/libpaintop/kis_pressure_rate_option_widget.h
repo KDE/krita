@@ -22,7 +22,7 @@
 
 #include "kis_curve_option_widget.h"
 
-class QSlider;
+class KisDoubleSliderSpinBox;
 
 class PAINTOP_EXPORT KisPressureRateOptionWidget : public KisCurveOptionWidget
 {
@@ -34,10 +34,10 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 private slots:
-    void rateChanged(int rate);
+    void rateChanged(qreal rate);
     
 private:
-    QSlider* m_rateSlider;
+    KisDoubleSliderSpinBox* m_rateSlider;
 };
 
 #endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H

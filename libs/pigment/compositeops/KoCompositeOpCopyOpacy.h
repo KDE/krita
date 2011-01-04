@@ -56,6 +56,8 @@ public:
                    quint8 U8_opacity,
                    const QBitArray & channelFlags) const
     {
+        Q_UNUSED(channelFlags);
+        
         bool          useMask = maskRowStart != 0;
         channels_type opacity = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
         

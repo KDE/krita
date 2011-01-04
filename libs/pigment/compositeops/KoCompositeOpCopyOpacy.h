@@ -37,7 +37,7 @@ class KoCompositeOpCopyOpacy : public KoCompositeOp
     
 public:
     KoCompositeOpCopyOpacy(const KoColorSpace * cs)
-        : KoCompositeOp(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Opacy"), KoCompositeOp::categoryArithmetic(), true) {
+        : KoCompositeOp(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Opacy"), KoCompositeOp::categoryMix(), false) {
     }
     
 public:

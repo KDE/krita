@@ -135,6 +135,7 @@ set(TestSections_test_SRCS
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextLine.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})

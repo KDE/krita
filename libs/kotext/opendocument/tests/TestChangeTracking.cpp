@@ -269,6 +269,13 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("List Item Deletion")  << "ChangeTracking/lists/deleted-list-item/deleted-list-item-tracked.odt";
     QTest::newRow("List Item Merge")  << "ChangeTracking/lists/list-item-merge/list-item-merge-tracked.odt";
     QTest::newRow("List Item Split")  << "ChangeTracking/lists/list-item-split/list-item-split-tracked.odt";
+
+    //Table unit-test-cases
+    QTest::newRow("Added Table")  << "ChangeTracking/tables/added-table/added-table-tracked.odt";
+    QTest::newRow("Added Row")  << "ChangeTracking/tables/added-row/added-row-tracked.odt";
+    QTest::newRow("Deleted Row")  << "ChangeTracking/tables/deleted-row/deleted-row-tracked.odt";
+    QTest::newRow("Added Column")  << "ChangeTracking/tables/added-column/added-column-tracked.odt";
+    QTest::newRow("Deleted Column")  << "ChangeTracking/tables/deleted-column/deleted-column-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

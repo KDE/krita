@@ -233,13 +233,12 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
 {
     int changeId = 0;
     QTextCursor cursor(document);
-    cursor.setPosition(position + 1);
-    QTextCharFormat charFormat = cursor.charFormat();
     QTextBlock block = document->findBlock(position);
 
     switch (elementType) {
         case KoTextWriter::Private::Span:
-            changeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
+            cursor.setPosition(position + 1);
+            changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
             break;
         case KoTextWriter::Private::ParagraphOrHeader:
             changeId = checkForBlockChange(block);
@@ -281,7 +280,7 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
         writer->startElement("delta:removed-content", false);
         writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
     }
-
+    
     return changeId;
 }
 

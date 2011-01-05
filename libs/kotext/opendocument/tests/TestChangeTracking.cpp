@@ -267,6 +267,8 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Sub-List Insertion Partial")  << "ChangeTracking/lists/added-sublist-partial/added-sublist-partial-tracked.odt";
     QTest::newRow("List Deletion")  << "ChangeTracking/lists/deleted-list/deleted-list-tracked.odt";
     QTest::newRow("List Item Deletion")  << "ChangeTracking/lists/deleted-list-item/deleted-list-item-tracked.odt";
+    QTest::newRow("List Item Merge")  << "ChangeTracking/lists/list-item-merge/list-item-merge-tracked.odt";
+    QTest::newRow("List Item Split")  << "ChangeTracking/lists/list-item-split/list-item-split-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

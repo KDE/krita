@@ -184,8 +184,7 @@ public:
             lockButton->setParent(q);
             lockButton->show();
         }
-        lockButton->move(q->width() - lockButton->width() - scrollArea->verticalScrollBar()->sizeHint().width() - (hasTitle ? 24 : 4), lockButton->y());
-        tabButton->move(lockButton->x()  - tabButton->width() - 4, lockButton->y());
+        q->resizeEvent(0);
     }
     void toggleTab()
     {
@@ -206,9 +205,17 @@ KoToolDocker::KoToolDocker(QWidget *parent)
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::TopDockWidgetArea);
 
+    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
+    d->tabbed = cfg.readEntry("TabbedMode", false);
+    d->hasTitle = cfg.readEntry("Locked", true);
+
     toggleViewAction()->setVisible(false); //should always be visible, so hide option in menu
-    setFeatures(AllDockWidgetFeatures);
-    setTitleBarWidget(new QWidget());
+    setFeatures(DockWidgetMovable|DockWidgetFloatable);
+    if (d->hasTitle) {
+        setTitleBarWidget(new KoDockWidgetTitleBar(this));
+    } else {
+        setTitleBarWidget(new QWidget());
+    }
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
@@ -227,30 +234,32 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     setWidget(d->scrollArea);
 
     d->lockButton = new QToolButton(this);
-    d->lockButton->setIcon(d->lockIcon);
+    if (d->hasTitle) {
+        d->lockButton->setIcon(d->unlockIcon);
+    } else {
+        d->lockButton->setIcon(d->lockIcon);
+    }
     d->lockButton->setToolTip(i18n("Toggles showing a title bar"));
     d->lockButton->setAutoRaise(true);
     connect(d->lockButton, SIGNAL(clicked()), SLOT(toggleLock()));
     d->lockButton->setVisible(true);
     d->lockButton->resize(d->lockButton->sizeHint());
-    d->hasTitle = false;
 
-    d->tabButton = new QToolButton(0); // parent hack in toggleLock to keep it clickable
+    d->tabButton = new QToolButton(this); // parent hack in toggleLock to keep it clickable
     d->tabButton->setIcon(d->tabIcon);
     d->tabButton->setToolTip(i18n("Toggles organising the options in tabs or not"));
     d->tabButton->setAutoRaise(true);
     connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
-    d->tabButton->setVisible(false);
     d->tabButton->resize(d->tabButton->sizeHint());
-
-    KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
-    d->tabbed = cfg.readEntry("TabbedMode", false);
+    d->tabButton->setVisible(d->hasTitle);
 }
 
 KoToolDocker::~KoToolDocker()
 {
     KConfigGroup cfg = KGlobal::config()->group("DockWidget sharedtooldocker");
     cfg.writeEntry("TabbedMode", d->tabbed);
+    cfg.writeEntry("Locked", d->hasTitle);
+    cfg.sync();
 
     delete d;
 }
@@ -268,10 +277,8 @@ void KoToolDocker::setOptionWidgets(const QMap<QString, QWidget *> &optionWidget
 void KoToolDocker::resizeEvent(QResizeEvent*)
 {
     int fw = isFloating() ? style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, this) : 0;
-    int mw = style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, this);
-    QFontMetrics titleFontMetrics = fontMetrics();
-    d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width() - (d->hasTitle ? 24 : 4), fw + mw);
-    d->tabButton->move(d->lockButton->x()  - d->tabButton->width() - 4, d->lockButton->y());
+    d->lockButton->move(width() - d->lockButton->width() - d->scrollArea->verticalScrollBar()->sizeHint().width(), fw);
+    d->tabButton->move(d->lockButton->x() - d->tabButton->width() - 2, d->lockButton->y());
 }
 
 #include <KoToolDocker_p.moc>

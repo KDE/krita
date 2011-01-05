@@ -50,6 +50,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/FontDia.cpp
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
     ../dialogs/SimpleParagraphWidget.cpp
@@ -186,6 +187,7 @@ set(TestTextTool_test_SRCS
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
     ../dialogs/ListStyleButton.cpp
@@ -234,6 +236,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
     ../dialogs/ListStyleButton.cpp

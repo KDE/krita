@@ -2,6 +2,7 @@
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (C) 2011      Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -105,7 +106,6 @@ private:
     void setEnabledInternal(bool value);
 
 private slots:
-
     void updatePaintops();
     void nodeChanged(const KisNodeSP node);
     void eraseModeToggled(bool checked);
@@ -113,6 +113,7 @@ private slots:
     void slotSetCompositeMode(const QString& compositeOp);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
+    void slotWatchPresetNameLineEdit(const QString& text);
 
 private:
 

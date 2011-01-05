@@ -441,16 +441,17 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
 #endif
+        // load the viewbox
+        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
+        if (!viewBox.isEmpty()) {
+            m_viewBox = viewBox;
+        }
+
         if (!path.isEmpty()) {
             parsePathData(path);
         }
 
-        // load the viewbox
-        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
-        if (! viewBox.isEmpty()) {
-            m_viewBox = viewBox;
-        }
-        else {
+        if (viewBox.isEmpty()) {
             // if there is no view box defined make it is big as the path.
             m_viewBox = m_viewBound;
         }

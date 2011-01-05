@@ -297,7 +297,9 @@ KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpac
         KoColorSpace* cs = d->colorSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
         return cs;
     }
-    warnPigment << "Unknow factory " << colorSpace->id() << " returning the colorspace itself";
+    if (colorSpace->id() != "ALPHA") {
+        warnPigment << "Unknow factory " << colorSpace->id() << " returning the colorspace itself";
+    }
     return const_cast<KoColorSpace*>(colorSpace);
 }
 

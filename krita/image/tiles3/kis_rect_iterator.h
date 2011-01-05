@@ -44,6 +44,8 @@ public:
     bool nextPixel();
     const quint8 * oldRawData() const;
     quint8 * rawData();
+    qint32 x() const;
+    qint32 y() const;
 
 protected:
     qint32 m_x;

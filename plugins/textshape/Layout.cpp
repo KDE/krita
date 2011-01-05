@@ -773,8 +773,14 @@ void Layout::handleTable()
 
             // Position the table. Use position of previous block if it's empty.
             QTextBlock prevBlock = m_block.previous();
-            QPointF pos = prevBlock.length() == 1 ? prevBlock.layout()->lineAt(0).position() : QPointF(x(), y());
 
+            QPointF pos;
+
+            if(prevBlock.length() == 1 && prevBlock.blockNumber() == 0) {
+                pos = prevBlock.layout()->lineAt(0).position();
+            } else {
+                pos = QPointF(x(), y());
+            }
             // Start the first rect of the table.
             //kDebug(32500) << "initial layout about to start at " << pos;
             m_tableLayout.startNewTableRect(pos, shape->size().width(), 0);
@@ -1212,7 +1218,6 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             m_tableLayout.setTable(table);
@@ -1223,7 +1228,7 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
                 retval.setBottom(m_tableLayout.cellBoundingRect(table->cellAt(table->lastPosition())).bottom());
                 return retval;
             }
-        } /*else if (subFrame) {
+        } /*else if (it.currentFrame()) { // subframe?
             // right now we don't care about sections
             textRectFrame(QTextFrame *frame, QTextCursor &cursor);
             continue;

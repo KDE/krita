@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -112,6 +113,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
+    
+    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
+            this, SIGNAL(presetNameLineEditChanged(QString)));
             
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
@@ -161,9 +165,6 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     }
 
     if (widget) {
-
-        
-        
         widget->setFont(m_d->smallFont);
 
         m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
@@ -173,6 +174,22 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
         widget->show();
     }
 }
+
+void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
+{
+    QPalette palette;
+    
+    if (change) {
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+    else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+}
+
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
@@ -239,6 +256,11 @@ void KisPaintOpPresetsPopup::hideScratchPad()
 void KisPaintOpPresetsPopup::showScratchPad()
 {
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
+}
+
+void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+{
+	m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
 

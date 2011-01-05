@@ -26,7 +26,7 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/StylesWidget.h"
+#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -1587,7 +1587,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     QMap<QString, QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    StylesWidget *styw = new StylesWidget(0);
+    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
@@ -1604,17 +1604,17 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
 
 
     // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(styw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(styw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(styw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     updateStyleManager();
     if (m_textShape)
         updateActions();
     widgets.insert(i18n("Character"), scw);
     widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), styw);
+    widgets.insert(i18n("Styles"), ssw);
     widgets.insert(i18n("Table"), stw);
     return widgets;
 }

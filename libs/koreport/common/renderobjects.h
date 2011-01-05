@@ -52,7 +52,7 @@ class KOREPORT_EXPORT ORODocument
     friend class OROSection;
 public:
     ORODocument(const QString & = QString());
-    virtual ~ORODocument();
+    ~ORODocument();
 
     QString title() const {
         return m_title;
@@ -96,7 +96,7 @@ class KOREPORT_EXPORT OROPage
 
 public:
     OROPage(ORODocument * = 0);
-    virtual ~OROPage();
+    ~OROPage();
 
     ORODocument* document() const {
         return m_document;
@@ -131,7 +131,7 @@ public:
     };
 
     OROSection(ORODocument * = 0);
-    virtual ~OROSection();
+    ~OROSection();
 
     void setHeight(int);
     int height();
@@ -142,7 +142,6 @@ public:
     ORODocument* document() const {
         return m_document;
     };
-    long row() const; // returns this pages current page number
 
     void setType(KRSectionData::Section t) {
         m_type = t;

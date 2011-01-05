@@ -40,20 +40,20 @@ class KoPrintingDialogPrivate {
 public:
     KoPrintingDialogPrivate(KoPrintingDialog *dia)
         : parent(dia),
-        stop(true),
-        shapeManager(0),
-        painter(0),
-        printer(new QPrinter()),
-        index(0),
-        progress(0),
-        dialog(0),
-        removePolicy(KoPrintJob::DoNotDelete)
+          stop(true),
+          shapeManager(0),
+          painter(0),
+          printer(new QPrinter()),
+          index(0),
+          progress(0),
+          dialog(0),
+          removePolicy(KoPrintJob::DoNotDelete)
     {
         action = new KoAction(parent);
         QObject::connect(action, SIGNAL(triggered (const QVariant&)),
-                parent, SLOT(preparePage(const QVariant&)), Qt::DirectConnection);
+                         parent, SLOT(preparePage(const QVariant&)), Qt::DirectConnection);
         QObject::connect(action, SIGNAL(updateUi (const QVariant&)),
-                parent, SLOT(printPage(const QVariant&)), Qt::DirectConnection);
+                         parent, SLOT(printPage(const QVariant&)), Qt::DirectConnection);
     }
 
     ~KoPrintingDialogPrivate() {
@@ -130,30 +130,35 @@ public:
         painter->save();
         parent->printPage(page.toInt(), *painter);
         painter->restore();
-        if (!stop && shapeManager)
+        if (!stop && shapeManager) {
             shapeManager->paint(*painter, zoomer, true);
+        }
         painter->restore(); // state before page preparation
 
-        if (parent->property("blocking").toBool())
-            return;
-        if (!stop && index < pages.count()) {
-            pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
-            action->execute(pages[index++]);
+        if (parent->property("blocking").toBool()) {
             return;
         }
 
-        // printing done!
-        painter->end();
-        progress->cancel();
-        parent->printingDone();
-        pageNumber->setText(i18n("Printing done"));
-        button->setText(i18n("Close"));
-        stop = true;
-        QTimer::singleShot(1200, dialog, SLOT(accept()));
-        if (removePolicy == KoPrintJob::DeleteWhenDone)
-            parent->deleteLater();
-        else
-            resetValues();
+        if (!stop && index < pages.count()) {
+            pageNumber->setText(i18n("Printing page %1", QString::number(pages[index])));
+            action->execute(pages[index++]);
+        }
+        else {
+            // printing done!
+            painter->end();
+            progress->cancel();
+            parent->printingDone();
+            pageNumber->setText(i18n("Printing done"));
+            button->setText(i18n("Close"));
+            stop = true;
+            QTimer::singleShot(1200, dialog, SLOT(accept()));
+            if (removePolicy == KoPrintJob::DeleteWhenDone) {
+                parent->deleteLater();
+            }
+            else {
+                resetValues();
+            }
+        }
     }
 
     void stopPressed() {
@@ -214,7 +219,7 @@ public:
 
 KoPrintingDialog::KoPrintingDialog(QWidget *parent)
     : KoPrintJob(parent),
-    d(new KoPrintingDialogPrivate(this))
+      d(new KoPrintingDialogPrivate(this))
 {
     d->dialog = new PrintDialog(d, parent);
 
@@ -282,7 +287,7 @@ void KoPrintingDialog::startPrinting(RemovePolicy removePolicy)
         d->stop = false;
         delete d->painter;
         d->painter = 0;
-	d->zoomer.setZoom( 1.0 );
+        d->zoomer.setZoom( 1.0 );
         d->zoomer.setDpi( d->printer->resolution(), d->printer->resolution() );
 
         d->progress->start();

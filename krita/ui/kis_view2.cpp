@@ -860,7 +860,7 @@ void KisView2::slotFirstRun()
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
         doc->addShell(shell);
-        doc->showStartUpWidget(shell);
+        doc->showStartUpWidget(shell, true);
         doc->openUrl(fname);
     }
 

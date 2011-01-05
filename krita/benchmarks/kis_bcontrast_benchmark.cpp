@@ -86,11 +86,8 @@ void KisBContrastBenchmark::benchmarkFilter()
         kfc->fromXML(s);
     }
 
-    KisConstProcessingInformation src(m_device,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(m_device, QPoint(0, 0), 0);
-
     QBENCHMARK{
-        filter->process(src, dst, QSize(GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), kfc);
+        filter->process(m_device, QRect(0, 0, GMP_IMAGE_WIDTH,GMP_IMAGE_HEIGHT), kfc);
     }
 }
 

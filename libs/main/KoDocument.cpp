@@ -2490,9 +2490,9 @@ void KoDocument::deleteOpenPane()
         d->startUpWidget->hide();
         d->startUpWidget->deleteLater();
 
-        shells().first()->factory()->container("mainToolBar",
-                                               shells().first())->show();
         shells().first()->setRootDocument(this);
+
+        shells().first()->factory()->container("mainToolBar", shells().first())->show();
     } else {
         emit closeEmbedInitDialog();
     }

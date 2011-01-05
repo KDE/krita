@@ -31,7 +31,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
@@ -535,17 +534,14 @@ void EnhancedPathShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void EnhancedPathShape::updateTextArea()
 {
-    KoTextOnShapeContainer* tosContainer = dynamic_cast<KoTextOnShapeContainer*>(parent());
-    if (tosContainer) {
-        tosContainer->setResizeBehavior(KoTextOnShapeContainer::TextFollowsPreferredTextRect);
-        QRectF r = m_viewBox;
-        if (m_textArea.size() >= 4) {
-            r.setLeft(evaluateConstantOrReference(m_textArea[0]));
-            r.setTop(evaluateConstantOrReference(m_textArea[1]));
-            r.setRight(evaluateConstantOrReference(m_textArea[2]));
-            r.setBottom(evaluateConstantOrReference(m_textArea[3]));
-        }
-        r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
-        tosContainer->setPreferredTextRect(r);
+    setResizeBehavior(TextFollowsPreferredTextRect);
+    QRectF r = m_viewBox;
+    if (m_textArea.size() >= 4) {
+        r.setLeft(evaluateConstantOrReference(m_textArea[0]));
+        r.setTop(evaluateConstantOrReference(m_textArea[1]));
+        r.setRight(evaluateConstantOrReference(m_textArea[2]));
+        r.setBottom(evaluateConstantOrReference(m_textArea[3]));
     }
+    r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
+    setPreferredTextRect(r);
 }

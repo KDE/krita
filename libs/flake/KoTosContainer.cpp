@@ -42,6 +42,7 @@ KoTosContainerPrivate::~KoTosContainerPrivate()
 
 
 KoTosContainer::KoTosContainer()
+: KoShapeContainer(*(new KoTosContainerPrivate(this)))
 {
 }
 
@@ -172,6 +173,23 @@ Qt::Alignment KoTosContainer::textAlignment() const
     answer = answer | (cursor.blockFormat().alignment() & Qt::AlignHorizontal_Mask);
 
     return answer;
+}
+
+void KoTosContainer::setPreferredTextRect(const QRectF &rect)
+{
+    Q_D(KoTosContainer);
+    d->preferredTextRect = rect;
+    KoShape *textShape = this->textShape();
+    if (d->resizeBehavior == TextFollowsPreferredTextRect && textShape) {
+        textShape->setPosition(rect.topLeft());
+        textShape->setSize(rect.size());
+    }
+}
+
+QRectF KoTosContainer::preferredTextRect() const
+{
+    Q_D(const KoTosContainer);
+    return d->preferredTextRect;
 }
 
 KoShape *KoTosContainer::createTextShape(KoResourceManager *documentResources)

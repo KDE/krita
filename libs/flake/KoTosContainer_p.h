@@ -14,6 +14,7 @@ public:
     virtual ~KoTosContainerPrivate();
 
     KoTosContainer::ResizeBehavior resizeBehavior;
+    QRectF preferredTextRect;
 };
 
 #endif // KOTOSCONTAINER_P_H

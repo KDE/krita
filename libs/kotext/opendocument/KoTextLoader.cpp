@@ -989,10 +989,11 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
         //Don't do anything
     } else {
         if ((e.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content") || (e.localName() == "remove-leaving-content-start")) {
-            if (!d->checkForListItemSplit(e)) {
-                _node = loadDeleteMerges(e,&generatedXmlString);
-            } else {
+            //Check whether this is a list-item split or a merge
+            if ((e.localName() == "remove-leaving-content-start") && d->checkForListItemSplit(e)) {
                 _node = d->loadListItemSplit(e, &generatedXmlString);
+            } else {
+                _node = loadDeleteMerges(e,&generatedXmlString);
             }
 
             //Parse and Load the generated xml

@@ -241,20 +241,28 @@ void TestChangeTracking::testChangeTracking()
 void TestChangeTracking::testChangeTracking_data()
 {
     QTest::addColumn<QString>("testcase");
-
-    QTest::newRow("SimpleTextInsertion") << "ChangeTracking/text/simple-addition/simple-addition-tracked.odt";
-    QTest::newRow("SimpleTextDeletion")  << "ChangeTracking/text/simple-deletion/simple-deletion-tracked.odt";
-    QTest::newRow("NumberedParagraphAddition")  << "ChangeTracking/text/simple-numbered-paragraph-addition/simple-numbered-paragraph-addition-tracked.odt";
-    QTest::newRow("ParagraphAddition")  << "ChangeTracking/text/simple-paragraph-addition/simple-paragraph-addition-tracked.odt";
-    QTest::newRow("ParagraphDeletion")  << "ChangeTracking/text/simple-paragraph-deletion/simple-paragraph-deletion-tracked.odt";
-    QTest::newRow("ParagraphSplit-1")  << "ChangeTracking/text/simple-paragraph-split/simple-paragraph-split-tracked.odt";
-    QTest::newRow("ParagraphSplit-2")  << "ChangeTracking/text/split-paragraph-with-text-addition/split-para-with-added-text-tracked.odt";
-    QTest::newRow("ParagraphSplit-3")  << "ChangeTracking/text/split-paragraph-by-table-addition/para-split-by-table-tracked.odt";
-    QTest::newRow("ParagraphSplit-4")  << "ChangeTracking/text/split-paragraph-by-table-and-text/split-para-tracked.odt";
-    QTest::newRow("ParagraphMerge")  << "ChangeTracking/text/simple-paragraph-merge/simple-paragraph-merge-tracked.odt";
-    QTest::newRow("DifferentElementMerge")  << "ChangeTracking/text/different-element-merge/different-element-merge-tracked.odt";
-    QTest::newRow("MultipleParagraphMerge")  << "ChangeTracking/text/multiple-paragraph-merge/multiple-paragraph-merge-tracked.odt";
-    QTest::newRow("MergeAcrossTable")  << "ChangeTracking/text/paragraph-merge-across-table/merge-across-table-tracked.odt";
+    
+    // Text unit-test-cases
+    QTest::newRow("Simple Text Insertion") << "ChangeTracking/text/simple-addition/simple-addition-tracked.odt";
+    QTest::newRow("Simple Text Deletion")  << "ChangeTracking/text/simple-deletion/simple-deletion-tracked.odt";
+    QTest::newRow("Numbered Paragraph Addition")  << "ChangeTracking/text/simple-numbered-paragraph-addition/simple-numbered-paragraph-addition-tracked.odt";
+    QTest::newRow("Paragraph Addition")  << "ChangeTracking/text/simple-paragraph-addition/simple-paragraph-addition-tracked.odt";
+    QTest::newRow("Paragraph Deletion")  << "ChangeTracking/text/simple-paragraph-deletion/simple-paragraph-deletion-tracked.odt";
+    QTest::newRow("Paragraph Split-1")  << "ChangeTracking/text/simple-paragraph-split/simple-paragraph-split-tracked.odt";
+    QTest::newRow("Paragraph Split-2")  << "ChangeTracking/text/split-paragraph-with-text-addition/split-para-with-added-text-tracked.odt";
+    QTest::newRow("Paragraph Split-3")  << "ChangeTracking/text/split-paragraph-by-table-addition/para-split-by-table-tracked.odt";
+    QTest::newRow("Paragraph Split-4")  << "ChangeTracking/text/split-paragraph-by-table-and-text/split-para-tracked.odt";
+    QTest::newRow("Paragraph Merge")  << "ChangeTracking/text/simple-paragraph-merge/simple-paragraph-merge-tracked.odt";
+    QTest::newRow("Different Element Merge")  << "ChangeTracking/text/different-element-merge/different-element-merge-tracked.odt";
+    QTest::newRow("Multiple Paragraph Merge")  << "ChangeTracking/text/multiple-paragraph-merge/multiple-paragraph-merge-tracked.odt";
+    QTest::newRow("Merge Across Table")  << "ChangeTracking/text/paragraph-merge-across-table/merge-across-table-tracked.odt";
+    
+    // List unit-test-cases
+    QTest::newRow("List Item Insertion")  << "ChangeTracking/lists/added-list-item/added-list-item-tracked.odt";
+    QTest::newRow("List Insertion")  << "ChangeTracking/lists/added-list/added-list-tracked.odt";
+    QTest::newRow("Multi Para List Item Insertion")  << "ChangeTracking/lists/added-multi-para-list-item/added-multi-para-list-item-tracked.odt";
+    QTest::newRow("Multi Para List Item Insertion Full")  << "ChangeTracking/lists/added-multi-para-list-item-full/added-multi-para-list-item-full-tracked.odt";
+    QTest::newRow("Multi Para List Item Insertion Partial")  << "ChangeTracking/lists/added-multi-para-list-item-partial/added-multi-para-list-item-partial-tracked.odt";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

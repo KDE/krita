@@ -56,10 +56,7 @@ bool applyFilter(const KoColorSpace * cs,  KisFilterSP f)
     }
     qDebug() << f->id() << ", " << cs->id() << ", " << cs->profile()->name();// << kfc->toXML() << "\n";
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
     return true;
 

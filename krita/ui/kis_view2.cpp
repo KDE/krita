@@ -288,8 +288,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
     }
 
     m_d->statusBar = new KisStatusBar(this);

@@ -38,7 +38,7 @@ public:
     virtual Iterator* createIterator();
 private:
     KisPaintDeviceSP m_device;
-    KisRandomConstAccessor* m_accessor;
+    mutable KisRandomConstAccessorSP m_accessor;
 };
 
 class PaintDeviceImage : public GTLCore::AbstractImage
@@ -57,7 +57,7 @@ public:
     virtual Iterator* createIterator();
 private:
     KisPaintDeviceSP m_device;
-    KisRandomAccessor* m_accessor;
+    mutable KisRandomAccessorSP m_accessor;
 };
 
 #endif

@@ -338,6 +338,9 @@ void KoTextOnShapeContainer::saveOdfChildElements(KoShapeSavingContext &context)
 void KoTextOnShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoXmlElement text = KoXml::namedItemNS(element, KoXmlNS::text, "p");
+    if (text.isNull()) {
+        text = KoXml::namedItemNS(element, KoXmlNS::text, "list");
+    }
     if (!text.isNull()) {
         KoShapeContainer *oldParent = shape->parent();
         KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(shape,

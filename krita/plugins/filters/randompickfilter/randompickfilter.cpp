@@ -51,6 +51,8 @@
 
 #include "kis_wdg_random_pick.h"
 #include "ui_wdgrandompickoptions.h"
+#include <kis_iterator_ng.h>
+#include <kis_random_accessor_ng.h>
 
 K_PLUGIN_FACTORY(KritaRandomPickFilterFactory, registerPlugin<KritaRandomPickFilter>();)
 K_EXPORT_PLUGIN(KritaRandomPickFilterFactory("krita"))
@@ -74,27 +76,22 @@ KisFilterRandomPick::KisFilterRandomPick() : KisFilter(id(), categoryOther(), i1
 }
 
 
-void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
-                                  KisProcessingInformation dstInfo,
-                                  const QSize& size,
-                                  const KisFilterConfiguration* config,
-                                  KoUpdater* progressUpdater
+void KisFilterRandomPick::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater
                                  ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
+        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
     }
     int count = 0;
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
 
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
@@ -113,9 +110,8 @@ void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
     KisRandomGenerator randH(seedH);
     KisRandomGenerator randV(seedV);
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisRandomConstAccessorPixel srcRA = src->createRandomConstAccessor(0, 0, srcInfo.selection());
+    KisRectIteratorSP dstIt = device->createRectIteratorNG(applyRect);
+    KisRandomConstAccessorSP srcRA = device->createRandomConstAccessorNG(0, 0);
 
     double threshold = (100 - level) / 100.0;
 
@@ -123,23 +119,17 @@ void KisFilterRandomPick::process(KisConstProcessingInformation srcInfo,
     weights[0] = (255 * opacity) / 100; weights[1] = 255 - weights[0];
     const quint8* pixels[2];
     KoMixColorsOp * mixOp = cs->mixColorsOp();
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        while (!srcIt.isDone()) {
-            if (randT.doubleRandomAt(srcIt.x(), srcIt.y()) > threshold) {
-                int x = static_cast<int>(srcIt.x() + 2.5 * randH.doubleRandomAt(srcIt.x(), srcIt.y()));
-                int y = static_cast<int>(srcIt.y() +  2.5 * randH.doubleRandomAt(srcIt.x(), srcIt.y()));
-                srcRA.moveTo(x, y);
-                pixels[0] = srcRA.oldRawData();
-                pixels[1] = srcIt.oldRawData();
-                mixOp->mixColors(pixels, weights, 2, dstIt.rawData());
-            }
-            ++srcIt;
-            ++dstIt;
-            if (progressUpdater) progressUpdater->setValue(++count);
+    do{
+        if (randT.doubleRandomAt(dstIt->x(), dstIt->y()) > threshold) {
+            int x = static_cast<int>(dstIt->x() + 2.5 * randH.doubleRandomAt(dstIt->x(), dstIt->y()));
+            int y = static_cast<int>(dstIt->y() +  2.5 * randH.doubleRandomAt(dstIt->x(), dstIt->y()));
+            srcRA->moveTo(x, y);
+            pixels[0] = srcRA->oldRawData();
+            pixels[1] = dstIt->oldRawData();
+            mixOp->mixColors(pixels, weights, 2, dstIt->rawData());
         }
-        srcIt.nextRow();
-        dstIt.nextRow();
-    }
+        if (progressUpdater) progressUpdater->setValue(++count);
+    } while(dstIt->nextPixel());
 
 }
 

@@ -147,11 +147,6 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &map, QWidget *widgets);
-
-    /**
-     * Emit the new tool option widgets to be used with this canvas.
-     */
     void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &widgets);
 
 private slots:

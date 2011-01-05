@@ -633,9 +633,7 @@ ORODocument* KoReportPreRenderer::generate()
     delete d->m_kodata;
     d->m_postProcText.clear();
 
-    ORODocument * pDoc = d->m_document;
-    d->m_document = 0;
-    return pDoc;
+    return d->m_document;
 }
 
 void KoReportPreRenderer::setSourceData(KoReportData *data)

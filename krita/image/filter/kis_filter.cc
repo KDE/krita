@@ -26,6 +26,7 @@
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "kis_types.h"
+#include <kis_painter.h>
 
 KoID KisFilter::categoryAdjust()
 {
@@ -88,57 +89,48 @@ KisFilter::~KisFilter()
 {
 }
 
-void KisFilter::process(KisConstProcessingInformation src,
-                        KisProcessingInformation dst,
-                        const QSize& size,
-                        const KisFilterConfiguration* config) const
+void KisFilter::process(const KisPaintDeviceSP src,
+                KisPaintDeviceSP dst,
+                KisSelectionSP sel,
+                const QRect& applyRect,
+                const KisFilterConfiguration* config,
+                KoUpdater* progressUpdater ) const
 {
-    process(src, dst, size, config, 0);
+    QRect nR = neededRect(applyRect, config);
+    // Create a temporary device that will be filtered, sharing the source data
+    KisPaintDeviceSP temporary;
+    if(src == dst && sel == 0)
+    {
+        temporary = src;
+    } else {
+        temporary = new KisPaintDevice(src->colorSpace());
+        temporary->makeCloneFromRough(src, nR);
+    }
+    // Filter
+    process(temporary, applyRect, config, progressUpdater);
+    // Copy on destination, respecting the selection
+    if(temporary != src)
+    {
+        KisPainter p(dst);
+        p.setSelection(sel);
+        p.bitBlt(applyRect.topLeft(), temporary, applyRect);
+    }
 }
-
-void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                        KoUpdater* progressUpdater) const
-{
-    KisProcessingInformation info(device, rect.topLeft());
-    process(info, info, rect.size(), config, progressUpdater);
-}
-
-void KisFilter::process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const
-{
-    KisProcessingInformation info(device, rect.topLeft());
-    process(info, info, rect.size(), config, 0);
-}
-
 
 bool KisFilter::workWith(const KoColorSpace* cs) const
 {
     Q_UNUSED(cs); return true;
 }
 
-int KisFilter::overlapMarginNeeded(const KisFilterConfiguration*) const
-{
-    return 0;
-}
-
 QRect KisFilter::neededRect(const QRect & rect, const KisFilterConfiguration* c) const
 {
-    QRect rc = rect;
-    int margin = overlapMarginNeeded(c);
-    rc.setLeft(rect.left() - margin);
-    rc.setTop(rect.top() - margin);
-    rc.setRight(rect.right() + margin);
-    rc.setBottom(rect.bottom() + margin);
-    return rc;
+    Q_UNUSED(c);
+    return rect;
 }
 
 QRect KisFilter::changedRect(const QRect & rect, const KisFilterConfiguration* c) const
 {
-    QRect rc = rect;
-    int margin = overlapMarginNeeded(c);
-    rc.setLeft(rect.left() - margin);
-    rc.setTop(rect.top() - margin);
-    rc.setRight(rect.right() + margin);
-    rc.setBottom(rect.bottom() + margin);
-    return rc;
+    Q_UNUSED(c);
+    return rect;
 }
 

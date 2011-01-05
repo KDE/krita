@@ -33,9 +33,8 @@ public:
 
     using KisFilter::process;
 
-    virtual void process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
+    virtual void process(KisPaintDeviceSP dev,
+                         const QRect& size,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
                         ) const;

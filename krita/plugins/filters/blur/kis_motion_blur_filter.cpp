@@ -66,20 +66,15 @@ KisFilterConfiguration* KisMotionBlurFilter::factoryConfiguration(const KisPaint
     return config;
 }
 
-void KisMotionBlurFilter::process(KisConstProcessingInformation srcInfo,
-                            KisProcessingInformation dstInfo,
-                            const QSize& size,
+void KisMotionBlurFilter::process(KisPaintDeviceSP device,
+                            const QRect& rect,
                             const KisFilterConfiguration* config,
                             KoUpdater* progressUpdater
                            ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = rect.topLeft();
 
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    Q_ASSERT(device != 0);
 
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
@@ -97,7 +92,7 @@ void KisMotionBlurFilter::process(KisConstProcessingInformation srcInfo,
         channelFlags = config->channelFlags();
     } 
     if (channelFlags.isEmpty() || !config) {
-        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+        channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
     // convert angle to radians
@@ -132,12 +127,12 @@ void KisMotionBlurFilter::process(KisConstProcessingInformation srcInfo,
     }
 
     // apply convolution
-    KisConvolutionPainter painter(dst, dstInfo.selection());
+    KisConvolutionPainter painter(device);
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
 
     KisConvolutionKernelSP kernel = KisConvolutionKernel::fromMatrix(motionBlurKernel, 0, motionBlurKernel.sum());
-    painter.applyMatrix(kernel, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
+    painter.applyMatrix(kernel, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
 }
 
 QRect KisMotionBlurFilter::neededRect(const QRect & rect, const KisFilterConfiguration* _config) const

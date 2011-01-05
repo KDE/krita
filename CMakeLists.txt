@@ -49,6 +49,7 @@ IF (TINY)
     set(SHOULD_BUILD_SCRIPTING FALSE)
     set(SHOULD_BUILD_F_OFFICE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
+    set(SHOULD_BUILD_BRAINDUMP FALSE)
 ELSE(TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
@@ -65,6 +66,7 @@ ELSE(TINY)
     set(SHOULD_BUILD_SCRIPTING TRUE)
     set(SHOULD_BUILD_F_OFFICE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
+    set(SHOULD_BUILD_BRAINDUMP TRUE)
 ENDIF(TINY)
 
 if(KDE4_BUILD_TESTS)
@@ -347,10 +349,10 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 #
 
 
-### Tables: eigen2
-if(NOT EIGEN2_FOUND)
+### Tables: eigen2, boost
+if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND)
+endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
 
 ### KPresenter: boost
 if(NOT Boost_FOUND)
@@ -443,6 +445,10 @@ if(SHOULD_BUILD_KARBON)
   macro_optional_add_subdirectory(karbon)
 endif(SHOULD_BUILD_KARBON)
 
+if(SHOULD_BUILD_BRAINDUMP)
+  macro_optional_add_subdirectory(braindump)
+endif(SHOULD_BUILD_BRAINDUMP)
+
 macro_optional_add_subdirectory(doc)
 
 # non-app directories are moved here because they can depend on SHOULD_BUILD_{appname} variables set above
@@ -474,6 +480,7 @@ macro_display_application_enabled(kexi ${SHOULD_BUILD_KEXI})
 macro_display_application_enabled(kplato ${SHOULD_BUILD_KPLATO})
 macro_display_application_enabled(krita ${SHOULD_BUILD_KRITA})
 macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
+macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})

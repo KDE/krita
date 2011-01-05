@@ -61,7 +61,7 @@ KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
 
 KoReportItemCheck::~KoReportItemCheck()
 {
-    //dtor
+    delete m_set;
 }
 
 void KoReportItemCheck::createProperties()
@@ -148,11 +148,20 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
 
     chk->setValue(v);
 
-    if (page) page->addPrimitive(chk);
-    OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
-    chk2->setPosition(m_pos.toPoint());
-    if (section) section->addPrimitive(chk2);
-
+    if (page) {
+        page->addPrimitive(chk);
+    }
+    
+    if (section) {
+        OROCheck *chk2 = dynamic_cast<OROCheck*>(chk->clone());
+        chk2->setPosition(m_pos.toPoint());
+        section->addPrimitive(chk2);
+    }
+    
+    if (!page) {
+        delete chk;
+    }
+        
     return 0; //Item doesnt stretch the section height
 }
 

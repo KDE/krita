@@ -36,6 +36,13 @@ static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWi
 {
     return (dockwidget->features() & feature) == feature;
 }
+static inline QDockWidget *parentDock(QWidget *w)
+{
+    while(w && qobject_cast<QDockWidget*>(w) == 0) {
+        w = w->parentWidget();
+    }
+    return qobject_cast<QDockWidget*>(w);
+}
 
 class KoDockWidgetTitleBar::Private
 {

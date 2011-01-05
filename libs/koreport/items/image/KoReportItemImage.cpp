@@ -54,6 +54,11 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
 
 }
 
+KoReportItemImage::~KoReportItemImage()
+{
+    delete m_set;
+}
+
 bool KoReportItemImage::isInline() const
 {
     return !(inlineImageData().isEmpty());
@@ -163,11 +168,20 @@ int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offse
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());
-    if (page) page->addPrimitive(id);
-
-    OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
-    i2->setPosition(m_pos.toPoint());
-    if (section) section->addPrimitive(i2);
+    if (page) {
+        page->addPrimitive(id);
+    }
+    
+    if (section) {
+        OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
+        i2->setPosition(m_pos.toPoint());
+        section->addPrimitive(i2);
+    }
+    
+    if (!page) {
+        delete id;
+    }
+    
     return 0; //Item doesnt stretch the section height
 }
 

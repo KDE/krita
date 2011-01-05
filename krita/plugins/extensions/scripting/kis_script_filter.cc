@@ -55,12 +55,12 @@ QString KisScriptFilter::category() const
     return d->action->property("category").toString();
 }
 
-void KisScriptFilter::process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const
+void KisScriptFilter::process(KisPaintDeviceSP src, const QRect& size, const KisFilterConfiguration* config, KoUpdater*) const
 {
     Q_UNUSED(config);
     d->action->trigger();
 
-    emit scriptProcess(new Scripting::ConstPaintDevice(srcInfo.paintDevice(), 0), srcInfo.topLeft(), new Scripting::PaintDevice(dstInfo.paintDevice(), 0), dstInfo.topLeft(), size, 0);
+    emit scriptProcess(new Scripting::PaintDevice(src), size, 0);
 }
 
 #include "kis_script_filter.moc"

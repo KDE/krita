@@ -40,7 +40,7 @@ public:
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
-    
+
     void setCollapsable(bool collapsable);
     void setTextVisible(bool visible);
     /// Define wether the text size should be ignored in @ref sizeHint

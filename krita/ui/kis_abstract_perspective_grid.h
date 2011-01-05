@@ -1,7 +1,7 @@
 /*
  * This file is part of Krita
  *
- * Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,38 +18,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_SCRIPT_FILTER_H_
-#define _KIS_SCRIPT_FILTER_H_
+#ifndef KIS_ABSTRACT_PERSPECTIVE_GRID_H
+#define KIS_ABSTRACT_PERSPECTIVE_GRID_H
 
-#include <QObject>
-#include "filter/kis_filter.h"
-#include "kis_processing_information.h"
+#include <QPointF>
 
-#include "kritacore/krs_paint_device.h"
-
-namespace Kross
+class KisAbstractPerspectiveGrid
 {
-class Action;
-}
-
-class KisScriptFilter : public QObject, public KisFilter
-{
-    Q_OBJECT
 public:
-    KisScriptFilter(Kross::Action* action);
-    virtual ~KisScriptFilter();
-
-    using KisFilter::process;
-
-    virtual void process(KisPaintDeviceSP src, const QRect& size, const KisFilterConfiguration* config, KoUpdater*) const;
-public Q_SLOTS:
-    QString category() const;
-signals:
-    void scriptProcess(QObject* src, const QRect& srcTopLeft, QObject* config) const;
-private:
-    class Private;
-    Private* const d;
+    virtual bool contains(const QPointF& pt) const = 0;
+    /**
+     * Returns the reciprocal of the distance from the given point
+     * to the 'observer', in the range [0, 1] where 0 = inifinite
+     * distance and 1 = closest.
+     */
+    virtual qreal distance(const QPointF& pt) const = 0;
 };
-
 
 #endif

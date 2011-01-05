@@ -55,6 +55,7 @@
 #include <kis_processing_information.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
+#include <kis_iterator_ng.h>
 
 
 KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArtistic(), i18n("&Pixelize..."))
@@ -62,24 +63,18 @@ KisPixelizeFilter::KisPixelizeFilter() : KisFilter(id(), KisFilter::categoryArti
     setSupportsPainting(true);
 }
 
-void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
-                                KisProcessingInformation dstInfo,
-                                const QSize& size,
-                                const KisFilterConfiguration* configuration,
-                                KoUpdater* progressUpdater
+void KisPixelizeFilter::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* configuration,
+                         KoUpdater* progressUpdater
                                ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src);
-    Q_ASSERT(dst);
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device);
     Q_ASSERT(configuration);
-    Q_ASSERT(size.isValid());
 
-    qint32 width = size.width();
-    qint32 height = size.height();
+    qint32 width = applyRect.width();
+    qint32 height = applyRect.height();
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 pixelWidth = configuration->getInt("pixelWidth", 10);
@@ -87,7 +82,7 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
     if (pixelWidth == 0) pixelWidth = 1;
     if (pixelHeight == 0) pixelHeight = 1;
 
-    qint32 pixelSize = src->pixelSize();
+    qint32 pixelSize = device->pixelSize();
     QVector<qint32> average(pixelSize);
 
     qint32 count;
@@ -104,7 +99,7 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
     }
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
+        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
     }
 
     qint32 numberOfPixelsProcessed = 0;
@@ -123,16 +118,13 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
             count = 0;
 
             //read
-            KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x() + x, srcTopLeft.y() + y, w, h, srcInfo.selection());
-            while (! srcIt.isDone()) {
-                if (srcIt.isSelected()) {
-                    for (qint32 i = 0; i < pixelSize; i++) {
-                        average[i] += srcIt.oldRawData()[i];
-                    }
-                    count++;
+            KisRectConstIteratorSP srcIt = device->createRectConstIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w, h);
+            do {
+                for (qint32 i = 0; i < pixelSize; i++) {
+                    average[i] += srcIt->oldRawData()[i];
                 }
-                ++srcIt;
-            }
+                count++;
+            } while (srcIt->nextPixel());
 
             //average
             if (count > 0) {
@@ -140,15 +132,12 @@ void KisPixelizeFilter::process(KisConstProcessingInformation srcInfo,
                     average[i] /= count;
             }
             //write
-            KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x() + x, dstTopLeft.y() + y, w, h, dstInfo.selection());
-            while (! dstIt.isDone()) {
-                if (dstIt.isSelected()) {
-                    for (int i = 0; i < pixelSize; i++) {
-                        dstIt.rawData()[i] = average[i];
-                    }
+            KisRectIteratorSP dstIt = device->createRectIteratorNG(srcTopLeft.x(), srcTopLeft.y(), w, h);
+            do {
+                for (int i = 0; i < pixelSize; i++) {
+                    dstIt->rawData()[i] = average[i];
                 }
-                ++dstIt;
-            }
+            } while (dstIt->nextPixel());
             if (progressUpdater) progressUpdater->setValue(++numberOfPixelsProcessed);
         }
     }

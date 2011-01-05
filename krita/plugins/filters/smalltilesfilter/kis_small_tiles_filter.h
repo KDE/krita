@@ -34,11 +34,10 @@ public:
 public:
     using KisFilter::process;
 
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
-                 const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
+    void process(KisPaintDeviceSP device,
+                const QRect& applyRect,
+                const KisFilterConfiguration* config,
+                KoUpdater* progressUpdater
                 ) const;
     static inline KoID id() {
         return KoID("smalltiles", i18n("Small Tiles"));

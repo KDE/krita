@@ -71,6 +71,7 @@ KoReportItemText::KoReportItemText(QDomNode & element) : m_bottomPadding(0.0)
 
 KoReportItemText::~KoReportItemText()
 {
+    delete m_set;
 }
 
 Qt::Alignment KoReportItemText::textFlags() const
@@ -252,12 +253,21 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
                     tb->setFlags(textFlags());
                     tb->setTextStyle(textStyle());
                     tb->setLineStyle(lineStyle());
-                    if (page) page->addPrimitive(tb);
-
-                    OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
-                    tb2->setPosition(m_pos.toPoint());
-                    if (section) section->addPrimitive(tb2);
-
+                    
+                    if (page) {
+                        page->addPrimitive(tb);
+                    }
+                    
+                    if (section) {
+                        OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
+                        tb2->setPosition(m_pos.toPoint());
+                        section->addPrimitive(tb2);
+                    }
+                    
+                    if (!page) {
+                        delete tb;
+                    }
+    
                     intStretch += intRectHeight;
                     intLineCounter++;
                 }
@@ -286,5 +296,6 @@ int KoReportItemText::render(OROPage* page, OROSection* section,  QPointF offset
 
         intStretch += (m_bottomPadding / 100.0);
     }
+    
     return intStretch; //Item returns its required section height
 }

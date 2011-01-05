@@ -65,20 +65,15 @@ KisFilterConfiguration* KisGaussianBlurFilter::factoryConfiguration(const KisPai
     return config;
 }
 
-void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
-                            KisProcessingInformation dstInfo,
-                            const QSize& size,
+void KisGaussianBlurFilter::process(KisPaintDeviceSP device,
+                            const QRect& rect,
                             const KisFilterConfiguration* config,
                             KoUpdater* progressUpdater
                            ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = rect.topLeft();
 
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    Q_ASSERT(device != 0);
 
     if (!config) config = new KisFilterConfiguration(id().id(), 1);
 
@@ -93,7 +88,7 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
         channelFlags = config->channelFlags();
     } 
     if (channelFlags.isEmpty() || !config) {
-        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+        channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
 
     // compute horizontal kernel
@@ -126,45 +121,45 @@ void KisGaussianBlurFilter::process(KisConstProcessingInformation srcInfo,
 
     if ( (horizontalRadius > 0) && (verticalRadius > 0) )
     {
-        KisPaintDeviceSP interm = new KisPaintDevice(src->colorSpace());
+        KisPaintDeviceSP interm = new KisPaintDevice(device->colorSpace());
 
         KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
         KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
 
-        KisConvolutionPainter horizPainter(interm, dstInfo.selection());
+        KisConvolutionPainter horizPainter(interm);
         horizPainter.setChannelFlags(channelFlags);
         horizPainter.setProgress(progressUpdater);
-        horizPainter.applyMatrix(kernelHoriz, src, 
+        horizPainter.applyMatrix(kernelHoriz, device, 
                                  srcTopLeft - QPoint(0, verticalRadius), 
                                  srcTopLeft - QPoint(0, verticalRadius), 
-                                 size + QSize(0, 2 * verticalRadius), BORDER_REPEAT);
+                                 rect.size() + QSize(0, 2 * verticalRadius), BORDER_REPEAT);
         
         
-        KisConvolutionPainter verticalPainter(dst, dstInfo.selection());
+        KisConvolutionPainter verticalPainter(device);
         verticalPainter.setChannelFlags(channelFlags);
         verticalPainter.setProgress(progressUpdater);
-        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
+        verticalPainter.applyMatrix(kernelVertical, interm, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
     }
     else
     {
         if (horizontalRadius > 0)
         {
-            KisConvolutionPainter painter(dst, dstInfo.selection());
+            KisConvolutionPainter painter(device);
             painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
             KisConvolutionKernelSP kernelHoriz = KisConvolutionKernel::fromMatrix(horizGaussian, 0, horizGaussian.sum());
-            painter.applyMatrix(kernelHoriz, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
+            painter.applyMatrix(kernelHoriz, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
         }
 
         if (verticalRadius > 0)
         {
-            KisConvolutionPainter painter(dst, dstInfo.selection());
+            KisConvolutionPainter painter(device);
             painter.setChannelFlags(channelFlags);
             painter.setProgress(progressUpdater);
 
             KisConvolutionKernelSP kernelVertical = KisConvolutionKernel::fromMatrix(verticalGaussian, 0, verticalGaussian.sum());
-            painter.applyMatrix(kernelVertical, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
+            painter.applyMatrix(kernelVertical, device, srcTopLeft, srcTopLeft, rect.size(), BORDER_REPEAT);
         }
     }
 }

@@ -414,6 +414,11 @@ public:
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
 
     /**
+     * Removes the startupWidget shown at application start up.
+     */
+    void deleteOpenPane();
+
+    /**
      *  Tells the document that its title has been modified, either because
      *  the modified status changes (this is done by setModified() ) or
      *  because the URL or the document-info's title changed.
@@ -1008,11 +1013,6 @@ private slots:
     void slotAutoSave();
     void slotStarted(KIO::Job*);
     void startCustomDocument();
-
-    /**
-     * Removes the open widget shown at application start up.
-     */
-    void deleteOpenPane();
 
 private:
 

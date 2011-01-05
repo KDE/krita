@@ -33,9 +33,8 @@ public:
     KisColorTransformationFilter(const KoID& id, const KoID & category, const QString & entry);
     virtual ~KisColorTransformationFilter();
     using KisFilter::process;
-    virtual void process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
+    virtual void process(KisPaintDeviceSP device, 
+                         const QRect& applyRect,
                          const KisFilterConfiguration* config,
                          KoUpdater* progressUpdater
                         ) const;

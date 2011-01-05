@@ -1196,7 +1196,6 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             m_tableLayout.setTable(table);
@@ -1207,7 +1206,7 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
                 retval.setBottom(m_tableLayout.cellBoundingRect(table->cellAt(table->lastPosition())).bottom());
                 return retval;
             }
-        } /*else if (subFrame) {
+        } /*else if (it.currentFrame()) { // subframe?
             // right now we don't care about sections
             textRectFrame(QTextFrame *frame, QTextCursor &cursor);
             continue;

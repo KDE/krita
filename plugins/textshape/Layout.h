@@ -115,7 +115,7 @@ public:
 
     virtual QTextLine createLine();
 
-    virtual void fitLineForRunAround(const bool resetHorizontalPosition);
+    virtual void fitLineForRunAround(bool resetHorizontalPosition);
 
 private:
     friend class TestTableLayout; // to allow direct testing.

@@ -214,7 +214,7 @@ public:
         /// Create a QTextLine and possibly some behind the scenes auxillary info
         virtual QTextLine createLine() = 0;
         /// Fiddle with the width of the current textline until it fits
-        virtual void fitLineForRunAround(const bool resetHorizontalPosition = false) = 0;
+        virtual void fitLineForRunAround(bool resetHorizontalPosition) = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

@@ -125,7 +125,7 @@ QTextLine Layout::createLine()
     return m_textLine.line;
 }
 
-void Layout::fitLineForRunAround(const bool resetHorizontalPosition)
+void Layout::fitLineForRunAround(bool resetHorizontalPosition)
 {
     m_textLine.fit(resetHorizontalPosition);
 }

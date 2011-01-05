@@ -105,12 +105,12 @@ public:
     void registerRunAroundShape(KoShape *) {}
     void updateRunAroundShape(KoShape *) {}
     void unregisterAllRunAroundShapes() {}
-    QTextLine createLine()
-    {
-        return layout->createLine();;
+    QTextLine createLine() {
+        return layout->createLine();
     }
-
-    void fitLineForRunAround(const bool ) { }
+    void fitLineForRunAround(bool resetHorizontalPosition) {
+        Q_UNUSED(resetHorizontalPosition);
+    }
 };
 
 class KoTextDocumentLayout::Private

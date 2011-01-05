@@ -45,7 +45,7 @@ struct KisCoordinatesConverter::Private {
 
 void KisCoordinatesConverter::recalculateTransformations() const
 {
-    if(!m_d->image) return;
+    if(!m_d->image.isValid()) return;
 
     m_d->imageToDocument = QTransform::fromScale(1 / m_d->image->xRes(),
                                                  1 / m_d->image->yRes());
@@ -238,19 +238,19 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
 {
-    if(!m_d->image) return QRectF();
+    if(!m_d->image.isValid()) return QRectF();
     return viewportToWidget(imageToViewport(m_d->image->bounds()));
 }
 
 QRectF KisCoordinatesConverter::imageRectInViewportPixels() const
 {
-    if(!m_d->image) return QRectF();
+    if(!m_d->image.isValid()) return QRectF();
     return imageToViewport(m_d->image->bounds());
 }
 
 QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 {
-    if(!m_d->image) return QSizeF();
+    if(!m_d->image.isValid()) return QSizeF();
 
     qreal scaleX, scaleY;
     imageScale(&scaleX, &scaleY);

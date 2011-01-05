@@ -142,7 +142,6 @@ public:
     ORODocument* document() const {
         return m_document;
     };
-    long row() const; // returns this pages current page number
 
     void setType(KRSectionData::Section t) {
         m_type = t;

@@ -90,7 +90,7 @@ OROPage::OROPage(ORODocument * pDocument)
 OROPage::~OROPage()
 {
     if (m_document) {
-        m_document->m_pages.removeAt(page());
+        m_document->m_pages.removeOne(this);
         m_document = 0;
     }
 
@@ -142,18 +142,12 @@ OROSection::OROSection(ORODocument * pDocument)
 OROSection::~OROSection()
 {
     if (m_document) {
-        m_document->m_sections.removeAt(row());
+        m_document->m_sections.removeOne(this);
         m_document = 0;
     }
 
     qDeleteAll(m_primitives);
     m_primitives.clear();
-    
-}
-
-long OROSection::row() const
-{
-    return m_row;
 }
 
 OROPrimitive* OROSection::primitive(int idx)
@@ -212,7 +206,7 @@ OROPrimitive::OROPrimitive(int pType)
 
 OROPrimitive::~OROPrimitive()
 {
-    if (m_page) {
+   if (m_page) {
         m_page->m_primitives.removeAt(m_page->m_primitives.indexOf(this));
         m_page = 0;
     }

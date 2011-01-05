@@ -111,28 +111,23 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     return style;
 }
 
-static void createTabs(const QVariant &data, int outlineLevel, KoParagraphStyle *tocTemplateStyle) {
-    QList<KoText::Tab> tabList = tocTemplateStyle->tabPositions();
-    //qDebug() << "TESTX TAB LIST " << tabList.size();
-    //TODO pavolk: can we modify existing style to have tab ?
-    if (tabList.isEmpty()) {
-        QVariant entryTabStopTypeVariant = attribute(data, "index-entry-tab-stop", "type", outlineLevel);
-        //qDebug() << "TESTX ENTRY TAB STOP STYLE VARIANT " << entryTabStopTypeVariant;
-        QTextOption::TabType entryTabStopType = (entryTabStopTypeVariant.isNull() ? QTextOption::RightTab : (QTextOption::TabType) entryTabStopTypeVariant.toInt());
-        //qDebug() << "TESTX ENTRY TAB STOP STYLE INT " << entryTabStopType;
-        QVariant entryTabStopLeaderCharVariant = attribute(data, "index-entry-tab-stop", "leader-char", outlineLevel);
-        //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR VARIANT " << entryTabStopLeaderCharVariant;
-        QString entryTabStopLeaderChar = (entryTabStopLeaderCharVariant.isNull() ? "." : entryTabStopLeaderCharVariant.toString());
-        //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR " << entryTabStopLeaderChar;
-        QList<KoText::Tab> tabList;
-        struct KoText::Tab aTab;
-        aTab.type = entryTabStopType;
-        aTab.leaderText = entryTabStopLeaderChar;
-        //TODO pavolk: we need to fill leader chars also at update time to formate page numbers !!
-        aTab.position = 490;
-        tabList.append(aTab);
-        tocTemplateStyle->setTabPositions(tabList);
-    }
+static QList<KoText::Tab> createTabList(const QVariant &data, int outlineLevel) {
+    QVariant entryTabStopTypeVariant = attribute(data, "index-entry-tab-stop", "type", outlineLevel);
+    //qDebug() << "TESTX ENTRY TAB STOP STYLE VARIANT " << entryTabStopTypeVariant;
+    QTextOption::TabType entryTabStopType = (entryTabStopTypeVariant.isNull() ? QTextOption::RightTab : (QTextOption::TabType) entryTabStopTypeVariant.toInt());
+    //qDebug() << "TESTX ENTRY TAB STOP STYLE INT " << entryTabStopType;
+    QVariant entryTabStopLeaderCharVariant = attribute(data, "index-entry-tab-stop", "leader-char", outlineLevel);
+    //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR VARIANT " << entryTabStopLeaderCharVariant;
+    QString entryTabStopLeaderChar = (entryTabStopLeaderCharVariant.isNull() ? "." : entryTabStopLeaderCharVariant.toString());
+    //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR " << entryTabStopLeaderChar;
+    QList<KoText::Tab> tabList;
+    struct KoText::Tab aTab;
+    aTab.type = entryTabStopType;
+    aTab.leaderText = entryTabStopLeaderChar;
+    //TODO pavolk: we need to fill leader chars also at update time to formate page numbers !!
+    aTab.position = 490;
+    tabList.append(aTab);
+    return tabList;
 }
 
 void ToCGenerator::generate()
@@ -194,28 +189,10 @@ void ToCGenerator::generate()
                 //qDebug() << "TESTX GENERATE NEW STYLE";
                 tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
             }
-            createTabs(data, outlineLevel, tocTemplateStyle);
-//            QList<KoText::Tab> tabList = tocTemplateStyle->tabPositions();
-//            //qDebug() << "TESTX TAB LIST " << tabList.size();
-//            //TODO pavolk: can we modify existing style to have tab ?
-//            if (tabList.isEmpty()) {
-//                QVariant entryTabStopTypeVariant = attribute(data, "index-entry-tab-stop", "type", outlineLevel);
-//                //qDebug() << "TESTX ENTRY TAB STOP STYLE VARIANT " << entryTabStopTypeVariant;
-//                QTextOption::TabType entryTabStopType = (entryTabStopTypeVariant.isNull() ? QTextOption::RightTab : (QTextOption::TabType) entryTabStopTypeVariant.toInt());
-//                //qDebug() << "TESTX ENTRY TAB STOP STYLE INT " << entryTabStopType;
-//                QVariant entryTabStopLeaderCharVariant = attribute(data, "index-entry-tab-stop", "leader-char", outlineLevel);
-//                //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR VARIANT " << entryTabStopLeaderCharVariant;
-//                QString entryTabStopLeaderChar = (entryTabStopLeaderCharVariant.isNull() ? "." : entryTabStopLeaderCharVariant.toString());
-//                //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR " << entryTabStopLeaderChar;
-//                QList<KoText::Tab> tabList;
-//                struct KoText::Tab aTab;
-//                aTab.type = entryTabStopType;
-//                aTab.leaderText = entryTabStopLeaderChar;
-//                //TODO pavolk: we need to fill leader chars also at update time to formate page numbers !!
-//                aTab.position = 490;
-//                tabList.append(aTab);
-//                tocTemplateStyle->setTabPositions(tabList);
-//            }
+            if (tocTemplateStyle->tabPositions().isEmpty()) {
+                QList<KoText::Tab> tabList = createTabList(data, outlineLevel);
+                tocTemplateStyle->setTabPositions(tabList);
+            }
             tocTemplateStyle->applyStyle(tocEntryTextBlock);
             //TODO pavolk: create and insert hyperlinks ?
             //KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());

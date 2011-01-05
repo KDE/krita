@@ -702,8 +702,8 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
     QTextBlock::iterator it = block.begin();
 
     if (it.atEnd()) {
-        //This is a single fragment block. So just return the change-id of the fragment
-        changeId = it.fragment().charFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+        //This is a empty block. So just return the change-id of the block 
+        changeId = block.blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
     }
 
     for (it = block.begin(); !(it.atEnd()); ++it) {
@@ -1279,7 +1279,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         }
     } while(changeId);
 
-    if (endBlock.blockNumber() != block.blockNumber()) {
+    if ((endBlock.blockNumber() != block.blockNumber()) && (endBlock.length())) {
         //Check that the last fragment of this block is not a part of this change. If so, it is not a merge or a split
         QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();

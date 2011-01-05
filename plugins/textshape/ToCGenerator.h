@@ -23,6 +23,8 @@
 #include <QList>
 #include <QTextBlock>
 
+typedef QPair<QTextBlock, QTextBlock> BlockPair;
+
 class QTextFrame;
 
 class ToCGenerator : public QObject
@@ -54,7 +56,8 @@ private:
 
     State m_state;
     QTextFrame *m_ToCFrame;
-    QList<QTextBlock> m_originalBlocksInToc;
+    //QList<QTextBlock> m_originalBlocksInToc;
+    QList<BlockPair> m_originalBlocksInToc;
 };
 
 #endif

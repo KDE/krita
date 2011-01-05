@@ -86,6 +86,8 @@
 #include <QPair>
 #include <QStringList>
 #include <QVector>
+#include <QDebug>
+#include <QVariant>
 
 /*
  Use more compact representation of in-memory nodes.

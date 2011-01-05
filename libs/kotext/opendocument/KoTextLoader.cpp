@@ -1383,52 +1383,106 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     }
 }
 
+static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle)
+{
+    QStringList attrNames = element.attributeNames();
+    //qDebug() << "TESTX ATTR NAMES " << attrNames;
+    QVariantHash attrMap;
+    for (int i = 0; i < attrNames.size(); i++) {
+        QString attrName = attrNames.at(i);
+        //qDebug() << "TESTX ATTR NAME" << attrName;
+        QString value = element.attribute(attrName);
+        //qDebug() << "TESTX ATTR VALUE " << value;
+        QVariant attr;
+        if (attrName == "style-name") {
+            attr.setValue(0);
+            KoParagraphStyle *style = textSharedData->paragraphStyle(value, useStylesAutoStyle);
+            if (style) {
+                attr.setValue(style->styleId());
+            }
+            KoSectionStyle *sectionStyle = textSharedData->sectionStyle(value, useStylesAutoStyle);
+            if (sectionStyle) {
+                attr.setValue(sectionStyle->styleId());
+            }
+            //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " STYLE NAME " << value << " ATTR " << attr;
+        } else if (attrName == "index-entry-tab-stop") {
+            if (value == "right") {
+                attr.setValue((int) QTextOption::RightTab);
+            } else if (value == "left") {
+                attr.setValue((int) QTextOption::LeftTab);
+            } else if (value == "center") {
+                attr.setValue((int) QTextOption::CenterTab);
+            } else if (value == "delimiter") {
+                attr.setValue((int) QTextOption::DelimiterTab);
+            }
+        } else {
+            attr.setValue(value);
+        }
+        //qDebug() << "TESTX ATTR VARIANT " << attr;
+        attrMap.insert(attrName, attr);
+    }
+    return attrMap;
+}
+
+static QVariant createTocData(const KoXmlElement &toc, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle) {
+    //qDebug() << "TESTX ++++++ LOADING DATA +++++++";
+    QVariantHash attrMap;
+    //text:table-of-content
+    QVariant tocAttr = attributes(toc, textSharedData, true);
+    //qDebug() << "TESTX TOC NAME " << toc.localName() << " ATTR " << tocAttr;
+    attrMap.insert(toc.localName(), tocAttr);
+    KoXmlElement tocSource;
+    forEachElement(tocSource, toc) {
+        //text:table-of-content-source
+        QVariant tocSourceAttr = attributes(tocSource, textSharedData, useStylesAutoStyle);
+        attrMap.insert(tocSource.localName(), tocSourceAttr);
+        KoXmlElement tocTemplate;
+        forEachElement(tocTemplate, tocSource) {
+            //text:index-title-template
+            //text:table-of-content-entry-template
+            QString outlineLevel = tocTemplate.attribute("outline-level");
+            QString secondaryKey = outlineLevel.isNull() ? "" : " " + outlineLevel;
+            QVariant tocTemplateAttr = attributes(tocTemplate, textSharedData, useStylesAutoStyle);
+            attrMap.insert(tocTemplate.localName() + secondaryKey, tocTemplateAttr);
+            KoXmlElement tocIndexEntry;
+            forEachElement(tocIndexEntry, tocTemplate) {
+                //text:index-entry
+                QVariant tocIndexEntryAttr = attributes(tocIndexEntry, textSharedData, useStylesAutoStyle);
+                attrMap.insert(tocIndexEntry.localName() + secondaryKey, tocIndexEntryAttr);
+            }
+        }
+    }
+    return QVariant(attrMap);
+}
+
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // Add a frame to the current layout
     QTextFrameFormat tocFormat;
     tocFormat.setProperty(KoText::TableOfContents, true);
+    bool useStylesAutoStyle = d->context.odfLoadingContext().useStylesAutoStyles();
+    //qDebug() << "TESTX USE AUTO STYLES " << useStylesAutoStyle;
+    QVariant data = createTocData(element, d->textSharedData, useStylesAutoStyle);
+    //qDebug() << "TESTX ATTR VARIANT " << data;
+    tocFormat.setProperty(KoText::TableOfContentsData, data);
     cursor.insertFrame(tocFormat);
+    //qDebug() << "TESTX ++++++ LOADING TEMPLATE +++++++";
     // Get the cursor of the frame
     QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
-
     // We'll just try to find displayable elements and add them as paragraphs
+    //qDebug() << "TESTX ELEMENT " << element.localName();
     KoXmlElement e;
     forEachElement(e, element) {
-        if (e.isNull() || e.namespaceURI() != KoXmlNS::text)
-            continue;
-
-        //TODO look at table-of-content-source
-
-        // We look at the index body now
+        //qDebug() << "TESTX ELEMENT " << e.localName();
         if (e.localName() == "index-body") {
-            KoXmlElement p;
-            bool firstTime = true;
-            forEachElement(p, e) {
-                // All elem will be "p" instead of the title, which is particular
-                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
-                    continue;
-
-                if (!firstTime) {
-                    // use empty formats to not inherit from the prev parag
-                    QTextBlockFormat bf;
-                    QTextCharFormat cf;
-                    cursorFrame.insertBlock(bf, cf);
-                }
-                firstTime = false;
-
-                QTextBlock current = cursorFrame.block();
-                QTextBlockFormat blockFormat;
-
-                if (p.localName() == "p") {
-                    loadParagraph(p, cursorFrame);
-                } else if (p.localName() == "index-title") {
-                    loadBody(p, cursorFrame);
-                }
-
-                QTextCursor c(current);
-                c.mergeBlockFormat(blockFormat);
+            KoXmlElement indexBody;
+            forEachElement(indexBody, e) {
+                //qDebug() << "TESTX ELEMENT " << e.localName();
             }
+            QTextBlockFormat bf;
+            QTextCharFormat cf;
+            cursorFrame.insertBlock(bf, cf);
+            loadBody(e, cursorFrame);
         }
     }
     // Get out of the frame

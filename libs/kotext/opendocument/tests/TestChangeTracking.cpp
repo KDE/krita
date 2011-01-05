@@ -276,6 +276,10 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Deleted Row")  << "ChangeTracking/tables/deleted-row/deleted-row-tracked.odt";
     QTest::newRow("Added Column")  << "ChangeTracking/tables/added-column/added-column-tracked.odt";
     QTest::newRow("Deleted Column")  << "ChangeTracking/tables/deleted-column/deleted-column-tracked.odt";
+
+    //Text Style Changes
+    QTest::newRow("Text Made Bold")  << "ChangeTracking/styling/text-made-bold/text-made-bold-tracked.odt";
+     
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

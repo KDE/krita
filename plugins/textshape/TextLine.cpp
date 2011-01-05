@@ -73,7 +73,7 @@ void TextLine::fit(const bool resetHorizontalPosition)
         if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
             line.setNumColumns(1);
         line.setPosition(QPointF(m_state->x(), m_state->y()));
-        line.setLineWidth(0.0);
+        line.setLineWidth(0.0); // we need to define a line-width that is >=0.0 to prevent the QTextLine from being removed again
         return;
     }
 

@@ -24,6 +24,7 @@
 #include "kis_node_query_path.h"
 #include "kis_play_info.h"
 #include "kis_image.h"
+#include <KoProgressUpdater.h>
 
 struct KisRecordedNodeAction::Private
 {
@@ -47,9 +48,11 @@ KisRecordedNodeAction::~KisRecordedNodeAction()
 void KisRecordedNodeAction::play(const KisPlayInfo& _info, KoUpdater* _updater) const
 {
     QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(_info.image(), _info.currentNode());
+    KoProgressUpdater updater(_updater);
+    updater.start(nodes.size());
     foreach(KisNodeSP node, nodes)
     {
-        play(node, _info, _updater);
+        play(node, _info, updater.startSubtask());
     }
 }
 

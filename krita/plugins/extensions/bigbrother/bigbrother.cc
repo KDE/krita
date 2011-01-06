@@ -16,7 +16,8 @@
  */
 
 #include "bigbrother.h"
-#include <stdlib.h>
+#include <cstdlib>
+#include <unistd.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -45,6 +46,8 @@
 #include "actionseditor/kis_actions_editor_dialog.h"
 #include <kis_resource_server_provider.h>
 #include <KoResourceServerProvider.h>
+#include <recorder/kis_macro_player.h>
+#include <QApplication>
 
 K_PLUGIN_FACTORY(BigBrotherPluginFactory, registerPlugin<BigBrotherPlugin>();)
 K_EXPORT_PLUGIN(BigBrotherPluginFactory("krita"))
@@ -118,7 +121,13 @@ void BigBrotherPlugin::slotOpenPlay()
     KisMacro* m = openMacro();
     if (!m) return;
     dbgPlugins << "Play the macro";
-    m->play(KisPlayInfo(m_view->image(), m_view->activeNode()));
+    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()));
+    player.start();
+    while(player.isRunning())
+    {
+        QApplication::processEvents();
+        sleep(10);
+    }
     dbgPlugins << "Finished";
     delete m;
 }

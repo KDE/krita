@@ -194,6 +194,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
+   recorder/kis_macro_player.cc
    recorder/kis_node_query_path.cc
    recorder/kis_play_info.cc
    recorder/kis_recorded_action.cc

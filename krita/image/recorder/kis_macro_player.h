@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,24 +16,29 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PLAY_INFO_H_
-#define _KIS_PLAY_INFO_H_
+#ifndef _KIS_MACRO_PLAYER_H_
+#define _KIS_MACRO_PLAYER_H_
 
-#include <kis_types.h>
+#include <QThread>
+
 #include <krita_export.h>
 
-class KisUndoAdapter;
+class KisMacro;
+class KisPlayInfo;
 
-class KRITAIMAGE_EXPORT KisPlayInfo
-{
+/**
+ * This class play a macro inside a thread.
+ */
+class KRITAIMAGE_EXPORT KisMacroPlayer : public QThread {
+    Q_OBJECT
 public:
-    KisPlayInfo(KisImageWSP image, KisNodeSP currentNodes);
-    KisPlayInfo(const KisPlayInfo& _rhs);
-    KisPlayInfo& operator=(const KisPlayInfo& _rhs);
-    ~KisPlayInfo();
-    KisUndoAdapter* undoAdapter() const;
-    KisImageWSP image() const;
-    KisNodeSP currentNode() const;
+    KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, QObject* _parent = 0);
+    virtual ~KisMacroPlayer();
+public slots:
+    void pause();
+    void resume();
+protected:
+    virtual void run();
 private:
     struct Private;
     Private* const d;

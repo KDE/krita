@@ -274,6 +274,7 @@ void KisRecordedPaintAction::play(KisNodeSP node, const KisPlayInfo& info, KoUpd
     }
 
     KisPainter* painter = createPainter(target);
+    painter->setProgress(_updater);
 
     if (d->paintIncremental) {
         painter->setCompositeOp(d->compositeOp);

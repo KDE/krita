@@ -31,7 +31,8 @@ namespace KoOdf
         Spreadsheet,
         Chart,
         Image,
-        Formula
+        Formula,
+        OpenOfficeClipboard
     };
 
     /**

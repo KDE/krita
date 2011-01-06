@@ -26,16 +26,12 @@
 #include <kis_layer.h>
 #include <kis_group_layer.h>
 
-#include "kis_node_query_path.h"
-
 struct KisRecordedAction::Private {
-    Private(const KisNodeQueryPath& _path) : path(_path) {}
     QString name;
     QString id;
-    KisNodeQueryPath path;
 };
 
-KisRecordedAction::KisRecordedAction(const QString& id, const QString& name, const KisNodeQueryPath& path) : d(new Private(path))
+KisRecordedAction::KisRecordedAction(const QString& id, const QString& name) : d(new Private())
 {
     d->name = name;
     d->id = id;
@@ -66,17 +62,10 @@ void KisRecordedAction::setName(const QString& name)
     d->name = name;
 }
 
-
-const KisNodeQueryPath& KisRecordedAction::nodeQueryPath() const
-{
-    return d->path;
-}
-
 void KisRecordedAction::toXML(QDomDocument& , QDomElement& elt, KisRecordedActionSaveContext* ) const
 {
     elt.setAttribute("name", name());
     elt.setAttribute("id", id());
-    elt.setAttribute("path", d->path.toString());
 }
 
 struct KisRecordedActionFactory::Private {

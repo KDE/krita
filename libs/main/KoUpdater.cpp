@@ -26,6 +26,8 @@
 #include "KoProgressUpdater.h"
 #include "KoUpdaterPrivate_p.h"
 
+#include <kdebug.h>
+
 KoUpdater::KoUpdater(KoUpdaterPrivate *p)
     : m_progressPercent(0)
 {
@@ -55,6 +57,7 @@ void KoUpdater::setProgress(int percent)
     }
 
     m_progressPercent = percent;
+    kDebug(30003) << d->objectName() << percent;
 
     emit sigProgress( percent );
 }

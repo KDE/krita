@@ -21,6 +21,7 @@
 #include <filter/kis_filter_registry.h>
 
 #include "DodgeBurn.h"
+#include <KoColorTransformationFactoryRegistry.h>
 
 K_PLUGIN_FACTORY(DodgeBurnPluginFactory, registerPlugin<DodgeBurnPlugin>();)
 K_EXPORT_PLUGIN(DodgeBurnPluginFactory("krita"))
@@ -28,8 +29,14 @@ K_EXPORT_PLUGIN(DodgeBurnPluginFactory("krita"))
 DodgeBurnPlugin::DodgeBurnPlugin(QObject *parent, const QVariantList &)
 {
     Q_UNUSED(parent);
-    KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("dodge", "Dodge", i18n("Dodge")));
-    KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("burn", "Burn", i18n("Burn")));
+    if(KoColorTransformationFactoryRegistry::containsColorTransformationFactory("DodgeHighlights"))
+    {
+	KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("dodge", "Dodge", i18n("Dodge")));
+    }
+    if(KoColorTransformationFactoryRegistry::containsColorTransformationFactory("BurnHighlights"))
+    {
+	KisFilterRegistry::instance()->add(new KisFilterDodgeBurn("burn", "Burn", i18n("Burn")));
+    }
 }
 
 DodgeBurnPlugin::~DodgeBurnPlugin()

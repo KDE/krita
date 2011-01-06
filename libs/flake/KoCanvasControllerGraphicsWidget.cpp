@@ -70,7 +70,7 @@ KoCanvasControllerGraphicsWidget::~KoCanvasControllerGraphicsWidget()
 }
 
 
-void KoCanvasControllerGraphicsWidget::scrollContentsBy(int dx, int dy)
+void KoCanvasControllerGraphicsWidget::scrollContentsBy(int /*dx*/, int /*dy*/)
 {
 }
 
@@ -79,11 +79,11 @@ QSize KoCanvasControllerGraphicsWidget::viewportSize() const
     return QSize();
 }
 
-void KoCanvasControllerGraphicsWidget::setDrawShadow(bool drawShadow)
+void KoCanvasControllerGraphicsWidget::setDrawShadow(bool /*draw*/Shadow)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setCanvas(KoCanvasBase *canvas)
+void KoCanvasControllerGraphicsWidget::setCanvas(KoCanvasBase */*canvas*/)
 {
 }
 
@@ -112,27 +112,27 @@ int KoCanvasControllerGraphicsWidget::canvasOffsetY() const
     return 0;
 }
 
-void KoCanvasControllerGraphicsWidget::ensureVisible(const QRectF &rect, bool smooth)
+void KoCanvasControllerGraphicsWidget::ensureVisible(const QRectF &/*rect*/, bool /*smooth*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::ensureVisible(KoShape *shape)
+void KoCanvasControllerGraphicsWidget::ensureVisible(KoShape */*shape*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomIn(const QPoint &center)
+void KoCanvasControllerGraphicsWidget::zoomIn(const QPoint &/*center*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomOut(const QPoint &center)
+void KoCanvasControllerGraphicsWidget::zoomOut(const QPoint &/*center*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomBy(const QPoint &center, qreal zoom)
+void KoCanvasControllerGraphicsWidget::zoomBy(const QPoint &/*center*/, qreal /*zoom*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomTo(const QRect &rect)
+void KoCanvasControllerGraphicsWidget::zoomTo(const QRect &/*rect*/)
 {
 }
 
@@ -140,7 +140,7 @@ void KoCanvasControllerGraphicsWidget::recenterPreferred()
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setPreferredCenter(const QPoint &viewPoint)
+void KoCanvasControllerGraphicsWidget::setPreferredCenter(const QPoint &/*viewPoint*/)
 {
 }
 
@@ -149,11 +149,11 @@ QPoint KoCanvasControllerGraphicsWidget::preferredCenter() const
     return QPoint();
 }
 
-void KoCanvasControllerGraphicsWidget::pan(const QPoint &distance)
+void KoCanvasControllerGraphicsWidget::pan(const QPoint &/*distance*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setMargin(int margin)
+void KoCanvasControllerGraphicsWidget::setMargin(int /*margin*/)
 {
 }
 
@@ -162,15 +162,15 @@ QPoint KoCanvasControllerGraphicsWidget::scrollBarValue() const
     return QPoint();
 }
 
-void KoCanvasControllerGraphicsWidget::setScrollBarValue(const QPoint &value)
+void KoCanvasControllerGraphicsWidget::setScrollBarValue(const QPoint &/*value*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KoCanvasControllerGraphicsWidget::updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/)
 {
 }
 
-QCursor KoCanvasControllerGraphicsWidget::setCursor(const QCursor &cursor)
+QCursor KoCanvasControllerGraphicsWidget::setCursor(const QCursor &/*cursor*/)
 {
     return QCursor();
 }

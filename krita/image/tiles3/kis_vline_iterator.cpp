@@ -185,3 +185,13 @@ void KisVLineIterator2::preallocateTiles()
         fetchTileDataForCache(m_tilesCache[i], m_column, m_topRow + i );
     }
 }
+
+qint32 KisVLineIterator2::x() const
+{
+    return m_x;
+}
+
+qint32 KisVLineIterator2::y() const
+{
+    return m_y;
+}

@@ -138,7 +138,7 @@ QImage KoImageData::image() const
         // load image
         if (d->temporaryFile) {
             d->temporaryFile->open();
-            if (d->errorCode == Success && !d->image.load(d->temporaryFile, d->suffix.toLatin1())) {
+            if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName())) {
                 d->errorCode = OpenFailed;
             }
             d->temporaryFile->close();

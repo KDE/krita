@@ -26,6 +26,7 @@ class KisDoubleSliderSpinBox;
 class QLabel;
 class QCheckBox;
 
+class KisMultipliersDoubleSliderSpinBox;
 class KisDoubleSliderSpinBox;
 class KoResourceItemChooser;
 class KoResource;
@@ -65,7 +66,7 @@ private:
     QLabel* m_lbScale;
     QLabel* m_lbSpacing;
     KisDoubleSliderSpinBox* m_slRotation;
-    KisDoubleSliderSpinBox* m_slScale;
+    KisMultipliersDoubleSliderSpinBox* m_slScale;
     KisDoubleSliderSpinBox* m_slSpacing;
     QCheckBox* m_chkColorMask;
     KisBrushSP m_brush;

@@ -87,10 +87,7 @@ bool testFilterSrcNotIsDev(KisFilterSP f)
     }
     qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dstdev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, dstdev, 0, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
 
@@ -128,10 +125,7 @@ bool testFilterNoTransaction(KisFilterSP f)
     }
     qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
 
@@ -175,10 +169,7 @@ bool testFilter(KisFilterSP f)
     }
     qDebug() << f->id();// << "\n" << kfc->toXML() << "\n";
 
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), 0);
-    KisProcessingInformation dst(dev, QPoint(0, 0), 0);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
 
@@ -223,13 +214,7 @@ bool testFilterWithSelections(KisFilterSP f)
     KisSelectionSP sel1 = new KisSelection(dev);
     sel1->getOrCreatePixelSelection()->select(qimage.rect());
 
-    KisSelectionSP sel2 = new KisSelection(dev);
-    sel2->getOrCreatePixelSelection()->select(qimage.rect());
-
-    KisConstProcessingInformation src(dev,  QPoint(0, 0), sel1);
-    KisProcessingInformation dst(dev, QPoint(0, 0), sel2);
-
-    f->process(src, dst, qimage.size(), kfc);
+    f->process(dev, dev, sel1, QRect(QPoint(0,0), qimage.size()), kfc);
 
     QPoint errpoint;
 

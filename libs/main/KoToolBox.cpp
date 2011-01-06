@@ -475,11 +475,10 @@ void KoToolBox::setCanvas(KoCanvasBase *canvas)
     d->canvas = canvas;
 }
 
-void KoToolBox::paintEvent(QPaintEvent * e)
+void KoToolBox::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.eraseRect(e->rect());
-    
+
     painter.setBrush(palette().shadow());
 
     const QList<Section*> sections = d->sections.values();

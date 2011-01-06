@@ -21,9 +21,8 @@
 #include "KoReportPluginInterface.h"
 #include "KoReportPluginInfo.h"
 
-KoReportPluginInterface::KoReportPluginInterface()
+KoReportPluginInterface::KoReportPluginInterface() : m_pluginInfo(0)
 {
-    m_pluginInfo = 0;
 }
 
 KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariantList& args): QObject(parent)
@@ -33,9 +32,7 @@ KoReportPluginInterface::KoReportPluginInterface(QObject* parent, const QVariant
 
 KoReportPluginInterface::~KoReportPluginInterface()
 {
-    if (m_pluginInfo) {
-        delete m_pluginInfo;
-    }
+    delete m_pluginInfo;
 }
 
 void KoReportPluginInterface::setInfo(KoReportPluginInfo* p)

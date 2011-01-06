@@ -42,6 +42,7 @@ public:
     ~KisActionsEditor();
     void setMacro(KisMacro*);
 private slots:
+    void slotCreateAction(const QString& _id);
     void slotActionActivated(const QModelIndex&);
     void slotBtnDelete();
     void slotBtnDuplicate();

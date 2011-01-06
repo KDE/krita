@@ -256,6 +256,12 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
 
 bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 {
+    if (m_d->image) {
+        m_d->shapeController->setImage(0);
+        m_d->nodeModel->setImage(0);
+        m_d->image = 0;
+    }
+
     KoXmlElement root;
     QString attr;
     KoXmlNode node;

@@ -1,12 +1,16 @@
 [Desktop Entry]
 Name=Krita Undo History Docker plugin
+Name[et]=Krita tagasivõtmise ajaloo doki plugin
 Name[fr]=Module de panneaux d'historique pour Krita
+Name[it]=Estensione di aggancio per l'annullamento della cronologia di Krita
+Name[nds]=Torüchnehmlist-Andockmoduul för Krita
 Name[nl]=Vastzetterplugin van ongedaan maken-geschiedenis van Krita
 Name[pt]='Plugin' do Módulo Acoplável do Histórico de Anulações do Krita
 Name[pt_BR]=Plug-in de módulos acopláveis do do histórico de anulações do Krita
 Name[sv]=Krita insticksprogram för ångringshistorik
 Name[uk]=Додаток панелі журналу скасування для Krita
 Name[x-test]=xxKrita Undo History Docker pluginxx
+Name[zh_TW]=Krita 復原動作歷史紀錄嵌入外掛程式
 Type=Service
 X-KDE-ServiceTypes=Krita/Dock
 X-KDE-Library=kritahistorydocker

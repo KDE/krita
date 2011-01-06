@@ -150,6 +150,9 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 {
     Q_ASSERT(mask);
+    if (!mask->filter()) {
+        return false;
+    }
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, FILTER_MASK, mask);
     el.setAttribute(FILTER_NAME, mask->filter()->name());

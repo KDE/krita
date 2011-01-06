@@ -117,6 +117,7 @@ struct KisAutoBrush::Private {
     KisMaskGenerator* shape;
     qreal randomness;
     qreal density;
+    int idealThreadCountCached;
     mutable QVector<quint8> precomputedQuarter;
 };
 
@@ -127,6 +128,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     d->shape = as;
     d->randomness = randomness;
     d->density = density;
+    d->idealThreadCountCached = QThread::idealThreadCount();
     setBrushType(MASK);
     setWidth(d->shape->width());
     setHeight(d->shape->height());
@@ -302,7 +304,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
         }//endfor y
 
         MaskProcessor s(dst, cs, d->randomness, d->density, centerX, centerY, invScaleX, invScaleY, angle, d->shape);
-        int jobs = QThread::idealThreadCount();
+        int jobs = d->idealThreadCountCached;
         if(dstHeight > 100 && jobs >= 4) {
             int splitter = dstHeight/jobs;
             QVector<QRect> rects;

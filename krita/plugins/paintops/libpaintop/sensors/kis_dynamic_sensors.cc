@@ -72,3 +72,8 @@ KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
     setMaximumLabel(i18n("30°"));
 }
 
+KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(PerspectiveId)
+{
+    setMinimumLabel(i18n("Far"));
+    setMaximumLabel(i18n("Near"));
+}

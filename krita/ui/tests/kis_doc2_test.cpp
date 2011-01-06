@@ -20,9 +20,12 @@
 
 #include <KUndoStack>
 #include <qtest_kde.h>
-
+#include <kstandarddirs.h>
 #include "kis_doc2.h"
 #include "kis_undo_adapter.h"
+#include "kis_factory2.h"
+#include <KoDocumentEntry.h>
+#include <KoMainWindow.h>
 
 class KisCommandHistoryListenerFake : public KisCommandHistoryListener
 {
@@ -136,6 +139,18 @@ void KisDoc2Test::testUndoRedoNotify()
 
 }
 
+void KisDoc2Test::testOpenImageTwiceInSameDoc()
+{
+    QString fname2 = QString(FILES_DATA_DIR) + QDir::separator() + "load_test.kra";
+    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", "krita_first_start.kra");
+
+
+    Q_ASSERT(!fname.isEmpty());
+    Q_ASSERT(!fname2.isEmpty());
+    KisDoc2 doc;
+    doc.loadNativeFormat(fname);
+    doc.loadNativeFormat(fname2);
+}
 
 QTEST_KDEMAIN(KisDoc2Test, GUI)
 #include "kis_doc2_test.moc"

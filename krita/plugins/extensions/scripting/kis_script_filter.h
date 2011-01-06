@@ -41,11 +41,11 @@ public:
 
     using KisFilter::process;
 
-    virtual void process(KisConstProcessingInformation srcInfo, KisProcessingInformation dstInfo, const QSize& size, const KisFilterConfiguration* config, KoUpdater*) const;
+    virtual void process(KisPaintDeviceSP src, const QRect& size, const KisFilterConfiguration* config, KoUpdater*) const;
 public Q_SLOTS:
     QString category() const;
 signals:
-    void scriptProcess(QObject* src, const QPoint& srcTopLeft, QObject* dst, const QPoint& dstTopLeft, const QSize& size, QObject* config) const;
+    void scriptProcess(QObject* src, const QRect& srcTopLeft, QObject* config) const;
 private:
     class Private;
     Private* const d;

@@ -54,6 +54,8 @@
 #include <kis_processing_information.h>
 
 #include "widgets/kis_multi_integer_filter_widget.h"
+#include <kis_iterator_ng.h>
+#include <kis_random_accessor_ng.h>
 
 KisEmbossFilter::KisEmbossFilter() : KisFilter(id(), categoryEmboss(), i18n("&Emboss with Variable Depth..."))
 {
@@ -81,19 +83,14 @@ KisFilterConfiguration* KisEmbossFilter::factoryConfiguration(const KisPaintDevi
  *                     understand. You get the diference between the colors and
  *                     increase it. After this, get the gray tone
  */
-void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
-                              KisProcessingInformation dstInfo,
-                              const QSize& size,
+void KisEmbossFilter::process(KisPaintDeviceSP device,
+                              const QRect& applyRect,
                               const KisFilterConfiguration* config,
                               KoUpdater* progressUpdater
                              ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device);
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 embossdepth = config ?  config->getInt("depth", 30) : 30;
@@ -104,44 +101,34 @@ void KisEmbossFilter::process(KisConstProcessingInformation srcInfo,
     float Depth = embossdepth / 10.0;
     int    R = 0, G = 0, B = 0;
     uchar  Gray = 0;
-    int Width = size.width();
-    int Height = size.height();
+    int Width = applyRect.width();
+    int Height = applyRect.height();
 
     if (progressUpdater) {
         progressUpdater->setRange(0, Height);
     }
 
-    KisHLineConstIteratorPixel it = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
+    KisRectIteratorSP it = device->createRectIteratorNG(applyRect);
     QColor color1;
     QColor color2;
-    for (int y = 0; !(progressUpdater && progressUpdater->interrupted()) && (y < Height); ++y) {
-        KisRandomConstAccessorPixel acc = src->createRandomConstAccessor(srcTopLeft.x(), srcTopLeft.y());
+    KisRandomConstAccessorSP acc = device->createRandomAccessorNG(srcTopLeft.x(), srcTopLeft.y());
+    do {
+    
+        // XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
+        device->colorSpace()->toQColor(it->oldRawData(), &color1);
+        acc->moveTo(srcTopLeft.x() + it->x() + Lim_Max(it->x(), 1, Width), srcTopLeft.y() + it->y() + Lim_Max(it->y(), 1, Height));
 
-        for (int x = 0; !(progressUpdater && progressUpdater->interrupted()) && (x < Width); ++x, ++it, ++dstIt) {
-            if (dstIt.isSelected()) {
+        device->colorSpace()->toQColor(acc->oldRawData(), &color2);
 
-// XXX: COLORSPACE_INDEPENDENCE or at least work IN RGB16A
+        R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
+        G = abs((int)((color1.green() - color2.green()) * Depth + (quint8_MAX / 2)));
+        B = abs((int)((color1.blue() - color2.blue()) * Depth + (quint8_MAX / 2)));
 
+        Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
 
-                src->colorSpace()->toQColor(it.oldRawData(), &color1);
-                acc.moveTo(srcTopLeft.x() + x + Lim_Max(x, 1, Width), srcTopLeft.y() + y + Lim_Max(y, 1, Height));
-
-                src->colorSpace()->toQColor(acc.oldRawData(), &color2);
-
-                R = abs((int)((color1.red() - color2.red()) * Depth + (quint8_MAX / 2)));
-                G = abs((int)((color1.green() - color2.green()) * Depth + (quint8_MAX / 2)));
-                B = abs((int)((color1.blue() - color2.blue()) * Depth + (quint8_MAX / 2)));
-
-                Gray = CLAMP((R + G + B) / 3, 0, quint8_MAX);
-
-                dst->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), dstIt.rawData());
-            }
-        }
-        it.nextRow();
-        dstIt.nextRow();
-        if (progressUpdater) progressUpdater->setValue(y);
-    }
+        device->colorSpace()->fromQColor(QColor(Gray, Gray, Gray, color1.alpha()), it->rawData());
+        if (progressUpdater) { progressUpdater->setValue(it->y()); if(progressUpdater->interrupted()) return; }
+    } while(it->nextPixel());
 }
 
 // This method have been ported from Pieter Z. Voloshyn algorithm code.

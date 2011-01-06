@@ -43,7 +43,7 @@ void DeleteTableColumnCommand::undo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     for (int i = 0; i < m_selectionColumnSpan; ++i) {
-        carsManager.setColumnStyle(m_selectionColumn + i, m_deletedStyles.at(i));
+        carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
     }
 
     QUndoCommand::undo();

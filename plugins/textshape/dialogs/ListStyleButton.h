@@ -46,8 +46,8 @@ private slots:
     void itemSelected(QAction *action);
 
 private:
-    QAction *m_lastAction ;
     bool m_letterSynchronization;
+    QAction *m_lastAction ;
     QMenu *m_menu;
     QMap<QAction *, int > m_actionMap;
 };

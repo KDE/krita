@@ -66,7 +66,7 @@ private:
     KisFilterConfiguration* kconfig;
 };
 
-KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* fc) : KisRecordedAction("FilterAction", name, path), d(new Private)
+KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* fc) : KisRecordedNodeAction("FilterAction", name, path), d(new Private)
 {
     Q_ASSERT(filter);
     d->filter = filter;
@@ -75,7 +75,7 @@ KisRecordedFilterAction::KisRecordedFilterAction(QString name, const KisNodeQuer
     }
 }
 
-KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& rhs) : KisRecordedAction(rhs), d(new Private(*rhs.d))
+KisRecordedFilterAction::KisRecordedFilterAction(const KisRecordedFilterAction& rhs) : KisRecordedNodeAction(rhs), d(new Private(*rhs.d))
 {
 }
 
@@ -83,31 +83,26 @@ KisRecordedFilterAction::~KisRecordedFilterAction()
 {
 }
 
-void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& info) const
+void KisRecordedFilterAction::play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater) const
 {
-    Q_UNUSED(node);
-
     KisFilterConfiguration * kfc = d->configuration();
-    QList<KisNodeSP> nodes = nodeQueryPath().queryNodes(info.image(), info.currentNode());
-    foreach(KisNodeSP node, nodes) {
-        KisPaintDeviceSP dev = node->paintDevice();
-        KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
-        QRect r1 = dev->extent();
-        KisTransaction transaction(d->filter->name(), dev);
+    KisPaintDeviceSP dev = node->paintDevice();
+    KisLayerSP layer = dynamic_cast<KisLayer*>(node.data());
+    QRect r1 = dev->extent();
+    KisTransaction transaction(d->filter->name(), dev);
 
-        KisImageWSP image = info.image();
-        r1 = r1.intersected(image->bounds());
-        if (layer && layer->selectionMask()) {
-            r1 = r1.intersected(layer->selectionMask()->exactBounds());
-        }
-        if (image->globalSelection())
-            r1 = r1.intersected(image->globalSelection()->selectedExactRect());
-
-        d->filter->process(dev, r1, kfc);
-        node->setDirty(r1);
-
-        transaction.commit(info.undoAdapter());
+    KisImageWSP image = _info.image();
+    r1 = r1.intersected(image->bounds());
+    if (layer && layer->selectionMask()) {
+        r1 = r1.intersected(layer->selectionMask()->exactBounds());
     }
+    if (image->globalSelection())
+        r1 = r1.intersected(image->globalSelection()->selectedExactRect());
+
+    d->filter->process(dev, r1, kfc, _updater);
+    node->setDirty(r1);
+
+    transaction.commit(_info.undoAdapter());
 }
 
 void KisRecordedFilterAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* context) const

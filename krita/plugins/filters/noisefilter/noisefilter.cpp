@@ -50,6 +50,7 @@
 
 #include "kis_wdg_noise.h"
 #include "ui_wdgnoiseoptions.h"
+#include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaNoiseFilterFactory, registerPlugin<KritaNoiseFilter>();)
 K_EXPORT_PLUGIN(KritaNoiseFilterFactory("krita"))
@@ -92,33 +93,27 @@ KisConfigWidget * KisFilterNoise::createConfigurationWidget(QWidget* parent, con
     return new KisWdgNoise((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterNoise::process(KisConstProcessingInformation srcInfo,
-                             KisProcessingInformation dstInfo,
-                             const QSize& size,
-                             const KisFilterConfiguration* config,
-                             KoUpdater* progressUpdater
+void KisFilterNoise::process(KisPaintDeviceSP device,
+                            const QRect& applyRect,
+                            const KisFilterConfiguration* config,
+                            KoUpdater* progressUpdater
                             ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(!device.isNull());
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.width() * size.height());
+        progressUpdater->setRange(0, applyRect.width() * applyRect.height());
     }
     int count = 0;
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
 
     QVariant value;
     int level = (config && config->getProperty("level", value)) ? value.toInt() : 50;
     int opacity = (config && config->getProperty("opacity", value)) ? value.toInt() : 100;
 
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), srcInfo.selection());
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), dstInfo.selection());
+    KisRectIteratorSP srcIt = device->createRectIteratorNG(applyRect);
 
     quint8* interm = new quint8[ cs->pixelSize()];
     double threshold = (100.0 - level) * 0.01;
@@ -148,23 +143,19 @@ void KisFilterNoise::process(KisConstProcessingInformation srcInfo,
     KisRandomGenerator randg(seedGreen);
     KisRandomGenerator randb(seedBlue);
 
-    for (int row = 0; row < size.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
-        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
-            if (randt.doubleRandomAt(srcIt.x(), srcIt.y()) > threshold) {
+    for (int row = 0; row < applyRect.height() && !(progressUpdater && progressUpdater->interrupted()); ++row) {
+        do {
+            if (randt.doubleRandomAt(srcIt->x(), srcIt->y()) > threshold) {
                 // XXX: Added static_cast to get rid of warnings
-                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(srcIt.x(), srcIt.y()) * 255),
-                                static_cast<int>((double)randg.doubleRandomAt(srcIt.x(), srcIt.y()) * 255),
-                                static_cast<int>((double)randb.doubleRandomAt(srcIt.x(), srcIt.y()) * 255));
+                QColor c = qRgb(static_cast<int>((double)randr.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
+                                static_cast<int>((double)randg.doubleRandomAt(srcIt->x(), srcIt->y()) * 255),
+                                static_cast<int>((double)randb.doubleRandomAt(srcIt->x(), srcIt->y()) * 255));
                 cs->fromQColor(c, interm, 0);
-                pixels[1] = srcIt.oldRawData();
-                mixOp->mixColors(pixels, weights, 2, dstIt.rawData());
+                pixels[1] = srcIt->oldRawData();
+                mixOp->mixColors(pixels, weights, 2, srcIt->rawData());
             }
-            ++srcIt;
-            ++dstIt;
             if (progressUpdater) progressUpdater->setValue(++count);
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
+        } while (srcIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
     }
 
     delete [] interm;

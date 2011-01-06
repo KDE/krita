@@ -100,4 +100,14 @@ public:
     }
 };
 
+class KisDynamicSensorPerspective : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorPerspective();
+    virtual ~KisDynamicSensorPerspective() { }
+    virtual qreal parameter(const KisPaintInformation& info) {
+        return info.perspective();
+    }
+};
+
 #endif

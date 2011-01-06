@@ -52,14 +52,16 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
     if (family) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(family);
+        widget.fontsFrame->addWidget(family,0,0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
     QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
     if (size) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(size);
+        widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
+
+    widget.fontsFrame->setColumnStretch(0,1);
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)

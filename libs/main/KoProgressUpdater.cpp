@@ -28,6 +28,8 @@
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
 
+#include <kdebug.h>
+
 class KoProgressUpdater::Private
 {
 public:
@@ -49,8 +51,7 @@ public:
     Mode mode;
     int totalWeight;
     int currentProgress;
-    bool updated;          // is true whe
-                           // never the progress needs to be recomputed
+    bool updated;          // is true whenever the progress needs to be recomputed
     QTextStream *output;
     QTimer updateGuiTimer; // fires regulary to update the progress bar widget
     QList<QPointer<KoUpdaterPrivate> > subtasks;
@@ -100,6 +101,7 @@ QTime KoProgressUpdater::referenceTime() const
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
+    kDebug(30003) << range << text;
     d->updateGuiTimer.start(100); // 10 updates/second should be enough?
 
     qDeleteAll(d->subtasks);
@@ -120,6 +122,7 @@ void KoProgressUpdater::start(int range, const QString &text)
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
                                                     const QString &name)
 {
+    kDebug(30003) << name << weight;
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
     d->subtasks.append(p);

@@ -1325,9 +1325,10 @@ bool KoDocument::openFile()
     // contain subtasks for filtering and loading
     DocumentProgressProxy proxyProgress(this);
     d->progressUpdater = new KoProgressUpdater(&proxyProgress,
-                                               KoProgressUpdater::Threaded,
+                                               KoProgressUpdater::Unthreaded,
                                                d->profileStream);
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
+    d->progressUpdater->start();
 
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)

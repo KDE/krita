@@ -49,6 +49,7 @@ KisRecordedFilterActionCreator::~KisRecordedFilterActionCreator()
 KisRecordedAction* KisRecordedFilterActionCreator::createAction() const
 {
     const KisFilter* filter = m_filterModel->indexToFilter(m_filterTree->currentIndex());
+    if(!filter) return 0;
     return new KisRecordedFilterAction(filter->name(), KisNodeQueryPath::fromString(""), filter, filter->defaultConfiguration(0));
 }
 

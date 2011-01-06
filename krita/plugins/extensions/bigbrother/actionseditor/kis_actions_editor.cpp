@@ -30,6 +30,7 @@
 #include <QSignalMapper>
 #include <recorder/kis_recorded_action_creator_factory.h>
 #include <recorder/kis_recorded_action_creator.h>
+#include <KMessageBox>
 
 KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
 
@@ -99,6 +100,11 @@ void KisActionsEditor::slotCreateAction(const QString& _id)
         if(d.exec() == KDialog::Accepted)
         {
             action = creator->createAction();
+            if(!action)
+            {
+                KMessageBox::error(this, i18n("Failed to create an action."));
+                return;
+            }
         } else {
             return;
         }

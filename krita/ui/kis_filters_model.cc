@@ -182,6 +182,9 @@ QVariant KisFiltersModel::data(const QModelIndex &index, int role) const
             Private::Node* node = static_cast<Private::Node*>(index.internalPointer());
             Private::Filter* filter = dynamic_cast<Private::Filter*>(node);
             if (filter) {
+                if (!d->thumb) {
+                    return QVariant();
+                }
                 if (!d->previewCache.contains(filter->filter)) {
             
                     QFutureWatcher<QImage>* watcher = new QFutureWatcher<QImage>();

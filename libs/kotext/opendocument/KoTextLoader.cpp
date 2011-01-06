@@ -531,11 +531,28 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         }
                     } else if (localName == "unordered-list" || localName == "ordered-list" // OOo-1.1
                             || localName == "list" || localName == "numbered-paragraph") {  // OASIS
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->openChangeRegion(tag);
-                        loadList(tag, cursor);
-                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
-                            d->closeChangeRegion(tag);
+                        if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "insert-around-content") {
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                                d->openChangeRegion(tag);
+                            loadList(tag, cursor);
+                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                                d->closeChangeRegion(tag);
+                        } else {
+                            QString generatedXmlString;
+                            _node = loadDeleteMerges(tag,&generatedXmlString);
+                            //Parse and Load the generated xml
+                            QString errorMsg;
+                            int errorLine, errorColumn;
+                            KoXmlDocument doc;
+
+                            QXmlStreamReader reader(generatedXmlString);
+                            reader.setNamespaceProcessing(true);
+
+                            bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
+                            if (ok) {
+                                loadBody(doc.documentElement(), cursor);     
+                            }   
+                        }
                     } else if (localName == "section") {  // Temporary support (TODO)
                         loadSection(tag, cursor);
                     } else if (localName == "table-of-content") {

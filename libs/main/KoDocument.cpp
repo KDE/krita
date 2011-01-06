@@ -1325,9 +1325,10 @@ bool KoDocument::openFile()
     // contain subtasks for filtering and loading
     DocumentProgressProxy proxyProgress(this);
     d->progressUpdater = new KoProgressUpdater(&proxyProgress,
-                                               KoProgressUpdater::Threaded,
+                                               KoProgressUpdater::Unthreaded,
                                                d->profileStream);
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
+    d->progressUpdater->start();
 
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
@@ -2490,9 +2491,9 @@ void KoDocument::deleteOpenPane()
         d->startUpWidget->hide();
         d->startUpWidget->deleteLater();
 
-        shells().first()->factory()->container("mainToolBar",
-                                               shells().first())->show();
         shells().first()->setRootDocument(this);
+
+        shells().first()->factory()->container("mainToolBar", shells().first())->show();
     } else {
         emit closeEmbedInitDialog();
     }

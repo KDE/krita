@@ -57,7 +57,6 @@ void KisColorTransformationFilter::process(KisPaintDeviceSP device,
 
     const KoColorSpace * cs = device->colorSpace();
     KoColorTransformation* colorTransformation = createTransformation(cs, config);
-    Q_ASSERT(colorTransformation);
     if (!colorTransformation) return;
 
     KisRectIteratorSP it = device->createRectIteratorNG(applyRect);

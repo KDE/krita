@@ -18,16 +18,58 @@
  */
 #include "SimpleStylesWidget.h"
 #include "TextTool.h"
+#include "StylesWidget.h"
+
+#include <KoStyleManager.h>
+#include <KoCharacterStyle.h>
+#include <KoParagraphStyle.h>
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
+#include <QFrame>
+#include <QHBoxLayout>
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
         ,m_blockSignals(false)
 {
+    setObjectName("simplestyleswidget");
+    m_popupForBlock = new StylesWidget;
+    m_popupForChar = new StylesWidget;
+
+    QFrame *blockFrame = new QFrame;
+    blockFrame->setFrameShape(QFrame::StyledPanel);
+    blockFrame->setFrameShadow(QFrame::Sunken);
+    QWidget *blockPreview = new QWidget();
+    blockPreview->setAutoFillBackground(true);
+    blockPreview->setBackgroundRole(QPalette::Base);
+    blockPreview->setMinimumWidth(50);
+    blockPreview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    QHBoxLayout *l = new QHBoxLayout;
+    l->addWidget(blockPreview);
+    l->setMargin(0);
+    blockFrame->setLayout(l);
+
+    QFrame *charFrame = new QFrame;
+    charFrame->setFrameShape(QFrame::StyledPanel);
+    charFrame->setFrameShadow(QFrame::Sunken);
+    QWidget *charPreview = new QWidget();
+    charPreview->setAutoFillBackground(true);
+    charPreview->setBackgroundRole(QPalette::Base);
+    charPreview->setMinimumWidth(50);
+    charPreview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    l = new QHBoxLayout;
+    l->addWidget(charPreview);
+    l->setMargin(0);
+    charFrame->setLayout(l);
+
+    l = new QHBoxLayout;
+    l->addWidget(blockFrame);
+    l->addWidget(charFrame);
+    l->setMargin(0);
+    setLayout(l);
 }
 
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)

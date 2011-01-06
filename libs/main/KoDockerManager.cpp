@@ -32,6 +32,7 @@
 
 #include "KoView.h"
 #include "KoMainWindow.h"
+#include "KoDockWidgetTitleBar.h"
 
 #include <QList>
 #include <QGridLayout>
@@ -92,9 +93,11 @@ public:
 
     void restoringDone()
     {
-        ignore = false;
-        moveToolBars();
-        toolOptionsDocker->setVisible(true); // should always be visible
+        if (ignore) {
+            ignore = false;
+            moveToolBars();
+            toolOptionsDocker->setVisible(true); // should always be visible
+        }
     }
 
     void moveToolBarsBack()
@@ -140,12 +143,15 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     d->dockedToolBarsLayout = new QGridLayout();
     d->dockedToolBarsLayout->setHorizontalSpacing(2);
     d->dockedToolBarsLayout->setVerticalSpacing(0);
+    d->dockedToolBarsLayout->setMargin(0);
     dockedToolBarsWidget->setLayout(d->dockedToolBarsLayout);
     d->toolBarsDocker->setAllowedAreas(Qt::TopDockWidgetArea);
     d->toolBarsDocker->setFeatures(QDockWidget::DockWidgetClosable);
     d->toolBarsDocker->setWidget(dockedToolBarsWidget);
-    d->toolBarsDocker->setTitleBarWidget(new QWidget());
     d->toolBarsDocker->setVisible(false);
+    KoDockWidgetTitleBar *tb = new KoDockWidgetTitleBar(d->toolBarsDocker);
+    tb->setTextVisible(false);
+    d->toolBarsDocker->setTitleBarWidget(tb);
 
     connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
     connect(d->toolBarsDocker, SIGNAL(visibilityChanged(bool)), this, SLOT(moveToolBars()));

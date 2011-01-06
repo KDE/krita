@@ -66,7 +66,6 @@ KisNodeModel::~KisNodeModel()
 
 void KisNodeModel::setImage(KisImageWSP image)
 {
-    dbgUI << "KisNodeModel::setImage " << image << ": number of layers " << image->nlayers();
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
@@ -365,7 +364,7 @@ void KisNodeModel::beginRemoveNodes(KisNode * parent, int index)
 {
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
-    
+
     //dbgUI <<"KisNodeModel::beginRemoveNodes parent=" << parent << ", index=" << index;
     beginRemoveRows(indexFromNode(parent), parent->childCount() - 1 - index, parent->childCount() - 1 - index);
 }

@@ -50,6 +50,11 @@ void KoColorTransformationFactoryRegistry::removeColorTransformationFactory(KoCo
     instance()->remove(factory->id());
 }
 
+bool KoColorTransformationFactoryRegistry::containsColorTransformationFactory(const QString& id)
+{
+    return instance()->contains(id);
+}
+
 KoColorTransformationFactoryRegistry* KoColorTransformationFactoryRegistry::instance()
 {
     if (Private::s_registry == 0) {

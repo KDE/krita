@@ -290,6 +290,9 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("List Item Merges")  << "ChangeTracking/complex-delete-merges/list-item-merge-simple/list-item-merge-simple-tracked.odt";
     QTest::newRow("List Merges")  << "ChangeTracking/complex-delete-merges/list-merges/list-merges-tracked.odt";
     QTest::newRow("Paragraph with header")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-header-simple/paragraph-merge-with-header-simple-tracked.odt";
+    
+    //Other tests
+    QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt";
      
 }
 

@@ -130,7 +130,6 @@ void BigBrotherPlugin::slotOpenPlay()
     while(player.isRunning())
     {
         QApplication::processEvents();
-        sleep(10);
     }
     dbgPlugins << "Finished";
     delete m;

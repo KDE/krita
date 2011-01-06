@@ -20,12 +20,12 @@
 #define _KIS_MACRO_PLAYER_H_
 
 #include <QThread>
-#include <KoProgressUpdater.h>
 
 #include <krita_export.h>
 
 class KisMacro;
 class KisPlayInfo;
+class KoUpdater;
 
 /**
  * This class play a macro inside a thread.
@@ -33,7 +33,7 @@ class KisPlayInfo;
 class KRITAIMAGE_EXPORT KisMacroPlayer : public QThread {
     Q_OBJECT
 public:
-    KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoProgressUpdater * updater = 0, QObject* _parent = 0);
+    KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoUpdater * updater = 0, QObject* _parent = 0);
     virtual ~KisMacroPlayer();
 public slots:
     void pause();

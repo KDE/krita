@@ -27,6 +27,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
+#include <KoUpdater.h>
+
 #include <recorder/kis_action_recorder.h>
 #include <kis_config.h>
 #include <kis_cursor.h>
@@ -121,7 +123,9 @@ void BigBrotherPlugin::slotOpenPlay()
     KisMacro* m = openMacro();
     if (!m) return;
     dbgPlugins << "Play the macro";
-    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), m_view->createProgressUpdater());
+    KoProgressUpdater* updater = m_view->createProgressUpdater();
+    updater->start(1);
+    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), updater->startSubtask());
     player.start();
     while(player.isRunning())
     {

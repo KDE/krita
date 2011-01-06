@@ -37,10 +37,10 @@ struct KisMacroPlayer::Private
     bool paused;
     KisMacro* macro;
     KisPlayInfo info;
-    KoProgressUpdater* updater;
+    KoUpdater* updater;
 };
 
-KisMacroPlayer::KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoProgressUpdater * updater, QObject* _parent ) : QThread(_parent), d(new Private(info))
+KisMacroPlayer::KisMacroPlayer(KisMacro* _macro, const KisPlayInfo& info, KoUpdater * updater, QObject* _parent ) : QThread(_parent), d(new Private(info))
 {
     d->macro = _macro;
     d->updater = updater;
@@ -71,17 +71,21 @@ void KisMacroPlayer::run()
         d->info.undoAdapter()->beginMacro(i18n("Play macro"));
     }
 
+    KoProgressUpdater* progressUpdater = 0;
     if(d->updater)
-        d->updater->start(actions.size());
+    {
+        progressUpdater = new KoProgressUpdater(d->updater);
+        progressUpdater->start(actions.size());
+    }
 
     for (QList<KisRecordedAction*>::iterator it = actions.begin(); it != actions.end(); ++it) {
         if (*it) {
             dbgImage << "Play action : " << (*it)->name();
             KoUpdater* updater = 0;
-            if(d->updater) updater = d->updater->startSubtask();
+            if(progressUpdater) updater = progressUpdater->startSubtask();
             (*it)->play(d->info, updater);
         }
-        if(d->updater->interrupted())
+        if(progressUpdater->interrupted())
         {
             break;
         }
@@ -89,7 +93,7 @@ void KisMacroPlayer::run()
 
     if (d->info.undoAdapter()) {
         d->info.undoAdapter() ->endMacro();
-        if(d->updater->interrupted())
+        if(progressUpdater->interrupted())
         {
             d->info.undoAdapter()->undoLastCommand();
         }

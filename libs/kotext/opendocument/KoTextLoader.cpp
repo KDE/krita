@@ -666,12 +666,16 @@ void KoTextLoader::Private::copyRemoveLeavingContentStart(const KoXmlNode &node,
     QPair<QString, QString> attributeName;
     foreach(attributeName, attributeNSNames) {
         QString nameSpace = attributeName.first;
-        int index = nameSpacesList.indexOf(nameSpace);
-        if (index == -1) {
-            nameSpacesList.append(nameSpace);
-            index = nameSpacesList.size() - 1;
+        if (nameSpace != "http://www.w3.org/XML/1998/namespace") {
+            int index = nameSpacesList.indexOf(nameSpace);
+            if (index == -1) {
+                nameSpacesList.append(nameSpace);
+                index = nameSpacesList.size() - 1;
+            }
+            xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+        } else {
+            xmlStream << " " << "xml:" << attributeName.second << "=";
         }
-        xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
         xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
     }
     
@@ -781,12 +785,16 @@ void KoTextLoader::Private::copyTagStart(const KoXmlElement &element, QTextStrea
         if (nameSpace == KoXmlNS::delta && ignoreChangeAttributes) {
             continue;
         }
-        int index = nameSpacesList.indexOf(nameSpace);
-        if (index == -1) {
-            nameSpacesList.append(nameSpace);
-            index = nameSpacesList.size() - 1;
+        if (nameSpace != "http://www.w3.org/XML/1998/namespace") {
+            int index = nameSpacesList.indexOf(nameSpace);
+            if (index == -1) {
+                nameSpacesList.append(nameSpace);
+                index = nameSpacesList.size() - 1;
+            }
+            xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
+        } else {
+            xmlStream << " " << "xml:" << attributeName.second << "=";
         }
-        xmlStream << " " << "ns" << index << ":" << attributeName.second << "=";
         xmlStream << "\"" << element.attributeNS(nameSpace, attributeName.second) << "\"";
     }
     xmlStream << ">";       

@@ -43,6 +43,7 @@ public:
         , currentProgress(0)
         , updated(false)
         , output(output_)
+        , canceled(false)
     {
     }
 
@@ -60,6 +61,7 @@ public:
 
     static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
                           const QTime& startTime, const QString& prefix);
+    bool canceled;
 };
 
 // NOTE: do not make the KoProgressUpdater object part of the QObject
@@ -117,6 +119,7 @@ void KoProgressUpdater::start(int range, const QString &text)
         d->progressBar->setFormat(text);
     }
     d->totalWeight = 0;
+    d->canceled = false;
 }
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
@@ -140,6 +143,7 @@ void KoProgressUpdater::cancel()
         updater->setProgress(100);
         updater->interrupt();
     }
+    d->canceled = true;
     updateUi();
 }
 
@@ -191,6 +195,11 @@ void KoProgressUpdater::updateUi()
         d->updateGuiTimer.stop(); // 10 updates/second should be enough?
     }
     d->progressBar->setValue(d->currentProgress);
+}
+
+bool KoProgressUpdater::interrupted() const
+{
+    return d->canceled;
 }
 
 void KoProgressUpdater::Private::logEvents(QTextStream& out,

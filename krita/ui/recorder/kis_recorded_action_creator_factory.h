@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009,2011 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,38 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
-#define _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
+#ifndef _KIS_RECORDED_ACTION_CREATOR_FACTORY_H_
+#define _KIS_RECORDED_ACTION_CREATOR_FACTORY_H_
 
 #include <krita_export.h>
 
-class QWidget;
 class KisRecordedAction;
+class KisRecordedActionCreator;
 class QString;
+class QWidget;
 
 /**
- * This class allow to create widget that can edit a @ref KisRecordedAction
+ * This class allows to create widgets that are used to create new actions.
  */
-class KRITAUI_EXPORT KisRecordedActionEditorFactory
+class KRITAUI_EXPORT KisRecordedActionCreatorFactory
 {
 public:
-    KisRecordedActionEditorFactory();
-    virtual ~KisRecordedActionEditorFactory();
+    KisRecordedActionCreatorFactory(const QString& _id, const QString& _name);
+    virtual ~KisRecordedActionCreatorFactory();
+    QString id() const;
+    QString name() const;
     /**
-     * Create an editor for the action.
-     * The widget is expected to have a 'actionChanged' signal that is emitted
-     * when the editor has changed one of the parameter of the action.
+     * @return true if the creation of this action require the use of a creator widget
      */
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const = 0;
+    virtual bool requireCreator() const = 0;
     /**
-     * @return true if this factory can create an editor for the given action.
+     * Create an creator for the action.
      */
-    virtual bool canEdit(const KisRecordedAction* action) const = 0;
+    virtual KisRecordedActionCreator* createCreator(QWidget* parent) const;
+    /**
+     * Create an action. If the action require a creator, it should return 0.
+     */
+    virtual KisRecordedAction* createAction() const;
 private:
     struct Private;
     Private* const d;

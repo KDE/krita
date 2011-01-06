@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009,2011 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
-#define _KIS_RECORDED_ACTION_EDITOR_FACTORY_H_
+#ifndef _KIS_RECORDED_ACTION_CREATOR_FACTORY_REGISTRY_H_
+#define _KIS_RECORDED_ACTION_CREATOR_FACTORY_REGISTRY_H_
 
 #include <krita_export.h>
+#include <KoID.h>
 
 class QWidget;
 class KisRecordedAction;
-class QString;
+class KisRecordedActionCreatorFactory;
 
 /**
- * This class allow to create widget that can edit a @ref KisRecordedAction
+ * This class allow to create a creator for a specific recorded action.
+ *
  */
-class KRITAUI_EXPORT KisRecordedActionEditorFactory
+class KRITAUI_EXPORT KisRecordedActionCreatorFactoryRegistry
 {
+private:
+    KisRecordedActionCreatorFactoryRegistry();
+    ~KisRecordedActionCreatorFactoryRegistry();
 public:
-    KisRecordedActionEditorFactory();
-    virtual ~KisRecordedActionEditorFactory();
+    static KisRecordedActionCreatorFactoryRegistry* instance();
     /**
-     * Create an editor for the action.
-     * The widget is expected to have a 'actionChanged' signal that is emitted
-     * when the editor has changed one of the parameter of the action.
+     * Add a factory of action creator.
      */
-    virtual QWidget* createEditor(QWidget* parent, KisRecordedAction* action) const = 0;
+    void add(KisRecordedActionCreatorFactory* factory);
     /**
-     * @return true if this factory can create an editor for the given action.
+     * @return an creator for the given action, or a null pointer if there is
+     *         no factory for that action.
      */
-    virtual bool canEdit(const KisRecordedAction* action) const = 0;
+    KisRecordedActionCreatorFactory* get(const QString& _id) const;
+    /**
+     * @return the list of creators
+     */
+    QList<KoID> creators() const;
 private:
     struct Private;
     Private* const d;

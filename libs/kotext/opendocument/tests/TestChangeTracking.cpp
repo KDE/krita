@@ -279,6 +279,11 @@ void TestChangeTracking::testChangeTracking_data()
 
     //Text Style Changes
     QTest::newRow("Text Made Bold")  << "ChangeTracking/styling/text-made-bold/text-made-bold-tracked.odt";
+
+    //Complex Delete Merges
+    QTest::newRow("Paragraph with list-item - 1")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item/paragraph-merge-with-list-item-tracked.odt";
+    QTest::newRow("Paragraph with list-item - 2")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-from-a-list-at-a-higher-level/paragraph-merge-with-list-item-from-a-list-at-a-higher-level-tracked.odt";
+    QTest::newRow("Paragraph with list-item - 3")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-simple/paragraph-merge-with-list-item-simple-tracked.odt";
      
 }
 

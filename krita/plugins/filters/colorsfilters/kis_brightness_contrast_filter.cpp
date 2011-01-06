@@ -152,7 +152,7 @@ KisBrightnessContrastFilter::KisBrightnessContrastFilter()
 
 KisConfigWidget * KisBrightnessContrastFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
-    return new KisBrightnessContrastConfigWidget(parent, dev, image->bounds());
+    return new KisBrightnessContrastConfigWidget(parent, dev, image ? image->bounds() : QRect());
 }
 
 KisFilterConfiguration* KisBrightnessContrastFilter::factoryConfiguration(const KisPaintDeviceSP)

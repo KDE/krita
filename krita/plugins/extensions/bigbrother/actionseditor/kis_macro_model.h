@@ -22,6 +22,7 @@
 
 #include <QAbstractListModel>
 
+class KisRecordedAction;
 class KisMacro;
 
 class KisMacroModel : public QAbstractListModel
@@ -34,6 +35,7 @@ public:
     virtual Qt::ItemFlags flags(const QModelIndex & index) const;
     virtual bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole);
     virtual bool removeRows(int row, int count, const QModelIndex & parent = QModelIndex());
+    void addAction(const QModelIndex& _after, const KisRecordedAction& _action);
     void duplicateAction(const QModelIndex& index);
     void raise(const QModelIndex& index);
     void lower(const QModelIndex& index);

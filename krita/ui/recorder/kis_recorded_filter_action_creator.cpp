@@ -19,14 +19,15 @@
 #include "kis_recorded_filter_action_creator.h"
 
 #include <QGridLayout>
+#include <QHeaderView>
 
 #include <KLocale>
 
+#include <filter/kis_filter.h>
 #include <kis_paint_device.h>
 #include <kis_filter_selector_widget.h>
 #include <kis_filters_model.h>
 #include <recorder/kis_recorded_filter_action.h>
-#include <filter/kis_filter.h>
 #include <recorder/kis_node_query_path.h>
 
 
@@ -35,6 +36,7 @@ KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent ,
     m_filterModel = new KisFiltersModel(0);
     m_filterTree = new KisFilterTree(this);
     m_filterTree->setFilterModel(m_filterModel);
+    m_filterTree->header()->setVisible(false);
     QGridLayout* layout = new QGridLayout();
     setLayout(layout);
     layout->addWidget(m_filterTree, 0, 0, 1, 1);

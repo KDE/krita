@@ -289,6 +289,7 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("List Item with a Paragraph - 3")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph-simple/list-item-merge-with-a-succeeding-paragraph-simple-tracked.odt";
     QTest::newRow("List Item Merges")  << "ChangeTracking/complex-delete-merges/list-item-merge-simple/list-item-merge-simple-tracked.odt";
     QTest::newRow("List Merges")  << "ChangeTracking/complex-delete-merges/list-merges/list-merges-tracked.odt";
+    QTest::newRow("Paragraph with header")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-header-simple/paragraph-merge-with-header-simple-tracked.odt";
      
 }
 

@@ -203,6 +203,7 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_action_save_context.cpp
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_fill_paint_action.cpp
+   recorder/kis_recorded_node_action.cc
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp

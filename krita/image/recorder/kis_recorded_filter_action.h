@@ -19,7 +19,7 @@
 #ifndef _KIS_RECORDED_FILTER_ACTION_H_
 #define _KIS_RECORDED_FILTER_ACTION_H_
 
-#include "recorder/kis_recorded_action.h"
+#include "recorder/kis_recorded_node_action.h"
 
 #include <krita_export.h>
 
@@ -30,7 +30,7 @@ class QRect;
 /**
  * Action representing a filter.
  */
-class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedAction
+class KRITAIMAGE_EXPORT KisRecordedFilterAction : public KisRecordedNodeAction
 {
 public:
     /**
@@ -39,7 +39,8 @@ public:
     KisRecordedFilterAction(QString name, const KisNodeQueryPath& path, const KisFilter* filter, const KisFilterConfiguration* config);
     KisRecordedFilterAction(const KisRecordedFilterAction&);
     virtual ~KisRecordedFilterAction();
-    virtual void play(KisNodeSP node, const KisPlayInfo&) const;
+    using KisRecordedNodeAction::play;
+    virtual void play(KisNodeSP node, const KisPlayInfo& _info, KoUpdater* _updater = 0) const;
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
     virtual KisRecordedAction* clone() const;
     const KisFilter* filter() const;

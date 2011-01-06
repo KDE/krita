@@ -28,6 +28,7 @@
 
 #include <kis_debug.h>
 #include "kis_recorded_action_creator_factory.h"
+#include "kis_recorded_filter_action_creator.h"
 
 struct KisRecordedActionCreatorFactoryRegistry::Private {
     KoGenericRegistry<KisRecordedActionCreatorFactory*> factories;
@@ -36,6 +37,7 @@ struct KisRecordedActionCreatorFactoryRegistry::Private {
 KisRecordedActionCreatorFactoryRegistry::KisRecordedActionCreatorFactoryRegistry()
         : d(new Private)
 {
+    add(new KisRecordedFilterActionCreatorFactory);
 }
 
 KisRecordedActionCreatorFactoryRegistry::~KisRecordedActionCreatorFactoryRegistry()

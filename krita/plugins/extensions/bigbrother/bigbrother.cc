@@ -121,7 +121,7 @@ void BigBrotherPlugin::slotOpenPlay()
     KisMacro* m = openMacro();
     if (!m) return;
     dbgPlugins << "Play the macro";
-    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()));
+    KisMacroPlayer player(m, KisPlayInfo(m_view->image(), m_view->activeNode()), m_view->createProgressUpdater());
     player.start();
     while(player.isRunning())
     {

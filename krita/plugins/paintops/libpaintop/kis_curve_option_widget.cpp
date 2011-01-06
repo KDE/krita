@@ -32,7 +32,7 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
     {
         label->setText(curve_label.name());
     } else {
-        label->setPixmap(curve_label.icon());
+        label->setPixmap(QPixmap::fromImage(curve_label.icon()));
     }
 }
 

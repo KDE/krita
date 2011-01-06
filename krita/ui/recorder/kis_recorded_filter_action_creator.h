@@ -23,7 +23,7 @@
 #include "kis_recorded_action_creator_factory.h"
 
 class KisFiltersModel;
-class KisFilterTree;
+class QTreeView;
 
 class KisRecordedFilterActionCreator : public KisRecordedActionCreator {
 public:
@@ -32,7 +32,7 @@ public:
     virtual KisRecordedAction* createAction() const;
 private:
     KisFiltersModel* m_filterModel;
-    KisFilterTree* m_filterTree;
+    QTreeView* m_filterTree;
 };
 
 /**

@@ -34,8 +34,8 @@
 KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent , Qt::WindowFlags f) : KisRecordedActionCreator(parent, f)
 {
     m_filterModel = new KisFiltersModel(0);
-    m_filterTree = new KisFilterTree(this);
-    m_filterTree->setFilterModel(m_filterModel);
+    m_filterTree = new QTreeView(this);
+    m_filterTree->setModel(m_filterModel);
     m_filterTree->header()->setVisible(false);
     QGridLayout* layout = new QGridLayout();
     setLayout(layout);
@@ -44,6 +44,8 @@ KisRecordedFilterActionCreator::KisRecordedFilterActionCreator(QWidget* parent ,
 
 KisRecordedFilterActionCreator::~KisRecordedFilterActionCreator()
 {
+    delete m_filterTree;
+    delete m_filterModel;
 }
 
 KisRecordedAction* KisRecordedFilterActionCreator::createAction() const

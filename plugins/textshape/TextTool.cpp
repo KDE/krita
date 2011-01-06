@@ -1560,6 +1560,9 @@ void TextTool::repaintSelection(QTextCursor &cursor)
 }
 QRectF TextTool::caretRect(int position) const
 {
+    if (!m_textShapeData) {
+        return QRectF();
+    }
     QTextBlock block = m_textShapeData->document()->findBlock(position);
     if (!block.isValid())
         return QRectF();

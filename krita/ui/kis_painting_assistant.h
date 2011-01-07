@@ -87,11 +87,12 @@ public:
     void addHandle(KisPaintingAssistantHandleSP handle);
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
-protected:
+public:
     /**
      * This will paint a path using a white and black colors.
      */
-    void drawPath(QPainter& painter, const QPainterPath& path);
+    static void drawPath(QPainter& painter, const QPainterPath& path);
+protected:
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
 private:
     struct Private;

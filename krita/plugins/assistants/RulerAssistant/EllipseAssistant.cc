@@ -66,13 +66,12 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
         gc.save();
         gc.setTransform(initialTransform);
         gc.setTransform(e.getInverse(), true);
-        gc.setPen(QColor(0, 0, 0, 125));
-        // Draw axes
-        gc.drawLine(QPointF(-e.semiMajor(), 0), QPointF(e.semiMajor(), 0));
-        gc.drawLine(QPointF(0, -e.semiMinor()), QPointF(0, e.semiMinor()));
+        QPainterPath path;
+        path.moveTo(QPointF(-e.semiMajor(), 0)); path.lineTo(QPointF(e.semiMajor(), 0));
+        path.moveTo(QPointF(0, -e.semiMinor())); path.lineTo(QPointF(0, e.semiMinor()));
         // Draw the ellipse
-        gc.drawEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
-        
+        path.addEllipse(QPointF(0, 0), e.semiMajor(), e.semiMinor());
+        drawPath(gc, path);
         gc.restore();
     }
 }

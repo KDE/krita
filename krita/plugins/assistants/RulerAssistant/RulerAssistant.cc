@@ -75,28 +75,13 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
     // Draw the gradient
     QPointF p1 = *handles()[0];
     QPointF p2 = *handles()[1];
-    gc.save();
-    {
-        QTransform gradientTransform = initialTransform;
-
-        gradientTransform.translate(p1.x(), p1.y());
-        gradientTransform.rotate(angle(p1, p2) / M_PI * 180);
-        gc.setTransform(gradientTransform);
-
-        QLinearGradient gradient(0, -30, 0, 30);
-        gradient.setColorAt(0, QColor(0, 0, 0, 0));
-        gradient.setColorAt(0.5, QColor(0, 0, 0, 100));
-        gradient.setColorAt(1, QColor(0, 0, 0, 0));
-        gc.setBrush(gradient);
-        gc.setPen(QPen(Qt::NoPen));
-        gc.drawRect(QRectF(0, -50, norm2(p2 - p1), 100));
-    }
-    gc.restore();
 
     gc.save();
     gc.setTransform(initialTransform);
-    gc.setPen(QColor(0, 0, 0, 125));
-    gc.drawLine(p1,p2);
+    QPainterPath path;
+    path.moveTo(p1);
+    path.lineTo(p2);
+    drawPath(gc, path);
     gc.restore();
 }
 

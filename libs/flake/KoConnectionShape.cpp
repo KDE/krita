@@ -588,7 +588,7 @@ KoShape *KoConnectionShape::firstShape() const
     return d->shape1;
 }
 
-int KoConnectionShape::firstConnectionIndex() const
+int KoConnectionShape::firstConnectionId() const
 {
     Q_D(const KoConnectionShape);
     return d->connectionPointId1;
@@ -600,7 +600,7 @@ KoShape *KoConnectionShape::secondShape() const
     return d->shape2;
 }
 
-int KoConnectionShape::secondConnectionIndex() const
+int KoConnectionShape::secondConnectionId() const
 {
     Q_D(const KoConnectionShape);
     return d->connectionPointId2;

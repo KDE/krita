@@ -61,6 +61,9 @@ class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
 
+/// Connection point container with id, position
+typedef QMap<int, QPointF> KoConnectionPoints;
+
 /**
  *
  * Base class for all flake shapes. Shapes extend this class
@@ -333,7 +336,7 @@ public:
      * All the points are relative to the shape position, see absolutePosition().
      * @return a list of the connectors that have been added to this shape.
      */
-    QList<QPointF> connectionPoints() const;
+    KoConnectionPoints connectionPoints() const;
 
     /// Removes connection point with specified id
     void removeConnectionPoint(int connectionPointId);

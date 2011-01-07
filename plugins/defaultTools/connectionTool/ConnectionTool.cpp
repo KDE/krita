@@ -85,7 +85,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         // Apply the conversion make by the matrix transformation
         QTransform transform = m_lastShapeOn->absoluteTransformation(0);
         KoShape::applyConversion(painter, converter);
-        QPointF pointSelected = m_lastShapeOn->connectionPoints().value(getConnectionIndex(m_lastShapeOn, m_mouse));
+        QPointF pointSelected = m_lastShapeOn->connectionPoints().value(getConnectionId(m_lastShapeOn, m_mouse));
         handleRect.moveCenter(transform.map(pointSelected));
         painter.fillRect(handleRect, QColor(Qt::blue));
 
@@ -160,7 +160,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
             KoConnectionShape * connectionShapeTest = dynamic_cast<KoConnectionShape*>(tempShape);
             if(isInRoi()) {
                 m_shape1 = tempShape;
-                m_firstHandleIndex = getConnectionIndex(tempShape, m_mouse);
+                m_firstHandleIndex = getConnectionId(tempShape, m_mouse);
                 
                 m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
                 m_isTied->first = true;
@@ -191,7 +191,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
         if(tempShape != 0) {
             if(isInRoi()) {
                 // If everything is good, we connect the line to the shape
-                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
+                m_connectionShape->connectSecond(tempShape, getConnectionId(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
                 m_connectionShape->connectSecond(tempShape, 0);
@@ -201,7 +201,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent *event)
         // If the cursor points the background
             if(isInRoi()) {
                 // If everything is good, we connect the line to the shape
-                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
+                m_connectionShape->connectSecond(tempShape, getConnectionId(tempShape, m_mouse));
                 m_isTied->second = true;
             } else {
                 m_connectionShape->moveHandle(m_connectionShape->handleCount(), event->point);
@@ -234,7 +234,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         if(m_connectionShape != 0) {
             if(isInRoi()) {
                 // Make the connection to the specific point
-                m_connectionShape->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                m_connectionShape->connectSecond(m_lastShapeOn, getConnectionId(m_lastShapeOn, m_mouse));
                 m_connectionShape->updateConnections();
             } else if(m_shapeOn != 0) {
                 // Make the connection to the first handle of the shape
@@ -263,9 +263,9 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
                 // We have to know what handle is actually moving
                 // Connection with the specific handle
                 if(m_activeHandle == 0){
-                    m_lastConnectionShapeOn->connectFirst(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                    m_lastConnectionShapeOn->connectFirst(m_lastShapeOn, getConnectionId(m_lastShapeOn, m_mouse));
                 }else if(m_activeHandle == 1){
-                    m_lastConnectionShapeOn->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
+                    m_lastConnectionShapeOn->connectSecond(m_lastShapeOn, getConnectionId(m_lastShapeOn, m_mouse));
                 }
             }
         }else if(m_shapeOn != 0 ){
@@ -289,7 +289,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
     if(event->modifiers() & Qt::ControlModifier) {
         if(isInRoi()) {
             // delete a connection Point
-            m_shapeOn->removeConnectionPoint(getConnectionIndex(m_lastShapeOn, m_mouse));
+            m_shapeOn->removeConnectionPoint(getConnectionId(m_lastShapeOn, m_mouse));
         }else{
             // add a connection Point
             m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
@@ -342,49 +342,48 @@ void ConnectionTool::updateConnections()
         KoShape *shape1 = m_connectionShape->firstShape();
         KoShape *shape2 = m_connectionShape->secondShape();
         if(!m_isTied->first){
-            m_connectionShape->connectFirst(shape1 , getConnectionIndex(shape1, shape2->absolutePosition()));
+            m_connectionShape->connectFirst(shape1 , getConnectionId(shape1, shape2->absolutePosition()));
         }
         if(!m_isTied->second){
-            m_connectionShape->connectSecond(shape2 , getConnectionIndex(shape2, shape1->absolutePosition()));
+            m_connectionShape->connectSecond(shape2 , getConnectionId(shape2, shape1->absolutePosition()));
         }
     // If only the first item of the connection is a shape
     } else if(m_connectionShape->firstShape()) {
         KoShape *shape = m_connectionShape->firstShape();
         QPointF point = m_connectionShape->handlePosition(m_connectionShape->handleCount()) + m_connectionShape->absolutePosition();
         if(!m_isTied->first) {
-            m_connectionShape->connectFirst(shape , getConnectionIndex(shape, point));
+            m_connectionShape->connectFirst(shape , getConnectionId(shape, point));
         }
     // If only the second item of the connection is a shape
     } else if(m_connectionShape->secondShape()) {
         KoShape* shape = m_connectionShape->secondShape();
         QPointF point = m_connectionShape->handlePosition(0) + m_connectionShape->absolutePosition();
         if(!m_isTied->second)
-            m_connectionShape->connectSecond(shape , getConnectionIndex(shape, point));
+            m_connectionShape->connectSecond(shape , getConnectionId(shape, point));
     }
     // The connection is now done, so update and put everything to 0
     m_connectionShape->updateConnections();
 }
 
-int ConnectionTool::getConnectionIndex(KoShape * shape, QPointF point)
+int ConnectionTool::getConnectionId(KoShape * shape, QPointF point)
 {
     float minDistance = HUGE_VAL;
-    int nearestPointIndex = -1, i;
-    // Get all the points
-    QList<QPointF> connectionPoints = shape->connectionPoints();
-    int connectionPointsCount = connectionPoints.count();
-
+    int nearestPointId = -1, i;
     point = shape->documentToShape(point);
-    // Find the nearest point and stock the index
-    for(i = 0; i < connectionPointsCount; i++)
-    {
-        float distance = distanceSquare(connectionPoints[i], point);
+    // Get all the points
+    KoConnectionPoints connectionPoints = shape->connectionPoints();
+    KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
+    KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
+    // Find the nearest point and stock the id
+    for(; cp != lastCp; ++cp) {
+        float distance = distanceSquare(cp.value(), point);
         if(distance < minDistance) {
             minDistance = distance;
-            nearestPointIndex =  i;
+            nearestPointId = cp.key();
         }
     }
-    // return the nearest point index
-    return nearestPointIndex;
+    // return the nearest point id
+    return nearestPointId;
 }
 
 float ConnectionTool::distanceSquare(QPointF p1, QPointF p2)

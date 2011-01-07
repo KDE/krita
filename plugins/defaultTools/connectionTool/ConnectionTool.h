@@ -68,7 +68,7 @@ public:
      * @param point The point to connect
      * @return The index of the nearest point
      */
-    int getConnectionIndex( KoShape * shape, QPointF point );
+    int getConnectionId( KoShape * shape, QPointF point );
     /**
      * @brief Return the square of the absolute distance between p1 and p2 
      *

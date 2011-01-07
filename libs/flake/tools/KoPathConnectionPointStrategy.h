@@ -50,9 +50,9 @@ private:
     int m_handleId;                      ///< the id of the control point
     QPointF m_startPoint;                ///< the starting position of the control point
     KoShape *m_oldConnectionShape;
-    int m_oldConnectionIndex;
+    int m_oldConnectionId;
     KoShape *m_newConnectionShape;
-    int m_newConnectionIndex;
+    int m_newConnectionId;
 };
 
 

@@ -89,7 +89,7 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    QMap<int, QPointF> connectors; ///< glue point id and position in percent of size [0..1]
+    KoConnectionPoints connectors; ///< glue point id and position in percent of size [0..1]
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;

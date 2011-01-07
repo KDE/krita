@@ -82,11 +82,11 @@ public:
     KoShape *firstShape() const;
 
     /**
-     * Return the connection-index in the first shape we are connected to.
+     * Return the connection point id of the first shape we are connected to.
      * In case we are not connected to a first shape the return value is undefined.
      * @see firstShape(), KoShape::connectionPoints()
      */
-    int firstConnectionIndex() const;
+    int firstConnectionId() const;
 
     /**
      * Return the second shape this connection is attached to, or null if none.
@@ -94,11 +94,11 @@ public:
     KoShape *secondShape() const;
 
     /**
-     * Return the connection-index in the second shape we are connected to.
+     * Return the connection point id of the second shape we are connected to.
      * In case we are not connected to a second shape the return value is undefined.
      * @see firstShape(), KoShape::connectionPoints()
      */
-    int secondConnectionIndex() const;
+    int secondConnectionId() const;
 
     /**
      * Finishes the loading of a connection.

@@ -785,14 +785,18 @@ QPointF KoShape::connectionPoint(int connectionPointId) const
     return p;
 }
 
-QList<QPointF> KoShape::connectionPoints() const
+KoConnectionPoints KoShape::connectionPoints() const
 {
     Q_D(const KoShape);
-    QList<QPointF> points;
     QSizeF s = size();
+    KoConnectionPoints points = d->connectors;
+    KoConnectionPoints::iterator point = points.begin();
+    KoConnectionPoints::iterator lastPoint = points.end();
     // convert glue points to shape coordinates
-    foreach(const QPointF &cp, d->connectors)
-        points.append(QPointF(s.width() * cp.x(), s.height() * cp.y()));
+    for(; point != lastPoint; ++point) {
+        point->rx() *= s.width();
+        point->ry() *= s.height();
+    }
 
     return points;
 }

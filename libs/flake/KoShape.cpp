@@ -805,6 +805,7 @@ void KoShape::removeConnectionPoint(int connectionPointId)
 {
     Q_D(KoShape);
     d->connectors.remove(connectionPointId);
+    d->shapeChanged(ConnectionPointChanged);
 }
 
 void KoShape::clearConnectionPoints()
@@ -1706,7 +1707,25 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
         context.xmlWriter().endElement();
     }
 
-    // TODO: save glue points see ODF 9.2.19 Glue Points
+    // save glue points see ODF 9.2.19 Glue Points
+    if(d->connectors.count()) {
+        QSizeF s = size();
+        KoConnectionPoints::const_iterator cp = d->connectors.constBegin();
+        KoConnectionPoints::const_iterator lastCp = d->connectors.constEnd();
+        for(; cp != lastCp; ++cp) {
+            // do not save default glue points
+            if(cp.key() < 4)
+                continue;
+            // convert to percent from center
+            const qreal x = cp.value().x() / s.width() * 100.0 - 50.0;
+            const qreal y = cp.value().y() / s.height() * 100.0 -50.0;
+            context.xmlWriter().startElement("draw:glue-point");
+            context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
+            context.xmlWriter().addAttribute("svg:x", QString("%1%%").arg(x));
+            context.xmlWriter().addAttribute("svg:y", QString("%1%%").arg(y));
+            context.xmlWriter().endElement();
+        }
+    }
 }
 
 // end loading & saving methods

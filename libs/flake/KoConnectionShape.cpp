@@ -643,6 +643,13 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
         if (shape == d->shape2)
             connectSecond(0, -1);
         break;
+    case ConnectionPointChanged:
+        if (shape == d->shape1 && !shape->hasConnectionPoint(d->connectionPointId1)) {
+            connectFirst(0, -1);
+        } else if( shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)){
+            connectSecond(0, -1);
+        }
+        break;
     case BackgroundChanged:
     {
         // connection shape should not have a background

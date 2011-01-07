@@ -184,8 +184,15 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     gc.setTransform(initialTransform);
     if (!quad(poly)) {
         // color red for an invalid transform, but not for an incomplete one
-        gc.setPen((handles().size() == 4) ? QColor(255, 0, 0, 125) : QColor(0, 0, 0, 125));
-        gc.drawPolygon(poly);
+        if(handles().size() == 4)
+        {
+            gc.setPen(QColor(255, 0, 0, 125));
+            gc.drawPolygon(poly);
+        } else {
+            QPainterPath path;
+            path.addPolygon(poly);
+            drawPath(gc, path);
+        }
         gc.restore();
     } else {
         gc.setPen(QColor(0, 0, 0, 125));

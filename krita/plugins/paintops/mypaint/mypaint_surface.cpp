@@ -211,14 +211,7 @@ void MyPaintSurface::get_color (float x, float y,
             //qDebug() << "tx" << tx << "tx * TILE_SIZE" << tx * TILE_SIZE << "ty" << ty << "ty * TILE_SIZE" << ty * TILE_SIZE;
             m_src->readBytes(m_srcData, tx * TILE_SIZE, ty * TILE_SIZE, TILE_SIZE, TILE_SIZE);
             m_src->colorSpace()->convertPixelsTo(m_srcData, m_dstRgb16Data, m_rgb16, TILE_SIZE * TILE_SIZE);
-
-            //qDebug() << "bounds" << m_src->exactBounds();
-//             m_src->convertToQImage(0).save("bla.png");
-
             quint16* rgba_p = reinterpret_cast<quint16*>(m_dstRgb16Data);
-            KisPaintDeviceSP dev = new KisPaintDevice(m_rgb16);
-            dev->writeBytes(m_dstRgb16Data, 0, 0, TILE_SIZE, TILE_SIZE);
-//             dev->convertToQImage(0).save(QString("bla%1_%2.png").arg(tx).arg(ty));
 
             float xc = x - tx*TILE_SIZE;
             float yc = y - ty*TILE_SIZE;

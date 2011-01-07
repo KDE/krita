@@ -20,51 +20,42 @@
 #ifndef KOCOMPOSITEOPBURN_H_
 #define KOCOMPOSITEOPBURN_H_
 
-#include "KoCompositeOpAlphaBase.h"
+#include "KoCompositeOpFunctions.h"
 
 /**
  * A template version of the burn composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits>, true >
+class KoCompositeOpBurn : public KoCompositeOpBase< _CSTraits, KoCompositeOpBurn<_CSTraits> >
 {
     typedef typename _CSTraits::channels_type channels_type;
     typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
+    static const qint32 channels_nb = _CSTraits::channels_nb;
+    static const qint32 alpha_pos   = _CSTraits::alpha_pos;
     
 public:
-
-    KoCompositeOpBurn(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits>, true >(cs, COMPOSITE_BURN, i18n("Burn"), KoCompositeOp::categoryLight()) {
-    }
+    KoCompositeOpBurn(const KoColorSpace* cs)
+        : KoCompositeOpBase< _CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn"), KoCompositeOp::categoryLight()) { }
 
 public:
-    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
-        return qMin(srcAlpha, dstAlpha);
-    }
-
-    inline static void composeColorChannels(channels_type srcBlend,
-                                            const channels_type* src,
-                                            channels_type* dst,
-                                            bool allChannelFlags,
-                                            const QBitArray & channelFlags) {
-        for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-            if ((int)i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                composite_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-                composite_type invDst    = unitValue - dst[i];
-                
-                if(src[i] != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-                    composite_type result = unitValue - qMin<composite_type>(invDst * unitValue / src[i], unitValue);
-                    dst[i] = KoColorSpaceMaths<channels_type>::blend(result, dst[i], srcBlend);
-                }
-                else {
-                    //composite_type result = KoColorSpaceMathsTraits<channels_type>::zeroValue;
-                    composite_type result = unitValue - qMin<composite_type>(invDst * unitValue, unitValue);
-                    dst[i] = KoColorSpaceMaths<channels_type>::blend(result, dst[i], srcBlend);
+    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
+                                                     channels_type* dst, channels_type dstAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
+        srcAlpha = mul(srcAlpha, opacity);
+        
+        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+        
+        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && channelFlags.testBit(i)) {
+                    channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, &cfColorBurn<channels_type>);
+                    dst[i] = div(result, newDstAlpha);
                 }
             }
         }
+        
+        return newDstAlpha;
     }
-
 };
 
 #endif

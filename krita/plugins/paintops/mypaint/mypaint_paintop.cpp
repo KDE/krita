@@ -29,6 +29,7 @@
 #include "mypaint_brush_resource.h"
 #include "mypaint_paintop_settings.h"
 #include "mypaint_surface.h"
+#include <kis_paint_information.h>
 
 MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
@@ -55,6 +56,7 @@ MyPaint::~MyPaint()
 
 qreal MyPaint::paintAt(const KisPaintInformation& info)
 {
+    Q_UNUSED(info);
     return 1.0;
 }
 
@@ -75,7 +77,7 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
     m_brush->stroke_to(m_surface,
                        pi2.pos().x(), pi2.pos().y(),
                        pi2.pressure(),
-                       0.0, 0.0,
+                       pi2.xTilt() / 60.0, pi2.yTilt() / 60.0,
                        qreal(pi2.currentTime() - pi1.currentTime()) / 1000);
 
     // not sure what to do with these...

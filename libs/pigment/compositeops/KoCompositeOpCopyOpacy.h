@@ -41,91 +41,50 @@ public:
     }
     
 public:
-    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
-        return qMin(srcAlpha, dstAlpha);
-    }
+    using KoCompositeOp::composite;
     
-    void composite(quint8 *dstRowStart,
-                   qint32 dstRowStride,
-                   const quint8 *srcRowStart,
-                   qint32 srcRowStride,
-                   const quint8 *maskRowStart,
-                   qint32 maskRowStride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
-    {
+    virtual void composite(quint8 *dstRowStart       , qint32 dstRowStride ,
+                           const quint8 *srcRowStart , qint32 srcRowStride ,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray & channelFlags) const {
+        
         Q_UNUSED(channelFlags);
         
-        bool          useMask = maskRowStart != 0;
-        channels_type opacity = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
+        bool          useMask   = maskRowStart != 0;
+        qint32        srcInc    = srcRowStride != 0 ? channels_nb : 0;
+        channels_type opacity   = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
         
-        if(srcRowStride != 0) {
-            for(; rows>0; --rows) {
-                const quint8*        mskRowItr = maskRowStart;
-                const channels_type* srcRowItr = reinterpret_cast<const channels_type*>(srcRowStart) + alpha_pos;
-                channels_type*       dstRowItr = reinterpret_cast<channels_type*>(dstRowStart) + alpha_pos;
-                
-                for(qint32 c=cols; c>0; --c) {
-                    channels_type value = 0;
-                    
-                    switch(U8_opacity)
-                    {
-                    case OPACITY_TRANSPARENT_U8: { value = *dstRowItr; } break;
-                    case OPACITY_OPAQUE_U8:      { value = *srcRowItr; } break;
-                    default: { value = KoColorSpaceMaths<channels_type>::blend(*srcRowItr, *dstRowItr, opacity); } break;
-                    }
-                    
-                    if(useMask) {
-                        channels_type blend = KoColorSpaceMaths<quint8,channels_type>::scaleToA(*mskRowItr);
-                        value = KoColorSpaceMaths<channels_type>::blend(value, *dstRowItr, blend);
-                        ++mskRowItr;
-                    }
-                    
-                    value      = (value > *dstRowItr) ? (value-1) : value;
-                    *dstRowItr = value;
-                    srcRowItr += channels_nb;
-                    dstRowItr += channels_nb;
-                }
-                
-                srcRowStart  += srcRowStride;
-                dstRowStart  += dstRowStride;
-                maskRowStart += maskRowStride;
-            }
-        }
-        else {
-            channels_type srcValue = *(reinterpret_cast<const channels_type*>(srcRowStart) + alpha_pos);
+        for(; rows>0; --rows) {
+            const quint8*        mskRowItr = maskRowStart;
+            const channels_type* srcRowItr = reinterpret_cast<const channels_type*>(srcRowStart) + alpha_pos;
+            channels_type*       dstRowItr = reinterpret_cast<channels_type*>(dstRowStart) + alpha_pos;
             
-            for(; rows>0; --rows) {
-                const quint8*  mskRowItr = maskRowStart;
-                channels_type* dstRowItr = reinterpret_cast<channels_type*>(dstRowStart) + alpha_pos;
+            for(qint32 c=cols; c>0; --c) {
+                channels_type value = 0;
                 
-                for(qint32 c=cols; c>0; --c) {
-                    channels_type value = 0;
-                    
-                    switch(U8_opacity)
-                    {
-                        case OPACITY_TRANSPARENT_U8: { value = *dstRowItr; } break;
-                        case OPACITY_OPAQUE_U8:      { value = srcValue;   } break;
-                        default: { value = KoColorSpaceMaths<channels_type>::blend(srcValue, *dstRowItr, opacity); } break;
-                    }
-                    
-                    if(useMask) {
-                        channels_type blend = KoColorSpaceMaths<quint8,channels_type>::scaleToA(*mskRowItr);
-                        value = KoColorSpaceMaths<channels_type>::blend(value, *dstRowItr, blend);
-                        ++mskRowItr;
-                    }
-                    
-                    value      = (value > *dstRowItr) ? (value-1) : value;
-                    *dstRowItr = value;
-                    dstRowItr += channels_nb;
+                switch(U8_opacity)
+                {
+                case OPACITY_TRANSPARENT_U8: { value = *dstRowItr; } break;
+                case OPACITY_OPAQUE_U8:      { value = *srcRowItr; } break;
+                default: { value = KoColorSpaceMaths<channels_type>::blend(*srcRowItr, *dstRowItr, opacity); } break;
                 }
                 
-                srcRowStart  += srcRowStride;
-                dstRowStart  += dstRowStride;
-                maskRowStart += maskRowStride;
+                if(useMask) {
+                    channels_type blend = KoColorSpaceMaths<quint8,channels_type>::scaleToA(*mskRowItr);
+                    value = KoColorSpaceMaths<channels_type>::blend(value, *dstRowItr, blend);
+                    ++mskRowItr;
+                }
+                
+                value      = (value > *dstRowItr) ? (value-1) : value;
+                *dstRowItr = value;
+                
+                srcRowItr += srcInc;
+                dstRowItr += channels_nb;
             }
+            
+            srcRowStart  += srcRowStride;
+            dstRowStart  += dstRowStride;
+            maskRowStart += maskRowStride;
         }
     }
     

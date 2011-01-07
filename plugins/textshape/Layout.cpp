@@ -264,6 +264,9 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
+                    if (!m_fragmentIterator.atEnd()) {
+                        break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())

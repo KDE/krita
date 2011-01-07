@@ -55,8 +55,9 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
         // just draw the axis
         gc.save();
         gc.setTransform(initialTransform);
-        gc.setPen(QColor(0, 0, 0, 125));
-        gc.drawLine(*handles()[0], *handles()[1]);
+        QPainterPath path;
+        path.moveTo(*handles()[0]);
+        path.lineTo(*handles()[1]);
         gc.restore();
         return;
     }

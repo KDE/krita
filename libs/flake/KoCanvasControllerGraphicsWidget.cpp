@@ -31,11 +31,12 @@ class KoCanvasControllerGraphicsWidget::Private
 public:
 
     Private(KoCanvasControllerGraphicsWidget *qq)
-        : q(qq),
-        canvas(0),
-        ignoreScrollSignals(false),
-        zoomWithWheel(false),
-        vastScrollingFactor(0)
+        : q(qq)
+        , canvas(0)
+        , ignoreScrollSignals(false)
+        , isScrolling(false)
+        , zoomWithWheel(false)
+        , vastScrollingFactor(0)
     {
     }
 
@@ -53,10 +54,14 @@ public:
     KoCanvasBase * canvas;
     bool ignoreScrollSignals;
     bool zoomWithWheel;
+    bool isScrolling;
     qreal vastScrollingFactor;
-    QPointF m_oldPosition;
-    int m_margin;
-    bool m_ignoreScrollSignals;
+    QPointF oldPosition;
+    int margin;
+    QPointF currentPosition; // other implementations, based on QAbstractScrollArea or
+    // MPannableViewport already track the current position, we're a plain
+    // QGraphicsWidget, so we have to do that ourselves
+    QRectF range; // scrolling range in pixels
 };
 
 KoCanvasControllerGraphicsWidget::KoCanvasControllerGraphicsWidget(QGraphicsItem * parent, Qt::WindowFlags wFlags)
@@ -183,3 +188,24 @@ void KoCanvasControllerGraphicsWidget::setVastScrolling(qreal)
 {
 }
 
+void KoCanvasControllerGraphicsWidget::mouseMoveEvent ( QGraphicsSceneMouseEvent * event )
+{
+    d->isScrolling = true;
+}
+
+void KoCanvasControllerGraphicsWidget::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+{
+    // implement scrolling
+}
+
+void KoCanvasControllerGraphicsWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+{
+    d->isScrolling = false;
+}
+
+void KoCanvasControllerGraphicsWidget::wheelEvent ( QGraphicsSceneWheelEvent * event )
+{
+    if (d->zoomWithWheel) {
+        // implement zooming
+    }
+}

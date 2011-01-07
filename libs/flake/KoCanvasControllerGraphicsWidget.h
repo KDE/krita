@@ -74,6 +74,12 @@ public:
     void setZoomWithWheel(bool);
     void setVastScrolling(qreal);
 
+    // QGraphicsWidget overrides
+    virtual void  mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void  mousePressEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void  mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void   wheelEvent ( QGraphicsSceneWheelEvent * event );
+
 private:
     class Private;
     Private * const d;

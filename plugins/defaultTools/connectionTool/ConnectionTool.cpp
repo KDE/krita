@@ -289,13 +289,15 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
     if(event->modifiers() & Qt::ControlModifier) {
         if(isInRoi()) {
             // delete a connection Point
-            m_shapeOn->removeConnectionPoint(getConnectionId(m_lastShapeOn, m_mouse));
+            if(m_lastShapeOn)
+                m_lastShapeOn->removeConnectionPoint(getConnectionId(m_lastShapeOn, m_mouse));
         }else{
             // add a connection Point
             m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
-            QPointF point = m_shapeOn->documentToShape(event->point);
-
-            m_shapeOn->addConnectionPoint(point);
+            if(m_shapeOn) {
+                QPointF point = m_shapeOn->documentToShape(event->point);
+                m_shapeOn->addConnectionPoint(point);
+            }
         }
     }else{
         if(m_modifyConnection){
@@ -368,7 +370,7 @@ void ConnectionTool::updateConnections()
 int ConnectionTool::getConnectionId(KoShape * shape, QPointF point)
 {
     float minDistance = HUGE_VAL;
-    int nearestPointId = -1, i;
+    int nearestPointId = -1;
     point = shape->documentToShape(point);
     // Get all the points
     KoConnectionPoints connectionPoints = shape->connectionPoints();

@@ -115,6 +115,19 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
+    unregisterAllRunAroundShapes();
+}
+
+QTextLine Layout::createLine()
+{
+    m_textLine.createLine(this);
+    m_textLine.setOutlines(m_outlines);
+    return m_textLine.line;
+}
+
+void Layout::fitLineForRunAround(bool resetHorizontalPosition)
+{
+    m_textLine.fit(resetHorizontalPosition);
 }
 
 void Layout::reset()
@@ -211,8 +224,11 @@ struct LineKeeper
     QPointF position;
 };
 
-bool Layout::addLine(QTextLine &line, bool processingLine)
+bool Layout::addLine()
 {
+    QTextLine line = m_textLine.line;
+    bool processingLine = m_textLine.processingLine();
+ 
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -2255,3 +2271,24 @@ void Layout::setTabSpacing(qreal spacing)
     m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }
 
+void Layout::registerRunAroundShape(KoShape *s)
+{
+    QTransform matrix = s->absoluteTransformation(0);
+    matrix = matrix * shape->absoluteTransformation(0).inverted();
+    matrix.translate(0, documentOffsetInShape());
+    Outline *outline = new Outline(s, matrix);
+    m_outlines.append(outline);
+}
+
+void Layout::updateRunAroundShape(KoShape *s)
+{
+    foreach (Outline *outline, m_outlines) {
+        if (outline->shape() == s) {
+            QTransform matrix = s->absoluteTransformation(0);
+            matrix = matrix * shape->absoluteTransformation(0).inverted();
+            matrix.translate(0, documentOffsetInShape());
+            outline->changeMatrix(matrix);
+            m_textLine.updateOutline(outline);
+        }
+    }
+}

@@ -99,6 +99,8 @@ public:
     // the KoOdfLoadingContext.
     bool stylesDotXml;
 
+    QTextBlockFormat defaultBlockFormat;
+    QTextCharFormat defaultCharFormat;
     int bodyProgressTotal;
     int bodyProgressValue;
     int nextProgressReportMs;
@@ -343,11 +345,16 @@ KoTextLoader::~KoTextLoader()
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 {
     static int rootCallChecker = 0;
+    if (rootCallChecker == 0) {
+        //This is the first call of loadBody.
+        //Store the default block and char formats
+        //Will be used whenever a new block is inserted
+        d->defaultBlockFormat = cursor.blockFormat();
+        d->defaultCharFormat = cursor.charFormat();
+    }
     rootCallChecker++;
 
     cursor.beginEditBlock();
-    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
-    const QTextCharFormat defaultCharFormat = cursor.charFormat();
     const QTextDocument *document = cursor.block().document();
 
     d->styleManager = KoTextDocument(document).styleManager();
@@ -387,7 +394,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     else if (d->changeTracker && localName == "removed-content") {
                         QString changeId = tag.attributeNS(KoXmlNS::delta, "removal-change-idref");
                         int deleteStartPosition = cursor.position();
-                        cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                        cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                         d->openChangeRegion(tag);
                         loadBody(tag, cursor);
                         d->closeChangeRegion(tag);
@@ -399,7 +406,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         }
                     } else if (d->changeTracker && localName == "remove-leaving-content-start"){
                         if (usedParagraph)
-                            cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                            cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                         usedParagraph = true;
                         QString generatedXmlString;
                         _node = loadDeleteMerges(tag,&generatedXmlString);
@@ -421,7 +428,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
 
                 if (tag.namespaceURI() == KoXmlNS::text) {
                     if (usedParagraph)
-                        cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                        cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                     usedParagraph = true;
                     if (d->changeTracker && localName == "tracked-changes") {
                         d->changeTracker->loadOdfChanges(tag);
@@ -966,8 +973,6 @@ void KoTextLoader::loadHeading(const KoXmlElement &element, QTextCursor &cursor)
 void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
 {
     const bool numberedParagraph = element.localName() == "numbered-paragraph";
-    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
-    const QTextCharFormat defaultCharFormat = cursor.charFormat();
 
     QString styleName = element.attributeNS(KoXmlNS::text, "style-name", QString());
     KoListStyle *listStyle = d->textSharedData->listStyle(styleName, d->stylesDotXml);
@@ -1051,7 +1056,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
             KoXmlElement deletedElement;
             forEachElement(deletedElement, e) {
                 if (!firstTime && !numberedParagraph)
-                    cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                    cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                 firstTime = false;
                 loadListItem(deletedElement, cursor, level); 
             }
@@ -1064,7 +1069,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
             }
         } else {
             if (!firstTime && !numberedParagraph)
-                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
             firstTime = false;
             loadListItem(e, cursor, level);
         }
@@ -1661,8 +1666,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
 
 void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
 {
-    const QTextBlockFormat defaultBlockFormat = cursor.blockFormat();
-    const QTextCharFormat defaultCharFormat = cursor.charFormat();
     d->openChangeRegion(element);
     QString changeId = element.attributeNS(KoXmlNS::delta, "removal-change-idref");
     int deleteStartPosition = cursor.position();
@@ -1678,13 +1681,13 @@ void KoTextLoader::loadMerge(const KoXmlElement &element, QTextCursor &cursor)
         } else if (isDeltaNS && localName == "intermediate-content") {
             if (ts.hasChildNodes()) {
                 if (ts.firstChild().toElement().localName() != "table") {
-                    cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                    cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                 }
                 loadBody(ts, cursor);
             }
         } else if (isDeltaNS && localName == "trailing-partial-content") {
             if (ts.previousSibling().lastChild().toElement().localName() != "table") {
-                cursor.insertBlock(defaultBlockFormat, defaultCharFormat);
+                cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
             }
             loadBody(ts, cursor);
         }

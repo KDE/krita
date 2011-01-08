@@ -25,6 +25,7 @@
 #include "kis_color_source.h"
 #include <kis_painter.h>
 #include <kis_paint_device.h>
+#include <kis_pattern.h>
 
 struct KisColorSourceOption::Private
 {
@@ -53,6 +54,8 @@ KisColorSourceOption::KisColorSourceOption() : d(new Private)
     Private::addType(GRADIENT, KoID("gradient", i18n("Gradient")));
     Private::addType(UNIFORM_RANDOM, KoID("uniform_random", i18n("Uniform random")));
     Private::addType(TOTAL_RANDOM, KoID("total_random", i18n("Total random")));
+    Private::addType(PATTERN, KoID("pattern", i18n("Pattern")));
+    Private::addType(PATTERN_LOCKED, KoID("lockedpattern", i18n("Locked pattern")));
   }
 }
 
@@ -84,6 +87,10 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
         return new KisUniformRandomColorSource();
       case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
+      case PATTERN:
+        return 0;
+      case PATTERN_LOCKED:
+        return new KisLockedPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height());
     }
 }
 

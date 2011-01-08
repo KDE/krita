@@ -20,6 +20,8 @@
 
 #include "kis_paintop_option.h"
 
+#include <QRect>
+
 #include <KoColor.h>
 
 #include <kis_types.h>
@@ -115,6 +117,26 @@ public:
     virtual bool isUniformColor() const;
 private:
     const KoColorSpace* m_colorSpace;
+};
+
+class PAINTOP_EXPORT KisLockedPatternColorSource : public KisColorSource
+{
+public:
+    KisLockedPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height);
+    virtual ~KisLockedPatternColorSource();
+public:
+    virtual void selectColor(double mix);
+    virtual void darken(qint32 v);
+    virtual void applyColorTransformation(const KoColorTransformation* transfo);
+    virtual const KoColorSpace* colorSpace() const;
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorAt(int x, int y, KoColor*);
+    virtual void rotate(double r);
+    virtual void resize(double xs, double ys);
+    virtual bool isUniformColor() const;
+private:
+    const KisPaintDeviceSP m_device;
+    QRect m_bounds;
 };
 
 #endif

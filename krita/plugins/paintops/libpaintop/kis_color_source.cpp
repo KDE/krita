@@ -22,6 +22,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <kis_datamanager.h>
+#include <kis_fill_painter.h>
 
 KisColorSource::~KisColorSource() { }
 
@@ -235,3 +236,62 @@ bool KisTotalRandomColorSource::isUniformColor() const
 
 void KisTotalRandomColorSource::rotate(double) {}
 void KisTotalRandomColorSource::resize(double , double) {}
+
+
+
+KisLockedPatternColorSource::KisLockedPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height) : m_device(_pattern), m_bounds(QRect(0, 0, _width, _height))
+{
+}
+
+KisLockedPatternColorSource::~KisLockedPatternColorSource()
+{
+}
+
+void KisLockedPatternColorSource::selectColor(double mix)
+{
+    Q_UNUSED(mix);
+}
+
+void KisLockedPatternColorSource::darken(qint32 v)
+{
+    Q_UNUSED(v);
+}
+
+void KisLockedPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)
+{
+    Q_UNUSED(transfo);
+}
+
+const KoColorSpace* KisLockedPatternColorSource::colorSpace() const
+{
+    return m_device->colorSpace();
+}
+
+void KisLockedPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect)
+{
+    KisFillPainter painter(device);
+    painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
+}
+
+void KisLockedPatternColorSource::colorAt(int x, int y, KoColor*)
+{
+  Q_UNUSED(x);
+  Q_UNUSED(y);
+}
+
+void KisLockedPatternColorSource::rotate(double r)
+{
+  Q_UNUSED(r);
+}
+
+void KisLockedPatternColorSource::resize(double xs, double ys)
+{
+  Q_UNUSED(xs);
+  Q_UNUSED(ys);
+}
+
+bool KisLockedPatternColorSource::isUniformColor() const
+{
+    return false;
+}
+

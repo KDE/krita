@@ -26,17 +26,17 @@
 // #include "compositeops/KoCompositeOpAdd.h"
 #include "compositeops/KoCompositeOpAlphaDarken.h"
 // #include "compositeops/KoCompositeOpBurn.h"
-#include "compositeops/KoCompositeOpDivide.h"
+// #include "compositeops/KoCompositeOpDivide.h"
 // #include "compositeops/KoCompositeOpDodge.h"
 #include "compositeops/KoCompositeOpErase.h"
 // #include "compositeops/KoCompositeOpMultiply.h"
 // #include "compositeops/KoCompositeOpOver.h"
-#include "compositeops/KoCompositeOpOverlay.h"
+// #include "compositeops/KoCompositeOpOverlay.h"
 // #include "compositeops/KoCompositeOpScreen.h"
 // #include "compositeops/KoCompositeOpSubtract.h"
-#include "compositeops/KoCompositeOpInversedSubtract.h"
-#include "compositeops/KoCompositeOpSoftlight.h"
-#include "compositeops/KoCompositeOpHardlight.h"
+// #include "compositeops/KoCompositeOpInversedSubtract.h"
+// #include "compositeops/KoCompositeOpSoftlight.h"
+// #include "compositeops/KoCompositeOpHardlight.h"
 #include "compositeops/KoCompositeOpCopy2.h"
 #include "compositeops/KoCompositeOpGeneric.h"
 
@@ -59,26 +59,29 @@ void addStandardCompositeOps(KoColorSpace* cs)
     //cs->addCompositeOp(new KoCompositeOpOverlay<_Traits_>(cs));
     //cs->addCompositeOp(new KoCompositeOpScreen<_Traits_>(cs));
     //cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
-    cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
+    //cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
+    //cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
     
-    typedef typename _Traits_::channels_type type;
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOver <type> >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()));
+    typedef typename _Traits_::channels_type T;
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOver<T> >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()));
     
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfColorBurn  <type> >(cs, COMPOSITE_BURN        , i18n("Color Burn"), KoCompositeOp::categoryLight()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfColorDodge <type> >(cs, COMPOSITE_DODGE       , i18n("Color Dodge"), KoCompositeOp::categoryLight()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfLinearBurn <type> >(cs, COMPOSITE_LINEAR_BURN , i18n("Linear Burn"), KoCompositeOp::categoryLight()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition   <type> >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDarkenOnly <type> >(cs, COMPOSITE_DARKEN      , i18n("Darken"), KoCompositeOp::categoryLight()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfLightenOnly<type> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfColorBurn<T>   >(cs, COMPOSITE_BURN        , i18n("Color Burn"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfColorDodge<T>  >(cs, COMPOSITE_DODGE       , i18n("Color Dodge"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfLinearBurn<T>  >(cs, COMPOSITE_LINEAR_BURN , i18n("Linear Burn"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition<T>    >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDarkenOnly<T>  >(cs, COMPOSITE_DARKEN      , i18n("Darken"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfLightenOnly<T> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfHardLight<T>   >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSoftLight<T>   >(cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light"), KoCompositeOp::categoryLight()));
     
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition  <type> >(cs, COMPOSITE_ADD      , i18n("Addition"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSubtract  <type> >(cs, COMPOSITE_SUBTRACT , i18n("Subtract"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDifference<type> >(cs, COMPOSITE_DIFF     , i18n("Difference"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfMultiply  <type> >(cs, COMPOSITE_MULT     , i18n("Multiply"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDivide    <type> >(cs, COMPOSITE_DIVIDE   , i18n("Divide"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfExclusion <type> >(cs, COMPOSITE_EXCLUSION, i18n("Exclusion"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfScreen    <type> >(cs, COMPOSITE_SCREEN   , i18n("Screen"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfScreen<T>     >(cs, COMPOSITE_SCREEN   , i18n("Screen"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOverlay<T>    >(cs, COMPOSITE_OVERLAY  , i18n("Overlay"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition<T>   >(cs, COMPOSITE_ADD      , i18n("Addition"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSubtract<T>   >(cs, COMPOSITE_SUBTRACT , i18n("Subtract"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDifference<T> >(cs, COMPOSITE_DIFF     , i18n("Difference"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfMultiply<T>   >(cs, COMPOSITE_MULT     , i18n("Multiply"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDivide<T>     >(cs, COMPOSITE_DIVIDE   , i18n("Divide"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfExclusion<T>  >(cs, COMPOSITE_EXCLUSION, i18n("Exclusion"), KoCompositeOp::categoryArithmetic()));
 }
 
 #endif

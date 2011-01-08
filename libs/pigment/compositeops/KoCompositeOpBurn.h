@@ -35,7 +35,7 @@ class KoCompositeOpBurn : public KoCompositeOpBase< _CSTraits, KoCompositeOpBurn
     
 public:
     KoCompositeOpBurn(const KoColorSpace* cs)
-        : KoCompositeOpBase< _CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn"), KoCompositeOp::categoryLight()) { }
+        : KoCompositeOpBase< _CSTraits, KoCompositeOpBurn<_CSTraits> >(cs, COMPOSITE_BURN, i18n("Burn"), KoCompositeOp::categoryLight(), true) { }
 
 public:
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,

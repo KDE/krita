@@ -59,8 +59,8 @@ void addStandardCompositeOps(KoColorSpace* cs)
     //cs->addCompositeOp(new KoCompositeOpOverlay<_Traits_>(cs));
     //cs->addCompositeOp(new KoCompositeOpScreen<_Traits_>(cs));
     //cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
-    //cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
-    //cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
+    cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
+    cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
     
     typedef typename _Traits_::channels_type type;
     cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOver <type> >(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix()));

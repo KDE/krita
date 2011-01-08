@@ -92,6 +92,8 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
       case PATTERN_LOCKED:
         return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), true);
     }
+    qFatal("Unknown color source");
+    return 0;
 }
 
 QString KisColorSourceOption::colorSourceTypeId() const

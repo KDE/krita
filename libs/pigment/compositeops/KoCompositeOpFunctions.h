@@ -56,7 +56,8 @@ inline T inv(T a) {
 
 template<class T>
 inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-    return (a > KoColorSpaceMathsTraits<T>::unitValue) ? KoColorSpaceMathsTraits<T>::unitValue : T(a);
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
 }
 
 template<class T>
@@ -89,23 +90,68 @@ inline T blend(T src, T srcAlpha, T dst, T dstAlpha, TFunc blendFunc) {
 
 template<class T>
 inline T cfColorBurn(T src, T dst) {
-    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
     if(src != KoColorSpaceMathsTraits<T>::zeroValue)
         return inv(clamp<T>(div(inv(dst), src)));
-    
     return KoColorSpaceMathsTraits<T>::zeroValue;
 }
 
 template<class T>
-inline T cfColorDodge(T src, T dst) {
+inline T cfLinearBurn(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    
+    return clamp<T>(composite_type(src) + dst - KoColorSpaceMathsTraits<T>::unitValue);
+}
+
+template<class T>
+inline T cfColorDodge(T src, T dst) {
     if(src != KoColorSpaceMathsTraits<T>::unitValue)
         return clamp<T>(div(dst, inv(src)));
-    
     return KoColorSpaceMathsTraits<T>::unitValue;
 }
+
+template<class T>
+inline T cfAddition(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(src) + dst);
+}
+
+template<class T>
+inline T cfSubtract(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(dst) - src);
+}
+
+template<class T>
+inline T cfExclusion(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    composite_type x = mul(src, dst);
+    return clamp<T>(composite_type(dst) + src - (x + x));
+}
+
+template<class T>
+inline T cfDivide(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    if(src == KoColorSpaceMathsTraits<T>::zeroValue)
+        return dst;
+    return clamp<T>(div(dst, src));
+}
+
+template<class T>
+inline T cfOver(T src, T dst) { Q_UNUSED(dst); return src; }
+
+template<class T>
+inline T cfMultiply(T src, T dst) { return mul(src, dst); }
+
+template<class T>
+inline T cfDifference(T src, T dst) { return qMax(src,dst) - qMin(src,dst); }
+
+template<class T>
+inline T cfScreen(T src, T dst) { return unionShapeOpacy(src, dst); }
+
+template<class T>
+inline T cfDarkenOnly(T src, T dst) { return qMin(src, dst); }
+
+template<class T>
+inline T cfLightenOnly(T src, T dst) { return qMax(src, dst); }
 
 /**
  * A template base class that can be used for most composite modes/ops
@@ -132,8 +178,8 @@ class KoCompositeOpBase : public KoCompositeOp
     
 public:
     
-    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category)
-        : KoCompositeOp(cs, id, description, category) { }
+    KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible)
+        : KoCompositeOp(cs, id, description, category, userVisible) { }
     
 private:
     template<bool alphaLocked>

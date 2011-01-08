@@ -58,6 +58,7 @@ void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, con
         QPainterPath path;
         path.moveTo(*handles()[0]);
         path.lineTo(*handles()[1]);
+        drawPath(gc, path);
         gc.restore();
         return;
     }

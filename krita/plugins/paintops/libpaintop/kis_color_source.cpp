@@ -54,7 +54,7 @@ void KisUniformColorSource::resize(double , double)
     // Do nothing as plain color does not have size
 }
 
-void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size)
+void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, const QPoint&)
 {
     Q_UNUSED(size);
     if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
@@ -181,7 +181,7 @@ const KoColorSpace* KisTotalRandomColorSource::colorSpace() const
 {
     return m_colorSpace;
 }
-void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect)
+void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect, const QPoint&)
 {
     KoColor kc(dev->colorSpace());
 
@@ -212,47 +212,60 @@ void KisTotalRandomColorSource::resize(double , double) {}
 
 
 
-KisLockedPatternColorSource::KisLockedPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height) : m_device(_pattern), m_bounds(QRect(0, 0, _width, _height))
+KisPatternColorSource::KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked) : m_device(_pattern), m_bounds(QRect(0, 0, _width, _height)), m_locked(_locked)
 {
 }
 
-KisLockedPatternColorSource::~KisLockedPatternColorSource()
+KisPatternColorSource::~KisPatternColorSource()
 {
 }
 
-void KisLockedPatternColorSource::selectColor(double mix)
+void KisPatternColorSource::selectColor(double mix)
 {
     Q_UNUSED(mix);
 }
 
-void KisLockedPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)
+void KisPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)
 {
     Q_UNUSED(transfo);
 }
 
-const KoColorSpace* KisLockedPatternColorSource::colorSpace() const
+const KoColorSpace* KisPatternColorSource::colorSpace() const
 {
     return m_device->colorSpace();
 }
 
-void KisLockedPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect)
+void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, const QPoint& offset)
 {
     KisFillPainter painter(device);
-    painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
+    if(m_locked)
+    {
+        painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
+    } else {
+        int x = offset.x() % m_bounds.width();
+        int y = offset.y() % m_bounds.height();
+        
+        // Change the position, because the pattern is always applied starting from (0,0) in the paint device reference
+        device->setX(x);
+        device->setY(y);
+        painter.fillRect(rect.x() + x, rect.y() + y, rect.width(), rect.height(), m_device, m_bounds);
+        device->setX(0);
+        device->setY(0);
+    }
 }
 
-void KisLockedPatternColorSource::rotate(double r)
+void KisPatternColorSource::rotate(double r)
 {
   Q_UNUSED(r);
 }
 
-void KisLockedPatternColorSource::resize(double xs, double ys)
+void KisPatternColorSource::resize(double xs, double ys)
 {
   Q_UNUSED(xs);
   Q_UNUSED(ys);
 }
 
-bool KisLockedPatternColorSource::isUniformColor() const
+bool KisPatternColorSource::isUniformColor() const
 {
     return false;
 }

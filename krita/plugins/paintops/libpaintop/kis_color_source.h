@@ -45,10 +45,22 @@ public:
      * @param mix is a parameter between 0.0 and 1.0
      */
     virtual void selectColor(double mix) = 0;
+    /**
+     * Apply a color transformation on the selected color
+     */
     virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
     virtual const KoColorSpace* colorSpace() const = 0;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect) = 0;
+    /**
+     * Apply the color on a paint device
+     */
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) = 0;
+    /**
+     * @return true if the color is an uniform color
+     */
     virtual bool isUniformColor() const = 0;
+    /**
+     * @return the color if the color is uniformed
+     */
     virtual const KoColor& uniformColor() const;
 };
 
@@ -61,7 +73,7 @@ public:
     virtual void resize(double , double);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset);
     virtual bool isUniformColor() const;
     virtual const KoColor& uniformColor() const;
 protected:
@@ -109,7 +121,7 @@ public:
     virtual void selectColor(double mix);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset);
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;
@@ -117,22 +129,23 @@ private:
     const KoColorSpace* m_colorSpace;
 };
 
-class PAINTOP_EXPORT KisLockedPatternColorSource : public KisColorSource
+class PAINTOP_EXPORT KisPatternColorSource : public KisColorSource
 {
 public:
-    KisLockedPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height);
-    virtual ~KisLockedPatternColorSource();
+    KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked);
+    virtual ~KisPatternColorSource();
 public:
     virtual void selectColor(double mix);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset);
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;
 private:
     const KisPaintDeviceSP m_device;
     QRect m_bounds;
+    bool m_locked;
 };
 
 #endif

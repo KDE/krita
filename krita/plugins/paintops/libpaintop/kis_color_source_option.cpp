@@ -88,9 +88,9 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
       case TOTAL_RANDOM:
         return new KisTotalRandomColorSource();
       case PATTERN:
-        return 0;
+        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), false);
       case PATTERN_LOCKED:
-        return new KisLockedPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height());
+        return new KisPatternColorSource(_painter->pattern()->paintDevice(_painter->device()->colorSpace()), _painter->pattern()->width(), _painter->pattern()->height(), true);
     }
 }
 

@@ -157,7 +157,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
             } else {
                 m_colorSourceDevice->clear();
             }
-            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)));
+            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
             brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));            
         }
     }

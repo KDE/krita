@@ -40,8 +40,11 @@ class PAINTOP_EXPORT KisColorSource
 public:
     virtual ~KisColorSource();
 public:
+    /**
+     * This is function is called to initialize the color that will be used for the dab.
+     * @param mix is a parameter between 0.0 and 1.0
+     */
     virtual void selectColor(double mix) = 0;
-    virtual void darken(qint32 v) = 0;
     virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
     virtual const KoColorSpace* colorSpace() const = 0;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect) = 0;
@@ -54,7 +57,6 @@ class PAINTOP_EXPORT KisUniformColorSource : public KisColorSource
 public:
     KisUniformColorSource();
     virtual ~KisUniformColorSource();
-    virtual void darken(qint32 v);
     virtual void rotate(double);
     virtual void resize(double , double);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
@@ -105,7 +107,6 @@ public:
     virtual ~KisTotalRandomColorSource();
 public:
     virtual void selectColor(double mix);
-    virtual void darken(qint32 v);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect);
@@ -123,7 +124,6 @@ public:
     virtual ~KisLockedPatternColorSource();
 public:
     virtual void selectColor(double mix);
-    virtual void darken(qint32 v);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect);

@@ -46,13 +46,6 @@ KisUniformColorSource::~KisUniformColorSource()
     delete m_cachedColor;
 }
 
-void KisUniformColorSource::darken(qint32 v)
-{
-    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
-    transfo->transform(m_color->data(),  m_color->data(), 1);
-    delete transfo;
-}
-
 void KisUniformColorSource::rotate(double)
 {}
 
@@ -183,7 +176,6 @@ void KisTotalRandomColorSource::selectColor(double)
 {
 }
 
-void KisTotalRandomColorSource::darken(qint32) {}
 void KisTotalRandomColorSource::applyColorTransformation(const KoColorTransformation*) {}
 const KoColorSpace* KisTotalRandomColorSource::colorSpace() const
 {
@@ -231,11 +223,6 @@ KisLockedPatternColorSource::~KisLockedPatternColorSource()
 void KisLockedPatternColorSource::selectColor(double mix)
 {
     Q_UNUSED(mix);
-}
-
-void KisLockedPatternColorSource::darken(qint32 v)
-{
-    Q_UNUSED(v);
 }
 
 void KisLockedPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)

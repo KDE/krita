@@ -43,6 +43,7 @@ public:
         : base_class(cs, id, description, category, userVisible) { }
 
 public:
+    template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
@@ -51,8 +52,8 @@ public:
         
         if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
             for(qint32 i=0; i <channels_nb; i++) {
-                if(i != alpha_pos && channelFlags.testBit(i)) {
-                    channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc);
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                    channels_type result = blend<channels_type,compositeFunc>(src[i], srcAlpha, dst[i], dstAlpha);
                     dst[i] = div(result, newDstAlpha);
                 }
             }

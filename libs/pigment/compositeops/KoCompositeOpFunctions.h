@@ -76,10 +76,9 @@ inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
     return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
 }
 
-/* ---------------- Blending/Compositing functions ------------------------ /
- * definitions of standard blending/compositing functions compatible
- * to the ISO 32000-1 specification (for PDF filed) which also defines
- * the compositing functions who are also used in Adobe Photoshop (c)
+/* ------------------------ Auxiliary Functions --------------------------- /
+ * definitions of auxiliary functions needed by the blending functions
+ * or the KoCompositeOp* classes to calculate the pixel colors
  */
 
 template<class T>
@@ -88,10 +87,16 @@ inline T unionShapeOpacy(T a, T b) {
     return T(composite_type(a) + b - mul(a,b));
 }
 
-template<class T, class TFunc>
-inline T blend(T src, T srcAlpha, T dst, T dstAlpha, TFunc blendFunc) {
+template<class T, T blendFunc(T,T)>
+inline T blend(T src, T srcAlpha, T dst, T dstAlpha) {
     return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, blendFunc(src, dst));
 }
+
+/* ---------------- Blending/Compositing functions ------------------------ /
+ * definitions of standard blending/compositing functions compatible
+ * to the ISO 32000-1 specification (for PDF filed) which also defines
+ * the compositing functions who are also used in Adobe Photoshop (c)
+ */
 
 template<class T>
 inline T cfColorBurn(T src, T dst) {
@@ -254,6 +259,7 @@ inline T cfLightenOnly(T src, T dst) { return qMax(src, dst); }
  *
  * @param _compositeOp this template parameter is a class that must be
  *        derived fom KoCompositeOpBase and must define the static member function
+ *        template<bool alphaLocked, bool allChannelFlags>
  *        inline static channels_type composeColorChannels(
  *            const channels_type* src,
  *            channels_type srcAlpha,
@@ -278,7 +284,7 @@ public:
         : KoCompositeOp(cs, id, description, category, userVisible) { }
     
 private:
-    template<bool alphaLocked>
+    template<bool alphaLocked, bool allChannelFlags>
     void genericComposite(quint8*       dstRowStart , qint32 dstRowStride ,
                           const quint8* srcRowStart , qint32 srcRowStride ,
                           const quint8* maskRowStart, qint32 maskRowStride,
@@ -295,10 +301,13 @@ private:
             const quint8*        mask = maskRowStart;
             
             for(qint32 c=cols; c>0; --c) {
-                channels_type srcAlpha    = (alpha_pos == -1) ? unitValue : src[alpha_pos];
-                channels_type dstAlpha    = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
-                channels_type blend       = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
-                channels_type newDstAlpha = _compositeOp::composeColorChannels(src, srcAlpha, dst, dstAlpha, blend, channelFlags);
+                channels_type srcAlpha = (alpha_pos == -1) ? unitValue : src[alpha_pos];
+                channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
+                channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
+                
+                channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
+                    src, srcAlpha, dst, dstAlpha, blend, channelFlags
+                );
                 
                 if(alpha_pos != -1)
                     dst[alpha_pos] = alphaLocked ? dstAlpha : newDstAlpha;
@@ -322,13 +331,22 @@ public:
                            const quint8* maskRowStart, qint32 maskRowStride,
                            qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
         
-        const QBitArray& flags       = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
-        bool             alphaLocked = (alpha_pos != -1) && !flags.testBit(alpha_pos);
+        const QBitArray& flags           = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
+        bool             allChannelFlags = channelFlags.isEmpty();
+        bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
         
-        if(alphaLocked)
-            genericComposite<true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
-        else
-            genericComposite<false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+        if(alphaLocked) {
+            if(allChannelFlags)
+                genericComposite<true,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+            else
+                genericComposite<true,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+        }
+        else {
+            if(allChannelFlags)
+                genericComposite<false,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+            else
+                genericComposite<false,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+        }
     }
 };
 

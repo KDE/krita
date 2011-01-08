@@ -45,7 +45,6 @@ public:
     virtual void applyColorTransformation(const KoColorTransformation* transfo) = 0;
     virtual const KoColorSpace* colorSpace() const = 0;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect) = 0;
-    virtual void colorAt(int x, int y, KoColor*) = 0;
     virtual bool isUniformColor() const = 0;
     virtual const KoColor& uniformColor() const;
 };
@@ -61,7 +60,6 @@ public:
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect);
-    virtual void colorAt(int x, int y, KoColor*);
     virtual bool isUniformColor() const;
     virtual const KoColor& uniformColor() const;
 protected:
@@ -111,7 +109,6 @@ public:
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect);
-    virtual void colorAt(int x, int y, KoColor*);
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;
@@ -130,7 +127,6 @@ public:
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
     virtual void colorize(KisPaintDeviceSP, const QRect& rect);
-    virtual void colorAt(int x, int y, KoColor*);
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;

@@ -74,19 +74,6 @@ void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size)
     dev->clear();
 }
 
-void KisUniformColorSource::colorAt(int x, int y, KoColor* c)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-
-    if (!m_cachedColor || !(*c->colorSpace() == *m_cachedColor->colorSpace())) {
-        if (m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor(c->colorSpace());
-        m_cachedColor->fromKoColor(*m_color);
-    }
-    c->fromKoColor(*m_cachedColor);
-}
-
 const KoColor& KisUniformColorSource::uniformColor() const
 {
     return *m_color;
@@ -222,12 +209,6 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
     }
 
 }
-void KisTotalRandomColorSource::colorAt(int x, int y, KoColor* c)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    c->fromQColor(QColor((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX)));
-}
 
 bool KisTotalRandomColorSource::isUniformColor() const
 {
@@ -271,12 +252,6 @@ void KisLockedPatternColorSource::colorize(KisPaintDeviceSP device, const QRect&
 {
     KisFillPainter painter(device);
     painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
-}
-
-void KisLockedPatternColorSource::colorAt(int x, int y, KoColor*)
-{
-  Q_UNUSED(x);
-  Q_UNUSED(y);
 }
 
 void KisLockedPatternColorSource::rotate(double r)

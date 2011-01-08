@@ -46,9 +46,10 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
-    Q_ASSERT(painter);
 
-    m_colorSource = new KisPlainColorSource(painter->backgroundColor(), painter->paintColor());
+    KisColorSourceOption colorSourceOption;
+    colorSourceOption.readOptionSetting(settings);
+    m_colorSource = colorSourceOption.createColorSource(painter);
     
     m_hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());

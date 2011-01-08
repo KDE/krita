@@ -34,6 +34,7 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
+#include <kis_color_source_option.h>
 
 class KisBrushBasedPaintOpSettings;
 

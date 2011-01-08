@@ -34,8 +34,9 @@ struct KisColorSourceOptionWidget::Private {
     QMap<QString, QRadioButton*> id2radio;
 };
 
-KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n("Source"), KisPaintOpOption::colorCategory(), false ), d(new Private)
+KisColorSourceOptionWidget::KisColorSourceOptionWidget() : KisPaintOpOption(i18n("Source"), KisPaintOpOption::colorCategory(), true ), d(new Private)
 {
+    m_checkable = false;
     QWidget* configurationWidget = new QWidget;
   
     QGroupBox* groupBox = new QGroupBox(configurationWidget);

@@ -22,6 +22,9 @@
 #include <QMap>
 #include <KoID.h>
 #include <kis_properties_configuration.h>
+#include "kis_color_source.h"
+#include <kis_painter.h>
+#include <kis_paint_device.h>
 
 struct KisColorSourceOption::Private
 {
@@ -69,9 +72,19 @@ void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration* s
     d->type = Private::id2type.value(colorSourceType, PLAIN);
 }
 
-KisColorSource* KisColorSourceOption::createColorSource() const
+KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _painter) const
 {
-    return 0;
+    switch(d->type)
+    {
+      case PLAIN:
+        return new KisPlainColorSource(_painter->backgroundColor(), _painter->paintColor());
+      case GRADIENT:
+        return new KisGradientColorSource(_painter->gradient(), _painter->device()->colorSpace() );
+      case UNIFORM_RANDOM:
+        return new KisUniformRandomColorSource();
+      case TOTAL_RANDOM:
+        return new KisTotalRandomColorSource();
+    }
 }
 
 void KisColorSourceOption::setColorSourceType(Type _type)

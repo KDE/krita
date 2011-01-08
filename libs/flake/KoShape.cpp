@@ -751,17 +751,17 @@ int KoShape::addConnectionPoint(const QPointF &point)
     QPointF connectionPoint(point.x() / s.width(), point.y() / s.height());
     // get next glue point id
     int nextConnectionPointId = KoFlake::FirstCustomConnectionPoint;
-    if(d->connectors.size())
+    if (d->connectors.size())
         nextConnectionPointId = qMax(nextConnectionPointId, (--d->connectors.end()).key()+1);
 
     // allow adding default connection point
-    if(connectionPoint == d->defaultConnectionPoint(KoFlake::TopConnectionPoint))
+    if (connectionPoint == d->defaultConnectionPoint(KoFlake::TopConnectionPoint))
         nextConnectionPointId = KoFlake::TopConnectionPoint;
-    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::RightConnectionPoint))
+    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::RightConnectionPoint))
         nextConnectionPointId = KoFlake::RightConnectionPoint;
-    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::BottomConnectionPoint))
+    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::BottomConnectionPoint))
         nextConnectionPointId = KoFlake::BottomConnectionPoint;
-    else if(connectionPoint == d->defaultConnectionPoint(KoFlake::LeftConnectionPoint))
+    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::LeftConnectionPoint))
         nextConnectionPointId = KoFlake::LeftConnectionPoint;
 
     d->connectors[nextConnectionPointId] = connectionPoint;

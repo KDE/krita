@@ -1,7 +1,6 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -21,40 +20,44 @@
 #ifndef _KOCOMPOSITEOPDODGE_H_
 #define _KOCOMPOSITEOPDODGE_H_
 
-#include "KoCompositeOpFunctions.h"
+#include "KoCompositeOpAlphaBase.h"
+
 
 /**
  * A template version of the dodge composite operation to use in colorspaces.
  */
 template<class _CSTraits>
-class KoCompositeOpDodge : public KoCompositeOpBase< _CSTraits, KoCompositeOpDodge<_CSTraits> >
+class KoCompositeOpDodge : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
-    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
-    static const qint32 channels_nb = _CSTraits::channels_nb;
-    static const qint32 alpha_pos   = _CSTraits::alpha_pos;
+    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
 public:
+
     KoCompositeOpDodge(const KoColorSpace * cs)
-        : KoCompositeOpBase< _CSTraits, KoCompositeOpDodge<_CSTraits> >(cs, COMPOSITE_DODGE, i18n("Dodge"), KoCompositeOp::categoryLight(), true) { }
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpDodge<_CSTraits>, true >(cs, COMPOSITE_DODGE, i18n("Dodge"), KoCompositeOp::categoryLight()) {
+    }
 
 public:
-    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
-                                                     channels_type* dst, channels_type dstAlpha,
-                                                     channels_type opacity, const QBitArray& channelFlags) {
-        srcAlpha = mul(srcAlpha, opacity);
-        
-        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
-        
-        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-            for(qint32 i=0; i <channels_nb; i++) {
-                if(i != alpha_pos && channelFlags.testBit(i)) {
-                    channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, &cfColorDodge<channels_type>);
-                    dst[i] = div(result, newDstAlpha);
-                }
+    inline static channels_type selectAlpha(channels_type srcAlpha, channels_type dstAlpha) {
+        return qMin(srcAlpha, dstAlpha);
+    }
+    inline static void composeColorChannels(channels_type srcBlend,
+                                            const channels_type* src,
+                                            channels_type* dst,
+                                            bool allChannelFlags,
+                                            const QBitArray & channelFlags) {
+        for (uint channel = 0; channel < _CSTraits::channels_nb; channel++) {
+            if ((int)channel != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
+                compositetype srcColor = src[channel];
+                compositetype dstColor = dst[channel];
+
+                srcColor = qMin((compositetype)(dstColor * (NATIVE_MAX_VALUE + 1)) / (NATIVE_MAX_VALUE + 1 - srcColor), (compositetype)NATIVE_MAX_VALUE);
+
+                channels_type newColor = KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
+
+                dst[channel] = newColor;
             }
         }
-        
-        return newDstAlpha;
     }
 
 };

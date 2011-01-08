@@ -73,15 +73,21 @@ void addStandardCompositeOps(KoColorSpace* cs)
     cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfLightenOnly<T> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten"), KoCompositeOp::categoryLight()));
     cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfHardLight<T>   >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light"), KoCompositeOp::categoryLight()));
     cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSoftLight<T>   >(cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfGammaLight<T>  >(cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfGammaDark<T>   >(cs, COMPOSITE_GAMMA_DARK  , i18n("Gamma Dark"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfVividLight<T>  >(cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light"), KoCompositeOp::categoryLight()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfPinLight<T>    >(cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light"), KoCompositeOp::categoryLight()));
     
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfScreen<T>     >(cs, COMPOSITE_SCREEN   , i18n("Screen"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOverlay<T>    >(cs, COMPOSITE_OVERLAY  , i18n("Overlay"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition<T>   >(cs, COMPOSITE_ADD      , i18n("Addition"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSubtract<T>   >(cs, COMPOSITE_SUBTRACT , i18n("Subtract"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDifference<T> >(cs, COMPOSITE_DIFF     , i18n("Difference"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfMultiply<T>   >(cs, COMPOSITE_MULT     , i18n("Multiply"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDivide<T>     >(cs, COMPOSITE_DIVIDE   , i18n("Divide"), KoCompositeOp::categoryArithmetic()));
-    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfExclusion<T>  >(cs, COMPOSITE_EXCLUSION, i18n("Exclusion"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfScreen<T>        >(cs, COMPOSITE_SCREEN        , i18n("Screen"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfOverlay<T>       >(cs, COMPOSITE_OVERLAY       , i18n("Overlay"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfAddition<T>      >(cs, COMPOSITE_ADD           , i18n("Addition"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfSubtract<T>      >(cs, COMPOSITE_SUBTRACT      , i18n("Subtract"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDifference<T>    >(cs, COMPOSITE_DIFF          , i18n("Difference"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfMultiply<T>      >(cs, COMPOSITE_MULT          , i18n("Multiply"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfDivide<T>        >(cs, COMPOSITE_DIVIDE        , i18n("Divide"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfExclusion<T>     >(cs, COMPOSITE_EXCLUSION     , i18n("Exclusion"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfArcTangent<T>    >(cs, COMPOSITE_ARC_TANGENT   , i18n("Arcus Tangent"), KoCompositeOp::categoryArithmetic()));
+    cs->addCompositeOp(new KoCompositeOpGeneric< _Traits_, &cfGeometricMean<T> >(cs, COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"), KoCompositeOp::categoryArithmetic()));
 }
 
 #endif

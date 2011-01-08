@@ -86,7 +86,7 @@ void KisColorSourceOptionWidget::sourceChanged()
         if(it.value()->isChecked())
         {
             d->option.setColorSourceType(it.key());
-            return;
+            break;
         }
     }
     emit sigSettingChanged();

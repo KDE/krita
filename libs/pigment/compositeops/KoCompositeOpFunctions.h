@@ -169,6 +169,66 @@ inline T cfSoftLight(T src, T dst) {
 }
 
 template<class T>
+inline T cfVividLight(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    
+    if(src < KoColorSpaceMathsTraits<T>::halfValue) {
+        if(src == KoColorSpaceMathsTraits<T>::zeroValue)
+            return KoColorSpaceMathsTraits<T>::zeroValue; //TODO: maybe better to return unitValue, must be verified
+            
+        // min(1,max(0,1-(1-dst) / (2*src)))
+        composite_type src2 = composite_type(src) + src;
+        composite_type dsti = inv(dst);
+        return clamp<T>(KoColorSpaceMathsTraits<T>::unitValue - (dsti * KoColorSpaceMathsTraits<T>::unitValue / src2));
+    }
+    
+    if(src == KoColorSpaceMathsTraits<T>::unitValue)
+        return KoColorSpaceMathsTraits<T>::unitValue; //TODO: maybe better to return zeroValue, must be verified
+    
+    // min(1,max(0, dst / (2*(1-src)))
+    composite_type srci2 = inv(src);
+    srci2 += srci2;
+    return clamp<T>(composite_type(dst) * KoColorSpaceMathsTraits<T>::unitValue / srci2);
+}
+
+template<class T>
+inline T cfPinLight(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    // TODO: verify that the formular is correct (the first max would be useless here)
+    // max(0, max(2*src-1, min(dst, 2*src)))
+    composite_type src2 = composite_type(src) + src;
+    composite_type a    = qMin<composite_type>(dst, src2);
+    composite_type b    = qMax<composite_type>(src2-KoColorSpaceMathsTraits<T>::unitValue, a);
+    return T(b);
+}
+
+template<class T>
+inline T cfArcTangent(T src, T dst) {
+    const static qreal pi = 3.14159265358979323846;
+    
+    if(dst == KoColorSpaceMathsTraits<T>::zeroValue)
+        return (src == KoColorSpaceMathsTraits<T>::zeroValue) ?
+            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
+    
+    return scale<T>(2.0 * atan(scale<qreal>(src) / scale<qreal>(dst)) / pi);
+}
+
+template<class T>
+inline T cfGammaDark(T src, T dst) {
+    if(src == KoColorSpaceMathsTraits<T>::zeroValue)
+        return KoColorSpaceMathsTraits<T>::zeroValue;
+    
+    // power(dst, 1/src)
+    return scale<T>(pow(scale<qreal>(dst), 1.0/scale<qreal>(src)));
+}
+
+template<class T>
+inline T cfGammaLight(T src, T dst) { return scale<T>(pow(scale<qreal>(dst), scale<qreal>(src))); }
+
+template<class T>
+inline T cfGeometricMean(T src, T dst) { return scale<T>(sqrt(scale<qreal>(dst) * scale<qreal>(src))); }
+
+template<class T>
 inline T cfOver(T src, T dst) { Q_UNUSED(dst); return src; }
 
 template<class T>

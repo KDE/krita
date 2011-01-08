@@ -30,10 +30,16 @@
  * if non floating point types are used, fixed point arithmetic is used
  */
 
+// template<class T>
+// inline T mul(T a, T b) { T(KoColorSpaceMaths<T>::multiply(a, b)); }
+
+// template<class T>
+// inline T mul(T a, T b, T c) { T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
+
 template<class T>
 inline T mul(T a, T b) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return T(composite_type(a) * composite_type(b) / KoColorSpaceMathsTraits<T>::unitValue);
+    return T(composite_type(a) * b / KoColorSpaceMathsTraits<T>::unitValue);
 }
 
 template<class T>
@@ -43,6 +49,21 @@ inline T mul(T a, T b, T c) {
 }
 
 template<class T>
+inline T inv(T a) { return KoColorSpaceMathsTraits<T>::unitValue - a; }
+
+template<class T>
+inline T lerp(T a, T b, T alpha) { return KoColorSpaceMaths<T>::blend(b, a, alpha); }
+
+template<class TRet, class T>
+inline TRet scale(T a) { return KoColorSpaceMaths<T,TRet>::scaleToA(a); }
+
+// template<class TRet, class T>
+// inline TRet scale(T a) {
+//     typedef typename KoColorSpaceMathsTraits<TRet>::compositetype composite_type;
+//     return TRet(composite_type(a) * KoColorSpaceMathsTraits<TRet>::unitValue / KoColorSpaceMathsTraits<T>::unitValue);
+// }
+
+template<class T>
 inline typename KoColorSpaceMathsTraits<T>::compositetype
 div(T a, T b) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
@@ -50,25 +71,9 @@ div(T a, T b) {
 }
 
 template<class T>
-inline T inv(T a) {
-    return KoColorSpaceMathsTraits<T>::unitValue - a;
-}
-
-template<class T>
 inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
-}
-
-template<class T>
-inline T lerp(T a, T b, T alpha) {
-    return KoColorSpaceMaths<T>::blend(b, a, alpha);
-}
-
-template<class TRet, class T>
-inline TRet scale(T a) {
-    typedef typename KoColorSpaceMathsTraits<TRet>::compositetype composite_type;
-    return TRet(composite_type(a) * KoColorSpaceMathsTraits<TRet>::unitValue / KoColorSpaceMathsTraits<T>::unitValue);
 }
 
 /* ---------------- Blending/Compositing functions ------------------------ /
@@ -136,7 +141,38 @@ inline T cfDivide(T src, T dst) {
 }
 
 template<class T>
+inline T cfHardLight(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    composite_type src2 = composite_type(src) + src;
+    
+    if(src > KoColorSpaceMathsTraits<T>::halfValue) {
+        // screen(src*2.0 - 1.0, dst)
+        src2 -= KoColorSpaceMathsTraits<T>::unitValue;
+        return T((src2+dst) - (src2*dst / KoColorSpaceMathsTraits<T>::unitValue));
+    }
+    
+    // multiply(src*2.0, dst)
+    return clamp<T>(src2*dst / KoColorSpaceMathsTraits<T>::unitValue);
+}
+
+template<class T>
+inline T cfSoftLight(T src, T dst) {
+    qreal fsrc = scale<qreal>(src);
+    qreal fdst = scale<qreal>(dst);
+    
+    if(fsrc > 0.5f) {
+        qreal D = (fdst > 0.25f) ? sqrt(fdst) : ((16.0f*fdst - 12.0)*fdst + 4.0f)*fdst;
+        return scale<T>(fdst + (2.0f*fsrc - 1.0f) * (D - fdst));
+    }
+    
+    return scale<T>(fdst - (1.0f - 2.0f*fsrc) * fdst * (1.0f - fdst));
+}
+
+template<class T>
 inline T cfOver(T src, T dst) { Q_UNUSED(dst); return src; }
+
+template<class T>
+inline T cfOverlay(T src, T dst) { return cfHardLight(dst, src); }
 
 template<class T>
 inline T cfMultiply(T src, T dst) { return mul(src, dst); }

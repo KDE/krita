@@ -131,7 +131,6 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info) );
-    KoColor origColor = painter()->paintColor();
     m_darkenOption.apply(m_colorSource, info);
 
     if(m_hsvTransfo)
@@ -143,15 +142,24 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
         m_colorSource->applyColorTransformation(m_hsvTransfo);
     }
 
-    painter()->setPaintColor( m_colorSource->uniformColor() );
-
     KisFixedPaintDeviceSP dab = cachedDab(device->colorSpace());
     if (brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         dab = brush->paintDevice(device->colorSpace(), scale, rotation, info, xFraction, yFraction);
     } else {
-        KoColor color = painter()->paintColor();
-        color.convertTo(dab->colorSpace());
-        brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
+        if(m_colorSource->isUniformColor())
+        {
+            KoColor color = m_colorSource->uniformColor();
+            color.convertTo(dab->colorSpace());
+            brush->mask(dab, color, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
+        } else {
+            if (!m_colorSourceDevice) {
+                m_colorSourceDevice = new KisPaintDevice(dab->colorSpace());
+            } else {
+                m_colorSourceDevice->clear();
+            }
+            m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)));
+            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));            
+        }
     }
     
     MirrorProperties mirrors = m_mirrorOption.apply(info);
@@ -162,7 +170,6 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
     renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
-    painter()->setPaintColor(origColor);
 
     return spacing(scale);
 }

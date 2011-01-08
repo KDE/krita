@@ -69,6 +69,7 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
     KoColorTransformation* m_hsvTransfo;
     KisPaintDeviceSP m_dab;
+    KisPaintDeviceSP m_colorSourceDevice;
 };
 
 #endif // KIS_BRUSHOP_H_

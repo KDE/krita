@@ -72,6 +72,11 @@ void KisColorSourceOptionWidget::writeOptionSetting(KisPropertiesConfiguration* 
 void KisColorSourceOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     d->option.readOptionSetting(setting);
+    QRadioButton* rb = d->id2radio.value(d->option.colorSourceTypeId());
+    if(rb)
+    {
+        rb->setChecked(true);
+    }
 }
 
 void KisColorSourceOptionWidget::sourceChanged()
@@ -84,4 +89,5 @@ void KisColorSourceOptionWidget::sourceChanged()
             return;
         }
     }
+    emit sigSettingChanged();
 }

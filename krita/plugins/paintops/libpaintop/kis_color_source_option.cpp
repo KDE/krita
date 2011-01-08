@@ -87,6 +87,11 @@ KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _paint
     }
 }
 
+QString KisColorSourceOption::colorSourceTypeId() const
+{
+    return Private::type2id.value(d->type).id();
+}
+
 void KisColorSourceOption::setColorSourceType(Type _type)
 {
     d->type = _type;

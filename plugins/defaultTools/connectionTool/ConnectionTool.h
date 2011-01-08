@@ -27,6 +27,7 @@
 
 #include <KoConnectionShape.h>
 #include <KoCanvasBase.h>
+
 class ConnectionTool : public KoPathTool
 {
     Q_OBJECT
@@ -39,7 +40,7 @@ public:
      * @brief Destructor
      */
     ~ConnectionTool();
-    
+
     /// reimplemented from superclass
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
 
@@ -55,12 +56,12 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
-    
 
     /**
      * @brief Modify connections if they are on a shape and not the nearest one
      */
     void updateConnections();
+
     /**
      * @brief Return the index of the nearest connection point of the shape with the point
      *
@@ -69,6 +70,7 @@ public:
      * @return The index of the nearest point
      */
     int getConnectionId( KoShape * shape, QPointF point );
+
     /**
      * @brief Return the square of the absolute distance between p1 and p2 
      *
@@ -76,16 +78,18 @@ public:
      * @param p2 The second point
      * @return The float which is the square of the distance
      */
-    float distanceSquare( QPointF p1, QPointF p2 );
+    qreal distanceSquare( const QPointF &p1, const QPointF &p2 );
+
     /**
      * @brief Return true if the mouse is near to a connection point
      */
     bool isInRoi();
+
     /**
      * @brief Permit to activate the connection with a comand
      */
     void command();
-    
+
 private:
     KoShape * m_shape1;
     int m_firstHandleIndex;

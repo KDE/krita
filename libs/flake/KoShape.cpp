@@ -2,7 +2,7 @@
    Copyright (C) 2006 Casper Boemann Rasmussen <cbr@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2006-2010 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
    CopyRight (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
 
    This library is free software; you can redistribute it and/or
@@ -783,6 +783,25 @@ QPointF KoShape::connectionPoint(int connectionPointId) const
     p.rx() *= s.width();
     p.ry() *= s.height();
     return p;
+}
+
+bool KoShape::setConnectionPointPosition(int connectionPointId, const QPointF &newPosition)
+{
+    // do not allow to change position of default connection points
+    if (connectionPointId < KoFlake::FirstCustomConnectionPoint)
+        return false;
+
+    Q_D(KoShape);
+    KoConnectionPoints::iterator cp = d->connectors.find(connectionPointId);
+    // check if connection point exists
+    if(cp == d->connectors.end())
+        return false;
+
+    QSizeF s = size();
+    cp->rx() = newPosition.x() / s.width();
+    cp->ry() = newPosition.y() / s.height();
+
+    return true;
 }
 
 KoConnectionPoints KoShape::connectionPoints() const

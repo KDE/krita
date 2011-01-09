@@ -2,7 +2,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
-   Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -331,6 +331,14 @@ public:
 
     /// Returns connection point with specified connection point id
     QPointF connectionPoint(int connectionPointId) const;
+
+    /**
+     * Sets new position for specified custom connection point
+     * @param connectionPointId the id of the custom connection point to change
+     * @param newPosition the new position of the custom connection point in shape coordinates
+     * @return true if position could be changed, else false
+     */
+    bool setConnectionPointPosition(int connectionPointId, const QPointF &newPosition);
 
     /**
      * Return a list of the connection points that have been added to this shape.

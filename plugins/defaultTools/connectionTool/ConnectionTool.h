@@ -79,6 +79,9 @@ private:
     /// Resets the current edit mode
     void resetEditMode();
 
+    /// Returns the nearest connection shape within handle grab sensitiviy distance
+    KoConnectionShape * nearestConnectionShape(QList<KoShape*> shapes, const QPointF &mousePos);
+
     enum EditMode {
         Idle,
         CreateConnection,

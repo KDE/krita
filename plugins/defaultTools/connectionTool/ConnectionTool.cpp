@@ -224,26 +224,10 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
             // we want to priorize connection shape handles, even if the connection shape
             // is not at the top of the shape stack at the mouse position
-            KoConnectionShape *connectionShape = 0;
-            int handleId = -1;
-            // try to find a connection shape with a handle near the mouse position
-            foreach(KoShape *shape, shapes) {
-                connectionShape = dynamic_cast<KoConnectionShape*>(shape);
-                if (connectionShape) {
-                    handleId = handleAtPoint(connectionShape, event->point);
-                    if(handleId >= 0) {
-                        m_shapeOn = connectionShape;
-                        break;
-                    }
-                }
-            }
-            // not found any connection shape with a handle near the mouse position?
-            if(!m_shapeOn) {
-                // use the top-most shape from the stack
-                m_shapeOn = shapes.first();
-                connectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-                handleId = handleAtPoint(m_shapeOn, event->point);
-            }
+            KoConnectionShape *connectionShape = nearestConnectionShape(shapes, event->point);
+            // use best connection shape or first shape from stack if not found
+            m_shapeOn = connectionShape ? connectionShape : shapes.first();
+            int handleId = handleAtPoint(m_shapeOn, event->point);
             if(handleId >= 0) {
                 m_activeHandle = handleId;
                 m_editMode = connectionShape ? EditConnection : CreateConnection;
@@ -400,6 +384,44 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint)
         }
         return handleId;
     }
+}
+
+KoConnectionShape * ConnectionTool::nearestConnectionShape(QList<KoShape*> shapes, const QPointF &mousePos)
+{
+    int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+
+    KoConnectionShape * nearestConnectionShape = 0;
+    qreal minSqaredDistance = HUGE_VAL;
+    const qreal maxSquaredDistance = grabSensitivity*grabSensitivity;
+
+    foreach(KoShape *shape, shapes) {
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+        if (!connectionShape || !connectionShape->isParametricShape())
+            continue;
+
+        // convert document point to shape coordinates
+        QPointF p = connectionShape->documentToShape(mousePos);
+        // our region of interest, i.e. a region around our mouse position
+        QRectF roi = handleGrabRect(p);
+
+        // check all segments of this shape which intersect the region of interest
+        QList<KoPathSegment> segments = connectionShape->segmentsAt(roi);
+        foreach (const KoPathSegment &s, segments) {
+            qreal nearestPointParam = s.nearestPoint(p);
+            QPointF nearestPoint = s.pointAt(nearestPointParam);
+            QPointF diff = p - nearestPoint;
+            qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
+            // are we within the allowed distance ?
+            if (squaredDistance > maxSquaredDistance)
+                continue;
+            // are we closer to the last closest point ?
+            if (squaredDistance < minSqaredDistance) {
+                nearestConnectionShape = connectionShape;
+            }
+        }
+    }
+
+    return nearestConnectionShape;
 }
 
 void ConnectionTool::resetEditMode()

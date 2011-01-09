@@ -93,7 +93,6 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         } else {
             painter.save();
             painter.setPen(Qt::black);
-            // Apply the conversion make by the matrix transformation
             QTransform transform = m_shapeOn->absoluteTransformation(0);
             KoShape::applyConversion(painter, converter);
             // Draw all the connection points of the shape
@@ -102,7 +101,13 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
                 handleRect.moveCenter(transform.map(cp.value()));
-                painter.setBrush(cp.key() == m_activeHandle ? Qt::red : Qt::darkGreen);
+                Qt::GlobalColor fillColor = Qt::white;
+                if(m_editMode == EditConnectionPoint) {
+                    fillColor = cp.key() == m_activeHandle ? Qt::red : Qt::darkGreen;
+                } else if (m_editMode == CreateConnection) {
+                    fillColor = cp.key() == m_activeHandle ? Qt::red : Qt::white;
+                }
+                painter.setBrush(fillColor);
                 painter.drawRect(handleRect);
             }
             painter.restore();
@@ -132,11 +137,21 @@ void ConnectionTool::repaintDecorations()
     }
 }
 
-void ConnectionTool::mousePressEvent(KoPointerEvent * /*event*/)
+void ConnectionTool::mousePressEvent(KoPointerEvent * event)
 {
-    if(m_editMode == EditConnection) {
+    if (m_editMode == Idle) {
+        // pressing aon a shape in idle mode switches to connection point edit mode
+        if (m_shapeOn && !dynamic_cast<KoConnectionShape*>(m_shapeOn)) {
+            m_editMode = EditConnectionPoint;
+            m_activeHandle = -1;
+            repaintDecorations();
+        }
+    } else if(m_editMode == EditConnection) {
+        // create connection handle change strategy
         m_currentStrategy = createStrategy(dynamic_cast<KoConnectionShape*>(m_shapeOn), m_activeHandle);
-    } else if(m_editMode == EditConnectionPoint) {
+    } else if(m_editMode == CreateConnection) {
+        // create new connection shape, connect it to the active connection point
+        // and start editing the new connection
         repaintDecorations();
         // create the new connection shape
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
@@ -144,6 +159,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * /*event*/)
         KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
         if(!connectionShape) {
             delete shape;
+            resetEditMode();
             return;
         }
         // get the position of the connection point we start our connection from
@@ -154,20 +170,30 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * /*event*/)
         // connect the first handle of the connection shape to our connection point
         if(!connectionShape->connectFirst(m_shapeOn, m_activeHandle)) {
             delete shape;
+            resetEditMode();
             return;
         }
         // create the connection edit strategy from the path tool
         m_currentStrategy = createStrategy(connectionShape, 1);
         if (!m_currentStrategy) {
             delete shape;
+            resetEditMode();
             return;
         }
-        // update our edit mode and state data
-        m_editMode = CreateConnection;
+        // update our handle data
         m_activeHandle = 1;
         m_shapeOn = shape;
         // add connection shape to the shape manager so it gets painted
         canvas()->shapeManager()->addShape(connectionShape);
+    } else if (m_editMode == EditConnectionPoint) {
+        // clicking not on a connection point and not on the current shape exits
+        // connection point edit mode
+        if (m_activeHandle < 0) {
+            if (!canvas()->shapeManager()->shapesAt(handleGrabRect(event->point)).contains(m_shapeOn)) {
+                repaintDecorations();
+                resetEditMode();
+            }
+        }
     }
 }
 
@@ -182,43 +208,53 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 
     repaintDecorations();
 
-    resetEditMode();
+    if (m_editMode == EditConnectionPoint) {
+        Q_ASSERT(m_shapeOn);
+        // check if we should highlight another connection point
+        int handleId = handleAtPoint(m_shapeOn, event->point);
+        if(handleId != m_activeHandle) {
+            m_activeHandle = handleId;
+            repaintDecorations();
+        }
+    } else {
+        resetEditMode();
 
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(event->point));
-    if(!shapes.isEmpty()) {
-        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-        // we want to priorize connection shape handles, even if the connection shape
-        // is not at the top of the shape stack at the mouse position
-        KoConnectionShape *connectionShape = 0;
-        int handleId = -1;
-        // try to find a connection shape with a handle near the mouse position
-        foreach(KoShape *shape, shapes) {
-            connectionShape = dynamic_cast<KoConnectionShape*>(shape);
-            if (connectionShape) {
-                handleId = handleAtPoint(connectionShape, event->point);
-                if(handleId >= 0) {
-                    m_shapeOn = connectionShape;
-                    break;
+        QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(event->point));
+        if(!shapes.isEmpty()) {
+            qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+            // we want to priorize connection shape handles, even if the connection shape
+            // is not at the top of the shape stack at the mouse position
+            KoConnectionShape *connectionShape = 0;
+            int handleId = -1;
+            // try to find a connection shape with a handle near the mouse position
+            foreach(KoShape *shape, shapes) {
+                connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+                if (connectionShape) {
+                    handleId = handleAtPoint(connectionShape, event->point);
+                    if(handleId >= 0) {
+                        m_shapeOn = connectionShape;
+                        break;
+                    }
                 }
             }
-        }
-        // not found any connection shape with a handle near the mouse position?
-        if(!m_shapeOn) {
-            // use the top-most shape from the stack
-            m_shapeOn = shapes.first();
-            connectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-            handleId = handleAtPoint(m_shapeOn, event->point);
-        }
-        if(handleId >= 0) {
-            m_activeHandle = handleId;
-            m_editMode = connectionShape ? EditConnection : EditConnectionPoint;
+            // not found any connection shape with a handle near the mouse position?
+            if(!m_shapeOn) {
+                // use the top-most shape from the stack
+                m_shapeOn = shapes.first();
+                connectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
+                handleId = handleAtPoint(m_shapeOn, event->point);
+            }
+            if(handleId >= 0) {
+                m_activeHandle = handleId;
+                m_editMode = connectionShape ? EditConnection : CreateConnection;
+            }
         }
     }
 
     switch(m_editMode) {
         case Idle:
-            if(m_shapeOn && !dynamic_cast<KoConnectionShape*>(m_shapeOn))
-                emit statusTextChanged(i18n("Double click to add connection point."));
+            if(m_shapeOn && !dynamic_cast<KoConnectionShape*>(m_shapeOn) && m_activeHandle < 0)
+                emit statusTextChanged(i18n("Click to edit connection points."));
             else
                 emit statusTextChanged("");
             break;
@@ -226,7 +262,13 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             emit statusTextChanged(i18n("Drag to edit connection."));
             break;
         case EditConnectionPoint:
-            emit statusTextChanged(i18n("Double click to remove connection point. Drag to create connection."));
+            if (m_activeHandle >= 0)
+                emit statusTextChanged(i18n("Double click to remove connection point"));
+            else
+                emit statusTextChanged(i18n("Double click to add connection point."));
+            break;
+        case CreateConnection:
+            emit statusTextChanged(i18n("Drag to create new connection."));
             break;
         default:
             emit statusTextChanged("");
@@ -288,18 +330,17 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
 
     if (m_editMode == EditConnectionPoint) {
         repaintDecorations();
-        // TODO: use an undo command
-        m_shapeOn->removeConnectionPoint(handleAtPoint(m_shapeOn, event->point));
-        repaintDecorations();
-        m_activeHandle = -1;
-        m_editMode = Idle;
-    } else if (m_editMode == Idle) {
-        if (!dynamic_cast<KoConnectionShape*>(m_shapeOn)) {
+        int handleId = handleAtPoint(m_shapeOn, event->point);
+        if (handleId < 0) {
             QPointF point = m_shapeOn->documentToShape(event->point);
             // TODO: use an undo command
             m_shapeOn->addConnectionPoint(point);
-            repaintDecorations();
+        } else {
+            // TODO: use an undo command
+            m_shapeOn->removeConnectionPoint(handleId);
         }
+        repaintDecorations();
+        m_activeHandle = -1;
     }
 }
 

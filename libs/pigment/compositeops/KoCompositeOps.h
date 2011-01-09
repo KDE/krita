@@ -26,7 +26,6 @@
 #include "KoColorSpace.h"
 #include "KoColorSpaceTraits.h"
 
-#include "compositeops/KoCompositeOpFunctions.h"
 #include "compositeops/KoCompositeOpGeneric.h"
 #include "compositeops/KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOpErase.h"
@@ -60,7 +59,7 @@ struct AddGeneralOps<Traits, true>
     
     template<Arg compositeFunc(Arg, Arg)>
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-        cs->addCompositeOp(new KoCompositeOpGeneric<Traits, compositeFunc>(cs, id, description, category, userVisible));
+        cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, compositeFunc>(cs, id, description, category, userVisible));
     }
     
     static void add(KoColorSpace* cs) {
@@ -115,7 +114,7 @@ struct AddHSLOps<Traits, true>
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-        cs->addCompositeOp(new KoCompositeOpGenericLum<Traits, compositeFunc>(cs, id, description, category, userVisible));
+        cs->addCompositeOp(new KoCompositeOpGenericHSL<Traits, compositeFunc>(cs, id, description, category, userVisible));
     }
     
     static void add(KoColorSpace* cs) {

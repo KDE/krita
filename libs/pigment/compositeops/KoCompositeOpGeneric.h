@@ -21,25 +21,30 @@
 #define _KOCOMPOSITEO_GENERIC_H_
 
 #include "KoCompositeOpFunctions.h"
+#include "KoCompositeOpBase.h"
 
 /**
- * A template version of the burn composite operation to use in colorspaces.
+ * Generic CompositeOp for separable channel compositing functions
+ * 
+ * A template to generate a KoCompositeOp class by just specifying a
+ * blending/compositing function. This template works with compositing functions
+ * for separable channels (means each channel of a pixel can be processed separately)
  */
 template<
     class Traits,
     typename Traits::channels_type compositeFunc(typename Traits::channels_type, typename Traits::channels_type)
 >
-class KoCompositeOpGeneric : public KoCompositeOpBase< Traits, KoCompositeOpGeneric<Traits,compositeFunc> >
+class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc> >
 {
-    typedef KoCompositeOpBase< Traits, KoCompositeOpGeneric<Traits,compositeFunc> > base_class;
-    typedef typename Traits::channels_type                                          channels_type;
-    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype          composite_type;
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc> > base_class;
+    typedef typename Traits::channels_type                                            channels_type;
+    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype            composite_type;
     
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;
     
 public:
-    KoCompositeOpGeneric(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
+    KoCompositeOpGenericSC(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
         : base_class(cs, id, description, category, userVisible) { }
 
 public:
@@ -57,6 +62,58 @@ public:
                     dst[i] = div(result, newDstAlpha);
                 }
             }
+        }
+        
+        return newDstAlpha;
+    }
+};
+
+
+/**
+ * Generic CompositeOp for nonseparable/HSL channel compositing functions
+ * 
+ * A template to generate a KoCompositeOp class by just specifying a
+ * blending/compositing function. This template works with compositing functions
+ * for RGB channels only (the channels can not be processed separately)
+ */
+template<class Traits, void compositeFunc(float, float, float, float&, float&, float&)>
+class KoCompositeOpGenericHSL: public KoCompositeOpBase< Traits, KoCompositeOpGenericHSL<Traits,compositeFunc> >
+{
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericHSL<Traits,compositeFunc> > base_class;
+    typedef typename Traits::channels_type                                             channels_type;
+    
+    static const qint32 red_pos   = Traits::red_pos;
+    static const qint32 green_pos = Traits::green_pos;
+    static const qint32 blue_pos  = Traits::blue_pos;
+    
+public:
+    KoCompositeOpGenericHSL(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
+        : base_class(cs, id, description, category, userVisible) { }
+    
+public:
+    template<bool alphaLocked, bool allChannelFlags>
+    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
+                                                     channels_type*       dst, channels_type dstAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
+        Q_UNUSED(channelFlags);
+        
+        srcAlpha = mul(srcAlpha, opacity);
+        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+        
+        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            float srcR = scale<float>(src[red_pos]);
+            float srcG = scale<float>(src[green_pos]);
+            float srcB = scale<float>(src[blue_pos]);
+            
+            float dstR = scale<float>(dst[red_pos]);
+            float dstG = scale<float>(dst[green_pos]);
+            float dstB = scale<float>(dst[blue_pos]);
+            
+            compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
+            
+            dst[red_pos]   = div(blend(src[red_pos]  , srcAlpha, dst[red_pos]  , dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
+            dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
+            dst[blue_pos]  = div(blend(src[blue_pos] , srcAlpha, dst[blue_pos] , dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
         }
         
         return newDstAlpha;

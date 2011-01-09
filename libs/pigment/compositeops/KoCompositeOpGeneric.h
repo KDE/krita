@@ -53,7 +53,7 @@ public:
         if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
             for(qint32 i=0; i <channels_nb; i++) {
                 if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                    channels_type result = blend<channels_type,compositeFunc>(src[i], srcAlpha, dst[i], dstAlpha);
+                    channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc(src[i],dst[i]));
                     dst[i] = div(result, newDstAlpha);
                 }
             }

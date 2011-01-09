@@ -76,6 +76,18 @@ inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
     return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
 }
 
+template<class T>
+inline T min(T a, T b, T c) {
+    b = (a < b) ? a : b;
+    return (b < c) ? b : c;
+}
+
+template<class T>
+inline T max(T a, T b, T c) {
+    b = (a > b) ? a : b;
+    return (b > c) ? b : c;
+}
+
 /* ------------------------ Auxiliary Functions --------------------------- /
  * definitions of auxiliary functions needed by the blending functions
  * or the KoCompositeOp* classes to calculate the pixel colors
@@ -87,16 +99,120 @@ inline T unionShapeOpacy(T a, T b) {
     return T(composite_type(a) + b - mul(a,b));
 }
 
-template<class T, T blendFunc(T,T)>
-inline T blend(T src, T srcAlpha, T dst, T dstAlpha) {
-    return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, blendFunc(src, dst));
+template<class T>
+inline T blend(T src, T srcAlpha, T dst, T dstAlpha, T cfValue) {
+    return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, cfValue);
+}
+
+template<class TReal>
+inline TReal getLuminosity(TReal r, TReal g, TReal b) {
+    return TReal(0.3)*r + TReal(0.59)*g + TReal(0.11)*b;
+}
+
+template<class TReal>
+inline void setLuminosity(TReal& r, TReal& g, TReal& b, TReal lum) {
+    
+    TReal d = lum - getLuminosity(r, g, b);
+    
+    r += d;
+    g += d;
+    b += d;
+    
+    TReal l = getLuminosity(r, g, b);
+    TReal n = min(r, g, b);
+    TReal x = max(r, g, b);
+    
+    if(n < TReal(0.0)) {
+        r = l + ((r-l) * l) / (l-n);
+        g = l + ((g-l) * l) / (l-n);
+        b = l + ((b-l) * l) / (l-n);
+    }
+    
+    if(x > TReal(1.0)) {
+        r = l + ((r-l) * (TReal(1.0)-l)) / (x-l);
+        g = l + ((g-l) * (TReal(1.0)-l)) / (x-l);
+        b = l + ((b-l) * (TReal(1.0)-l)) / (x-l);
+    }
+}
+
+template<class TReal>
+inline TReal getSaturation(TReal r, TReal g, TReal b) {
+    return max(r,g,b) - min(r,g,b);
+}
+
+template<class TReal>
+inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat) {
+    TReal& min = r;
+    TReal& mid = g;
+    TReal& max = b;
+    
+    if(mid < min) {
+        TReal& tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if(max < mid) {
+        TReal& tmp = mid;
+        mid = max;
+        max = tmp;
+    }
+    
+    if(mid < min) {
+        TReal& tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if(max > min) {
+        mid = ((mid-min) * sat) / (max-min);
+        max = sat;
+    } else {
+        mid = TReal(0.0);
+        max = TReal(0.0);
+    }
+    
+    min = TReal(0.0);
 }
 
 /* ---------------- Blending/Compositing functions ------------------------ /
  * definitions of standard blending/compositing functions compatible
- * to the ISO 32000-1 specification (for PDF filed) which also defines
+ * to the ISO 32000-1 specification (for PDF files) which also defines
  * the compositing functions who are also used in Adobe Photoshop (c)
  */
+
+template<class TReal>
+inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    TReal lum = getLuminosity(dr, dg, db);
+    dr = sr;
+    dg = sg;
+    db = sb;
+    setLuminosity(dr, dg, db, lum);
+}
+
+template<class TReal>
+inline void cfLuminosity(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    setLuminosity(dr, dg, db, getLuminosity(sr, sg, sb));
+}
+
+template<class TReal>
+inline void cfSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    TReal sat = getSaturation(sr, sg, sb);
+    TReal lum = getLuminosity(dr, dg, db);
+    setSaturation(dr, dg, db, sat);
+    setLuminosity(dr, dg, db, lum);
+}
+
+template<class TReal>
+inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    TReal sat = getSaturation(dr, dg, db);
+    TReal lum = getLuminosity(dr, dg, db);
+    dr = sr;
+    dg = sg;
+    db = sb;
+    setSaturation(dr, dg, db, sat);
+    setLuminosity(dr, dg, db, lum);
+}
 
 template<class T>
 inline T cfColorBurn(T src, T dst) {
@@ -178,8 +294,10 @@ inline T cfVividLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     if(src < KoColorSpaceMathsTraits<T>::halfValue) {
+    
         if(src == KoColorSpaceMathsTraits<T>::zeroValue)
-            return KoColorSpaceMathsTraits<T>::zeroValue; //TODO: maybe better to return unitValue, must be verified
+            return (dst == KoColorSpaceMathsTraits<T>::unitValue) ?
+                KoColorSpaceMathsTraits<T>::unitValue : KoColorSpaceMathsTraits<T>::zeroValue;
             
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
@@ -188,7 +306,8 @@ inline T cfVividLight(T src, T dst) {
     }
     
     if(src == KoColorSpaceMathsTraits<T>::unitValue)
-        return KoColorSpaceMathsTraits<T>::unitValue; //TODO: maybe better to return zeroValue, must be verified
+        return (dst == KoColorSpaceMathsTraits<T>::zeroValue) ?
+            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
     
     // min(1,max(0, dst / (2*(1-src)))
     composite_type srci2 = inv(src);
@@ -199,7 +318,7 @@ inline T cfVividLight(T src, T dst) {
 template<class T>
 inline T cfPinLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    // TODO: verify that the formular is correct (the first max would be useless here)
+    // TODO: verify that the formula is correct (the first max would be useless here)
     // max(0, max(2*src-1, min(dst, 2*src)))
     composite_type src2 = composite_type(src) + src;
     composite_type a    = qMin<composite_type>(dst, src2);
@@ -216,6 +335,40 @@ inline T cfArcTangent(T src, T dst) {
             KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
     
     return scale<T>(2.0 * atan(scale<qreal>(src) / scale<qreal>(dst)) / pi);
+}
+
+template<class T>
+inline T cfAllanon(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    // (dst + src) / 2   [or (dst + src) * 0.5]
+    return T((composite_type(src) + dst) * KoColorSpaceMathsTraits<T>::halfValue / KoColorSpaceMathsTraits<T>::unitValue);
+}
+
+template<class T>
+inline T cfLinearLight(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    // min(1,max(0,(dst + 2*src)-1))
+    return clamp<T>((composite_type(src) + src + dst) - KoColorSpaceMathsTraits<T>::unitValue);
+}
+
+template<class T>
+inline T cfParallel(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    
+    // min(max(2 / (1/dst + 1/src), 0), 1)
+    composite_type unit = KoColorSpaceMathsTraits<T>::unitValue;
+    composite_type s    = (src != KoColorSpaceMathsTraits<T>::zeroValue) ? div<T>(unit, src) : unit;
+    composite_type d    = (dst != KoColorSpaceMathsTraits<T>::zeroValue) ? div<T>(unit, dst) : unit;
+    
+    return clamp<T>((unit+unit) * KoColorSpaceMathsTraits<T>::unitValue / (d+s));
+}
+
+template<class T>
+inline T cfEquivalence(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    // 1 - abs(dst - src)
+    composite_type x = composite_type(dst) - src;
+    return (x < KoColorSpaceMathsTraits<T>::zeroValue) ? T(-x) : T(x);
 }
 
 template<class T>
@@ -347,6 +500,53 @@ public:
             else
                 genericComposite<false,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
         }
+    }
+};
+
+
+
+
+
+template<class Traits, void compositeFunc(float, float, float, float&, float&, float&)>
+class KoCompositeOpGenericLum : public KoCompositeOpBase< Traits, KoCompositeOpGenericLum<Traits,compositeFunc> >
+{
+    typedef KoCompositeOpBase< Traits, KoCompositeOpGenericLum<Traits,compositeFunc> > base_class;
+    typedef typename Traits::channels_type                                             channels_type;
+    
+    static const qint32 red_pos   = Traits::red_pos;
+    static const qint32 green_pos = Traits::green_pos;
+    static const qint32 blue_pos  = Traits::blue_pos;
+    
+public:
+    KoCompositeOpGenericLum(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true)
+        : base_class(cs, id, description, category, userVisible) { }
+    
+public:
+    template<bool alphaLocked, bool allChannelFlags>
+    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
+                                                     channels_type*       dst, channels_type dstAlpha,
+                                                     channels_type opacity, const QBitArray& channelFlags) {
+        Q_UNUSED(channelFlags);
+        
+        srcAlpha = mul(srcAlpha, opacity);
+        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+        
+        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            float srcR = scale<float>(src[red_pos]);
+            float srcG = scale<float>(src[green_pos]);
+            float srcB = scale<float>(src[blue_pos]);
+            
+            float dstR = scale<float>(dst[red_pos]);
+            float dstG = scale<float>(dst[green_pos]);
+            float dstB = scale<float>(dst[blue_pos]);
+            
+            compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
+            dst[red_pos]   = div(blend(src[red_pos]  , srcAlpha, dst[red_pos]  , dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
+            dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
+            dst[blue_pos]  = div(blend(src[blue_pos] , srcAlpha, dst[blue_pos] , dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
+        }
+        
+        return newDstAlpha;
     }
 };
 

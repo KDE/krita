@@ -370,6 +370,26 @@ inline T cfEquivalence(T src, T dst) {
 }
 
 template<class T>
+inline T cfGrainMerge(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(dst) + src - KoColorSpaceMathsTraits<T>::halfValue);
+}
+
+template<class T>
+inline T cfGrainExtract(T src, T dst) {
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(dst) - src + KoColorSpaceMathsTraits<T>::halfValue);
+}
+
+template<class T>
+inline T cfHardMix(T src, T dst) {
+    if(dst > KoColorSpaceMathsTraits<T>::halfValue)
+        return cfColorDodge(src, dst);
+    
+    return cfColorBurn(src, dst);
+}
+
+template<class T>
 inline T cfGammaDark(T src, T dst) {
     if(src == KoColorSpaceMathsTraits<T>::zeroValue)
         return KoColorSpaceMathsTraits<T>::zeroValue;

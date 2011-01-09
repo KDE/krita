@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -43,6 +44,8 @@ public:
 
     /// reimplemented from superclass
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    /// reimplemented from superclass
+    virtual void repaintDecorations();
 
     /// reimplemented from superclass
     virtual void mousePressEvent( KoPointerEvent *event ) ;
@@ -51,57 +54,42 @@ public:
     /// reimplemented from superclass
     virtual void mouseReleaseEvent( KoPointerEvent *event );
     /// reimplemented from superclass
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from superclass
     virtual void keyPressEvent( QKeyEvent *event );
     /// reimplemented from superclass
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
 
-    /**
-     * @brief Modify connections if they are on a shape and not the nearest one
-     */
-    void updateConnections();
 
+private:
     /**
-     * @brief Return the index of the nearest connection point of the shape with the point
-     *
-     * @param shape The shape to connect
-     * @param point The point to connect
-     * @return The index of the nearest point
-     */
-    int getConnectionId( KoShape * shape, QPointF point );
-
-    /**
-     * @brief Return the square of the absolute distance between p1 and p2 
+     * @brief Return the square of the absolute distance between p1 and p2
      *
      * @param p1 The first point
      * @param p2 The second point
      * @return The float which is the square of the distance
      */
-    qreal distanceSquare( const QPointF &p1, const QPointF &p2 );
+    qreal squareDistance( const QPointF &p1, const QPointF &p2 );
 
-    /**
-     * @brief Return true if the mouse is near to a connection point
-     */
-    bool isInRoi();
+    /// Returns nearest connection handle or nearest connection point id of shape
+    int handleAtPoint(KoShape *shape, const QPointF &mousePoint);
 
-    /**
-     * @brief Permit to activate the connection with a comand
-     */
-    void command();
+    /// Resets the current edit mode
+    void resetEditMode();
 
-private:
-    KoShape * m_shape1;
-    int m_firstHandleIndex;
-    KoShape * m_shapeOn;
-    KoShape * m_lastShapeOn;
-    QPointF * m_pointSelected;
-    QPointF m_mouse;
-    int m_activeHandle;
-    KoConnectionShape * m_connectionShape;
-    KoConnectionShape * m_lastConnectionShapeOn;
-    QPair<bool,bool> * m_isTied;
-    bool m_modifyConnection;
+    enum EditMode {
+        Idle,
+        CreateConnection,
+        EditConnection,
+        EditConnectionPoint
+    };
+
+    EditMode m_editMode; ///< the current edit mode
+    KoShape * m_shapeOn; ///< the current shape we are working on
+    int m_activeHandle;  ///< the currently active connection point/connection handle
+    KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
 };
 
 #endif

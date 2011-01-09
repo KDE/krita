@@ -44,9 +44,12 @@
  * TODO: use strategies to handle different tool actions:
  * 1. edit connections (reuse KoPathTools connection strategy) DONE
  * 2. create new connections                                   DONE
- * 3. remove connections
- * 4. edit connection points of a shape (add, delete, move)
- *    -> click on a shape to activate editing
+ * 3. remove connections                                       DONE
+ * 4. edit connection points of a shape
+ *    -> click on a shape to activate editing                  DONE
+ *    - add connection points                                  DONE
+ *    - remove connection points                               DONE
+ *    - move connection points
  */
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
@@ -237,10 +240,14 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 
     switch(m_editMode) {
         case Idle:
-            if(m_shapeOn && !dynamic_cast<KoConnectionShape*>(m_shapeOn) && m_activeHandle < 0)
-                emit statusTextChanged(i18n("Click to edit connection points."));
-            else
+            if(m_shapeOn) {
+                if (dynamic_cast<KoConnectionShape*>(m_shapeOn))
+                    emit statusTextChanged(i18n("Double click to remove connection."));
+                else if (m_activeHandle < 0)
+                    emit statusTextChanged(i18n("Click to edit connection points."));
+            } else {
                 emit statusTextChanged("");
+            }
             break;
         case EditConnection:
             emit statusTextChanged(i18n("Drag to edit connection."));
@@ -278,14 +285,12 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
                 // - cleanup and delete the strategy
                 // - remove connection shape from shape manager and delete it
                 // - reset edit mode to last state
-                m_currentStrategy->cancelInteraction();
                 delete m_currentStrategy;
                 m_currentStrategy = 0;
                 repaintDecorations();
                 canvas()->shapeManager()->remove(m_shapeOn);
                 m_shapeOn = connectionShape->firstShape();
                 m_activeHandle = connectionShape->firstConnectionId();
-                m_editMode = EditConnectionPoint;
                 repaintDecorations();
                 delete connectionShape;
                 return;
@@ -325,6 +330,14 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
         }
         repaintDecorations();
         m_activeHandle = -1;
+    } else if (m_editMode == Idle) {
+        if (dynamic_cast<KoConnectionShape*>(m_shapeOn)) {
+            repaintDecorations();
+            QUndoCommand * cmd = canvas()->shapeController()->removeShape(m_shapeOn);
+            canvas()->addCommand(cmd);
+            resetEditMode();
+            repaintDecorations();
+        }
     }
 }
 

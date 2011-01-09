@@ -801,6 +801,8 @@ bool KoShape::setConnectionPointPosition(int connectionPointId, const QPointF &n
     cp->rx() = newPosition.x() / s.width();
     cp->ry() = newPosition.y() / s.height();
 
+    d->shapeChanged(ConnectionPointChanged);
+
     return true;
 }
 

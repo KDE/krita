@@ -214,9 +214,15 @@ inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
 
 template<class T>
 inline T cfColorBurn(T src, T dst) {
-    if(src != KoColorSpaceMathsTraits<T>::zeroValue)
-        return inv(clamp<T>(div(inv(dst), src)));
-    return KoColorSpaceMathsTraits<T>::zeroValue;
+    if(dst == KoColorSpaceMathsTraits<T>::unitValue)
+        return KoColorSpaceMathsTraits<T>::unitValue;
+    
+    T invDst = inv(dst);
+    
+    if(src < invDst)
+        return KoColorSpaceMathsTraits<T>::zeroValue;
+    
+    return inv(clamp<T>(div(invDst, src)));
 }
 
 template<class T>
@@ -227,9 +233,15 @@ inline T cfLinearBurn(T src, T dst) {
 
 template<class T>
 inline T cfColorDodge(T src, T dst) {
-    if(src != KoColorSpaceMathsTraits<T>::unitValue)
-        return clamp<T>(div(dst, inv(src)));
-    return KoColorSpaceMathsTraits<T>::unitValue;
+    if(dst == KoColorSpaceMathsTraits<T>::zeroValue)
+        return KoColorSpaceMathsTraits<T>::zeroValue;
+    
+    T invSrc = inv(src);
+    
+    if(invSrc < dst)
+        return KoColorSpaceMathsTraits<T>::unitValue;
+    
+    return clamp<T>(div(dst, invSrc));
 }
 
 template<class T>

@@ -545,9 +545,14 @@ bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
     if (hasDependee(shape1))
         return false;
 
-    // check if the connection point does exist
-    if (shape1 && !shape1->hasConnectionPoint(connectionPointId))
-        return false;
+    if (shape1) {
+        // check if the connection point does exist
+        if (!shape1->hasConnectionPoint(connectionPointId))
+            return false;
+        // do not connect to the same connection point twice
+        if(d->shape2 == shape1 && d->connectionPointId2 == connectionPointId)
+            return false;
+    }
 
     if (d->shape1)
         d->shape1->removeDependee(this);
@@ -567,9 +572,14 @@ bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointId)
     if (hasDependee(shape2))
         return false;
 
-    // check if the connection point does exist
-    if (shape2 && !shape2->hasConnectionPoint(connectionPointId))
-        return false;
+    if (shape2) {
+        // check if the connection point does exist
+        if (!shape2->hasConnectionPoint(connectionPointId))
+            return false;
+        // do not connect to the same connection point twice
+        if(d->shape1 == shape2 && d->connectionPointId1 == connectionPointId)
+            return false;
+    }
 
     if (d->shape2)
         d->shape2->removeDependee(this);

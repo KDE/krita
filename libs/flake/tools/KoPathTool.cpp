@@ -43,6 +43,8 @@
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
+#include "KoPathConnectionPointStrategy.h"
+#include "KoParameterChangeStrategy.h"
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
@@ -974,6 +976,17 @@ void KoPathTool::deleteSelection()
 KoToolSelection * KoPathTool::selection()
 {
     return &m_pointSelection;
+}
+
+KoInteractionStrategy * KoPathTool::createStrategy(KoParameterShape *shape, int handleId)
+{
+    if(!shape)
+        return 0;
+    KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+    if(connectionShape)
+        return new KoPathConnectionPointStrategy(this, connectionShape, handleId);
+    else
+        return new KoParameterChangeStrategy(this, shape, handleId);
 }
 
 #include <KoPathTool.moc>

@@ -32,6 +32,7 @@ class QButtonGroup;
 class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
+class KoParameterShape;
 
 class KAction;
 
@@ -82,6 +83,8 @@ protected:
     /// reimplemented
     virtual QMap<QString, QWidget *>  createOptionWidgets();
 
+    /// Creates a strategy for moving a parameter handle
+    KoInteractionStrategy *createStrategy(KoParameterShape *shape, int handleId);
 
 private:
     void updateOptionsWidget();

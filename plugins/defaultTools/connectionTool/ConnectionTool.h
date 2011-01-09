@@ -82,6 +82,9 @@ private:
     /// Returns the nearest connection shape within handle grab sensitiviy distance
     KoConnectionShape * nearestConnectionShape(QList<KoShape*> shapes, const QPointF &mousePos);
 
+    /// Updates status text depending on edit mode
+    void updateStatusText();
+
     enum EditMode {
         Idle,
         CreateConnection,

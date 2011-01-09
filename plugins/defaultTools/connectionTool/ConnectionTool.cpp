@@ -40,17 +40,7 @@
 #include <QPointF>
 #include <QKeyEvent>
 
-/*
- * TODO: use strategies to handle different tool actions:
- * 1. edit connections (reuse KoPathTools connection strategy) DONE
- * 2. create new connections                                   DONE
- * 3. remove connections                                       DONE
- * 4. edit connection points of a shape
- *    -> click on a shape to activate editing                  DONE
- *    - add connection points                                  DONE
- *    - remove connection points                               DONE
- *    - move connection points
- */
+/* TODO: use commands for editing, use snapping when moving connection points */
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     : KoPathTool(canvas)
@@ -213,11 +203,19 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 
     if (m_editMode == EditConnectionPoint) {
         Q_ASSERT(m_shapeOn);
-        // check if we should highlight another connection point
-        int handleId = handleAtPoint(m_shapeOn, event->point);
-        if(handleId != m_activeHandle) {
-            m_activeHandle = handleId;
+        if (event->buttons() & Qt::LeftButton && m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
+            QPointF cp = m_shapeOn->documentToShape(event->point);
             repaintDecorations();
+            // TODO: use undo command
+            m_shapeOn->setConnectionPointPosition(m_activeHandle, cp);
+            repaintDecorations();
+        } else {
+            // check if we should highlight another connection point
+            int handleId = handleAtPoint(m_shapeOn, event->point);
+            if(handleId != m_activeHandle) {
+                m_activeHandle = handleId;
+                repaintDecorations();
+            }
         }
     } else {
         resetEditMode();
@@ -238,33 +236,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         }
     }
 
-    switch(m_editMode) {
-        case Idle:
-            if(m_shapeOn) {
-                if (dynamic_cast<KoConnectionShape*>(m_shapeOn))
-                    emit statusTextChanged(i18n("Double click to remove connection."));
-                else if (m_activeHandle < 0)
-                    emit statusTextChanged(i18n("Click to edit connection points."));
-            } else {
-                emit statusTextChanged("");
-            }
-            break;
-        case EditConnection:
-            emit statusTextChanged(i18n("Drag to edit connection."));
-            break;
-        case EditConnectionPoint:
-            if (m_activeHandle >= 0)
-                emit statusTextChanged(i18n("Double click to remove connection point"));
-            else
-                emit statusTextChanged(i18n("Double click to add connection point."));
-            break;
-        case CreateConnection:
-            emit statusTextChanged(i18n("Drag to create new connection."));
-            break;
-        default:
-            emit statusTextChanged("");
-    }
-
+    updateStatusText();
     repaintDecorations();
 }
 
@@ -310,6 +282,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
         m_currentStrategy = 0;
         resetEditMode();
     }
+    updateStatusText();
 }
 
 void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -443,4 +416,36 @@ void ConnectionTool::resetEditMode()
     m_shapeOn = 0;
     m_activeHandle = -1;
     emit statusTextChanged("");
+}
+
+void ConnectionTool::updateStatusText()
+{
+    switch(m_editMode) {
+        case Idle:
+            if(m_shapeOn) {
+                if (dynamic_cast<KoConnectionShape*>(m_shapeOn))
+                    emit statusTextChanged(i18n("Double click to remove connection."));
+                else if (m_activeHandle < 0)
+                    emit statusTextChanged(i18n("Click to edit connection points."));
+            } else {
+                emit statusTextChanged("");
+            }
+            break;
+        case EditConnection:
+            emit statusTextChanged(i18n("Drag to edit connection."));
+            break;
+        case EditConnectionPoint:
+            if (m_activeHandle >= KoFlake::FirstCustomConnectionPoint)
+                emit statusTextChanged(i18n("Drag to move connection point. Double click to remove connection point"));
+            else if (m_activeHandle >= 0)
+                emit statusTextChanged(i18n("Double click to remove connection point"));
+            else
+                emit statusTextChanged(i18n("Double click to add connection point."));
+            break;
+        case CreateConnection:
+            emit statusTextChanged(i18n("Drag to create new connection."));
+            break;
+        default:
+            emit statusTextChanged("");
+    }
 }

@@ -389,7 +389,10 @@ void KisLayerBox::slotRmClicked()
             m_nodeManager->removeNode(node);        
         }
     }
-    m_nodeManager->updateGUI();
+    if (m_canvas && m_canvas->view()) {
+        KisView2* view = m_canvas->view();
+        view->updateGUI();
+    }
 }
 
 void KisLayerBox::slotRaiseClicked()

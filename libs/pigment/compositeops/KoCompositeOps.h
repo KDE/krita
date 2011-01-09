@@ -27,6 +27,7 @@
 #include "KoColorSpaceTraits.h"
 
 #include "compositeops/KoCompositeOpGeneric.h"
+#include "compositeops/KoCompositeOpCopyChannel.h"
 #include "compositeops/KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpCopy2.h"
@@ -63,11 +64,14 @@ struct AddGeneralOps<Traits, true>
     }
     
     static void add(KoColorSpace* cs) {
+        cs->addCompositeOp(new KoCompositeOpOver<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
         
-        add<&cfOver>(cs, COMPOSITE_OVER, i18n("Normal"), KoCompositeOp::categoryMix());
+        add<&cfGrainMerge>  (cs, COMPOSITE_GRAIN_MERGE  , i18n("Grain Merge")  , KoCompositeOp::categoryMix());
+        add<&cfGrainExtract>(cs, COMPOSITE_GRAIN_EXTRACT, i18n("Grain Extract"), KoCompositeOp::categoryMix());
+        add<&cfHardMix>     (cs, COMPOSITE_HARD_MIX     , i18n("Hard Mix")     , KoCompositeOp::categoryMix());
         
         add<&cfColorBurn>  (cs, COMPOSITE_BURN        , i18n("Color Burn")  , KoCompositeOp::categoryLight());
         add<&cfColorDodge> (cs, COMPOSITE_DODGE       , i18n("Color Dodge") , KoCompositeOp::categoryLight());
@@ -102,15 +106,20 @@ struct AddGeneralOps<Traits, true>
 };
 
 template<class Traits, bool flag>
-struct AddHSLOps
+struct AddRGBOps
 {
     static void add(KoColorSpace* cs) { Q_UNUSED(cs); }
 };
 
 template<class Traits>
-struct AddHSLOps<Traits, true>
+struct AddRGBOps<Traits, true>
 {
     typedef float Arg;
+    
+    static const qint32 red_pos   = Traits::red_pos;
+    static const qint32 green_pos = Traits::green_pos;
+    static const qint32 blue_pos  = Traits::blue_pos;
+    static const qint32 alpha_pos = Traits::alpha_pos;
     
     template<void compositeFunc(Arg, Arg, Arg, Arg&, Arg&, Arg&)>
     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
@@ -118,6 +127,13 @@ struct AddHSLOps<Traits, true>
     }
     
     static void add(KoColorSpace* cs) {
+        cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,red_pos  >(cs, COMPOSITE_COPY_RED  , i18n("Copy Red")  , KoCompositeOp::categoryMisc()));
+        cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,green_pos>(cs, COMPOSITE_COPY_GREEN, i18n("Copy Green"), KoCompositeOp::categoryMisc()));
+        cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,blue_pos >(cs, COMPOSITE_COPY_BLUE , i18n("Copy Blue") , KoCompositeOp::categoryMisc()));
+        
+        if(alpha_pos != -1)
+            cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,alpha_pos>(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Alpha") , KoCompositeOp::categoryMisc()));
+        
         add<&cfColor>(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryColor());
         add<&cfHue>  (cs, COMPOSITE_HUE  , i18n("Hue")  , KoCompositeOp::categoryColor());
         
@@ -159,7 +175,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     static const bool useHSLOps     = boost::is_base_of<KoRgbTraits<channels_type>, _Traits_>::value;
     
     Private::AddGeneralOps<_Traits_, useGeneralOps>::add(cs);
-    Private::AddHSLOps    <_Traits_, useHSLOps    >::add(cs);
+    Private::AddRGBOps    <_Traits_, useHSLOps    >::add(cs);
 }
 
 #endif

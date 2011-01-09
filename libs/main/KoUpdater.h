@@ -55,6 +55,7 @@ public:
      */
     void cancel();
 
+public slots:
     /**
      * Update your progress. Progress is always from 0 to 100.
      * The global progress shown to the user is determined by the total
@@ -63,6 +64,7 @@ public:
      */
     void setProgress(int percent);
 
+public:
     /**
      * return true when this task should stop processing immediately.
      * When the task has been cancelled all the subtasks will get interrupted

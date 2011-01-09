@@ -48,10 +48,13 @@ public:
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
-        if(channel_pos == alpha_pos)
-            return lerp(dstAlpha, srcAlpha, opacity);
+        if(allChannelFlags || channelFlags.testBit(channel_pos)) {
+            if(channel_pos == alpha_pos)
+                return lerp(dstAlpha, srcAlpha, opacity);
+            
+            dst[channel_pos] = lerp(dst[channel_pos], src[channel_pos], opacity);
+        }
         
-        dst[channel_pos] = lerp(dst[channel_pos], src[channel_pos], opacity);
         return dstAlpha;
     }
 };

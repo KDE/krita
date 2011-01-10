@@ -111,9 +111,14 @@ public:
             
             compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
             
-            dst[red_pos]   = div(blend(src[red_pos]  , srcAlpha, dst[red_pos]  , dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
-            dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
-            dst[blue_pos]  = div(blend(src[blue_pos] , srcAlpha, dst[blue_pos] , dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
+            if(allChannelFlags || channelFlags.testBit(red_pos))
+                dst[red_pos] = div(blend(src[red_pos], srcAlpha, dst[red_pos], dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
+            
+            if(allChannelFlags || channelFlags.testBit(green_pos))
+                dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
+            
+            if(allChannelFlags || channelFlags.testBit(blue_pos))
+                dst[blue_pos] = div(blend(src[blue_pos], srcAlpha, dst[blue_pos], dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
         }
         
         return newDstAlpha;

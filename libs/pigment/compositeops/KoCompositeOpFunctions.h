@@ -267,7 +267,9 @@ template<class T>
 inline T cfDivide(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     if(src == KoColorSpaceMathsTraits<T>::zeroValue)
-        return dst;
+        return (dst == KoColorSpaceMathsTraits<T>::zeroValue) ?
+            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
+    
     return clamp<T>(div(dst, src));
 }
 
@@ -399,6 +401,13 @@ inline T cfHardMix(T src, T dst) {
         return cfColorDodge(src, dst);
     
     return cfColorBurn(src, dst);
+}
+
+template<class T>
+inline T cfAdditiveSubstractive(T src, T dst) {
+    // min(1,max(0,abs(sqr(CB)-sqr(CT))))
+    qreal x = sqrt(scale<qreal>(dst)) - sqrt(scale<qreal>(src));
+    return scale<T>((x < 0.0) ? -x : x);
 }
 
 template<class T>

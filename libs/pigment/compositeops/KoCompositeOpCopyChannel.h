@@ -52,7 +52,8 @@ public:
             if(channel_pos == alpha_pos)
                 return lerp(dstAlpha, srcAlpha, opacity);
             
-            dst[channel_pos] = lerp(dst[channel_pos], src[channel_pos], opacity);
+            srcAlpha = mul(srcAlpha, opacity);
+            dst[channel_pos] = lerp(dst[channel_pos], src[channel_pos], srcAlpha);
         }
         
         return dstAlpha;

@@ -520,11 +520,14 @@ bool KoChangeTracker::checkListDeletion(QTextList *list, QTextCursor &cursor)
         /***************************************************************************************************/
         /*                                    Qt Quirk Work-Around                                         */
         /***************************************************************************************************/
-        if ((cursor.anchor() == (startOfList + 1)) && (cursor.position() > endOfList))
+        if ((cursor.anchor() == (startOfList + 1)) && (cursor.position() > endOfList)) {
             return true;
         /***************************************************************************************************/
-        else
+        } else if((cursor.anchor() <= startOfList) && (list->count() == 1)) {
+            return true;
+        } else {
             return false;
+        }
     }
 } 
 
@@ -553,6 +556,15 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
         int docOutlineLevel = cursor.block().blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
         if (docOutlineLevel) {
             //Even though we got a list, it is actually a list for storing headings. So don't consider it
+            currentList = NULL;
+        }
+
+        QTextList *previousTextList = currentBlock.previous().isValid() ? QTextCursor(currentBlock.previous()).currentList():NULL;
+        if (textList && previousTextList && (textList != previousTextList) && (KoList::level(currentBlock) == KoList::level(currentBlock.previous()))) {
+            //Even though we are already in a list, the QTextList* of the current block is differnt from that of the previous block
+            //Also the levels of the list-items ( previous and current ) are the same.
+            //This can happen only when two lists are merged together without any intermediate content.
+            //So we need to create a new list. 
             currentList = NULL;
         }
 

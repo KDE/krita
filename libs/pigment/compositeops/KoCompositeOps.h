@@ -97,11 +97,12 @@ struct AddGeneralOps<Traits, true>
         add<&cfScreen> (cs, COMPOSITE_SCREEN , i18n("Screen") , KoCompositeOp::categoryColor());
         add<&cfOverlay>(cs, COMPOSITE_OVERLAY, i18n("Overlay"), KoCompositeOp::categoryColor());
         
-        add<&cfArcTangent>   (cs, COMPOSITE_ARC_TANGENT   , i18n("Arcus Tangent") , KoCompositeOp::categoryMisc());
-        add<&cfGeometricMean>(cs, COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"), KoCompositeOp::categoryMisc());
-        add<&cfAllanon>      (cs, COMPOSITE_ALLANON       , i18n("Allanon")       , KoCompositeOp::categoryMisc());
-        add<&cfParallel>     (cs, COMPOSITE_PARALLEL      , i18n("Parallel")      , KoCompositeOp::categoryMisc());
-        add<&cfEquivalence>  (cs, COMPOSITE_EQUIVALENCE   , i18n("Equivalence")   , KoCompositeOp::categoryMisc());
+        add<&cfArcTangent>          (cs, COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")        , KoCompositeOp::categoryMisc());
+        add<&cfGeometricMean>       (cs, COMPOSITE_GEOMETRIC_MEAN       , i18n("Geometric Mean")       , KoCompositeOp::categoryMisc());
+        add<&cfAllanon>             (cs, COMPOSITE_ALLANON              , i18n("Allanon")              , KoCompositeOp::categoryMisc());
+        add<&cfParallel>            (cs, COMPOSITE_PARALLEL             , i18n("Parallel")             , KoCompositeOp::categoryMisc());
+        add<&cfEquivalence>         (cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryMisc());
+        add<&cfAdditiveSubstractive>(cs, COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive-Substractive"), KoCompositeOp::categoryMisc());
     }
 };
 

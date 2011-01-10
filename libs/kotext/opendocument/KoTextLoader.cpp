@@ -394,16 +394,24 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                     else if (d->changeTracker && localName == "removed-content") {
                         QString changeId = tag.attributeNS(KoXmlNS::delta, "removal-change-idref");
                         int deleteStartPosition = cursor.position();
-                        cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
+                        if ((usedParagraph) && (tag.firstChild().toElement().localName() != "table"))
+                            cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
+
                         d->openChangeRegion(tag);
                         loadBody(tag, cursor);
                         d->closeChangeRegion(tag);
+
                         if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
                             QTextCursor tempCursor(cursor);
                             tempCursor.setPosition(deleteStartPosition);
                             KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
                             d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
                         }
+
+                        if (tag.lastChild().toElement().localName() == "table") {
+                            usedParagraph = false;
+                        }
+
                     } else if (d->changeTracker && localName == "remove-leaving-content-start"){
                         if (usedParagraph)
                             cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
@@ -427,7 +435,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                 }
 
                 if (tag.namespaceURI() == KoXmlNS::text) {
-                    if (usedParagraph)
+                    if ((usedParagraph) && (tag.localName() != "table"))
                         cursor.insertBlock(d->defaultBlockFormat, d->defaultCharFormat);
                     usedParagraph = true;
                     if (d->changeTracker && localName == "tracked-changes") {

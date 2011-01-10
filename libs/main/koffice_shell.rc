@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="KOffice" version="23">
+<kpartgui name="KOffice" version="24">
 <MenuBar>
  <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_new" />
@@ -33,7 +33,6 @@
   <Merge/>
 <!--  <ActionList name="toolbarlist"/> -->
   <Action name="settings_dockers_menu"/>
-  <Separator/>
   <DefineGroup name="settings_show"/>
   <Separator/>
   <Action name="options_configure_keybinding"/>

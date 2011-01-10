@@ -538,6 +538,13 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
     bool deletedListItem = false;
     
     for (QTextBlock currentBlock = tempDoc.begin(); currentBlock != tempDoc.end(); currentBlock = currentBlock.next()) {
+        //This condition is for the work-around for a Qt behaviour
+        //Even if a delete ends at the end of a table, the fragment will have an empty block after the table
+        //If such a block is detected then, just ignore it
+        if ((currentBlock.next() == tempDoc.end()) && (currentBlock.text().length() == 0) && (QTextCursor(currentBlock.previous()).currentTable())) {
+            continue;
+        }
+        
         tempCursor.setPosition(currentBlock.position());
         QTextList *textList = tempCursor.currentList();
         int outlineLevel = currentBlock.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();

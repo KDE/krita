@@ -54,6 +54,8 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    KoTableOfContentsGeneratorInfo.cpp
+
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp

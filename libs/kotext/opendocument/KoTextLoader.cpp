@@ -55,6 +55,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
+#include "KoTableOfContentsGeneratorInfo.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -1455,6 +1456,8 @@ static QVariant createTocData(const KoXmlElement &toc, KoTextSharedLoadingData *
     return QVariant(attrMap);
 }
 
+
+#if 1
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // Add a frame to the current layout
@@ -1485,9 +1488,80 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             loadBody(e, cursorFrame);
         }
     }
+
     // Get out of the frame
     cursor.movePosition(QTextCursor::End);
 }
+
+#else
+
+void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
+{
+    // make sure that the tag is table-of-content
+    Q_ASSERT(element.tagName() == "table-of-content");
+    
+    // for "meta-iformation" about the TOC we use this class
+    KoTableOfContentsGeneratorInfo info;
+    info.tableOfContentData()->name = element.attribute("name");
+    info.tableOfContentData()->styleName = element.attribute("style-name");
+    
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
+            continue;
+        }
+        
+        if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text){
+
+            info.loadOdf(e);
+            // uncomment to see what has been loaded
+            //info.tableOfContentData()->dump();
+            
+            QTextFrameFormat tocFormat;
+            tocFormat.setProperty( KoText::TableOfContents, QVariant::fromValue<TableOfContent*>(info.tableOfContentData()) );
+            cursor.insertFrame(tocFormat);
+            
+            
+        // We'll just try to find displayable elements and add them as paragraphs
+        } else if (e.localName() == "index-body") {
+            //qDebug() << e.localName();
+            QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
+            
+            bool firstTime = true;
+            KoXmlElement p;
+            forEachElement(p, e) {
+                // All elem will be "p" instead of the title, which is particular
+                if (p.isNull() || p.namespaceURI() != KoXmlNS::text)
+                    continue;
+
+                if (!firstTime) {
+                    // use empty formats to not inherit from the prev parag
+                    QTextBlockFormat bf;
+                    QTextCharFormat cf;
+                    cursorFrame.insertBlock(bf, cf);
+                }
+                firstTime = false;
+
+                QTextBlock current = cursorFrame.block();
+                QTextBlockFormat blockFormat;
+
+                if (p.localName() == "p") {
+                    loadParagraph(p, cursorFrame);
+                } else if (p.localName() == "index-title") {
+                    loadBody(p, cursorFrame);
+                }
+
+                QTextCursor c(current);
+                c.mergeBlockFormat(blockFormat);
+            }
+        }// index-body
+
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::End);
+}
+
+#endif
 
 void KoTextLoader::startBody(int total)
 {

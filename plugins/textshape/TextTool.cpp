@@ -941,7 +941,6 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 {
     m_changeTipPos = event->globalPos();
 
-    useCursor(Qt::IBeamCursor);
     if (event->buttons()) {
         updateSelectedShape(event->point);
     }
@@ -954,6 +953,11 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     int position = pointToPosition(event->point);
 
     if (event->buttons() == Qt::NoButton) {
+
+        if (m_textShapeData->endPosition() == position) {
+            useCursor(Qt::IBeamCursor);
+            return;
+        }
         QTextCursor cursor(*(m_textEditor.data()->cursor()));
         cursor.setPosition(position);
 
@@ -967,14 +971,23 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
                 m_changeTipCursorPos = position;
         }
 
-        if (cursor.charFormat().isAnchor())
+        if (cursor.charFormat().isAnchor()) {
             useCursor(Qt::PointingHandCursor);
-        else
-            useCursor(Qt::IBeamCursor);
+            return;
+        }
 
+        // check if mouse pointer is not over shape with hyperlink
+        KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
+        if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
+            useCursor(Qt::PointingHandCursor);
+            return;
+        }
+
+        useCursor(Qt::IBeamCursor);
         return;
     }
 
+    useCursor(Qt::IBeamCursor);
     if (position == m_textEditor.data()->position()) return;
     if (position >= 0) {
         if (m_textEditor.data()->hasSelection())
@@ -992,6 +1005,14 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
 {
     event->ignore();
     editingPluginEvents();
+
+    // check if mouse pointer is not over some shape with hyperlink
+    KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
+    if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
+        QString url = selectedShape->hyperLink();
+        runUrl(event, url);
+        return;
+    }
 
     // Is there an anchor here ?
     if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
@@ -1015,24 +1036,7 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
                 }
             }
 
-            bool isLocalLink = (anchor.indexOf("file:") == 0);
-            QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
-
-            if (KRun::isExecutableFile(anchor, type)) {
-                QString question = i18n("This link points to the program or script '%1'.\n"
-                                        "Malicious programs can harm your computer. "
-                                        "Are you sure that you want to run this program?", anchor);
-                // this will also start local programs, so adding a "don't warn again"
-                // checkbox will probably be too dangerous
-                int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
-                if (choice != KMessageBox::Yes)
-                    return;
-            }
-
-            event->accept();
-            new KRun(m_textEditor.data()->charFormat().anchorHref(), 0);
-            m_textEditor.data()->setPosition(0);
-            ensureCursorVisible();
+            runUrl(event, anchor);
             return;
         } else {
             QStringList anchorList = m_textEditor.data()->charFormat().anchorNames();
@@ -2248,6 +2252,28 @@ void TextTool::writeConfig()
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
     }
+}
+
+void TextTool::runUrl(KoPointerEvent *event, QString &url)
+{
+    bool isLocalLink = (url.indexOf("file:") == 0);
+    QString type = KMimeType::findByUrl(url, 0, isLocalLink)->name();
+
+    if (KRun::isExecutableFile(url, type)) {
+        QString question = i18n("This link points to the program or script '%1'.\n"
+                                "Malicious programs can harm your computer. "
+                                "Are you sure that you want to run this program?", url);
+        // this will also start local programs, so adding a "don't warn again"
+        // checkbox will probably be too dangerous
+        int choice = KMessageBox::warningYesNo(0, question, i18n("Open Link?"));
+        if (choice != KMessageBox::Yes)
+            return;
+    }
+
+    event->accept();
+    new KRun(url, 0);
+    m_textEditor.data()->setPosition(0);
+    ensureCursorVisible();
 }
 
 void TextTool::debugTextDocument()

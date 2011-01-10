@@ -272,6 +272,7 @@ void TestChangeTracking::testChangeTracking_data()
 
     //Table unit-test-cases
     QTest::newRow("Added Table")  << "ChangeTracking/tables/added-table/added-table-tracked.odt";
+    QTest::newRow("Deleted Table")  << "ChangeTracking/tables/deleted-table/deleted-table-tracked.odt";
     QTest::newRow("Added Row")  << "ChangeTracking/tables/added-row/added-row-tracked.odt";
     QTest::newRow("Deleted Row")  << "ChangeTracking/tables/deleted-row/deleted-row-tracked.odt";
     QTest::newRow("Added Column")  << "ChangeTracking/tables/added-column/added-column-tracked.odt";

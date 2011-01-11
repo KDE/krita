@@ -24,9 +24,6 @@
 #include <KActionCollection>
 #include <KLocale>
 #include <KDebug>
-#include <QApplication>
-#include <QStyle>
-#include <QStyleOptionSlider>
 
 #include <KoZoomHandler.h>
 #include <KoCanvasBase.h>
@@ -150,12 +147,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         d->action->setZoom(zoom);
     }
     else if(mode == KoZoomMode::ZOOM_WIDTH) {
-        int margin = 2*d->fitMargin - 2;
-        if(QStyle *style = qApp->style()) {
-            QStyleOptionSlider opt;
-            margin -= style->pixelMetric(QStyle::PM_ScrollBarExtent, &opt);
-        }
-        zoom = (d->canvasController->viewportSize().width() - qMax(0, margin))
+        zoom = (d->canvasController->viewportSize().width() - 2*d->fitMargin)
                          / (d->zoomHandler->resolutionX() * d->pageSize.width());
         d->action->setSelectedZoomMode(mode);
         d->action->setEffectiveZoom(zoom);

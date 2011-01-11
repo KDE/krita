@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2010 Edward Apap <schumifer@hotmail.com>
+ *  Copyright (c) 2011 José Luis Vergara Toloza <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -107,11 +108,8 @@ public:
         for (quint32 i = 0; i < m_noOfChannels; ++i) {
             if (convChannelList.at(i)->channelType() == KoChannelInfo::ALPHA) {
                 alphaChannelIndex = i;
-                qDebug() << "ALPHA ES " << i;
             }
         }
-        
-        qDebug() << "PICHULA ";
         
         m_channelFFT = new fftw_complex*[m_noOfChannels];
         for (quint32 i = 0; i < m_noOfChannels; ++i)
@@ -132,7 +130,7 @@ public:
         
         //Pentalis comment: apparently here we are saving the Raw data elsewhere before replacing it with something else.
         //...That something else seems to be the number turned into a Double.
-        //...So, I need to perform my Alpha Premultiplication right here.
+        //...So, I need to perform my Alpha Premultiplication here.
         for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
         {
             while (!hitSrc.isDone())
@@ -160,9 +158,7 @@ public:
             for (quint32 k = 0; k < m_noOfChannels; ++k)
                 m_channelPtr[k] = (double*)m_channelFFT[k];
             
-            // Pentalis comment: I'll keep trying till this thing works and I never have to touch it again
-            // Make an absurd new iterator since I don't know how to reset them
-            // typename _IteratorFactory_::HLineConstIterator hitSrc2 = _IteratorFactory_::createHLineConstIterator(src, srcPos.x() - halfKernelWidth, srcPos.y() - halfKernelHeight, m_fftWidth, dataRect);
+            // Pentalis comment: I'll keep trying till this thing works and I never have to touch it again  UPDATE: WORKED!
             
             // Pentalis comment: Iterate over the same pixels again but this time with a different intent
             for (quint32 srcRow = 0; srcRow < m_fftHeight; ++srcRow)
@@ -172,20 +168,18 @@ public:
                     //const quint8* data = hitSrc.oldRawData();
 
                     for (quint32 k = 0; k < m_noOfChannels; ++k) {
+                        /* Pentalis comment: Pass to the next loop if you hit the alpha channel,
+                        make sure to increment *m_channelPtr[k]  (this was a bug that took hours to find) */
                         if (k == alphaChannelIndex) {
+                            *m_channelPtr[k]++;
                             continue;
                         }
-                        // PREMULTIPLY BY ALPHA, HOORAY
-                        // This code works because m_channelPtr has already been filled entirely
-                        // Error: this code DOESN'T work but I don't know why
                         
+                        /* Pentalis comments: PREMULTIPLY BY ALPHA
+                        This code works because m_channelPtr has already been filled entirely */
                         *m_channelPtr[k] *= *m_channelPtr[alphaChannelIndex];
-                        *m_channelPtr[k] /= 255;   // JUST TESTING A HUNCH
-                        
-                        
                         *m_channelPtr[k]++;
                     }
-
                 }
 
                 for (quint32 k = 0; k < m_noOfChannels; ++k) {
@@ -264,10 +258,9 @@ public:
         const quint32 pixelSize = src->colorSpace()->pixelSize();
 
         // Pentalis comment: if there IS an alpha Channel...
-        double alphaChannelPixelValue;
-        
         if (alphaChannelIndex >= 0)
         {
+            double alphaChannelPixelValue;
             for (quint32 y = 0; y < areaHeight; ++y)
             {
                 for (quint32 x = 0; x < areaWidth; ++x)
@@ -277,17 +270,17 @@ public:
 
                     // Pentalis comment: This needs to be done only once and before we iterate over the channels
                     alphaChannelPixelValue = *(m_channelPtr[alphaChannelIndex]) * fftScale + m_absoluteOffset[alphaChannelIndex];
-                    alphaChannelPixelValue /= 255;  // JUST TESTING A HUNCH
                     
                     for (quint32 k = 0; k < m_noOfChannels; ++k)
                     {
                         channelPixelValue = *(m_channelPtr[k]) * fftScale + m_absoluteOffset[k];
                         
                         if (k != alphaChannelIndex) {
-                            // Pentalis comment: divide the PREMULTIPLIED (see conditionals above) channels by the
-                            // CONVOLUTED alpha channel 
-                            // hint: capital letters are not shouting here
-                            channelPixelValue /= alphaChannelPixelValue;
+                            /* Pentalis comment: divide the PREMULTIPLIED (see conditionals above) channels by the
+                            CONVOLUTED alpha channel. Also, avoid division by zero. */
+                            if (alphaChannelIndex != 0) {
+                                channelPixelValue /= alphaChannelPixelValue;
+                            }
                         }
                         
                         // clamp values

@@ -29,7 +29,6 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_types.h>
-#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_pressure_composite_option.h>

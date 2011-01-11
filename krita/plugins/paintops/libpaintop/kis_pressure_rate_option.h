@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) Silvio Heinrich <plassy@web.de>, (C) 2011
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,10 +46,9 @@ public:
     void apply(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    void setRate(qreal rate) { m_rate = rate; }
+    void setRate(qreal rate) { m_rate = qBound<qreal>(0.0, rate, 1.0); }
     qreal rate() const { return m_rate; }
     
 private:

@@ -56,8 +56,10 @@ void KisPressureCompositeOption::readOptionSetting(const KisPropertiesConfigurat
 
 void KisPressureCompositeOption::applyOpacityRate(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax) const
 {
-    if(!isChecked())
+    if(!isChecked()) {
+        painter->setOpacity((quint8)(scaleMax * 255.0));
         return;
+    }
     
     qreal  rate    = scaleMin + (scaleMax - scaleMin) * m_rate; // scale m_rate into the range scaleMin - scaleMax
     quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);

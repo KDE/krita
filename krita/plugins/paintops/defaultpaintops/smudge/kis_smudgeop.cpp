@@ -110,19 +110,12 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     const KoCompositeOp* oldMode    = painter()->compositeOp();
     
     if(!m_firstRun) {
-        // set opacity calculated by the rate option (but fit the rate inbetween the range 0.0 - 0.25)
-        m_rateOption.apply(painter(), info, 0.0, 0.25);
+        // set opacity calculated by the rate option
+        m_rateOption.apply(painter(), info);
         
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
-        painter()->setCompositeOp(COMPOSITE_OVER);
-        painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
-        
-        // apply the opacity rate calculated by the rate option for smudging the alpha channel
-        // (this time we use the full range of the rate value)
-        m_rateOption.apply(painter(), info);
-        
-        painter()->setCompositeOp(COMPOSITE_COPY_OPACITY);
+        painter()->setCompositeOp(COMPOSITE_COPY);
         painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
     }
     else m_firstRun = false;
@@ -144,7 +137,9 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // we will mix some color into the temorary painting device (m_tempDev)
     if(m_compositeOption.isChecked()) {
         // this will apply the opacy and the composite mode (selected by the user) to copyPainter
-        m_compositeOption.applyOpacityRate(&copyPainter, info, 0.0, 0.5);
+        // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
+        qreal maxColorRate = qMax<qreal>(1.0-m_rateOption.rate(), 0.2);
+        m_compositeOption.applyOpacityRate(&copyPainter, info, 0.0, maxColorRate);
         m_compositeOption.applyCompositeOp(&copyPainter);
         
         // paint a rectangle with the current color (foreground color)

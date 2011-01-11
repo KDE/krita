@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -47,11 +48,13 @@ void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* 
 
 void KisPressureRateOption::apply(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax) const
 {
-    if(!isChecked())
+    if(!isChecked()) {
+        painter->setOpacity((quint8)(scaleMax * 255.0));
         return;
+    }
     
-    qreal  rate    = scaleMin + (scaleMax - scaleMin) * m_rate;
-    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(m_rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
+    qreal  rate    = scaleMin + (scaleMax - scaleMin) * m_rate; // scale m_rate into the range scaleMin - scaleMax
+    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
 
     painter->setOpacity(opacity);
 }

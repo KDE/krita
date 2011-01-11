@@ -71,7 +71,7 @@ public:
     virtual quint8 difference(const quint8 *src1, const quint8 *src2) const {
         Q_UNUSED(src1);
         Q_UNUSED(src2);
-        warnPigment << i18n("Undefined operation in the %1 space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 space", m_name);
         return 0;
     }
 
@@ -92,35 +92,35 @@ public:
     }
 
     virtual KoColorTransformation* createBrightnessContrastAdjustment(const quint16*) const {
-        warnPigment << i18n("Undefined operation in the %1 space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
 
     virtual KoColorTransformation* createDesaturateAdjustment() const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
 
     virtual KoColorTransformation* createPerChannelAdjustment(const quint16* const*) const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
 
     virtual KoColorTransformation *createDarkenAdjustment(qint32 , bool , qreal) const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
         return 0;
     }
 
     virtual void invertColor(quint8*, qint32) const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
 
     virtual void colorToXML(const quint8* , QDomDocument& , QDomElement&) const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
 
     virtual void colorFromXML(quint8* , const QDomElement&) const {
-        warnPigment << i18n("Undefined operation in the %1 color space").arg(m_name);
+        warnPigment << i18n("Undefined operation in the %1 color space", m_name);
     }
 
     virtual void toLabA16(const quint8* src, quint8* dst, quint32 nPixels) const {

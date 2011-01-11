@@ -19,7 +19,7 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <QtCore>
+#include <QString>
 #include <klocale.h>
 
 #include "pigment_export.h"

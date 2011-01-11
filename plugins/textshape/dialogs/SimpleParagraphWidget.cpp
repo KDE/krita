@@ -21,7 +21,7 @@
 #include "TextTool.h"
 #include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
-#include "ListStyleButton.h"
+#include "FormattingButton.h"
 
 #include <KAction>
 #include <KoTextBlockData.h>

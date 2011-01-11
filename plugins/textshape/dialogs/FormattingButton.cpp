@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ListStyleButton.h"
+#include "FormattingButton.h"
 
 #include "ListItemsHelper.h"
 
@@ -30,17 +30,17 @@
 #include <kdebug.h>
 
 //This class is the main place where the expanding grid is done
-class StyleChooser : public QWidgetAction
+class ItemChooserAction : public QWidgetAction
 {
 public:
-    StyleChooser();
+    ItemChooserAction();
     QWidget *m_widget;
     QGridLayout *m_containerLayout;
     int m_cnt;
     QToolButton *addItem(QPixmap pm);
 };
 
-StyleChooser::StyleChooser()
+ItemChooserAction::ItemChooserAction()
  : QWidgetAction(0)
  , m_cnt(0)
 {
@@ -52,7 +52,7 @@ StyleChooser::StyleChooser()
     m_widget->setBackgroundRole(QPalette::Base);
 }
 
-QToolButton *StyleChooser::addItem(QPixmap pm)
+QToolButton *ItemChooserAction::addItem(QPixmap pm)
 {
     QToolButton *b = new QToolButton();
     b->setIcon(QIcon(pm));
@@ -64,7 +64,7 @@ QToolButton *StyleChooser::addItem(QPixmap pm)
 }
 
 
-ListStyleButton::ListStyleButton( QWidget *parent)
+FormattingButton::FormattingButton( QWidget *parent)
     : QToolButton(parent)
     , m_lastId(0)
     , m_styleAction(0)
@@ -73,12 +73,12 @@ ListStyleButton::ListStyleButton( QWidget *parent)
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
     if(m_styleAction==0)
-        m_styleAction = new StyleChooser();
+        m_styleAction = new ItemChooserAction();
     m_menu->addAction(m_styleAction);
     connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
 }
 
-void ListStyleButton::addItem(QPixmap pm, int id)
+void FormattingButton::addItem(QPixmap pm, int id)
 {
     QToolButton *b = m_styleAction->addItem(pm);
     m_styleMap[b] = id;
@@ -89,17 +89,17 @@ void ListStyleButton::addItem(QPixmap pm, int id)
     }
 }
 
-void ListStyleButton::addAction(QAction *action)
+void FormattingButton::addAction(QAction *action)
 {
     m_menu->addAction(action);
 }
 
-void ListStyleButton::addSeparator()
+void FormattingButton::addSeparator()
 {
     m_menu->addSeparator();
 }
 
-void ListStyleButton::itemSelected()
+void FormattingButton::itemSelected()
 {
     if(sender() != this) {
         m_lastId = m_styleMap[sender()];
@@ -108,7 +108,7 @@ void ListStyleButton::itemSelected()
     emit itemTriggered(m_lastId);
 }
 
-QString ListStyleButton::example(KoListStyle::Style type) const {
+QString FormattingButton::example(KoListStyle::Style type) const {
     int value=1;
     switch( type ) {
         case KoListStyle::DecimalItem:
@@ -141,4 +141,4 @@ QString ListStyleButton::example(KoListStyle::Style type) const {
     }
 }
 
-#include <ListStyleButton.moc>
+#include <FormattingButton.moc>

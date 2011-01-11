@@ -29,13 +29,13 @@
 
 class QMenu;
 class QAction;
-class StyleChooser;
+class ItemChooserAction;
 
-class ListStyleButton : public QToolButton
+class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    ListStyleButton( QWidget *parent = 0 );
+    FormattingButton( QWidget *parent = 0 );
 
     QString example(KoListStyle::Style type) const;
     void addItem(QPixmap pm, int id);
@@ -52,7 +52,7 @@ private:
     int m_lastId ;
     QMenu *m_menu;
     QMap<QObject *, int > m_styleMap;
-    StyleChooser *m_styleAction;
+    ItemChooserAction *m_styleAction;
 };
 
 #endif

@@ -64,7 +64,7 @@ SET ( textshape_SRCS
     dialogs/StyleManagerWelcome.cpp
     dialogs/TableDialog.cpp
     dialogs/QuickTableButton.cpp
-    dialogs/ListStyleButton.cpp
+    dialogs/FormattingButton.cpp
     dialogs/ChangeConfigureDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp

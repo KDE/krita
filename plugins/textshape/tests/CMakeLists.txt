@@ -54,7 +54,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -190,7 +190,7 @@ set(TestTextTool_test_SRCS
     ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -239,7 +239,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp

@@ -32,6 +32,9 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
 
 void KisColorSelectorSimple::setColor(const QColor &c)
 {
+    QColor color;
+    color.setHsvF(c.hslHueF(), 1.0, 1.0);
+    
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.hslSaturationF());
@@ -48,6 +51,14 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         m_lastClickPos.setY(1-c.valueF());
         emit paramChanged(-1, c.saturationF(), c.valueF(), -1, -1);
         break;
+    case KisColorSelector::SV2: {
+        qreal xRel = c.hsvSaturationF();
+        qreal yRel = 1.0 - qBound<qreal>(0.0, (c.valueF() - xRel) / (1.0 - xRel), 1.0);
+        m_lastClickPos.setX(xRel);
+        m_lastClickPos.setY(yRel);
+        emit paramChanged(-1, -1, -1, xRel, yRel);
+        break;
+    }
     case KisColorSelector::VH:
         m_lastClickPos.setX(qBound<qreal>(0., c.hueF(), 1.));
         m_lastClickPos.setY(c.valueF());
@@ -124,6 +135,7 @@ QColor KisColorSelectorSimple::selectColor(int x, int y)
     case KisColorSelector::SL:
         emit paramChanged(-1, -1, -1, xRel, yRel);
         break;
+    case KisColorSelector::SV2:
     case KisColorSelector::SV:
         emit paramChanged(-1, xRel, yRel, -1, -1);
         break;
@@ -188,6 +200,7 @@ void KisColorSelectorSimple::paint(QPainter* painter)
             break;
         case KisColorSelector::SL:
         case KisColorSelector::SV:
+        case KisColorSelector::SV2:
         case KisColorSelector::hslSH:
         case KisColorSelector::hsvSH:
         case KisColorSelector::VH:
@@ -217,12 +230,18 @@ const QColor& KisColorSelectorSimple::colorAt(int x, int y)
     else
         relPos = 1.-x/qreal(width());
 
+    QColor color;
+    color.setHsvF(m_hue, 1.0, 1.0);
+    
     switch(m_parameter) {
     case KisColorSelector::SL:
         m_qcolor.setHslF(m_hue, xRel, yRel);
         break;
     case KisColorSelector::SV:
         m_qcolor.setHsvF(m_hue, xRel, yRel);
+        break;
+    case KisColorSelector::SV2:
+        m_qcolor.setHsvF(m_hue, xRel, xRel + (1.0-xRel)*yRel);
         break;
     case KisColorSelector::hsvSH:
         m_qcolor.setHsvF(xRel, yRel, m_value);

@@ -1394,8 +1394,11 @@ static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData 
         //        qDebug() << "TESTX ATTR NAME" << attrName;
         QString value = element.attribute(attrName);
         //qDebug() << "TESTX ATTR VALUE " << value;
+        
         QVariant attr;
         if (attrName == "style-name") {
+            
+            
             attr.setValue(0);
             KoParagraphStyle *style = textSharedData->paragraphStyle(value, useStylesAutoStyle);
             if (style) {
@@ -1406,6 +1409,17 @@ static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData 
                 attr.setValue(sectionStyle->styleId());
             }
             //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " STYLE NAME " << value << " ATTR " << attr;
+        } else if (attrName == "index-entry-tab-stop") {
+            if (value == "right") {
+                attr.setValue((int) QTextOption::RightTab);
+            } else if (value == "left") {
+                attr.setValue((int) QTextOption::LeftTab);
+            } else if (value == "center") {
+                attr.setValue((int) QTextOption::CenterTab);
+            } else if (value == "delimiter") {
+                attr.setValue((int) QTextOption::DelimiterTab);
+            }
+
         } else {
             attr.setValue(value);
         }
@@ -1474,9 +1488,10 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
 }
 
 
-#if 1
+#if 0
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
+    qDebug() << "korinek";
     // Add a frame to the current layout
     QTextFrameFormat tocFormat;
     tocFormat.setProperty(KoText::TableOfContents, true);
@@ -1512,9 +1527,14 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 {
     // make sure that the tag is table-of-content
     Q_ASSERT(element.tagName() == "table-of-content");
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::TableOfContents, true);
+    
     
     // for "meta-iformation" about the TOC we use this class
     KoTableOfContentsGeneratorInfo info;
+    info.setSharedLoadingData( d->textSharedData );
+    
     info.tableOfContentData()->name = element.attribute("name");
     info.tableOfContentData()->styleName = element.attribute("style-name");
     
@@ -1525,15 +1545,11 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
         }
         
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text){
-
             info.loadOdf(e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
-            
-            QTextFrameFormat tocFormat;
-            tocFormat.setProperty( KoText::TableOfContents, QVariant::fromValue<TableOfContent*>(info.tableOfContentData()) );
+            tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<TableOfContent*>(info.tableOfContentData()) );
             cursor.insertFrame(tocFormat);
-            
             
         // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {
@@ -1567,8 +1583,8 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
                 QTextCursor c(current);
                 c.mergeBlockFormat(blockFormat);
             }
-        }// index-body
 
+        }// index-body
     }
     // Get out of the frame
     cursor.movePosition(QTextCursor::End);

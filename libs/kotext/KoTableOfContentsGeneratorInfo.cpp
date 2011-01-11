@@ -22,6 +22,10 @@
 #include <QTextCursor>
 
 #include <KoXmlNS.h>
+#include <KoTextSharedLoadingData.h>
+#include <KoParagraphStyle.h>
+
+static const bool STYLES_DOT_XML = true;
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
 {
@@ -54,12 +58,13 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
         // first child 
         if (p.localName() == "index-title-template" && p.namespaceURI() == KoXmlNS::text) {
             m_toc->tocSource.indexTitleTemplate.styleName = p.attribute("style-name");
-        
+            m_toc->tocSource.indexTitleTemplate.styleId = styleNameToStyleId( m_toc->tocSource.indexTitleTemplate.styleName );
         // second child
         } else if (p.localName() == "table-of-content-entry-template" && p.namespaceURI() == KoXmlNS::text) {
             TocEntryTemplate tocEntryTemplate;
             tocEntryTemplate.outlineLevel = p.attribute("outline-level").toInt();
             tocEntryTemplate.styleName = p.attribute("style-name");
+            tocEntryTemplate.styleId = styleNameToStyleId( tocEntryTemplate.styleName );
             
             KoXmlElement indexEntry;
             forEachElement(indexEntry, p) {
@@ -91,9 +96,21 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                     
                 } else if (indexEntry.localName() == "index-entry-tab-stop"){
                     IndexEntryTabStop * entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
-                    entryTabStop->leaderChar = indexEntry.attribute("leader-char",".").at(0);
-                    entryTabStop->position = indexEntry.attribute("position"); // length (size+unit)
-                    entryTabStop->type = indexEntry.attribute("type"); // left or right
+                    
+                    QString type = indexEntry.attribute("type"); // left or right                        
+                    if (type == "right") {
+                        entryTabStop->tab.type = QTextOption::RightTab;
+                    } else if (type == "left") {
+                        entryTabStop->tab.type = QTextOption::LeftTab;
+                    } else if (type == "center") {
+                        entryTabStop->tab.type = QTextOption::CenterTab;
+                    } else if (type == "delimiter") {
+                        entryTabStop->tab.type = QTextOption::DelimiterTab;
+                    } else {
+                        entryTabStop->tab.type = QTextOption::RightTab;
+                    }
+                    entryTabStop->tab.leaderText = indexEntry.attribute("leader-char",".");
+                    entryTabStop->tab.position = indexEntry.attribute("position", QString("490")).toDouble(); // length (size+unit)
                     tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryTabStop) );
                         
                 } else if (indexEntry.localName() == "index-entry-link-start"){
@@ -116,8 +133,8 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                 forEachElement(sourceElement, p){
                     if (sourceElement.localName() == "index-source-style"){
                         indexStyle.styleName = sourceElement.attribute("style-name");
-                        indexStyles.styles.append(indexStyle);
-                        
+                        indexStyle.styleId = styleNameToStyleId( indexStyle.styleName );
+                        indexStyles.styles.append( indexStyle );
                     }
                 }
                 m_toc->tocSource.indexSourceStyles.append(indexStyles);
@@ -125,3 +142,24 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
     }// forEachElement
 }
 
+void KoTableOfContentsGeneratorInfo::saveOdf()
+{
+    //TODO: saving
+}
+
+
+void KoTableOfContentsGeneratorInfo::setSharedLoadingData(KoTextSharedLoadingData* loadingData)
+{
+    m_sharedLoadingData = loadingData;
+}
+
+int KoTableOfContentsGeneratorInfo::styleNameToStyleId(QString styleName)
+{
+    KoParagraphStyle * style = m_sharedLoadingData->paragraphStyle(styleName,STYLES_DOT_XML);
+    if (style){
+        return style->styleId();
+    }
+    
+    qDebug() << "Style " << styleName << " has not been found.";
+    return 0;
+}

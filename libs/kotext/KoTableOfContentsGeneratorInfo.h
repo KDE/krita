@@ -29,6 +29,7 @@
 #include <QVariant>
 
 #include <KoXmlReader.h>
+#include "KoText.h"
 
 const int INVALID_OUTLINE_LEVEL = -1;
 
@@ -130,14 +131,12 @@ public:
 
     virtual void dump() const{
         IndexEntry::dump();
-        qDebug() << ppVar(leaderChar);
-        qDebug() << ppVar(position);
-        qDebug() << ppVar(type);
+        qDebug() << ppVar(tab.leaderText);
+        qDebug() << ppVar(tab.position);
+        qDebug() << ppVar(tab.type);
     }
 
-    QChar leaderChar;
-    QString position;
-    QString type;
+    KoText::Tab tab;
 };
 
 class IndexEntryPageNumber : public IndexEntry {
@@ -160,6 +159,7 @@ class TocEntryTemplate{
 public:
     quint32 outlineLevel;
     QString styleName;
+    int styleId;
     QList<IndexEntry*> indexEntries;
     
     void dump() const{
@@ -175,10 +175,12 @@ public:
 
 struct IndexTitleTemplate{
     QString styleName;
+    int styleId;
 };
 
 struct IndexSourceStyle{
   QString styleName;  
+  int styleId;
 };
 
 struct IndexSourceStyles {
@@ -258,6 +260,8 @@ public:
 
 Q_DECLARE_METATYPE(TableOfContent*)
 
+class KoTextSharedLoadingData;
+
 class KoTableOfContentsGeneratorInfo {
 
 public:
@@ -268,13 +272,18 @@ public:
     void loadOdf(const KoXmlElement &element);
     void saveOdf(); // TODO
     
+    void setSharedLoadingData(KoTextSharedLoadingData * loadingData);
+    
     TableOfContent * tableOfContentData() const {
         return m_toc;
     }
 
 private:
     TableOfContent * m_toc;
+    KoTextSharedLoadingData * m_sharedLoadingData;
     
+private: 
+    int styleNameToStyleId(QString styleName);
 };
 
 #endif

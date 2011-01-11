@@ -40,7 +40,7 @@
 #include <QPointF>
 #include <QKeyEvent>
 
-/* TODO: use commands for editing, use snapping when moving connection points */
+/* TODO: use commands for editing */
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     : KoPathTool(canvas)

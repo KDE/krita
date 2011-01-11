@@ -130,7 +130,7 @@ void ToCGenerator::generate()
     //QTextBlock tocTextBlock = cursor.block();
     //tocStyle->applyStyle(cursorFrame);
     //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-    // Add the title
+    // Add TOC title
     QVariant titleStyleVariant = attribute(tocVariant, "index-title-template", "style-name");
     // Check title text
     if ( !titleStyleVariant.isNull()) {
@@ -182,7 +182,7 @@ void ToCGenerator::generate()
         }
         block = block.next();
     }
-    // Alternativelly: we can create index body snapshot and paste as one !
+    // Alternative: we can create index body snapshot and paste as one !
     // KoTextLoader loader(ctxt, m_document->documentRdfBase());
     // KoXmlElement e;
     // loader.loadBody(e, cursor);
@@ -200,7 +200,7 @@ void ToCGenerator::update()
         //qDebug() << "TESTX entry block position " << entryBlock.position() << ", size " << entryBlock.length();
         QTextBlock headingBlock = blockPair.second;
         KoShape *shape = layout->shapeForPosition(headingBlock.position());
-        //alternative 1
+        // Alternative 1
         if (shape) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
             Q_ASSERT(shapeData);
@@ -211,7 +211,7 @@ void ToCGenerator::update()
                 cursor.insertText(pageNumber);
             }
         }
-        // alternative 2
+        // Alternative 2
 //        Q_ASSERT(shape);
 //        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
 //        Q_ASSERT(shapeData);

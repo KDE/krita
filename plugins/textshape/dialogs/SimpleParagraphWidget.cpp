@@ -64,6 +64,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
     //widget.bulletListButton->setIconSize(QSize(16,16));
     //widget.numberedListButton->setIconSize(QSize(16,16));
     fillListButtons();
+    widget.bulletListButton->addSeparator();
+    //widget.bulletListButton->addAction(new QAction("fgfd",0));
 
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
@@ -143,7 +145,7 @@ void SimpleParagraphWidget::fillListButtons()
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
-        QPixmap pm(16,16);
+        QPixmap pm(48,48);
 
         pm.fill(Qt::transparent);
         QPainter p(&pm);
@@ -160,10 +162,10 @@ void SimpleParagraphWidget::fillListButtons()
             }
             listStyle.setLevelProperties(llp);
             cursor.select(QTextCursor::Document);
-            cursor.insertText("--");
+            cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
-            cursor.insertText("\n--");
-            cursor.insertText("\n--");
+            cursor.insertText("\n----");
+            cursor.insertText("\n----");
             dynamic_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout())->layout();
 
             textShape.paintComponent(p, zoomHandler);

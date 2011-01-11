@@ -23,32 +23,89 @@
 #include "ListItemsHelper.h"
 
 #include <QMenu>
+#include <QFrame>
+#include <QGridLayout>
+#include <QWidgetAction>
+
+#include <kdebug.h>
+
+//This class is the main place where the expanding grid is done
+class StyleChooser : public QWidgetAction
+{
+public:
+    StyleChooser();
+    QWidget *m_widget;
+    QGridLayout *m_containerLayout;
+    int m_cnt;
+    QToolButton *addItem(QPixmap pm);
+};
+
+StyleChooser::StyleChooser()
+ : QWidgetAction(0)
+ , m_cnt(0)
+{
+    m_widget = new QWidget;
+    m_containerLayout = new QGridLayout();
+    m_containerLayout->setSpacing(6);
+    m_widget->setLayout(m_containerLayout);
+    setDefaultWidget(m_widget);
+    m_widget->setBackgroundRole(QPalette::Base);
+}
+
+QToolButton *StyleChooser::addItem(QPixmap pm)
+{
+    QToolButton *b = new QToolButton();
+    b->setIcon(QIcon(pm));
+    b->setIconSize(QSize(48,48));
+    b->setAutoRaise(true);
+    m_containerLayout->addWidget(b, m_cnt/3, m_cnt%3);
+    ++m_cnt;
+    return b;
+}
+
 
 ListStyleButton::ListStyleButton( QWidget *parent)
     : QToolButton(parent)
-    , m_letterSynchronization(false)
-    , m_lastAction(0)
+    , m_lastId(0)
+    , m_styleAction(0)
 {
     m_menu = new QMenu();
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
-    connect(this, SIGNAL(triggered(QAction *)), this, SLOT(itemSelected(QAction *)));
+    if(m_styleAction==0)
+        m_styleAction = new StyleChooser();
+    m_menu->addAction(m_styleAction);
+    connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
 }
 
 void ListStyleButton::addItem(QPixmap pm, int id)
 {
-    m_actionMap[m_menu->addAction(QIcon(pm), QString())] = id;
-    if (!m_lastAction) {
-        m_lastAction = m_actionMap.key(id);
+    QToolButton *b = m_styleAction->addItem(pm);
+    m_styleMap[b] = id;
+    connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
+
+    if (!m_lastId) {
+        m_lastId = id;
     }
 }
 
-void ListStyleButton::itemSelected(QAction *action)
+void ListStyleButton::addAction(QAction *action)
 {
-    if(action != defaultAction()) {
-        m_lastAction = action;
+    m_menu->addAction(action);
+}
+
+void ListStyleButton::addSeparator()
+{
+    m_menu->addSeparator();
+}
+
+void ListStyleButton::itemSelected()
+{
+    if(sender() != this) {
+        m_lastId = m_styleMap[sender()];
     }
-    emit itemTriggered(m_actionMap[m_lastAction]);
+    m_menu->hide();
+    emit itemTriggered(m_lastId);
 }
 
 QString ListStyleButton::example(KoListStyle::Style type) const {
@@ -57,9 +114,9 @@ QString ListStyleButton::example(KoListStyle::Style type) const {
         case KoListStyle::DecimalItem:
             return QString::number(value);
         case KoListStyle::AlphaLowerItem:
-            return Lists::intToAlpha(value, Lists::Lowercase, m_letterSynchronization);
+            return Lists::intToAlpha(value, Lists::Lowercase, false);
         case KoListStyle::UpperAlphaItem:
-            return Lists::intToAlpha(value, Lists::Uppercase, m_letterSynchronization);
+            return Lists::intToAlpha(value, Lists::Uppercase, false);
         case KoListStyle::RomanLowerItem:
             return Lists::intToRoman(value);
         case KoListStyle::UpperRomanItem:

@@ -29,6 +29,7 @@
 
 class QMenu;
 class QAction;
+class StyleChooser;
 
 class ListStyleButton : public QToolButton
 {
@@ -38,18 +39,20 @@ public:
 
     QString example(KoListStyle::Style type) const;
     void addItem(QPixmap pm, int id);
+    void addAction(QAction *action);
+    void addSeparator();
 
 signals:
     void itemTriggered(int id);
 
 private slots:
-    void itemSelected(QAction *action);
+    void itemSelected();
 
 private:
-    bool m_letterSynchronization;
-    QAction *m_lastAction ;
+    int m_lastId ;
     QMenu *m_menu;
-    QMap<QAction *, int > m_actionMap;
+    QMap<QObject *, int > m_styleMap;
+    StyleChooser *m_styleAction;
 };
 
 #endif

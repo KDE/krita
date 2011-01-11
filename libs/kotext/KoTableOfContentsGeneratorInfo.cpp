@@ -39,7 +39,7 @@ KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
 
 void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
 {
-    Q_ASSERT(e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text);
+    Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
     
     m_toc->tocSource.indexScope = element.attribute("index-scope", "document"); // enum {document, chapter}
     m_toc->tocSource.outlineLevel = element.attribute("outline-level").toInt();  

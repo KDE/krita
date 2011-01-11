@@ -53,8 +53,8 @@ public:
     KoCanvasControllerGraphicsWidget *q;
     KoCanvasBase * canvas;
     bool ignoreScrollSignals;
-    bool zoomWithWheel;
     bool isScrolling;
+    bool zoomWithWheel;
     qreal vastScrollingFactor;
     QPointF oldPosition;
     int margin;
@@ -84,7 +84,7 @@ QSize KoCanvasControllerGraphicsWidget::viewportSize() const
     return QSize();
 }
 
-void KoCanvasControllerGraphicsWidget::setDrawShadow(bool /*draw*/Shadow)
+void KoCanvasControllerGraphicsWidget::setDrawShadow(bool /*drawShadow*/)
 {
 }
 
@@ -188,22 +188,22 @@ void KoCanvasControllerGraphicsWidget::setVastScrolling(qreal)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::mouseMoveEvent ( QGraphicsSceneMouseEvent * event )
+void KoCanvasControllerGraphicsWidget::mouseMoveEvent ( QGraphicsSceneMouseEvent * /*event*/ )
 {
     d->isScrolling = true;
 }
 
-void KoCanvasControllerGraphicsWidget::mousePressEvent ( QGraphicsSceneMouseEvent * event )
+void KoCanvasControllerGraphicsWidget::mousePressEvent ( QGraphicsSceneMouseEvent * /*event */)
 {
     // implement scrolling
 }
 
-void KoCanvasControllerGraphicsWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * event )
+void KoCanvasControllerGraphicsWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * /*event*/ )
 {
     d->isScrolling = false;
 }
 
-void KoCanvasControllerGraphicsWidget::wheelEvent ( QGraphicsSceneWheelEvent * event )
+void KoCanvasControllerGraphicsWidget::wheelEvent ( QGraphicsSceneWheelEvent * /*event*/ )
 {
     if (d->zoomWithWheel) {
         // implement zooming

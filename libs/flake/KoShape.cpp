@@ -1737,6 +1737,18 @@ void KoShape::setToolDelegates(const QSet<KoShape*> &delegates)
     d->toolDelegates = delegates;
 }
 
+QString KoShape::hyperLink () const
+{
+    Q_D(const KoShape);
+    return d->hyperLink;
+}
+
+void KoShape::setHyperLink (QString & hyperLink)
+{
+    Q_D(KoShape);
+    d->hyperLink = hyperLink;
+}
+
 KoShapePrivate *KoShape::priv()
 {
     Q_D(KoShape);

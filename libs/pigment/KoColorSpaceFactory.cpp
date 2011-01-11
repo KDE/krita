@@ -49,8 +49,8 @@ KoColorSpaceFactory::~KoColorSpaceFactory()
     foreach(const QList<KoColorSpace*>& cl, d->availableColorspaces) {
         count += cl.size();
     }
-    for(QHash<KoColorSpace*, QString>::const_iterator it = d->stackInformation.begin();
-        it != d->stackInformation.end(); ++it)
+    for(QHash<KoColorSpace*, QString>::const_iterator it = d->stackInformation.constBegin();
+        it != d->stackInformation.constEnd(); ++it)
     {
         errorPigment << "*******************************************";
         errorPigment << it.key()->id() << " still in used, and grabed in: ";

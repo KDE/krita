@@ -930,6 +930,17 @@ public:
     void setToolDelegates(const QSet<KoShape*> &delegates);
 
     /**
+     * Return the hyperlink for this shape.
+     */
+    QString hyperLink () const;
+
+    /**
+     * Set hyperlink for this shape.
+     * @param hyperLink name.
+     */
+    void setHyperLink (QString & hyperLink);
+
+    /**
      * \internal
      * Returns the private object for use within the flake lib
      */

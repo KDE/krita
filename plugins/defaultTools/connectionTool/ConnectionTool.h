@@ -28,6 +28,7 @@
 
 #include <KoConnectionShape.h>
 #include <KoCanvasBase.h>
+#include <KoSnapGuide.h>
 
 class ConnectionTool : public KoPathTool
 {
@@ -96,6 +97,7 @@ private:
     KoShape * m_shapeOn; ///< the current shape we are working on
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
+    KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 
 #endif

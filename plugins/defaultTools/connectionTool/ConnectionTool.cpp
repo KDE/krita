@@ -48,6 +48,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_shapeOn(0)
     , m_activeHandle(-1)
     , m_currentStrategy(0)
+    , m_oldSnapStrategies(0)
 {
 }
 
@@ -204,7 +205,8 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_editMode == EditConnectionPoint) {
         Q_ASSERT(m_shapeOn);
         if (event->buttons() & Qt::LeftButton && m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
-            QPointF cp = m_shapeOn->documentToShape(event->point);
+            QPointF mousePos = canvas()->snapGuide()->snap(event->point, event->modifiers());
+            QPointF cp = m_shapeOn->documentToShape(mousePos);
             repaintDecorations();
             // TODO: use undo command
             m_shapeOn->setConnectionPointPosition(m_activeHandle, cp);
@@ -294,7 +296,8 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
         repaintDecorations();
         int handleId = handleAtPoint(m_shapeOn, event->point);
         if (handleId < 0) {
-            QPointF point = m_shapeOn->documentToShape(event->point);
+            QPointF mousePos = canvas()->snapGuide()->snap(event->point, event->modifiers());
+            QPointF point = m_shapeOn->documentToShape(mousePos);
             // TODO: use an undo command
             m_shapeOn->addConnectionPoint(point);
         } else {
@@ -324,6 +327,10 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
 void ConnectionTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
     canvas()->canvasWidget()->setCursor(Qt::PointingHandCursor);
+    // save old enabled snap strategies, set bounding box snap strategy
+    m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
+    canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);
+    canvas()->snapGuide()->reset();
 }
 
 void ConnectionTool::deactivate()
@@ -332,6 +339,9 @@ void ConnectionTool::deactivate()
     delete m_currentStrategy;
     m_currentStrategy = 0;
     resetEditMode();
+    // restore previously set snap strategies
+    canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
+    canvas()->snapGuide()->reset();
 }
 
 qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2)

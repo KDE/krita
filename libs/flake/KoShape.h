@@ -326,6 +326,15 @@ public:
      */
     int addConnectionPoint(const QPointF &point);
 
+    /**
+     * Tries to insert connection point with specified id.
+     * @param point the position of the connector in shape coordinates
+     * @param connectionPointId the id of the connection point to insert
+     * @return true if inserting connection point was successful;
+     *         false if connection point did already exists or id is invalid
+     */
+    bool insertConnectionPoint(const QPointF &point, int connectionPointId);
+
     /// Checks if a connection point with the specified id exists
     bool hasConnectionPoint(int connectionPointId) const;
 

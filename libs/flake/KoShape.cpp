@@ -754,19 +754,36 @@ int KoShape::addConnectionPoint(const QPointF &point)
     if (d->connectors.size())
         nextConnectionPointId = qMax(nextConnectionPointId, (--d->connectors.end()).key()+1);
 
-    // allow adding default connection point
-    if (connectionPoint == d->defaultConnectionPoint(KoFlake::TopConnectionPoint))
-        nextConnectionPointId = KoFlake::TopConnectionPoint;
-    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::RightConnectionPoint))
-        nextConnectionPointId = KoFlake::RightConnectionPoint;
-    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::BottomConnectionPoint))
-        nextConnectionPointId = KoFlake::BottomConnectionPoint;
-    else if (connectionPoint == d->defaultConnectionPoint(KoFlake::LeftConnectionPoint))
-        nextConnectionPointId = KoFlake::LeftConnectionPoint;
-
     d->connectors[nextConnectionPointId] = connectionPoint;
 
     return nextConnectionPointId;
+}
+
+bool KoShape::insertConnectionPoint(const QPointF &point, int connectionPointId)
+{
+    Q_D(KoShape);
+    if (connectionPointId < 0 || d->connectors.contains(connectionPointId))
+        return false;
+
+    QSizeF s = size();
+    // convert glue point from shape coordinates to factors of size
+    QPointF connectionPoint(point.x() / s.width(), point.y() / s.height());
+
+    switch(connectionPointId) {
+        case KoFlake::TopConnectionPoint:
+        case KoFlake::RightConnectionPoint:
+        case KoFlake::BottomConnectionPoint:
+        case KoFlake::LeftConnectionPoint:
+            connectionPoint = d->defaultConnectionPoint(static_cast<KoFlake::ConnectionPointId>(connectionPointId));
+            break;
+        default:
+            // do nothing for all other cases
+            break;
+    }
+
+    d->connectors[connectionPointId] = connectionPoint;
+
+    return true;
 }
 
 bool KoShape::hasConnectionPoint(int connectionPointId) const

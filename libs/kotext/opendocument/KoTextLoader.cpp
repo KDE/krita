@@ -1385,13 +1385,13 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
 }
 
 static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle)
-{
+{   
     QStringList attrNames = element.attributeNames();
     //qDebug() << "TESTX ATTR NAMES " << attrNames;
     QVariantHash attrMap;
     for (int i = 0; i < attrNames.size(); i++) {
         QString attrName = attrNames.at(i);
-        //qDebug() << "TESTX ATTR NAME" << attrName;
+        //        qDebug() << "TESTX ATTR NAME" << attrName;
         QString value = element.attribute(attrName);
         //qDebug() << "TESTX ATTR VALUE " << value;
         QVariant attr;
@@ -1406,16 +1406,6 @@ static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData 
                 attr.setValue(sectionStyle->styleId());
             }
             //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " STYLE NAME " << value << " ATTR " << attr;
-        } else if (attrName == "index-entry-tab-stop") {
-            if (value == "right") {
-                attr.setValue((int) QTextOption::RightTab);
-            } else if (value == "left") {
-                attr.setValue((int) QTextOption::LeftTab);
-            } else if (value == "center") {
-                attr.setValue((int) QTextOption::CenterTab);
-            } else if (value == "delimiter") {
-                attr.setValue((int) QTextOption::DelimiterTab);
-            }
         } else {
             attr.setValue(value);
         }
@@ -1425,31 +1415,58 @@ static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData 
     return attrMap;
 }
 
-static QVariant createTocData(const KoXmlElement &toc, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle) {
+static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle) {
     //qDebug() << "TESTX ++++++ LOADING DATA +++++++";
     QVariantHash attrMap;
     //text:table-of-content
-    QVariant tocAttr = attributes(toc, textSharedData, true);
+    QVariant tocElementAttr = attributes(tocElement, textSharedData, true);
     //qDebug() << "TESTX TOC NAME " << toc.localName() << " ATTR " << tocAttr;
-    attrMap.insert(toc.localName(), tocAttr);
-    KoXmlElement tocSource;
-    forEachElement(tocSource, toc) {
+    attrMap.insert(tocElement.localName(), tocElementAttr);
+    KoXmlElement tocChild;
+    forEachElement(tocChild, tocElement) {
         //text:table-of-content-source
-        QVariant tocSourceAttr = attributes(tocSource, textSharedData, useStylesAutoStyle);
-        attrMap.insert(tocSource.localName(), tocSourceAttr);
+        QVariant tocChildAttr = attributes(tocChild, textSharedData, useStylesAutoStyle);
+        attrMap.insert(tocChild.localName(), tocChildAttr);
         KoXmlElement tocTemplate;
-        forEachElement(tocTemplate, tocSource) {
+        forEachElement(tocTemplate, tocChild) {
             //text:index-title-template
             //text:table-of-content-entry-template
             QString outlineLevel = tocTemplate.attribute("outline-level");
-            QString secondaryKey = outlineLevel.isNull() ? "" : " " + outlineLevel;
+            QString outlineLevelSuffix = outlineLevel.isNull() ? "" : " " + outlineLevel;
             QVariant tocTemplateAttr = attributes(tocTemplate, textSharedData, useStylesAutoStyle);
-            attrMap.insert(tocTemplate.localName() + secondaryKey, tocTemplateAttr);
+            attrMap.insert(tocTemplate.localName() + outlineLevelSuffix, tocTemplateAttr);
             KoXmlElement tocIndexEntry;
             forEachElement(tocIndexEntry, tocTemplate) {
                 //text:index-entry
-                QVariant tocIndexEntryAttr = attributes(tocIndexEntry, textSharedData, useStylesAutoStyle);
-                attrMap.insert(tocIndexEntry.localName() + secondaryKey, tocIndexEntryAttr);
+                if (tocIndexEntry.localName() == "index-entry-tab-stop") {
+                    
+                    KoText::Tab tab;
+                    QString type = tocIndexEntry.attribute("type");
+                    if (type == "right") {
+                        tab.type = QTextOption::RightTab;
+                    } else if (type == "left") {
+                        tab.type = QTextOption::LeftTab;
+                    } else if (type == "center") {
+                        tab.type = QTextOption::CenterTab;
+                    } else if (type == "delimiter") {
+                        tab.type = QTextOption::DelimiterTab;
+                    } else {
+                        tab.type = QTextOption::RightTab;
+                    }
+                    QString leaderChar = tocIndexEntry.attribute("leader-char");
+                    tab.leaderText = leaderChar.isEmpty() ? "." : leaderChar;
+                    //TODO: solve !
+                    tab.position = 490;
+                    qDebug() << "TESTX TAB TYPE " << tab.type << " LEDAER CHAR " << tab.leaderText;
+                    QVariant tabVariant;
+                    tabVariant.setValue(tab);
+                    KoText::Tab tab2 = tabVariant.value<KoText::Tab>();
+                    qDebug() << "TESTX TAB VARIANT " << tab2.type;
+                    attrMap.insert(tocIndexEntry.localName() + outlineLevelSuffix, tabVariant);
+                } else {
+                    QVariant tocIndexEntryAttr = attributes(tocIndexEntry, textSharedData, useStylesAutoStyle);
+                    attrMap.insert(tocIndexEntry.localName() + outlineLevelSuffix, tocIndexEntryAttr);
+                }
             }
         }
     }
@@ -1465,27 +1482,23 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     tocFormat.setProperty(KoText::TableOfContents, true);
     bool useStylesAutoStyle = d->context.odfLoadingContext().useStylesAutoStyles();
     //qDebug() << "TESTX USE AUTO STYLES " << useStylesAutoStyle;
-    QVariant data = createTocData(element, d->textSharedData, useStylesAutoStyle);
+    QVariant tocVariant = createTocVariant(element, d->textSharedData, useStylesAutoStyle);
     //qDebug() << "TESTX ATTR VARIANT " << data;
-    tocFormat.setProperty(KoText::TableOfContentsData, data);
+    tocFormat.setProperty(KoText::TableOfContentsData, tocVariant);
     cursor.insertFrame(tocFormat);
     //qDebug() << "TESTX ++++++ LOADING TEMPLATE +++++++";
     // Get the cursor of the frame
     QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
     // We'll just try to find displayable elements and add them as paragraphs
     //qDebug() << "TESTX ELEMENT " << element.localName();
-    KoXmlElement e;
-    forEachElement(e, element) {
+    KoXmlElement indexBody;
+    forEachElement(indexBody, element) {
         //qDebug() << "TESTX ELEMENT " << e.localName();
-        if (e.localName() == "index-body") {
-            KoXmlElement indexBody;
-            forEachElement(indexBody, e) {
-                //qDebug() << "TESTX ELEMENT " << e.localName();
-            }
+        if (indexBody.localName() == "index-body") {
             QTextBlockFormat bf;
             QTextCharFormat cf;
             cursorFrame.insertBlock(bf, cf);
-            loadBody(e, cursorFrame);
+            loadBody(indexBody, cursorFrame);
         }
     }
 

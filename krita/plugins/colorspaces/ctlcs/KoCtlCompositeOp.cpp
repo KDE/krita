@@ -22,6 +22,7 @@
 #include <OpenCTL/Template.h>
 
 #include <QFileInfo>
+#include <QMutexLocker>
 
 #include <klocale.h>
 

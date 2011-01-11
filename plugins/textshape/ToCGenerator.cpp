@@ -29,6 +29,7 @@
 #include <KoTextDocument.h>
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
+#include <KoTextLoader.h>
 
 #include <QTextFrame>
 #include <QTimer>
@@ -100,34 +101,8 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     style->setName("Contents " + QString::number(outlineLevel));
     style->setParent(styleManager->paragraphStyle("Standard"));
     style->setLeftMargin((outlineLevel - 1) * 8);
-    QList<KoText::Tab> tabList;
-    struct KoText::Tab aTab;
-    aTab.type = QTextOption::RightTab;
-    aTab.leaderText = '.';
-    aTab.position = 490 - outlineLevel * 8;
-    tabList.append(aTab);
-    style->setTabPositions(tabList);
     styleManager->add(style);
     return style;
-}
-
-static QList<KoText::Tab> createTabList(const QVariant &data, int outlineLevel) {
-    QVariant entryTabStopTypeVariant = attribute(data, "index-entry-tab-stop", "type", outlineLevel);
-    //qDebug() << "TESTX ENTRY TAB STOP STYLE VARIANT " << entryTabStopTypeVariant;
-    QTextOption::TabType entryTabStopType = (entryTabStopTypeVariant.isNull() ? QTextOption::RightTab : (QTextOption::TabType) entryTabStopTypeVariant.toInt());
-    //qDebug() << "TESTX ENTRY TAB STOP STYLE INT " << entryTabStopType;
-    QVariant entryTabStopLeaderCharVariant = attribute(data, "index-entry-tab-stop", "leader-char", outlineLevel);
-    //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR VARIANT " << entryTabStopLeaderCharVariant;
-    QString entryTabStopLeaderChar = (entryTabStopLeaderCharVariant.isNull() ? "." : entryTabStopLeaderCharVariant.toString());
-    //qDebug() << "TESTX ENTRY TAB STOP LEADER CHAR " << entryTabStopLeaderChar;
-    QList<KoText::Tab> tabList;
-    struct KoText::Tab aTab;
-    aTab.type = entryTabStopType;
-    aTab.leaderText = entryTabStopLeaderChar;
-    //TODO pavolk: we need to fill leader chars also at update time to formate page numbers !!
-    aTab.position = 490;
-    tabList.append(aTab);
-    return tabList;
 }
 
 void ToCGenerator::generate()
@@ -144,71 +119,73 @@ void ToCGenerator::generate()
     //   text:table-of-content-entry-template
     //     text:index-entry
     QTextFrame *cursorFrame = cursor.currentFrame();
-    QVariant data = cursorFrame->format().property(KoText::TableOfContentsData);
+    QVariant tocVariant = cursorFrame->format().property(KoText::TableOfContentsData);
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
     //TODO pavolk: apply section toc style
-    //QVariant tocStyleVariant = attribute(data, "table-of-content", "style-name");
+    //QVariant tocStyleVariant = attribute(tocVariant, "table-of-content", "style-name");
     //qDebug() << "TESTX TOC STYLE VARIANT " << tocStyleVariant;
     //KoSectionStyle *tocStyle = getStyle(styleManager, tocStyleVariant);
     //QTextBlock tocTextBlock = cursor.block();
     //tocStyle->applyStyle(cursorFrame);
     //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     // Add the title
-    // Do we want add title like this ?
-    QVariant titleStyleVariant = attribute(data, "index-title-template", "style-name");
-    KoParagraphStyle *titleStyle = getStyle(styleManager, titleStyleVariant);
-    // Do we want default style or generate style also for title ?
-    if (titleStyle) {
-        //qDebug() << "TESTX GOT STYLE " << titleStyle->name();
-    } else {
-        //TODO pavolk: generate style for title ?
-        titleStyle = styleManager->defaultParagraphStyle();
-        //qDebug() << "TESTX USING DEFALT STYLE " << titleStyle->styleId();
+    QVariant titleStyleVariant = attribute(tocVariant, "index-title-template", "style-name");
+    // Check title text
+    if ( !titleStyleVariant.isNull()) {
+        // Get style for title
+        KoParagraphStyle *titleStyle = getStyle(styleManager, titleStyleVariant);
+        if ( ! titleStyle) {
+            titleStyle = styleManager->defaultParagraphStyle();
+            qDebug() << "TESTX USING DEFALT STYLE " << titleStyle->styleId();
+            QTextBlock titleTextBlock = cursor.block();
+            titleStyle->applyStyle(titleTextBlock);
+            //TODO: load and insert title text
+            cursor.insertText(tr2i18n("Table of Contents"));
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());            
+        }
     }
-    QTextBlock titleTextBlock = cursor.block();
-    titleStyle->applyStyle(titleTextBlock);
-    cursor.insertText(tr2i18n("Table of Contents"));
-    cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     // Add TOC
-    // looks for blocks to add in the ToC
+    // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
     while (block.isValid()) {
         KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
+        // Choose only TOC blocks
         if (bd && bd->hasCounterData()) {
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
             QTextBlock tocEntryTextBlock = cursor.block();
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
-            QVariant tocTemplateStyleVariant = attribute(data, "table-of-content-entry-template", "style-name", outlineLevel);
-            //TODO pavolk: How to use source styles ?
-            //QVariant tocTemplateStyleVariant = attribute(data, "index-source-style", "style-name", outlineLevel);
-            //qDebug() << "TESTX TOC TEMPLATE VARIANT " << tocTemplateStyleVariant;
+            QVariant tocTemplateStyleVariant = attribute(tocVariant, "table-of-content-entry-template", "style-name", outlineLevel);
             KoParagraphStyle *tocTemplateStyle = getStyle(styleManager, tocTemplateStyleVariant);
             if (tocTemplateStyle == 0) {
-                //qDebug() << "TESTX GENERATE NEW STYLE";
+                qDebug() << "TESTX GENERATE NEW STYLE";
                 tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
             }
-            if (tocTemplateStyle->tabPositions().isEmpty()) {
-                QList<KoText::Tab> tabList = createTabList(data, outlineLevel);
-                tocTemplateStyle->setTabPositions(tabList);
-            }
             tocTemplateStyle->applyStyle(tocEntryTextBlock);
-            //TODO pavolk: create and insert hyperlinks ?
-            //KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
-            if (bd && bd->hasCounterData()) {
-                cursor.insertText(bd->counterText());
-                //qDebug() << "TESTX CHAPTER " << bd->counterText();
-                cursor.insertText(QLatin1String(" "));
-            }
-            // Wrong page number, it will be corrected in the update
-            // note that the fact that I use 4 chars is reused in the update method!
+            //TODO generate TOC links
+            QVariantHash tagMap = tocVariant.toHash();
+            QVariant tabVariant = tagMap.value("index-entry-tab-stop " + QString::number(outlineLevel));
+            QList<QVariant> list;
+            list.append(tabVariant);
+            QTextCursor textCursor(tocEntryTextBlock);            
+            QTextBlockFormat blockFormat = textCursor.blockFormat();
+            blockFormat.setProperty(KoParagraphStyle::TabPositions, list);
+            textCursor.setBlockFormat(blockFormat);
+
+            cursor.insertText(bd->counterText());
+            //qDebug() << "TESTX CHAPTER " << bd->counterText();
+            cursor.insertText(QLatin1String(" "));
             cursor.insertText(block.text() + "\t");
             //qDebug() << "TESTX TEXT " << block.text();
             m_originalBlocksInToc.append(qMakePair(tocEntryTextBlock, block));
         }
         block = block.next();
     }
+    // Alternativelly: we can create index body snapshot and paste as one !
+    // KoTextLoader loader(ctxt, m_document->documentRdfBase());
+    // KoXmlElement e;
+    // loader.loadBody(e, cursor);
     cursor.endEditBlock();
 }
 

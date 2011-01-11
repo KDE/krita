@@ -584,7 +584,13 @@ void KoChangeTracker::insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMa
             if (deletedListItem && currentBlock != tempDoc.begin()) {
                 // Found a deleted list item in the fragment. So insert a new list-item
                 int deletedListItemLevel = KoList::level(currentBlock);
-                cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
+
+                if (!(QTextCursor(currentBlock.previous()).currentTable())) {
+                    cursor.insertBlock(currentBlock.blockFormat(), currentBlock.charFormat());
+                } else {
+                    cursor.mergeBlockFormat(currentBlock.blockFormat());
+                }
+
                 if(!currentList) {
                     if (!outlineLevel) {
                         //This happens when a part of a paragraph and a succeeding list-item are deleted together

@@ -21,6 +21,7 @@
  */
 
 #include "ConnectionTool.h"
+#include "AddConnectionPointCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -298,8 +299,7 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
         if (handleId < 0) {
             QPointF mousePos = canvas()->snapGuide()->snap(event->point, event->modifiers());
             QPointF point = m_currentShape->documentToShape(mousePos);
-            // TODO: use an undo command
-            m_currentShape->addConnectionPoint(point);
+            canvas()->addCommand(new AddConnectionPointCommand(m_currentShape, point));
         } else {
             // TODO: use an undo command
             m_currentShape->removeConnectionPoint(handleId);

@@ -45,7 +45,7 @@ public:
         createProperties();
     }
     KoReportItemImage(QDomNode & element);
-    ~KoReportItemImage() {};
+    virtual ~KoReportItemImage();
 
     virtual QString typeName() const;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);

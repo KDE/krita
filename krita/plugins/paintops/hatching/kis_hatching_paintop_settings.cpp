@@ -24,8 +24,11 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+const QString HATCHING_VERSION = "Hatching/Version";
+
 KisHatchingPaintOpSettings::KisHatchingPaintOpSettings()
 {
+    setProperty(HATCHING_VERSION, "2");
 }
 
 KisHatchingPaintOpSettings::~KisHatchingPaintOpSettings()
@@ -81,6 +84,13 @@ void KisHatchingPaintOpSettings::initializeTwin(KisHatchingPaintOpSettings* conv
     
 }
 
-
-
-
+void KisHatchingPaintOpSettings::fromXML(const QDomElement& elt)
+{
+    setProperty(HATCHING_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
+    KisBrushBasedPaintOpSettings::fromXML(elt);
+    QVariant v;
+    if(!getProperty(HATCHING_VERSION, v) || v == "1")
+    {
+        setProperty("Hatching/thickness", 2.0 * getDouble("Hatching/thickness"));
+    }    
+}

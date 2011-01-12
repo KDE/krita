@@ -2,6 +2,7 @@
 Icon=
 Name=Krita PPM Import Filter
 Name[ca]=Filtre d'importació PPM per al Krita
+Name[ca@valencia]=Filtre d'importació PPM per al Krita
 Name[da]=PPM-importfilter til Krita
 Name[de]=Krita PPM-Importfilter
 Name[en_GB]=Krita PPM Import Filter
@@ -20,7 +21,9 @@ Name[pt]=Filtro de Importação de PPM para o Krita
 Name[pt_BR]=Filtro de Importação de PPM para o Krita
 Name[ru]=Фильтр импорта изображений PPM в Krita
 Name[sv]=Krita PPM-importfilter
+Name[uk]=Фільтр імпорту PPM для Krita
 Name[wa]=Passete d' abagaedje PPM di Krita
+Name[x-test]=xxKrita PPM Import Filterxx
 Name[zh_CN]=Krita PPM 导入过滤器
 Name[zh_TW]=Krita PPM 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter

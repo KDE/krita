@@ -177,7 +177,7 @@ bool KisKraLoadVisitor::visit(KisGeneratorLayer* layer)
 //     if (!loadPaintDevice(layer->paintDevice(), getLocation(layer))) {
 //         return false;
 //     }
-// 
+//
 //     if (!loadProfile(layer->paintDevice(), getLocation(layer, DOT_ICC))) {
 //         return false;
 //     }
@@ -280,7 +280,7 @@ bool KisKraLoadVisitor::loadPaintDevice(KisPaintDeviceSP device, const QString& 
             quint8 *defPixel = new quint8[pixelSize];
             m_store->read((char*)defPixel, pixelSize);
             device->setDefaultPixel(defPixel);
-            delete defPixel;
+            delete[] defPixel;
         }
         m_store->close();
     }

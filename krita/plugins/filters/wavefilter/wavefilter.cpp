@@ -50,6 +50,7 @@
 #include <kis_processing_information.h>
 #include "kis_wdg_wave.h"
 #include "ui_wdgwaveoptions.h"
+#include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(KritaWaveFilterFactory, registerPlugin<KritaWaveFilter>();)
 K_EXPORT_PLUGIN(KritaWaveFilterFactory("krita"))
@@ -130,22 +131,17 @@ KisConfigWidget * KisFilterWave::createConfigurationWidget(QWidget* parent, cons
     return new KisWdgWave((KisFilter*)this, (QWidget*)parent);
 }
 
-void KisFilterWave::process(KisConstProcessingInformation srcInfo,
-                            KisProcessingInformation dstInfo,
-                            const QSize& size,
+void KisFilterWave::process(KisPaintDeviceSP device,
+                            const QRect& applyRect,
                             const KisFilterConfiguration* config,
                             KoUpdater* progressUpdater
                            ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = applyRect.topLeft();
 
-    Q_ASSERT(src.data() != 0);
-    Q_ASSERT(dst.data() != 0);
+    Q_ASSERT(device.data() != 0);
 
-    int cost = (size.width() * size.height()) / 100;
+    int cost = (applyRect.width() * applyRect.height()) / 100;
     if (cost == 0) cost = 1;
     int count = 0;
 
@@ -158,7 +154,7 @@ void KisFilterWave::process(KisConstProcessingInformation srcInfo,
     int verticalshift = (config && config->getProperty("verticalshift", value)) ? value.toInt() : 50;
     int verticalamplitude = (config && config->getProperty("verticalamplitude", value)) ? value.toInt() : 4;
     int verticalshape = (config && config->getProperty("verticalshape", value)) ? value.toInt() : 0;
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
+    KisRectIteratorSP dstIt = device->createRectIteratorNG(applyRect);
     KisWaveCurve* verticalcurve;
     if (verticalshape == 1)
         verticalcurve = new KisTriangleWaveCurve(verticalamplitude, verticalwavelength, verticalshift);
@@ -169,17 +165,15 @@ void KisFilterWave::process(KisConstProcessingInformation srcInfo,
         horizontalcurve = new KisTriangleWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
     else
         horizontalcurve = new KisSinusoidalWaveCurve(horizontalamplitude, horizontalwavelength, horizontalshift);
-    KisRandomSubAccessorPixel srcRSA = src->createRandomSubAccessor(srcInfo.selection());
-    int tx = srcTopLeft.x() - dstTopLeft.x();
-    int ty = srcTopLeft.y() - dstTopLeft.y();
-    while (!dstIt.isDone()) {
-        double xv = horizontalcurve->valueAt(dstIt.y(), dstIt.x());
-        double yv = verticalcurve->valueAt(dstIt.x(), dstIt.y());
-        srcRSA.moveTo(QPointF(xv - tx, yv - ty));
-        srcRSA.sampledOldRawData(dstIt.rawData());
-        ++dstIt;
+    
+    KisRandomSubAccessorPixel srcRSA = device->createRandomSubAccessor();
+    do {
+        double xv = horizontalcurve->valueAt(dstIt->y(), dstIt->x());
+        double yv = verticalcurve->valueAt(dstIt->x(), dstIt->y());
+        srcRSA.moveTo(QPointF(xv, yv));
+        srcRSA.sampledOldRawData(dstIt->rawData());
         if (progressUpdater) progressUpdater->setProgress((++count) / cost);
-    }
+    }while (dstIt->nextPixel());
     delete horizontalcurve;
     delete verticalcurve;
 }

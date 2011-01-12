@@ -82,7 +82,7 @@ public:
         return 0;
     }
 
-    QRectF selectionBoundingBox(QTextCursor &cursor) {
+    QRectF selectionBoundingBox(QTextCursor &/*cursor*/) {
         return QRectF();
     }
 

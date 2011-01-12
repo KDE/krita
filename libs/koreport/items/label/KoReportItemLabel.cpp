@@ -65,6 +65,11 @@ KoReportItemLabel::KoReportItemLabel(QDomNode & element)
     }
 }
 
+KoReportItemLabel::~KoReportItemLabel()
+{
+    delete m_set;
+}
+
 QString KoReportItemLabel::text() const
 {
     return m_text->value().toString();
@@ -179,12 +184,21 @@ int KoReportItemLabel::render(OROPage* page, OROSection* section,  QPointF offse
     tb->setFlags(textFlags());
     tb->setTextStyle(textStyle());
     tb->setLineStyle(lineStyle());
-    if (page) page->addPrimitive(tb);
-
-    OROPrimitive *clone = tb->clone();
-    clone->setPosition(m_pos.toScene());
-    if (section) section->addPrimitive(clone);
-
+    
+    if (page) {
+        page->addPrimitive(tb);
+    }
+    
+    if (section) {
+        OROPrimitive *clone = tb->clone();
+        clone->setPosition(m_pos.toScene());
+        section->addPrimitive(clone);
+    }
+    
+    if (!page) {
+        delete tb;
+    }
+    
     return 0; //Item doesnt stretch the section height
 }
 

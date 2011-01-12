@@ -162,7 +162,7 @@ KisShapeController::~KisShapeController()
 
 void KisShapeController::setImage(KisImageWSP image)
 {
-    if (m_d->image) {
+    if (m_d->image.isValid()) {
         m_d->image->disconnect(this);
         m_d->removeNodeShape(m_d->rootNode);
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>184</width>
-    <height>70</height>
+    <width>185</width>
+    <height>87</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -22,6 +22,16 @@
     <widget class="QCheckBox" name="cbPerspective">
      <property name="text">
       <string>Correct the perspective</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbSourcePoint">
+     <property name="text">
+      <string>Source point move</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>

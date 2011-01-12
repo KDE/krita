@@ -68,7 +68,7 @@ KoReportPage::KoReportPage(QWidget *parent, ORODocument *document)
 KoReportPage::~KoReportPage()
 {
     delete m_renderer;
-    m_renderer = 0;
+    delete m_pixmap;
 }
 
 void KoReportPage::paintEvent(QPaintEvent*)

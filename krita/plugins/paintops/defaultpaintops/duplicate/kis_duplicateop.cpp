@@ -3,7 +3,7 @@
  *  Copyright (c) 2004-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
- *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2004,2010 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -74,6 +74,7 @@ KisDuplicateOp::KisDuplicateOp(const KisDuplicateOpSettings *settings, KisPainte
     m_sizeOption.readOptionSetting(settings);
     m_healing = settings->getBool(DUPLICATE_HEALING);
     m_perspectiveCorrection = settings->getBool(DUPLICATE_CORRECT_PERSPECTIVE);
+    m_moveSourcePoint = settings->getBool(DUPLICATE_MOVE_SOURCE_POINT);
 }
 
 KisDuplicateOp::~KisDuplicateOp()
@@ -125,7 +126,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return 1.0;
 
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = m_sizeOption.apply(info);
     QPointF hotSpot = brush->hotSpot(scale, scale);
     QPointF pt = info.pos() - hotSpot;
 
@@ -143,10 +144,16 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(pt.y(), &y, &yFraction);
     xFraction = yFraction = 0.0;
 
-    QPointF srcPointF = pt - settings->offset();
-    QPoint srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
-                             y - static_cast<qint32>(settings->offset().y()));
-
+    QPoint srcPoint;
+    
+    if(m_moveSourcePoint)
+    {
+        srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
+                          y - static_cast<qint32>(settings->offset().y()));
+    } else {
+        srcPoint = QPoint(static_cast<qint32>(settings->position().x() - hotSpot.x()),
+                          static_cast<qint32>(settings->position().y() - hotSpot.y()));
+    }
 
     qint32 sw = brush->maskWidth(scale, 0.0);
     qint32 sh = brush->maskHeight(scale, 0.0);

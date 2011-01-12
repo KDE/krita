@@ -32,6 +32,8 @@ KisPressureMirrorOption::KisPressureMirrorOption()
 {
     m_enableHorizontalMirror = false;
     m_enableVerticalMirror = false;
+    setMinimumLabel(i18n("Not mirrored"));
+    setMaximumLabel(i18n("Mirrored"));
 }
 
 void KisPressureMirrorOption::enableHorizontalMirror(bool mirror)

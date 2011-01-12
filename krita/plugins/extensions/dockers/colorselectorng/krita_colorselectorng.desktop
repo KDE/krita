@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=ColorSelectorNG
 Name[ca]=SelectorColorNG
+Name[ca@valencia]=SelectorColorNG
 Name[da]=ColorSelectorNG
 Name[en_GB]=ColourSelectorNG
 Name[es]=Selector de colores de nueva generación
@@ -13,7 +14,9 @@ Name[nl]=ColorSelectorNG
 Name[pt]=Selector de Cores NG
 Name[pt_BR]=Seletor de Cores NG
 Name[sv]=Färgväljare
+Name[uk]=НовийВибірКольору
 Name[wa]=Tchoezixheu di coleur NG
+Name[x-test]=xxColorSelectorNGxx
 Name[zh_TW]=ColorSelectorNG
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service

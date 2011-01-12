@@ -82,7 +82,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     if (! brush->canPaintFor(info))
         return 1.0;
 
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return spacing(scale);
 
     setCurrentScale(scale);
@@ -106,10 +106,12 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     qint32 maskHeight = brush->maskHeight(scale, 0.0);
 
     // Filter the paint device
-    m_filter->process(KisConstProcessingInformation(source(), QPoint(x, y)),
-                    KisProcessingInformation(m_tmpDevice, QPoint(0, 0)),
-                    QSize(maskWidth, maskHeight),
-                    m_filterConfiguration, 0);
+    QRect rect = QRect(0, 0, maskWidth, maskHeight);
+    QRect neededRect = m_filter->neededRect(rect.translated(x, y), m_filterConfiguration);
+    KisPainter p(m_tmpDevice);
+    p.bitBlt(QPoint(x-neededRect.x(), y-neededRect.y()), source(), neededRect);
+    
+    m_filter->process(m_tmpDevice, rect, m_filterConfiguration, 0);
 
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 

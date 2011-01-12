@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Change case plugin
 Name[ca]=Connector de canvi de caixa
+Name[ca@valencia]=Connector de canvi de caixa
 Name[cs]=Modul pro změnu velikosti písmen
 Name[da]=Plugin til at skifte mellem store/små bogstaver
 Name[de]=„Groß-/Kleinschreibung ändern“-Modul
@@ -8,7 +9,7 @@ Name[el]=Πρόσθετο τροποποίησης πεζών/κεφαλαίων
 Name[en_GB]=Change case plugin
 Name[es]=Complemento para cambiar mayúsculas/minúsculas
 Name[et]=Tõstu muutmise plugin
-Name[fa]=تغییر وصلۀ حالت
+Name[fa]=تغییر وصله حالت
 Name[fi]=Merkkikoon muutosliitännäinen
 Name[fr]=Module externe de changement de taille
 Name[gl]=Extensión para o cambio a maiúsculas

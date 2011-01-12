@@ -28,18 +28,11 @@
 #include "kis_coordinates_converter.h"
 
 #include <math.h>
-
 #include <limits>
 
 PerspectiveAssistant::PerspectiveAssistant()
         : KisPaintingAssistant("perspective", i18n("Perspective assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    handles.push_back(new KisPaintingAssistantHandle(100, 200));
-    handles.push_back(new KisPaintingAssistantHandle(200, 100));
-    handles.push_back(new KisPaintingAssistantHandle(200, 200));
-    initHandles(handles);
 }
 
 // squared distance from a point to a line
@@ -110,6 +103,68 @@ void PerspectiveAssistant::endStroke()
     snapLine = QLineF();
 }
 
+bool PerspectiveAssistant::contains(const QPointF& pt) const
+{
+    QPolygonF poly;
+    if (!quad(poly)) return false;
+    return poly.containsPoint(pt, Qt::OddEvenFill);
+}
+
+inline qreal lengthSquared(const QPointF& vector)
+{
+    return vector.x() * vector.x() + vector.y() * vector.y();
+}
+
+inline qreal localScale(const QTransform& transform, QPointF pt)
+{
+//    const qreal epsilon = 1e-5, epsilonSquared = epsilon * epsilon;
+//    qreal xSizeSquared = lengthSquared(transform.map(pt + QPointF(epsilon, 0.0)) - orig) / epsilonSquared;
+//    qreal ySizeSquared = lengthSquared(transform.map(pt + QPointF(0.0, epsilon)) - orig) / epsilonSquared;
+//    xSizeSquared /= lengthSquared(transform.map(QPointF(0.0, pt.y())) - transform.map(QPointF(1.0, pt.y())));
+//    ySizeSquared /= lengthSquared(transform.map(QPointF(pt.x(), 0.0)) - transform.map(QPointF(pt.x(), 1.0)));
+//  when taking the limit epsilon->0:
+//  xSizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+//  ySizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+//  xSize*ySize=(abs(m13*x+m33)*abs(m13*x+m33+m23)*abs(m23*y+m33)*abs(m23*y+m33+m13))/(m23*y+m13*x+m33)^4
+    const qreal x = transform.m13() * pt.x(),
+                y = transform.m23() * pt.y(),
+                a = x + transform.m33(),
+                b = y + transform.m33(),
+                c = x + y + transform.m33(),
+                d = c * c;
+    return fabs(a*(a + transform.m23())*b*(b + transform.m13()))/(d * d);
+}
+
+// returns the reciprocal of the maximum local scale at the points (0,0),(0,1),(1,0),(1,1)
+inline qreal inverseMaxLocalScale(const QTransform& transform)
+{
+    const qreal a = fabs((transform.m33() + transform.m13()) * (transform.m33() + transform.m23())),
+                b = fabs((transform.m33()) * (transform.m13() + transform.m33() + transform.m23())),
+                d00 = transform.m33() * transform.m33(),
+                d11 = (transform.m33() + transform.m23() + transform.m13())*(transform.m33() + transform.m23() + transform.m13()),
+                s0011 = qMin(d00, d11) / a,
+                d10 = (transform.m33() + transform.m13()) * (transform.m33() + transform.m13()),
+                d01 = (transform.m33() + transform.m23()) * (transform.m33() + transform.m23()),
+                s1001 = qMin(d10, d01) / b;
+    return qMin(s0011, s1001);
+}
+
+qreal PerspectiveAssistant::distance(const QPointF& pt) const
+{
+    QPolygonF poly;
+    if (!quad(poly)) return 1.0;
+    QTransform transform;
+    if (!QTransform::squareToQuad(poly, transform)) return 1.0;
+    bool invertible;
+    QTransform inverse = transform.inverted(&invertible);
+    if (!invertible) return 1.0;
+    if (inverse.m13() * pt.x() + inverse.m23() * pt.y() + inverse.m33() == 0.0) {
+        // point at infinity
+        return 0.0;
+    }
+    return localScale(transform, inverse.map(pt)) * inverseMaxLocalScale(transform);
+}
+
 // draw a vanishing point marker
 inline void drawX(QPainter& gc, const QPointF& pt)
 {
@@ -120,14 +175,14 @@ inline void drawX(QPainter& gc, const QPointF& pt)
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 4);
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QPolygonF poly;
     gc.save();
     gc.setTransform(initialTransform);
     if (!quad(poly)) {
-        gc.setPen(QColor(255, 0, 0, 125));
+        // color red for an invalid transform, but not for an incomplete one
+        gc.setPen((handles().size() == 4) ? QColor(255, 0, 0, 125) : QColor(0, 0, 0, 125));
         gc.drawPolygon(poly);
         gc.restore();
     } else {
@@ -159,6 +214,13 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     }
 }
 
+QPointF PerspectiveAssistant::buttonPosition() const
+{
+    QPointF centroid(0, 0);
+    for (int i = 0; i < 4; ++i) centroid += *handles()[i];
+    return centroid * 0.25;
+}
+
 template <typename T> int sign(T a)
 {
     return (a > 0) - (a < 0);
@@ -171,8 +233,11 @@ inline qreal pdot(const QPointF& a, const QPointF& b)
 
 bool PerspectiveAssistant::quad(QPolygonF& poly) const
 {
-    for (int i = 0; i < 4; ++i)
+    for (int i = 0; i < handles().size(); ++i)
         poly.push_back(*handles()[i]);
+    if (handles().size() != 4) {
+        return false;
+    }
     int sum = 0;
     int signs[4];
     for (int i = 0; i < 4; ++i) {

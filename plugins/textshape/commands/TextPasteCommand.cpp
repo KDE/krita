@@ -74,8 +74,12 @@ void TextPasteCommand::redo()
         // check for mime type
         const QMimeData *data = QApplication::clipboard()->mimeData(m_mode);
 
-        if (data->hasFormat("application/vnd.oasis.opendocument.text")) {
-
+        if (data->hasFormat(KoOdf::mimeType(KoOdf::Text))
+                        || data->hasFormat(KoOdf::mimeType(KoOdf::OpenOfficeClipboard)) ) {
+            KoOdf::DocumentType odfType = KoOdf::Text;
+            if (!data->hasFormat(KoOdf::mimeType(odfType))) {
+                odfType = KoOdf::OpenOfficeClipboard;
+            }
             bool weOwnRdfModel = true;
             Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
@@ -92,7 +96,7 @@ void TextPasteCommand::redo()
             //kDebug() << "pasting odf text";
             KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(),
                               m_tool->canvas(), rdfModel);
-            paste.paste(KoOdf::Text, data);
+            paste.paste(odfType, data);
             //kDebug() << "done with pasting odf";
 
 #ifdef SHOULD_BUILD_RDF

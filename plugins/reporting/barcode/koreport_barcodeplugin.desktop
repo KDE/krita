@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=KoReport_Barcode
 Name[ca]=KoReport_CodiBarres
+Name[ca@valencia]=KoReport_CodiBarres
 Name[da]=KoReport_Barcode
 Name[en_GB]=KoReport_Barcode
 Name[es]=Código de barras de KoReport
@@ -21,6 +22,7 @@ Name[x-test]=xxKoReport_Barcodexx
 Name[zh_TW]=KoReport_Barcode
 Comment=KoReport Barcode PLugin
 Comment[ca]=Connector de codi de barres KoReport
+Comment[ca@valencia]=Connector de codi de barres KoReport
 Comment[da]=Stregkode-plugin til KoReport
 Comment[en_GB]=KoReport Barcode PLugin
 Comment[es]=Complemento de código de barras de KoReport

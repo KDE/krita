@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,6 +29,7 @@ class QString;
 class KisPaintOpPreset;
 class KisPropertiesConfiguration;
 class KisCanvasResourceProvider;
+class KoResource;
 
 /**
  * Popup widget for presets with built-in functionality
@@ -44,6 +46,12 @@ public:
     ~KisPaintOpPresetsPopup();
 
     void setPaintOpSettingsWidget(QWidget * widget);
+    
+    /**
+     * changes the "save to preset" button text to "override preset"
+     * and highlites the preset name lineedit
+     */
+    void changeSavePresetButtonText(bool change);
 
     /**
      * @return the name entered in the preset name lineedit
@@ -59,23 +67,25 @@ public:
     QImage cutOutOverlay();
 
 protected:
-
     void contextMenuEvent(QContextMenuEvent *);
 
 public slots:
     void switchDetached();
     void hideScratchPad();
     void showScratchPad();
+	void resourceSelected(KoResource* resource);
 
 signals:
     void savePresetClicked();
     void defaultPresetClicked();
+    void presetNameLineEditChanged(const QString& presetName);
 
 private slots:
     void fillScratchPadGradient();
     void fillScratchPadSolid();
     void fillScratchPadLayer();
     void slotCheckPresetValidity();
+    
 
 private:
 

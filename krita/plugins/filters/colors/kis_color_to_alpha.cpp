@@ -35,6 +35,7 @@
 
 #include "ui_wdgcolortoalphabase.h"
 #include "kis_wdg_color_to_alpha.h"
+#include <kis_iterator_ng.h>
 
 KisFilterColorToAlpha::KisFilterColorToAlpha() : KisFilter(id(), categoryColors(), i18n("&Color to Alpha..."))
 {
@@ -58,19 +59,14 @@ KisFilterConfiguration* KisFilterColorToAlpha::factoryConfiguration(const KisPai
     return config;
 }
 
-void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
-                                    KisProcessingInformation dstInfo,
-                                    const QSize& size,
+void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
+                                    const QRect& rect,
                                     const KisFilterConfiguration* config,
                                     KoUpdater* progressUpdater
                                    ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    QPoint srcTopLeft = rect.topLeft();
+    Q_ASSERT(device != 0);
 
     if (config == 0) config = new KisFilterConfiguration("colortoalpha", 1);
 
@@ -79,37 +75,32 @@ void KisFilterColorToAlpha::process(KisConstProcessingInformation srcInfo,
     int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
     qreal thresholdF = threshold;
 
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
-
-    int totalCost = size.width() * size.height() / 100;
+    int totalCost = rect.width() * rect.height() / 100;
     if (totalCost == 0) totalCost = 1;
     int currentProgress = 0;
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
     qint32 pixelsize = cs->pixelSize();
 
     quint8* color = new quint8[pixelsize];
     cs->fromQColor(cTA, color);
 
-    while (! srcIt.isDone()) {
-        if (srcIt.isSelected()) {
-            quint8 d = cs->difference(color, srcIt.oldRawData());
-            qreal newOpacity; // = cs->opacityF(srcIt.rawData());
-            if (d >= threshold) {
-                newOpacity = 1.0;
-            } else {
-                newOpacity = d / thresholdF;
-            }
-            memcpy(dstIt.rawData(), srcIt.rawData(), pixelsize);
-            if(newOpacity < cs->opacityF(srcIt.rawData()))
-            {
-              cs->setOpacity(dstIt.rawData(), newOpacity, 1);
-            }
+    KisRectIteratorSP it = device->createRectIteratorNG(rect);
+
+    do {
+        quint8 d = cs->difference(color, it->oldRawData());
+        qreal newOpacity; // = cs->opacityF(srcIt.rawData());
+        if (d >= threshold) {
+            newOpacity = 1.0;
+        } else {
+            newOpacity = d / thresholdF;
+        }
+        memcpy(it->rawData(), it->rawData(), pixelsize);
+        if(newOpacity < cs->opacityF(it->rawData()))
+        {
+          cs->setOpacity(it->rawData(), newOpacity, 1);
         }
         if (progressUpdater) progressUpdater->setProgress((++currentProgress) / totalCost);
-        ++srcIt;
-        ++dstIt;
-    }
+    } while(it->nextPixel());
     delete[] color;
 }

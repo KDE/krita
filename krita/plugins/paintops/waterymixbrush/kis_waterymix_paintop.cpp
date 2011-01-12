@@ -65,7 +65,7 @@ KisWateryMixPaintOp::~KisWateryMixPaintOp()
 {
 }
 
-double KisWateryMixPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisWateryMixPaintOp::paintAt(const KisPaintInformation& info)
 {
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
@@ -91,7 +91,7 @@ double KisWateryMixPaintOp::paintAt(const KisPaintInformation& info)
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x, y;
-    double xFraction, yFraction;
+    qreal xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);

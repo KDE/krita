@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Experiment
 Name[ca]=Experiment
+Name[ca@valencia]=Experiment
 Name[da]=Eksperiment
 Name[de]=Experiment
 Name[en_GB]=Experiment
@@ -15,7 +16,9 @@ Name[nl]=Experiment
 Name[pt]=Experiência
 Name[pt_BR]=Experiência
 Name[sv]=Experiment
+Name[uk]=Експеримент
 Name[wa]=Asprouvaedje
+Name[x-test]=xxExperimentxx
 Name[zh_TW]=實驗
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

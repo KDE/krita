@@ -39,7 +39,7 @@ public:
         createProperties();
     };
     KoReportItemLabel(QDomNode & element);
-    ~KoReportItemLabel() {};
+    virtual ~KoReportItemLabel();
     
     virtual QString typeName() const;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);

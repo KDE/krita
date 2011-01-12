@@ -27,7 +27,8 @@
 
 KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(0.0), m_length(3 * 1000), m_periodic(true)
 {
-
+    setMinimumLabel(i18n("0 s"));
+    setLength(3);
 }
 
 qreal KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
@@ -58,6 +59,7 @@ void KisDynamicSensorTime::setPeriodic(bool periodic)
 void KisDynamicSensorTime::setLength(int length)
 {
     m_length = length * 1000;
+    setMaximumLabel(i18n("%1 s", length));
 }
 
 QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)

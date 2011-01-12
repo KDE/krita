@@ -26,7 +26,7 @@
 #include "dialogs/SimpleCharacterWidget.h"
 #include "dialogs/SimpleParagraphWidget.h"
 #include "dialogs/SimpleTableWidget.h"
-#include "dialogs/StylesWidget.h"
+#include "dialogs/SimpleStylesWidget.h"
 #include "dialogs/ParagraphSettingsDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/InsertCharacter.h"
@@ -441,11 +441,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("edit_record_changes", m_actionRecordChanges);
     connect(m_actionRecordChanges, SIGNAL(triggered(bool)), this, SLOT(toggleRecordChanges(bool)));
 
-    m_configureChangeTracking = new KAction(i18n("Configure Change Tracking"), this);
+    m_configureChangeTracking = new KAction(i18n("Configure Change Tracking..."), this);
     addAction("configure_change_tracking", m_configureChangeTracking);
     connect(m_configureChangeTracking, SIGNAL(triggered()), this, SLOT(configureChangeTracking()));
 
-    action = new KAction(i18n("Style Manager"), this);
+    action = new KAction(i18n("Style Manager..."), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
     action->setWhatsThis(i18n("Change font and paragraph attributes of styles.<p>Multiple styles can be changed using the dialog box."));
@@ -1509,6 +1509,7 @@ void TextTool::repaintCaret()
     if (textEditor == 0)
         return;
     QRectF repaintRect = caretRect(textEditor->position());
+    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
     if (repaintRect.isValid()) {
         repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
         canvas()->updateCanvas(repaintRect);
@@ -1586,7 +1587,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     QMap<QString, QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
-    StylesWidget *styw = new StylesWidget(0);
+    SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
@@ -1603,17 +1604,17 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
 
 
     // Connect to/with simple styles widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), styw, SLOT(setStyleManager(KoStyleManager *)));
-    connect(styw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(styw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(styw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(ssw, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     updateStyleManager();
     if (m_textShape)
         updateActions();
     widgets.insert(i18n("Character"), scw);
     widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), styw);
+    widgets.insert(i18n("Styles"), ssw);
     widgets.insert(i18n("Table"), stw);
     return widgets;
 }

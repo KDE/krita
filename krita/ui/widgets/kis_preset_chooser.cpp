@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -100,6 +101,10 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 {
+	static bool compareKoResources(const KoResource* a, const KoResource* b){
+		return a->name() < b->name();
+	}
+	
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
          : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false){}
@@ -108,7 +113,7 @@ public:
     virtual QList< KoResource* > resources() {
         if( ! resourceServer() )
             return QList<KoResource*>();
-
+		
         QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
 
         QList<KoResource*> resources;
@@ -117,7 +122,9 @@ public:
                 resources.append( resource );
             }
         }
-        return resources;      
+        
+        qSort(resources.begin(), resources.end(), KisPresetProxyAdapter::compareKoResources);
+        return resources;
     }
 
     bool filterAcceptsPreset(KisPaintOpPreset* preset) const

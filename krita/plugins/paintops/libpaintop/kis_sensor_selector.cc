@@ -29,6 +29,7 @@ KisSensorSelector::KisSensorSelector(QWidget* parent) : QWidget(parent), m_curre
     sensorSelectorUI->comboBoxSensor->setIDList(KisDynamicSensor::sensorsIds());
     m_layout = new QHBoxLayout(sensorSelectorUI->widgetConfiguration);
     connect(sensorSelectorUI->comboBoxSensor, SIGNAL(activated(const KoID &)), this, SLOT(setSensorId(const KoID&)));
+    setSensorId(sensorSelectorUI->comboBoxSensor->currentItem());
 }
 
 void KisSensorSelector::setCurrent(KisDynamicSensor* sensor)

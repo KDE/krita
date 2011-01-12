@@ -59,6 +59,13 @@ public:
 
     bool isChecked() const;
     void setChecked(bool checked);
+    const KisCurveLabel& minimumLabel() const;
+    const KisCurveLabel& maximumLabel() const;
+    
+protected:
+    void setMinimumLabel(const KisCurveLabel& _label);
+    void setMaximumLabel(const KisCurveLabel& _label);
+
 protected:
 
     double computeValue(const KisPaintInformation& info) const {
@@ -88,6 +95,8 @@ protected:
     QString m_name;
     bool m_checkable;
     bool m_checked;
+private:
+    KisCurveLabel m_minimumLabel, m_maximumLabel;
 };
 
 #endif

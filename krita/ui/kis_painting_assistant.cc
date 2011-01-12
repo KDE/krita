@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -78,6 +79,17 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
     }
 }
 
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
+{
+    QList<KisPaintingAssistantHandleSP> newHandles;
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        KisPaintingAssistantHandleSP newHandle(new KisPaintingAssistantHandle(*this));
+        newHandles.append(newHandle);
+        assistant->replaceHandle(this, newHandle);
+    }
+    return newHandles;
+}
+
 
 struct KisPaintingAssistant::Private {
     QString id;
@@ -125,6 +137,13 @@ void KisPaintingAssistant::replaceHandle(KisPaintingAssistantHandleSP _handle, K
     Q_ASSERT(!d->handles.contains(_handle));
     _handle->unregisterAssistant(this);
     _with->registerAssistant(this);
+}
+
+void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
+{
+    Q_ASSERT(!d->handles.contains(handle));
+    d->handles.append(handle);
+    handle->registerAssistant(this);
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

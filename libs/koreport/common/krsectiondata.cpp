@@ -89,6 +89,7 @@ KRSectionData::KRSectionData(const QDomElement & elemSource, KoReportReportData*
 KRSectionData::~KRSectionData()
 {
     delete m_set;
+    qDeleteAll(m_objects);
 }
 
 bool KRSectionData::zLessThan(KoReportItemBase* s1, KoReportItemBase* s2)

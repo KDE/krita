@@ -94,9 +94,11 @@ void KisPopupButton::showPopupWidget()
         QSize popSize = m_d->popupWidget->size();
         QRect popupRect(this->mapToGlobal(QPoint(0, this->size().height())), popSize);
 
-        // Make sure the popup is not drawn outside the screen area
+        // Get the available geometry of the screen which contains this KisPopupButton
         QDesktopWidget* desktopWidget = QApplication::desktop();
-        QRect screenRect = desktopWidget->availableGeometry(desktopWidget->screenNumber());
+        QRect screenRect = desktopWidget->availableGeometry(this);
+
+        // Make sure the popup is not drawn outside the screen area
         if (popupRect.right() > screenRect.right())
             popupRect.translate(screenRect.right() - popupRect.right(), 0);
         if (popupRect.left() < screenRect.left())

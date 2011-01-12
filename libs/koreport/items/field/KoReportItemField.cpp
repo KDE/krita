@@ -27,6 +27,7 @@
 
 KoReportItemField::~KoReportItemField()
 {
+    delete m_set;
 }
 
 KoReportItemField::KoReportItemField(QDomNode & element)
@@ -219,13 +220,19 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     }
     
     tb->setText(str);
-    if (page)
+    if (page) {
         page->addPrimitive(tb);
-
+    }
+        
     if (section) {
         OROPrimitive *clone = tb->clone();
         clone->setPosition(m_pos.toScene());
         section->addPrimitive(clone);
+    }
+    
+    //If there is no page to add the item to, delete it now because it wont be deleted later
+    if (!page) {
+        delete tb;
     }
     return 0; //Item doesnt stretch the section height
 }

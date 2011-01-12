@@ -62,49 +62,31 @@ KisSmallTilesFilter::KisSmallTilesFilter() : KisFilter(id(), KisFilter::category
     setSupportsThreading(false);
 }
 
-void KisSmallTilesFilter::process(KisConstProcessingInformation srcInfo,
-                                  KisProcessingInformation dstInfo,
-                                  const QSize& size,
+void KisSmallTilesFilter::process(KisPaintDeviceSP device,
+                                  const QRect& applyRect,
                                   const KisFilterConfiguration* config,
                                   KoUpdater* progressUpdater
                                  ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(!device.isNull());
 
     //read the filter configuration values from the KisFilterConfiguration object
     quint32 numberOfTiles = config->getInt("numberOfTiles", 2);
 
-    QRect srcRect = src->exactBounds();
+    QRect srcRect = device->exactBounds();
 
     int w = static_cast<int>(srcRect.width() / numberOfTiles);
     int h = static_cast<int>(srcRect.height() / numberOfTiles);
 
-    KisPaintDeviceSP tile = KisPaintDeviceSP(0);
-    if (srcInfo.selection()) {
-        KisPaintDeviceSP tmp = new KisPaintDevice(src->colorSpace());
-        KisPainter gc(tmp);
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(0, 0, src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        tile = tmp->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
-    } else {
-        tile = src->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
-    }
+    KisPaintDeviceSP tile = device->createThumbnailDevice(srcRect.width() / numberOfTiles, srcRect.height() / numberOfTiles);
     if (tile.isNull()) return;
 
-    KisPainter gc(dst);
+    KisPainter gc(device);
     gc.setCompositeOp(COMPOSITE_COPY);
 
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);
-    }
-
-    if (srcInfo.selection()) {
-        gc.setSelection(srcInfo.selection());
     }
 
     for (uint y = 0; y < numberOfTiles; ++y) {

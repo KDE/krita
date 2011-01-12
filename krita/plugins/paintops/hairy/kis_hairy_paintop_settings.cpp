@@ -27,6 +27,12 @@
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
 
+const QString HAIRY_VERSION = "Hairy/Version";
+
+KisHairyPaintOpSettings::KisHairyPaintOpSettings()
+{
+    setProperty(HAIRY_VERSION, "2");
+}
 
 QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos, KisPaintOpSettings::OutlineMode mode, qreal scale, qreal rotation) const
 {
@@ -43,3 +49,13 @@ QPainterPath KisHairyPaintOpSettings::brushOutline(const QPointF& pos, KisPaintO
     return path;
 }
 
+void KisHairyPaintOpSettings::fromXML(const QDomElement& elt)
+{
+    setProperty(HAIRY_VERSION, "1"); // This make sure that fromXML will override HAIRY_VERSION with 2, or will default to 1
+    KisBrushBasedPaintOpSettings::fromXML(elt);
+    QVariant v;
+    if(!getProperty(HAIRY_VERSION, v) || v == "1")
+    {
+        setProperty(HAIRY_BRISTLE_SCALE, 2.0 * getDouble(HAIRY_BRISTLE_SCALE));
+    }
+}

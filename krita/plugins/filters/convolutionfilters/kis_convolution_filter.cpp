@@ -41,30 +41,24 @@ KisConvolutionFilter::KisConvolutionFilter(const KoID& id, const KoID & category
 }
 
 
-void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
-                                   KisProcessingInformation dstInfo,
-                                   const QSize& size,
-                                   const KisFilterConfiguration* config,
-                                   KoUpdater* progressUpdater
-                                  ) const
+void KisConvolutionFilter::process(KisPaintDeviceSP device,
+                                  const QRect& applyRect,
+                                  const KisFilterConfiguration* config,
+                                  KoUpdater* progressUpdater) const
 {
     Q_UNUSED(config);
 
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device != 0);
 
-    KisConvolutionPainter painter(dst, dstInfo.selection());
+    KisConvolutionPainter painter(device);
 
     QBitArray channelFlags;
     if (config) {
         channelFlags = config->channelFlags();
     }
     if (channelFlags.isEmpty() || !config) {
-        channelFlags = QBitArray(src->colorSpace()->channelCount(), true);
+        channelFlags = QBitArray(device->colorSpace()->channelCount(), true);
     }
  
     // disable alpha channel
@@ -72,7 +66,7 @@ void KisConvolutionFilter::process(KisConstProcessingInformation srcInfo,
 
     painter.setChannelFlags(channelFlags);
     painter.setProgress(progressUpdater);
-    painter.applyMatrix(m_matrix, src, srcTopLeft, dstTopLeft, size, BORDER_REPEAT);
+    painter.applyMatrix(m_matrix, device, srcTopLeft, srcTopLeft, applyRect.size(), BORDER_REPEAT);
 
 }
 

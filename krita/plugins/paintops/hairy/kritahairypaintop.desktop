@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Hairy brushes
 Name[ca]=Pinzells espessos
+Name[ca@valencia]=Pinzells espessos
 Name[da]=Langhårede pensler
 Name[de]=Haarpinsel
 Name[en_GB]=Hairy brushes
@@ -15,7 +16,9 @@ Name[nl]=Harige penselen
 Name[pt]=Pincéis peludos
 Name[pt_BR]=Pincéis de pêlo
 Name[sv]=Hårpenslar
+Name[uk]=Волохатий пензель
 Name[wa]=Pincea tchiveas
+Name[x-test]=xxHairy brushesxx
 Name[zh_TW]=毛筆刷
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

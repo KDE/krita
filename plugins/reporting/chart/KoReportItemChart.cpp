@@ -142,7 +142,7 @@ void KoReportItemChart::createProperties()
         strings << names[pos.toInt()-1];
     }
     subData = new KoProperty::Property::ListData(keys, strings);
-    m_legendPosition = new KoProperty::Property("legend-position", subData, (int)KDChartEnums::PositionEast, i18n("Legend Postion"));
+    m_legendPosition = new KoProperty::Property("legend-position", subData, (int)KDChartEnums::PositionEast, i18n("Legend Position"));
 
     keys.clear();
     strings.clear();

@@ -208,12 +208,12 @@ public:
     QByteArray lastExportedFormat;
     int lastExportSpecialOutputFlag;
 
-    QMap<QString, QDockWidget*> dockWidgetsMap;
-    KActionMenu* dockWidgetMenu;
-    QMap<QDockWidget*, bool> dockWidgetVisibilityMap;
+    QMap<QString, QDockWidget *> dockWidgetsMap;
+    KActionMenu *dockWidgetMenu;
+    QMap<QDockWidget *, bool> dockWidgetVisibilityMap;
     KoDockerManager *dockerManager;
-    QList<QDockWidget*> dockWidgets;
-    QList<QDockWidget*> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
+    QList<QDockWidget *> dockWidgets;
+    QList<QDockWidget *> hiddenDockwidgets; // List of dockers hiddent by the call to hideDocker
 };
 
 KoMainWindow::KoMainWindow(const KComponentData &componentData)
@@ -384,7 +384,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     restoreWindowSize( config );
 
     d->dockerManager = new KoDockerManager(this);
-    connect(this, SIGNAL(restoringDone()), d->dockerManager, SLOT(removeUnusedOptionWidgets()));
 }
 
 KoMainWindow::~KoMainWindow()
@@ -1046,6 +1045,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
     if (queryClose()) {
+        if (d->docToOpen) {
+            // The open pane is visible
+            d->docToOpen->deleteOpenPane();
+        }
         // Reshow the docker that were temporarely hidden before saving settings
         foreach(QDockWidget* dw, d->hiddenDockwidgets) {
             dw->show();
@@ -1514,7 +1517,7 @@ void KoMainWindow::slotSetOrientation()
 
 void KoMainWindow::slotProgress(int value)
 {
-    //kDebug(30003) <<"KoMainWindow::slotProgress" << value;
+    kDebug(30003) << "KoMainWindow::slotProgress" << value;
     if (value <= -1) {
         if (d->progress) {
             statusBar()->removeWidget(d->progress);
@@ -1565,6 +1568,10 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         //kDebug(30003) <<"no need to change the GUI";
         return;
     }
+
+    // important so dockermanager can move toolbars back
+    emit beforeHandlingToolBars();
+
 
     KXMLGUIFactory *factory = guiFactory();
 
@@ -1638,6 +1645,8 @@ void KoMainWindow::slotActivePartChanged(KParts::Part *newPart)
         d->activeView = 0;
         d->activePart = 0;
     }
+    // important so dockermanager can move toolbars where wanted
+    emit afterHandlingToolBars();
 // ###  setUpdatesEnabled( true );
 }
 

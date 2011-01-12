@@ -140,7 +140,7 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    if (m_d->image)
+    if (m_d->image.isValid())
         return m_d->image->colorSpace();
     return 0;
 }
@@ -252,7 +252,7 @@ KisSelectionSP KisLayer::selection() const
 
     if (layer->selectionMask())
         return layer->selectionMask()->selection();
-    else if (m_d->image)
+    else if (m_d->image.isValid())
         return m_d->image->globalSelection();
     else
         return KisSelectionSP(new KisSelection());

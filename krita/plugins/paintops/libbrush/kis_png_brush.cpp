@@ -73,4 +73,5 @@ void KisPngBrush::toXML(QDomDocument& d, QDomElement& e) const
     e.setAttribute("type", "png_brush");
     e.setAttribute("filename", shortFilename());
     e.setAttribute("spacing", spacing());
+    KisBrush::toXML(d, e);
 }

@@ -9,7 +9,9 @@ if (SHOULD_BUILD_SCRIPTING)
     add_subdirectory( kokross )
 endif (SHOULD_BUILD_SCRIPTING)
 add_subdirectory( kopageapp )
-add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
+if(NOT TINY)
+    add_subdirectory( koproperty ) # TODO move to independent place like kdesupport
+endif(NOT TINY)
 
 # only build koreport if possible
 if (SHOULD_BUILD_KOREPORT)

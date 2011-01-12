@@ -28,6 +28,8 @@ KisCurveOption::KisCurveOption(const QString & label, const QString& name, const
         , m_checked(checked)
 {
     setSensor(KisDynamicSensor::id2Sensor(PressureId.id()));
+    setMinimumLabel(i18n("0.0"));
+    setMaximumLabel(i18n("1.0"));
 }
 
 KisCurveOption::~KisCurveOption()
@@ -109,4 +111,25 @@ bool KisCurveOption::isChecked() const
 void KisCurveOption::setChecked(bool checked)
 {
     m_checked = checked;
+}
+
+
+const KisCurveLabel& KisCurveOption::minimumLabel() const
+{
+    return m_minimumLabel;
+}
+
+const KisCurveLabel& KisCurveOption::maximumLabel() const
+{
+    return m_maximumLabel;
+}
+
+void KisCurveOption::setMinimumLabel(const KisCurveLabel& _label)
+{
+    m_minimumLabel = _label;
+}
+
+void KisCurveOption::setMaximumLabel(const KisCurveLabel& _label)
+{
+    m_maximumLabel = _label;
 }

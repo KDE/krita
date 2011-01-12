@@ -25,6 +25,12 @@
 #include <recorder/kis_recorded_action.h>
 #include <recorder/kis_macro.h>
 #include <recorder/kis_recorded_action_editor_factory_registry.h>
+#include <recorder/kis_recorded_action_creator_factory_registry.h>
+#include <QMenu>
+#include <QSignalMapper>
+#include <recorder/kis_recorded_action_creator_factory.h>
+#include <recorder/kis_recorded_action_creator.h>
+#include <KMessageBox>
 
 KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_currentEditor(0), m_form(new Ui::ActionsEditor), m_macro(0), m_model(0), m_widgetLayout(0)
 
@@ -33,6 +39,16 @@ KisActionsEditor::KisActionsEditor(QWidget* parent) : QWidget(parent), m_current
 
     // Setup buttons
     m_form->bnAdd->setIcon(SmallIcon("list-add"));
+    QSignalMapper* mapper = new QSignalMapper(this);
+    connect(mapper, SIGNAL(mapped(QString)), SLOT(slotCreateAction(QString)));
+    QMenu* addMenu = new QMenu;
+    foreach(const KoID& id, KisRecordedActionCreatorFactoryRegistry::instance()->creators())
+    {
+        QAction* action = addMenu->addAction(id.name(), mapper, SLOT(map()));
+        mapper->setMapping(action, id.id());
+    }
+    m_form->bnAdd->setMenu(addMenu);
+    
 
     m_form->bnDelete->setIcon(SmallIcon("list-remove"));
     connect(m_form->bnDelete, SIGNAL(released()), SLOT(slotBtnDelete()));
@@ -67,6 +83,38 @@ void KisActionsEditor::setMacro(KisMacro* _macro)
     m_model = new KisMacroModel(m_macro);
     m_form->actionsList->setModel(m_model);
     delete oldModel;
+}
+
+void KisActionsEditor::slotCreateAction(const QString& _id)
+{
+    KisRecordedActionCreatorFactory* f = KisRecordedActionCreatorFactoryRegistry::instance()->get(_id);
+    Q_ASSERT(f);
+    if(!f) return;
+    KisRecordedAction* action = 0;
+    if(f->requireCreator())
+    {
+        KDialog d;
+        d.setButtons(KDialog::Ok | KDialog::Cancel);
+        KisRecordedActionCreator* creator = f->createCreator(&d);
+        d.setMainWidget(creator);
+        if(d.exec() == KDialog::Accepted)
+        {
+            action = creator->createAction();
+            if(!action)
+            {
+                KMessageBox::error(this, i18n("Failed to create an action."));
+                return;
+            }
+        } else {
+            return;
+        }
+    } else {
+        action = f->createAction();
+    }
+    Q_ASSERT(action);
+    
+    m_model->addAction(m_form->actionsList->currentIndex(), *action);
+    delete action;
 }
 
 void KisActionsEditor::slotActionActivated(const QModelIndex& item)

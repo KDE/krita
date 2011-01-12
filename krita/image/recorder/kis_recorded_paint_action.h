@@ -19,7 +19,7 @@
 #ifndef _KIS_RECORDED_PAINT_ACTION_H_
 #define _KIS_RECORDED_PAINT_ACTION_H_
 
-#include "recorder/kis_recorded_action.h"
+#include "recorder/kis_recorded_node_action.h"
 #include "kis_types.h"
 #include "kis_painter.h"
 
@@ -33,7 +33,7 @@ class KoCompositeOp;
 /**
  * Base class for paint action.
  */
-class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedAction
+class KRITAIMAGE_EXPORT KisRecordedPaintAction : public KisRecordedNodeAction
 {
 public:
 
@@ -48,7 +48,8 @@ public:
 
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 
-    virtual void play(KisNodeSP node, const KisPlayInfo&) const;
+    using KisRecordedNodeAction::play;
+    virtual void play(KisNodeSP node, const KisPlayInfo& info, KoUpdater* _updater = 0) const;
 
 protected:
     /**

@@ -27,6 +27,7 @@
 #include <klocale.h>
 
 #include "kis_serializable_configuration.h"
+#include "kis_curve_label.h"
 
 class QWidget;
 class KisPaintInformation;
@@ -42,6 +43,7 @@ const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from 
 const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
 const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
 const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
+const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depending on the distance on the perspective grid
 
 /**
  * Sensor are used to extract from KisPaintInformation a single
@@ -98,8 +100,15 @@ public:
 
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
+    const KisCurveLabel& minimumLabel() const;
+    const KisCurveLabel& maximumLabel() const;
+    
+protected:
+    void setMinimumLabel(const KisCurveLabel& _label);
+    void setMaximumLabel(const KisCurveLabel& _label);
 private:
     const KoID& m_id;
+    KisCurveLabel m_minimumLabel, m_maximumLabel;
 };
 
 #endif

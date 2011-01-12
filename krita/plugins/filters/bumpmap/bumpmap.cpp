@@ -67,6 +67,7 @@
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
 #include <kis_node_model.h>
+#include <kis_iterator_ng.h>
 
 #define MOD(x, y)                                               \
     ((x) < 0 ? ((y) - 1 - ((y) - 1 - (x)) % (y)) : (x) % (y))
@@ -100,13 +101,13 @@ void convertRow(const KisPaintDevice * orig, quint8 * row, qint32 x, qint32 y, q
 {
     const KoColorSpace * csOrig = orig->colorSpace();
 
-    KisHLineConstIteratorPixel origIt = orig->createHLineConstIterator(x, y, w);
+    KisHLineConstIteratorSP origIt = orig->createHLineConstIteratorNG(x, y, w);
     for (int i = 0; i < w; ++i) {
-        row[0] = csOrig->intensity8(origIt.rawData());
-        row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->opacityU8(origIt.rawData())) / 255];
+        row[0] = csOrig->intensity8(origIt->oldRawData());
+        row[0] = lut[waterlevel + ((row[0] -  waterlevel) * csOrig->opacityU8(origIt->oldRawData())) / 255];
 
         ++row;
-        ++origIt;
+        origIt->nextRow();
     }
 }
 
@@ -132,24 +133,17 @@ KisFilterConfiguration* KisFilterBumpmap::factoryConfiguration(const KisPaintDev
 }
 
 
-void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
-                               KisProcessingInformation dstInfo,
-                               const QSize& size,
-                               const KisFilterConfiguration* config,
-                               KoUpdater* progressUpdater
+void KisFilterBumpmap::process(KisPaintDeviceSP device,
+                              const QRect& applyRect,
+                              const KisFilterConfiguration* config,
+                              KoUpdater* progressUpdater
                               ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = applyRect.topLeft();
 
-    if (!src) return;
-    if (!dst) return;
+    if (!device) return;
     if (!config) return;
-    if (!size.isValid()) return;
-    if (size.isNull()) return;
-    if (size.isEmpty()) return;
+    if (applyRect.isNull()) return;
 
     qint32 lx, ly;       /* X and Y components of light vector */
     qint32 nz2, nzlz;    /* nz^2, nz*lz */
@@ -224,20 +218,20 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
         }
         bmRect = bumpmap->exactBounds();
     } else {
-        bmRect = QRect(srcTopLeft, size);
-        bumpmap = src;
+        bmRect = QRect(srcTopLeft, applyRect.size());
+        bumpmap = device;
     }
 
     return;
 
-    qint32 sel_h = size.height();
-    qint32 sel_w = size.width();
+    qint32 sel_h = applyRect.height();
+    qint32 sel_w = applyRect.width();
 
     qint32 bm_h = qMin(1, bmRect.height());
     qint32 bm_w = qMin(1, bmRect.width());
     qint32 bm_x = bmRect.x();
 
-    int cost = size.height();
+    int cost = applyRect.height();
     int count = 0;
 
     // ------------------- Map the bumps
@@ -245,11 +239,11 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
 
     // ------------------- Initialize offsets
     if (config->getBool("tiled", true)) {
-        yofs2 = MOD(config->getInt("yofs", 0) + dstTopLeft.y(), bm_h);
+        yofs2 = MOD(config->getInt("yofs", 0) + applyRect.y(), bm_h);
         yofs1 = MOD(yofs2 - 1, bm_h);
         yofs3 = MOD(yofs2 + 1,  bm_h);
     } else {
-        yofs2 = CLAMP(config->getInt("yofs", 0) + dstTopLeft.y(), 0, bm_h - 1);
+        yofs2 = CLAMP(config->getInt("yofs", 0) + applyRect.y(), 0, bm_h - 1);
         yofs1 = yofs2;
         yofs3 = CLAMP(yofs2 + 1, 0, bm_h - 1);
 
@@ -257,7 +251,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
 
     // ---------------------- Load initial three bumpmap scanlines
 
-    const KoColorSpace * srcCs = src->colorSpace();
+    const KoColorSpace * srcCs = device->colorSpace();
     QList<KoChannelInfo *> channels = srcCs->channels();
 
     // One byte per pixel, converted from the bumpmap layer.
@@ -275,8 +269,7 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
 
     qint32 xofs1, xofs2, xofs3, shade = 0, ndotl, nx, ny;
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), sel_w, srcInfo.selection());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), sel_w, dstInfo.selection());
+    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), srcTopLeft.y(), sel_w);
     KoColorTransformation* darkenTransfo = srcCs->createDarkenAdjustment(shade, config->getBool("compensate", true), compensation);
 
     for (int y = 0; y < sel_h; y++) {
@@ -286,61 +279,56 @@ void KisFilterBumpmap::process(KisConstProcessingInformation srcInfo,
         // Bumpmap
 
 
-        qint32 tmp = config->getInt("xofs", 0) + dstTopLeft.x();
+        qint32 tmp = config->getInt("xofs", 0) + srcTopLeft.x();
         xofs2 = MOD(tmp, bm_w);
 
         qint32 x = 0;
         //while (x < sel_w || cancelRequested()) {
-        while (!srcIt.isDone() && !(progressUpdater && progressUpdater->interrupted())) {
-            if (srcIt.isSelected()) {
-                // Calculate surface normal from bumpmap
-                if (config->getBool("tiled", true) || (row_in_bumpmap && x >= - tmp && x < - tmp + bm_w)) {
+        do {
+            // Calculate surface normal from bumpmap
+            if (config->getBool("tiled", true) || (row_in_bumpmap && x >= - tmp && x < - tmp + bm_w)) {
 
-                    if (config->getBool("tiled", true)) {
-                        xofs1 = MOD(xofs2 - 1, bm_w);
-                        xofs3 = MOD(xofs2 + 1, bm_w);
-                    } else {
-                        xofs1 = CLAMP(xofs2 - 1, 0, bm_w - 1);
-                        xofs3 = CLAMP(xofs2 + 1, 0, bm_w - 1);
-                    }
-
-                    nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
-                          bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
-                    ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
-                          bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
-
-
+                if (config->getBool("tiled", true)) {
+                    xofs1 = MOD(xofs2 - 1, bm_w);
+                    xofs3 = MOD(xofs2 + 1, bm_w);
                 } else {
-                    nx = 0;
-                    ny = 0;
+                    xofs1 = CLAMP(xofs2 - 1, 0, bm_w - 1);
+                    xofs3 = CLAMP(xofs2 + 1, 0, bm_w - 1);
                 }
 
-                // Shade
+                nx = (bm_row1[xofs1] + bm_row2[xofs1] + bm_row3[xofs1] -
+                      bm_row1[xofs3] - bm_row2[xofs3] - bm_row3[xofs3]);
+                ny = (bm_row3[xofs1] + bm_row3[xofs2] + bm_row3[xofs3] -
+                      bm_row1[xofs1] - bm_row1[xofs2] - bm_row1[xofs3]);
 
-                if ((nx == 0) && (ny == 0)) {
-                    shade = background;
-                } else {
-                    ndotl = (nx * lx) + (ny * ly) + nzlz;
 
-                    if (ndotl < 0) {
-                        shade = (qint32)(compensation * config->getInt("ambient", 0));
-                    } else {
-                        shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
-                        shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->getInt("ambient", 0) / 255));
-                    }
-                }
-
-                // Paint
-                darkenTransfo->transform(srcIt.rawData(), dstIt.rawData(), 1);
+            } else {
+                nx = 0;
+                ny = 0;
             }
+
+            // Shade
+
+            if ((nx == 0) && (ny == 0)) {
+                shade = background;
+            } else {
+                ndotl = (nx * lx) + (ny * ly) + nzlz;
+
+                if (ndotl < 0) {
+                    shade = (qint32)(compensation * config->getInt("ambient", 0));
+                } else {
+                    shade = (qint32)(ndotl / sqrt(nx * nx + ny * ny + nz2));
+                    shade = (qint32)(shade + qMax(0, (int)((255 * compensation - shade)) * config->getInt("ambient", 0) / 255));
+                }
+            }
+
+            // Paint
+            darkenTransfo->transform(dstIt->oldRawData(), dstIt->rawData(), 1);
             if (++xofs2 == bm_w)
                 xofs2 = 0;
-            ++srcIt;
-            ++dstIt;
             ++x;
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
+        } while (dstIt->nextPixel() && !(progressUpdater && progressUpdater->interrupted()));
+        dstIt->nextRow();
 
         // Next line
         if (config->getBool("tiled", true) || row_in_bumpmap) {

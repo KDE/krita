@@ -38,6 +38,7 @@
 #include "kis_brush_registry.h"
 #include "kis_brush_server.h"
 #include "widgets/kis_slider_spin_box.h"
+#include "widgets/kis_multipliers_double_slider_spinbox.h"
 
 #include "kis_global.h"
 #include "kis_gbr_brush.h"
@@ -92,9 +93,12 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     setObjectName(name);
 
     m_lbScale = new QLabel(i18n("Scale: "), this);
-    m_slScale = new KisDoubleSliderSpinBox(this);
+    m_slScale = new KisMultipliersDoubleSliderSpinBox(this);
     m_slScale->setRange(0.0, 2.0, 2);
     m_slScale->setValue(1.0);
+    m_slScale->addMultiplier(0.1);
+    m_slScale->addMultiplier(2);
+    m_slScale->addMultiplier(10);
     QObject::connect(m_slScale, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetItemScale(qreal)));
 
     m_lbRotation = new QLabel(i18n("Rotation: "), this);

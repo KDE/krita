@@ -61,6 +61,7 @@
 #include <KoUpdater.h>
 #include <KoColorSpaceConstants.h>
 #include <KoCompositeOp.h>
+#include <kis_iterator_ng.h>
 
 K_PLUGIN_FACTORY(ColorsFiltersFactory, registerPlugin<ColorsFilters>();)
 K_EXPORT_PLUGIN(ColorsFiltersFactory("krita"))
@@ -100,24 +101,17 @@ bool KisAutoContrast::workWith(const KoColorSpace* cs) const
     return (cs->profile() != 0);
 }
 
-void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
-                              KisProcessingInformation dstInfo,
-                              const QSize& size,
-                              const KisFilterConfiguration* config,
-                              KoUpdater* progressUpdater
-                             ) const
+void KisAutoContrast::process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
+                         const KisFilterConfiguration* config,
+                         KoUpdater* progressUpdater) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    QRect bounds(srcTopLeft, size);
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device != 0);
     Q_UNUSED(config);
     // initialize
     KoHistogramProducerSP producer = KoHistogramProducerSP(new KoGenericLabHistogramProducer());
-    KisHistogram histogram(src, bounds, producer, LINEAR);
+    KisHistogram histogram(device, applyRect, producer, LINEAR);
     int minvalue = int(255 * histogram.calculations().getMin() + 0.5);
     int maxvalue = int(255 * histogram.calculations().getMax() + 0.5);
 
@@ -173,67 +167,27 @@ void KisAutoContrast::process(KisConstProcessingInformation srcInfo,
     }
 
     KisSelectionSP dstSel;
-    if (dst != src) {
-        KisPainter gc(dst, dstInfo.selection());
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(dstTopLeft.x(), dstTopLeft.y(), src, srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height());
-        gc.end();
-    }
 
     // apply
-    KoColorTransformation *adj = src->colorSpace()->createBrightnessContrastAdjustment(transfer);
+    KoColorTransformation *adj = device->colorSpace()->createBrightnessContrastAdjustment(transfer);
 
-    KisRectIteratorPixel iter = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
+    KisRectIteratorSP iter = device->createRectIteratorNG(applyRect);
 
-    qint32 totalCost = (size.width() * size.height()) / 100;
+    qint32 totalCost = (applyRect.width() * applyRect.height()) / 100;
     if (totalCost == 0) totalCost = 1;
     qint32 pixelsProcessed = 0;
 
-    KoMixColorsOp * mixOp = src->colorSpace()->mixColorsOp();
+    KoMixColorsOp * mixOp = device->colorSpace()->mixColorsOp();
 
-    while (! iter.isDone()  && !(progressUpdater && progressUpdater->interrupted())) {
-        quint32 npix = 0, maxpix = iter.nConseqPixels();
-        quint8 selectedness = iter.selectedness();
-        // The idea here is to handle stretches of completely selected and completely unselected pixels.
-        // Partially selected pixels are handled one pixel at a time.
-        switch (selectedness) {
-        case MIN_SELECTED:
-            while (iter.selectedness() == MIN_SELECTED && maxpix) {
-                --maxpix;
-                ++iter;
-                ++npix;
-            }
-            pixelsProcessed += npix;
-            break;
-
-        case MAX_SELECTED: {
-            quint8 *firstPixel = iter.rawData();
-            while (iter.selectedness() == MAX_SELECTED && maxpix) {
-                --maxpix;
-                if (maxpix != 0) // just to be sure that the tile remain in memory
-                    ++iter;
-                ++npix;
-            }
-            // adjust
-            adj->transform(firstPixel, firstPixel, npix);
-            pixelsProcessed += npix;
-            ++iter;
-            break;
-        }
-
-        default:
-            // adjust, but since it's partially selected we also only partially adjust
-            adj->transform(iter.oldRawData(), iter.rawData(), 1);
-            const quint8 *pixels[2] = {iter.oldRawData(), iter.rawData()};
-            qint16 weights[2] = { qint16(MAX_SELECTED - selectedness), selectedness};
-            mixOp->mixColors(pixels, weights, 2, iter.rawData());
-            ++iter;
-            pixelsProcessed++;
-            break;
-        }
+    do {
+        quint32 npix = iter->nConseqPixels();
+        quint8 *firstPixel = iter->rawData();
+        // adjust
+        adj->transform(iter->oldRawData(), iter->rawData(), npix);
+        pixelsProcessed += npix;
         if (progressUpdater) progressUpdater->setProgress(pixelsProcessed / totalCost);
-    }
-    delete transfer;
+    } while(iter->nextPixel()  && !(progressUpdater && progressUpdater->interrupted()));
+    delete[] transfer;
     delete adj;
 }
 

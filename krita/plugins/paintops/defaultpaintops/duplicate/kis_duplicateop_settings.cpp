@@ -59,6 +59,11 @@ QPointF KisDuplicateOpSettings::offset() const
     return m_offset;
 }
 
+QPointF KisDuplicateOpSettings::position() const
+{
+    return m_position;
+}
+
 bool KisDuplicateOpSettings::mousePressEvent(const KisPaintInformation &info, Qt::KeyboardModifiers modifiers)
 {
     bool ignoreEvent = true;
@@ -171,7 +176,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const QPointF& pos, KisPaintOp
     
     QPainterPath copy(path);
     QRectF rect2 = copy.boundingRect();
-    if (m_isOffsetNotUptodate) {
+    if (m_isOffsetNotUptodate || !getBool(DUPLICATE_MOVE_SOURCE_POINT)) {
         copy.translate(m_position - pos);
     } else {
         copy.translate(-m_offset);

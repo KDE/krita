@@ -57,7 +57,7 @@ public:
     ListItemsHelper(QTextList *textList, const QFont &font);
     ~ListItemsHelper() {}
     /// is meant to take a QTextList and set the indent plus the string to render on each listitem
-    void recalculate();
+    void recalculateBlock(QTextBlock &block);
     static bool needsRecalc(QTextList *textList);
 
 private:

@@ -37,6 +37,7 @@ SET ( textshape_SRCS
     dialogs/StylesWidget.cpp
     dialogs/SimpleCharacterWidget.cpp
     dialogs/SimpleParagraphWidget.cpp
+    dialogs/SimpleStylesWidget.cpp
     dialogs/SimpleTableWidget.cpp
     dialogs/ParagraphLayout.cpp
     dialogs/ParagraphIndentSpacing.cpp

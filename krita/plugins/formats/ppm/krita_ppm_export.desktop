@@ -2,6 +2,7 @@
 Icon=
 Name=Krita PPM Export Filter
 Name[ca]=Filtre d'exportació PPM per al Krita
+Name[ca@valencia]=Filtre d'exportació PPM per al Krita
 Name[da]=PPM-eksportfilter til Krita
 Name[de]=Krita PPM-Exportfilter
 Name[en_GB]=Krita PPM Export Filter
@@ -20,7 +21,9 @@ Name[pt]=Filtro de Exportação de PPM para o Krita
 Name[pt_BR]=Filtro de Exportação para PPM do Krita
 Name[ru]=Фильтр экспорта рисунков Krita в PPM
 Name[sv]=Krita PPM-exportfilter
+Name[uk]=Фільтр експорту PPM для Krita
 Name[wa]=Passete d' ebagaedje PPM di Krita
+Name[x-test]=xxKrita PPM Export Filterxx
 Name[zh_CN]=Krita PPM 导出过滤器
 Name[zh_TW]=Krita PPM 匯出過濾程式
 X-KDE-ServiceTypes=KOfficeFilter

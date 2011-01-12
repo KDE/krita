@@ -2,6 +2,7 @@
 Name=Dyna
 Name[bg]=Динамична
 Name[ca]=Dinàmic
+Name[ca@valencia]=Dinàmic
 Name[da]=Dyna
 Name[de]=Dyna
 Name[en_GB]=Dyna
@@ -19,7 +20,9 @@ Name[pt]=Dyna
 Name[pt_BR]=Dyna
 Name[sv]=Dyna
 Name[tr]=Dyna
+Name[uk]=Дайна
 Name[wa]=Dinamike
+Name[x-test]=xxDynaxx
 Name[zh_TW]=動態
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service

@@ -133,7 +133,12 @@ void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
 
 KisNodeSP KisNode::parent() const
 {
-    return m_d->parent;
+    if (m_d->parent.isValid()) {
+        return m_d->parent;
+    }
+    else {
+        return 0;
+    }
 }
 
 KisBaseNodeSP KisNode::parentCallback() const

@@ -77,6 +77,8 @@ public:
     quint8* rawData();
     const quint8* oldRawData() const;
     virtual qint32 nConseqPixels() const;
+    qint32 x() const;
+    qint32 y() const;
 
 private:
     KisTiledDataManager *m_ktm;

@@ -26,6 +26,16 @@
 #include "kis_global.h"
 #include "kis_curve_option.h"
 
+inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
+{
+    if(curve_label.icon().isNull())
+    {
+        label->setText(curve_label.name());
+    } else {
+        label->setPixmap(QPixmap::fromImage(curve_label.icon()));
+    }
+}
+
 KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
         : KisPaintOpOption(curveOption->label(), curveOption->category(), curveOption->isChecked())
         , m_widget(new QWidget)
@@ -38,6 +48,9 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
     transferCurve();
+    setLabel(m_curveOptionWidget->label_ymin, curveOption->minimumLabel());
+    setLabel(m_curveOptionWidget->label_ymax, curveOption->maximumLabel());
+    updateSensorCurveLabels();
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()
@@ -93,5 +106,14 @@ void KisCurveOptionWidget::setSensor(KisDynamicSensor* sensor)
 {
     m_curveOption->setSensor(sensor);
     emit sigSettingChanged();
+    updateSensorCurveLabels();
 }
 
+void KisCurveOptionWidget::updateSensorCurveLabels()
+{
+    if(m_curveOptionWidget->sensorSelector->current())
+    {
+        setLabel(m_curveOptionWidget->label_xmin, m_curveOptionWidget->sensorSelector->current()->minimumLabel());
+        setLabel(m_curveOptionWidget->label_xmax, m_curveOptionWidget->sensorSelector->current()->maximumLabel());
+    }
+}

@@ -157,7 +157,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             node = currentNode();
         }
 
-        currentImage()->undoAdapter()->beginMacro(i18n("Move"));
+        image->undoAdapter()->beginMacro(i18n("Move"));
 
         if (selection && !selection->isTotallyUnselected(image->bounds()) && !selection->isDeselected() && !node->inherits("KisSelectionMask")) {
             // Create a temporary layer with the contents of the selection of the current layer.
@@ -187,7 +187,7 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
 
                     if (image->globalSelection()) {
                         KisDeselectGlobalSelectionCommand* cmd = new KisDeselectGlobalSelectionCommand(image);
-                        currentImage()->undoAdapter()->addCommand(cmd);
+                        image->undoAdapter()->addCommand(cmd);
                     }
                 }
 
@@ -198,11 +198,11 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
                 }
 
                 // create the new layer and add it.
-                KisPaintLayerSP layer = new KisPaintLayer(currentImage(),
+                KisPaintLayerSP layer = new KisPaintLayer(image,
                         node->name() + "(moved)",
                         oldLayer->opacity(),
                         dev);
-                currentImage()->undoAdapter()->addCommand(new KisImageLayerAddCommand(currentImage(), layer, node->parent(), node));
+                image->undoAdapter()->addCommand(new KisImageLayerAddCommand(image, layer, node->parent(), node));
                 view->nodeManager()->activateNode(layer);
                 m_targetLayer = node;
                 m_selectedNode = layer;
@@ -213,8 +213,17 @@ void KisToolMove::mousePressEvent(KoPointerEvent *event)
             m_targetLayer = 0;
         }
 
+        /**
+         * FIXME: Hack alert:
+         * Our iterators don't have guarantees on thread-safety
+         * when the offset varies. When it is fixed, remove the locking
+         * see: KisIterator::stressTest()
+         */
+        image->lock();
         m_layerStart.setX(node->x());
         m_layerStart.setY(node->y());
+        image->unlock();
+
         m_layerPosition = m_layerStart;
         m_dragStart = pos.toPoint();
     }
@@ -273,14 +282,19 @@ void KisToolMove::drag(const QPoint& original)
 
         pos -= m_dragStart; // convert to delta
         rc = m_selectedNode->extent();
+
+        // FIXME: see comment in KisToolMove::mousePressEvent()
+        KisImageWSP image = currentImage();
+        image->lock();
         m_selectedNode->setX(m_selectedNode->x() + pos.x());
         m_selectedNode->setY(m_selectedNode->y() + pos.y());
+        image->unlock();
 
         rc = rc.unite(m_selectedNode->extent());
 
         m_layerPosition = QPoint(m_selectedNode->x(), m_selectedNode->y());
         m_dragStart = original;
-        
+
         if (m_selectedNode->inherits("KisSelectionMask")) {
             currentImage()->undoAdapter()->emitSelectionChanged();
         }

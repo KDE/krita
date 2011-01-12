@@ -67,7 +67,7 @@ KisHatchingPaintOp::~KisHatchingPaintOp()
     delete m_hatchingBrush;
 }
 
-double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 {
     //------START SIMPLE ERROR CATCHING-------
     if (!painter()->device()) return 1;
@@ -90,9 +90,9 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     //SENSOR-depending settings
     m_settings->crosshatchingsensorvalue = m_crosshatchingOption.apply(info);
     m_settings->separationsensorvalue = m_separationOption.apply(info);
-    m_settings->thicknesssensorvalue = KisPaintOp::scaleForPressure(m_thicknessOption.apply(info));
+    m_settings->thicknesssensorvalue = m_thicknessOption.apply(info);
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    double scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
 
     setCurrentScale(scale);
@@ -104,7 +104,7 @@ double KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
     QPointF pt = info.pos() - hotSpot;
 
     qint32 x, y;
-    double xFraction, yFraction;
+    qreal xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);

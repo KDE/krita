@@ -63,7 +63,6 @@ public:
     /// reimplemented from superclass
     virtual void deactivate();
 
-
 private:
     /**
      * @brief Return the square of the absolute distance between p1 and p2
@@ -87,17 +86,17 @@ private:
     void updateStatusText();
 
     enum EditMode {
-        Idle,
-        CreateConnection,
-        EditConnection,
-        EditConnectionPoint
+        Idle,               ///< we are idle, nothing interesting happens
+        CreateConnection,   ///< we are creating a new connection
+        EditConnection,     ///< we are editing a connection
+        EditConnectionPoint ///< we are editing connection points
     };
 
     EditMode m_editMode; ///< the current edit mode
-    KoShape * m_shapeOn; ///< the current shape we are working on
+    KoShape * m_currentShape; ///< the current shape we are working on
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 
-#endif
+#endif // KO_CONNECTION_TOOL_H

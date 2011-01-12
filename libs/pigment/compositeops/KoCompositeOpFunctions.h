@@ -140,37 +140,37 @@ inline TReal getSaturation(TReal r, TReal g, TReal b) {
 
 template<class TReal>
 inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat) {
-    TReal& min = r;
-    TReal& mid = g;
-    TReal& max = b;
+    TReal* min = &r;
+    TReal* mid = &g;
+    TReal* max = &b;
     
     if(mid < min) {
-        TReal& tmp = min;
+        TReal* tmp = min;
         min = mid;
         mid = tmp;
     }
     
     if(max < mid) {
-        TReal& tmp = mid;
+        TReal* tmp = mid;
         mid = max;
         max = tmp;
     }
     
     if(mid < min) {
-        TReal& tmp = min;
+        TReal* tmp = min;
         min = mid;
         mid = tmp;
     }
     
-    if(max > min) {
-        mid = ((mid-min) * sat) / (max-min);
-        max = sat;
+    if((*max - *min) > TReal(0.0001)) {
+        *mid = ((*mid-*min) * sat) / (*max-*min);
+        *max = sat;
     } else {
-        mid = TReal(0.0);
-        max = TReal(0.0);
+        *mid = TReal(0.0);
+        *max = TReal(0.0);
     }
     
-    min = TReal(0.0);
+    *min = TReal(0.0);
 }
 
 /* ---------------- Blending/Compositing functions ------------------------ /

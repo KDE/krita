@@ -251,9 +251,7 @@ KoDocumentRdfEditWidget::KoDocumentRdfEditWidget(QWidget *parent, KoDocumentRdf 
 
 KoDocumentRdfEditWidget::~KoDocumentRdfEditWidget()
 {
-    if (d) {
-        delete d;
-    }
+    delete d;
 }
 
 

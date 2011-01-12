@@ -1615,6 +1615,12 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
+    
+    // Connect to/with simple table widget (docker)
+    connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
+    connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+
     updateStyleManager();
     if (m_textShape)
         updateActions();

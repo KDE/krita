@@ -1497,36 +1497,6 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
     return QVariant(attrMap);
 }
 
-#if 1
-void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
-{
-    qDebug() << "korinek";
-    // Add a frame to the current layout
-    QTextFrameFormat tocFormat;
-    tocFormat.setProperty(KoText::TableOfContents, true);
-    bool useStylesAutoStyle = d->context.odfLoadingContext().useStylesAutoStyles();
-    QVariant tocVariant = createTocVariant(element, d->textSharedData, useStylesAutoStyle);
-    //qDebug() << "TESTX ATTR VARIANT " << tocVariant;
-    tocFormat.setProperty(KoText::TableOfContentsData, tocVariant);
-    cursor.insertFrame(tocFormat);
-    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
-    // table-of-content
-    KoXmlElement indexBody;
-    forEachElement(indexBody, element) {
-        // index-body
-        if (indexBody.localName() == "index-body") {
-            QTextBlockFormat bf;
-            QTextCharFormat cf;
-            cursorFrame.insertBlock(bf, cf);
-            loadBody(indexBody, cursorFrame);
-        }
-    }
-    // Get out of the frame
-    cursor.movePosition(QTextCursor::End);
-}
-
-#else
-
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // make sure that the tag is table-of-content
@@ -1594,7 +1564,32 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::End);
 }
 
-#endif
+void KoTextLoader::loadTableOfContentsPalo(const KoXmlElement &element, QTextCursor &cursor)
+{
+    qDebug() << "korinek";
+    // Add a frame to the current layout
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::TableOfContents, true);
+    bool useStylesAutoStyle = d->context.odfLoadingContext().useStylesAutoStyles();
+    QVariant tocVariant = createTocVariant(element, d->textSharedData, useStylesAutoStyle);
+    //qDebug() << "TESTX ATTR VARIANT " << tocVariant;
+    tocFormat.setProperty(KoText::TableOfContentsData, tocVariant);
+    cursor.insertFrame(tocFormat);
+    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
+    // table-of-content
+    KoXmlElement indexBody;
+    forEachElement(indexBody, element) {
+        // index-body
+        if (indexBody.localName() == "index-body") {
+            QTextBlockFormat bf;
+            QTextCharFormat cf;
+            cursorFrame.insertBlock(bf, cf);
+            loadBody(indexBody, cursorFrame);
+        }
+    }
+    // Get out of the frame
+    cursor.movePosition(QTextCursor::End);
+}
 
 void KoTextLoader::startBody(int total)
 {

@@ -59,6 +59,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
         if (p.localName() == "index-title-template" && p.namespaceURI() == KoXmlNS::text) {
             m_toc->tocSource.indexTitleTemplate.styleName = p.attribute("style-name");
             m_toc->tocSource.indexTitleTemplate.styleId = styleNameToStyleId( m_toc->tocSource.indexTitleTemplate.styleName );
+            m_toc->tocSource.indexTitleTemplate.text = p.text();
         // second child
         } else if (p.localName() == "table-of-content-entry-template" && p.namespaceURI() == KoXmlNS::text) {
             TocEntryTemplate tocEntryTemplate;

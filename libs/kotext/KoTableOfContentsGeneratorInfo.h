@@ -176,6 +176,7 @@ public:
 struct IndexTitleTemplate{
     QString styleName;
     int styleId;
+    QString text;
 };
 
 struct IndexSourceStyle{

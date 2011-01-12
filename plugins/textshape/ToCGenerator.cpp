@@ -70,43 +70,6 @@ void ToCGenerator::documentLayoutFinished()
     };
 }
 
-static QVariant attribute(const QVariant &data, const QString &tagName, const QString &attrName, int outlineLevel = 0) {
-    QVariantHash tagMap = data.toHash();
-    QString outlineLevelTagName = tagName;
-    if (outlineLevel > 0) {
-        outlineLevelTagName = outlineLevelTagName + " " + QString::number(outlineLevel);
-    }
-    QVariant tag = tagMap.value(outlineLevelTagName);
-    //qDebug() << "TESTX KEY " << outlineLevelTagName;
-    //qDebug() << "TESTX TAG " << tag;
-    QVariant attr;
-    if (tag.isValid()) {
-        QVariantHash attrMap = tag.toHash();
-        attr = attrMap.value(attrName);
-    }
-    //qDebug() << "TESTX ATTR " << attr;
-    return attr;
-}
-
-static KoParagraphStyle *getStyle(KoStyleManager *styleManager, const QVariant &styleVariant) {
-    KoParagraphStyle *style = 0;
-    if (styleVariant.isValid()) {
-        int styleId = styleVariant.toInt();
-        //qDebug() << "TESTX TITLE STYLE ID " << styleId;
-        style = styleManager->paragraphStyle(styleId);
-    }
-    return style;
-}
-
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Contents " + QString::number(outlineLevel));
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin((outlineLevel - 1) * 8);
-    styleManager->add(style);
-    return style;
-}
-
 void ToCGenerator::generate()
 {
     // Add a frame to the current layout
@@ -276,6 +239,191 @@ void ToCGenerator::generate()
     cursor.endEditBlock();
 }
 
+static QVariant attribute(const QVariant &data, const QString &tagName, const QString &attrName, int outlineLevel = 0) {
+    QVariantHash tagMap = data.toHash();
+    QString outlineLevelTagName = tagName;
+    if (outlineLevel > 0) {
+        outlineLevelTagName = outlineLevelTagName + " " + QString::number(outlineLevel);
+    }
+    QVariant tag = tagMap.value(outlineLevelTagName);
+    //qDebug() << "TESTX KEY " << outlineLevelTagName;
+    //qDebug() << "TESTX TAG " << tag;
+    QVariant attr;
+    if (tag.isValid()) {
+        QVariantHash attrMap = tag.toHash();
+        attr = attrMap.value(attrName);
+    }
+    //qDebug() << "TESTX ATTR " << attr;
+    return attr;
+}
+
+static QList<QVariant> entryElements(const QVariant &data, const QString &tagName, int outlineLevel = 0) {
+    QVariantHash tagMap = data.toHash();
+    //qDebug() << "TESTX ENTRY KEYS " << tagMap.keys();
+    QString outlineLevelTagName = tagName;
+    if (outlineLevel > 0) {
+        outlineLevelTagName = outlineLevelTagName + " ELEMENTS " + QString::number(outlineLevel);
+    }    
+    QVariant variantPairList = tagMap.value(outlineLevelTagName);
+    return variantPairList.toList();
+}
+
+static KoParagraphStyle *getStyle(KoStyleManager *styleManager, const QVariant &styleVariant) {
+    KoParagraphStyle *style = 0;
+    if (styleVariant.isValid()) {
+        int styleId = styleVariant.toInt();
+        //qDebug() << "TESTX TITLE STYLE ID " << styleId;
+        style = styleManager->paragraphStyle(styleId);
+    }
+    return style;
+}
+
+static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
+    KoParagraphStyle *style = new KoParagraphStyle();
+    style->setName("Contents " + QString::number(outlineLevel));
+    style->setParent(styleManager->paragraphStyle("Standard"));
+    style->setLeftMargin((outlineLevel - 1) * 8);
+    styleManager->add(style);
+    return style;
+}
+
+static void insertTocTitle(const QVariant &tocVariant, KoStyleManager *styleManager, QTextCursor &cursor) {
+    QVariant titleTextVariant = attribute(tocVariant, "index-title-template", "TEXT");
+    if (! titleTextVariant.isNull()) {
+        QString titleText = titleTextVariant.toString();
+        QVariant titleStyleVariant = attribute(tocVariant, "index-title-template", "style-name");
+        // Get style for title
+        KoParagraphStyle *titleStyle = getStyle(styleManager, titleStyleVariant);
+        if (! titleStyle) {
+            titleStyle = styleManager->defaultParagraphStyle();
+            qDebug() << "TESTX USING DEFALT STYLE " << titleStyle->styleId();
+        }
+        QTextBlock titleTextBlock = cursor.block();
+        titleStyle->applyStyle(titleTextBlock);
+        cursor.insertText(titleText);
+        cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());                        
+    }     
+}
+
+static void insertBody(QTextCursor &entryCursor, QString &body) {
+    if (! body.isEmpty()) {
+        entryCursor.insertText(body);
+        body.clear();    
+    }
+}
+
+void ToCGenerator::generatePalo() {
+    QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
+    cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
+    cursor.beginEditBlock();
+    QTextFrame *cursorFrame = cursor.currentFrame();
+    QVariant tocVariant = cursorFrame->format().property(KoText::TableOfContentsData);
+    QTextDocument *doc = m_ToCFrame->document();
+    KoTextDocument koDocument(doc);
+    KoStyleManager *styleManager = koDocument.styleManager();
+    //TODO pavolk: apply section toc style ?
+    //QTextFrameFormat tocFormat = m_ToCFrame->frameFormat();
+    //QVariant tocStyleVariant = attribute(tocVariant, "table-of-content", "style-name");
+    //qDebug() << "TESTX TOC STYLE VARIANT " << tocStyleVariant;
+    //KoSectionStyle *tocStyle = getStyle(styleManager, tocStyleVariant);
+    //QTextBlock tocTextBlock = cursor.block();
+    //tocStyle->applyStyle(cursorFrame);
+    //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+    // Add TOC title
+    insertTocTitle(tocVariant, styleManager, cursor);
+    // Add TOC
+    // Iterate through all blocks to generate TOC
+    QTextBlock block = doc->begin();
+    while (block.isValid()) {
+        KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
+        // Choose only TOC blocks
+        if (bd && bd->hasCounterData()) {
+            cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());     
+            // Get and apply style for toc entry
+            int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
+            QVariant tocTemplateStyleVariant = attribute(tocVariant, "table-of-content-entry-template", "style-name", outlineLevel);
+            KoParagraphStyle *tocTemplateStyle = getStyle(styleManager, tocTemplateStyleVariant);
+            if (tocTemplateStyle == 0) {
+                qDebug() << "TESTX GENERATE NEW STYLE";
+                tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
+            }
+            QTextBlock tocEntryTextBlock = cursor.block();
+            tocTemplateStyle->applyStyle(tocEntryTextBlock);
+            // Apply additional properties to style                        
+            QList<QVariant> variantPairList = entryElements(tocVariant, "table-of-content-entry-template", outlineLevel);
+            QList<QVariant>::iterator i;
+            QList<QVariant> tabList;
+            QTextCursor entryCursor(tocEntryTextBlock);
+            for (i = variantPairList.begin(); i != variantPairList.end(); ++i) {
+                QVariant variantPair = *i;
+                VariantPair nameVariantPair = variantPair.value<VariantPair>();
+                QString name = nameVariantPair.first;
+                if (name == "index-entry-tab-stop") {
+                    QVariant tabVariant = nameVariantPair.second;
+                    tabList.append(tabVariant);
+                }
+            }
+            // Generate and insert toc entries
+            QTextBlockFormat blockFormat = entryCursor.blockFormat();
+            blockFormat.setProperty(KoParagraphStyle::TabPositions, tabList);
+            entryCursor.setBlockFormat(blockFormat);
+            QTextCharFormat cf = entryCursor.charFormat();
+            QString body;
+            for (i = variantPairList.begin(); i != variantPairList.end(); ++i) {
+                QVariant variantPair = *i;
+                VariantPair nameVariantPair = variantPair.value<VariantPair>();
+                QString name = nameVariantPair.first;
+                //qDebug() << "TESTX ATTR NAME " << name;
+                if (name == "index-entry-link-start") {
+                    // Insert what was before link start
+                    insertBody(entryCursor, body);
+                    // openoffice format: "#1.Document control|outline"
+                    QString link = "#" + bd->counterText() + block.text() + "|outline";
+                    QTextCharFormat linkCf(cf);
+                    linkCf.setAnchor(true);
+                    linkCf.setAnchorHref(link);                    
+                    //TODO set link color
+                    QBrush foreground = linkCf.foreground();
+                    foreground.setColor(Qt::blue);
+                    foreground.setStyle(Qt::Dense1Pattern);
+                    linkCf.setForeground(foreground);
+                    linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+                    linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
+                    entryCursor.setCharFormat(linkCf);                    
+                } else if (name == "index-entry-chapter") {
+                    body = body.append(bd->counterText());
+                } else if (name == "index-entry-span") {
+                    QVariant attrMapVariant = nameVariantPair.second;
+                    QVariantHash attrMap = attrMapVariant.toHash();
+                    QVariant attrVariant = attrMap.value("TEXT");
+                    QString text = attrVariant.toString();
+                    body = body.append(text);
+                } else if (name == "index-entry-text") {
+                    body = body.append(block.text());
+                } else if (name == "index-entry-tab-stop") {
+                    body = body + "\t";
+                } else if (name == "index-entry-page-number") {
+                    body = body.append(QChar::ReplacementCharacter);
+                } else if (name == "index-entry-link-end") {
+                    // Insert what is inside link
+                    insertBody(entryCursor, body);
+                    entryCursor.setCharFormat(cf);
+                }
+            }
+            // Insert what is after last link
+            insertBody(entryCursor, body);
+            entryCursor.setCharFormat(cf);
+            m_originalBlocksInToc.append(qMakePair(tocEntryTextBlock, block));
+        }
+        block = block.next();
+    }
+    // Alternative: we can create index body snapshot and paste as one !
+    // KoTextLoader loader(ctxt, m_document->documentRdfBase());
+    // KoXmlElement e;
+    // loader.loadBody(e, cursor);
+    cursor.endEditBlock();
+}
+
 void ToCGenerator::update()
 {
     QTextDocument *doc = m_ToCFrame->document();
@@ -283,31 +431,28 @@ void ToCGenerator::update()
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();
     cursor.beginEditBlock();
     foreach (const BlockPair &blockPair, m_originalBlocksInToc) {
-        QTextBlock entryBlock = blockPair.first;
-        //qDebug() << "TESTX entry block position " << entryBlock.position() << ", size " << entryBlock.length();
+        QTextBlock tocEntryBlock = blockPair.first;
+        //qDebug() << "TESTX entry block position " << tocEntryBlock.position() << ", size " << tocEntryBlock.length();
         QTextBlock headingBlock = blockPair.second;
         KoShape *shape = layout->shapeForPosition(headingBlock.position());
-        // Alternative 1
         if (shape) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
             Q_ASSERT(shapeData);
             if (shapeData && shapeData->page()) {
-                QString pageNumber = QString::number(shapeData->page()->pageNumber());
-                //qDebug() << "TESTX page number " << QString::number(shapeData->page()->pageNumber());
-                cursor.setPosition(entryBlock.position() + entryBlock.text().length());
-                cursor.insertText(pageNumber);
+                QString blockText = tocEntryBlock.text();
+                int position = blockText.indexOf(QChar::ReplacementCharacter);
+                if (position > -1) {
+                    //qDebug() << "TESTX page number " << QString::number(shapeData->page()->pageNumber());
+                    cursor.setPosition(tocEntryBlock.position() + position);
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                    QString pageNumber = QString::number(shapeData->page()->pageNumber());
+                    cursor.insertText(pageNumber);
+                } else {
+                    qDebug() << "TESTX PAGE NUMBER REPLACEMENT CHAR NOT FOUND";
+                }
+                
             }
         }
-        // Alternative 2
-//        Q_ASSERT(shape);
-//        KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
-//        Q_ASSERT(shapeData);
-//        Q_ASSERT(shapeData->page());
-//        QString pageNumber = QString::number(shapeData->page()->pageNumber();
-//        qDebug() << "TESTX page number " << QString::number(shapeData->page()->pageNumber());
-//        cursor.setPosition(entryBlock.position() + entryBlock.length() - pageNumber.size());
-//        Q_ASSERT(cursor.position() < m_ToCFrame->lastPosition());
-//        cursor.insertText(pageNumber);
     }
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();

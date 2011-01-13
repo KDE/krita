@@ -550,8 +550,9 @@ bool Layout::nextParag()
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        if (! m_currentMasterPage.isNull()) // no pagebreak for the first master-page
+            pagebreak = true; // new master-page means new page
         m_currentMasterPage = masterPageName.toString();
-        pagebreak = true; // new master-page means new page
     }
 
     // start a new shape if requested, but not if that would leave the current shape empty.

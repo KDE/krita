@@ -30,14 +30,8 @@ public:
     MockModel(KoStyleManager *manager, QObject *parent = 0)
             : StylesModel(manager, parent) { }
 
-    void publicRecalculate() {
-        StylesModel::recalculate();
-    }
     QList<int> rootStyleIds() {
         return m_styleList;
-    }
-    QMultiHash<int, int> relations() {
-        return m_relations;
     }
 };
 
@@ -74,15 +68,6 @@ void TestStylesModel::testPrecalcCache()
     QVERIFY(red);
     QCOMPARE(red->name(), QString("red"));
 
-    //only contains parent paragraph styles with links to the child.
-    QVERIFY(model.relations().contains(headers->styleId()));
-    QList<int> children = model.relations().values(headers->styleId());
-    QCOMPARE(children.count(), 3);
-    foreach(int id, children) {
-        KoParagraphStyle *head = manager->paragraphStyle(id);
-        QVERIFY(head);
-        QVERIFY(head->name().startsWith("Head "));
-    }
 }
 
 void TestStylesModel::testSetManager()

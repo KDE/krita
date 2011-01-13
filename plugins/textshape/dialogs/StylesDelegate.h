@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,37 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLETABLEWIDGET_H
-#define SIMPLETABLEWIDGET_H
+#ifndef STYLESDELEGATE_H
+#define STYLESDELEGATE_H
 
-#include <ui_SimpleTableWidget.h>
-#include <KoListStyle.h>
+#include <QStyledItemDelegate>
 
-#include <QWidget>
-#include <QTextBlock>
-
-class TextTool;
 class KoStyleManager;
+class KoParagraphStyle;
+class KoCharacterStyle;
 
-class SimpleTableWidget : public QWidget
+class StylesDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit SimpleTableWidget(TextTool *tool, QWidget *parent = 0);
+    StylesDelegate();
 
-public slots:
-    void setStyleManager(KoStyleManager *sm);
-
-signals:
-    void doneWithFocus();
-    
-private:
-    Ui::SimpleTableWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                            const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif

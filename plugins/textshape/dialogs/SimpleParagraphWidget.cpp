@@ -55,14 +55,19 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
+    connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignRight, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
+    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));
 
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
     widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
 
-    //widget.bulletListButton->setIconSize(QSize(16,16));
-    //widget.numberedListButton->setIconSize(QSize(16,16));
     fillListButtons();
     widget.bulletListButton->addSeparator();
     //widget.bulletListButton->addAction(new QAction("fgfd",0));
@@ -212,10 +217,10 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
+    emit doneWithFocus();
     if (m_blockSignals) return;
 
     m_tool->addCommand( new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
-    emit doneWithFocus();
 }
 
 #include <SimpleParagraphWidget.moc>

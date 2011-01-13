@@ -18,6 +18,7 @@
  */
 #include "StylesWidget.h"
 #include "StylesModel.h"
+#include "StylesDelegate.h"
 #include "ParagraphGeneral.h"
 #include "CharacterGeneral.h"
 
@@ -35,13 +36,12 @@ StylesWidget::StylesWidget(QWidget *parent)
         : QWidget(parent),
         m_styleManager(0),
         m_stylesModel(new StylesModel(0, this)),
+        m_stylesDelegate(new StylesDelegate()),
         m_blockSignals(false)
 {
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
-    widget.stylesView->header()->swapSections(0, 1);
-    widget.stylesView->header()->resizeSection(1, 16);
-    widget.stylesView->header()->hide();
+    widget.stylesView->setItemDelegate(m_stylesDelegate);
 
     widget.newStyle->setIcon(KIcon("list-add"));
     widget.deleteStyle->setIcon(KIcon("list-remove"));

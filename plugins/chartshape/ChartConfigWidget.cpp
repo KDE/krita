@@ -445,10 +445,8 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::deleteSubDialogs()
 {
-    if ( d->tableEditorDialog ) {
-        delete d->tableEditorDialog;
-        d->tableEditorDialog = 0;
-    }
+    delete d->tableEditorDialog;
+    d->tableEditorDialog = 0;
 }
 
 void ChartConfigWidget::open( KoShape* shape )

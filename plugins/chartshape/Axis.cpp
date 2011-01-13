@@ -837,10 +837,9 @@ Axis::~Axis()
     d->plotArea->parent()->KoShapeContainer::removeShape( d->title );
 
     Q_ASSERT( d->title );
-    if ( d->title )
-        delete d->title;
+    delete d->title;
 
-   delete d;
+    delete d;
 }
 
 PlotArea* Axis::plotArea() const

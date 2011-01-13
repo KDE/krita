@@ -30,6 +30,7 @@ class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class QSignalMapper;
+class TextShape;
 
 class StylesModel : public QAbstractListModel
 {
@@ -72,11 +73,9 @@ private slots:
     void removeParagraphStyle(KoParagraphStyle*);
     void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
-    void generatePixmap(KoParagraphStyle *style);
 
 protected:
     QList<int> m_styleList; // list of style IDs
-    QMap<int,QPixmap> m_pixmapMap; // map of pixmap representations of the style
 
 private:
     KoStyleManager *m_styleManager;
@@ -89,6 +88,7 @@ private:
     QIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
+    TextShape *m_tmpTextShape;
 };
 
 #endif

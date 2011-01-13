@@ -59,13 +59,11 @@ void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
 
 void SpecialButton::enterEvent(QEvent *event)
 {
-    qDebug() << "entered button";
-    //m_stylesWidget->show();
+    m_stylesWidget->show();
 }
 
 void SpecialButton::leaveEvent(QEvent *event)
 {
-    qDebug() << "left button";
 }
 
 
@@ -110,8 +108,8 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
-    //m_popupForBlock->setStyleManager(sm);
-    //m_popupForChar->setStyleManager(sm);
+    m_popupForBlock->setStyleManager(sm);
+    m_popupForChar->setStyleManager(sm);
 }
 
 void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)

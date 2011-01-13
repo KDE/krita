@@ -1048,30 +1048,24 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int listChangeId = 0;
     if (!headingLevel && !numberedParagraphLevel) {
         listStarted = true;
-        listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List);
-        writer->startElement("text:list", false);
-        writer->addAttribute("text:style-name", listStyles[textList]);
-        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
-            writer->addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
 
-        if (listChangeId && changeTracker->elementById(listChangeId)->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listChangeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        }
+        TagInformation listTagInformation;
+        listTagInformation.setTagName("text:list");
+        listTagInformation.addAttribute("text:style-name", listStyles[textList]);
+        if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
+            listTagInformation.addAttribute("text:continue-numbering",textList->format().boolProperty(KoListStyle::ContinueNumbering) ? "true" : "false");
+
+        listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listTagInformation);
     }
 
     if (!headingLevel) {
         do {
             if (numberedParagraphLevel) {
-                int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph);
-                writer->startElement("text:numbered-paragraph", false);
-                writer->addAttribute("text:level", numberedParagraphLevel);
-                writer->addAttribute("text:style-name", listStyles.value(textList));
-
-                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                    writer->addAttribute("delta:insertion-type", "insert-with-content");
-                }
+                TagInformation paraTagInformation;
+                paraTagInformation.setTagName("text:numbered-paragraph");
+                paraTagInformation.addAttribute("text:level", numberedParagraphLevel);
+                paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
+                int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
                 
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
                 writer->endElement(); 
@@ -1089,18 +1083,13 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 int listItemChangeId;
+                TagInformation listItemTagInformation;
+                listItemTagInformation.setTagName(listHeader ? "text:list-header" : "text:list-item");
                 if (textList == topLevelTextList) {
-                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::ListItem);
+                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::ListItem, listItemTagInformation);
                 } else {
                     // This is a sub-list. So check for a list-change
-                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::List);
-                }
-
-                writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
-
-                if (listItemChangeId && changeTracker->elementById(listItemChangeId)->getChangeType() == KoGenChange::InsertChange) {
-                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(listItemChangeId));
-                    writer->addAttribute("delta:insertion-type", "insert-with-content");
+                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::List, listItemTagInformation);
                 }
 
                 if (KoListStyle::isNumberingStyle(textList->format().style())) {

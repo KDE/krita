@@ -922,22 +922,14 @@ int KoTextWriter::Private::checkForTableColumnChange(int position)
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
-    int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
-    writer->startElement("table:table");
-    
-    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-        writer->addAttribute("delta:insertion-type", "insert-with-content");
-    }
+    TagInformation tableTagInformation;
+    tableTagInformation.setTagName("table:table");
+    int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
     
     for (int c = 0 ; c < table->columns() ; c++) {
-        int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn);
-        writer->startElement("table:table-column");
-
-        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        }
+        TagInformation tableColumnInformation;
+        tableColumnInformation.setTagName("table:table-column");
+        int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn, tableColumnInformation);
 
         writer->endElement(); // table:table-column
 
@@ -945,27 +937,21 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             closeTagRegion();
     }
     for (int r = 0 ; r < table->rows() ; r++) {
-        int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow);
-        writer->startElement("table:table-row");
-
-        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        }
+        TagInformation tableRowInformation;
+        tableRowInformation.setTagName("table:table-row");
+        int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow, tableRowInformation);
 
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
-            int changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell);
-            if ((cell.row() == r) && (cell.column() == c)) {
-                writer->startElement("table:table-cell");
-                writer->addAttribute("rowSpan", cell.rowSpan());
-                writer->addAttribute("columnSpan", cell.columnSpan());
-        
-                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                    writer->addAttribute("delta:insertion-type", "insert-with-content");
-                }
+            int changeId = 0;
 
+            if ((cell.row() == r) && (cell.column() == c)) {
+                TagInformation tableCellInformation;
+                tableCellInformation.setTagName("table:table-cell");
+                tableCellInformation.addAttribute("rowSpan", cell.rowSpan());
+                tableCellInformation.addAttribute("columnSpan", cell.columnSpan());
+                changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
+        
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
                 QVariant v = cellFormat.property(KoTableCellStyle::InlineRdf);
@@ -974,12 +960,11 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 }
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
-                writer->startElement("table:covered-table-cell");
-                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                    writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                    writer->addAttribute("delta:insertion-type", "insert-with-content");
-                }
+                TagInformation tableCellInformation;
+                tableCellInformation.setTagName("table:covered-table-cell");
+                changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }
+
             writer->endElement(); // table:table-cell
             if (changeId)
                 closeTagRegion();

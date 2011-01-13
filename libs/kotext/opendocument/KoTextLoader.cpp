@@ -960,7 +960,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             cursor.insertText("\t");
         } else if (isTextNS && localName == "a") { // text:a
             QString target = ts.attributeNS(KoXmlNS::xlink, "href");
-            qDebug() << "TESTX LINK " << target;
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
             if (!target.isEmpty()) {
                 QTextCharFormat linkCf(cf);   // and copy it to alter it
@@ -1404,6 +1403,10 @@ static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData 
             if (sectionStyle) {
                 attr.setValue(sectionStyle->styleId());
             }
+            KoCharacterStyle *characterStyle = textSharedData->characterStyle(value, useStylesAutoStyle);
+            if (characterStyle) {
+                attr.setValue(characterStyle->styleId());
+            }
             //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " STYLE NAME " << value << " ATTR " << attr;
         } else if (attrName == "index-entry-tab-stop") {
             if (value == "right") {
@@ -1471,8 +1474,8 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
                         }
                         QString leaderChar = tocIndexEntry.attribute("leader-char");
                         tab.leaderText = leaderChar.isEmpty() ? "." : leaderChar;
-                        //TODO: solve !
-                        tab.position = 490;
+                        QString position = tocIndexEntry.attribute("position");
+                        tab.position = position.isNull() ?  490 : KoUnit::parseValue(position, 490);
                         //qDebug() << "TESTX TAB TYPE " << tab.type << " LEDAER CHAR " << tab.leaderText;
                         QVariant tabVariant;
                         tabVariant.setValue(tab);
@@ -1480,10 +1483,8 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
                         QVariant variantPair;
                         variantPair.setValue(nameVariantPair);
                         indexEntryList.append(variantPair);
-                        //attrMap.insert(tocIndexEntry.localName() + outlineLevelSuffix, tabVariant);
                     } else {
                         QVariant tocIndexEntryAttr = attributes(tocIndexEntry, textSharedData, useStylesAutoStyle);
-                        //attrMap.insert(tocIndexEntry.localName() + outlineLevelSuffix, tocIndexEntryAttr);
                         VariantPair nameVariantPair = qMakePair(tocIndexEntry.localName(), tocIndexEntryAttr);
                         QVariant variantPair;
                         variantPair.setValue(nameVariantPair);
@@ -1496,6 +1497,8 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
     }
     return QVariant(attrMap);
 }
+
+#if 1
 
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
@@ -1564,7 +1567,11 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::End);
 }
 
-void KoTextLoader::loadTableOfContentsPalo(const KoXmlElement &element, QTextCursor &cursor)
+#else
+
+//Pavol Korinek: TOC prototype, used for analyze, logic design and knowleadge transfer
+
+void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     qDebug() << "korinek";
     // Add a frame to the current layout
@@ -1590,6 +1597,8 @@ void KoTextLoader::loadTableOfContentsPalo(const KoXmlElement &element, QTextCur
     // Get out of the frame
     cursor.movePosition(QTextCursor::End);
 }
+
+#endif
 
 void KoTextLoader::startBody(int total)
 {

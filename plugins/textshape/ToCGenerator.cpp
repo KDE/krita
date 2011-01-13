@@ -70,33 +70,27 @@ void ToCGenerator::documentLayoutFinished()
     };
 }
 
+static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
+    KoParagraphStyle *style = new KoParagraphStyle();
+    style->setName("Contents " + QString::number(outlineLevel));
+    style->setParent(styleManager->paragraphStyle("Standard"));
+    style->setLeftMargin((outlineLevel - 1) * 8);
+    styleManager->add(style);
+    return style;
+}
+
+#if 1
+
 void ToCGenerator::generate()
 {
-    // Add a frame to the current layout
-    //QTextFrameFormat tocFormat = m_ToCFrame->frameFormat();
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
-    // Toc elements hierarchy
-    // table-of-content
-    // text:table-of-content-source
-    //   text:index-title-template
-    //   text:table-of-content-entry-template
-    //     text:index-entry
     QVariant data = cursor.currentFrame()->format().property(KoText::TableOfContentsData);
-    TableOfContent * tocDescription = data.value<TableOfContent*>();
-    
+    TableOfContent * tocDescription = data.value<TableOfContent*>();    
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
-    //TODO pavolk: apply section toc style
-    //QVariant tocStyleVariant = attribute(tocVariant, "table-of-content", "style-name");
-    //qDebug() << "TESTX TOC STYLE VARIANT " << tocStyleVariant;
-    //KoSectionStyle *tocStyle = getStyle(styleManager, tocStyleVariant);
-    //QTextBlock tocTextBlock = cursor.block();
-    //tocStyle->applyStyle(cursorFrame);
-    //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-    // Add TOC title
     if ( !tocDescription->tocSource.indexTitleTemplate.text.isNull() ){
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(tocDescription->tocSource.indexTitleTemplate.styleId);
         // Do we want default style or generate style also for title ?
@@ -232,12 +226,12 @@ void ToCGenerator::generate()
         }
         block = block.next();
     }
-    // Alternative: we can create index body snapshot and paste as one !
-    // KoTextLoader loader(ctxt, m_document->documentRdfBase());
-    // KoXmlElement e;
-    // loader.loadBody(e, cursor);
     cursor.endEditBlock();
 }
+
+#else
+
+//Pavol Korinek: TOC prototype, used for analyze, logic design and knowleadge transfer
 
 static QVariant attribute(const QVariant &data, const QString &tagName, const QString &attrName, int outlineLevel = 0) {
     QVariantHash tagMap = data.toHash();
@@ -278,12 +272,13 @@ static KoParagraphStyle *getStyle(KoStyleManager *styleManager, const QVariant &
     return style;
 }
 
-static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
-    KoParagraphStyle *style = new KoParagraphStyle();
-    style->setName("Contents " + QString::number(outlineLevel));
-    style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin((outlineLevel - 1) * 8);
-    styleManager->add(style);
+static KoCharacterStyle *getCharacterStyle(KoStyleManager *styleManager, const QVariant &styleVariant) {
+    KoCharacterStyle *style = 0;
+    if (styleVariant.isValid()) {
+        int styleId = styleVariant.toInt();
+        //qDebug() << "TESTX TITLE STYLE ID " << styleId;
+        style = styleManager->characterStyle(styleId);
+    }
     return style;
 }
 
@@ -312,7 +307,14 @@ static void insertBody(QTextCursor &entryCursor, QString &body) {
     }
 }
 
-void ToCGenerator::generatePalo() {
+static QVariant attribute(const VariantPair &nameVariantPair, const QString &attrName) {
+    QVariant attrMapVariant = nameVariantPair.second;
+    QVariantHash attrMap = attrMapVariant.toHash();
+    QVariant attrVariant = attrMap.value(attrName);
+    return attrVariant;
+}
+
+void ToCGenerator::generate() {
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
@@ -363,10 +365,10 @@ void ToCGenerator::generatePalo() {
                     tabList.append(tabVariant);
                 }
             }
-            // Generate and insert toc entries
             QTextBlockFormat blockFormat = entryCursor.blockFormat();
             blockFormat.setProperty(KoParagraphStyle::TabPositions, tabList);
             entryCursor.setBlockFormat(blockFormat);
+            // Generate and insert toc entries
             QTextCharFormat cf = entryCursor.charFormat();
             QString body;
             for (i = variantPairList.begin(); i != variantPairList.end(); ++i) {
@@ -377,25 +379,29 @@ void ToCGenerator::generatePalo() {
                 if (name == "index-entry-link-start") {
                     // Insert what was before link start
                     insertBody(entryCursor, body);
+                    //TODO navigation for link
                     // openoffice format: "#1.Document control|outline"
                     QString link = "#" + bd->counterText() + block.text() + "|outline";
                     QTextCharFormat linkCf(cf);
+                    QVariant linkStyleVariat = attribute(nameVariantPair, "style:name");
+                    KoCharacterStyle *characterStyle = getCharacterStyle(styleManager, linkStyleVariat);
+                    if (characterStyle) {
+                        characterStyle->applyStyle(linkCf);                        
+                    } else {
+                        QBrush foreground = linkCf.foreground();
+                        foreground.setColor(Qt::blue);
+                        foreground.setStyle(Qt::Dense1Pattern);
+                        linkCf.setForeground(foreground);
+                        linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+                        linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
+                    }
                     linkCf.setAnchor(true);
                     linkCf.setAnchorHref(link);                    
-                    //TODO set link color
-                    QBrush foreground = linkCf.foreground();
-                    foreground.setColor(Qt::blue);
-                    foreground.setStyle(Qt::Dense1Pattern);
-                    linkCf.setForeground(foreground);
-                    linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-                    linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
                     entryCursor.setCharFormat(linkCf);                    
                 } else if (name == "index-entry-chapter") {
                     body = body.append(bd->counterText());
                 } else if (name == "index-entry-span") {
-                    QVariant attrMapVariant = nameVariantPair.second;
-                    QVariantHash attrMap = attrMapVariant.toHash();
-                    QVariant attrVariant = attrMap.value("TEXT");
+                    QVariant attrVariant = attribute(nameVariantPair, "TEXT");
                     QString text = attrVariant.toString();
                     body = body.append(text);
                 } else if (name == "index-entry-text") {
@@ -423,6 +429,8 @@ void ToCGenerator::generatePalo() {
     // loader.loadBody(e, cursor);
     cursor.endEditBlock();
 }
+
+#endif
 
 void ToCGenerator::update()
 {

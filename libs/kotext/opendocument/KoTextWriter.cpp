@@ -336,6 +336,9 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
             writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             writer->addAttribute("delta:insertion-type", "insert-with-content");
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            writer->addAttribute("delta:insertion-type", "insert-around-content");
         }
     }
 
@@ -681,23 +684,19 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
             } else {
-                int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span);
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
+
+                TagInformation fragmentTagInformation;
                 if (charFormat.isAnchor()) {
-                    writer->startElement("text:a", false);
-                    writer->addAttribute("xlink:type", "simple");
-                    writer->addAttribute("xlink:href", charFormat.anchorHref());
+                    fragmentTagInformation.setTagName("text:a");
+                    fragmentTagInformation.addAttribute("xlink:type", "simple");
+                    fragmentTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
-                    writer->startElement("text:span", false);
-                    writer->addAttribute("text:style-name", styleName);
-                    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                        writer->addAttribute("delta:insertion-type", "insert-with-content");
-                    } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
-                        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-                        writer->addAttribute("delta:insertion-type", "insert-around-content");
-                    }
+                    fragmentTagInformation.setTagName("text:span");
+                    fragmentTagInformation.addAttribute("text:style-name", styleName);
                 }
+
+                int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, fragmentTagInformation);
 
                 QString text = currentFragment.text();
                 int spanFrom = fragmentStart >= from ? 0 : from;

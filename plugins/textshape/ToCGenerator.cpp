@@ -37,6 +37,8 @@
 #include <QTimer>
 #include <KDebug>
 
+static const QString INVALID_HREF_TARGET = "INVALID_HREF";
+
 ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
     : QObject(tocFrame),
     m_state(NeverGeneratedState),
@@ -49,7 +51,15 @@ ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
 
     // disabled for now as this requires us to update the list items in 'update' too
 */
+
+    m_tocDescription = 0;
 }
+
+ToCGenerator::~ToCGenerator()
+{
+    delete m_tocDescription;
+}
+
 
 void ToCGenerator::documentLayoutFinished()
 {
@@ -86,13 +96,25 @@ void ToCGenerator::generate()
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
+
     QVariant data = cursor.currentFrame()->format().property(KoText::TableOfContentsData);
-    TableOfContent * tocDescription = data.value<TableOfContent*>();    
+    m_tocDescription = data.value<TableOfContent*>();
+    
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
-    if ( !tocDescription->tocSource.indexTitleTemplate.text.isNull() ){
-        KoParagraphStyle *titleStyle = styleManager->paragraphStyle(tocDescription->tocSource.indexTitleTemplate.styleId);
+    
+    //TODO pavolk: apply section toc style
+    //QVariant tocStyleVariant = attribute(tocVariant, "table-of-content", "style-name");
+    //qDebug() << "TESTX TOC STYLE VARIANT " << tocStyleVariant;
+    //KoSectionStyle *tocStyle = getStyle(styleManager, tocStyleVariant);
+    //QTextBlock tocTextBlock = cursor.block();
+    //tocStyle->applyStyle(cursorFrame);
+    //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
+    // Add TOC title
+    
+    if ( !m_tocDescription->tocSource.indexTitleTemplate.text.isNull() ){
+        KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_tocDescription->tocSource.indexTitleTemplate.styleId);
         // Do we want default style or generate style also for title ?
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
@@ -101,8 +123,8 @@ void ToCGenerator::generate()
         
         QTextBlock titleTextBlock = cursor.block();
         titleStyle->applyStyle(titleTextBlock);
-        qDebug() << "\t\t\tInserting text " << tocDescription->tocSource.indexTitleTemplate.text;
-        cursor.insertText( tocDescription->tocSource.indexTitleTemplate.text );
+        //qDebug() << "\t\t\tInserting text " << m_tocDescription->tocSource.indexTitleTemplate.text;
+        cursor.insertText( m_tocDescription->tocSource.indexTitleTemplate.text );
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
     
@@ -120,9 +142,9 @@ void ToCGenerator::generate()
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
-            if (outlineLevel >= 1 && (outlineLevel-1) < tocDescription->tocSource.entryTemplate.size()){
+            if (outlineLevel >= 1 && (outlineLevel-1) < m_tocDescription->tocSource.entryTemplate.size()){
                 // List's index starts with 0, outline level starts with 0
-                TocEntryTemplate tocEntryTemplate = tocDescription->tocSource.entryTemplate.at(outlineLevel - 1);
+                TocEntryTemplate tocEntryTemplate = m_tocDescription->tocSource.entryTemplate.at(outlineLevel - 1);
                 // ensure that we fetched correct entry template
                 Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
                 if (tocEntryTemplate.outlineLevel != outlineLevel){
@@ -147,8 +169,8 @@ void ToCGenerator::generate()
                         case IndexEntry::LINK_START: {
                             IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
                             
-                            // TODO: fetch correct target, style is ignored
-                            QString target = "#NOWHERE";
+                            QString target = INVALID_HREF_TARGET;
+                            
                             QTextCharFormat linkCf(savedCharFormat);   // and copy it to alter it
                             linkCf.setAnchor(true);
                             linkCf.setAnchorHref(target);
@@ -168,21 +190,16 @@ void ToCGenerator::generate()
                             IndexEntryChapter * chapter = static_cast<IndexEntryChapter*>(entry);
                             
                             cursor.insertText(bd->counterText());
-                            
                             break;
                         }
                         case IndexEntry::SPAN: {
                             IndexEntrySpan * span = static_cast<IndexEntrySpan*>(entry);
-                            
                             cursor.insertText(span->text);
-
                             break;
                         }
                         case IndexEntry::TEXT: {
                             IndexEntryText * text = static_cast<IndexEntryText*>(entry);
-                            
                             cursor.insertText(block.text());
-                            
                             break;
                         }
                         case IndexEntry::TAB_STOP: {
@@ -195,18 +212,16 @@ void ToCGenerator::generate()
                             blockFormat.setProperty(KoParagraphStyle::TabPositions, tabStops);
                             cursor.setBlockFormat(blockFormat);
                             cursor.insertText("\t");
-
                             break;
                         }
                         case IndexEntry::PAGE_NUMBER: {
                             IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
+                            cursor.insertText( QString(QChar::ReplacementCharacter) );
                             break;
                         }
                         case IndexEntry::LINK_END: {
                             IndexEntryLinkEnd * linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
-                            
                             cursor.setCharFormat(savedCharFormat);
-
                             break;
                         }
                         default:{
@@ -217,7 +232,6 @@ void ToCGenerator::generate()
                 }// foreach
                 cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
                 
-                // TODO: what is this doing?
                 m_originalBlocksInToc.append(qMakePair(cursor.block(), block));
 
             } else {

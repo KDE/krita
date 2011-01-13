@@ -108,6 +108,7 @@ void KoList::add(const QTextBlock &block, int level)
     if (level == 0) { // fetch the first proper level we have
         level = 1; // if nothing works...
         for (int i = 1; i <= 10; i++) {
+            qDebug()<<"Style is "<<d->style;
             if (d->style->hasLevelProperties(i)) {
                 level = i;
                 break;

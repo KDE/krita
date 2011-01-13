@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,42 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLESTYLESWIDGET_H
-#define SIMPLESTYLESWIDGET_H
+#ifndef STYLESDELEGATE_H
+#define STYLESDELEGATE_H
 
-#include <QWidget>
-#include <QTextBlockFormat>
-#include <QTextCharFormat>
+#include <QStyledItemDelegate>
 
-
-class StylesWidget;
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 
-class SimpleStylesWidget : public QWidget
+class StylesDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit SimpleStylesWidget(QWidget *parent = 0);
+    StylesDelegate();
 
-public slots:
-    void setStyleManager(KoStyleManager *sm);
-    void setCurrentFormat(const QTextBlockFormat &format);
-    void setCurrentFormat(const QTextCharFormat &format);
-
-signals:
-    void doneWithFocus();
-    void characterStyleSelected(KoCharacterStyle *);
-    void paragraphStyleSelected(KoParagraphStyle *);
-
-private:
-    KoStyleManager *m_styleManager;
-    QTextBlockFormat m_currentBlockFormat;
-    QTextCharFormat m_currentCharFormat;
-    bool m_blockSignals;
-    StylesWidget *m_popupForBlock;
-    StylesWidget *m_popupForChar;
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,
+                            const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 #endif

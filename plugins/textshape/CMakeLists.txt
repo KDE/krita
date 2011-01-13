@@ -48,6 +48,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
+    dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp

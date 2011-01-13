@@ -72,11 +72,11 @@
 class KoTextWriter::TagInformation
 {
     public:
-        TagInformation():tagName(), attributeList()
+        TagInformation():tagName(NULL), attributeList()
         {
         }
 
-        void setTagName(const QString& tagName) 
+        void setTagName(const char *tagName) 
         {
             this->tagName = tagName;
         }
@@ -86,24 +86,29 @@ class KoTextWriter::TagInformation
             attributeList.push_back(QPair<QString,QString>(attributeName, attributeValue));
         }
 
+        void addAttribute(const QString& attributeName, int value)
+        {
+            addAttribute(attributeName, QString::number(value));
+        }
+
         void clear()
         {
-            tagName.clear();
+            tagName = NULL;
             attributeList.clear();
         }
 
-        const QString& name() const
+        const char *name() const
         {
             return tagName;
         }
 
-        const QVector<QPair<QString, QString> > attributes() const
+        const QVector<QPair<QString, QString> >& attributes() const
         {
             return attributeList;
         }
 
     private:
-        QString tagName;
+        const char *tagName;
         QVector<QPair<QString, QString> > attributeList;
 };
 
@@ -267,7 +272,7 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTransTable.insert(changeId, changeName);
 }
 
-int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagDetails)
+int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagInformation)
 {
     int changeId = 0;
     QTextCursor cursor(document);
@@ -319,6 +324,21 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
     }
     
+    if (tagInformation.name()) {
+
+        writer->startElement(tagInformation.name(), false);
+        const QVector<QPair<QString, QString> > &attributeList = tagInformation.attributes();
+        QPair<QString, QString> attribute;
+        foreach(attribute, attributeList) {
+            writer->addAttribute(attribute.first.toAscii(), attribute.second.toAscii());
+        }
+        
+        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            writer->addAttribute("delta:insertion-type", "insert-with-content");
+        }
+    }
+
     return changeId;
 }
 
@@ -492,21 +512,18 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
     QTextCursor cursor(block);
-    
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
-    int changeId = openTagRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader);
+
+    TagInformation blockTagInformation;
     if (outlineLevel > 0) {
-        writer->startElement("text:h", false);
-        writer->addAttribute("text:outline-level", outlineLevel);
+        blockTagInformation.setTagName("text:h");
+        blockTagInformation.addAttribute("text:outline-level", outlineLevel);
     } else {
-        writer->startElement("text:p", false);
+        blockTagInformation.setTagName("text:p");
     }
 
-    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-        writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-        writer->addAttribute("delta:insertion-type", "insert-with-content");
-    }
+    int changeId = openTagRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader, blockTagInformation);
 
     if (!deleteMergeRegionOpened && !splitRegionOpened && !cursor.currentTable() && (!cursor.currentList() || outlineLevel)) {
         splitEndBlockNumber = checkForSplit(block);

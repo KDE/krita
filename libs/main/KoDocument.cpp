@@ -2594,9 +2594,9 @@ void KoDocument::setEmpty()
     d->bEmpty = true;
 }
 
-QGraphicsItem *KoDocument::canvasItem()
+QGraphicsItem *KoDocument::canvasItem(bool create)
 {
-    if (!d->canvasItem) {
+    if (create && !d->canvasItem) {
         d->canvasItem = createCanvasItem();
     }
     return d->canvasItem;

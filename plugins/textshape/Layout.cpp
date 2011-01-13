@@ -550,8 +550,11 @@ bool Layout::nextParag()
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
-        if (! m_currentMasterPage.isNull()) // no pagebreak for the first master-page
+        // NOTE maybe following lines are not enough and we actually need to check if there is content on the current
+        // page and only page-break if there is to prevent empty pages caused by switching between master-pages.
+        if (! m_currentMasterPage.isNull()) { // no pagebreak for the first master-page
             pagebreak = true; // new master-page means new page
+        }
         m_currentMasterPage = masterPageName.toString();
     }
 

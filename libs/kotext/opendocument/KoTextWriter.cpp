@@ -69,6 +69,44 @@
 #include <Soprano/Soprano>
 #endif
 
+class KoTextWriter::TagInformation
+{
+    public:
+        TagInformation():tagName(), attributeList()
+        {
+        }
+
+        void setTagName(const QString& tagName) 
+        {
+            this->tagName = tagName;
+        }
+
+        void addAttribute(const QString& attributeName, const QString& attributeValue)
+        {
+            attributeList.push_back(QPair<QString,QString>(attributeName, attributeValue));
+        }
+
+        void clear()
+        {
+            tagName.clear();
+            attributeList.clear();
+        }
+
+        const QString& name() const
+        {
+            return tagName;
+        }
+
+        const QVector<QPair<QString, QString> > attributes() const
+        {
+            return attributeList;
+        }
+
+    private:
+        QString tagName;
+        QVector<QPair<QString, QString> > attributeList;
+};
+
 class KoTextWriter::Private
 {
 public:
@@ -106,8 +144,8 @@ public:
 
     void saveChange(QTextCharFormat format);
     void saveChange(int changeId);
-    int openChangeRegion(int position, ElementType elementType);
-    void closeChangeRegion();
+    int openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagDetails = KoTextWriter::TagInformation());
+    void closeTagRegion();
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
@@ -229,7 +267,7 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTransTable.insert(changeId, changeName);
 }
 
-int KoTextWriter::Private::openChangeRegion(int position, ElementType elementType)
+int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagDetails)
 {
     int changeId = 0;
     QTextCursor cursor(document);
@@ -284,7 +322,7 @@ int KoTextWriter::Private::openChangeRegion(int position, ElementType elementTyp
     return changeId;
 }
 
-void KoTextWriter::Private::closeChangeRegion()
+void KoTextWriter::Private::closeTagRegion()
 {
     int changeId = changeStack.pop();
     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
@@ -457,7 +495,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     
     QTextBlockFormat blockFormat = block.blockFormat();
     const int outlineLevel = blockFormat.intProperty(KoParagraphStyle::OutlineLevel);
-    int changeId = openChangeRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader);
+    int changeId = openTagRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader);
     if (outlineLevel > 0) {
         writer->startElement("text:h", false);
         writer->addAttribute("text:outline-level", outlineLevel);
@@ -585,7 +623,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
-                        int changeId = openChangeRegion(currentFragment.position(), KoTextWriter::Private::Span);
+                        int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span);
                         KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
                         if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                             textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
@@ -600,7 +638,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         }
                         
                         if (changeId)
-                            closeChangeRegion();
+                            closeTagRegion();
                     }
 
                     if (saveSpan) {
@@ -626,7 +664,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
                 }
             } else {
-                int changeId = openChangeRegion(currentFragment.position(), KoTextWriter::Private::Span);
+                int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span);
                 QString styleName = saveCharacterStyle(charFormat, blockCharFormat);
                 if (charFormat.isAnchor()) {
                     writer->startElement("text:a", false);
@@ -658,7 +696,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 }
 
                 if (changeId)
-                    closeChangeRegion();
+                    closeTagRegion();
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
@@ -673,7 +711,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     }
 
     if (changeId)
-        closeChangeRegion();
+        closeTagRegion();
 
     QTextBlock nextBlock = block.next();
     if (nextBlock.isValid() && deleteMergeRegionOpened) {
@@ -868,7 +906,7 @@ int KoTextWriter::Private::checkForTableColumnChange(int position)
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
-    int changeId = openChangeRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
+    int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table);
     writer->startElement("table:table");
     
     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
@@ -877,7 +915,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
     
     for (int c = 0 ; c < table->columns() ; c++) {
-        int changeId = openChangeRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn);
+        int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn);
         writer->startElement("table:table-column");
 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
@@ -888,10 +926,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         writer->endElement(); // table:table-column
 
         if (changeId)
-            closeChangeRegion();
+            closeTagRegion();
     }
     for (int r = 0 ; r < table->rows() ; r++) {
-        int changeId = openChangeRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow);
+        int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow);
         writer->startElement("table:table-row");
 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
@@ -901,7 +939,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
-            int changeId = openChangeRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell);
+            int changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell);
             if ((cell.row() == r) && (cell.column() == c)) {
                 writer->startElement("table:table-cell");
                 writer->addAttribute("rowSpan", cell.rowSpan());
@@ -928,16 +966,16 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             }
             writer->endElement(); // table:table-cell
             if (changeId)
-                closeChangeRegion();
+                closeTagRegion();
         }
         writer->endElement(); // table:table-row
         if (changeId)
-            closeChangeRegion();
+            closeTagRegion();
     }
     writer->endElement(); // table:table
 
     if (changeId)
-        closeChangeRegion();
+        closeTagRegion();
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
@@ -1009,7 +1047,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     int listChangeId = 0;
     if (!headingLevel && !numberedParagraphLevel) {
         listStarted = true;
-        listChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
+        listChangeId = openTagRegion(block.position(), KoTextWriter::Private::List);
         writer->startElement("text:list", false);
         writer->addAttribute("text:style-name", listStyles[textList]);
         if (textList->format().hasProperty(KoListStyle::ContinueNumbering))
@@ -1024,7 +1062,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     if (!headingLevel) {
         do {
             if (numberedParagraphLevel) {
-                int changeId = openChangeRegion(block.position(), KoTextWriter::Private::NumberedParagraph);
+                int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph);
                 writer->startElement("text:numbered-paragraph", false);
                 writer->addAttribute("text:level", numberedParagraphLevel);
                 writer->addAttribute("text:style-name", listStyles.value(textList));
@@ -1038,7 +1076,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 writer->endElement(); 
                 
                 if (changeId) {
-                    closeChangeRegion();
+                    closeTagRegion();
                 }
             } else {
                 int endBlockNumber = checkForSplit(block);
@@ -1051,10 +1089,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 const bool listHeader = blockFormat.boolProperty(KoParagraphStyle::IsListHeader)|| blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem);
                 int listItemChangeId;
                 if (textList == topLevelTextList) {
-                    listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::ListItem);
+                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::ListItem);
                 } else {
                     // This is a sub-list. So check for a list-change
-                    listItemChangeId = openChangeRegion(block.position(), KoTextWriter::Private::List);
+                    listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::List);
                 }
 
                 writer->startElement(listHeader ? "text:list-header" : "text:list-item", false);
@@ -1090,7 +1128,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     block = block.previous();
                 }
                 if (listItemChangeId)
-                   closeChangeRegion();
+                   closeTagRegion();
                 writer->endElement(); 
 
                 if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
@@ -1110,7 +1148,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
     if (listStarted) {
         if (listChangeId)
-            closeChangeRegion();
+            closeTagRegion();
         writer->endElement();
     }
 

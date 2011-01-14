@@ -149,7 +149,7 @@ public:
 
     void saveChange(QTextCharFormat format);
     void saveChange(int changeId);
-    int openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagDetails = KoTextWriter::TagInformation());
+    int openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation);
     void closeTagRegion(int changeId);
     QStack<const char *> openedTagStack;
 
@@ -273,9 +273,9 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTransTable.insert(changeId, changeName);
 }
 
-int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagInformation)
+int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation)
 {
-    int changeId = 0;
+    int changeId = 0, returnChangeId = 0;
     QTextCursor cursor(document);
     QTextBlock block = document->findBlock(position);
 
@@ -316,17 +316,35 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     }
 
     if (changeId && (changeStack.top() != changeId)) {
-        saveChange(changeId);
         changeStack.push(changeId);
     } else {
         changeId = 0;
     }
-
-    if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
-        writer->startElement("delta:removed-content", false);
-        writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
-    }
+    returnChangeId = changeId;
     
+    //Navigate through the change history and push into a stack so that they can be processed in the reverse order (i.e starting from earliest)
+    QStack<int> changeHistory;
+    while (changeId) {
+        changeHistory.push(changeId);
+        saveChange(changeId);
+        changeId = changeTracker->parent(changeId);
+    }
+
+    while(changeHistory.size()) {
+        int changeId = changeHistory.pop();
+
+        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
+            writer->startElement("delta:removed-content", false);
+            writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
+        }else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
+            tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            tagInformation.addAttribute("delta:insertion-type", "insert-with-content");
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+            tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
+            tagInformation.addAttribute("delta:insertion-type", "insert-around-content");
+        }
+    }
+
     if (tagInformation.name()) {
         writer->startElement(tagInformation.name(), false);
         const QVector<QPair<QString, QString> > &attributeList = tagInformation.attributes();
@@ -334,17 +352,9 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         foreach(attribute, attributeList) {
             writer->addAttribute(attribute.first.toAscii(), attribute.second.toAscii());
         }
-        
-        if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-            writer->addAttribute("delta:insertion-type", "insert-with-content");
-        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
-            writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
-            writer->addAttribute("delta:insertion-type", "insert-around-content");
-        }
     }
 
-    return changeId;
+    return returnChangeId;
 }
 
 void KoTextWriter::Private::closeTagRegion(int changeId)
@@ -652,7 +662,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
-                        int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span);
+                        TagInformation inlineTagInformation;
+                        int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, inlineTagInformation);
                         KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
                         if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                             textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));

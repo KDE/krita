@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Matus Hanzes <matus.hanzes@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #define KOTEXTANCHOR_H
 
 #include "KoInlineObject.h"
+#include "KoTextDocumentLayout.h"
 
 #include "kotext_export.h"
 
@@ -29,6 +31,25 @@ class KoShape;
 class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+
+/**
+ * This class is an interface that positions the shape linked to text anchor
+ */
+class KOTEXT_EXPORT KoAnchorStrategy{
+public:
+    KoAnchorStrategy(){};
+    virtual ~KoAnchorStrategy(){};
+
+    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state) = 0;
+
+    virtual bool isPositioned() = 0;
+
+    virtual void reset() = 0;
+
+    virtual bool isRelayoutNeeded() = 0;
+
+    virtual QPointF relayoutPosition() = 0;
+};
 
 /**
  * This class is the object that is positioned in the text to be an anchor for a shape.
@@ -104,6 +125,7 @@ public:
         VParagraphContent,
         VText
     };
+
     /**
      * Constructor for an in-place anchor.
      * @param shape the anchored shape that this anchor links to.
@@ -184,6 +206,31 @@ public:
 
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();
+
+    // get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
+    QRectF pageRect();
+
+    // set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
+    void setPageRect(QRectF &pageRect);
+
+    // get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    QRectF pageContentRect();
+
+    // set content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    void setPageContentRect(QRectF &marginRect);
+
+    // get number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    int pageNumber();
+
+    // set number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    void setPageNumber(int pageNumber);
+
+    // get anchor strategy which is used to position shape linked to text anchor
+    KoAnchorStrategy * anchorStrategy();
+
+    // set anchor strategy which is used to position shape linked to text anchor
+    void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
+
 
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)

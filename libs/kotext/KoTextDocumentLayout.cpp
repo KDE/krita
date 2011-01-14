@@ -111,6 +111,18 @@ public:
     void fitLineForRunAround(bool resetHorizontalPosition) {
         Q_UNUSED(resetHorizontalPosition);
     }
+
+    virtual void insertInlineObject(KoTextAnchor * textAnchor) {
+        Q_UNUSED(textAnchor);
+    }
+
+    virtual void resetInlineObject(int resetPosition) {
+        Q_UNUSED(resetPosition);
+    }
+
+    virtual void removeInlineObject(KoTextAnchor * textAnchor) {
+        Q_UNUSED(textAnchor);
+    }
 };
 
 class KoTextDocumentLayout::Private
@@ -433,6 +445,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // found our (first) shape to re-layout
             data->foul();
             m_state->reset();
+            resetInlineObject(position);
             scheduleLayout();
             return;
         }
@@ -563,6 +576,11 @@ void KoTextDocumentLayout::layout()
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     return d->shapes;
+}
+
+void KoTextDocumentLayout::resetInlineObject(int resetPosition)
+{
+    m_state->resetInlineObject(resetPosition);
 }
 
 KoShape* KoTextDocumentLayout::shapeForPosition(int position) const

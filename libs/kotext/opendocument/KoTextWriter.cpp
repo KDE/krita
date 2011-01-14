@@ -150,7 +150,8 @@ public:
     void saveChange(QTextCharFormat format);
     void saveChange(int changeId);
     int openTagRegion(int position, ElementType elementType, const KoTextWriter::TagInformation& tagDetails = KoTextWriter::TagInformation());
-    void closeTagRegion();
+    void closeTagRegion(int changeId);
+    QStack<const char *> openedTagStack;
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
@@ -278,6 +279,8 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     QTextCursor cursor(document);
     QTextBlock block = document->findBlock(position);
 
+    openedTagStack.push(tagInformation.name());
+
     switch (elementType) {
         case KoTextWriter::Private::Span:
             cursor.setPosition(position + 1);
@@ -313,8 +316,8 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     }
 
     if (changeId && (changeStack.top() != changeId)) {
-        changeStack.push(changeId);
         saveChange(changeId);
+        changeStack.push(changeId);
     } else {
         changeId = 0;
     }
@@ -325,7 +328,6 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     }
     
     if (tagInformation.name()) {
-
         writer->startElement(tagInformation.name(), false);
         const QVector<QPair<QString, QString> > &attributeList = tagInformation.attributes();
         QPair<QString, QString> attribute;
@@ -345,9 +347,16 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     return changeId;
 }
 
-void KoTextWriter::Private::closeTagRegion()
+void KoTextWriter::Private::closeTagRegion(int changeId)
 {
-    int changeId = changeStack.pop();
+    const char *tagName = openedTagStack.pop();
+    if (tagName) {
+        writer->endElement(); // close the tag
+    }
+    
+    if (changeId)
+        changeStack.pop();
+
     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
         writer->endElement(); //delta:removed-content
     }
@@ -658,7 +667,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         }
                         
                         if (changeId)
-                            closeTagRegion();
+                            closeTagRegion(changeId);
                     }
 
                     if (saveSpan) {
@@ -707,12 +716,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addTextSpan(text);
                 }
 
-                if ((!styleName.isEmpty() /*&& !identical*/) || charFormat.isAnchor()) {
-                    writer->endElement();
-                }
-
-                if (changeId)
-                    closeTagRegion();
+                closeTagRegion(changeId);
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
@@ -725,9 +729,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             inlineObject->saveOdf(context);
         }
     }
-
-    if (changeId)
-        closeTagRegion();
 
     QTextBlock nextBlock = block.next();
     if (nextBlock.isValid() && deleteMergeRegionOpened) {
@@ -745,7 +746,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
     
-    writer->endElement();
+    closeTagRegion(changeId);
 }
 
 //Check if the whole Block is a part of a single change
@@ -930,11 +931,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         TagInformation tableColumnInformation;
         tableColumnInformation.setTagName("table:table-column");
         int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn, tableColumnInformation);
-
-        writer->endElement(); // table:table-column
-
-        if (changeId)
-            closeTagRegion();
+        closeTagRegion(changeId);
     }
     for (int r = 0 ; r < table->rows() ; r++) {
         TagInformation tableRowInformation;
@@ -965,18 +962,11 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }
 
-            writer->endElement(); // table:table-cell
-            if (changeId)
-                closeTagRegion();
+            closeTagRegion(changeId);
         }
-        writer->endElement(); // table:table-row
-        if (changeId)
-            closeTagRegion();
+        closeTagRegion(changeId);
     }
-    writer->endElement(); // table:table
-
-    if (changeId)
-        closeTagRegion();
+    closeTagRegion(changeId);
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
@@ -1065,14 +1055,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 paraTagInformation.setTagName("text:numbered-paragraph");
                 paraTagInformation.addAttribute("text:level", numberedParagraphLevel);
                 paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
+                
                 int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
-                
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList); 
-                writer->endElement(); 
-                
-                if (changeId) {
-                    closeTagRegion();
-                }
+                closeTagRegion(changeId);
             } else {
                 int endBlockNumber = checkForSplit(block);
                 if (!deleteMergeRegionOpened && !splitRegionOpened && (endBlockNumber != -1)) {
@@ -1117,9 +1103,8 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
                 }
-                if (listItemChangeId)
-                   closeTagRegion();
-                writer->endElement(); 
+
+                closeTagRegion(listItemChangeId);
 
                 if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
                     splitRegionOpened = false;
@@ -1137,9 +1122,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     if (listStarted) {
-        if (listChangeId)
-            closeTagRegion();
-        writer->endElement();
+        closeTagRegion(listChangeId);
     }
 
     if (closeDelMergeRegion) {

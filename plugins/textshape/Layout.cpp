@@ -115,6 +115,19 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
+    unregisterAllRunAroundShapes();
+}
+
+QTextLine Layout::createLine()
+{
+    m_textLine.createLine(this);
+    m_textLine.setOutlines(m_outlines);
+    return m_textLine.line;
+}
+
+void Layout::fitLineForRunAround(bool resetHorizontalPosition)
+{
+    m_textLine.fit(resetHorizontalPosition);
 }
 
 void Layout::reset()
@@ -211,8 +224,11 @@ struct LineKeeper
     QPointF position;
 };
 
-bool Layout::addLine(QTextLine &line, bool processingLine)
+bool Layout::addLine()
 {
+    QTextLine line = m_textLine.line;
+    bool processingLine = m_textLine.processingLine();
+ 
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -264,6 +280,9 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
+                    if (!m_fragmentIterator.atEnd()) {
+                        break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -531,8 +550,12 @@ bool Layout::nextParag()
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        // NOTE maybe following lines are not enough and we actually need to check if there is content on the current
+        // page and only page-break if there is to prevent empty pages caused by switching between master-pages.
+        if (! m_currentMasterPage.isNull()) { // no pagebreak for the first master-page
+            pagebreak = true; // new master-page means new page
+        }
         m_currentMasterPage = masterPageName.toString();
-        pagebreak = true; // new master-page means new page
     }
 
     // start a new shape if requested, but not if that would leave the current shape empty.
@@ -2223,24 +2246,26 @@ void Layout::updateFrameStack()
         QTextFrameFormat ff = frame->frameFormat();
         if (ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
             // this frame is a TOC
-            QList<QWeakPointer<ToCGenerator> >::Iterator iter;
-            QWeakPointer<ToCGenerator> item;
-            for (iter = m_tocGenerators.begin(); iter < m_tocGenerators.end(); iter++) {
-                item = *iter;
+            bool found = false;
+            QList<QWeakPointer<ToCGenerator> >::Iterator iter = m_tocGenerators.begin();
+            while (iter != m_tocGenerators.end()) {
+                QWeakPointer<ToCGenerator> item = *iter;
                 if (item.isNull()) {
-                    m_tocGenerators.erase(iter);
-                } else {
-                    if (item.data()->tocFrame() == frame) {
-                        break;
-                    }                    
+                    iter = m_tocGenerators.erase(iter);
+                    continue;
                 }
+                if (item.data()->tocFrame() == frame) {
+                    found = true;
+                    break;
+                }
+                iter++;
             }
-            if (item.isNull()) {
+            if (!found) {
                 ToCGenerator *tg = new ToCGenerator(frame);
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),
-                                 tg, SLOT(documentLayoutFinished()));
+                        tg, SLOT(documentLayoutFinished()));
             }
         }
     }
@@ -2251,3 +2276,24 @@ void Layout::setTabSpacing(qreal spacing)
     m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }
 
+void Layout::registerRunAroundShape(KoShape *s)
+{
+    QTransform matrix = s->absoluteTransformation(0);
+    matrix = matrix * shape->absoluteTransformation(0).inverted();
+    matrix.translate(0, documentOffsetInShape());
+    Outline *outline = new Outline(s, matrix);
+    m_outlines.append(outline);
+}
+
+void Layout::updateRunAroundShape(KoShape *s)
+{
+    foreach (Outline *outline, m_outlines) {
+        if (outline->shape() == s) {
+            QTransform matrix = s->absoluteTransformation(0);
+            matrix = matrix * shape->absoluteTransformation(0).inverted();
+            matrix.translate(0, documentOffsetInShape());
+            outline->changeMatrix(matrix);
+            m_textLine.updateOutline(outline);
+        }
+    }
+}

@@ -1498,8 +1498,8 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
     return QVariant(attrMap);
 }
 
-
 #if 1
+
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // make sure that the tag is table-of-content

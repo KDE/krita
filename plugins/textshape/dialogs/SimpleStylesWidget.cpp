@@ -88,6 +88,7 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     blockFrame->setLayout(l);
 
     SpecialButton *charFrame = new SpecialButton;
+    charFrame->setStylesWidget(m_popupForChar);
     QWidget *charPreview = new QWidget();
     charPreview->setAutoFillBackground(true);
     charPreview->setBackgroundRole(QPalette::Base);

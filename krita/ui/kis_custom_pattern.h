@@ -51,14 +51,10 @@ signals:
     void activatedResource(KoResource *);
     void addPattern(KisPattern*);
 
-protected:
-    virtual void showEvent(QShowEvent *);
-
 private slots:
-    void slotExport();
     void slotAddPredefined();
     void slotUsePattern();
-    void slotUpdateCurrentPattern(int);
+    void slotUpdateCurrentPattern();
 
 private:
     void createPattern();

@@ -550,8 +550,12 @@ bool Layout::nextParag()
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        // NOTE maybe following lines are not enough and we actually need to check if there is content on the current
+        // page and only page-break if there is to prevent empty pages caused by switching between master-pages.
+        if (! m_currentMasterPage.isNull()) { // no pagebreak for the first master-page
+            pagebreak = true; // new master-page means new page
+        }
         m_currentMasterPage = masterPageName.toString();
-        pagebreak = true; // new master-page means new page
     }
 
     // start a new shape if requested, but not if that would leave the current shape empty.
@@ -2254,6 +2258,7 @@ void Layout::updateFrameStack()
                     found = true;
                     break;
                 }
+                iter++;
             }
             if (!found) {
                 ToCGenerator *tg = new ToCGenerator(frame);

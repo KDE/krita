@@ -29,27 +29,30 @@
 
 class QMenu;
 class QAction;
+class ItemChooserAction;
 
-class ListStyleButton : public QToolButton
+class FormattingButton : public QToolButton
 {
     Q_OBJECT
 public:
-    ListStyleButton( QWidget *parent = 0 );
+    FormattingButton( QWidget *parent = 0 );
 
     QString example(KoListStyle::Style type) const;
     void addItem(QPixmap pm, int id);
+    void addAction(QAction *action);
+    void addSeparator();
 
 signals:
     void itemTriggered(int id);
 
 private slots:
-    void itemSelected(QAction *action);
+    void itemSelected();
 
 private:
-    bool m_letterSynchronization;
-    QAction *m_lastAction ;
+    int m_lastId ;
     QMenu *m_menu;
-    QMap<QAction *, int > m_actionMap;
+    QMap<QObject *, int > m_styleMap;
+    ItemChooserAction *m_styleAction;
 };
 
 #endif

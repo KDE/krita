@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,37 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef SIMPLETABLEWIDGET_H
-#define SIMPLETABLEWIDGET_H
 
-#include <ui_SimpleTableWidget.h>
-#include <KoListStyle.h>
+#include "StylesDelegate.h"
 
-#include <QWidget>
-#include <QTextBlock>
+#include <QPainter>
 
-class TextTool;
-class KoStyleManager;
-
-class SimpleTableWidget : public QWidget
+StylesDelegate::StylesDelegate()
+ : QStyledItemDelegate()
 {
-    Q_OBJECT
-public:
-    explicit SimpleTableWidget(TextTool *tool, QWidget *parent = 0);
+}
 
-public slots:
-    void setStyleManager(KoStyleManager *sm);
+void StylesDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+                            const QModelIndex &index) const
+{
+   if (index.column() == 1) {
+         painter->fillRect(option.rect, QColor(Qt::red));
 
-signals:
-    void doneWithFocus();
-    
-private:
-    Ui::SimpleTableWidget widget;
-    KoStyleManager *m_styleManager;
-    bool m_blockSignals;
-    bool m_comboboxHasBidiItems;
-    QTextBlock m_currentBlock;
-    TextTool *m_tool;
-};
+   } else {
+         QStyledItemDelegate::paint(painter, option, index);
+   }
+}
 
-#endif
+QSize StylesDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    return QSize(250,48);
+}

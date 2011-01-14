@@ -307,10 +307,8 @@ void KoFilterChain::manageIO()
         delete m_inputStorage;
         m_inputStorage = 0;
     }
-    if (m_inputTempFile) {
-        delete m_inputTempFile;  // autodelete
-        m_inputTempFile = 0;
-    }
+    delete m_inputTempFile;  // autodelete
+    m_inputTempFile = 0;
     m_inputFile.clear();
 
     if (!m_outputFile.isEmpty()) {

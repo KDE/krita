@@ -1143,6 +1143,46 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
     setGeometryProtected(protect.contains("position") || protect.contains("size"));
     setContentProtected(protect.contains("content"));
+
+    QString margin = styleStack.property(KoXmlNS::fo, "margin");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-left");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-top");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-bottom");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-right");
+    setTextRunAroundDistance(KoUnit::parseValue(margin));
+
+    QString wrap;
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap")) {
+        wrap = styleStack.property(KoXmlNS::style, "wrap");
+    } else {
+        // no value given in the file, but guess biggest
+        wrap = "biggest";
+    }
+    if (wrap == "none") {
+        setTextRunAroundSide(KoShape::NoRunAround);
+    } else if (wrap == "run-through") {
+        QString runTrought = styleStack.property(KoXmlNS::style, "run-through", "background");
+        if (runTrought == "background") {
+            setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
+        } else {
+            setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
+        }
+    } else {
+        if (wrap == "biggest")
+            setTextRunAroundSide(KoShape::BiggestRunAroundSide);
+        else if (wrap == "left")
+            setTextRunAroundSide(KoShape::LeftRunAroundSide);
+        else if (wrap == "right")
+            setTextRunAroundSide(KoShape::RightRunAroundSide);
+        else if (wrap == "dynamic")
+            setTextRunAroundSide(KoShape::AutoRunAroundSide);
+        else if (wrap == "parallel")
+            setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
 }
 
 bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes)
@@ -1208,6 +1248,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
             context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
         }
         loadStyle(element, context);
+
         styleStack.restore();
     }
 
@@ -1225,46 +1266,6 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                 //kDebug(30006) << "load additional attribute" << attributeData.tag << value;
                 setAdditionalAttribute(attributeData.name, value);
             }
-        }
-
-        QString margin = element.attributeNS(KoXmlNS::fo, "margin");
-        if (margin.isEmpty())
-            margin = element.attributeNS(KoXmlNS::fo, "margin-left");
-        if (margin.isEmpty())
-            margin = element.attributeNS(KoXmlNS::fo, "margin-top");
-        if (margin.isEmpty())
-            margin = element.attributeNS(KoXmlNS::fo, "margin-bottom");
-        if (margin.isEmpty())
-            margin = element.attributeNS(KoXmlNS::fo, "margin-right");
-        setTextRunAroundDistance(KoUnit::parseValue(margin));
-
-        QString wrap;
-        if (element.hasAttributeNS(KoXmlNS::style, "wrap")) {
-            wrap = element.attributeNS(KoXmlNS::style, "wrap");
-        } else {
-            // no value given in the file, but guess biggest
-            wrap = "biggest";
-        }
-        if (wrap == "none") {
-            setTextRunAroundSide(KoShape::NoRunAround);
-        } else if (wrap == "run-through") {
-            QString runTrought = element.attributeNS(KoXmlNS::style, "run-through", "background");
-            if (runTrought == "background") {
-                setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
-            } else {
-                setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
-            }
-        } else {
-            if (wrap == "biggest")
-                setTextRunAroundSide(KoShape::BiggestRunAroundSide);
-            else if (wrap == "left")
-                setTextRunAroundSide(KoShape::LeftRunAroundSide);
-            else if (wrap == "right")
-                setTextRunAroundSide(KoShape::RightRunAroundSide);
-            else if (wrap == "dynamic")
-                setTextRunAroundSide(KoShape::AutoRunAroundSide);
-            else if (wrap == "parallel")
-                setTextRunAroundSide(KoShape::BothRunAroundSide);
         }
     }
 

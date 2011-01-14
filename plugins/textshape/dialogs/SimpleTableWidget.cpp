@@ -38,6 +38,15 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.deleteColumn->setDefaultAction(tool->action("delete_tablecolumn"));
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
+
+    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addColumnLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addColumnRight, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.deleteRow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.deleteColumn, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.mergeCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.splitCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }
 
 void SimpleTableWidget::setStyleManager(KoStyleManager *sm)

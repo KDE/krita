@@ -27,6 +27,8 @@
 #include <QImage>
 #include <QBitArray>
 #include <QStack>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include <KoProperties.h>
 #include <KoCompositeOp.h>

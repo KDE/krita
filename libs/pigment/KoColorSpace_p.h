@@ -21,6 +21,7 @@
 #define _KOCOLORSPACE_P_H_
 
 #include "KoColorSpace.h"
+#include <QThreadStorage>
 
 struct KoColorSpace::Private {
 

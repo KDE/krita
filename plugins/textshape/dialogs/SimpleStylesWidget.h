@@ -40,6 +40,11 @@ public slots:
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
 
+signals:
+    void doneWithFocus();
+    void characterStyleSelected(KoCharacterStyle *);
+    void paragraphStyleSelected(KoParagraphStyle *);
+
 private:
     KoStyleManager *m_styleManager;
     QTextBlockFormat m_currentBlockFormat;

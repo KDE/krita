@@ -362,12 +362,13 @@ public:
     int viewCount() const;
 
     /**
-     * @return a QGraphicsItem canvas displaying this document. The QGraphicsItem
-     * is created on first call. There is only one QGraphicsItem canvas that can
+     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
      * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
      * as well).
+     *
+     * @param create if true, a new canvas item is created if there wasn't one.
      */
-    QGraphicsItem *canvasItem();
+    QGraphicsItem *canvasItem(bool create = true);
 
     /**
      * Reimplemented from KParts::Part

@@ -48,6 +48,7 @@ SET ( textshape_SRCS
     dialogs/ParagraphSettingsDialog.cpp
     dialogs/ListsSpinBox.cpp
     dialogs/StylesModel.cpp
+    dialogs/StylesDelegate.cpp
     dialogs/StyleManager.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/ParagraphGeneral.cpp
@@ -64,7 +65,7 @@ SET ( textshape_SRCS
     dialogs/StyleManagerWelcome.cpp
     dialogs/TableDialog.cpp
     dialogs/QuickTableButton.cpp
-    dialogs/ListStyleButton.cpp
+    dialogs/FormattingButton.cpp
     dialogs/ChangeConfigureDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp

@@ -326,6 +326,14 @@ endif(SHOULD_BUILD_SCRIPTING)
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
+# koabstraction depends on kotext & flake
+set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
+                    ${KOTEXT_INCLUDES}
+                    ${FLAKE_INCLUDES}
+                    ${KOPAGEAPP_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/tools/koabstraction)
+
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place

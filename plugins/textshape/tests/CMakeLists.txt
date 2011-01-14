@@ -54,7 +54,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -70,6 +70,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/ParagraphBulletsNumbers.cpp
     ../dialogs/ListsSpinBox.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/NewStyleWidget.cpp
@@ -110,9 +111,18 @@ target_link_libraries(TestChangesDatabase ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRA
 set(TestStylesModel_test_SRCS
     TestStylesModel.cpp
     ../dialogs/StylesModel.cpp
+    ../TextShape.cpp
+    ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
+    ../TableLayout.cpp
+    ../TableLayoutData.cpp
+    ../ListItemsHelper.cpp
+    ../ToCGenerator.cpp
+    ../ShrinkToFitShapeContainer.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -187,10 +197,11 @@ set(TestTextTool_test_SRCS
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
     ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -239,7 +250,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -255,6 +266,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/ParagraphBulletsNumbers.cpp
     ../dialogs/ListsSpinBox.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/NewStyleWidget.cpp

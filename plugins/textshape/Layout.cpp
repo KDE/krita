@@ -2248,7 +2248,7 @@ void Layout::updateFrameStack()
             // this frame is a TOC
             QList<QWeakPointer<ToCGenerator> >::Iterator iter;
             QWeakPointer<ToCGenerator> item;
-            for (iter = m_tocGenerators.begin(); iter < m_tocGenerators.end(); iter++) {
+            for (iter = m_tocGenerators.begin(); iter != m_tocGenerators.end(); iter++) {
                 item = *iter;
                 if (item.isNull()) {
                     m_tocGenerators.erase(iter);

@@ -1498,8 +1498,8 @@ static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoa
     return QVariant(attrMap);
 }
 
-#if 1
 
+#if 1
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
     // make sure that the tag is table-of-content
@@ -1525,6 +1525,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             info.loadOdf(e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
+            Q_ASSERT( !tocFormat.hasProperty(KoText::TableOfContentsData) );
             tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<TableOfContent*>(info.tableOfContentData()) );
             cursor.insertFrame(tocFormat);
             

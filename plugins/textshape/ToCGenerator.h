@@ -26,13 +26,15 @@
 typedef QPair<QTextBlock, QTextBlock> BlockPair;
 
 class QTextFrame;
+class TableOfContent;
 
 class ToCGenerator : public QObject
 {
     Q_OBJECT
 public:
     explicit ToCGenerator(QTextFrame *tocFrame);
-
+    virtual ~ToCGenerator();
+    
     QTextFrame *tocFrame() const { return m_ToCFrame; }
 
     // TODO API to be called when the shape is printed so we can guarentee
@@ -56,6 +58,7 @@ private:
 
     State m_state;
     QTextFrame *m_ToCFrame;
+    TableOfContent * m_tocDescription;
     //QList<QTextBlock> m_originalBlocksInToc;
     QList<BlockPair> m_originalBlocksInToc;
 };

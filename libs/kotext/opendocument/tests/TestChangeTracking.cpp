@@ -297,6 +297,9 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt";
     QTest::newRow("Others-2")  << "ChangeTracking/other/list-id-sample/list-sample-tracked.odt";
     QTest::newRow("Others-3")  << "ChangeTracking/other/list-table-list-1/list-table-list-tracked.odt";
+
+    //Multiple and Overlapping changes
+    QTest::newRow("Multiple Paragraph Changes")  << "ChangeTracking/multiple-changes/para-add-then-delete/para-add-delete-tracked.odt";
      
 }
 

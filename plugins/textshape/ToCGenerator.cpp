@@ -79,7 +79,7 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     return style;
 }
 
-#if 1
+#if 0
 
 void ToCGenerator::generate()
 {
@@ -449,16 +449,18 @@ void ToCGenerator::update()
             if (shapeData && shapeData->page()) {
                 QString blockText = tocEntryBlock.text();
                 int position = blockText.indexOf(QChar::ReplacementCharacter);
-                if (position > -1) {
+                if (position == -1) {
+                    qDebug() << "TESTX PAGE NUMBER REPLACEMENT CHAR NOT FOUND";
+                }
+                // Replace page number, possibly more than one time in one block
+                while (position > -1) {
                     //qDebug() << "TESTX page number " << QString::number(shapeData->page()->pageNumber());
                     cursor.setPosition(tocEntryBlock.position() + position);
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
                     QString pageNumber = QString::number(shapeData->page()->pageNumber());
                     cursor.insertText(pageNumber);
-                } else {
-                    qDebug() << "TESTX PAGE NUMBER REPLACEMENT CHAR NOT FOUND";
+                    position = blockText.indexOf(QChar::ReplacementCharacter, position + 1);
                 }
-                
             }
         }
     }

@@ -30,6 +30,7 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
+#include <kmessagebox.h>
 
 #include "kis_view2.h"
 #include "kis_image.h"
@@ -41,7 +42,7 @@
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
-        : KisWdgCustomPattern(parent, name), m_view(view)
+    : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
     setWindowTitle(caption);
@@ -153,7 +154,19 @@ void KisCustomPattern::createPattern()
     if (!image)
         return;
 
-    m_pattern = new KisPattern(image->mergedImage().data(), 0, 0, image->width(), image->height());
+    // warn when creating large patterns
+    QSize size(image->width(), image->height());
+    if (size.width() > 1000 || size.height() > 1000) {
+        KMessageBox::warningContinueCancel(m_view,
+                                           i18n("The current image is too big to create a pattern."
+                                                "The pattern will be scaled down."),
+                                           "Krita");
+        size.scale(1000, 1000, Qt::KeepAspectRatio);
+    }
+    image->lock();
+    m_pattern = new KisPattern(image->projection(), size.width(), size.height());
+    image->unlock();
+
 }
 
 

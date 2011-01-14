@@ -37,7 +37,7 @@ class KRITAIMAGE_EXPORT KisPattern : public KoPattern
 
 public:
     KisPattern(const QString& file);
-    KisPattern(KisPaintDevice* image, int x, int y, int w, int h);
+    KisPattern(KisPaintDeviceSP image, int w, int h);
     virtual ~KisPattern();
 
     /**

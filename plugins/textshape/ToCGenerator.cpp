@@ -89,7 +89,7 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     return style;
 }
 
-#if 0
+#if 1
 
 void ToCGenerator::generate()
 {
@@ -104,18 +104,8 @@ void ToCGenerator::generate()
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
     
-    //TODO pavolk: apply section toc style
-    //QVariant tocStyleVariant = attribute(tocVariant, "table-of-content", "style-name");
-    //qDebug() << "TESTX TOC STYLE VARIANT " << tocStyleVariant;
-    //KoSectionStyle *tocStyle = getStyle(styleManager, tocStyleVariant);
-    //QTextBlock tocTextBlock = cursor.block();
-    //tocStyle->applyStyle(cursorFrame);
-    //cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-    // Add TOC title
-    
     if ( !m_tocDescription->tocSource.indexTitleTemplate.text.isNull() ){
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_tocDescription->tocSource.indexTitleTemplate.styleId);
-        // Do we want default style or generate style also for title ?
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
             //qDebug() << "TESTX USING DEFALT STYLE " << titleStyle->styleId();
@@ -393,7 +383,6 @@ void ToCGenerator::generate() {
                 if (name == "index-entry-link-start") {
                     // Insert what was before link start
                     insertBody(entryCursor, body);
-                    //TODO navigation for link
                     // openoffice format: "#1.Document control|outline"
                     QString link = "#" + bd->counterText() + block.text() + "|outline";
                     QTextCharFormat linkCf(cf);

@@ -145,6 +145,9 @@ public:
     /// Returns the specified default connection point
     QPointF defaultConnectionPoint(KoFlake::ConnectionPointId connectionPointId);
 
+    /// Sets the specified connection point
+    void setConnectionPoint(int id, const QPointF &position);
+
     Q_DECLARE_PUBLIC(KoShape)
 };
 

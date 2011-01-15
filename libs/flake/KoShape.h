@@ -315,12 +315,13 @@ public:
 
     /**
      * @brief Add a connector point to the shape
+     * 
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
      * @param point the position where to place the connector. The points coordinate system
-     *   are based around the zero-pos which is the top-left of the shape
-     *   The point does not have to be inside the boundings rectangle.  The point is in pt,
+     *   are based around the zero-pos which is the top-left of the shape. The position of
+     *   the connector is restricted to the bounding rectangle of the shape. The point is in pt,
      *   just like the rest of the KoShape class uses.
      * @return the id of the new connection point
      */
@@ -328,6 +329,9 @@ public:
 
     /**
      * Tries to insert connection point with specified id.
+     *
+     * The position of the connector is restricted to the bounding rectangle of the shape.
+     * 
      * @param point the position of the connector in shape coordinates
      * @param connectionPointId the id of the connection point to insert
      * @return true if inserting connection point was successful;
@@ -343,6 +347,9 @@ public:
 
     /**
      * Sets new position for specified custom connection point
+     *
+     * The position of the connector is restricted to the bounding rectangle of the shape.
+     *
      * @param connectionPointId the id of the custom connection point to change
      * @param newPosition the new position of the custom connection point in shape coordinates
      * @return true if position could be changed, else false

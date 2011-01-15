@@ -219,6 +219,15 @@ QPointF KoShapePrivate::defaultConnectionPoint(KoFlake::ConnectionPointId connec
             return QPointF();
     }
 }
+
+void KoShapePrivate::setConnectionPoint(int id, const QPointF &position)
+{
+    // restrict position of connection point to bounding box
+    const qreal x = qBound<qreal>(0.0, position.x(), 1.0);
+    const qreal y = qBound<qreal>(0.0, position.y(), 1.0);
+    connectors[id] = QPointF(x, y);
+}
+
 // static
 QString KoShapePrivate::getStyleProperty(const char *property, KoShapeLoadingContext &context)
 {
@@ -747,14 +756,14 @@ int KoShape::addConnectionPoint(const QPointF &point)
 {
     Q_D(KoShape);
     QSizeF s = size();
-    // convert glue point from shape coordinates to factors of size
-    QPointF connectionPoint(point.x() / s.width(), point.y() / s.height());
+
     // get next glue point id
     int nextConnectionPointId = KoFlake::FirstCustomConnectionPoint;
     if (d->connectors.size())
         nextConnectionPointId = qMax(nextConnectionPointId, (--d->connectors.end()).key()+1);
 
-    d->connectors[nextConnectionPointId] = connectionPoint;
+    // convert glue point from shape coordinates to factors of size
+    d->setConnectionPoint(nextConnectionPointId, QPointF(point.x()/s.width(), point.y()/s.height()));
 
     return nextConnectionPointId;
 }
@@ -765,10 +774,7 @@ bool KoShape::insertConnectionPoint(const QPointF &point, int connectionPointId)
     if (connectionPointId < 0 || d->connectors.contains(connectionPointId))
         return false;
 
-    QSizeF s = size();
-    // convert glue point from shape coordinates to factors of size
-    QPointF connectionPoint(point.x() / s.width(), point.y() / s.height());
-
+    QPointF connectionPoint;
     switch(connectionPointId) {
         case KoFlake::TopConnectionPoint:
         case KoFlake::RightConnectionPoint:
@@ -777,11 +783,16 @@ bool KoShape::insertConnectionPoint(const QPointF &point, int connectionPointId)
             connectionPoint = d->defaultConnectionPoint(static_cast<KoFlake::ConnectionPointId>(connectionPointId));
             break;
         default:
-            // do nothing for all other cases
+        {
+            QSizeF s = size();
+            // convert glue point from shape coordinates to factors of size
+            connectionPoint.rx() = point.x() / s.width();
+            connectionPoint.ry() = point.y() / s.height();
             break;
+        }
     }
 
-    d->connectors[connectionPointId] = connectionPoint;
+    d->setConnectionPoint(connectionPointId, connectionPoint);
 
     return true;
 }
@@ -809,15 +820,14 @@ bool KoShape::setConnectionPointPosition(int connectionPointId, const QPointF &n
         return false;
 
     Q_D(KoShape);
-    KoConnectionPoints::iterator cp = d->connectors.find(connectionPointId);
-    // check if connection point exists
-    if(cp == d->connectors.end())
+    if (!d->connectors.contains(connectionPointId))
         return false;
 
     QSizeF s = size();
-    cp->rx() = newPosition.x() / s.width();
-    cp->ry() = newPosition.y() / s.height();
-
+    // convert glue point from shape coordinates to factors of size
+    const qreal x = newPosition.x() / s.width();
+    const qreal y = newPosition.y() / s.height();
+    d->setConnectionPoint(connectionPointId, QPointF(x, y));
     d->shapeChanged(ConnectionPointChanged);
 
     return true;
@@ -1416,10 +1426,11 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                     // convert position to be relative to top-left corner
                     connectorPos += QPointF(0.5, 0.5);
                 }
-                d->connectors[index] = connectorPos;
+                d->setConnectionPoint(index, connectorPos);
                 kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
             }
         }
+        kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
     }
 
     return true;

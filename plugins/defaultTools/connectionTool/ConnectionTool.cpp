@@ -23,6 +23,7 @@
 #include "ConnectionTool.h"
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
+#include "MoveConnectionPointStrategy.h"
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -41,8 +42,6 @@
 #include <QUndoCommand>
 #include <QPointF>
 #include <QKeyEvent>
-
-/* TODO: use commands for editing */
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     : KoPathTool(canvas)
@@ -136,7 +135,7 @@ void ConnectionTool::repaintDecorations()
 void ConnectionTool::mousePressEvent(KoPointerEvent * event)
 {
     if (m_editMode == Idle) {
-        // pressing aon a shape in idle mode switches to connection point edit mode
+        // pressing on a shape in idle mode switches to connection point edit mode
         if (m_currentShape && !dynamic_cast<KoConnectionShape*>(m_currentShape)) {
             m_editMode = EditConnectionPoint;
             m_activeHandle = -1;
@@ -189,6 +188,10 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
                 repaintDecorations();
                 resetEditMode();
             }
+        } else {
+            if (m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
+                m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, m_activeHandle, this);
+            }
         }
     }
 }
@@ -197,7 +200,12 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_currentStrategy) {
         repaintDecorations();
-        m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+        if (m_editMode != EditConnection && m_editMode != CreateConnection) {
+            QPointF snappedPos = canvas()->snapGuide()->snap(event->point, event->modifiers());
+            m_currentStrategy->handleMouseMove(snappedPos, event->modifiers());
+        } else {
+            m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+        }
         repaintDecorations();
         return;
     }
@@ -206,20 +214,11 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 
     if (m_editMode == EditConnectionPoint) {
         Q_ASSERT(m_currentShape);
-        if (event->buttons() & Qt::LeftButton && m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
-            QPointF mousePos = canvas()->snapGuide()->snap(event->point, event->modifiers());
-            QPointF cp = m_currentShape->documentToShape(mousePos);
+        // check if we should highlight another connection point
+        int handleId = handleAtPoint(m_currentShape, event->point);
+        if(handleId != m_activeHandle) {
+            m_activeHandle = handleId;
             repaintDecorations();
-            // TODO: use undo command
-            m_currentShape->setConnectionPointPosition(m_activeHandle, cp);
-            repaintDecorations();
-        } else {
-            // check if we should highlight another connection point
-            int handleId = handleAtPoint(m_currentShape, event->point);
-            if(handleId != m_activeHandle) {
-                m_activeHandle = handleId;
-                repaintDecorations();
-            }
         }
     } else {
         resetEditMode();
@@ -284,7 +283,8 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
             canvas()->addCommand(command);
         delete m_currentStrategy;
         m_currentStrategy = 0;
-        resetEditMode();
+        if (m_editMode == EditConnection || m_editMode == CreateConnection)
+            resetEditMode();
     }
     updateStatusText();
 }

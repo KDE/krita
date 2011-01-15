@@ -140,3 +140,15 @@ kde4_add_unit_test(TestPointMergeCommand TESTNAME libs-flake-TestPointMergeComma
 target_link_libraries(TestPointMergeCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+set(TestPointMergeCommand_test_SRCS TestPointMergeCommand.cpp )
+kde4_add_unit_test(TestPointMergeCommand TESTNAME libs-flake-TestPointMergeCommand  ${TestPointMergeCommand_test_SRCS})
+target_link_libraries(TestPointMergeCommand ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############
+
+set(TestInputDevice_test_SRCS TestInputDevice.cpp )
+kde4_add_unit_test(TestInputDevice TESTNAME libs-flake-TestInputDevice  ${TestInputDevice_test_SRCS})
+target_link_libraries(TestInputDevice ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
+
+########### end ###############

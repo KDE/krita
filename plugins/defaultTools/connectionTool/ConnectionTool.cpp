@@ -120,14 +120,12 @@ void ConnectionTool::repaintDecorations()
             handlePos = connectionShape->shapeToDocument(handlePos);
             repaint(handlePaintRect(handlePos));
         } else {
-            QRectF bbox;
             KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
-                bbox.unite(handleGrabRect(m_currentShape->shapeToDocument(cp.value())));
+                repaint(handleGrabRect(m_currentShape->shapeToDocument(cp.value())));
             }
-            repaint(bbox);
         }
     }
 }

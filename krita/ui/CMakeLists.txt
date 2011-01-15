@@ -110,9 +110,13 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
+    recorder/kis_recorded_action_creator.cc
+    recorder/kis_recorded_action_creator_factory.cc
+    recorder/kis_recorded_action_creator_factory_registry.cc
     recorder/kis_recorded_action_editor_factory.cc
     recorder/kis_recorded_action_editor_factory_registry.cc
     recorder/kis_recorded_filter_action_editor.cc
+    recorder/kis_recorded_filter_action_creator.cpp
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp 
     tool/kis_shape_tool_helper.cpp 

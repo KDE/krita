@@ -73,8 +73,7 @@ void KoColorSetWidget::KoColorSetWidgetPrivate::filter(int state)
 {
     bool hide = (state == Qt::Checked);
 
-    if (colorSetContainer)
-        delete colorSetContainer;
+    delete colorSetContainer;
     colorSetContainer = new QWidget();
     colorSetLayout = new QGridLayout();
     colorSetLayout->setMargin(3);

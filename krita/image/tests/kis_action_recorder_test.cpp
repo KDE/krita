@@ -29,6 +29,7 @@
 
 #include <ktemporaryfile.h>
 #include <recorder/kis_play_info.h>
+#include <recorder/kis_macro_player.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -72,7 +73,9 @@ void KisActionRecorderTest::testFiles()
             KisMacro m;
             m.fromXML(docElem, 0);
             // Play
-            m.play(KisPlayInfo(&image, image.root()));
+            KisMacroPlayer player(&m, KisPlayInfo(&image, image.root()));
+            player.start();
+            player.wait();
             QImage sourceImage = image.convertToQImage(0, 0, 200, 200, 0);
             // load what we should have get from the hard drive
             QImage resultImage(resultFileInfo.absoluteFilePath());

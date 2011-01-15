@@ -86,33 +86,6 @@ void KisMacro::moveAction(const KisRecordedAction* action, const KisRecordedActi
     }
 }
 
-// TODO should be threaded instead
-#include <QApplication>
-
-void KisMacro::play(const KisPlayInfo& info) const
-{
-    dbgImage << "Start playing macro with " << d->actions.size() << " actions";
-    if (info.undoAdapter()) {
-        info.undoAdapter() ->beginMacro(i18n("Play macro"));
-    }
-
-
-    for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
-        if (*it) {
-            QList<KisNodeSP> nodes = (*it)->nodeQueryPath().queryNodes(info.image(), info.currentNode());
-            foreach(const KisNodeSP node, nodes) {
-                dbgImage << "Play action : " << (*it)->name();
-                (*it)->play(node, info);
-            }
-        }
-        QApplication::processEvents();
-    }
-
-    if (info.undoAdapter()) {
-        info.undoAdapter() ->endMacro();
-    }
-}
-
 void KisMacro::fromXML(const QDomElement& docElem, const KisRecordedActionLoadContext* loadContext)
 {
     d->actions.clear();

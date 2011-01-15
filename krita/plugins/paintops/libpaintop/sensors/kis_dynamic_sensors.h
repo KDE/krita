@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2006-2007,2010 Cyrille Berger <cberger@cberger.net>
- *
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -97,6 +98,45 @@ public:
     virtual ~KisDynamicSensorYTilt() { }
     virtual qreal parameter(const KisPaintInformation& info) {
         return 1.0 - fabs(info.yTilt()) / 60.0;
+    }
+};
+
+class KisDynamicSensorAscension : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorAscension();
+    virtual ~KisDynamicSensorAscension() {}
+    virtual qreal parameter(const KisPaintInformation& info){
+        qreal xTilt = info.xTilt();
+        qreal yTilt = info.yTilt();
+        // radians -PI, PI
+        qreal ascension = atan2(-xTilt, yTilt);
+        // map to 0.0..1.0
+        ascension = ascension / (2 * M_PI) + 0.5;
+        return ascension;
+    }
+};
+
+class KisDynamicSensorDeclination : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorDeclination();
+    virtual ~KisDynamicSensorDeclination() {}
+    virtual qreal parameter(const KisPaintInformation& info){
+        qreal xTilt = qBound(-1.0, info.xTilt() / 60.0 , 1.0);
+        qreal yTilt = qBound(-1.0, info.yTilt() / 60.0 , 1.0);
+
+        qreal e;
+        if (fabs(xTilt) > fabs(yTilt)) {
+            e = sqrt(1.0 + yTilt*yTilt);
+        } else {
+            e = sqrt(1.0 + xTilt*xTilt);
+        }
+      
+        qreal cosAlpha = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
+        // in radians in [0, 0.5 * PI] .. mapping to 0.0..1.0
+        qreal declination = acos (cosAlpha) / (M_PI * 0.5);
+        return declination;
     }
 };
 

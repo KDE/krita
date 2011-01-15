@@ -14,9 +14,6 @@
    <property name="margin">
     <number>0</number>
    </property>
-   <item row="0" column="0" colspan="5">
-    <widget class="QTreeView" name="stylesView"/>
-   </item>
    <item row="1" column="0">
     <widget class="QToolButton" name="applyStyle">
      <property name="toolTip">
@@ -59,6 +56,9 @@
       <string>...</string>
      </property>
     </widget>
+   </item>
+   <item row="0" column="0" colspan="5">
+    <widget class="QListView" name="stylesView"/>
    </item>
    <item row="1" column="4">
     <widget class="QToolButton" name="deleteStyle">

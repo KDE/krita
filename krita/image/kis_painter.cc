@@ -2152,7 +2152,7 @@ void KisPainter::setGradient(const KoAbstractGradient* gradient)
     d->gradient = gradient;
 }
 
-const KoAbstractGradient* KisPainter::gradient()
+const KoAbstractGradient* KisPainter::gradient() const
 {
     return d->gradient;
 }

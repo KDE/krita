@@ -36,7 +36,7 @@ class KisCoordinatesConverter;
 class KisPaintingAssistantHandle;
 typedef KisSharedPtr<KisPaintingAssistantHandle> KisPaintingAssistantHandleSP;
 class KisPaintingAssistant;
-
+class QPainterPath;
 
 /**
   * Represent an handle of the assistant, used to edit the parameters
@@ -87,6 +87,11 @@ public:
     void addHandle(KisPaintingAssistantHandleSP handle);
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+public:
+    /**
+     * This will paint a path using a white and black colors.
+     */
+    static void drawPath(QPainter& painter, const QPainterPath& path);
 protected:
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
 private:

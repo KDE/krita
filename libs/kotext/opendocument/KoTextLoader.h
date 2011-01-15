@@ -150,9 +150,14 @@ private:
     void loadNote(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+    * Load the shape element and assign hyperlink to it \p element into the \p cursor .
+    */
+    void loadShapeWithHyperLink(const KoXmlElement &element, QTextCursor& cursor);
+
+    /**
     * Load the shape element \p element into the \p cursor .
     */
-    void loadShape(const KoXmlElement &element, QTextCursor& cursor);
+    KoShape *loadShape(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
     * Load the table of content element \p element into the \p cursor .

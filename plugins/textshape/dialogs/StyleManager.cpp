@@ -17,9 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#define PARAGRAPH_STYLE 1000
-#define CHARACTER_STYLE 1001
-
 #include "StyleManager.h"
 
 #include "StylesWidget.h"

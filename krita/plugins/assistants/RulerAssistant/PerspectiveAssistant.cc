@@ -166,10 +166,12 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
 }
 
 // draw a vanishing point marker
-inline void drawX(QPainter& gc, const QPointF& pt)
+inline QPainterPath drawX(QPainter& gc, const QPointF& pt)
 {
-    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() - 5.0), QPointF(pt.x() + 5.0, pt.y() + 5.0));
-    gc.drawLine(QPointF(pt.x() - 5.0, pt.y() + 5.0), QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    QPainterPath path;
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    return path;
 }
 
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
@@ -182,8 +184,15 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     gc.setTransform(initialTransform);
     if (!quad(poly)) {
         // color red for an invalid transform, but not for an incomplete one
-        gc.setPen((handles().size() == 4) ? QColor(255, 0, 0, 125) : QColor(0, 0, 0, 125));
-        gc.drawPolygon(poly);
+        if(handles().size() == 4)
+        {
+            gc.setPen(QColor(255, 0, 0, 125));
+            gc.drawPolygon(poly);
+        } else {
+            QPainterPath path;
+            path.addPolygon(poly);
+            drawPath(gc, path);
+        }
         gc.restore();
     } else {
         gc.setPen(QColor(0, 0, 0, 125));
@@ -196,20 +205,27 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             return;
         }
         gc.setTransform(transform, true);
+        QPainterPath path;
         for (int y = 0; y <= 8; ++y)
-            gc.drawLine(QPointF(0.0, y * 0.125), QPointF(1.0, y * 0.125));
+        {
+            path.moveTo(QPointF(0.0, y * 0.125));
+            path.lineTo(QPointF(1.0, y * 0.125));
+        }
         for (int x = 0; x <= 8; ++x)
-            gc.drawLine(QPointF(x * 0.125, 0.0), QPointF(x * 0.125, 1.0));
-
+        {
+            path.moveTo(QPointF(x * 0.125, 0.0));
+            path.lineTo(QPointF(x * 0.125, 1.0));
+        }
+        drawPath(gc, path);
         gc.restore();
         
         // draw vanishing points
         QPointF intersection(0, 0);
         if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-            drawX(gc, initialTransform.map(intersection));
+            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
         }
         if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-            drawX(gc, initialTransform.map(intersection));
+            drawPath(gc, drawX(gc, initialTransform.map(intersection)));
         }
     }
 }

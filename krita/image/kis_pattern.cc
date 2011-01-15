@@ -49,13 +49,11 @@ KisPattern::KisPattern(const QString& file)
 {
 }
 
-KisPattern::KisPattern(KisPaintDevice* image, int x, int y, int w, int h)
+KisPattern::KisPattern(const QImage &image, const QString &name)
         : KoPattern("")
 {
-    // Forcefully convert to RGBA8
-    // XXX profile and exposure?
-    setImage(image->convertToQImage(0, x, y, w, h));
-    setName(image->objectName());
+    setImage(image);
+    setName(name);
 }
 
 KisPattern::~KisPattern()

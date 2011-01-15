@@ -32,6 +32,7 @@
 #include <QMap>
 #include <QDebug>
 #include <QUndoCommand>
+#include <QMimeData>
 
 #include <ktemporaryfile.h>
 #include <kicon.h>
@@ -44,6 +45,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoImageCollection.h>
+#include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>

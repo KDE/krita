@@ -92,7 +92,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
         if (!selection->write(store)) {
             selection->disconnect();
             store->close();
-	    delete store;
+            delete store;
             return;
         }
         store->close();
@@ -134,6 +134,9 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 
     delete store;
 
+#ifdef __GNUC__
+#warning "QIMAGE: This code potentially creates enormous QImages! We need to warn the user!"
+#endif
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
     KisConfig cfg;

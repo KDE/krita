@@ -124,6 +124,10 @@ public:
      */
     QTime referenceTime() const;
 
+    /**
+     * @return true when the processing is interrupted
+     */
+    bool interrupted() const;
 private slots:
 
     void update();

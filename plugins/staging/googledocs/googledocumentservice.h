@@ -55,9 +55,14 @@ private:
     QXmlInputSource  xmlInput;
     bool newInformation;
     bool waitingForDoc;
+    bool haveDocAuthToken;
     GoogleContentHandler *gHandler;
     QString authToken;
     DocumentListWindow *documentList;
+    QString docAuthToken;
+    QString spreadAuthToken;
+    QString username;
+    QString password;
     QNetworkAccessManager networkManager;
     bool loggedin;
 

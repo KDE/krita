@@ -56,11 +56,6 @@ public:
      * @param before if null, the action is moved to the end
      */
     void moveAction(const KisRecordedAction* action, const KisRecordedAction* before);
-public:
-    /**
-     * Play the macro on the image.
-     */
-    void play(const KisPlayInfo&) const;
 public: // serialization functions
 
     virtual void fromXML(const QDomElement&, const KisRecordedActionLoadContext* loadContext);

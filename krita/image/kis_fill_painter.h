@@ -97,6 +97,12 @@ public:
     void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPattern * pattern);
 
     /**
+     * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
+     * entire rectangle.
+     */
+    void fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect);
+
+    /**
      * Overloaded version of the above function.
      */
     void fillRect(const QRect& rc, const KisPattern * pattern);

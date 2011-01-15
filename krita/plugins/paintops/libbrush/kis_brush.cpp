@@ -261,7 +261,7 @@ void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
 KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
     KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element);
-    if(element.attribute("BrushVersion", "1") == "1")
+    if(brush && element.attribute("BrushVersion", "1") == "1")
     {
         brush->setScale(brush->scale() * 2.0);
     }

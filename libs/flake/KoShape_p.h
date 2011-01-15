@@ -106,6 +106,7 @@ public:
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
     qreal transparency; ///< the shapes transparency
+    QString hyperLink; //hyperlink for this shape
 
     static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!
@@ -121,6 +122,10 @@ public:
     KoShape::CacheMode cacheMode;
 
     KoShapeCache *cache;
+
+    KoShape::TextRunAroundSide textRunAroundSide;
+
+    qreal textRunAroundDistance;
 
     /**
      * @return the shape cache if there is one, else 0

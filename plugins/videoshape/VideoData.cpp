@@ -209,6 +209,8 @@ void VideoData::copyToTemporary(QIODevice &device)
     if (!temporaryFile->open()) {
         kWarning(30006) << "open temporary file for writing failed";
         errorCode = VideoData::StorageFailed;
+	delete temporaryFile;
+	temporaryFile = 0;
         return;
     }
     QCryptographicHash md5(QCryptographicHash::Md5);

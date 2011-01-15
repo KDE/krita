@@ -44,7 +44,7 @@ public:
      * @return the type of this profile (icc, ctlcs etc)
      */
     virtual QString type() const {
-        return QString::null;
+        return QString();
     }
 
     /**

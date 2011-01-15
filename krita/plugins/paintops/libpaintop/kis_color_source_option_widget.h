@@ -1,6 +1,5 @@
-/* This file is part of the KDE project
- * Copyright (C) 2007 Thomas Zander <zander@kde.org>
- * Copyright (C) 2009 Casper Boemann <cbo@boemann.dk>
+/*
+ * Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,38 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LISTSTYLEBUTTON_H
-#define LISTSTYLEBUTTON_H
+#ifndef KIS_COLOR_SOURCE_OPTION_WIDGET_H
+#define KIS_COLOR_SOURCE_OPTION_WIDGET_H
 
-#include <KoListStyle.h>
+#include "kis_paintop_option.h"
 
-#include <QToolButton>
-#include <QPixmap>
-#include <QMap>
-
-class QMenu;
-class QAction;
-
-class ListStyleButton : public QToolButton
+/**
+ * The brush option allows the user to select a particular brush
+ * footprint for suitable paintops
+ */
+class PAINTOP_EXPORT KisColorSourceOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    ListStyleButton( QWidget *parent = 0 );
+    KisColorSourceOptionWidget();
+    ~KisColorSourceOptionWidget();
 
-    QString example(KoListStyle::Style type) const;
-    void addItem(QPixmap pm, int id);
-
-signals:
-    void itemTriggered(int id);
-
+    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    void readOptionSetting(const KisPropertiesConfiguration* setting);
 private slots:
-    void itemSelected(QAction *action);
-
+    void sourceChanged();
 private:
-    bool m_letterSynchronization;
-    QAction *m_lastAction ;
-    QMenu *m_menu;
-    QMap<QAction *, int > m_actionMap;
+    struct Private;
+    Private* const d;    
 };
 
 #endif

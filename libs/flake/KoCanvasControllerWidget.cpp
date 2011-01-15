@@ -206,6 +206,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
 
+    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);
     /*
       Fixes:   apps starting at zero zoom.

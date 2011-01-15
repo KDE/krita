@@ -29,8 +29,8 @@
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
-    foreach(KoID modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces)) {
-        foreach(KoID depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces)) {
+    foreach(const KoID& modelId, KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces)) {
+        foreach(const KoID& depthId, KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces)) {
             QList< const KoColorProfile * > profiles =
                 KoColorSpaceRegistry::instance()->profilesFor(
                     KoColorSpaceRegistry::instance()->colorSpaceId(modelId, depthId));
@@ -44,8 +44,8 @@ TestColorConversionSystem::TestColorConversionSystem()
 
 void TestColorConversionSystem::testConnections()
 {
-    foreach(ModelDepthProfile srcCS, listModels) {
-        foreach(ModelDepthProfile dstCS, listModels) {
+    foreach(const ModelDepthProfile& srcCS, listModels) {
+        foreach(const ModelDepthProfile& dstCS, listModels) {
             QVERIFY2(KoColorSpaceRegistry::instance()->colorConversionSystem()->existsPath(srcCS.model, srcCS.depth, srcCS.profile, dstCS.model, dstCS.depth, dstCS.profile) , QString("No path between %1 / %2 and %3 / %4").arg(srcCS.model).arg(srcCS.depth).arg(dstCS.model).arg(dstCS.depth).toLatin1());
         }
     }
@@ -54,8 +54,8 @@ void TestColorConversionSystem::testConnections()
 void TestColorConversionSystem::testGoodConnections()
 {
     int countFail = 0;
-    foreach(ModelDepthProfile srcCS, listModels) {
-        foreach(ModelDepthProfile dstCS, listModels) {
+    foreach(const ModelDepthProfile& srcCS, listModels) {
+        foreach(const ModelDepthProfile& dstCS, listModels) {
             if (!KoColorSpaceRegistry::instance()->colorConversionSystem()->existsGoodPath(srcCS.model, srcCS.depth, srcCS.profile , dstCS.model, dstCS.depth, dstCS.profile)) {
                 ++countFail;
                 dbgPigment << "No good path between \"" << srcCS.model << " " << srcCS.depth << " " << srcCS.profile << "\" \"" << dstCS.model << " " << dstCS.depth << " " << dstCS.profile << "\"";

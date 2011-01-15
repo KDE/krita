@@ -34,6 +34,7 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+class QToolButton;
 class QPushButton;
 class QString;
 class QHBoxLayout;
@@ -128,7 +129,7 @@ private:
     KisPopupButton* m_presetWidget;
     KisPopupButton* m_brushChooser;
     KisCmbComposite* m_cmbComposite;
-    QPushButton* m_eraseModeButton;
+    QToolButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
     KisBrushEngineSelector* m_brushEngineSelector;

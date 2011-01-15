@@ -248,22 +248,25 @@ void KisRulerAssistantTool::paint(QPainter& _gc, const KoViewConverter &_convert
 
     if (m_newAssistant) {
         m_newAssistant->drawAssistant(_gc, QRectF(QPointF(0, 0), QSizeF(m_canvas->image()->size())), m_canvas->coordinatesConverter());
-        _gc.setPen(handlesColor);
-        _gc.setBrush(Qt::transparent);
         foreach(const KisPaintingAssistantHandleSP handle, m_newAssistant->handles()) {
-            _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
+            QPainterPath path;
+            path.addEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
+            KisPaintingAssistant::drawPath(_gc, path);
         }
     }
 
     foreach(const KisPaintingAssistantHandleSP handle, m_handles) {
+        QRectF ellipse(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12));
         if (handle == m_handleDrag || handle == m_handleCombine) {
-            _gc.setPen(handlesColor);
+            _gc.save();
+            _gc.setPen(Qt::transparent);
             _gc.setBrush(handlesColor);
-        } else {
-            _gc.setPen(handlesColor);
-            _gc.setBrush(Qt::transparent);
+            _gc.drawEllipse(ellipse);
+            _gc.restore();
         }
-        _gc.drawEllipse(QRectF(_converter.documentToView(*handle) -  QPointF(6, 6), QSizeF(12, 12)));
+        QPainterPath path;
+        path.addEllipse(ellipse);
+        KisPaintingAssistant::drawPath(_gc, path);        
     }
     
     QPixmap iconDelete = KIcon("edit-delete").pixmap(16, 16);

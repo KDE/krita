@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -71,6 +72,19 @@ KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
     setMinimumLabel(i18n("-30°"));
     setMaximumLabel(i18n("30°"));
 }
+
+KisDynamicSensorAscension::KisDynamicSensorAscension() : KisDynamicSensor(AscensionId)
+{
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
+}
+
+KisDynamicSensorDeclination::KisDynamicSensorDeclination() : KisDynamicSensor(DeclinationId)
+{
+    setMinimumLabel(i18n("90°"));
+    setMaximumLabel(i18n("0°"));
+}
+
 
 KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(PerspectiveId)
 {

@@ -19,20 +19,20 @@
 #define _KIS_CURVE_LABEL_H_
 
 class QString;
-class QPixmap;
+class QImage;
 
 class KisCurveLabel
 {
 public:
     KisCurveLabel();
     KisCurveLabel(const QString& );
-    KisCurveLabel(const QPixmap& );
+    KisCurveLabel(const QImage& );
     KisCurveLabel(const KisCurveLabel& );
     KisCurveLabel& operator=(const KisCurveLabel& );
     ~KisCurveLabel();
     
     QString name() const;
-    QPixmap icon() const;
+    QImage icon() const;
 private:
     struct Private;
     Private* const d;

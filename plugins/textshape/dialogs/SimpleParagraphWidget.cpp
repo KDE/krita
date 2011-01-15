@@ -21,7 +21,7 @@
 #include "TextTool.h"
 #include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
-#include "ListStyleButton.h"
+#include "FormattingButton.h"
 
 #include <KAction>
 #include <KoTextBlockData.h>
@@ -55,15 +55,22 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.decreaseIndent->setDefaultAction(tool->action("format_decreaseindent"));
     widget.increaseIndent->setDefaultAction(tool->action("format_increaseindent"));
+    connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.alignRight, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 
     connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(insertTableQuick(int, int)));
+    connect(widget.quickTable, SIGNAL(create(int, int)), this, SIGNAL(doneWithFocus()));
 
     widget.bulletListButton->setDefaultAction(tool->action("format_bulletlist"));
     widget.numberedListButton->setDefaultAction(tool->action("format_numberlist"));
 
-    //widget.bulletListButton->setIconSize(QSize(16,16));
-    //widget.numberedListButton->setIconSize(QSize(16,16));
     fillListButtons();
+    widget.bulletListButton->addSeparator();
+    //widget.bulletListButton->addAction(new QAction("fgfd",0));
 
     connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
     connect(widget.numberedListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
@@ -143,7 +150,7 @@ void SimpleParagraphWidget::fillListButtons()
     textShape.setSize(QSizeF(300, 100));
     QTextCursor cursor (textShape.textShapeData()->document());
     foreach(Lists::ListStyleItem item, Lists::genericListStyleItems()) {
-        QPixmap pm(16,16);
+        QPixmap pm(48,48);
 
         pm.fill(Qt::transparent);
         QPainter p(&pm);
@@ -160,10 +167,10 @@ void SimpleParagraphWidget::fillListButtons()
             }
             listStyle.setLevelProperties(llp);
             cursor.select(QTextCursor::Document);
-            cursor.insertText("--");
+            cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
-            cursor.insertText("\n--");
-            cursor.insertText("\n--");
+            cursor.insertText("\n----");
+            cursor.insertText("\n----");
             dynamic_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout())->layout();
 
             textShape.paintComponent(p, zoomHandler);
@@ -210,10 +217,10 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
 
 void SimpleParagraphWidget::listStyleChanged(int id)
 {
+    emit doneWithFocus();
     if (m_blockSignals) return;
 
     m_tool->addCommand( new ChangeListCommand (m_tool->cursor(), static_cast<KoListStyle::Style> (id)));
-    emit doneWithFocus();
 }
 
 #include <SimpleParagraphWidget.moc>

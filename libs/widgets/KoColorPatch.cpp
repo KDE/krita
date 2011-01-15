@@ -34,7 +34,7 @@ QSize KoColorPatch::sizeHint() const
     return QSize(12,12);
 }
 
-void KoColorPatch::setColor(const KoColor c)
+void KoColorPatch::setColor(const KoColor& c)
 {
     m_color = c;
 

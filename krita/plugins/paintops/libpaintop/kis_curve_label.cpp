@@ -18,12 +18,12 @@
 #include "kis_curve_label.h"
 
 #include <QString>
-#include <QPixmap>
+#include <QImage>
 
 struct KisCurveLabel::Private
 {
     QString name;
-    QPixmap icon;
+    QImage icon;
 };
 
 KisCurveLabel::KisCurveLabel() : d(new Private)
@@ -35,7 +35,7 @@ KisCurveLabel::KisCurveLabel(const QString& name) : d(new Private)
 {
     d->name = name;
 }
-KisCurveLabel::KisCurveLabel(const QPixmap& icon) : d(new Private)
+KisCurveLabel::KisCurveLabel(const QImage& icon) : d(new Private)
 {
     d->icon = icon;
 }
@@ -60,7 +60,7 @@ QString KisCurveLabel::name() const
     return d->name;
 }
 
-QPixmap KisCurveLabel::icon() const
+QImage KisCurveLabel::icon() const
 {
     return d->icon;
 }

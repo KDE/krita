@@ -28,6 +28,7 @@
 
 #include <klocale.h>
 #include <kglobal.h>
+#include <kmessagebox.h>
 
 #include "KoColorSpace.h"
 #include "KoStore.h"
@@ -73,8 +74,6 @@ KisClipboard* KisClipboard::instance()
 
 void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 {
-    dbgUI << selection->exactBounds();
-
     if (!selection)
         return;
 
@@ -134,30 +133,49 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 
     delete store;
 
-#ifdef __GNUC__
-#warning "QIMAGE: This code potentially creates enormous QImages! We need to warn the user!"
-#endif
-    // We also create a QImage so we can interchange with other applications
-    QImage qimage;
-    KisConfig cfg;
-    QString monitorProfileName = cfg.monitorProfile();
-    const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-    qimage = selection->convertToQImage(monitorProfile);
+
 
     QMimeData *mimeData = new QMimeData;
     Q_CHECK_PTR(mimeData);
 
     if (mimeData) {
-        if (!qimage.isNull()) {
+        mimeData->setData(mimeType, buffer.buffer());
+    }
+
+    QRect rc = selection->exactBounds();
+    // warn if the clip is over ten megapixels
+    bool makeExchangeClip = false;
+    if (rc.width() * rc.height() > 10 * 1024 * 1024) {
+        makeExchangeClip =
+                (KMessageBox::Continue ==
+                 KMessageBox::warningContinueCancel(0,
+                                                    i18n("You are putting more than 10 megapixels on the clipboard."
+                                                         " Do you want to make this data available to other applications as well?"),
+                                                    i18n("Krita"),
+                                                    KStandardGuiItem::cont(),
+                                                    KStandardGuiItem::cancel(),
+                                                    "krita_big_clip_on_clipboard"));
+    }
+
+    // We also create a QImage so we can interchange with other applications
+    if (makeExchangeClip) {
+        QImage qimage;
+        KisConfig cfg;
+        QString monitorProfileName = cfg.monitorProfile();
+        const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
+        qimage = selection->convertToQImage(monitorProfile);
+        if (!qimage.isNull() && mimeData) {
             mimeData->setImageData(qimage);
         }
 
-        mimeData->setData(mimeType, buffer.buffer());
+    }
 
+    if (mimeData) {
         m_pushedClipboard = true;
         QClipboard *cb = QApplication::clipboard();
         cb->setMimeData(mimeData);
     }
+
 }
 
 KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)

@@ -1,5 +1,10 @@
 /*
  *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2010 Boudewijn Rempt <boud@kde.org>
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -147,7 +152,7 @@ private:
         if(m_scaleOnlyShapes) {
             return;
         }
-        
+
         KisPaintDeviceSP dev = node->paintDevice();
 
         KisTransaction transaction(i18n("Rotate Node"), dev);
@@ -158,7 +163,7 @@ private:
         transaction.commit(m_image->undoAdapter());
         node->setDirty();
     }
-    
+
     void transformMask(KisMask* mask) {
         KisSelectionSP selection = mask->selection();
         if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
@@ -175,7 +180,7 @@ private:
             if (command)
                 m_image->undoAdapter()->addCommand(command);
         }
-        
+
         selection->updateProjection();
     }
 

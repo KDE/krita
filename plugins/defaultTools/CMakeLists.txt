@@ -31,6 +31,8 @@ SET ( defaulttools_SRCS
     connectionTool/ConnectionToolWidget.cpp
     connectionTool/AddConnectionPointCommand.cpp
     connectionTool/RemoveConnectionPointCommand.cpp
+    connectionTool/MoveConnectionPointCommand.cpp
+    connectionTool/MoveConnectionPointStrategy.cpp
 )
 
 kde4_add_ui_files(defaulttools_SRCS

@@ -162,7 +162,7 @@ void KisCustomPattern::createPattern()
     QRect rc = dev->exactBounds();
     QSize size = rc.size();
     if (size.width() > 1000 || size.height() > 1000) {
-        lblWarning->setText(i18n("The current image is too big to create a pattern."
+        lblWarning->setText(i18n("The current image is too big to create a pattern. "
                                 "The pattern will be scaled down."));
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }

@@ -182,9 +182,16 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
         // clicking not on a connection point and not on the current shape exits
         // connection point edit mode
         if (m_activeHandle < 0) {
+            // check we are on the current shape
             if (!canvas()->shapeManager()->shapesAt(handleGrabRect(event->point)).contains(m_currentShape)) {
                 repaintDecorations();
                 resetEditMode();
+                findShapeAtPosition(event->point);
+                if (m_currentShape && !dynamic_cast<KoConnectionShape*>(m_currentShape)) {
+                    m_editMode = EditConnectionPoint;
+                    m_activeHandle = -1;
+                    repaintDecorations();
+                }
             }
         } else {
             if (m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
@@ -220,21 +227,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         }
     } else {
         resetEditMode();
-
-        QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(event->point));
-        if(!shapes.isEmpty()) {
-            qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-            // we want to priorize connection shape handles, even if the connection shape
-            // is not at the top of the shape stack at the mouse position
-            KoConnectionShape *connectionShape = nearestConnectionShape(shapes, event->point);
-            // use best connection shape or first shape from stack if not found
-            m_currentShape = connectionShape ? connectionShape : shapes.first();
-            int handleId = handleAtPoint(m_currentShape, event->point);
-            if(handleId >= 0) {
-                m_activeHandle = handleId;
-                m_editMode = connectionShape ? EditConnection : CreateConnection;
-            }
-        }
+        findShapeAtPosition(event->point);
     }
 
     updateStatusText();
@@ -348,6 +341,24 @@ qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2)
     const qreal dx = p2.x() - p1.x();
     const qreal dy = p2.y() - p1.y();
     return dx*dx + dy*dy;
+}
+
+void ConnectionTool::findShapeAtPosition(const QPointF &position)
+{
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
+    if(!shapes.isEmpty()) {
+        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        // we want to priorize connection shape handles, even if the connection shape
+        // is not at the top of the shape stack at the mouse position
+        KoConnectionShape *connectionShape = nearestConnectionShape(shapes, position);
+        // use best connection shape or first shape from stack if not found
+        m_currentShape = connectionShape ? connectionShape : shapes.first();
+        int handleId = handleAtPoint(m_currentShape, position);
+        if(handleId >= 0) {
+            m_activeHandle = handleId;
+            m_editMode = connectionShape ? EditConnection : CreateConnection;
+        }
+    }
 }
 
 int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint)

@@ -85,6 +85,9 @@ private:
     /// Updates status text depending on edit mode
     void updateStatusText();
 
+    /// Updates current shape and edit mode dependent on position
+    void findShapeAtPosition(const QPointF &position);
+
     enum EditMode {
         Idle,               ///< we are idle, nothing interesting happens
         CreateConnection,   ///< we are creating a new connection

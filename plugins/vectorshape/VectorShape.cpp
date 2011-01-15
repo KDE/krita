@@ -98,17 +98,6 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
     draw(painter);
 }
 
-void VectorShape::paintDecorations(QPainter &painter, const KoViewConverter &converter,
-                                   const KoCanvasBase *canvas)
-{
-    Q_UNUSED(canvas);
-
-    applyConversion(painter, converter);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    draw(painter);
-}
-
 void VectorShape::draw(QPainter &painter) const
 {
     // If the data is uninitialized, e.g. because loading failed, draw the null shape

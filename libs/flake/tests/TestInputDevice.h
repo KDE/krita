@@ -28,7 +28,14 @@ class TestInputDevice : public QObject
     Q_OBJECT
 private slots:
     // tests
+    void testTabletConstructor();
+    void testNoParameterConstructor();
+    void testConstructorWithSingleReference();
+    void testEqualityCheckOperator();
     void testMouse();
+    void testStylus();
+    void testEraser();
+    
 };
 
 #endif /* TESTINPUTDEVICE_H */

@@ -219,11 +219,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_editMode == EditConnectionPoint) {
         Q_ASSERT(m_currentShape);
         // check if we should highlight another connection point
-        int handleId = handleAtPoint(m_currentShape, event->point);
-        if(handleId != m_activeHandle) {
-            m_activeHandle = handleId;
-            repaintDecorations();
-        }
+        m_activeHandle = handleAtPoint(m_currentShape, event->point);
     } else {
         findShapeAtPosition(event->point);
     }

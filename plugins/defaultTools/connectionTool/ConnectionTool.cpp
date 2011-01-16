@@ -185,7 +185,6 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
             // check we are on the current shape
             if (!canvas()->shapeManager()->shapesAt(handleGrabRect(event->point)).contains(m_currentShape)) {
                 repaintDecorations();
-                resetEditMode();
                 findShapeAtPosition(event->point);
                 if (m_currentShape && !dynamic_cast<KoConnectionShape*>(m_currentShape)) {
                     m_editMode = EditConnectionPoint;
@@ -226,7 +225,6 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             repaintDecorations();
         }
     } else {
-        resetEditMode();
         findShapeAtPosition(event->point);
     }
 
@@ -345,6 +343,7 @@ qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2)
 
 void ConnectionTool::findShapeAtPosition(const QPointF &position)
 {
+    resetEditMode();
     QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
     if(!shapes.isEmpty()) {
         qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
@@ -396,7 +395,7 @@ KoConnectionShape * ConnectionTool::nearestConnectionShape(QList<KoShape*> shape
     int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
 
     KoConnectionShape * nearestConnectionShape = 0;
-    qreal minSqaredDistance = HUGE_VAL;
+    qreal minSquaredDistance = HUGE_VAL;
     const qreal maxSquaredDistance = grabSensitivity*grabSensitivity;
 
     foreach(KoShape *shape, shapes) {
@@ -420,8 +419,9 @@ KoConnectionShape * ConnectionTool::nearestConnectionShape(QList<KoShape*> shape
             if (squaredDistance > maxSquaredDistance)
                 continue;
             // are we closer to the last closest point ?
-            if (squaredDistance < minSqaredDistance) {
+            if (squaredDistance < minSquaredDistance) {
                 nearestConnectionShape = connectionShape;
+                minSquaredDistance = squaredDistance;
             }
         }
     }

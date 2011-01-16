@@ -1787,12 +1787,12 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
             if(cp.key() < 4)
                 continue;
             // convert to percent from center
-            const qreal x = cp.value().x() / s.width() * 100.0 - 50.0;
-            const qreal y = cp.value().y() / s.height() * 100.0 -50.0;
+            const qreal x = cp.value().x() * 100.0 - 50.0;
+            const qreal y = cp.value().y() * 100.0 -50.0;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
-            context.xmlWriter().addAttribute("svg:x", QString("%1%%").arg(x));
-            context.xmlWriter().addAttribute("svg:y", QString("%1%%").arg(y));
+            context.xmlWriter().addAttribute("svg:x", QString("%1%").arg(x));
+            context.xmlWriter().addAttribute("svg:y", QString("%1%").arg(y));
             context.xmlWriter().endElement();
         }
     }

@@ -29,7 +29,6 @@
 #include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rate_option_widget.h>
-#include <kis_pressure_composite_option_widget.h>
 
 
 KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)

@@ -123,7 +123,9 @@ void KoTosContainer::setResizeBehavior(ResizeBehavior resizeBehavior)
         return;
     }
     d->resizeBehavior = resizeBehavior;
-    d->model->containerChanged(this, KoShape::SizeChanged);
+    if (d->model) {
+        d->model->containerChanged(this, KoShape::SizeChanged);
+    }
 }
 
 KoTosContainer::ResizeBehavior KoTosContainer::resizeBehavior() const

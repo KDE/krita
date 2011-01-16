@@ -38,7 +38,6 @@ class KoCompositeOpGenericSC: public KoCompositeOpBase< Traits, KoCompositeOpGen
 {
     typedef KoCompositeOpBase< Traits, KoCompositeOpGenericSC<Traits,compositeFunc> > base_class;
     typedef typename Traits::channels_type                                            channels_type;
-    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype            composite_type;
     
     static const qint32 channels_nb = Traits::channels_nb;
     static const qint32 alpha_pos   = Traits::alpha_pos;

@@ -25,6 +25,7 @@
 
 #include "KoInsets.h"
 #include "KoFlake.h"
+#include "KoConnectionPoint.h"
 
 #include <QTransform>
 #include <QVector>
@@ -34,6 +35,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
+
 //#include <KoSnapData.h>
 
 #include "flake_export.h"
@@ -60,9 +62,6 @@ class KoEventAction;
 class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
-
-/// Connection point container with id, position
-typedef QMap<int, QPointF> KoConnectionPoints;
 
 /**
  *
@@ -319,13 +318,10 @@ public:
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
-     * @param point the position where to place the connector. The points coordinate system
-     *   are based around the zero-pos which is the top-left of the shape. The position of
-     *   the connector is restricted to the bounding rectangle of the shape. The point is in pt,
-     *   just like the rest of the KoShape class uses.
+     * @param point the connection point to add
      * @return the id of the new connection point
      */
-    int addConnectionPoint(const QPointF &point);
+    int addConnectionPoint(const KoConnectionPoint &point);
 
     /**
      * Tries to insert connection point with specified id.
@@ -337,13 +333,13 @@ public:
      * @return true if inserting connection point was successful;
      *         false if connection point did already exists or id is invalid
      */
-    bool insertConnectionPoint(const QPointF &point, int connectionPointId);
+    bool insertConnectionPoint(const KoConnectionPoint &point, int connectionPointId);
 
     /// Checks if a connection point with the specified id exists
     bool hasConnectionPoint(int connectionPointId) const;
 
     /// Returns connection point with specified connection point id
-    QPointF connectionPoint(int connectionPointId) const;
+    KoConnectionPoint connectionPoint(int connectionPointId) const;
 
     /**
      * Sets new position for specified custom connection point

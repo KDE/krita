@@ -21,6 +21,7 @@
 #ifndef REMOVECONNECTIONPOINTCOMMAND_H
 #define REMOVECONNECTIONPOINTCOMMAND_H
 
+#include <KoConnectionPoint.h>
 #include <QtGui/QUndoCommand>
 #include <QtCore/QPointF>
 
@@ -41,7 +42,7 @@ private:
     void updateRoi();
 
     KoShape * m_shape;
-    QPointF m_connectionPoint;
+    KoConnectionPoint m_connectionPoint;
     int m_connectionPointId;
 };
 

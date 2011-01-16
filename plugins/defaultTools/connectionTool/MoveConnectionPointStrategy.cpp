@@ -29,7 +29,7 @@ MoveConnectionPointStrategy::MoveConnectionPointStrategy(KoShape *shape, int con
 : KoInteractionStrategy(parent), m_shape(shape), m_connectionPointId(connectionPointId)
 {
     Q_ASSERT(m_shape);
-    m_oldPosition = m_newPosition = m_shape->connectionPoint(m_connectionPointId);
+    m_oldPosition = m_newPosition = m_shape->connectionPoint(m_connectionPointId).position;
 }
 
 MoveConnectionPointStrategy::~MoveConnectionPointStrategy()

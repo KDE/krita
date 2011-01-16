@@ -81,15 +81,6 @@ namespace KoFlake
         Foreground  ///< the foreground / border style is active
     };
 
-    /// Default connection point ids
-    enum ConnectionPointId {
-        TopConnectionPoint = 0,
-        RightConnectionPoint = 1,
-        BottomConnectionPoint = 2,
-        LeftConnectionPoint = 3,
-        FirstCustomConnectionPoint = 4
-    };
-
     /// clones the given gradient
     FLAKE_EXPORT QGradient *cloneGradient(const QGradient *gradient);
 

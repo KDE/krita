@@ -92,22 +92,22 @@ void KoPathConnectionPointStrategy::handleMouseMove(const QPointF &mouseLocation
                 connectionPoints[-2] = QPointF(size.width(), 0.0);
                 connectionPoints[-3] = QPointF(size.width(), size.height());
                 connectionPoints[-4] = QPointF(0.0, size.height());
-                connectionPoints[-5] = 0.5 * (connectionPoints[-1] + connectionPoints[-2]);
-                connectionPoints[-6] = 0.5 * (connectionPoints[-2] + connectionPoints[-3]);
-                connectionPoints[-7] = 0.5 * (connectionPoints[-3] + connectionPoints[-4]);
-                connectionPoints[-8] = 0.5 * (connectionPoints[-4] + connectionPoints[-1]);
+                connectionPoints[-5] = 0.5 * (connectionPoints[-1].position + connectionPoints[-2].position);
+                connectionPoints[-6] = 0.5 * (connectionPoints[-2].position + connectionPoints[-3].position);
+                connectionPoints[-7] = 0.5 * (connectionPoints[-3].position + connectionPoints[-4].position);
+                connectionPoints[-8] = 0.5 * (connectionPoints[-4].position + connectionPoints[-1].position);
             }
             QPointF localMousePosition = shape->absoluteTransformation(0).inverted().map(mouseLocation);
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
-                QPointF difference = localMousePosition - cp.value();
+                QPointF difference = localMousePosition - cp.value().position;
                 qreal distance = difference.x() * difference.x() + difference.y() * difference.y();
                 if (distance > MAX_DISTANCE_SQR)
                     continue;
                 if (distance < minimalDistance) {
                     nearestShape = shape;
-                    nearestPoint = cp.value();
+                    nearestPoint = cp.value().position;
                     nearestPointId = cp.key();
                     minimalDistance = distance;
                 }

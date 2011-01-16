@@ -95,7 +95,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
-                handleRect.moveCenter(transform.map(cp.value()));
+                handleRect.moveCenter(transform.map(cp.value().position));
                 Qt::GlobalColor fillColor = Qt::white;
                 if(m_editMode == EditConnectionPoint) {
                     fillColor = cp.key() == m_activeHandle ? Qt::red : Qt::darkGreen;
@@ -124,7 +124,7 @@ void ConnectionTool::repaintDecorations()
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
-                repaint(handleGrabRect(m_currentShape->shapeToDocument(cp.value())));
+                repaint(handleGrabRect(m_currentShape->shapeToDocument(cp.value().position)));
             }
         }
     }
@@ -156,7 +156,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
             return;
         }
         // get the position of the connection point we start our connection from
-        QPointF cp = m_currentShape->shapeToDocument(m_currentShape->connectionPoint(m_activeHandle));
+        QPointF cp = m_currentShape->shapeToDocument(m_currentShape->connectionPoint(m_activeHandle).position);
         // move both handles to that point
         connectionShape->moveHandle(0, cp);
         connectionShape->moveHandle(1, cp);
@@ -193,7 +193,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
                 }
             }
         } else {
-            if (m_activeHandle >= KoFlake::FirstCustomConnectionPoint) {
+            if (m_activeHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
                 m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, m_activeHandle, this);
             }
         }
@@ -376,7 +376,7 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint)
         KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
         KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
         for(; cp != lastCp; ++cp) {
-            qreal d = squareDistance(shapePoint, cp.value());
+            qreal d = squareDistance(shapePoint, cp.value().position);
             if (d <= grabSensitivity && d < minDistance) {
                 handleId = cp.key();
                 minDistance = d;
@@ -450,7 +450,7 @@ void ConnectionTool::updateStatusText()
             emit statusTextChanged(i18n("Drag to edit connection."));
             break;
         case EditConnectionPoint:
-            if (m_activeHandle >= KoFlake::FirstCustomConnectionPoint)
+            if (m_activeHandle >= KoConnectionPoint::FirstCustomConnectionPoint)
                 emit statusTextChanged(i18n("Drag to move connection point. Double click to remove connection point"));
             else if (m_activeHandle >= 0)
                 emit statusTextChanged(i18n("Double click to remove connection point"));

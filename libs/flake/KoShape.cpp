@@ -1410,15 +1410,17 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                 const QRectF bbox = boundingRect();
                 const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
                 if (align.isEmpty()) {
+#ifndef NWORKAROUND_ODF_BUGS
+                    KoOdfWorkaround::fixGluePointPosition(xStr, context);
+                    KoOdfWorkaround::fixGluePointPosition(yStr, context);
+#endif
+                    if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
+                        kWarning(30006) << "glue-point with invald position";
+                        continue;
+                    }
                     // x and y are relative to drawing object center
-                    if(xStr.endsWith('%'))
-                        connectorPos.setX(xStr.remove('%').toDouble()/100.0);
-                    else
-                        connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
-                    if(yStr.endsWith('%'))
-                        connectorPos.setY(yStr.remove('%').toDouble()/100.0);
-                    else
-                        connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
+                    connectorPos.setX(xStr.remove('%').toDouble()/100.0);
+                    connectorPos.setY(yStr.remove('%').toDouble()/100.0);
                     // convert position to be relative to top-left corner
                     connectorPos += QPointF(0.5, 0.5);
                 } else {

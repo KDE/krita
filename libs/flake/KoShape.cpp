@@ -1429,7 +1429,24 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                         connectorPos.rx() += 1.0;
                     }
                 }
-                KoConnectionPoint connector(connectorPos);
+                KoConnectionPoint::EscapeDirection escapeDirection = KoConnectionPoint::AllDirections;
+                const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
+                if (!escape.isEmpty()) {
+                    if (escape == "horizontal") {
+                        escapeDirection = KoConnectionPoint::HorizontalDirections;
+                    } else if (escape == "vertical") {
+                        escapeDirection = KoConnectionPoint::VerticalDirections;
+                    } else if (escape == "left") {
+                        escapeDirection = KoConnectionPoint::LeftDirection;
+                    } else if (escape == "right") {
+                        escapeDirection = KoConnectionPoint::RightDirection;
+                    } else if (escape == "up") {
+                        escapeDirection = KoConnectionPoint::UpDirection;
+                    } else if (escape == "down") {
+                        escapeDirection = KoConnectionPoint::DownDirection;
+                    }
+                }
+                KoConnectionPoint connector(connectorPos, escapeDirection);
                 d->setConnectionPoint(index, connector);
                 kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
             }
@@ -1776,6 +1793,30 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
             context.xmlWriter().addAttribute("svg:x", QString("%1%").arg(x));
             context.xmlWriter().addAttribute("svg:y", QString("%1%").arg(y));
+            QString escapeDirection;
+            switch(cp.value().escapeDirection) {
+                case KoConnectionPoint::HorizontalDirections:
+                    escapeDirection = "horizontal";
+                    break;
+                case KoConnectionPoint::VerticalDirections:
+                    escapeDirection = "vertical";
+                    break;
+                case KoConnectionPoint::LeftDirection:
+                    escapeDirection = "left";
+                    break;
+                case KoConnectionPoint::RightDirection:
+                    escapeDirection = "right";
+                    break;
+                case KoConnectionPoint::UpDirection:
+                    escapeDirection = "up";
+                    break;
+                case KoConnectionPoint::DownDirection:
+                    escapeDirection = "down";
+                    break;
+            }
+            if(!escapeDirection.isEmpty()) {
+                context.xmlWriter().addAttribute("draw:escape-direction", escapeDirection);
+            }
             context.xmlWriter().endElement();
         }
     }

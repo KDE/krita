@@ -26,7 +26,6 @@
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
 #include <kis_pressure_size_option.h>
-#include <kis_pressure_composite_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rate_option_widget.h>
@@ -39,9 +38,8 @@ KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisPressureRateOptionWidget());
-    addPaintOpOption(new KisPressureCompositeOptionWidget());
-
+    addPaintOpOption(new KisPressureRateOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
+    addPaintOpOption(new KisPressureRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
 }
 
 KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()

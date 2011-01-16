@@ -42,17 +42,17 @@
 #include <kis_brush_based_paintop_settings.h>
 
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-        : KisBrushBasedPaintOp(settings, painter), m_tempDev(0)
+    : KisBrushBasedPaintOp(settings, painter), m_tempDev(0), m_smudgeRateOption("SmudgeRate"), m_colorRateOption("ColorRate")
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     m_sizeOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-    m_compositeOption.readOptionSetting(settings);
+    m_smudgeRateOption.readOptionSetting(settings);
+    m_colorRateOption.readOptionSetting(settings);
     m_sizeOption.sensor()->reset();
-    m_rateOption.sensor()->reset();
-    m_compositeOption.sensor()->reset();
+    m_smudgeRateOption.sensor()->reset();
+    m_colorRateOption.sensor()->reset();
 
     m_tempDev  = new KisPaintDevice(painter->device()->colorSpace());
     m_firstRun = true;
@@ -111,7 +111,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     
     if(!m_firstRun) {
         // set opacity calculated by the rate option
-        m_rateOption.apply(painter(), info);
+        m_smudgeRateOption.apply(painter(), info);
         
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
@@ -135,15 +135,16 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)
-    if(m_compositeOption.isChecked()) {
-        // this will apply the opacy and the composite mode (selected by the user) to copyPainter
+    if(m_colorRateOption.isChecked()) {
+        // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
-        qreal maxColorRate = qMax<qreal>(1.0-m_rateOption.rate(), 0.2);
-        m_compositeOption.applyOpacityRate(&copyPainter, info, 0.0, maxColorRate);
-        m_compositeOption.applyCompositeOp(&copyPainter);
+        qreal maxColorRate = qMax<qreal>(1.0-m_smudgeRateOption.getRate(), 0.2);
+        m_colorRateOption.apply(&copyPainter, info, 0.0, maxColorRate);
         
         // paint a rectangle with the current color (foreground color)
-        // into the temporary painting device
+        // into the temporary painting device and use the user selected
+        // composite mode
+        copyPainter.setCompositeOp(oldMode);
         copyPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
         copyPainter.setPaintColor(painter()->paintColor());
         copyPainter.paintRect(maskDab->bounds());

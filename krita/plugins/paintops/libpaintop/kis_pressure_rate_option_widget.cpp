@@ -31,16 +31,15 @@
 
 #include <klocale.h>
 
-KisPressureRateOptionWidget::KisPressureRateOptionWidget()
-    : KisCurveOptionWidget(new KisPressureRateOption())
+KisPressureRateOptionWidget::KisPressureRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked)
+    : KisCurveOptionWidget(new KisPressureRateOption(name, label, checked))
 {
     QWidget* w = new QWidget;
-    QLabel* rateLabel = new QLabel(i18n("Rate: "));
+    QLabel* rateLabel = new QLabel(sliderLabel);
     m_rateSlider = new KisDoubleSliderSpinBox();
     m_rateSlider->setRange(0.0, 1.0, 2);
     m_rateSlider->setSingleStep(0.01);
     m_rateSlider->setValue(0.3);
-    m_rateSlider->setSuffix("%");
     
     connect(m_rateSlider, SIGNAL(valueChanged(qreal)),SLOT(rateChanged(qreal)));
     
@@ -61,7 +60,7 @@ KisPressureRateOptionWidget::KisPressureRateOptionWidget()
 void KisPressureRateOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_rateSlider->setValue(static_cast<KisPressureRateOption*>(curveOption())->rate());
+    m_rateSlider->setValue(static_cast<KisPressureRateOption*>(curveOption())->getRate());
 }
 
 void KisPressureRateOptionWidget::rateChanged(qreal rate)

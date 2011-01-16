@@ -29,21 +29,19 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-KisPressureRateOption::KisPressureRateOption()
-        : KisCurveOption(i18n("Rate"), "Rate", KisPaintOpOption::brushCategory(), true)
-{
-}
+KisPressureRateOption::KisPressureRateOption(const QString& name, const QString& label, bool checked, const QString& category)
+    : KisCurveOption(label, name, category, checked) { }
 
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty("RateValue", m_rate);
+    setting->setProperty(m_name + "Value", m_rate);
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    m_rate = setting->getDouble("RateValue");
+    m_rate = setting->getDouble(m_name + "Value");
 }
 
 void KisPressureRateOption::apply(KisPainter* painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax) const

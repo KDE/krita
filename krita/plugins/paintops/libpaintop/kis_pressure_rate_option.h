@@ -37,7 +37,7 @@ class KisPainter;
 class PAINTOP_EXPORT KisPressureRateOption : public KisCurveOption
 {
 public:
-    KisPressureRateOption();
+    KisPressureRateOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
 
     /**
      * Set the opacity of the painter based on the rate
@@ -49,7 +49,7 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setRate(qreal rate) { m_rate = qBound<qreal>(0.0, rate, 1.0); }
-    qreal rate() const { return m_rate; }
+    qreal getRate() const { return m_rate; }
     
 private:
     qreal m_rate;

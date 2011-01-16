@@ -29,7 +29,7 @@ class PAINTOP_EXPORT KisPressureRateOptionWidget : public KisCurveOptionWidget
     Q_OBJECT
     
 public:
-    KisPressureRateOptionWidget();
+    KisPressureRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
 
     void readOptionSetting(const KisPropertiesConfiguration* setting);
     

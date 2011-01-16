@@ -52,8 +52,8 @@ private:
     bool             m_firstRun;
     KisPaintDeviceSP m_tempDev; // The temporary paint device
     KisPressureSizeOption m_sizeOption;
-    KisPressureRateOption m_rateOption;
-    KisPressureCompositeOption m_compositeOption;
+    KisPressureRateOption m_smudgeRateOption;
+    KisPressureRateOption m_colorRateOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

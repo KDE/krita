@@ -1408,12 +1408,8 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                 }
                 QPointF connectorPos;
                 const QRectF bbox = boundingRect();
-                if(child.hasAttributeNS(KoXmlNS::draw, "align")) {
-                    // absolute distances to the edge specified by align
-                    connectorPos.setX(KoUnit::parseValue(xStr));
-                    connectorPos.setY(KoUnit::parseValue(yStr));
-                    // TODO: convert position to percentage values taking align attribute into account
-                } else {
+                const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
+                if (align.isEmpty()) {
                     // x and y are relative to drawing object center
                     if(xStr.endsWith('%'))
                         connectorPos.setX(xStr.remove('%').toDouble()/100.0);
@@ -1425,6 +1421,29 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
                         connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
                     // convert position to be relative to top-left corner
                     connectorPos += QPointF(0.5, 0.5);
+                } else {
+                    // absolute distances to the edge specified by align
+                    connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
+                    connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
+                    if (align == "top-left") {
+                        // this matches our coordinate origin
+                    } else if (align == "top") {
+                        connectorPos.rx() = 0.5;
+                    } else if (align == "top-right") {
+                        connectorPos.rx() += 1.0;
+                    } else if (align == "left") {
+                        connectorPos.ry() = 0.5;
+                    } else if (align == "center") {
+                        connectorPos += QPointF(0.5, 0.5);
+                    } else if (align == "right") {
+                        connectorPos.ry() = 0.5;
+                    } else if (align == "bottom-left") {
+                        connectorPos.ry() += 1.0;
+                    } else if (align == "bottom") {
+                        connectorPos.rx() = 0.5;
+                    } else if (align == "bottom-right") {
+                        connectorPos.rx() += 1.0;
+                    }
                 }
                 d->setConnectionPoint(index, connectorPos);
                 kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;

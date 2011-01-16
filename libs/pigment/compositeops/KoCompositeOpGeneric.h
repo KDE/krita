@@ -53,18 +53,31 @@ public:
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
         srcAlpha = mul(srcAlpha, opacity);
-        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
         
-        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-            for(qint32 i=0; i <channels_nb; i++) {
-                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                    channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc(src[i],dst[i]));
-                    dst[i] = div(result, newDstAlpha);
+        if(alphaLocked) {
+            if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                for(qint32 i=0; i <channels_nb; i++) {
+                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+                        dst[i] = lerp(dst[i], compositeFunc(src[i],dst[i]), srcAlpha);
                 }
             }
+            
+            return dstAlpha;
         }
-        
-        return newDstAlpha;
+        else {
+            channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+            
+            if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                for(qint32 i=0; i <channels_nb; i++) {
+                    if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
+                        channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc(src[i],dst[i]));
+                        dst[i] = div(result, newDstAlpha);
+                    }
+                }
+            }
+            
+            return newDstAlpha;
+        }
     }
 };
 
@@ -95,33 +108,58 @@ public:
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
-        Q_UNUSED(channelFlags);
-        
         srcAlpha = mul(srcAlpha, opacity);
-        channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
         
-        if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-            float srcR = scale<float>(src[red_pos]);
-            float srcG = scale<float>(src[green_pos]);
-            float srcB = scale<float>(src[blue_pos]);
+        if(alphaLocked) {
+            if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                float srcR = scale<float>(src[red_pos]);
+                float srcG = scale<float>(src[green_pos]);
+                float srcB = scale<float>(src[blue_pos]);
+                
+                float dstR = scale<float>(dst[red_pos]);
+                float dstG = scale<float>(dst[green_pos]);
+                float dstB = scale<float>(dst[blue_pos]);
+                
+                compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
+                
+                if(allChannelFlags || channelFlags.testBit(red_pos))
+                    dst[red_pos] = lerp(dst[red_pos], scale<channels_type>(dstR), srcAlpha);
+                
+                if(allChannelFlags || channelFlags.testBit(green_pos))
+                    dst[green_pos] = lerp(dst[green_pos], scale<channels_type>(dstG), srcAlpha);
+                
+                if(allChannelFlags || channelFlags.testBit(blue_pos))
+                    dst[blue_pos] = lerp(dst[blue_pos], scale<channels_type>(dstB), srcAlpha);
+            }
             
-            float dstR = scale<float>(dst[red_pos]);
-            float dstG = scale<float>(dst[green_pos]);
-            float dstB = scale<float>(dst[blue_pos]);
-            
-            compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
-            
-            if(allChannelFlags || channelFlags.testBit(red_pos))
-                dst[red_pos] = div(blend(src[red_pos], srcAlpha, dst[red_pos], dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
-            
-            if(allChannelFlags || channelFlags.testBit(green_pos))
-                dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
-            
-            if(allChannelFlags || channelFlags.testBit(blue_pos))
-                dst[blue_pos] = div(blend(src[blue_pos], srcAlpha, dst[blue_pos], dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
+            return dstAlpha;
         }
-        
-        return newDstAlpha;
+        else {
+            channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+            
+            if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                float srcR = scale<float>(src[red_pos]);
+                float srcG = scale<float>(src[green_pos]);
+                float srcB = scale<float>(src[blue_pos]);
+                
+                float dstR = scale<float>(dst[red_pos]);
+                float dstG = scale<float>(dst[green_pos]);
+                float dstB = scale<float>(dst[blue_pos]);
+                
+                compositeFunc(srcR, srcG, srcB, dstR, dstG, dstB);
+                
+                if(allChannelFlags || channelFlags.testBit(red_pos))
+                    dst[red_pos] = div(blend(src[red_pos], srcAlpha, dst[red_pos], dstAlpha, scale<channels_type>(dstR)), newDstAlpha);
+                
+                if(allChannelFlags || channelFlags.testBit(green_pos))
+                    dst[green_pos] = div(blend(src[green_pos], srcAlpha, dst[green_pos], dstAlpha, scale<channels_type>(dstG)), newDstAlpha);
+                
+                if(allChannelFlags || channelFlags.testBit(blue_pos))
+                    dst[blue_pos] = div(blend(src[blue_pos], srcAlpha, dst[blue_pos], dstAlpha, scale<channels_type>(dstB)), newDstAlpha);
+            }
+            
+            return newDstAlpha;
+        }
     }
 };
 

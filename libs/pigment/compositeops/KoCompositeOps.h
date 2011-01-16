@@ -31,6 +31,7 @@
 #include "compositeops/KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpCopy2.h"
+#include "compositeops/KoCompositeOpAtop.h"
 // #include "compositeops/KoCompositeOpAdd.h"
 // #include "compositeops/KoCompositeOpBurn.h"
 // #include "compositeops/KoCompositeOpDivide.h"
@@ -68,6 +69,7 @@ struct AddGeneralOps<Traits, true>
         cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
+        cs->addCompositeOp(new KoCompositeOpAtop<Traits>(cs, KoCompositeOp::categoryMix()));
         
         add<&cfGrainMerge>  (cs, COMPOSITE_GRAIN_MERGE  , i18n("Grain Merge")  , KoCompositeOp::categoryMix());
         add<&cfGrainExtract>(cs, COMPOSITE_GRAIN_EXTRACT, i18n("Grain Extract"), KoCompositeOp::categoryMix());

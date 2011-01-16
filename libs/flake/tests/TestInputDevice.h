@@ -32,6 +32,8 @@ private slots:
     void testNoParameterConstructor();
     void testConstructorWithSingleReference();
     void testEqualityCheckOperator();
+    void testDevice();
+    void testPointer();
     void testMouse();
     void testStylus();
     void testEraser();

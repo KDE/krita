@@ -157,7 +157,7 @@ public:
 
 class TocEntryTemplate{
 public:
-    quint32 outlineLevel;
+    int outlineLevel;
     QString styleName;
     int styleId;
     QList<IndexEntry*> indexEntries;

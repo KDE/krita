@@ -36,6 +36,8 @@
 #include <QTextFrame>
 #include <QTimer>
 #include <KDebug>
+#include <KoBookmark.h>
+#include <KoInlineTextObjectManager.h>
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
@@ -89,8 +91,27 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     return style;
 }
 
-#if 1
+QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager* inlineTextObjectManager)
+{
+    QTextBlock::iterator it;
+    for (it = block.begin(); !(it.atEnd()); ++it) {
+        QTextFragment currentFragment = it.fragment();
+        // most possibly inline object
+        if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()){
+            KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
+            KoBookmark * isBookmark = dynamic_cast<KoBookmark*>(inlineObject);
+            if (isBookmark){
+                return isBookmark->name();
+                break;
+            }
+        }
+    }
+    
+    return QString();
+}
 
+
+#if 1
 void ToCGenerator::generate()
 {
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
@@ -122,6 +143,7 @@ void ToCGenerator::generate()
     // Add TOC
     // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
+    int blockId = 0;
     while (block.isValid()) {
         
         KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
@@ -143,42 +165,54 @@ void ToCGenerator::generate()
                 
                 tocTemplateStyle = styleManager->paragraphStyle( tocEntryTemplate.styleId );
                 if (tocTemplateStyle == 0) {
-                    //qDebug() << "TESTX GENERATE NEW STYLE";
                     tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
-                    
                 }
 
                 QTextBlock tocEntryTextBlock = cursor.block();
                 tocTemplateStyle->applyStyle( tocEntryTextBlock );
-
 
                 // save the current style due to hyperlinks 
                 QTextCharFormat savedCharFormat = cursor.charFormat(); 
                 foreach (IndexEntry * entry,tocEntryTemplate.indexEntries){
                     switch(entry->name){
                         case IndexEntry::LINK_START: {
-                            IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
+                            //IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
                             
-                            QString target = INVALID_HREF_TARGET;
+                            QString target;
+                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout() );
+                            if (layout){
+                                target = fetchBookmarkRef(block, layout->inlineTextObjectManager());
+                                
+                                if (target.isNull()){
+                                    // generate unique name for the bookmark
+                                    target = bd->counterText() + block.text() + "|outline" + QString::number(blockId);
+                                    blockId++;  
+                                    
+                                    // insert new KoBookmark 
+                                    KoBookmark *bookmark = new KoBookmark(target,block.document());
+                                    bookmark->setType(KoBookmark::SinglePosition);
+                                    QTextCursor blockCursor(block);
+                                    layout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
+                                }    
+                                
+                            }
                             
-                            QTextCharFormat linkCf(savedCharFormat);   // and copy it to alter it
+                            // copy it to alter subset of properties
+                            QTextCharFormat linkCf(savedCharFormat);   
                             linkCf.setAnchor(true);
                             linkCf.setAnchorHref(target);
 
                             QBrush foreground = linkCf.foreground();
-                            // TODO: maybe the style can contain info about the color of the hyperlink
                             foreground.setColor(Qt::blue);
 
                             linkCf.setForeground(foreground);
                             linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
                             linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-
                             cursor.setCharFormat(linkCf);
                             break;
                         }
                         case IndexEntry::CHAPTER: {
-                            IndexEntryChapter * chapter = static_cast<IndexEntryChapter*>(entry);
-                            
+                            //IndexEntryChapter * chapter = static_cast<IndexEntryChapter*>(entry);
                             cursor.insertText(bd->counterText());
                             break;
                         }
@@ -188,7 +222,7 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::TEXT: {
-                            IndexEntryText * text = static_cast<IndexEntryText*>(entry);
+                            //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
                             cursor.insertText(block.text());
                             break;
                         }
@@ -205,12 +239,12 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::PAGE_NUMBER: {
-                            IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
+                            //IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
                             cursor.insertText( QString(QChar::ReplacementCharacter) );
                             break;
                         }
                         case IndexEntry::LINK_END: {
-                            IndexEntryLinkEnd * linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
+                            //IndexEntryLinkEnd * linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
                             cursor.setCharFormat(savedCharFormat);
                             break;
                         }

@@ -23,6 +23,7 @@
 #include <QList>
 #include <QTextBlock>
 
+class KoInlineTextObjectManager;
 typedef QPair<QTextBlock, QTextBlock> BlockPair;
 
 class QTextFrame;
@@ -61,6 +62,9 @@ private:
     TableOfContent * m_tocDescription;
     //QList<QTextBlock> m_originalBlocksInToc;
     QList<BlockPair> m_originalBlocksInToc;
+    
+    // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
+    QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);
 };
 
 #endif

@@ -1403,7 +1403,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             QString changeId = ts.attributeNS(KoXmlNS::delta, "removal-change-idref");
             int deleteStartPosition = cursor.position();
             bool stripLeadingSpace = true;
+            d->openChangeRegion(ts);
             loadSpan(ts,cursor,&stripLeadingSpace);
+            d->closeChangeRegion(ts);
             if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
                 QTextCursor tempCursor(cursor);
                 tempCursor.setPosition(deleteStartPosition);

@@ -300,6 +300,7 @@ void TestChangeTracking::testChangeTracking_data()
 
     //Multiple and Overlapping changes
     QTest::newRow("Multiple Paragraph Changes")  << "ChangeTracking/multiple-changes/para-add-then-delete/para-add-delete-tracked.odt";
+    QTest::newRow("Multiple Span Changes")  << "ChangeTracking/multiple-changes/insert-delete-span/insert-delete-span-tracked.odt";
      
 }
 

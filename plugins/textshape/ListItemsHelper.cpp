@@ -236,6 +236,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         dp = level;
     const int displayLevel = dp ? dp : 1;
 
+    QTextBlockFormat blockFormat = block.blockFormat();
+
+    // Look if we have a block that is inside a header. We need to special case them cause header-lists are
+    // different from any other kind of list and they do build up there own global list (table of content).
+    bool isOutline = blockFormat.intProperty(KoParagraphStyle::OutlineLevel) > 0;
+
     int startValue = 1;
     if (format.hasProperty(KoListStyle::StartValue))
         startValue = format.intProperty(KoListStyle::StartValue);
@@ -244,6 +250,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         for (QTextBlock tb = m_textList->item(0).previous(); tb.isValid(); tb = tb.previous()) {
             if (!tb.textList() || tb.textList() == m_textList)
                 continue; // no list here or it's the same list; keep looking
+
+            if (isOutline != bool(tb.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
+                continue; // one of them is an outline while the other is not
 
             QTextListFormat otherFormat = tb.textList()->format();
             if (otherFormat.intProperty(KoListStyle::Level) != level)
@@ -265,7 +274,6 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         data = new KoTextBlockData();
         block.setUserData(data);
     }
-    QTextBlockFormat blockFormat = block.blockFormat();
 
     if (blockFormat.boolProperty(KoParagraphStyle::UnnumberedListItem)
         || blockFormat.boolProperty(KoParagraphStyle::IsListHeader)) {
@@ -289,20 +297,28 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         //check if this is the first of this level meaning we should start from startvalue
         for (QTextBlock b = block.previous(); b.isValid(); b = b.previous()) {
             if (b.textList() == 0)
-                continue;
+                continue; // we only look for lists
+
             QTextListFormat otherFormat = b.textList()->format();
-            if (otherFormat.property(KoListStyle::StyleId) == format.property(KoListStyle::StyleId)) {
-                if (b.textList() == m_textList) {
-                    if (b.textList()->format().intProperty(KoListStyle::Level) == level)
-                        if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
-                            index = otherData->counterIndex() + 1; // Start from previous list value + 1
-                        break;
-                    }
-                }
-                if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
-                    index = startValue;
+            
+            if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
+                continue; // different liststyle what means it's another unrelated list
+
+            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
+                continue; // one of them is an outline while the other is not
+
+            if (b.textList() == m_textList) {
+                if (b.textList()->format().intProperty(KoListStyle::Level) == level)
+                    if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
+                        index = otherData->counterIndex() + 1; // Start from previous list value + 1
                     break;
                 }
+            }
+            if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
+                // Either a new list, that would mark the end (as in beginning) of our list, or the same
+                // list with a lower list-level (is that possible at all?). In both cases we can abort.
+                index = startValue;
+                break;
             }
         }
     }
@@ -317,6 +333,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             QTextListFormat lf = b.textList()->format();
             if (lf.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
                continue; // uninteresting for us
+            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
+                continue; // also uninteresting cause the one is an outline-listitem while the other is not
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
             if (checkLevel <= otherLevel)
                 continue;

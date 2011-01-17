@@ -1399,6 +1399,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         } else if (isDeltaNS && localName == "remove-leaving-content-end") {
             d->closeChangeRegion(ts);
         } else if (isDeltaNS && localName == "removed-content") {
+            QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format
             QString changeId = ts.attributeNS(KoXmlNS::delta, "removal-change-idref");
             int deleteStartPosition = cursor.position();
             bool stripLeadingSpace = true;
@@ -1409,6 +1410,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);
                 d->deleteChangeMarkerMap.insert(marker, QPair<int,int>(deleteStartPosition+1, cursor.position()));
             }
+            cursor.setCharFormat(cf); // restore the cursor char format
         } else if (isDeltaNS && localName == "merge") {
             loadMerge(ts, cursor);
         } else if (isTextNS && localName == "change-start") { // text:change-start

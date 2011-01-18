@@ -78,7 +78,7 @@ public:
         return 0;
     }
 
-    virtual const KoViewConverter *viewConverter() const
+    virtual KoViewConverter *viewConverter() const
     {
         return 0;
     }

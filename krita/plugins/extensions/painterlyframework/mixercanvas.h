@@ -87,7 +87,7 @@ public:
     void gridSize(qreal *, qreal *) const { Q_ASSERT(false); }
     bool snapToGrid() const { Q_ASSERT(false); return false; }
     KoShapeManager *shapeManager() const { Q_ASSERT(false); return 0; }
-    const KoViewConverter *viewConverter() const { return m_viewConverter;}
+    KoViewConverter *viewConverter() const { return m_viewConverter;}
     void updateInputMethodInfo() { Q_ASSERT(false); }
     void updateCanvas(const QRectF &rc) { Q_UNUSED(rc);}
     KoToolProxy* toolProxy() const { Q_ASSERT(false); return 0; }

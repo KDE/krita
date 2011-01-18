@@ -175,7 +175,7 @@ public:
                         const QString& defaultValue = QString()) const;
     bool hasAttribute(const QString& name) const;
     bool hasAttributeNS(const QString& namespaceURI, const QString& localName) const;
-    QVariant attributes() const;
+    
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;

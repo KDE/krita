@@ -31,7 +31,7 @@
 #define KOTEXTLOADER_H
 
 #include <QObject>
-#include <QVariant>
+
 
 #include "kotext_export.h"
 #include "KoXmlReaderForward.h"
@@ -41,10 +41,6 @@ class KoShape;
 class QTextCursor;
 class KoBookmarkManager;
 class KoDocumentRdfBase;
-
-typedef QPair<QString, QVariant> VariantPair;
-
-Q_DECLARE_METATYPE(VariantPair)
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape

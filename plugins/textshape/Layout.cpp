@@ -2237,7 +2237,6 @@ void Layout::updateFrameStack()
                 }
             }
             if (!found) {
-                //qDebug() << "TESTX TOC GENERATOR CREATE ---------------------------- ";
                 ToCGenerator *tg = new ToCGenerator(frame);
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout

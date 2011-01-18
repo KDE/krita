@@ -315,19 +315,22 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
             break;
     }
 
-    if (changeId && (changeStack.top() != changeId)) {
-        changeStack.push(changeId);
-    } else {
+    if (!changeId || (changeStack.top() == changeId)) {
         changeId = 0;
     }
+
     returnChangeId = changeId;
     
     //Navigate through the change history and push into a stack so that they can be processed in the reverse order (i.e starting from earliest)
     QStack<int> changeHistory;
-    while (changeId) {
+    while (changeId && (changeId != changeStack.top())) {
         changeHistory.push(changeId);
         saveChange(changeId);
         changeId = changeTracker->parent(changeId);
+    }
+
+    if (returnChangeId) {
+        changeStack.push(returnChangeId);
     }
 
     while(changeHistory.size()) {
@@ -777,6 +780,12 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
             int currentChangeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
+
+            KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+            if (currentFragment.length() == 1 && inlineObject && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
+                continue;
+            }
+
             if (!currentChangeId) {
                 // Encountered a fragment that is not a change
                 // So break out of loop and return 0
@@ -794,6 +803,13 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
                         //Change Fragment and it is the same as the first change.
                         //continue looking
                         continue; 
+                    } else if (changeTracker->isParent(currentChangeId, changeId)) {
+                        //The currentChangeId is a parent of changeId
+                        changeId = currentChangeId;
+                        continue;
+                    } else if (changeTracker->isParent(changeId, currentChangeId)) {
+                        //The current change id is a child of change-id
+                        continue;
                     } else {
                         //A Change Fragment but not same as the first change fragment
                         //Break-out of loop and return 0

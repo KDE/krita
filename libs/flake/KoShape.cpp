@@ -745,8 +745,8 @@ int KoShape::addConnectionPoint(const KoConnectionPoint &point)
         nextConnectionPointId = qMax(nextConnectionPointId, (--d->connectors.end()).key()+1);
 
     KoConnectionPoint p = point;
-    p.position = KoFlake::toRelative(p.position, size());
     // convert glue point from shape coordinates to factors of size
+    p.position = KoFlake::toRelative(p.position, size());
     d->setConnectionPoint(nextConnectionPointId, p);
 
     return nextConnectionPointId;
@@ -793,6 +793,7 @@ KoConnectionPoint KoShape::connectionPoint(int connectionPointId) const
 {
     Q_D(const KoShape);
     KoConnectionPoint p = d->connectors.value(connectionPointId, KoConnectionPoint());
+    // convert glue point to shape coordinates
     p.position = KoFlake::toAbsolute(p.position, size());
     return p;
 }
@@ -1371,87 +1372,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
             d->eventActions = KoEventActionRegistry::instance()->createEventActionsFromOdf(eventActionsElement, context);
         }
         // load glue points (connection points)
-        KoXmlElement child;
-        forEachElement(child, element) {
-            if (child.namespaceURI() != KoXmlNS::draw)
-                continue;
-            if (child.localName() == "glue-point") {
-                const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
-                const int index = id.toInt();
-                if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
-                    kWarning(30006) << "glue-point with no or invalid id";
-                    continue;
-                }
-                QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
-                QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
-                if(xStr.isEmpty() || yStr.isEmpty()) {
-                    kWarning(30006) << "glue-point with invald position";
-                    continue;
-                }
-                QPointF connectorPos;
-                const QRectF bbox = boundingRect();
-                const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
-                if (align.isEmpty()) {
-#ifndef NWORKAROUND_ODF_BUGS
-                    KoOdfWorkaround::fixGluePointPosition(xStr, context);
-                    KoOdfWorkaround::fixGluePointPosition(yStr, context);
-#endif
-                    if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
-                        kWarning(30006) << "glue-point with invald position";
-                        continue;
-                    }
-                    // x and y are relative to drawing object center
-                    connectorPos.setX(xStr.remove('%').toDouble()/100.0);
-                    connectorPos.setY(yStr.remove('%').toDouble()/100.0);
-                    // convert position to be relative to top-left corner
-                    connectorPos += QPointF(0.5, 0.5);
-                } else {
-                    // absolute distances to the edge specified by align
-                    connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
-                    connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
-                    if (align == "top-left") {
-                        // this matches our coordinate origin
-                    } else if (align == "top") {
-                        connectorPos.rx() = 0.5;
-                    } else if (align == "top-right") {
-                        connectorPos.rx() += 1.0;
-                    } else if (align == "left") {
-                        connectorPos.ry() = 0.5;
-                    } else if (align == "center") {
-                        connectorPos += QPointF(0.5, 0.5);
-                    } else if (align == "right") {
-                        connectorPos.ry() = 0.5;
-                    } else if (align == "bottom-left") {
-                        connectorPos.ry() += 1.0;
-                    } else if (align == "bottom") {
-                        connectorPos.rx() = 0.5;
-                    } else if (align == "bottom-right") {
-                        connectorPos.rx() += 1.0;
-                    }
-                }
-                KoConnectionPoint::EscapeDirection escapeDirection = KoConnectionPoint::AllDirections;
-                const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
-                if (!escape.isEmpty()) {
-                    if (escape == "horizontal") {
-                        escapeDirection = KoConnectionPoint::HorizontalDirections;
-                    } else if (escape == "vertical") {
-                        escapeDirection = KoConnectionPoint::VerticalDirections;
-                    } else if (escape == "left") {
-                        escapeDirection = KoConnectionPoint::LeftDirection;
-                    } else if (escape == "right") {
-                        escapeDirection = KoConnectionPoint::RightDirection;
-                    } else if (escape == "up") {
-                        escapeDirection = KoConnectionPoint::UpDirection;
-                    } else if (escape == "down") {
-                        escapeDirection = KoConnectionPoint::DownDirection;
-                    }
-                }
-                KoConnectionPoint connector(connectorPos, escapeDirection);
-                d->setConnectionPoint(index, connector);
-                kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
-            }
-        }
-        kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
+        loadOdfGluePoints(element, context);
     }
 
     return true;
@@ -1558,6 +1479,93 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
         return shadow;
     }
     return 0;
+}
+
+void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    Q_D(KoShape);
+
+    KoXmlElement child;
+    forEachElement(child, element) {
+        if (child.namespaceURI() != KoXmlNS::draw)
+            continue;
+        if (child.localName() == "glue-point") {
+            const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
+            const int index = id.toInt();
+            if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
+                kWarning(30006) << "glue-point with no or invalid id";
+                continue;
+            }
+            QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
+            QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
+            if(xStr.isEmpty() || yStr.isEmpty()) {
+                kWarning(30006) << "glue-point with invald position";
+                continue;
+            }
+            QPointF connectorPos;
+            const QRectF bbox = boundingRect();
+            const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
+            if (align.isEmpty()) {
+                #ifndef NWORKAROUND_ODF_BUGS
+                KoOdfWorkaround::fixGluePointPosition(xStr, context);
+                KoOdfWorkaround::fixGluePointPosition(yStr, context);
+                #endif
+                if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
+                    kWarning(30006) << "glue-point with invald position";
+                    continue;
+            }
+            // x and y are relative to drawing object center
+            connectorPos.setX(xStr.remove('%').toDouble()/100.0);
+            connectorPos.setY(yStr.remove('%').toDouble()/100.0);
+            // convert position to be relative to top-left corner
+            connectorPos += QPointF(0.5, 0.5);
+        } else {
+            // absolute distances to the edge specified by align
+            connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
+            connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
+            if (align == "top-left") {
+                // this matches our coordinate origin
+            } else if (align == "top") {
+                connectorPos.rx() = 0.5;
+            } else if (align == "top-right") {
+                connectorPos.rx() += 1.0;
+            } else if (align == "left") {
+                connectorPos.ry() = 0.5;
+            } else if (align == "center") {
+                connectorPos += QPointF(0.5, 0.5);
+            } else if (align == "right") {
+                connectorPos.ry() = 0.5;
+            } else if (align == "bottom-left") {
+                connectorPos.ry() += 1.0;
+            } else if (align == "bottom") {
+                connectorPos.rx() = 0.5;
+            } else if (align == "bottom-right") {
+                connectorPos.rx() += 1.0;
+            }
+        }
+        KoConnectionPoint::EscapeDirection escapeDirection = KoConnectionPoint::AllDirections;
+        const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
+        if (!escape.isEmpty()) {
+            if (escape == "horizontal") {
+                escapeDirection = KoConnectionPoint::HorizontalDirections;
+            } else if (escape == "vertical") {
+                escapeDirection = KoConnectionPoint::VerticalDirections;
+            } else if (escape == "left") {
+                escapeDirection = KoConnectionPoint::LeftDirection;
+            } else if (escape == "right") {
+                escapeDirection = KoConnectionPoint::RightDirection;
+            } else if (escape == "up") {
+                escapeDirection = KoConnectionPoint::UpDirection;
+            } else if (escape == "down") {
+                escapeDirection = KoConnectionPoint::DownDirection;
+            }
+        }
+        KoConnectionPoint connector(connectorPos, escapeDirection);
+        d->setConnectionPoint(index, connector);
+        kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
+        }
+    }
+    kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
 }
 
 QTransform KoShape::parseOdfTransform(const QString &transform)

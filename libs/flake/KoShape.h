@@ -1062,6 +1062,9 @@ protected:
     /// Loads the shadow style
     KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
 
+    /// Loads the connection points
+    void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
+
     /* ** end loading saving */
 
     /**

@@ -8,6 +8,8 @@
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com> 
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1382,123 +1384,6 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
     }
 }
 
-static QVariant attributes(const KoXmlElement &element, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle)
-{   
-    QStringList attrNames = element.attributeNames();
-    //qDebug() << "TESTX ATTR NAMES " << attrNames;
-    QVariantHash attrMap;
-    for (int i = 0; i < attrNames.size(); i++) {
-        QString attrName = attrNames.at(i);
-        //qDebug() << "TESTX ATTR NAME " << attrName;
-        QString value = element.attribute(attrName);
-        //qDebug() << "TESTX ATTR VALUE " << value;        
-        QVariant attr;
-        if (attrName == "style-name") {
-            attr.setValue(0);
-            KoParagraphStyle *style = textSharedData->paragraphStyle(value, useStylesAutoStyle);
-            if (style) {
-                attr.setValue(style->styleId());
-            }
-            KoSectionStyle *sectionStyle = textSharedData->sectionStyle(value, useStylesAutoStyle);
-            if (sectionStyle) {
-                attr.setValue(sectionStyle->styleId());
-            }
-            KoCharacterStyle *characterStyle = textSharedData->characterStyle(value, useStylesAutoStyle);
-            if (characterStyle) {
-                attr.setValue(characterStyle->styleId());
-            }
-            //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " STYLE NAME " << value << " ATTR " << attr;
-        } else if (attrName == "index-entry-tab-stop") {
-            if (value == "right") {
-                attr.setValue((int) QTextOption::RightTab);
-            } else if (value == "left") {
-                attr.setValue((int) QTextOption::LeftTab);
-            } else if (value == "center") {
-                attr.setValue((int) QTextOption::CenterTab);
-            } else if (value == "delimiter") {
-                attr.setValue((int) QTextOption::DelimiterTab);
-            }
-
-        } else {
-            attr.setValue(value);
-        }
-        //qDebug() << "TESTX ATTR VARIANT " << attr;
-        attrMap.insert(attrName, attr);
-    }
-    if (! element.text().isEmpty()) {
-        QVariant textVariant;
-        textVariant.setValue(element.text());
-        //qDebug() << "TESTX ELEMENT NAME " << element.localName() << " TEXT VARIANT " << textVariant;
-        attrMap.insert("TEXT", textVariant);
-    }
-    return attrMap;
-}
-
-static QVariant createTocVariant(const KoXmlElement &tocElement, KoTextSharedLoadingData *textSharedData, bool useStylesAutoStyle) {
-    QVariantHash attrMap;
-    //text:table-of-content
-    QVariant tocElementAttr = attributes(tocElement, textSharedData, true);
-    //qDebug() << "TESTX TOC NAME " << toc.localName() << " ATTR " << tocAttr;
-    attrMap.insert(tocElement.localName(), tocElementAttr);
-    KoXmlElement tocChild;
-    forEachElement(tocChild, tocElement) {
-        //text:table-of-content-source
-        if (tocChild.localName() == "table-of-content-source") {
-            QVariant tocChildAttr = attributes(tocChild, textSharedData, useStylesAutoStyle);
-            attrMap.insert(tocChild.localName(), tocChildAttr);
-            KoXmlElement tocTemplate;
-            forEachElement(tocTemplate, tocChild) {
-                //text:index-title-template
-                //text:table-of-content-entry-template
-                QString outlineLevel = tocTemplate.attribute("outline-level");
-                QVariant tocTemplateAttr = attributes(tocTemplate, textSharedData, useStylesAutoStyle);
-                QString outlineLevelSuffix = outlineLevel.isNull() ? "" : " " + outlineLevel;
-                attrMap.insert(tocTemplate.localName() +  outlineLevelSuffix, tocTemplateAttr);
-                KoXmlElement tocIndexEntry;
-                QList<QVariant> indexEntryList;
-                forEachElement(tocIndexEntry, tocTemplate) {
-                    //text:index-entry
-                    if (tocIndexEntry.localName() == "index-entry-tab-stop") {            
-                        KoText::Tab tab;
-                        QString type = tocIndexEntry.attribute("type");
-                        if (type == "right") {
-                            tab.type = QTextOption::RightTab;
-                        } else if (type == "left") {
-                            tab.type = QTextOption::LeftTab;
-                        } else if (type == "center") {
-                            tab.type = QTextOption::CenterTab;
-                        } else if (type == "delimiter") {
-                            tab.type = QTextOption::DelimiterTab;
-                        } else {
-                            tab.type = QTextOption::RightTab;
-                        }
-                        QString leaderChar = tocIndexEntry.attribute("leader-char");
-                        tab.leaderText = leaderChar.isEmpty() ? "." : leaderChar;
-                        QString position = tocIndexEntry.attribute("position");
-                        tab.position = position.isNull() ?  490 : KoUnit::parseValue(position, 490);
-                        //qDebug() << "TESTX TAB TYPE " << tab.type << " LEDAER CHAR " << tab.leaderText;
-                        QVariant tabVariant;
-                        tabVariant.setValue(tab);
-                        VariantPair nameVariantPair = qMakePair(tocIndexEntry.localName(), tabVariant);
-                        QVariant variantPair;
-                        variantPair.setValue(nameVariantPair);
-                        indexEntryList.append(variantPair);
-                    } else {
-                        QVariant tocIndexEntryAttr = attributes(tocIndexEntry, textSharedData, useStylesAutoStyle);
-                        VariantPair nameVariantPair = qMakePair(tocIndexEntry.localName(), tocIndexEntryAttr);
-                        QVariant variantPair;
-                        variantPair.setValue(nameVariantPair);
-                        indexEntryList.append(variantPair);
-                    }
-                }
-                attrMap.insert(tocTemplate.localName() + " ELEMENTS"  + outlineLevelSuffix, indexEntryList);
-            }
-        }
-    }
-    return QVariant(attrMap);
-}
-
-#if 1
 
 void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
 {
@@ -1568,38 +1453,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     cursor.movePosition(QTextCursor::End);
 }
 
-#else
-
-//Pavol Korinek: TOC prototype, used for analyze, logic design and knowleadge transfer
-
-void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor &cursor)
-{
-    qDebug() << "korinek";
-    // Add a frame to the current layout
-    QTextFrameFormat tocFormat;
-    tocFormat.setProperty(KoText::TableOfContents, true);
-    bool useStylesAutoStyle = d->context.odfLoadingContext().useStylesAutoStyles();
-    QVariant tocVariant = createTocVariant(element, d->textSharedData, useStylesAutoStyle);
-    //qDebug() << "TESTX ATTR VARIANT " << tocVariant;
-    tocFormat.setProperty(KoText::TableOfContentsData, tocVariant);
-    cursor.insertFrame(tocFormat);
-    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
-    // table-of-content
-    KoXmlElement indexBody;
-    forEachElement(indexBody, element) {
-        // index-body
-        if (indexBody.localName() == "index-body") {
-            QTextBlockFormat bf;
-            QTextCharFormat cf;
-            cursorFrame.insertBlock(bf, cf);
-            loadBody(indexBody, cursorFrame);
-        }
-    }
-    // Get out of the frame
-    cursor.movePosition(QTextCursor::End);
-}
-
-#endif
 
 void KoTextLoader::startBody(int total)
 {

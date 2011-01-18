@@ -21,7 +21,7 @@
 #define KO_TABLE_OF_CONTENTS_GENERATOR_INFO
 
 #define ppVar( var ) #var << "=" << var
-#define DEBUG_TOC_STRUCTURE
+//#define DEBUG_TOC_STRUCTURE
 
 #include <QDebug>
 #include <QList>

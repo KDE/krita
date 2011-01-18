@@ -34,9 +34,6 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
 
 KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
 {
-    if (m_toc){
-        qDebug() << "KoTableOfContentsGeneratorInfo:I'm not owner of TableOfContent, so please delete it";
-    }
 }
 
 

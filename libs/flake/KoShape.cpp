@@ -1521,8 +1521,9 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             connectorPos += QPointF(0.5, 0.5);
         } else {
             // absolute distances to the edge specified by align
-            connectorPos.setX(KoUnit::parseValue(xStr) / bbox.width());
-            connectorPos.setY(KoUnit::parseValue(yStr) / bbox.height());
+            connectorPos.setX(KoUnit::parseValue(xStr));
+            connectorPos.setY(KoUnit::parseValue(yStr));
+            connectorPos = KoFlake::toRelative(connectorPos, bbox.size());
             if (align == "top-left") {
                 // this matches our coordinate origin
             } else if (align == "top") {

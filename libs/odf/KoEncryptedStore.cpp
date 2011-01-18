@@ -160,7 +160,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
 
         KoXmlDocument xmldoc;
         bool namespaceProcessing = true; // for the manifest ignore the namespace (bug #260515)
-        if (!xmldoc.setContent(dev, namespaceProcessing)) {
+        if (!xmldoc.setContent(dev, namespaceProcessing) || xmldoc.documentElement().localName() != "manifest" || xmldoc.documentElement().namespaceURI() != KoXmlNS::manifest) {
             KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
             dev->close();
             delete dev;
@@ -169,15 +169,6 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             return false;
         }
         KoXmlElement xmlroot = xmldoc.documentElement();
-        if (xmlroot.localName() != "manifest" || xmlroot.namespaceURI() != KoXmlNS::manifest) {
-            KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
-            dev->close();
-            delete dev;
-            m_pZip->close();
-            d->good = false;
-            return false;
-        }
-
         if (xmlroot.hasChildNodes()) {
             QCA::Base64 base64decoder(QCA::Decode);
             KoXmlNode xmlnode = xmlroot.firstChild();

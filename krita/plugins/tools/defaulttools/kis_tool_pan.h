@@ -71,12 +71,12 @@ class KisToolPanFactory : public KoToolFactoryBase
 public:
     KisToolPanFactory(const QStringList&)
             : KoToolFactoryBase(KoPanTool_ID) {
-        setToolTip(i18n("Move and rotate your canvas"));
+        setToolTip(i18n("Move and rotate your canvas  (ALT+V)"));
         setToolType(navigationToolType());
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID_ALWAYS_ACTIVE);
         setPriority(5);
         setIcon("krita_tool_pan");
-        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
+        setShortcut( KShortcut( Qt::ALT + Qt::Key_V ) );
     }
 
     virtual ~KisToolPanFactory() {}

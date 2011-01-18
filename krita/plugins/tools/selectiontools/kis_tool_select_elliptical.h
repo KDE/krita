@@ -66,7 +66,7 @@ class KisToolSelectEllipticalFactory : public KoToolFactoryBase
 public:
     KisToolSelectEllipticalFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectElliptical") {
-        setToolTip(i18n("Select an elliptical area"));
+        setToolTip(i18n("Select an elliptical area (J)"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_elliptical_selection");

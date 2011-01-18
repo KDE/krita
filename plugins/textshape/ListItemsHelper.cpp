@@ -311,8 +311,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 if (b.textList()->format().intProperty(KoListStyle::Level) == level)
                     if (KoTextBlockData *otherData = dynamic_cast<KoTextBlockData *>(b.userData())) {
                         index = otherData->counterIndex() + 1; // Start from previous list value + 1
-                    break;
-                }
+                        break;
+                    }
             }
             if (b.textList()->format().intProperty(KoListStyle::Level) < level) {
                 // Either a new list, that would mark the end (as in beginning) of our list, or the same

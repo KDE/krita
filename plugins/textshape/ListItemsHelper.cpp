@@ -226,7 +226,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 {
     //kDebug(32500);
     const QTextListFormat format = m_textList->format();
-    const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(m_textList->format().style());
+    const KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(format.style());
 
     const QString prefix = format.stringProperty(KoListStyle::ListItemPrefix);
     const QString suffix = format.stringProperty(KoListStyle::ListItemSuffix);

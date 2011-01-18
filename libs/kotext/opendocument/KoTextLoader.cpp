@@ -258,7 +258,13 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
     if (!changeId)
         return;
     if (!changeStack.empty() && (changeStack.top() != changeId)) {
-        changeTracker->setParent(changeId, changeStack.top());
+        //Parent child relationship is defined by the order in which the change meta-data is seen 
+        //So check the changeId to set the parent-child relationship
+        if (changeId > changeStack.top()) {
+            changeTracker->setParent(changeId, changeStack.top());
+        } else {
+            changeTracker->setParent(changeStack.top(), changeId);
+        }
     }
     changeStack.push(changeId);
     changeTransTable.insert(id, changeId);
@@ -1720,8 +1726,6 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
     KoDeleteChangeMarker *retMarker = NULL;
     int changeId = changeTracker->getLoadedChangeId(id);
     if (changeId) {
-        if (changeStack.count() && (changeStack.top() != changeId))
-            changeTracker->setParent(changeId, changeStack.top());
         KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(changeTracker);
         deleteChangemarker->setChangeId(changeId);
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);

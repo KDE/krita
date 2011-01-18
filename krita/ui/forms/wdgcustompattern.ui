@@ -24,10 +24,15 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBox1">
+      <widget class="QComboBox" name="cmbSource">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
+       <item>
+        <property name="text">
+         <string>Current Layer</string>
+        </property>
+       </item>
        <item>
         <property name="text">
          <string>Entire Image</string>
@@ -72,6 +77,9 @@
          <height>0</height>
         </size>
        </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -101,26 +109,33 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="patternButton">
+      <widget class="QLabel" name="lblWarning">
        <property name="text">
-        <string>Use as Pattern</string>
+        <string/>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="exportButton">
+      <widget class="QPushButton" name="updateButton">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="text">
-        <string>Export</string>
+        <string>&amp;Update</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="patternButton">
+       <property name="text">
+        <string>use as &amp;Pattern</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="addButton">
        <property name="text">
-        <string>Add to Predefined Patterns</string>
+        <string>&amp;Add to Predefined Patterns</string>
        </property>
       </widget>
      </item>

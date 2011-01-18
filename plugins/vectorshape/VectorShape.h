@@ -46,8 +46,6 @@ public:
     /// reimplemented from KoShape
     void paint(QPainter &painter, const KoViewConverter &converter);
     /// reimplemented from KoShape
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
-    /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented from KoShape
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );

@@ -32,7 +32,7 @@ class KoOdfStylesReader;
 /**
  * Helper class around KoStore for reading out ODF files.
  *
- * The class loades and parses files from the KoStore.
+ * The class loads and parses files from the KoStore.
  *
  * @author: David Faure <faure@kde.org>
  */

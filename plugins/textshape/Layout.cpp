@@ -2246,26 +2246,24 @@ void Layout::updateFrameStack()
         QTextFrameFormat ff = frame->frameFormat();
         if (ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
             // this frame is a TOC
-            bool found = false;
-            QList<QWeakPointer<ToCGenerator> >::Iterator iter = m_tocGenerators.begin();
-            while (iter != m_tocGenerators.end()) {
-                QWeakPointer<ToCGenerator> item = *iter;
+            QList<QWeakPointer<ToCGenerator> >::Iterator iter;
+            QWeakPointer<ToCGenerator> item;
+            for (iter = m_tocGenerators.begin(); iter != m_tocGenerators.end(); iter++) {
+                item = *iter;
                 if (item.isNull()) {
-                    iter = m_tocGenerators.erase(iter);
-                    continue;
+                    m_tocGenerators.erase(iter);
+                } else {
+                    if (item.data()->tocFrame() == frame) {
+                        break;
+                    }                    
                 }
-                if (item.data()->tocFrame() == frame) {
-                    found = true;
-                    break;
-                }
-                iter++;
             }
-            if (!found) {
+            if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),
-                        tg, SLOT(documentLayoutFinished()));
+                                 tg, SLOT(documentLayoutFinished()));
             }
         }
     }

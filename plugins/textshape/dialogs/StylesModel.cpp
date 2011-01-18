@@ -50,6 +50,7 @@ StylesModel::StylesModel(KoStyleManager *manager, QObject *parent)
         m_pureParagraphStyle(true),
         m_pureCharacterStyle(true),
         m_styleMapper(new QSignalMapper(this))
+        ,m_tmpTextShape(0)
 {
     setStyleManager(manager);
     m_paragIcon = KIcon("kotext-paragraph");
@@ -59,6 +60,7 @@ StylesModel::StylesModel(KoStyleManager *manager, QObject *parent)
 
 StylesModel::~StylesModel()
 {
+    delete m_tmpTextShape;
 }
 
 QModelIndex StylesModel::index(int row, int column, const QModelIndex &parent) const
@@ -82,31 +84,6 @@ int StylesModel::rowCount(const QModelIndex &parent) const
     return 0;
 }
 
-void StylesModel::generatePixmap(KoParagraphStyle *style)
-{
-    KoZoomHandler zoomHandler;
-    KoInlineTextObjectManager itom;
-    TextShape textShape(&itom);
-    textShape.setSize(QSizeF(250, 300));
-    QTextCursor cursor (textShape.textShapeData()->document());
-    QPixmap pm(250,48);
-
-    pm.fill(Qt::transparent);
-    QPainter p(&pm);
-
-    p.translate(0, 1.5);
-    p.setRenderHint(QPainter::Antialiasing);
-    cursor.select(QTextCursor::Document);
-    cursor.insertText(style->name());
-    QTextBlock block = cursor.block();
-    style->applyStyle(block, true);
-    dynamic_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout())->layout();
-
-    textShape.paintComponent(p, zoomHandler);
-
-    m_pixmapMap.insert(style->styleId(), pm);
-}
-
 QVariant StylesModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -124,9 +101,15 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
             return characterStyle->name();
         break;
     }
-    case Qt::DecorationRole:
-        return m_pixmapMap[id];
+    case Qt::DecorationRole: {
+        KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
+        if (paragStyle)
+            return m_styleManager->thumbnail(paragStyle);
+        KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
+        if (characterStyle)
+            return m_styleManager->thumbnail(characterStyle);
         break;
+    }
     default: break;
     };
     return QVariant();
@@ -176,10 +159,16 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
-
     if (m_styleManager == 0) {
         return;
     }
+
+    delete m_tmpTextShape;
+
+    KoInlineTextObjectManager *itom = new KoInlineTextObjectManager;
+    m_tmpTextShape = new TextShape(itom);
+    m_tmpTextShape->setSize(QSizeF(250, 300));
+    m_styleManager->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());
 
     connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
     connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
@@ -196,7 +185,6 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
 void StylesModel::addParagraphStyle(KoParagraphStyle *style)
 {
     Q_ASSERT(style);
-    generatePixmap(style);
     m_styleList.append(style->styleId());
     m_styleMapper->setMapping(style, style->styleId());
     connect(style, SIGNAL(nameChanged(const QString&)), m_styleMapper, SLOT(map()));

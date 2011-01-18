@@ -325,17 +325,17 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("grow_to_fit_width", m_growWidthAction);
     m_growWidthAction->setCheckable(true);
     connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
-    
+
     m_growHeightAction = new KAction(KIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
     addAction("grow_to_fit_height", m_growHeightAction);
     m_growHeightAction->setCheckable(true);
     connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
-    
+
     m_shrinkToFitAction = new KAction(KIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
     addAction("shrink_to_fit", m_shrinkToFitAction);
     m_shrinkToFitAction->setCheckable(true);
     connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
-    
+
     action = new KAction(i18n("Default Format"), this);
     addAction("text_default", action);
     action->setToolTip(i18n("Change text attributes to their default values"));
@@ -576,8 +576,13 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (m_textEditor.isNull())
         return;
-    if (canvas()->canvasWidget()->hasFocus() && !m_caretTimer.isActive()) // make sure we blink
+    if (canvas()
+            && (( canvas()->canvasWidget() && canvas()->canvasWidget()->hasFocus())
+                  || (canvas()->canvasItem() && canvas()->canvasItem()->hasFocus())
+               )
+            && !m_caretTimer.isActive()) { // make sure we blink
         m_caretTimer.start();
+    }
     QTextBlock block = m_textEditor.data()->block();
     if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
         return;
@@ -1615,7 +1620,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    
+
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));

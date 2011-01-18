@@ -23,6 +23,7 @@
 #include "KoEncryptionChecker.h"
 #include "KoStore_p.h"
 #include "KoXmlReader.h"
+#include <KoXmlNS.h>
 
 #include <QString>
 #include <QByteArray>
@@ -158,7 +159,8 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
         QIODevice *dev = (static_cast< const KArchiveFile* >(manifestArchiveEntry))->createDevice();
 
         KoXmlDocument xmldoc;
-        if (!xmldoc.setContent(dev)) {
+        bool namespaceProcessing = true; // for the manifest ignore the namespace (bug #260515)
+        if (!xmldoc.setContent(dev, namespaceProcessing)) {
             KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
             dev->close();
             delete dev;
@@ -167,7 +169,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             return false;
         }
         KoXmlElement xmlroot = xmldoc.documentElement();
-        if (xmlroot.tagName() != "manifest:manifest") {
+        if (xmlroot.localName() != "manifest" || xmlroot.namespaceURI() != KoXmlNS::manifest) {
             KMessage::message(KMessage::Warning, i18n("The manifest file seems to be corrupted. The document could not be opened."));
             dev->close();
             delete dev;
@@ -181,7 +183,7 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
             KoXmlNode xmlnode = xmlroot.firstChild();
             while (!xmlnode.isNull()) {
                 // Search for files
-                if (!xmlnode.isElement() || xmlnode.toElement().tagName() != "manifest:file-entry" || !xmlnode.toElement().hasAttribute("manifest:full-path") || !xmlnode.hasChildNodes()) {
+                if (!xmlnode.isElement() || xmlroot.namespaceURI() != KoXmlNS::manifest || xmlnode.toElement().localName() != "file-entry" || !xmlnode.toElement().hasAttribute("full-path") || !xmlnode.hasChildNodes()) {
                     xmlnode = xmlnode.nextSibling();
                     continue;
                 }
@@ -196,14 +198,15 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 encData.initVector = QCA::SecureArray();
 
                 // Get some info about the file
-                QString fullpath = xmlnode.toElement().attribute("manifest:full-path");
-                if (xmlnode.toElement().hasAttribute("manifest:size")) {
-                    encData.filesize = xmlnode.toElement().attribute("manifest:size").toUInt();
+                QString fullpath = xmlnode.toElement().attribute("full-path");
+
+                if (xmlnode.toElement().hasAttribute("size")) {
+                    encData.filesize = xmlnode.toElement().attribute("size").toUInt();
                 }
 
                 // Find the embedded encryption-data block
                 KoXmlNode xmlencnode = xmlnode.firstChild();
-                while (!xmlencnode.isNull() && (!xmlencnode.isElement() || xmlencnode.toElement().tagName() != "manifest:encryption-data" || !xmlencnode.hasChildNodes())) {
+                while (!xmlencnode.isNull() && (!xmlencnode.isElement() || xmlencnode.toElement().localName() != "encryption-data" || !xmlencnode.hasChildNodes())) {
                     xmlencnode = xmlencnode.nextSibling();
                 }
                 if (xmlencnode.isNull()) {
@@ -212,11 +215,11 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                 }
 
                 // Find some things about the checksum
-                if (xmlencnode.toElement().hasAttribute("manifest:checksum")) {
+                if (xmlencnode.toElement().hasAttribute("checksum")) {
                     base64decoder.clear();
-                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("manifest:checksum").toAscii()));
-                    if (xmlencnode.toElement().hasAttribute("manifest:checksum-type")) {
-                        QString checksumType = xmlencnode.toElement().attribute("manifest:checksum-type");
+                    encData.checksum = base64decoder.decode(QCA::SecureArray(xmlencnode.toElement().attribute("checksum").toAscii()));
+                    if (xmlencnode.toElement().hasAttribute("checksum-type")) {
+                        QString checksumType = xmlencnode.toElement().attribute("checksum-type");
                         if (checksumType == "SHA1") {
                             encData.checksumShort = false;
                         }
@@ -247,10 +250,10 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     }
 
                     // Find some things about the encryption algorithm
-                    if (xmlencattr.toElement().tagName() == "manifest:algorithm" && xmlencattr.toElement().hasAttribute("manifest:initialisation-vector")) {
+                    if (xmlencattr.toElement().localName() == "algorithm" && xmlencattr.toElement().hasAttribute("initialisation-vector")) {
                         algorithmFound = true;
-                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("manifest:initialisation-vector").toAscii()));
-                        if (xmlencattr.toElement().hasAttribute("manifest:algorithm-name") && xmlencattr.toElement().attribute("manifest:algorithm-name") != "Blowfish CFB") {
+                        encData.initVector = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("initialisation-vector").toAscii()));
+                        if (xmlencattr.toElement().hasAttribute("algorithm-name") && xmlencattr.toElement().attribute("algorithm-name") != "Blowfish CFB") {
                             if (!unreadableErrorShown) {
                                 KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
                                 unreadableErrorShown = true;
@@ -260,14 +263,14 @@ bool KoEncryptedStore::init(Mode mode, const QByteArray & appIdentification)
                     }
 
                     // Find some things about the key derivation
-                    if (xmlencattr.toElement().tagName() == "manifest:key-derivation" && xmlencattr.toElement().hasAttribute("manifest:salt")) {
+                    if (xmlencattr.toElement().localName() == "key-derivation" && xmlencattr.toElement().hasAttribute("salt")) {
                         keyDerivationFound = true;
-                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("manifest:salt").toAscii()));
+                        encData.salt = base64decoder.decode(QCA::SecureArray(xmlencattr.toElement().attribute("salt").toAscii()));
                         encData.iterationCount = 1024;
-                        if (xmlencattr.toElement().hasAttribute("manifest:iteration-count")) {
-                            encData.iterationCount = xmlencattr.toElement().attribute("manifest:iteration-count").toUInt();
+                        if (xmlencattr.toElement().hasAttribute("iteration-count")) {
+                            encData.iterationCount = xmlencattr.toElement().attribute("iteration-count").toUInt();
                         }
-                        if (xmlencattr.toElement().hasAttribute("manifest:key-derivation-name") && xmlencattr.toElement().attribute("manifest:key-derivation-name") != "PBKDF2") {
+                        if (xmlencattr.toElement().hasAttribute("key-derivation-name") && xmlencattr.toElement().attribute("key-derivation-name") != "PBKDF2") {
                             if (!unreadableErrorShown) {
                                 KMessage::message(KMessage::Warning, i18n("This document contains an unknown encryption method. Some parts may be unreadable."));
                                 unreadableErrorShown = true;

@@ -48,6 +48,20 @@ struct FLAKE_EXPORT KoConnectionPoint
         DownDirection         ///< connection can escape down
     };
 
+    /// Alignments for connection points for shape resizing
+    enum Align {
+        AlignNone,         ///< align to nothing
+        AlignTopLeft,      ///< align to top and left edge
+        AlignTop,          ///< align to top edge
+        AlignTopRight,     ///< align to top and right edge
+        AlignLeft,         ///< align to left edge
+        AlignCenter,       ///< align to center
+        AlignRight,        ///< align to right edge
+        AlignBottomLeft,   ///< align to bottom and left edge
+        AlignBottom,       ///< align to bottom edge
+        AlignBottomRight   ///< align to bottom and right edge
+    };
+
     /// Default constructor
     KoConnectionPoint();
 
@@ -57,11 +71,15 @@ struct FLAKE_EXPORT KoConnectionPoint
     /// Creates connection point with specified position and escape direction
     KoConnectionPoint(const QPointF &position, EscapeDirection escapeDirection);
 
+    /// Creates connection point with specified position, escape direction and alignment
+    KoConnectionPoint(const QPointF &position, EscapeDirection escapeDirection, Align alignment);
+
     /// Returns default connection point with specified id
     static KoConnectionPoint defaultConnectionPoint(KoConnectionPoint::PointId connectionPointId);
 
     QPointF position; ///< the position of the connection point in shape coordinates
     EscapeDirection escapeDirection; ///< the escape direction for connection attached to that connection point
+    Align align;      ///< specifies to which edge the connection point is aligned to
 };
 
 /// Connection point container storing connection point data along their id

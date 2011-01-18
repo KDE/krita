@@ -1489,30 +1489,33 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
     forEachElement(child, element) {
         if (child.namespaceURI() != KoXmlNS::draw)
             continue;
-        if (child.localName() == "glue-point") {
-            const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
-            const int index = id.toInt();
-            if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
-                kWarning(30006) << "glue-point with no or invalid id";
-                continue;
-            }
-            QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
-            QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
-            if(xStr.isEmpty() || yStr.isEmpty()) {
+        if (child.localName() != "glue-point")
+            continue;
+
+        const QString id = child.attributeNS(KoXmlNS::draw, "id", QString());
+        const int index = id.toInt();
+        if(id.isEmpty() || index < 4 || d->connectors.contains(index)) {
+            kWarning(30006) << "glue-point with no or invalid id";
+            continue;
+        }
+        QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
+        QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
+        if(xStr.isEmpty() || yStr.isEmpty()) {
+            kWarning(30006) << "glue-point with invald position";
+            continue;
+        }
+        QPointF connectorPos;
+        KoConnectionPoint::Align alignment = KoConnectionPoint::AlignNone;
+        const QRectF bbox = boundingRect();
+        const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
+        if (align.isEmpty()) {
+            #ifndef NWORKAROUND_ODF_BUGS
+            KoOdfWorkaround::fixGluePointPosition(xStr, context);
+            KoOdfWorkaround::fixGluePointPosition(yStr, context);
+            #endif
+            if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
                 kWarning(30006) << "glue-point with invald position";
                 continue;
-            }
-            QPointF connectorPos;
-            const QRectF bbox = boundingRect();
-            const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
-            if (align.isEmpty()) {
-                #ifndef NWORKAROUND_ODF_BUGS
-                KoOdfWorkaround::fixGluePointPosition(xStr, context);
-                KoOdfWorkaround::fixGluePointPosition(yStr, context);
-                #endif
-                if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
-                    kWarning(30006) << "glue-point with invald position";
-                    continue;
             }
             // x and y are relative to drawing object center
             connectorPos.setX(xStr.remove('%').toDouble()/100.0);
@@ -1526,21 +1529,30 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             connectorPos = KoFlake::toRelative(connectorPos, bbox.size());
             if (align == "top-left") {
                 // this matches our coordinate origin
+                alignment = KoConnectionPoint::AlignTopLeft;
             } else if (align == "top") {
+                alignment = KoConnectionPoint::AlignTop;
                 connectorPos.rx() = 0.5;
             } else if (align == "top-right") {
+                alignment = KoConnectionPoint::AlignTopRight;
                 connectorPos.rx() += 1.0;
             } else if (align == "left") {
+                alignment = KoConnectionPoint::AlignLeft;
                 connectorPos.ry() = 0.5;
             } else if (align == "center") {
+                alignment = KoConnectionPoint::AlignCenter;
                 connectorPos += QPointF(0.5, 0.5);
             } else if (align == "right") {
+                alignment = KoConnectionPoint::AlignRight;
                 connectorPos.ry() = 0.5;
             } else if (align == "bottom-left") {
+                alignment = KoConnectionPoint::AlignBottomLeft;
                 connectorPos.ry() += 1.0;
             } else if (align == "bottom") {
+                alignment = KoConnectionPoint::AlignBottom;
                 connectorPos.rx() = 0.5;
             } else if (align == "bottom-right") {
+                alignment = KoConnectionPoint::AlignBottomRight;
                 connectorPos.rx() += 1.0;
             }
         }
@@ -1561,10 +1573,9 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
                 escapeDirection = KoConnectionPoint::DownDirection;
             }
         }
-        KoConnectionPoint connector(connectorPos, escapeDirection);
+        KoConnectionPoint connector(connectorPos, escapeDirection, alignment);
         d->setConnectionPoint(index, connector);
         kDebug(30006) << "loaded glue-point" << index << "at position" << connectorPos;
-        }
     }
     kDebug(30006) << "shape has now" << d->connectors.count() << "glue-points";
 }
@@ -1822,9 +1833,48 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 case KoConnectionPoint::DownDirection:
                     escapeDirection = "down";
                     break;
+                default:
+                    // fall through
+                    break;
             }
             if(!escapeDirection.isEmpty()) {
                 context.xmlWriter().addAttribute("draw:escape-direction", escapeDirection);
+            }
+            QString alignment;
+            switch(cp.value().align) {
+                case KoConnectionPoint::AlignTopLeft:
+                    alignment = "top-left";
+                    break;
+                case KoConnectionPoint::AlignTop:
+                    alignment = "top";
+                    break;
+                case KoConnectionPoint::AlignTopRight:
+                    alignment = "top-right";
+                    break;
+                case KoConnectionPoint::AlignLeft:
+                    alignment = "left";
+                    break;
+                case KoConnectionPoint::AlignCenter:
+                    alignment = "center";
+                    break;
+                case KoConnectionPoint::AlignRight:
+                    alignment = "right";
+                    break;
+                case KoConnectionPoint::AlignBottomLeft:
+                    alignment = "bottom-left";
+                    break;
+                case KoConnectionPoint::AlignBottom:
+                    alignment = "bottom";
+                    break;
+                case KoConnectionPoint::AlignBottomRight:
+                    alignment = "bottom-right";
+                    break;
+                default:
+                    // fall through
+                    break;
+            }
+            if(!alignment.isEmpty()) {
+                context.xmlWriter().addAttribute("draw:align", alignment);
             }
             context.xmlWriter().endElement();
         }

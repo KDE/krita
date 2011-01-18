@@ -325,7 +325,6 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     QStack<int> changeHistory;
     while (changeId && (changeId != changeStack.top())) {
         changeHistory.push(changeId);
-        saveChange(changeId);
         changeId = changeTracker->parent(changeId);
     }
 
@@ -565,7 +564,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         QString splitId = QString("split") + QString::number(splitIdCounter);
         writer->addAttribute("delta:split-id", splitId);
         int changeId = block.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
-        saveChange(changeId);
         writer->addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
         writer->addAttribute("delta:insertion-type", "split");
         splitIdCounter++;
@@ -584,7 +582,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             QTextCharFormat firstFragmentFormat = firstFragment.charFormat();
             int firstFragmentChangeId = firstFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
             if (firstFragmentChangeId != changeId) {
-                saveChange(changeId);
                 QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
                 writer->addCompleteElement(outputXml.toUtf8());
             }
@@ -611,8 +608,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 identical = true;
             else
                 identical = false;
-
-            saveChange(charFormat);
 
             const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData());
             if (blockData && (it == block.begin())) {
@@ -753,7 +748,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
             int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
             if (lastFragmentChangeId != changeId) {
-                saveChange(changeId);
                 QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
                 writer->addCompleteElement(outputXml.toUtf8());
             }
@@ -1164,7 +1158,6 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
 void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 {
-    saveChange(changeId);
     QString change = changeTransTable.value(changeId);
 
     QString generatedXmlString(generatedXmlArray);
@@ -2060,6 +2053,12 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
     if (d->layout) Q_ASSERT(d->layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
+
+    QVector<int> changesVector;
+    d->changeTracker->allChangeIds(changesVector);
+    foreach (int changeId, changesVector) {
+        d->saveChange(changeId);
+    }
 
     QHash<QTextList *, QString> listStyles = d->saveListStyles(block, to);
     d->writeBlocks(document, from, to, listStyles);

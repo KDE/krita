@@ -381,6 +381,17 @@ int KoChangeTracker::getDeletedChanges(QVector<KoChangeTrackerElement *>& delete
     return numAppendedItems;
 }
 
+int KoChangeTracker::allChangeIds(QVector<int>& changesVector)
+{
+    int numAppendedItems = 0;
+    foreach(int changeId, d->changes.keys()) {
+        changesVector << changeId;
+        numAppendedItems++;
+    }
+
+    return numAppendedItems;
+}
+
 const QColor& KoChangeTracker::getInsertionBgColor()
 {
     return d->insertionBgColor;

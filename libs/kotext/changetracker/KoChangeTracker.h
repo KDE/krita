@@ -72,6 +72,8 @@ public:
     //Returns all the deleted changes
     int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector);
 
+    int allChangeIds(QVector<int>& changesVector);
+
     bool containsInlineChanges(const QTextFormat &format);
     int mergeableId(KoGenChange::Type type, QString &title, int existingId);
 

@@ -225,7 +225,7 @@ void KoTextLoader::Private::splitStack(int id)
         return;
     int newId = changeTracker->split(oldId);
     splitStack(id);
-    changeTracker->setParent(changeStack.top(), newId);
+    changeTracker->setParent(newId, changeStack.top());
     changeStack.push(newId);
 }
 
@@ -258,7 +258,7 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
     if (!changeId)
         return;
     if (!changeStack.empty() && (changeStack.top() != changeId)) {
-        changeTracker->setParent(changeStack.top(), changeId);
+        changeTracker->setParent(changeId, changeStack.top());
     }
     changeStack.push(changeId);
     changeTransTable.insert(id, changeId);
@@ -454,7 +454,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                         int changeId = d->changeTracker->getLoadedChangeId(id);
                         if (changeId) {
                             if (d->changeStack.count() && (d->changeStack.top() != changeId))
-                                d->changeTracker->setParent(d->changeStack.top(), changeId);
+                                d->changeTracker->setParent(changeId, d->changeStack.top());
                             KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
                             deleteChangemarker->setChangeId(changeId);
                             KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
@@ -1424,7 +1424,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             int changeId = d->changeTracker->getLoadedChangeId(id);
             if (changeId) {
                 if (d->changeStack.count() && (d->changeStack.top() != changeId))
-                    d->changeTracker->setParent(d->changeStack.top(), changeId);
+                    d->changeTracker->setParent(changeId, d->changeStack.top());
                 KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(d->changeTracker);
                 deleteChangemarker->setChangeId(changeId);
                 KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
@@ -1721,7 +1721,7 @@ KoDeleteChangeMarker * KoTextLoader::Private::insertDeleteChangeMarker(QTextCurs
     int changeId = changeTracker->getLoadedChangeId(id);
     if (changeId) {
         if (changeStack.count() && (changeStack.top() != changeId))
-            changeTracker->setParent(changeStack.top(), changeId);
+            changeTracker->setParent(changeId, changeStack.top());
         KoDeleteChangeMarker *deleteChangemarker = new KoDeleteChangeMarker(changeTracker);
         deleteChangemarker->setChangeId(changeId);
         KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);

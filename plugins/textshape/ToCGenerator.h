@@ -60,7 +60,6 @@ private:
     State m_state;
     QTextFrame *m_ToCFrame;
     TableOfContent * m_tocDescription;
-    //QList<QTextBlock> m_originalBlocksInToc;
     QList<BlockPair> m_originalBlocksInToc;
     
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned

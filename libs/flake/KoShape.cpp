@@ -1555,6 +1555,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
                 alignment = KoConnectionPoint::AlignBottomRight;
                 connectorPos.rx() += 1.0;
             }
+            kDebug(30006) << "using alignment" << align;
         }
         KoConnectionPoint::EscapeDirection escapeDirection = KoConnectionPoint::AllDirections;
         const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
@@ -1572,6 +1573,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             } else if (escape == "down") {
                 escapeDirection = KoConnectionPoint::DownDirection;
             }
+            kDebug(30006) << "using escape direction" << escape;
         }
         KoConnectionPoint connector(connectorPos, escapeDirection, alignment);
         d->setConnectionPoint(index, connector);

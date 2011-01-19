@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -49,6 +50,10 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorXTilt();
     } else if (id.id() == YTiltId.id()) {
         return new KisDynamicSensorYTilt();
+    } else if (id.id() == AscensionId.id()) {
+        return new KisDynamicSensorAscension();
+    } else if (id.id() == DeclinationId.id()) {
+        return new KisDynamicSensorDeclination();
     } else if (id.id() == SpeedId.id()) {
         return new KisDynamicSensorSpeed();
     } else if (id.id() == DrawingAngleId.id()) {
@@ -93,7 +98,7 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId << PerspectiveId;
+    ids << PressureId << XTiltId << YTiltId << AscensionId << DeclinationId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId << PerspectiveId;
     return ids;
 }
 

@@ -173,7 +173,7 @@ QPixmap KoPAPage::generateThumbnail( const QSize& size )
     KoPAUtil::setZoom( layout, size, zoomHandler );
     QRect pageRect( KoPAUtil::pageRect( layout, size, zoomHandler ) );
 
-    QPixmap pixmap( size.width(), size.height() );
+    QPixmap pixmap(size);
     pixmap.fill( Qt::white );
     QPainter painter( &pixmap );
     painter.setClipRect( pageRect );

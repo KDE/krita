@@ -31,6 +31,42 @@
 #include <QFrame>
 #include <QHBoxLayout>
 
+class SpecialButton : public QFrame
+{
+public:
+    SpecialButton();
+
+    void setStylesWidget(StylesWidget *stylesWidget);
+
+protected:
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
+
+    StylesWidget *m_stylesWidget;
+};
+
+SpecialButton::SpecialButton()
+ : QFrame()
+{
+    setFrameShape(QFrame::StyledPanel);
+    setFrameShadow(QFrame::Sunken);
+}
+
+void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
+{
+    m_stylesWidget = stylesWidget;
+}
+
+void SpecialButton::enterEvent(QEvent *event)
+{
+    m_stylesWidget->show();
+}
+
+void SpecialButton::leaveEvent(QEvent *event)
+{
+}
+
+
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
         ,m_blockSignals(false)
@@ -39,9 +75,8 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     m_popupForBlock = new StylesWidget;
     m_popupForChar = new StylesWidget;
 
-    QFrame *blockFrame = new QFrame;
-    blockFrame->setFrameShape(QFrame::StyledPanel);
-    blockFrame->setFrameShadow(QFrame::Sunken);
+    SpecialButton *blockFrame = new SpecialButton;
+    blockFrame->setStylesWidget(m_popupForBlock);
     QWidget *blockPreview = new QWidget();
     blockPreview->setAutoFillBackground(true);
     blockPreview->setBackgroundRole(QPalette::Base);
@@ -52,9 +87,8 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     l->setMargin(0);
     blockFrame->setLayout(l);
 
-    QFrame *charFrame = new QFrame;
-    charFrame->setFrameShape(QFrame::StyledPanel);
-    charFrame->setFrameShadow(QFrame::Sunken);
+    SpecialButton *charFrame = new SpecialButton;
+    charFrame->setStylesWidget(m_popupForChar);
     QWidget *charPreview = new QWidget();
     charPreview->setAutoFillBackground(true);
     charPreview->setBackgroundRole(QPalette::Base);
@@ -75,6 +109,8 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;
+    m_popupForBlock->setStyleManager(sm);
+    m_popupForChar->setStyleManager(sm);
 }
 
 void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)

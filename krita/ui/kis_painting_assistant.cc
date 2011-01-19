@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008,2011 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 #include "kis_debug.h"
 
 #include <kglobal.h>
+#include <QPen>
+#include <QPainter>
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -101,6 +103,20 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 {
     d->id = id;
     d->name = name;
+}
+
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path)
+{
+    painter.save();
+    QPen pen_a(QColor(0, 0, 0, 100), 2);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
+    QPen pen_b(Qt::white, 0.9);
+    pen_b.setCosmetic(true);
+    painter.setPen(pen_b);
+    painter.drawPath(path);
+    painter.restore();
 }
 
 void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles)

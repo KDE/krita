@@ -20,6 +20,8 @@
  */
 
 #include "kis_transform_worker.h"
+
+#include <qmath.h>
 #include <klocale.h>
 
 #include <KoProgressUpdater.h>

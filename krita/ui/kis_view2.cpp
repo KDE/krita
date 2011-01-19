@@ -285,7 +285,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
         connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),

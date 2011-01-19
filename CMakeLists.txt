@@ -50,6 +50,7 @@ IF (TINY)
     set(SHOULD_BUILD_F_OFFICE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
+    set(SHOULD_BUILD_CALLIGRA FALSE)
 ELSE(TINY)
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_KPRESENTER TRUE)
@@ -67,6 +68,7 @@ ELSE(TINY)
     set(SHOULD_BUILD_F_OFFICE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
+    set(SHOULD_BUILD_CALLIGRA TRUE)
 ENDIF(TINY)
 
 if(KDE4_BUILD_TESTS)
@@ -326,6 +328,14 @@ endif(SHOULD_BUILD_SCRIPTING)
 # kopageapp
 set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
+# koabstraction depends on kotext & flake
+set(KOABSTRACTION_INCLUDES ${KDE4_INCLUDES}
+                    ${KOTEXT_INCLUDES}
+                    ${FLAKE_INCLUDES}
+                    ${KOPAGEAPP_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/tools/koabstraction)
+
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
 SET(KOPROPERTY_LIBS ${KOPROPERTY_TARGETNAME})                   # TODO remove when we move to independent place
@@ -484,6 +494,7 @@ macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
+macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

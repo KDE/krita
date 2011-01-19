@@ -64,11 +64,11 @@ class KisToolSelectRectangularFactory : public KoToolFactoryBase
 public:
     KisToolSelectRectangularFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectRectangular") {
-        setToolTip(i18n("Select a rectangular area"));
+        setToolTip(i18n("Select a rectangular area (SHIFT+R)"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_rect_selection");
-        setShortcut(KShortcut(Qt::Key_R));
+        setShortcut(KShortcut(Qt::SHIFT + Qt::Key_R));
         setPriority(52);
     }
 

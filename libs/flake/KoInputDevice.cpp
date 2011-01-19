@@ -74,7 +74,7 @@ bool KoInputDevice::isMouse() const
 {
     return d->mouse;
 }
-
+ 
 
 bool KoInputDevice::operator==(const KoInputDevice &other) const
 {
@@ -102,6 +102,7 @@ KoInputDevice KoInputDevice::mouse()
     KoInputDevice id;
     return id;
 }
+
 // static
 KoInputDevice KoInputDevice::stylus()
 {

@@ -30,6 +30,7 @@ class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class StylesModel;
+class StylesDelegate;
 
 class StylesWidget : public QWidget
 {
@@ -68,6 +69,7 @@ private:
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;
     StylesModel *m_stylesModel;
+    StylesDelegate *m_stylesDelegate;
     bool m_blockSignals;
     bool m_isEmbedded;
 };

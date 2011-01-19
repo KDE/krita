@@ -22,6 +22,7 @@
  */
 
 #include "KoListLevelProperties.h"
+#include "KoTextSharedLoadingData.h"
 #include "Styles_p.h"
 
 #include <float.h>
@@ -382,10 +383,32 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     const QString displayLevel = style.attributeNS(KoXmlNS::text,
                                  "display-levels", QString());
 
+    const QString styleName = style.attributeNS(KoXmlNS::text, "style-name", QString());
+    if (!styleName.isEmpty()) {
+//         kDebug(32500) << "Should use the style =>" << styleName << "<=";
+
+        KoSharedLoadingData *sharedData = scontext.sharedData(KOTEXT_SHARED_LOADING_ID);
+        KoTextSharedLoadingData *textSharedData = 0;
+        if (sharedData) {
+            textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
+        }
+        if (textSharedData) {
+            KoCharacterStyle *cs = textSharedData->characterStyle(styleName, context.useStylesAutoStyles());
+            if (!cs) {
+               kWarning(32500) << "Missing KoCharacterStyle!";
+            }
+            else {
+//                kDebug(32500) << "==> cs.name:" << cs->name();
+//                kDebug(32500) << "==> cs.styleId:" << cs->styleId();
+               setCharacterStyleId(cs->styleId());
+            }
+        }
+    }
+
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
 
         //1.6: KoParagCounter::loadOasisListStyle
-        QString bulletChar = style.isNull() ? QString() : style.attributeNS(KoXmlNS::text, "bullet-char", QString());
+        QString bulletChar = style.attributeNS(KoXmlNS::text, "bullet-char", QString());
         kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
         if (bulletChar.isEmpty()) {  // list without any visible bullets
             setStyle(KoListStyle::CustomCharItem);
@@ -445,6 +468,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 break;
             } // switch
             setBulletCharacter(bulletChar[0]);
+        }
+        QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
+        if (!size.isEmpty()) {
+            setRelativeBulletSize(size.replace("%", "").toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list

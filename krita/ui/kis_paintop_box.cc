@@ -28,6 +28,8 @@
 #include <QLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QToolButton>
+#include <QAction>
 
 #include <kactioncollection.h>
 #include <kis_debug.h>
@@ -114,14 +116,17 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //m_presetWidget->setText(i18n("Select Brush"));
     m_presetWidget->setFixedSize(32, 32);
 
-    m_eraseModeButton = new QPushButton(this);
-    m_eraseModeButton->setIcon(KIcon("draw-eraser"));
-    m_eraseModeButton->setToolTip(i18n("Set eraser mode"));
+    m_eraseModeButton = new QToolButton(this);
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
-    m_eraseModeButton->setShortcut(Qt::Key_E);
+    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
+    eraseAction->setIcon(KIcon("draw-eraser"));
+    eraseAction->setShortcut(Qt::Key_E);
+    eraseAction->setCheckable(true);
+    m_eraseModeButton->setDefaultAction(eraseAction);
+    m_view->actionCollection()->addAction("erase_action", eraseAction);
 
-    connect(m_eraseModeButton, SIGNAL(toggled(bool)), this, SLOT(eraseModeToggled(bool)));
+    connect(eraseAction, SIGNAL(triggered(bool)), this, SLOT(eraseModeToggled(bool)));
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);

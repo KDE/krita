@@ -37,6 +37,9 @@ public:
 public slots:
     void setStyleManager(KoStyleManager *sm);
 
+signals:
+    void doneWithFocus();
+    
 private:
     Ui::SimpleTableWidget widget;
     KoStyleManager *m_styleManager;

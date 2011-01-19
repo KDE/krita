@@ -107,7 +107,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     QPainterPath path;
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
-    gc.drawPath(path);
+    drawPath(gc, path);
     
     gc.restore();
 }

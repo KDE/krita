@@ -101,7 +101,9 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       cacheMode(KoShape::NoCache),
-      cache(0)
+      cache(0),
+      textRunAroundSide(KoShape::BiggestRunAroundSide),
+      textRunAroundDistance(1.0)
 {
     connectors.append(QPointF(0.5, 0.0));
     connectors.append(QPointF(1.0, 0.5));
@@ -764,6 +766,40 @@ QSet<KoEventAction *> KoShape::eventActions() const
     return d->eventActions;
 }
 
+KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundSide;
+}
+
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
+{
+    Q_D(KoShape);
+    d->textRunAroundSide = side;
+
+    if (side == RunThrough) {
+        if (runThrought == Background) {
+            setRunThrough(-1);
+        } else {
+            setRunThrough(1);
+        }
+    } else {
+        setRunThrough(0);
+    }
+}
+
+qreal KoShape::textRunAroundDistance() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundDistance;
+}
+
+void KoShape::setTextRunAroundDistance(qreal distance)
+{
+    Q_D(KoShape);
+    d->textRunAroundDistance = distance;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -1107,6 +1143,46 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
     setGeometryProtected(protect.contains("position") || protect.contains("size"));
     setContentProtected(protect.contains("content"));
+
+    QString margin = styleStack.property(KoXmlNS::fo, "margin");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-left");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-top");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-bottom");
+    if (margin.isEmpty())
+        margin = styleStack.property(KoXmlNS::fo, "margin-right");
+    setTextRunAroundDistance(KoUnit::parseValue(margin));
+
+    QString wrap;
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap")) {
+        wrap = styleStack.property(KoXmlNS::style, "wrap");
+    } else {
+        // no value given in the file, but guess biggest
+        wrap = "biggest";
+    }
+    if (wrap == "none") {
+        setTextRunAroundSide(KoShape::NoRunAround);
+    } else if (wrap == "run-through") {
+        QString runTrought = styleStack.property(KoXmlNS::style, "run-through", "background");
+        if (runTrought == "background") {
+            setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
+        } else {
+            setTextRunAroundSide(KoShape::RunThrough, KoShape::Foreground);
+        }
+    } else {
+        if (wrap == "biggest")
+            setTextRunAroundSide(KoShape::BiggestRunAroundSide);
+        else if (wrap == "left")
+            setTextRunAroundSide(KoShape::LeftRunAroundSide);
+        else if (wrap == "right")
+            setTextRunAroundSide(KoShape::RightRunAroundSide);
+        else if (wrap == "dynamic")
+            setTextRunAroundSide(KoShape::AutoRunAroundSide);
+        else if (wrap == "parallel")
+            setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
 }
 
 bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingContext &context, int attributes)
@@ -1172,6 +1248,7 @@ bool KoShape::loadOdfAttributes(const KoXmlElement &element, KoShapeLoadingConte
             context.odfLoadingContext().fillStyleStack(element, KoXmlNS::presentation, "style-name", "presentation");
         }
         loadStyle(element, context);
+
         styleStack.restore();
     }
 
@@ -1478,6 +1555,34 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         for (; it != d->additionalAttributes.constEnd(); ++it) {
             context.xmlWriter().addAttribute(it.key().toUtf8(), it.value());
         }
+
+        QString value;
+        switch (textRunAroundSide()) {
+        case BiggestRunAroundSide:
+            value = "biggest";
+            break;
+        case LeftRunAroundSide:
+            value = "left";
+            break;
+        case RightRunAroundSide:
+            value = "right";
+            break;
+        case AutoRunAroundSide:
+            value = "dynamic";
+            break;
+        case BothRunAroundSide:
+            value = "parallel";
+            break;
+        case NoRunAround:
+            value = "none";
+            break;
+        case RunThrough:
+            value = "run-through";
+            break;
+        }
+        context.xmlWriter().addAttribute("style:wrap", value);
+
+        context.xmlWriter().addAttribute("fo:margin", QString::number(textRunAroundDistance()) + "pt");
     }
 }
 
@@ -1631,6 +1736,18 @@ void KoShape::setToolDelegates(const QSet<KoShape*> &delegates)
 {
     Q_D(KoShape);
     d->toolDelegates = delegates;
+}
+
+QString KoShape::hyperLink () const
+{
+    Q_D(const KoShape);
+    return d->hyperLink;
+}
+
+void KoShape::setHyperLink (QString & hyperLink)
+{
+    Q_D(KoShape);
+    d->hyperLink = hyperLink;
 }
 
 KoShapePrivate *KoShape::priv()

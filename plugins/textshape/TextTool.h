@@ -293,6 +293,7 @@ private:
     void finishedParagraph();
     void readConfig();
     void writeConfig();
+    void runUrl(KoPointerEvent *event, QString &url);
 
 private:
     friend class UndoTextCommand;

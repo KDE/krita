@@ -69,7 +69,7 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const {
         return rect;
     }
-    bool addLine(QTextLine &, bool) {
+    bool addLine() {
         return true;
     }
     bool nextParag() {
@@ -101,6 +101,15 @@ public:
     }
     qreal maxLineHeight() const {
         return 0;
+    }
+    void registerRunAroundShape(KoShape *) {}
+    void updateRunAroundShape(KoShape *) {}
+    void unregisterAllRunAroundShapes() {}
+    QTextLine createLine() {
+        return layout->createLine();
+    }
+    void fitLineForRunAround(bool resetHorizontalPosition) {
+        Q_UNUSED(resetHorizontalPosition);
     }
 };
 
@@ -524,7 +533,7 @@ void KoTextDocumentLayout::layout()
     if (! m_state->start())
         return;
     while (m_state->shape) {
-        QTextLine line = m_state->layout->createLine();
+        QTextLine line = m_state->createLine();
         if (!line.isValid()) { // end of parag
             qreal posY = m_state->y();
             bool moreText = m_state->nextParag();
@@ -543,7 +552,7 @@ void KoTextDocumentLayout::layout()
         else
             line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
-        m_state->addLine(line);
+        m_state->addLine();
         if (m_state->shape == 0) { // shape is full!
             emit finishedLayout();
             return; // done!

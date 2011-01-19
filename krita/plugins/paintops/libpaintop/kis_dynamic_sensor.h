@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
- *
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -43,6 +44,8 @@ const KoID RotationId("rotation", ki18n("Rotation")); ///< rotation coming from 
 const KoID PressureId("pressure", ki18n("Pressure")); ///< number depending on the pressure
 const KoID XTiltId("xtilt", ki18n("X-Tilt")); ///< number depending on X-tilt
 const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
+const KoID AscensionId("ascension", ki18n("Ascension")); /// < number depending on the X and Y tilt, ascension is 0 when stylus nib points to you and changes clockwise from -180 to +180.
+const KoID DeclinationId("declination", ki18n("Declination")); /// < declination is 90 when stylus is perpendicular to tablet and 0 when it's parallel to tablet
 const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depending on the distance on the perspective grid
 
 /**

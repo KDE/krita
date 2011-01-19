@@ -593,7 +593,7 @@ public:
     KisSelectionSP selection();
 
     void setGradient(const KoAbstractGradient* gradient);
-    const KoAbstractGradient* gradient();
+    const KoAbstractGradient* gradient() const;
 
     /**
     * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath

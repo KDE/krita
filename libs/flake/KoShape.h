@@ -132,6 +132,25 @@ public:
         ScaledCache, ///< cache at every zoomlevel
     };
 
+    /// The behavior text should do when intersecting this shape.
+    enum TextRunAroundSide {
+        BiggestRunAroundSide,   ///< Run other text around the side that has the most space
+        LeftRunAroundSide,      ///< Run other text around the left side of the frame
+        RightRunAroundSide,     ///< Run other text around the right side of the frame
+        AutoRunAroundSide,      ///< Run other text dynamically around both sides of the shape, provided there is sufficient space left
+        BothRunAroundSide,      ///< Run other text around both sides of the shape
+        NoRunAround,            ///< The text will be completely avoiding the frame by keeping the horizontal space that this frame occupies blank.
+        RunThrough              ///< The text will completely ignore the frame and layout as if it was not there
+    };
+
+    /**
+     * TODO
+     */
+    enum Through {
+        Background,
+        Foreground
+    };
+
     /**
      * @brief Constructor
      */
@@ -322,6 +341,29 @@ public:
      * Get all event actions
      */
     QSet<KoEventAction *> eventActions() const;
+
+    /**
+     * Return the side text should flow around this shape.
+     */
+    TextRunAroundSide textRunAroundSide() const;
+
+    /**
+     * Set the side text should flow around this shape.
+     * @param side the requested side
+     */
+    void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
+
+    /**
+     * The space between this shape's edge and text that runs around this shape.
+     * @return the space around this shape to keep free from text
+     */
+    qreal textRunAroundDistance() const;
+
+    /**
+     * Set the space between this shape's edge and the text that run around this shape.
+     * @param distance the space around this shape to keep free from text
+     */
+    void setTextRunAroundDistance(qreal distance);
 
     /**
      * Set the background of the shape.
@@ -886,6 +928,17 @@ public:
      * @see toolDelegates()
      */
     void setToolDelegates(const QSet<KoShape*> &delegates);
+
+    /**
+     * Return the hyperlink for this shape.
+     */
+    QString hyperLink () const;
+
+    /**
+     * Set hyperlink for this shape.
+     * @param hyperLink name.
+     */
+    void setHyperLink (QString & hyperLink);
 
     /**
      * \internal

@@ -22,6 +22,7 @@
 
 #include <QHash>
 
+#include <QReadWriteLock>
 #include <QStringList>
 #include <QDir>
 

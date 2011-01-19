@@ -64,6 +64,8 @@
 #include <kdebug.h>
 #include <kdeprintdialog.h>
 #include <knotification.h>
+#include <kstandarddirs.h>
+#include <kdesktopfile.h>
 
 #include <QtCore/QBuffer>
 #include <QtCore/QDir>
@@ -2397,11 +2399,29 @@ void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     if (!alwaysShow) {
         KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
-
         if (!fullTemplateName.isEmpty()) {
-            openTemplate(fullTemplateName);
-            shells().first()->setRootDocument(this);
-            return;
+            KUrl url(fullTemplateName);
+            QFileInfo fi(url.toLocalFile());
+            if (!fi.exists()) {
+                QString appName = KGlobal::mainComponent().componentName();
+                QString desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/*/" + fullTemplateName);
+                if (desktopfile.isEmpty()) {
+                    desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/" + fullTemplateName);
+                }
+                if (desktopfile.isEmpty()) {
+                    fullTemplateName.clear();
+                } else {
+                    KUrl templateURL;
+                    KDesktopFile f(desktopfile);
+                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
+                    fullTemplateName = templateURL.toLocalFile();
+                }
+            }
+            if (!fullTemplateName.isEmpty()) {
+                openTemplate(fullTemplateName);
+                shells().first()->setRootDocument(this);
+                return;
+            }
         }
     }
 
@@ -2594,9 +2614,9 @@ void KoDocument::setEmpty()
     d->bEmpty = true;
 }
 
-QGraphicsItem *KoDocument::canvasItem()
+QGraphicsItem *KoDocument::canvasItem(bool create)
 {
-    if (!d->canvasItem) {
+    if (create && !d->canvasItem) {
         d->canvasItem = createCanvasItem();
     }
     return d->canvasItem;

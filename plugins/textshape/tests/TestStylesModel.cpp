@@ -30,14 +30,8 @@ public:
     MockModel(KoStyleManager *manager, QObject *parent = 0)
             : StylesModel(manager, parent) { }
 
-    void publicRecalculate() {
-        StylesModel::recalculate();
-    }
     QList<int> rootStyleIds() {
         return m_styleList;
-    }
-    QMultiHash<int, int> relations() {
-        return m_relations;
     }
 };
 
@@ -55,12 +49,12 @@ void TestStylesModel::testPrecalcCache()
 {
     fillManager();
     MockModel model(manager);
-    QCOMPARE(model.rootStyleIds().count(), 5);
+    QCOMPARE(model.rootStyleIds().count(), 15);
 
     KoParagraphStyle *s = manager->paragraphStyle(model.rootStyleIds().at(0));
     QVERIFY(s);
-    QCOMPARE(s->name(), QString("Default"));
-    KoParagraphStyle *code = manager->paragraphStyle(model.rootStyleIds().at(2));
+    //QCOMPARE(s->name(), QString("Default"));
+    KoParagraphStyle *code = manager->paragraphStyle(model.rootStyleIds().at(0));
     QVERIFY(code);
     QCOMPARE(code->name(), QString("code"));
     KoParagraphStyle *altered = manager->paragraphStyle(model.rootStyleIds().at(1));
@@ -70,19 +64,10 @@ void TestStylesModel::testPrecalcCache()
     QVERIFY(headers);
     QCOMPARE(headers->name(), QString("headers"));
 
-    KoCharacterStyle *red = manager->characterStyle(model.rootStyleIds().at(4));
+    KoCharacterStyle *red = manager->characterStyle(model.rootStyleIds().at(6));
     QVERIFY(red);
     QCOMPARE(red->name(), QString("red"));
 
-    //only contains parent paragraph styles with links to the child.
-    QVERIFY(model.relations().contains(headers->styleId()));
-    QList<int> children = model.relations().values(headers->styleId());
-    QCOMPARE(children.count(), 3);
-    foreach(int id, children) {
-        KoParagraphStyle *head = manager->paragraphStyle(id);
-        QVERIFY(head);
-        QVERIFY(head->name().startsWith("Head "));
-    }
 }
 
 void TestStylesModel::testSetManager()

@@ -88,6 +88,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_doc(doc),
         m_adapter(new KisNodeCommandsAdapter(view)),
         m_copy(0),
+        m_copyMerged(0),
         m_cut(0),
         m_paste(0),
         m_pasteNew(0),
@@ -138,6 +139,11 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_pasteAt = new KAction(i18n("Paste at cursor"), this);
     collection->addAction("paste_at", m_pasteAt);
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
+    
+    m_copyMerged = new KAction(i18n("Copy merged"), this);
+    collection->addAction("copy_merged", m_copyMerged);
+    m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
+    connect(m_copyMerged, SIGNAL(triggered()), this, SLOT(copyMerged()));
 
     m_selectAll = collection->addAction(KStandardAction::SelectAll,  "select_all", this, SLOT(selectAll()));
 
@@ -330,6 +336,7 @@ void KisSelectionManager::updateGUI()
     }
 
     m_copy->setEnabled(enable || shapeCopyEnable);
+    m_copyMerged->setEnabled(image->rootLayer()->childCount() > 0);
     m_paste->setEnabled(!image.isNull() && (m_clipboard->hasClip() || shapePasteEnable));
     m_pasteNew->setEnabled(!image.isNull() && m_clipboard->hasClip());
     m_toNewLayer->setEnabled(enable);
@@ -402,52 +409,25 @@ void KisSelectionManager::copy()
 
         KisPaintDeviceSP dev = m_view->activeDevice();
         if (!dev) return;
-
-        KisSelectionSP selection = m_view->selection();
-
-        QRect r = (selection) ? selection->selectedExactRect() : image->bounds();
-
-        KisPaintDeviceSP clip = new KisPaintDevice(dev->colorSpace());
-        Q_CHECK_PTR(clip);
-
-        const KoColorSpace * cs = clip->colorSpace();
-
-        // TODO if the source is linked... copy from all linked layers?!?
-
-        // Copy image data
-        KisPainter gc;
-        gc.begin(clip);
-        gc.setCompositeOp(COMPOSITE_COPY);
-        gc.bitBlt(0, 0, dev, r.x(), r.y(), r.width(), r.height());
-        gc.end();
-
-        if (selection) {
-            // Apply selection mask.
-
-            KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
-            KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
-
-            for (qint32 y = 0; y < r.height(); y++) {
-
-                while (!layerIt.isDone()) {
-
-                    cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.rawData(), 1);
-
-
-                    ++layerIt;
-                    ++selectionIt;
-                }
-                layerIt.nextRow();
-                selectionIt.nextRow();
-            }
-        }
-
-        m_clipboard->setClip(clip, r.topLeft());
+        
+        copyFromDevice(dev);
     }
 
     selectionChanged();
 }
 
+void KisSelectionManager::copyMerged()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisPaintDeviceSP dev = image->rootLayer()->projection();
+    if (!dev) return;
+        
+    copyFromDevice(dev);
+
+    selectionChanged();
+}
 
 void KisSelectionManager::paste()
 {
@@ -1575,6 +1555,53 @@ void KisSelectionManager::imageResizeToSelection()
         image->resize(selection->selectedExactRect(), true);
         undoAdapter->endMacro();
     }
+}
+
+void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+    
+    KisSelectionSP selection = m_view->selection();
+
+    QRect r = (selection) ? selection->selectedExactRect() : image->bounds();
+
+    KisPaintDeviceSP clip = new KisPaintDevice(device->colorSpace());
+    Q_CHECK_PTR(clip);
+
+    const KoColorSpace * cs = clip->colorSpace();
+
+    // TODO if the source is linked... copy from all linked layers?!?
+
+    // Copy image data
+    KisPainter gc;
+    gc.begin(clip);
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(0, 0, device, r.x(), r.y(), r.width(), r.height());
+    gc.end();
+
+    if (selection) {
+        // Apply selection mask.
+
+        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
+        KisHLineConstIteratorPixel selectionIt = selection->createHLineIterator(r.x(), r.y(), r.width());
+
+        for (qint32 y = 0; y < r.height(); y++) {
+
+            while (!layerIt.isDone()) {
+
+                cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.rawData(), 1);
+
+
+                ++layerIt;
+                ++selectionIt;
+            }
+            layerIt.nextRow();
+            selectionIt.nextRow();
+        }
+    }
+
+    m_clipboard->setClip(clip, r.topLeft());
 }
 
 #include "kis_selection_manager.moc"

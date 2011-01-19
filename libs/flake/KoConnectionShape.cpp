@@ -63,31 +63,56 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
     Q_Q(const KoConnectionShape);
     QPointF direction;
     if (handleConnected(handleId)) {
-        QTransform absoluteMatrix = q->absoluteTransformation(0);
-        QPointF handlePoint = absoluteMatrix.map(handles[handleId]);
-        QPointF centerPoint;
-        if (handleId == StartHandle)
-            centerPoint = shape1->absolutePosition(KoFlake::CenteredPosition);
-        else
-            centerPoint = shape2->absolutePosition(KoFlake::CenteredPosition);
+        KoShape *attachedShape = handleId == StartHandle ? shape1 : shape2;
+        int connectionPointId = handleId == StartHandle ? connectionPointId1 : connectionPointId2;
+        KoConnectionPoint::EscapeDirection ed = attachedShape->connectionPoint(connectionPointId).escapeDirection;
+        if(ed == KoConnectionPoint::AllDirections) {
+            QTransform absoluteMatrix = q->absoluteTransformation(0);
+            QPointF handlePoint = absoluteMatrix.map(handles[handleId]);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
 
-        qreal angle = atan2(handlePoint.y() - centerPoint.y(), handlePoint.x() - centerPoint.x());
-        if (angle < 0.0)
-            angle += 2.0 * M_PI;
-        angle *= 180.0 / M_PI;
-        if (angle >= 45.0 && angle < 135.0)
-            direction = QPointF(0.0, 1.0);
-        else if (angle >= 135.0 && angle < 225.0)
+            qreal angle = atan2(handlePoint.y() - centerPoint.y(), handlePoint.x() - centerPoint.x());
+            if (angle < 0.0)
+                angle += 2.0 * M_PI;
+            angle *= 180.0 / M_PI;
+            if (angle >= 45.0 && angle < 135.0)
+                direction = QPointF(0.0, 1.0);
+            else if (angle >= 135.0 && angle < 225.0)
+                direction = QPointF(-1.0, 0.0);
+            else if (angle >= 225.0 && angle < 315.0)
+                direction = QPointF(0.0, -1.0);
+            else
+                direction = QPointF(1.0, 0.0);
+
+            // transform escape direction by using our own transformation matrix
+            QTransform invMatrix = absoluteMatrix.inverted();
+            direction = invMatrix.map(direction) - invMatrix.map(QPointF());
+            direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
+        } else if (ed == KoConnectionPoint::HorizontalDirections) {
+            QPointF handlePoint = q->shapeToDocument(handles[handleId]);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
+            // use horizontal direction pointing away from center point
+            if(handlePoint.x() < centerPoint.x())
+                direction = QPointF(-1.0, 0.0);
+            else
+                direction = QPointF(1.0, 0.0);
+        } else if (ed == KoConnectionPoint::VerticalDirections) {
+            QPointF handlePoint = q->shapeToDocument(handles[handleId]);
+            QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
+            // use vertical direction pointing away from center point
+            if(handlePoint.y() < centerPoint.y())
+                direction = QPointF(0.0, -1.0);
+            else
+                direction = QPointF(0.0, 1.0);
+        } else if(ed == KoConnectionPoint::LeftDirection) {
             direction = QPointF(-1.0, 0.0);
-        else if (angle >= 225.0 && angle < 315.0)
-            direction = QPointF(0.0, -1.0);
-        else
+        } else if (ed == KoConnectionPoint::RightDirection) {
             direction = QPointF(1.0, 0.0);
-
-        // transform escape direction by using our own transformation matrix
-        QTransform invMatrix = absoluteMatrix.inverted();
-        direction = invMatrix.map(direction) - invMatrix.map(QPointF());
-        direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
+        } else if(ed == KoConnectionPoint::UpDirection) {
+            direction = QPointF(0.0, -1.0);
+        } else if (ed == KoConnectionPoint::DownDirection) {
+            direction = QPointF(0.0, 1.0);
+        }
     }
 
     return direction;

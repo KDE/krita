@@ -71,11 +71,11 @@ class KisToolSelectBrushFactory : public KoToolFactoryBase
 public:
     KisToolSelectBrushFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectBrush") {
-        setToolTip(i18n("Select by brush (SHIFT+B)"));
+        setToolTip(i18n("Select by brush"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_brush_selection");
-        setShortcut(KShortcut(Qt::SHIFT + Qt::Key_B));
+        //setShortcut(KShortcut(Qt::Key_B));
         setPriority(53);
     }
 

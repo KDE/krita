@@ -1057,11 +1057,15 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
         break;
     case FillStylePattern:
         Q_ASSERT(d->pattern != 0);
-        d->fillPainter->fillRect(fillRect, d->pattern);
+        if (d->pattern) { // if the user hasn't got any patterns installed, we shouldn't crash...
+            d->fillPainter->fillRect(fillRect, d->pattern);
+        }
         break;
     case FillStyleGenerator:
         Q_ASSERT(d->generator != 0);
-        d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
+        if (d->generator) { // if the user hasn't got any generators, we shouldn't crash...
+            d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());\
+        }
         break;
     }
 

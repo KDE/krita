@@ -125,7 +125,7 @@ private:
 
 void KisCommonColorsRecalculationRunner::run()
 {
-    parent->setColors(extractColors());
+    parent->delayedSetColors(extractColors());
 }
 
 QList<KoColor> KisCommonColorsRecalculationRunner::extractColors()

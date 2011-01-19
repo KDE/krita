@@ -31,17 +31,21 @@ public:
     explicit KisCommonColors(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
     KisColorSelectorBase* createPopup() const;
-    void setColors(QList<KoColor> colors);
 
 public slots:
+    void delayedSetColors(QList<KoColor> colors);
     void updateSettings();
     void recalculate();
 
+protected slots:
+    void updateColors();
+
 private:
-    void updateImageCache();
     QMutex m_mutex;
     QTimer m_recalculationTimer;
+    QTimer m_delayUpdateTimer;
     QPushButton* m_reloadButton;
+    QList<KoColor> m_calculatedColors;
 };
 
 #endif

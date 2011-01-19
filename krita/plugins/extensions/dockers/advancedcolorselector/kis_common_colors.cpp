@@ -53,8 +53,13 @@ KisCommonColors::KisCommonColors(QWidget *parent) :
     m_recalculationTimer.setInterval(2000);
     m_recalculationTimer.setSingleShot(true);
 
+    m_delayUpdateTimer.setInterval(1);
+    m_delayUpdateTimer.setSingleShot(true);
+
     connect(&m_recalculationTimer, SIGNAL(timeout()),
-            this,                 SLOT(recalculate()));
+            this,                  SLOT(recalculate()));
+    connect(&m_delayUpdateTimer,   SIGNAL(timeout()),
+            this,                  SLOT(updateColors()));
 }
 
 void KisCommonColors::setCanvas(KisCanvas2 *canvas)
@@ -72,7 +77,7 @@ KisColorSelectorBase* KisCommonColors::createPopup() const
 {
     KisCommonColors* ret = new KisCommonColors();
     ret->setCanvas(m_canvas);
-    ret->setColors(colors());
+    ret->delayedSetColors(colors());
     return ret;
 }
 
@@ -100,11 +105,19 @@ void KisCommonColors::updateSettings()
     m_reloadButton->setEnabled(true);
 }
 
-void KisCommonColors::setColors(QList<KoColor> colors)
+void KisCommonColors::delayedSetColors(QList<KoColor> colors)
+{
+    QMutexLocker locker(&m_mutex);
+    m_calculatedColors = colors;
+    m_delayUpdateTimer.start();
+    locker.unlock();
+}
+
+void KisCommonColors::updateColors()
 {
     QMutexLocker locker(&m_mutex);
     m_reloadButton->setEnabled(true);
-    KisColorPatches::setColors(colors);
+    KisColorPatches::setColors(m_calculatedColors);
     locker.unlock();
 }
 
@@ -123,7 +136,8 @@ void KisCommonColors::recalculate()
     qApp->processEvents();
 
     KisImageWSP kisImage = m_canvas->image();
-    QImage image = kisImage->projection()->createThumbnail(1024, 1024);
+
+    QImage image = kisImage->projection()->createThumbnail(1024, 1024, 0, kisImage->bounds());
 
     KisCommonColorsRecalculationRunner* runner = new KisCommonColorsRecalculationRunner(image, patchCount(), this);
     QThreadPool::globalInstance()->start(runner);

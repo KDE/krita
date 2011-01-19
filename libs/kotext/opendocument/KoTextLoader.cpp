@@ -1809,13 +1809,8 @@ void KoTextLoader::Private::processDeleteChange(QTextCursor &cursor)
         int startPosition = rangeValue.first;
         int endPosition = rangeValue.second;
 
-        //Set the char format to the changeId
         cursor.setPosition(startPosition);
         cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
-
-        QTextCharFormat format;
-        format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-        cursor.mergeCharFormat(format);
 
         //Get the QTextDocumentFragment from the selection and store it in the changeElement
         QTextDocumentFragment deletedFragment = KoChangeTracker::generateDeleteFragment(cursor, changeElement->getDeleteChangeMarker());

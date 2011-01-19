@@ -235,9 +235,7 @@ void KisColorSelectorSettings::loadPreferences()
     ui->lastUsedColorsWidth->setValue(cfg.readEntry("lastUsedColorsWidth", 16));
     ui->lastUsedColorsHeight->setValue(cfg.readEntry("lastUsedColorsHeight", 16));
 
-    //disable common colours
-//    ui->commonColorsShow->setChecked(cfg.readEntry("commonColorsShow", true));
-    ui->commonColorsShow->setChecked(false);
+    ui->commonColorsShow->setChecked(cfg.readEntry("commonColorsShow", true));
     a = cfg.readEntry("commonColorsAlignment", false);
     ui->commonColorsAlignVertical->setChecked(a);
     ui->commonColorsAlignHorizontal->setChecked(!a);
@@ -304,9 +302,7 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->lastUsedColorsWidth->setValue(16);
     ui->lastUsedColorsHeight->setValue(16);
 
-    // disable common colours
-//    ui->commonColorsShow->setChecked(true);
-    ui->commonColorsShow->setChecked(false);
+    ui->commonColorsShow->setChecked(true);
     ui->commonColorsAlignVertical->setChecked(false);
     ui->commonColorsAlignHorizontal->setChecked(true);
     ui->commonColorsAllowScrolling->setChecked(false);

@@ -29,8 +29,6 @@ class KisCommonColors : public KisColorPatches
 Q_OBJECT
 public:
     explicit KisCommonColors(QWidget *parent = 0);
-//    int heightForWidth(int) const;
-//    QSize sizeHint() const;
     void setCanvas(KisCanvas2 *canvas);
     KisColorSelectorBase* createPopup() const;
     void setColors(QList<KoColor> colors);
@@ -38,12 +36,9 @@ public:
 public slots:
     void updateSettings();
     void recalculate();
-    void setDirty(const QRect &rc);
 
 private:
     void updateImageCache();
-    QImage m_imageCache;
-    QRegion m_dirtyRegion;
     QMutex m_mutex;
     QTimer m_recalculationTimer;
     QPushButton* m_reloadButton;

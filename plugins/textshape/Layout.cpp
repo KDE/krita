@@ -616,7 +616,7 @@ bool Layout::nextParag()
             // The style:type attribute specifies the position of a tab stop.
             switch(koTab.type) {
             case QTextOption::RightTab:
-                position = qMax(0., position - shape->size().width());
+                position = qMax(qreal(0), position - shape->size().width());
                 break;
             case QTextOption::CenterTab:
             case QTextOption::DelimiterTab:

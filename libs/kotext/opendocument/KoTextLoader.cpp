@@ -1414,11 +1414,11 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     
     
     // for "meta-iformation" about the TOC we use this class
-    KoTableOfContentsGeneratorInfo info;
-    info.setSharedLoadingData( d->textSharedData );
+    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
+    info->setSharedLoadingData( d->textSharedData );
     
-    info.tableOfContentData()->name = element.attribute("name");
-    info.tableOfContentData()->styleName = element.attribute("style-name");
+    info->tableOfContentData()->name = element.attribute("name");
+    info->tableOfContentData()->styleName = element.attribute("style-name");
     
     KoXmlElement e;
     forEachElement(e, element) {
@@ -1427,11 +1427,11 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
         }
         
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text){
-            info.loadOdf(e);
+            info->loadOdf(e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
             Q_ASSERT( !tocFormat.hasProperty(KoText::TableOfContentsData) );
-            tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<TableOfContent*>(info.tableOfContentData()) );
+            tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
             cursor.insertFrame(tocFormat);
             
         // We'll just try to find displayable elements and add them as paragraphs

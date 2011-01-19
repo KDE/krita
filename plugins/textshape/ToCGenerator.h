@@ -23,11 +23,12 @@
 #include <QList>
 #include <QTextBlock>
 
+#include <KoTableOfContentsGeneratorInfo.h>
 class KoInlineTextObjectManager;
+
 typedef QPair<QTextBlock, QTextBlock> BlockPair;
 
 class QTextFrame;
-class TableOfContent;
 
 class ToCGenerator : public QObject
 {
@@ -59,7 +60,7 @@ private:
 
     State m_state;
     QTextFrame *m_ToCFrame;
-    TableOfContent * m_tocDescription;
+    KoTableOfContentsGeneratorInfo * m_tocInfo;
     QList<BlockPair> m_originalBlocksInToc;
     
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned

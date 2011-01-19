@@ -67,6 +67,7 @@ public:
     ~Private() { }
 
     QMultiHash<int, int> children;
+    QMultiHash<int, int> duplicateIds;
     QHash<int, int> parents;
     QHash<int, KoChangeTrackerElement *> changes;
     QHash<QString, int> loadedChanges;
@@ -256,6 +257,38 @@ int KoChangeTracker::parent(int changeId)
     if (d->acceptedRejectedChanges.contains(d->parents.value(changeId)))
         return parent(d->parents.value(changeId));
     return d->parents.value(changeId);
+}
+
+int KoChangeTracker::createDulicateChangeId(int existingChangeId)
+{
+    int duplicateChangeId = d->changeId;
+    d->changeId++;
+    
+    d->duplicateIds.insert(existingChangeId, duplicateChangeId);
+
+    return duplicateChangeId;
+}
+
+bool KoChangeTracker::isDuplicateChangeId(int duplicateChangeId)
+{
+    bool isDuplicate = d->duplicateIds.values().contains(duplicateChangeId);    
+    return isDuplicate;
+}
+
+bool KoChangeTracker::originalChangeId(int duplicateChangeId)
+{
+    int originalChangeId = 0;
+    QMultiHash<int, int>::const_iterator i = d->duplicateIds.constBegin();
+
+    while (i != d->duplicateIds.constEnd()) {
+        if (duplicateChangeId == i.value()) {
+            originalChangeId = i.key();
+            break;
+        }
+        ++i;
+    }
+
+    return originalChangeId;
 }
 
 void KoChangeTracker::acceptRejectChange(int changeId, bool set)

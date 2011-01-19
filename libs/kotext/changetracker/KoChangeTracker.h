@@ -92,6 +92,10 @@ public:
     void setParent(int child, int parent);
     int parent(int changeId);
 
+    int createDulicateChangeId(int existingChangeId);
+    bool isDuplicateChangeId(int duplicateChangeId);
+    bool originalChangeId(int duplicateChangeId);
+
     void acceptRejectChange(int changeId, bool set);
 
     /// Load/save methods

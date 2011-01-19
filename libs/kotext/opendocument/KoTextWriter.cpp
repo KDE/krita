@@ -845,15 +845,39 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
     KoList *list = textDocument.list(block);
     int topListLevel = KoList::level(block);
    
-    int listChangeId = 0;
+    int changeId = 0;
     do {
-        listChangeId = checkForBlockChange(block);
-        if (!listChangeId)
+        int currentChangeId = checkForBlockChange(block);
+        if (!currentChangeId) {
+            // Encountered a list-item that is not a change
+            // So break out of loop and return 0
+            changeId = 0;
             break;
-        block = block.next();
+        } else {
+            // This list-item is a changed cell. Continue further.
+            if (changeId == 0) {
+                //First list-item and it is a changed list-item
+                //Store it and continue 
+                changeId = currentChangeId;
+                block = block.next();
+                continue;
+            } else {
+                if (currentChangeId == changeId) {
+                    //Change found and it is the same as the first change.
+                    //continue looking
+                    block = block.next();
+                    continue; 
+                } else {
+                    //A Change found but not same as the first change
+                    //Break-out of loop and return 0
+                    changeId = 0;
+                    break;
+                }
+            }
+        }
     } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
 
-    return listChangeId;
+    return changeId;
 }
 
 //Check if the whole of table row is a part of a singke change

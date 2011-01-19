@@ -867,6 +867,15 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
                     //continue looking
                     block = block.next();
                     continue; 
+                } else if (changeTracker->isParent(currentChangeId, changeId)) {
+                    //The currentChangeId is a parent of changeId
+                    changeId = currentChangeId;
+                    block = block.next();
+                    continue;
+                } else if (changeTracker->isParent(changeId, currentChangeId)) {
+                    //The current change id is a child of change-id
+                    block = block.next();
+                    continue;
                 } else {
                     //A Change found but not same as the first change
                     //Break-out of loop and return 0

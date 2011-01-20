@@ -1786,18 +1786,6 @@ bool KoTextLoader::Private::checkForDeleteMerge(QTextCursor &cursor, const QStri
             deleteChangeMarkerMap.insert(changeElement->getDeleteChangeMarker(), deleteMarkerRange);
             result = true;
         }
-
-        int endPosition = cursor.position();
-        //Set the char format to the changeId
-        if (startPosition != endPosition) {
-            cursor.setPosition(startPosition);
-            cursor.setPosition(endPosition, QTextCursor::KeepAnchor);
-
-            QTextCharFormat format;
-            format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-            cursor.mergeCharFormat(format);
-            cursor.clearSelection();
-        }
     }
     return result; 
 }

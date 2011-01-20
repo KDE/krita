@@ -214,21 +214,6 @@ bool KoTextLoader::containsRichText(const KoXmlElement &element)
     return false;
 }
 
-void KoTextLoader::Private::splitStack(int id)
-{
-    if (changeStack.isEmpty())
-        return;
-
-    int oldId = changeStack.top();
-    changeStack.pop();
-    if (id == oldId)
-        return;
-    int newId = changeTracker->split(oldId);
-    splitStack(id);
-    changeTracker->setParent(newId, changeStack.top());
-    changeStack.push(newId);
-}
-
 void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
     QString id;
@@ -257,16 +242,22 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
     int changeId = changeTracker->getLoadedChangeId(id);
     if (!changeId)
         return;
+
     if (!changeStack.empty() && (changeStack.top() != changeId)) {
         //Parent child relationship is defined by the order in which the change meta-data is seen 
         //So check the changeId to set the parent-child relationship
         if (changeId > changeStack.top()) {
             changeTracker->setParent(changeId, changeStack.top());
+            changeStack.push(changeId);
         } else {
-            changeTracker->setParent(changeStack.top(), changeId);
+            int duplicateId = changeTracker->createDuplicateChangeId(changeStack.top());
+            changeTracker->setParent(duplicateId, changeId);
+            changeStack.push(duplicateId);
         }
+    } else {
+        changeStack.push(changeId);
     }
-    changeStack.push(changeId);
+
     changeTransTable.insert(id, changeId);
 
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
@@ -307,6 +298,21 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
 
     changeId = changeTracker->getLoadedChangeId(id);
     splitStack(changeId);
+}
+
+void KoTextLoader::Private::splitStack(int id)
+{
+    if (changeStack.isEmpty())
+        return;
+
+    int oldId = changeStack.top();
+    changeStack.pop();
+    if ((id == oldId) || changeTracker->isParent(id, oldId))
+        return;
+    int newId = changeTracker->split(oldId);
+    splitStack(id);
+    changeTracker->setParent(newId, changeStack.top());
+    changeStack.push(newId);
 }
 
 KoList *KoTextLoader::Private::list(const QTextDocument *document, KoListStyle *listStyle)

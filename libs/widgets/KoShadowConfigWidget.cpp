@@ -38,8 +38,10 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     : QWidget( parent ), d( new Private() )
 {
     d->widget.setupUi(this);
-    d->widget.shadowOffset->setValue( 10.0 );
-    d->widget.shadowAngle->setValue( 45.0 );
+    d->widget.shadowOffset->setValue( 0.0 );
+    d->widget.shadowBlur->setValue( 10.0 );
+    d->widget.shadowSpread->setValue( 0.0 );
+    d->widget.shadowAngle->setValue( 0.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
     d->widget.shadowOptions->setEnabled( false );
@@ -53,6 +55,8 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
         this, SIGNAL(shadowColorChanged(const KoColor&)));
     connect( d->widget.shadowAngle, SIGNAL(valueChanged(qreal,bool)), this, SLOT(offsetChanged()));
     connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(offsetChanged()));
+    connect( d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(blurChanged()));
+    connect( d->widget.shadowSpread, SIGNAL(valueChangedPt(qreal)), this, SLOT(spreadChanged()));
 }
 
 KoShadowConfigWidget::~KoShadowConfigWidget()
@@ -96,6 +100,32 @@ QPointF KoShadowConfigWidget::shadowOffset() const
     return m.map( offset );
 }
 
+void KoShadowConfigWidget::setShadowBlur( const qreal &blur )
+{
+    d->widget.shadowBlur->blockSignals(true);
+    d->widget.shadowBlur->changeValue( blur );
+    d->widget.shadowBlur->blockSignals(false);
+}
+
+qreal KoShadowConfigWidget::shadowBlur() const
+{
+    qreal blur( d->widget.shadowBlur->value() );
+    return blur;
+}
+
+void KoShadowConfigWidget::setShadowSpread( const qreal &spread )
+{
+    d->widget.shadowSpread->blockSignals(true);
+    d->widget.shadowSpread->changeValue( spread );
+    d->widget.shadowSpread->blockSignals(false);
+}
+
+qreal KoShadowConfigWidget::shadowSpread() const
+{
+    qreal spread( d->widget.shadowSpread->value() );
+    return spread;
+}
+
 void KoShadowConfigWidget::setShadowVisible( bool visible )
 {
     d->widget.shadowVisible->blockSignals(true);
@@ -117,6 +147,16 @@ void KoShadowConfigWidget::visibilityChanged()
 void KoShadowConfigWidget::offsetChanged()
 {
     emit shadowOffsetChanged( shadowOffset() );
+}
+
+void KoShadowConfigWidget::blurChanged()
+{
+    emit shadowBlurChanged( shadowBlur() );
+}
+
+void KoShadowConfigWidget::spreadChanged()
+{
+    emit shadowSpreadChanged( shadowSpread() );
 }
 
 void KoShadowConfigWidget::setUnit( const KoUnit &unit )

@@ -1509,10 +1509,10 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         const QRectF bbox = boundingRect();
         const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
         if (align.isEmpty()) {
-            #ifndef NWORKAROUND_ODF_BUGS
+#ifndef NWORKAROUND_ODF_BUGS
             KoOdfWorkaround::fixGluePointPosition(xStr, context);
             KoOdfWorkaround::fixGluePointPosition(yStr, context);
-            #endif
+#endif
             if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
                 kWarning(30006) << "glue-point with invald position";
                 continue;

@@ -32,9 +32,6 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
 
 void KisColorSelectorSimple::setColor(const QColor &c)
 {
-    QColor color;
-    color.setHsvF(c.hslHueF(), 1.0, 1.0);
-    
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.hslSaturationF());

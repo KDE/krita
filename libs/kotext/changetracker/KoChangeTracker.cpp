@@ -259,7 +259,7 @@ int KoChangeTracker::parent(int changeId)
     return d->parents.value(changeId);
 }
 
-int KoChangeTracker::createDulicateChangeId(int existingChangeId)
+int KoChangeTracker::createDuplicateChangeId(int existingChangeId)
 {
     int duplicateChangeId = d->changeId;
     d->changeId++;

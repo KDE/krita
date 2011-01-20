@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * 
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,20 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ConnectionToolWidget.h"
+#ifndef CONNECTIONPOINTWIDGET_H
+#define CONNECTIONPOINTWIDGET_H
 
-#include <KDebug>
-#include <KLocale>
+#include <ui_ConnectionPointWidget.h>
+#include <QtGui/QWidget>
 
-ConnectionToolWidget::ConnectionToolWidget(QWidget * parent)
-    :QWidget(parent)
+class ConnectionPointWidget : public QWidget
 {
-    widget.setupUi(this);
-    widget.connectionType->clear();
-    widget.connectionType->addItem(i18n("Standard"));
-    widget.connectionType->addItem(i18n("Lines"));
-    widget.connectionType->addItem(i18n("Straight"));
-    widget.connectionType->addItem(i18n("Curve"));
-}
+    Q_OBJECT
+public:
+    ConnectionPointWidget(QWidget * parent = 0);
 
-#include <ConnectionToolWidget.moc>
+private:
+
+    Ui::ConnectionPointWidget widget;
+};
+
+#endif // CONNECTIONPOINTWIDGET_H

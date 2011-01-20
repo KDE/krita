@@ -24,6 +24,8 @@
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
 #include "MoveConnectionPointStrategy.h"
+#include "ConnectionToolWidget.h"
+#include "ConnectionPointWidget.h"
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -463,4 +465,17 @@ void ConnectionTool::updateStatusText()
         default:
             emit statusTextChanged("");
     }
+}
+
+QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
+{
+    QMap<QString, QWidget *> map;
+
+    ConnectionToolWidget *tw = new ConnectionToolWidget();
+    ConnectionPointWidget *pw = new ConnectionPointWidget();
+
+    map.insert(i18n("Connection"), tw);
+    map.insert(i18n("Connection Point"), pw);
+
+    return map;
 }

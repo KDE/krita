@@ -29,9 +29,9 @@ class ConnectionToolWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ConnectionToolWidget( QWidget * parent );
-    
-   private:
+    ConnectionToolWidget(QWidget * parent = 0);
+
+private:
 
     Ui::ConnectionToolWidget widget;
 };

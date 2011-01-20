@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * 
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,20 +18,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ConnectionToolWidget.h"
+#include "ConnectionPointWidget.h"
 
-#include <KDebug>
-#include <KLocale>
-
-ConnectionToolWidget::ConnectionToolWidget(QWidget * parent)
+ConnectionPointWidget::ConnectionPointWidget(QWidget * parent)
     :QWidget(parent)
 {
     widget.setupUi(this);
-    widget.connectionType->clear();
-    widget.connectionType->addItem(i18n("Standard"));
-    widget.connectionType->addItem(i18n("Lines"));
-    widget.connectionType->addItem(i18n("Straight"));
-    widget.connectionType->addItem(i18n("Curve"));
+    widget.alignLeft->setIcon(KIcon("align-horizontal-left"));
+    widget.alignCenterH->setIcon(KIcon("align-horizontal-center"));
+    widget.alignRight->setIcon(KIcon("align-horizontal-right"));
+    widget.alignTop->setIcon(KIcon("align-vertical-top"));
+    widget.alignCenterV->setIcon(KIcon("align-vertical-center"));
+    widget.alignBottom->setIcon(KIcon("align-vertical-bottom"));
 }
 
-#include <ConnectionToolWidget.moc>
+#include <ConnectionPointWidget.moc>

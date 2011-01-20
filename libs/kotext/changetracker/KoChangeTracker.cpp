@@ -488,10 +488,6 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
         }
     }
 
-    QTextCharFormat format;
-    format.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-    cursor.mergeCharFormat(format);
-
     QTextBlock currentBlock = document->findBlock(cursor.anchor());
     QTextBlock startBlock = currentBlock;
     QTextBlock endBlock = document->findBlock(cursor.position()).next();

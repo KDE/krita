@@ -92,7 +92,7 @@ public:
     void setParent(int child, int parent);
     int parent(int changeId);
 
-    int createDulicateChangeId(int existingChangeId);
+    int createDuplicateChangeId(int existingChangeId);
     bool isDuplicateChangeId(int duplicateChangeId);
     bool originalChangeId(int duplicateChangeId);
 

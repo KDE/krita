@@ -39,8 +39,7 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
 {
     d->widget.setupUi(this);
     d->widget.shadowOffset->setValue( 0.0 );
-    d->widget.shadowBlur->setValue( 10.0 );
-    d->widget.shadowSpread->setValue( 0.0 );
+    d->widget.shadowBlur->setValue( 8.0 );
     d->widget.shadowAngle->setValue( 0.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
@@ -56,7 +55,6 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     connect( d->widget.shadowAngle, SIGNAL(valueChanged(qreal,bool)), this, SLOT(offsetChanged()));
     connect( d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(offsetChanged()));
     connect( d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(blurChanged()));
-    connect( d->widget.shadowSpread, SIGNAL(valueChangedPt(qreal)), this, SLOT(spreadChanged()));
 }
 
 KoShadowConfigWidget::~KoShadowConfigWidget()
@@ -113,19 +111,6 @@ qreal KoShadowConfigWidget::shadowBlur() const
     return blur;
 }
 
-void KoShadowConfigWidget::setShadowSpread( const qreal &spread )
-{
-    d->widget.shadowSpread->blockSignals(true);
-    d->widget.shadowSpread->changeValue( spread );
-    d->widget.shadowSpread->blockSignals(false);
-}
-
-qreal KoShadowConfigWidget::shadowSpread() const
-{
-    qreal spread( d->widget.shadowSpread->value() );
-    return spread;
-}
-
 void KoShadowConfigWidget::setShadowVisible( bool visible )
 {
     d->widget.shadowVisible->blockSignals(true);
@@ -152,11 +137,6 @@ void KoShadowConfigWidget::offsetChanged()
 void KoShadowConfigWidget::blurChanged()
 {
     emit shadowBlurChanged( shadowBlur() );
-}
-
-void KoShadowConfigWidget::spreadChanged()
-{
-    emit shadowSpreadChanged( shadowSpread() );
 }
 
 void KoShadowConfigWidget::setUnit( const KoUnit &unit )

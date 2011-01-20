@@ -67,9 +67,9 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
     style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()));
     style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()));
     if (d->blur != 0)
-        style.addProperty("draw:shadow-blur-radius", QString("%1pt").arg(d->blur));
-    if (d->spread != 0)
-        style.addProperty("draw:shadow-spread", QString("%1pt").arg(d->spread));
+        style.addProperty("draw:shadow-blur-radius", QString("%1").arg(d->blur));
+    /*if (d->spread != 0)
+        style.addProperty("draw:shadow-spread", QString("%1pt").arg(d->spread));*/
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
@@ -178,16 +178,6 @@ void KoShapeShadow::setBlur(const qreal &blur)
 qreal KoShapeShadow::blur() const
 {
     return d->blur;
-}
-
-void KoShapeShadow::setSpread(const qreal &spread)
-{
-    d->spread = spread;
-}
-
-qreal KoShapeShadow::spread() const
-{
-    return d->spread;
 }
 
 void KoShapeShadow::setVisible(bool visible)

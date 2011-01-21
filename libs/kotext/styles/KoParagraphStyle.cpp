@@ -1167,7 +1167,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         QList<KoText::Tab> tabList;
         KoXmlElement tabStop;
         forEachElement(tabStop, tabStops) {
-            Q_ASSERT(tabStop.localName() == "tab-stop");
+            if(tabStop.localName() != "tab-stop")
+                continue;
+
             // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));

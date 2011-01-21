@@ -280,9 +280,10 @@ bool Layout::addLine()
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
-                    if (!m_fragmentIterator.atEnd()) {
-                        break;
-                    }
+//sebsauer this cannot work, see bug first document attached to bug #239143
+//                     if (!m_fragmentIterator.atEnd()) {
+//                         break;
+//                     }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -610,6 +611,21 @@ bool Layout::nextParag()
 
             // conversion here is required because Qt thinks in device units and we don't
             position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
+
+#if 0 // see bug 239143
+            // ODF 18.517.2 <style:tab-stop>
+            // The style:type attribute specifies the position of a tab stop.
+            switch(koTab.type) {
+            case QTextOption::RightTab:
+                position = qMax(0., position - shape->size().width());
+                break;
+            case QTextOption::CenterTab:
+            case QTextOption::DelimiterTab:
+            case QTextOption::LeftTab:
+                break;
+            }
+#endif
+
             tab.position = position;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;

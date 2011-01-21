@@ -29,6 +29,7 @@ class KoShape;
 class KoGenStyle;
 class KoShapeSavingContext;
 class QPainter;
+class QImage;
 class KoViewConverter;
 struct KoInsets;
 
@@ -72,6 +73,24 @@ public:
     /// Returns the shadow color including opacity
     QColor color() const;
 
+    /**
+     * Sets the shadow blur radius of the shape
+     * @param blur the shadow blur radius
+     */
+    void setBlur(const qreal &blur);
+
+    /// Returns the shadow blur radius
+    qreal blur() const;
+
+    /**
+     * Sets the shadow spread radius of the shape
+     * @param spread the shadow spread
+     */
+    void setSpread(const qreal &spread);
+
+    /// Returns the shadow spread radius
+    qreal spread() const;
+
     /// Sets the shadow visibility
     void setVisible(bool visible);
 
@@ -97,6 +116,7 @@ public:
 private:
     class Private;
     Private * const d;
+    void blurShadow(QImage &image, int radius, const QColor& shadowColor);
 };
 
 #endif // KOSHAPESHADOW_H

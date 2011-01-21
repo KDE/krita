@@ -33,7 +33,7 @@ class KisColorSelector : public KisColorSelectorBase
     Q_OBJECT
 public:
     enum Type {Ring, Square, Wheel, Triangle, Slider};
-    enum Parameters {H, hsvS, V, hslS, L, SL, SV, hsvSH, hslSH, VH, LH};
+    enum Parameters {H, hsvS, V, hslS, L, SL, SV, SV2, hsvSH, hslSH, VH, LH};
     struct Configuration {
         Type mainType;
         Type subType;

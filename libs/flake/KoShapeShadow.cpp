@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Ariya Hidayat <ariya.hidayat@gmail.com>
+ * Copyright (C) 2010 Yue Liu <opuspace@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,15 +30,18 @@
 #include <KoViewConverter.h>
 #include <QtGui/QPainter>
 #include <QtCore/QAtomicInt>
+#include <QImage>
 
 class KoShapeShadow::Private
 {
 public:
     Private()
-            : offset(10, 10), color(Qt::black), visible(true), refCount(0) {
+            : offset(0, 0), color(Qt::black), blur(10), spread(0), visible(true), refCount(0) {
     }
     QPointF offset;
     QColor color;
+    qreal blur;
+    qreal spread;
     bool visible;
     QAtomicInt refCount;
 };
@@ -61,52 +66,88 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
         style.addProperty("draw:shadow-opacity", QString("%1%").arg(d->color.alphaF() * 100.0));
     style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()));
     style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()));
+    if (d->blur != 0)
+        style.addProperty("draw:shadow-blur-radius", QString("%1pt").arg(d->blur));
+    if (d->spread != 0)
+        style.addProperty("draw:shadow-spread", QString("%1pt").arg(d->spread));
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
 {
     if (! d->visible)
         return;
-
+    
     // calculate the shadow offset independent of shape transformation
     QTransform tm;
     tm.translate(d->offset.x(), d->offset.y());
     QTransform tr = shape->absoluteTransformation(&converter);
     QTransform offsetMatrix = tr * tm * tr.inverted();
 
+    // There is a blur effect for shape shadows, we need to prerender the shadow on an image, then blur it
+    // First step, compute the rectangle used for the image
+    QRectF shadowBound(QPointF(), shape->size());
+
+    //convert relative radius to absolute radius
+    qreal absBR = 0.01*d->blur*shadowBound.width();
+
+    qreal expand = 3 * absBR;
+    // The blur effect would cause the shadow to be bigger
+    QRectF clipRegion = shadowBound.adjusted(-expand, -expand, expand, expand);
+    QRectF zoomedClipRegion = converter.documentToView(clipRegion);
+
+    // determine the offset from the blur expand edge to the shadow bound's origin
+    QPointF blurOffset(expand, expand);
+    QPointF zoomedBlurOffset = converter.documentToView(blurOffset);
+
+    QPointF clippingOffset = zoomedClipRegion.topLeft() + converter.documentToView(d->offset);
+
+    // Initialize the buffer image
+    QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
+    sourceGraphic.fill(qRgba(0,0,0,0));
+
+    // Init the buffer painter
+    QPainter imagePainter(&sourceGraphic);
+    imagePainter.translate(zoomedBlurOffset);
+    imagePainter.setPen(Qt::NoPen);
+    imagePainter.setBrush(Qt::NoBrush);
+    imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
+
     if (shape->background()) {
-        painter.save();
-
-        KoShape::applyConversion(painter, converter);
-
+        imagePainter.save();
+        KoShape::applyConversion(imagePainter, converter);
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
-        painter.setBrush(QBrush(d->color));
-
+        imagePainter.setTransform(offsetMatrix * imagePainter.transform());
+        imagePainter.setBrush(QBrush(d->color));
         QPainterPath path(shape->outline());
         KoPathShape * pathShape = dynamic_cast<KoPathShape*>(shape);
         if (pathShape)
             path.setFillRule(pathShape->fillRule());
-        painter.drawPath(path);
-        painter.restore();
+        imagePainter.drawPath(path);
+        imagePainter.restore();
     }
 
     if (shape->border()) {
-        QTransform oldPainterMatrix = painter.transform();
-        KoShape::applyConversion(painter, converter);
-        QTransform newPainterMatrix = painter.transform();
-
+        imagePainter.save();
+        QTransform oldPainterMatrix = imagePainter.transform();
+        KoShape::applyConversion(imagePainter, converter);
+        QTransform newPainterMatrix = imagePainter.transform();
         // the shadow direction is independent of the shapes transformation
         // please only change if you know what you are doing
-        painter.setTransform(offsetMatrix * painter.transform());
-
+        imagePainter.setTransform(offsetMatrix * imagePainter.transform());
         // compensate applyConversion call in paint
         QTransform scaleMatrix = newPainterMatrix * oldPainterMatrix.inverted();
-        painter.setTransform(scaleMatrix.inverted() * painter.transform());
-
-        shape->border()->paint(shape, painter, converter, d->color);
+        imagePainter.setTransform(scaleMatrix.inverted() * imagePainter.transform());
+        shape->border()->paint(shape, imagePainter, converter);
+        imagePainter.restore();
     }
+
+    imagePainter.end();
+    blurShadow(sourceGraphic, absBR, d->color);
+    // Paint the result
+    painter.save();
+    painter.drawImage(clippingOffset, sourceGraphic);
+    painter.restore();
 }
 
 void KoShapeShadow::setOffset(const QPointF & offset)
@@ -127,6 +168,26 @@ void KoShapeShadow::setColor(const QColor &color)
 QColor KoShapeShadow::color() const
 {
     return d->color;
+}
+
+void KoShapeShadow::setBlur(const qreal &blur)
+{
+    d->blur = blur;
+}
+
+qreal KoShapeShadow::blur() const
+{
+    return d->blur;
+}
+
+void KoShapeShadow::setSpread(const qreal &spread)
+{
+    d->spread = spread;
+}
+
+qreal KoShapeShadow::spread() const
+{
+    return d->spread;
 }
 
 void KoShapeShadow::setVisible(bool visible)
@@ -168,4 +229,87 @@ bool KoShapeShadow::deref()
 int KoShapeShadow::useCount() const
 {
     return d->refCount;
+}
+
+/* You can also find a BSD version to this method from
+ * http://gitorious.org/ofi-labs/x2/blobs/master/graphics/shadowblur/
+ */
+void KoShapeShadow::blurShadow(QImage &image, int radius, const QColor& shadowColor)
+{
+    static const int BlurSumShift = 15;
+
+    // Check http://www.w3.org/TR/SVG/filters.html#
+    // As noted in the SVG filter specification, ru
+    // approximates a real gaussian blur nicely.
+    // See comments in http://webkit.org/b/40793, it seems sensible
+    // to follow Skia's limit of 128 pixels for the blur radius.
+    if (radius > 128)
+        radius = 128;
+
+    int channels[4] = { 3, 0, 1, 3 };
+    int dmax = radius >> 1;
+    int dmin = dmax - 1 + (radius & 1);
+    if (dmin < 0)
+        dmin = 0;
+
+    // Two stages: horizontal and vertical
+    for (int k = 0; k < 2; ++k) {
+
+        unsigned char* pixels = image.bits();
+        int stride = (k == 0) ? 4 : image.bytesPerLine();
+        int delta = (k == 0) ? image.bytesPerLine() : 4;
+        int jfinal = (k == 0) ? image.height() : image.width();
+        int dim = (k == 0) ? image.width() : image.height();
+
+        for (int j = 0; j < jfinal; ++j, pixels += delta) {
+
+            // For each step, we blur the alpha in a channel and store the result
+            // in another channel for the subsequent step.
+            // We use sliding window algorithm to accumulate the alpha values.
+            // This is much more efficient than computing the sum of each pixels
+            // covered by the box kernel size for each x.
+
+            for (int step = 0; step < 3; ++step) {
+                int side1 = (step == 0) ? dmin : dmax;
+                int side2 = (step == 1) ? dmin : dmax;
+                int pixelCount = side1 + 1 + side2;
+                int invCount = ((1 << BlurSumShift) + pixelCount - 1) / pixelCount;
+                int ofs = 1 + side2;
+                int alpha1 = pixels[channels[step]];
+                int alpha2 = pixels[(dim - 1) * stride + channels[step]];
+                unsigned char* ptr = pixels + channels[step + 1];
+                unsigned char* prev = pixels + stride + channels[step];
+                unsigned char* next = pixels + ofs * stride + channels[step];
+
+                int i;
+                int sum = side1 * alpha1 + alpha1;
+                int limit = (dim < side2 + 1) ? dim : side2 + 1;
+                for (i = 1; i < limit; ++i, prev += stride)
+                    sum += *prev;
+                if (limit <= side2)
+                    sum += (side2 - limit + 1) * alpha2;
+
+                limit = (side1 < dim) ? side1 : dim;
+                for (i = 0; i < limit; ptr += stride, next += stride, ++i, ++ofs) {
+                    *ptr = (sum * invCount) >> BlurSumShift;
+                    sum += ((ofs < dim) ? *next : alpha2) - alpha1;
+                }
+                prev = pixels + channels[step];
+                for (; ofs < dim; ptr += stride, prev += stride, next += stride, ++i, ++ofs) {
+                    *ptr = (sum * invCount) >> BlurSumShift;
+                    sum += (*next) - (*prev);
+                }
+                for (; i < dim; ptr += stride, prev += stride, ++i) {
+                    *ptr = (sum * invCount) >> BlurSumShift;
+                    sum += alpha2 - (*prev);
+                }
+            }
+        }
+    }
+
+    // "Colorize" with the right shadow color.
+    QPainter p(&image);
+    p.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    p.fillRect(image.rect(), shadowColor);
+    p.end();
 }

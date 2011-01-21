@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 David Faure <faure@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -88,6 +89,13 @@ public:
      */
     inline void addAttribute(const char* attrName, uint value) {
         addAttribute(attrName, QByteArray::number(value));
+    }
+    /**
+     * Add an attribute whose value is an bool
+     * It is written as "true" or "false" based on value
+     */
+    inline void addAttribute(const char* attrName, bool value) {
+        addAttribute(attrName, value ? "true" : "false");
     }
     /**
      * Add an attribute whose value is a floating point number

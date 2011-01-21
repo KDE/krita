@@ -88,11 +88,11 @@ class KisToolFillFactory : public KoToolFactoryBase
 public:
     KisToolFillFactory(const QStringList&)
             : KoToolFactoryBase("KritaFill/KisToolFill") {
-        setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection. (F)"));
+        setToolTip(i18n("Fill a contiguous area of color with a color, or fill a selection."));
         setToolType(TOOL_TYPE_FILL);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("krita_tool_color_fill");
-        setShortcut( KShortcut( Qt::Key_F ) );
+        //setShortcut( QKeySequence( Qt::Key_F ) );
         setPriority(14);
         setInputDeviceAgnostic(false);
     }

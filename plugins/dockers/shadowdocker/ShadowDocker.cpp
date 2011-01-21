@@ -64,6 +64,7 @@ ShadowDocker::ShadowDocker()
 
     connect( d->widget, SIGNAL(shadowColorChanged(const KoColor&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowOffsetChanged(const QPointF&)), this, SLOT(shadowChanged()));
+    connect( d->widget, SIGNAL(shadowBlurChanged(const qreal&)), this, SLOT(shadowChanged()));
     connect( d->widget, SIGNAL(shadowVisibilityChanged(bool)), this, SLOT(shadowChanged()));
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
@@ -98,6 +99,7 @@ void ShadowDocker::selectionChanged()
     d->widget->setShadowVisible( shadow->isVisible() );
     d->widget->setShadowOffset( shadow->offset() );
     d->widget->setShadowColor( shadow->color() );
+    d->widget->setShadowBlur( shadow->blur() );
 }
 
 void ShadowDocker::setCanvas( KoCanvasBase *canvas )
@@ -124,6 +126,7 @@ void ShadowDocker::shadowChanged()
     newShadow->setVisible(d->widget->shadowVisible());
     newShadow->setColor( d->widget->shadowColor() );
     newShadow->setOffset( d->widget->shadowOffset() );
+    newShadow->setBlur( d->widget->shadowBlur() );
     d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
 }
 

@@ -89,12 +89,12 @@ class KisToolMoveFactory : public KoToolFactoryBase
 public:
     KisToolMoveFactory(const QStringList&)
             : KoToolFactoryBase("KritaTransform/KisToolMove") {
-        setToolTip(i18n("Move a layer (SHIFT+V)"));
+        setToolTip(i18n("Move a layer"));
         setToolType(TOOL_TYPE_TRANSFORM);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setPriority(11);
         setIcon("krita_tool_move");
-        setShortcut( KShortcut( Qt::SHIFT + Qt::Key_V ) );
+        //setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_V ) );
     }
 
     virtual ~KisToolMoveFactory() {}

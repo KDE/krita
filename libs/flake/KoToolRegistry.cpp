@@ -21,6 +21,7 @@
 #include "KoToolRegistry.h"
 #include <KGlobal>
 #include <KDebug>
+#include <kconfiggroup.h>
 
 #include "tools/KoCreatePathToolFactory.h"
 #include "tools/KoCreateShapesToolFactory.h"
@@ -58,6 +59,12 @@ void KoToolRegistry::init()
     add(new KoPathToolFactory());
     add(new KoZoomToolFactory());
     add(new KoPanToolFactory());
+
+    KConfigGroup cfg = KGlobal::config()->group("koffice");
+    QStringList toolsBlacklist = cfg.readEntry("ToolsBlacklist", QStringList());
+    foreach (const QString& toolID, toolsBlacklist) {
+        remove(toolID);
+    }
 }
 
 KoToolRegistry::~KoToolRegistry()

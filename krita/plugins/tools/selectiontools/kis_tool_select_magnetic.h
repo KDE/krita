@@ -123,11 +123,11 @@ class KisToolSelectMagneticFactory : public KoToolFactoryBase
 public:
     KisToolSelectMagneticFactory(const QStringList&)
             : KoToolFactoryBase("KisToolSelectMagnetic") {
-        setToolTip(i18n("Magnetic selection tool (SHIFT+E)"));
+        setToolTip(i18n("Magnetic selection tool"));
         setToolType(TOOL_TYPE_SELECTED);
         setActivationShapeId(KRITA_TOOL_ACTIVATION_ID);
         setIcon("tool_magneticoutline_selection");
-        setShortcut(KShortcut(Qt::SHIFT + Qt::Key_E));
+        setShortcut(KShortcut(Qt::CTRL + Qt::Key_E));
         setPriority(57);
     }
 

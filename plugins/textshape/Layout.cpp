@@ -612,17 +612,19 @@ bool Layout::nextParag()
             // conversion here is required because Qt thinks in device units and we don't
             position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
 
+#if 0 // see bug 239143
             // ODF 18.517.2 <style:tab-stop>
             // The style:type attribute specifies the position of a tab stop.
             switch(koTab.type) {
             case QTextOption::RightTab:
-                position = qMax(qreal(0), position - shape->size().width());
+                position = qMax(0., position - shape->size().width());
                 break;
             case QTextOption::CenterTab:
             case QTextOption::DelimiterTab:
             case QTextOption::LeftTab:
                 break;
             }
+#endif
 
             tab.position = position;
             tab.type = koTab.type;

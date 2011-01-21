@@ -94,6 +94,8 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     alignRelative->setExclusive(true);
     alignRelative->addAction(m_alignPercent);
     connect(alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+
+    setEditMode(Idle, 0, -1);
 }
 
 ConnectionTool::~ConnectionTool()
@@ -217,21 +219,20 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
             return;
         }
         // update our handle data
-        m_activeHandle = 1;
-        m_currentShape = shape;
+        setEditMode(m_editMode, shape, 1);
         // add connection shape to the shape manager so it gets painted
         canvas()->shapeManager()->addShape(connectionShape);
     } else if (m_editMode == EditConnectionPoint) {
         // clicking not on a connection point and not on the current shape exits
         // connection point edit mode
-        if (m_activeHandle < 0) {
+        int handle = handleAtPoint(m_currentShape, event->point);
+        if (handle < 0) {
             // check we are on the current shape
             if (!canvas()->shapeManager()->shapesAt(handleGrabRect(event->point)).contains(m_currentShape)) {
                 repaintDecorations();
                 findShapeAtPosition(event->point);
                 if (m_currentShape && !dynamic_cast<KoConnectionShape*>(m_currentShape)) {
-                    m_editMode = EditConnectionPoint;
-                    m_activeHandle = -1;
+                    setEditMode(EditConnectionPoint, m_currentShape, -1);
                     repaintDecorations();
                 }
             }
@@ -262,7 +263,9 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
     if (m_editMode == EditConnectionPoint) {
         Q_ASSERT(m_currentShape);
         // check if we should highlight another connection point
-        m_activeHandle = handleAtPoint(m_currentShape, event->point);
+        int handle = handleAtPoint(m_currentShape, event->point);
+        if (handle >= 0)
+            setEditMode(m_editMode, m_currentShape, handle);
     } else {
         findShapeAtPosition(event->point);
     }
@@ -292,8 +295,7 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
                 m_currentStrategy = 0;
                 repaintDecorations();
                 canvas()->shapeManager()->remove(m_currentShape);
-                m_currentShape = connectionShape->firstShape();
-                m_activeHandle = connectionShape->firstConnectionId();
+                setEditMode(m_editMode, connectionShape->firstShape(), connectionShape->firstConnectionId());
                 repaintDecorations();
                 delete connectionShape;
                 return;
@@ -333,7 +335,7 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
             canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, handleId));
         }
         repaintDecorations();
-        m_activeHandle = -1;
+        setEditMode(m_editMode, m_currentShape, -1);
     } else if (m_editMode == Idle) {
         if (dynamic_cast<KoConnectionShape*>(m_currentShape)) {
             repaintDecorations();
@@ -390,12 +392,13 @@ void ConnectionTool::findShapeAtPosition(const QPointF &position)
         // is not at the top of the shape stack at the mouse position
         KoConnectionShape *connectionShape = nearestConnectionShape(shapes, position);
         // use best connection shape or first shape from stack if not found
-        m_currentShape = connectionShape ? connectionShape : shapes.first();
-        int handleId = handleAtPoint(m_currentShape, position);
+        KoShape *currentShape = connectionShape ? connectionShape : shapes.first();
+        int handleId = handleAtPoint(currentShape, position);
+        EditMode mode = m_editMode;
         if(handleId >= 0) {
-            m_activeHandle = handleId;
-            m_editMode = connectionShape ? EditConnection : CreateConnection;
+            mode = connectionShape ? EditConnection : CreateConnection;
         }
+        setEditMode(mode, currentShape, handleId);
     }
 }
 
@@ -468,11 +471,16 @@ KoConnectionShape * ConnectionTool::nearestConnectionShape(QList<KoShape*> shape
     return nearestConnectionShape;
 }
 
+void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handle)
+{
+    m_editMode = mode;
+    m_currentShape = currentShape;
+    m_activeHandle = handle;
+}
+
 void ConnectionTool::resetEditMode()
 {
-    m_editMode = Idle;
-    m_currentShape = 0;
-    m_activeHandle = -1;
+    setEditMode(Idle, 0, -1);
     emit statusTextChanged("");
 }
 

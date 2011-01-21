@@ -86,6 +86,16 @@ private:
     /// Returns nearest connection handle or nearest connection point id of shape
     int handleAtPoint(KoShape *shape, const QPointF &mousePoint);
 
+    enum EditMode {
+        Idle,               ///< we are idle, nothing interesting happens
+        CreateConnection,   ///< we are creating a new connection
+        EditConnection,     ///< we are editing a connection
+        EditConnectionPoint ///< we are editing connection points
+    };
+
+    /// Sets the edit mode, current shape and active handle
+    void setEditMode(EditMode mode, KoShape *currentShape, int handle);
+
     /// Resets the current edit mode
     void resetEditMode();
 
@@ -98,12 +108,6 @@ private:
     /// Updates current shape and edit mode dependent on position
     void findShapeAtPosition(const QPointF &position);
 
-    enum EditMode {
-        Idle,               ///< we are idle, nothing interesting happens
-        CreateConnection,   ///< we are creating a new connection
-        EditConnection,     ///< we are editing a connection
-        EditConnectionPoint ///< we are editing connection points
-    };
 
     EditMode m_editMode; ///< the current edit mode
     KoShape * m_currentShape; ///< the current shape we are working on

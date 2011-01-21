@@ -36,12 +36,11 @@ class KoShapeShadow::Private
 {
 public:
     Private()
-            : offset(0, 0), color(Qt::black), blur(10), spread(0), visible(true), refCount(0) {
+            : offset(0, 0), color(Qt::black), blur(8), visible(true), refCount(0) {
     }
     QPointF offset;
     QColor color;
     qreal blur;
-    qreal spread;
     bool visible;
     QAtomicInt refCount;
 };
@@ -67,9 +66,7 @@ void KoShapeShadow::fillStyle(KoGenStyle &style, KoShapeSavingContext &context)
     style.addProperty("draw:shadow-offset-x", QString("%1pt").arg(d->offset.x()));
     style.addProperty("draw:shadow-offset-y", QString("%1pt").arg(d->offset.y()));
     if (d->blur != 0)
-        style.addProperty("draw:shadow-blur-radius", QString("%1").arg(d->blur));
-    /*if (d->spread != 0)
-        style.addProperty("draw:shadow-spread", QString("%1pt").arg(d->spread));*/
+        style.addProperty("koffice:shadow-blur-radius", QString("%1").arg(d->blur));
 }
 
 void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
@@ -83,16 +80,12 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     QTransform tr = shape->absoluteTransformation(&converter);
     QTransform offsetMatrix = tr * tm * tr.inverted();
 
-    // There is a blur effect for shape shadows, we need to prerender the shadow on an image, then blur it
-    // First step, compute the rectangle used for the image
-    QRectF shadowBound(QPointF(), shape->size());
+    QRectF shadowRect(QPointF(), shape->boundingRect().size()); //shape rectangle
 
     //convert relative radius to absolute radius
-    qreal absBR = 0.01*d->blur*shadowBound.width();
-
-    qreal expand = 3 * absBR;
-    // The blur effect would cause the shadow to be bigger
-    QRectF clipRegion = shadowBound.adjusted(-expand, -expand, expand, expand);
+    qreal absBR = d->blur*0.01*shape->boundingRect().width();
+    qreal expand = 3 * absBR; //blur would cause the shadow to be bigger
+    QRectF clipRegion = shadowRect.adjusted(-expand, -expand, expand, expand);
     QRectF zoomedClipRegion = converter.documentToView(clipRegion);
 
     // determine the offset from the blur expand edge to the shadow bound's origin
@@ -101,7 +94,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
 
     QPointF clippingOffset = zoomedClipRegion.topLeft() + converter.documentToView(d->offset);
 
-    // Initialize the buffer image
+    // Init the buffer image
     QImage sourceGraphic(zoomedClipRegion.size().toSize(), QImage::Format_ARGB32_Premultiplied);
     sourceGraphic.fill(qRgba(0,0,0,0));
 

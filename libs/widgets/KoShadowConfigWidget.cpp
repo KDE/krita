@@ -38,9 +38,9 @@ KoShadowConfigWidget::KoShadowConfigWidget( QWidget * parent )
     : QWidget( parent ), d( new Private() )
 {
     d->widget.setupUi(this);
-    d->widget.shadowOffset->setValue( 0.0 );
+    d->widget.shadowOffset->setValue( 0.02 );
     d->widget.shadowBlur->setValue( 8.0 );
-    d->widget.shadowAngle->setValue( 0.0 );
+    d->widget.shadowAngle->setValue( 315.0 );
     d->widget.shadowAngle->setMinimum( 0.0 );
     d->widget.shadowAngle->setMaximum( 360.0 );
     d->widget.shadowOptions->setEnabled( false );

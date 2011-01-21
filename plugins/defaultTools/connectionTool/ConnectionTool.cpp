@@ -39,6 +39,7 @@
 #include <KoLineBorder.h>
 #include <KoResourceManager.h>
 #include <KoInteractionStrategy.h>
+#include <KAction>
 #include <KLocale>
 #include <KDebug>
 #include <QUndoCommand>
@@ -53,6 +54,46 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_currentStrategy(0)
     , m_oldSnapStrategies(0)
 {
+    m_alignPercent = new KAction(QString("%"), this);
+    m_alignPercent->setCheckable(true);
+    addAction("align-relative", m_alignPercent);
+    m_alignLeft = new KAction(KIcon("align-horizontal-left"), i18n("Align to left edge"), this);
+    m_alignLeft->setCheckable(true);
+    addAction("align-left", m_alignLeft);
+    m_alignCenterH = new KAction(KIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
+    m_alignCenterH->setCheckable(true);
+    addAction("align-centerh", m_alignCenterH);
+    m_alignRight = new KAction(KIcon("align-horizontal-right"), i18n("Align to right edge"), this);
+    m_alignRight->setCheckable(true);
+    addAction("align-right", m_alignRight);
+    m_alignTop = new KAction(KIcon("align-vertical-top"), i18n("Align to top edge"), this);
+    m_alignTop->setCheckable(true);
+    addAction("align-top", m_alignTop);
+    m_alignCenterV = new KAction(KIcon("align-vertical-center"), i18n("Align to vertical center"), this);
+    m_alignCenterV->setCheckable(true);
+    addAction("align-centerv", m_alignCenterV);
+    m_alignBottom = new KAction(KIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
+    m_alignBottom->setCheckable(true);
+    addAction("align-bottom", m_alignBottom);
+
+    QActionGroup *alignHorizonal = new QActionGroup(this);
+    alignHorizonal->setExclusive(true);
+    alignHorizonal->addAction(m_alignLeft);
+    alignHorizonal->addAction(m_alignCenterH);
+    alignHorizonal->addAction(m_alignRight);
+    connect(alignHorizonal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
+
+    QActionGroup *alignVertical = new QActionGroup(this);
+    alignVertical->setExclusive(true);
+    alignVertical->addAction(m_alignTop);
+    alignVertical->addAction(m_alignCenterV);
+    alignVertical->addAction(m_alignBottom);
+    connect(alignVertical, SIGNAL(triggered(QAction*)), this, SLOT(verticalAlignChanged()));
+
+    QActionGroup *alignRelative = new QActionGroup(this);
+    alignRelative->setExclusive(true);
+    alignRelative->addAction(m_alignPercent);
+    connect(alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
 }
 
 ConnectionTool::~ConnectionTool()
@@ -472,10 +513,37 @@ QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
     QMap<QString, QWidget *> map;
 
     ConnectionToolWidget *tw = new ConnectionToolWidget();
-    ConnectionPointWidget *pw = new ConnectionPointWidget();
+    ConnectionPointWidget *pw = new ConnectionPointWidget(this);
 
     map.insert(i18n("Connection"), tw);
     map.insert(i18n("Connection Point"), pw);
 
     return map;
+}
+
+void ConnectionTool::horizontalAlignChanged()
+{
+    if (m_alignPercent->isChecked()) {
+        m_alignPercent->setChecked(false);
+        m_alignCenterV->setChecked(true);
+    }
+}
+
+void ConnectionTool::verticalAlignChanged()
+{
+    if (m_alignPercent->isChecked()) {
+        m_alignPercent->setChecked(false);
+        m_alignCenterH->setChecked(true);
+    }
+}
+
+void ConnectionTool::relativeAlignChanged()
+{
+    m_alignLeft->setChecked(false);
+    m_alignCenterH->setChecked(false);
+    m_alignRight->setChecked(false);
+    m_alignTop->setChecked(false);
+    m_alignCenterV->setChecked(false);
+    m_alignBottom->setChecked(false);
+    m_alignPercent->setChecked(true);
 }

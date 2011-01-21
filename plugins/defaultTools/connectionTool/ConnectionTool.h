@@ -30,6 +30,8 @@
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
 
+class KAction;
+
 class ConnectionTool : public KoPathTool
 {
     Q_OBJECT
@@ -62,6 +64,11 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
+
+private slots:
+    void horizontalAlignChanged();
+    void verticalAlignChanged();
+    void relativeAlignChanged();
 
 private:
     /// reimplemented from superclass
@@ -103,6 +110,14 @@ private:
     int m_activeHandle;  ///< the currently active connection point/connection handle
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
+
+    KAction * m_alignPercent;
+    KAction * m_alignLeft;
+    KAction * m_alignCenterH;
+    KAction * m_alignRight;
+    KAction * m_alignTop;
+    KAction * m_alignCenterV;
+    KAction * m_alignBottom;
 };
 
 #endif // KO_CONNECTION_TOOL_H

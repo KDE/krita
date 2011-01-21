@@ -24,15 +24,14 @@
 #include <ui_ConnectionPointWidget.h>
 #include <QtGui/QWidget>
 
+class ConnectionTool;
+
 class ConnectionPointWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ConnectionPointWidget(QWidget * parent = 0);
+    ConnectionPointWidget(ConnectionTool *tool, QWidget * parent = 0);
 
-private slots:
-    void alignPercentClicked(bool checked);
-    void alignClicked();
 private:
 
     Ui::ConnectionPointWidget widget;

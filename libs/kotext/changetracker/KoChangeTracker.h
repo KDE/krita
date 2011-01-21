@@ -94,7 +94,7 @@ public:
 
     int createDuplicateChangeId(int existingChangeId);
     bool isDuplicateChangeId(int duplicateChangeId);
-    bool originalChangeId(int duplicateChangeId);
+    int originalChangeId(int duplicateChangeId);
 
     void acceptRejectChange(int changeId, bool set);
 

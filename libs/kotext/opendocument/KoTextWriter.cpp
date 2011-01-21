@@ -317,7 +317,17 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
     if (!changeId || (changeStack.top() == changeId)) {
         changeId = 0;
-    }
+    } else if ((changeTracker->isDuplicateChangeId(changeId)) && (changeTracker->originalChangeId(changeId) == changeStack.top())) {
+        QVectorIterator<int> changeStackIterator(changeStack);
+        changeStackIterator.toBack();
+       
+        while ((changeStackIterator.peekPrevious()) && (changeStackIterator.peekPrevious() == changeTracker->originalChangeId(changeId))) {
+            changeStackIterator.previous();
+            changeId = changeTracker->parent(changeId);
+        }
+    } else if ((changeTracker->isDuplicateChangeId(changeId)) && (changeTracker->isParent(changeStack.top(), changeId))) {
+        changeId = 0;
+    } 
 
     returnChangeId = changeId;
     
@@ -334,6 +344,9 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
     while(changeHistory.size()) {
         int changeId = changeHistory.pop();
+        if (changeTracker->isDuplicateChangeId(changeId)) {
+            changeId = changeTracker->originalChangeId(changeId);
+        }
 
         if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
             writer->startElement("delta:removed-content", false);
@@ -581,6 +594,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             QTextFragment firstFragment = (block.begin()).fragment();
             QTextCharFormat firstFragmentFormat = firstFragment.charFormat();
             int firstFragmentChangeId = firstFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+            if (changeTracker->isDuplicateChangeId(firstFragmentChangeId)) {
+                firstFragmentChangeId = changeTracker->originalChangeId(firstFragmentChangeId);
+            }
             if (firstFragmentChangeId != changeId) {
                 QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
                 writer->addCompleteElement(outputXml.toUtf8());
@@ -747,6 +763,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             QTextFragment lastFragment = (--block.end()).fragment();
             QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
             int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+            if (changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
+                lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
+            }
             if (lastFragmentChangeId != changeId) {
                 QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
                 writer->addCompleteElement(outputXml.toUtf8());
@@ -848,6 +867,10 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
     int changeId = 0;
     do {
         int currentChangeId = checkForBlockChange(block);
+        if (changeTracker->isDuplicateChangeId(currentChangeId)) {
+            currentChangeId = changeTracker->originalChangeId(currentChangeId);
+        }
+
         if (!currentChangeId) {
             // Encountered a list-item that is not a change
             // So break out of loop and return 0
@@ -885,7 +908,6 @@ int KoTextWriter::Private::checkForListChange(const QTextBlock &listBlock)
             }
         }
     } while ((textDocument.list(block) == list) && (KoList::level(block) >= topListLevel));
-
     return changeId;
 }
 
@@ -1326,6 +1348,10 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         } else {
             nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
         }
+
+        if (changeTracker->isDuplicateChangeId(nextBlockChangeId)) {
+            nextBlockChangeId = changeTracker->originalChangeId(nextBlockChangeId);
+        }
         
         if (!changeId) {
             splitMergeChangeId = changeId = nextBlockChangeId;
@@ -1348,6 +1374,10 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+        if (changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
+            lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
+        }
+
         if (lastFragmentChangeId != splitMergeChangeId) {
             endBlockNumber = endBlock.blockNumber();
         }

@@ -344,7 +344,7 @@ bool Layout::addLine()
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
                 line = m_block.layout()->createLine();
-                line.setNumColumns(lk.columns, lk.lineWidth);
+                line.setLineWidth(lk.lineWidth);
                 line.setPosition(lk.position);
             }
             if(lineKeeps.isEmpty()) {

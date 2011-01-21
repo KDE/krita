@@ -34,6 +34,7 @@
 class KoResource;
 class KisPattern;
 class KisPaintOpPreset;
+class KisWorkspaceResource;
 
 class KRITAUI_EXPORT KisResourceServerProvider : public QObject
 {
@@ -46,6 +47,7 @@ public:
 
     KoResourceServer<KisPattern>* patternServer();
     KoResourceServer<KisPaintOpPreset>* paintOpPresetServer();
+    KoResourceServer<KisWorkspaceResource>* workspaceServer();
 
 private:
 
@@ -55,16 +57,19 @@ private:
 
     KoResourceServer<KisPattern>* m_patternServer;
     KoResourceServer<KisPaintOpPreset>* m_paintOpPresetServer;
+    KoResourceServer<KisWorkspaceResource>* m_workspaceServer;
 
 private slots:
 
     void patternThreadDone();
     void paintOpPresetThreadDone();
+    void workspaceThreadDone();
 
 private:
 
     QThread * patternThread;
     QThread * paintOpPresetThread;
+    QThread * workspaceThread;
 };
 
 #endif // KIS_RESOURCESERVERPROVIDER_H_

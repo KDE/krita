@@ -30,9 +30,14 @@ class ConnectionPointWidget : public QWidget
 public:
     ConnectionPointWidget(QWidget * parent = 0);
 
+private slots:
+    void alignPercentClicked(bool checked);
+    void alignClicked();
 private:
 
     Ui::ConnectionPointWidget widget;
+    QButtonGroup * m_horzGroup;
+    QButtonGroup * m_vertGroup;
 };
 
 #endif // CONNECTIONPOINTWIDGET_H

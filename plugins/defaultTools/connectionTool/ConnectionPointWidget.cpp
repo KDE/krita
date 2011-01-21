@@ -30,6 +30,56 @@ ConnectionPointWidget::ConnectionPointWidget(QWidget * parent)
     widget.alignTop->setIcon(KIcon("align-vertical-top"));
     widget.alignCenterV->setIcon(KIcon("align-vertical-center"));
     widget.alignBottom->setIcon(KIcon("align-vertical-bottom"));
+
+    widget.alignLeft->setCheckable(true);
+    widget.alignCenterH->setCheckable(true);
+    widget.alignRight->setCheckable(true);
+    widget.alignTop->setCheckable(true);
+    widget.alignCenterV->setCheckable(true);
+    widget.alignBottom->setCheckable(true);
+    widget.alignPercent->setCheckable(true);
+
+    m_horzGroup = new QButtonGroup(this);
+    m_horzGroup->addButton(widget.alignLeft);
+    m_horzGroup->addButton(widget.alignCenterH);
+    m_horzGroup->addButton(widget.alignRight);
+    m_horzGroup->setExclusive(true);
+
+    m_vertGroup = new QButtonGroup(this);
+    m_vertGroup->addButton(widget.alignTop);
+    m_vertGroup->addButton(widget.alignCenterV);
+    m_vertGroup->addButton(widget.alignBottom);
+    m_vertGroup->setExclusive(true);
+
+    connect(widget.alignPercent, SIGNAL(clicked(bool)), this, SLOT(alignPercentClicked(bool)));
+    connect(m_horzGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(alignClicked()));
+    connect(m_vertGroup, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(alignClicked()));
+}
+
+void ConnectionPointWidget::alignPercentClicked(bool checked)
+{
+    m_horzGroup->setExclusive(!checked);
+    m_vertGroup->setExclusive(!checked);
+    if(checked) {
+        if (m_horzGroup->checkedButton())
+            m_horzGroup->checkedButton()->setChecked(false);
+        if (m_vertGroup->checkedButton())
+            m_vertGroup->checkedButton()->setChecked(false);
+    } else {
+        widget.alignCenterH->setChecked(true);
+        widget.alignCenterV->setChecked(true);
+    }
+}
+
+void ConnectionPointWidget::alignClicked()
+{
+    m_horzGroup->setExclusive(true);
+    m_vertGroup->setExclusive(true);
+    widget.alignPercent->setChecked(false);
+    if (!m_horzGroup->checkedButton())
+        widget.alignCenterH->setChecked(true);
+    if (!m_vertGroup->checkedButton())
+        widget.alignCenterV->setChecked(true);
 }
 
 #include <ConnectionPointWidget.moc>

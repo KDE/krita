@@ -152,7 +152,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_workspaceWidget->setFixedSize(32, 32);
     m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
     
-    m_layout = new QHBoxLayout(this);
+    QHBoxLayout* baseLayout = new QHBoxLayout(this);
+    m_paintopWidget = new QWidget(this);
+    baseLayout->addWidget(m_paintopWidget);
+
+    m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -161,7 +165,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(m_eraseModeButton);
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    m_layout->addWidget(m_workspaceWidget);
+
+    baseLayout->addWidget(m_workspaceWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -571,7 +576,7 @@ void KisPaintopBox::setCompositeOpInternal(const QString& id)
 
 void KisPaintopBox::setEnabledInternal(bool value)
 {
-    setEnabled(value);
+    m_paintopWidget->setEnabled(value);
     if(value) {
         m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));

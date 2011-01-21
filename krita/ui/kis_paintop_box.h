@@ -124,6 +124,7 @@ private:
     KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
+    QWidget* m_paintopWidget;
     KisPaintOpSettingsWidget* m_optionWidget;
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;

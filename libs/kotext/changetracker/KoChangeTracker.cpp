@@ -189,6 +189,9 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
 
 KoChangeTrackerElement* KoChangeTracker::elementById(int id)
 {
+    if (isDuplicateChangeId(id)) {
+        id = originalChangeId(id);
+    }
     return d->changes.value(id);
 }
 
@@ -275,7 +278,7 @@ bool KoChangeTracker::isDuplicateChangeId(int duplicateChangeId)
     return isDuplicate;
 }
 
-bool KoChangeTracker::originalChangeId(int duplicateChangeId)
+int KoChangeTracker::originalChangeId(int duplicateChangeId)
 {
     int originalChangeId = 0;
     QMultiHash<int, int>::const_iterator i = d->duplicateIds.constBegin();
@@ -287,7 +290,7 @@ bool KoChangeTracker::originalChangeId(int duplicateChangeId)
         }
         ++i;
     }
-
+    
     return originalChangeId;
 }
 

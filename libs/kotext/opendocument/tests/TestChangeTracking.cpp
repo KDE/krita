@@ -303,6 +303,7 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Multiple Span Changes")  << "ChangeTracking/multiple-changes/insert-delete-span/insert-delete-span-tracked.odt";
     QTest::newRow("Paragraph Overlapping")  << "ChangeTracking/overlapping/text-delete-within-added-p/text-delete-within-added-p-tracked.odt";
     QTest::newRow("List Overlapping")  << "ChangeTracking/overlapping/insert-list-item-delete-list/insert-list-item-delete-list-tracked.odt";
+    QTest::newRow("Paragraph Add Then Merge")  << "ChangeTracking/multiple-changes/para-add-then-merge/para-add-merge-tracked.odt";
      
 }
 

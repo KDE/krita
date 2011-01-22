@@ -45,13 +45,17 @@ void MoveConnectionPointStrategy::paint(QPainter& painter, const KoViewConverter
 void MoveConnectionPointStrategy::handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
 {
     m_newPosition = m_shape->documentToShape(mouseLocation);
-    m_shape->setConnectionPointPosition(m_connectionPointId, m_newPosition);
+    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
+    cp.position = m_newPosition;
+    m_shape->setConnectionPoint(m_connectionPointId, cp);
 }
 
 void MoveConnectionPointStrategy::cancelInteraction()
 {
     KoInteractionStrategy::cancelInteraction();
-    m_shape->setConnectionPointPosition(m_connectionPointId, m_oldPosition);
+    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
+    cp.position = m_oldPosition;
+    m_shape->setConnectionPoint(m_connectionPointId, cp);
 }
 
 void MoveConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)

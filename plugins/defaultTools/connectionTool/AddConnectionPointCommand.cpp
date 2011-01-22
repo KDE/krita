@@ -36,7 +36,7 @@ void AddConnectionPointCommand::redo()
     if(m_connectionPointId < 0) {
         m_connectionPointId = m_shape->addConnectionPoint(m_connectionPoint);
     } else {
-        m_shape->insertConnectionPoint(m_connectionPoint, m_connectionPointId);
+        m_shape->setConnectionPoint(m_connectionPointId, m_connectionPoint);
     }
     updateRoi();
 

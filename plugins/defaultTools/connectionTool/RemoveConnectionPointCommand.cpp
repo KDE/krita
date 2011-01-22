@@ -46,7 +46,7 @@ void RemoveConnectionPointCommand::undo()
 {
     QUndoCommand::undo();
 
-    m_shape->insertConnectionPoint(m_connectionPoint, m_connectionPointId);
+    m_shape->setConnectionPoint(m_connectionPointId, m_connectionPoint);
     updateRoi();
 }
 

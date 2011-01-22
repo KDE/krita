@@ -752,11 +752,13 @@ int KoShape::addConnectionPoint(const KoConnectionPoint &point)
     return nextConnectionPointId;
 }
 
-bool KoShape::insertConnectionPoint(const KoConnectionPoint &point, int connectionPointId)
+bool KoShape::setConnectionPoint(int connectionPointId, const KoConnectionPoint &point)
 {
     Q_D(KoShape);
-    if (connectionPointId < 0 || d->connectors.contains(connectionPointId))
+    if (connectionPointId < 0)
         return false;
+
+    const bool insertPoint = !hasConnectionPoint(connectionPointId);
 
     switch(connectionPointId) {
         case KoConnectionPoint::TopConnectionPoint:
@@ -766,6 +768,8 @@ bool KoShape::insertConnectionPoint(const KoConnectionPoint &point, int connecti
         {
             KoConnectionPoint::PointId id = static_cast<KoConnectionPoint::PointId>(connectionPointId);
             KoConnectionPoint p = KoConnectionPoint::defaultConnectionPoint(id);
+            p.escapeDirection = point.escapeDirection;
+            p.align = point.align;
             d->setConnectionPoint(connectionPointId, p);
             break;
         }
@@ -779,6 +783,8 @@ bool KoShape::insertConnectionPoint(const KoConnectionPoint &point, int connecti
         }
     }
 
+    if(!insertPoint)
+        d->shapeChanged(ConnectionPointChanged);
 
     return true;
 }
@@ -796,25 +802,6 @@ KoConnectionPoint KoShape::connectionPoint(int connectionPointId) const
     // convert glue point to shape coordinates
     p.position = KoFlake::toAbsolute(p.position, size());
     return p;
-}
-
-bool KoShape::setConnectionPointPosition(int connectionPointId, const QPointF &newPosition)
-{
-    // do not allow to change position of default connection points
-    if (connectionPointId < KoConnectionPoint::FirstCustomConnectionPoint)
-        return false;
-
-    Q_D(KoShape);
-    if (!d->connectors.contains(connectionPointId))
-        return false;
-
-    KoConnectionPoint p = connectionPoint(connectionPointId);
-    // convert glue point from shape coordinates to factors of size
-    p.position = KoFlake::toRelative(newPosition, size());
-    d->setConnectionPoint(connectionPointId, p);
-    d->shapeChanged(ConnectionPointChanged);
-
-    return true;
 }
 
 KoConnectionPoints KoShape::connectionPoints() const

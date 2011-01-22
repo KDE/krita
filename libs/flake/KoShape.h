@@ -324,33 +324,25 @@ public:
     int addConnectionPoint(const KoConnectionPoint &point);
 
     /**
-     * Tries to insert connection point with specified id.
+     * Sets data of connection point with specified id.
      *
      * The position of the connector is restricted to the bounding rectangle of the shape.
+     * When setting a default connection point, the new position is ignored, as these
+     * are fixed at their default position.
+     * The function will insert a new connection point if the specified id was not used
+     * before.
      * 
-     * @param point the position of the connector in shape coordinates
-     * @param connectionPointId the id of the connection point to insert
-     * @return true if inserting connection point was successful;
-     *         false if connection point did already exists or id is invalid
+     * @param connectionPointId the id of the connection point to set
+     * @param point the connection point data
+     * @return false if specified connection point id is invalid, else true
      */
-    bool insertConnectionPoint(const KoConnectionPoint &point, int connectionPointId);
+    bool setConnectionPoint(int connectionPointId, const KoConnectionPoint &point);
 
     /// Checks if a connection point with the specified id exists
     bool hasConnectionPoint(int connectionPointId) const;
 
     /// Returns connection point with specified connection point id
     KoConnectionPoint connectionPoint(int connectionPointId) const;
-
-    /**
-     * Sets new position for specified custom connection point
-     *
-     * The position of the connector is restricted to the bounding rectangle of the shape.
-     *
-     * @param connectionPointId the id of the custom connection point to change
-     * @param newPosition the new position of the custom connection point in shape coordinates
-     * @return true if position could be changed, else false
-     */
-    bool setConnectionPointPosition(int connectionPointId, const QPointF &newPosition);
 
     /**
      * Return a list of the connection points that have been added to this shape.

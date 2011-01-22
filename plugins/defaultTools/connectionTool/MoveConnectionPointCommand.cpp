@@ -35,7 +35,9 @@ MoveConnectionPointCommand::~MoveConnectionPointCommand()
 void MoveConnectionPointCommand::redo()
 {
     updateRoi(m_oldPosition);
-    m_shape->setConnectionPointPosition(m_connectionPointId, m_newPosition);
+    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
+    cp.position = m_newPosition;
+    m_shape->setConnectionPoint(m_connectionPointId, cp);
     updateRoi(m_newPosition);
 
     QUndoCommand::redo();
@@ -46,7 +48,9 @@ void MoveConnectionPointCommand::undo()
     QUndoCommand::undo();
 
     updateRoi(m_oldPosition);
-    m_shape->setConnectionPointPosition(m_connectionPointId, m_oldPosition);
+    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
+    cp.position = m_oldPosition;
+    m_shape->setConnectionPoint(m_connectionPointId, cp);
     updateRoi(m_newPosition);
 }
 

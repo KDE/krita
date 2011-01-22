@@ -370,7 +370,9 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             modifiers += QString::number(modifier) + ' ';
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
 
-        context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        if (m_textArea.size() >= 4) {
+            context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        }
 
         QString path;
         foreach (EnhancedPathCommand * c, m_commands)
@@ -410,6 +412,9 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         }
 
         m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
+        if (m_textArea.size() >= 4) {
+            setResizeBehavior(TextFollowsPreferredTextRect);
+        }
 
         KoXmlElement grandChild;
         forEachElement(grandChild, enhancedGeometry) {
@@ -538,14 +543,13 @@ void EnhancedPathShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void EnhancedPathShape::updateTextArea()
 {
-    setResizeBehavior(TextFollowsPreferredTextRect);
-    QRectF r = m_viewBox;
     if (m_textArea.size() >= 4) {
+        QRectF r = m_viewBox;
         r.setLeft(evaluateConstantOrReference(m_textArea[0]));
         r.setTop(evaluateConstantOrReference(m_textArea[1]));
         r.setRight(evaluateConstantOrReference(m_textArea[2]));
         r.setBottom(evaluateConstantOrReference(m_textArea[3]));
+        r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
+        setPreferredTextRect(r);
     }
-    r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
-    setPreferredTextRect(r);
 }

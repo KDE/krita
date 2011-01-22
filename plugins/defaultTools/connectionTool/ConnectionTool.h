@@ -113,6 +113,8 @@ private:
     /// Updates current shape and edit mode dependent on position
     void findShapeAtPosition(const QPointF &position);
 
+    /// Updates actions
+    void updateActions();
 
     EditMode m_editMode; ///< the current edit mode
     KoShape * m_currentShape; ///< the current shape we are working on

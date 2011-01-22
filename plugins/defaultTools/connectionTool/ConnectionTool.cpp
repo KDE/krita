@@ -126,7 +126,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_escapeDirections->addAction(m_escapeRight);
     m_escapeDirections->addAction(m_escapeUp);
     m_escapeDirections->addAction(m_escapeDown);
-    connect(m_escapeDirections, SIGNAL(triggered(QAction*)), this, SLOT(escapeDirectionsChanged()));
+    connect(m_escapeDirections, SIGNAL(triggered(QAction*)), this, SLOT(escapeDirectionChanged()));
 
     connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignHorizontal, SLOT(setEnabled(bool)));
     connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignVertical, SLOT(setEnabled(bool)));
@@ -514,7 +514,11 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
     m_editMode = mode;
     m_currentShape = currentShape;
     m_activeHandle = handle;
+    updateActions();
+}
 
+void ConnectionTool::updateActions()
+{
     const bool connectionPointSelected = m_editMode == EditConnectionPoint && m_activeHandle >= 0;
     if (connectionPointSelected) {
         KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
@@ -675,5 +679,25 @@ void ConnectionTool::relativeAlignChanged()
 
 void ConnectionTool::escapeDirectionChanged()
 {
-    // TODO: change connection point escape direction here
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+        QAction * checkedAction = m_escapeDirections->checkedAction();
+        if (checkedAction == m_escapeAll) {
+            cp.escapeDirection = KoConnectionPoint::AllDirections;
+        } else if (checkedAction == m_escapeHorizontal) {
+            cp.escapeDirection = KoConnectionPoint::HorizontalDirections;
+        } else if (checkedAction == m_escapeVertical) {
+            cp.escapeDirection = KoConnectionPoint::VerticalDirections;
+        } else if (checkedAction == m_escapeLeft) {
+            cp.escapeDirection = KoConnectionPoint::LeftDirection;
+        } else if (checkedAction == m_escapeRight) {
+            cp.escapeDirection = KoConnectionPoint::RightDirection;
+        } else if (checkedAction == m_escapeUp) {
+            cp.escapeDirection = KoConnectionPoint::UpDirection;
+        } else if (checkedAction == m_escapeDown) {
+            cp.escapeDirection = KoConnectionPoint::DownDirection;
+        }
+        // TODO: use undo command
+        m_currentShape->setConnectionPoint(m_activeHandle, cp);
+    }
 }

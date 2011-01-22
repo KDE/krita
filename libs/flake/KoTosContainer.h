@@ -115,6 +115,8 @@ protected:
      */
     KoShape *textShape() const;
 
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+
 private:
     Q_DECLARE_PRIVATE(KoTosContainer)
 };

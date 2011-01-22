@@ -182,7 +182,9 @@ void KoTosContainer::setPreferredTextRect(const QRectF &rect)
     Q_D(KoTosContainer);
     d->preferredTextRect = rect;
     KoShape *textShape = this->textShape();
+    kDebug(30006) << rect << textShape << d->resizeBehavior;
     if (d->resizeBehavior == TextFollowsPreferredTextRect && textShape) {
+        kDebug(30006) << rect;
         textShape->setPosition(rect.topLeft());
         textShape->setSize(rect.size());
     }
@@ -237,3 +239,19 @@ KoShape *KoTosContainer::textShape() const
     return subShapes.isEmpty() ? 0 : subShapes.at(0);
 }
 
+void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
+{
+    Q_D(KoTosContainer);
+    if (d->model == 0) {
+        return;
+    }
+
+    if (type == SizeChanged || type == ContentChanged) {
+        d->model->containerChanged(this, type);
+    }
+    // TODO is this needed?
+#if 0
+    foreach(KoShape *shape, d->model->shapes())
+        shape->notifyChanged();
+#endif
+}

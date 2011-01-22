@@ -22,6 +22,8 @@
 #include "KoTextShapeDataBase.h"
 #include "KoTosContainer.h"
 
+#include <KDebug>
+
 KoTosContainerModel::KoTosContainerModel()
 : m_textShape(0)
 {
@@ -95,12 +97,18 @@ QList<KoShape*> KoTosContainerModel::shapes() const
 
 void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
-    if (type != KoShape::SizeChanged) {
+    kDebug(30006) << "change type:" << type << KoShape::SizeChanged << KoShape::ContentChanged;
+    if (type != KoShape::SizeChanged && type != KoShape::ContentChanged) {
         return;
     }
     // TODO check if lock is needed lock = true;
     KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(container);
+    kDebug(30006) << "tosContainer" << tosContainer;
+    if (tosContainer) {
+        kDebug(30006) << "behaviour" << tosContainer->resizeBehavior() << KoTosContainer::TextFollowsPreferredTextRect;
+    }
     if ( m_textShape && tosContainer && tosContainer->resizeBehavior() != KoTosContainer::TextFollowsPreferredTextRect ) {
+        kDebug(30006) << "change type setSize";
         m_textShape->setSize(tosContainer->size());
     }
     //lock = false;

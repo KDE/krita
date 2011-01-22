@@ -32,7 +32,6 @@
 #include "KoShapeBackground.h"
 #include "KoShapeContainer.h"
 #include "KoFilterEffectStack.h"
-#include "KoTextOnShapeContainer.h"
 
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -602,7 +601,7 @@ QPointF KoPathShape::normalize()
 
     // keep the top left point of the object
     applyTransformation(matrix.inverted());
-
+    d->shapeChanged(ContentChanged);
     return tl;
 }
 

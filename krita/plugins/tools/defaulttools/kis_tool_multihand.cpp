@@ -21,6 +21,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#define MAXIMUM_SMOOTHNESS 1000
+#define MAXIMUM_MAGNETISM 1000
+
+
 #include "kis_tool_multihand.h"
 #include "kis_tool_multihand_p.h"
 
@@ -58,9 +62,12 @@
 #include <kis_painting_assistants_manager.h>
 #include <kis_3d_object_model.h>
 #include <kis_transaction.h>
+#include <kis_slider_spin_box.h>
+#include <QComboBox>
 
 #define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
+static const int MAXIMUM_BRUSHES = 50;
 
 KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
@@ -69,26 +76,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
     m_explicitShowOutline = false;
 
     m_brushesCount = 6; // UI value
-    m_translatedBrush = QPointF(100, 0);
-
-    QPointF axisPoint = QPointF(currentImage()->width() * 0.5,currentImage()->height() * 0.5);
-    qreal angle = 0.0;
-    qreal angleAddition = (2 * M_PI) / m_brushesCount;
-
-    QTransform m;
-    for (int i = 0; i < m_brushesCount ; i++){
-        m.reset();
-        m.translate(axisPoint.x(),axisPoint.y());
-        m.rotateRadians(angle);
-        m.translate(-axisPoint.x(), -axisPoint.y());
-        m_brushTransforms.append(m);
-        angle += angleAddition;
-    }
-
-    for (int i = 0; i < m_brushesCount; i++){
-        qDebug() << m_brushTransforms.at(i);
-    }
-
+    m_currentTransformMode = SYMETRY;
 
     m_transaction = 0;
     //m_painters;
@@ -111,15 +99,15 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
     m_prevyTilt = 0.0;
 #endif
 
-//     m_increaseBrushSize = new KAction(i18n("Increase Brush Size"), this);
-//     m_increaseBrushSize->setShortcut(Qt::Key_Period);
-//     connect(m_increaseBrushSize, SIGNAL(activated()), SLOT(increaseBrushSize()));
-//     addAction("increase_brush_size", m_increaseBrushSize);
-//
-//     m_decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), this);
-//     m_decreaseBrushSize->setShortcut(Qt::Key_Comma);
-//     connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
-//     addAction("decrease_brush_size", m_decreaseBrushSize);
+    m_increaseBrushSize = new KAction(i18n("Increase Brush Size"), this);
+    m_increaseBrushSize->setShortcut(Qt::Key_Period);
+    connect(m_increaseBrushSize, SIGNAL(activated()), SLOT(increaseBrushSize()));
+    addAction("increase_brush_size", m_increaseBrushSize);
+
+    m_decreaseBrushSize = new KAction(i18n("Decrease Brush Size"), this);
+    m_decreaseBrushSize->setShortcut(Qt::Key_Comma);
+    connect(m_decreaseBrushSize, SIGNAL(activated()), SLOT(decreaseBrushSize()));
+    addAction("decrease_brush_size", m_decreaseBrushSize);
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
@@ -127,6 +115,57 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
 
 KisToolMultihand::~KisToolMultihand()
 {
+}
+
+void KisToolMultihand::initTransformations()
+{
+    QPointF axisPoint = KisToolPaint::m_axisCenter;
+    m_brushTransforms.resize(m_brushesCount);
+    QTransform m;
+
+    if (m_currentTransformMode == SYMETRY) {
+        qreal angle = 0.0;
+        qreal angleAddition = (2 * M_PI) / m_brushesCount;
+
+        for (int i = 0; i < m_brushesCount ; i++){
+            m.reset();
+            m.translate(axisPoint.x(), axisPoint.y());
+
+            m.rotateRadians(angle);
+
+            m.translate(-axisPoint.x(), -axisPoint.y());
+            m_brushTransforms[i] = m;
+
+            angle += angleAddition;
+        }
+    } else if (m_currentTransformMode == MIRROR) {
+        if (m_brushCounter->value() != 2) {
+            m_brushCounter->setValue(2);
+            m_brushCounter->update();
+        }
+        for (int i = 0; i < m_brushesCount ; i++){
+            m.reset();
+            m.translate(axisPoint.x(),axisPoint.y());
+
+            m.scale(-1,1);
+
+            m.translate(-axisPoint.x(), -axisPoint.y());
+            m_brushTransforms[i] = m;
+        }
+    } else // if (m_currentTransformMode == TRANSLATE)
+    {
+        int m_areaRadius = 100;
+        for (int i = 0; i < m_brushesCount ; i++){
+            m.reset();
+            m.translate(axisPoint.x(),axisPoint.y());
+
+            m.translate(drand48() * 2 * m_areaRadius - m_areaRadius,
+                        drand48() * 2 * m_areaRadius - m_areaRadius);
+
+            m.translate(-axisPoint.x(), -axisPoint.y());
+            m_brushTransforms[i] = m;
+        }
+    }
 }
 
 void KisToolMultihand::deactivate()
@@ -197,6 +236,8 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
         setMode(KisTool::PAINT_MODE);
 
         initPaint(e);
+        initTransformations();
+
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
@@ -281,7 +322,6 @@ void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
 
         m_previousTangent = newTangent;
     } else {
-        qDebug() << "paintLine";
         paintLine(m_previousPaintInformation, info,m_painters[0]);
         for (int i = 1; i < m_brushesCount; i++){
             KisPaintInformation pi1 = m_previousPaintInformation;
@@ -708,6 +748,80 @@ void KisToolMultihand::hideOutline()
     m_explicitShowOutline = false;
     updateOutlineRect();
 }
+
+QWidget * KisToolMultihand::createOptionWidget()
+{
+
+    QWidget * optionWidget = KisToolPaint::createOptionWidget();
+    optionWidget->setObjectName(toolId() + "option widget");
+
+    m_chkSmooth = new QCheckBox(i18nc("smooth out the curves while drawing", "Smoothness:"), optionWidget);
+    m_chkSmooth->setObjectName("chkSmooth");
+    m_chkSmooth->setChecked(m_smooth);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), this, SLOT(setSmooth(bool)));
+
+    m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
+    m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
+    m_sliderSmoothness->setEnabled(true);
+    connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
+    connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
+    m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);
+
+    addOptionWidgetOption(m_sliderSmoothness, m_chkSmooth);
+
+    // Drawing assistant configuration
+    m_chkAssistant = new QCheckBox(i18n("Assistant:"), optionWidget);
+    m_chkAssistant->setToolTip(i18n("You need to add Ruler Assistants before this tool will work."));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), this, SLOT(setAssistant(bool)));
+    m_sliderMagnetism = new KisSliderSpinBox(optionWidget);
+    m_sliderMagnetism->setToolTip(i18n("Assistant Magnetism"));
+    m_sliderMagnetism->setRange(0, MAXIMUM_SMOOTHNESS);
+    m_sliderMagnetism->setEnabled(false);
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setEnabled(bool)));
+    m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
+    connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
+
+    addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
+
+    m_transformModes = new QComboBox(optionWidget);
+    m_transformModes->addItem(i18n("Symetry"),int(SYMETRY));
+    m_transformModes->addItem(i18n("Mirror"),int(MIRROR));
+    m_transformModes->addItem(i18n("Translate"),int(TRANSLATE));
+    connect(m_transformModes,SIGNAL(currentIndexChanged(int)),SLOT(slotSetCurrentTransformMode(int)));
+
+    m_brushCounter = new KisSliderSpinBox(optionWidget);
+    m_brushCounter->setToolTip( i18n("Brush count") );
+    m_brushCounter->setRange( 0, MAXIMUM_BRUSHES );
+    m_brushCounter->setValue( m_brushesCount );
+    m_brushCounter->setEnabled( true );
+    connect(m_brushCounter, SIGNAL(valueChanged(int)),this, SLOT(slotSetBrushCount(int)));
+
+    addOptionWidgetOption(m_transformModes);
+    addOptionWidgetOption(m_brushCounter);
+
+    return optionWidget;
+}
+
+void KisToolMultihand::slotSetBrushCount(int count)
+{
+    m_brushesCount = count;
+}
+
+void KisToolMultihand::slotSetCurrentTransformMode(int qcomboboxIndex)
+{
+    m_currentTransformMode = enumTransforModes( m_transformModes->itemData(qcomboboxIndex).toInt() );
+}
+
+void KisToolMultihand::slotSetSmoothness(int smoothness)
+{
+    m_smoothness = smoothness / (double)MAXIMUM_SMOOTHNESS;
+}
+
+void KisToolMultihand::slotSetMagnetism(int magnetism)
+{
+    m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
+}
+
 
 #include "kis_tool_multihand.moc"
 

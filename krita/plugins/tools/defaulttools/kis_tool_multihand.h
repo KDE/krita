@@ -38,6 +38,7 @@ class KoCanvasBase;
 class KisPainter;
 
 class QThreadPool;
+class QComboBox;
 class FreehandPaintJob;
 class KisRecordedPathPaintAction;
 class FreehandPaintJobExecutor;
@@ -45,6 +46,7 @@ class FreehandPaintJobExecutor;
 #include "kis_paintop_settings.h"
 #include <kis_cursor.h>
 #include <KoToolFactoryBase.h>
+
 
 class KisToolMultihand : public KisToolPaint
 {
@@ -95,6 +97,7 @@ protected slots:
 
     void setSmooth(bool smooth);
     void setAssistant(bool assistant);
+    virtual QWidget * createOptionWidget();
 
 private:
     /**
@@ -108,10 +111,26 @@ private:
     QPainterPath getOutlinePath(const QPointF &documentPos,
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
+    void initTransformations();
+
+    QGridLayout *m_optionLayout;
+    QCheckBox *m_chkSmooth;
+    QCheckBox *m_chkAssistant;
+    KisSliderSpinBox *m_sliderMagnetism;
+    KisSliderSpinBox *m_sliderSmoothness;
+    QComboBox * m_transformModes;
+    KisSliderSpinBox *m_brushCounter;
+
 private slots:
     void increaseBrushSize();
     void decreaseBrushSize();
     void hideOutline();
+
+    void slotSetSmoothness(int smoothness);
+    void slotSetMagnetism(int magnetism);
+    void slotSetBrushCount(int count);
+    void slotSetCurrentTransformMode(int qcomboboxIndex);
+
 protected:
 
     KisPaintInformation m_previousPaintInformation;
@@ -146,6 +165,9 @@ private:
     QPointF m_translatedBrush;
     KisTransaction * m_transaction;
 
+    enum enumTransforModes { SYMETRY, MIRROR, TRANSLATE, CUSTOM };
+
+    enumTransforModes m_currentTransformMode;
 
 
     QPointF m_outlineDocPoint;

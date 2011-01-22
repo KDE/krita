@@ -23,6 +23,7 @@
 #include "ConnectionTool.h"
 #include "AddConnectionPointCommand.h"
 #include "RemoveConnectionPointCommand.h"
+#include "ChangeConnectionPointCommand.h"
 #include "MoveConnectionPointStrategy.h"
 #include "ConnectionToolWidget.h"
 #include "ConnectionPointWidget.h"
@@ -681,53 +682,55 @@ void ConnectionTool::relativeAlignChanged()
 void ConnectionTool::updateConnectionPoint()
 {
     if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
-        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
-        if (m_alignPercent->isChecked())
-            cp.align = KoConnectionPoint::AlignNone;
-        else if (m_alignLeft->isChecked() && m_alignTop->isChecked())
-            cp.align = KoConnectionPoint::AlignTopLeft;
-        else if(m_alignCenterH->isChecked() && m_alignTop->isChecked())
-            cp.align = KoConnectionPoint::AlignTop;
-        else if (m_alignRight->isChecked() && m_alignTop->isChecked())
-            cp.align = KoConnectionPoint::AlignTopRight;
-        else if (m_alignLeft->isChecked() && m_alignCenterV->isChecked())
-            cp.align = KoConnectionPoint::AlignLeft;
-        else if (m_alignCenterH->isChecked() && m_alignCenterV->isChecked())
-            cp.align = KoConnectionPoint::AlignCenter;
-        else if (m_alignRight->isChecked() && m_alignCenterV->isChecked())
-            cp.align = KoConnectionPoint::AlignRight;
-        else if (m_alignLeft->isChecked() && m_alignBottom->isChecked())
-            cp.align = KoConnectionPoint::AlignBottomLeft;
-        else if (m_alignCenterH->isChecked() && m_alignBottom->isChecked())
-            cp.align = KoConnectionPoint::AlignBottom;
-        else if (m_alignRight->isChecked() && m_alignBottom->isChecked())
-            cp.align = KoConnectionPoint::AlignBottomRight;
-        // TODO: use undo command
-        m_currentShape->setConnectionPoint(m_activeHandle, cp);
+        KoConnectionPoint oldPoint = m_currentShape->connectionPoint(m_activeHandle);
+        KoConnectionPoint newPoint = oldPoint;
+        if (m_alignPercent->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignNone;
+        } else if (m_alignLeft->isChecked() && m_alignTop->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignTopLeft;
+        } else if(m_alignCenterH->isChecked() && m_alignTop->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignTop;
+        } else if (m_alignRight->isChecked() && m_alignTop->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignTopRight;
+        } else if (m_alignLeft->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignLeft;
+        } else if (m_alignCenterH->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignCenter;
+        } else if (m_alignRight->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignRight;
+        } else if (m_alignLeft->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignBottomLeft;
+        } else if (m_alignCenterH->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignBottom;
+        } else if (m_alignRight->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.align = KoConnectionPoint::AlignBottomRight;
+        }
+
+        canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));
     }
 }
 
 void ConnectionTool::escapeDirectionChanged()
 {
     if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
-        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+        KoConnectionPoint oldPoint = m_currentShape->connectionPoint(m_activeHandle);
+        KoConnectionPoint newPoint = oldPoint;
         QAction * checkedAction = m_escapeDirections->checkedAction();
         if (checkedAction == m_escapeAll) {
-            cp.escapeDirection = KoConnectionPoint::AllDirections;
+            newPoint.escapeDirection = KoConnectionPoint::AllDirections;
         } else if (checkedAction == m_escapeHorizontal) {
-            cp.escapeDirection = KoConnectionPoint::HorizontalDirections;
+            newPoint.escapeDirection = KoConnectionPoint::HorizontalDirections;
         } else if (checkedAction == m_escapeVertical) {
-            cp.escapeDirection = KoConnectionPoint::VerticalDirections;
+            newPoint.escapeDirection = KoConnectionPoint::VerticalDirections;
         } else if (checkedAction == m_escapeLeft) {
-            cp.escapeDirection = KoConnectionPoint::LeftDirection;
+            newPoint.escapeDirection = KoConnectionPoint::LeftDirection;
         } else if (checkedAction == m_escapeRight) {
-            cp.escapeDirection = KoConnectionPoint::RightDirection;
+            newPoint.escapeDirection = KoConnectionPoint::RightDirection;
         } else if (checkedAction == m_escapeUp) {
-            cp.escapeDirection = KoConnectionPoint::UpDirection;
+            newPoint.escapeDirection = KoConnectionPoint::UpDirection;
         } else if (checkedAction == m_escapeDown) {
-            cp.escapeDirection = KoConnectionPoint::DownDirection;
+            newPoint.escapeDirection = KoConnectionPoint::DownDirection;
         }
-        // TODO: use undo command
-        m_currentShape->setConnectionPoint(m_activeHandle, cp);
+        canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));
     }
 }

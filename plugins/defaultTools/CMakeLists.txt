@@ -31,7 +31,7 @@ SET ( defaulttools_SRCS
     connectionTool/ConnectionToolWidget.cpp
     connectionTool/AddConnectionPointCommand.cpp
     connectionTool/RemoveConnectionPointCommand.cpp
-    connectionTool/MoveConnectionPointCommand.cpp
+    connectionTool/ChangeConnectionPointCommand.cpp
     connectionTool/MoveConnectionPointStrategy.cpp
     connectionTool/ConnectionPointWidget.cpp
 )

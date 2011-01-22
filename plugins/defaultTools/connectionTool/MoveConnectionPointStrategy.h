@@ -22,6 +22,7 @@
 #define MOVECONNECTIONPOINTSTRATEGY_H
 
 #include <KoInteractionStrategy.h>
+#include <KoConnectionPoint.h>
 #include <QtCore/QPointF>
 
 class KoShape;
@@ -52,8 +53,8 @@ public:
 private:
     KoShape *m_shape;
     int m_connectionPointId;
-    QPointF m_oldPosition;
-    QPointF m_newPosition;
+    KoConnectionPoint m_oldPoint;
+    KoConnectionPoint m_newPoint;
 };
 
 #endif // MOVECONNECTIONPOINTSTRATEGY_H

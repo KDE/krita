@@ -18,43 +18,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "MoveConnectionPointCommand.h"
+#include "ChangeConnectionPointCommand.h"
 #include <KoShape.h>
 
-MoveConnectionPointCommand::MoveConnectionPointCommand(KoShape* shape, int connectionPointId, const QPointF &oldPosition, const QPointF &newPosition, QUndoCommand* parent)
+ChangeConnectionPointCommand::ChangeConnectionPointCommand(KoShape* shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, QUndoCommand* parent)
 : QUndoCommand(parent), m_shape(shape), m_connectionPointId(connectionPointId)
-, m_oldPosition(oldPosition), m_newPosition(newPosition)
+, m_oldPoint(oldPoint), m_newPoint(newPoint)
 {
     Q_ASSERT(m_shape);
 }
 
-MoveConnectionPointCommand::~MoveConnectionPointCommand()
+ChangeConnectionPointCommand::~ChangeConnectionPointCommand()
 {
 }
 
-void MoveConnectionPointCommand::redo()
+void ChangeConnectionPointCommand::redo()
 {
-    updateRoi(m_oldPosition);
-    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
-    cp.position = m_newPosition;
-    m_shape->setConnectionPoint(m_connectionPointId, cp);
-    updateRoi(m_newPosition);
+    updateRoi(m_oldPoint.position);
+    m_shape->setConnectionPoint(m_connectionPointId, m_newPoint);
+    updateRoi(m_newPoint.position);
 
     QUndoCommand::redo();
 }
 
-void MoveConnectionPointCommand::undo()
+void ChangeConnectionPointCommand::undo()
 {
     QUndoCommand::undo();
 
-    updateRoi(m_oldPosition);
-    KoConnectionPoint cp = m_shape->connectionPoint(m_connectionPointId);
-    cp.position = m_oldPosition;
-    m_shape->setConnectionPoint(m_connectionPointId, cp);
-    updateRoi(m_newPosition);
+    updateRoi(m_newPoint.position);
+    m_shape->setConnectionPoint(m_connectionPointId, m_oldPoint);
+    updateRoi(m_oldPoint.position);
 }
 
-void MoveConnectionPointCommand::updateRoi(const QPointF &position)
+void ChangeConnectionPointCommand::updateRoi(const QPointF &position)
 {
     // TODO: is there a way we can get at the correct update size?
     QRectF roi(0, 0, 10, 10);

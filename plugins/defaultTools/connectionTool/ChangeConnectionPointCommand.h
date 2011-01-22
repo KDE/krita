@@ -18,20 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef MOVECONNECTIONPOINTCOMMAND_H
-#define MOVECONNECTIONPOINTCOMMAND_H
+#ifndef CHANGECONNECTIONPOINTCOMMAND_H
+#define CHANGECONNECTIONPOINTCOMMAND_H
 
+#include <KoConnectionPoint.h>
 #include <QtGui/QUndoCommand>
 #include <QtCore/QPointF>
 
 class KoShape;
 
-class MoveConnectionPointCommand : public QUndoCommand
+class ChangeConnectionPointCommand : public QUndoCommand
 {
 public:
-    /// Creates new comand to move connection point of shape
-    MoveConnectionPointCommand(KoShape *shape, int connectionPointId, const QPointF &oldPosition, const QPointF &newPosition, QUndoCommand *parent = 0);
-    virtual ~MoveConnectionPointCommand();
+    /// Creates new comand to change connection point of shape
+    ChangeConnectionPointCommand(KoShape *shape, int connectionPointId, const KoConnectionPoint &oldPoint, const KoConnectionPoint &newPoint, QUndoCommand *parent = 0);
+    virtual ~ChangeConnectionPointCommand();
     /// reimplemented from QUndoCommand
     virtual void redo();
     /// reimplemented from QUndoCommand
@@ -42,8 +43,8 @@ private:
 
     KoShape * m_shape;
     int m_connectionPointId;
-    QPointF m_oldPosition;
-    QPointF m_newPosition;
+    KoConnectionPoint m_oldPoint;
+    KoConnectionPoint m_newPoint;
 };
 
-#endif // MOVECONNECTIONPOINTCOMMAND_H
+#endif // CHANGECONNECTIONPOINTCOMMAND_H

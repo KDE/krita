@@ -31,6 +31,7 @@
 #include <KoSnapGuide.h>
 
 class KAction;
+class QActionGroup;
 
 class ConnectionTool : public KoPathTool
 {
@@ -72,6 +73,7 @@ private slots:
     void horizontalAlignChanged();
     void verticalAlignChanged();
     void relativeAlignChanged();
+    void escapeDirectionChanged();
 
 private:
     /// reimplemented from superclass
@@ -118,6 +120,11 @@ private:
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 
+    QActionGroup *m_alignVertical;
+    QActionGroup *m_alignHorizontal;
+    QActionGroup *m_alignRelative;
+    QActionGroup *m_escapeDirections;
+
     KAction * m_alignPercent;
     KAction * m_alignLeft;
     KAction * m_alignCenterH;
@@ -125,6 +132,14 @@ private:
     KAction * m_alignTop;
     KAction * m_alignCenterV;
     KAction * m_alignBottom;
+
+    KAction * m_escapeAll;
+    KAction * m_escapeHorizontal;
+    KAction * m_escapeVertical;
+    KAction * m_escapeUp;
+    KAction * m_escapeLeft;
+    KAction * m_escapeDown;
+    KAction * m_escapeRight;
 };
 
 #endif // KO_CONNECTION_TOOL_H

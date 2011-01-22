@@ -76,28 +76,62 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_alignBottom->setCheckable(true);
     addAction("align-bottom", m_alignBottom);
 
-    QActionGroup *alignHorizontal = new QActionGroup(this);
-    alignHorizontal->setExclusive(true);
-    alignHorizontal->addAction(m_alignLeft);
-    alignHorizontal->addAction(m_alignCenterH);
-    alignHorizontal->addAction(m_alignRight);
-    connect(alignHorizontal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
+    m_escapeAll = new KAction("a", this);
+    m_escapeAll->setCheckable(true);
+    addAction("escape-all", m_escapeAll);
+    m_escapeHorizontal = new KAction("h", this);
+    m_escapeHorizontal->setCheckable(true);
+    addAction("escape-horizontal", m_escapeHorizontal);
+    m_escapeVertical = new KAction("v", this);
+    m_escapeVertical->setCheckable(true);
+    addAction("escape-vertical", m_escapeVertical);
+    m_escapeLeft = new KAction("l", this);
+    m_escapeLeft->setCheckable(true);
+    addAction("escape-left", m_escapeLeft);
+    m_escapeRight = new KAction("r", this);
+    m_escapeRight->setCheckable(true);
+    addAction("escape-right", m_escapeRight);
+    m_escapeUp = new KAction("u", this);
+    m_escapeUp->setCheckable(true);
+    addAction("escape-up", m_escapeUp);
+    m_escapeDown = new KAction("d", this);
+    m_escapeDown->setCheckable(true);
+    addAction("escape-down", m_escapeDown);
 
-    QActionGroup *alignVertical = new QActionGroup(this);
-    alignVertical->setExclusive(true);
-    alignVertical->addAction(m_alignTop);
-    alignVertical->addAction(m_alignCenterV);
-    alignVertical->addAction(m_alignBottom);
-    connect(alignVertical, SIGNAL(triggered(QAction*)), this, SLOT(verticalAlignChanged()));
+    m_alignHorizontal = new QActionGroup(this);
+    m_alignHorizontal->setExclusive(true);
+    m_alignHorizontal->addAction(m_alignLeft);
+    m_alignHorizontal->addAction(m_alignCenterH);
+    m_alignHorizontal->addAction(m_alignRight);
+    connect(m_alignHorizontal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
 
-    QActionGroup *alignRelative = new QActionGroup(this);
-    alignRelative->setExclusive(true);
-    alignRelative->addAction(m_alignPercent);
-    connect(alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+    m_alignVertical = new QActionGroup(this);
+    m_alignVertical->setExclusive(true);
+    m_alignVertical->addAction(m_alignTop);
+    m_alignVertical->addAction(m_alignCenterV);
+    m_alignVertical->addAction(m_alignBottom);
+    connect(m_alignVertical, SIGNAL(triggered(QAction*)), this, SLOT(verticalAlignChanged()));
 
-    connect(this, SIGNAL(connectionPointEnabled(bool)), alignHorizontal, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(connectionPointEnabled(bool)), alignVertical, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(connectionPointEnabled(bool)), alignRelative, SLOT(setEnabled(bool)));
+    m_alignRelative = new QActionGroup(this);
+    m_alignRelative->setExclusive(true);
+    m_alignRelative->addAction(m_alignPercent);
+    connect(m_alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+
+    m_escapeDirections = new QActionGroup(this);
+    m_escapeDirections->setExclusive(true);
+    m_escapeDirections->addAction(m_escapeAll);
+    m_escapeDirections->addAction(m_escapeHorizontal);
+    m_escapeDirections->addAction(m_escapeVertical);
+    m_escapeDirections->addAction(m_escapeLeft);
+    m_escapeDirections->addAction(m_escapeRight);
+    m_escapeDirections->addAction(m_escapeUp);
+    m_escapeDirections->addAction(m_escapeDown);
+    connect(m_escapeDirections, SIGNAL(triggered(QAction*)), this, SLOT(escapeDirectionsChanged()));
+
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignHorizontal, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignVertical, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignRelative, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_escapeDirections, SLOT(setEnabled(bool)));
 
     setEditMode(Idle, 0, -1);
 }
@@ -484,13 +518,12 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
     const bool connectionPointSelected = m_editMode == EditConnectionPoint && m_activeHandle >= 0;
     if (connectionPointSelected) {
         KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+
         m_alignPercent->setChecked(false);
-        m_alignLeft->setChecked(false);
-        m_alignCenterH->setChecked(false);
-        m_alignRight->setChecked(false);
-        m_alignTop->setChecked(false);
-        m_alignCenterV->setChecked(false);
-        m_alignBottom->setChecked(false);
+        foreach(QAction *action, m_alignHorizontal->actions())
+            action->setChecked(false);
+        foreach(QAction *action, m_alignVertical->actions())
+            action->setChecked(false);
         switch(cp.align) {
             case KoConnectionPoint::AlignNone:
                 m_alignPercent->setChecked(true);
@@ -530,6 +563,31 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
             case KoConnectionPoint::AlignBottomRight:
                 m_alignRight->setChecked(true);
                 m_alignBottom->setChecked(true);
+                break;
+        }
+        foreach(QAction *action, m_escapeDirections->actions())
+            action->setChecked(false);
+        switch(cp.escapeDirection) {
+            case KoConnectionPoint::AllDirections:
+                m_escapeAll->setChecked(true);
+                break;
+            case KoConnectionPoint::HorizontalDirections:
+                m_escapeHorizontal->setChecked(true);
+                break;
+            case KoConnectionPoint::VerticalDirections:
+                m_escapeVertical->setChecked(true);
+                break;
+            case KoConnectionPoint::LeftDirection:
+                m_escapeLeft->setChecked(true);
+                break;
+            case KoConnectionPoint::RightDirection:
+                m_escapeRight->setChecked(true);
+                break;
+            case KoConnectionPoint::UpDirection:
+                m_escapeUp->setChecked(true);
+                break;
+            case KoConnectionPoint::DownDirection:
+                m_escapeDown->setChecked(true);
                 break;
         }
     }
@@ -607,12 +665,15 @@ void ConnectionTool::verticalAlignChanged()
 
 void ConnectionTool::relativeAlignChanged()
 {
-    m_alignLeft->setChecked(false);
-    m_alignCenterH->setChecked(false);
-    m_alignRight->setChecked(false);
-    m_alignTop->setChecked(false);
-    m_alignCenterV->setChecked(false);
-    m_alignBottom->setChecked(false);
+    foreach(QAction *action, m_alignHorizontal->actions())
+        action->setChecked(false);
+    foreach(QAction *action, m_alignVertical->actions())
+        action->setChecked(false);
     m_alignPercent->setChecked(true);
     // TODO: change connection point align here
+}
+
+void ConnectionTool::escapeDirectionChanged()
+{
+    // TODO: change connection point escape direction here
 }

@@ -33,6 +33,14 @@ ConnectionPointWidget::ConnectionPointWidget(ConnectionTool *tool, QWidget * par
     widget.alignCenterV->setDefaultAction(tool->action("align-centerv"));
     widget.alignBottom->setDefaultAction(tool->action("align-bottom"));
     widget.alignPercent->setDefaultAction(tool->action("align-relative"));
+
+    widget.escapeAll->setDefaultAction(tool->action("escape-all"));
+    widget.escapeHorz->setDefaultAction(tool->action("escape-horizontal"));
+    widget.escapeVert->setDefaultAction(tool->action("escape-vertical"));
+    widget.escapeLeft->setDefaultAction(tool->action("escape-left"));
+    widget.escapeRight->setDefaultAction(tool->action("escape-right"));
+    widget.escapeUp->setDefaultAction(tool->action("escape-up"));
+    widget.escapeDown->setDefaultAction(tool->action("escape-down"));
 }
 
 #include <ConnectionPointWidget.moc>

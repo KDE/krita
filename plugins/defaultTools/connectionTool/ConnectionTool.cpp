@@ -655,7 +655,7 @@ void ConnectionTool::horizontalAlignChanged()
         m_alignPercent->setChecked(false);
         m_alignCenterV->setChecked(true);
     }
-    // TODO: change connection point align here
+    updateConnectionPoint();
 }
 
 void ConnectionTool::verticalAlignChanged()
@@ -664,7 +664,7 @@ void ConnectionTool::verticalAlignChanged()
         m_alignPercent->setChecked(false);
         m_alignCenterH->setChecked(true);
     }
-    // TODO: change connection point align here
+    updateConnectionPoint();
 }
 
 void ConnectionTool::relativeAlignChanged()
@@ -674,7 +674,37 @@ void ConnectionTool::relativeAlignChanged()
     foreach(QAction *action, m_alignVertical->actions())
         action->setChecked(false);
     m_alignPercent->setChecked(true);
-    // TODO: change connection point align here
+
+    updateConnectionPoint();
+}
+
+void ConnectionTool::updateConnectionPoint()
+{
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+        if (m_alignPercent->isChecked())
+            cp.align = KoConnectionPoint::AlignNone;
+        else if (m_alignLeft->isChecked() && m_alignTop->isChecked())
+            cp.align = KoConnectionPoint::AlignTopLeft;
+        else if(m_alignCenterH->isChecked() && m_alignTop->isChecked())
+            cp.align = KoConnectionPoint::AlignTop;
+        else if (m_alignRight->isChecked() && m_alignTop->isChecked())
+            cp.align = KoConnectionPoint::AlignTopRight;
+        else if (m_alignLeft->isChecked() && m_alignCenterV->isChecked())
+            cp.align = KoConnectionPoint::AlignLeft;
+        else if (m_alignCenterH->isChecked() && m_alignCenterV->isChecked())
+            cp.align = KoConnectionPoint::AlignCenter;
+        else if (m_alignRight->isChecked() && m_alignCenterV->isChecked())
+            cp.align = KoConnectionPoint::AlignRight;
+        else if (m_alignLeft->isChecked() && m_alignBottom->isChecked())
+            cp.align = KoConnectionPoint::AlignBottomLeft;
+        else if (m_alignCenterH->isChecked() && m_alignBottom->isChecked())
+            cp.align = KoConnectionPoint::AlignBottom;
+        else if (m_alignRight->isChecked() && m_alignBottom->isChecked())
+            cp.align = KoConnectionPoint::AlignBottomRight;
+        // TODO: use undo command
+        m_currentShape->setConnectionPoint(m_activeHandle, cp);
+    }
 }
 
 void ConnectionTool::escapeDirectionChanged()

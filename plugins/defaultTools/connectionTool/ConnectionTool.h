@@ -116,6 +116,9 @@ private:
     /// Updates actions
     void updateActions();
 
+    /// Updates currently selected connection point
+    void updateConnectionPoint();
+
     EditMode m_editMode; ///< the current edit mode
     KoShape * m_currentShape; ///< the current shape we are working on
     int m_activeHandle;  ///< the currently active connection point/connection handle

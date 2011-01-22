@@ -65,6 +65,9 @@ public:
     /// reimplemented from superclass
     virtual void deactivate();
 
+signals:
+    void connectionPointEnabled(bool enabled);
+
 private slots:
     void horizontalAlignChanged();
     void verticalAlignChanged();

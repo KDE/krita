@@ -76,12 +76,12 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_alignBottom->setCheckable(true);
     addAction("align-bottom", m_alignBottom);
 
-    QActionGroup *alignHorizonal = new QActionGroup(this);
-    alignHorizonal->setExclusive(true);
-    alignHorizonal->addAction(m_alignLeft);
-    alignHorizonal->addAction(m_alignCenterH);
-    alignHorizonal->addAction(m_alignRight);
-    connect(alignHorizonal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
+    QActionGroup *alignHorizontal = new QActionGroup(this);
+    alignHorizontal->setExclusive(true);
+    alignHorizontal->addAction(m_alignLeft);
+    alignHorizontal->addAction(m_alignCenterH);
+    alignHorizontal->addAction(m_alignRight);
+    connect(alignHorizontal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
 
     QActionGroup *alignVertical = new QActionGroup(this);
     alignVertical->setExclusive(true);
@@ -94,6 +94,10 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     alignRelative->setExclusive(true);
     alignRelative->addAction(m_alignPercent);
     connect(alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+
+    connect(this, SIGNAL(connectionPointEnabled(bool)), alignHorizontal, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), alignVertical, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), alignRelative, SLOT(setEnabled(bool)));
 
     setEditMode(Idle, 0, -1);
 }
@@ -476,6 +480,60 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
     m_editMode = mode;
     m_currentShape = currentShape;
     m_activeHandle = handle;
+
+    const bool connectionPointSelected = m_editMode == EditConnectionPoint && m_activeHandle >= 0;
+    if (connectionPointSelected) {
+        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+        m_alignPercent->setChecked(false);
+        m_alignLeft->setChecked(false);
+        m_alignCenterH->setChecked(false);
+        m_alignRight->setChecked(false);
+        m_alignTop->setChecked(false);
+        m_alignCenterV->setChecked(false);
+        m_alignBottom->setChecked(false);
+        switch(cp.align) {
+            case KoConnectionPoint::AlignNone:
+                m_alignPercent->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTopLeft:
+                m_alignLeft->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTop:
+                m_alignCenterH->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTopRight:
+                m_alignRight->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignLeft:
+                m_alignLeft->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignCenter:
+                m_alignCenterH->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignRight:
+                m_alignRight->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottomLeft:
+                m_alignLeft->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottom:
+                m_alignCenterH->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottomRight:
+                m_alignRight->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+        }
+    }
+    emit connectionPointEnabled(connectionPointSelected);
 }
 
 void ConnectionTool::resetEditMode()
@@ -535,6 +593,7 @@ void ConnectionTool::horizontalAlignChanged()
         m_alignPercent->setChecked(false);
         m_alignCenterV->setChecked(true);
     }
+    // TODO: change connection point align here
 }
 
 void ConnectionTool::verticalAlignChanged()
@@ -543,6 +602,7 @@ void ConnectionTool::verticalAlignChanged()
         m_alignPercent->setChecked(false);
         m_alignCenterH->setChecked(true);
     }
+    // TODO: change connection point align here
 }
 
 void ConnectionTool::relativeAlignChanged()
@@ -554,4 +614,5 @@ void ConnectionTool::relativeAlignChanged()
     m_alignCenterV->setChecked(false);
     m_alignBottom->setChecked(false);
     m_alignPercent->setChecked(true);
+    // TODO: change connection point align here
 }

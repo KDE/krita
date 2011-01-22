@@ -145,13 +145,17 @@ void KisCustomPattern::createPattern()
 
     KisPaintDeviceSP dev;
     QString name;
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+    QRect rc = image->bounds();
+
     if (cmbSource->currentIndex() == 0) {
         dev = m_view->activeNode()->projection();
         name = m_view->activeNode()->name();
+        QRect rc2 = dev->exactBounds();
+        rc = rc.intersected(rc2);
     }
     else {
-        KisImageWSP image = m_view->image();
-        if (!image) return;
         image->lock();
         dev = image->projection();
         image->unlock();
@@ -159,15 +163,15 @@ void KisCustomPattern::createPattern()
     }
     if (!dev) return;
     // warn when creating large patterns
-    QRect rc = dev->exactBounds();
+
     QSize size = rc.size();
     if (size.width() > 1000 || size.height() > 1000) {
-        lblWarning->setText(i18n("The current image is too big to create a pattern."
+        lblWarning->setText(i18n("The current image is too big to create a pattern. "
                                 "The pattern will be scaled down."));
         size.scale(1000, 1000, Qt::KeepAspectRatio);
     }
 
-    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height()), name);
+    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), 0, rc), name);
 
 }
 

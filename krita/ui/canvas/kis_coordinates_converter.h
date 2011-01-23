@@ -19,6 +19,8 @@
 #ifndef KIS_COORDINATES_CONVERTER_H
 #define KIS_COORDINATES_CONVERTER_H
 
+#include <KoZoomHandler.h>
+
 #include "krita_export.h"
 #include "kis_types.h"
 
@@ -70,10 +72,10 @@ class KoViewConverter;
 
 
 
-class KRITAUI_EXPORT KisCoordinatesConverter
+class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
 {
 public:
-    KisCoordinatesConverter(KoViewConverter *viewConverter);
+    KisCoordinatesConverter();
     ~KisCoordinatesConverter();
 
     void notifyZoomChanged();

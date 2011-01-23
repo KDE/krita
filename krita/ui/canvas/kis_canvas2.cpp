@@ -29,7 +29,6 @@
 
 #include <KoUnit.h>
 #include <KoZoomHandler.h>
-#include <KoViewConverter.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
@@ -72,9 +71,8 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase * parent, KoViewConverter * viewConverter, KisView2 * view)
-        : coordinatesConverter(new KisCoordinatesConverter(viewConverter))
-        , viewConverter(viewConverter)
+    KisCanvas2Private(KoCanvasBase * parent, KisCoordinatesConverter* coordConverter, KisView2 * view)
+        : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
         , shapeManager(new KoShapeManager(parent))
@@ -88,14 +86,12 @@ public:
     }
 
     ~KisCanvas2Private() {
-        delete coordinatesConverter;
         delete favoriteResourceManager;
         delete shapeManager;
         delete toolProxy;
     }
 
     KisCoordinatesConverter *coordinatesConverter;
-    KoViewConverter *viewConverter;
     KisView2 *view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
@@ -112,9 +108,9 @@ public:
     bool vastScrolling;
 };
 
-KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeControllerBase * sc)
     : KoCanvasBase(sc)
-    , m_d(new KisCanvas2Private(this, viewConverter, view))
+    , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
@@ -287,7 +283,7 @@ const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
 
 const KoViewConverter* KisCanvas2::viewConverter() const
 {
-    return m_d->viewConverter;
+    return m_d->coordinatesConverter;
 }
 
 QWidget* KisCanvas2::canvasWidget()

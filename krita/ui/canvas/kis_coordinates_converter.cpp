@@ -31,7 +31,6 @@
 struct KisCoordinatesConverter::Private {
     KisImageWSP image;
     QSize canvasWidgetSize;
-    KoViewConverter *viewConverter;
     QPoint documentOffset;
     QPoint documentOrigin;
     QTransform postprocessingTransform;
@@ -51,7 +50,7 @@ void KisCoordinatesConverter::recalculateTransformations() const
                                                  1 / m_d->image->yRes());
 
     qreal zoomX, zoomY;
-    m_d->viewConverter->zoom(&zoomX, &zoomY);
+    zoom(&zoomX, &zoomY);
     m_d->documentToFlake = QTransform::fromScale(zoomX, zoomY);
 
     // Make new coordinate system not go to negative values
@@ -91,11 +90,8 @@ void KisCoordinatesConverter::recalculateTransformations() const
 }
 
 
-KisCoordinatesConverter::KisCoordinatesConverter(KoViewConverter *viewConverter)
-    : m_d(new Private)
-{
-    m_d->viewConverter = viewConverter;
-}
+KisCoordinatesConverter::KisCoordinatesConverter()
+    : m_d(new Private) { }
 
 KisCoordinatesConverter::~KisCoordinatesConverter()
 {
@@ -286,7 +282,7 @@ void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;
-    m_d->viewConverter->zoom(&zoomX, &zoomY);
+    zoom(&zoomX, &zoomY);
 
     // Get the KisImage resolution
     qreal resX = m_d->image->xRes();

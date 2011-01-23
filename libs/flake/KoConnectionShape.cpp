@@ -617,6 +617,8 @@ void KoConnectionShape::setType(Type connectionType)
 void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_D(KoConnectionShape);
+
+    KoTosContainer::shapeChanged(type, shape);
     // check if we are during a forced update
     const bool updateIsActive = d->forceUpdate;
 

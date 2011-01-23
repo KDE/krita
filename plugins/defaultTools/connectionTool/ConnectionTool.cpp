@@ -164,14 +164,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             for(int i = 0; i < handleCount; ++i) {
                 painter.save();
                 painter.setPen(Qt::blue);
-                Qt::GlobalColor fillColor = Qt::white;
-                if(m_editMode == EditConnection) {
-                    fillColor = i == m_activeHandle ? Qt::red : Qt::darkGreen;
-                } else {
-                    fillColor = i == m_activeHandle ? Qt::red : Qt::white;
-                }
-                painter.setBrush(fillColor);
-                //painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
+                painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
                 painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
                 connectionShape->paintHandle(painter, converter, i, radius);
                 painter.restore();
@@ -187,13 +180,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
                 handleRect.moveCenter(transform.map(cp.value().position));
-                Qt::GlobalColor fillColor = Qt::white;
-                if(m_editMode == EditConnectionPoint) {
-                    fillColor = cp.key() == m_activeHandle ? Qt::red : Qt::darkGreen;
-                } else if (m_editMode == CreateConnection) {
-                    fillColor = cp.key() == m_activeHandle ? Qt::red : Qt::white;
-                }
-                painter.setBrush(fillColor);
+                painter.setBrush(cp.key() == m_activeHandle ? Qt::red : Qt::white);
                 painter.drawRect(handleRect);
             }
             painter.restore();

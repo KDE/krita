@@ -123,7 +123,11 @@ QString KRSectionData::name() const
 
 QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 {
+#ifdef __GNUC__
 #warning use QMap
+#else
+#pragma WARNING( use QMap )
+#endif
     QString sectiontype;
     switch (s) {
     case KRSectionData::PageHeaderAny:
@@ -180,7 +184,11 @@ QString KRSectionData::sectionTypeString(KRSectionData::Section s)
 
 KRSectionData::Section KRSectionData::sectionTypeFromString(const QString& s)
 {
+#ifdef __GNUC__
 #warning use QMap
+#else
+#pragma WARNING( use QMap )
+#endif
     KRSectionData::Section sec;
     kDebug() << "Determining section type for " << s;
 

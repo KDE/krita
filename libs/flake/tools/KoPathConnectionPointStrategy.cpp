@@ -41,6 +41,8 @@ KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoPathTool *tool,
         , m_connectionShape(shape)
         , m_handleId(handleId)
         , m_startPoint(m_connectionShape->shapeToDocument(m_connectionShape->handlePosition(handleId)))
+        , m_oldConnectionShape(0), m_oldConnectionId(-1)
+        , m_newConnectionShape(0), m_newConnectionId(-1)
 {
     if (handleId == 0) {
         m_oldConnectionShape = m_connectionShape->firstShape();

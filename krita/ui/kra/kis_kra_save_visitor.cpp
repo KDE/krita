@@ -102,6 +102,7 @@ bool KisKraSaveVisitor::visit(KisGroupLayer *layer)
 
 bool KisKraSaveVisitor::visit(KisAdjustmentLayer* layer)
 {
+    if (!layer->filter()) return false;
     if (!saveSelection(layer)) return false;
     if (!saveFilterConfiguration(layer)) return false;
     if (!saveMetaData(layer)) return false;

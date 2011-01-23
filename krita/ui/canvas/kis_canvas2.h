@@ -30,6 +30,7 @@
 #include <KoPointerEvent.h>
 
 #include "kis_ui_types.h"
+#include "kis_coordinates_converter.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -66,7 +67,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2* view, KoShapeControllerBase* sc);
 
     virtual ~KisCanvas2();
 

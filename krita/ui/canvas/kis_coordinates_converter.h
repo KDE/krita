@@ -24,7 +24,6 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
-
 class QSize;
 class QSizeF;
 class QRectF;
@@ -32,45 +31,6 @@ class QPoint;
 class QPolygonF;
 class QTransform;
 class KoViewConverter;
-
-
-/**
- * Automatic generation of QRectF and QPointF transformation methods.
- * They will use pre-generated QTransform objects to perform the change.
- */
-#define DEFINE_RECT_METHOD(name,transform)                              \
-    QRectF KisCoordinatesConverter::name(const QRectF &rc) const        \
-    {                                                                   \
-        return (transform).mapRect(rc);                                 \
-    }
-
-#define DEFINE_POINT_METHOD(name,transform)                             \
-    QPointF KisCoordinatesConverter::name(const QPointF &pt) const      \
-    {                                                                   \
-        return (transform).map(pt);                                     \
-    }
-
-#define DECLARE_RECT_METHOD(name)               \
-    QRectF name(const QRectF &rc) const
-
-#define DECLARE_POINT_METHOD(name)              \
-    QPointF name(const QPointF &rc) const
-
-
-#define DEFINE_TRANSFORM_METHODS(name,invertedName,transform)         \
-    DEFINE_RECT_METHOD(name, transform);                              \
-    DEFINE_RECT_METHOD(invertedName, (transform).inverted());         \
-    DEFINE_POINT_METHOD(name, transform);                             \
-    DEFINE_POINT_METHOD(invertedName, (transform).inverted())         \
-
-#define DECLARE_TRANSFORM_METHODS(name,invertedName)                   \
-    DECLARE_RECT_METHOD(name);                                         \
-    DECLARE_RECT_METHOD(invertedName);                                 \
-    DECLARE_POINT_METHOD(name);                                        \
-    DECLARE_POINT_METHOD(invertedName)                                 \
-
-
-
 
 class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
 {
@@ -90,14 +50,30 @@ public:
     void setPostprocessingTransform(const QTransform &transform);
     QTransform postprocessingTransform() const;
 
-
-    // Automatic methods generation. See a comment above.
-    DECLARE_TRANSFORM_METHODS(imageToViewport, viewportToImage);
-    DECLARE_TRANSFORM_METHODS(flakeToWidget, widgetToFlake);
-    DECLARE_TRANSFORM_METHODS(widgetToViewport, viewportToWidget);
-    DECLARE_TRANSFORM_METHODS(documentToWidget, widgetToDocument);
-    DECLARE_TRANSFORM_METHODS(imageToDocument, documentToImage);
-
+    QRectF  imageToViewport(const QRectF &rc) const;
+    QRectF  viewportToImage(const QRectF &rc) const;
+    QPointF imageToViewport(const QPointF &rc) const;
+    QPointF viewportToImage(const QPointF &rc) const;
+    
+    QRectF  flakeToWidget(const QRectF &rc) const;
+    QRectF  widgetToFlake(const QRectF &rc) const;
+    QPointF flakeToWidget(const QPointF &rc) const;
+    QPointF widgetToFlake(const QPointF &rc) const;
+    
+    QRectF  widgetToViewport(const QRectF &rc) const;
+    QRectF  viewportToWidget(const QRectF &rc) const;
+    QPointF widgetToViewport(const QPointF &rc) const;
+    QPointF viewportToWidget(const QPointF &rc) const;
+    
+    QRectF  documentToWidget(const QRectF &rc) const;
+    QRectF  widgetToDocument(const QRectF &rc) const;
+    QPointF documentToWidget(const QPointF &rc) const;
+    QPointF widgetToDocument(const QPointF &rc) const;
+    
+    QRectF  imageToDocument(const QRectF &rc) const;
+    QRectF  documentToImage(const QRectF &rc) const;
+    QPointF imageToDocument(const QPointF &rc) const;
+    QPointF documentToImage(const QPointF &rc) const;
 
     QTransform imageToWidgetTransform() const;
     QTransform documentToWidgetTransform() const;

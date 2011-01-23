@@ -148,26 +148,70 @@ QTransform KisCoordinatesConverter::postprocessingTransform() const
     return m_d->postprocessingTransform;
 }
 
+QRectF  KisCoordinatesConverter::imageToDocument(const QRectF &rc)  const {
+    return m_d->imageToDocument.mapRect(rc);
+}
+QRectF  KisCoordinatesConverter::documentToImage(const QRectF &rc)  const {
+    return m_d->imageToDocument.inverted().mapRect(rc);
+}
+QPointF KisCoordinatesConverter::imageToDocument(const QPointF &pt) const {
+    return m_d->imageToDocument.map(pt);
+}
+QPointF KisCoordinatesConverter::documentToImage(const QPointF &pt) const {
+    return m_d->imageToDocument.inverted().map(pt);
+} 
 
-// see a comment in header file
-DEFINE_TRANSFORM_METHODS(imageToDocument, documentToImage,
-                         m_d->imageToDocument);
+QRectF  KisCoordinatesConverter::flakeToWidget(const QRectF &rc)  const {
+    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).mapRect(rc);
+}
+QRectF  KisCoordinatesConverter::widgetToFlake(const QRectF &rc)  const {
+    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().mapRect(rc);
+}
+QPointF KisCoordinatesConverter::flakeToWidget(const QPointF &pt) const {
+    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).map(pt);
+}
+QPointF KisCoordinatesConverter::widgetToFlake(const QPointF &pt) const {
+    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().map(pt);
+} 
 
-DEFINE_TRANSFORM_METHODS(flakeToWidget, widgetToFlake,
-                         m_d->flakeToPostprocessedFlake
-                         * m_d->postprocessedFlakeToWidget);
+QRectF KisCoordinatesConverter::documentToWidget(const QRectF &rc) const {
+    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).mapRect(rc);
+}
+QRectF KisCoordinatesConverter::widgetToDocument(const QRectF &rc) const {
+    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().mapRect(rc);
+}
+QPointF KisCoordinatesConverter::documentToWidget(const QPointF &pt) const {
+    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).map(pt);
+}
+QPointF KisCoordinatesConverter::widgetToDocument (const QPointF &pt) const {
+    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().map(pt);
+}
 
-DEFINE_TRANSFORM_METHODS(documentToWidget, widgetToDocument,
-                         m_d->documentToFlake * m_d->flakeToPostprocessedFlake
-                         * m_d->postprocessedFlakeToWidget);
+QRectF  KisCoordinatesConverter::widgetToViewport(const QRectF &rc)  const {
+    return m_d->widgetToViewport.mapRect(rc);
+}
+QRectF  KisCoordinatesConverter::viewportToWidget(const QRectF &rc)  const {
+    return m_d->widgetToViewport.inverted().mapRect(rc);
+}
+QPointF KisCoordinatesConverter::widgetToViewport(const QPointF &pt) const {
+    return m_d->widgetToViewport.map(pt);
+}
+QPointF KisCoordinatesConverter::viewportToWidget(const QPointF &pt) const {
+    return m_d->widgetToViewport.inverted().map(pt);
+}
 
-DEFINE_TRANSFORM_METHODS(widgetToViewport, viewportToWidget,
-                         m_d->widgetToViewport);
-
-DEFINE_TRANSFORM_METHODS(imageToViewport, viewportToImage,
-                         m_d->imageToDocument * m_d->documentToFlake
-                         * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget
-                         * m_d->widgetToViewport);
+QRectF KisCoordinatesConverter::imageToViewport(const QRectF &rc) const {
+    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).mapRect(rc);
+}
+QRectF KisCoordinatesConverter::viewportToImage(const QRectF &rc) const {
+    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).inverted().mapRect(rc);
+}
+QPointF KisCoordinatesConverter::imageToViewport(const QPointF &pt) const {
+    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).map(pt);
+}
+QPointF KisCoordinatesConverter::viewportToImage(const QPointF &pt) const {
+    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).inverted().map(pt);
+}
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const
 {

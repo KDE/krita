@@ -32,6 +32,7 @@
 
 class KAction;
 class QActionGroup;
+class KoShapeConfigWidgetBase;
 
 class ConnectionTool : public KoPathTool
 {
@@ -74,6 +75,7 @@ private slots:
     void verticalAlignChanged();
     void relativeAlignChanged();
     void escapeDirectionChanged();
+    void connectionChanged();
 
 private:
     /// reimplemented from superclass
@@ -145,6 +147,8 @@ private:
     KAction * m_escapeLeft;
     KAction * m_escapeDown;
     KAction * m_escapeRight;
+
+    QList<KoShapeConfigWidgetBase*> m_connectionShapeWidgets;
 };
 
 #endif // KO_CONNECTION_TOOL_H

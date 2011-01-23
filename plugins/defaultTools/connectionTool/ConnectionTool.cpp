@@ -25,7 +25,6 @@
 #include "RemoveConnectionPointCommand.h"
 #include "ChangeConnectionPointCommand.h"
 #include "MoveConnectionPointStrategy.h"
-#include "ConnectionToolWidget.h"
 #include "ConnectionPointWidget.h"
 
 #include <KoCanvasBase.h>
@@ -40,6 +39,7 @@
 #include <KoLineBorder.h>
 #include <KoResourceManager.h>
 #include <KoInteractionStrategy.h>
+#include <KoShapeConfigWidgetBase.h>
 #include <KAction>
 #include <KLocale>
 #include <KDebug>
@@ -498,6 +498,14 @@ void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handl
 {
     repaintDecorations();
     m_editMode = mode;
+    if(m_currentShape != currentShape) {
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(currentShape);
+        foreach(KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+            if(connectionShape)
+                cw->open(currentShape);
+            cw->setEnabled(connectionShape != 0);
+        }
+    }
     m_currentShape = currentShape;
     m_activeHandle = handle;
     repaintDecorations();
@@ -634,11 +642,24 @@ QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> map;
 
-    ConnectionToolWidget *tw = new ConnectionToolWidget();
-    ConnectionPointWidget *pw = new ConnectionPointWidget(this);
+    m_connectionShapeWidgets.clear();
 
-    map.insert(i18n("Connection"), tw);
-    map.insert(i18n("Connection Point"), pw);
+    KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get(KOCONNECTIONSHAPEID);
+    if (factory) {
+        QList<KoShapeConfigWidgetBase*> widgets = factory->createShapeOptionPanels();
+        foreach(KoShapeConfigWidgetBase *cw, widgets) {
+            if (cw->showOnShapeCreate() || !cw->showOnShapeSelect()) {
+                delete cw;
+                continue;
+            }
+            cw->setEnabled(false);
+            connect(cw, SIGNAL(propertyChanged()), this, SLOT(connectionChanged()));
+            m_connectionShapeWidgets.append(cw);
+            map.insert(i18n("Connection"), cw);
+        }
+    }
+
+    map.insert(i18n("Connection Point"), new ConnectionPointWidget(this));
 
     return map;
 }
@@ -725,5 +746,18 @@ void ConnectionTool::escapeDirectionChanged()
             newPoint.escapeDirection = KoConnectionPoint::DownDirection;
         }
         canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));
+    }
+}
+
+void ConnectionTool::connectionChanged()
+{
+    if (m_editMode != EditConnection)
+        return;
+    KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+    if (!connectionShape)
+        return;
+
+    foreach(KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+        canvas()->addCommand(cw->createCommand());
     }
 }

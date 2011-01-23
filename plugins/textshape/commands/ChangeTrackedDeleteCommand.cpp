@@ -290,6 +290,11 @@ void ChangeTrackedDeleteCommand::deleteSelection(QTextCursor &selection)
     deleteChangemarker = new KoDeleteChangeMarker(KoTextDocument(document).changeTracker());
     deleteChangemarker->setChangeId(changeId);
     element->setDeleteChangeMarker(deleteChangemarker);
+
+    QTextCharFormat charFormat;
+    charFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    selection.mergeCharFormat(charFormat);
+
     deletedFragment = KoChangeTracker::generateDeleteFragment(selection, deleteChangemarker);
     element->setDeleteData(deletedFragment);
 

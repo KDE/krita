@@ -111,7 +111,7 @@ private:
     void updateStatusText();
 
     /// Updates current shape and edit mode dependent on position
-    void findShapeAtPosition(const QPointF &position);
+    KoShape * findShapeAtPosition(const QPointF &position);
 
     /// Updates actions
     void updateActions();

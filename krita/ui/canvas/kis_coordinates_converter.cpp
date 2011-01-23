@@ -148,91 +148,29 @@ QTransform KisCoordinatesConverter::postprocessingTransform() const
     return m_d->postprocessingTransform;
 }
 
-QRectF  KisCoordinatesConverter::imageToDocument(const QRectF &rc)  const {
-    return m_d->imageToDocument.mapRect(rc);
-}
-QRectF  KisCoordinatesConverter::documentToImage(const QRectF &rc)  const {
-    return m_d->imageToDocument.inverted().mapRect(rc);
-}
-QPointF KisCoordinatesConverter::imageToDocument(const QPointF &pt) const {
-    return m_d->imageToDocument.map(pt);
-}
-QPointF KisCoordinatesConverter::documentToImage(const QPointF &pt) const {
-    return m_d->imageToDocument.inverted().map(pt);
-} 
-
-QRectF  KisCoordinatesConverter::flakeToWidget(const QRectF &rc)  const {
-    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).mapRect(rc);
-}
-QRectF  KisCoordinatesConverter::widgetToFlake(const QRectF &rc)  const {
-    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().mapRect(rc);
-}
-QPointF KisCoordinatesConverter::flakeToWidget(const QPointF &pt) const {
-    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).map(pt);
-}
-QPointF KisCoordinatesConverter::widgetToFlake(const QPointF &pt) const {
-    return (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().map(pt);
-} 
-
-QRectF KisCoordinatesConverter::documentToWidget(const QRectF &rc) const {
-    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).mapRect(rc);
-}
-QRectF KisCoordinatesConverter::widgetToDocument(const QRectF &rc) const {
-    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().mapRect(rc);
-}
-QPointF KisCoordinatesConverter::documentToWidget(const QPointF &pt) const {
-    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).map(pt);
-}
-QPointF KisCoordinatesConverter::widgetToDocument (const QPointF &pt) const {
-    return (m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted().map(pt);
+QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
+    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
 }
 
-QRectF  KisCoordinatesConverter::widgetToViewport(const QRectF &rc)  const {
-    return m_d->widgetToViewport.mapRect(rc);
-}
-QRectF  KisCoordinatesConverter::viewportToWidget(const QRectF &rc)  const {
-    return m_d->widgetToViewport.inverted().mapRect(rc);
-}
-QPointF KisCoordinatesConverter::widgetToViewport(const QPointF &pt) const {
-    return m_d->widgetToViewport.map(pt);
-}
-QPointF KisCoordinatesConverter::viewportToWidget(const QPointF &pt) const {
-    return m_d->widgetToViewport.inverted().map(pt);
+QTransform KisCoordinatesConverter::imageToDocumentTransform() const {
+    return m_d->imageToDocument;
 }
 
-QRectF KisCoordinatesConverter::imageToViewport(const QRectF &rc) const {
-    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).mapRect(rc);
-}
-QRectF KisCoordinatesConverter::viewportToImage(const QRectF &rc) const {
-    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).inverted().mapRect(rc);
-}
-QPointF KisCoordinatesConverter::imageToViewport(const QPointF &pt) const {
-    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).map(pt);
-}
-QPointF KisCoordinatesConverter::viewportToImage(const QPointF &pt) const {
-    return (m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport).inverted().map(pt);
-}
-
-QTransform KisCoordinatesConverter::imageToWidgetTransform() const
-{
-    return m_d->imageToDocument * m_d->documentToFlake
-        * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
+    return m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
 }
 
 QTransform KisCoordinatesConverter::documentToWidgetTransform() const
 {
-    return m_d->documentToFlake
-        * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+    return m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
 }
 
-QTransform KisCoordinatesConverter::flakeToWidgetTransform() const
-{
-    return m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+QTransform KisCoordinatesConverter::widgetToViewportTransform() const {
+    return m_d->widgetToViewport;
 }
 
-QTransform KisCoordinatesConverter::viewportToWidgetTransform() const
-{
-    return m_d->widgetToViewport.inverted();
+QTransform KisCoordinatesConverter::imageToViewportTransform() const {
+    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport;
 }
 
 void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
@@ -241,13 +179,13 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
 {
     KisConfig cfg;
     if (cfg.scrollCheckers()) {
-        *transform = viewportToWidgetTransform();
+        *transform = widgetToViewportTransform().inverted();
         *polygon = imageRectInViewportPixels();
         *brushOrigin = imageToViewport(QPointF(0,0));
     }
     else {
         *transform = QTransform();
-        *polygon = viewportToWidgetTransform().map(imageRectInViewportPixels());
+        *polygon = widgetToViewportTransform().inverted().map(imageRectInViewportPixels());
         *brushOrigin = QPoint(0,0);
     }
 }
@@ -269,7 +207,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
         *textureRect = viewportRect;
     }
 
-    *modelTransform = viewportToWidgetTransform();;
+    *modelTransform = widgetToViewportTransform().inverted();
     *modelRect = viewportRect;
 }
 

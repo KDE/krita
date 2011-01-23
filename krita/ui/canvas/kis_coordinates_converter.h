@@ -19,6 +19,7 @@
 #ifndef KIS_COORDINATES_CONVERTER_H
 #define KIS_COORDINATES_CONVERTER_H
 
+#include <QTransform>
 #include <KoZoomHandler.h>
 
 #include "krita_export.h"
@@ -31,6 +32,27 @@ class QPoint;
 class QPolygonF;
 class QTransform;
 class KoViewConverter;
+
+namespace _Private
+{
+    template<class T> struct Traits { };
+
+    template<> struct Traits<QRectF>
+    {
+        typedef QRectF Result;
+        static QRectF map(const QTransform& transform, const QRectF& rc)  { return transform.mapRect(rc); }
+    };
+    
+    template<> struct Traits<QRect>: public Traits<QRectF> { };
+
+    template<> struct Traits<QPointF>
+    {
+        typedef QPointF Result;
+        static QPointF map(const QTransform& transform, const QPointF& pt)  { return transform.map(pt); }
+    };
+
+    template<> struct Traits<QPoint>: public Traits<QPointF> { };
+}
 
 class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
 {
@@ -49,36 +71,38 @@ public:
 
     void setPostprocessingTransform(const QTransform &transform);
     QTransform postprocessingTransform() const;
-
-    QRectF  imageToViewport(const QRectF &rc) const;
-    QRectF  viewportToImage(const QRectF &rc) const;
-    QPointF imageToViewport(const QPointF &rc) const;
-    QPointF viewportToImage(const QPointF &rc) const;
     
-    QRectF  flakeToWidget(const QRectF &rc) const;
-    QRectF  widgetToFlake(const QRectF &rc) const;
-    QPointF flakeToWidget(const QPointF &rc) const;
-    QPointF widgetToFlake(const QPointF &rc) const;
+    template<class T> typename _Private::Traits<T>::Result
+    imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    viewportToImage(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform().inverted(), obj); }
     
-    QRectF  widgetToViewport(const QRectF &rc) const;
-    QRectF  viewportToWidget(const QRectF &rc) const;
-    QPointF widgetToViewport(const QPointF &rc) const;
-    QPointF viewportToWidget(const QPointF &rc) const;
+    template<class T> typename _Private::Traits<T>::Result
+    flakeToWidget(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToFlake(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform().inverted(), obj); }
     
-    QRectF  documentToWidget(const QRectF &rc) const;
-    QRectF  widgetToDocument(const QRectF &rc) const;
-    QPointF documentToWidget(const QPointF &rc) const;
-    QPointF widgetToDocument(const QPointF &rc) const;
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToViewport(const T& obj) const { return _Private::Traits<T>::map(widgetToViewportTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    viewportToWidget(const T& obj) const { return _Private::Traits<T>::map(widgetToViewportTransform().inverted(), obj); }
     
-    QRectF  imageToDocument(const QRectF &rc) const;
-    QRectF  documentToImage(const QRectF &rc) const;
-    QPointF imageToDocument(const QPointF &rc) const;
-    QPointF documentToImage(const QPointF &rc) const;
+    template<class T> typename _Private::Traits<T>::Result
+    documentToWidget(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToDocument(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform().inverted(), obj); }
+    
+    template<class T> typename _Private::Traits<T>::Result
+    imageToDocument(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    documentToImage(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj); }
 
     QTransform imageToWidgetTransform() const;
-    QTransform documentToWidgetTransform() const;
+    QTransform imageToDocumentTransform() const;
+    QTransform imageToViewportTransform() const;
+    QTransform widgetToViewportTransform() const;
     QTransform flakeToWidgetTransform() const;
-    QTransform viewportToWidgetTransform() const;
+    QTransform documentToWidgetTransform() const;
 
     void getQPainterCheckersInfo(QTransform *transform,
                                  QPointF *brushOrigin,

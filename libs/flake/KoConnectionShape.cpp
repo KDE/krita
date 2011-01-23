@@ -683,6 +683,8 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
             connectFirst(0, -1);
         } else if( shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)){
             connectSecond(0, -1);
+        } else {
+            d->forceUpdate = true;
         }
         break;
     case BackgroundChanged:

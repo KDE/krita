@@ -77,25 +77,25 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_alignBottom->setCheckable(true);
     addAction("align-bottom", m_alignBottom);
 
-    m_escapeAll = new KAction("a", this);
+    m_escapeAll = new KAction(KIcon("escape-direction-all"), i18n("Escape in all directions"), this);
     m_escapeAll->setCheckable(true);
     addAction("escape-all", m_escapeAll);
-    m_escapeHorizontal = new KAction("h", this);
+    m_escapeHorizontal = new KAction(KIcon("escape-direction-horizontal"), i18n("Escape in horizonal directions"), this);
     m_escapeHorizontal->setCheckable(true);
     addAction("escape-horizontal", m_escapeHorizontal);
-    m_escapeVertical = new KAction("v", this);
+    m_escapeVertical = new KAction(KIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
     m_escapeVertical->setCheckable(true);
     addAction("escape-vertical", m_escapeVertical);
-    m_escapeLeft = new KAction("l", this);
+    m_escapeLeft = new KAction(KIcon("escape-direction-left"), i18n("Escape in left direction"), this);
     m_escapeLeft->setCheckable(true);
     addAction("escape-left", m_escapeLeft);
-    m_escapeRight = new KAction("r", this);
+    m_escapeRight = new KAction(KIcon("escape-direction-right"), i18n("Escape in right direction"), this);
     m_escapeRight->setCheckable(true);
     addAction("escape-right", m_escapeRight);
-    m_escapeUp = new KAction("u", this);
+    m_escapeUp = new KAction(KIcon("escape-direction-up"), i18n("Escape in up direction"), this);
     m_escapeUp->setCheckable(true);
     addAction("escape-up", m_escapeUp);
-    m_escapeDown = new KAction("d", this);
+    m_escapeDown = new KAction(KIcon("escape-direction-down"), i18n("Escape in down direction"), this);
     m_escapeDown->setCheckable(true);
     addAction("escape-down", m_escapeDown);
 

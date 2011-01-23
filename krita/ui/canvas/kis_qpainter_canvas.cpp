@@ -119,7 +119,7 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 #endif
 
     KisCoordinatesConverter *converter = coordinatesConverter();
-    QTransform imageTransform = converter->viewportToWidgetTransform();
+    QTransform imageTransform = converter->widgetToViewportTransform().inverted();
 
     gc.save();
 

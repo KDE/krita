@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Channel Docker
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritachanneldocker
+X-Krita-Version=4

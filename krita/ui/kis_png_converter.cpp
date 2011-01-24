@@ -491,7 +491,11 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
 
     // Read image profile
     png_charp profile_name;
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
     png_bytep profile_data;
+#else
+    png_charp profile_data;
+#endif
     int compression_type;
     png_uint_32 proflen;
 
@@ -940,7 +944,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().toAscii());
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
             png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (const png_bytep)(*it)->annotation().data(), (*it) -> annotation() . size());
+#else
+            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
+#endif
         }
         ++it;
     }

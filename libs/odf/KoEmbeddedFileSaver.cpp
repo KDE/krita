@@ -37,11 +37,11 @@
 
 #define INTERNAL_PROTOCOL "intern"
 
-typedef struct {
+struct FileEntry {
     QString     path;
     QByteArray  mimeType;       // QBA because this is what addManifestEntry wants
     QByteArray  contents;
-} FileEntry;
+};
 
 class KoEmbeddedFileSaver::Private
 {

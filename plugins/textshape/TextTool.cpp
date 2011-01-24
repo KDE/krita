@@ -1022,6 +1022,10 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
         QString anchor = m_textEditor.data()->charFormat().anchorHref();
+        // local uri has this prefix but bookmark does not contain it, so strip it
+        if ( anchor.startsWith("#") ){
+            anchor = anchor.right(anchor.size()-1);
+        }
         if (!anchor.isEmpty()) {
             KoTextDocument document(m_textShapeData->document());
             KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();

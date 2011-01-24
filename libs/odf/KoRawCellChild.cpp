@@ -18,6 +18,7 @@
 
 #include "KoRawCellChild.h"
 
+#include <KoGenStyles.h>
 #include <KoXmlWriter.h>
 
 KoRawCellChild::KoRawCellChild(QBuffer* content)

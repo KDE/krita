@@ -417,7 +417,7 @@ public:
     /**
      * Removes the startupWidget shown at application start up.
      */
-    void deleteOpenPane();
+    void deleteOpenPane(bool closing = false);
 
     /**
      *  Tells the document that its title has been modified, either because

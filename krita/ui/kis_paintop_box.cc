@@ -2,7 +2,7 @@
  *  kis_paintop_box.cc - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
+ *  Copyright (c) 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
@@ -67,6 +67,7 @@
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
+#include "widgets/kis_workspace_chooser.h"
 #include "kis_paintop_settings_widget.h"
 #include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
@@ -145,7 +146,17 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //view->actionCollection()->addAction("palette_manager", action);
     //action->setDefaultWidget(m_paletteButton);
 
-    m_layout = new QHBoxLayout(this);
+    m_workspaceWidget = new KisPopupButton(this);
+    m_workspaceWidget->setIcon(KIcon("document-multiple"));
+    m_workspaceWidget->setToolTip(i18n("Choose workspace"));
+    m_workspaceWidget->setFixedSize(32, 32);
+    m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
+    
+    QHBoxLayout* baseLayout = new QHBoxLayout(this);
+    m_paintopWidget = new QWidget(this);
+    baseLayout->addWidget(m_paintopWidget);
+
+    m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
@@ -154,7 +165,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(m_eraseModeButton);
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-//     m_layout->addWidget(m_brushChooser);
+
+    baseLayout->addWidget(m_workspaceWidget);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -564,7 +576,7 @@ void KisPaintopBox::setCompositeOpInternal(const QString& id)
 
 void KisPaintopBox::setEnabledInternal(bool value)
 {
-    setEnabled(value);
+    m_paintopWidget->setEnabled(value);
     if(value) {
         m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));

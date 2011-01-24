@@ -82,15 +82,6 @@ public:
     /// Returns the shadow blur radius
     qreal blur() const;
 
-    /**
-     * Sets the shadow spread radius of the shape
-     * @param spread the shadow spread
-     */
-    void setSpread(const qreal &spread);
-
-    /// Returns the shadow spread radius
-    qreal spread() const;
-
     /// Sets the shadow visibility
     void setVisible(bool visible);
 

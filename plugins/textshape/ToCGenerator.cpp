@@ -105,50 +105,50 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
             }
         }
     }
-    
+
     return QString();
 }
 
 
 void ToCGenerator::generate()
 {
-    QTextCursor cursor = m_ToCFrame->lastCursorPosition();    
+    QTextCursor cursor = m_ToCFrame->lastCursorPosition();
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
     QVariant data = cursor.currentFrame()->format().property(KoText::TableOfContentsData);
     m_tocInfo = data.value<KoTableOfContentsGeneratorInfo*>();
     TableOfContent * m_tocData = m_tocInfo->tableOfContentData();
-    
+
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
-    
+
     if ( !m_tocData->tocSource.indexTitleTemplate.text.isNull() ){
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_tocData->tocSource.indexTitleTemplate.styleId);
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
-        } 
-        
+        }
+
         QTextBlock titleTextBlock = cursor.block();
         titleStyle->applyStyle(titleTextBlock);
-        
+
         cursor.insertText( m_tocData->tocSource.indexTitleTemplate.text );
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
-    
+
 
     // Add TOC
     // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
     int blockId = 0;
     while (block.isValid()) {
-        
+
         KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
         // Choose only TOC blocks
         if (bd && bd->hasCounterData()) {
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-            
+
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
@@ -160,7 +160,7 @@ void ToCGenerator::generate()
                 if (tocEntryTemplate.outlineLevel != outlineLevel){
                     qDebug() << "TOC outline level not found correctly " << outlineLevel;
                 }
-                
+
                 tocTemplateStyle = styleManager->paragraphStyle( tocEntryTemplate.styleId );
                 if (tocTemplateStyle == 0) {
                     tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
@@ -169,34 +169,34 @@ void ToCGenerator::generate()
                 QTextBlock tocEntryTextBlock = cursor.block();
                 tocTemplateStyle->applyStyle( tocEntryTextBlock );
 
-                // save the current style due to hyperlinks 
-                QTextCharFormat savedCharFormat = cursor.charFormat(); 
+                // save the current style due to hyperlinks
+                QTextCharFormat savedCharFormat = cursor.charFormat();
                 foreach (IndexEntry * entry,tocEntryTemplate.indexEntries){
                     switch(entry->name){
                         case IndexEntry::LINK_START: {
                             //IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
-                            
+
                             QString target;
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout() );
                             if (layout){
                                 target = fetchBookmarkRef(block, layout->inlineTextObjectManager());
-                                
+
                                 if (target.isNull()){
                                     // generate unique name for the bookmark
                                     target = bd->counterText() + block.text() + "|outline" + QString::number(blockId);
-                                    blockId++;  
-                                    
-                                    // insert new KoBookmark 
+                                    blockId++;
+
+                                    // insert new KoBookmark
                                     KoBookmark *bookmark = new KoBookmark(target,block.document());
                                     bookmark->setType(KoBookmark::SinglePosition);
                                     QTextCursor blockCursor(block);
                                     layout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
-                                }    
-                                
+                                }
+
                             }
-                            
+
                             // copy it to alter subset of properties
-                            QTextCharFormat linkCf(savedCharFormat);   
+                            QTextCharFormat linkCf(savedCharFormat);
                             linkCf.setAnchor(true);
                             linkCf.setAnchorHref(target);
 
@@ -226,10 +226,10 @@ void ToCGenerator::generate()
                         }
                         case IndexEntry::TAB_STOP: {
                             IndexEntryTabStop * tabStop = static_cast<IndexEntryTabStop*>(entry);
-                            
+
                             QList<QVariant> tabStops;
                             tabStops.append( QVariant::fromValue<KoText::Tab>(tabStop->tab) );
-                            
+
                             QTextBlockFormat blockFormat = cursor.blockFormat();
                             blockFormat.setProperty(KoParagraphStyle::TabPositions, tabStops);
                             cursor.setBlockFormat(blockFormat);
@@ -253,7 +253,7 @@ void ToCGenerator::generate()
                     }
                 }// foreach
                 cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
-                
+
                 m_originalBlocksInToc.append(qMakePair(cursor.block(), block));
 
             } else {

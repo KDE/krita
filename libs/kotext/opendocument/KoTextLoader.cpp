@@ -9,7 +9,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
  * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
- * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com> 
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -489,7 +489,7 @@ void KoTextLoader::loadParagraph(const KoXmlElement &element, QTextCursor &curso
         inlineRdf->loadOdf(element);
         KoTextInlineRdf::attach(inlineRdf, cursor);
     }
-    
+
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat()) << d->currentList << d->currentListStyle;
 #endif
@@ -616,7 +616,7 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor, bo
         kWarning() << "Out of bounds list-level=" << level;
         level = qBound(0, level, 10);
     }
-    
+
     if (element.hasAttributeNS(KoXmlNS::text, "continue-numbering")) {
         const QString continueNumbering = element.attributeNS(KoXmlNS::text, "continue-numbering", QString());
         d->currentList->setContinueNumbering(level, continueNumbering == "true");
@@ -1411,21 +1411,21 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     Q_ASSERT(element.tagName() == "table-of-content");
     QTextFrameFormat tocFormat;
     tocFormat.setProperty(KoText::TableOfContents, true);
-    
-    
+
+
     // for "meta-iformation" about the TOC we use this class
     KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
     info->setSharedLoadingData( d->textSharedData );
-    
+
     info->tableOfContentData()->name = element.attribute("name");
     info->tableOfContentData()->styleName = element.attribute("style-name");
-    
+
     KoXmlElement e;
     forEachElement(e, element) {
         if (e.isNull() || e.namespaceURI() != KoXmlNS::text) {
             continue;
         }
-        
+
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text){
             info->loadOdf(e);
             // uncomment to see what has been loaded
@@ -1433,12 +1433,12 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             Q_ASSERT( !tocFormat.hasProperty(KoText::TableOfContentsData) );
             tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
             cursor.insertFrame(tocFormat);
-            
+
         // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {
             //qDebug() << e.localName();
             QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
-            
+
             bool firstTime = true;
             KoXmlElement p;
             forEachElement(p, e) {

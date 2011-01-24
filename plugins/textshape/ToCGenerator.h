@@ -1,6 +1,8 @@
 /* This file is part of the KDE project
  * Copyright (C) 2010 Thomas Zander <zander@kde.org>
- *
+ * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -36,7 +38,7 @@ class ToCGenerator : public QObject
 public:
     explicit ToCGenerator(QTextFrame *tocFrame);
     virtual ~ToCGenerator();
-    
+
     QTextFrame *tocFrame() const { return m_ToCFrame; }
 
     // TODO API to be called when the shape is printed so we can guarentee
@@ -62,7 +64,7 @@ private:
     QTextFrame *m_ToCFrame;
     KoTableOfContentsGeneratorInfo * m_tocInfo;
     QList<BlockPair> m_originalBlocksInToc;
-    
+
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);
 };

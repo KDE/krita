@@ -113,6 +113,9 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
 {
+    if (!layer->filter()) {
+        return false;
+    }
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, ADJUSTMENT_LAYER, layer);
     layerElement.setAttribute(FILTER_NAME, layer->filter()->name());

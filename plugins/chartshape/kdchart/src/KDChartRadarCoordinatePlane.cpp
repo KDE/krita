@@ -44,4 +44,10 @@ void KDChart::RadarCoordinatePlane::setTextAttributes(const KDChart::TextAttribu
 const KDChart::TextAttributes RadarCoordinatePlane::textAttributes() const
 {
     return d->textAttributes;
+
+}
+
+void RadarCoordinatePlane::init()
+{
+    // this bloc left empty intentionally
 }

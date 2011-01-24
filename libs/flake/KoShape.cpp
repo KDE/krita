@@ -1369,6 +1369,8 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
         qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
         qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
         shadow->setOffset(QPointF(offsetX, offsetY));
+        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::koffice, "shadow-blur-radius"));
+        shadow->setBlur(blur);
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
         if (! opacity.isEmpty() && opacity.right(1) == "%")

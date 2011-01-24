@@ -124,6 +124,7 @@ private:
     KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
+    QWidget* m_paintopWidget;
     KisPaintOpSettingsWidget* m_optionWidget;
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
@@ -135,6 +136,7 @@ private:
     KisBrushEngineSelector* m_brushEngineSelector;
     KisView2* m_view;
     QPushButton* m_paletteButton;
+    KisPopupButton* m_workspaceWidget;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;

@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,13 +29,11 @@
 #include <kis_debug.h>
 
 #include <KoUnit.h>
-#include <KoZoomHandler.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
-#include <KoZoomAction.h>
 #include <KoToolProxy.h>
 #include <KoSelection.h>
 

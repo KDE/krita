@@ -2,6 +2,7 @@
   KoScriptingOdf.cpp
  * This file is part of the KDE project
  * copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoDocumentAdaptor.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 
 #include <KDebug>
 #include <QBuffer>
@@ -284,8 +286,9 @@ QByteArray KoScriptingOdfStore::getByteArray()
     KoStore *store = KoStore::createStore(&buffer, KoStore::Write, "KrossScript", KoStore::Tar);
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter("");
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver     embeddedFileSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
     QByteArray mime = getMimeType();
     if (! m_document->saveOdf(documentContext)) {
         kWarning(32010)  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,10 +43,14 @@ public:
      *
      * @param xmlWriter used for writing the data to
      * @param context the saving context
-     * @param embeddedSaver for saving embedded documents
+     * @param embeddedDocSaver for saving embedded documents
+     * @param embeddedFileSaver for saving embedded files
      * @param page the starting page number
      */
-    KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, KoEmbeddedDocumentSaver &embeddedSaver, int page); //TODO default
+    KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
+                       KoEmbeddedDocumentSaver &embeddedDocSaver,
+                       KoEmbeddedFileSaver &embeddedFileSaver,
+                       int page); //TODO default
 
     /**
      * @brief Destructor

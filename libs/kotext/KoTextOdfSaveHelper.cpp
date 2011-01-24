@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,11 +74,14 @@ bool KoTextOdfSaveHelper::writeBody()
     return true;
 }
 
-KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver)
+KoShapeSavingContext * KoTextOdfSaveHelper::context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles,
+                                                    KoEmbeddedDocumentSaver &embeddedDocSaver,
+                                                    KoEmbeddedFileSaver &embeddedFileSaver)
 {
 //    Q_ASSERT(d->context == 0);
 
-    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
+    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles,
+                                          embeddedDocSaver, embeddedFileSaver);
     return d->context;
 }
 

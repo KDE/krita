@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,8 +25,10 @@
 #include <kdebug.h>
 
 KoTextShapeSavingContext::KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-        KoEmbeddedDocumentSaver& embeddedSaver, KoGenChanges& changes)
-        : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
+                                                   KoEmbeddedDocumentSaver& embeddedDocSaver,
+                                                   KoEmbeddedFileSaver& embeddedFileSaver,
+                                                   KoGenChanges& changes)
+        : KoShapeSavingContext(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver)
 	, m_changes(changes)
 {
 }

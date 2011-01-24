@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -185,7 +186,9 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    KoPASavingContext paContext(*bodyWriter, mainStyles, documentContext.embeddedSaver, 1);
+    KoPASavingContext paContext(*bodyWriter, mainStyles,
+                                documentContext.embeddedDocSaver, documentContext.embeddedFileSaver,
+                                1);
 
     saveOdfDocumentStyles( paContext );
 

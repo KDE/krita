@@ -3,6 +3,7 @@
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,7 +37,8 @@
 
 class KoShapeSavingContextPrivate {
 public:
-    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&);
+    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&,
+                                KoEmbeddedDocumentSaver&, KoEmbeddedFileSaver&);
 
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
@@ -53,24 +55,28 @@ public:
     QHash<const KoShape *, QTransform> shapeOffsets;
 
     KoGenStyles& mainStyles;
-    KoEmbeddedDocumentSaver& embeddedSaver;
+    KoEmbeddedDocumentSaver& embeddedDocSaver;
+    KoEmbeddedFileSaver& embeddedFileSaver;
 };
 
-KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
-        KoGenStyles &s, KoEmbeddedDocumentSaver &e)
-        : xmlWriter(&w),
-        savingOptions(0),
-        drawId(0),
-        subId(0),
-        imageId(0),
-        mainStyles(s),
-        embeddedSaver(e)
+KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w, KoGenStyles &s,
+                                                         KoEmbeddedDocumentSaver &ed,
+                                                         KoEmbeddedFileSaver &ef)
+    : xmlWriter(&w),
+      savingOptions(0),
+      drawId(0),
+      subId(0),
+      imageId(0),
+      mainStyles(s),
+      embeddedDocSaver(ed),
+      embeddedFileSaver(ef)
 {
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-        KoEmbeddedDocumentSaver &embeddedSaver)
-    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
+                                           KoEmbeddedDocumentSaver &embeddedDocSaver,
+                                           KoEmbeddedFileSaver &embeddedFileSaver)
+    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver))
 {
     // by default allow saving of draw:id
     addOption(KoShapeSavingContext::DrawId);
@@ -96,9 +102,14 @@ KoGenStyles & KoShapeSavingContext::mainStyles()
     return d->mainStyles;
 }
 
-KoEmbeddedDocumentSaver &KoShapeSavingContext::embeddedSaver()
+KoEmbeddedDocumentSaver &KoShapeSavingContext::embeddedDocumentSaver()
 {
-    return d->embeddedSaver;
+    return d->embeddedDocSaver;
+}
+
+KoEmbeddedFileSaver &KoShapeSavingContext::embeddedFileSaver()
+{
+    return d->embeddedFileSaver;
 }
 
 bool KoShapeSavingContext::isSet(ShapeSavingOption option) const

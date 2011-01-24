@@ -2,6 +2,7 @@
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Inge wallin <inge@lysator.liu.se>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,6 +44,7 @@
 #include <KoDataCenterBase.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include <KoGenStyle.h>
 #include <KoImageCollection.h>
 #include <KoOdf.h>
@@ -257,8 +259,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver embeddedFileSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -296,7 +299,9 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     contentTmpWriter.startElement("office:body");
     contentTmpWriter.startElement("office:drawing");
 
-    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
+    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles,
+                                      documentContext.embeddedDocSaver,
+                                      documentContext.embeddedFileSaver);
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
@@ -323,7 +328,8 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     if (!store->close())
         return false;
 
-    embeddedSaver.saveEmbeddedDocuments(documentContext);
+    embeddedDocSaver.saveEmbeddedDocuments(documentContext);
+    embeddedFileSaver.saveEmbeddedFiles(documentContext);
 
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,11 +26,13 @@
 #include "KoPAPage.h"
 
 KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
-        KoEmbeddedDocumentSaver &embeddedSaver, int page)
-    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedSaver)
-, m_page( page )
-, m_masterPageIndex( 0 )
-, m_clearDrawIds( false )
+                                     KoEmbeddedDocumentSaver &embeddedDocSaver,
+                                     KoEmbeddedFileSaver &embeddedFileSaver,
+                                     int page)
+    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver)
+    , m_page( page )
+    , m_masterPageIndex( 0 )
+    , m_clearDrawIds( false )
 {
 }
 

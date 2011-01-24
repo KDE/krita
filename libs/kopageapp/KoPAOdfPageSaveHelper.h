@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -40,7 +41,9 @@ public:
     virtual ~KoPAOdfPageSaveHelper();
 
     /// reimplemented
-    virtual KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver );
+    virtual KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
+                                            KoEmbeddedDocumentSaver & embeddedDocSaver,
+                                            KoEmbeddedFileSaver & embeddedFileSaver );
 
     /// reimplemented
     virtual bool writeBody();

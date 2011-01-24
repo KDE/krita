@@ -4,6 +4,7 @@
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,7 @@ class KoStore;
 class KoOdfReadStore;
 class KoOdfWriteStore;
 class KoEmbeddedDocumentSaver;
+class KoEmbeddedFileSaver;
 
 #include "koodf_export.h"
 
@@ -43,12 +45,15 @@ public:
 
     // context passed on saving to saveOdf
     struct SavingContext {
-        SavingContext(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
+    SavingContext(KoOdfWriteStore &odfStore,
+                  KoEmbeddedDocumentSaver &embeddedDocSaver, KoEmbeddedFileSaver &embeddedFileSaver)
                 : odfStore(odfStore)
-                , embeddedSaver(embeddedSaver) {}
+                , embeddedDocSaver(embeddedDocSaver)
+                , embeddedFileSaver(embeddedFileSaver) {}
 
         KoOdfWriteStore &odfStore;
-        KoEmbeddedDocumentSaver &embeddedSaver;
+        KoEmbeddedDocumentSaver &embeddedDocSaver;
+        KoEmbeddedFileSaver     &embeddedFileSaver;
     };
 
     /**

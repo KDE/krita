@@ -3,6 +3,7 @@
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoDataCenterBase;
 class KoEmbeddedDocumentSaver;
+class KoEmbeddedFileSaver;
 class KoImageData;
 class KoShapeLayer;
 class KoStore;
@@ -74,10 +76,12 @@ public:
      * @brief Constructor
      * @param xmlWriter used for writing the xml
      * @param mainStyles for saving the styles
-     * @param embeddedSaver for saving embedded documents
+     * @param embeddedDocSaver for saving embedded documents
+     * @param embeddedFileSaver for saving embedded files
      */
     KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-                         KoEmbeddedDocumentSaver &embeddedSaver);
+                         KoEmbeddedDocumentSaver &embeddedDocSaver,
+                         KoEmbeddedFileSaver &embeddedFileSaver);
     virtual ~KoShapeSavingContext();
 
     /**
@@ -109,7 +113,14 @@ public:
      *
      * @return embedded document saver
      */
-    KoEmbeddedDocumentSaver &embeddedSaver();
+    KoEmbeddedDocumentSaver &embeddedDocumentSaver();
+
+    /**
+     * @brief Get the embedded file saver
+     *
+     * @return embedded file saver
+     */
+    KoEmbeddedFileSaver &embeddedFileSaver();
 
     /**
      * @brief Check if an option is set

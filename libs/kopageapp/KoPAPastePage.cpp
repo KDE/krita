@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +27,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include "KoPALoadingContext.h"
 #include "KoPADocument.h"
 #include "KoPAMasterPage.h"
@@ -64,8 +66,10 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         QBuffer buffer;
         buffer.open( QIODevice::WriteOnly );
         KoXmlWriter xmlWriter( &buffer );
-        KoEmbeddedDocumentSaver embeddedSaver;
-        KoPASavingContext savingContext(xmlWriter, mainStyles, embeddedSaver, 1);
+        KoEmbeddedDocumentSaver embeddedDocSaver;
+        KoEmbeddedFileSaver     embeddedFileSaver;
+        KoPASavingContext savingContext(xmlWriter, mainStyles,
+                                        embeddedDocSaver, embeddedFileSaver, 1);
         savingContext.addOption( KoShapeSavingContext::UniqueMasterPages );
         QList<KoPAPageBase*> emptyList;
         QList<KoPAPageBase*> existingMasterPages = m_doc->pages( true );

@@ -3,6 +3,7 @@
  * Copyright (C) 2000-2005 David Faure <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -39,6 +40,7 @@
 #include "KoOdfReadStore.h"
 #include "KoOdfWriteStore.h"
 #include "KoEmbeddedDocumentSaver.h"
+#include "KoEmbeddedFileSaver.h"
 #include "KoXmlNS.h"
 #include "KoOpenPane.h"
 #include "KoApplication.h"
@@ -886,8 +888,9 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
-    KoEmbeddedDocumentSaver embeddedSaver;
-    SavingContext documentContext(odfStore, embeddedSaver);
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver     embeddedFileSaver;
+    SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -896,10 +899,15 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
         return false;
     }
 
-    // Save embedded objects
-    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+    // Save embedded objects and files
+    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
         odfStore.closeManifestWriter(false);
+        delete store;
+        return false;
+    }
+    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
+        kDebug(30003) << "save embedded files failed";
         delete store;
         return false;
     }
@@ -1865,8 +1873,9 @@ bool KoDocument::addVersion(const QString& comment)
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     Q_UNUSED(manifestWriter); // XXX why?
 
-    KoEmbeddedDocumentSaver embeddedSaver;
-    SavingContext documentContext(odfStore, embeddedSaver);
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver     embeddedFileSaver;
+    SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -1874,9 +1883,14 @@ bool KoDocument::addVersion(const QString& comment)
         return false;
     }
 
-    // Save embedded objects
-    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+    // Save embedded objects and files
+    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
+        delete store;
+        return false;
+    }
+    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
+        kDebug(30003) << "save embedded files failed";
         delete store;
         return false;
     }

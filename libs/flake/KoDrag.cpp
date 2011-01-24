@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +37,7 @@
 #include <KoXmlWriter.h>
 #include <KoOdfDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoEmbeddedFileSaver.h>
 #include "KoShapeSavingContext.h"
 
 class KoDragPrivate {
@@ -72,7 +74,8 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
     Q_ASSERT(!store->bad());
 
     KoOdfWriteStore odfStore(store);
-    KoEmbeddedDocumentSaver embeddedSaver;
+    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedFileSaver     embeddedFileSaver;
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoXmlWriter *contentWriter = odfStore.contentWriter();
@@ -83,7 +86,8 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles, embeddedSaver);
+    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles,
+                                                   embeddedDocSaver, embeddedFileSaver);
 
     if (!helper.writeBody()) {
         return false;
@@ -106,10 +110,14 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
         return false;
     }
 
-    // Save embedded objects
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
-    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
+    // Save embedded objects and files
+    KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30006) << "save embedded documents failed";
+        return false;
+    }
+    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
+        kDebug(30006) << "save embedded files failed";
         return false;
     }
 

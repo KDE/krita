@@ -44,6 +44,18 @@ public:
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
+    qreal leftPadding() const;
+    void setLeftPadding(qreal padding);
+
+    qreal topPadding() const;
+    void setTopPadding(qreal padding);
+
+    qreal rightPadding() const;
+    void setRightPadding(qreal padding);
+
+    qreal bottomPadding() const;
+    void setBottomPadding(qreal padding);
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -54,6 +66,11 @@ protected:
 private:
     KoBorder* m_borders;
     QColor m_backgroundColor;
+
+    qreal m_leftPadding;
+    qreal m_topPadding;
+    qreal m_rightPadding;
+    qreal m_bottomPadding;
 };
 
 #endif

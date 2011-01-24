@@ -102,14 +102,19 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 }
 
 void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &converter,
-                                   const KoCanvasBase *canvas)
+                                      const KoCanvasBase *canvas)
 {
+    // There are no decorations for the Unavail Shape
+    Q_UNUSED(painter);
+    Q_UNUSED(converter);
     Q_UNUSED(canvas);
-
+    return;
+#if 0
     applyConversion(painter, converter);
     painter.setRenderHint(QPainter::Antialiasing);
 
     draw(painter);
+#endif
 }
 
 void KoUnavailShape::draw(QPainter &painter) const

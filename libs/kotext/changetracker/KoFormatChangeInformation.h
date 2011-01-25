@@ -19,6 +19,7 @@
 
 #ifndef __FORMAT_CHANGE_INFORMATION_H__
 #define __FORMAT_CHANGE_INFORMATION_H__
+#include <QTextCharFormat>
 
 class KoFormatChangeInformation {
     public:
@@ -34,6 +35,15 @@ class KoFormatChangeInformation {
 
     private:
         KoFormatChangeInformation::FormatChangeType formatChangeType;
+};
+
+class KoTextStyleChangeInformation:public KoFormatChangeInformation {
+    public:
+        KoTextStyleChangeInformation();
+        void setPreviousCharFormat(QTextCharFormat &oldFormat);
+        QTextCharFormat& previousCharFormat();
+    private:
+        QTextCharFormat previousFormat;
 };
 
 #endif

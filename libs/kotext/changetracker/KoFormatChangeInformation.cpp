@@ -28,3 +28,17 @@ KoFormatChangeInformation::FormatChangeType KoFormatChangeInformation::formatTyp
 {
     return formatChangeType;
 }
+
+KoTextStyleChangeInformation::KoTextStyleChangeInformation():KoFormatChangeInformation(KoFormatChangeInformation::eTextStyleChange)
+{
+}
+
+void KoTextStyleChangeInformation::setPreviousCharFormat(QTextCharFormat &previousFormat)
+{
+    this->previousFormat = previousFormat;
+}
+
+QTextCharFormat& KoTextStyleChangeInformation::previousCharFormat()
+{
+    return this->previousFormat;
+}

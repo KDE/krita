@@ -80,8 +80,10 @@ void KisCanvasController::setCanvas(KoCanvasBase *canvas)
 
 void KisCanvasController::scrollToCenterPoint(const QPoint &center)
 {
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(center);
-    pan(shift);
+//     QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(center);
+//     pan(shift);
+    
+    KoCanvasControllerWidget::scrollToCenterPoint(center);
 }
 
 bool KisCanvasController::eventFilter(QObject *watched, QEvent *event)

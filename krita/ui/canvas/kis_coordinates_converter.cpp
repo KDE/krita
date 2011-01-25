@@ -223,7 +223,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
 {
     if(!m_d->image.isValid()) return QRectF();
-    return viewportToWidget(imageToViewport(m_d->image->bounds()));
+    return imageToWidget(m_d->image->bounds());
 }
 
 QRectF KisCoordinatesConverter::imageRectInViewportPixels() const

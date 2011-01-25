@@ -96,6 +96,11 @@ public:
     imageToDocument(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform(), obj); }
     template<class T> typename _Private::Traits<T>::Result
     documentToImage(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj); }
+    
+    template<class T> typename _Private::Traits<T>::Result
+    imageToWidget(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform(), obj); }
+    template<class T> typename _Private::Traits<T>::Result
+    widgetToImage(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform().inverted(), obj); }
 
     QTransform imageToWidgetTransform() const;
     QTransform imageToDocumentTransform() const;

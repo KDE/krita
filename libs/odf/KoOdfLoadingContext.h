@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
+   Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,12 +23,14 @@
 
 class KoStore;
 
+#include <QtCore/QString>
+
+#include <kcomponentdata.h>
+
 #include "koodf_export.h"
 #include "KoStyleStack.h"
 #include "KoOdfStylesReader.h"
 
-#include <QtCore/QString>
-#include <kcomponentdata.h>
 
 // A class that holds a manifest:file-entry.
 class KOODF_EXPORT KoOdfManifestEntry
@@ -44,6 +47,7 @@ public:
     QString  mediaType;         // manifest:media-type
     QString  version;           // manifest:version  (isNull==true if not present)
 };
+
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).

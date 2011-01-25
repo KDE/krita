@@ -1426,7 +1426,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
             continue;
         }
 
-        if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text){
+        if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text) {
             info->loadOdf(e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();

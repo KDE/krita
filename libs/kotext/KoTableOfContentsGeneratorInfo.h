@@ -32,225 +32,151 @@
 #include "KoText.h"
 #include <KoXmlWriter.h>
 
+class KoTextSharedLoadingData;
+
 const int INVALID_OUTLINE_LEVEL = 0;
 
-// DATA structure that holds the information
-
-class IndexEntry {
+class IndexEntry
+{
 
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END};
-    IndexEntry(QString _styleName, IndexEntryName _name = IndexEntry::UNKNOWN)
-        :   styleName(_styleName),
-            name(_name)
-    {
 
-    }
-
-    virtual ~IndexEntry(){}
+    IndexEntry(QString _styleName, IndexEntryName _name = IndexEntry::UNKNOWN);
+    virtual ~IndexEntry();
+    virtual void addAttributes(KoXmlWriter * writer) const;
+    void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;
     IndexEntryName name;
+};
 
-    virtual void addAttributes(KoXmlWriter * writer) const{
-        Q_UNUSED(writer);
-    }
 
-    void saveOdf(KoXmlWriter * writer) const{
-        switch (name){
-            case LINK_START     : writer->startElement("text:index-entry-link-start"); break;
-            case CHAPTER        : writer->startElement("text:index-entry-chapter"); break;
-            case SPAN           : writer->startElement("text:index-entry-span"); break;
-            case TEXT           : writer->startElement("text:index-entry-text");  break;
-            case TAB_STOP       : writer->startElement("text:index-entry-tab-stop"); break;
-            case PAGE_NUMBER    : writer->startElement("text:index-entry-page-number"); break;
-            case LINK_END       : writer->startElement("text:index-entry-link-end"); break;
-            case UNKNOWN        : break;
-        }
+class IndexEntryLinkStart : public IndexEntry
+{
 
-        if (!styleName.isNull()){
-            writer->addAttribute("text:style-name", styleName);
-        }
-        addAttributes(writer);
-        writer->endElement();
-    }
-
+public:
+    IndexEntryLinkStart(QString _styleName);
 
 };
 
-class IndexEntryLinkStart : public IndexEntry {
+
+class IndexEntryChapter : public IndexEntry
+{
 
 public:
-    IndexEntryLinkStart(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::LINK_START)
-    {}
-};
-
-class IndexEntryChapter : public IndexEntry {
-
-public:
-    IndexEntryChapter(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::CHAPTER)
-    {
-            outlineLevel = INVALID_OUTLINE_LEVEL;
-            // display is null String
-    }
-
-    virtual void addAttributes(KoXmlWriter* writer) const{
-        if (!display.isNull()) {
-            writer->addAttribute("text:display", display);
-        }
-        writer->addAttribute("text:outline-level", outlineLevel);
-    }
+    IndexEntryChapter(QString _styleName);
+    virtual void addAttributes(KoXmlWriter* writer) const;
 
     QString display;
     int outlineLevel;
 };
 
-class IndexEntrySpan : public IndexEntry {
+
+class IndexEntrySpan : public IndexEntry
+{
 
 public:
-    IndexEntrySpan(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::SPAN)
-    {
-        // text is null string
-    }
-
-    virtual void addAttributes(KoXmlWriter* writer) const{
-        if (!text.isNull() && !text.isEmpty()){
-            writer->addTextNode(text);
-        }
-    }
+    IndexEntrySpan(QString _styleName);
+    virtual void addAttributes(KoXmlWriter* writer) const;
 
     QString text;
 };
 
-class IndexEntryText : public IndexEntry{
+
+class IndexEntryText : public IndexEntry
+{
 
 public:
-    IndexEntryText(QString _styleName)
-    :IndexEntry(_styleName,IndexEntry::TEXT)
-    {}
+    IndexEntryText(QString _styleName);
 };
 
-class IndexEntryTabStop : public IndexEntry {
+
+class IndexEntryTabStop : public IndexEntry
+{
 
 public:
-
-    IndexEntryTabStop(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::TAB_STOP)
-    {}
-
-    virtual void addAttributes(KoXmlWriter* writer) const{
-        writer->addAttribute("style:leader-char",tab.leaderText);
-        // If the value of this attribute is left, the style:position attribute shall also be present.
-        // Otherwise, this attribute shall be omitted.
-        if (tab.type == QTextOption::LeftTab) {
-            writer->addAttribute("style:type", "left");
-            writer->addAttribute("style:position", m_position);
-        } else {
-            Q_ASSERT(tab.type == QTextOption::RightTab);
-            writer->addAttribute("style:type", "right");
-        }
-    }
-
-    KoText::Tab tab;
+    IndexEntryTabStop(QString _styleName);
+    virtual void addAttributes(KoXmlWriter* writer) const;
     // for saving let's save the original unit,
     // for KoText::Tab we need to covert to PostScript points
-    void setPosition(const QString &position){
-        m_position = position;
-        tab.position = 550; //KoUnit::parseValue(position);
-    }
+    void setPosition(const QString &position);
+
+    KoText::Tab tab;
 private:
     QString m_position;
 };
 
-class IndexEntryPageNumber : public IndexEntry {
+
+class IndexEntryPageNumber : public IndexEntry
+{
 
 public:
-    IndexEntryPageNumber(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::PAGE_NUMBER)
-    {}
+    IndexEntryPageNumber(QString _styleName);
 };
 
-class IndexEntryLinkEnd : public IndexEntry {
+
+class IndexEntryLinkEnd : public IndexEntry
+{
 
 public:
-    IndexEntryLinkEnd(QString _styleName)
-    :IndexEntry(_styleName, IndexEntry::LINK_END)
-    {}
+    IndexEntryLinkEnd(QString _styleName);
 };
 
-class TocEntryTemplate{
+
+class TocEntryTemplate
+{
+
 public:
+    void saveOdf(KoXmlWriter * writer) const;
+
     int outlineLevel;
     QString styleName;
     int styleId;
     QList<IndexEntry*> indexEntries;
-
-    void saveOdf(KoXmlWriter * writer) const{
-        writer->startElement("text:table-of-content-entry-template");
-            writer->addAttribute("text:outline-level", outlineLevel);
-            writer->addAttribute("text:style-name", styleName);
-
-            foreach(IndexEntry* e,indexEntries){
-                e->saveOdf(writer);
-            }
-
-        writer->endElement();
-    }
 };
 
-class IndexTitleTemplate{
+
+class IndexTitleTemplate
+{
+
 public:
+    void saveOdf(KoXmlWriter * writer) const;
+
     QString styleName;
     int styleId;
     QString text;
-
-    void saveOdf(KoXmlWriter * writer) const{
-        writer->startElement("text:index-title-template");
-            writer->addAttribute("text:style-name", styleName);
-            if ( !text.isEmpty() && !text.isNull() ) {
-                writer->addTextNode(text);
-            }
-        writer->endElement();
-    }
-
 };
 
-class IndexSourceStyle{
+
+class IndexSourceStyle
+{
+
 public:
+    void saveOdf(KoXmlWriter * writer) const;
+
     QString styleName;
     int styleId;
-
-    void saveOdf(KoXmlWriter * writer) const {
-        writer->startElement("text:index-source-styles");
-        if (!styleName.isNull()){
-            writer->addAttribute("text:style-name",styleName);
-        }
-        writer->endElement();
-    }
 };
 
-class IndexSourceStyles {
+
+class IndexSourceStyles
+{
+
 public:
+    void saveOdf(KoXmlWriter * writer) const;
+
     int outlineLevel;
     QList<IndexSourceStyle> styles;
-
-    void saveOdf(KoXmlWriter * writer) const {
-        writer->startElement("text:index-source-styles");
-            writer->addAttribute("text:outline-level", outlineLevel);
-            foreach(const IndexSourceStyle &s, styles) {
-                s.saveOdf(writer);
-            }
-        writer->endElement();
-    }
-
 };
 
-class TableOfContentSource {
+
+class TableOfContentSource
+{
 
 public:
+    void saveOdf(KoXmlWriter * writer) const;
+
     QString indexScope; // enum {document, chapter}
     int outlineLevel;
     bool relativeTabStopPosition;
@@ -261,34 +187,11 @@ public:
     IndexTitleTemplate indexTitleTemplate;
     QList<TocEntryTemplate> entryTemplate; // N-entries
     QList<IndexSourceStyles> indexSourceStyles;
-
-    void saveOdf(KoXmlWriter * writer) const{
-        writer->startElement("text:table-of-content-source");
-            writer->addAttribute("text:index-scope", indexScope);
-            writer->addAttribute("text:outline-level", outlineLevel);
-            writer->addAttribute("text:relative-tab-stop-position", relativeTabStopPosition);
-            writer->addAttribute("text:use-index-marks", useIndexMarks);
-            writer->addAttribute("text:use-index-source-styles", useIndexSourceStyles);
-            writer->addAttribute("text:use-outline-level", useOutlineLevel);
-
-            indexTitleTemplate.saveOdf(writer);
-
-            foreach (TocEntryTemplate entryTemplate, entryTemplate){
-                entryTemplate.saveOdf(writer);
-            }
-
-            foreach (IndexSourceStyles sourceStyle, indexSourceStyles){
-                sourceStyle.saveOdf(writer);
-            }
-
-        writer->endElement(); // text:table-of-content-source
-    }
-
-
-
 };
 
-class TableOfContent{
+
+class TableOfContent
+{
 
 public:
     QString name;
@@ -299,35 +202,26 @@ public:
     // text:protection-key-digest-algorithm
     // xml:id
     TableOfContentSource tocSource;
-
 };
 
 
-class KoTextSharedLoadingData;
-
-class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo {
+class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
+{
 
 public:
-
     KoTableOfContentsGeneratorInfo();
     ~KoTableOfContentsGeneratorInfo();
-
     void loadOdf(const KoXmlElement &element);
     void saveOdf(KoXmlWriter * writer) const;
-
     void setSharedLoadingData(KoTextSharedLoadingData * loadingData);
 
-    TableOfContent * tableOfContentData() const {
-        return m_toc;
-    }
-
-
-private:
-    TableOfContent * m_toc;
-    KoTextSharedLoadingData * m_sharedLoadingData;
+    TableOfContent * tableOfContentData() const;
 
 private:
     int styleNameToStyleId(QString styleName);
+
+    TableOfContent * m_toc;
+    KoTextSharedLoadingData * m_sharedLoadingData;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo*)

@@ -96,10 +96,10 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         // most possibly inline object
-        if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()){
+        if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()) {
             KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
             KoBookmark * isBookmark = dynamic_cast<KoBookmark*>(inlineObject);
-            if (isBookmark){
+            if (isBookmark) {
                 return isBookmark->name();
                 break;
             }
@@ -124,7 +124,7 @@ void ToCGenerator::generate()
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
 
-    if ( !m_tocData->tocSource.indexTitleTemplate.text.isNull() ){
+    if ( !m_tocData->tocSource.indexTitleTemplate.text.isNull() ) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_tocData->tocSource.indexTitleTemplate.styleId);
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
@@ -152,12 +152,12 @@ void ToCGenerator::generate()
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
-            if (outlineLevel >= 1 && (outlineLevel-1) < m_tocData->tocSource.entryTemplate.size()){
+            if (outlineLevel >= 1 && (outlineLevel-1) < m_tocData->tocSource.entryTemplate.size()) {
                 // List's index starts with 0, outline level starts with 0
                 TocEntryTemplate tocEntryTemplate = m_tocData->tocSource.entryTemplate.at(outlineLevel - 1);
                 // ensure that we fetched correct entry template
                 Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
-                if (tocEntryTemplate.outlineLevel != outlineLevel){
+                if (tocEntryTemplate.outlineLevel != outlineLevel) {
                     qDebug() << "TOC outline level not found correctly " << outlineLevel;
                 }
 
@@ -171,17 +171,17 @@ void ToCGenerator::generate()
 
                 // save the current style due to hyperlinks
                 QTextCharFormat savedCharFormat = cursor.charFormat();
-                foreach (IndexEntry * entry,tocEntryTemplate.indexEntries){
-                    switch(entry->name){
+                foreach (IndexEntry * entry,tocEntryTemplate.indexEntries) {
+                    switch(entry->name) {
                         case IndexEntry::LINK_START: {
                             //IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
 
                             QString target;
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout() );
-                            if (layout){
+                            if (layout) {
                                 target = fetchBookmarkRef(block, layout->inlineTextObjectManager());
 
-                                if (target.isNull()){
+                                if (target.isNull()) {
                                     // generate unique name for the bookmark
                                     target = bd->counterText() + block.text() + "|outline" + QString::number(blockId);
                                     blockId++;

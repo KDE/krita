@@ -84,7 +84,7 @@ bool KisColorSpaceConvertVisitor::visit(KisAdjustmentLayer * layer)
             layer->opacity(), layer->opacity(),
             layer->compositeOpId(), layer->compositeOpId(),
             layer->name(), layer->name(),
-            layer->channelFlags(), m_emptyChannelFlags);
+            layer->channelFlags(), m_emptyChannelFlags, true);
     m_image->undoAdapter()->addCommand(propsCommand);
 
     layer->resetCache();
@@ -104,7 +104,7 @@ bool KisColorSpaceConvertVisitor::convertPaintDevice(KisLayer* layer)
             layer->opacity(), layer->opacity(),
             layer->compositeOpId(), layer->compositeOpId(),
             layer->name(), layer->name(),
-            layer->channelFlags(), m_emptyChannelFlags);
+            layer->channelFlags(), m_emptyChannelFlags, true);
 
     m_image->undoAdapter()->addCommand(propsCommand);
 

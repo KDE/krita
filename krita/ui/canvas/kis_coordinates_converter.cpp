@@ -254,7 +254,7 @@ QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 
 QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
 {
-    return flakeToWidgetTransform().inverted().mapRect(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
+    return widgetToFlake(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
 QPoint KisCoordinatesConverter::shiftFromFlakeCenterPoint(const QPointF &pt) const

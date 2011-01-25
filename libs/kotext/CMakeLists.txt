@@ -76,6 +76,7 @@ set(kotext_LIB_SRCS
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
     changetracker/KoDeleteChangeMarker.cpp
+    changetracker/KoFormatChangeInformation.cpp
     KoTextDrag.cpp
 )
 

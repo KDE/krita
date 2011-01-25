@@ -89,7 +89,7 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    KoConnectionPoints connectors; ///< glue point id and position in percent of size [0..1]
+    KoConnectionPoints connectors; ///< glue point id to data mapping
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
@@ -142,8 +142,11 @@ public:
      */
     void removeShapeCache();
 
-    /// Sets the specified connection point
-    void setConnectionPoint(int id, KoConnectionPoint &point);
+    /// Convert connection point position from shape coordinates, taking alignment into account
+    void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
+
+    /// Convert connection point position to shape coordinates, taking alignment into account
+    void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
 
     Q_DECLARE_PUBLIC(KoShape)
 };

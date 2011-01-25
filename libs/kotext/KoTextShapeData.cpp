@@ -279,7 +279,9 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *
 {
     Q_D(const KoTextShapeData);
     InsertDeleteChangesCommand *insertCommand = new InsertDeleteChangesCommand(document());
-    KoTextDocument(document()).textEditor()->addCommand(insertCommand, false);
+    if (!KoTextDocument(document()).changeTracker()->displayChanges()) {
+        KoTextDocument(document()).textEditor()->addCommand(insertCommand, false);
+    }
 
     KoTextWriter writer(context, rdfData);
     writer.write(d->document, from, to);

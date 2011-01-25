@@ -205,7 +205,7 @@ void KoShapePrivate::removeShapeCache()
 
 void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
 {
-    switch(point.align) {
+    switch(point.alignment) {
         case KoConnectionPoint::AlignNone:
             point.position = KoFlake::toRelative(point.position, shapeSize);
             point.position.rx() = qBound<qreal>(0.0, point.position.x(), 1.0);
@@ -243,7 +243,7 @@ void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const
 
 void KoShapePrivate::convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
 {
-    switch(point.align) {
+    switch(point.alignment) {
         case KoConnectionPoint::AlignNone:
             point.position = KoFlake::toAbsolute(point.position, shapeSize);
             break;
@@ -1578,23 +1578,23 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             connector.position.setX(KoUnit::parseValue(xStr));
             connector.position.setY(KoUnit::parseValue(yStr));
             if (align == "top-left") {
-                connector.align = KoConnectionPoint::AlignTopLeft;
+                connector.alignment = KoConnectionPoint::AlignTopLeft;
             } else if (align == "top") {
-                connector.align = KoConnectionPoint::AlignTop;
+                connector.alignment = KoConnectionPoint::AlignTop;
             } else if (align == "top-right") {
-                connector.align = KoConnectionPoint::AlignTopRight;
+                connector.alignment = KoConnectionPoint::AlignTopRight;
             } else if (align == "left") {
-                connector.align = KoConnectionPoint::AlignLeft;
+                connector.alignment = KoConnectionPoint::AlignLeft;
             } else if (align == "center") {
-                connector.align = KoConnectionPoint::AlignCenter;
+                connector.alignment = KoConnectionPoint::AlignCenter;
             } else if (align == "right") {
-                connector.align = KoConnectionPoint::AlignRight;
+                connector.alignment = KoConnectionPoint::AlignRight;
             } else if (align == "bottom-left") {
-                connector.align = KoConnectionPoint::AlignBottomLeft;
+                connector.alignment = KoConnectionPoint::AlignBottomLeft;
             } else if (align == "bottom") {
-                connector.align = KoConnectionPoint::AlignBottom;
+                connector.alignment = KoConnectionPoint::AlignBottom;
             } else if (align == "bottom-right") {
-                connector.align = KoConnectionPoint::AlignBottomRight;
+                connector.alignment = KoConnectionPoint::AlignBottomRight;
             }
             kDebug(30006) << "using alignment" << align;
             d->convertFromShapeCoordinates(connector, size());
@@ -1883,7 +1883,7 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
                 context.xmlWriter().addAttribute("draw:escape-direction", escapeDirection);
             }
             QString alignment;
-            switch(cp.value().align) {
+            switch(cp.value().alignment) {
                 case KoConnectionPoint::AlignTopLeft:
                     alignment = "top-left";
                     break;

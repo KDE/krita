@@ -21,22 +21,22 @@
 #include "KoConnectionPoint.h"
 
 KoConnectionPoint::KoConnectionPoint()
-: position(0, 0), escapeDirection(AllDirections), align(AlignNone)
+: position(0, 0), escapeDirection(AllDirections), alignment(AlignNone)
 {
 }
 
 KoConnectionPoint::KoConnectionPoint(const QPointF& pos)
-: position(pos), escapeDirection(AllDirections), align(AlignNone)
+: position(pos), escapeDirection(AllDirections), alignment(AlignNone)
 {
 }
 
 KoConnectionPoint::KoConnectionPoint(const QPointF& pos, EscapeDirection direction)
-: position(pos), escapeDirection(direction), align(AlignNone)
+: position(pos), escapeDirection(direction), alignment(AlignNone)
 {
 }
 
-KoConnectionPoint::KoConnectionPoint(const QPointF &pos, EscapeDirection direction, Align alignment)
-: position(pos), escapeDirection(direction), align(alignment)
+KoConnectionPoint::KoConnectionPoint(const QPointF &pos, EscapeDirection direction, Alignment alignment)
+: position(pos), escapeDirection(direction), alignment(alignment)
 {
 }
 

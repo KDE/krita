@@ -27,6 +27,7 @@
 #include "MoveConnectionPointStrategy.h"
 #include "ConnectionPointWidget.h"
 
+#include <KoConnectionShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
@@ -529,7 +530,7 @@ void ConnectionTool::updateActions()
             action->setChecked(false);
         foreach(QAction *action, m_alignVertical->actions())
             action->setChecked(false);
-        switch(cp.align) {
+        switch(cp.alignment) {
             case KoConnectionPoint::AlignNone:
                 m_alignPercent->setChecked(true);
                 break;
@@ -699,25 +700,25 @@ void ConnectionTool::updateConnectionPoint()
         KoConnectionPoint oldPoint = m_currentShape->connectionPoint(m_activeHandle);
         KoConnectionPoint newPoint = oldPoint;
         if (m_alignPercent->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignNone;
+            newPoint.alignment = KoConnectionPoint::AlignNone;
         } else if (m_alignLeft->isChecked() && m_alignTop->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignTopLeft;
+            newPoint.alignment = KoConnectionPoint::AlignTopLeft;
         } else if(m_alignCenterH->isChecked() && m_alignTop->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignTop;
+            newPoint.alignment = KoConnectionPoint::AlignTop;
         } else if (m_alignRight->isChecked() && m_alignTop->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignTopRight;
+            newPoint.alignment = KoConnectionPoint::AlignTopRight;
         } else if (m_alignLeft->isChecked() && m_alignCenterV->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignLeft;
+            newPoint.alignment = KoConnectionPoint::AlignLeft;
         } else if (m_alignCenterH->isChecked() && m_alignCenterV->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignCenter;
+            newPoint.alignment = KoConnectionPoint::AlignCenter;
         } else if (m_alignRight->isChecked() && m_alignCenterV->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignRight;
+            newPoint.alignment = KoConnectionPoint::AlignRight;
         } else if (m_alignLeft->isChecked() && m_alignBottom->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignBottomLeft;
+            newPoint.alignment = KoConnectionPoint::AlignBottomLeft;
         } else if (m_alignCenterH->isChecked() && m_alignBottom->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignBottom;
+            newPoint.alignment = KoConnectionPoint::AlignBottom;
         } else if (m_alignRight->isChecked() && m_alignBottom->isChecked()) {
-            newPoint.align = KoConnectionPoint::AlignBottomRight;
+            newPoint.alignment = KoConnectionPoint::AlignBottomRight;
         }
 
         canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));

@@ -26,10 +26,10 @@
 
 #include "KoPathTool.h"
 
-#include <KoConnectionShape.h>
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
 
+class KoConnectionShape;
 class KAction;
 class QActionGroup;
 class KoShapeConfigWidgetBase;

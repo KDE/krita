@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 David Faure <faure@kde.org>
+   Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -254,7 +255,7 @@ QList<KoOdfManifestEntry*> KoOdfLoadingContext::manifestEntries() const
 {
     return d->manifestEntries.values();
 }
-\
+
 bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 {
     // First find the manifest:manifest node.
@@ -309,4 +310,3 @@ bool KoOdfLoadingContext::parseManifest(const KoXmlDocument &manifestDocument)
 
     return true;
 }
-

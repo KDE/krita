@@ -149,7 +149,7 @@ void KisToolPaint::mousePressEvent(KoPointerEvent *event)
        !specialModifierActive()) {
         setMode(MIRROR_AXIS_SETUP_MODE);
         useCursor(KisCursor::crossCursor());
-        m_axisCenter = convertToPixelCoord(event->point);
+        canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
     }
     else if(mode() == KisTool::HOVER_MODE &&
        (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) &&
@@ -185,7 +185,7 @@ void KisToolPaint::mouseMoveEvent(KoPointerEvent *event)
         event->accept();
     }
     else if (mode() == KisTool::MIRROR_AXIS_SETUP_MODE){
-        m_axisCenter = convertToPixelCoord(event->point);
+        canvas()->resourceManager()->setResource(KisCanvasResourceProvider::MirrorAxisCenter, convertToPixelCoord(event->point));
     }
     else {
         KisTool::mouseMoveEvent(event);
@@ -372,12 +372,13 @@ void KisToolPaint::setupPainter(KisPainter* painter)
     painter->setOpacity(m_opacity);
     painter->setCompositeOp(m_compositeOp);
 
-    if (m_axisCenter.isNull()){
-        m_axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
+    QPointF axisCenter = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
+    if (axisCenter.isNull()){
+        axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
     bool mirrorMaskHorizontal = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
     bool mirrorMaskVertical = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
-    painter->setMirrorInformation(m_axisCenter, mirrorMaskHorizontal, mirrorMaskVertical);
+    painter->setMirrorInformation(axisCenter, mirrorMaskHorizontal, mirrorMaskVertical);
 }
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)

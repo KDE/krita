@@ -146,8 +146,6 @@ protected slots:
 
 
 protected:
-    QPointF m_axisCenter;
-    
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;

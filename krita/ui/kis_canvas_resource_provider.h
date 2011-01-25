@@ -60,7 +60,8 @@ public:
         CurrentGeneratorConfiguration,
         CurrentCompositeOp,
         MirrorHorizontal,
-        MirrorVertical
+        MirrorVertical,
+        MirrorAxisCenter
     };
 
 

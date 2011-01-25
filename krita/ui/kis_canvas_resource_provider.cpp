@@ -416,5 +416,4 @@ bool KisCanvasResourceProvider::mirrorVertical() const
     return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
-
 #include "kis_canvas_resource_provider.moc"

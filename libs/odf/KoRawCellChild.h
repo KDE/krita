@@ -38,14 +38,14 @@
 class KOODF_EXPORT KoRawCellChild : public KoCellChild
 {
 public:
-    KoRawCellChild(QBuffer* content);
+    KoRawCellChild(const QByteArray& content);
     virtual ~KoRawCellChild();
 
 protected:
     virtual void saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const;
 
 private:
-    QBuffer* m_content;
+    QByteArray m_content;
 };
 
 #endif

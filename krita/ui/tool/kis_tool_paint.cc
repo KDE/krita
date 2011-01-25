@@ -84,9 +84,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     updateTabletPressureSamples();
 
     m_supportOutline = false;
-    
-    m_mirrorMaskHorizontal = false;
-    m_mirrorMaskVertical = false;
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
 
@@ -254,12 +251,6 @@ QWidget * KisToolPaint::createOptionWidget()
     m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
     connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
 
-    m_lblMirror = new QLabel(i18n("Mirror: "), optionWidget);
-    m_chbMirrorMaskHorizonatl = new QCheckBox(i18n("Horizontal"), optionWidget);
-    m_chbMirrorMaskVertical = new QCheckBox(i18n("Vertical"), optionWidget);
-    connect(m_chbMirrorMaskHorizonatl,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskHorizontal(bool)));
-    connect(m_chbMirrorMaskVertical,SIGNAL(toggled(bool)),this,SLOT(slotSetMirrorMaskVertical(bool)));
-    
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
@@ -272,9 +263,6 @@ QWidget * KisToolPaint::createOptionWidget()
 
     m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
     m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
-    m_optionWidgetLayout->addWidget(m_lblMirror, 2, 0);
-    m_optionWidgetLayout->addWidget(m_chbMirrorMaskHorizonatl, 3, 0);
-    m_optionWidgetLayout->addWidget(m_chbMirrorMaskVertical, 3, 1);
 
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
@@ -319,17 +307,6 @@ void KisToolPaint::slotSetOpacity(int opacityPerCent)
 {
     m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
 }
-
-void KisToolPaint::slotSetMirrorMaskHorizontal(bool mirrorMaskHorizontal)
-{
-    m_mirrorMaskHorizontal = mirrorMaskHorizontal;
-}
-
-void KisToolPaint::slotSetMirrorMaskVertical(bool mirrorMaskVertical)
-{
-    m_mirrorMaskVertical = mirrorMaskVertical;
-}
-
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
 {
@@ -398,7 +375,9 @@ void KisToolPaint::setupPainter(KisPainter* painter)
     if (m_axisCenter.isNull()){
         m_axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
-    painter->setMirrorInformation(m_axisCenter,m_mirrorMaskHorizontal,m_mirrorMaskVertical);
+    bool mirrorMaskHorizontal = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
+    bool mirrorMaskVertical = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
+    painter->setMirrorInformation(m_axisCenter, mirrorMaskHorizontal, mirrorMaskVertical);
 }
 
 void KisToolPaint::setupPaintAction(KisRecordedPaintAction* action)

@@ -669,7 +669,7 @@ void ConnectionTool::horizontalAlignChanged()
 {
     if (m_alignPercent->isChecked()) {
         m_alignPercent->setChecked(false);
-        m_alignCenterV->setChecked(true);
+        m_alignTop->setChecked(true);
     }
     updateConnectionPoint();
 }
@@ -678,7 +678,7 @@ void ConnectionTool::verticalAlignChanged()
 {
     if (m_alignPercent->isChecked()) {
         m_alignPercent->setChecked(false);
-        m_alignCenterH->setChecked(true);
+        m_alignLeft->setChecked(true);
     }
     updateConnectionPoint();
 }

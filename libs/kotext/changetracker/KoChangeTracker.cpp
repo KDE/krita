@@ -31,6 +31,7 @@
 #include <KoListStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoStyleManager.h>
+#include <KoFormatChangeInformation.h>
 
 //KDE includes
 #include <KDebug>
@@ -71,6 +72,7 @@ public:
     QHash<int, int> parents;
     QHash<int, KoChangeTrackerElement *> changes;
     QHash<QString, int> loadedChanges;
+    QHash<int, KoFormatChangeInformation *> changeInformation;
     QList<int> saveChanges;
     QList<int> acceptedRejectedChanges;
     int changeId;
@@ -320,6 +322,16 @@ bool KoChangeTracker::saveInlineChange(int changeId, KoGenChange &change)
         change.addChildElement("changeMetaData", d->changes.value(changeId)->getExtraMetaData());
 
     return true;
+}
+
+void KoChangeTracker::setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation)
+{
+    d->changeInformation.insert(formatChangeId, formatInformation);
+}
+
+KoFormatChangeInformation *KoChangeTracker::formatChangeInformation(int formatChangeId)
+{
+    return d->changeInformation.value(formatChangeId);
 }
 
 void KoChangeTracker::loadOdfChanges(const KoXmlElement& element)

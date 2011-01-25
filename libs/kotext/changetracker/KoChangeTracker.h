@@ -23,6 +23,7 @@
 #include "kotext_export.h"
 //#include "KoChangeTrackerElement.h"
 class KoChangeTrackerElement;
+class KoFormatChangeInformation;
 
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
@@ -66,6 +67,9 @@ public:
     int getInsertChangeId(QString title, int existingChangeId);
     int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
 
+    void setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation);
+    KoFormatChangeInformation *formatChangeInformation(int formatChangeId);
+    
     KoChangeTrackerElement* elementById(int id);
     bool removeById(int id, bool freeMemory = true);
 

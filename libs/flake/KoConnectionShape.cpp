@@ -67,27 +67,62 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         int connectionPointId = handleId == StartHandle ? connectionPointId1 : connectionPointId2;
         KoConnectionPoint::EscapeDirection ed = attachedShape->connectionPoint(connectionPointId).escapeDirection;
         if(ed == KoConnectionPoint::AllDirections) {
-            QTransform absoluteMatrix = q->absoluteTransformation(0);
-            QPointF handlePoint = absoluteMatrix.map(handles[handleId]);
+            QPointF handlePoint = q->shapeToDocument(handles[handleId]);
             QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
 
-            qreal angle = atan2(handlePoint.y() - centerPoint.y(), handlePoint.x() - centerPoint.x());
-            if (angle < 0.0)
-                angle += 2.0 * M_PI;
-            angle *= 180.0 / M_PI;
-            if (angle >= 45.0 && angle < 135.0)
-                direction = QPointF(0.0, 1.0);
-            else if (angle >= 135.0 && angle < 225.0)
-                direction = QPointF(-1.0, 0.0);
-            else if (angle >= 225.0 && angle < 315.0)
-                direction = QPointF(0.0, -1.0);
-            else
-                direction = QPointF(1.0, 0.0);
+            /*
+             * Determine the best escape direction from the position of the handle point
+             * and the position and orientation of the attached shape.
+             * The idea is to define 4 sectors, one for each edge of the attached shape.
+             * Each sector starts at the center point of the attached shape and has it
+             * left and right edge going through the two points which define the edge.
+             * Then we check which sector contains our handle point, for which we can
+             * simply calculate the corresponding direction which is orthogonal to the
+             * corresponding bounding box edge.
+             * From that we derive the escape direction from looking at the main coordinate
+             * of the orthogonal direction.
+             */
+            // define our edge points in the right order
+            KoFlake::Position corners[4] = {
+                KoFlake::BottomRightCorner,
+                KoFlake::BottomLeftCorner,
+                KoFlake::TopLeftCorner,
+                KoFlake::TopRightCorner
+            };
 
-            // transform escape direction by using our own transformation matrix
-            QTransform invMatrix = absoluteMatrix.inverted();
-            direction = invMatrix.map(direction) - invMatrix.map(QPointF());
-            direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
+            QPointF vHandle = handlePoint-centerPoint;
+            for (int i = 0; i < 4; ++i) {
+                // first point of bounding box edge
+                QPointF p1 = attachedShape->absolutePosition(corners[i]);
+                // second point of bounding box edge
+                QPointF p2 = attachedShape->absolutePosition(corners[(i+1)%4]);
+                // check on which side of the first sector edge our second sector edge is
+                const qreal c0 = crossProd(p1-centerPoint, p2-centerPoint);
+                // check on which side of the first sector edge our handle point is
+                const qreal c1 = crossProd(p1-centerPoint, vHandle);
+                // second egde and handle point must be on the same side of first edge
+                if ((c0 < 0 && c1 > 0) || (c0 > 0 && c1 < 0))
+                    continue;
+                // check on which side of the handle point our second sector edge is
+                const qreal c2 = crossProd(vHandle, p2-centerPoint);
+                // second edge must be on the same side of the handle point as on first edge
+                if ((c0 < 0 && c2 > 0) || (c0 > 0 && c2 < 0))
+                    continue;
+                // now we found the correct edge
+                QPointF vDir = 0.5 *(p1+p2) - centerPoint;
+                // look at coordinate with the greatest absolute value
+                // and construct our escape direction accordingly
+                const qreal xabs = qAbs<qreal>(vDir.x());
+                const qreal yabs = qAbs<qreal>(vDir.y());
+                if (xabs > yabs) {
+                    direction.rx() = vDir.x() > 0 ? 1.0 : -1.0;
+                    direction.ry() = 0.0;
+                } else {
+                    direction.rx() = 0.0;
+                    direction.ry() = vDir.y() > 0 ? 1.0 : -1.0;
+                }
+                break;
+            }
         } else if (ed == KoConnectionPoint::HorizontalDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
             QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
@@ -113,6 +148,11 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         } else if (ed == KoConnectionPoint::DownDirection) {
             direction = QPointF(0.0, 1.0);
         }
+
+        // transform escape direction by using our own transformation matrix
+        QTransform invMatrix = q->absoluteTransformation(0).inverted();
+        direction = invMatrix.map(direction) - invMatrix.map(QPointF());
+        direction /= sqrt(direction.x() * direction.x() + direction.y() * direction.y());
     }
 
     return direction;
@@ -213,12 +253,12 @@ void KoConnectionShapePrivate::normalPath(const qreal MinimumEscapeLength)
     path.append(handles[EndHandle]);
 }
 
-qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2)
+qreal KoConnectionShapePrivate::scalarProd(const QPointF &v1, const QPointF &v2) const
 {
     return v1.x() * v2.x() + v1.y() * v2.y();
 }
 
-qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2)
+qreal KoConnectionShapePrivate::crossProd(const QPointF &v1, const QPointF &v2) const
 {
     return v1.x() * v2.y() - v1.y() * v2.x();
 }

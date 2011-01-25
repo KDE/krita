@@ -38,8 +38,8 @@ public:
     /// Populate the path list by a normal way
     void normalPath(const qreal MinimumEscapeLength);
 
-    qreal scalarProd(const QPointF &v1, const QPointF &v2);
-    qreal crossProd(const QPointF &v1, const QPointF &v2);
+    qreal scalarProd(const QPointF &v1, const QPointF &v2) const;
+    qreal crossProd(const QPointF &v1, const QPointF &v2) const;
 
     /// Returns if given handle is connected to a shape
     bool handleConnected(int handleId) const;

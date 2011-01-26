@@ -1597,7 +1597,6 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
                 connector.alignment = KoConnectionPoint::AlignBottomRight;
             }
             kDebug(30006) << "using alignment" << align;
-            d->convertFromShapeCoordinates(connector, size());
         }
         const QString escape = child.attributeNS(KoXmlNS::draw, "escape-direction", QString());
         if (!escape.isEmpty()) {
@@ -1848,13 +1847,18 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
             // do not save default glue points
             if(cp.key() < 4)
                 continue;
-            // convert to percent from center
-            const qreal x = cp.value().position.x() * 100.0 - 50.0;
-            const qreal y = cp.value().position.y() * 100.0 -50.0;
             context.xmlWriter().startElement("draw:glue-point");
             context.xmlWriter().addAttribute("draw:id", QString("%1").arg(cp.key()));
-            context.xmlWriter().addAttribute("svg:x", QString("%1%").arg(x));
-            context.xmlWriter().addAttribute("svg:y", QString("%1%").arg(y));
+            if (cp.value().alignment == KoConnectionPoint::AlignNone) {
+                // convert to percent from center
+                const qreal x = cp.value().position.x() * 100.0 - 50.0;
+                const qreal y = cp.value().position.y() * 100.0 - 50.0;
+                context.xmlWriter().addAttribute("svg:x", QString("%1%").arg(x));
+                context.xmlWriter().addAttribute("svg:y", QString("%1%").arg(y));
+            } else {
+                context.xmlWriter().addAttributePt("svg:x", cp.value().position.x());
+                context.xmlWriter().addAttributePt("svg:y", cp.value().position.y());
+            }
             QString escapeDirection;
             switch(cp.value().escapeDirection) {
                 case KoConnectionPoint::HorizontalDirections:

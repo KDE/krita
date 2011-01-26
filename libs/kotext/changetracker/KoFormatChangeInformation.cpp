@@ -29,16 +29,32 @@ KoFormatChangeInformation::FormatChangeType KoFormatChangeInformation::formatTyp
     return formatChangeType;
 }
 
-KoTextStyleChangeInformation::KoTextStyleChangeInformation():KoFormatChangeInformation(KoFormatChangeInformation::eTextStyleChange)
+KoTextStyleChangeInformation::KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType):
+                              KoFormatChangeInformation(formatChangeType)
 {
 }
 
 void KoTextStyleChangeInformation::setPreviousCharFormat(QTextCharFormat &previousFormat)
 {
-    this->previousFormat = previousFormat;
+    this->previousTextCharFormat = previousFormat;
 }
 
 QTextCharFormat& KoTextStyleChangeInformation::previousCharFormat()
 {
-    return this->previousFormat;
+    return this->previousTextCharFormat;
+}
+
+KoParagraphStyleChangeInformation::KoParagraphStyleChangeInformation():
+                                   KoTextStyleChangeInformation(KoFormatChangeInformation::eParagraphStyleChange)
+{
+}
+
+void KoParagraphStyleChangeInformation::setPreviousBlockFormat(QTextBlockFormat &previousFormat)
+{
+    this->previousTextBlockFormat = previousFormat;
+}
+
+QTextBlockFormat& KoParagraphStyleChangeInformation::previousBlockFormat()
+{
+    return this->previousTextBlockFormat;
 }

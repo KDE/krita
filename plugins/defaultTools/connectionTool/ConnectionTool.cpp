@@ -369,8 +369,7 @@ void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
     } else if (m_editMode == Idle || m_editMode == EditConnection) {
         if (dynamic_cast<KoConnectionShape*>(m_currentShape)) {
             repaintDecorations();
-            QUndoCommand * cmd = canvas()->shapeController()->removeShape(m_currentShape);
-            canvas()->addCommand(cmd);
+            canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));
             resetEditMode();
         }
     }
@@ -380,6 +379,9 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         deactivate();
+    } else if(event->key() == Qt::Key_Backspace) {
+        deleteSelection();
+        event->accept();
     }
 }
 
@@ -609,7 +611,7 @@ void ConnectionTool::updateStatusText()
                     if (m_activeHandle >= 0)
                         emit statusTextChanged(i18n("Drag to edit connection."));
                     else
-                        emit statusTextChanged(i18n("Double click connection to remove it."));
+                        emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
                 } else if (m_activeHandle < 0) {
                     emit statusTextChanged(i18n("Click to edit connection points."));
                 }
@@ -621,13 +623,13 @@ void ConnectionTool::updateStatusText()
             if (m_activeHandle >= 0)
                 emit statusTextChanged(i18n("Drag to edit connection."));
             else
-                emit statusTextChanged(i18n("Double click connection to remove it."));
+                emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
             break;
         case EditConnectionPoint:
             if (m_activeHandle >= KoConnectionPoint::FirstCustomConnectionPoint)
-                emit statusTextChanged(i18n("Drag to move connection point. Double click to remove connection point"));
+                emit statusTextChanged(i18n("Drag to move connection point. Double click connection or press delete to remove it."));
             else if (m_activeHandle >= 0)
-                emit statusTextChanged(i18n("Double click to remove connection point"));
+                emit statusTextChanged(i18n("Double click connection point or press delete to remove it."));
             else
                 emit statusTextChanged(i18n("Double click to add connection point."));
             break;
@@ -760,5 +762,18 @@ void ConnectionTool::connectionChanged()
 
     foreach(KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
         canvas()->addCommand(cw->createCommand());
+    }
+}
+
+void ConnectionTool::deleteSelection()
+{
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        repaintDecorations();
+        canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, m_activeHandle));
+        setEditMode(m_editMode, m_currentShape, -1);
+    } else if(m_editMode == EditConnection && m_currentShape) {
+        repaintDecorations();
+        canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));
+        resetEditMode();
     }
 }

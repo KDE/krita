@@ -66,7 +66,8 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented from superclass
     virtual void deactivate();
-
+    /// reimplemented from superclass
+    virtual void deleteSelection();
 signals:
     void connectionPointEnabled(bool enabled);
 

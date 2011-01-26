@@ -29,7 +29,9 @@
 
 #include <QWidget>
 #include <QFrame>
+#include <QComboBox> // just to query style
 #include <QHBoxLayout>
+#include <QDesktopWidget>
 
 class SpecialButton : public QFrame
 {
@@ -38,6 +40,7 @@ public:
 
     void setStylesWidget(StylesWidget *stylesWidget);
 
+    void showPopup();
 protected:
     virtual void enterEvent(QEvent *event);
     virtual void leaveEvent(QEvent *event);
@@ -50,6 +53,38 @@ SpecialButton::SpecialButton()
 {
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
+
+    QWidget *preview = new QWidget();
+    preview->setAutoFillBackground(true);
+    preview->setBackgroundRole(QPalette::Base);
+    preview->setMinimumWidth(50);
+    preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    QHBoxLayout *l = new QHBoxLayout;
+    l->addWidget(preview);
+    l->setMargin(0);
+    setLayout(l);
+}
+
+void SpecialButton::showPopup()
+{
+    if (!m_stylesWidget) {
+        return;
+    }
+
+    QRect popupRect(mapToGlobal(QPoint(0, height())), m_stylesWidget->sizeHint());
+
+    // Make sure the popup is not drawn outside the screen area
+    QRect screenRect = QApplication::desktop()->availableGeometry(this);
+    if (popupRect.right() > screenRect.right())
+        popupRect.translate(screenRect.right() - popupRect.right(), 0);
+    if (popupRect.left() < screenRect.left())
+        popupRect.translate(screenRect.left() - popupRect.left(), 0);
+    if (popupRect.bottom() > screenRect.bottom())
+        popupRect.translate(0, -(height() + m_stylesWidget->height()));
+
+    m_stylesWidget->setGeometry(popupRect);
+    m_stylesWidget->raise();
+    m_stylesWidget->show();
 }
 
 void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
@@ -57,55 +92,51 @@ void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
     m_stylesWidget = stylesWidget;
 }
 
-void SpecialButton::enterEvent(QEvent *event)
+void SpecialButton::enterEvent(QEvent *)
 {
-    m_stylesWidget->show();
+    showPopup();
 }
 
 void SpecialButton::leaveEvent(QEvent *event)
 {
-}
+    if (!m_stylesWidget) {
+        return;
+    }
 
+    m_stylesWidget->hide();
+}
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
         ,m_blockSignals(false)
 {
     setObjectName("simplestyleswidget");
-    m_popupForBlock = new StylesWidget;
-    m_popupForChar = new StylesWidget;
+    m_popupForBlock = new StylesWidget(0, Qt::Popup);
+    m_popupForBlock->setFrameShape(QFrame::StyledPanel);
+    m_popupForBlock->setFrameShadow(QFrame::Raised);
+    m_popupForChar = new StylesWidget(0, Qt::Popup);
+    m_popupForChar->setFrameShape(QFrame::StyledPanel);
+    m_popupForChar->setFrameShadow(QFrame::Raised);
 
     SpecialButton *blockFrame = new SpecialButton;
     blockFrame->setStylesWidget(m_popupForBlock);
-    QWidget *blockPreview = new QWidget();
-    blockPreview->setAutoFillBackground(true);
-    blockPreview->setBackgroundRole(QPalette::Base);
-    blockPreview->setMinimumWidth(50);
-    blockPreview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    QHBoxLayout *l = new QHBoxLayout;
-    l->addWidget(blockPreview);
-    l->setMargin(0);
-    blockFrame->setLayout(l);
 
     SpecialButton *charFrame = new SpecialButton;
     charFrame->setStylesWidget(m_popupForChar);
-    QWidget *charPreview = new QWidget();
-    charPreview->setAutoFillBackground(true);
-    charPreview->setBackgroundRole(QPalette::Base);
-    charPreview->setMinimumWidth(50);
-    charPreview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    l = new QHBoxLayout;
-    l->addWidget(charPreview);
-    l->setMargin(0);
-    charFrame->setLayout(l);
 
-    l = new QHBoxLayout;
+    QHBoxLayout *l = new QHBoxLayout;
     l->addWidget(blockFrame);
     l->addWidget(charFrame);
     l->setMargin(0);
     setLayout(l);
 }
 
+/*
+void SimpleStylesWidget::tryPopdown()
+{
+    if(!
+}
+*/
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;

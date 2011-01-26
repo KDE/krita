@@ -61,6 +61,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <changetracker/KoChangeTrackerElement.h>
 #include <changetracker/KoDeleteChangeMarker.h>
+#include <changetracker/KoFormatChangeInformation.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 #include <rdf/KoDocumentRdfBase.h>
@@ -355,6 +356,25 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-with-content");
         } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+            KoFormatChangeInformation *formatChangeInformation = changeTracker->formatChangeInformation(changeId);
+            
+            if (formatChangeInformation && formatChangeInformation->formatType() == KoFormatChangeInformation::eTextStyleChange) {
+                writer->startElement("delta:remove-leaving-content-start", false);
+                writer->addAttribute("delta:removal-change-idref", changeTransTable.value(changeId));
+                writer->addAttribute("delta:end-element-idref", QString("end%1").arg(changeId));
+
+                cursor.setPosition(position);
+                KoTextStyleChangeInformation *textStyleChangeInformation = static_cast<KoTextStyleChangeInformation *>(formatChangeInformation);  
+                QString styleName = saveCharacterStyle(textStyleChangeInformation->previousCharFormat(), cursor.blockCharFormat());
+                if (!styleName.isEmpty()) {
+                   writer->startElement("text:span", false);
+                   writer->addAttribute("text:style-name", styleName);
+                }
+                writer->endElement();
+                writer->endElement();
+
+            }
+
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-around-content");
         }
@@ -384,6 +404,13 @@ void KoTextWriter::Private::closeTagRegion(int changeId)
 
     if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
         writer->endElement(); //delta:removed-content
+    } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+        KoFormatChangeInformation *formatChangeInformation = changeTracker->formatChangeInformation(changeId);
+        if (formatChangeInformation && formatChangeInformation->formatType() == KoFormatChangeInformation::eTextStyleChange) {
+            writer->startElement("delta:remove-leaving-content-end", false);
+            writer->addAttribute("delta:end-element-id", QString("end%1").arg(changeId));
+            writer->endElement();
+        }
     }
     return;
 }

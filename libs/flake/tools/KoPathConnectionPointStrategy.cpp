@@ -34,7 +34,7 @@
 
 const int InvalidConnectionPointId = INT_MIN;
 
-KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoPathTool *tool,
+KoPathConnectionPointStrategy::KoPathConnectionPointStrategy(KoToolBase *tool,
         KoConnectionShape *shape, int handleId)
         : KoParameterChangeStrategy(tool, shape, handleId)
         , m_tool(tool)

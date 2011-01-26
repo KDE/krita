@@ -83,9 +83,6 @@ protected:
     /// reimplemented
     virtual QMap<QString, QWidget *>  createOptionWidgets();
 
-    /// Creates a strategy for moving a parameter handle
-    KoInteractionStrategy *createStrategy(KoParameterShape *shape, int handleId);
-
 private:
     void updateOptionsWidget();
     bool segmentAtPoint( const QPointF &point, KoPathShape* &shape, KoPathPoint* &segmentStart, qreal &pointParam );

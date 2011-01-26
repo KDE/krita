@@ -24,8 +24,7 @@
 
 #define ConnectionTool_ID "ConnectionTool"
 
-#include "KoPathTool.h"
-
+#include <KoToolBase.h>
 #include <KoCanvasBase.h>
 #include <KoSnapGuide.h>
 
@@ -33,8 +32,9 @@ class KoConnectionShape;
 class KAction;
 class QActionGroup;
 class KoShapeConfigWidgetBase;
+class KoInteractionStrategy;
 
-class ConnectionTool : public KoPathTool
+class ConnectionTool : public KoToolBase
 {
     Q_OBJECT
 public:

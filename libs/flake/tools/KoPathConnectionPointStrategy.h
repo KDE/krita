@@ -22,9 +22,10 @@
 #ifndef KO_PATH_CONNECTION_POINT_STRATEGY
 #define KO_PATH_CONNECTION_POINT_STRATEGY
 
-#include <QPointF>
+#include "flake_export.h"
 #include "KoParameterChangeStrategy.h"
 #include "KoConnectionShape.h"
+#include <QPointF>
 
 class KoCanvasBase;
 class KoPathTool;
@@ -33,10 +34,10 @@ class KoPathTool;
  * /internal
  * @brief Strategy for moving points of a path shape.
  */
-class KoPathConnectionPointStrategy : public KoParameterChangeStrategy
+class FLAKE_EXPORT KoPathConnectionPointStrategy : public KoParameterChangeStrategy
 {
 public:
-    KoPathConnectionPointStrategy(KoPathTool *tool,
+    KoPathConnectionPointStrategy(KoToolBase *tool,
                                   KoConnectionShape *parameterShape, int handleId);
     virtual ~KoPathConnectionPointStrategy();
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
@@ -45,7 +46,7 @@ public:
 
 private:
 
-    KoPathTool *m_tool;
+    KoToolBase *m_tool;
     KoConnectionShape *m_connectionShape; ///< the parametric shape we are working on
     int m_handleId;                      ///< the id of the control point
     QPointF m_startPoint;                ///< the starting position of the control point

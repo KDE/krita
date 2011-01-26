@@ -41,6 +41,7 @@
 #include <KoResourceManager.h>
 #include <KoInteractionStrategy.h>
 #include <KoShapeConfigWidgetBase.h>
+#include <KoPathConnectionPointStrategy.h>
 #include <KAction>
 #include <KLocale>
 #include <KDebug>
@@ -49,7 +50,7 @@
 #include <QKeyEvent>
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
-    : KoPathTool(canvas)
+    : KoToolBase(canvas)
     , m_editMode(Idle)
     , m_currentShape(0)
     , m_activeHandle(-1)
@@ -192,18 +193,24 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 void ConnectionTool::repaintDecorations()
 {
     if(m_currentShape) {
-        repaint(m_currentShape->boundingRect());
+        const qreal radius = canvas()->resourceManager()->handleRadius();
+
+        QRectF repaintRect = m_currentShape->boundingRect();
+        canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
+
         KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
         if(connectionShape) {
             QPointF handlePos = connectionShape->handlePosition(m_activeHandle);
             handlePos = connectionShape->shapeToDocument(handlePos);
-            repaint(handlePaintRect(handlePos));
+            repaintRect = handlePaintRect(handlePos);
+            canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
         } else {
             KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
             KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
             KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
             for(; cp != lastCp; ++cp) {
-                repaint(handleGrabRect(m_currentShape->shapeToDocument(cp.value().position)));
+                repaintRect = handleGrabRect(m_currentShape->shapeToDocument(cp.value().position));
+                canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
             }
         }
     }
@@ -216,7 +223,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
 
     if(m_editMode == EditConnection && hitHandle >= 0) {
         // create connection handle change strategy
-        m_currentStrategy = createStrategy(dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
+        m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
     } else if (m_editMode == EditConnectionPoint && hitHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
         // start moving custom connection point
         m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, hitHandle, this);
@@ -244,7 +251,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
             return;
         }
         // create the connection edit strategy from the path tool
-        m_currentStrategy = createStrategy(connectionShape, 1);
+        m_currentStrategy = new KoPathConnectionPointStrategy(this, connectionShape, 1);
         if (!m_currentStrategy) {
             delete shape;
             resetEditMode();
@@ -262,7 +269,7 @@ void ConnectionTool::mousePressEvent(KoPointerEvent * event)
                 setEditMode(EditConnection, hitShape, hitHandle);
                 if(hitHandle >= 0) {
                     // start editing connection shape
-                    m_currentStrategy = createStrategy(dynamic_cast<KoConnectionShape*>(m_currentShape), m_activeHandle);
+                    m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), m_activeHandle);
                 }
             } else {
                 setEditMode(EditConnectionPoint, hitShape, -1);

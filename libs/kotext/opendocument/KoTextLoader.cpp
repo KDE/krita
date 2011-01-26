@@ -58,6 +58,7 @@
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
+#include "changetracker/KoFormatChangeInformation.h"
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -262,12 +263,27 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     changeElement->setEnabled(true);
-    if ((element.localName() == "remove-leaving-content-start") || 
-        (element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content"))
+
+    if ((element.localName() == "remove-leaving-content-start")) {
         changeElement->setChangeType(KoGenChange::FormatChange);
 
-    if ((element.localName() == "removed-content") || (element.localName() == "merge"))
+        KoXmlElement spanElement = element.firstChild().toElement();
+        QString styleName = spanElement.attributeNS(KoXmlNS::text, "style-name", QString());
+
+        QTextCharFormat cf; 
+        KoCharacterStyle *characterStyle = textSharedData->characterStyle(styleName, stylesDotXml);
+        if (characterStyle) {
+             characterStyle->applyStyle(cf);
+        }
+
+        KoTextStyleChangeInformation *formatChangeInformation = new KoTextStyleChangeInformation();
+        formatChangeInformation->setPreviousCharFormat(cf);
+        changeTracker->setFormatChangeInformation(changeId, formatChangeInformation);
+    } else if((element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
+        changeElement->setChangeType(KoGenChange::FormatChange);
+    } else if ((element.localName() == "removed-content") || (element.localName() == "merge")) {
         changeElement->setChangeType(KoGenChange::DeleteChange);
+    }
 }
 
 void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)

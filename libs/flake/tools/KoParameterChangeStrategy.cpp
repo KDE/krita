@@ -18,20 +18,19 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "KoParameterChangeStrategy.h"
-
+#include "KoParameterChangeStrategy_p.h"
 #include "KoParameterShape.h"
 #include "commands/KoParameterHandleMoveCommand.h"
 
 KoParameterChangeStrategy::KoParameterChangeStrategy(KoToolBase *tool, KoParameterShape *parameterShape, int handleId)
-        : KoInteractionStrategy(tool)
-        , m_parameterShape(parameterShape)
-        , m_handleId(handleId)
-        , m_startPoint(m_parameterShape->shapeToDocument(m_parameterShape->handlePosition(handleId)))
-        , m_lastModifierUsed(0)
+    : KoInteractionStrategy(*(new KoParameterChangeStrategyPrivate(tool, parameterShape, handleId)))
 {
-    // initialize release point with start point position to prevent
-    // change when just clicking a handle without moving the mouse
-    m_releasePoint = m_startPoint;
+}
+
+KoParameterChangeStrategy::KoParameterChangeStrategy(KoParameterChangeStrategyPrivate& dd)
+: KoInteractionStrategy(dd)
+{
+
 }
 
 KoParameterChangeStrategy::~KoParameterChangeStrategy()
@@ -40,18 +39,25 @@ KoParameterChangeStrategy::~KoParameterChangeStrategy()
 
 void KoParameterChangeStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    m_parameterShape->moveHandle(m_handleId, mouseLocation, modifiers);
-    m_lastModifierUsed = modifiers;
-    m_releasePoint = mouseLocation;
+    Q_D(KoParameterChangeStrategy);
+    d->parameterShape->moveHandle(d->handleId, mouseLocation, modifiers);
+    d->lastModifierUsed = modifiers;
+    d->releasePoint = mouseLocation;
 }
 
 QUndoCommand* KoParameterChangeStrategy::createCommand()
 {
+    Q_D(KoParameterChangeStrategy);
     KoParameterHandleMoveCommand *cmd = 0;
     // check if handle position changed
-    if (m_startPoint != QPointF(0, 0) && m_startPoint != m_releasePoint) {
-        cmd = new KoParameterHandleMoveCommand(m_parameterShape, m_handleId, m_startPoint, m_releasePoint, m_lastModifierUsed);
+    if (d->startPoint != QPointF(0, 0) && d->startPoint != d->releasePoint) {
+        cmd = new KoParameterHandleMoveCommand(d->parameterShape, d->handleId, d->startPoint, d->releasePoint, d->lastModifierUsed);
     }
     return cmd;
 }
+
+void KoParameterChangeStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)
+{
+}
+
 

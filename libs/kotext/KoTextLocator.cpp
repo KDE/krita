@@ -26,6 +26,7 @@
 
 #include <KoShape.h>
 #include <KoShapeLoadingContext.h>
+#include "KoShapeSavingContext.h"
 
 #include <KDebug>
 #include <QTextDocument>

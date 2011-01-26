@@ -35,6 +35,7 @@
 #include <kis_debug.h>
 #include <kis_pattern.h>
 #include <kis_paintop_preset.h>
+#include <kis_workspace_resource.h>
 
 KisResourceServerProvider::KisResourceServerProvider()
 {
@@ -45,7 +46,8 @@ KisResourceServerProvider::KisResourceServerProvider()
     KGlobal::mainComponent().dirs()->addResourceType("kis_paintoppresets", "data", "krita/paintoppresets/");
     KGlobal::mainComponent().dirs()->addResourceDir("kis_paintoppresets", QDir::homePath() + QString("/.create/paintoppresets/krita"));
 
-
+    KGlobal::mainComponent().dirs()->addResourceType("kis_workspaces", "data", "krita/workspaces/");
+    
     m_patternServer = new KoResourceServer<KisPattern>("kis_patterns", "*.jpg:*.gif:*.png:*.tif:*.xpm:*.bmp:*.pat");
     patternThread = new KoResourceLoaderThread(m_patternServer);
     connect(patternThread, SIGNAL(finished()), this, SLOT(patternThreadDone()));
@@ -55,7 +57,11 @@ KisResourceServerProvider::KisResourceServerProvider()
     paintOpPresetThread = new KoResourceLoaderThread(m_paintOpPresetServer);
     connect(paintOpPresetThread, SIGNAL(finished()), this, SLOT(paintOpPresetThreadDone()));
     paintOpPresetThread->start();
-
+    
+    m_workspaceServer = new KoResourceServer<KisWorkspaceResource>("kis_workspaces", "*.kws");
+    workspaceThread = new KoResourceLoaderThread(m_workspaceServer);
+    connect(workspaceThread, SIGNAL(finished()), this, SLOT(workspaceThreadDone()));
+    workspaceThread->start();
 }
 
 KisResourceServerProvider::~KisResourceServerProvider()
@@ -63,6 +69,7 @@ KisResourceServerProvider::~KisResourceServerProvider()
     dbgRegistry << "deleting KisResourceServerProvider";
     delete m_patternServer;
     delete m_paintOpPresetServer;
+    delete m_workspaceServer;
 }
 
 KisResourceServerProvider* KisResourceServerProvider::instance()
@@ -82,6 +89,11 @@ KoResourceServer<KisPaintOpPreset>* KisResourceServerProvider::paintOpPresetServ
     return m_paintOpPresetServer;
 }
 
+KoResourceServer< KisWorkspaceResource >* KisResourceServerProvider::workspaceServer()
+{
+    return m_workspaceServer;
+}
+
 void KisResourceServerProvider::patternThreadDone()
 {
     delete patternThread;
@@ -92,6 +104,12 @@ void KisResourceServerProvider::paintOpPresetThreadDone()
 {
     delete paintOpPresetThread;
     paintOpPresetThread = 0;
+}
+
+void KisResourceServerProvider::workspaceThreadDone()
+{
+    delete workspaceThread;
+    workspaceThread = 0;
 }
 
 #include "kis_resource_server_provider.moc"

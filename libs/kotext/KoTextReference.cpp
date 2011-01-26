@@ -18,8 +18,13 @@
  */
 
 #include "KoTextReference.h"
+
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include "KoTextLocator.h"
 #include "KoInlineTextObjectManager.h"
+
+#include <KoXmlReader.h>
 
 KoTextReference::KoTextReference(int indexId)
         : KoVariable(),

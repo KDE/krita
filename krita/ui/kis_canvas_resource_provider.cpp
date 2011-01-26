@@ -76,6 +76,9 @@ void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceMa
     setCurrentCompositeOp(COMPOSITE_OVER);
     resetDisplayProfile();
 
+    setMirrorHorizontal(false);
+    setMirrorVertical(false);
+
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
 
@@ -391,6 +394,26 @@ void KisCanvasResourceProvider::addPerspectiveGrid(KisAbstractPerspectiveGrid* g
 void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid* grid)
 {
     m_perspectiveGrids.removeOne(grid);
+}
+
+void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
+{
+    m_resourceManager->setResource(MirrorHorizontal, mirrorHorizontal);
+}
+
+bool KisCanvasResourceProvider::mirrorHorizontal() const
+{
+    return m_resourceManager->resource(MirrorHorizontal).toBool();
+}
+
+void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
+{
+    m_resourceManager->setResource(MirrorVertical, mirrorVertical);
+}
+
+bool KisCanvasResourceProvider::mirrorVertical() const
+{
+    return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
 #include "kis_canvas_resource_provider.moc"

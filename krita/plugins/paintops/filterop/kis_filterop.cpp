@@ -116,7 +116,7 @@ qreal KisFilterOp::paintAt(const KisPaintInformation& info)
     // Apply the mask on the paint device (filter before mask because edge pixels may be important)
 
     KisFixedPaintDeviceSP fixedDab = new KisFixedPaintDevice(m_tmpDevice->colorSpace());
-    fixedDab->setRect(m_tmpDevice->extent());
+    fixedDab->setRect(rect);
     fixedDab->initialize();
 
     m_tmpDevice->readBytes(fixedDab->data(), fixedDab->bounds());

@@ -20,6 +20,7 @@
 #ifndef __FORMAT_CHANGE_INFORMATION_H__
 #define __FORMAT_CHANGE_INFORMATION_H__
 #include <QTextCharFormat>
+#include <QTextBlockFormat>
 
 class KoFormatChangeInformation {
     public:
@@ -39,11 +40,20 @@ class KoFormatChangeInformation {
 
 class KoTextStyleChangeInformation:public KoFormatChangeInformation {
     public:
-        KoTextStyleChangeInformation();
+        KoTextStyleChangeInformation(KoFormatChangeInformation::FormatChangeType formatChangeType = KoFormatChangeInformation::eTextStyleChange);
         void setPreviousCharFormat(QTextCharFormat &oldFormat);
         QTextCharFormat& previousCharFormat();
     private:
-        QTextCharFormat previousFormat;
+        QTextCharFormat previousTextCharFormat;
+};
+
+class KoParagraphStyleChangeInformation:public KoTextStyleChangeInformation {
+    public:
+        KoParagraphStyleChangeInformation();
+        void setPreviousBlockFormat(QTextBlockFormat &oldFormat);
+        QTextBlockFormat& previousBlockFormat();
+    private:
+        QTextBlockFormat previousTextBlockFormat;
 };
 
 #endif

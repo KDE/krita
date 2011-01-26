@@ -88,8 +88,8 @@ QString KoEmbeddedFileSaver::getFilename(const QString &prefix)
 //       reference since then the actual array may disappear before
 //       the real saving is done.
 //
-void KoEmbeddedFileSaver::embedFile(KoXmlWriter &writer, const QString &path,
-                                    const QByteArray &mimeType,
+void KoEmbeddedFileSaver::embedFile(KoXmlWriter &writer, const char *element,
+                                    const QString &path, const QByteArray &mimeType,
                                     QByteArray contents)
 {
     // Put the file in the list of files to be written to the store later.
@@ -99,6 +99,7 @@ void KoEmbeddedFileSaver::embedFile(KoXmlWriter &writer, const QString &path,
     entry->contents = contents;
     d->files.append(entry);
 
+    writer.startElement(element);
     // Write the attributes that refer to the file.
 
     //<draw:object draw:style-name="standard" draw:id="1"
@@ -113,6 +114,7 @@ void KoEmbeddedFileSaver::embedFile(KoXmlWriter &writer, const QString &path,
 
     kDebug(30003) << "KoEmbeddedFileSaver::addEmbeddedFile saving reference to embedded file as" << path;
     writer.addAttribute("xlink:href", path);
+    writer.endElement();
 }
 
 bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &documentContext)
@@ -136,7 +138,12 @@ bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &docume
             return false;
         }
 #else
-        // FIXME: here should go the writing of the actual file.
+        if (!store->open(fileName)) {
+            return false;
+        }
+        store->write(entry->contents);
+        store->close();
+
 #endif
         // Now that we're done leave the directory again
         store->popDirectory();
@@ -145,7 +152,6 @@ bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &docume
         if (path.startsWith('/')) {
             path = path.mid(1);   // remove leading '/', no wanted in manifest
         }
-
         documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
     }
 

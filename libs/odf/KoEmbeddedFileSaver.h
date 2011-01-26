@@ -48,7 +48,8 @@ public:
      * embedded documents themselves is done in @ref save. This
      * function should be called from within KoOdfDocument::saveOdf.
      */
-    void embedFile(KoXmlWriter &writer, const QString &path, const QByteArray &mimeType,
+    void embedFile(KoXmlWriter &writer, const char *element,
+                   const QString &path, const QByteArray &mimeType,
                    QByteArray contents);
 
     /**

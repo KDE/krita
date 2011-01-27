@@ -229,6 +229,10 @@ void ToCGenerator::generate()
                         case IndexEntry::TEXT: {
                             //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
                             QString text = block.text();
+                            // causes problems when rendering the tabstop
+                            // see Layout::decorateParagraph
+                            text.remove(QChar::ObjectReplacementCharacter);
+                            // some headings contain tabs, replace them with space
                             text.replace('\t',' ');
                             cursor.insertText(text);
                             break;

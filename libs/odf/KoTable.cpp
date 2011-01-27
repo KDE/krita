@@ -64,6 +64,9 @@ KoColumn* KoTable::columnAt(int column)
 
     if(!columnAt) {
         columnAt = new KoColumn();
+        if(column >= m_columns.size()) {
+            m_columns.resize(column+1);
+        }
         m_columns.insert(column, columnAt);
         m_columnCount = qMax(column+1, m_columnCount);
     }
@@ -77,7 +80,10 @@ KoRow* KoTable::rowAt(int row)
 
     if(!rowAt) {
         rowAt = new KoRow();
-        m_rows.insert(row, rowAt);
+        if(row >= m_rows.size()) {
+            m_rows.resize(row+1);
+        }
+        m_rows.replace(row, rowAt);
         m_rowCount = qMax(row+1, m_rowCount);
     }
 

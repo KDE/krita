@@ -115,7 +115,8 @@ private slots:
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
-
+    void slotHorizontalMirrorChanged(bool value);
+    void slotVerticalMirrorChanged(bool value);
 private:
 
     const KoColorSpace* m_colorspace;

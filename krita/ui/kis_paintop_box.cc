@@ -39,6 +39,7 @@
 #include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kseparator.h>
 
 #include <KoToolManager.h>
 #include <KoColorSpace.h>
@@ -127,7 +128,29 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setDefaultAction(eraseAction);
     m_view->actionCollection()->addAction("erase_action", eraseAction);
 
+    QToolButton* hMirrorButton = new QToolButton(this);
+    hMirrorButton->setFixedSize(32, 32);
+    hMirrorButton->setCheckable(true);
+    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+//     hMirrorAction->setShortcut(Qt::Key_H);
+    hMirrorAction->setCheckable(true);
+    hMirrorButton->setDefaultAction(hMirrorAction);
+    m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
+
+    QToolButton* vMirrorButton = new QToolButton(this);
+    vMirrorButton->setFixedSize(32, 32);
+    vMirrorButton->setCheckable(true);
+    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+//     vMirrorAction->setShortcut(Qt::Key_V);
+    vMirrorAction->setCheckable(true);
+    vMirrorButton->setDefaultAction(vMirrorAction);
+    m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
+
     connect(eraseAction, SIGNAL(triggered(bool)), this, SLOT(eraseModeToggled(bool)));
+    connect(hMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(vMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotVerticalMirrorChanged(bool)));
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
@@ -163,6 +186,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
     m_layout->addWidget(m_eraseModeButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
+    m_layout->addWidget(hMirrorButton);
+    m_layout->addWidget(vMirrorButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
 
@@ -609,6 +636,16 @@ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
+}
+
+void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorHorizontal(value);
+}
+
+void KisPaintopBox::slotVerticalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorVertical(value);
 }
 
 

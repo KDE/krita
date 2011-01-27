@@ -230,10 +230,10 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     switch (m_type) {
     case VectorTypeWmf:
-        mimeType = "application/x-emf";
+        mimeType = "application/x-wmf";
         break;
     case VectorTypeEmf:
-        mimeType = "application/x-wmf";
+        mimeType = "application/x-emf";
         break;
     default:
         // FIXME: What here?

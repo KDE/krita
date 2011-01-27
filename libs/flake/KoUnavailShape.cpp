@@ -47,6 +47,12 @@
 #include <KoShapeSavingContext.h>
 
 
+struct FileEntry {
+    QString     path;
+    QString     mimeType;
+    QByteArray  contents;
+};
+
 class KoUnavailShape::Private
 {
 public:
@@ -60,10 +66,11 @@ public:
     // Objects inside the frame.  We store:
     //  - The XML code for each object
     //  - Any embedded files (names, contents) that are referenced by xlink:href
-    QList<QByteArray>                  contents;      // A list of the XML trees in the frame
-    QStringList                        objectNames;   // A list of objects names in the files
-    QList<QPair<QString, QByteArray> > embeddedFiles; // List of <objectNames,contents> of embedded files.
-    KoOdfManifestEntry                *manifestEntry; // The manifest entry for this embedded object
+    //  - The manifest entries
+    QList<QByteArray>    frameContents; // A list of the XML trees in the frame, each of them one object
+    QStringList          objectNames;   // A list of objects names in the frame.                                                            // These are extracted from frameContents
+    QList<FileEntry*>    embeddedFiles; // List of <objectNames,contents> of embedded files.
+    KoOdfManifestEntry  *manifestEntry; // The manifest entry for this embedded object
 };
 
 KoUnavailShape::Private::Private()
@@ -177,8 +184,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
     // Write the already saved XML
     // FIXME: Add hrefs and stuff
-    for (int i = 0; i < d->contents.size(); ++i) {
-        QByteArray  xmlArray(d->contents.value(i));
+    for (int i = 0; i < d->frameContents.size(); ++i) {
+        QByteArray  xmlArray(d->frameContents.value(i));
         QString     objectName(d->objectNames.value(i)); // Possibly empty.
 
         if (!(objectName.isEmpty())) {
@@ -196,7 +203,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         // Save embedded files for this object.
         for (int j = 0; j < d->embeddedFiles.size(); ++j) {
-            QString  fileName(d->embeddedFiles.value(i).first);
+            QString  fileName(d->embeddedFiles.value(i)->path);
             kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
@@ -225,15 +232,19 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     // Get the XML contents from the draw:frame.  As a side effect,
     // this extracts the object names from all xlink:href and stores
     // them into d->objectNames.  The saved xml contents itself is
-    // saved into d->contents (QByteArray) so we can save it back from
+    // saved into d->frameContents (QByteArray) so we can save it back from
     // saveOdf().
     d->saveXml(frameElement);
 
-    kDebug(30006) << "Contents: " << d->contents;
-    kDebug(30006) << "objectNames: " << d->objectNames;
+    kDebug(30006) << "frameContents: " << d->frameContents;
+    kDebug(30006) << "objectNames:   " << d->objectNames;
 
+    QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
     kDebug(30006) << "MANIFEST: ";
-    QList<KoOdfManifestEntry*> manifestEntries = context.odfLoadingContext().manifestEntries();
+    foreach (KoOdfManifestEntry *entry, manifest) {
+        kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
+    }
+
     // Loop through the objects that were found in the frame and save
     // all the files associated with them.  Some of the objects are
     // files, and some are directories.  The directories are searched
@@ -256,8 +267,12 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         // If the object is a directory, then save all the files
         // inside it, otherwise save the file as it is.
         if (!context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty()) {
+            // A directory.
             // The files can be found in the manifest.
-            foreach (KoOdfManifestEntry *entry, manifestEntries) {
+            foreach (KoOdfManifestEntry *entry, manifest) {
+                if (entry->fullPath == dirName)
+                    continue;
+
                 if (entry->fullPath.startsWith(dirName)) {
                     d->saveFile(entry->fullPath, context);
                 }
@@ -297,7 +312,7 @@ void KoUnavailShape::Private::saveXml(const KoXmlElement & element)
         if (n.isElement())
             saveXmlRecursive(n.toElement(), writer);
 
-        contents.append(contentsTmp);
+        frameContents.append(contentsTmp);
     }
 }
 
@@ -307,6 +322,7 @@ void KoUnavailShape::Private::saveXmlRecursive(const KoXmlElement &el, KoXmlWrit
     writer.startElement(el.nodeName().toAscii());
 
     // Write the attributes, including namespaces.
+    // FIXME: We should only handle xlink:href's on the top level.  (or?)
     QList< QPair<QString, QString> >  attributeNames = el.attributeFullNames();
     for (int i = 0; i < attributeNames.size(); ++i) {
         // This somewhat convoluted code is because we need the
@@ -367,8 +383,8 @@ void KoUnavailShape::Private::saveFile(const QString &fileName, KoShapeLoadingCo
     if (fileName.endsWith('/'))
         return;
 
-    KoStore *store = context.odfLoadingContext().store();
-    QByteArray fileContent;
+    KoStore    *store = context.odfLoadingContext().store();
+    QByteArray  fileContent;
 
     if (!store->open(fileName)) {
         store->close();
@@ -379,6 +395,11 @@ void KoUnavailShape::Private::saveFile(const QString &fileName, KoShapeLoadingCo
     fileContent = store->read(fileSize);
     store->close();
 
-    kDebug(30006) << "File content: " << fileContent;
-    embeddedFiles.append(QPair<QString, QByteArray>(fileName, fileContent));
+    FileEntry *entry = new FileEntry;
+    entry->path     = fileName;
+    entry->mimeType = context.odfLoadingContext().mimeTypeForPath(fileName);
+    entry->contents = fileContent;
+    embeddedFiles.append(entry);
+
+    //kDebug(30006) << "File content: " << fileContent;
 }

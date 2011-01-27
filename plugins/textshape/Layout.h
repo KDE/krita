@@ -52,6 +52,8 @@ class Layout : public KoTextDocumentLayout::LayoutState
 {
 public:
     explicit Layout(KoTextDocumentLayout *parent);
+
+    virtual ~Layout();
     /// start layouting, return false when there is nothing to do
     virtual bool start();
     /// end layouting
@@ -108,15 +110,17 @@ public:
     virtual void updateRunAroundShape(KoShape *shape);
 
     /// Clear all registrations of shapest for run around
-    virtual void unregisterAllRunAroundShapes() {
-        qDeleteAll(m_outlines);
-        m_outlines.clear();
-    }
+    virtual void unregisterAllRunAroundShapes();
 
     virtual QTextLine createLine();
 
     virtual void fitLineForRunAround(bool resetHorizontalPosition);
-
+    // add inline object
+    virtual void insertInlineObject(KoTextAnchor * textAnchor);
+    // reset all inline object which document position is bigger or equal to resetPosition
+    virtual void resetInlineObject(int resetPosition);
+    // remove inline object
+    virtual void removeInlineObject(KoTextAnchor * textAnchor);
 private:
     friend class TestTableLayout; // to allow direct testing.
 
@@ -173,6 +177,23 @@ private:
 
     void updateFrameStack();
 
+    /**
+     * Try to position inline objects that are not positioned and create outline for them if needed.
+     *
+     * @return false if no relayout is needed.
+     */
+    bool positionInlineObjects();
+
+    /**
+     * Check position of text anchor linked shape and move layout position back if needed.
+     *
+     * @return false if layout position wasn't changed.
+     */
+    bool moveLayoutPosition(KoTextAnchor *textAnchor); //true layout position was modified
+
+    // Fill m_currentLineOutlines list with actual outlines for current page
+    void refreshCurrentPageOutlines();
+
 private:
     KoStyleManager *m_styleManager;
 
@@ -217,8 +238,12 @@ private:
     bool m_relativeTabs;
     qreal m_scaleFactor;
 
-    QList<Outline*> m_outlines;
+    QHash<KoShape*,Outline*> m_outlines; // all outlines created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
+    QList<Outline*> m_currentLineOutlines; // outlines for current page
     TextLine m_textLine;
+
+    QList<KoTextAnchor *> m_textAnchors; // list of all inserted inline objects
+    int m_textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 };
 
 #endif

@@ -775,7 +775,6 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
 void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
 {
     Q_D(KoShape);
-    d->textRunAroundSide = side;
 
     if (side == RunThrough) {
         if (runThrought == Background) {
@@ -786,6 +785,14 @@ void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
     } else {
         setRunThrough(0);
     }
+
+    if ( d->textRunAroundSide == side) {
+        return;
+    }
+
+    d->textRunAroundSide = side;
+    notifyChanged();
+    d->shapeChanged(TextRunAroundChanged);
 }
 
 qreal KoShape::textRunAroundDistance() const

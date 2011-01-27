@@ -69,6 +69,9 @@ public:
     void removeAnchor(KoTextAnchor *anchor);
 
 private:
+    // reset child position and relayout shape to which this shape is linked
+    void relayoutInlineObject(KoShape *child);
+
     class Private;
     Private * const d;
 };

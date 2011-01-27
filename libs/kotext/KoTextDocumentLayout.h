@@ -38,6 +38,7 @@ class QTextLayout;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
+class KoTextAnchor;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -138,6 +139,9 @@ public:
     /// return the list of shapes that will be used to run all the text into.
     virtual QList<KoShape*> shapes() const;
 
+    // reset all inline object which document position is bigger or equal to resetPosition
+    virtual void resetInlineObject(int resetPosition);
+
     /**
      * This inner class is an interface that allows the KoTextDocumentLayout to do rough layout
      * while the LayoutState implementation can do all the boring details.
@@ -215,6 +219,12 @@ public:
         virtual QTextLine createLine() = 0;
         /// Fiddle with the width of the current textline until it fits
         virtual void fitLineForRunAround(bool resetHorizontalPosition) = 0;
+        // add inline object
+        virtual void insertInlineObject(KoTextAnchor * textAnchor) = 0;
+        // reset all inline object which document position is bigger or equal to resetPosition
+        virtual void resetInlineObject(int resetPosition) = 0;
+        // remove inline object
+        virtual void removeInlineObject(KoTextAnchor * textAnchor) = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

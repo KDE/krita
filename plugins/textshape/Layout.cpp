@@ -235,7 +235,7 @@ bool Layout::addLine()
 {
     QTextLine line = m_textLine.line;
     bool processingLine = m_textLine.processingLine();
- 
+
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -2291,11 +2291,12 @@ void Layout::updateFrameStack()
                 } else {
                     if (item.data()->tocFrame() == frame) {
                         break;
-                    }                    
+                    }
                 }
             }
             if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
+                tg->setPageWidth( shape->size().width() );
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),

@@ -319,16 +319,14 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                 } else if (indexEntry.localName() == "index-entry-tab-stop") {
                     IndexEntryTabStop * entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
 
-                    QString type = indexEntry.attribute("type"); // left or right
-                    if (type == "right") {
-                        entryTabStop->tab.type = QTextOption::RightTab;
-                    } else if (type == "left") {
+                    QString type = indexEntry.attribute("type","right"); // left or right
+                    if (type == "left") {
                         entryTabStop->tab.type = QTextOption::LeftTab;
                     } else {
                         entryTabStop->tab.type = QTextOption::RightTab;
                     }
+                    entryTabStop->setPosition( indexEntry.attribute("position", QString()) );
                     entryTabStop->tab.leaderText = indexEntry.attribute("leader-char",".");
-                    entryTabStop->setPosition( indexEntry.attribute("position", QString("490pt")) );
                     tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryTabStop) );
 
                 } else if (indexEntry.localName() == "index-entry-link-start") {

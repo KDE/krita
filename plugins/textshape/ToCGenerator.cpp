@@ -46,7 +46,9 @@ static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
     : QObject(tocFrame),
     m_state(NeverGeneratedState),
-    m_ToCFrame(tocFrame)
+    m_ToCFrame(tocFrame),
+    m_tocInfo(0),
+    m_pageWidthPt(0.0)
 {
     Q_ASSERT(tocFrame);
 /*
@@ -55,13 +57,17 @@ ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
 
     // disabled for now as this requires us to update the list items in 'update' too
 */
-
-    m_tocInfo = 0;
 }
 
 ToCGenerator::~ToCGenerator()
 {
     delete m_tocInfo;
+}
+
+
+void ToCGenerator::setPageWidth(qreal pageWidthPt)
+{
+    m_pageWidthPt = pageWidthPt;
 }
 
 
@@ -143,10 +149,9 @@ void ToCGenerator::generate()
     QTextBlock block = doc->begin();
     int blockId = 0;
     while (block.isValid()) {
-
-        KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
         // Choose only TOC blocks
-        if (bd && bd->hasCounterData()) {
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty()) {
+
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
@@ -168,6 +173,8 @@ void ToCGenerator::generate()
 
                 QTextBlock tocEntryTextBlock = cursor.block();
                 tocTemplateStyle->applyStyle( tocEntryTextBlock );
+
+                KoTextBlockData *bd = dynamic_cast<KoTextBlockData *>(block.userData());
 
                 // save the current style due to hyperlinks
                 QTextCharFormat savedCharFormat = cursor.charFormat();
@@ -221,13 +228,19 @@ void ToCGenerator::generate()
                         }
                         case IndexEntry::TEXT: {
                             //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
-                            cursor.insertText(block.text());
+                            QString text = block.text();
+                            text.replace('\t',' ');
+                            cursor.insertText(text);
                             break;
                         }
                         case IndexEntry::TAB_STOP: {
                             IndexEntryTabStop * tabStop = static_cast<IndexEntryTabStop*>(entry);
 
                             QList<QVariant> tabStops;
+                            if (tabStop->tab.type == QTextOption::RightTab){
+                                tabStop->tab.position = m_pageWidthPt;
+                            }
+
                             tabStops.append( QVariant::fromValue<KoText::Tab>(tabStop->tab) );
 
                             QTextBlockFormat blockFormat = cursor.blockFormat();
@@ -257,7 +270,7 @@ void ToCGenerator::generate()
                 m_originalBlocksInToc.append(qMakePair(cursor.block(), block));
 
             } else {
-                qDebug() << "Invalid outline level";
+                qDebug() << "Invalid outline level: " << outlineLevel;
             }
         }
         block = block.next();

@@ -110,6 +110,7 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
         writer->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
         writer->addAttribute("xmlns:delta", KoXmlNS::delta);
         writer->addAttribute("xmlns:split", KoXmlNS::split);
+        writer->addAttribute("xmlns:ac", KoXmlNS::ac);
     }
     writer->addAttribute("office:version", "1.2");
 

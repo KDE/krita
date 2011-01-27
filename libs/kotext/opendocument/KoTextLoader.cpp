@@ -189,6 +189,27 @@ public:
     void splitStack(int id);
 };
 
+class AttributeChangeRecord {
+    public:
+        AttributeChangeRecord():isValid(false){};
+
+        void setChangeRecord(const QString& changeRecord)
+        {
+            QStringList strList = changeRecord.split(",");
+            this->changeId = strList.value(0);
+            this->changeType = strList.value(1);
+            this->attributeName = strList.value(2);
+            this->attributeValue = strList.value(3);
+            this->isValid = true;
+        };
+
+        bool isValid;
+        QString changeId;
+        QString changeType;
+        QString attributeName;
+        QString attributeValue;
+};
+
 bool KoTextLoader::containsRichText(const KoXmlElement &element)
 {
     KoXmlElement textParagraphElement;
@@ -218,6 +239,8 @@ bool KoTextLoader::containsRichText(const KoXmlElement &element)
 void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
 {
     QString id;
+    AttributeChangeRecord attributeChange;
+
     if (element.localName() == "change-start") {
         //This is a ODF 1.1 Change
         id = element.attributeNS(KoXmlNS::text, "change-id");
@@ -237,6 +260,9 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
             id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         }
+    } else if(element.attributeNS(KoXmlNS::ac, "change001") != "") {
+        attributeChange.setChangeRecord(element.attributeNS(KoXmlNS::ac, "change001"));
+        id = attributeChange.changeId;
     } else {
     }
 
@@ -279,6 +305,20 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         KoTextStyleChangeInformation *formatChangeInformation = new KoTextStyleChangeInformation();
         formatChangeInformation->setPreviousCharFormat(cf);
         changeTracker->setFormatChangeInformation(changeId, formatChangeInformation);
+    } else if((element.localName() == "p") && attributeChange.isValid) {
+        changeElement->setChangeType(KoGenChange::FormatChange);
+        QTextBlockFormat blockFormat;
+        if (attributeChange.attributeName == "text:style-name") {
+            QString styleName = attributeChange.attributeValue;
+            KoParagraphStyle *paragraphStyle = textSharedData->paragraphStyle(styleName, stylesDotXml);
+            if (paragraphStyle) {
+                paragraphStyle->applyStyle(blockFormat);
+            }
+        }
+
+        KoParagraphStyleChangeInformation *paragraphChangeInformation = new KoParagraphStyleChangeInformation();
+        paragraphChangeInformation->setPreviousBlockFormat(blockFormat);
+        changeTracker->setFormatChangeInformation(changeId, paragraphChangeInformation);
     } else if((element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
         changeElement->setChangeType(KoGenChange::FormatChange);
     } else if ((element.localName() == "removed-content") || (element.localName() == "merge")) {
@@ -514,12 +554,17 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                                     markBlocksAsInserted(cursor, d->splitPositionMap.value(splitId), changeId);
                                     d->splitPositionMap.remove(splitId);
                                 }
+                            } else if (tag.attributeNS(KoXmlNS::ac, "change001") != "") {
+                                    d->openChangeRegion(tag);
                             }
 
                             loadParagraph(tag, cursor);
 
-                            if (tag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+                            if ((tag.attributeNS(KoXmlNS::delta, "insertion-type") != "") || 
+                                 (tag.attributeNS(KoXmlNS::ac, "change001") != "")) {
                                 d->closeChangeRegion(tag);
+                            }
+
                         } else {
                             QString generatedXmlString;
                             _node = loadDeleteMerges(tag,&generatedXmlString);

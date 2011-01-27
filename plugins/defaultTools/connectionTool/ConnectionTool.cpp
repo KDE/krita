@@ -309,7 +309,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         int hoverHandle = -1;
         if (hoverShape)
             hoverHandle = handleAtPoint(hoverShape, event->point);
-        setEditMode(Idle, hoverShape, hoverHandle);
+        setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
     }
 }
 

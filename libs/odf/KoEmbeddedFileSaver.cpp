@@ -75,7 +75,7 @@ QString KoEmbeddedFileSaver::getFilename(const QString &prefix)
     // This inserts prefix into the map if it's not there.
     d->prefixes[prefix] = index + 1;
 
-    return prefix + QString("%04d").arg(index);
+    return prefix + QString("%1").arg(index, 4, 10, QChar('0'));
 }
 
 // Examples:

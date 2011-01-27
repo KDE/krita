@@ -409,7 +409,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.attributeNS(KoXmlNS::text, "bullet-char", QString());
-        kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
+//         kDebug(32500) << "style.localName()=" << style.localName() << "level=" << level << "displayLevel=" << displayLevel << "bulletChar=" << bulletChar;
         if (bulletChar.isEmpty()) {  // list without any visible bullets
             setStyle(KoListStyle::CustomCharItem);
             setBulletCharacter(QChar());
@@ -531,7 +531,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
     }
     else { // if not defined, we have do nothing
-        kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
+//         kDebug(32500) << "stylename else:" << style.localName() << "level=" << level << "displayLevel=" << displayLevel;
         setStyle(KoListStyle::DecimalItem);
         setListItemSuffix(".");
     }

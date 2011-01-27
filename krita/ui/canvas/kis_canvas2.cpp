@@ -80,7 +80,6 @@ public:
         , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KoToolProxy(parent))
         , favoriteResourceManager(0)
-        , canvasMirroredY(false)
         , vastScrolling(true) {
     }
 
@@ -103,7 +102,6 @@ public:
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
     KisPrescaledProjectionSP prescaledProjection;
-    bool canvasMirroredY;
     bool vastScrolling;
 };
 
@@ -181,26 +179,16 @@ void KisCanvas2::pan(QPoint shift)
 
 void KisCanvas2::mirrorCanvas(bool enable)
 {
-    if(enable != m_d->canvasMirroredY) {
-        QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-        m_d->coordinatesConverter->mirror(false, true);
-        notifyZoomChanged();
-
-        QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-        pan(shift);
-    }
+    m_d->coordinatesConverter->mirror(false, enable);
+    notifyZoomChanged();
+    updateCanvas();
 }
 
 void KisCanvas2::rotateCanvas(qreal angle)
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-    
     m_d->coordinatesConverter->rotate(angle);
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    updateCanvas();
 }
 
 void KisCanvas2::rotateCanvasRight15()
@@ -215,13 +203,9 @@ void KisCanvas2::rotateCanvasLeft15()
 
 void KisCanvas2::resetCanvasTransformations()
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-    m_d->coordinatesConverter->resetTransformations();
+    m_d->coordinatesConverter->resetRotation();
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    updateCanvas();
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

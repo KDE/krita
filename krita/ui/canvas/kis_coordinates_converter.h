@@ -68,7 +68,7 @@ public:
     
     void rotate(qreal angle);
     void mirror(bool mirrorXAxis, bool mirrorYAxis);
-    void resetTransformations();
+    void resetRotation();
     
     virtual void setZoom(qreal zoom);
     
@@ -123,9 +123,7 @@ public:
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
 
-    QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
     QPointF flakeCenterPoint() const;
-
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:

@@ -239,8 +239,7 @@ void KisOpenGLCanvas2::drawImage()
     KisCoordinatesConverter *converter = coordinatesConverter();
 
     QRectF widgetRect(0,0, width(), height());
-    QRectF widgetRectInImagePixels = converter->
-        documentToImage(converter->widgetToDocument(widgetRect));
+    QRectF widgetRectInImagePixels = converter->widgetToImage(widgetRect);
 
     qreal scaleX, scaleY;
     converter->imageScale(&scaleX, &scaleY);

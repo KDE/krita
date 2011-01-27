@@ -699,13 +699,6 @@ void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
 {
     QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
 
-    foreach (ToolHelper *th, tools) {
-        if (th->shortcut().contains(item)) {
-            event->accept();
-            switchTool(th->id(), false);
-            return;
-        }
-    }
     if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
         switchTool(KoPanTool_ID, true);
     } else if (event->key() == Qt::Key_Escape && event->modifiers() == 0) {
@@ -788,6 +781,11 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         for (; it != actions.constEnd(); ++it) {
             ac->addAction(it.key(), it.value());
         }
+    }
+    foreach(ToolHelper * th, d->tools) {
+        ToolAction* action = new ToolAction(this, th->id(), th->toolTip());
+        action->setShortcut(th->shortcut());
+        ac->addAction(th->id(), action);
     }
 }
 

@@ -66,7 +66,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
         KoShape *attachedShape = handleId == StartHandle ? shape1 : shape2;
         int connectionPointId = handleId == StartHandle ? connectionPointId1 : connectionPointId2;
         KoConnectionPoint::EscapeDirection ed = attachedShape->connectionPoint(connectionPointId).escapeDirection;
-        if(ed == KoConnectionPoint::AllDirections) {
+        if (ed == KoConnectionPoint::AllDirections) {
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
             QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
 
@@ -83,7 +83,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
              * of the orthogonal direction.
              */
             // define our edge points in the right order
-            KoFlake::Position corners[4] = {
+            const KoFlake::Position corners[4] = {
                 KoFlake::BottomRightCorner,
                 KoFlake::BottomLeftCorner,
                 KoFlake::TopLeftCorner,
@@ -127,7 +127,7 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
             QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
             // use horizontal direction pointing away from center point
-            if(handlePoint.x() < centerPoint.x())
+            if (handlePoint.x() < centerPoint.x())
                 direction = QPointF(-1.0, 0.0);
             else
                 direction = QPointF(1.0, 0.0);
@@ -135,15 +135,15 @@ QPointF KoConnectionShapePrivate::escapeDirection(int handleId) const
             QPointF handlePoint = q->shapeToDocument(handles[handleId]);
             QPointF centerPoint = attachedShape->absolutePosition(KoFlake::CenteredPosition);
             // use vertical direction pointing away from center point
-            if(handlePoint.y() < centerPoint.y())
+            if (handlePoint.y() < centerPoint.y())
                 direction = QPointF(0.0, -1.0);
             else
                 direction = QPointF(0.0, 1.0);
-        } else if(ed == KoConnectionPoint::LeftDirection) {
+        } else if (ed == KoConnectionPoint::LeftDirection) {
             direction = QPointF(-1.0, 0.0);
         } else if (ed == KoConnectionPoint::RightDirection) {
             direction = QPointF(1.0, 0.0);
-        } else if(ed == KoConnectionPoint::UpDirection) {
+        } else if (ed == KoConnectionPoint::UpDirection) {
             direction = QPointF(0.0, -1.0);
         } else if (ed == KoConnectionPoint::DownDirection) {
             direction = QPointF(0.0, 1.0);
@@ -615,7 +615,7 @@ bool KoConnectionShape::connectFirst(KoShape * shape1, int connectionPointId)
         if (!shape1->hasConnectionPoint(connectionPointId))
             return false;
         // do not connect to the same connection point twice
-        if(d->shape2 == shape1 && d->connectionPointId2 == connectionPointId)
+        if (d->shape2 == shape1 && d->connectionPointId2 == connectionPointId)
             return false;
     }
 
@@ -642,7 +642,7 @@ bool KoConnectionShape::connectSecond(KoShape * shape2, int connectionPointId)
         if (!shape2->hasConnectionPoint(connectionPointId))
             return false;
         // do not connect to the same connection point twice
-        if(d->shape1 == shape2 && d->connectionPointId1 == connectionPointId)
+        if (d->shape1 == shape2 && d->connectionPointId1 == connectionPointId)
             return false;
     }
 
@@ -721,7 +721,7 @@ void KoConnectionShape::shapeChanged(ChangeType type, KoShape *shape)
     case ConnectionPointChanged:
         if (shape == d->shape1 && !shape->hasConnectionPoint(d->connectionPointId1)) {
             connectFirst(0, -1);
-        } else if( shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)){
+        } else if ( shape == d->shape2 && !shape->hasConnectionPoint(d->connectionPointId2)){
             connectSecond(0, -1);
         } else {
             d->forceUpdate = true;

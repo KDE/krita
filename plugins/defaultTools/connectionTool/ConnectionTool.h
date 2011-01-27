@@ -89,10 +89,10 @@ private:
      * @param p2 The second point
      * @return The float which is the square of the distance
      */
-    qreal squareDistance( const QPointF &p1, const QPointF &p2 );
+    qreal squareDistance( const QPointF &p1, const QPointF &p2 ) const;
 
     /// Returns nearest connection handle or nearest connection point id of shape
-    int handleAtPoint(KoShape *shape, const QPointF &mousePoint);
+    int handleAtPoint(KoShape *shape, const QPointF &mousePoint) const;
 
     enum EditMode {
         Idle,               ///< we are idle, nothing interesting happens
@@ -108,13 +108,13 @@ private:
     void resetEditMode();
 
     /// Returns the nearest connection shape within handle grab sensitiviy distance
-    KoConnectionShape * nearestConnectionShape(QList<KoShape*> shapes, const QPointF &mousePos);
+    KoConnectionShape * nearestConnectionShape(const QList<KoShape*> &shapes, const QPointF &mousePos) const;
 
     /// Updates status text depending on edit mode
     void updateStatusText();
 
     /// Updates current shape and edit mode dependent on position
-    KoShape * findShapeAtPosition(const QPointF &position);
+    KoShape * findShapeAtPosition(const QPointF &position) const;
 
     /// Updates actions
     void updateActions();

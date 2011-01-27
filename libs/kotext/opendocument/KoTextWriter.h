@@ -64,6 +64,8 @@ public:
      */
     static QString saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context);
 
+    static QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager *styleManager, KoShapeSavingContext &context);
+
     /**
      * Writes the portion of document contained within 'from' and 'to'
      */

@@ -2115,8 +2115,9 @@ KoXmlNode KoXmlNode::namedItemNS(const QString& nsURI, const QString& name) cons
     KoXmlNodeData* node = d->first;
     while (node) {
         if (node->nodeType == KoXmlNode::ElementNode
+                 && node->localName == name
                  && node->namespaceURI == nsURI
-                 && node->localName == name) {
+                 ) {
             return KoXmlNode(node);
         }
         node = node->next;

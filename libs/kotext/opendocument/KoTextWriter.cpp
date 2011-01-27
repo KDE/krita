@@ -155,6 +155,7 @@ public:
     QStack<const char *> openedTagStack;
 
     QString saveParagraphStyle(const QTextBlock &block);
+    QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
@@ -444,11 +445,14 @@ KoTextWriter::~KoTextWriter()
 
 QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager *styleManager, KoShapeSavingContext &context)
 {
-    KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
-
     QTextBlockFormat blockFormat = block.blockFormat();
     QTextCharFormat charFormat = QTextCursor(block).blockCharFormat();
+    return saveParagraphStyle(blockFormat, charFormat, styleManager, context);
+}
 
+QString KoTextWriter::saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat, KoStyleManager * styleManager, KoShapeSavingContext &context)
+{
+    KoParagraphStyle *defaultParagraphStyle = styleManager->defaultParagraphStyle();
     KoParagraphStyle *originalParagraphStyle = styleManager->paragraphStyle(blockFormat.intProperty(KoParagraphStyle::StyleId));
     if (!originalParagraphStyle)
         originalParagraphStyle = defaultParagraphStyle;
@@ -482,6 +486,11 @@ QString KoTextWriter::saveParagraphStyle(const QTextBlock &block, KoStyleManager
 QString KoTextWriter::Private::saveParagraphStyle(const QTextBlock &block)
 {
     return KoTextWriter::saveParagraphStyle(block, styleManager, context);
+}
+
+QString KoTextWriter::Private::saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat)
+{
+    return KoTextWriter::saveParagraphStyle(blockFormat, charFormat, styleManager, context);
 }
 
 QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat)

@@ -49,3 +49,4 @@ const QString KoXmlNS::officeooo("http://openoffice.org/2009/office");
 
 const QString KoXmlNS::delta("http://www.deltaxml.com/ns/track-changes/delta-namespace");
 const QString KoXmlNS::split("http://www.deltaxml.com/ns/track-changes/split-namespace");
+const QString KoXmlNS::ac("http://www.deltaxml.com/ns/track-changes/attribute-change-namespace");

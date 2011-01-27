@@ -1491,6 +1491,7 @@ void KoTextWriter::Private::addNameSpaceDefinitions(QString &generatedXmlString)
     nameSpacesStream << "xmlns:officeooo=\"" << KoXmlNS::officeooo << "\" ";
     nameSpacesStream << "xmlns:delta=\"" << KoXmlNS::delta << "\" ";
     nameSpacesStream << "xmlns:split=\"" << KoXmlNS::split << "\" ";
+    nameSpacesStream << "xmlns:ac=\"" << KoXmlNS::ac << "\" ";
     nameSpacesStream << ">";
 
     generatedXmlString.prepend(nameSpaceDefinitions);

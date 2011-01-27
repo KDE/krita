@@ -356,7 +356,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         }else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-with-content");
-        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange) {
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange && elementType == KoTextWriter::Private::Span) {
             KoFormatChangeInformation *formatChangeInformation = changeTracker->formatChangeInformation(changeId);
             
             if (formatChangeInformation && formatChangeInformation->formatType() == KoFormatChangeInformation::eTextStyleChange) {
@@ -378,6 +378,17 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
             tagInformation.addAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
             tagInformation.addAttribute("delta:insertion-type", "insert-around-content");
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange 
+                            && elementType == KoTextWriter::Private::ParagraphOrHeader) {
+            KoFormatChangeInformation *formatChangeInformation = changeTracker->formatChangeInformation(changeId);
+            if (formatChangeInformation && formatChangeInformation->formatType() == KoFormatChangeInformation::eParagraphStyleChange) {
+                KoParagraphStyleChangeInformation *paraStyleChangeInformation = static_cast<KoParagraphStyleChangeInformation *>(formatChangeInformation);
+                QString styleName = saveParagraphStyle(paraStyleChangeInformation->previousBlockFormat(), QTextCharFormat());
+                QString attributeChangeRecord = changeTransTable.value(changeId) + QString(",") + QString("modify") 
+                                                                                 + QString(",") + QString("text:style-name")
+                                                                                 + QString(",") + styleName;
+                tagInformation.addAttribute("ac:change001", attributeChangeRecord);
+            }
         }
     }
 

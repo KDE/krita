@@ -114,7 +114,12 @@ bool Layout::start()
     else if (shape)
         nextParag();
     m_reset = false;
-    return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    
+    bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    if (!ok) {
+        kDebug() << "shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+    }
+    return ok;
 }
 
 void Layout::end()

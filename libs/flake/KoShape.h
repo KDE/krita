@@ -127,7 +127,8 @@ public:
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
-        ChildChanged ///< a child of a container was changed/removed. This is propagated to all parents
+        ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
+        ConnectionPointChanged ///< a connection point has changed
     };
 
     /// See QGraphicsItem::CacheMode

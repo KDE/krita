@@ -775,7 +775,6 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
 void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
 {
     Q_D(KoShape);
-    d->textRunAroundSide = side;
 
     if (side == RunThrough) {
         if (runThrought == Background) {
@@ -786,6 +785,14 @@ void KoShape::setTextRunAroundSide(TextRunAroundSide side, Through runThrought)
     } else {
         setRunThrough(0);
     }
+
+    if ( d->textRunAroundSide == side) {
+        return;
+    }
+
+    d->textRunAroundSide = side;
+    notifyChanged();
+    d->shapeChanged(TextRunAroundChanged);
 }
 
 qreal KoShape::textRunAroundDistance() const
@@ -1369,6 +1376,8 @@ KoShapeShadow *KoShapePrivate::loadOdfShadow(KoShapeLoadingContext &context) con
         qreal offsetX = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-x"));
         qreal offsetY = KoUnit::parseValue(styleStack.property(KoXmlNS::draw, "shadow-offset-y"));
         shadow->setOffset(QPointF(offsetX, offsetY));
+        qreal blur = KoUnit::parseValue(styleStack.property(KoXmlNS::koffice, "shadow-blur-radius"));
+        shadow->setBlur(blur);
 
         QString opacity = styleStack.property(KoXmlNS::draw, "shadow-opacity");
         if (! opacity.isEmpty() && opacity.right(1) == "%")

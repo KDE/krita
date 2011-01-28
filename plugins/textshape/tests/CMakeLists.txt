@@ -22,6 +22,7 @@ set(TestDocumentLayout_test_SRCS
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextAnchorStrategy.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -90,6 +91,7 @@ set(TestChangeListCommand_test_SRCS
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
     ../FontSizeAction.cpp
+    ../TextAnchorStrategy.cpp
 )
 
 
@@ -120,6 +122,7 @@ set(TestStylesModel_test_SRCS
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
 target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
@@ -137,6 +140,7 @@ set(TestTableLayout_test_SRCS
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
 target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})
@@ -154,6 +158,7 @@ set(TestSections_test_SRCS
     ../ShrinkToFitShapeContainer.cpp
     ../TextLine.cpp
     ../Outline.cpp
+    ../TextAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -220,6 +225,7 @@ set(TestTextTool_test_SRCS
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
     ../FontSizeAction.cpp
+    ../TextAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
 target_link_libraries(TestTextTool komain ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -286,6 +292,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
     ../FontSizeAction.cpp
+    ../TextAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
 target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS} komain kotext ${QT_QTTEST_LIBRARY})

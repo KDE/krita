@@ -32,12 +32,13 @@
 #include <QFormLayout>
 #include <QRadioButton>
 
-StylesWidget::StylesWidget(QWidget *parent)
-        : QWidget(parent),
+StylesWidget::StylesWidget(QWidget *parent, Qt::WindowFlags f)
+        : QFrame(parent, f),
         m_styleManager(0),
         m_stylesModel(new StylesModel(0, this)),
         m_stylesDelegate(new StylesDelegate()),
         m_blockSignals(false)
+        ,m_isHovered(false)
 {
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
@@ -55,6 +56,17 @@ StylesWidget::StylesWidget(QWidget *parent)
     connect(widget.modifyStyle, SIGNAL(clicked()), this, SLOT(editStyle()));
     connect(widget.applyStyle, SIGNAL(clicked()), this, SLOT(applyStyle()));
     connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(setCurrent(const QModelIndex&)));
+}
+
+void StylesWidget::enterEvent(QEvent *)
+{
+    m_isHovered = true;
+}
+
+void StylesWidget::leaveEvent(QEvent *event)
+{
+    m_isHovered = false;
+    emit hoverChanged(false);
 }
 
 void StylesWidget::setEmbedded(bool embed)

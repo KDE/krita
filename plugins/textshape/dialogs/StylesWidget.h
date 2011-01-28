@@ -19,7 +19,7 @@
 #ifndef STYLESWIDGET_H
 #define STYLESWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QList>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -32,13 +32,17 @@ class KoCharacterStyle;
 class StylesModel;
 class StylesDelegate;
 
-class StylesWidget : public QWidget
+class StylesWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit StylesWidget(QWidget *parent = 0);
+    explicit StylesWidget(QWidget *parent = 0,  Qt::WindowFlags f = 0);
 
     void setEmbedded(bool embed);
+
+protected:
+    virtual void enterEvent(QEvent *event);
+    virtual void leaveEvent(QEvent *event);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
@@ -61,6 +65,7 @@ private slots:
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
     void characterStyleSelected(KoCharacterStyle *style);
+    void hoverChanged(bool);
 
 private:
     Ui::StylesWidget widget;
@@ -72,6 +77,7 @@ private:
     StylesDelegate *m_stylesDelegate;
     bool m_blockSignals;
     bool m_isEmbedded;
+    bool m_isHovered;
 };
 
 #endif

@@ -142,17 +142,11 @@ void KoTextShapeContainerModel::containerChanged(KoShapeContainer *container, Ko
 
 void KoTextShapeContainerModel::childChanged(KoShape *child, KoShape::ChangeType type)
 {
-    if (type == KoShape::RotationChanged || type == KoShape::ScaleChanged ||
-            type == KoShape::ShearChanged || type == KoShape::SizeChanged) {
+    if (((type == KoShape::RotationChanged || type == KoShape::ScaleChanged || type == KoShape::ShearChanged ||
+          type == KoShape::SizeChanged) && child->textRunAroundSide() != KoShape::RunThrough) ||
+          type == KoShape::TextRunAroundChanged) {
 
-        KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
-        Q_ASSERT(data);
-        data->foul();
-
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
-        if (lay)
-            lay->interruptLayout();
-        data->fireResizeEvent();
+        relayoutInlineObject(child);
     }
     KoShapeContainerModel::childChanged( child, type );
 }
@@ -195,6 +189,7 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
         QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
         relation.anchor->setOffset(QPointF(newPosition.x() - tl.cursorToX(anchorPosInParag)
             + tl.x(), 0));
+        relayoutInlineObject(child);
 
         // the rest of the code uses the shape baseline, at this time the bottom. So adjust
         newPosition.setY(newPosition.y() + child->size().height());
@@ -209,11 +204,13 @@ void KoTextShapeContainerModel::proposeMove(KoShape *child, QPointF &move)
             QTextLine tl = layout->lineForTextPosition(anchorPosInParag);
             qreal y = tl.y() - data->documentOffset() - newPosition.y() + child->size().height();
             relation.anchor->setOffset(QPointF(relation.anchor->offset().x(), -y));
+            relayoutInlineObject(child);
         }
     } else {
         //TODO pavolk: handle position type change: absolute to realtive, etc ..
         child->setPosition(newPosition);
         relation.anchor->setOffset(relation.anchor->offset() + move);
+        relayoutInlineObject(child);
     }
 
     move.setX(0); // let the text layout move it.
@@ -224,3 +221,27 @@ bool KoTextShapeContainerModel::isChildLocked(const KoShape *child) const
 {
     return child->isGeometryProtected();
 }
+
+void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
+{
+    if (child == 0) {
+        return;
+    }
+    KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
+    Q_ASSERT(data);
+    data->foul();
+
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
+    if (lay) {
+        lay->interruptLayout();
+
+        if (d->children.contains(child)) {
+            Relation relation = d->children.value(child);
+            if (relation.anchor) {
+                lay->resetInlineObject(relation.anchor->positionInDocument());
+            }
+        }
+    }
+    data->fireResizeEvent();
+}
+

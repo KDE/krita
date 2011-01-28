@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Service
 Name=Krita ODG Import Filter
+Name[cs]=Importní filtr formátu ODG pro Kritu
 Name[de]=Krita-ODG-Importfilter
 Name[et]=Krita ODG impordifilter
 Name[fr]=Filtre d'importation ODG  de Krita

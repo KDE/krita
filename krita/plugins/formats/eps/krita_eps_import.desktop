@@ -3,6 +3,7 @@ Type=Service
 Name=Krita Encapsulated PostScript Import Filter
 Name[ca]=Filtre d'importació de PostScript encapsulat per al Krita
 Name[ca@valencia]=Filtre d'importació de PostScript encapsulat per al Krita
+Name[cs]=Importní filtr formátu Encapsulated PostScript pro Kritu
 Name[da]=Encapsulated PostScript-importfilter til Krita
 Name[de]=Krita Encapsulated-Postscript-Importfilter
 Name[en_GB]=Krita Encapsulated PostScript Import Filter

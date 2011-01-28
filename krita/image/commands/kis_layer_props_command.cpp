@@ -38,7 +38,8 @@ KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
         qint32 oldOpacity, qint32 newOpactiy,
         const QString& oldCompositeOp, const QString& newCompositeOp,
         const QString& oldName, const QString& newName,
-        const QBitArray oldChannelFlags, const QBitArray newChannelFlags)
+        const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
+        bool undoChannelFlags)
         : KisLayerCommand(i18n("Property Changes"), layer)
         , m_oldName(oldName)
         , m_newName(newName)
@@ -48,6 +49,7 @@ KisLayerPropsCommand::KisLayerPropsCommand(KisLayerSP layer,
         , m_newCompositeOp(newCompositeOp)
         , m_oldChannelFlags(oldChannelFlags)
         , m_newChannelFlags(newChannelFlags)
+        , m_undoChannelFlags(undoChannelFlags)
 {
 }
 
@@ -60,7 +62,9 @@ void KisLayerPropsCommand::redo()
     m_layer->setOpacity(m_newOpacity);
     m_layer->setCompositeOp(m_newCompositeOp);
     m_layer->setName(m_newName);
-    m_layer->setChannelFlags(m_newChannelFlags);
+    if (m_undoChannelFlags) {
+        m_layer->setChannelFlags(m_newChannelFlags);
+    }
     m_layer->setDirty();
 }
 
@@ -69,6 +73,8 @@ void KisLayerPropsCommand::undo()
     m_layer->setOpacity(m_oldOpacity);
     m_layer->setCompositeOp(m_oldCompositeOp);
     m_layer->setName(m_oldName);
-    m_layer->setChannelFlags(m_oldChannelFlags);
+    if (m_undoChannelFlags) {
+        m_layer->setChannelFlags(m_oldChannelFlags);
+    }
     m_layer->setDirty();
 }

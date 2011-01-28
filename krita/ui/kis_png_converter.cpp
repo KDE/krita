@@ -30,6 +30,7 @@
 
 #include <limits.h>
 #include <stdio.h>
+#include <zlib.h>
 
 #include <QBuffer>
 #include <QFile>
@@ -453,17 +454,17 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     png_read_info(png_ptr, info_ptr);
 
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_GRAY && info_ptr->bit_depth < 8) {
+    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_GRAY && png_get_bit_depth(png_ptr, info_ptr) < 8) {
         png_set_expand(png_ptr);
     }
 
-    if (info_ptr->color_type == PNG_COLOR_TYPE_PALETTE && info_ptr->bit_depth < 8) {
+    if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_PALETTE && png_get_bit_depth(png_ptr, info_ptr) < 8) {
         png_set_packing(png_ptr);
     }
 
 
-    if (info_ptr->color_type != PNG_COLOR_TYPE_PALETTE &&
-            (info_ptr->valid & PNG_INFO_tRNS)) {
+    if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_PALETTE &&
+            (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))) {
         png_set_expand(png_ptr);
     }
     png_read_update_info(png_ptr, info_ptr);
@@ -489,7 +490,12 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     bool hasalpha = (color_type == PNG_COLOR_TYPE_RGB_ALPHA || color_type == PNG_COLOR_TYPE_GRAY_ALPHA);
 
     // Read image profile
-    png_charp profile_name, profile_data;
+    png_charp profile_name;
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+    png_bytep profile_data;
+#else
+    png_charp profile_data;
+#endif
     int compression_type;
     png_uint_32 proflen;
 
@@ -938,7 +944,11 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().toAscii());
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (const png_bytep)(*it)->annotation().data(), (*it) -> annotation() . size());
+#else
             png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
+#endif
         }
         ++it;
     }

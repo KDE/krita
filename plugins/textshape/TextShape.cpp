@@ -101,7 +101,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
     setCollisionDetection(true);
 
-    lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
+//     lay->connect(m_textShapeData, SIGNAL(relayout()), SLOT(scheduleLayout()));
 }
 
 TextShape::~TextShape()

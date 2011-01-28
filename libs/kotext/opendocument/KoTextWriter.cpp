@@ -389,6 +389,18 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
                                                                                  + QString(",") + styleName;
                 tagInformation.addAttribute("ac:change001", attributeChangeRecord);
             }
+        } else if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::FormatChange
+                            && elementType == KoTextWriter::Private::ListItem) {
+            KoFormatChangeInformation *formatChangeInformation = changeTracker->formatChangeInformation(changeId);
+            if (formatChangeInformation && formatChangeInformation->formatType() == KoFormatChangeInformation::eListItemNumberingChange) {
+                KoListItemNumChangeInformation *listItemChangeInfo = static_cast<KoListItemNumChangeInformation *>(formatChangeInformation);
+
+                if (listItemChangeInfo->listItemNumChangeType() == KoListItemNumChangeInformation::eNumberingRestarted) {
+                    QString attributeChangeRecord = changeTransTable.value(changeId) + QString(",") + QString("insert") 
+                                                                                     + QString(",") + QString("text:start-value");
+                    tagInformation.addAttribute("ac:change001", attributeChangeRecord);
+                }
+            }
         }
     }
 
@@ -1194,6 +1206,10 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 int listItemChangeId;
                 TagInformation listItemTagInformation;
                 listItemTagInformation.setTagName(listHeader ? "text:list-header" : "text:list-item");
+                if (block.blockFormat().hasProperty(KoParagraphStyle::ListStartValue)) {
+                    int startValue = block.blockFormat().intProperty(KoParagraphStyle::ListStartValue);
+                    listItemTagInformation.addAttribute("text:start-value", startValue);
+                }
                 if (textList == topLevelTextList) {
                     listItemChangeId = openTagRegion(block.position(), KoTextWriter::Private::ListItem, listItemTagInformation);
                 } else {

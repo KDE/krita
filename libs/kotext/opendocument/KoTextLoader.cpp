@@ -319,6 +319,12 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         KoParagraphStyleChangeInformation *paragraphChangeInformation = new KoParagraphStyleChangeInformation();
         paragraphChangeInformation->setPreviousBlockFormat(blockFormat);
         changeTracker->setFormatChangeInformation(changeId, paragraphChangeInformation);
+    } else if((element.localName() == "list-item") && attributeChange.isValid) {
+        changeElement->setChangeType(KoGenChange::FormatChange);
+        if (attributeChange.changeType == "insert") {
+            KoListItemNumChangeInformation *listItemChangeInformation = new KoListItemNumChangeInformation(KoListItemNumChangeInformation::eNumberingRestarted);
+            changeTracker->setFormatChangeInformation(changeId, listItemChangeInformation);
+        }
     } else if((element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
         changeElement->setChangeType(KoGenChange::FormatChange);
     } else if ((element.localName() == "removed-content") || (element.localName() == "merge")) {
@@ -1182,8 +1188,11 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     if (!numberedParagraph && e.tagName() != "list-item" && !listHeader)
         return;
 
-    if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+    if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
         d->openChangeRegion(e);
+    } else if (e.attributeNS(KoXmlNS::ac, "change001") != "") {
+        d->openChangeRegion(e);
+    }
 
     QTextBlock current = cursor.block();
 

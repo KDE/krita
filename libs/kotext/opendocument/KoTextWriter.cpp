@@ -399,6 +399,11 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
                     QString attributeChangeRecord = changeTransTable.value(changeId) + QString(",") + QString("insert") 
                                                                                      + QString(",") + QString("text:start-value");
                     tagInformation.addAttribute("ac:change001", attributeChangeRecord);
+                } else if (listItemChangeInfo->listItemNumChangeType() == KoListItemNumChangeInformation::eRestartRemoved) {
+                    QString attributeChangeRecord = changeTransTable.value(changeId) + QString(",") + QString("remove") 
+                                                                                     + QString(",") + QString("text:start-value")
+                                                                                     + QString(",") + QString::number(listItemChangeInfo->previousStartNumber());
+                    tagInformation.addAttribute("ac:change001", attributeChangeRecord);
                 }
             }
         }

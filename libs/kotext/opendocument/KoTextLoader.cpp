@@ -324,6 +324,10 @@ void KoTextLoader::Private::openChangeRegion(const KoXmlElement& element)
         if (attributeChange.changeType == "insert") {
             KoListItemNumChangeInformation *listItemChangeInformation = new KoListItemNumChangeInformation(KoListItemNumChangeInformation::eNumberingRestarted);
             changeTracker->setFormatChangeInformation(changeId, listItemChangeInformation);
+        } else if (attributeChange.changeType == "remove") {
+            KoListItemNumChangeInformation *listItemChangeInformation = new KoListItemNumChangeInformation(KoListItemNumChangeInformation::eRestartRemoved);
+            listItemChangeInformation->setPreviousStartNumber(attributeChange.attributeValue.toInt());
+            changeTracker->setFormatChangeInformation(changeId, listItemChangeInformation);
         }
     } else if((element.attributeNS(KoXmlNS::delta, "insertion-type") == "insert-around-content")) {
         changeElement->setChangeType(KoGenChange::FormatChange);

@@ -923,10 +923,9 @@ void KisLayerManager::saveLayerAsImage()
     d.setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());
     KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
+    gc.bitBlt(QPoint(0, 0), l->projection(), r);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-    dst->resize(paintLayer->exactBounds());
     dst->refreshGraph();
 
     d.setOutputMimeType(mimefilter.toLatin1());

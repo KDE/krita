@@ -349,6 +349,10 @@ void KoTextLoader::Private::closeChangeRegion(const KoXmlElement& element)
         if ((insertionType == "insert-with-content") || (insertionType == "insert-around-content")) {
             id = element.attributeNS(KoXmlNS::delta, "insertion-change-idref");
         }
+    } else if(element.attributeNS(KoXmlNS::ac, "change001") != "") {
+        AttributeChangeRecord attributeChange;
+        attributeChange.setChangeRecord(element.attributeNS(KoXmlNS::ac, "change001"));
+        id = attributeChange.changeId;
     } else {
     }
 
@@ -360,7 +364,6 @@ void KoTextLoader::Private::splitStack(int id)
 {
     if (changeStack.isEmpty())
         return;
-
     int oldId = changeStack.top();
     changeStack.pop();
     if ((id == oldId) || changeTracker->isParent(id, oldId))

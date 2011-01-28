@@ -110,4 +110,24 @@ void Connector::selectionChanged()
     emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }
 
+//   ************ ToolAction **********
+ToolAction::ToolAction(KoToolManager* toolManager, QString id, QString name)
+    : KAction(name, toolManager),
+    m_toolManager(toolManager),
+    m_toolID(id)
+{
+    connect(this, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
+}
+
+ToolAction::~ToolAction()
+{
+}
+
+void ToolAction::actionTriggered()
+{
+    m_toolManager->switchToolRequested(m_toolID);
+}
+
+
+
 #include <KoToolManager_p.moc>

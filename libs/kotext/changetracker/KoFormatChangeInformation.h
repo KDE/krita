@@ -26,7 +26,8 @@ class KoFormatChangeInformation {
     public:
         typedef enum {
             eTextStyleChange = 0,
-            eParagraphStyleChange
+            eParagraphStyleChange,
+            eListItemNumberingChange
         }FormatChangeType;
 
     KoFormatChangeInformation::FormatChangeType formatType();
@@ -56,4 +57,18 @@ class KoParagraphStyleChangeInformation:public KoTextStyleChangeInformation {
         QTextBlockFormat previousTextBlockFormat;
 };
 
+class KoListItemNumChangeInformation:public KoFormatChangeInformation {
+    public:
+        typedef enum {
+            eNumberingRestarted = 0,
+            eRestartRemoved
+        }ListItemNumChangeType;
+        KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType eSubType);
+        void setPreviousStartNumber(int oldRestartNumber);
+        KoListItemNumChangeInformation::ListItemNumChangeType listItemNumChangeType();
+        int previousStartNumber();
+    private:
+        int oldStartNumber;
+        KoListItemNumChangeInformation::ListItemNumChangeType eSubType;
+};
 #endif

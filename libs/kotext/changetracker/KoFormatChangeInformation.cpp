@@ -58,3 +58,25 @@ QTextBlockFormat& KoParagraphStyleChangeInformation::previousBlockFormat()
 {
     return this->previousTextBlockFormat;
 }
+
+KoListItemNumChangeInformation::KoListItemNumChangeInformation(KoListItemNumChangeInformation::ListItemNumChangeType type):
+                                                               KoFormatChangeInformation(KoFormatChangeInformation::eListItemNumberingChange),
+                                                               eSubType(type)
+{
+}
+
+void KoListItemNumChangeInformation::setPreviousStartNumber(int oldStartNumber)
+{
+    this->oldStartNumber = oldStartNumber;
+}
+
+KoListItemNumChangeInformation::ListItemNumChangeType KoListItemNumChangeInformation::listItemNumChangeType()
+{
+    return eSubType;
+}
+
+int KoListItemNumChangeInformation::previousStartNumber()
+{
+    return oldStartNumber;
+}
+

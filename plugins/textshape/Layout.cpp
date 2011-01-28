@@ -162,9 +162,11 @@ qreal Layout::width()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
-        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        if (table) {
+            m_tableLayout.setTable(table);
+            ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
+            m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        }
     }
     if (m_newParag)
         ptWidth -= resolveTextIndent();

@@ -22,11 +22,11 @@
 #include "TreeShapeMoveStrategy.h"
 #include "TreeShapeMoveCommand.h"
 #include "SelectionDecorator.h"
-#include "KoTextOnShapeContainer.h"
 
-#include "KoShapeRegistry.h"
-#include "kdebug.h"
+#include <kdebug.h>
 
+#include <KoShapeRegistry.h>
+#include <KoTosContainer.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
@@ -56,9 +56,8 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::blue);
     m_ballastRoot->setBackground(new KoGradientBackground(gradient));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(m_ballastRoot, 0);
-    tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
-    m_ballastRoot = tos;
+    KoTosContainer *tos = dynamic_cast<KoTosContainer *>(m_ballastRoot);
+    tos->setResizeBehavior(KoTosContainer::IndependentSizes);
     m_ballastTree = dynamic_cast<KoShape*>(new TreeShape(m_ballastRoot));
     m_ballastConnector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
     m_ballastTree->setVisible(false);

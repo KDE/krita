@@ -21,12 +21,21 @@
 
 #include <QWidget>
 
+class KisNodeQueryPath;
+/**
+ * This class is used to edit @ref KisNodeQueryPath
+ */
 class KisNodeQueryPathEditor : public QWidget
 {
     Q_OBJECT
 public:
     KisNodeQueryPathEditor(QWidget* parent);
     ~KisNodeQueryPathEditor();
+    void setNodeQueryPath(const KisNodeQueryPath& path);
+    /**
+     * Generate a node query path based on the state of the widgets
+     */
+    KisNodeQueryPath nodeQueryPath() const;
 private slots:
     void currentLayerEnabled(bool v);
     void customPathEnabled(bool v);

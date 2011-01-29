@@ -20,13 +20,14 @@
 
 #include "ui_wdgnodequerypatheditor.h"
 #include <QWhatsThis>
+#include <recorder/kis_node_query_path.h>
 
 struct KisNodeQueryPathEditor::Private
 {
     Ui_WdgNodeQueryPathEditor form;
 };
 
-KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : d(new Private)
+KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : QWidget(parent), d(new Private)
 {
     d->form.setupUi(this);
   
@@ -35,6 +36,7 @@ KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : d(new Private)
     
     d->form.kpushbutton->setIcon(KIcon("help-contents"));
     connect(d->form.kpushbutton, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
+    currentLayerEnabled(true);
 }
 
 KisNodeQueryPathEditor::~KisNodeQueryPathEditor()
@@ -42,11 +44,28 @@ KisNodeQueryPathEditor::~KisNodeQueryPathEditor()
     delete d;
 }
 
+void KisNodeQueryPathEditor::setNodeQueryPath(const KisNodeQueryPath& path)
+{
+  if(path.toString() == ".")
+  {
+    d->form.radioButtonCurrentLayer->setChecked(true);
+  } else {
+    d->form.radioButtonCustomPath->setChecked(true);
+    d->form.klineeditPath->setText(path.toString());
+  }
+}
+
+KisNodeQueryPath KisNodeQueryPathEditor::nodeQueryPath() const
+{
+    return KisNodeQueryPath::fromString(d->form.klineeditPath->text());
+}
+
 void KisNodeQueryPathEditor::currentLayerEnabled(bool v)
 {
     if(!v) return;
     d->form.klineeditPath->setEnabled(false);
     d->form.kpushbutton->setEnabled(false);
+    d->form.klineeditPath->setText(".");
 }
 
 void KisNodeQueryPathEditor::customPathEnabled(bool v)
@@ -54,7 +73,6 @@ void KisNodeQueryPathEditor::customPathEnabled(bool v)
     if(!v) return;
     d->form.klineeditPath->setEnabled(true);
     d->form.kpushbutton->setEnabled(true);
-    d->form.klineeditPath->setText(".");
 }
 
 void KisNodeQueryPathEditor::slotPopupQuickHelp()

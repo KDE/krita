@@ -94,10 +94,9 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     m_paintOpsToPreset[m_action->paintOpPreset()->paintOp().id()] = m_action->paintOpPreset();
     connect(m_actionEditor->wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
 
-    m_nodeQueryPathEditor = new KisNodeQueryPathEditor(this);
-    m_nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
-    connect(m_nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
-    m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);  
+    // Setup the query path editor
+    m_actionEditor->nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
+    connect(m_actionEditor->nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
     
 }
 
@@ -140,7 +139,7 @@ void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
 
 void KisRecordedPaintActionEditor::nodeQueryPathChanged()
 {
-    m_action->setNodeQueryPath(m_nodeQueryPathEditor->nodeQueryPath());
+    m_action->setNodeQueryPath(m_actionEditor->nodeQueryPathEditor->nodeQueryPath());
     emit(actionEdited());
 }
 

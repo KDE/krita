@@ -58,7 +58,6 @@ private:
     QGridLayout* m_gridLayout;
     QList<QString> m_paintops;
     QMap<QString, KisPaintOpPresetSP> m_paintOpsToPreset;
-    KisNodeQueryPathEditor* m_nodeQueryPathEditor;
 };
 
 class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactory

@@ -51,8 +51,10 @@ void KisNodeQueryPathEditor::setNodeQueryPath(const KisNodeQueryPath& path)
   if(path.toString() == ".")
   {
     d->form.radioButtonCurrentLayer->setChecked(true);
+    currentLayerEnabled(true);
   } else {
     d->form.radioButtonCustomPath->setChecked(true);
+    customPathEnabled(true);
     d->form.klineeditPath->setText(path.toString());
   }
 }

@@ -82,13 +82,13 @@ void KisNodeQueryPathEditor::customPathEnabled(bool v)
 void KisNodeQueryPathEditor::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), i18n(
-          "<b>/</b> represents the root of the image, or a sperator\n"
-          "<b>a number</b> represents a layer\n"
-          "<b>.</b> represents the current layer\n"
-          "<b>..</b> represents the parent layer\n\n"
-          "<b>Examples:</b>\n"
-          "<i>/0</i> represents the bottom layer of the image\n"
-          "<i>../1</i> represents the second layer from the bottom of the parent of the current layer\n"
+          "<b>/</b> represents the root of the image, or a sperator<br/>\n"
+          "<b>a number</b> represents a layer<br/>\n"
+          "<b>.</b> represents the current layer<br/>\n"
+          "<b>..</b> represents the parent layer<br/>\n\n"
+          "<b>Examples:</b><br/>\n"
+          "<i>/0</i> represents the bottom layer of the image<br/>\n"
+          "<i>../1</i> represents the second layer from the bottom of the parent of the current layer<br/>\n"
           "<i>./0</i> represents the first child of the current layer" ) );
 }
 

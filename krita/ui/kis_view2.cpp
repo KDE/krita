@@ -169,6 +169,7 @@ public:
         delete perspectiveGridManager;
         delete paintingAssistantManager;
         delete viewConverter;
+        delete statusBar;
     }
 
 public:

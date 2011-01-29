@@ -295,21 +295,46 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
         Q_ASSERT(m_currentShape);
         // check if we should highlight another connection point
         int handle = handleAtPoint(m_currentShape, event->point);
-        if (handle >= 0)
+        if (handle >= 0) {
             setEditMode(m_editMode, m_currentShape, handle);
-        else
+            useCursor(handle >= KoConnectionPoint::FirstCustomConnectionPoint ? Qt::SizeAllCursor : Qt::ArrowCursor);
+        } else {
+            KoShape *hoverShape = findShapeAtPosition(event->point);
             updateStatusText();
+            if (hoverShape == m_currentShape)
+                useCursor(Qt::CrossCursor);
+            else if (!hoverShape)
+                useCursor(Qt::ArrowCursor);
+            else
+                useCursor(Qt::PointingHandCursor);
+        }
     } else if (m_editMode == EditConnection) {
         Q_ASSERT(m_currentShape);
+        KoShape *hoverShape = findShapeAtPosition(event->point);
         // check if we should highlight another connection handle
         int handle = handleAtPoint(m_currentShape, event->point);
         setEditMode(m_editMode, m_currentShape, handle);
+        if (m_activeHandle >= 0)
+            useCursor(Qt::SizeAllCursor);
+        else if (hoverShape && hoverShape != m_currentShape)
+            useCursor(Qt::PointingHandCursor);
+        else
+            useCursor(Qt::ArrowCursor);
     } else {
         KoShape *hoverShape = findShapeAtPosition(event->point);
         int hoverHandle = -1;
         if (hoverShape)
             hoverHandle = handleAtPoint(hoverShape, event->point);
-        setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(hoverShape);
+        if (connectionShape) {
+            setEditMode(hoverHandle >= 0 ? EditConnection : Idle, hoverShape, hoverHandle);
+            useCursor(hoverHandle >= 0 ? Qt::SizeAllCursor : Qt::PointingHandCursor);
+        } else if (hoverShape) {
+            setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
+            useCursor(hoverHandle >= 0 ? Qt::DragLinkCursor : Qt::PointingHandCursor);
+        } else {
+            useCursor(Qt::ForbiddenCursor);
+        }
     }
 }
 
@@ -394,7 +419,6 @@ void ConnectionTool::keyPressEvent(QKeyEvent *event)
 
 void ConnectionTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    canvas()->canvasWidget()->setCursor(Qt::PointingHandCursor);
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
     canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);

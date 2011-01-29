@@ -25,6 +25,8 @@
 #include <filter/kis_filter_configuration.h>
 #include <QLabel>
 #include <kis_paint_device.h>
+#include "kis_node_query_path_editor.h"
+#include <recorder/kis_node_query_path.h>
 
 KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
         m_action(dynamic_cast<KisRecordedFilterAction*>(action)),
@@ -39,6 +41,11 @@ KisRecordedFilterActionEditor::KisRecordedFilterActionEditor(QWidget* parent, Ki
     } else {
         m_gridLayout->addWidget(new QLabel("No configuration option.", this));
     }
+    m_nodeQueryPathEditor = new KisNodeQueryPathEditor(this);
+    m_nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
+    connect(m_nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
+    m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);
+    
 }
 
 KisRecordedFilterActionEditor::~KisRecordedFilterActionEditor()
@@ -52,6 +59,12 @@ void KisRecordedFilterActionEditor::configurationUpdated()
         m_action->setFilterConfiguration(config);
         emit(actionEdited());
     }
+}
+
+void KisRecordedFilterActionEditor::nodeQueryPathChanged()
+{
+    m_action->setNodeQueryPath(m_nodeQueryPathEditor->nodeQueryPath());
+    emit(actionEdited());
 }
 
 KisRecordedFilterActionEditorFactory::KisRecordedFilterActionEditorFactory()

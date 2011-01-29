@@ -22,6 +22,7 @@
 #include <QWidget>
 #include "kis_recorded_action_editor_factory.h"
 
+class KisNodeQueryPathEditor;
 class KisRecordedFilterAction;
 class QGridLayout;
 class KisConfigWidget;
@@ -34,12 +35,14 @@ public:
     ~KisRecordedFilterActionEditor();
 private slots:
     void configurationUpdated();
+    void nodeQueryPathChanged();
 signals:
     void actionEdited();
 private:
     KisRecordedFilterAction* m_action;
     QGridLayout* m_gridLayout;
     KisConfigWidget* m_configWidget;
+    KisNodeQueryPathEditor* m_nodeQueryPathEditor;
 };
 
 class KisRecordedFilterActionEditorFactory : public KisRecordedActionEditorFactory

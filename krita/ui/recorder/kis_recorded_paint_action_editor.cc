@@ -33,6 +33,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <kis_factory2.h>
 #include <kstandarddirs.h>
+#include "kis_node_query_path_editor.h"
+#include <recorder/kis_node_query_path.h>
 
 KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisRecordedAction* action) : QWidget(parent),
         m_action(dynamic_cast<KisRecordedPaintAction*>(action)),
@@ -91,6 +93,12 @@ KisRecordedPaintActionEditor::KisRecordedPaintActionEditor(QWidget* parent, KisR
     m_actionEditor->paintOps->setCurrentIndex(m_paintops.indexOf(m_action->paintOpPreset()->paintOp().id()));
     m_paintOpsToPreset[m_action->paintOpPreset()->paintOp().id()] = m_action->paintOpPreset();
     connect(m_actionEditor->wdgPresetChooser, SIGNAL(resourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
+
+    m_nodeQueryPathEditor = new KisNodeQueryPathEditor(this);
+    m_nodeQueryPathEditor->setNodeQueryPath(m_action->nodeQueryPath());
+    connect(m_nodeQueryPathEditor, SIGNAL(nodeQueryPathChanged()), SLOT(nodeQueryPathChanged()));
+    m_gridLayout->addWidget(m_nodeQueryPathEditor, 1, 0);  
+    
 }
 
 KisRecordedPaintActionEditor::~KisRecordedPaintActionEditor()
@@ -129,6 +137,13 @@ void KisRecordedPaintActionEditor::resourceSelected(KoResource* resource)
     m_action->setPaintOpPreset(preset);
     setPaintOpPreset();
 }
+
+void KisRecordedPaintActionEditor::nodeQueryPathChanged()
+{
+    m_action->setNodeQueryPath(m_nodeQueryPathEditor->nodeQueryPath());
+    emit(actionEdited());
+}
+
 
 void KisRecordedPaintActionEditor::setPaintOpPreset()
 {

@@ -30,6 +30,7 @@ class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;
 class Ui_WdgPaintActionEditor;
 class KoResource;
+class KisNodeQueryPathEditor;
 
 /**
  * This is the editor for all \ref KisRecordedPaintAction
@@ -44,6 +45,7 @@ private slots:
     void configurationUpdated();
     void paintOpChanged(int index);
     void resourceSelected(KoResource* resource);
+    void nodeQueryPathChanged();
 signals:
     void actionEdited();
 private:
@@ -56,6 +58,7 @@ private:
     QGridLayout* m_gridLayout;
     QList<QString> m_paintops;
     QMap<QString, KisPaintOpPresetSP> m_paintOpsToPreset;
+    KisNodeQueryPathEditor* m_nodeQueryPathEditor;
 };
 
 class KisRecordedPaintActionEditorFactory : public KisRecordedActionEditorFactory

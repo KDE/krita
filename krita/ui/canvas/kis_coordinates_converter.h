@@ -65,6 +65,7 @@ public:
 
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
+    QPoint shiftAfterZoom() const;
     
     void rotate(qreal angle);
     void mirror(bool mirrorXAxis, bool mirrorYAxis);

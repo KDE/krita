@@ -164,7 +164,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     KisImageWSP image = m_view->image();
 
     m_view->canvasBase()->notifyZoomChanged();
-    m_view->canvas()->update();
+    m_canvasController->pan(m_view->canvasBase()->coordinatesConverter()->shiftAfterZoom());
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()

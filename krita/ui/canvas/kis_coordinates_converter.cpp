@@ -36,14 +36,16 @@ struct KisCoordinatesConverter::Private
     
     KisImageWSP image;
     
-    bool   mirrorXAxis;
-    bool   mirrorYAxis;
-    QSize  canvasWidgetSize;
-    QPoint documentOffset;
-    QPoint documentOrigin;
+    bool    mirrorXAxis;
+    bool    mirrorYAxis;
+    QSizeF  canvasWidgetSize;
+    QPointF shiftAfterZoom;
+    QPointF documentOffset;
+    QPoint  documentOrigin;
     
     QTransform imageToDocument;
     QTransform postprocessingTransform;
+    QTransform zoom;
     QTransform transform;
     QTransform widgetToViewport;
 };
@@ -60,8 +62,7 @@ void KisCoordinatesConverter::recalculateTransformations() const
     qreal cx     = qreal(m_d->canvasWidgetSize.width()) / 2.0;
     qreal cy     = qreal(m_d->canvasWidgetSize.height()) / 2.0;
     
-    m_d->transform.reset();
-    m_d->transform *= QTransform::fromTranslate(-cx,-cy) * QTransform::fromScale(scaleX, scaleY) * QTransform::fromTranslate(cx,cy);
+    m_d->transform = QTransform::fromTranslate(-cx,-cy) * QTransform::fromScale(scaleX,scaleY) * QTransform::fromTranslate(cx,cy);
     m_d->transform *= m_d->postprocessingTransform;
 
     QRectF irect = imageRectInWidgetPixels();
@@ -101,7 +102,7 @@ void KisCoordinatesConverter::setDocumentOrigin(const QPoint &origin)
     m_d->documentOrigin = origin;
     recalculateTransformations();
 }
-#include <iostream>
+
 void KisCoordinatesConverter::setDocumentOffset(const QPoint &offset)
 {
     QPointF diff = m_d->documentOffset - offset;
@@ -118,23 +119,34 @@ QPoint KisCoordinatesConverter::documentOrigin() const
 
 QPoint KisCoordinatesConverter::documentOffset() const
 {
-    return m_d->documentOffset;
+    return QPoint(int(m_d->documentOffset.x()), int(m_d->documentOffset.y()));
 }
 
 void KisCoordinatesConverter::setZoom(qreal zoom)
 {
-    qreal zFactor = zoom / KoZoomHandler::zoom();
-    qreal cx      = qreal(m_d->canvasWidgetSize.width()) / 2.0;
-    qreal cy      = qreal(m_d->canvasWidgetSize.height()) / 2.0;
+    QRectF rb = imageRectInWidgetPixels();
     
     KoZoomHandler::setZoom(zoom);
     
-    m_d->postprocessingTransform *=
-        QTransform::fromTranslate(-cx,-cy) * QTransform::fromScale(zFactor,zFactor) * QTransform::fromTranslate(cx,cy);
+    qreal   cx        = m_d->canvasWidgetSize.width()  / 2.0;
+    qreal   cy        = m_d->canvasWidgetSize.height() / 2.0;
+    QPointF oldOffset = m_d->documentOffset;
     
-//     m_d->documentOffset.setX(-m_d->postprocessingTransform.m31());
-//     m_d->documentOffset.setY(-m_d->postprocessingTransform.m32());
+    qreal zoomX, zoomY;
+    KoZoomHandler::zoom(&zoomX, &zoomY);
+    
+    m_d->postprocessingTransform *= QTransform::fromTranslate(-cx,-cy);
+    m_d->postprocessingTransform *= m_d->zoom.inverted();
+    
+    m_d->zoom = QTransform::fromScale(zoomX, zoomY);
+    
+    m_d->postprocessingTransform *= m_d->zoom;
+    m_d->postprocessingTransform *= QTransform::fromTranslate(cx,cy);
+    
+    m_d->documentOffset = QPointF(-m_d->postprocessingTransform.m31(), -m_d->postprocessingTransform.m32());
     recalculateTransformations();
+    
+    m_d->shiftAfterZoom = m_d->documentOffset - oldOffset;
 }
 
 void KisCoordinatesConverter::rotate(qreal angle)
@@ -142,8 +154,8 @@ void KisCoordinatesConverter::rotate(qreal angle)
     QTransform rotation;
     rotation.rotate(angle);
     
-    qreal cx = qreal(m_d->canvasWidgetSize.width())  / 2.0;
-    qreal cy = qreal(m_d->canvasWidgetSize.height()) / 2.0;
+    qreal cx = m_d->canvasWidgetSize.width()  / 2.0;
+    qreal cy = m_d->canvasWidgetSize.height() / 2.0;
     
     m_d->postprocessingTransform *=
         QTransform::fromTranslate(-cx,-cy) * rotation * QTransform::fromTranslate(cx,cy);
@@ -160,13 +172,17 @@ void KisCoordinatesConverter::mirror(bool mirrorXAxis, bool mirrorYAxis)
 
 void KisCoordinatesConverter::resetRotation()
 {
-    qreal  zoom = KoZoomHandler::zoom();
+    qreal zoomX, zoomY;
+    KoZoomHandler::zoom(&zoomX, &zoomY);
     
-    m_d->postprocessingTransform.reset();
-    m_d->postprocessingTransform *= QTransform::fromScale(zoom, zoom);
+    m_d->postprocessingTransform = QTransform::fromScale(zoomX, zoomY);
     m_d->postprocessingTransform *= QTransform::fromTranslate(-m_d->documentOffset.x(), -m_d->documentOffset.y());
     
     recalculateTransformations();
+}
+
+QPoint KisCoordinatesConverter::shiftAfterZoom() const {
+    return QPoint(int(m_d->shiftAfterZoom.x()), int(m_d->shiftAfterZoom.y()));
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
@@ -274,7 +290,7 @@ void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;
-    zoom(&zoomX, &zoomY);
+    KoZoomHandler::zoom(&zoomX, &zoomY);
 
     // Get the KisImage resolution
     qreal resX = m_d->image->xRes();

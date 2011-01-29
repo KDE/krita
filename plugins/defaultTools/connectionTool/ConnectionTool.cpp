@@ -82,7 +82,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_escapeAll = new KAction(KIcon("escape-direction-all"), i18n("Escape in all directions"), this);
     m_escapeAll->setCheckable(true);
     addAction("escape-all", m_escapeAll);
-    m_escapeHorizontal = new KAction(KIcon("escape-direction-horizontal"), i18n("Escape in horizonal directions"), this);
+    m_escapeHorizontal = new KAction(KIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
     m_escapeHorizontal->setCheckable(true);
     addAction("escape-horizontal", m_escapeHorizontal);
     m_escapeVertical = new KAction(KIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);

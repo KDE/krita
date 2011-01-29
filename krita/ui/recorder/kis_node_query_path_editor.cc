@@ -37,6 +37,8 @@ KisNodeQueryPathEditor::KisNodeQueryPathEditor(QWidget* parent) : QWidget(parent
     d->form.kpushbutton->setIcon(KIcon("help-contents"));
     connect(d->form.kpushbutton, SIGNAL(clicked()), this, SLOT(slotPopupQuickHelp()));
     currentLayerEnabled(true);
+    
+    connect(d->form.klineeditPath, SIGNAL(textChanged(QString)), SIGNAL(nodeQueryPathChanged()));
 }
 
 KisNodeQueryPathEditor::~KisNodeQueryPathEditor()

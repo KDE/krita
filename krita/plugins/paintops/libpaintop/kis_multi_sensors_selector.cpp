@@ -30,6 +30,7 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Privat
 {
   d->form.setupUi(this);
   d->form.sensorsList->setModel(new KisMultiSensorsModel);
+  d->sensor = 0;
 }
 
 KisMultiSensorsSelector::~KisMultiSensorsSelector()

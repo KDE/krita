@@ -34,6 +34,7 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     {
         return KisDynamicSensor::sensorsIds()[index.row()].name();
     }
+    return QVariant();
 }
 
 Qt::ItemFlags KisMultiSensorsModel::flags( const QModelIndex & /*index */) const

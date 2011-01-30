@@ -53,6 +53,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
 {
     if(role == Qt::CheckStateRole)
     {
+        emit(parametersChanged());
         bool checked = value.toInt() == Qt::Checked;
         if(!checked && m_listSensor == 0) // It is not accepted to uncheck when there is only one sensor left
         {
@@ -74,6 +75,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
                     m_currentSensor = m_listSensor->takeSensor(ids.first());
                     delete m_listSensor;
                     m_listSensor = 0;
+                    emit(sensorChanged(m_currentSensor));
                 }
                 return true;
             }
@@ -83,6 +85,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             m_listSensor->addSensor(m_currentSensor);
             m_currentSensor = m_listSensor;
             m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
+            emit(sensorChanged(m_currentSensor));
             return true;
         }
     }
@@ -100,3 +103,5 @@ void KisMultiSensorsModel::setCurrentSensor(KisDynamicSensor* sensor)
     m_listSensor    = dynamic_cast<KisDynamicSensorList*>(sensor);
     reset();
 }
+
+#include "kis_multi_sensors_model_p.moc"

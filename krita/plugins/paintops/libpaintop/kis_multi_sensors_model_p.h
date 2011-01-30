@@ -15,12 +15,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#ifndef KISMULTISENSORSMODEL_H_
+#define KISMULTISENSORSMODEL_H_
+
 #include <QAbstractListModel>
 
 class KisDynamicSensorList;
 class KisDynamicSensor;
 
 class KisMultiSensorsModel : public QAbstractListModel {
+    Q_OBJECT
 public:
     explicit KisMultiSensorsModel(QObject* parent = 0);
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -28,8 +32,16 @@ public:
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     void setCurrentSensor(KisDynamicSensor* sensor);
+signals:
+    void sensorChanged(KisDynamicSensor* sensor);
+    /**
+     * This signal is emitted when the parameters of sensor are changed.
+     */
+    void parametersChanged();    
 private:
     KisDynamicSensor* m_currentSensor;
     KisDynamicSensorList* m_listSensor;
     
 };
+
+#endif

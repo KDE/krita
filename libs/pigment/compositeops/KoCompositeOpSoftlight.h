@@ -21,6 +21,8 @@
 #ifndef KOCOMPOSITEOPSOFTLIGHT_H_
 #define KOCOMPOSITEOPSOFTLIGHT_H_
 
+#include <math.h>
+
 #include "KoCompositeOpAlphaBase.h"
 
 /**

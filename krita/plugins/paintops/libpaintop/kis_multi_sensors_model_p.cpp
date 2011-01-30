@@ -73,8 +73,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
                 if(ids.size() == 1)
                 {
                     m_currentSensor = m_listSensor->takeSensor(ids.first());
-                    delete m_listSensor;
-                    m_listSensor = 0;
+                    m_listSensor = 0; // Don't delete the list sensor, it will be deleted as an effect of the call to sensorChanged
                     emit(sensorChanged(m_currentSensor));
                 }
                 return true;
@@ -82,7 +81,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         } else {
             Q_ASSERT(checked);
             m_listSensor = new KisDynamicSensorList;
-            m_listSensor->addSensor(m_currentSensor);
+            m_listSensor->addSensor(m_currentSensor->clone()); // Use a clone to make sure that it is owned by the KisDynamicSensorList
             m_currentSensor = m_listSensor;
             m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
             emit(sensorChanged(m_currentSensor));

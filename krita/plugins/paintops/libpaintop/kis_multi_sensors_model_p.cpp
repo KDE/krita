@@ -17,8 +17,9 @@
 
 #include "kis_multi_sensors_model_p.h"
 #include "kis_dynamic_sensor.h"
+#include "sensors/kis_dynamic_sensor_list.h"
 
-KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent) : QAbstractListModel(parent)
+KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent) : QAbstractListModel(parent), m_currentSensor(0), m_listSensor(0)
 {
 }
 
@@ -35,7 +36,15 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
         return KisDynamicSensor::sensorsIds()[index.row()].name();
     } else if(role == Qt::CheckStateRole)
     {
-        return QVariant(false);
+        if(m_listSensor)
+        {
+            return QVariant(m_listSensor->hasSensor(KisDynamicSensor::sensorsIds()[index.row()].id()) ? Qt::Checked : Qt::Unchecked );
+        } else if(m_currentSensor)
+        {
+            return QVariant(m_currentSensor->id() == KisDynamicSensor::sensorsIds()[index.row()].id() ? Qt::Checked : Qt::Unchecked );
+        } else {
+            return QVariant(Qt::Checked);
+        }
     }
     return QVariant();
 }
@@ -43,4 +52,11 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags KisMultiSensorsModel::flags( const QModelIndex & /*index */) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+}
+
+void KisMultiSensorsModel::setCurrentSensor(KisDynamicSensor* sensor)
+{
+    m_currentSensor = sensor;
+    m_listSensor    = dynamic_cast<KisDynamicSensorList*>(sensor);
+    reset();
 }

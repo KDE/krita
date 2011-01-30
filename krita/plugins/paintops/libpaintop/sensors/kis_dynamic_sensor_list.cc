@@ -72,3 +72,12 @@ void KisDynamicSensorList::fromXML(const QDomElement& elt)
         }
     }
 }
+
+bool KisDynamicSensorList::hasSensor(const QString& id)
+{
+    foreach(KisDynamicSensor* sensor, m_list)
+    {
+        if(sensor->id() == id) return true;
+    }
+    return false;
+}

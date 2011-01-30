@@ -36,6 +36,8 @@ public:
 
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
+    
+    bool hasSensor(const QString& id);
 private:
     QList<KisDynamicSensor*> m_list;
 };

@@ -17,11 +17,18 @@
 
 #include <QAbstractListModel>
 
+class KisDynamicSensorList;
+class KisDynamicSensor;
+
 class KisMultiSensorsModel : public QAbstractListModel {
 public:
     explicit KisMultiSensorsModel(QObject* parent = 0);
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+    void setCurrentSensor(KisDynamicSensor* sensor);
+private:
+    KisDynamicSensor* m_currentSensor;
+    KisDynamicSensorList* m_listSensor;
     
 };

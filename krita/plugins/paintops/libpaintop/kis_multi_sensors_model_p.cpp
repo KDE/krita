@@ -63,6 +63,17 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
                 m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
                 return true;
             } else {
+                KisDynamicSensor* sensor = m_listSensor->takeSensor(KisDynamicSensor::sensorsIds()[index.row()].id());
+                delete sensor;
+                QList<QString> ids = m_listSensor->sensorIds();
+                Q_ASSERT(!ids.empty());
+                if(ids.size() == 1)
+                {
+                    m_currentSensor = m_listSensor->takeSensor(ids.first());
+                    delete m_listSensor;
+                    m_listSensor = 0;
+                }
+                return true;
             }
         } else {
             Q_ASSERT(checked);

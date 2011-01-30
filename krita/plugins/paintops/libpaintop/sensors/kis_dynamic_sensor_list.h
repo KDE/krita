@@ -37,6 +37,18 @@ public:
     virtual void toXML(QDomDocument&, QDomElement&) const;
     virtual void fromXML(const QDomElement&);
     
+    /**
+     * Remove the sensor corrseponnding to the id from the list of sensors.
+     * And return it. It becomes the responsability of the caller to delete
+     * the sensor.
+     */
+    KisDynamicSensor* takeSensor(const QString& id);
+    
+    /**
+     * @return the list of sensor ids countained by this @ref KisDynamicSensorList
+     */
+    QList<QString> sensorIds() const;
+    
     bool hasSensor(const QString& id);
     /**
      * Add a new sensor to the list

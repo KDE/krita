@@ -87,3 +87,27 @@ void KisDynamicSensorList::addSensor(KisDynamicSensor* sensor)
     Q_ASSERT(!hasSensor(sensor->id())); // we really want only one sensor id
     m_list.append(sensor);
 }
+
+KisDynamicSensor* KisDynamicSensorList::takeSensor(const QString& id)
+{
+    Q_ASSERT(hasSensor(id));
+    foreach(KisDynamicSensor* sensor, m_list)
+    {
+        if(sensor->id() == id)
+        {
+            m_list.removeAll(sensor);
+            return sensor;
+        }
+    }
+    
+}
+
+QList<QString> KisDynamicSensorList::sensorIds() const
+{
+    QList<QString> ids;
+    foreach(KisDynamicSensor* sensor, m_list)
+    {
+        ids.push_back(sensor->id());
+    }
+    return ids;
+}

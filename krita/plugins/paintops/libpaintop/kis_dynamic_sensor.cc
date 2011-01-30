@@ -33,6 +33,11 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 
 KisDynamicSensor::~KisDynamicSensor() { }
 
+KisDynamicSensor* KisDynamicSensor::clone() const
+{
+    return createFromXML(toXML());
+}
+
 QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorSelector*)
 {
     Q_UNUSED(parent);

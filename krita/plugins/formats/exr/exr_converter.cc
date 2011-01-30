@@ -658,6 +658,8 @@ Encoder* encoder(Imf::OutputFile& file, const ExrPaintLayerSaveInfo& info, int w
         }
         break;
     }
+    default:
+        qFatal("Impossible error");
     }
     return 0;
 }

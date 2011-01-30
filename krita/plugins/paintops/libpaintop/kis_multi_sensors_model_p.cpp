@@ -15,24 +15,23 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_multi_sensors_selector.h"
-
-#include "ui_wdgmultisensorsselector.h"
 #include "kis_multi_sensors_model_p.h"
+#include "kis_dynamic_sensor.h"
 
-struct KisMultiSensorsSelector::Private
+KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent) : QAbstractListModel(parent)
 {
-  Ui_WdgMultiSensorsSelector form;
-};
-
-KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Private)
-{
-  d->form.setupUi(this);
-  d->form.sensorsList->setModel(new KisMultiSensorsModel);
 }
 
-KisMultiSensorsSelector::~KisMultiSensorsSelector()
+int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
-  delete d;
+    return KisDynamicSensor::sensorsIds().size();
 }
 
+QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid()) return QVariant();
+    if(role == Qt::DisplayRole)
+    {
+        return KisDynamicSensor::sensorsIds()[index.row()].name();
+    }
+}

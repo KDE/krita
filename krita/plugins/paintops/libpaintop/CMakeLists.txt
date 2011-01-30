@@ -46,6 +46,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop_settings.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_distance.cc
+    sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
 )

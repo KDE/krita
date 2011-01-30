@@ -35,3 +35,8 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
         return KisDynamicSensor::sensorsIds()[index.row()].name();
     }
 }
+
+Qt::ItemFlags KisMultiSensorsModel::flags( const QModelIndex & /*index */) const
+{
+    return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;
+}

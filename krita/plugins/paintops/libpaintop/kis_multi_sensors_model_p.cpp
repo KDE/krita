@@ -65,6 +65,8 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             } else {
                 KisDynamicSensor* sensor = m_listSensor->takeSensor(KisDynamicSensor::sensorsIds()[index.row()].id());
                 delete sensor;
+                
+                // If there is only one sensor left, remove it from the list sensor, and delete the list sensor
                 QList<QString> ids = m_listSensor->sensorIds();
                 Q_ASSERT(!ids.empty());
                 if(ids.size() == 1)

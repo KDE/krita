@@ -181,31 +181,35 @@ void KisCanvas2::mirrorCanvas(bool enable)
 {
     m_d->coordinatesConverter->mirror(false, enable);
     notifyZoomChanged();
-    updateCanvas();
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
-void KisCanvas2::rotateCanvas(qreal angle)
+void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
     m_d->coordinatesConverter->rotate(angle);
     notifyZoomChanged();
-    updateCanvas();
+    
+    if(updateOffset)
+        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
+    else
+        updateCanvas();
 }
 
 void KisCanvas2::rotateCanvasRight15()
 {
-    rotateCanvas(15.0);
+    rotateCanvas(15.0, true);
 }
 
 void KisCanvas2::rotateCanvasLeft15()
 {
-    rotateCanvas(-15.0);
+    rotateCanvas(-15.0, true);
 }
 
 void KisCanvas2::resetCanvasTransformations()
 {
     m_d->coordinatesConverter->resetRotation();
     notifyZoomChanged();
-    updateCanvas();
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

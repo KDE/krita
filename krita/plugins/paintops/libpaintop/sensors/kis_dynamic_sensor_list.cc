@@ -48,16 +48,18 @@ void KisDynamicSensorList::reset()
 
 void KisDynamicSensorList::toXML(QDomDocument& doc, QDomElement& elt) const
 {
+    KisDynamicSensor::toXML(doc, elt);
     foreach(KisDynamicSensor* sensor, m_list)
     {
         QDomElement childelt = doc.createElement("ChildSensor");
         sensor->toXML(doc, childelt);
         elt.appendChild(childelt);
-    }    
+    }
 }
 
 void KisDynamicSensorList::fromXML(const QDomElement& elt)
 {
+    KisDynamicSensor::fromXML(elt);
     QDomNode node = elt.firstChild();
     while (!node.isNull())
     {
@@ -70,6 +72,7 @@ void KisDynamicSensorList::fromXML(const QDomElement& elt)
                 m_list.push_back(sensor);
             }
         }
+        node = node.nextSibling();
     }
 }
 

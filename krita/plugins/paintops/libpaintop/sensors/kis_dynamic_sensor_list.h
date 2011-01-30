@@ -38,6 +38,10 @@ public:
     virtual void fromXML(const QDomElement&);
     
     bool hasSensor(const QString& id);
+    /**
+     * Add a new sensor to the list
+     */
+    void addSensor(KisDynamicSensor* sensor);
 private:
     QList<KisDynamicSensor*> m_list;
 };

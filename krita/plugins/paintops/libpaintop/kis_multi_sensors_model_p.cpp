@@ -49,6 +49,27 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
+bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &value, int role )
+{
+    if(role == Qt::CheckStateRole)
+    {
+        bool checked = value.toInt() == Qt::Checked;
+        if(!checked && m_listSensor == 0) // It is not accepted to uncheck when there is only one sensor left
+        {
+          return false;
+        } else if(m_listSensor) {
+        } else {
+            Q_ASSERT(checked);
+            m_listSensor = new KisDynamicSensorList;
+            m_listSensor->addSensor(m_currentSensor);
+            m_currentSensor = m_listSensor;
+            m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
+            return true;
+        }
+    }
+    return false;
+}
+
 Qt::ItemFlags KisMultiSensorsModel::flags( const QModelIndex & /*index */) const
 {
     return Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled;

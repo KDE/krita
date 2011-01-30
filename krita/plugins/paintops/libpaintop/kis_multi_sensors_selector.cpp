@@ -23,6 +23,7 @@
 struct KisMultiSensorsSelector::Private
 {
   Ui_WdgMultiSensorsSelector form;
+  KisDynamicSensor* sensor;
 };
 
 KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Private)
@@ -36,3 +37,12 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
   delete d;
 }
 
+void KisMultiSensorsSelector::setCurrent(KisDynamicSensor* _sensor)
+{
+  d->sensor = _sensor;
+}
+
+KisDynamicSensor* KisMultiSensorsSelector::current()
+{
+  return d->sensor;
+}

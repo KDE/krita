@@ -84,7 +84,7 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
     m_paintIncremental = false;
     m_executor = new QThreadPool(this);
     m_executor->setMaxThreadCount(1);
-    m_smooth = false;
+    m_smooth = true;
     m_assistant = false;
     m_smoothness = 0.5;
     m_magnetism = 1.0;
@@ -119,7 +119,10 @@ KisToolMultihand::~KisToolMultihand()
 
 void KisToolMultihand::initTransformations()
 {
-    QPointF axisPoint = KisToolPaint::m_axisCenter;
+    QPointF axisPoint = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
+    if (axisPoint.isNull()){
+        axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
+    }
     m_brushTransforms.resize(m_brushesCount);
     QTransform m;
 
@@ -319,6 +322,25 @@ void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
                          control1,
                          control2,
                          info,m_painters[0]);
+
+        // naive implementation
+        for (int i = 1; i < m_brushesCount; i++){
+            KisPaintInformation pi1 = m_previousPaintInformation;
+            KisPaintInformation pi2 = info;
+
+            pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
+            pi2.setPos( m_brushTransforms.at(i).map(pi2.pos()) );
+
+            QPointF control1tx = m_brushTransforms.at(i).map(control1);
+            QPointF control2tx = m_brushTransforms.at(i).map(control2);
+
+            paintBezierCurve(pi1,
+                         control1tx,
+                         control2tx,
+                         pi2,m_painters[i]);
+        }
+
+
 
         m_previousTangent = newTangent;
     } else {
@@ -762,7 +784,7 @@ QWidget * KisToolMultihand::createOptionWidget()
 
     m_sliderSmoothness = new KisSliderSpinBox(optionWidget);
     m_sliderSmoothness->setRange(0, MAXIMUM_SMOOTHNESS);
-    m_sliderSmoothness->setEnabled(true);
+    m_sliderSmoothness->setEnabled(m_smooth);
     connect(m_chkSmooth, SIGNAL(toggled(bool)), m_sliderSmoothness, SLOT(setEnabled(bool)));
     connect(m_sliderSmoothness, SIGNAL(valueChanged(int)), SLOT(slotSetSmoothness(int)));
     m_sliderSmoothness->setValue(m_smoothness * MAXIMUM_SMOOTHNESS);

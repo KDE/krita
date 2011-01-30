@@ -114,7 +114,6 @@ set(flake_SRCS
     KoFilterEffectConfigWidgetBase.cpp
     KoFilterEffectRenderContext.cpp
     KoFilterEffectLoadingContext.cpp
-    KoTextOnShapeContainer.cpp
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
@@ -268,7 +267,6 @@ install(
     KoShapeUserData.h
     KoShapeApplicationData.h
     KoSharedSavingData.h
-    KoTextOnShapeContainer.h
     KoTextShapeDataBase.h
     KoToolBase.h
     KoToolManager.h

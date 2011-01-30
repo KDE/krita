@@ -30,7 +30,7 @@ KisDynamicSensorList::~KisDynamicSensorList()
 
 qreal KisDynamicSensorList::parameter(const KisPaintInformation& info)
 {
-    qreal t;
+    qreal t = 1.0;
     foreach(KisDynamicSensor* sensor, m_list)
     {
         t *= sensor->parameter(info);
@@ -99,7 +99,7 @@ KisDynamicSensor* KisDynamicSensorList::takeSensor(const QString& id)
             return sensor;
         }
     }
-    
+    return 0;
 }
 
 QList<QString> KisDynamicSensorList::sensorIds() const

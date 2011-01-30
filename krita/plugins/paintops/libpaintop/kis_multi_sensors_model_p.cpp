@@ -58,6 +58,12 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         {
           return false;
         } else if(m_listSensor) {
+            if(checked)
+            {
+                m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
+                return true;
+            } else {
+            }
         } else {
             Q_ASSERT(checked);
             m_listSensor = new KisDynamicSensorList;

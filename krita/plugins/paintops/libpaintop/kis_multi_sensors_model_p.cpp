@@ -33,6 +33,9 @@ QVariant KisMultiSensorsModel::data(const QModelIndex &index, int role) const
     if(role == Qt::DisplayRole)
     {
         return KisDynamicSensor::sensorsIds()[index.row()].name();
+    } else if(role == Qt::CheckStateRole)
+    {
+        return QVariant(false);
     }
     return QVariant();
 }

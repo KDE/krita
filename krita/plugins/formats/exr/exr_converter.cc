@@ -80,6 +80,9 @@ ImageType imfTypeToKisType(Imf::PixelType type)
         return IT_FLOAT16;
     case Imf::FLOAT:
         return IT_FLOAT32;
+    default:
+        qFatal("Out of bound enum");
+        return IT_UNKNOWN;
     }
 }
 
@@ -92,6 +95,9 @@ const KoColorSpace* kisTypeToColorSpace(QString model, ImageType imageType)
         return KoColorSpaceRegistry::instance()->colorSpace(model, Float32BitsColorDepthID.id(), "");
     case IT_UNKNOWN:
     case IT_UNSUPPORTED:
+        return 0;
+    default:
+        qFatal("Out of bound enum");
         return 0;
     }
 }

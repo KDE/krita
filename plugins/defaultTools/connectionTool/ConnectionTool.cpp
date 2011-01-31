@@ -334,7 +334,7 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 #if QT_VERSION  >= 0x040700
             useCursor(hoverHandle >= 0 ? Qt::DragLinkCursor : Qt::PointingHandCursor);
 #else
-            useCursor(hoverHandle >= 0 ? Qt::DragCopyCursor : Qt::PointingHandCursor);
+            useCursor(Qt::PointingHandCursor);
 #endif
         } else {
             useCursor(Qt::ForbiddenCursor);

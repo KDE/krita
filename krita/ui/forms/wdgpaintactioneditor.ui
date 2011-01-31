@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>376</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
+    <widget class="KisNodeQueryPathEditor" name="nodeQueryPathEditor" native="true"/>
+   </item>
+   <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>0</number>
@@ -182,6 +185,12 @@
    <class>KisPresetChooser</class>
    <extends>QWidget</extends>
    <header>widgets/kis_preset_chooser.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisNodeQueryPathEditor</class>
+   <extends>QWidget</extends>
+   <header>recorder/kis_node_query_path_editor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -198,7 +198,7 @@ KoShape* Layout::proposePosition(KoShape* shape)
     QPointF pos;
     switch (m_structure) {
         case TreeShape::OrgDown:
-            pos = shape->shapeToDocument(shape->connectionPoints()[0]);
+            pos = shape->shapeToDocument(shape->connectionPoints().value(0).position);
             pos = m_container->documentToShape(pos);
 
             nextShape = m_children.first();
@@ -211,7 +211,7 @@ KoShape* Layout::proposePosition(KoShape* shape)
                 nextShape = 0;
             break;
         case TreeShape::OrgUp:
-            pos = shape->shapeToDocument(shape->connectionPoints()[2]);
+            pos = shape->shapeToDocument(shape->connectionPoints().value(2).position);
             pos = m_container->documentToShape(pos);
 
             nextShape = m_children.first();
@@ -224,7 +224,7 @@ KoShape* Layout::proposePosition(KoShape* shape)
                 nextShape = 0;
             break;
         case TreeShape::OrgLeft:
-            pos = shape->shapeToDocument(shape->connectionPoints()[1]);
+            pos = shape->shapeToDocument(shape->connectionPoints().value(1).position);
             pos = m_container->documentToShape(pos);
 
             nextShape = m_children.first();
@@ -237,7 +237,7 @@ KoShape* Layout::proposePosition(KoShape* shape)
                 nextShape = 0;
             break;
         case TreeShape::OrgRight:
-            pos = shape->shapeToDocument(shape->connectionPoints()[3]);
+            pos = shape->shapeToDocument(shape->connectionPoints().value(3).position);
             pos = m_container->documentToShape(pos);
 
             nextShape = m_children.first();

@@ -85,6 +85,7 @@ set(flake_SRCS
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
+    KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp
@@ -225,6 +226,7 @@ install(
     KoCanvasObserverBase.h
     KoCanvasSupervisor.h
     KoResourceManager.h
+    KoConnectionPoint.h
     KoCopyController.h
     KoCutController.h
     KoDataCenterBase.h

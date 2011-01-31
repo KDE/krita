@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,7 +21,13 @@
  */
 
 #include "ConnectionTool.h"
+#include "AddConnectionPointCommand.h"
+#include "RemoveConnectionPointCommand.h"
+#include "ChangeConnectionPointCommand.h"
+#include "MoveConnectionPointStrategy.h"
+#include "ConnectionPointWidget.h"
 
+#include <KoConnectionShape.h>
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
 #include <KoShapeManager.h>
@@ -32,30 +39,108 @@
 #include <KoSelection.h>
 #include <KoLineBorder.h>
 #include <KoResourceManager.h>
-
+#include <KoInteractionStrategy.h>
+#include <KoShapeConfigWidgetBase.h>
+#include <KoPathConnectionPointStrategy.h>
+#include <KAction>
+#include <KLocale>
+#include <KDebug>
 #include <QUndoCommand>
 #include <QPointF>
 #include <QKeyEvent>
 
 ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
-    : KoPathTool(canvas)
-    , m_shape1(0)
-    , m_shapeOn(0)
-    , m_lastShapeOn(0)
-    , m_connectionShape(0)
-    , m_lastConnectionShapeOn(0)
+    : KoToolBase(canvas)
+    , m_editMode(Idle)
+    , m_currentShape(0)
+    , m_activeHandle(-1)
+    , m_currentStrategy(0)
+    , m_oldSnapStrategies(0)
 {
-    // Initialize the isTied for first and second shape
-    m_isTied = new QPair<bool, bool>(false,false);
-    // Nothing is active or modify for now
-    m_activeHandle = -1;
-    m_firstHandleIndex = 0;
-    m_modifyConnection = false;
+    m_alignPercent = new KAction(QString("%"), this);
+    m_alignPercent->setCheckable(true);
+    addAction("align-relative", m_alignPercent);
+    m_alignLeft = new KAction(KIcon("align-horizontal-left"), i18n("Align to left edge"), this);
+    m_alignLeft->setCheckable(true);
+    addAction("align-left", m_alignLeft);
+    m_alignCenterH = new KAction(KIcon("align-horizontal-center"), i18n("Align to horizontal center"), this);
+    m_alignCenterH->setCheckable(true);
+    addAction("align-centerh", m_alignCenterH);
+    m_alignRight = new KAction(KIcon("align-horizontal-right"), i18n("Align to right edge"), this);
+    m_alignRight->setCheckable(true);
+    addAction("align-right", m_alignRight);
+    m_alignTop = new KAction(KIcon("align-vertical-top"), i18n("Align to top edge"), this);
+    m_alignTop->setCheckable(true);
+    addAction("align-top", m_alignTop);
+    m_alignCenterV = new KAction(KIcon("align-vertical-center"), i18n("Align to vertical center"), this);
+    m_alignCenterV->setCheckable(true);
+    addAction("align-centerv", m_alignCenterV);
+    m_alignBottom = new KAction(KIcon("align-vertical-bottom"), i18n("Align to bottom edge"), this);
+    m_alignBottom->setCheckable(true);
+    addAction("align-bottom", m_alignBottom);
+
+    m_escapeAll = new KAction(KIcon("escape-direction-all"), i18n("Escape in all directions"), this);
+    m_escapeAll->setCheckable(true);
+    addAction("escape-all", m_escapeAll);
+    m_escapeHorizontal = new KAction(KIcon("escape-direction-horizontal"), i18n("Escape in horizontal directions"), this);
+    m_escapeHorizontal->setCheckable(true);
+    addAction("escape-horizontal", m_escapeHorizontal);
+    m_escapeVertical = new KAction(KIcon("escape-direction-vertical"), i18n("Escape in vertical directions"), this);
+    m_escapeVertical->setCheckable(true);
+    addAction("escape-vertical", m_escapeVertical);
+    m_escapeLeft = new KAction(KIcon("escape-direction-left"), i18n("Escape in left direction"), this);
+    m_escapeLeft->setCheckable(true);
+    addAction("escape-left", m_escapeLeft);
+    m_escapeRight = new KAction(KIcon("escape-direction-right"), i18n("Escape in right direction"), this);
+    m_escapeRight->setCheckable(true);
+    addAction("escape-right", m_escapeRight);
+    m_escapeUp = new KAction(KIcon("escape-direction-up"), i18n("Escape in up direction"), this);
+    m_escapeUp->setCheckable(true);
+    addAction("escape-up", m_escapeUp);
+    m_escapeDown = new KAction(KIcon("escape-direction-down"), i18n("Escape in down direction"), this);
+    m_escapeDown->setCheckable(true);
+    addAction("escape-down", m_escapeDown);
+
+    m_alignHorizontal = new QActionGroup(this);
+    m_alignHorizontal->setExclusive(true);
+    m_alignHorizontal->addAction(m_alignLeft);
+    m_alignHorizontal->addAction(m_alignCenterH);
+    m_alignHorizontal->addAction(m_alignRight);
+    connect(m_alignHorizontal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
+
+    m_alignVertical = new QActionGroup(this);
+    m_alignVertical->setExclusive(true);
+    m_alignVertical->addAction(m_alignTop);
+    m_alignVertical->addAction(m_alignCenterV);
+    m_alignVertical->addAction(m_alignBottom);
+    connect(m_alignVertical, SIGNAL(triggered(QAction*)), this, SLOT(verticalAlignChanged()));
+
+    m_alignRelative = new QActionGroup(this);
+    m_alignRelative->setExclusive(true);
+    m_alignRelative->addAction(m_alignPercent);
+    connect(m_alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+
+    m_escapeDirections = new QActionGroup(this);
+    m_escapeDirections->setExclusive(true);
+    m_escapeDirections->addAction(m_escapeAll);
+    m_escapeDirections->addAction(m_escapeHorizontal);
+    m_escapeDirections->addAction(m_escapeVertical);
+    m_escapeDirections->addAction(m_escapeLeft);
+    m_escapeDirections->addAction(m_escapeRight);
+    m_escapeDirections->addAction(m_escapeUp);
+    m_escapeDirections->addAction(m_escapeDown);
+    connect(m_escapeDirections, SIGNAL(triggered(QAction*)), this, SLOT(escapeDirectionChanged()));
+
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignHorizontal, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignVertical, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignRelative, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(connectionPointEnabled(bool)), m_escapeDirections, SLOT(setEnabled(bool)));
+
+    setEditMode(Idle, 0, -1);
 }
 
 ConnectionTool::~ConnectionTool()
 {
-    delete m_isTied;
 }
 
 void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
@@ -64,367 +149,662 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
     QRectF handleRect = handlePaintRect(QPointF());
 
     painter.setRenderHint(QPainter::Antialiasing, true);
-    // Green rects
-    if(m_shapeOn !=  0) {
-        // save the painter to restore it later
+
+    if (m_currentStrategy) {
         painter.save();
-        // Apply the conversion make by the matrix transformation
-        QTransform transform = m_shapeOn->absoluteTransformation(0);
-        KoShape::applyConversion(painter, converter);
-        foreach(const QPointF &point, m_shapeOn->connectionPoints())
-        { // Draw all the connection point of the shape
-            handleRect.moveCenter(transform.map(point));
-            painter.fillRect(handleRect, QColor(Qt::darkGreen));
-        }
+        m_currentStrategy->paint(painter, converter);
         painter.restore();
     }
-    // Blue recs (when the mouse is on a a green rec)
-    if(isInRoi()){
-        // save the painter to restore it later
-        painter.save();
-        // Apply the conversion make by the matrix transformation
-        QTransform transform = m_lastShapeOn->absoluteTransformation(0);
-        KoShape::applyConversion(painter, converter);
-        QPointF pointSelected = m_lastShapeOn->connectionPoints().value(getConnectionIndex(m_lastShapeOn, m_mouse));
-        handleRect.moveCenter(transform.map(pointSelected));
-        painter.fillRect(handleRect, QColor(Qt::blue));
 
-        painter.restore();
-    }
-    
-    // Draw handles ...
-    KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-    if(tempShape){
-        painter.save();
-
-        painter.setPen(Qt::blue);
-        painter.setBrush(Qt::white);
-        int radius = canvas()->resourceManager()->handleRadius();
-        // Apply the conversion make by the matrix transformation
-        painter.setTransform(tempShape->absoluteTransformation(&converter) * painter.transform());
-        // ... handle unselected
-        tempShape->paintHandles(painter, converter, radius);
-
-        painter.restore();
-
-        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
-        QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
-        int handleId = tempShape->handleIdAt(tempShape->documentToShape(rec));
-
-        if(handleId != -1) {
+    if (m_currentShape) {
+        // paint connection points or connection handles depending
+        // on the shape the mouse is currently
+        KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+        if (connectionShape) {
+            int radius = canvas()->resourceManager()->handleRadius();
+            int handleCount = connectionShape->handleCount();
+            for(int i = 0; i < handleCount; ++i) {
+                painter.save();
+                painter.setPen(Qt::blue);
+                painter.setBrush(i == m_activeHandle ? Qt::red : Qt::white);
+                painter.setTransform(connectionShape->absoluteTransformation(&converter) * painter.transform());
+                connectionShape->paintHandle(painter, converter, i, radius);
+                painter.restore();
+            }
+        } else {
             painter.save();
-            // ... handle selected
-            painter.setPen(Qt::blue);
-            painter.setBrush(Qt::red);
-            // Apply the conversion make by the matrix transformation
-            painter.setTransform(tempShape->absoluteTransformation(&converter) * painter.transform());
-            tempShape->paintHandle(painter, converter, handleId, radius);
-
+            painter.setPen(Qt::black);
+            QTransform transform = m_currentShape->absoluteTransformation(0);
+            KoShape::applyConversion(painter, converter);
+            // Draw all the connection points of the shape
+            KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
+            KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
+            KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
+            for(; cp != lastCp; ++cp) {
+                handleRect.moveCenter(transform.map(cp.value().position));
+                painter.setBrush(cp.key() == m_activeHandle ? Qt::red : Qt::white);
+                painter.drawRect(handleRect);
+            }
             painter.restore();
         }
     }
 }
 
-void ConnectionTool::mousePressEvent(KoPointerEvent *event)
+void ConnectionTool::repaintDecorations()
 {
-    // If we are pressing down the control key, it should add handles, not connectionShape
-    if(event->modifiers() & Qt::ControlModifier)
-        return;
-    // We here try to recover the the last shape in case of the handle point is out of the shape
-    KoShape * tempShape = 0;
-    if(isInRoi())
-        tempShape = m_lastShapeOn;
-    else
-        tempShape = canvas()->shapeManager()->shapeAt(event->point);
-    
-    // We take care if the shape under the mouse is not another connection shape
-    KoConnectionShape * tempConnectionShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-    if(tempConnectionShape && m_connectionShape == 0){
-        // grabSensitivity is defined by the user
-        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
-        QRectF rec(m_mouse.x()-grabSensitivity/2, m_mouse.y()-grabSensitivity/2, grabSensitivity, grabSensitivity);
-        m_activeHandle = tempConnectionShape->handleIdAt(tempShape->documentToShape(rec));
-        
-        m_lastConnectionShapeOn = tempConnectionShape;
-        m_modifyConnection = true;
-        return;
-    } else
-        tempShape = m_lastShapeOn;
-    
-    // First click
-    if(m_connectionShape == 0) {
-        // All sizes and positions are hardcoded for now
+    if (m_currentShape) {
+        const qreal radius = canvas()->resourceManager()->handleRadius();
+
+        QRectF repaintRect = m_currentShape->boundingRect();
+        canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
+
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+        if (connectionShape) {
+            QPointF handlePos = connectionShape->handlePosition(m_activeHandle);
+            handlePos = connectionShape->shapeToDocument(handlePos);
+            repaintRect = handlePaintRect(handlePos);
+            canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
+        } else {
+            KoConnectionPoints connectionPoints = m_currentShape->connectionPoints();
+            KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
+            KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
+            for(; cp != lastCp; ++cp) {
+                repaintRect = handleGrabRect(m_currentShape->shapeToDocument(cp.value().position));
+                canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
+            }
+        }
+    }
+}
+
+void ConnectionTool::mousePressEvent(KoPointerEvent * event)
+{
+    KoShape * hitShape = findShapeAtPosition(event->point);
+    int hitHandle = handleAtPoint(m_currentShape, event->point);
+
+    if (m_editMode == EditConnection && hitHandle >= 0) {
+        // create connection handle change strategy
+        m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), hitHandle);
+    } else if (m_editMode == EditConnectionPoint && hitHandle >= KoConnectionPoint::FirstCustomConnectionPoint) {
+        // start moving custom connection point
+        m_currentStrategy = new MoveConnectionPointStrategy(m_currentShape, hitHandle, this);
+    } else if (m_editMode == CreateConnection) {
+        // create new connection shape, connect it to the active connection point
+        // and start editing the new connection
+        // create the new connection shape
         KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoConnectionShape");
         KoShape *shape = factory->createDefaultShape(canvas()->shapeController()->resourceManager());
-        if((m_connectionShape = dynamic_cast<KoConnectionShape*>(shape))){
-            KoConnectionShape * connectionShapeTest = dynamic_cast<KoConnectionShape*>(tempShape);
-            if(isInRoi()) {
-                m_shape1 = tempShape;
-                m_firstHandleIndex = getConnectionIndex(tempShape, m_mouse);
-                
-                m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
-                m_isTied->first = true;
-            // If the shape selected is not the background
-            // We take care if the working tempShape is not another connection shape
-            }else if(tempShape != 0 && !connectionShapeTest) {
-                m_shape1 = tempShape;
-                m_firstHandleIndex = 0;
-                m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
-                m_isTied->first = false;
-            } else {
-                m_shape1 = 0;
-                m_firstHandleIndex = 0;
-                m_connectionShape->moveHandle(0, event->point);
-            }
-            
-            m_connectionShape->moveHandle(1, event->point);
-            // The connection is now done, so update for apply
-            m_connectionShape->updateConnections();
-            canvas()->shapeManager()->addShape(m_connectionShape);
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+        if (!connectionShape) {
+            delete shape;
+            resetEditMode();
+            return;
         }
+        // get the position of the connection point we start our connection from
+        QPointF cp = m_currentShape->shapeToDocument(m_currentShape->connectionPoint(m_activeHandle).position);
+        // move both handles to that point
+        connectionShape->moveHandle(0, cp);
+        connectionShape->moveHandle(1, cp);
+        // connect the first handle of the connection shape to our connection point
+        if (!connectionShape->connectFirst(m_currentShape, m_activeHandle)) {
+            delete shape;
+            resetEditMode();
+            return;
+        }
+        // create the connection edit strategy from the path tool
+        m_currentStrategy = new KoPathConnectionPointStrategy(this, connectionShape, 1);
+        if (!m_currentStrategy) {
+            delete shape;
+            resetEditMode();
+            return;
+        }
+        // update our handle data
+        setEditMode(m_editMode, shape, 1);
+        // add connection shape to the shape manager so it gets painted
+        canvas()->shapeManager()->addShape(connectionShape);
     } else {
-    // Second click
-    
-        if(m_shape1 != 0)
-            m_connectionShape->connectFirst(m_shape1, m_firstHandleIndex);
-        // If the shape selected is not the background
-        if(tempShape != 0) {
-            if(isInRoi()) {
-                // If everything is good, we connect the line to the shape
-                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
-                m_isTied->second = true;
+        // pressing on a shape in idle mode switches to corresponding edit mode
+        if (hitShape) {
+            if (dynamic_cast<KoConnectionShape*>(hitShape)) {
+                int hitHandle = handleAtPoint(hitShape, event->point);
+                setEditMode(EditConnection, hitShape, hitHandle);
+                if (hitHandle >= 0) {
+                    // start editing connection shape
+                    m_currentStrategy = new KoPathConnectionPointStrategy(this, dynamic_cast<KoConnectionShape*>(m_currentShape), m_activeHandle);
+                }
             } else {
-                m_connectionShape->connectSecond(tempShape, 0);
+                setEditMode(EditConnectionPoint, hitShape, -1);
             }
-            
         } else {
-        // If the cursor points the background
-            if(isInRoi()) {
-                // If everything is good, we connect the line to the shape
-                m_connectionShape->connectSecond(tempShape, getConnectionIndex(tempShape, m_mouse));
-                m_isTied->second = true;
-            } else {
-                m_connectionShape->moveHandle(m_connectionShape->handleCount(), event->point);
-            }
+            resetEditMode();
         }
-        // Will find the nearest point and update the connection shape
-        updateConnections();
-        
-        // Apply the connection shape for now
-        command();
-        
-        m_connectionShape = 0;
-        m_lastShapeOn =0;
     }
 }
 
 void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
 {
-    // Record the last shape
-    if(m_shapeOn != 0){
-        m_lastShapeOn = m_shapeOn;
-    }
-    // Record the mouse position
-    m_mouse = event->point;
-    // Look at the new shape under the mouse
-    m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
-
-    KoConnectionShape * tempShape = dynamic_cast<KoConnectionShape*>(m_shapeOn);
-    if(!tempShape) {
-        if(m_connectionShape != 0) {
-            if(isInRoi()) {
-                // Make the connection to the specific point
-                m_connectionShape->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
-                m_connectionShape->updateConnections();
-            } else if(m_shapeOn != 0) {
-                // Make the connection to the first handle of the shape
-                m_connectionShape->connectSecond(m_shapeOn, 0);
-                updateConnections();
-            } else {
-                // Unmake the connection (detach it)
-                m_connectionShape->connectSecond(0, 0);
-                m_connectionShape->moveHandle(1, m_mouse);
-
-                updateConnections();
-            }
+    if (m_currentStrategy) {
+        repaintDecorations();
+        if (m_editMode != EditConnection && m_editMode != CreateConnection) {
+            QPointF snappedPos = canvas()->snapGuide()->snap(event->point, event->modifiers());
+            m_currentStrategy->handleMouseMove(snappedPos, event->modifiers());
+        } else {
+            m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+        }
+        repaintDecorations();
+    } else if (m_editMode == EditConnectionPoint) {
+        Q_ASSERT(m_currentShape);
+        // check if we should highlight another connection point
+        int handle = handleAtPoint(m_currentShape, event->point);
+        if (handle >= 0) {
+            setEditMode(m_editMode, m_currentShape, handle);
+            useCursor(handle >= KoConnectionPoint::FirstCustomConnectionPoint ? Qt::SizeAllCursor : Qt::ArrowCursor);
+        } else {
+            KoShape *hoverShape = findShapeAtPosition(event->point);
+            updateStatusText();
+            if (hoverShape == m_currentShape)
+                useCursor(Qt::CrossCursor);
+            else if (!hoverShape)
+                useCursor(Qt::ArrowCursor);
+            else
+                useCursor(Qt::PointingHandCursor);
+        }
+    } else if (m_editMode == EditConnection) {
+        Q_ASSERT(m_currentShape);
+        KoShape *hoverShape = findShapeAtPosition(event->point);
+        // check if we should highlight another connection handle
+        int handle = handleAtPoint(m_currentShape, event->point);
+        setEditMode(m_editMode, m_currentShape, handle);
+        if (m_activeHandle >= 0)
+            useCursor(Qt::SizeAllCursor);
+        else if (hoverShape && hoverShape != m_currentShape)
+            useCursor(Qt::PointingHandCursor);
+        else
+            useCursor(Qt::ArrowCursor);
+    } else {
+        KoShape *hoverShape = findShapeAtPosition(event->point);
+        int hoverHandle = -1;
+        if (hoverShape)
+            hoverHandle = handleAtPoint(hoverShape, event->point);
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(hoverShape);
+        if (connectionShape) {
+            setEditMode(hoverHandle >= 0 ? EditConnection : Idle, hoverShape, hoverHandle);
+            useCursor(hoverHandle >= 0 ? Qt::SizeAllCursor : Qt::PointingHandCursor);
+        } else if (hoverShape) {
+            setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
+            useCursor(hoverHandle >= 0 ? Qt::DragLinkCursor : Qt::PointingHandCursor);
+        } else {
+            useCursor(Qt::ForbiddenCursor);
         }
     }
-    // If we are really active we can follow the mouse with the line
-    if(m_activeHandle != -1 && m_lastConnectionShapeOn != 0) {
-        // We have to know what handle is actually moving
-        if(m_activeHandle == 0){
-            m_lastConnectionShapeOn->connectFirst(0, 0);
-        }else if(m_activeHandle == 1){
-            m_lastConnectionShapeOn->connectSecond(0, 0);
-        }
-        // We try to connect as usual, even if we are following the line
-        if(!tempShape && isInRoi()) {
-            if(m_lastShapeOn != 0){
-                // We have to know what handle is actually moving
-                // Connection with the specific handle
-                if(m_activeHandle == 0){
-                    m_lastConnectionShapeOn->connectFirst(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
-                }else if(m_activeHandle == 1){
-                    m_lastConnectionShapeOn->connectSecond(m_lastShapeOn, getConnectionIndex(m_lastShapeOn, m_mouse));
-                }
-            }
-        }else if(m_shapeOn != 0 ){
-            // We have to know what handle is actually moving
-            // Connection with the first handle of the shape
-            if(m_activeHandle == 0){
-                m_lastConnectionShapeOn->connectFirst(m_shapeOn, 0);
-            }else if(m_activeHandle == 1){
-                m_lastConnectionShapeOn->connectSecond(m_shapeOn, 0);
-            }
-        }else{
-            m_lastConnectionShapeOn->moveHandle(m_activeHandle, m_mouse);
-        }
-        m_lastConnectionShapeOn->updateConnections();
-    }
-    canvas()->updateCanvas(QRectF(0, 0, canvas()->canvasWidget()->width(), canvas()->canvasWidget()->height()));
 }
 
 void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
 {
-    if(event->modifiers() & Qt::ControlModifier) {
-        if(isInRoi()) {
-            // delete a connection Point
-            m_shapeOn->removeConnectionPoint(getConnectionIndex(m_lastShapeOn, m_mouse));
-        }else{
-            // add a connection Point
-            m_shapeOn = canvas()->shapeManager()->shapeAt(event->point);
-            QPointF point = m_shapeOn->documentToShape(event->point);
-
-            m_shapeOn->addConnectionPoint(point);
+    if (m_currentStrategy) {
+        if (m_editMode == CreateConnection) {
+            // check if connection handles have a minimal distance
+            KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+            Q_ASSERT(connectionShape);
+            // get both handle positions in document coordinates
+            QPointF p1 = connectionShape->shapeToDocument(connectionShape->handlePosition(0));
+            QPointF p2 = connectionShape->shapeToDocument(connectionShape->handlePosition(1));
+            int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+            // use grabbing sensitivity as minimal distance threshold
+            if (squareDistance(p1, p2) < grabSensitivity*grabSensitivity) {
+                // minimal distance was not reached, so we have to undo the started work:
+                // - cleanup and delete the strategy
+                // - remove connection shape from shape manager and delete it
+                // - reset edit mode to last state
+                delete m_currentStrategy;
+                m_currentStrategy = 0;
+                repaintDecorations();
+                canvas()->shapeManager()->remove(m_currentShape);
+                setEditMode(m_editMode, connectionShape->firstShape(), connectionShape->firstConnectionId());
+                repaintDecorations();
+                delete connectionShape;
+                return;
+            } else {
+                // finalize adding the new connection shape with an undo command
+                QUndoCommand * cmd = canvas()->shapeController()->addShape(m_currentShape);
+                canvas()->addCommand(cmd);
+            }
+            resetEditMode();
         }
-    }else{
-        if(m_modifyConnection){
-            deactivate();
+        m_currentStrategy->finishInteraction(event->modifiers());
+        // TODO: Add parent command to KoInteractionStrategy::createCommand
+        // so that we can have a single command to undo for the user
+        QUndoCommand *command = m_currentStrategy->createCommand();
+        if (command)
+            canvas()->addCommand(command);
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+    }
+    updateStatusText();
+}
+
+void ConnectionTool::mouseDoubleClickEvent(KoPointerEvent *event)
+{
+    if (!m_currentShape)
+        return;
+
+    if (m_editMode == EditConnectionPoint) {
+        repaintDecorations();
+        int handleId = handleAtPoint(m_currentShape, event->point);
+        if (handleId < 0) {
+            QPointF mousePos = canvas()->snapGuide()->snap(event->point, event->modifiers());
+            QPointF point = m_currentShape->documentToShape(mousePos);
+            canvas()->addCommand(new AddConnectionPointCommand(m_currentShape, point));
+        } else {
+            canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, handleId));
+        }
+        setEditMode(m_editMode, m_currentShape, -1);
+    } else if (m_editMode == Idle || m_editMode == EditConnection) {
+        if (dynamic_cast<KoConnectionShape*>(m_currentShape)) {
+            repaintDecorations();
+            canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));
+            resetEditMode();
         }
     }
 }
 
 void ConnectionTool::keyPressEvent(QKeyEvent *event)
 {
-    if(event->key() == Qt::Key_Escape) {
+    if (event->key() == Qt::Key_Escape) {
         deactivate();
+    } else if (event->key() == Qt::Key_Backspace) {
+        deleteSelection();
+        event->accept();
     }
 }
 
 void ConnectionTool::activate(ToolActivation, const QSet<KoShape*> &)
 {
-    canvas()->canvasWidget()->setCursor(Qt::PointingHandCursor);
+    // save old enabled snap strategies, set bounding box snap strategy
+    m_oldSnapStrategies = canvas()->snapGuide()->enabledSnapStrategies();
+    canvas()->snapGuide()->enableSnapStrategies(KoSnapGuide::BoundingBoxSnapping);
+    canvas()->snapGuide()->reset();
 }
 
 void ConnectionTool::deactivate()
 {
     // Put everything to 0 to be able to begin a new shape properly
-    m_shape1 = 0;
-    m_lastConnectionShapeOn = 0;
-    m_lastShapeOn = 0;
-    m_modifyConnection = false;
-    if(m_connectionShape != 0) {
-        QRectF rec(m_connectionShape->boundingRect());
-        canvas()->shapeManager()->remove(m_connectionShape);
-        repaint(rec);
-        canvas()->updateCanvas(rec);
-        m_connectionShape = 0;
-    }
+    delete m_currentStrategy;
+    m_currentStrategy = 0;
+    resetEditMode();
+    // restore previously set snap strategies
+    canvas()->snapGuide()->enableSnapStrategies(m_oldSnapStrategies);
+    canvas()->snapGuide()->reset();
 }
 
-void ConnectionTool::updateConnections()
-{
-    if(m_connectionShape == 0){
-        return;
-    }
-    // If two shapes are connected
-    if (m_connectionShape->firstShape() && m_connectionShape->secondShape()) {
-        KoShape *shape1 = m_connectionShape->firstShape();
-        KoShape *shape2 = m_connectionShape->secondShape();
-        if(!m_isTied->first){
-            m_connectionShape->connectFirst(shape1 , getConnectionIndex(shape1, shape2->absolutePosition()));
-        }
-        if(!m_isTied->second){
-            m_connectionShape->connectSecond(shape2 , getConnectionIndex(shape2, shape1->absolutePosition()));
-        }
-    // If only the first item of the connection is a shape
-    } else if(m_connectionShape->firstShape()) {
-        KoShape *shape = m_connectionShape->firstShape();
-        QPointF point = m_connectionShape->handlePosition(m_connectionShape->handleCount()) + m_connectionShape->absolutePosition();
-        if(!m_isTied->first) {
-            m_connectionShape->connectFirst(shape , getConnectionIndex(shape, point));
-        }
-    // If only the second item of the connection is a shape
-    } else if(m_connectionShape->secondShape()) {
-        KoShape* shape = m_connectionShape->secondShape();
-        QPointF point = m_connectionShape->handlePosition(0) + m_connectionShape->absolutePosition();
-        if(!m_isTied->second)
-            m_connectionShape->connectSecond(shape , getConnectionIndex(shape, point));
-    }
-    // The connection is now done, so update and put everything to 0
-    m_connectionShape->updateConnections();
-}
-
-int ConnectionTool::getConnectionIndex(KoShape * shape, QPointF point)
-{
-    float minDistance = HUGE_VAL;
-    int nearestPointIndex = -1, i;
-    // Get all the points
-    QList<QPointF> connectionPoints = shape->connectionPoints();
-    int connectionPointsCount = connectionPoints.count();
-
-    point = shape->documentToShape(point);
-    // Find the nearest point and stock the index
-    for(i = 0; i < connectionPointsCount; i++)
-    {
-        float distance = distanceSquare(connectionPoints[i], point);
-        if(distance < minDistance) {
-            minDistance = distance;
-            nearestPointIndex =  i;
-        }
-    }
-    // return the nearest point index
-    return nearestPointIndex;
-}
-
-float ConnectionTool::distanceSquare(QPointF p1, QPointF p2)
+qreal ConnectionTool::squareDistance(const QPointF &p1, const QPointF &p2) const
 {
     // Square of the distance
-    float distx = (p2.x() - p1.x()) * (p2.x() - p1.x());
-    float disty = (p2.y() - p1.y()) * (p2.y() - p1.y());
-    float dist = distx + disty;
-    return dist;
+    const qreal dx = p2.x() - p1.x();
+    const qreal dy = p2.y() - p1.y();
+    return dx*dx + dy*dy;
 }
 
-bool ConnectionTool::isInRoi()
+KoShape * ConnectionTool::findShapeAtPosition(const QPointF &position) const
 {
-    int grabSensitivity = canvas()->resourceManager()->grabSensitivity() * canvas()->resourceManager()->grabSensitivity();
-    if(m_lastShapeOn == 0)
-        return false;
-    
-    KoConnectionShape * tempInRoiShape = dynamic_cast<KoConnectionShape*>(m_lastShapeOn);
-    if(tempInRoiShape && m_connectionShape == 0)
-        return false;
-    
-    QPointF mouse = m_lastShapeOn->documentToShape(m_mouse);
-    foreach(const QPointF& point, m_lastShapeOn->connectionPoints())
-        if(distanceSquare(mouse, point) <= grabSensitivity)
-            return true;
+    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt(handleGrabRect(position));
+    if (!shapes.isEmpty()) {
+        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        // we want to priorize connection shape handles, even if the connection shape
+        // is not at the top of the shape stack at the mouse position
+        KoConnectionShape *connectionShape = nearestConnectionShape(shapes, position);
+        // use best connection shape or first shape from stack if not found
+        return connectionShape ? connectionShape : shapes.first();
+    }
 
-    return false;
+    return 0;
 }
 
-void ConnectionTool::command()
+int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) const
 {
-    // Create the command which will make the connection
-    QUndoCommand * cmd = 0;
-    if(m_connectionShape != 0)
-        cmd = canvas()->shapeController()->addShape(m_connectionShape);
+    if (!shape)
+        return -1;
 
-    if (cmd) {
-        canvas()->addCommand(cmd);
+    const QPointF shapePoint = shape->documentToShape(mousePoint);
+
+    KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+    if (connectionShape) {
+        // check connection shape handles
+        return connectionShape->handleIdAt(handleGrabRect(shapePoint));
     } else {
-        canvas()->updateCanvas(m_connectionShape->boundingRect());
-        delete m_connectionShape;
+        // check connection points
+        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+        qreal minDistance = HUGE_VAL;
+        int handleId = -1;
+        KoConnectionPoints connectionPoints = shape->connectionPoints();
+        KoConnectionPoints::const_iterator cp = connectionPoints.constBegin();
+        KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
+        for(; cp != lastCp; ++cp) {
+            qreal d = squareDistance(shapePoint, cp.value().position);
+            if (d <= grabSensitivity && d < minDistance) {
+                handleId = cp.key();
+                minDistance = d;
+            }
+        }
+        return handleId;
+    }
+}
+
+KoConnectionShape * ConnectionTool::nearestConnectionShape(const QList<KoShape*> &shapes, const QPointF &mousePos) const
+{
+    int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+
+    KoConnectionShape * nearestConnectionShape = 0;
+    qreal minSquaredDistance = HUGE_VAL;
+    const qreal maxSquaredDistance = grabSensitivity*grabSensitivity;
+
+    foreach(KoShape *shape, shapes) {
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);
+        if (!connectionShape || !connectionShape->isParametricShape())
+            continue;
+
+        // convert document point to shape coordinates
+        QPointF p = connectionShape->documentToShape(mousePos);
+        // our region of interest, i.e. a region around our mouse position
+        QRectF roi = handleGrabRect(p);
+
+        // check all segments of this shape which intersect the region of interest
+        QList<KoPathSegment> segments = connectionShape->segmentsAt(roi);
+        foreach (const KoPathSegment &s, segments) {
+            qreal nearestPointParam = s.nearestPoint(p);
+            QPointF nearestPoint = s.pointAt(nearestPointParam);
+            QPointF diff = p - nearestPoint;
+            qreal squaredDistance = diff.x()*diff.x() + diff.y()*diff.y();
+            // are we within the allowed distance ?
+            if (squaredDistance > maxSquaredDistance)
+                continue;
+            // are we closer to the last closest point ?
+            if (squaredDistance < minSquaredDistance) {
+                nearestConnectionShape = connectionShape;
+                minSquaredDistance = squaredDistance;
+            }
+        }
+    }
+
+    return nearestConnectionShape;
+}
+
+void ConnectionTool::setEditMode(EditMode mode, KoShape *currentShape, int handle)
+{
+    repaintDecorations();
+    m_editMode = mode;
+    if (m_currentShape != currentShape) {
+        KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(currentShape);
+        foreach (KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+            if (connectionShape)
+                cw->open(currentShape);
+            cw->setEnabled(connectionShape != 0);
+        }
+    }
+    m_currentShape = currentShape;
+    m_activeHandle = handle;
+    repaintDecorations();
+    updateActions();
+    updateStatusText();
+}
+
+void ConnectionTool::resetEditMode()
+{
+    setEditMode(Idle, 0, -1);
+}
+
+void ConnectionTool::updateActions()
+{
+    const bool connectionPointSelected = m_editMode == EditConnectionPoint && m_activeHandle >= 0;
+    if (connectionPointSelected) {
+        KoConnectionPoint cp = m_currentShape->connectionPoint(m_activeHandle);
+
+        m_alignPercent->setChecked(false);
+        foreach(QAction *action, m_alignHorizontal->actions())
+            action->setChecked(false);
+        foreach(QAction *action, m_alignVertical->actions())
+            action->setChecked(false);
+        switch(cp.alignment) {
+            case KoConnectionPoint::AlignNone:
+                m_alignPercent->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTopLeft:
+                m_alignLeft->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTop:
+                m_alignCenterH->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignTopRight:
+                m_alignRight->setChecked(true);
+                m_alignTop->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignLeft:
+                m_alignLeft->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignCenter:
+                m_alignCenterH->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignRight:
+                m_alignRight->setChecked(true);
+                m_alignCenterV->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottomLeft:
+                m_alignLeft->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottom:
+                m_alignCenterH->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+            case KoConnectionPoint::AlignBottomRight:
+                m_alignRight->setChecked(true);
+                m_alignBottom->setChecked(true);
+                break;
+        }
+        foreach(QAction *action, m_escapeDirections->actions())
+            action->setChecked(false);
+        switch(cp.escapeDirection) {
+            case KoConnectionPoint::AllDirections:
+                m_escapeAll->setChecked(true);
+                break;
+            case KoConnectionPoint::HorizontalDirections:
+                m_escapeHorizontal->setChecked(true);
+                break;
+            case KoConnectionPoint::VerticalDirections:
+                m_escapeVertical->setChecked(true);
+                break;
+            case KoConnectionPoint::LeftDirection:
+                m_escapeLeft->setChecked(true);
+                break;
+            case KoConnectionPoint::RightDirection:
+                m_escapeRight->setChecked(true);
+                break;
+            case KoConnectionPoint::UpDirection:
+                m_escapeUp->setChecked(true);
+                break;
+            case KoConnectionPoint::DownDirection:
+                m_escapeDown->setChecked(true);
+                break;
+        }
+    }
+    emit connectionPointEnabled(connectionPointSelected);
+}
+
+void ConnectionTool::updateStatusText()
+{
+    switch(m_editMode) {
+        case Idle:
+            if (m_currentShape) {
+                if (dynamic_cast<KoConnectionShape*>(m_currentShape)) {
+                    if (m_activeHandle >= 0)
+                        emit statusTextChanged(i18n("Drag to edit connection."));
+                    else
+                        emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
+                } else if (m_activeHandle < 0) {
+                    emit statusTextChanged(i18n("Click to edit connection points."));
+                }
+            } else {
+                emit statusTextChanged("");
+            }
+            break;
+        case EditConnection:
+            if (m_activeHandle >= 0)
+                emit statusTextChanged(i18n("Drag to edit connection."));
+            else
+                emit statusTextChanged(i18n("Double click connection or press delete to remove it."));
+            break;
+        case EditConnectionPoint:
+            if (m_activeHandle >= KoConnectionPoint::FirstCustomConnectionPoint)
+                emit statusTextChanged(i18n("Drag to move connection point. Double click connection or press delete to remove it."));
+            else if (m_activeHandle >= 0)
+                emit statusTextChanged(i18n("Double click connection point or press delete to remove it."));
+            else
+                emit statusTextChanged(i18n("Double click to add connection point."));
+            break;
+        case CreateConnection:
+            emit statusTextChanged(i18n("Drag to create new connection."));
+            break;
+        default:
+            emit statusTextChanged("");
+    }
+}
+
+QMap<QString, QWidget *> ConnectionTool::createOptionWidgets()
+{
+    QMap<QString, QWidget *> map;
+
+    m_connectionShapeWidgets.clear();
+
+    KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get(KOCONNECTIONSHAPEID);
+    if (factory) {
+        QList<KoShapeConfigWidgetBase*> widgets = factory->createShapeOptionPanels();
+        foreach(KoShapeConfigWidgetBase *cw, widgets) {
+            if (cw->showOnShapeCreate() || !cw->showOnShapeSelect()) {
+                delete cw;
+                continue;
+            }
+            cw->setEnabled(false);
+            connect(cw, SIGNAL(propertyChanged()), this, SLOT(connectionChanged()));
+            m_connectionShapeWidgets.append(cw);
+            map.insert(i18n("Connection"), cw);
+        }
+    }
+
+    map.insert(i18n("Connection Point"), new ConnectionPointWidget(this));
+
+    return map;
+}
+
+void ConnectionTool::horizontalAlignChanged()
+{
+    if (m_alignPercent->isChecked()) {
+        m_alignPercent->setChecked(false);
+        m_alignTop->setChecked(true);
+    }
+    updateConnectionPoint();
+}
+
+void ConnectionTool::verticalAlignChanged()
+{
+    if (m_alignPercent->isChecked()) {
+        m_alignPercent->setChecked(false);
+        m_alignLeft->setChecked(true);
+    }
+    updateConnectionPoint();
+}
+
+void ConnectionTool::relativeAlignChanged()
+{
+    foreach(QAction *action, m_alignHorizontal->actions())
+        action->setChecked(false);
+    foreach(QAction *action, m_alignVertical->actions())
+        action->setChecked(false);
+    m_alignPercent->setChecked(true);
+
+    updateConnectionPoint();
+}
+
+void ConnectionTool::updateConnectionPoint()
+{
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        KoConnectionPoint oldPoint = m_currentShape->connectionPoint(m_activeHandle);
+        KoConnectionPoint newPoint = oldPoint;
+        if (m_alignPercent->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignNone;
+        } else if (m_alignLeft->isChecked() && m_alignTop->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignTopLeft;
+        } else if (m_alignCenterH->isChecked() && m_alignTop->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignTop;
+        } else if (m_alignRight->isChecked() && m_alignTop->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignTopRight;
+        } else if (m_alignLeft->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignLeft;
+        } else if (m_alignCenterH->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignCenter;
+        } else if (m_alignRight->isChecked() && m_alignCenterV->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignRight;
+        } else if (m_alignLeft->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignBottomLeft;
+        } else if (m_alignCenterH->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignBottom;
+        } else if (m_alignRight->isChecked() && m_alignBottom->isChecked()) {
+            newPoint.alignment = KoConnectionPoint::AlignBottomRight;
+        }
+
+        canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));
+    }
+}
+
+void ConnectionTool::escapeDirectionChanged()
+{
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        KoConnectionPoint oldPoint = m_currentShape->connectionPoint(m_activeHandle);
+        KoConnectionPoint newPoint = oldPoint;
+        QAction * checkedAction = m_escapeDirections->checkedAction();
+        if (checkedAction == m_escapeAll) {
+            newPoint.escapeDirection = KoConnectionPoint::AllDirections;
+        } else if (checkedAction == m_escapeHorizontal) {
+            newPoint.escapeDirection = KoConnectionPoint::HorizontalDirections;
+        } else if (checkedAction == m_escapeVertical) {
+            newPoint.escapeDirection = KoConnectionPoint::VerticalDirections;
+        } else if (checkedAction == m_escapeLeft) {
+            newPoint.escapeDirection = KoConnectionPoint::LeftDirection;
+        } else if (checkedAction == m_escapeRight) {
+            newPoint.escapeDirection = KoConnectionPoint::RightDirection;
+        } else if (checkedAction == m_escapeUp) {
+            newPoint.escapeDirection = KoConnectionPoint::UpDirection;
+        } else if (checkedAction == m_escapeDown) {
+            newPoint.escapeDirection = KoConnectionPoint::DownDirection;
+        }
+        canvas()->addCommand(new ChangeConnectionPointCommand(m_currentShape, m_activeHandle, oldPoint, newPoint));
+    }
+}
+
+void ConnectionTool::connectionChanged()
+{
+    if (m_editMode != EditConnection)
+        return;
+    KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
+    if (!connectionShape)
+        return;
+
+    foreach(KoShapeConfigWidgetBase *cw, m_connectionShapeWidgets) {
+        canvas()->addCommand(cw->createCommand());
+    }
+}
+
+void ConnectionTool::deleteSelection()
+{
+    if (m_editMode == EditConnectionPoint && m_currentShape && m_activeHandle >= 0) {
+        repaintDecorations();
+        canvas()->addCommand(new RemoveConnectionPointCommand(m_currentShape, m_activeHandle));
+        setEditMode(m_editMode, m_currentShape, -1);
+    } else if (m_editMode == EditConnection && m_currentShape) {
+        repaintDecorations();
+        canvas()->addCommand(canvas()->shapeController()->removeShape(m_currentShape));
+        resetEditMode();
     }
 }

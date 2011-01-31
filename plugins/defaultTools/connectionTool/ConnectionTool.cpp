@@ -331,7 +331,11 @@ void ConnectionTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(hoverHandle >= 0 ? Qt::SizeAllCursor : Qt::PointingHandCursor);
         } else if (hoverShape) {
             setEditMode(hoverHandle >= 0 ? CreateConnection : Idle, hoverShape, hoverHandle);
+#if QT_VERSION  >= 0x040700
             useCursor(hoverHandle >= 0 ? Qt::DragLinkCursor : Qt::PointingHandCursor);
+#else
+            useCursor(Qt::PointingHandCursor);
+#endif
         } else {
             useCursor(Qt::ForbiddenCursor);
         }

@@ -8,6 +8,8 @@
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
+ * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,6 +31,7 @@
 #define KOTEXTLOADER_H
 
 #include <QObject>
+
 
 #include "kotext_export.h"
 #include "KoXmlReaderForward.h"

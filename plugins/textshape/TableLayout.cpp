@@ -543,7 +543,7 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell, const QTextChar
     const int row = cell.row();
     const int column = cell.column();
     const int rowSpan = fmt.tableCellRowSpan();
-    const int columnSpan = fmt.tableCellColumnSpan();
+    int columnSpan = fmt.tableCellColumnSpan();
 
     Q_ASSERT(row < m_tableLayoutData->m_rowPositions.size());
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
@@ -552,7 +552,9 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell, const QTextChar
         --i;
         tableRect =  m_tableLayoutData->m_tableRects[i];
     }
-    Q_ASSERT(column + columnSpan <=  tableRect.columnPositions.size());
+
+    if (column + columnSpan > tableRect.columnPositions.size())
+        columnSpan = tableRect.columnPositions.size() - column;
 
     // Cell width.
     qreal width = 0;

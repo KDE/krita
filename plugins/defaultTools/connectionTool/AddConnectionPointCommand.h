@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * 
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,22 +18,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOCONNECTIONTOOLWIDGET_H
-#define KOCONNECTIONTOOLWIDGET_H
+#ifndef ADDCONNECTIONPOINTCOMMAND_H
+#define ADDCONNECTIONPOINTCOMMAND_H
 
-#include <ui_ConnectionToolWidget.h>
+#include <QtGui/QUndoCommand>
+#include <QtCore/QPointF>
 
-#include <QtGui/QWidget>
+class KoShape;
 
-class ConnectionToolWidget : public QWidget
+class AddConnectionPointCommand : public QUndoCommand
 {
-    Q_OBJECT
 public:
-    ConnectionToolWidget( QWidget * parent );
-    
-   private:
+    /// Creates new comand to add connection point to shape
+    AddConnectionPointCommand(KoShape *shape, const QPointF &connectionPoint, QUndoCommand *parent = 0);
+    virtual ~AddConnectionPointCommand();
+    /// reimplemented from QUndoCommand
+    virtual void redo();
+    /// reimplemented from QUndoCommand
+    virtual void undo();
 
-    Ui::ConnectionToolWidget widget;
+private:
+    void updateRoi();
+
+    KoShape * m_shape;
+    QPointF m_connectionPoint;
+    int m_connectionPointId;
 };
 
-#endif // KOCONNECTIONTOOLWIDGET_H
+#endif // ADDCONNECTIONPOINTCOMMAND_H

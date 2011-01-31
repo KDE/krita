@@ -59,11 +59,13 @@ KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
         , m_actualPixels(0)
         , m_actualSize(0)
         , m_fitToCanvas(0)
+        , m_zoomActionWidget(0)
 {
 }
 
 KisZoomManager::~KisZoomManager()
 {
+    m_view->removeStatusBarItem(m_zoomActionWidget);
     KisConfig cfg;
     cfg.setShowRulers(m_showRulersAction->isChecked());
 }
@@ -81,7 +83,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 
     m_zoomAction = m_zoomController->zoomAction();
     actionCollection->addAction("zoom", m_zoomAction);
-    m_view->addStatusBarItem(m_zoomAction->createWidget(m_view->KoView::statusBar()), 0, true);
+    m_zoomActionWidget = m_zoomAction->createWidget(m_view->KoView::statusBar());
+    m_view->addStatusBarItem(m_zoomActionWidget, 0, true);
 
     m_showRulersAction  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection->addAction("view_ruler", m_showRulersAction);

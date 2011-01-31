@@ -82,6 +82,7 @@ private:
     KAction * m_actualPixels;
     KAction * m_actualSize;
     KAction * m_fitToCanvas;
+    QWidget * m_zoomActionWidget;
 };
 
 #endif

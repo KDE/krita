@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * 
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,18 +18,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ConnectionToolWidget.h"
+#ifndef REMOVECONNECTIONPOINTCOMMAND_H
+#define REMOVECONNECTIONPOINTCOMMAND_H
 
-#include <KDebug>
-#include <KLocale>
+#include <KoConnectionPoint.h>
+#include <QtGui/QUndoCommand>
+#include <QtCore/QPointF>
 
-ConnectionToolWidget::ConnectionToolWidget( QWidget * parent )
-    :QWidget(parent)
+class KoShape;
+
+class RemoveConnectionPointCommand : public QUndoCommand
 {
-    widget.setupUi(this);
-    
-    widget.connectionType->clear();
-    widget.connectionType->addItem(i18n("Standard"));
-    
-}
-#include <ConnectionToolWidget.moc>
+public:
+    /// Creates new comand to remove connection point from shape
+    RemoveConnectionPointCommand(KoShape *shape, int connectionPointId, QUndoCommand *parent = 0);
+    virtual ~RemoveConnectionPointCommand();
+    /// reimplemented from QUndoCommand
+    virtual void redo();
+    /// reimplemented from QUndoCommand
+    virtual void undo();
+
+private:
+    void updateRoi();
+
+    KoShape * m_shape;
+    KoConnectionPoint m_connectionPoint;
+    int m_connectionPointId;
+};
+
+#endif // REMOVECONNECTIONPOINTCOMMAND_H

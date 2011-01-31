@@ -167,11 +167,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     qreal minDistance = 10000, distance;
 
     // down
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[0]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(0).position);
     rect = QRectF(pos-QPointF(0,length), QSizeF(1,length));
     tree = propose(rect, TreeShape::OrgDown);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[2]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(2).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -181,11 +181,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // up
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[2]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(2).position);
     rect = QRectF(pos, QSizeF(1,length));
     tree = propose(rect, TreeShape::OrgUp);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[0]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(0).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -195,11 +195,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // right
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[3]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(3).position);
     rect = QRectF(pos-QPointF(length,0), QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgRight);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[1]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(1).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -209,11 +209,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // left
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[1]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(1).position);
     rect = QRectF(pos, QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgLeft);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[3]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(3).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {

@@ -38,7 +38,7 @@ namespace KDChart {
      *
      * The CartesianGrid interface is used
      * for calculating and for drawing
-     * the horizonal grid lines, and the vertical grid lines
+     * the horizontal grid lines, and the vertical grid lines
      * of a cartesian coordinate plane.
      */
     class CartesianGrid : public AbstractGrid

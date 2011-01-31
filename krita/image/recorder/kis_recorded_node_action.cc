@@ -61,6 +61,11 @@ const KisNodeQueryPath& KisRecordedNodeAction::nodeQueryPath() const
     return d->path;
 }
 
+void KisRecordedNodeAction::setNodeQueryPath(const KisNodeQueryPath& nqp)
+{
+    d->path = nqp;
+}
+
 void KisRecordedNodeAction::toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const
 {
     Q_UNUSED(doc)

@@ -85,6 +85,7 @@ set(flake_SRCS
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
+    KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp

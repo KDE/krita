@@ -30,6 +30,7 @@ class KisPaintOpSettingsWidget;
 class KisRecordedPaintAction;
 class Ui_WdgPaintActionEditor;
 class KoResource;
+class KisNodeQueryPathEditor;
 
 /**
  * This is the editor for all \ref KisRecordedPaintAction
@@ -44,6 +45,7 @@ private slots:
     void configurationUpdated();
     void paintOpChanged(int index);
     void resourceSelected(KoResource* resource);
+    void nodeQueryPathChanged();
 signals:
     void actionEdited();
 private:

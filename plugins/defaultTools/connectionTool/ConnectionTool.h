@@ -128,6 +128,8 @@ private:
     KoInteractionStrategy *m_currentStrategy; ///< the current editing strategy
     KoSnapGuide::Strategies m_oldSnapStrategies; ///< the previously enables snap strategies
 
+    QCursor m_connectCursor;
+
     QActionGroup *m_alignVertical;
     QActionGroup *m_alignHorizontal;
     QActionGroup *m_alignRelative;

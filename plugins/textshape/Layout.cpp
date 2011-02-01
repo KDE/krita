@@ -114,7 +114,12 @@ bool Layout::start()
     else if (shape)
         nextParag();
     m_reset = false;
-    return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    
+    bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    if (!ok) {
+        kDebug() << "shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+    }
+    return ok;
 }
 
 void Layout::end()
@@ -157,9 +162,11 @@ qreal Layout::width()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
-        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        if (table) {
+            m_tableLayout.setTable(table);
+            ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
+            m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        }
     }
     if (m_newParag)
         ptWidth -= resolveTextIndent();
@@ -235,7 +242,7 @@ bool Layout::addLine()
 {
     QTextLine line = m_textLine.line;
     bool processingLine = m_textLine.processingLine();
- 
+
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -2293,11 +2300,12 @@ void Layout::updateFrameStack()
                 } else {
                     if (item.data()->tocFrame() == frame) {
                         break;
-                    }                    
+                    }
                 }
             }
             if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
+                tg->setPageWidth( shape->size().width() );
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),

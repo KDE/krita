@@ -102,6 +102,7 @@ enum DocumentResource {
 
 enum KoTextFrameProperty {
     TableOfContents = QTextFormat::UserProperty + 1,
+    TableOfContentsData = QTextFormat::UserProperty + 2
 };
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum

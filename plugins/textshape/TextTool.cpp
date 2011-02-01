@@ -465,7 +465,7 @@ TextTool::~TextTool()
 
 void TextTool::showChangeTip()
 {
-    if (!m_textShapeData || !m_changeTipCursorPos)
+    if (!m_textShapeData || !m_changeTipCursorPos || !m_changeTracker->displayChanges())
         return;
     QTextCursor c(m_textShapeData->document());
     c.setPosition(m_changeTipCursorPos);

@@ -90,6 +90,9 @@ namespace KOfficeFilter {
         KoFilter::ConversionStatus status = m_filter->convert(m_from, m_to);
         delete m_filter;
         m_filter = 0;
+        if (m_updater) {
+            m_updater->setProgress(100);
+        }
         return status;
     }
 

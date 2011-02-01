@@ -128,6 +128,12 @@ public:
      * @return true when the processing is interrupted
      */
     bool interrupted() const;
+
+    /**
+     * @return true when the output has been set
+     */
+    bool hasOutput() const;
+
 private slots:
 
     void update();

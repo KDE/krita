@@ -135,45 +135,40 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::rotate(qreal angle)
+void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
     
-    qreal cx = m_d->canvasWidgetSize.width()  / 2.0;
-    qreal cy = m_d->canvasWidgetSize.height() / 2.0;
-    
     m_d->rotation                *= rot;
-    m_d->postprocessingTransform *= QTransform::fromTranslate(-cx,-cy) * rot * QTransform::fromTranslate(cx,cy);
+    m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
+    m_d->postprocessingTransform *= rot;
+    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(), center.y());
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::mirror(bool mirrorXAxis, bool mirrorYAxis)
+void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
 {
-    qreal scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
-    qreal scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
-    qreal cx     = m_d->canvasWidgetSize.width()  / 2.0;
-    qreal cy     = m_d->canvasWidgetSize.height() / 2.0;
-    
+    qreal      scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
+    qreal      scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
     QTransform mirror = QTransform::fromScale(scaleX, scaleY);
     
-    m_d->postprocessingTransform *= QTransform::fromTranslate(-cx,-cy);
+    m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
     m_d->postprocessingTransform *= m_d->rotation.inverted();
     m_d->postprocessingTransform *= mirror;
     m_d->postprocessingTransform *= m_d->rotation;
-    m_d->postprocessingTransform *= QTransform::fromTranslate(cx,cy);
+    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(),center.y());
     recalculateTransformations();
     
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
 }
 
-void KisCoordinatesConverter::resetRotation()
+void KisCoordinatesConverter::resetRotation(QPointF center)
 {
-    qreal cx = m_d->canvasWidgetSize.width()  / 2.0;
-    qreal cy = m_d->canvasWidgetSize.height() / 2.0;
-    
-    m_d->postprocessingTransform *= QTransform::fromTranslate(-cx,-cy) * m_d->rotation.inverted() * QTransform::fromTranslate(cx,cy);
+    m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
+    m_d->postprocessingTransform *= m_d->rotation.inverted();
+    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(),center.y());
     m_d->rotation.reset();
     
     recalculateTransformations();
@@ -251,6 +246,15 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
 }
 
 
+QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
+{
+    if(!m_d->image.isValid())
+        return QPointF();
+    
+    QPolygonF poly = imageToWidget(QPolygon(m_d->image->bounds()));
+    return (poly[0] + poly[1] + poly[2] + poly[3]) / 4.0;
+}
+
 // these functions return a bounding rect if the canvas is rotated
 
 QRectF KisCoordinatesConverter::imageRectInWidgetPixels() const
@@ -287,6 +291,12 @@ QPointF KisCoordinatesConverter::flakeCenterPoint() const
     return QPointF(widgetRect.left() + widgetRect.width() / 2,
                    widgetRect.top() + widgetRect.height() / 2);
 }
+
+QPointF KisCoordinatesConverter::widgetCenterPoint() const
+{
+    return QPointF(m_d->canvasWidgetSize.width() / 2.0, m_d->canvasWidgetSize.height() / 2.0);
+}
+
 
 void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {

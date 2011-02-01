@@ -179,14 +179,14 @@ void KisCanvas2::pan(QPoint shift)
 
 void KisCanvas2::mirrorCanvas(bool enable)
 {
-    m_d->coordinatesConverter->mirror(false, enable);
+    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->imageCenterInWidgetPixel(), false, enable);
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
-    m_d->coordinatesConverter->rotate(angle);
+    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     notifyZoomChanged();
     
     if(updateOffset)
@@ -207,7 +207,7 @@ void KisCanvas2::rotateCanvasLeft15()
 
 void KisCanvas2::resetCanvasTransformations()
 {
-    m_d->coordinatesConverter->resetRotation();
+    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }

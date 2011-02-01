@@ -40,16 +40,22 @@ namespace _Private
         typedef QRectF Result;
         static QRectF map(const QTransform& transform, const QRectF& rc)  { return transform.mapRect(rc); }
     };
-    
-    template<> struct Traits<QRect>: public Traits<QRectF> { };
 
     template<> struct Traits<QPointF>
     {
         typedef QPointF Result;
         static QPointF map(const QTransform& transform, const QPointF& pt)  { return transform.map(pt); }
     };
+    
+    template<> struct Traits<QPolygonF>
+    {
+        typedef QPolygonF Result;
+        static QPolygonF map(const QTransform& transform, const QPolygonF& po)  { return transform.map(po); }
+    };
 
-    template<> struct Traits<QPoint>: public Traits<QPointF> { };
+    template<> struct Traits<QRect>:    public Traits<QRectF>    { };
+    template<> struct Traits<QPoint>:   public Traits<QPointF>   { };
+    template<> struct Traits<QPolygon>: public Traits<QPolygonF> { };
 }
 
 class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
@@ -67,9 +73,9 @@ public:
     QPoint documentOffset() const;
     QPoint updateOffsetAfterTransform() const;
     
-    void rotate(qreal angle);
-    void mirror(bool mirrorXAxis, bool mirrorYAxis);
-    void resetRotation();
+    void rotate(QPointF center, qreal angle);
+    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
+    void resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
     
@@ -119,12 +125,14 @@ public:
                                QRectF *textureRect,
                                QRectF *modelRect) const;
 
+    QPointF imageCenterInWidgetPixel() const;
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
-
     QPointF flakeCenterPoint() const;
+    QPointF widgetCenterPoint() const;
+    
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:

@@ -26,11 +26,6 @@
 #include "krita_export.h"
 #include "kis_types.h"
 
-class QSize;
-class QSizeF;
-class QRectF;
-class QPoint;
-
 namespace _Private
 {
     template<class T> struct Traits { };

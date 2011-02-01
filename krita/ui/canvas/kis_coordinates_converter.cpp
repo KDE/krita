@@ -19,10 +19,7 @@
 
 #include "kis_coordinates_converter.h"
 
-#include <QPolygonF>
 #include <QTransform>
-#include <QSizeF>
-
 #include <KoViewConverter.h>
 
 #include <kis_config.h>

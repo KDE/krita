@@ -60,9 +60,9 @@ public:
       : changeId(1),
         recordChanges(false),
         displayChanges(false),
-        insertionBgColor(0,255,0),
-        deletionBgColor(255,0,0),
-        formatChangeBgColor(0,0,255)
+        insertionBgColor(101,255,137),
+        deletionBgColor(255,118,97),
+        formatChangeBgColor(102,151,255)
     {
     }
     ~Private() { }

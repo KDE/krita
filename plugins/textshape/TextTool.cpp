@@ -416,7 +416,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_caretTimer.setInterval(500);
     connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
 
-    m_changeTipTimer.setInterval(1000);
+    m_changeTipTimer.setInterval(500);
     m_changeTipTimer.setSingleShot(true);
     connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
 }
@@ -465,7 +465,7 @@ TextTool::~TextTool()
 
 void TextTool::showChangeTip()
 {
-    if (!m_textShapeData)
+    if (!m_textShapeData || !m_changeTipCursorPos)
         return;
     QTextCursor c(m_textShapeData->document());
     c.setPosition(m_changeTipCursorPos);
@@ -813,7 +813,7 @@ QStringList TextTool::supportedPasteMimeTypes() const
 int TextTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::ExactHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
     if (m_textShapeData->endPosition() == -1) {
         kWarning(32500) << "Clicking in not fully laid-out textframe";

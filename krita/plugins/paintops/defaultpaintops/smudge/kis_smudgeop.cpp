@@ -108,10 +108,11 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
     const KoCompositeOp* oldMode    = painter()->compositeOp();
+    qreal                fpOpacity  = qreal(oldOpacity) / 255.0;
     
     if(!m_firstRun) {
         // set opacity calculated by the rate option
-        m_smudgeRateOption.apply(painter(), info);
+        m_smudgeRateOption.apply(*painter(), info, 0.0, 1.0, fpOpacity);
         
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
@@ -139,7 +140,7 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
         // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0-m_smudgeRateOption.getRate(), 0.2);
-        m_colorRateOption.apply(&copyPainter, info, 0.0, maxColorRate);
+        m_colorRateOption.apply(copyPainter, info, 0.0, maxColorRate, fpOpacity);
         
         // paint a rectangle with the current color (foreground color)
         // into the temporary painting device and use the user selected

@@ -59,7 +59,7 @@ public:
     Private();
     ~Private();
 
-    void saveXml(const KoXmlElement & element);
+    void saveXml(const KoXmlElement &element);
     void saveXmlRecursive(const KoXmlElement &el, KoXmlWriter &writer);
     void saveFile(const QString &filename, KoShapeLoadingContext &context);
 
@@ -68,9 +68,12 @@ public:
     //  - Any embedded files (names, contents) that are referenced by xlink:href
     //  - The manifest entries
     QList<QByteArray>    frameContents; // A list of the XML trees in the frame, each of them one object
-    QStringList          objectNames;   // A list of objects names in the frame.                                                            // These are extracted from frameContents
+    QStringList          objectNames;   // A list of objects names in the frame
+                                        // These are extracted from frameContents
+    QList<KoOdfManifestEntry*> manifestEntries; // A list of manifest entries for the above.
+
     QList<FileEntry*>    embeddedFiles; // List of <objectNames,contents> of embedded files.
-    KoOdfManifestEntry  *manifestEntry; // The manifest entry for this embedded object
+    KoOdfManifestEntry  *manifestEntry; // The manifest entry for this embedded object itself
 };
 
 KoUnavailShape::Private::Private()
@@ -79,6 +82,7 @@ KoUnavailShape::Private::Private()
 
 KoUnavailShape::Private::~Private()
 {
+    qDeleteAll(manifestEntries);
 }
 
 
@@ -176,7 +180,9 @@ void KoUnavailShape::drawNull(QPainter &painter) const
 void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 {
     kDebug(30006) << "START SAVING ##################################################";
-    KoXmlWriter&  writer = context.xmlWriter();
+
+    KoEmbeddedFileSaver &fileSaver = context.embeddedFileSaver();
+    KoXmlWriter         &writer    = context.xmlWriter();
 
     writer.startElement( "draw:frame" );
     // See also loadOdf() in loadOdfAttributes.
@@ -207,6 +213,12 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
             kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
+                
+#if 0
+                1. Fix the vector shape to create the links itself and the filesaver not to;
+                2. Save file here;
+                3. Save the manifest for the object itself (may be a new qlist);
+#endif
                 //manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); // TODO: version
                 // FIXME: Add the file here.
             }
@@ -229,6 +241,14 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     //       the things inside the frame, not just one of them, like
     //       loadOdfFrame() provides.
 
+    // Get the manifest.
+    QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
+#if 0
+    kDebug(30006) << "MANIFEST: ";
+    foreach (KoOdfManifestEntry *entry, manifest) {
+        kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
+    }
+#endif
     // Get the XML contents from the draw:frame.  As a side effect,
     // this extracts the object names from all xlink:href and stores
     // them into d->objectNames.  The saved xml contents itself is
@@ -238,12 +258,6 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
 
     kDebug(30006) << "frameContents: " << d->frameContents;
     kDebug(30006) << "objectNames:   " << d->objectNames;
-
-    QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
-    kDebug(30006) << "MANIFEST: ";
-    foreach (KoOdfManifestEntry *entry, manifest) {
-        kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
-    }
 
     // Loop through the objects that were found in the frame and save
     // all the files associated with them.  Some of the objects are
@@ -266,8 +280,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
 
         // If the object is a directory, then save all the files
         // inside it, otherwise save the file as it is.
-        if (!context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty()) {
-            // A directory.
+        bool isDir = !context.odfLoadingContext().mimeTypeForPath(dirName).isEmpty();
+        if (isDir) {
             // The files can be found in the manifest.
             foreach (KoOdfManifestEntry *entry, manifest) {
                 if (entry->fullPath == dirName)
@@ -282,8 +296,32 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             // A file: save it.
             d->saveFile(objectName, context);
         }
+
+        // Get the manifest entry for this object.
+        KoOdfManifestEntry *entry = 0;
+        QString             entryName = isDir ? dirName : objectName;
+        for (int i = 0; i < manifest.size(); ++i) {
+            KoOdfManifestEntry *temp = manifest.value(i);
+
+            if (temp->fullPath == entryName) {
+                entry = new KoOdfManifestEntry(*manifest.value(i));
+                //*entry = *temp;
+                break;
+            }
+        }
+        d->manifestEntries.append(entry);
     }
 
+    kDebug(30006) << "Object manifest entries:";
+    for (int i = 0; i < d->manifestEntries.size(); ++i) {
+        KoOdfManifestEntry *entry = d->manifestEntries.value(i);
+        if (entry)
+            kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
+        else
+            kDebug(30006) << "--";
+    }
+
+            
     kDebug(30006) << "END LOADING ####################################################";
     return true;
 }
@@ -340,7 +378,8 @@ void KoUnavailShape::Private::saveXmlRecursive(const KoXmlElement &el, KoXmlWrit
     }
 
     // Save filenames. An empty string is saved if none is found.
-    objectNames << el.attributeNS(KoXmlNS::xlink, "href", QString());
+    QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
+    objectNames << name;
 
     // Child elements
     // Loop through all the child elements of the draw:frame.

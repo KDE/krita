@@ -45,6 +45,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoEmbeddedFileSaver.h>
 
 
 struct FileEntry {
@@ -72,8 +73,7 @@ public:
                                         // These are extracted from frameContents
     QList<KoOdfManifestEntry*> manifestEntries; // A list of manifest entries for the above.
 
-    QList<FileEntry*>    embeddedFiles; // List of <objectNames,contents> of embedded files.
-    KoOdfManifestEntry  *manifestEntry; // The manifest entry for this embedded object itself
+    QList<FileEntry*>    embeddedFiles; // List of embedded files.
 };
 
 KoUnavailShape::Private::Private()
@@ -191,38 +191,45 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     // Write the already saved XML
     // FIXME: Add hrefs and stuff
     for (int i = 0; i < d->frameContents.size(); ++i) {
-        QByteArray  xmlArray(d->frameContents.value(i));
-        QString     objectName(d->objectNames.value(i)); // Possibly empty.
+        QByteArray          xmlArray(d->frameContents.value(i));
+        QString             objectName(d->objectNames.value(i)); // Possibly empty.
+        KoOdfManifestEntry *manifestEntry(d->manifestEntries.value(i));
 
-        if (!(objectName.isEmpty())) {
-            // FIXME: Create new object name and fix the string
+        QString newName = objectName;
+        if (!objectName.isEmpty()) {
+            newName = fileSaver.getFilename("UObject");
+            xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
         }
 
         writer.addCompleteElement(xmlArray.data());
 
+        // If the objectName is empty, this may be an inline object.
+        // If so, we are done now.
         if (objectName.isEmpty())
             continue;
 
         // Remove the prefix ./ (as in ./Object1) from object names.
+#if 0
         if (objectName.startsWith("./"))
             objectName = objectName.mid(2);
-
+#else
+        if (newName.startsWith("./"))
+            newName = newName.mid(2);
+#endif
         // Save embedded files for this object.
         for (int j = 0; j < d->embeddedFiles.size(); ++j) {
             QString  fileName(d->embeddedFiles.value(i)->path);
             kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
-                
-#if 0
-                1. Fix the vector shape to create the links itself and the filesaver not to;
-                2. Save file here;
-                3. Save the manifest for the object itself (may be a new qlist);
-#endif
-                //manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); // TODO: version
-                // FIXME: Add the file here.
+                fileName.replace(objectName, newName);
+                fileSaver.saveFile(newName, d->embeddedFiles.value(i)->mimeType.toLatin1(),
+                                   d->embeddedFiles.value(i)->contents);
             }
         }
+
+        // Write the manifest entry for the object itself.
+        //context.manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); 
     }
 
     writer.endElement(); // draw:frame

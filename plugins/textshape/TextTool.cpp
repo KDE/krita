@@ -1476,7 +1476,7 @@ QWidget *TextTool::createOptionWidget()
     widget->addTab(ssw, i18n("Abc"));
     StylesWidget *styles = new StylesWidget(widget);
     widget->addTab(styles, i18n("Styles"));
-    ChangeTrackingOptionsWidget *changeTrackingOptions = new ChangeTrackingOptionsWidget(widget);
+    ChangeTrackingOptionsWidget *changeTrackingOptions = new ChangeTrackingOptionsWidget(this, widget);
     widget->addTab(changeTrackingOptions, i18n("Change Tracking"));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));

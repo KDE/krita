@@ -33,6 +33,7 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/ChangeConfigureDialog.h"
+#include "dialogs/ChangeTrackingOptionsWidget.h"
 #include "commands/TextCutCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeListCommand.h"
@@ -1577,6 +1578,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     StylesWidget *styw = new StylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
+    ChangeTrackingOptionsWidget *ctw = new ChangeTrackingOptionsWidget(0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1604,6 +1606,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     widgets.insert(i18n("Paragraph"), spw);
     widgets.insert(i18n("Styles"), styw);
     widgets.insert(i18n("Table"), stw);
+    widgets.insert(i18n("Change Tracking"), ctw);
     return widgets;
 }
 

@@ -2410,7 +2410,8 @@ bool Layout::positionInlineObjects()
         m_textAnchorIndex++;
 
         // create outline if the shape is positioned inside text
-        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough &&
+            !textAnchor->behavesAsCharacter()) {
             updateRunAroundShape(textAnchor->shape());
             return true;
         }

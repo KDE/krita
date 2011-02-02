@@ -284,6 +284,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
 
+    //Workaround, by default has the same shortcut as mirrorCanvas
+    KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
     if (shell())
     {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");

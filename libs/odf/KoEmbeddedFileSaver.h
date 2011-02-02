@@ -42,15 +42,30 @@ public:
 
     QString getFilename(const QString &prefix);
 
-    /**FIXME
-     * Adds the object specific attributes to the tag, but does NOT
-     * write the content of the embedded document. Saving of the
-     * embedded documents themselves is done in @ref save. This
-     * function should be called from within KoOdfDocument::saveOdf.
+    /**
+     * Adds the object specific attributes to the tag, and queues the
+     * file for saving into the store.
+     *
+     * However, it does NOT write the content of the embedded document
+     * to the store. Saving of the embedded files themselves is done
+     * in @ref saveEmbeddedFiles. This function should be called from
+     * within saveOdf in a shape or a document.
      */
     void embedFile(KoXmlWriter &writer, const char *element,
                    const QString &path, const QByteArray &mimeType,
                    QByteArray contents);
+
+    /**
+     * Queues the file for saving into the store.
+     *
+     * Saving of the embedded files themselves is done in @ref
+     * saveEmbeddedFiles. This function should be called from within
+     * saveOdf in a shape or a document if you don't wish to have a
+     * reference to the file within content.xml, e.g. when the file is
+     * part of an embedded object with embedded files within it.
+     */
+    void saveFile(const QString &path, const QByteArray &mimeType,
+                  QByteArray contents);
 
     /**
      * Save all embedded files to the store.

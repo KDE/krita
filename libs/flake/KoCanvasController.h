@@ -27,6 +27,7 @@
 #include "flake_export.h"
 #include <QObject>
 
+class KActionCollection;
 class QRect;
 class QRectF;
 class QPoint;
@@ -81,8 +82,9 @@ public:
 
     /**
      * Constructor.
+     * @param actionCollection the action collection for this canvas
      */
-    explicit KoCanvasController();
+    explicit KoCanvasController(KActionCollection* actionCollection);
     virtual ~KoCanvasController();
 
 public:
@@ -288,6 +290,12 @@ public:
      *     scrolling is disabled.
      */
     virtual void setVastScrolling(qreal factor) = 0;
+
+   /**
+     * Returns the action collection for the canvas
+     * @returns action collection for this canvas, can be 0
+     */    
+    virtual KActionCollection* actionCollection() const;
 
 protected:
     void setDocumentSize(const QSize &sz);

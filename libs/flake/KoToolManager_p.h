@@ -102,6 +102,8 @@ public:
 
     bool layerEnabled;
 
+private:
+    void activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions);
 };
 
 /// \internal

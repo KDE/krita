@@ -20,12 +20,13 @@
 #define __CHANGE_TRACKING_OPTIONS_WIDGET_H__
 
 #include <ui_ChangeTrackingOptionsWidget.h>
+#include <TextTool.h>
 
 class ChangeTrackingOptionsWidget : public QWidget
 {
     Q_OBJECT
     public:
-        ChangeTrackingOptionsWidget(QWidget *parent = 0);
+        ChangeTrackingOptionsWidget(TextTool *tool,QWidget *parent = 0);
     
     private slots:
         void recordChangesChanged(int isChecked);
@@ -34,6 +35,7 @@ class ChangeTrackingOptionsWidget : public QWidget
 
     private:
         Ui::ChangeTrackingOptions widget;
+        TextTool *m_tool;
 };
 
 #endif

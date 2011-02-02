@@ -20,7 +20,7 @@
 #include "ChangeTrackingOptionsWidget.h"
 #include <QDebug>
 
-ChangeTrackingOptionsWidget::ChangeTrackingOptionsWidget(QWidget *parent):QWidget(parent)
+ChangeTrackingOptionsWidget::ChangeTrackingOptionsWidget(TextTool *tool, QWidget *parent):QWidget(parent), m_tool(tool)
 {
     widget.setupUi(this);
     connect(widget.recordChangesCheckBox, SIGNAL(stateChanged(int)), this, SLOT(recordChangesChanged(int)));
@@ -30,16 +30,16 @@ ChangeTrackingOptionsWidget::ChangeTrackingOptionsWidget(QWidget *parent):QWidge
 
 void ChangeTrackingOptionsWidget::recordChangesChanged(int isChecked)
 {
-    qDebug() << "*************record changes changed: " << isChecked;
+    m_tool->toggleRecordChanges(isChecked);
 }
 
 void ChangeTrackingOptionsWidget::showChangesChanged(int isChecked)
 {
-    qDebug() << "*************show changes changed: " << isChecked;
+    m_tool->toggleShowChanges(isChecked);
 }
 
 void ChangeTrackingOptionsWidget::configureSettingsPressed()
 {
-    qDebug() << "*************configure settings pressed************";
+    m_tool->configureChangeTracking();
 }
 

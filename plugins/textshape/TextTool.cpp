@@ -1578,7 +1578,7 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     StylesWidget *styw = new StylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
-    ChangeTrackingOptionsWidget *ctw = new ChangeTrackingOptionsWidget(0);
+    ChangeTrackingOptionsWidget *ctw = new ChangeTrackingOptionsWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));

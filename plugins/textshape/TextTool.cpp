@@ -31,6 +31,7 @@
 #include "dialogs/FontDia.h"
 #include "dialogs/TableDialog.h"
 #include "dialogs/ChangeConfigureDialog.h"
+#include "dialogs/ChangeTrackingOptionsWidget.h"
 #include "commands/TextCutCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeListCommand.h"
@@ -1475,6 +1476,8 @@ QWidget *TextTool::createOptionWidget()
     widget->addTab(ssw, i18n("Abc"));
     StylesWidget *styles = new StylesWidget(widget);
     widget->addTab(styles, i18n("Styles"));
+    ChangeTrackingOptionsWidget *changeTrackingOptions = new ChangeTrackingOptionsWidget(widget);
+    widget->addTab(changeTrackingOptions, i18n("Change Tracking"));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));

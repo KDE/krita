@@ -60,10 +60,10 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 #include <rdf/KoDocumentRdfBase.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
-#include <KoTableOfContentsGeneratorInfo.h>
 #endif
 
 class KoTextWriter::Private

@@ -60,6 +60,7 @@ KisProgressWidget::KisProgressWidget(QWidget* parent)
     connect(m_progressBar, SIGNAL(done()), this, SLOT(hide()));
     layout->addWidget(m_progressBar);
     layout->addWidget(m_cancelButton);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 
 KisProgressWidget::~KisProgressWidget()

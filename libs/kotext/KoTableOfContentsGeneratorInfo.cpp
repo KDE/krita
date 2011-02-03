@@ -210,8 +210,8 @@ void TableOfContentSource::saveOdf(KoXmlWriter* writer) const
 
         indexTitleTemplate.saveOdf(writer);
 
-        foreach (const TocEntryTemplate &entryTemplate, entryTemplate) {
-            entryTemplate.saveOdf(writer);
+        foreach (const TocEntryTemplate &entry, entryTemplate) {
+            entry.saveOdf(writer);
         }
 
         foreach (const IndexSourceStyles &sourceStyle, indexSourceStyles) {

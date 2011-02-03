@@ -193,7 +193,7 @@ public:
      *
      * @param painter a pointer to the QPainter to draw the table with.
      */
-    void drawBackground(QPainter *painter) const;
+    void drawBackground(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) const;
 
     /**
      * Draw the table borders using the given QPainter.
@@ -201,7 +201,7 @@ public:
      * @param painter a pointer to the QPainter to draw the table with.
      * @param accuBlankBorders a painterpath that should accumulate blank borders.
      */
-    void drawBorders(QPainter *painter, QPainterPath *accuBlankBorders) const;
+    void drawBorders(QPainter *painter, QVector<QLineF> *accuBlankBorders) const;
 
     /**
      * Figures outDraw the table borders using the given QPainter.
@@ -222,7 +222,21 @@ public:
      *
      * @return the list of rectangles.
      */
-    QList<QRectF> tableRects() const;
+//    QList<QRectF> tableRects() const;
+
+    /**
+     * Get the left edge position of the table minimum if spanning several tableRects
+     *
+     * @return x.
+     */
+    qreal tableMinX() const;
+
+    /**
+     * Get the right edge position of the table maximum if spanning several tableRects
+     *
+     * @return x.
+     */
+    qreal tableMaxX() const;
 
     /**
      * Get the bounding rectangle of a given cell.
@@ -231,6 +245,7 @@ public:
      * @return the bounding rectangle of the cell.
      */
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
+    QRectF cellBoundingRect(const QTextTableCell &cell, const QTextCharFormat &fmt) const;
 
     /**
      * Get the content rectangle of a given cell.
@@ -251,6 +266,16 @@ public:
      * \sa position(), setPosition()
      */
     qreal cellContentY(const QTextTableCell &cell) const;
+
+    /**
+     * Get the content X of a given cell.
+     *
+     * @param cell the cell.
+     * @return the x pos where content starts.
+     *
+     * \sa position(), setPosition()
+     */
+    qreal cellContentX(const QTextTableCell &cell) const;
 
     /**
      * Get the bounding rectangle of a given row.
@@ -310,8 +335,6 @@ private:
     TableLayoutData *m_tableLayoutData; /**< The current table layout data. */
 
     QMap<QTextTable *, TableLayoutData *> m_tableLayoutDataMap;  /**< The map of table layout data objects. */
-
-    bool m_dirty;        /**< Table layout is dirty. */
 };
 
 #endif // TABLELAYOUT_H

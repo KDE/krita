@@ -23,6 +23,7 @@
 #include "TableLayoutData.h"
 
 #include <KoTableStyle.h>
+#include <KoTableBorderStyle.h>
 #include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
@@ -43,15 +44,14 @@
 
 #include <kdebug.h>
 
-TableLayout::TableLayout(QTextTable *table) : m_dirty(true)
+TableLayout::TableLayout(QTextTable *table)
 {
     setTable(table);
 }
 
 TableLayout::TableLayout() :
     m_table(0),
-    m_tableLayoutData(0),
-    m_dirty(true)
+    m_tableLayoutData(0)
 {
 }
 
@@ -59,22 +59,22 @@ void TableLayout::setTable(QTextTable *table)
 {
     Q_ASSERT(table);
 
-    if (table == m_table)
-        return; // we are already set
+    if (table != m_table) {
+        // We are not already set
+        TableLayoutData *tableLayoutData;
+        if (!m_tableLayoutDataMap.contains(table)) {
+            // Set up new table layout data.
+            tableLayoutData = new TableLayoutData();
+            m_tableLayoutDataMap.insert(table, tableLayoutData);
+            connect(table, SIGNAL(destroyed(QObject *)), this, SLOT(tableDestroyed(QObject *)));
+        } else {
+            // Table layout data already in map.
+            tableLayoutData = m_tableLayoutDataMap.value(table);
+        }
 
-    TableLayoutData *tableLayoutData;
-    if (!m_tableLayoutDataMap.contains(table)) {
-        // Set up new table layout data.
-        tableLayoutData = new TableLayoutData();
-        m_tableLayoutDataMap.insert(table, tableLayoutData);
-        connect(table, SIGNAL(destroyed(QObject *)), this, SLOT(tableDestroyed(QObject *)));
-    } else {
-        // Table layout data already in map.
-        tableLayoutData = m_tableLayoutDataMap.value(table);
+        m_table = table;
+        m_tableLayoutData = tableLayoutData;
     }
-
-    m_table = table;
-    m_tableLayoutData = tableLayoutData;
 
     // Resize geometry vectors for the table.
     m_tableLayoutData->m_rowPositions.resize(m_table->rows());
@@ -83,8 +83,6 @@ void TableLayout::setTable(QTextTable *table)
     for (int row = 0; row < m_table->rows(); ++row) {
         m_tableLayoutData->m_contentHeights[row].resize(m_table->columns());
     }
-
-    m_dirty = true;
 }
 
 QTextTable *TableLayout::table() const
@@ -142,11 +140,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     tableRect.columnWidths.resize(m_table->columns());
 
     // Get the column and row style manager.
-    KoTableColumnAndRowStyleManager *carsManager =
-    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
-            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-    if (!carsManager)
-        carsManager = new KoTableColumnAndRowStyleManager();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     // Column widths.
     qreal availableWidth = tableWidth; // Width available for columns.
@@ -154,7 +148,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
     for (int col = 0; col < tableRect.columnPositions.size(); ++col) {
-        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle columnStyle = carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
             relativeWidthColumns.append(col);
@@ -165,7 +159,6 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
             availableWidth -= columnStyle.columnWidth();
         } else {
             // Neither width nor relative width specified.
-            kWarning(32600) << "Neither column-width nor rel-column-width specified";
             tableRect.columnWidths[col] = 0.0;
             relativeWidthColumns.append(col); // handle it as a relative width column without asking for anything
             ++numNonStyleColumns;
@@ -180,7 +173,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
-        KoTableColumnStyle columnStyle = carsManager->columnStyle(col);
+        KoTableColumnStyle columnStyle = carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             tableRect.columnWidths[col] =
                 qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
@@ -206,10 +199,10 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
         columnPosition += tableRect.columnWidths[col];
     }
 
+    m_tableLayoutData->m_minX = qMin(m_tableLayoutData->m_minX, tableRect.columnPositions[0]);
+    m_tableLayoutData->m_maxX = qMax(m_tableLayoutData->m_maxX, columnPosition);
     m_tableLayoutData->m_tableRects.append(tableRect);
     m_tableLayoutData->m_rowPositions[fromRow] = tableRect.rect.top(); //Initialize the position of first row of tableRect
-
-    m_dirty = false;
 }
 
 void TableLayout::layoutRow(int row)
@@ -221,7 +214,6 @@ void TableLayout::layoutRow(int row)
     if (!isValid()) {
         return;
     }
-
     if (row < 0 || row >= m_table->rows()) {
         return;
     }
@@ -235,12 +227,7 @@ void TableLayout::layoutRow(int row)
     QTextTableFormat tableFormat = m_table->format();
 
     // Get the column and row style manager.
-    KoTableColumnAndRowStyleManager *carsManager =
-    reinterpret_cast<KoTableColumnAndRowStyleManager *>(
-            tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
-
-    if (!carsManager)
-        carsManager = new KoTableColumnAndRowStyleManager();
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     /*
      * Implementation Note:
@@ -264,7 +251,7 @@ void TableLayout::layoutRow(int row)
      * cells that should contribute to the row height.
      */
 
-    KoTableRowStyle rowStyle = carsManager->rowStyle(row);
+    KoTableRowStyle rowStyle = carsManager.rowStyle(row);
 
     // Adjust row height.
     qreal minimumRowHeight = rowStyle.minimumRowHeight();
@@ -314,7 +301,8 @@ void TableLayout::layoutRow(int row)
         m_tableLayoutData->m_rowPositions[row+1] =
             m_tableLayoutData->m_rowPositions[row ] + // Position of this row.
             m_tableLayoutData->m_rowHeights[row];    // Height of this row.
-    }
+    } else
+        m_tableLayoutData->m_dirty = false; //we have reached the end and the table should now be fully laied out
 
     // Adjust table rect height for new height.
     m_tableLayoutData->m_tableRects.last().rect.setHeight(m_tableLayoutData->m_rowPositions[row]
@@ -322,19 +310,23 @@ void TableLayout::layoutRow(int row)
         - m_tableLayoutData->m_rowPositions[m_tableLayoutData->m_tableRects.last().fromRow]);//FIXME review when breaking inside a row
 }
 
-void TableLayout::drawBackground(QPainter *painter) const
+void TableLayout::drawBackground(QPainter *painter, const KoTextDocumentLayout::PaintContext &context) const
 {
     if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
     }
-
     painter->save();
-
-    // Draw table background.
+    // Draw table background and row backgrounds
+    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     foreach (TableRect tRect, m_tableLayoutData->m_tableRects) {
         painter->fillRect(tRect.rect, m_table->format().background());
+        QRectF tableRect = tRect.rect;
+        for (int row = tRect.fromRow; row < m_table->rows() && m_tableLayoutData->m_rowPositions[row] < tableRect.bottom(); ++row) {
+            QRectF rowRect(tableRect.x(), m_tableLayoutData->m_rowPositions[row], tableRect.width(), m_tableLayoutData->m_rowHeights[row]);
+            KoTableRowStyle rowStyle = carsManager.rowStyle(row);
+            painter->fillRect(rowRect, rowStyle.background());
+        }
     }
-
     // Draw cell backgrounds using their styles.
     for (int row = 0; row < m_table->rows(); ++row) {
         for (int column = 0; column < m_table->columns(); ++column) {
@@ -346,9 +338,30 @@ void TableLayout::drawBackground(QPainter *painter) const
              */
             if (row == tableCell.row() && column == tableCell.column()) {
                 // This is an actual cell we want to draw, and not a covered one.
-
-                KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
-                cellStyle.paintBackground(*painter, cellBoundingRect(tableCell));
+                QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
+                QRectF bRect(cellBoundingRect(tableCell,tfm));
+                QVariant background(tfm.property(KoTableBorderStyle::CellBackgroundBrush));
+                if (!background.isNull()) {
+                    painter->fillRect(bRect, qvariant_cast<QBrush>(background));
+                }
+                // possibly draw the selection of the entire cell
+                foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+                    if (selection.cursor.hasComplexSelection()) {
+                        int selectionRow;
+                        int selectionColumn;
+                        int selectionRowSpan;
+                        int selectionColumnSpan;
+                        selection.cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+                        if (row >= selectionRow && column>=selectionColumn
+                            && row < selectionRow + selectionRowSpan
+                            && column < selectionColumn + selectionColumnSpan) {
+                            painter->fillRect(bRect, selection.format.background());
+                        }
+                    } else if (selection.cursor.selectionStart()  < m_table->firstPosition()
+                        && selection.cursor.selectionEnd() > m_table->lastPosition()) {
+                        painter->fillRect(bRect, selection.format.background());
+                    }
+                }
             }
         }
     }
@@ -380,7 +393,7 @@ void TableLayout::drawBackground(QPainter *painter) const
     painter->restore();
 }
 
-void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders) const
+void TableLayout::drawBorders(QPainter *painter, QVector<QLineF> *accuBlankBorders) const
 {
     if (m_tableLayoutData->m_tableRects.isEmpty()) {
         return;
@@ -402,29 +415,30 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
             */
             if (row == tableCell.row() && column == tableCell.column()) {
                 // This is an actual cell we want to draw, and not a covered one.
-                KoTableCellStyle cellStyle(tableCell.format().toTableCellFormat());
+                QTextTableCellFormat tfm(tableCell.format().toTableCellFormat());
+                KoTableBorderStyle cellStyle(tfm);
 
+                QRectF bRect = cellBoundingRect(tableCell,tfm);
                 if (collapsing) {
-                    QRectF bRect = cellBoundingRect(tableCell);
 
                     // First the horizontal borders
                     if (row == 0) {
                         cellStyle.drawTopHorizontalBorder(*painter, bRect.x(), bRect.y(), bRect.width(), accuBlankBorders);
                     }
-                    if (row + tableCell.rowSpan() == m_table->rows()) {
+                    if (row + tfm.tableCellRowSpan() == m_table->rows()) {
                         // we hit the bottom of the table so just draw the bottom border
                         cellStyle.drawBottomHorizontalBorder(*painter, bRect.x(), bRect.bottom(), bRect.width(), accuBlankBorders);
                     } else {
-                        // we have cells below so draw sharedborders
-                        QTextTableCell tableCellBelow;
-                        for (int c = column; c < column + tableCell.columnSpan();
-                                                    c = tableCellBelow.column()+tableCellBelow.columnSpan()) {
-                            tableCellBelow = m_table->cellAt(row + tableCell.rowSpan()-1+1, c);
-                            QRectF belowBRect = cellBoundingRect(tableCellBelow);
+                        int c = column;
+                        while (c < column + tfm.tableCellColumnSpan()) {
+                            QTextTableCell tableCellBelow = m_table->cellAt(row + tfm.tableCellRowSpan(), c);
+                            QTextTableCellFormat belowTfm(tableCellBelow.format().toTableCellFormat());
+                            QRectF belowBRect = cellBoundingRect(tableCellBelow, belowTfm);
                             qreal x = qMax(bRect.x(), belowBRect.x());
                             qreal x2 = qMin(bRect.right(), belowBRect.right());
-                            KoTableCellStyle cellBelowStyle(tableCellBelow.format().toTableCellFormat());
+                            KoTableBorderStyle cellBelowStyle(belowTfm);
                             cellStyle.drawSharedHorizontalBorder(*painter, cellBelowStyle, x, bRect.bottom(), x2 - x, accuBlankBorders);
+                            c = tableCellBelow.column() + belowTfm.tableCellColumnSpan();
                         }
                     }
 
@@ -432,27 +446,27 @@ void TableLayout::drawBorders(QPainter *painter, QPainterPath *accuBlankBorders)
                     if (column == 0) {
                         cellStyle.drawLeftmostVerticalBorder(*painter, bRect.x(), bRect.y(), bRect.height(), accuBlankBorders);
                     }
-                    if (column + tableCell.columnSpan() == m_table->columns()) {
+                    if (column + tfm.tableCellColumnSpan() == m_table->columns()) {
                         // we hit the rightmost edge of the table so draw the rightmost border
                         cellStyle.drawRightmostVerticalBorder(*painter, bRect.right(), bRect.y(), bRect.height(), accuBlankBorders);
                     } else {
                         // we have cells to the right so draw sharedborders
-                        QTextTableCell tableCellRight;
-                        for (int r = row; r < row + tableCell.rowSpan();
-                                                r = tableCellRight.row() + tableCellRight.rowSpan()) {
-                            tableCellRight = m_table->cellAt(r, column + tableCell.columnSpan()-1+1);
-                            QRectF rightBRect = cellBoundingRect(tableCellRight);
+                        int r = row;
+                        while (r < row + tfm.tableCellRowSpan()) {
+                            QTextTableCell tableCellRight = m_table->cellAt(r, column + tfm.tableCellColumnSpan());
+                            QTextTableCellFormat rightTfm(tableCellRight.format().toTableCellFormat());
+                            QRectF rightBRect = cellBoundingRect(tableCellRight, rightTfm);
                             qreal y = qMax(bRect.y(), rightBRect.y());
                             qreal y2 = qMin(bRect.bottom(), rightBRect.bottom());
-
-                            KoTableCellStyle cellBelowRight(tableCellRight.format().toTableCellFormat());
+                            KoTableBorderStyle cellBelowRight(rightTfm);
                             cellStyle.drawSharedVerticalBorder(*painter, cellBelowRight, bRect.right(), y, y2-y, accuBlankBorders);
+                            r = tableCellRight.row() + rightTfm.tableCellRowSpan();
                         }
                     }
                     // Paint diagonal borders for current cell
                     cellStyle.paintDiagonalBorders(*painter, bRect);
                 } else { // separating border model
-                    cellStyle.paintBorders(*painter, cellBoundingRect(tableCell));
+                    cellStyle.paintBorders(*painter, bRect, accuBlankBorders);
                 }
             }
         }
@@ -484,17 +498,52 @@ QTextTableCell TableLayout::hitTestTable(const QPointF &point) const
     return QTextTableCell();
 }
 
+qreal TableLayout::tableMinX() const
+{
+    return m_tableLayoutData->m_minX-10; //-10 is just to add potential penwidths
+}
+
+qreal TableLayout::tableMaxX() const
+{
+    return m_tableLayoutData->m_maxX+10; //10 is just to add potential penwidths
+}
+
 qreal TableLayout::cellContentY(const QTextTableCell &cell) const
 {
     Q_ASSERT(isValid());
     Q_ASSERT(cell.isValid());
 
     /*
+     * Get the cell style and return the y pos adjusted for
+     * borders and paddings.
+     */
+    KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+    return m_tableLayoutData->m_rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
+}
+
+qreal TableLayout::cellContentX(const QTextTableCell &cell) const
+{
+    Q_ASSERT(isValid());
+    Q_ASSERT(cell.isValid());
+    Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
+    
+    if (m_tableLayoutData->m_tableRects.isEmpty())
+        return 0.0;
+    
+    TableRect tableRect = m_tableLayoutData->m_tableRects.last();
+    int i = m_tableLayoutData->m_tableRects.size()-1;
+    while (tableRect.fromRow > cell.row()) {
+        --i;
+        tableRect =  m_tableLayoutData->m_tableRects[i];
+    }
+    Q_ASSERT(cell.column() + cell.columnSpan() <=  tableRect.columnPositions.size());
+
+    /*
      * Get the cell style and return the bounding rect adjusted for
      * borders and paddings by calling KoTableCellStyle::contentRect().
      */
     KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
-    return m_tableLayoutData->m_rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
+    return tableRect.columnPositions[cell.column()] + cellStyle.topPadding() + cellStyle.topBorderWidth();
 }
 
 QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
@@ -512,34 +561,41 @@ QRectF TableLayout::cellContentRect(const QTextTableCell &cell) const
 
 QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell) const
 {
-    Q_ASSERT(isValid());
-    Q_ASSERT(cell.row() < m_tableLayoutData->m_rowPositions.size());
-    
-    if (m_tableLayoutData->m_tableRects.isEmpty())
-        return QRectF(QPointF(0.0,0.0), QSizeF(0.0,0.0));
+    return cellBoundingRect(cell, cell.format());
+}
 
+QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell, const QTextCharFormat &fmt) const
+{
+    Q_ASSERT(isValid());
+
+    const int row = cell.row();
+    const int column = cell.column();
+    const int rowSpan = fmt.tableCellRowSpan();
+    const int columnSpan = fmt.tableCellColumnSpan();
+
+    Q_ASSERT(row < m_tableLayoutData->m_rowPositions.size());
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
     int i = m_tableLayoutData->m_tableRects.size()-1;
-    while (tableRect.fromRow > cell.row()) {
+    while (tableRect.fromRow > row) {
         --i;
         tableRect =  m_tableLayoutData->m_tableRects[i];
     }
-    Q_ASSERT(cell.column() + cell.columnSpan() <=  tableRect.columnPositions.size());
+    Q_ASSERT(column + columnSpan <=  tableRect.columnPositions.size());
 
     // Cell width.
     qreal width = 0;
-    for (int col = 0; col < cell.columnSpan(); ++col) {
-        width += tableRect.columnWidths[cell.column() + col];
+    for (int col = 0; col < columnSpan; ++col) {
+        width += tableRect.columnWidths[column + col];
     }
 
     // Cell height.
     qreal height = 0;
-    for (int r = 0; r < cell.rowSpan(); ++r) {
-        height += m_tableLayoutData->m_rowHeights[cell.row() + r];
+    for (int r = 0; r < rowSpan; ++r) {
+        height += m_tableLayoutData->m_rowHeights[row + r];
         // TODO  when breaking within a row the tableRect needs to be switched at some point
     }
 
-    return QRectF(tableRect.columnPositions[cell.column()], m_tableLayoutData->m_rowPositions[cell.row()],
+    return QRectF(tableRect.columnPositions[column], m_tableLayoutData->m_rowPositions[row],
             width, height);
 }
 
@@ -598,7 +654,7 @@ qreal TableLayout::yAfterTable() const
 
 bool TableLayout::isDirty() const
 {
-    return m_dirty;
+    return isValid() && m_tableLayoutData->m_dirty;
 }
 
 bool TableLayout::isValid() const

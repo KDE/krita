@@ -22,12 +22,16 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableStyle.h"
 
 #include <QVector>
 #include <QSet>
+#include <QVariant>
+#include <QTextTable>
+
 #include <QDebug>
 
-class KoTableColumnAndRowStyleManager::Private
+class KoTableColumnAndRowStyleManager::Private : public QSharedData
 {
 public:
     Private()  { }
@@ -45,9 +49,37 @@ KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager()
 {
 }
 
+KoTableColumnAndRowStyleManager::KoTableColumnAndRowStyleManager(const KoTableColumnAndRowStyleManager &rhs)
+    : d(rhs.d)
+{
+}
+
+KoTableColumnAndRowStyleManager &KoTableColumnAndRowStyleManager::operator=(const KoTableColumnAndRowStyleManager &rhs)
+{
+    d = rhs.d;
+
+    return *this;
+}
+
 KoTableColumnAndRowStyleManager::~KoTableColumnAndRowStyleManager()
 {
-    delete d;
+}
+
+KoTableColumnAndRowStyleManager KoTableColumnAndRowStyleManager::getManager(QTextTable *table)
+{
+    QTextTableFormat tableFormat = table->format();
+
+    if (tableFormat.hasProperty(KoTableStyle::ColumnAndRowStyleManager)) {
+        return  tableFormat.property(KoTableStyle::ColumnAndRowStyleManager).value<KoTableColumnAndRowStyleManager>();
+    } else {
+        KoTableColumnAndRowStyleManager carsManager;
+
+        QVariant var;
+        var.setValue(carsManager);
+        tableFormat.setProperty(KoTableStyle::ColumnAndRowStyleManager, var);
+        table->setFormat(tableFormat);
+        return carsManager;
+    }
 }
 
 void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableColumnStyle &columnStyle)
@@ -64,7 +96,38 @@ void KoTableColumnAndRowStyleManager::setColumnStyle(int column, const KoTableCo
 
     while (column > d->tableColumnStyles.size())
         d->tableColumnStyles.append(KoTableColumnStyle());
+
     d->tableColumnStyles.insert(column, columnStyle);
+}
+
+void KoTableColumnAndRowStyleManager::insertColumns(int column, int numberColumns, const KoTableColumnStyle &columnStyle)
+{
+    Q_ASSERT(column >= 0);
+    Q_ASSERT(numberColumns >= 0);
+
+    if (column < 0 || numberColumns < 0) {
+        return;
+    }
+
+    while (column > d->tableColumnStyles.size())
+        d->tableColumnStyles.append(KoTableColumnStyle());
+
+    d->tableColumnStyles.insert(column, numberColumns, columnStyle);
+}
+
+void KoTableColumnAndRowStyleManager::removeColumns(int column, int numberColumns)
+{
+    Q_ASSERT(column >= 0);
+    Q_ASSERT(numberColumns >= 0);
+
+    if (column >= d->tableColumnStyles.size() || column < 0 || numberColumns < 0) {
+        return;
+    }
+
+    while (column > d->tableColumnStyles.size())
+        d->tableColumnStyles.append(KoTableColumnStyle());
+
+    d->tableColumnStyles.remove(column, numberColumns);
 }
 
 KoTableColumnStyle KoTableColumnAndRowStyleManager::columnStyle(int column) const
@@ -92,7 +155,38 @@ void KoTableColumnAndRowStyleManager::setRowStyle(int row, const KoTableRowStyle
 
     while (row > d->tableRowStyles.size())
         d->tableRowStyles.append(KoTableRowStyle());
+
     d->tableRowStyles.insert(row, rowStyle);
+}
+
+void KoTableColumnAndRowStyleManager::insertRows(int row, int numberRows, const KoTableRowStyle &rowStyle)
+{
+    Q_ASSERT(row >= 0);
+    Q_ASSERT(numberRows >= 0);
+
+    if (row < 0 || numberRows < 0) {
+        return;
+    }
+
+    while (row > d->tableRowStyles.size())
+        d->tableRowStyles.append(KoTableRowStyle());
+
+    d->tableRowStyles.insert(row, numberRows, rowStyle);
+}
+
+void KoTableColumnAndRowStyleManager::removeRows(int row, int numberRows)
+{
+    Q_ASSERT(row >= 0);
+    Q_ASSERT(numberRows >= 0);
+
+    if (row >= d->tableRowStyles.size() || row < 0 || numberRows < 0) {
+        return;
+    }
+
+    while (row > d->tableRowStyles.size())
+        d->tableRowStyles.append(KoTableRowStyle());
+
+    d->tableRowStyles.remove(row, numberRows);
 }
 
 KoTableRowStyle KoTableColumnAndRowStyleManager::rowStyle(int row) const

@@ -32,6 +32,7 @@
 #include "dialogs/TableDialog.h"
 #include "dialogs/ChangeConfigureDialog.h"
 #include "dialogs/ChangeTrackingOptionsWidget.h"
+#include "dialogs/SimpleTableWidget.h"
 #include "commands/TextCutCommand.h"
 #include "commands/TextPasteCommand.h"
 #include "commands/ChangeListCommand.h"
@@ -356,11 +357,46 @@ TextTool::TextTool(KoCanvasBase *canvas)
     }
     setPopupActionList(list);
 
-
     action = new KAction(i18n("Table..."), this);
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+    action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
+    action->setToolTip(i18n("Insert Row Above"));
+    addAction("insert_tablerow_above", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+
+    action  = new KAction(KIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
+    action->setToolTip(i18n("Insert Row Below"));
+    addAction("insert_tablerow_below", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
+    action->setToolTip(i18n("Insert Column Left"));
+    addAction("insert_tablecolumn_left", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+
+    action  = new KAction(KIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
+    action->setToolTip(i18n("Insert Column Right"));
+    addAction("insert_tablecolumn_right", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+    action  = new KAction(KIcon("edit-table-delete-column"), i18n("Column"), this);
+    action->setToolTip(i18n("Delete Column"));
+    addAction("delete_tablecolumn", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+
+    action  = new KAction(KIcon("edit-table-delete-row"), i18n("Row"), this);
+    action->setToolTip(i18n("Delete Row"));
+    addAction("delete_tablerow", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+
+    action  = new KAction(KIcon("merge"), i18n("Merge Cells"), this);
+    addAction("merge_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
+
+    action  = new KAction(KIcon("split"), i18n("Split Cells"), this);
+    addAction("split_tablecells", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
 
     action = new KAction(i18n("Paragraph..."), this);
     addAction("format_paragraph", action);
@@ -1478,6 +1514,8 @@ QWidget *TextTool::createOptionWidget()
     widget->addTab(styles, i18n("Styles"));
     ChangeTrackingOptionsWidget *changeTrackingOptions = new ChangeTrackingOptionsWidget(this, widget);
     widget->addTab(changeTrackingOptions, i18n("Change Tracking"));
+    SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
+    widget->addTab(stw, i18n("Table"));
 
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), ssw, SLOT(setStyleManager(KoStyleManager *)));
     connect(this, SIGNAL(blockChanged(const QTextBlock&)), ssw, SLOT(setCurrentBlock(const QTextBlock&)));
@@ -1746,10 +1784,48 @@ void TextTool::insertTable()
     TableDialog *dia = new TableDialog(0);
     if (dia->exec() == TableDialog::Accepted)
         m_textEditor.data()->insertTable(dia->rows(), dia->columns());
-
     delete dia;
 }
 
+void TextTool::insertTableRowAbove()
+{
+    m_textEditor.data()->insertTableRowAbove();
+}
+
+void TextTool::insertTableRowBelow()
+{
+    m_textEditor.data()->insertTableRowBelow();
+}
+
+void TextTool::insertTableColumnLeft()
+{
+    m_textEditor.data()->insertTableColumnLeft();
+}
+
+void TextTool::insertTableColumnRight()
+{
+    m_textEditor.data()->insertTableColumnRight();
+}
+
+void TextTool::deleteTableColumn()
+{
+    m_textEditor.data()->deleteTableColumn();
+}
+
+void TextTool::deleteTableRow()
+{
+    m_textEditor.data()->deleteTableRow();
+}
+
+void TextTool::mergeTableCells()
+{
+    m_textEditor.data()->mergeTableCells();
+}
+
+void TextTool::splitTableCells()
+{
+    m_textEditor.data()->splitTableCells();
+}
 
 void TextTool::formatParagraph()
 {

@@ -60,6 +60,7 @@ SET ( textshape_SRCS
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
     dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/SimpleTableWidget.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -95,6 +96,7 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/ChangeConfigureDialog.ui
     dialogs/TrackedChangeManager.ui
     dialogs/ChangeTrackingOptionsWidget.ui
+    dialogs/SimpleTableWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

@@ -446,9 +446,9 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     }
     
     // border-model 
-    if (styleStack.hasProperty(KoXmlNS::style, "border-model")) {
+    if (styleStack.hasProperty(KoXmlNS::table, "border-model")) {
         // OASIS spec says it's "auto"/"always", not a boolean.
-        QString val = styleStack.property(KoXmlNS::style, "border-model");
+        QString val = styleStack.property(KoXmlNS::table, "border-model");
         setCollapsingBorderModel(val =="collapsing");
     }
 }

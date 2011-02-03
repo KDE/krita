@@ -198,6 +198,22 @@ private slots:
     void insertIndexMarker();
     /// shows a dialog to insert a table
     void insertTable();
+    /// insert a row above
+    void insertTableRowAbove();
+    /// insert a row below
+    void insertTableRowBelow();
+    /// insert a column left
+    void insertTableColumnLeft();
+    /// insert a column right
+    void insertTableColumnRight();
+    /// delete a column
+    void deleteTableColumn();
+    /// delete a row
+    void deleteTableRow();
+    /// merge table cells
+    void mergeTableCells();
+    /// split previous merged table cells
+    void splitTableCells();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
     /// select all text in the current document.

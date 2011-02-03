@@ -195,6 +195,46 @@ public slots:
      */
     void insertTable(int rows, int columns);
 
+     /** 
+     * Insert a table row above the current cursor position (if in a table).
+     */
+    void insertTableRowAbove();
+
+     /** 
+     * Insert a table row below the current cursor position (if in a table).
+     */
+    void insertTableRowBelow();
+
+     /** 
+     * Insert a table column to the left of the current cursor position (if in a table).
+     */
+    void insertTableColumnLeft();
+
+     /**
+     * Insert a table column to the right of the current cursor position (if in a table).
+     */
+    void insertTableColumnRight();
+
+     /**
+     * Delete a table column where the cursor is (if in a table).
+     */
+    void deleteTableColumn();
+
+     /**
+     * Delete a table row where the cursor is (if in a table).
+     */
+    void deleteTableRow();
+
+     /**
+     * Merge table cells (selected by the cursor).
+     */
+    void mergeTableCells();
+
+     /**
+     * Split table cells (selected by the cursor) that were previously merged.
+     */
+    void splitTableCells();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);

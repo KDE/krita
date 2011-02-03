@@ -57,7 +57,7 @@ public:
         BreakBefore,    ///< If true, insert a frame break before this table
         BreakAfter,     ///< If true, insert a frame break after this table
         MayBreakBetweenRows,     ///< If true, then the table is allowed to break between rows
-        ColumnAndRowStyleManager,     ///< QMetaType::VoidStar pointer to a KoColumnAndRowStyleManager
+        ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
                                                              /// It's not really a property of KoTableStyle but defined here for convenience
         CollapsingBorders,     ///< If true, then the table has collapsing border model
         MasterPageName         ///< Optional name of the master-page

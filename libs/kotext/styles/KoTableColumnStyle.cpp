@@ -60,6 +60,7 @@ public:
 KoTableColumnStyle::KoTableColumnStyle()
         :  d(new Private())
 {
+    Q_ASSERT (d);
 }
 
 KoTableColumnStyle::KoTableColumnStyle(const KoTableColumnStyle &rhs)

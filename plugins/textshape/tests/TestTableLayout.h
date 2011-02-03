@@ -3,6 +3,7 @@
 
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
+#include <KoTableColumnAndRowStyleManager.h>
 
 #include <QObject>
 #include <QHash>
@@ -104,7 +105,7 @@ private:
     QTextTable *m_table;
     KoTextDocumentLayout *m_layout;
     KoStyleManager *m_styleManager;
-    KoTableColumnAndRowStyleManager *m_tableColumnAndRowStyleManager;
+    KoTableColumnAndRowStyleManager m_tableColumnAndRowStyleManager;
     Layout *m_textLayout;
     MockTextShape *m_shape;
 

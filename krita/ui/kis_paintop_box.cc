@@ -192,8 +192,10 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(new KSeparator(Qt::Vertical, this));
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     baseLayout->addWidget(m_workspaceWidget);
+    baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);

@@ -62,7 +62,7 @@ public:
     QPoint updateOffsetAfterTransform() const;
     
     void rotate(QPointF center, qreal angle);
-    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
+    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=true);
     void resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
@@ -78,9 +78,9 @@ public:
     widgetToFlake(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform().inverted(), obj); }
     
     template<class T> typename _Private::Traits<T>::Result
-    widgetToViewport(const T& obj) const { return _Private::Traits<T>::map(widgetToViewportTransform(), obj); }
+    widgetToViewport(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform().inverted(), obj); }
     template<class T> typename _Private::Traits<T>::Result
-    viewportToWidget(const T& obj) const { return _Private::Traits<T>::map(widgetToViewportTransform().inverted(), obj); }
+    viewportToWidget(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform(), obj); }
     
     template<class T> typename _Private::Traits<T>::Result
     documentToWidget(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform(), obj); }
@@ -100,9 +100,9 @@ public:
     QTransform imageToWidgetTransform() const;
     QTransform imageToDocumentTransform() const;
     QTransform imageToViewportTransform() const;
-    QTransform widgetToViewportTransform() const;
     QTransform flakeToWidgetTransform() const;
     QTransform documentToWidgetTransform() const;
+    QTransform viewportToWidgetTransform() const;
 
     void getQPainterCheckersInfo(QTransform *transform,
                                  QPointF *brushOrigin,

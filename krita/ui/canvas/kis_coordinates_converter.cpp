@@ -144,21 +144,26 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis)
+void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
 {
     qreal      scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
     qreal      scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
     QTransform mirror = QTransform::fromScale(scaleX, scaleY);
     
     m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
-    m_d->postprocessingTransform *= m_d->rotation.inverted();
-    m_d->postprocessingTransform *= mirror;
-    m_d->postprocessingTransform *= m_d->rotation;
-    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(),center.y());
-    recalculateTransformations();
     
+    if(keepOrientation)
+        m_d->postprocessingTransform *= m_d->rotation.inverted();
+    
+    m_d->postprocessingTransform *= mirror;
+    
+    if(keepOrientation)
+        m_d->postprocessingTransform *= m_d->rotation;
+    
+    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(),center.y());
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
+    recalculateTransformations();
 }
 
 void KisCoordinatesConverter::resetRotation(QPointF center)
@@ -196,8 +201,8 @@ QTransform KisCoordinatesConverter::documentToWidgetTransform() const
     return m_d->postprocessingTransform;
 }
 
-QTransform KisCoordinatesConverter::widgetToViewportTransform() const {
-    return m_d->widgetToViewport;
+QTransform KisCoordinatesConverter::viewportToWidgetTransform() const {
+    return m_d->widgetToViewport.inverted();
 }
 
 QTransform KisCoordinatesConverter::imageToViewportTransform() const {
@@ -210,13 +215,13 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
 {
     KisConfig cfg;
     if (cfg.scrollCheckers()) {
-        *transform = widgetToViewportTransform().inverted();
+        *transform = viewportToWidgetTransform();
         *polygon = imageRectInViewportPixels();
         *brushOrigin = imageToViewport(QPointF(0,0));
     }
     else {
         *transform = QTransform();
-        *polygon = widgetToViewportTransform().inverted().map(imageRectInViewportPixels());
+        *polygon = viewportToWidget(QPolygonF(imageRectInViewportPixels()));
         *brushOrigin = QPoint(0,0);
     }
 }
@@ -238,7 +243,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
         *textureRect = viewportRect;
     }
 
-    *modelTransform = widgetToViewportTransform().inverted();
+    *modelTransform = viewportToWidgetTransform();
     *modelRect = viewportRect;
 }
 

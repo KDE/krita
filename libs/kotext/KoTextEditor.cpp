@@ -930,8 +930,8 @@ void KoTextEditor::insertTable(int rows, int columns)
 
             cellStyle.applyStyle(format);
             cell.setFormat(format);
-        }
-    }
+        }    
+    }    
 
     d->updateState(KoTextEditor::Private::NoOp);
 }

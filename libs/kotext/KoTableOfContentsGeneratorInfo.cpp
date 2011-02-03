@@ -76,8 +76,8 @@ IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName): IndexEntry(_styleN
 
 
 IndexEntryChapter::IndexEntryChapter(QString _styleName):   IndexEntry(_styleName, IndexEntry::CHAPTER),
-                                                            outlineLevel(INVALID_OUTLINE_LEVEL),
-                                                            display(QString())
+                                                            display(QString()),
+                                                            outlineLevel(INVALID_OUTLINE_LEVEL)
 {
 
 }

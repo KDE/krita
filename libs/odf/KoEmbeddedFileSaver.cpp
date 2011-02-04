@@ -1,3 +1,4 @@
+
 /* This file is part of the KDE project
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
@@ -145,25 +146,18 @@ bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &docume
         const QString fileName = path.right(path.size() - index - 1);
         store->enterDirectory(dirPath);
 
-#if 0
-        if (!doc->saveOdf(documentContext)) {
-            kWarning(30003) << "KoEmbeddedDocumentSaver::saveEmbeddedFile failed";
-            return false;
-        }
-#else
         if (!store->open(fileName)) {
             return false;
         }
         store->write(entry->contents);
         store->close();
 
-#endif
         // Now that we're done leave the directory again
         store->popDirectory();
 
         // Create the manifest entry.
-        if (path.startsWith('/')) {
-            path = path.mid(1);   // remove leading '/', no wanted in manifest
+        if (path.startsWith("./")) {
+            path = path.mid(2);   // remove leading './', no wanted in manifest
         }
         documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
     }

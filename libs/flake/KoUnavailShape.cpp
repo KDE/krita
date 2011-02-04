@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2010 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2010-2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,7 +49,7 @@
 
 
 struct FileEntry {
-    QString     path;
+    QString     path;           // Normalized filename, i.e. without "./".
     QString     mimeType;
     QByteArray  contents;
 };
@@ -69,7 +69,7 @@ public:
     //  - Any embedded files (names, contents) that are referenced by xlink:href
     //  - The manifest entries
     QList<QByteArray>    frameContents; // A list of the XML trees in the frame, each of them one object
-    QStringList          objectNames;   // A list of objects names in the frame
+    QStringList          objectNames;   // A list of objects names in the frame without "./"
                                         // These are extracted from frameContents
     QList<KoOdfManifestEntry*> manifestEntries; // A list of manifest entries for the above.
 
@@ -183,13 +183,13 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
     KoEmbeddedFileSaver &fileSaver = context.embeddedFileSaver();
     KoXmlWriter         &writer    = context.xmlWriter();
+    //KoXmlWriter         &manifestWriter = context.manifestWriter;
 
     writer.startElement( "draw:frame" );
     // See also loadOdf() in loadOdfAttributes.
     saveOdfAttributes( context, OdfAllAttributes );
 
-    // Write the already saved XML
-    // FIXME: Add hrefs and stuff
+    // Write the already saved XML.
     for (int i = 0; i < d->frameContents.size(); ++i) {
         QByteArray          xmlArray(d->frameContents.value(i));
         QString             objectName(d->objectNames.value(i)); // Possibly empty.
@@ -198,6 +198,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         QString newName = objectName;
         if (!objectName.isEmpty()) {
             newName = fileSaver.getFilename("UObject");
+            if (objectName.endsWith('/'))
+                newName += '/';
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
         }
 
@@ -208,27 +210,21 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         if (objectName.isEmpty())
             continue;
 
-        // Remove the prefix ./ (as in ./Object1) from object names.
-#if 0
-        if (objectName.startsWith("./"))
-            objectName = objectName.mid(2);
-#else
-        if (newName.startsWith("./"))
-            newName = newName.mid(2);
-#endif
         // Save embedded files for this object.
         for (int j = 0; j < d->embeddedFiles.size(); ++j) {
-            QString  fileName(d->embeddedFiles.value(i)->path);
+            QString  fileName(d->embeddedFiles.value(j)->path);
             kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
                 fileName.replace(objectName, newName);
-                fileSaver.saveFile(newName, d->embeddedFiles.value(i)->mimeType.toLatin1(),
+                fileName.prepend("./");
+                kDebug(30006) << "New filename: " << fileName;
+                fileSaver.saveFile(fileName, d->embeddedFiles.value(i)->mimeType.toLatin1(),
                                    d->embeddedFiles.value(i)->contents);
             }
         }
 
-        // Write the manifest entry for the object itself.
+        // FIXME: Write the manifest entry for the object itself.
         //context.manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); 
     }
 
@@ -277,11 +273,6 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             continue;
 
         // Try to find out if the entry is a directory.
-
-        // Remove the prefix ./ (as in ./Object1) from object names
-        // because the filenames in the manifest never contains this.
-        if (objectName.startsWith("./"))
-            objectName = objectName.mid(2);
 
         QString dirName = objectName + '/';
 
@@ -384,8 +375,11 @@ void KoUnavailShape::Private::saveXmlRecursive(const KoXmlElement &el, KoXmlWrit
         }
     }
 
-    // Save filenames. An empty string is saved if none is found.
+    // Save the normalized filename, i.e. without a starting "./".
+    // An empty string is saved if no name is found.
     QString  name = el.attributeNS(KoXmlNS::xlink, "href", QString());
+    if (name.startsWith("./"))
+        name = name.mid(2);
     objectNames << name;
 
     // Child elements
@@ -442,8 +436,10 @@ void KoUnavailShape::Private::saveFile(const QString &fileName, KoShapeLoadingCo
     store->close();
 
     FileEntry *entry = new FileEntry;
-    entry->path     = fileName;
-    entry->mimeType = context.odfLoadingContext().mimeTypeForPath(fileName);
+    entry->path = fileName;
+    if (entry->path.startsWith("./"))
+        entry->path = entry->path.mid(2);
+    entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
     entry->contents = fileContent;
     embeddedFiles.append(entry);
 

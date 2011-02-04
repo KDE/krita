@@ -2,7 +2,7 @@
  *  kis_paintop_box.cc - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
+ *  Copyright (c) 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
@@ -39,6 +39,7 @@
 #include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kseparator.h>
 
 #include <KoToolManager.h>
 #include <KoColorSpace.h>
@@ -67,6 +68,7 @@
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
+#include "widgets/kis_workspace_chooser.h"
 #include "kis_paintop_settings_widget.h"
 #include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
@@ -126,7 +128,29 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_eraseModeButton->setDefaultAction(eraseAction);
     m_view->actionCollection()->addAction("erase_action", eraseAction);
 
+    QToolButton* hMirrorButton = new QToolButton(this);
+    hMirrorButton->setFixedSize(32, 32);
+    hMirrorButton->setCheckable(true);
+    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+//     hMirrorAction->setShortcut(Qt::Key_H);
+    hMirrorAction->setCheckable(true);
+    hMirrorButton->setDefaultAction(hMirrorAction);
+    m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
+
+    QToolButton* vMirrorButton = new QToolButton(this);
+    vMirrorButton->setFixedSize(32, 32);
+    vMirrorButton->setCheckable(true);
+    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+//     vMirrorAction->setShortcut(Qt::Key_V);
+    vMirrorAction->setCheckable(true);
+    vMirrorButton->setDefaultAction(vMirrorAction);
+    m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
+
     connect(eraseAction, SIGNAL(triggered(bool)), this, SLOT(eraseModeToggled(bool)));
+    connect(hMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(vMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotVerticalMirrorChanged(bool)));
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
@@ -145,16 +169,33 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //view->actionCollection()->addAction("palette_manager", action);
     //action->setDefaultWidget(m_paletteButton);
 
-    m_layout = new QHBoxLayout(this);
+    m_workspaceWidget = new KisPopupButton(this);
+    m_workspaceWidget->setIcon(KIcon("document-multiple"));
+    m_workspaceWidget->setToolTip(i18n("Choose workspace"));
+    m_workspaceWidget->setFixedSize(32, 32);
+    m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
+    
+    QHBoxLayout* baseLayout = new QHBoxLayout(this);
+    m_paintopWidget = new QWidget(this);
+    baseLayout->addWidget(m_paintopWidget);
+
+    m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
     m_layout->addWidget(m_eraseModeButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
+    m_layout->addWidget(hMirrorButton);
+    m_layout->addWidget(vMirrorButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-//     m_layout->addWidget(m_brushChooser);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+
+    baseLayout->addWidget(m_workspaceWidget);
+    baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -564,7 +605,7 @@ void KisPaintopBox::setCompositeOpInternal(const QString& id)
 
 void KisPaintopBox::setEnabledInternal(bool value)
 {
-    setEnabled(value);
+    m_paintopWidget->setEnabled(value);
     if(value) {
         m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));
@@ -597,6 +638,16 @@ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
 {
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
+}
+
+void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorHorizontal(value);
+}
+
+void KisPaintopBox::slotVerticalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorVertical(value);
 }
 
 

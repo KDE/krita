@@ -86,6 +86,12 @@ KisStatusBar::KisStatusBar(KisView2 * view)
 
 KisStatusBar::~KisStatusBar()
 {
+    m_view->removeStatusBarItem(m_selectionStatusLabel);
+    m_view->removeStatusBarItem(m_statusBarStatusLabel);
+    m_view->removeStatusBarItem(m_statusBarProfileLabel);
+    m_view->removeStatusBarItem(m_imageSizeLabel);
+    m_view->removeStatusBarItem(m_pointerPositionLabel);
+    m_view->removeStatusBarItem(m_progress);
 }
 
 #define EPSILON 1e-6
@@ -163,6 +169,5 @@ KisProgressWidget* KisStatusBar::progress()
 {
     return m_progress;
 }
-
 
 #include "kis_statusbar.moc"

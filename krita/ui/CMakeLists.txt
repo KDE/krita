@@ -95,6 +95,7 @@ set(kritaui_LIB_SRCS
     kis_view2.cpp 
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
+    kis_workspace_resource.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -110,6 +111,7 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
+    recorder/kis_node_query_path_editor.cc
     recorder/kis_recorded_action_creator.cc
     recorder/kis_recorded_action_creator_factory.cc
     recorder/kis_recorded_action_creator_factory_registry.cc
@@ -159,6 +161,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
     widgets/kis_wdg_generator.cpp
+    widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
 )
 
@@ -216,6 +219,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
+    forms/wdgnodequerypatheditor.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

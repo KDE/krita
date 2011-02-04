@@ -30,6 +30,7 @@
 #include "ListItemsHelper.h"
 #include "TextShape.h"
 #include "ToCGenerator.h"
+#include "TextAnchorStrategy.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -91,10 +92,16 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_allTimeMinimumLeft(0),
         m_allTimeMaximumRight(0),
         m_maxLineHeight(0),
-        m_scaleFactor(1.0)
+        m_scaleFactor(1.0),
+        m_textAnchorIndex(0)
 {
     m_frameStack.reserve(5); // avoid reallocs
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
+}
+
+Layout::~Layout()
+{
+    unregisterAllRunAroundShapes();
 }
 
 bool Layout::start()
@@ -102,12 +109,18 @@ bool Layout::start()
     m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     m_changeTracker = KoTextDocument(m_parent->document()).changeTracker();
     m_relativeTabs = KoTextDocument(m_parent->document()).relativeTabs();
-    if (m_reset)
+    if (m_reset) {
         resetPrivate();
-    else if (shape)
+    } else if (shape) {
         nextParag();
+    }
     m_reset = false;
-    return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+
+    bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+    if (!ok) {
+        kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+    }
+    return ok;
 }
 
 void Layout::end()
@@ -115,13 +128,13 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
-    unregisterAllRunAroundShapes();
 }
 
 QTextLine Layout::createLine()
 {
     m_textLine.createLine(this);
-    m_textLine.setOutlines(m_outlines);
+    refreshCurrentPageOutlines();
+    m_textLine.setOutlines(m_currentLineOutlines);
     return m_textLine.line;
 }
 
@@ -150,9 +163,11 @@ qreal Layout::width()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
-        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        if (table) {
+            m_tableLayout.setTable(table);
+            ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
+            m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        }
     }
     if (m_newParag)
         ptWidth -= resolveTextIndent();
@@ -228,7 +243,7 @@ bool Layout::addLine()
 {
     QTextLine line = m_textLine.line;
     bool processingLine = m_textLine.processingLine();
- 
+
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -344,7 +359,9 @@ bool Layout::addLine()
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
                 line = m_block.layout()->createLine();
-                line.setNumColumns(lk.columns, lk.lineWidth);
+                if (!line.isValid())
+                    break;
+                line.setLineWidth(lk.lineWidth);
                 line.setPosition(lk.position);
             }
             if(lineKeeps.isEmpty()) {
@@ -358,7 +375,7 @@ bool Layout::addLine()
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data)
+        if (m_data && line.isValid())
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
@@ -408,6 +425,19 @@ bool Layout::addLine()
                 m_y = m_y_justBelowDropCaps; // make sure m_y is below the dropped characters
             m_y_justBelowDropCaps = 0;
             m_dropCapsAffectedLineWidthAdjust = 0;
+        }
+    }
+
+    // position inline objects
+    bool possibleRelayoutNeeded = positionInlineObjects();
+
+    if (possibleRelayoutNeeded) {
+
+        if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
+
+            if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
+                return false;
+            }
         }
     }
 
@@ -612,17 +642,19 @@ bool Layout::nextParag()
             // conversion here is required because Qt thinks in device units and we don't
             position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
 
+#if 0 // see bug 239143
             // ODF 18.517.2 <style:tab-stop>
             // The style:type attribute specifies the position of a tab stop.
             switch(koTab.type) {
             case QTextOption::RightTab:
-                position = qMax(qreal(0), position - shape->size().width());
+                position = qMax(0., position - shape->size().width());
                 break;
             case QTextOption::CenterTab:
             case QTextOption::DelimiterTab:
             case QTextOption::LeftTab:
                 break;
             }
+#endif
 
             tab.position = position;
             tab.type = koTab.type;
@@ -2269,11 +2301,12 @@ void Layout::updateFrameStack()
                 } else {
                     if (item.data()->tocFrame() == frame) {
                         break;
-                    }                    
+                    }
                 }
             }
             if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
+                tg->setPageWidth( shape->size().width() );
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),
@@ -2294,18 +2327,131 @@ void Layout::registerRunAroundShape(KoShape *s)
     matrix = matrix * shape->absoluteTransformation(0).inverted();
     matrix.translate(0, documentOffsetInShape());
     Outline *outline = new Outline(s, matrix);
-    m_outlines.append(outline);
+    m_outlines.insert(s,outline);
 }
 
 void Layout::updateRunAroundShape(KoShape *s)
 {
-    foreach (Outline *outline, m_outlines) {
-        if (outline->shape() == s) {
-            QTransform matrix = s->absoluteTransformation(0);
-            matrix = matrix * shape->absoluteTransformation(0).inverted();
-            matrix.translate(0, documentOffsetInShape());
-            outline->changeMatrix(matrix);
-            m_textLine.updateOutline(outline);
+    if (m_outlines.contains(s)) {
+        Outline *outline = m_outlines.value(s);
+        QTransform matrix = s->absoluteTransformation(0);
+        matrix = matrix * shape->absoluteTransformation(0).inverted();
+        matrix.translate(0, documentOffsetInShape());
+        outline->changeMatrix(matrix);
+        m_textLine.updateOutline(outline);
+        return;
+    }
+
+    // if no outline was found then create one
+    registerRunAroundShape(s);
+}
+
+void Layout::unregisterAllRunAroundShapes()
+{
+    qDeleteAll(m_outlines);
+    m_outlines.clear();
+}
+
+void Layout::insertInlineObject(KoTextAnchor * textAnchor)
+{
+    if (textAnchor != 0) {
+        textAnchor->setAnchorStrategy(new TextAnchorStrategy(textAnchor));
+        m_textAnchors.append(textAnchor);
+    }
+}
+
+void Layout::resetInlineObject(int resetPosition)
+{
+    bool resetAllOthers = false;
+    for (int index = 0; index < m_textAnchors.size(); index++) {
+
+        if (resetAllOthers == false) {
+            if (m_textAnchors[index]->positionInDocument() >= resetPosition) {
+
+                if (m_textAnchors[index]->anchorStrategy()->isPositioned()) {
+                    m_textAnchorIndex = index;
+                    resetAllOthers = true;
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+        if (resetAllOthers == true) {
+
+            KoTextAnchor * textAnchorToReset = m_textAnchors[index];
+            textAnchorToReset->anchorStrategy()->reset();
+
+            // delete outline
+            if (m_outlines.contains(textAnchorToReset->shape())) {
+                Outline *outline = m_outlines.value(textAnchorToReset->shape());
+                m_outlines.remove(textAnchorToReset->shape());
+                m_textLine.updateOutline(outline);
+                refreshCurrentPageOutlines();
+                delete outline;
+            }
+        }
+    }
+}
+
+void Layout::removeInlineObject(KoTextAnchor * textAnchor)
+{
+    Q_UNUSED(textAnchor);
+}
+
+bool Layout::positionInlineObjects()
+{
+    while (m_textAnchorIndex < m_textAnchors.size()) {
+        KoTextAnchor *textAnchor = m_textAnchors[m_textAnchorIndex];
+        if (textAnchor->anchorStrategy()->positionShape(this) == false) {
+            break;
+        }
+        // move the index to next not positioned shape
+        m_textAnchorIndex++;
+
+        // create outline if the shape is positioned inside text
+        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough &&
+            !textAnchor->behavesAsCharacter()) {
+            updateRunAroundShape(textAnchor->shape());
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Layout::moveLayoutPosition(KoTextAnchor *textAnchor)
+{
+    int oldPosition = y();
+    QPointF relayoutPos = textAnchor->anchorStrategy()->relayoutPosition();
+    qreal recalcFrom = relayoutPos.y() + m_data->documentOffset();
+    // move position layout over the textAnchor linked shape
+    do {
+        if (recalcFrom >= y()) {
+            break;
+        }
+    } while (previousParag());
+
+    if (oldPosition != y()) {
+        return true;
+    }
+    return false;
+}
+
+void Layout::refreshCurrentPageOutlines()
+{
+    m_currentLineOutlines.clear();
+
+    TextShape *textShape = dynamic_cast<TextShape*>(shape);
+    if (textShape == 0) {
+        return;
+    }
+
+    // add current page children outlines to m_currentLineOutlines
+    foreach(KoShape *childShape, textShape->shapes()) {
+        if (m_outlines.contains(childShape)) {
+            m_currentLineOutlines.append(m_outlines.value(childShape));
         }
     }
 }

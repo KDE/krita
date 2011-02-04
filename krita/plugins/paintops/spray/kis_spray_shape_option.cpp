@@ -85,6 +85,7 @@ void KisSprayShapeOption::writeOptionSetting(KisPropertiesConfiguration* setting
 {
     setting->setProperty(SPRAYSHAPE_ENABLED,isChecked());
     setting->setProperty(SPRAYSHAPE_SHAPE,shape());
+    setting->setProperty(SPRAYSHAPE_USE_ASPECT, m_useAspect);
     setting->setProperty(SPRAYSHAPE_PROPORTIONAL,m_options->proportionalBox->isChecked());
     setting->setProperty(SPRAYSHAPE_WIDTH, m_options->widthSpin->value());
     setting->setProperty(SPRAYSHAPE_HEIGHT, m_options->heightSpin->value());
@@ -98,6 +99,7 @@ void KisSprayShapeOption::readOptionSetting(const KisPropertiesConfiguration* se
     setChecked(setting->getBool(SPRAYSHAPE_ENABLED,true));
     m_options->shapeBox->setCurrentIndex(setting->getInt(SPRAYSHAPE_SHAPE));
     m_options->proportionalBox->setChecked(setting->getBool(SPRAYSHAPE_PROPORTIONAL));
+    m_options->aspectButton->setKeepAspectRatio(setting->getBool(SPRAYSHAPE_USE_ASPECT, false));
     m_options->widthSpin->setValue(setting->getInt(SPRAYSHAPE_WIDTH));
     m_options->heightSpin->setValue(setting->getInt(SPRAYSHAPE_HEIGHT));
     m_options->imageUrl->setText(setting->getString(SPRAYSHAPE_IMAGE_URL));

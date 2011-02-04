@@ -22,7 +22,6 @@
 #include "RectangleShape.h"
 
 #include <KoPathPoint.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -67,7 +66,7 @@ bool RectangleShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext 
     updateHandles();
 
     loadOdfAttributes(element, context, OdfTransformation);
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }
@@ -82,8 +81,7 @@ void RectangleShape::saveOdf(KoShapeSavingContext & context) const
             context.xmlWriter().addAttributePt("svg:ry", m_cornerRadiusY * (0.5*size().height()) / 100.0);
         }
         saveOdfCommonChildElements(context);
-        if (parent())
-            parent()->saveOdfChildElements(context);
+        saveText(context);
         context.xmlWriter().endElement();
     } else {
         KoPathShape::saveOdf(context);

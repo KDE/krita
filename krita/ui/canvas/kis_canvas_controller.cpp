@@ -58,8 +58,8 @@ void KisCanvasController::Private::emitPointerPositionChangedSignals(QEvent *eve
     q->proxyObject->emitCanvasMousePositionChanged(pointerPos);
 }
 
-KisCanvasController::KisCanvasController(QWidget *parent)
-    : KoCanvasControllerWidget(parent),
+KisCanvasController::KisCanvasController(QWidget *parent, KActionCollection * actionCollection)
+    : KoCanvasControllerWidget(actionCollection, parent),
       m_d(new Private(this))
 {
 }

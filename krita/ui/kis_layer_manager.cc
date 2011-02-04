@@ -308,8 +308,7 @@ void KisLayerManager::layerProperties()
 
             if (layer->name() != dlg.getName() ||
                     layer->opacity() != dlg.getOpacity() ||
-                    layer->compositeOp()->id() != dlg.getCompositeOp() ||
-                    oldChannelFlags != newChannelFlags
+                    layer->compositeOp()->id() != dlg.getCompositeOp()
                ) {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
@@ -319,6 +318,10 @@ void KisLayerManager::layerProperties()
                                                   oldChannelFlags, newChannelFlags));
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified(true);
+            }
+            if (oldChannelFlags != newChannelFlags) {
+                layer->setChannelFlags(newChannelFlags);
+                layer->setDirty();
             }
         }
     }
@@ -920,10 +923,9 @@ void KisLayerManager::saveLayerAsImage()
     d.setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());
     KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
+    gc.bitBlt(QPoint(0, 0), l->projection(), r);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-    dst->resize(paintLayer->exactBounds());
     dst->refreshGraph();
 
     d.setOutputMimeType(mimefilter.toLatin1());

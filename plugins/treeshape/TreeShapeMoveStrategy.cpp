@@ -22,11 +22,11 @@
 #include "TreeShapeMoveStrategy.h"
 #include "TreeShapeMoveCommand.h"
 #include "SelectionDecorator.h"
-#include "KoTextOnShapeContainer.h"
 
-#include "KoShapeRegistry.h"
-#include "kdebug.h"
+#include <kdebug.h>
 
+#include <KoShapeRegistry.h>
+#include <KoTosContainer.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
@@ -56,9 +56,8 @@ TreeShapeMoveStrategy::TreeShapeMoveStrategy(KoToolBase *tool, const QPointF &cl
     gradient->setColorAt(0.0, Qt::white);
     gradient->setColorAt(1.0, Qt::blue);
     m_ballastRoot->setBackground(new KoGradientBackground(gradient));
-    KoTextOnShapeContainer *tos = new KoTextOnShapeContainer(m_ballastRoot, 0);
-    tos->setResizeBehavior(KoTextOnShapeContainer::IndependendSizes);
-    m_ballastRoot = tos;
+    KoTosContainer *tos = dynamic_cast<KoTosContainer *>(m_ballastRoot);
+    tos->setResizeBehavior(KoTosContainer::IndependentSizes);
     m_ballastTree = dynamic_cast<KoShape*>(new TreeShape(m_ballastRoot));
     m_ballastConnector = KoShapeRegistry::instance()->value("KoConnectionShape")->createDefaultShape();
     m_ballastTree->setVisible(false);
@@ -168,11 +167,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     qreal minDistance = 10000, distance;
 
     // down
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[0]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(0).position);
     rect = QRectF(pos-QPointF(0,length), QSizeF(1,length));
     tree = propose(rect, TreeShape::OrgDown);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[2]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(2).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -182,11 +181,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // up
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[2]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(2).position);
     rect = QRectF(pos, QSizeF(1,length));
     tree = propose(rect, TreeShape::OrgUp);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[0]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(0).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -196,11 +195,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // right
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[3]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(3).position);
     rect = QRectF(pos-QPointF(length,0), QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgRight);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[1]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(1).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {
@@ -210,11 +209,11 @@ TreeShape* TreeShapeMoveStrategy::proposeParent()
     }
 
     // left
-    pos = m_movable->shapeToDocument(m_movable->connectionPoints()[1]);
+    pos = m_movable->shapeToDocument(m_movable->connectionPoints().value(1).position);
     rect = QRectF(pos, QSizeF(length,1));
     tree = propose(rect, TreeShape::OrgLeft);
     if (tree) {
-        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints()[3]);
+        treePos = tree->root()->shapeToDocument(tree->root()->connectionPoints().value(3).position);
         distance = (pos.x() - treePos.x())*(pos.x() - treePos.x())
                     + (pos.y() - treePos.y())*(pos.y() - treePos.y());
         if (distance<minDistance) {

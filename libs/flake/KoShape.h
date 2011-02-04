@@ -2,7 +2,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006, 2008 Casper Boemann <cbr@boemann.dk>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
-   Copyright (C) 2007-2009 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2009,2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +25,7 @@
 
 #include "KoInsets.h"
 #include "KoFlake.h"
+#include "KoConnectionPoint.h"
 
 #include <QTransform>
 #include <QVector>
@@ -34,6 +35,7 @@
 #include <QMetaType>
 
 #include <KoXmlReaderForward.h>
+
 //#include <KoSnapData.h>
 
 #include "flake_export.h"
@@ -123,7 +125,9 @@ public:
         ShadowChanged, ///< the shapes shadow has changed
         ParameterChanged, ///< the shapes parameter has changed (KoParameterShape only)
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
-        ChildChanged ///< a child of a container was changed/removed. This is propagated to all parents
+        TextRunAroundChanged, ///< used after a setTextRunAroundSide()
+        ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
+        ConnectionPointChanged ///< a connection point has changed
     };
 
     /// See QGraphicsItem::CacheMode
@@ -310,22 +314,48 @@ public:
 
     /**
      * @brief Add a connector point to the shape
+     * 
      * A connector is a place on the shape that allows a graphical connection to be made
      * using a line, for example.
      *
-     * @param point the position where to place the connector. The points coordinate system
-     *   are based around the zero-pos which is the top-left of the shape
-     *   The point does not have to be inside the boundings rectangle.  The point is in pt,
-     *   just like the rest of the KoShape class uses.
+     * @param point the connection point to add
+     * @return the id of the new connection point
      */
-    void addConnectionPoint(const QPointF &point);
+    int addConnectionPoint(const KoConnectionPoint &point);
+
+    /**
+     * Sets data of connection point with specified id.
+     *
+     * The position of the connector is restricted to the bounding rectangle of the shape.
+     * When setting a default connection point, the new position is ignored, as these
+     * are fixed at their default position.
+     * The function will insert a new connection point if the specified id was not used
+     * before.
+     * 
+     * @param connectionPointId the id of the connection point to set
+     * @param point the connection point data
+     * @return false if specified connection point id is invalid, else true
+     */
+    bool setConnectionPoint(int connectionPointId, const KoConnectionPoint &point);
+
+    /// Checks if a connection point with the specified id exists
+    bool hasConnectionPoint(int connectionPointId) const;
+
+    /// Returns connection point with specified connection point id
+    KoConnectionPoint connectionPoint(int connectionPointId) const;
 
     /**
      * Return a list of the connection points that have been added to this shape.
      * All the points are relative to the shape position, see absolutePosition().
      * @return a list of the connectors that have been added to this shape.
      */
-    QList<QPointF> connectionPoints() const;
+    KoConnectionPoints connectionPoints() const;
+
+    /// Removes connection point with specified id
+    void removeConnectionPoint(int connectionPointId);
+
+    /// Removes all connection points
+    void clearConnectionPoints();
 
     /**
      * Add a event action
@@ -818,9 +848,6 @@ public:
     /// checks recursively if the shape or one of its parents is not visible or locked
     bool isEditable() const;
 
-    /// Removes connection point with given index
-    void removeConnectionPoint(int index);
-
     /**
      * Adds a shape which depends on this shape.
      * Making a shape dependent on this one means it will get shapeChanged() called
@@ -1026,6 +1053,9 @@ protected:
 
     /// Loads the shadow style
     KoShapeBackground *loadOdfFill(KoShapeLoadingContext &context) const;
+
+    /// Loads the connection points
+    void loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     /* ** end loading saving */
 

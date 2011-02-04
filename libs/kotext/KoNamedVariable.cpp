@@ -19,7 +19,10 @@
 
 #include "KoNamedVariable.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoShapeLoadingContext.h"
+#include "KoShapeSavingContext.h"
 #include <KoProperties.h>
+#include <KoXmlReader.h>
 
 KoNamedVariable::KoNamedVariable(Property key, const QString &name)
         : KoVariable(true),

@@ -20,13 +20,15 @@
 #ifndef KOPATHPARAMETERCHANGESTRATEGY_H
 #define KOPATHPARAMETERCHANGESTRATEGY_H
 
-#include <QPointF>
+#include "flake_export.h"
 #include "KoInteractionStrategy.h"
+#include <QPointF>
 
 class KoParameterShape;
+class KoParameterChangeStrategyPrivate;
 
 /// Strategy for changing control points of parametric shapes
-class KoParameterChangeStrategy : public KoInteractionStrategy
+class FLAKE_EXPORT KoParameterChangeStrategy : public KoInteractionStrategy
 {
 public:
     /**
@@ -39,17 +41,15 @@ public:
     virtual ~KoParameterChangeStrategy();
 
     virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers) {
-        Q_UNUSED(modifiers);
-    }
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
     virtual QUndoCommand* createCommand();
 
+protected:
+    /// constructor
+    KoParameterChangeStrategy(KoParameterChangeStrategyPrivate &);
+
 private:
-    KoParameterShape * const m_parameterShape; ///< the parametric shape we are working on
-    const int m_handleId;                      ///< the id of the control point
-    const QPointF m_startPoint;                ///< the starting position of the control point
-    Qt::KeyboardModifiers m_lastModifierUsed;
-    QPointF m_releasePoint;
+    Q_DECLARE_PRIVATE(KoParameterChangeStrategy);
 };
 
 #endif /* KOPATHPARAMETERCHANGESTRATEGY_H */

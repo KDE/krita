@@ -2505,15 +2505,17 @@ QString KoDocument::templateType() const
     return d->templateType;
 }
 
-void KoDocument::deleteOpenPane()
+void KoDocument::deleteOpenPane(bool closing)
 {
     if (d->startUpWidget) {
         d->startUpWidget->hide();
         d->startUpWidget->deleteLater();
 
-        shells().first()->setRootDocument(this);
+        if(!closing) {
+            shells().first()->setRootDocument(this);
 
-        shells().first()->factory()->container("mainToolBar", shells().first())->show();
+            shells().first()->factory()->container("mainToolBar", shells().first())->show();
+        }
     } else {
         emit closeEmbedInitDialog();
     }

@@ -32,7 +32,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
@@ -354,9 +353,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
         context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
 
-        if (parent())
-            parent()->saveOdfChildElements(context);
-        
+        saveText(context);
+
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
 
@@ -366,13 +364,15 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         if (m_mirrorVertically) {
             context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
         }
-        
+
         QString modifiers;
         foreach (qreal modifier, m_modifiers)
             modifiers += QString::number(modifier) + ' ';
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
 
-        context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        if (m_textArea.size() >= 4) {
+            context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        }
 
         QString path;
         foreach (EnhancedPathCommand * c, m_commands)
@@ -412,6 +412,9 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         }
 
         m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
+        if (m_textArea.size() >= 4) {
+            setResizeBehavior(TextFollowsPreferredTextRect);
+        }
 
         KoXmlElement grandChild;
         forEachElement(grandChild, enhancedGeometry) {
@@ -474,7 +477,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }
@@ -540,17 +543,13 @@ void EnhancedPathShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void EnhancedPathShape::updateTextArea()
 {
-    KoTextOnShapeContainer* tosContainer = dynamic_cast<KoTextOnShapeContainer*>(parent());
-    if (tosContainer) {
-        tosContainer->setResizeBehavior(KoTextOnShapeContainer::TextFollowsPreferredTextRect);
+    if (m_textArea.size() >= 4) {
         QRectF r = m_viewBox;
-        if (m_textArea.size() >= 4) {
-            r.setLeft(evaluateConstantOrReference(m_textArea[0]));
-            r.setTop(evaluateConstantOrReference(m_textArea[1]));
-            r.setRight(evaluateConstantOrReference(m_textArea[2]));
-            r.setBottom(evaluateConstantOrReference(m_textArea[3]));
-        }
+        r.setLeft(evaluateConstantOrReference(m_textArea[0]));
+        r.setTop(evaluateConstantOrReference(m_textArea[1]));
+        r.setRight(evaluateConstantOrReference(m_textArea[2]));
+        r.setBottom(evaluateConstantOrReference(m_textArea[3]));
         r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
-        tosContainer->setPreferredTextRect(r);
+        setPreferredTextRect(r);
     }
 }

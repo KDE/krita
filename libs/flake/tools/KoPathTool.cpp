@@ -43,6 +43,8 @@
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
+#include "KoPathConnectionPointStrategy.h"
+#include "KoParameterChangeStrategy.h"
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
 #include "KoSnapGuide.h"

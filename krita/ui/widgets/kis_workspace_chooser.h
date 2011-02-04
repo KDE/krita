@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Jean-Nicolas Artaud <jeannicolasartaud@gmail.com>
+ * Copyright (C) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,18 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ConnectionToolWidget.h"
 
-#include <KDebug>
-#include <KLocale>
+#ifndef KIS_WORKSPACE_CHOOSER_H
+#define KIS_WORKSPACE_CHOOSER_H
 
-ConnectionToolWidget::ConnectionToolWidget( QWidget * parent )
-    :QWidget(parent)
+#include <QWidget>
+
+class KLineEdit;
+class KoResourceItemChooser;
+class KisView2;
+class KoResource;
+
+class KisWorkspaceChooser : public QWidget
 {
-    widget.setupUi(this);
+    Q_OBJECT
+public:
+    KisWorkspaceChooser(KisView2 * view, QWidget* parent = 0);
+    virtual ~KisWorkspaceChooser();
+
+private slots:
+    void slotSave();
+    void resourceSelected( KoResource * resource );
     
-    widget.connectionType->clear();
-    widget.connectionType->addItem(i18n("Standard"));
-    
-}
-#include <ConnectionToolWidget.moc>
+private:
+    KoResourceItemChooser * m_itemChooser;
+    KisView2* m_view;
+    KLineEdit* m_nameEdit;
+};
+
+#endif // KIS_WORKSPACE_CHOOSER_H

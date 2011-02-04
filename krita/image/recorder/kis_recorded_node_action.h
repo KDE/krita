@@ -41,6 +41,7 @@ public:
     virtual void toXML(QDomDocument& doc, QDomElement& elt, KisRecordedActionSaveContext* ) const;
 public:
     const KisNodeQueryPath& nodeQueryPath() const;
+    void setNodeQueryPath(const KisNodeQueryPath&);
 private:
     struct Private;
     Private* const d;

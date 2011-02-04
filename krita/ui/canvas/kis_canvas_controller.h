@@ -28,7 +28,7 @@
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
 public:
-    KisCanvasController(QWidget *parent);
+    KisCanvasController(QWidget *parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
     void setCanvas(KoCanvasBase *canvas);

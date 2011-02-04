@@ -85,6 +85,7 @@ set(flake_SRCS
     KoDragOdfSaveHelper.cpp
     KoShapeOdfSaveHelper.cpp
     KoShapePaste.cpp
+    KoConnectionPoint.cpp
     KoConnectionShape.cpp
     KoConnectionShapeLoadingUpdater.cpp
     KoConnectionShapeFactory.cpp
@@ -114,8 +115,9 @@ set(flake_SRCS
     KoFilterEffectConfigWidgetBase.cpp
     KoFilterEffectRenderContext.cpp
     KoFilterEffectLoadingContext.cpp
-    KoTextOnShapeContainer.cpp
     KoTextShapeDataBase.cpp
+    KoTosContainer.cpp
+    KoTosContainerModel.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -225,6 +227,7 @@ install(
     KoCanvasObserverBase.h
     KoCanvasSupervisor.h
     KoResourceManager.h
+    KoConnectionPoint.h
     KoCopyController.h
     KoCutController.h
     KoDataCenterBase.h
@@ -266,7 +269,6 @@ install(
     KoShapeUserData.h
     KoShapeApplicationData.h
     KoSharedSavingData.h
-    KoTextOnShapeContainer.h
     KoTextShapeDataBase.h
     KoToolBase.h
     KoToolManager.h

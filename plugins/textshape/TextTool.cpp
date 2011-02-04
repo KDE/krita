@@ -914,6 +914,8 @@ QStringList TextTool::supportedPasteMimeTypes() const
 
 int TextTool::pointToPosition(const QPointF & point) const
 {
+    if (!m_textShape)
+        return -1;
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());
@@ -1022,6 +1024,10 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
     // Is there an anchor here ?
     if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
         QString anchor = m_textEditor.data()->charFormat().anchorHref();
+        // local uri has this prefix but bookmark does not contain it, so strip it
+        if ( anchor.startsWith("#") ){
+            anchor = anchor.right(anchor.size()-1);
+        }
         if (!anchor.isEmpty()) {
             KoTextDocument document(m_textShapeData->document());
             KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();

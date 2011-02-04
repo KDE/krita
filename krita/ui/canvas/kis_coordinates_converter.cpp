@@ -166,8 +166,8 @@ QTransform KisCoordinatesConverter::documentToWidgetTransform() const
     return m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
 }
 
-QTransform KisCoordinatesConverter::widgetToViewportTransform() const {
-    return m_d->widgetToViewport;
+QTransform KisCoordinatesConverter::viewportToWidgetTransform() const {
+    return m_d->widgetToViewport.inverted();
 }
 
 QTransform KisCoordinatesConverter::imageToViewportTransform() const {
@@ -180,13 +180,13 @@ void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
 {
     KisConfig cfg;
     if (cfg.scrollCheckers()) {
-        *transform = widgetToViewportTransform().inverted();
+        *transform = viewportToWidgetTransform();
         *polygon = imageRectInViewportPixels();
         *brushOrigin = imageToViewport(QPointF(0,0));
     }
     else {
         *transform = QTransform();
-        *polygon = widgetToViewportTransform().inverted().map(imageRectInViewportPixels());
+        *polygon = viewportToWidgetTransform().map(imageRectInViewportPixels());
         *brushOrigin = QPoint(0,0);
     }
 }
@@ -208,7 +208,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
         *textureRect = viewportRect;
     }
 
-    *modelTransform = widgetToViewportTransform().inverted();
+    *modelTransform = viewportToWidgetTransform();
     *modelRect = viewportRect;
 }
 

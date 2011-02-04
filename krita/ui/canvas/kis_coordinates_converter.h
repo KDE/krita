@@ -28,7 +28,11 @@
 
 namespace _Private
 {
-    template<class T> struct Traits { };
+    template<class T> struct Traits
+    {
+        typedef T Result;
+        static T map(const QTransform& transform, const T& obj)  { return transform.map(obj); }
+    };
 
     template<> struct Traits<QRectF>
     {
@@ -36,15 +40,10 @@ namespace _Private
         static QRectF map(const QTransform& transform, const QRectF& rc)  { return transform.mapRect(rc); }
     };
     
-    template<> struct Traits<QRect>: public Traits<QRectF> { };
-
-    template<> struct Traits<QPointF>
-    {
-        typedef QPointF Result;
-        static QPointF map(const QTransform& transform, const QPointF& pt)  { return transform.map(pt); }
-    };
-
-    template<> struct Traits<QPoint>: public Traits<QPointF> { };
+    template<> struct Traits<QRect>:    public Traits<QRectF>    { };
+    template<> struct Traits<QPoint>:   public Traits<QPointF>   { };
+    template<> struct Traits<QPolygon>: public Traits<QPolygonF> { };
+    template<> struct Traits<QLine>:    public Traits<QLineF>    { };
 }
 
 class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
@@ -113,6 +112,7 @@ public:
                                QRectF *textureRect,
                                QRectF *modelRect) const;
 
+    QPointF imageCenterInWidgetPixel() const;
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
     QSizeF imageSizeInFlakePixels() const;

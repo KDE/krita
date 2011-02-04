@@ -223,6 +223,15 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
     *modelRect = viewportRect;
 }
 
+QPointF KisCoordinatesConverter::imageCenterInWidgetPixel() const
+{
+    if(!m_d->image.isValid())
+        return QPointF();
+    
+    QPolygonF poly = imageToWidget(QPolygon(m_d->image->bounds()));
+    return (poly[0] + poly[1] + poly[2] + poly[3]) / 4.0;
+}
+
 
 // these functions return a bounding rect if the canvas is rotated
 

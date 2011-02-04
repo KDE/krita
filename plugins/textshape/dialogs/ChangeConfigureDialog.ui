@@ -323,7 +323,7 @@ p, li { white-space: pre-wrap; }
     <string>General Settings</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton">
+  <widget class="QRadioButton" name="odf12RadioButton">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -336,7 +336,7 @@ p, li { white-space: pre-wrap; }
     <string>ODF 1.2</string>
    </property>
   </widget>
-  <widget class="QRadioButton" name="radioButton_2">
+  <widget class="QRadioButton" name="deltaXmlRadioButton">
    <property name="geometry">
     <rect>
      <x>310</x>
@@ -362,7 +362,7 @@ p, li { white-space: pre-wrap; }
     <string>Saving Format</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="authorNameLineEdit">
    <property name="geometry">
     <rect>
      <x>190</x>

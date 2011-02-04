@@ -76,6 +76,7 @@
 #include <KStandardAction>
 #include <KMimeType>
 #include <KMessageBox>
+#include <KUser>
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
@@ -1858,13 +1859,17 @@ void TextTool::configureChangeTracking()
         insertionBgColor = m_changeTracker->getInsertionBgColor();
         deletionBgColor = m_changeTracker->getDeletionBgColor();
         formatChangeBgColor = m_changeTracker->getFormatChangeBgColor();
+        QString authorName = m_changeTracker->authorName();
+        KoChangeTracker::ChangeSaveFormat changeSaveFormat = m_changeTracker->saveFormat();
 
-        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, canvas()->canvasWidget());
+        ChangeConfigureDialog changeDialog(insertionBgColor, deletionBgColor, formatChangeBgColor, authorName, changeSaveFormat, canvas()->canvasWidget());
 
         if (changeDialog.exec()) {
             m_changeTracker->setInsertionBgColor(changeDialog.getInsertionBgColor());
             m_changeTracker->setDeletionBgColor(changeDialog.getDeletionBgColor());
             m_changeTracker->setFormatChangeBgColor(changeDialog.getFormatChangeBgColor());
+            m_changeTracker->setAuthorName(changeDialog.authorName());
+            m_changeTracker->setSaveFormat(changeDialog.saveFormat());
             writeConfig();
         }
     }
@@ -2126,6 +2131,8 @@ void TextTool::readConfig()
 {
     if (m_changeTracker) {
         QColor bgColor, defaultColor;
+        QString changeAuthor;
+        int changeSaveFormat = KoChangeTracker::DELTAXML;
         KConfigGroup interface = KoGlobal::kofficeConfig()->group("Change-Tracking");
         if (interface.exists()) {
             bgColor = interface.readEntry("insertionBgColor", defaultColor);
@@ -2134,6 +2141,15 @@ void TextTool::readConfig()
             m_changeTracker->setDeletionBgColor(bgColor);
             bgColor = interface.readEntry("formatChangeBgColor", defaultColor);
             m_changeTracker->setFormatChangeBgColor(bgColor);
+            changeAuthor = interface.readEntry("changeAuthor", changeAuthor);
+            if (changeAuthor == "") {
+                KUser user(KUser::UseRealUserID);
+                m_changeTracker->setAuthorName(user.property(KUser::FullName).toString());
+            } else {
+                m_changeTracker->setAuthorName(changeAuthor);
+            }
+            changeSaveFormat = interface.readEntry("changeSaveFormat", changeSaveFormat);
+            m_changeTracker->setSaveFormat((KoChangeTracker::ChangeSaveFormat)(changeSaveFormat));
         }
     }
 }
@@ -2145,6 +2161,12 @@ void TextTool::writeConfig()
         interface.writeEntry("insertionBgColor", m_changeTracker->getInsertionBgColor());
         interface.writeEntry("deletionBgColor", m_changeTracker->getDeletionBgColor());
         interface.writeEntry("formatChangeBgColor", m_changeTracker->getFormatChangeBgColor());
+        KUser user(KUser::UseRealUserID);
+        QString changeAuthor = m_changeTracker->authorName();
+        if (changeAuthor != user.property(KUser::FullName).toString()) {
+            interface.writeEntry("changeAuthor", changeAuthor);
+        }
+        interface.writeEntry("changeSaveFormat", (int)(m_changeTracker->saveFormat()));
     }
 }
 

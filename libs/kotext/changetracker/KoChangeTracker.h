@@ -50,6 +50,13 @@ class KOTEXT_EXPORT KoChangeTracker : public QObject
 {
     Q_OBJECT
 public:
+    
+    typedef enum
+    {
+        ODF_1_2 = 0,
+        DELTAXML
+    }ChangeSaveFormat;
+
     KoChangeTracker(QObject *parent = 0);
 
     ~KoChangeTracker();
@@ -111,6 +118,12 @@ public:
     static QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
     static void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
     static int fragmentLength(QTextDocumentFragment fragment);
+
+    const QString& authorName();
+    void setAuthorName(const QString &authorName);
+
+    ChangeSaveFormat saveFormat();
+    void setSaveFormat(ChangeSaveFormat saveFormat); 
 private:
     static bool checkListDeletion(QTextList *list, QTextCursor &cursor);
     class Private;

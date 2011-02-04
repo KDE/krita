@@ -38,7 +38,6 @@
 #include <KDateTime>
 #include <KGlobal>
 #include <KLocale>
-#include <KUser>
 
 //Qt includes
 #include <QColor>
@@ -79,6 +78,8 @@ public:
     bool recordChanges;
     bool displayChanges;
     QColor insertionBgColor, deletionBgColor, formatChangeBgColor;
+    QString changeAuthorName;
+    KoChangeTracker::ChangeSaveFormat changeSaveFormat;
 };
 
 KoChangeTracker::KoChangeTracker(QObject *parent)
@@ -113,6 +114,25 @@ bool KoChangeTracker::displayChanges()
     return d->displayChanges;
 }
 
+const QString& KoChangeTracker::authorName()
+{
+    return d->changeAuthorName;
+}
+
+void KoChangeTracker::setAuthorName(const QString &authorName)
+{
+    d->changeAuthorName = authorName;
+}
+
+KoChangeTracker::ChangeSaveFormat KoChangeTracker::saveFormat()
+{
+    return d->changeSaveFormat;
+}
+
+void KoChangeTracker::setSaveFormat(ChangeSaveFormat saveFormat)
+{
+    d->changeSaveFormat = saveFormat;
+}
 int KoChangeTracker::getChangeId(QString &title, KoGenChange::Type type, QTextCursor &selection, QTextFormat& newFormat, int prevCharChangeId, int nextCharChangeId)
 {
     Q_UNUSED(title)
@@ -137,8 +157,7 @@ int KoChangeTracker::getFormatChangeId(QString title, QTextFormat &format, QText
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 
-    KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.property(KUser::FullName).toString());
+    changeElement->setCreator(d->changeAuthorName);
 
     changeElement->setEnabled(d->recordChanges);
 
@@ -158,8 +177,7 @@ int KoChangeTracker::getInsertChangeId(QString title, int existingChangeId)
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
 //    changeElement->setDate(KDateTime::currentLocalDateTime().toString("Y-m-dTH:M:Sz")); //i must have misunderstood the API doc but it doesn't work.
-    KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.property(KUser::FullName).toString());
+    changeElement->setCreator(d->changeAuthorName);
 
     changeElement->setEnabled(d->recordChanges);
 
@@ -178,8 +196,7 @@ int KoChangeTracker::getDeleteChangeId(QString title, QTextDocumentFragment sele
     KoChangeTrackerElement *changeElement = new KoChangeTrackerElement(title, KoGenChange::DeleteChange);
 
     changeElement->setDate(KDateTime::currentLocalDateTime().toString(KDateTime::ISODate).replace(KGlobal::locale()->decimalSymbol(), QString(".")));
-    KUser user(KUser::UseRealUserID);
-    changeElement->setCreator(user.property(KUser::FullName).toString());
+    changeElement->setCreator(d->changeAuthorName);
     changeElement->setDeleteData(selection);
 
     changeElement->setEnabled(d->recordChanges);

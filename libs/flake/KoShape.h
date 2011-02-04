@@ -62,6 +62,7 @@ class KoEventAction;
 class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
+class KoClipPath;
 
 /**
  *
@@ -127,7 +128,8 @@ public:
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
-        ConnectionPointChanged ///< a connection point has changed
+        ConnectionPointChanged, ///< a connection point has changed
+        ClipPathChanged ///< the shapes clip path has changed
     };
 
     /// See QGraphicsItem::CacheMode
@@ -635,6 +637,12 @@ public:
 
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
+
+    /// Sets a new clip path, removing the old one
+    void setClipPath( KoClipPath * clipPath );
+
+    /// Returns the currently set clip path or 0 if there is no clip path set
+    KoClipPath * clipPath() const;
 
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will

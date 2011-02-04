@@ -43,6 +43,7 @@
 #include "KoLineBorder.h"
 #include "ShapeDeleter_p.h"
 #include "KoShapeShadow.h"
+#include "KoClipPath.h"
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
@@ -89,6 +90,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       border(0),
       q_ptr(shape),
       shadow(0),
+      clipPath(0),
       filterEffectStack(0),
       transparency(0.0),
       zIndex(0),
@@ -130,6 +132,8 @@ KoShapePrivate::~KoShapePrivate()
         delete fill;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
+    if (clipPath)
+        delete clipPath;
     qDeleteAll(eventActions);
 }
 
@@ -1149,6 +1153,20 @@ KoShapeShadow *KoShape::shadow() const
 {
     Q_D(const KoShape);
     return d->shadow;
+}
+
+void KoShape::setClipPath( KoClipPath * clipPath )
+{
+    Q_D(KoShape);
+    d->clipPath = clipPath;
+    d->shapeChanged(ClipPathChanged);
+    notifyChanged();
+}
+
+KoClipPath * KoShape::clipPath() const
+{
+    Q_D(const KoShape);
+    return d->clipPath;
 }
 
 QTransform KoShape::transform() const

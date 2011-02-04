@@ -179,7 +179,7 @@ void KoPAView::initGUI()
     setLayout( gridLayout );
 
     d->canvas = new KoPACanvas( this, d->doc, this );
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( this );
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );

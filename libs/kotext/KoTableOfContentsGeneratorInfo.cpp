@@ -76,8 +76,8 @@ IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName): IndexEntry(_styleN
 
 
 IndexEntryChapter::IndexEntryChapter(QString _styleName):   IndexEntry(_styleName, IndexEntry::CHAPTER),
-                                                            outlineLevel(INVALID_OUTLINE_LEVEL),
-                                                            display(QString())
+                                                            display(QString()),
+                                                            outlineLevel(INVALID_OUTLINE_LEVEL)
 {
 
 }
@@ -210,11 +210,11 @@ void TableOfContentSource::saveOdf(KoXmlWriter* writer) const
 
         indexTitleTemplate.saveOdf(writer);
 
-        foreach (TocEntryTemplate entryTemplate, entryTemplate) {
-            entryTemplate.saveOdf(writer);
+        foreach (const TocEntryTemplate &entry, entryTemplate) {
+            entry.saveOdf(writer);
         }
 
-        foreach (IndexSourceStyles sourceStyle, indexSourceStyles) {
+        foreach (const IndexSourceStyles &sourceStyle, indexSourceStyles) {
             sourceStyle.saveOdf(writer);
         }
 

@@ -202,6 +202,11 @@ bool KoProgressUpdater::interrupted() const
     return d->canceled;
 }
 
+bool KoProgressUpdater::hasOutput() const
+{
+    return d->output != 0;
+}
+
 void KoProgressUpdater::Private::logEvents(QTextStream& out,
                                            KoProgressUpdater::Private *updater,
                                            const QTime& startTime,

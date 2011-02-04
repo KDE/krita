@@ -46,7 +46,7 @@ class KoSemanticStylesheetPrivate;
  */
 class KOMAIN_EXPORT KoSemanticStylesheet : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
     KoSemanticStylesheetPrivate * const d;
 protected:
 

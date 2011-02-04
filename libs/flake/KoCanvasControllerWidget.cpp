@@ -197,9 +197,9 @@ void KoCanvasControllerWidget::Private::activate()
 
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
     : QAbstractScrollArea(parent)
-    , KoCanvasController()
+    , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
     setFrameShape(NoFrame);

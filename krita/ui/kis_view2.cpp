@@ -232,7 +232,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->doc = doc;
     m_d->viewConverter = new KoZoomHandler();
 
-    KoCanvasControllerWidget *canvasController = new KisCanvasController(this);
+    KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
@@ -283,6 +283,13 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
+
+    //Workaround, by default has the same shortcut as mirrorCanvas
+    KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
 
     if (shell())
     {

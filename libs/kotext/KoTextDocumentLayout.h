@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -139,7 +140,7 @@ public:
     /// return the list of shapes that will be used to run all the text into.
     virtual QList<KoShape*> shapes() const;
 
-    // reset all inline object which document position is bigger or equal to resetPosition
+    /// reset all inline object which document position is bigger or equal to resetPosition
     virtual void resetInlineObject(int resetPosition);
 
     /**
@@ -159,10 +160,13 @@ public:
         virtual void reset() = 0;
         /// returns true if reset has been called.
         virtual bool isInterrupted() const = 0;
-        /// return the number of columns of the line to be layouted
+        /**
+         * return the number of columns of the line to be layouted.
+         * if numColumns() returns 0, use width() instead.
+         */
         virtual int numColumns() {
             return 0;
-        } // if numColumns() returns 0, use width() instead
+        }
         /// return the width of the line to be layouted
         virtual qreal width() = 0;
         /// return the x position of the line to be layouted
@@ -219,11 +223,11 @@ public:
         virtual QTextLine createLine() = 0;
         /// Fiddle with the width of the current textline until it fits
         virtual void fitLineForRunAround(bool resetHorizontalPosition) = 0;
-        // add inline object
+        /// add inline object
         virtual void insertInlineObject(KoTextAnchor * textAnchor) = 0;
-        // reset all inline object which document position is bigger or equal to resetPosition
+        /// reset all inline object which document position is bigger or equal to resetPosition
         virtual void resetInlineObject(int resetPosition) = 0;
-        // remove inline object
+        /// remove inline object
         virtual void removeInlineObject(KoTextAnchor * textAnchor) = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;

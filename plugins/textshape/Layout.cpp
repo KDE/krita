@@ -109,15 +109,16 @@ bool Layout::start()
     m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     m_changeTracker = KoTextDocument(m_parent->document()).changeTracker();
     m_relativeTabs = KoTextDocument(m_parent->document()).relativeTabs();
-    if (m_reset)
+    if (m_reset) {
         resetPrivate();
-    else if (shape)
+    } else if (shape) {
         nextParag();
+    }
     m_reset = false;
-    
+
     bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
     if (!ok) {
-        kDebug() << "shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+        kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
     }
     return ok;
 }

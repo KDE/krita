@@ -188,10 +188,7 @@ void KisCoordinatesConverterTest::testRotation()
     converter.setDocumentOffset(QPoint(0,0));
     converter.setCanvasWidgetSize(widgetSize);
 
-    QTransform postprocessingTransform;
-    postprocessingTransform.rotate(30);
-    converter.setPostprocessingTransform(postprocessingTransform);
-
+    converter.rotate(30);
     converter.setZoom(1.);
 
     QTransform viewportToWidget = converter.viewportToWidgetTransform();
@@ -226,15 +223,12 @@ void KisCoordinatesConverterTest::testMirroring()
     converter.setDocumentOffset(QPoint(200,100));
     converter.setCanvasWidgetSize(widgetSize);
 
-    QTransform postprocessingTransform;
-    postprocessingTransform.scale(-1,1);
-    converter.setPostprocessingTransform(postprocessingTransform);
-
     QTransform imageToWidget;
     QTransform documentToWidget;
     QTransform flakeToWidget;
     QTransform viewportToWidget;
 
+    converter.mirror(false, true);
     converter.setZoom(1.);
 
     // image pixels == flake pixels
@@ -264,15 +258,12 @@ void KisCoordinatesConverterTest::testMirroringCanvasBiggerThanImage()
     converter.setDocumentOffset(QPoint(0,0));
     converter.setCanvasWidgetSize(widgetSize);
 
-    QTransform postprocessingTransform;
-    postprocessingTransform.scale(-1,1);
-    converter.setPostprocessingTransform(postprocessingTransform);
-
     QTransform imageToWidget;
     QTransform documentToWidget;
     QTransform flakeToWidget;
     QTransform viewportToWidget;
 
+    converter.mirror(false, true);
     converter.setZoom(1.);
 
     // image pixels == flake pixels

@@ -80,7 +80,6 @@ public:
         , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KoToolProxy(parent))
         , favoriteResourceManager(0)
-        , canvasMirroredY(false)
         , vastScrolling(true) {
     }
 
@@ -103,7 +102,6 @@ public:
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
     KisPrescaledProjectionSP prescaledProjection;
-    bool canvasMirroredY;
     bool vastScrolling;
 };
 
@@ -181,28 +179,20 @@ void KisCanvas2::pan(QPoint shift)
 
 void KisCanvas2::mirrorCanvas(bool enable)
 {
-    if(enable != m_d->canvasMirroredY) {
-        QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
+    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
 
-        QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
-        newTransform *= QTransform::fromScale(-1,1);
-        m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
-        m_d->canvasMirroredY = enable;
-        notifyZoomChanged();
+    m_d->coordinatesConverter->mirror(false, enable);
+    notifyZoomChanged();
 
-        QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-        pan(shift);
-    }
+    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
+    pan(shift);
 }
 
 void KisCanvas2::rotateCanvas(qreal angle)
 {
     QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-    QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
-    QTransform temp; temp.rotate(angle);
-    newTransform *= temp;
-    m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
+    
+    m_d->coordinatesConverter->rotate(angle);
     notifyZoomChanged();
 
     QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
@@ -211,19 +201,19 @@ void KisCanvas2::rotateCanvas(qreal angle)
 
 void KisCanvas2::rotateCanvasRight15()
 {
-    rotateCanvas(15.);
+    rotateCanvas(15.0);
 }
 
 void KisCanvas2::rotateCanvasLeft15()
 {
-    rotateCanvas(-15.);
+    rotateCanvas(-15.0);
 }
 
 void KisCanvas2::resetCanvasTransformations()
 {
     QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
 
-    m_d->coordinatesConverter->setPostprocessingTransform(QTransform());
+    m_d->coordinatesConverter->resetTransformations();
     notifyZoomChanged();
 
     QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
@@ -513,7 +503,6 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
 
 void KisCanvas2::notifyZoomChanged()
 {
-    m_d->coordinatesConverter->notifyZoomChanged();
     adjustOrigin();
 
     if (!m_d->currentCanvasIsOpenGL) {

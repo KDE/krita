@@ -58,7 +58,6 @@ public:
     KisCoordinatesConverter();
     ~KisCoordinatesConverter();
 
-    void notifyZoomChanged();
     void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
     void setDocumentOrigin(const QPoint &origin);
@@ -66,9 +65,12 @@ public:
 
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
-
-    void setPostprocessingTransform(const QTransform &transform);
-    QTransform postprocessingTransform() const;
+    
+    void rotate(qreal angle);
+    void mirror(bool mirrorXAxis, bool mirrorYAxis);
+    void resetTransformations();
+    
+    virtual void setZoom(qreal zoom);
     
     template<class T> typename _Private::Traits<T>::Result
     imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }

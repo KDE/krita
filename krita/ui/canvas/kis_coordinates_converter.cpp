@@ -30,7 +30,13 @@
 
 
 struct KisCoordinatesConverter::Private {
+    Private():
+        isXAxisMirrored(false), isYAxisMirrored(false) { }
+    
     KisImageWSP image;
+    
+    bool isXAxisMirrored;
+    bool isYAxisMirrored;
     QSize canvasWidgetSize;
     QPoint documentOffset;
     QPoint documentOrigin;
@@ -55,30 +61,25 @@ void KisCoordinatesConverter::recalculateTransformations() const
     m_d->documentToFlake = QTransform::fromScale(zoomX, zoomY);
 
     // Make new coordinate system not go to negative values
-    QSizeF flakeSize = imageSizeInFlakePixels();
-    QPointF shift = -m_d->postprocessingTransform.mapRect(QRectF(QPointF(0,0), flakeSize)).topLeft();
+    QSizeF  flakeSize = imageSizeInFlakePixels();
+    QPointF shift     = -m_d->postprocessingTransform.mapRect(QRectF(QPointF(0,0), flakeSize)).topLeft();
 
-    m_d->flakeToPostprocessedFlake = m_d->postprocessingTransform
-        * QTransform::fromTranslate(shift.x(), shift.y());
+    m_d->flakeToPostprocessedFlake =
+        m_d->postprocessingTransform * QTransform::fromTranslate(shift.x(), shift.y());
 
     m_d->postprocessedFlakeToWidget =
         QTransform::fromTranslate(-m_d->documentOffset.x() + m_d->documentOrigin.x(),
                                   -m_d->documentOffset.y() + m_d->documentOrigin.y());
 
-
-    QTransform reversedTransform = (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted();
-
     QRectF irect = imageRectInWidgetPixels();
     QRectF wrect = QRectF(QPoint(0,0), m_d->canvasWidgetSize);
-
     QRectF rrect = irect & wrect;
 
-    QRectF canvasBounds = reversedTransform.mapRect(rrect);
-    QPointF offset = canvasBounds.topLeft();
+    QTransform reversedTransform = flakeToWidgetTransform().inverted();
+    QRectF     canvasBounds      = reversedTransform.mapRect(rrect);
+    QPointF    offset            = canvasBounds.topLeft();
 
-    reversedTransform = reversedTransform * QTransform::fromTranslate(-offset.x(), -offset.y());
-
-    m_d->widgetToViewport = reversedTransform;
+    m_d->widgetToViewport = reversedTransform * QTransform::fromTranslate(-offset.x(), -offset.y());
 
     // qDebug() << "***********";
     // qDebug() << ppVar(m_d->flakeToPostprocessedFlake);
@@ -97,11 +98,6 @@ KisCoordinatesConverter::KisCoordinatesConverter()
 KisCoordinatesConverter::~KisCoordinatesConverter()
 {
     delete m_d;
-}
-
-void KisCoordinatesConverter::notifyZoomChanged()
-{
-    recalculateTransformations();
 }
 
 void KisCoordinatesConverter::setCanvasWidgetSize(QSize size)
@@ -138,15 +134,33 @@ QPoint KisCoordinatesConverter::documentOffset() const
     return m_d->documentOffset;
 }
 
-void KisCoordinatesConverter::setPostprocessingTransform(const QTransform &transform)
+void KisCoordinatesConverter::setZoom(qreal zoom)
 {
-    m_d->postprocessingTransform = transform;
+    KoZoomHandler::setZoom(zoom);
     recalculateTransformations();
 }
 
-QTransform KisCoordinatesConverter::postprocessingTransform() const
+void KisCoordinatesConverter::rotate(qreal angle)
 {
-    return m_d->postprocessingTransform;
+    m_d->postprocessingTransform.rotate(angle);
+    recalculateTransformations();
+}
+
+void KisCoordinatesConverter::mirror(bool mirrorXAxis, bool mirrorYAxis)
+{
+    qreal scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
+    qreal scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
+    
+    m_d->postprocessingTransform.scale(scaleX, scaleY);
+    m_d->isXAxisMirrored = mirrorXAxis;
+    m_d->isYAxisMirrored = mirrorYAxis;
+    recalculateTransformations();
+}
+
+void KisCoordinatesConverter::resetTransformations()
+{
+    m_d->postprocessingTransform.reset();
+    recalculateTransformations();
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
@@ -240,17 +254,13 @@ QSizeF KisCoordinatesConverter::imageSizeInFlakePixels() const
 
 QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
 {
-    // NOTE: this duplicates part of recalculateTransformations()
-    QTransform reversedTransform = (m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget).inverted();
-    return reversedTransform.mapRect(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
+    return flakeToWidgetTransform().inverted().mapRect(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
 QPoint KisCoordinatesConverter::shiftFromFlakeCenterPoint(const QPointF &pt) const
 {
-    QTransform transform = m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
-    QPointF newWidgetCenter = transform.map(pt);
+    QPointF newWidgetCenter = flakeToWidgetTransform().map(pt);
     QPointF oldWidgetCenter = QPointF(m_d->canvasWidgetSize.width() / 2, m_d->canvasWidgetSize.height() / 2);
-
     return (newWidgetCenter - oldWidgetCenter).toPoint();
 }
 

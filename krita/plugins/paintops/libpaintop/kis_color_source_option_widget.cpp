@@ -27,6 +27,7 @@
 
 #include "kis_color_source_option.h"
 #include "kis_color_source.h"
+#include <kis_paint_device.h>
 
 
 struct KisColorSourceOptionWidget::Private {

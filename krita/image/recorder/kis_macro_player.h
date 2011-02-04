@@ -22,6 +22,7 @@
 #include <QThread>
 
 #include <krita_export.h>
+#include <kis_paint_device.h>
 
 class KisMacro;
 class KisPlayInfo;

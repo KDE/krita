@@ -107,7 +107,7 @@ public:
     }
 
 private:
-    void init(KisVector2D p0, KisVector2D p1) {
+    void init(const KisVector2D &p0, const KisVector2D &p1) {
         m_lineEquation =
             LineEquation::Through(p0, p1);
 

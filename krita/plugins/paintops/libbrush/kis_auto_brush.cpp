@@ -17,6 +17,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <stdlib.h>
+#define srand48 srand
+inline double drand48() {
+    return double(rand()) / RAND_MAX;
+}
+#endif
+
 #include "kis_auto_brush.h"
 
 #include <kis_debug.h>

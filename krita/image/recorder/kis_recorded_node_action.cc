@@ -24,6 +24,7 @@
 #include "kis_node_query_path.h"
 #include "kis_play_info.h"
 #include "kis_image.h"
+#include "kis_paint_device.h"
 #include <KoProgressUpdater.h>
 
 struct KisRecordedNodeAction::Private

@@ -630,7 +630,11 @@ void KisToolFreehand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
+#ifdef __GNUC__
 #warning "Remove adjusted() call -- it smells hacky"
+#else
+#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
+#endif
     m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
 
     canvas()->updateCanvas(m_oldOutlineRect);

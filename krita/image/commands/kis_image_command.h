@@ -26,6 +26,7 @@
 #include <QSize>
 #include <QRect>
 #include "kis_types.h"
+#include "kis_paint_device.h"
 
 
 /// the base command for commands altering a KisImage

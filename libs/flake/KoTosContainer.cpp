@@ -65,7 +65,7 @@ bool KoTosContainer::loadText(const KoXmlElement &element, KoShapeLoadingContext
     KoXmlElement child;
     forEachElement(child, element) {
         // only recreate the text shape if there's something to be loaded
-        if (child.localName() == "p") {
+        if (child.localName() == "p" || child.localName() == "list") {
 
             KoShape *textShape = createTextShape(context.documentResourceManager());
 

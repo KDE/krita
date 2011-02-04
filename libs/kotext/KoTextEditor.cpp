@@ -396,11 +396,11 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
         switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
             case KoGenChange::InsertChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, selection.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
                 break;
             case KoGenChange::FormatChange:
                 if (!changeId)
-                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, d->caret.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
                 break;
             case KoGenChange::DeleteChange:
                 //this should never be the case

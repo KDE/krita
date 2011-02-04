@@ -914,6 +914,8 @@ QStringList TextTool::supportedPasteMimeTypes() const
 
 int TextTool::pointToPosition(const QPointF & point) const
 {
+    if (!m_textShape)
+        return -1;
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
     caretPos = qMax(caretPos, m_textShapeData->position());

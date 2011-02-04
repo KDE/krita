@@ -42,8 +42,7 @@ public:
 
     void showPopup();
 protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
 
     StylesWidget *m_stylesWidget;
 };
@@ -92,18 +91,9 @@ void SpecialButton::setStylesWidget(StylesWidget *stylesWidget)
     m_stylesWidget = stylesWidget;
 }
 
-void SpecialButton::enterEvent(QEvent *)
+void SpecialButton::mousePressEvent(QMouseEvent *)
 {
     showPopup();
-}
-
-void SpecialButton::leaveEvent(QEvent *event)
-{
-    if (!m_stylesWidget) {
-        return;
-    }
-
-    m_stylesWidget->hide();
 }
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
@@ -111,10 +101,10 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         ,m_blockSignals(false)
 {
     setObjectName("simplestyleswidget");
-    m_popupForBlock = new StylesWidget(0, Qt::Popup);
+    m_popupForBlock = new StylesWidget(0, true, Qt::Popup);
     m_popupForBlock->setFrameShape(QFrame::StyledPanel);
     m_popupForBlock->setFrameShadow(QFrame::Raised);
-    m_popupForChar = new StylesWidget(0, Qt::Popup);
+    m_popupForChar = new StylesWidget(0, false, Qt::Popup);
     m_popupForChar->setFrameShape(QFrame::StyledPanel);
     m_popupForChar->setFrameShadow(QFrame::Raised);
 
@@ -129,14 +119,11 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     l->addWidget(charFrame);
     l->setMargin(0);
     setLayout(l);
+
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
 }
 
-/*
-void SimpleStylesWidget::tryPopdown()
-{
-    if(!
-}
-*/
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
 {
     m_styleManager = sm;

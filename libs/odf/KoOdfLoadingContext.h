@@ -21,8 +21,6 @@
 #ifndef KOOASISLOADINGCONTEXT_H
 #define KOOASISLOADINGCONTEXT_H
 
-class KoStore;
-
 #include <QtCore/QString>
 
 #include <kcomponentdata.h>
@@ -32,21 +30,8 @@ class KoStore;
 #include "KoOdfStylesReader.h"
 
 
-// A class that holds a manifest:file-entry.
-class KOODF_EXPORT KoOdfManifestEntry
-{
-public:
-    KoOdfManifestEntry(const QString &fp, const QString &mt, const QString &v)
-        : fullPath(fp)
-        , mediaType(mt)
-        , version(v)
-    {
-    }
-
-    QString  fullPath;          // manifest:full-path
-    QString  mediaType;         // manifest:media-type
-    QString  version;           // manifest:version  (isNull==true if not present)
-};
+class KoStore;
+class KoOdfManifestEntry;
 
 
 /**

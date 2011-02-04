@@ -42,8 +42,9 @@
 #include "KoXmlReader.h"
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoShapeLoadingContext.h>
+#include <KoOdfManifest.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoEmbeddedFileSaver.h>
 
@@ -282,11 +283,11 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         if (isDir) {
             // The files can be found in the manifest.
             foreach (KoOdfManifestEntry *entry, manifest) {
-                if (entry->fullPath == dirName)
+                if (entry->fullPath() == dirName)
                     continue;
 
-                if (entry->fullPath.startsWith(dirName)) {
-                    d->saveFile(entry->fullPath, context);
+                if (entry->fullPath().startsWith(dirName)) {
+                    d->saveFile(entry->fullPath(), context);
                 }
             }
         }
@@ -301,7 +302,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         for (int i = 0; i < manifest.size(); ++i) {
             KoOdfManifestEntry *temp = manifest.value(i);
 
-            if (temp->fullPath == entryName) {
+            if (temp->fullPath() == entryName) {
                 entry = new KoOdfManifestEntry(*manifest.value(i));
                 //*entry = *temp;
                 break;
@@ -314,7 +315,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     for (int i = 0; i < d->manifestEntries.size(); ++i) {
         KoOdfManifestEntry *entry = d->manifestEntries.value(i);
         if (entry)
-            kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
+            kDebug(30006) << entry->fullPath() << entry->mediaType() << entry->version();
         else
             kDebug(30006) << "--";
     }

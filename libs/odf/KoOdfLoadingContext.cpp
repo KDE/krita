@@ -18,15 +18,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+// Own
 #include "KoOdfLoadingContext.h"
+
+// KDE
+#include <kstandarddirs.h>
+#include <kdebug.h>
+
+// Calligra
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
-
-#include <kstandarddirs.h>
-
-#include <kdebug.h>
+#include <KoOdfManifest.h>
 
 
 
@@ -244,7 +248,7 @@ bool KoOdfLoadingContext::useStylesAutoStyles() const
 QString KoOdfLoadingContext::mimeTypeForPath(const QString& path) const
 {
     if (d->manifestEntries.contains(path)) {
-        return d->manifestEntries[path]->mediaType;
+        return d->manifestEntries[path]->mediaType();
     }
     else {
         return QString();

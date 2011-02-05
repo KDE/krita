@@ -144,7 +144,7 @@ void KisToolPan::mouseMoveEvent(KoPointerEvent *e)
     if(e->modifiers() & Qt::ShiftModifier) {
         if(!isInCheckerArea(actualPosition)) {
             qreal angle = calculateAngle(m_lastPosition, actualPosition);
-            kritaCanvas()->rotateCanvas(angle);
+            kritaCanvas()->rotateCanvas(angle, false);
         }
     }
     else {
@@ -159,6 +159,7 @@ void KisToolPan::mouseReleaseEvent(KoPointerEvent *e)
 {
     Q_UNUSED(e);
     m_defaultCursor = KisCursor::openHandCursor();
+    kritaCanvas()->rotateCanvas(0.0, true);
     adjustCursor();
 }
 

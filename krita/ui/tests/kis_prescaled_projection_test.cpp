@@ -173,18 +173,16 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothingPixelForPixel()
     layer->paintDevice()->convertFromQImage(qimage, "");
 
     KisPrescaledProjection projection;
-    KoZoomHandler * viewConverter = new KoZoomHandler();
-
-    KisCoordinatesConverter converter(viewConverter);
+    KisCoordinatesConverter converter;
+    
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-
     projection.setImage(image);
 
     // pixel-for-pixel, at 100% zoom
-    viewConverter->setResolution(image->xRes(), image->yRes());
+    converter.setResolution(image->xRes(), image->yRes());
 
-    testProjectionScenario(projection, viewConverter, "pixel_for_pixel");
+    testProjectionScenario(projection, &converter, "pixel_for_pixel");
 
 }
 
@@ -207,15 +205,14 @@ void KisPrescaledProjectionTest::testScalingUndeferredSmoothing()
     layer->paintDevice()->convertFromQImage(qimage, "");
 
     KisPrescaledProjection projection;
-    KoZoomHandler *viewConverter = new KoZoomHandler();
-
-    KisCoordinatesConverter converter(viewConverter);
+    KisCoordinatesConverter converter;
+    
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
 
     projection.setImage(image);
 
-    testProjectionScenario(projection, viewConverter, "120dpi");
+    testProjectionScenario(projection, &converter, "120dpi");
 
 }
 
@@ -237,20 +234,17 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
 
     image->addNode(layer, image->rootLayer(), 0);
 
-
-    KoZoomHandler * viewConverter = new KoZoomHandler();
     KisPrescaledProjection projection;
 
-    KisCoordinatesConverter converter(viewConverter);
+    KisCoordinatesConverter converter;
     converter.setImage(image);
     projection.setCoordinatesConverter(&converter);
-
     projection.setImage(image);
 
     // Emulate "Use same aspect as pixels"
-    viewConverter->setResolution(image->xRes(), image->yRes());
+    converter.setResolution(image->xRes(), image->yRes());
 
-    viewConverter->setZoom(1.0);
+    converter.setZoom(1.0);
 
     KisUpdateInfoSP info = projection.updateCache(image->bounds());
     projection.recalculateCache(info);
@@ -290,12 +284,9 @@ void KisPrescaledProjectionTest::testScaling()
 
     image->addNode(layer, image->rootLayer(), 0);
 
-
-    KoZoomHandler *zoomHandler = new KoZoomHandler();
-    zoomHandler->setResolution(100, 100);
-    zoomHandler->setZoom(1.);
-
-    KisCoordinatesConverter converter(zoomHandler);
+    KisCoordinatesConverter converter;
+    converter.setResolution(100, 100);
+    converter.setZoom(1.);
     converter.setImage(image);
     converter.setCanvasWidgetSize(QSize(100,100));
 

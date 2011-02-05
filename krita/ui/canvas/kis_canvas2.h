@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2011       Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +31,7 @@
 #include <KoPointerEvent.h>
 
 #include "kis_ui_types.h"
+#include "kis_coordinates_converter.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -66,7 +68,7 @@ public:
      * @param viewConverter the viewconverter for converting between
      *                       window and document coordinates.
      */
-    KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc);
+    KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2* view, KoShapeControllerBase* sc);
 
     virtual ~KisCanvas2();
 
@@ -173,7 +175,7 @@ public slots:
 
     /// slot for setting the mirroring
     void mirrorCanvas(bool mirror);
-    void rotateCanvas(qreal angle);
+    void rotateCanvas(qreal angle, bool updateOffset=true);
     void rotateCanvasRight15();
     void rotateCanvasLeft15();
     void resetCanvasTransformations();

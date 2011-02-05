@@ -35,7 +35,6 @@ public:
     bool eventFilter(QObject *watched, QEvent *event);
 
 protected:
-    void scrollToCenterPoint(const QPoint &center);
     void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
 
 private:

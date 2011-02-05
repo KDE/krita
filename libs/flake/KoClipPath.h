@@ -23,6 +23,7 @@
 #include "flake_export.h"
 #include <QtCore/QList>
 #include <QtCore/QSharedData>
+#include <QtCore/qnamespace.h>
 
 class KoShape;
 class KoPathShape;
@@ -31,6 +32,7 @@ class QPainter;
 class QTransform;
 class QPainterPath;
 
+/// Shared clip path data
 class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
@@ -44,6 +46,7 @@ private:
     bool m_deleteClipShapes;
 };
 
+/// Clip path used to clip shapes
 class FLAKE_EXPORT KoClipPath
 {
 public:
@@ -55,6 +58,12 @@ public:
     KoClipPath(KoClipData * clipData, const QTransform & transformToShape);
 
     ~KoClipPath();
+
+    /// Sets the clip rule to be used for the clip path
+    void setClipRule(Qt::FillRule clipRule);
+
+    /// Returns the current clip rule
+    Qt::FillRule clipRule() const;
 
     /// Applies the clipping to the given painter
     static void applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter);

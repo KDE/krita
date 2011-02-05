@@ -99,6 +99,16 @@ KoClipPath::~KoClipPath()
     delete d;
 }
 
+void KoClipPath::setClipRule(Qt::FillRule clipRule)
+{
+    d->clipPath.setFillRule(clipRule);
+}
+
+Qt::FillRule KoClipPath::clipRule() const
+{
+    return d->clipPath.fillRule();
+}
+
 void KoClipPath::applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter)
 {
     QPainterPath clipPath;

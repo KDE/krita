@@ -289,6 +289,12 @@ void KisStrokeBenchmark::dynabrushRL()
     benchmarkRandomLines(presetFileName);
 }
 
+void KisStrokeBenchmark::experimental()
+{
+    QString presetFileName = "experimental.kpp";
+    benchmarkStroke(presetFileName);
+}
+
 /*
 void KisStrokeBenchmark::predefinedBrush()
 {
@@ -372,7 +378,12 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
     qDebug() << "preset : " << presetFileName;
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    preset->load();
+    bool loadedOk = preset->load();
+    if (!loadedOk){
+        qDebug() << "The preset was not loaded correctly. Done.";
+        return;
+    }
+
     preset->settings()->setNode(m_layer);
     m_painter->setPaintOpPreset(preset, m_image);
 
@@ -407,7 +418,6 @@ void KisStrokeBenchmark::benchmarkRand()
         }
     }
 }
-
 
 
 QTEST_KDEMAIN(KisStrokeBenchmark, GUI)

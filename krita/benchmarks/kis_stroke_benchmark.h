@@ -39,13 +39,13 @@ private:
     KoColor m_color;
     KisImageSP m_image;
     KisLayerSP m_layer;
-    
+
     KisPainter * m_painter;
 
     KisPaintInformation m_pi1;
     KisPaintInformation m_pi2;
     KisPaintInformation m_pi3;
-    
+
     QPointF m_c1;
     QPointF m_c2;
 
@@ -54,69 +54,71 @@ private:
 
     void initCurvePoints(int width, int height);
     void initLines(int width, int height);
-    
+
     QString m_dataPath;
     QString m_outputPath;
-    
+
     private:
         inline void benchmarkRandomLines(QString presetFileName);
         inline void benchmarkStroke(QString presetFileName);
         inline void benchmarkLine(QString presetFileName);
-    
+
 private slots:
     void initTestCase();
     void cleanupTestCase();
-    
+
     void init();
 
     // Autobrush
     void pixelbrush300px();
     void pixelbrush300pxRL();
-    
+
     // Soft brush benchmarks
     void softbrushDefault30();
     void softbrushDefault30RL();
     void softbrushFullFeatures30();
     void softbrushFullFeatures30RL();
-    
+
     void softbrushSoftness();
     void softbrushOpacity();
-    
+
     // Hairy brush benchmarks
     void hairy30pxDefault();
     void hairy30pxDefaultRL();
-    
+
     void hairy30pxAntiAlias();
     void hairy30pxAntiAliasRL();
 
     void hairy30px30density();
     void hairy30px30densityRL();
-    
+
     void hairy30InkDepletion();
     void hairy30InkDepletionRL();
-    
+
     // Spray brush benchmark1
     void spray30px21particles();
     void spray30px21particlesRL();
-    
+
     void sprayPencil();
     void sprayPencilRL();
-    
+
     void sprayPixels();
     void sprayPixelsRL();
-    
+
     void sprayTexture();
     void sprayTextureRL();
-    
+
     void dynabrush();
     void dynabrushRL();
-    
+
     void deformBrush();
     void deformBrushRL();
-/*    
+
+    void experimental();
+/*
     void predefinedBrush();
     void predefinedBrushRL();
-*/   
+*/
     void benchmarkRand();
     void benchmarkRand48();
 };

@@ -28,21 +28,20 @@
 
 struct KisCoordinatesConverter::Private {
     Private():
-        isXAxisMirrored(false), isYAxisMirrored(false) { }
+        isXAxisMirrored(false), isYAxisMirrored(false), rotationAngle(0.0) { }
     
     KisImageWSP image;
     
     bool isXAxisMirrored;
     bool isYAxisMirrored;
+    qreal rotationAngle;
     QSizeF canvasWidgetSize;
     QPointF documentOffset;
     QPointF documentOrigin;
     
-    QTransform postprocessingTransform;
+    QTransform flakeToWidget;
     QTransform imageToDocument;
     QTransform documentToFlake;
-    QTransform flakeToPostprocessedFlake;
-    QTransform postprocessedFlakeToWidget;
     QTransform widgetToViewport;
 };
 
@@ -54,19 +53,8 @@ void KisCoordinatesConverter::recalculateTransformations() const
                                                  1 / m_d->image->yRes());
 
     qreal zoomX, zoomY;
-    zoom(&zoomX, &zoomY);
+    KoZoomHandler::zoom(&zoomX, &zoomY);
     m_d->documentToFlake = QTransform::fromScale(zoomX, zoomY);
-
-    // Make new coordinate system not go to negative values
-    QSizeF  flakeSize = imageSizeInFlakePixels();
-    QPointF shift     = -m_d->postprocessingTransform.mapRect(QRectF(QPointF(0,0), flakeSize)).topLeft();
-
-    m_d->flakeToPostprocessedFlake =
-        m_d->postprocessingTransform * QTransform::fromTranslate(shift.x(), shift.y());
-
-    m_d->postprocessedFlakeToWidget =
-        QTransform::fromTranslate(-m_d->documentOffset.x() + m_d->documentOrigin.x(),
-                                  -m_d->documentOffset.y() + m_d->documentOrigin.y());
 
     QRectF irect = imageRectInWidgetPixels();
     QRectF wrect = QRectF(QPoint(0,0), m_d->canvasWidgetSize);
@@ -77,15 +65,6 @@ void KisCoordinatesConverter::recalculateTransformations() const
     QPointF    offset            = canvasBounds.topLeft();
 
     m_d->widgetToViewport = reversedTransform * QTransform::fromTranslate(-offset.x(), -offset.y());
-
-    // qDebug() << "***********";
-    // qDebug() << ppVar(m_d->flakeToPostprocessedFlake);
-    // qDebug() << ppVar(m_d->postprocessedFlakeToWidget);
-    // qDebug() << ppVar(m_d->widgetToViewport);
-    // qDebug() << ppVar(documentOrigin());
-    // qDebug() << ppVar(irect) << ppVar(wrect) << ppVar(rrect);
-    // qDebug() << ppVar(canvasBounds);
-    // qDebug() << ppVar(m_d->widgetToViewport.mapRect(irect));
 }
 
 
@@ -109,15 +88,21 @@ void KisCoordinatesConverter::setImage(KisImageWSP image)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::setDocumentOrigin(const QPoint &origin)
+void KisCoordinatesConverter::setDocumentOrigin(const QPoint& origin)
 {
+    QPointF diff = origin - m_d->documentOrigin;
+    
     m_d->documentOrigin = origin;
+    m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::setDocumentOffset(const QPoint &offset)
+void KisCoordinatesConverter::setDocumentOffset(const QPoint& offset)
 {
+    QPointF diff = m_d->documentOffset - offset;
+    
     m_d->documentOffset = offset;
+    m_d->flakeToWidget *= QTransform::fromTranslate(diff.x(), diff.y());
     recalculateTransformations();
 }
 
@@ -137,25 +122,39 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::rotate(qreal angle)
+void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
 {
     QTransform rot;
     rot.rotate(angle);
     
-    QPointF center = widgetCenterPoint();
-    
-    m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
-    m_d->postprocessingTransform *= rot;
-    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(), center.y());
+    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
+    m_d->flakeToWidget *= rot;
+    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
+    m_d->rotationAngle += angle;
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::mirror(bool mirrorXAxis, bool mirrorYAxis)
+void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
 {
-    qreal scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
-    qreal scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
+    qreal      scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
+    qreal      scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
+    QTransform mirror = QTransform::fromScale(scaleX, scaleY);
     
-    m_d->postprocessingTransform.scale(scaleX, scaleY);
+    QTransform rot;
+    rot.rotate(m_d->rotationAngle);
+    
+    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
+    
+    if(keepOrientation)
+        m_d->flakeToWidget *= rot.inverted();
+    
+    m_d->flakeToWidget *= mirror;
+    
+    if(keepOrientation)
+        m_d->flakeToWidget *= rot;
+    
+    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(),center.y());
+    
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
     recalculateTransformations();
@@ -163,12 +162,20 @@ void KisCoordinatesConverter::mirror(bool mirrorXAxis, bool mirrorYAxis)
 
 void KisCoordinatesConverter::resetTransformations()
 {
-    m_d->postprocessingTransform.reset();
+    QPointF widgetCenter = widgetCenterPoint();
+    
+    QTransform rot;
+    rot.rotate(-m_d->rotationAngle);
+    
+    m_d->flakeToWidget *= QTransform::fromTranslate(-widgetCenter.x(), -widgetCenter.y());
+    m_d->flakeToWidget *= rot;
+    m_d->flakeToWidget *= QTransform::fromTranslate(widgetCenter.x(), widgetCenter.y());
+    m_d->rotationAngle = 0.0;
     recalculateTransformations();
 }
 
 QTransform KisCoordinatesConverter::imageToWidgetTransform() const{
-    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToWidget;
 }
 
 QTransform KisCoordinatesConverter::imageToDocumentTransform() const {
@@ -176,12 +183,12 @@ QTransform KisCoordinatesConverter::imageToDocumentTransform() const {
 }
 
 QTransform KisCoordinatesConverter::flakeToWidgetTransform() const {
-    return m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+    return m_d->flakeToWidget;
 }
 
 QTransform KisCoordinatesConverter::documentToWidgetTransform() const
 {
-    return m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget;
+    return m_d->documentToFlake * m_d->flakeToWidget;
 }
 
 QTransform KisCoordinatesConverter::viewportToWidgetTransform() const {
@@ -189,7 +196,7 @@ QTransform KisCoordinatesConverter::viewportToWidgetTransform() const {
 }
 
 QTransform KisCoordinatesConverter::imageToViewportTransform() const {
-    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToPostprocessedFlake * m_d->postprocessedFlakeToWidget * m_d->widgetToViewport;
+    return m_d->imageToDocument * m_d->documentToFlake * m_d->flakeToWidget * m_d->widgetToViewport;
 }
 
 void KisCoordinatesConverter::getQPainterCheckersInfo(QTransform *transform,
@@ -270,11 +277,14 @@ QRectF KisCoordinatesConverter::widgetRectInFlakePixels() const
     return widgetToFlake(QRectF(QPoint(0,0), m_d->canvasWidgetSize));
 }
 
-QPoint KisCoordinatesConverter::shiftFromFlakeCenterPoint(const QPointF &pt) const
+QPoint KisCoordinatesConverter::updateOffsetAfterTransform() const
 {
-    QPointF newWidgetCenter = flakeToWidgetTransform().map(pt);
-    QPointF oldWidgetCenter = QPointF(m_d->canvasWidgetSize.width() / 2, m_d->canvasWidgetSize.height() / 2);
-    return (newWidgetCenter - oldWidgetCenter).toPoint();
+    QPointF oldOffset = m_d->documentOrigin + m_d->documentOffset;
+    QPointF newOffset = -imageRectInWidgetPixels().topLeft();
+    QPointF shift     = newOffset - oldOffset;
+    
+    m_d->documentOffset = newOffset;
+    return shift.toPoint();
 }
 
 QPointF KisCoordinatesConverter::flakeCenterPoint() const
@@ -293,7 +303,7 @@ void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const
 {
     // get the x and y zoom level of the canvas
     qreal zoomX, zoomY;
-    zoom(&zoomX, &zoomY);
+    KoZoomHandler::zoom(&zoomX, &zoomY);
 
     // Get the KisImage resolution
     qreal resX = m_d->image->xRes();

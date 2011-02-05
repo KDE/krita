@@ -179,24 +179,20 @@ void KisCanvas2::pan(QPoint shift)
 
 void KisCanvas2::mirrorCanvas(bool enable)
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-    m_d->coordinatesConverter->mirror(false, enable);
+    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
-void KisCanvas2::rotateCanvas(qreal angle)
+void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-    
-    m_d->coordinatesConverter->rotate(angle);
+    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    
+    if(updateOffset)
+        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
+    else
+        updateCanvas();
 }
 
 void KisCanvas2::rotateCanvasRight15()
@@ -211,13 +207,9 @@ void KisCanvas2::rotateCanvasLeft15()
 
 void KisCanvas2::resetCanvasTransformations()
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
     m_d->coordinatesConverter->resetTransformations();
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)

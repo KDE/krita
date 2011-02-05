@@ -60,8 +60,8 @@ public:
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
     
-    void rotate(qreal angle);
-    void mirror(bool mirrorXAxis, bool mirrorYAxis);
+    void rotate(QPointF center, qreal angle);
+    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
     void resetTransformations();
     
     virtual void setZoom(qreal zoom);
@@ -118,7 +118,7 @@ public:
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
 
-    QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
+    QPoint updateOffsetAfterTransform() const;
     QPointF flakeCenterPoint() const;
     QPointF widgetCenterPoint() const;
 

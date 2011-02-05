@@ -39,6 +39,7 @@
 #include "KoFilterEffectRenderContext.h"
 #include "KoShapeBackground.h"
 #include <KoRTree.h>
+#include "KoClipPath.h"
 
 #include <QPainter>
 #include <QTimer>
@@ -307,8 +308,8 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
             if (!d->shapes.contains(parent))
                 break;
             if (parent->filterEffectStack() && !parent->filterEffectStack()->isEmpty()) {
-                    addShapeToList = false;
-                    break;
+                addShapeToList = false;
+                break;
             }
             parent = parent->parent();
         }
@@ -326,7 +327,13 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
             continue;
 
         painter.save();
+
+        // apply shape clipping
+        KoClipPath::applyClipping(shape, painter, converter);
+
+        // let the painting strategy paint the shape
         d->strategy->paint(shape, painter, converter, forPrint);
+        
         painter.restore();
     }
 

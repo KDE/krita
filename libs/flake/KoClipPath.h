@@ -20,19 +20,22 @@
 #ifndef KOCLIPPATH_H
 #define KOCLIPPATH_H
 
+#include "flake_export.h"
 #include <QtCore/QList>
 #include <QtCore/QSharedData>
 
+class KoShape;
 class KoPathShape;
+class KoViewConverter;
 class QPainter;
 class QTransform;
-class KoViewConverter;
+class QPainterPath;
 
-class KoClipData : public QSharedData
+class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
-    KoClipData( KoPathShape * clipPathShape );
-    KoClipData( const QList<KoPathShape*> & clipPathShapes );
+    KoClipData(KoPathShape * clipPathShape);
+    KoClipData(const QList<KoPathShape*> & clipPathShapes);
     ~KoClipData();
     QList<KoPathShape*> clipPathShapes() const;
     void removeClipShapesOwnership();
@@ -41,16 +44,16 @@ private:
     bool m_deleteClipShapes;
 };
 
-class KoClipPath
+class FLAKE_EXPORT KoClipPath
 {
 public:
     /// Create a new shape clipping using the given path shape
-    KoClipPath( KoClipData * clipData, const QTransform & shapeMatrix );
+    KoClipPath(KoClipData * clipData, const QTransform & shapeMatrix);
 
     ~KoClipPath();
 
     /// Applies the clipping to the given painter
-    void applyClipping( QPainter & painter, const KoViewConverter &converter );
+    static void applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter);
 
 private:
     class Private;

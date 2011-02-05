@@ -25,24 +25,24 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QPainter>
 
-KoClipData::KoClipData( KoPathShape * clipPathShape )
+KoClipData::KoClipData(KoPathShape * clipPathShape)
     : m_deleteClipShapes(true)
 {
-    Q_ASSERT( clipPathShape );
-    m_clipPathShapes.append( clipPathShape );
+    Q_ASSERT(clipPathShape);
+    m_clipPathShapes.append(clipPathShape);
 }
 
-KoClipData::KoClipData( const QList<KoPathShape*> & clipPathShapes )
+KoClipData::KoClipData(const QList<KoPathShape*> & clipPathShapes)
     : m_deleteClipShapes(true)
 {
-    Q_ASSERT( clipPathShapes.count() );
+    Q_ASSERT(clipPathShapes.count());
     m_clipPathShapes = clipPathShapes;
 }
 
 KoClipData::~KoClipData()
 {
-    if( m_deleteClipShapes )
-        qDeleteAll( m_clipPathShapes );
+    if(m_deleteClipShapes)
+        qDeleteAll(m_clipPathShapes);
 }
 
 QList<KoPathShape*> KoClipData::clipPathShapes() const
@@ -58,14 +58,14 @@ void KoClipData::removeClipShapesOwnership()
 class KoClipPath::Private
 {
 public:
-    Private( KoClipData * data )
-        : clipData( data )
+    Private(KoClipData * data)
+        : clipData(data)
     {}
     ~Private()
     {
     }
 
-    void compileClipPath( const QTransform &shapeMatrix )
+    void compileClipPath(const QTransform &shapeMatrix)
     {
         QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
         uint pathCount = clipShapes.count();
@@ -90,7 +90,7 @@ public:
     QTransform shapeMatrix;
 };
 
-KoClipPath::KoClipPath( KoClipData * clipData, const QTransform & shapeMatrix )
+KoClipPath::KoClipPath(KoClipData * clipData, const QTransform & shapeMatrix)
     : d( new Private(clipData) )
 {
     d->compileClipPath( shapeMatrix );
@@ -101,17 +101,20 @@ KoClipPath::~KoClipPath()
     delete d;
 }
 
-void KoClipPath::applyClipping( QPainter & painter, const KoViewConverter &converter )
+void KoClipPath::applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter)
 {
-    if( ! painter.hasClipping() )
-        return;
-    if( d->clipPath.isEmpty() )
-        return;
+    QPainterPath clipPath;
+    while(shape) {
+        if (shape->clipPath())
+            clipPath |= shape->absoluteTransformation(0).map(shape->clipPath()->d->clipPath);
+        shape = shape->parent();
+    }
 
-    QTransform viewMatrix;
-    double zoomX, zoomY;
-    converter.zoom(&zoomX, &zoomY);
-    viewMatrix.scale(zoomX, zoomY);
-
-    painter.setClipPath( viewMatrix.map( d->clipPath ), Qt::IntersectClip );
+    if (!clipPath.isEmpty()) {
+        QTransform viewMatrix;
+        double zoomX, zoomY;
+        converter.zoom(&zoomX, &zoomY);
+        viewMatrix.scale(zoomX, zoomY);
+        painter.setClipPath(viewMatrix.map(clipPath), Qt::IntersectClip);
+    }
 }

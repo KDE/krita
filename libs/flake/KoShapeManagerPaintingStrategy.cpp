@@ -23,7 +23,6 @@
 
 #include "KoShape.h"
 #include "KoShapeManager.h"
-#include "KoClipPath.h"
 #include <QPainter>
 
 class KoShapeManagerPaintingStrategy::Private
@@ -51,11 +50,6 @@ void KoShapeManagerPaintingStrategy::paint(KoShape * shape, QPainter &painter, c
     if (d->shapeManager) {
         painter.save();
         painter.setTransform(shape->absoluteTransformation(&converter) * painter.transform());
-
-        // apply clipping if clip path is set
-        if (shape->clipPath())
-            shape->clipPath()->applyClipping( painter, converter );
-
         d->shapeManager->paintShape(shape, painter, converter, forPrint);
         painter.restore();  // for the matrix
     }

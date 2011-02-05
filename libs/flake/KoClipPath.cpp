@@ -61,39 +61,37 @@ public:
     Private(KoClipData * data)
         : clipData(data)
     {}
+    
     ~Private()
     {
     }
 
-    void compileClipPath(const QTransform &shapeMatrix)
+    void compileClipPath(const QTransform &transformToShape)
     {
         QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
-        uint pathCount = clipShapes.count();
-        if( ! pathCount )
+        if(!clipShapes.count())
             return;
 
-        QTransform invShapeMatrix = shapeMatrix.inverted();
-        foreach( KoPathShape * path, clipShapes )
-        {
-            if( ! path )
+        foreach(KoPathShape * path, clipShapes) {
+            if(!path)
                 continue;
-            QTransform m = invShapeMatrix * path->absoluteTransformation(0);
-            if( clipPath.isEmpty() )
-                clipPath = m.map( path->outline() );
+            // map clip path to shape coordinates of clipped shape
+            QTransform m = path->absoluteTransformation(0) * transformToShape;
+            if (clipPath.isEmpty())
+                clipPath = m.map(path->outline());
             else
-                clipPath = clipPath.united( m.map( path->outline() ) );
+                clipPath |= m.map(path->outline());
         }
     }
 
     QExplicitlySharedDataPointer<KoClipData> clipData;
     QPainterPath clipPath;
-    QTransform shapeMatrix;
 };
 
-KoClipPath::KoClipPath(KoClipData * clipData, const QTransform & shapeMatrix)
+KoClipPath::KoClipPath(KoClipData * clipData, const QTransform & transformToShape)
     : d( new Private(clipData) )
 {
-    d->compileClipPath( shapeMatrix );
+    d->compileClipPath(transformToShape);
 }
 
 KoClipPath::~KoClipPath()

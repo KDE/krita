@@ -47,8 +47,12 @@ private:
 class FLAKE_EXPORT KoClipPath
 {
 public:
-    /// Create a new shape clipping using the given path shape
-    KoClipPath(KoClipData * clipData, const QTransform & shapeMatrix);
+    /**
+     * Create a new shape clipping using the given path shape
+     * @param clipData shared clipping data conatining the clip paths
+     * @param transformToShape transformation matrix to transform clipping paths to shape coordinates
+     */
+    KoClipPath(KoClipData * clipData, const QTransform & transformToShape);
 
     ~KoClipPath();
 

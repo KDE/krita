@@ -62,6 +62,7 @@ private:
         inline void benchmarkRandomLines(QString presetFileName);
         inline void benchmarkStroke(QString presetFileName);
         inline void benchmarkLine(QString presetFileName);
+        inline void benchmarkCircle(QString presetFileName);
 
 private slots:
     void initTestCase();
@@ -76,6 +77,7 @@ private slots:
     // Soft brush benchmarks
     void softbrushDefault30();
     void softbrushDefault30RL();
+    void softbrushCircle30();
     void softbrushFullFeatures30();
     void softbrushFullFeatures30RL();
 
@@ -115,6 +117,7 @@ private slots:
     void deformBrushRL();
 
     void experimental();
+    void experimentalCircle();
 /*
     void predefinedBrush();
     void predefinedBrushRL();

@@ -45,7 +45,7 @@ void KoTosContainerModel::add(KoShape *shape)
 
 void KoTosContainerModel::remove(KoShape *shape)
 {
-    Q_ASSERT(shape == m_textShape);
+    Q_ASSERT(m_textShape == 0 || shape == m_textShape);
     if (shape == m_textShape) {
         m_textShape = 0;
     }
@@ -91,7 +91,9 @@ int KoTosContainerModel::count() const
 QList<KoShape*> KoTosContainerModel::shapes() const
 {
     QList<KoShape*> shapes;
-    shapes << m_textShape;
+    if (m_textShape) {
+        shapes << m_textShape;
+    }
     return shapes;
 }
 

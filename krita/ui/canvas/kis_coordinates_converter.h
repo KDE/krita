@@ -59,10 +59,11 @@ public:
 
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
+    qreal rotationAngle() const;
     
     void rotate(QPointF center, qreal angle);
     void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=false);
-    void resetTransformations();
+    void resetRotation(QPointF center);
     
     virtual void setZoom(qreal zoom);
     

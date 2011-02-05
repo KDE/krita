@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <cmath>
+
 #include "kis_coordinates_converter.h"
 
 #include <QTransform>
@@ -116,6 +118,11 @@ QPoint KisCoordinatesConverter::documentOffset() const
     return QPoint(int(m_d->documentOffset.x()), int(m_d->documentOffset.y()));
 }
 
+qreal KisCoordinatesConverter::rotationAngle() const
+{
+    return m_d->rotationAngle;
+}
+
 void KisCoordinatesConverter::setZoom(qreal zoom)
 {
     KoZoomHandler::setZoom(zoom);
@@ -130,15 +137,17 @@ void KisCoordinatesConverter::rotate(QPointF center, qreal angle)
     m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(),-center.y());
     m_d->flakeToWidget *= rot;
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
-    m_d->rotationAngle += angle;
+    m_d->rotationAngle = std::fmod(m_d->rotationAngle + angle, 360.0);
     recalculateTransformations();
 }
 
 void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation)
 {
-    qreal      scaleX = (m_d->isYAxisMirrored ^ mirrorYAxis) ? -1.0 : 1.0;
-    qreal      scaleY = (m_d->isXAxisMirrored ^ mirrorXAxis) ? -1.0 : 1.0;
-    QTransform mirror = QTransform::fromScale(scaleX, scaleY);
+    bool       doXMirroring = m_d->isXAxisMirrored ^ mirrorXAxis;
+    bool       doYMirroring = m_d->isYAxisMirrored ^ mirrorYAxis;
+    qreal      scaleX       = doYMirroring ? -1.0 : 1.0;
+    qreal      scaleY       = doXMirroring ? -1.0 : 1.0;
+    QTransform mirror       = QTransform::fromScale(scaleX, scaleY);
     
     QTransform rot;
     rot.rotate(m_d->rotationAngle);
@@ -155,21 +164,22 @@ void KisCoordinatesConverter::mirror(QPointF center, bool mirrorXAxis, bool mirr
     
     m_d->flakeToWidget *= QTransform::fromTranslate(center.x(),center.y());
     
+    if(!keepOrientation && (doXMirroring ^ doYMirroring))
+        m_d->rotationAngle = -m_d->rotationAngle;
+    
     m_d->isXAxisMirrored = mirrorXAxis;
     m_d->isYAxisMirrored = mirrorYAxis;
     recalculateTransformations();
 }
 
-void KisCoordinatesConverter::resetTransformations()
+void KisCoordinatesConverter::resetRotation(QPointF center)
 {
-    QPointF widgetCenter = widgetCenterPoint();
-    
     QTransform rot;
     rot.rotate(-m_d->rotationAngle);
     
-    m_d->flakeToWidget *= QTransform::fromTranslate(-widgetCenter.x(), -widgetCenter.y());
+    m_d->flakeToWidget *= QTransform::fromTranslate(-center.x(), -center.y());
     m_d->flakeToWidget *= rot;
-    m_d->flakeToWidget *= QTransform::fromTranslate(widgetCenter.x(), widgetCenter.y());
+    m_d->flakeToWidget *= QTransform::fromTranslate(center.x(), center.y());
     m_d->rotationAngle = 0.0;
     recalculateTransformations();
 }
@@ -229,7 +239,7 @@ void KisCoordinatesConverter::getOpenGLCheckersInfo(QTransform *textureTransform
         *textureRect = QRectF(0, 0, viewportRect.width(),viewportRect.height());
     }
     else {
-        *textureTransform = m_d->widgetToViewport.inverted();
+        *textureTransform = viewportToWidgetTransform();
         *textureRect = viewportRect;
     }
 

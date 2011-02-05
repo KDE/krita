@@ -207,7 +207,7 @@ void KisCanvas2::rotateCanvasLeft15()
 
 void KisCanvas2::resetCanvasTransformations()
 {
-    m_d->coordinatesConverter->resetTransformations();
+    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     notifyZoomChanged();
     pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }

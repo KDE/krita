@@ -34,11 +34,11 @@ struct KisCoordinatesConverter::Private {
     
     bool isXAxisMirrored;
     bool isYAxisMirrored;
-    QSize canvasWidgetSize;
-    QPoint documentOffset;
-    QPoint documentOrigin;
+    QSizeF canvasWidgetSize;
+    QPointF documentOffset;
+    QPointF documentOrigin;
+    
     QTransform postprocessingTransform;
-
     QTransform imageToDocument;
     QTransform documentToFlake;
     QTransform flakeToPostprocessedFlake;
@@ -123,12 +123,12 @@ void KisCoordinatesConverter::setDocumentOffset(const QPoint &offset)
 
 QPoint KisCoordinatesConverter::documentOrigin() const
 {
-    return m_d->documentOrigin;
+    return QPoint(int(m_d->documentOrigin.x()), int(m_d->documentOrigin.y()));
 }
 
 QPoint KisCoordinatesConverter::documentOffset() const
 {
-    return m_d->documentOffset;
+    return QPoint(int(m_d->documentOffset.x()), int(m_d->documentOffset.y()));
 }
 
 void KisCoordinatesConverter::setZoom(qreal zoom)
@@ -139,7 +139,14 @@ void KisCoordinatesConverter::setZoom(qreal zoom)
 
 void KisCoordinatesConverter::rotate(qreal angle)
 {
-    m_d->postprocessingTransform.rotate(angle);
+    QTransform rot;
+    rot.rotate(angle);
+    
+    QPointF center = widgetCenterPoint();
+    
+    m_d->postprocessingTransform *= QTransform::fromTranslate(-center.x(),-center.y());
+    m_d->postprocessingTransform *= rot;
+    m_d->postprocessingTransform *= QTransform::fromTranslate(center.x(), center.y());
     recalculateTransformations();
 }
 
@@ -275,6 +282,11 @@ QPointF KisCoordinatesConverter::flakeCenterPoint() const
     QRectF widgetRect = widgetRectInFlakePixels();
     return QPointF(widgetRect.left() + widgetRect.width() / 2,
                    widgetRect.top() + widgetRect.height() / 2);
+}
+
+QPointF KisCoordinatesConverter::widgetCenterPoint() const
+{
+    return QPointF(m_d->canvasWidgetSize.width() / 2.0, m_d->canvasWidgetSize.height() / 2.0);
 }
 
 void KisCoordinatesConverter::imageScale(qreal *scaleX, qreal *scaleY) const

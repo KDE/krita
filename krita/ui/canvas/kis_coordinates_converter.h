@@ -120,6 +120,7 @@ public:
 
     QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
     QPointF flakeCenterPoint() const;
+    QPointF widgetCenterPoint() const;
 
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 

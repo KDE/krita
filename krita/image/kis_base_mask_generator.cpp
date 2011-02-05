@@ -58,10 +58,10 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);
     //e.setAttribute("radius", d->radius);
-    e.setAttribute("diameter", d->diameter);
-    e.setAttribute("ratio", d->ratio);
-    e.setAttribute("hfade", horizontalFade());
-    e.setAttribute("vfade", verticalFade());
+    e.setAttribute("diameter", QString::number(d->diameter));
+    e.setAttribute("ratio", QString::number(d->ratio));
+    e.setAttribute("hfade", QString::number(horizontalFade()));
+    e.setAttribute("vfade", QString::number(verticalFade()));
     e.setAttribute("spikes", d->spikes);
     e.setAttribute("id", id());
 }

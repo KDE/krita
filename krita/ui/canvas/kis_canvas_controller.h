@@ -31,8 +31,12 @@ public:
     KisCanvasController(QWidget *parent);
     ~KisCanvasController();
 
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    void setCanvas(KoCanvasBase *canvas);
+    bool eventFilter(QObject *watched, QEvent *event);
+
+protected:
+    void scrollToCenterPoint(const QPoint &center);
+    void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
 
 private:
     struct Private;

@@ -135,8 +135,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
 void KisZoomManager::mousePositionChanged(const QPoint &pos)
 {
     // "widget-to-postprocessed-flake"
-    QRectF  imageBounds = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    QPointF viewPos     = pos - m_canvasController->canvas()->documentOrigin() - imageBounds.topLeft();
+    QPoint canvasOffset(m_canvasController->canvasOffsetX(), m_canvasController->canvasOffsetY());
+    QPoint viewPos = pos - m_canvasController->canvas()->documentOrigin() - canvasOffset;
 
     m_horizontalRuler->updateMouseCoordinate(viewPos.x());
     m_verticalRuler->updateMouseCoordinate(viewPos.y());
@@ -164,7 +164,7 @@ void KisZoomManager::slotZoomChanged(KoZoomMode::Mode mode, qreal zoom)
     KisImageWSP image = m_view->image();
 
     m_view->canvasBase()->notifyZoomChanged();
-    m_canvasController->pan(m_view->canvasBase()->coordinatesConverter()->updateOffsetAfterTransform());
+    m_view->canvas()->update();
 }
 
 void KisZoomManager::slotScrollAreaSizeChanged()
@@ -189,10 +189,8 @@ void KisZoomManager::changeAspectMode(bool aspectMode)
 
 void KisZoomManager::pageOffsetChanged()
 {
-    QRectF imageBounds = m_view->canvasBase()->coordinatesConverter()->imageRectInWidgetPixels();
-    
-    m_horizontalRuler->setOffset(imageBounds.topLeft().x());
-    m_verticalRuler->setOffset(imageBounds.topLeft().y());
+    m_horizontalRuler->setOffset(m_canvasController->canvasOffsetX() + m_view->canvasBase()->documentOrigin().x());
+    m_verticalRuler->setOffset(m_canvasController->canvasOffsetY() + m_view->canvasBase()->documentOrigin().y());
 }
 
 

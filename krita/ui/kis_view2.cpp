@@ -176,7 +176,7 @@ public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KisCoordinatesConverter * viewConverter;
+    KoZoomHandler * viewConverter;
     KoCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -230,7 +230,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     }
 
     m_d->doc = doc;
-    m_d->viewConverter = new KisCoordinatesConverter();
+    m_d->viewConverter = new KoZoomHandler();
 
     KoCanvasControllerWidget *canvasController = new KisCanvasController(this);
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);

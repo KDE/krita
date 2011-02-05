@@ -1,6 +1,5 @@
 /*
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,38 +19,64 @@
 #ifndef KIS_COORDINATES_CONVERTER_H
 #define KIS_COORDINATES_CONVERTER_H
 
-#include <QTransform>
-#include <KoZoomHandler.h>
-
 #include "krita_export.h"
 #include "kis_types.h"
 
-namespace _Private
-{
-    template<class T> struct Traits
-    {
-        typedef T Result;
-        static T map(const QTransform& transform, const T& obj)  { return transform.map(obj); }
-    };
 
-    template<> struct Traits<QRectF>
-    {
-        typedef QRectF Result;
-        static QRectF map(const QTransform& transform, const QRectF& rc)  { return transform.mapRect(rc); }
-    };
+class QSize;
+class QSizeF;
+class QRectF;
+class QPoint;
+class QPolygonF;
+class QTransform;
+class KoViewConverter;
 
-    template<> struct Traits<QRect>:    public Traits<QRectF>    { };
-    template<> struct Traits<QPoint>:   public Traits<QPointF>   { };
-    template<> struct Traits<QPolygon>: public Traits<QPolygonF> { };
-    template<> struct Traits<QLine>:    public Traits<QLineF>    { };
-}
 
-class KRITAUI_EXPORT KisCoordinatesConverter: public KoZoomHandler
+/**
+ * Automatic generation of QRectF and QPointF transformation methods.
+ * They will use pre-generated QTransform objects to perform the change.
+ */
+#define DEFINE_RECT_METHOD(name,transform)                              \
+    QRectF KisCoordinatesConverter::name(const QRectF &rc) const        \
+    {                                                                   \
+        return (transform).mapRect(rc);                                 \
+    }
+
+#define DEFINE_POINT_METHOD(name,transform)                             \
+    QPointF KisCoordinatesConverter::name(const QPointF &pt) const      \
+    {                                                                   \
+        return (transform).map(pt);                                     \
+    }
+
+#define DECLARE_RECT_METHOD(name)               \
+    QRectF name(const QRectF &rc) const
+
+#define DECLARE_POINT_METHOD(name)              \
+    QPointF name(const QPointF &rc) const
+
+
+#define DEFINE_TRANSFORM_METHODS(name,invertedName,transform)         \
+    DEFINE_RECT_METHOD(name, transform);                              \
+    DEFINE_RECT_METHOD(invertedName, (transform).inverted());         \
+    DEFINE_POINT_METHOD(name, transform);                             \
+    DEFINE_POINT_METHOD(invertedName, (transform).inverted())         \
+
+#define DECLARE_TRANSFORM_METHODS(name,invertedName)                   \
+    DECLARE_RECT_METHOD(name);                                         \
+    DECLARE_RECT_METHOD(invertedName);                                 \
+    DECLARE_POINT_METHOD(name);                                        \
+    DECLARE_POINT_METHOD(invertedName)                                 \
+
+
+
+
+class KRITAUI_EXPORT KisCoordinatesConverter
 {
 public:
-    KisCoordinatesConverter();
+    KisCoordinatesConverter(KoViewConverter *viewConverter);
     ~KisCoordinatesConverter();
 
+    void notifyZoomChanged();
     void setCanvasWidgetSize(QSize size);
     void setImage(KisImageWSP image);
     void setDocumentOrigin(const QPoint &origin);
@@ -59,49 +84,22 @@ public:
 
     QPoint documentOrigin() const;
     QPoint documentOffset() const;
-    QPoint updateOffsetAfterTransform() const;
-    
-    void rotate(QPointF center, qreal angle);
-    void mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis, bool keepOrientation=true);
-    void resetRotation(QPointF center);
-    
-    virtual void setZoom(qreal zoom);
-    
-    template<class T> typename _Private::Traits<T>::Result
-    imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    viewportToImage(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    flakeToWidget(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToFlake(const T& obj) const { return _Private::Traits<T>::map(flakeToWidgetTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToViewport(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform().inverted(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    viewportToWidget(const T& obj) const { return _Private::Traits<T>::map(viewportToWidgetTransform(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    documentToWidget(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToDocument(const T& obj) const { return _Private::Traits<T>::map(documentToWidgetTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    imageToDocument(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    documentToImage(const T& obj) const { return _Private::Traits<T>::map(imageToDocumentTransform().inverted(), obj); }
-    
-    template<class T> typename _Private::Traits<T>::Result
-    imageToWidget(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform(), obj); }
-    template<class T> typename _Private::Traits<T>::Result
-    widgetToImage(const T& obj) const { return _Private::Traits<T>::map(imageToWidgetTransform().inverted(), obj); }
+
+    void setPostprocessingTransform(const QTransform &transform);
+    QTransform postprocessingTransform() const;
+
+
+    // Automatic methods generation. See a comment above.
+    DECLARE_TRANSFORM_METHODS(imageToViewport, viewportToImage);
+    DECLARE_TRANSFORM_METHODS(flakeToWidget, widgetToFlake);
+    DECLARE_TRANSFORM_METHODS(widgetToViewport, viewportToWidget);
+    DECLARE_TRANSFORM_METHODS(documentToWidget, widgetToDocument);
+    DECLARE_TRANSFORM_METHODS(imageToDocument, documentToImage);
+
 
     QTransform imageToWidgetTransform() const;
-    QTransform imageToDocumentTransform() const;
-    QTransform imageToViewportTransform() const;
-    QTransform flakeToWidgetTransform() const;
     QTransform documentToWidgetTransform() const;
+    QTransform flakeToWidgetTransform() const;
     QTransform viewportToWidgetTransform() const;
 
     void getQPainterCheckersInfo(QTransform *transform,
@@ -113,14 +111,14 @@ public:
                                QRectF *textureRect,
                                QRectF *modelRect) const;
 
-    QPointF imageCenterInWidgetPixel() const;
     QRectF imageRectInWidgetPixels() const;
     QRectF imageRectInViewportPixels() const;
     QSizeF imageSizeInFlakePixels() const;
     QRectF widgetRectInFlakePixels() const;
+
+    QPoint shiftFromFlakeCenterPoint(const QPointF &pt) const;
     QPointF flakeCenterPoint() const;
-    QPointF widgetCenterPoint() const;
-    
+
     void imageScale(qreal *scaleX, qreal *scaleY) const;
 
 private:

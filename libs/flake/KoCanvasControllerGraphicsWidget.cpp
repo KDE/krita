@@ -64,8 +64,9 @@ public:
     QRectF range; // scrolling range in pixels
 };
 
-KoCanvasControllerGraphicsWidget::KoCanvasControllerGraphicsWidget(QGraphicsItem * parent, Qt::WindowFlags wFlags)
+KoCanvasControllerGraphicsWidget::KoCanvasControllerGraphicsWidget(QGraphicsItem * parent, Qt::WindowFlags wFlags, KActionCollection * actionCollection)
     : QGraphicsWidget(parent, wFlags)
+    , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
 }

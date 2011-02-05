@@ -82,7 +82,7 @@ void KisNodeQueryPathEditor::customPathEnabled(bool v)
 void KisNodeQueryPathEditor::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), i18n(
-          "<b>/</b> represents the root of the image, or a sperator<br/>\n"
+          "<b>/</b> represents the root of the image, or a separator<br/>\n"
           "<b>a number</b> represents a layer<br/>\n"
           "<b>.</b> represents the current layer<br/>\n"
           "<b>..</b> represents the parent layer<br/>\n\n"

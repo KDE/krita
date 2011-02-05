@@ -202,8 +202,6 @@ public:
      */
     KoShapeContainerModel *model() const;
 
-    virtual void saveOdfChildElements(KoShapeSavingContext &context) const;
-
 protected:
     /**
      * This hook is for inheriting classes that need to do something on adding/removing
@@ -213,12 +211,12 @@ protected:
      */
     virtual void shapeCountChanged() { }
 
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+
     /// constructor
     KoShapeContainer(KoShapeContainerPrivate &);
 
 private:
-    void shapeChanged(ChangeType type, KoShape *shape = 0);
-
     Q_DECLARE_PRIVATE(KoShapeContainer)
 };
 

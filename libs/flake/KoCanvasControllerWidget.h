@@ -48,7 +48,7 @@ public:
      * Constructor.
      * @param parent the parent this widget will belong to
      */
-    explicit KoCanvasControllerWidget(QWidget *parent = 0);
+    explicit KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent = 0);
     virtual ~KoCanvasControllerWidget();
 
     /// Reimplemented from QObject

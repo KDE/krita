@@ -159,7 +159,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
 
     m_invert  = new KAction(i18n("&Invert Selection"), this);
     collection->addAction("invert", m_invert);
-    m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
+    m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
     m_toNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);

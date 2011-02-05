@@ -27,7 +27,6 @@
 
 #include "KoShape.h"
 #include <KoShapeContainer.h>
-#include <KoTextOnShapeContainer.h>
 #include "KoConnectionShape.h"
 #include "kdebug.h"
 
@@ -92,7 +91,6 @@ void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
 void Layout::setRoot(KoShape *shape, TreeShape::RootType type)
 {
     m_root = shape;
-    m_rootShape = dynamic_cast<KoTextOnShapeContainer *>(shape)->shapes().first();
     m_rootType = type;
     m_container->setSize(m_root->size());
     m_lastWidth = m_container->size().width();
@@ -441,9 +439,9 @@ void Layout::buildOrgUp()
                     -fromParentToChild;
         child->setPosition(QPointF(x, y));
         KoConnectionShape *connector = m_bonds[child];
-        connector->connectFirst(m_rootShape,0);
+        connector->connectFirst(m_root,0);
         TreeShape *tree = dynamic_cast<TreeShape*>(child);
-        KoShape *secondShape = dynamic_cast<KoTextOnShapeContainer*>(tree->root())->shapes().first();
+        KoShape *secondShape = tree->root();
         connector->connectSecond(secondShape,2);
         connector->updateConnections();
         x += child->size().width() + fromChildToChild;
@@ -481,9 +479,9 @@ void Layout::buildOrgDown()
         qreal y = fromParentToChild+m_root->size().height();
         child->setPosition(QPointF(x, y));
         KoConnectionShape *connector = m_bonds[child];
-        connector->connectFirst(m_rootShape,2);
+        connector->connectFirst(m_root,2);
         TreeShape *tree = dynamic_cast<TreeShape*>(child);
-        KoShape *secondShape = dynamic_cast<KoTextOnShapeContainer*>(tree->root())->shapes().first();
+        KoShape *secondShape = tree->root();
         connector->connectSecond(secondShape,0);
         connector->updateConnections();
         x += child->size().width() + fromChildToChild;
@@ -525,9 +523,9 @@ void Layout::buildOrgLeft()
                    -fromParentToChild;
         child->setPosition(QPointF(x, y));
         KoConnectionShape *connector = m_bonds[child];
-        connector->connectFirst(m_rootShape,3);
+        connector->connectFirst(m_root,3);
         TreeShape *tree = dynamic_cast<TreeShape*>(child);
-        KoShape *secondShape = dynamic_cast<KoTextOnShapeContainer*>(tree->root())->shapes().first();
+        KoShape *secondShape = tree->root();
         connector->connectSecond(secondShape,1);
         connector->updateConnections();
         y += child->size().height() + fromChildToChild;
@@ -565,9 +563,9 @@ void Layout::buildOrgRight()
         qreal x = fromParentToChild+m_root->size().width();
         child->setPosition(QPointF(x, y));
         KoConnectionShape *connector = m_bonds[child];
-        connector->connectFirst(m_rootShape,1);
+        connector->connectFirst(m_root,1);
         TreeShape *tree = dynamic_cast<TreeShape*>(child);
-        KoShape *secondShape = dynamic_cast<KoTextOnShapeContainer*>(tree->root())->shapes().first();
+        KoShape *secondShape = tree->root();
         connector->connectSecond(secondShape,3);
         connector->updateConnections();
         y += child->size().height() + fromChildToChild;

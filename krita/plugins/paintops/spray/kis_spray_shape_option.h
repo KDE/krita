@@ -27,6 +27,8 @@ const QString SPRAYSHAPE_PROPORTIONAL = "SprayShape/proportional";
 const QString SPRAYSHAPE_WIDTH = "SprayShape/width";
 const QString SPRAYSHAPE_HEIGHT = "SprayShape/height";
 const QString SPRAYSHAPE_IMAGE_URL = "SprayShape/imageUrl";
+const QString SPRAYSHAPE_USE_ASPECT = "SprayShape/useAspect";
+
 
 class KisShapeOptionsWidget;
 

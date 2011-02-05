@@ -43,7 +43,7 @@ class KoCanvasBase;
  */
 class KOMAIN_EXPORT KoRdfSemanticTreeWidgetItem : public QObject, public QTreeWidgetItem
 {
-    Q_OBJECT;
+    Q_OBJECT
 protected:
     virtual QString uIObjectName() const = 0;
     void addApplyStylesheetActions(QWidget *parent, QList<KAction *> &actions, KoCanvasBase *host);

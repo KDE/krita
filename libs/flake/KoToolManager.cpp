@@ -234,15 +234,6 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     // we expect the tool to emit a cursor on activation.
     updateCursor(Qt::ForbiddenCursor);
 
-    foreach(KAction *action, canvasData->activeTool->actions()) {
-        action->setEnabled(true);
-        // XXX: how to handle actions for non-qwidget-based canvases?
-        KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-        if (canvasControllerWidget) {
-            canvasControllerWidget->addAction(action);
-        }
-    }
-
     postSwitchTool(temporary);
 }
 
@@ -351,9 +342,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     }
 
     // Activate the actions for the currently active tool
-    foreach(KAction *action, canvasData->activeTool->actions()) {
-        action->setEnabled(true);
-    }
+    activateActions(canvasData->canvas->actionCollection(), canvasData->activeTool->actions());
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
@@ -711,6 +700,21 @@ void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
     switchTool(id, true);
 }
 
+void KoToolManager::Private::activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions)
+{
+    QHash<QString, KAction*>::const_iterator it( actions.constBegin());
+    for (; it != actions.constEnd(); ++it) {
+        if (ac) {
+            QAction* action = ac->action(it.key());
+                if (action) {
+                    ac->takeAction(action);
+                    it.value()->setShortcut(action->shortcut());
+                }
+                ac->addAction(it.key(), it.value());
+        }
+        it.value()->setEnabled(true);
+    }
+}
 
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()

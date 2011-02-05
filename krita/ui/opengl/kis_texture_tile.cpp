@@ -22,6 +22,9 @@
 
 #ifdef HAVE_OPENGL
 
+#ifndef GL_BGRA
+#define GL_BGRA 0x814F
+#endif
 
 inline QRectF relativeRect(const QRect &br /* baseRect */,
                            const QRect &cr /* childRect */,

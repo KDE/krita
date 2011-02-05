@@ -21,7 +21,7 @@
 #define PICTURESHAPE_H
 
 #include <QPixmap>
-#include <KoShape.h>
+#include <KoTosContainer.h>
 #include <KoFrameShape.h>
 
 #define PICTURESHAPEID "PictureShape"
@@ -29,7 +29,7 @@
 class KoImageCollection;
 class RenderQueue;
 
-class PictureShape : public KoShape, public KoFrameShape
+class PictureShape : public KoTosContainer, public KoFrameShape
 {
 public:
     enum PictureMode {
@@ -65,7 +65,7 @@ protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
 
     virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-    
+
     virtual void loadStyle(const KoXmlElement& element, KoShapeLoadingContext& context);
 
 private:

@@ -45,7 +45,7 @@ class KoRdfPrefixMappingPrivate;
  */
 class KOMAIN_EXPORT KoRdfPrefixMapping : public QObject
 {
-    Q_OBJECT;
+    Q_OBJECT
     KoRdfPrefixMappingPrivate * const d;
 public:
     KoRdfPrefixMapping(KoDocumentRdf *rdf);

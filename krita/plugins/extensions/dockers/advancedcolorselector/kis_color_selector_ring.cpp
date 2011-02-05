@@ -105,7 +105,7 @@ void KisColorSelectorRing::paint(QPainter* painter)
 QColor KisColorSelectorRing::selectColor(int x, int y) {
     QPoint ringMiddle(width()/2, height()/2);
     QPoint ringCoord = QPoint(x, y)-ringMiddle;
-    qreal hue = std::atan2(ringCoord.y(), ringCoord.x())+(M_PI);
+    qreal hue = std::atan2(qreal(ringCoord.y()), qreal(ringCoord.x()))+(M_PI);
     hue/=2.*M_PI;
     emit paramChanged(hue, -1, -1, -1, -1);
     m_lastHue=hue;
@@ -139,7 +139,7 @@ void KisColorSelectorRing::paintCache()
                && currentRadius > innerRadius()-1)
             {
 
-                float angle = std::atan2(relativeVector.y(), relativeVector.x())+((float)M_PI);
+                float angle = std::atan2((float)relativeVector.y(), (float)relativeVector.x())+((float)M_PI);
                 angle/=2*((float)M_PI);
                 angle*=359.f;
                 if(currentRadius < outerRadius()

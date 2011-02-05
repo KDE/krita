@@ -23,6 +23,8 @@
 
 #include "kis_types.h"
 #include "kis_image_command.h"
+#include "kis_paint_device.h"
+
 
 /// The command for adding a layer
 class KRITAIMAGE_EXPORT KisImageNodeToTopCommand : public KisImageCommand

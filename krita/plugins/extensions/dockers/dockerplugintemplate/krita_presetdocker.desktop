@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Preset Docker
+Name[en_GB]=Preset Docker
 Name[et]=Valmisseadistustega dokk
 Name[fr]=Panneau
 Name[it]=Gancio di preimpostazione
@@ -13,6 +14,7 @@ Name[uk]=Панель вибору налаштувань
 Name[x-test]=xxPreset Dockerxx
 Name[zh_TW]=預設定嵌入器
 Comment=Docker for selecting presets
+Comment[en_GB]=Docker for selecting presets
 Comment[et]=Valmisseadistuste valimise dokk
 Comment[fr]=Boîte d'outils
 Comment[it]=Gancio per selezionare preimpostazioni

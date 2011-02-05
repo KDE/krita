@@ -77,7 +77,7 @@ QColor KisColorSelectorWheel::selectColor(int x, int y)
 
     radius*=2.;
 
-    qreal angle = std::atan2(yWheel, xWheel);
+    qreal angle = std::atan2((qreal)yWheel, (qreal)xWheel);
     angle+=M_PI;
     angle/=2*M_PI;
 

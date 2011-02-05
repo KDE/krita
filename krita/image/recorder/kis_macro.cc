@@ -28,6 +28,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_play_info.h"
 #include "kis_node_query_path.h"
+#include <kis_paint_device.h>
 
 struct KisMacro::Private {
     QList<KisRecordedAction*> actions;

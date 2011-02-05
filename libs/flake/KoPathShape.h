@@ -26,7 +26,7 @@
 
 #include <QMap>
 
-#include "KoShape.h"
+#include "KoTosContainer.h"
 #include "KoPathSegment.h"
 
 #define KoPathShapeId "KoPathShape"
@@ -69,7 +69,7 @@ typedef QList<KoSubpath *> KoSubpathList;
  * generated. See the outline method. The reason for storing it like that is that
  * it is the points that are modified by the user and not the segments.
  */
-class FLAKE_EXPORT KoPathShape : public KoShape
+class FLAKE_EXPORT KoPathShape : public KoTosContainer
 {
 public:
     /**

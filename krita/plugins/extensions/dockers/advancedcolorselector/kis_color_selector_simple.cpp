@@ -32,9 +32,6 @@ KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
 
 void KisColorSelectorSimple::setColor(const QColor &c)
 {
-    QColor color;
-    color.setHsvF(c.hslHueF(), 1.0, 1.0);
-    
     switch (m_parameter) {
     case KisColorSelector::SL:
         m_lastClickPos.setX(c.hslSaturationF());
@@ -53,7 +50,11 @@ void KisColorSelectorSimple::setColor(const QColor &c)
         break;
     case KisColorSelector::SV2: {
         qreal xRel = c.hsvSaturationF();
-        qreal yRel = 1.0 - qBound<qreal>(0.0, (c.valueF() - xRel) / (1.0 - xRel), 1.0);
+        qreal yRel = 0.5;
+        
+        if(xRel != 1.0)
+            yRel = 1.0 - qBound<qreal>(0.0, (c.valueF() - xRel) / (1.0 - xRel), 1.0);
+        
         m_lastClickPos.setX(xRel);
         m_lastClickPos.setY(yRel);
         emit paramChanged(-1, -1, -1, xRel, yRel);

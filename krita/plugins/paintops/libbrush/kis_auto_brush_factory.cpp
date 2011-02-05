@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2010-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,11 +27,30 @@
 KisBrushSP KisAutoBrushFactory::getOrCreateBrush(const QDomElement& brushDefinition)
 {
     KisMaskGenerator* mask = KisMaskGenerator::fromXML(brushDefinition.firstChildElement("MaskGenerator"));
-    double angle = brushDefinition.attribute("angle", "0.0").toDouble();
-    double randomness = brushDefinition.attribute("randomness", "0.0").toDouble();
-    qreal density = brushDefinition.attribute("density", "1.0").toDouble();
+    bool result;
+    QLocale c(QLocale::German);
+
+    double angle = brushDefinition.attribute("angle", "0.0").toDouble(&result);
+    if (!result) {
+        angle = c.toDouble(brushDefinition.attribute("angle"));
+    }
+
+    double randomness = brushDefinition.attribute("randomness", "0.0").toDouble(&result);
+    if (!result) {
+        randomness = c.toDouble(brushDefinition.attribute("randomness"));
+    }
+
+    qreal density = brushDefinition.attribute("density", "1.0").toDouble(&result);
+    if (!result){
+        density = c.toDouble(brushDefinition.attribute("density"));
+    }
+
+    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble(&result);
+    if (!result){
+        spacing = c.toDouble(brushDefinition.attribute("spacing"));
+    }
+
     KisBrushSP brush = new KisAutoBrush(mask, angle, randomness, density);
-    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble();
     brush->setSpacing(spacing);
     return brush;
 }

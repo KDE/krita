@@ -25,6 +25,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
+#include <KoViewConverter.h>
 
 #include <kis_canvas2.h>
 

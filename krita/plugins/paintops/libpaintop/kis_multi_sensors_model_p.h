@@ -27,6 +27,7 @@ class KisMultiSensorsModel : public QAbstractListModel {
     Q_OBJECT
 public:
     explicit KisMultiSensorsModel(QObject* parent = 0);
+    virtual ~KisMultiSensorsModel();
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
@@ -38,11 +39,15 @@ signals:
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
-    void parametersChanged();    
+    void parametersChanged();
+private:
+    KisDynamicSensor* getOrCreateSensorFromCache(const QString& id);
+    KisDynamicSensor* takeOrCreateSensorFromCache(const QString& id);
+    void pushSensorToCache(KisDynamicSensor*);
 private:
     KisDynamicSensor* m_currentSensor;
     KisDynamicSensorList* m_listSensor;
-    
+    QMap<QString, KisDynamicSensor*> m_sensorCache;
 };
 
 #endif

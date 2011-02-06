@@ -23,6 +23,11 @@ KisMultiSensorsModel::KisMultiSensorsModel(QObject* parent) : QAbstractListModel
 {
 }
 
+KisMultiSensorsModel::~KisMultiSensorsModel()
+{
+    qDeleteAll(m_sensorCache);
+}
+
 int KisMultiSensorsModel::rowCount(const QModelIndex &/*parent*/) const
 {
     return KisDynamicSensor::sensorsIds().size();
@@ -61,11 +66,11 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
         } else if(m_listSensor) {
             if(checked)
             {
-                m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
+                m_listSensor->addSensor(takeOrCreateSensorFromCache( KisDynamicSensor::sensorsIds()[index.row()].id() ) );
                 return true;
             } else {
                 KisDynamicSensor* sensor = m_listSensor->takeSensor(KisDynamicSensor::sensorsIds()[index.row()].id());
-                delete sensor;
+                pushSensorToCache(sensor);;
                 
                 // If there is only one sensor left, remove it from the list sensor, and delete the list sensor
                 QList<QString> ids = m_listSensor->sensorIds();
@@ -83,7 +88,7 @@ bool KisMultiSensorsModel::setData(const QModelIndex &index, const QVariant &val
             m_listSensor = new KisDynamicSensorList;
             m_listSensor->addSensor(m_currentSensor->clone()); // Use a clone to make sure that it is owned by the KisDynamicSensorList
             m_currentSensor = m_listSensor;
-            m_listSensor->addSensor(KisDynamicSensor::id2Sensor( KisDynamicSensor::sensorsIds()[index.row()] ) );
+            m_listSensor->addSensor(takeOrCreateSensorFromCache( KisDynamicSensor::sensorsIds()[index.row()].id() ) );
             emit(sensorChanged(m_currentSensor));
             return true;
         }
@@ -115,11 +120,29 @@ QWidget* KisMultiSensorsModel::createConfigurationWidget(const QModelIndex& inde
         if(sensor)
         {
             return sensor->createConfigurationWidget(parent, selector);
-        } else {
-            return 0;
         }
     }
-    return 0;
+    return getOrCreateSensorFromCache(id)->createConfigurationWidget(parent, selector);
+}
+
+KisDynamicSensor* KisMultiSensorsModel::getOrCreateSensorFromCache(const QString& id)
+{
+   if(m_sensorCache.contains(id)) return m_sensorCache.value(id);
+   KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
+   m_sensorCache[id] = sensor;
+   return sensor;
+}
+
+KisDynamicSensor* KisMultiSensorsModel::takeOrCreateSensorFromCache(const QString& id)
+{
+   if(m_sensorCache.contains(id)) return m_sensorCache.take(id);
+   return KisDynamicSensor::id2Sensor(id);
+}
+
+void KisMultiSensorsModel::pushSensorToCache(KisDynamicSensor* sensor)
+{
+    Q_ASSERT(!m_sensorCache.contains(sensor->id()));
+    m_sensorCache[sensor->id()] = sensor;
 }
 
 #include "kis_multi_sensors_model_p.moc"

@@ -114,7 +114,7 @@ void KoClipPath::applyClipping(KoShape *shape, QPainter & painter, const KoViewC
     QPainterPath clipPath;
     while(shape) {
         if (shape->clipPath())
-            clipPath |= shape->absoluteTransformation(0).map(shape->clipPath()->d->clipPath);
+            clipPath |= shape->absoluteTransformation(0).map(shape->clipPath()->path());
         shape = shape->parent();
     }
 
@@ -125,4 +125,9 @@ void KoClipPath::applyClipping(KoShape *shape, QPainter & painter, const KoViewC
         viewMatrix.scale(zoomX, zoomY);
         painter.setClipPath(viewMatrix.map(clipPath), Qt::IntersectClip);
     }
+}
+
+QPainterPath KoClipPath::path() const
+{
+    return d->clipPath;
 }

@@ -65,6 +65,9 @@ public:
     /// Returns the current clip rule
     Qt::FillRule clipRule() const;
 
+    /// Returns the current clip path in shape coordinates of the clipped shape
+    QPainterPath path() const;
+    
     /// Applies the clipping to the given painter
     static void applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter);
 

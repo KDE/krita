@@ -1,6 +1,7 @@
 #add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
 
 set(kritalibpaintop_LIB_SRCS
+    kis_airbrush_option.cpp
     kis_auto_brush_widget.cpp
     kis_bidirectional_mixing_option.cpp
     kis_bidirectional_mixing_option_widget.cpp
@@ -20,8 +21,9 @@ set(kritalibpaintop_LIB_SRCS
     kis_custom_brush_widget.cpp
     kis_dynamic_sensor.cc
     kis_filter_option.cpp
+    kis_multi_sensors_model_p.cpp
+    kis_multi_sensors_selector.cpp
     kis_paint_action_type_option.cpp
-    kis_airbrush_option.cpp
     kis_paintop_option.cpp
     kis_paintop_options_model.cpp
     kis_paintop_options_widget.cpp
@@ -46,6 +48,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_brush_based_paintop_settings.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_distance.cc
+    sensors/kis_dynamic_sensor_list.cc
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
 )
@@ -57,6 +60,7 @@ kde4_add_ui_files(kritalibpaintop_LIB_SRCS
     wdgcustombrush.ui
     wdgtextbrush.ui
     wdgincremental.ui
+    wdgmultisensorsselector.ui
     wdgairbrush.ui
     wdgfilteroption.ui
     wdgcoloroptions.ui

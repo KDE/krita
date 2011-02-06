@@ -62,7 +62,7 @@ void KisDynamicSensorDistance::setLength(int length)
     setMaximumLabel(i18n("%1 px", length));
 }
 
-QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorDistanceConfiguration stc;

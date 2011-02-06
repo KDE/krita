@@ -37,6 +37,7 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Privat
     connect(d->model, SIGNAL(sensorChanged(KisDynamicSensor*)), SIGNAL(sensorChanged(KisDynamicSensor*)));
     connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
     connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
     d->form.sensorsList->setModel(d->model);
     d->layout = new QHBoxLayout(d->form.widgetConfiguration);
 }

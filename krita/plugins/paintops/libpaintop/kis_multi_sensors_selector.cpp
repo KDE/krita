@@ -24,28 +24,43 @@ struct KisMultiSensorsSelector::Private
 {
   Ui_WdgMultiSensorsSelector form;
   KisMultiSensorsModel* model;
+  QWidget* currentConfigWidget;
+  QHBoxLayout* layout;
 };
 
 KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Private)
 {
-  d->form.setupUi(this);
-  d->model = new KisMultiSensorsModel(this);
-  connect(d->model, SIGNAL(sensorChanged(KisDynamicSensor*)), SIGNAL(sensorChanged(KisDynamicSensor*)));
-  connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
-  d->form.sensorsList->setModel(d->model);
+    d->currentConfigWidget = 0;
+    d->form.setupUi(this);
+    d->model = new KisMultiSensorsModel(this);
+    connect(d->model, SIGNAL(sensorChanged(KisDynamicSensor*)), SIGNAL(sensorChanged(KisDynamicSensor*)));
+    connect(d->model, SIGNAL(parametersChanged()), SIGNAL(parametersChanged()));
+    connect(d->form.sensorsList, SIGNAL(activated(QModelIndex)), SLOT(sensorActivated(QModelIndex)));
+    d->form.sensorsList->setModel(d->model);
+    d->layout = new QHBoxLayout(d->form.widgetConfiguration);
 }
 
 KisMultiSensorsSelector::~KisMultiSensorsSelector()
 {
-  delete d;
+    delete d;
 }
 
 void KisMultiSensorsSelector::setCurrent(KisDynamicSensor* _sensor)
 {
-  d->model->setCurrentSensor(_sensor);
+    d->model->setCurrentSensor(_sensor);
 }
 
 KisDynamicSensor* KisMultiSensorsSelector::current()
 {
-  return 0;
+    return 0;
+}
+
+void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
+{
+    delete d->currentConfigWidget;
+    d->currentConfigWidget = d->model->createConfigurationWidget(index, d->form.widgetConfiguration, this);
+    if(d->currentConfigWidget)
+    {
+        d->layout->addWidget(d->currentConfigWidget);
+    }
 }

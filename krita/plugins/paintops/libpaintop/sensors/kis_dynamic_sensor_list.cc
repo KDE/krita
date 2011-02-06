@@ -91,6 +91,18 @@ void KisDynamicSensorList::addSensor(KisDynamicSensor* sensor)
     m_list.append(sensor);
 }
 
+KisDynamicSensor* KisDynamicSensorList::getSensor(QString arg1)
+{
+    foreach(KisDynamicSensor* sensor, m_list)
+    {
+        if(sensor->id() == arg1)
+        {
+            return sensor;
+        }
+    }
+    return 0;
+}
+
 KisDynamicSensor* KisDynamicSensorList::takeSensor(const QString& id)
 {
     Q_ASSERT(hasSensor(id));

@@ -103,4 +103,23 @@ void KisMultiSensorsModel::setCurrentSensor(KisDynamicSensor* sensor)
     reset();
 }
 
+QWidget* KisMultiSensorsModel::createConfigurationWidget(const QModelIndex& index, QWidget* parent, QWidget* selector)
+{
+    if(!index.isValid()) return 0;
+    QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
+    if(m_currentSensor->id() == id)
+    {
+        return m_currentSensor->createConfigurationWidget(parent, selector);
+    } else if(m_listSensor) {
+        KisDynamicSensor* sensor = m_listSensor->getSensor(id);
+        if(sensor)
+        {
+            return sensor->createConfigurationWidget(parent, selector);
+        } else {
+            return 0;
+        }
+    }
+    return 0;
+}
+
 #include "kis_multi_sensors_model_p.moc"

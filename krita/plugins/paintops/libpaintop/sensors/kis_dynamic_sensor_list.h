@@ -54,6 +54,7 @@ public:
      * Add a new sensor to the list
      */
     void addSensor(KisDynamicSensor* sensor);
+    KisDynamicSensor* getSensor(QString arg1);
 private:
     QList<KisDynamicSensor*> m_list;
 };

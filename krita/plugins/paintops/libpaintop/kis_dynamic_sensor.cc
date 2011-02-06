@@ -38,7 +38,7 @@ KisDynamicSensor* KisDynamicSensor::clone() const
     return createFromXML(toXML());
 }
 
-QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorSelector*)
+QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)
 {
     Q_UNUSED(parent);
     return 0;

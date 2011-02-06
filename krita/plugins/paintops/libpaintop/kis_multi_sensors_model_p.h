@@ -32,6 +32,7 @@ public:
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     void setCurrentSensor(KisDynamicSensor* sensor);
+    QWidget* createConfigurationWidget(const QModelIndex& index, QWidget* parent, QWidget* selector);
 signals:
     void sensorChanged(KisDynamicSensor* sensor);
     /**

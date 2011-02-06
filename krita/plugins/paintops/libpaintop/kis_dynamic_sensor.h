@@ -76,7 +76,10 @@ public:
      * Default implementation does nothing.
      */
     virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
+    /**
+     * @param selector is a \ref QWidget that countains a signal called "parametersChanged()"
+     */
+    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
     /**
      * Creates a sensor from its identifiant.
      */

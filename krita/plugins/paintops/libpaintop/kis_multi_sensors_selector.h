@@ -17,6 +17,7 @@
 
 #include <QWidget>
 
+class QModelIndex;
 class KisDynamicSensor;
 
 class KisMultiSensorsSelector : public QWidget
@@ -27,12 +28,14 @@ public:
     ~KisMultiSensorsSelector();
     void setCurrent(KisDynamicSensor* _sensor);
     KisDynamicSensor* current();
+private slots:
+    void sensorActivated(const QModelIndex& index);
 signals:
     void sensorChanged(KisDynamicSensor* sensor);
     /**
      * This signal is emitted when the parameters of sensor are changed.
      */
-    void parametersChanged();    
+    void parametersChanged();
 private:
     struct Private;
     Private* const d;

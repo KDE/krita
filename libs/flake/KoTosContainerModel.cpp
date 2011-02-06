@@ -103,7 +103,6 @@ void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape:
     if (type != KoShape::SizeChanged && type != KoShape::ContentChanged) {
         return;
     }
-    // TODO check if lock is needed lock = true;
     KoTosContainer *tosContainer = dynamic_cast<KoTosContainer*>(container);
     kDebug(30006) << "tosContainer" << tosContainer;
     if (tosContainer) {
@@ -113,5 +112,4 @@ void KoTosContainerModel::containerChanged(KoShapeContainer *container, KoShape:
         kDebug(30006) << "change type setSize";
         m_textShape->setSize(tosContainer->size());
     }
-    //lock = false;
 }

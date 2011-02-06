@@ -25,7 +25,7 @@ class KoTosContainerModel : public KoShapeContainerModel
 {
 public:
     KoTosContainerModel();
-    ~KoTosContainerModel();
+    virtual ~KoTosContainerModel();
 
     virtual void add(KoShape *shape);
     virtual void remove(KoShape *shape);

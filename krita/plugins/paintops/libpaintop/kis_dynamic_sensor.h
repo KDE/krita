@@ -47,6 +47,7 @@ const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
 const KoID AscensionId("ascension", ki18n("Ascension")); /// < number depending on the X and Y tilt, ascension is 0 when stylus nib points to you and changes clockwise from -180 to +180.
 const KoID DeclinationId("declination", ki18n("Declination")); /// < declination is 90 when stylus is perpendicular to tablet and 0 when it's parallel to tablet
 const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depending on the distance on the perspective grid
+const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< this a non user-visible sensor that can store a list of other sensors, and multiply their output
 
 /**
  * Sensor are used to extract from KisPaintInformation a single
@@ -65,6 +66,7 @@ protected:
     KisDynamicSensor(const KoID& id);
 public:
     virtual ~KisDynamicSensor();
+    KisDynamicSensor* clone() const;
     /**
      * @return the value of this sensor for the given KisPaintInformation
      */
@@ -74,7 +76,10 @@ public:
      * Default implementation does nothing.
      */
     virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
+    /**
+     * @param selector is a \ref QWidget that countains a signal called "parametersChanged()"
+     */
+    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget* selector);
     /**
      * Creates a sensor from its identifiant.
      */

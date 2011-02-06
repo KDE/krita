@@ -62,7 +62,7 @@ void KisDynamicSensorTime::setLength(int length)
     setMaximumLabel(i18n("%1 s", length));
 }
 
-QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorTime::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorTimeConfiguration stc;

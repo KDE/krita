@@ -35,7 +35,7 @@ public:
     virtual ~KisDynamicSensorTime() { }
     virtual qreal parameter(const KisPaintInformation&);
     virtual void reset();
-    virtual QWidget* createConfigurationWidget(QWidget* parent, KisSensorSelector*);
+    virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
 public slots:
     virtual void setPeriodic(bool periodic);
     virtual void setLength(int length);

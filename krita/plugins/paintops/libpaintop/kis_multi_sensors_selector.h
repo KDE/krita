@@ -28,6 +28,7 @@ public:
     ~KisMultiSensorsSelector();
     void setCurrent(KisDynamicSensor* _sensor);
     KisDynamicSensor* current();
+    KisDynamicSensor* currentHighlighted();
 private slots:
     void sensorActivated(const QModelIndex& index);
 signals:

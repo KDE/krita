@@ -51,7 +51,7 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     transferCurve();
     setLabel(m_curveOptionWidget->label_ymin, curveOption->minimumLabel());
     setLabel(m_curveOptionWidget->label_ymax, curveOption->maximumLabel());
-    
+    updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()

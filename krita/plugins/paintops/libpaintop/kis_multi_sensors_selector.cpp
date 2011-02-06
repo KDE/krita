@@ -50,6 +50,17 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
 void KisMultiSensorsSelector::setCurrent(KisDynamicSensor* _sensor)
 {
     d->model->setCurrentSensor(_sensor);
+    KisDynamicSensor* sensor = currentHighlighted();
+    if(!sensor)
+    {
+        sensor = d->model->getSensor(d->model->index(0, 0));
+    }
+    emit(highlightedSensorChanged(sensor));
+}
+
+KisDynamicSensor* KisMultiSensorsSelector::currentHighlighted()
+{
+    return d->model->getSensor(d->form.sensorsList->currentIndex());
 }
 
 KisDynamicSensor* KisMultiSensorsSelector::current()

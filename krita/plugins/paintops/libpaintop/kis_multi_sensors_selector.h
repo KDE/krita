@@ -36,6 +36,7 @@ signals:
      * This signal is emitted when the parameters of sensor are changed.
      */
     void parametersChanged();
+    void highlightedSensorChanged(KisDynamicSensor* sensor);
 private:
     struct Private;
     Private* const d;

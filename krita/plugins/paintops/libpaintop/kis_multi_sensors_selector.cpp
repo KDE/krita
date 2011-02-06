@@ -19,6 +19,7 @@
 
 #include "ui_wdgmultisensorsselector.h"
 #include "kis_multi_sensors_model_p.h"
+#include "kis_dynamic_sensor.h"
 
 struct KisMultiSensorsSelector::Private
 {
@@ -58,9 +59,11 @@ KisDynamicSensor* KisMultiSensorsSelector::current()
 void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
 {
     delete d->currentConfigWidget;
-    d->currentConfigWidget = d->model->createConfigurationWidget(index, d->form.widgetConfiguration, this);
+    KisDynamicSensor* sensor = d->model->getSensor(index);
+    d->currentConfigWidget = sensor->createConfigurationWidget(d->form.widgetConfiguration, this);
     if(d->currentConfigWidget)
     {
         d->layout->addWidget(d->currentConfigWidget);
     }
+    emit(highlightedSensorChanged(sensor));
 }

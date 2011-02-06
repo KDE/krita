@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004,2007-2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,30 +59,49 @@ void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
 {
     Q_UNUSED(doc);
     //e.setAttribute("radius", d->radius);
-    e.setAttribute("diameter", d->diameter);
-    e.setAttribute("ratio", d->ratio);
-    e.setAttribute("hfade", horizontalFade());
-    e.setAttribute("vfade", verticalFade());
+    e.setAttribute("diameter", QString::number(d->diameter));
+    e.setAttribute("ratio", QString::number(d->ratio));
+    e.setAttribute("hfade", QString::number(horizontalFade()));
+    e.setAttribute("vfade", QString::number(verticalFade()));
     e.setAttribute("spikes", d->spikes);
     e.setAttribute("id", id());
 }
 
 KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
 {
+    QLocale c(QLocale::German);
+    bool result;
+
     double diameter = 1.0;
     // backward compatibility -- it was mistakenly named radius for 2.2
     if (elt.hasAttribute("radius")){
-        diameter = elt.attribute("radius", "1.0").toDouble();
+        diameter = elt.attribute("radius", "1.0").toDouble(&result);
+        if (!result) {
+            diameter = c.toDouble(elt.attribute("radius"));
+        }
     }else /*if (elt.hasAttribute("diameter"))*/{
-        diameter = elt.attribute("diameter", "1.0").toDouble();
+        diameter = elt.attribute("diameter", "1.0").toDouble(&result);
+        if (!result) {
+            diameter = c.toDouble(elt.attribute("diameter"));
+        }
     }
-    double ratio = elt.attribute("ratio", "1.0").toDouble();
-    double hfade = elt.attribute("hfade", "0.0").toDouble();
-    double vfade = elt.attribute("vfade", "0.0").toDouble();
+    double ratio = elt.attribute("ratio", "1.0").toDouble(&result);
+    if (!result) {
+        ratio = c.toDouble(elt.attribute("ratio"));
+    }
+    double hfade = elt.attribute("hfade", "0.0").toDouble(&result);
+    if (!result) {
+        hfade = c.toDouble(elt.attribute("hfade"));
+    }
+    double vfade = elt.attribute("vfade", "0.0").toDouble(&result);
+    if (!result) {
+        vfade = c.toDouble(elt.attribute("vfade"));
+    }
+
     int spikes = elt.attribute("spikes", "2").toInt();
     QString typeShape = elt.attribute("type", "circle");
     QString id = elt.attribute("id", DefaultId.id());
-    
+
     if (id == DefaultId.id()){
         if (typeShape == "circle"){
             return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
@@ -89,7 +109,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
             return new KisRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
         }
     }
-    
+
     if (id == SoftId.id()){
         KisCubicCurve curve;
         curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
@@ -100,7 +120,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
             return new KisCurveRectangleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve);
         }
     }
-    
+
     // if unknown
     return new KisCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes);
 }

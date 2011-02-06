@@ -133,7 +133,11 @@ void KisMask::initSelection(KisSelectionSP copyFrom, KisLayerSP parentLayer)
 
 KisSelectionSP KisMask::selection() const
 {
+    #ifdef __GNUC__
     #warning "Please remove lazyness from KisMask::selection() after release of 2.3"
+    #else
+    #pragma WARNING( "Please remove lazyness from KisMask::selection() after release of 2.3" )
+    #endif
 
     if(!m_d->selection) {
         KisLayer *parentLayer = dynamic_cast<KisLayer*>(parent().data());

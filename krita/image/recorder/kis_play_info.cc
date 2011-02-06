@@ -20,6 +20,7 @@
 
 #include "kis_image.h"
 #include "kis_node.h"
+#include <kis_paint_device.h>
 
 struct KisPlayInfo::Private {
     KisImageWSP image;

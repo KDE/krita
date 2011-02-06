@@ -305,7 +305,11 @@ void KisOpenGLImageTextures::setHDRExposure(float exposure)
             } else {
 #endif
 
+#ifdef __GNUC__
 #warning "FIXME: Move this setOverrideCursor to a higher level"
+#else
+#pragma WARNING( "FIXME: Move this setOverrideCursor to a higher level") { )
+#endif
                 QApplication::setOverrideCursor(Qt::WaitCursor);
                 KisOpenGLUpdateInfoSP info = updateCache(m_image->bounds());
                 recalculateCache(info);

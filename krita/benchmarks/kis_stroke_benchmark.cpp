@@ -196,6 +196,13 @@ void KisStrokeBenchmark::softbrushDefault30()
 }
 
 
+void KisStrokeBenchmark::softbrushCircle30()
+{
+    QString presetFileName = "softbrush_30px.kpp";
+    benchmarkCircle(presetFileName);
+}
+
+
 void KisStrokeBenchmark::softbrushDefault30RL()
 {
     QString presetFileName = "softbrush_30px.kpp";
@@ -289,6 +296,19 @@ void KisStrokeBenchmark::dynabrushRL()
     benchmarkRandomLines(presetFileName);
 }
 
+void KisStrokeBenchmark::experimental()
+{
+    QString presetFileName = "experimental.kpp";
+    benchmarkStroke(presetFileName);
+}
+
+void KisStrokeBenchmark::experimentalCircle()
+{
+    QString presetFileName = "experimental.kpp";
+    benchmarkCircle(presetFileName);
+}
+
+
 /*
 void KisStrokeBenchmark::predefinedBrush()
 {
@@ -344,6 +364,61 @@ inline void KisStrokeBenchmark::benchmarkLine(QString presetFileName)
 
 }
 
+void KisStrokeBenchmark::benchmarkCircle(QString presetFileName)
+{
+    qDebug() << "(circle)preset : " << presetFileName;
+
+    KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
+    if (!preset->load()){
+        qDebug() << "Preset was not loaded";
+        return;
+    }
+
+
+    preset->settings()->setNode(m_layer);
+    m_painter->setPaintOpPreset(preset, m_image);
+
+QBENCHMARK{
+
+    qreal radius = 300;
+    qreal randomOffset = 300 * 0.4;
+    int rounds = 20;
+    int steps = 20;
+    qreal step = 1.0 / steps;
+
+    QPointF center(m_image->width() * 0.5, m_image->height() * 0.5);
+    QPointF first(center.x()+radius,center.y());
+
+    srand48(0);
+
+for (int k = 0; k < rounds; k++){
+    m_painter->paintLine(center, first);
+    QPointF prev = first;
+    for (int i = 1; i < steps; i++) {
+        qreal cx = cos(i * step * 2 * M_PI);
+        qreal cy = sin(i * step * 2 * M_PI);
+
+        cx *= (radius + drand48() * randomOffset);
+        cy *= (radius + drand48() * randomOffset);
+
+        cx += center.x();
+        cy += center.y();
+
+        m_painter->paintLine(prev, QPointF(cx,cy));
+        prev = QPointF(cx,cy);
+    }
+    m_painter->paintLine(prev, first);
+}
+
+}
+
+#ifdef SAVE_OUTPUT
+    m_layer->paintDevice()->convertToQImage(0).save(m_outputPath + presetFileName + "_circle" + OUTPUT_FORMAT);
+#endif
+
+}
+
+
 
 inline void KisStrokeBenchmark::benchmarkRandomLines(QString presetFileName)
 {
@@ -372,7 +447,12 @@ void KisStrokeBenchmark::benchmarkStroke(QString presetFileName)
     qDebug() << "preset : " << presetFileName;
 
     KisPaintOpPresetSP preset = new KisPaintOpPreset(m_dataPath + presetFileName);
-    preset->load();
+    bool loadedOk = preset->load();
+    if (!loadedOk){
+        qDebug() << "The preset was not loaded correctly. Done.";
+        return;
+    }
+
     preset->settings()->setNode(m_layer);
     m_painter->setPaintOpPreset(preset, m_image);
 
@@ -407,7 +487,6 @@ void KisStrokeBenchmark::benchmarkRand()
         }
     }
 }
-
 
 
 QTEST_KDEMAIN(KisStrokeBenchmark, GUI)

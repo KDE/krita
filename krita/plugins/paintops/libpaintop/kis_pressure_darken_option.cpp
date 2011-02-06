@@ -22,6 +22,7 @@
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include "kis_color_source.h"
+#include <kis_paint_device.h>
 
 KisPressureDarkenOption::KisPressureDarkenOption()
         : KisCurveOption(i18n("Darken"), "Darken", KisPaintOpOption::colorCategory(), false)

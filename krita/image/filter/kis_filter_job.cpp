@@ -56,8 +56,13 @@ void KisFilterJob::run()
     KisPaintDeviceSP tempDevice;
 
     tempDevice = m_selection ?
-        new KisPaintDevice(m_dev->colorSpace()) : m_dev;
+        KisPaintDeviceSP(new KisPaintDevice(m_dev->colorSpace())) : m_dev;
 
+/*    if (m_selection)
+        tempDevice = new KisPaintDevice(m_dev->colorSpace());
+    else
+        tempDevice = m_dev;
+*/
     m_filter->process(m_dev, m_dev, m_selection, m_rc, m_config, m_updater);
 
     if(tempDevice != m_dev) {

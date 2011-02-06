@@ -17,6 +17,14 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#if defined(_WIN32) || defined(_WIN64)
+#include <stdlib.h>
+#define srand48 srand
+inline double drand48() {
+    return double(rand()) / RAND_MAX;
+}
+#endif
+
 #include "kis_auto_brush.h"
 
 #include <kis_debug.h>
@@ -327,10 +335,10 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     d->shape->toXML(doc, shapeElt);
     e.appendChild(shapeElt);
     e.setAttribute("type", "auto_brush");
-    e.setAttribute("spacing", spacing());
-    e.setAttribute("angle", KisBrush::angle());
-    e.setAttribute("randomness", d->randomness);
-    e.setAttribute("density", d->density);
+    e.setAttribute("spacing", QString::number(spacing()));
+    e.setAttribute("angle", QString::number(KisBrush::angle()));
+    e.setAttribute("randomness", QString::number(d->randomness));
+    e.setAttribute("density", QString::number(d->density));
     KisBrush::toXML(doc, e);
 }
 

@@ -58,6 +58,10 @@
 #define NEAR_VAL -1000.0
 #define FAR_VAL 1000.0
 
+#ifndef GL_CLAMP_TO_EDGE
+#define GL_CLAMP_TO_EDGE 0x812F
+#endif
+
 namespace
 {
     const GLuint NO_PROGRAM = 0;

@@ -25,6 +25,7 @@
 #include <kis_node.h>
 #include <kis_layer.h>
 #include <kis_group_layer.h>
+#include <kis_paint_device.h>
 
 struct KisRecordedAction::Private {
     QString name;

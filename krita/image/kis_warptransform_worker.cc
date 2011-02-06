@@ -26,6 +26,7 @@
 #include <QTransform>
 #include <QVector2D>
 #include <QPainter>
+#include <QVarLengthArray>
 
 #include <KoProgressUpdater.h>
 #include <KoColorSpace.h>
@@ -650,7 +651,7 @@ void inline KisWarpTransformWorker::bilinInterp(QPointF p0, QPointF p1, QPointF 
 void KisWarpTransformWorker::quadInterpolation(QImage *src, QImage *dst, QPolygon pSrc, QPolygon pDst)
 {
     QRgb *pixels = NULL;
-    Side *TC[dst->height() + 1];
+    QVarLengthArray<Side*> TC(dst->height() + 1);
     Side *TCA = NULL;
     int y;
     Side *PrevSide = NULL, *CurrSide = NULL, *NextSide = NULL;
@@ -902,10 +903,10 @@ void KisWarpTransformWorker::quadInterpolation(QImage *src, QImage *dst, QPolygo
 QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
     int nbPoints = p.size();
-    qreal w[nbPoints];
+    QVarLengthArray<qreal> w(nbPoints);
     qreal sumWi = 0;
     QPointF pStar(0, 0), qStar(0, 0);
-    QPointF pHat[nbPoints], qHat[nbPoints];
+    QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
         if (v == p[i])
@@ -959,10 +960,10 @@ QPointF KisWarpTransformWorker::affineTransformMath(QPointF v, QVector<QPointF> 
 QPointF KisWarpTransformWorker::similitudeTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
     int nbPoints = p.size();
-    qreal w[nbPoints];
+    QVarLengthArray<qreal> w(nbPoints);
     qreal sumWi = 0;
     QPointF pStar(0, 0), qStar(0, 0);
-    QPointF pHat[nbPoints], qHat[nbPoints];
+    QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
         if (v == p[i])
@@ -1006,10 +1007,10 @@ QPointF KisWarpTransformWorker::similitudeTransformMath(QPointF v, QVector<QPoin
 QPointF KisWarpTransformWorker::rigidTransformMath(QPointF v, QVector<QPointF> p, QVector<QPointF> q, qreal alpha)
 {
     int nbPoints = p.size();
-    qreal w[nbPoints];
+    QVarLengthArray<qreal> w(nbPoints);
     qreal sumWi = 0;
     QPointF pStar(0, 0), qStar(0, 0);
-    QPointF pHat[nbPoints], qHat[nbPoints];
+    QVarLengthArray<QPointF> pHat(nbPoints), qHat(nbPoints);
 
     for (int i = 0; i < nbPoints; ++i) {
         if (v == p[i])
@@ -1323,8 +1324,7 @@ void KisWarpTransformWorker::quadInterpolation(KisPaintDeviceSP src, KisPaintDev
     int TC_offset = 0;
     if (boundRect.top() < 0)
         TC_offset = - boundRect.top();
-    Side *TC[boundRect.bottom() + TC_offset + 2];
-
+    QVarLengthArray<Side*> TC(boundRect.bottom() + TC_offset + 2);
     for (int i = 0; i <= boundRect.bottom() + TC_offset + 1; ++i)
         TC[i] = NULL;
 

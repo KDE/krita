@@ -20,6 +20,8 @@
 
 #include "kis_node_command.h"
 
+#include "kis_paint_device.h"
+
 class QPoint;
 
 /// The command for moving of a node

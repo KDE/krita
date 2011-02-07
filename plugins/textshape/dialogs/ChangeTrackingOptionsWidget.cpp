@@ -31,15 +31,18 @@ ChangeTrackingOptionsWidget::ChangeTrackingOptionsWidget(TextTool *tool, QWidget
 void ChangeTrackingOptionsWidget::recordChangesChanged(int isChecked)
 {
     m_tool->toggleRecordChanges(isChecked);
+    emit doneWithFocus();
 }
 
 void ChangeTrackingOptionsWidget::showChangesChanged(int isChecked)
 {
     m_tool->toggleShowChanges(isChecked);
+    emit doneWithFocus();
 }
 
 void ChangeTrackingOptionsWidget::configureSettingsPressed()
 {
     m_tool->configureChangeTracking();
+    emit doneWithFocus();
 }
 

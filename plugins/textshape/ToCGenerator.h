@@ -54,6 +54,8 @@ private:
     void generate();
     void update();
 
+    bool isWhitespaceOnly(QString text) const;
+
     enum State {
         DirtyState,
         NeverGeneratedState,

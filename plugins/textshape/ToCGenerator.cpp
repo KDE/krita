@@ -148,7 +148,7 @@ void ToCGenerator::generate()
     // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
     int blockId = 0;
-    while (block.isValid()) {
+    while (block.isValid() && !isWhitespaceOnly(block.text())) {
         // Choose only TOC blocks
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty()) {
 
@@ -313,5 +313,13 @@ void ToCGenerator::update()
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();
 }
+
+bool ToCGenerator::isWhitespaceOnly(QString text) const
+{
+    text.remove(' ');
+    text.remove('\t');
+    return text.isEmpty();
+}
+
 
 #include <ToCGenerator.moc>

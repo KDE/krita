@@ -170,6 +170,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 {
     setObjectName(name);
     QVBoxLayout * layout = new QVBoxLayout(this);
+    layout->setMargin(0);
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetProxy = new KisPresetProxyAdapter(rserver);
     m_chooser = new KoResourceItemChooser(m_presetProxy, this);

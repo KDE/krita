@@ -232,6 +232,9 @@ public:
     void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
 
 
+    qreal inlineObjectAscent();
+
+    qreal inlineObjectDescent();
 private:
     Q_DECLARE_PRIVATE(KoTextAnchor)
 };

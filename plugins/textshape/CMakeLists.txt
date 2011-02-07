@@ -37,6 +37,7 @@ SET ( textshape_SRCS
     TableLayoutData.cpp
     
     FloatingAnchorStrategy.cpp
+    InlineAnchorStrategy.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleCharacterWidget.cpp

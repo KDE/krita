@@ -31,6 +31,7 @@
 #include "TextShape.h"
 #include "ToCGenerator.h"
 #include "FloatingAnchorStrategy.h"
+#include "InlineAnchorStrategy.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -2357,7 +2358,11 @@ void Layout::unregisterAllRunAroundShapes()
 void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 {
     if (textAnchor != 0) {
-        textAnchor->setAnchorStrategy(new FloatingAnchorStrategy(textAnchor));
+        if (textAnchor->behavesAsCharacter()) {
+            textAnchor->setAnchorStrategy(new InlineAnchorStrategy(textAnchor));
+        } else {
+            textAnchor->setAnchorStrategy(new FloatingAnchorStrategy(textAnchor));
+        }
         m_textAnchors.append(textAnchor);
     }
 }

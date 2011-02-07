@@ -1535,6 +1535,7 @@ QWidget *TextTool::createOptionWidget()
     connect(styles, SIGNAL(characterStyleSelected(KoCharacterStyle *)),
             this, SLOT(setStyle(KoCharacterStyle*)));
     connect(styles, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(changeTrackingOptions, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     updateStyleManager();
     if (m_textShape)

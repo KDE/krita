@@ -647,16 +647,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         }
         if ((data == m_textShapeData) && m_caretTimerState) {
             // paint caret
-            QPen caretPen(Qt::black);
-            if (! m_textShape->hasTransparency()) {
-                KoColorBackground * fill = dynamic_cast<KoColorBackground*>(m_textShape->background());
-                if (fill) {
-                    QColor bg = fill->color();
-                    QColor invert = QColor(255 - bg.red(), 255 - bg.green(), 255 - bg.blue());
-                    caretPen.setColor(invert);
-                }
-            }
-            painter.setPen(caretPen);
             int posInParag = m_textEditor.data()->position() - block.position();
             if (posInParag <= block.layout()->preeditAreaPosition())
                 posInParag += block.layout()->preeditAreaText().length();
@@ -669,6 +659,10 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
                 if (tl.isValid()) {
                     const int posInParag = m_textEditor.data()->position() - block.position();
+                    QPen caretPen(m_textEditor.data()->charFormat().foreground(), 1.0);
+                    painter.setPen(caretPen);
+
+                    painter.setRenderHint(QPainter::Antialiasing,false);
                     if (tl.ascent() > 0) {
                         QPointF caretBasePos;
                         QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());

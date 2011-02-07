@@ -17,11 +17,14 @@
    </sizepolicy>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1,0" columnminimumwidth="0,0,0">
      <item row="0" column="0">
       <widget class="KLineEdit" name="searchBar">
-       <property name="clickMessage" stdset="0">
+       <property name="clickMessage">
         <string>Search Preset</string>
        </property>
        <property name="showClearButton" stdset="0">

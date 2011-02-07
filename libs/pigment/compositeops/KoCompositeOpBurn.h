@@ -29,7 +29,8 @@ template<class _CSTraits>
 class KoCompositeOpBurn : public KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpBurn<_CSTraits>, true >
 {
     typedef typename _CSTraits::channels_type channels_type;
-    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
+    typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;
+    
 public:
 
     KoCompositeOpBurn(const KoColorSpace * cs)
@@ -48,19 +49,21 @@ public:
                                             const QBitArray & channelFlags) {
         for (uint i = 0; i < _CSTraits::channels_nb; i++) {
             if ((int)i != _CSTraits::alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
-                compositetype srcColor = src[i];
-                compositetype dstColor = dst[i];
-
-                srcColor = qMin(((NATIVE_MAX_VALUE - dstColor) * (NATIVE_MAX_VALUE + 1)) / (srcColor + 1), (compositetype)NATIVE_MAX_VALUE);
-                if (NATIVE_MAX_VALUE - srcColor > NATIVE_MAX_VALUE) srcColor = NATIVE_MAX_VALUE;
-
-                channels_type newColor = NATIVE_MAX_VALUE - KoColorSpaceMaths<channels_type>::blend(srcColor, dstColor, srcBlend);
-
-                dst[i] = newColor;
+                composite_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
+                composite_type invDst    = unitValue - dst[i];
+                
+                if(src[i] != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                    composite_type result = unitValue - qMin<composite_type>(invDst * unitValue / src[i], unitValue);
+                    dst[i] = KoColorSpaceMaths<channels_type>::blend(result, dst[i], srcBlend);
+                }
+                else {
+                    //composite_type result = KoColorSpaceMathsTraits<channels_type>::zeroValue;
+                    composite_type result = unitValue - qMin<composite_type>(invDst * unitValue, unitValue);
+                    dst[i] = KoColorSpaceMaths<channels_type>::blend(result, dst[i], srcBlend);
+                }
             }
         }
     }
-
 
 };
 

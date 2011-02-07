@@ -36,19 +36,12 @@ class StylesWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit StylesWidget(QWidget *parent = 0,  Qt::WindowFlags f = 0);
-
-    void setEmbedded(bool embed);
-
-protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
+    explicit StylesWidget(QWidget *parent = 0,  bool paragraphMode=true, Qt::WindowFlags f = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
-    void deleteStyleClicked();
 
 signals:
     void doneWithFocus();
@@ -56,16 +49,11 @@ signals:
     void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
 private slots:
-    void newStyleClicked();
-    void editStyle();
     void applyStyle();
-    /// updates button state
-    void setCurrent(const QModelIndex &index);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
     void characterStyleSelected(KoCharacterStyle *style);
-    void hoverChanged(bool);
 
 private:
     Ui::StylesWidget widget;

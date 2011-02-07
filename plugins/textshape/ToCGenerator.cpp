@@ -116,6 +116,17 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
 }
 
 
+static bool isWhitespaceOnly(const QString& text)
+{
+    for (int i = 0; i < text.length(); i++) {
+        if (!text[i].isSpace()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 void ToCGenerator::generate()
 {
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();
@@ -148,7 +159,7 @@ void ToCGenerator::generate()
     // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
     int blockId = 0;
-    while (block.isValid()) {
+    while (block.isValid() && !isWhitespaceOnly(block.text())) {
         // Choose only TOC blocks
         if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty()) {
 

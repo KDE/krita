@@ -555,12 +555,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         m_image = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
-        if (profile && !profile->isSuitableForOutput()) {
-            KisAnnotationSP annotation;
-            if (profile->type() == "icc" && !profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
-            m_image -> addAnnotation(annotation);
-        }
     }
 
     // Read resolution
@@ -598,6 +592,10 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
                 decode_meta_data(text_ptr + i, layer->metaData(), "iptc", 14);
             } else if (key.contains("Raw profile type xmp")) {
                 decode_meta_data(text_ptr + i, layer->metaData(), "xmp", 0);
+            } else if (key == "version") {
+                m_image->addAnnotation(new KisAnnotation("kpp_version", "version", QByteArray(text_ptr[i].text)));
+            } else if (key == "preset") {
+                m_image->addAnnotation(new KisAnnotation("kpp_preset", "preset", QByteArray(text_ptr[i].text)));
             }
         }
     }
@@ -941,17 +939,31 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
 #warning "it should be possible to save krita_attributes in the \"CHUNKs\""
 #endif
             dbgFile << "cannot save this annotation : " << (*it) -> type();
-        } else { // Profile
-            char* name = new char[(*it)->type().length()+1];
-            strcpy(name, (*it)->type().toAscii());
-#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (const png_bytep)(*it)->annotation().data(), (*it) -> annotation() . size());
-#else
-            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
-#endif
+        } else if ((*it)->type() == "kpp_version" || (*it)->type() == "kpp_preset" ) {
+            dbgFile << "Saving preset information " << (*it)->description();
+            png_textp      text = (png_textp) png_malloc(png_ptr, (png_uint_32) sizeof(png_text));
+            
+            QByteArray keyData = (*it)->description().toLatin1();
+            text[0].key = keyData.data();
+            text[0].text = (*it)->annotation().data();
+            text[0].text_length = (*it)->annotation().size();
+            text[0].compression = -1;
+            
+            png_set_text(png_ptr, info_ptr, text, 1);
+            png_free(png_ptr, text);
         }
         ++it;
     }
+    
+    // Save the color profile
+    const KoColorProfile* colorProfile = device->colorSpace()->profile();
+    QByteArray colorProfileData = colorProfile->rawData();
+    
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+#else
+    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+#endif
 
     // read comments from the document information
     if (m_doc) {

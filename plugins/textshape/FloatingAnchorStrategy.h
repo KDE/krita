@@ -18,18 +18,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef TEXTANCHORSTRATEGY_H
-#define TEXTANCHORSTRATEGY_H
+#ifndef FLOATINGANCHORSTRATEGY_H
+#define FLOATINGANCHORSTRATEGY_H
 
 #include "KoTextAnchor.h"
 
 class KoTextShapeData;
 
-class TextAnchorStrategy  : public KoAnchorStrategy
+class FloatingAnchorStrategy  : public KoAnchorStrategy
 {
 public:
-    TextAnchorStrategy(KoTextAnchor *anchor);
-    ~TextAnchorStrategy();
+    FloatingAnchorStrategy(KoTextAnchor *anchor);
+    ~FloatingAnchorStrategy();
 
     /**
      * This function calculates position for linked shape.
@@ -86,4 +86,4 @@ private:
     QPointF m_relayoutPosition; // top most position of text and shape intersection
 };
 
-#endif // TEXTANCHORSTRATEGY_H
+#endif // FLOATINGANCHORSTRATEGY_H

@@ -147,13 +147,14 @@ void KoXmlWriter::addCompleteElement(const char* cstr)
 void KoXmlWriter::addCompleteElement(QIODevice* indev)
 {
     prepareForChild();
-    const bool needOpen = !indev->isOpen();
-    if (needOpen) {
-        const bool openOk = indev->open(QIODevice::ReadOnly);
-        Q_ASSERT(openOk);
-        if (!openOk)
-            return;
-    }
+    const bool wasOpen = indev->isOpen();
+    // Always (re)open the device in readonly mode, it might be
+    // already open but for writing, and we need to rewind.
+    const bool openOk = indev->open(QIODevice::ReadOnly);
+    Q_ASSERT(openOk);
+    if (!openOk)
+        return;
+
     static const int MAX_CHUNK_SIZE = 8 * 1024; // 8 KB
     QByteArray buffer;
     buffer.resize(MAX_CHUNK_SIZE);
@@ -163,7 +164,8 @@ void KoXmlWriter::addCompleteElement(QIODevice* indev)
             break;
         d->dev->write(buffer.data(), len);
     }
-    if (needOpen) {
+    if (!wasOpen) {
+        // Restore initial state
         indev->close();
     }
 }

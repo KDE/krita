@@ -1197,12 +1197,41 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 }
             }
 
-            drawTrackedChangeItem(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
+            for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
+                QTextFragment currentFragment = it.fragment();
+                if (currentFragment.isValid()) {
+                    QTextCharFormat format = currentFragment.charFormat();
+                    int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);
+                    if (changeId && m_changeTracker && m_changeTracker->displayChanges()) {
+                        KoChangeTrackerElement *changeElement = m_changeTracker->elementById(changeId);
+                        switch(changeElement->getChangeType()) {
+                            case (KoGenChange::InsertChange):
+                            format.setBackground(QBrush(m_changeTracker->getInsertionBgColor()));
+                            break;
+                            case (KoGenChange::FormatChange):
+                            format.setBackground(QBrush(m_changeTracker->getFormatChangeBgColor()));
+                            break;
+                            case (KoGenChange::DeleteChange):
+                            format.setBackground(QBrush(m_changeTracker->getDeletionBgColor()));
+                            break;
+                        }
+                    
+                        QTextLayout::FormatRange fr;
+                        fr.start = currentFragment.position();
+                        fr.length = currentFragment.length();
+                        fr.format = format;
+                        selections.append(fr);
+                    }
+                }
+            }
+
             if (clipRect.isValid()) {
                 painter->save();
                 painter->setClipRect(clipRect, Qt::IntersectClip);
             }
+
             layout->draw(painter, QPointF(0, 0), selections);
+
             if (clipRect.isValid()) {
                 painter->restore();
             }

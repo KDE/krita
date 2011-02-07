@@ -555,12 +555,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         m_image = new KisImage(m_adapter, width, height, cs, "built image");
         Q_CHECK_PTR(m_image);
         m_image->lock();
-        if (profile && !profile->isSuitableForOutput()) {
-            KisAnnotationSP annotation;
-            if (profile->type() == "icc" && !profile->rawData().isEmpty())
-                annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
-            m_image -> addAnnotation(annotation);
-        }
     }
 
     // Read resolution
@@ -957,17 +951,19 @@ KisImageBuilder_Result KisPNGConverter::buildFile(QIODevice* iodevice, KisImageW
             
             png_set_text(png_ptr, info_ptr, text, 1);
             png_free(png_ptr, text);
-        } else { // Profile
-            char* name = new char[(*it)->type().length()+1];
-            strcpy(name, (*it)->type().toAscii());
-#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
-            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (const png_bytep)(*it)->annotation().data(), (*it) -> annotation() . size());
-#else
-            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
-#endif
         }
         ++it;
     }
+    
+    // Save the color profile
+    KoColorProfile* colorProfile = device->colorSpace()->profile();
+    QByteArray colorProfileData = colorProfile->rawData();
+    
+#if PNG_LIBPNG_VER_MAJOR >= 1 && PNG_LIBPNG_VER_MINOR >= 5
+    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (const png_bytep)colorProfileData.data(), colorProfileData . size());
+#else
+    png_set_iCCP(png_ptr, info_ptr, "icc", PNG_COMPRESSION_TYPE_BASE, (char*)colorProfileData.data(), colorProfileData . size());
+#endif
 
     // read comments from the document information
     if (m_doc) {

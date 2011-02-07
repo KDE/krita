@@ -29,6 +29,8 @@
 #include "kis_view2.h"
 #include "kis_paintop_box.h"
 #include "kis_paintop_presets_chooser_popup.h"
+#include "kis_canvas_resource_provider.h"
+#include <kis_paintop_preset.h>
 
 
 PresetDockerDock::PresetDockerDock( ) : QDockWidget(i18n("Preset docker")), m_canvas(0)
@@ -44,9 +46,8 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
     Q_ASSERT(m_canvas);
     if(!m_canvas) return;
 
-//    connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-//            this, SLOT(resourceChanged(int, const QVariant&)));
-
+   connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+           this, SLOT(resourceChanged(int, const QVariant&)));
 
     connect(m_presetChooser, SIGNAL(resourceSelected(KoResource*)),
             m_canvas->view()->paintOpBox(), SLOT(resourceSelected(KoResource*)));
@@ -54,6 +55,10 @@ void PresetDockerDock::setCanvas(KoCanvasBase * canvas)
 
 void PresetDockerDock::resourceChanged(int key, const QVariant& v)
 {
+    KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+    if (preset) {
+        m_presetChooser->setPresetFilter(preset->paintOp());
+    }
 }
 
 #include "presetdocker_dock.moc"

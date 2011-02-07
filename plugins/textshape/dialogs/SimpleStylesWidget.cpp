@@ -121,7 +121,11 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     setLayout(l);
 
     connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)));
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_popupForBlock, SIGNAL(paragraphStyleSelected(KoParagraphStyle *)), this, SLOT(hidePopups()));
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
+    connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopups()));
 }
 
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
@@ -130,6 +134,13 @@ void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)
     m_popupForBlock->setStyleManager(sm);
     m_popupForChar->setStyleManager(sm);
 }
+
+void SimpleStylesWidget::hidePopups()
+{
+    m_popupForBlock->hide();
+    m_popupForChar->hide();
+}
+
 
 void SimpleStylesWidget::setCurrentFormat(const QTextBlockFormat &format)
 {

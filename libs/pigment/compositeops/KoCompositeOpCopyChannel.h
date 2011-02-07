@@ -48,6 +48,8 @@ public:
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
+        using namespace Arithmetic;
+        
         if(allChannelFlags || channelFlags.testBit(channel_pos)) {
             if(channel_pos == alpha_pos)
                 return lerp(dstAlpha, srcAlpha, opacity);

@@ -59,6 +59,8 @@ private:
                           const quint8* maskRowStart, qint32 maskRowStride,
                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
         
+        using namespace Arithmetic;
+        
         qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
         bool          useMask   = maskRowStart != 0;
         channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;

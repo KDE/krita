@@ -41,6 +41,8 @@ public:
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
                                                      channels_type opacity, const QBitArray& channelFlags) {
+        using namespace Arithmetic;
+        
         srcAlpha = mul(srcAlpha, opacity);
         
         if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {

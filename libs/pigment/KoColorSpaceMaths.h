@@ -514,4 +514,150 @@ inline float KoColorSpaceMaths<float, float>::scaleToA(float a)
     return a;
 }
 
+namespace Arithmetic
+{
+    const static qreal pi = 3.14159265358979323846;
+    
+    // template<class T>
+    // inline T mul(T a, T b) { T(KoColorSpaceMaths<T>::multiply(a, b)); }
+    
+    // template<class T>
+    // inline T mul(T a, T b, T c) { T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
+    
+    template<class T>
+    inline T mul(T a, T b) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return T(composite_type(a) * b / KoColorSpaceMathsTraits<T>::unitValue);
+    }
+    
+    template<class T>
+    inline T mul(T a, T b, T c) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return T((composite_type(a) * b * c) / (composite_type(KoColorSpaceMathsTraits<T>::unitValue) * KoColorSpaceMathsTraits<T>::unitValue));
+    }
+    
+    template<class T>
+    inline T inv(T a) { return KoColorSpaceMathsTraits<T>::unitValue - a; }
+    
+    template<class T>
+    inline T lerp(T a, T b, T alpha) { return KoColorSpaceMaths<T>::blend(b, a, alpha); }
+    
+    template<class TRet, class T>
+    inline TRet scale(T a) { return KoColorSpaceMaths<T,TRet>::scaleToA(a); }
+    
+    template<class T>
+    inline typename KoColorSpaceMathsTraits<T>::compositetype
+    div(T a, T b) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return composite_type(a) * KoColorSpaceMathsTraits<T>::unitValue / composite_type(b);
+    }
+    
+    template<class T>
+    inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
+    }
+    
+    template<class T>
+    inline T min(T a, T b, T c) {
+        b = (a < b) ? a : b;
+        return (b < c) ? b : c;
+    }
+    
+    template<class T>
+    inline T max(T a, T b, T c) {
+        b = (a > b) ? a : b;
+        return (b > c) ? b : c;
+    }
+    
+    template<class T>
+    inline T unionShapeOpacy(T a, T b) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return T(composite_type(a) + b - mul(a,b));
+    }
+    
+    template<class T>
+    inline T blend(T src, T srcAlpha, T dst, T dstAlpha, T cfValue) {
+        return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, cfValue);
+    }
+}
+
+namespace HSX
+{
+    template<class TReal>
+    inline TReal getLuminosity(TReal r, TReal g, TReal b) {
+        return TReal(0.3)*r + TReal(0.59)*g + TReal(0.11)*b;
+    }
+    
+    template<class TReal>
+    inline void setLuminosity(TReal& r, TReal& g, TReal& b, TReal lum) {
+        using namespace Arithmetic;
+        
+        TReal d = lum - getLuminosity(r, g, b);
+        
+        r += d;
+        g += d;
+        b += d;
+        
+        TReal l = getLuminosity(r, g, b);
+        TReal n = min(r, g, b);
+        TReal x = max(r, g, b);
+        
+        if(n < TReal(0.0)) {
+            r = l + ((r-l) * l) / (l-n);
+            g = l + ((g-l) * l) / (l-n);
+            b = l + ((b-l) * l) / (l-n);
+        }
+        
+        if(x > TReal(1.0)) {
+            r = l + ((r-l) * (TReal(1.0)-l)) / (x-l);
+            g = l + ((g-l) * (TReal(1.0)-l)) / (x-l);
+            b = l + ((b-l) * (TReal(1.0)-l)) / (x-l);
+        }
+    }
+    
+    template<class TReal>
+    inline TReal getSaturation(TReal r, TReal g, TReal b) {
+        return Arithmetic::max(r,g,b) - Arithmetic::min(r,g,b);
+    }
+    
+    template<class TReal>
+    inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat) {
+        
+        int   min    = 0;
+        int   mid    = 1;
+        int   max    = 2;
+        TReal rgb[3] = {r, g, b};
+        
+        if(rgb[mid] < rgb[min]) {
+            int tmp = min;
+            min = mid;
+            mid = tmp;
+        }
+        
+        if(rgb[max] < rgb[mid]) {
+            int tmp = mid;
+            mid = max;
+            max = tmp;
+        }
+        
+        if(rgb[mid] < rgb[min]) {
+            int tmp = min;
+            min = mid;
+            mid = tmp;
+        }
+        
+        if((rgb[max] - rgb[min]) > TReal(0.0)) {
+            rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
+            rgb[max] = sat;
+            rgb[min] = TReal(0.0);
+            
+            r = rgb[0];
+            g = rgb[1];
+            b = rgb[2];
+        }
+        else r = g = b = TReal(0.0);
+    }
+}
+
 #endif

@@ -116,6 +116,17 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
 }
 
 
+static bool isWhitespaceOnly(const QString& text)
+{
+    for (int i = 0; i < text.length(); i++) {
+        if (!text[i].isSpace()) {
+            return false;
+        }
+    }
+    return true;
+}
+
+
 void ToCGenerator::generate()
 {
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();
@@ -313,13 +324,5 @@ void ToCGenerator::update()
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();
 }
-
-bool ToCGenerator::isWhitespaceOnly(QString text) const
-{
-    text.remove(' ');
-    text.remove('\t');
-    return text.isEmpty();
-}
-
 
 #include <ToCGenerator.moc>

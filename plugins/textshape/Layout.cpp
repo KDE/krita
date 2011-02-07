@@ -1124,13 +1124,15 @@ void Layout::resetPrivate()
             if (m_block.layout() && m_block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 m_y = m_block.layout()->lineAt(0).position().y();
-                if (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
+                while (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
                     // the last layed-out parag
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
+                    Q_ASSERT(shape);
                     data = qobject_cast<KoTextShapeData*>(shape->userData());
+                    Q_ASSERT(data);
                     m_newShape = false;
                 }
                 if (m_y > data->documentOffset() + shape->size().height()) {

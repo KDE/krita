@@ -80,6 +80,7 @@ void ChangeTrackingTool::mouseReleaseEvent(KoPointerEvent* event)
 
 void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
 {
+    updateSelectedShape(event->point);
     int position = pointToPosition(event->point);
     QTextCursor cursor(m_textShapeData->document());
     cursor.setPosition(position);
@@ -87,25 +88,17 @@ void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
     int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
     if (changeId) {
         m_canvas->setCursor(QCursor(Qt::PointingHandCursor));
+        QModelIndex index = m_model->indexForChangeId(changeId);
+        m_changesTreeView->setCurrentIndex(index);
     } else {
         m_canvas->setCursor(QCursor(Qt::ArrowCursor));
+        m_changesTreeView->setCurrentIndex(QModelIndex());
     }
-    event->ignore();
 }
 
 void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
 {
-    if (event->button() != Qt::RightButton)
-        updateSelectedShape(event->point);
-
-    int position = pointToPosition(event->point);
-    QTextCursor cursor(m_textShapeData->document());
-    cursor.setPosition(position);
-
-    //KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
-    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-    QModelIndex index = m_model->indexForChangeId(changeId);
-    m_changesTreeView->setCurrentIndex(index);
+    event->ignore();
 }
 
 void ChangeTrackingTool::updateSelectedShape(const QPointF &point)

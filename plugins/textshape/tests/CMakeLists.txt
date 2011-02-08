@@ -70,6 +70,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
     ../dialogs/ChangeTrackingOptionsWidget.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp
@@ -148,6 +149,7 @@ set(TestTextTool_test_SRCS
     ../commands/TextCutCommand.cpp
     ../commands/TextPasteCommand.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/CharacterHighlighting.cpp
     ../dialogs/FontDecorations.cpp
@@ -233,6 +235,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
     ../dialogs/ChangeTrackingOptionsWidget.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp

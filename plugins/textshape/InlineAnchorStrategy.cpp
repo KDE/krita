@@ -43,8 +43,10 @@ bool InlineAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *stat
     }
 
     if (state->cursorPosition() <= m_anchor->positionInDocument()) {
-        kDebug() << "state->cursorPosition()" << state->cursorPosition();
-        kDebug() << "m_anchor->positionInDocument()" << m_anchor->positionInDocument();
+        return false;
+    }
+
+    if (!m_anchor->shape()->parent()) {
         return false;
     }
 

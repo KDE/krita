@@ -24,12 +24,18 @@
 #include <QLabel>
 #include <QGridLayout>
 
+#include <KoCanvasBase.h>
+#include <KoShapeController.h>
+#include <KoColorBackground.h>
+#include <KoPatternBackground.h>
+
 #include <kis_debug.h>
 #include <klocale.h>
 
 #include <kis_paint_layer.h>
 #include <kis_paint_device.h>
 #include <recorder/kis_recorded_paint_action.h>
+#include <KoShape.h>
 
 KisToolShape::KisToolShape(KoCanvasBase * canvas, const QCursor & cursor)
         : KisToolPaint(canvas, cursor)
@@ -107,6 +113,34 @@ void KisToolShape::setupPaintAction(KisRecordedPaintAction* action)
     action->setGenerator(currentGenerator());
     action->setPattern(currentPattern());
     action->setGradient(currentGradient());
+}
+
+void KisToolShape::addShape(KoShape* shape)
+{
+    KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
+    switch(fillStyle()) {
+        case KisPainter::FillStyleForegroundColor:
+            shape->setBackground(new KoColorBackground(currentFgColor().toQColor()));
+            break;
+        case KisPainter::FillStyleBackgroundColor:
+            shape->setBackground(new KoColorBackground(currentBgColor().toQColor()));
+            break;
+        case KisPainter::FillStylePattern:
+            if (imageCollection) {
+                KoPatternBackground* fill = new KoPatternBackground(imageCollection);
+                fill->setPattern(currentPattern()->image());
+                shape->setBackground(fill);
+            } else {
+                shape->setBackground(0);
+            }
+            break;
+        case KisPainter::FillStyleNone:
+        default:
+            shape->setBackground(0);
+            break;
+    }
+    QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
+    canvas()->addCommand(cmd);
 }
 
 #include "kis_tool_shape.moc"

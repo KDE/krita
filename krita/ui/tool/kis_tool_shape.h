@@ -62,6 +62,8 @@ protected:
     virtual void setupPainter(KisPainter * painter);
     virtual void setupPaintAction(KisRecordedPaintAction* action);
 
+    void addShape(KoShape* shape);
+
 private:
     QGridLayout *m_optionLayout;
     WdgGeometryOptions *m_shapeOptionsWidget;

@@ -80,6 +80,16 @@ void ChangeTrackingTool::mouseReleaseEvent(KoPointerEvent* event)
 
 void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
 {
+    int position = pointToPosition(event->point);
+    QTextCursor cursor(m_textShapeData->document());
+    cursor.setPosition(position);
+
+    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) {
+        m_canvas->setCursor(QCursor(Qt::PointingHandCursor));
+    } else {
+        m_canvas->setCursor(QCursor(Qt::ArrowCursor));
+    }
     event->ignore();
 }
 

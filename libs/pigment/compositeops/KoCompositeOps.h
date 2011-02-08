@@ -23,8 +23,9 @@
 
 #include <boost/type_traits.hpp>
 
-#include "KoColorSpace.h"
-#include "KoColorSpaceTraits.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceMaths.h>
+#include <KoColorSpaceTraits.h>
 
 #include "compositeops/KoCompositeOpGeneric.h"
 #include "compositeops/KoCompositeOpCopyChannel.h"
@@ -137,11 +138,25 @@ struct AddRGBOps<Traits, true>
         if(alpha_pos != -1)
             cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,alpha_pos>(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Alpha") , KoCompositeOp::categoryMisc()));
         
-        add<&cfColor>(cs, COMPOSITE_COLOR, i18n("Color"), KoCompositeOp::categoryColor());
-        add<&cfHue>  (cs, COMPOSITE_HUE  , i18n("Hue")  , KoCompositeOp::categoryColor());
+        add<&cfColor     <HSYType,Arg> >(cs, COMPOSITE_COLOR     , i18n("Color HSY")     , KoCompositeOp::categoryColor());
+        add<&cfHue       <HSYType,Arg> >(cs, COMPOSITE_HUE       , i18n("Hue HSY")       , KoCompositeOp::categoryColor());
+        add<&cfSaturation<HSYType,Arg> >(cs, COMPOSITE_SATURATION, i18n("Saturation HSY"), KoCompositeOp::categoryColor());
+        add<&cfLightness <HSYType,Arg> >(cs, COMPOSITE_LUMINIZE  , i18n("Luminosity")    , KoCompositeOp::categoryColor());
         
-        add<&cfLuminosity>(cs, COMPOSITE_LUMINIZE  , i18n("Luminosity"), KoCompositeOp::categoryMix());
-        add<&cfSaturation>(cs, COMPOSITE_SATURATION, i18n("Saturation"), KoCompositeOp::categoryMix());
+        add<&cfColor     <HSLType,Arg> >(cs, COMPOSITE_COLOR_HSL     , i18n("Color HSL")     , KoCompositeOp::categoryColor());
+        add<&cfHue       <HSLType,Arg> >(cs, COMPOSITE_HUE_HSL       , i18n("Hue HSL")       , KoCompositeOp::categoryColor());
+        add<&cfSaturation<HSLType,Arg> >(cs, COMPOSITE_SATURATION_HSL, i18n("Saturation HSL"), KoCompositeOp::categoryColor());
+        add<&cfLightness <HSLType,Arg> >(cs, COMPOSITE_LIGHTNESS     , i18n("Lightness")     , KoCompositeOp::categoryColor());
+        
+        add<&cfColor     <HSVType,Arg> >(cs, COMPOSITE_COLOR_HSV     , i18n("Color HSV")     , KoCompositeOp::categoryColor());
+        add<&cfHue       <HSVType,Arg> >(cs, COMPOSITE_HUE_HSV       , i18n("Hue HSV")       , KoCompositeOp::categoryColor());
+        add<&cfSaturation<HSVType,Arg> >(cs, COMPOSITE_SATURATION_HSV, i18n("Saturation HSV"), KoCompositeOp::categoryColor());
+        add<&cfLightness <HSVType,Arg> >(cs, COMPOSITE_VALUE         , i18n("Value")         , KoCompositeOp::categoryColor());
+        
+        add<&cfColor     <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI     , i18n("Color HSI")     , KoCompositeOp::categoryColor());
+        add<&cfHue       <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI       , i18n("Hue HSI")       , KoCompositeOp::categoryColor());
+        add<&cfSaturation<HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI, i18n("Saturation HSI"), KoCompositeOp::categoryColor());
+        add<&cfLightness <HSIType,Arg> >(cs, COMPOSITE_INTENSITY     , i18n("Intensity")     , KoCompositeOp::categoryColor());
     }
 };
 

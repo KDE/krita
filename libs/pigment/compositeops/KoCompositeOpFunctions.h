@@ -22,37 +22,37 @@
 
 #include <KoColorSpaceMaths.h>
 
-template<class TReal>
+template<class HSXType, class TReal>
 inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal lum = HSX::getLuminosity(dr, dg, db);
+    TReal lum = getLightness<HSXType>(dr, dg, db);
     dr = sr;
     dg = sg;
     db = sb;
-    HSX::setLuminosity(dr, dg, db, lum);
+    setLightness<HSXType>(dr, dg, db, lum);
 }
 
-template<class TReal>
-inline void cfLuminosity(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    HSX::setLuminosity(dr, dg, db, HSX::getLuminosity(sr, sg, sb));
+template<class HSXType, class TReal>
+inline void cfLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    setLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
 }
 
-template<class TReal>
+template<class HSXType, class TReal>
 inline void cfSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal sat = HSX::getSaturation(sr, sg, sb);
-    TReal lum = HSX::getLuminosity(dr, dg, db);
-    HSX::setSaturation(dr, dg, db, sat);
-    HSX::setLuminosity(dr, dg, db, lum);
+    TReal sat = getSaturation<HSXType>(sr, sg, sb);
+    TReal lum = getLightness<HSXType>(dr, dg, db);
+    setSaturation<HSXType>(dr, dg, db, sat);
+    setLightness<HSXType>(dr, dg, db, lum);
 }
 
-template<class TReal>
+template<class HSXType, class TReal>
 inline void cfHue(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal sat = HSX::getSaturation(dr, dg, db);
-    TReal lum = HSX::getLuminosity(dr, dg, db);
+    TReal sat = getSaturation<HSXType>(dr, dg, db);
+    TReal lum = getLightness<HSXType>(dr, dg, db);
     dr = sr;
     dg = sg;
     db = sb;
-    HSX::setSaturation(dr, dg, db, sat);
-    HSX::setLuminosity(dr, dg, db, lum);
+    setSaturation<HSXType>(dr, dg, db, sat);
+    setLightness<HSXType>(dr, dg, db, lum);
 }
 
 template<class T>

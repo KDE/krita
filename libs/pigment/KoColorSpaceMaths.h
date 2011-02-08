@@ -20,6 +20,9 @@
 #ifndef KOCOLORSPACEMATHS_H_
 #define KOCOLORSPACEMATHS_H_
 
+#include <cmath>
+#include <limits>
+
 #include "pigment_export.h"
 #include <KoIntegerMaths.h>
 #include "KoChannelInfo.h"
@@ -582,82 +585,170 @@ namespace Arithmetic
     }
 }
 
-namespace HSX
+struct HSYType
 {
     template<class TReal>
-    inline TReal getLuminosity(TReal r, TReal g, TReal b) {
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
         return TReal(0.3)*r + TReal(0.59)*g + TReal(0.11)*b;
     }
     
     template<class TReal>
-    inline void setLuminosity(TReal& r, TReal& g, TReal& b, TReal lum) {
-        using namespace Arithmetic;
-        
-        TReal d = lum - getLuminosity(r, g, b);
-        
-        r += d;
-        g += d;
-        b += d;
-        
-        TReal l = getLuminosity(r, g, b);
-        TReal n = min(r, g, b);
-        TReal x = max(r, g, b);
-        
-        if(n < TReal(0.0)) {
-            r = l + ((r-l) * l) / (l-n);
-            g = l + ((g-l) * l) / (l-n);
-            b = l + ((b-l) * l) / (l-n);
-        }
-        
-        if(x > TReal(1.0)) {
-            r = l + ((r-l) * (TReal(1.0)-l)) / (x-l);
-            g = l + ((g-l) * (TReal(1.0)-l)) / (x-l);
-            b = l + ((b-l) * (TReal(1.0)-l)) / (x-l);
-        }
-    }
-    
-    template<class TReal>
-    inline TReal getSaturation(TReal r, TReal g, TReal b) {
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
         return Arithmetic::max(r,g,b) - Arithmetic::min(r,g,b);
     }
+};
+
+struct HSIType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        return (r + g + b) * TReal(0.33333333333333333333); // (r + g + b) / 3.0
+    }
     
     template<class TReal>
-    inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat) {
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max    = Arithmetic::max(r, g, b);
+        TReal min    = Arithmetic::min(r, g, b);
+        TReal chroma = max - min;
         
-        int   min    = 0;
-        int   mid    = 1;
-        int   max    = 2;
-        TReal rgb[3] = {r, g, b};
-        
-        if(rgb[mid] < rgb[min]) {
-            int tmp = min;
-            min = mid;
-            mid = tmp;
-        }
-        
-        if(rgb[max] < rgb[mid]) {
-            int tmp = mid;
-            mid = max;
-            max = tmp;
-        }
-        
-        if(rgb[mid] < rgb[min]) {
-            int tmp = min;
-            min = mid;
-            mid = tmp;
-        }
-        
-        if((rgb[max] - rgb[min]) > TReal(0.0)) {
-            rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
-            rgb[max] = sat;
-            rgb[min] = TReal(0.0);
-            
-            r = rgb[0];
-            g = rgb[1];
-            b = rgb[2];
-        }
-        else r = g = b = TReal(0.0);
+        return (chroma > std::numeric_limits<TReal>::epsilon()) ?
+            (TReal(1.0) - min / getLightness(r, g, b)) : TReal(0.0);
     }
+};
+
+struct HSLType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        TReal max = Arithmetic::max(r, g, b);
+        TReal min = Arithmetic::min(r, g, b);
+        return (max + min) * TReal(0.5);
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max    = Arithmetic::max(r, g, b);
+        TReal min    = Arithmetic::min(r, g, b);
+        TReal chroma = max - min;
+        TReal light  = (max + min) * TReal(0.5);
+        TReal div    = TReal(1.0) - std::abs(TReal(2.0)*light - TReal(1.0));
+        
+        if(div > std::numeric_limits<TReal>::epsilon())
+            return chroma / div;
+        
+        return TReal(1.0);
+    }
+};
+
+struct HSVType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        return Arithmetic::max(r,g,b);
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max = Arithmetic::max(r, g, b);
+        TReal min = Arithmetic::min(r, g, b);
+        return (max == TReal(0.0)) ? TReal(0.0) : (max - min) / max;
+    }
+};
+
+template<class TReal>
+TReal getHue(TReal r, TReal g, TReal b) {
+    TReal min    = Arithmetic::min(r, g, b);
+    TReal max    = Arithmetic::max(r, g, b);
+    TReal chroma = max - min;
+    
+    TReal hue = TReal(0.0);
+    
+    if(chroma > std::numeric_limits<TReal>::epsilon()) {
+        if(max == r) // between yellow and magenta
+            hue = (g - b) / chroma;
+        else if(max == g) // between cyan and yellow
+            hue = TReal(2.0) + (b - r) / chroma;
+        else if(max == b) // between magenta and cyan
+            hue = TReal(4.0) + (r - g) / chroma;
+    }
+    
+    return hue;
+}
+
+template<class HSXType, class TReal>
+inline static TReal getLightness(TReal r, TReal g, TReal b) {
+    return HSXType::getLightness(r, g, b);
+}
+
+template<class HSXType, class TReal>
+inline void setLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    using namespace Arithmetic;
+    
+    TReal d = light - HSXType::getLightness(r, g, b);
+    
+    r += d;
+    g += d;
+    b += d;
+    
+    TReal l = HSXType::getLightness(r, g, b);
+    TReal n = min(r, g, b);
+    TReal x = max(r, g, b);
+    
+    if(n < TReal(0.0)) {
+        r = l + ((r-l) * l) / (l-n);
+        g = l + ((g-l) * l) / (l-n);
+        b = l + ((b-l) * l) / (l-n);
+    }
+    
+    if(x > TReal(1.0)) {
+        r = l + ((r-l) * (TReal(1.0)-l)) / (x-l);
+        g = l + ((g-l) * (TReal(1.0)-l)) / (x-l);
+        b = l + ((b-l) * (TReal(1.0)-l)) / (x-l);
+    }
+}
+
+template<class HSXType, class TReal>
+inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+    return HSXType::getSaturation(r, g, b);
+}
+
+template<class HSXType, class TReal>
+inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
+{
+    int   min    = 0;
+    int   mid    = 1;
+    int   max    = 2;
+    TReal rgb[3] = {r, g, b};
+    
+    if(rgb[mid] < rgb[min]) {
+        int tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if(rgb[max] < rgb[mid]) {
+        int tmp = mid;
+        mid = max;
+        max = tmp;
+    }
+    
+    if(rgb[mid] < rgb[min]) {
+        int tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if((rgb[max] - rgb[min]) > TReal(0.0)) {
+        rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
+        rgb[max] = sat;
+        rgb[min] = TReal(0.0);
+        
+        r = rgb[0];
+        g = rgb[1];
+        b = rgb[2];
+    }
+    else r = g = b = TReal(0.0);
 }
 
 #endif

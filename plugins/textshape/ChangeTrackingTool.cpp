@@ -194,14 +194,10 @@ void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& convert
             if ((data->endPosition() >= start && data->position() <= end)
                 || (data->position() <= start && data->endPosition() >= end)) {
                 QRectF clip = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
-            painter.save();
-            QPen pen;
-            pen.setColor(QColor(Qt::black));
-            pen.setWidth(3);
-            painter.setPen(pen);
-            painter.setClipRect(clip, Qt::IntersectClip);
-            painter.drawRect(clip);
-            painter.restore();
+                painter.save();
+                painter.setClipRect(clip, Qt::IntersectClip);
+                painter.fillRect(clip, QBrush(QColor(0,0,0,90)));
+                painter.restore();
             }
 
             painter.restore();

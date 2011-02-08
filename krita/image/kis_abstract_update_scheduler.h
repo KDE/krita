@@ -21,7 +21,9 @@
 
 #include "kis_node.h"
 
-
+/**
+ * XXX: APIDOX!
+ */
 class KRITAIMAGE_EXPORT KisAbstractUpdateScheduler : public QObject
 {
     Q_OBJECT

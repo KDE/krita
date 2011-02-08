@@ -34,7 +34,10 @@ class KOODF_EXPORT KoOdfManifestEntry
 {
 public:
     KoOdfManifestEntry(const QString &fp, const QString &mt, const QString &v);
+    KoOdfManifestEntry(const KoOdfManifestEntry &other);
     ~KoOdfManifestEntry();
+
+    KoOdfManifestEntry &operator=(const KoOdfManifestEntry &other);
 
     QString fullPath() const;
     void setFullPath(const QString &fp);

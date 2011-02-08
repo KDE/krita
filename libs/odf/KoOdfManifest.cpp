@@ -28,7 +28,7 @@ public:
     Private();
 
     QString  fullPath;          // manifest:full-path
-    QString  mediaType;          // manifest:media-type
+    QString  mediaType;         // manifest:media-type
     QString  version;           // manifest:version  (isNull==true if not present)
 };
 
@@ -48,10 +48,28 @@ KoOdfManifestEntry::KoOdfManifestEntry(const QString &fp, const QString &mt, con
     d->version = v;
 }
 
+KoOdfManifestEntry::KoOdfManifestEntry(const KoOdfManifestEntry &other)
+    : d(new Private())
+{
+    d->fullPath = other.d->fullPath;
+    d->mediaType = other.d->mediaType;
+    d->version = other.d->version;
+}
+
 KoOdfManifestEntry::~KoOdfManifestEntry()
 {
     delete d;
 }
+
+KoOdfManifestEntry &KoOdfManifestEntry::operator=(const KoOdfManifestEntry &other)
+{
+    d->fullPath = other.d->fullPath;
+    d->mediaType = other.d->mediaType;
+    d->version = other.d->version;
+
+    return *this;
+}
+
 
 QString KoOdfManifestEntry::fullPath() const
 {

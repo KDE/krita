@@ -23,6 +23,7 @@
 #include "sensors/kis_dynamic_sensor_distance.h"
 #include "sensors/kis_dynamic_sensor_time.h"
 #include "sensors/kis_dynamic_sensor_fade.h"
+#include "sensors/kis_dynamic_sensor_list.h"
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
@@ -32,7 +33,12 @@ KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 
 KisDynamicSensor::~KisDynamicSensor() { }
 
-QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorSelector*)
+KisDynamicSensor* KisDynamicSensor::clone() const
+{
+    return createFromXML(toXML());
+}
+
+QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)
 {
     Q_UNUSED(parent);
     return 0;
@@ -70,6 +76,8 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorFade();
     } else if (id.id() == PerspectiveId.id()) {
         return new KisDynamicSensorPerspective();
+    } else if (id.id() == SensorsListId.id()) {
+        return new KisDynamicSensorList();
     }
 
     dbgPlugins << "Unknown transform parameter :" << id.id();

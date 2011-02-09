@@ -66,7 +66,7 @@ void KisDynamicSensorFade::setLength(int length)
     setMaximumLabel(i18n("%1", length));
 }
 
-QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorFadeConfiguration stc;

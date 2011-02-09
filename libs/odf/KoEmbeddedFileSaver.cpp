@@ -32,6 +32,7 @@
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <KoOdfWriteStore.h>
+#include <KoOdfManifest.h>
 
 #include "KoOdfDocument.h"
 
@@ -51,6 +52,7 @@ public:
 
     QHash<QString, int>  prefixes; // Used in getFilename();
     QList<FileEntry*>    files;    // These will be saved when saveEmbeddedFiles() are called.
+    QList<KoOdfManifestEntry*> manifestEntries;
 };
 
 
@@ -62,6 +64,7 @@ KoEmbeddedFileSaver::KoEmbeddedFileSaver()
 KoEmbeddedFileSaver::~KoEmbeddedFileSaver()
 {
     qDeleteAll(d->files);
+    qDeleteAll(d->manifestEntries);
     delete d;
 }
 
@@ -131,6 +134,16 @@ void KoEmbeddedFileSaver::saveFile(const QString &path, const QByteArray &mimeTy
     kDebug(30003) << "saving reference to embedded file as" << path;
 }
 
+/**
+ *
+ */
+void KoEmbeddedFileSaver::saveManifestEntry(const QString &fullPath, const QString &mediaType,
+                                            const QString &version)
+{
+    d->manifestEntries.append(new KoOdfManifestEntry(fullPath, mediaType, version));
+}
+
+
 bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &documentContext)
 {
     KoStore * store = documentContext.odfStore.store();
@@ -160,6 +173,16 @@ bool KoEmbeddedFileSaver::saveEmbeddedFiles(KoOdfDocument::SavingContext &docume
             path = path.mid(2);   // remove leading './', no wanted in manifest
         }
         documentContext.odfStore.manifestWriter()->addManifestEntry(path, entry->mimeType);
+    }
+
+    // Write the manifest entries.
+    KoXmlWriter *manifestWriter = documentContext.odfStore.manifestWriter();
+    foreach(KoOdfManifestEntry *entry, d->manifestEntries) {
+        manifestWriter->startElement("manifest:file-entry");
+        manifestWriter->addAttribute("manifest:version", entry->version());
+        manifestWriter->addAttribute("manifest:media-type", entry->mediaType());
+        manifestWriter->addAttribute("manifest:full-path", entry->fullPath());
+        manifestWriter->endElement();
     }
 
     return true;

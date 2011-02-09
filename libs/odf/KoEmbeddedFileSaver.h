@@ -68,6 +68,12 @@ public:
                   QByteArray contents);
 
     /**
+     *
+     */
+    void saveManifestEntry(const QString &fullPath, const QString &mediaType,
+                           const QString &version = QString());
+
+    /**
      * Save all embedded files to the store.
      */
     bool saveEmbeddedFiles(KoOdfDocument::SavingContext &documentContext);

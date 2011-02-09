@@ -112,23 +112,23 @@ target_link_libraries(TestChangesDatabase ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRA
 
 ########### next target ###############
 
-set(TestStylesModel_test_SRCS
-    TestStylesModel.cpp
-    ../dialogs/StylesModel.cpp
-    ../TextShape.cpp
-    ../Layout.cpp
-    ../TextLine.cpp
-    ../Outline.cpp
-    ../TableLayout.cpp
-    ../TableLayoutData.cpp
-    ../ListItemsHelper.cpp
-    ../ToCGenerator.cpp
-    ../ShrinkToFitShapeContainer.cpp
-    ../FloatingAnchorStrategy.cpp
-    ../InlineAnchorStrategy.cpp
-)
-kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
+#set(TestStylesModel_test_SRCS
+#    TestStylesModel.cpp
+#    ../dialogs/StylesModel.cpp
+#    ../TextShape.cpp
+#    ../Layout.cpp
+#    ../TextLine.cpp
+#    ../Outline.cpp
+#    ../TableLayout.cpp
+#    ../TableLayoutData.cpp
+#    ../ListItemsHelper.cpp
+#    ../ToCGenerator.cpp
+#    ../ShrinkToFitShapeContainer.cpp
+#    ../FloatingAnchorStrategy.cpp
+#    ../InlineAnchorStrategy.cpp
+#)
+#kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
+#target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

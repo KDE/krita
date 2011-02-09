@@ -2371,36 +2371,35 @@ void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 
 void Layout::resetInlineObject(int resetPosition)
 {
-    bool resetAllOthers = false;
-    for (int index = 0; index < m_textAnchors.size(); index++) {
+    QList<KoTextAnchor *>::iterator iterBeginErase = m_textAnchors.end();
+    QList<KoTextAnchor *>::iterator iter;
+    for (iter = m_textAnchors.begin(); iter != m_textAnchors.end(); iter++) {
 
-        if (resetAllOthers == false) {
-            if (m_textAnchors[index]->positionInDocument() >= resetPosition) {
-
-                if (m_textAnchors[index]->anchorStrategy()->isPositioned()) {
-                    m_textAnchorIndex = index;
-                    resetAllOthers = true;
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-        if (resetAllOthers == true) {
-
-            KoTextAnchor * textAnchorToReset = m_textAnchors[index];
-            textAnchorToReset->anchorStrategy()->reset();
+        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
+        if ((*iter)->positionInDocument() >= resetPosition) {
+            (*iter)->anchorStrategy()->reset();
 
             // delete outline
-            if (m_outlines.contains(textAnchorToReset->shape())) {
-                Outline *outline = m_outlines.value(textAnchorToReset->shape());
-                m_outlines.remove(textAnchorToReset->shape());
+            if (m_outlines.contains((*iter)->shape())) {
+                Outline *outline = m_outlines.value((*iter)->shape());
+                m_outlines.remove((*iter)->shape());
                 m_textLine.updateOutline(outline);
                 refreshCurrentPageOutlines();
                 delete outline;
             }
+            (*iter)->setAnchorStrategy(0);
+
+            if (iterBeginErase == m_textAnchors.end()) {
+                iterBeginErase = iter;
+            }
         }
+    }
+
+    m_textAnchors.erase(iterBeginErase,m_textAnchors.end());
+
+    // update m_textAnchorIndex if necesary
+    if (m_textAnchorIndex > m_textAnchors.size()) {
+        m_textAnchorIndex = m_textAnchors.size();
     }
 }
 

@@ -117,7 +117,7 @@ public:
     virtual void fitLineForRunAround(bool resetHorizontalPosition);
     // add inline object
     virtual void insertInlineObject(KoTextAnchor * textAnchor);
-    // reset all inline object which document position is bigger or equal to resetPosition
+    // remove all inline objects which document position is bigger or equal to resetPosition
     virtual void resetInlineObject(int resetPosition);
     // remove inline object
     virtual void removeInlineObject(KoTextAnchor * textAnchor);

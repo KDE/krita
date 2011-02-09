@@ -161,7 +161,6 @@ void KoUnavailShape::draw(QPainter &painter) const
 void KoUnavailShape::drawNull(QPainter &painter) const
 {
     QRectF  rect(QPointF(0,0), size());
-    kDebug(30006) << "Drawrect = " << rect;
     painter.save();
 
     // Draw a simple cross in a rectangle just to indicate that there is something here.
@@ -190,6 +189,22 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     // See also loadOdf() in loadOdfAttributes.
     saveOdfAttributes( context, OdfAllAttributes );
 
+#if 0
+    kDebug(30006) << "Object names: " << d->objectNames.size();
+    for (int i = 0; i < d->objectNames.size(); ++i) {
+        kDebug(30006) << i << ':' << d->objectNames.value(i);
+    }
+    kDebug(30006) << "Object manifest entries: " << d->manifestEntries.size();
+    for (int i = 0; i < d->manifestEntries.size(); ++i) {
+        KoOdfManifestEntry *entry = d->manifestEntries.value(i);
+        kDebug(30006) << i << ":" << entry;
+        if (entry)
+            kDebug(30006) << entry->fullPath() << entry->mediaType() << entry->version();
+        else
+            kDebug(30006) << "--";
+    }
+#endif
+
     // Write the already saved XML.
     for (int i = 0; i < d->frameContents.size(); ++i) {
         QByteArray          xmlArray(d->frameContents.value(i));
@@ -214,19 +229,23 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         // Save embedded files for this object.
         for (int j = 0; j < d->embeddedFiles.size(); ++j) {
             QString  fileName(d->embeddedFiles.value(j)->path);
-            kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
+            //kDebug(30006) << "Object name: " << objectName << "filename: " << fileName;
 
             if (fileName.startsWith(objectName)) {
                 fileName.replace(objectName, newName);
                 fileName.prepend("./");
-                kDebug(30006) << "New filename: " << fileName;
-                fileSaver.saveFile(fileName, d->embeddedFiles.value(i)->mimeType.toLatin1(),
-                                   d->embeddedFiles.value(i)->contents);
+                //kDebug(30006) << "New filename: " << fileName;
+                fileSaver.saveFile(fileName, d->embeddedFiles.value(j)->mimeType.toLatin1(),
+                                   d->embeddedFiles.value(j)->contents);
             }
         }
 
-        // FIXME: Write the manifest entry for the object itself.
-        //context.manifestWriter.addManifestEntry(fileName, d->manifestEntry->mediaType, d->manifestEntry->version); 
+        // Write the manifest entry for the object itself.  If it's a
+        // file, the manifest is already written by saveFile, so skip
+        // it here.
+        if (newName.endsWith('/'))
+            fileSaver.saveManifestEntry(newName, manifestEntry->mediaType(),
+                                        manifestEntry->version());
     }
 
     writer.endElement(); // draw:frame
@@ -236,8 +255,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingContext &context)
 {
     kDebug(30006) << "START LOADING ##################################################";
-    kDebug(30006) << "Loading ODF frame in the KoUnavailShape. Element = "
-                  << frameElement.tagName();
+    //kDebug(30006) << "Loading ODF frame in the KoUnavailShape. Element = "
+    //              << frameElement.tagName();
 
     loadOdfAttributes(frameElement, context, OdfAllAttributes);
 
@@ -260,8 +279,8 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     // saveOdf().
     d->saveXml(frameElement);
 
-    kDebug(30006) << "frameContents: " << d->frameContents;
-    kDebug(30006) << "objectNames:   " << d->objectNames;
+    //kDebug(30006) << "frameContents: " << d->frameContents;
+    //kDebug(30006) << "objectNames:   " << d->objectNames;
 
     // Loop through the objects that were found in the frame and save
     // all the files associated with them.  Some of the objects are
@@ -299,29 +318,31 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         // Get the manifest entry for this object.
         KoOdfManifestEntry *entry = 0;
         QString             entryName = isDir ? dirName : objectName;
-        for (int i = 0; i < manifest.size(); ++i) {
-            KoOdfManifestEntry *temp = manifest.value(i);
+        for (int j = 0; j < manifest.size(); ++j) {
+            KoOdfManifestEntry *temp = manifest.value(j);
 
             if (temp->fullPath() == entryName) {
-                entry = new KoOdfManifestEntry(*manifest.value(i));
-                //*entry = *temp;
+                entry = new KoOdfManifestEntry(*manifest.value(j));
                 break;
             }
         }
         d->manifestEntries.append(entry);
+        if (isDir)
+            d->objectNames[i].append('/');
     }
 
+#if 0
     kDebug(30006) << "Object manifest entries:";
     for (int i = 0; i < d->manifestEntries.size(); ++i) {
         KoOdfManifestEntry *entry = d->manifestEntries.value(i);
+        kDebug(30006) << i << ":" << entry;
         if (entry)
             kDebug(30006) << entry->fullPath() << entry->mediaType() << entry->version();
         else
             kDebug(30006) << "--";
     }
-
-            
     kDebug(30006) << "END LOADING ####################################################";
+#endif
     return true;
 }
 
@@ -418,7 +439,7 @@ void KoUnavailShape::Private::saveXmlRecursive(const KoXmlElement &el, KoXmlWrit
 
 void KoUnavailShape::Private::saveFile(const QString &fileName, KoShapeLoadingContext &context)
 {
-    kDebug(30006) << "Saving file: " << fileName;
+    //kDebug(30006) << "Saving file: " << fileName;
 
     // For now, don't handle directories.
     if (fileName.endsWith('/'))

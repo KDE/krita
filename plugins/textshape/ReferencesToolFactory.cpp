@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
+
 #include "ReferencesToolFactory.h"
-#include "ChangeTrackingToolFactory.h"
-#include "TextShapeFactory.h"
+#include "ReferencesTool.h"
+#include "TextShape.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <KoCanvasBase.h>
 
-#include <kpluginfactory.h>
+#include <klocale.h>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
-K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
-
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+ReferencesToolFactory::ReferencesToolFactory()
+        : KoToolFactoryBase("ReferencesToolFactory_ID")
 {
-    KoToolRegistry::instance()->add(new TextToolFactory());
-    KoToolRegistry::instance()->add(new ChangeTrackingToolFactory());
-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
-    KoShapeRegistry::instance()->add(new TextShapeFactory());
+    setToolTip(i18n("References tool"));
+    setToolType(dynamicToolType());
+    setIcon("tool-references");
+    setPriority(3);
+    setActivationShapeId(TextShape_SHAPEID);
 }
 
-#include <TextPlugin.moc>
+ReferencesToolFactory::~ReferencesToolFactory()
+{
+}
+
+KoToolBase * ReferencesToolFactory::createTool(KoCanvasBase *canvas)
+{
+    return new ReferencesTool(canvas);
+}
+
+bool ReferencesToolFactory::canCreateTool(KoCanvasBase* canvas) const
+{
+    return true;
+}

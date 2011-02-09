@@ -33,6 +33,9 @@ SET ( textshape_SRCS
     TextChange.cpp
     FontSizeAction.cpp
 
+    ReferencesTool.cpp
+    ReferencesToolFactory.cpp
+
     TableLayout.cpp
     TableLayoutData.cpp
     

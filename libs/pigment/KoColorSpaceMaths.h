@@ -523,23 +523,11 @@ namespace Arithmetic
 {
     const static qreal pi = 3.14159265358979323846;
     
-    // template<class T>
-    // inline T mul(T a, T b) { T(KoColorSpaceMaths<T>::multiply(a, b)); }
-    
-    // template<class T>
-    // inline T mul(T a, T b, T c) { T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
+    template<class T>
+    inline T mul(T a, T b) { return T(KoColorSpaceMaths<T>::multiply(a, b)); }
     
     template<class T>
-    inline T mul(T a, T b) {
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-        return T(composite_type(a) * b / KoColorSpaceMathsTraits<T>::unitValue);
-    }
-    
-    template<class T>
-    inline T mul(T a, T b, T c) {
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-        return T((composite_type(a) * b * c) / (composite_type(KoColorSpaceMathsTraits<T>::unitValue) * KoColorSpaceMathsTraits<T>::unitValue));
-    }
+    inline T mul(T a, T b, T c) { return T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
     
     template<class T>
     inline T inv(T a) { return KoColorSpaceMathsTraits<T>::unitValue - a; }
@@ -552,15 +540,11 @@ namespace Arithmetic
     
     template<class T>
     inline typename KoColorSpaceMathsTraits<T>::compositetype
-    div(T a, T b) {
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-        return composite_type(a) * KoColorSpaceMathsTraits<T>::unitValue / composite_type(b);
-    }
+    div(T a, T b) { return KoColorSpaceMaths<T>::divide(a, b); }
     
     template<class T>
     inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
-        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-        return qBound<composite_type>(KoColorSpaceMathsTraits<T>::zeroValue, a, KoColorSpaceMathsTraits<T>::unitValue);
+        return KoColorSpaceMaths<T>::clamp(a);
     }
     
     template<class T>

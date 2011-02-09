@@ -42,13 +42,14 @@
 #include <QTextLayout>
 
 
-StylesModel::StylesModel(KoStyleManager *manager, QObject *parent)
+StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *parent)
         : QAbstractListModel(parent),
         m_styleManager(0),
         m_currentParagraphStyle(0),
         m_currentCharacterStyle(0),
         m_pureParagraphStyle(true),
         m_pureCharacterStyle(true),
+        m_paragraphMode(paragraphMode),
         m_styleMapper(new QSignalMapper(this))
         ,m_tmpTextShape(0)
 {
@@ -170,15 +171,18 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     m_tmpTextShape->setSize(QSizeF(250, 300));
     m_styleManager->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());
 
-    connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
-    connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
-    connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
-    connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
 
-    foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
-        addParagraphStyle(style);
-    foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
-        addCharacterStyle(style);
+    if (m_paragraphMode) {
+        foreach(KoParagraphStyle *style, m_styleManager->paragraphStyles())
+            addParagraphStyle(style);
+        connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
+        connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
+    } else {
+        foreach(KoCharacterStyle *style, m_styleManager->characterStyles())
+            addCharacterStyle(style);
+        connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
+        connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
+    }
 }
 
 // called when the stylemanager adds a style

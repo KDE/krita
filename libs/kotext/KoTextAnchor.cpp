@@ -67,7 +67,9 @@ public:
             pageRect(0,0,10,10),
             pageContentRect(0,0,10,10),
             pageNumber(0),
-            anchorStrategy(0)
+            anchorStrategy(0),
+            inlineObjectAscent(0),
+            inlineObjectDescent(0)
     {
         Q_ASSERT(shape);
     }
@@ -126,6 +128,8 @@ public:
     QRectF pageContentRect;
     int pageNumber;
     KoAnchorStrategy *anchorStrategy;
+    qreal inlineObjectAscent;
+    qreal inlineObjectDescent;
 };
 
 KoTextAnchor::KoTextAnchor(KoShape *shape)
@@ -274,6 +278,8 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
                 break;
             }
         }
+        d->inlineObjectAscent = object.ascent();
+        d->inlineObjectDescent = object.descent();
     } else {
         object.setWidth(0);
         object.setAscent(0);
@@ -282,6 +288,9 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     if (d->fakeAsChar) {
         object.setAscent(d->shape->size().height());
         object.setDescent(0);
+
+        d->inlineObjectAscent = object.ascent();
+        d->inlineObjectDescent = object.descent();
     }
 }
 
@@ -758,4 +767,16 @@ void KoTextAnchor::setAnchorStrategy(KoAnchorStrategy * anchorStrategy)
         }
         d->anchorStrategy = anchorStrategy;
     }
+}
+
+qreal KoTextAnchor::inlineObjectAscent()
+{
+    Q_D(KoTextAnchor);
+    return d->inlineObjectAscent;
+}
+
+qreal KoTextAnchor::inlineObjectDescent()
+{
+    Q_D(KoTextAnchor);
+    return d->inlineObjectDescent;
 }

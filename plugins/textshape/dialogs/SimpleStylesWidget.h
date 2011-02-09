@@ -25,6 +25,7 @@
 
 
 class StylesWidget;
+class SpecialButton;
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
@@ -39,6 +40,7 @@ public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
+    void hidePopups();
 
 signals:
     void doneWithFocus();

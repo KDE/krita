@@ -30,7 +30,8 @@
 #include "ListItemsHelper.h"
 #include "TextShape.h"
 #include "ToCGenerator.h"
-#include "TextAnchorStrategy.h"
+#include "FloatingAnchorStrategy.h"
+#include "InlineAnchorStrategy.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -1124,13 +1125,15 @@ void Layout::resetPrivate()
             if (m_block.layout() && m_block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 m_y = m_block.layout()->lineAt(0).position().y();
-                if (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
+                while (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
                     // the last layed-out parag
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
+                    Q_ASSERT(shape);
                     data = qobject_cast<KoTextShapeData*>(shape->userData());
+                    Q_ASSERT(data);
                     m_newShape = false;
                 }
                 if (m_y > data->documentOffset() + shape->size().height()) {
@@ -1343,6 +1346,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter, context);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
+            m_tableLayout.setTable(table); // in case there was a sub table
             QVector<QLineF> accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->setPen(QPen(QColor(0,0,0,96)));
@@ -1417,9 +1421,10 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 }
             }
 
-           QRectF clipRect;                 // create an empty clipping rectangle
+            QRectF clipRect;                 // create an empty clipping rectangle
 
             if (wholeTable) {               // if we're in the table drawing
+                m_tableLayout.setTable(wholeTable);
                 QTextTableCell currentCell = wholeTable->cellAt(block.position());  // get the currently drawn cell
 
                 if (currentCell.isValid()) {                                        // and if the cell is valid
@@ -1907,8 +1912,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                         int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
-                        qreal xx2 = line.naturalTextWidth() + line.cursorToX(line.textStart());
-                        x2 = qMin(x2, xx2);
+                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
+                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
@@ -2355,43 +2360,46 @@ void Layout::unregisterAllRunAroundShapes()
 void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 {
     if (textAnchor != 0) {
-        textAnchor->setAnchorStrategy(new TextAnchorStrategy(textAnchor));
+        if (textAnchor->behavesAsCharacter()) {
+            textAnchor->setAnchorStrategy(new InlineAnchorStrategy(textAnchor));
+        } else {
+            textAnchor->setAnchorStrategy(new FloatingAnchorStrategy(textAnchor));
+        }
         m_textAnchors.append(textAnchor);
     }
 }
 
 void Layout::resetInlineObject(int resetPosition)
 {
-    bool resetAllOthers = false;
-    for (int index = 0; index < m_textAnchors.size(); index++) {
+    QList<KoTextAnchor *>::iterator iterBeginErase = m_textAnchors.end();
+    QList<KoTextAnchor *>::iterator iter;
+    for (iter = m_textAnchors.begin(); iter != m_textAnchors.end(); iter++) {
 
-        if (resetAllOthers == false) {
-            if (m_textAnchors[index]->positionInDocument() >= resetPosition) {
-
-                if (m_textAnchors[index]->anchorStrategy()->isPositioned()) {
-                    m_textAnchorIndex = index;
-                    resetAllOthers = true;
-                }
-                else {
-                    break;
-                }
-            }
-        }
-
-        if (resetAllOthers == true) {
-
-            KoTextAnchor * textAnchorToReset = m_textAnchors[index];
-            textAnchorToReset->anchorStrategy()->reset();
+        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
+        if ((*iter)->positionInDocument() >= resetPosition) {
+            (*iter)->anchorStrategy()->reset();
 
             // delete outline
-            if (m_outlines.contains(textAnchorToReset->shape())) {
-                Outline *outline = m_outlines.value(textAnchorToReset->shape());
-                m_outlines.remove(textAnchorToReset->shape());
+            if (m_outlines.contains((*iter)->shape())) {
+                Outline *outline = m_outlines.value((*iter)->shape());
+                m_outlines.remove((*iter)->shape());
                 m_textLine.updateOutline(outline);
                 refreshCurrentPageOutlines();
                 delete outline;
             }
+            (*iter)->setAnchorStrategy(0);
+
+            if (iterBeginErase == m_textAnchors.end()) {
+                iterBeginErase = iter;
+            }
         }
+    }
+
+    m_textAnchors.erase(iterBeginErase,m_textAnchors.end());
+
+    // update m_textAnchorIndex if necesary
+    if (m_textAnchorIndex > m_textAnchors.size()) {
+        m_textAnchorIndex = m_textAnchors.size();
     }
 }
 

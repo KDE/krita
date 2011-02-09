@@ -37,7 +37,7 @@ class StylesModel : public QAbstractListModel
     Q_OBJECT
 
 public:
-    explicit StylesModel(KoStyleManager *styleManager, QObject *parent = 0);
+    explicit StylesModel(KoStyleManager *styleManager, bool paragraphMode, QObject *parent = 0);
     ~StylesModel();
 
     virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
@@ -84,6 +84,7 @@ private:
     int m_currentCharacterStyle;
     bool m_pureParagraphStyle;
     bool m_pureCharacterStyle;
+    bool m_paragraphMode;
 
     QIcon m_paragIcon, m_charIcon;
 

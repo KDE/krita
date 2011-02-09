@@ -198,8 +198,7 @@ void KisToolPath::addPathShape(KoPathShape* pathShape)
 
     } else {
         pathShape->normalize();
-        QUndoCommand * cmd = canvas()->shapeController()->addShape(pathShape);
-        canvas()->addCommand(cmd);
+        addShape(pathShape);
     }
 }
 

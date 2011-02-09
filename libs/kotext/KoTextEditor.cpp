@@ -731,12 +731,26 @@ bool KoTextEditor::insertIndexMarker()
 }
 
 void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
-{//TODO changeTracking
+{
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineTextObjectManager());
+
+    int startPosition = d->caret.position();
+    QTextCharFormat format = d->caret.charFormat();
+    if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+    }
+
     layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner, d->caret.charFormat());
+
+    int endPosition = d->caret.position();
+    d->caret.setPosition(startPosition);
+    d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Insert Inline Object"), format, format, false);
+    d->caret.clearSelection();
+
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

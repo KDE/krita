@@ -23,16 +23,29 @@
 #include <QtGui>
 #include <ui_AcceptRejectChangeDialog.h>
 
+class KoChangeTracker;
+
 class AcceptRejectChangeDialog:public QDialog
 {
     Q_OBJECT
 
     public:
-        AcceptRejectChangeDialog();
+        typedef enum{
+            eDialogCancelled = 0,
+            eChangeAccepted,
+            eChangeRejected
+        }AcceptRejectResult;
+
+        AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId);
         ~AcceptRejectChangeDialog();
         
     private:
         Ui::AcceptRejectChangeDialog ui;
+
+    private slots:
+        void changeAccepted();
+        void changeRejected();
+        void dialogCancelled();
 };
 
 #endif

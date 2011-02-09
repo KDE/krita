@@ -1912,8 +1912,8 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
                         int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
                         qreal x1 = line.cursorToX(p1);
                         qreal x2 = line.cursorToX(p2);
-                        qreal xx2 = line.naturalTextWidth() + line.cursorToX(line.textStart());
-                        x2 = qMin(x2, xx2);
+                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
+                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock);

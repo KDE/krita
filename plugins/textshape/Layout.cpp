@@ -1346,6 +1346,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter, context);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
+            m_tableLayout.setTable(table); // in case there was a sub table
             QVector<QLineF> accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->setPen(QPen(QColor(0,0,0,96)));
@@ -1420,9 +1421,10 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 }
             }
 
-           QRectF clipRect;                 // create an empty clipping rectangle
+            QRectF clipRect;                 // create an empty clipping rectangle
 
             if (wholeTable) {               // if we're in the table drawing
+                m_tableLayout.setTable(wholeTable);
                 QTextTableCell currentCell = wholeTable->cellAt(block.position());  // get the currently drawn cell
 
                 if (currentCell.isValid()) {                                        // and if the cell is valid

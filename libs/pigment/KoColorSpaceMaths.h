@@ -249,7 +249,7 @@ public:
      * @param a
      * @param b
      */
-    inline static _T divide(_T a, _Tdst b) {
+    inline static traits_compositetype divide(_T a, _Tdst b) {
         return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
     }
 
@@ -453,7 +453,8 @@ inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b, qint32 c)
 }
 
 template<>
-inline quint8 KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
+inline KoColorSpaceMathsTraits<quint8>::compositetype
+KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
 {
     return UINT8_DIVIDE(a, b);
 }
@@ -473,7 +474,8 @@ inline qint64 KoColorSpaceMaths<quint16>::multiply(qint64 a, qint64 b)
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
+inline KoColorSpaceMathsTraits<quint16>::compositetype
+KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
 {
     return UINT16_DIVIDE(a, b);
 }

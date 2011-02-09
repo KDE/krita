@@ -589,7 +589,7 @@ struct HSYType
 {
     template<class TReal>
     inline static TReal getLightness(TReal r, TReal g, TReal b) {
-        return TReal(0.3)*r + TReal(0.59)*g + TReal(0.11)*b;
+        return TReal(0.299)*r + TReal(0.587)*g + TReal(0.114)*b;
     }
     
     template<class TReal>

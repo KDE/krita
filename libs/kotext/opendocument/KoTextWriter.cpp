@@ -740,8 +740,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
-                        TagInformation inlineTagInformation;
-                        int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, inlineTagInformation);
+                        int changeId = 0;
                         KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
                         if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                             textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
@@ -754,9 +753,6 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                             textAnchor->shape()->removeAdditionalAttribute("delta:insertion-change-idref");
                             textAnchor->shape()->removeAdditionalAttribute("delta:insertion-type");
                         }
-                        
-                        if (changeId)
-                            closeTagRegion(changeId);
                     }
 
                     if (saveSpan) {

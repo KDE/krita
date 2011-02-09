@@ -37,6 +37,7 @@
 #include "commands/ShowChangesCommand.h"
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
+#include "dialogs/AcceptRejectChangeDialog.h"
 
 #include <KLocale>
 #include <KAction>
@@ -98,7 +99,21 @@ void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
 
 void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
 {
-    event->ignore();
+    int position = pointToPosition(event->point);
+    QTextCursor cursor(m_textShapeData->document());
+    cursor.setPosition(position);
+
+    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) {
+        AcceptRejectChangeDialog acceptDialog(KoTextDocument(m_textShapeData->document()).changeTracker(), changeId);
+        if (int result = acceptDialog.exec()) {
+            if (result == (int)(AcceptRejectChangeDialog::eChangeAccepted)) {
+                acceptChange();
+            } else if (result == (int)(AcceptRejectChangeDialog::eChangeRejected)) {
+                rejectChange();
+            }
+        }
+    }
 }
 
 void ChangeTrackingTool::updateSelectedShape(const QPointF &point)

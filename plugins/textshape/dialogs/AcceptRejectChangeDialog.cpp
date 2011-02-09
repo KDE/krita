@@ -18,13 +18,45 @@
  */
 
 #include "AcceptRejectChangeDialog.h"
+#include <KoChangeTracker.h>
+#include <KoChangeTrackerElement.h>
 
-AcceptRejectChangeDialog::AcceptRejectChangeDialog()
+AcceptRejectChangeDialog::AcceptRejectChangeDialog(KoChangeTracker *changeTracker, int changeId)
 {
     ui.setupUi(this);
+    ui.authorNameLineEdit->setText(changeTracker->elementById(changeId)->getCreator());
+    ui.dateLineEdit->setText(changeTracker->elementById(changeId)->getDate());
+    KoGenChange::Type changeType = changeTracker->elementById(changeId)->getChangeType();
+
+    if (changeType == KoGenChange::InsertChange) {
+        ui.changeTypeLineEdit->setText(QString("Insertion"));
+    } else if (changeType == KoGenChange::FormatChange) {
+        ui.changeTypeLineEdit->setText(QString("Formatting"));
+    } else {
+        ui.changeTypeLineEdit->setText(QString("Deletion"));
+    }
+
+    connect(ui.acceptButton, SIGNAL(released()), this, SLOT(changeAccepted()));
+    connect(ui.rejectButton, SIGNAL(released()), this, SLOT(changeRejected()));
+    connect(ui.cancelButton, SIGNAL(released()), this, SLOT(dialogCancelled()));
+    
 }
 
 AcceptRejectChangeDialog::~AcceptRejectChangeDialog()
 {
 }
 
+void AcceptRejectChangeDialog::changeAccepted()
+{
+    this->done(AcceptRejectChangeDialog::eChangeAccepted);
+}
+
+void AcceptRejectChangeDialog::changeRejected()
+{
+    this->done(AcceptRejectChangeDialog::eChangeRejected);
+}
+
+void AcceptRejectChangeDialog::dialogCancelled()
+{
+    this->done(AcceptRejectChangeDialog::eDialogCancelled);
+}

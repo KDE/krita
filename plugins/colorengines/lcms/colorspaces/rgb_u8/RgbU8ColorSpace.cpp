@@ -79,14 +79,14 @@ RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
 //     addCompositeOp(new RgbCompositeOpLighten<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpHue<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpSaturation<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpValue<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpValue<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpColor<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpIn<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpDiff<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpClear<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpDissolve<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDissolve<KoRgbU8Traits>(this));
 }
 
 

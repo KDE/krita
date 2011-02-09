@@ -43,14 +43,14 @@ RgbU16ColorSpace::RgbU16ColorSpace(KoColorProfile *p) :
 //     addCompositeOp(new RgbCompositeOpLighten<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpHue<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpSaturation<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpValue<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpValue<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpColor<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpIn<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpDiff<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpClear<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpDissolve<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDissolve<KoRgbU16Traits>(this));
 }
 
 bool RgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

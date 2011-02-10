@@ -72,9 +72,16 @@ KoZoomAction::KoZoomAction( KoZoomMode::Modes zoomModes, const QString& text, QO
     setEditable( true );
     setMaxComboViewCount( 15 );
 
-    for(int i = 0; i<33; i++)
-        d->sliderLookup[i] = pow(1.1892071, i - 16);
+    d->sliderLookup[0] = KoZoomMode::minimumZoom();
+    d->sliderLookup[32] = KoZoomMode::maximumZoom();
 
+    int steps = 32;
+    int halfSteps = steps / 2;
+    qreal zoomStep = pow(1.0 / KoZoomMode::minimumZoom(), 1.0/halfSteps);
+    for(int i = 1; i < steps; ++i) {
+        d->sliderLookup[i] = pow(zoomStep, i - halfSteps);
+    }
+    
     d->effectiveZoom = 1.0;
     regenerateItems(d->effectiveZoom, true);
 
@@ -94,7 +101,7 @@ qreal KoZoomAction::effectiveZoom() const
 void KoZoomAction::setZoom( qreal zoom )
 {
     setEffectiveZoom(zoom);
-    regenerateItems( zoom, true );
+    regenerateItems( d->effectiveZoom, true );
 }
 
 void KoZoomAction::triggered( const QString& text )
@@ -207,7 +214,7 @@ void KoZoomAction::zoomIn()
 
     qreal zoom = d->sliderLookup[i];
     setZoom(zoom);
-    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
+    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
 }
 
 void KoZoomAction::zoomOut()
@@ -221,7 +228,7 @@ void KoZoomAction::zoomOut()
 
     qreal zoom = d->sliderLookup[i];
     setZoom(zoom);
-    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, zoom);
+    emit zoomChanged( KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
 }
 
 QWidget * KoZoomAction::createWidget(QWidget *parent)
@@ -291,6 +298,8 @@ void KoZoomAction::setEffectiveZoom(qreal zoom)
 {
     if(d->effectiveZoom == zoom)
         return;
+
+    zoom = KoZoomMode::clampZoom(zoom);
     d->effectiveZoom = zoom;
 
     if(d->slider) {

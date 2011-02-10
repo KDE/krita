@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Johannes Schaub <litb_devel@web.de>
+   Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +30,9 @@ const char* KoZoomMode::modes[] =
     I18N_NOOP("Actual Pixels")
 };
 
+qreal KoZoomMode::minimumZoomValue = 0.2;
+qreal KoZoomMode::maximumZoomValue = 5.0;
+
 QString KoZoomMode::toString(Mode mode)
 {
     return i18n(modes[mode]);
@@ -51,4 +55,31 @@ KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
     // changeable, whereas all other zoom modes (non-constants) are normal
     // text like "Fit to xxx". they let the view grow/shrink according
     // to windowsize, hence the term 'non-constant'
+}
+
+qreal KoZoomMode::minimumZoom()
+{
+    return minimumZoomValue;
+}
+
+qreal KoZoomMode::maximumZoom()
+{
+    return maximumZoomValue;
+}
+
+qreal KoZoomMode::clampZoom(qreal zoom)
+{
+    return qMin(maximumZoomValue, qMax(minimumZoomValue, zoom));
+}
+
+void KoZoomMode::setMinimumZoom(qreal zoom)
+{
+    Q_ASSERT(zoom > 0.0f);
+    minimumZoomValue = zoom;
+}
+
+void KoZoomMode::setMaximumZoom(qreal zoom)
+{
+    Q_ASSERT(zoom > 0.0f);
+    maximumZoomValue = zoom;
 }

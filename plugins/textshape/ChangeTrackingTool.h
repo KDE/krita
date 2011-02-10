@@ -36,7 +36,7 @@ class QPainter;
 class QRectF;
 class QKeyEvent;
 class QTreeView;
-
+template <class T> class QVector;
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
 class ChangeTrackingTool : public KoToolBase
@@ -67,7 +67,7 @@ private slots:
 
 private:
     int pointToPosition(const QPointF & point) const;
-    QRectF textRect(int startPosition, int endPosition);
+    QVector<QRectF> *textRect(int startPosition, int endPosition);
     void updateSelectedShape(const QPointF &point);
 
     bool m_disableShowChangesOnExit;

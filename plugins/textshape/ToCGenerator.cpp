@@ -159,10 +159,9 @@ void ToCGenerator::generate()
     // Iterate through all blocks to generate TOC
     QTextBlock block = doc->begin();
     int blockId = 0;
-    while (block.isValid() && !isWhitespaceOnly(block.text())) {
+    while (block.isValid()) {
         // Choose only TOC blocks
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty()) {
-
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty() && !isWhitespaceOnly(block.text())) {
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
 
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);

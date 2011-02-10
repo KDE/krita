@@ -25,6 +25,8 @@
 #include <QSet>
 #include <Qt>
 
+Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> )
+
 using namespace KChart;
 
 Table::Table( const QString &name, QAbstractItemModel *model )
@@ -270,4 +272,3 @@ void TableSource::samHeaderDataChanged( Qt::Orientation orientation, int first, 
 }
 
 
-Q_DECLARE_METATYPE( QPointer<QAbstractItemModel> )

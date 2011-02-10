@@ -589,7 +589,7 @@ KoShape* KoTextDocumentLayout::shapeForPosition(int position) const
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         if (data == 0)
             continue;
-        if (data->position() <= position && (data->endPosition() == -1 || data->endPosition() > position))
+        if (data->position() <= position && (data->endPosition() == -1 || data->endPosition() >= position))
             return shape;
     }
     return 0;

@@ -18,13 +18,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include"TextAnchorStrategy.h"
+#include"FloatingAnchorStrategy.h"
 #include"Layout.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
 
-TextAnchorStrategy::TextAnchorStrategy(KoTextAnchor *anchor)
+FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor)
         : KoAnchorStrategy(),
           m_anchor(anchor),
           m_knowledgePoint(-1),
@@ -35,11 +35,11 @@ TextAnchorStrategy::TextAnchorStrategy(KoTextAnchor *anchor)
     calculateKnowledgePoint();
 }
 
-TextAnchorStrategy::~TextAnchorStrategy()
+FloatingAnchorStrategy::~FloatingAnchorStrategy()
 {
 }
 
-bool TextAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *state)
+bool FloatingAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *state)
 {
     if (m_finished) { // shape is in right position no second pass needed
         return false;
@@ -118,12 +118,12 @@ bool TextAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *state)
     return true;
 }
 
-bool TextAnchorStrategy::isPositioned()
+bool FloatingAnchorStrategy::isPositioned()
 {
     return m_finished;
 }
 
-void TextAnchorStrategy::reset()
+void FloatingAnchorStrategy::reset()
 {
     calculateKnowledgePoint();
     m_finished = false;
@@ -131,17 +131,17 @@ void TextAnchorStrategy::reset()
     return;
 }
 
-bool TextAnchorStrategy::isRelayoutNeeded()
+bool FloatingAnchorStrategy::isRelayoutNeeded()
 {
     return m_relayoutNeeded;
 }
 
-QPointF TextAnchorStrategy::relayoutPosition()
+QPointF FloatingAnchorStrategy::relayoutPosition()
 {
     return m_relayoutPosition;
 }
 
-void TextAnchorStrategy::calculateKnowledgePoint()
+void FloatingAnchorStrategy::calculateKnowledgePoint()
 {
     m_knowledgePoint = -1;
 
@@ -184,7 +184,7 @@ void TextAnchorStrategy::calculateKnowledgePoint()
    }
 }
 
-bool TextAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->horizontalRel()) {
@@ -287,7 +287,7 @@ bool TextAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF c
     return true;
 }
 
-void TextAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->horizontalPos()) {
     case KoTextAnchor::HCenter:
@@ -329,7 +329,7 @@ void TextAnchorStrategy::countHorizontalPos(QPointF &newPosition, QRectF anchorB
     }
 }
 
-bool TextAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
+bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                           KoTextShapeData *data, QTextBlock &block, QTextLayout *layout)
 {
     switch (m_anchor->verticalRel()) {
@@ -406,7 +406,7 @@ bool TextAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF con
     return true;
 }
 
-void TextAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect)
 {
     switch (m_anchor->verticalPos()) {
     case KoTextAnchor::VBottom:
@@ -432,7 +432,7 @@ void TextAnchorStrategy::countVerticalPos(QPointF &newPosition, QRectF anchorBou
 
 }
 
-void TextAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect)
+void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect)
 {
     //check left border and move the shape back to have the whole shape visible
     if (newPosition.x() < m_anchor->pageRect().x() - containerBoundingRect.x()) {
@@ -455,7 +455,7 @@ void TextAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF containerB
     }
 }
 
-bool TextAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
+bool FloatingAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
                                             KoTextShapeData *data)
 {
     bool intersectionX = false;

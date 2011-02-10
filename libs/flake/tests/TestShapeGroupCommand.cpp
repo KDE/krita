@@ -195,8 +195,8 @@ void TestShapeGroupCommand::testAddToToplevelGroup()
 
     QVERIFY(extraShape1->parent() == toplevelGroup);
     QCOMPARE(extraShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
-    QCOMPARE(extraShape1->position(), QPointF(0, 0));
-    QCOMPARE(toplevelGroup->position(), QPointF(150, 50));
+    QCOMPARE(extraShape1->position(), QPointF(100, 0));
+    QCOMPARE(toplevelGroup->position(), QPointF(50, 50));
 
     cmd2->undo();
 
@@ -223,13 +223,13 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
     QVERIFY(extraShape2->parent() == sublevelGroup);
     QCOMPARE(extraShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 50));
-    QCOMPARE(extraShape2->position(), QPointF(0, 0));
+    QCOMPARE(extraShape2->position(), QPointF(100, 0));
     QCOMPARE(sublevelShape1->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 150));
-    QCOMPARE(sublevelShape1->position(), QPointF(-100, 100));
+    QCOMPARE(sublevelShape1->position(), QPointF(0, 100));
     QCOMPARE(sublevelShape2->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 150));
-    QCOMPARE(sublevelShape2->position(), QPointF(0, 100));
-    QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(250, 50));
-    QCOMPARE(sublevelGroup->position(), QPointF(200, 0));
+    QCOMPARE(sublevelShape2->position(), QPointF(100, 100));
+    QCOMPARE(sublevelGroup->absolutePosition(KoFlake::TopLeftCorner), QPointF(150, 50));
+    QCOMPARE(sublevelGroup->position(), QPointF(100, 0));
 
     cmd2->undo();
 
@@ -246,17 +246,7 @@ void TestShapeGroupCommand::testAddToSublevelGroup()
 
 void TestShapeGroupCommand::testGroupStrokeShapes()
 {
-    QRectF bound(0,0,0,0);
-    if (strokeGroup->border()) {
-        KoInsets insets;
-        strokeGroup->border()->borderInsets(strokeGroup, insets);
-        bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
-    if (strokeGroup->shadow()) {
-        KoInsets insets;
-        strokeGroup->shadow()->insets(insets);
-        bound.adjust(-insets.left, -insets.top, insets.right, insets.bottom);
-    }
+    QRectF bound = strokeShape1->boundingRect().united(strokeShape2->boundingRect());
 
     QList<KoShape*> strokeShapes;
     strokeShapes << strokeShape2 << strokeShape1;

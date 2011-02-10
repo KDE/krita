@@ -33,10 +33,14 @@ SET ( textshape_SRCS
     TextChange.cpp
     FontSizeAction.cpp
 
+    ReferencesTool.cpp
+    ReferencesToolFactory.cpp
+
     TableLayout.cpp
     TableLayoutData.cpp
     
-    TextAnchorStrategy.cpp
+    FloatingAnchorStrategy.cpp
+    InlineAnchorStrategy.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleCharacterWidget.cpp

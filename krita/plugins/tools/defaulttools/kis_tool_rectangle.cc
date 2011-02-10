@@ -88,9 +88,7 @@ void KisToolRectangle::finishRect(const QRectF &rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createRectangleShape(r);
-
-        QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
-        canvas()->addCommand(cmd);
+        addShape(shape);
     }
 }
 

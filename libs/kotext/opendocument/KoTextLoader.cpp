@@ -1383,7 +1383,9 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         anchorType = "as-char"; // default value
 
     // page anchored shapes are handled differently
-    if (anchorType != "page") {
+    if (anchorType == "page" && shape->hasAdditionalAttribute("text:anchor-page-number")) {
+        d->textSharedData->shapeInserted(shape, element, d->context);
+    } else {
         KoTextAnchor *anchor = new KoTextAnchor(shape);
         if (d->inTable) {
             anchor->fakeAsChar();
@@ -1398,8 +1400,6 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
                 textObjectManager->insertInlineObject(cursor, anchor);
             }
         }
-    } else {
-        d->textSharedData->shapeInserted(shape, element, d->context);
     }
     return shape;
 }

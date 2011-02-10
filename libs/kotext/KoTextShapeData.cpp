@@ -161,6 +161,9 @@ void KoTextShapeData::foul()
 {
     Q_D(KoTextShapeData);
     d->dirty = true;
+
+    d->position = -1;
+    d->endPosition = -1;
 }
 
 void KoTextShapeData::wipe()

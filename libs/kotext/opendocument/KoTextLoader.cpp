@@ -2165,7 +2165,7 @@ void KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &cursor)
 
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
+                textObjectManager->insertInlineObject(cursor, anchor, cursor.charFormat());
             }
 
             if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "")

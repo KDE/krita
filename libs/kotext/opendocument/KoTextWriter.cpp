@@ -740,13 +740,15 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     }
 
                     if (saveInlineObject) {
-                        int changeId = 0;
+                        qDebug() << "*******************saveInlineObject**************************";
+                        int changeId = charFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
                         KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
                         if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                             textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
                             textAnchor->shape()->setAdditionalAttribute("delta:insertion-type", "insert-with-content");
                         }
-                        
+                       
+                        qDebug() << "***************calling saveOdf of inlineObject***************"; 
                         inlineObject->saveOdf(context);
                         
                         if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {

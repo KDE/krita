@@ -32,6 +32,10 @@ class ChangeTrackingOptionsWidget : public QWidget
         void recordChangesChanged(int isChecked);
         void showChangesChanged(int isChecked);
         void configureSettingsPressed();
+
+    public slots:
+        void toggleShowChanges(bool on);
+        void toggleRecordChanges(bool on);
     
     signals:
         void doneWithFocus();

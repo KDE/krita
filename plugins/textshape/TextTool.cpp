@@ -1536,6 +1536,8 @@ QWidget *TextTool::createOptionWidget()
             this, SLOT(setStyle(KoCharacterStyle*)));
     connect(styles, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
     connect(changeTrackingOptions, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(m_actionShowChanges, SIGNAL(triggered(bool)), changeTrackingOptions, SLOT(toggleShowChanges(bool)));
+    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), changeTrackingOptions, SLOT(toggleRecordChanges(bool)));
 
     updateStyleManager();
     if (m_textShape)
@@ -1842,6 +1844,7 @@ void TextTool::formatParagraph()
 
 void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 {
+    m_actionShowChanges->setChecked(on);
     ShowChangesCommand *command = new ShowChangesCommand(on, m_textShapeData->document(), this->canvas());
     connect(command, SIGNAL(toggledShowChange(bool)), m_actionShowChanges, SLOT(setChecked(bool)));
     m_textEditor.data()->addCommand(command);
@@ -1849,6 +1852,7 @@ void TextTool::toggleShowChanges(bool on)//TODO transfer this in KoTextEditor
 
 void TextTool::toggleRecordChanges(bool on)
 {
+    m_actionRecordChanges->setChecked(on);
     if (m_changeTracker)
         m_changeTracker->setRecordChanges(on);
 }

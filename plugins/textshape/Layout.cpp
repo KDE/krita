@@ -1217,7 +1217,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                         }
                     
                         QTextLayout::FormatRange fr;
-                        fr.start = currentFragment.position();
+                        fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
                         fr.format = format;
                         selections.append(fr);

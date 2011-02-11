@@ -72,6 +72,7 @@ public:
     QList<QByteArray>    frameContents; // A list of the XML trees in the frame, each of them one object
     QStringList          objectNames;   // A list of objects names in the frame without "./"
                                         // These are extracted from frameContents
+    QList<bool>          isDirs;
     QList<KoOdfManifestEntry*> manifestEntries; // A list of manifest entries for the above.
 
     QList<FileEntry*>    embeddedFiles; // List of embedded files.
@@ -214,8 +215,6 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         QString newName = objectName;
         if (!objectName.isEmpty()) {
             newName = fileSaver.getFilename("UObject");
-            if (objectName.endsWith('/'))
-                newName += '/';
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
         }
 
@@ -243,9 +242,11 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         // Write the manifest entry for the object itself.  If it's a
         // file, the manifest is already written by saveFile, so skip
         // it here.
-        if (newName.endsWith('/'))
+        if (d->isDirs.value(i)) {
+            newName += '/';
             fileSaver.saveManifestEntry(newName, manifestEntry->mediaType(),
                                         manifestEntry->version());
+        }
     }
 
     writer.endElement(); // draw:frame
@@ -327,8 +328,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             }
         }
         d->manifestEntries.append(entry);
-        if (isDir)
-            d->objectNames[i].append('/');
+        d->isDirs.append(isDir);
     }
 
 #if 0

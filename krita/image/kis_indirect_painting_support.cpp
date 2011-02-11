@@ -107,13 +107,11 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
     KisPainter gc(layer->paintDevice());
     gc.setCompositeOp(d->compositeOp);
     gc.setOpacity(d->compositeOpacity);
-    gc.setChannelFlags(layer->channelFlags());
 
-    if (KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(layer.data())) {
-        if (paintLayer->alphaLocked()) {
-            gc.setLockAlpha(paintLayer->alphaLocked());
-        }
-    }
+    if(KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(layer.data()))
+        gc.setChannelFlags(paintLayer->paintChannelFlags());
+    else
+        gc.setChannelFlags(layer->channelFlags());
 
     d->lock.lockForWrite();
     if(layer->image()) {

@@ -570,13 +570,8 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setGradient(currentGradient());
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
-    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) {
-        painter->setChannelFlags(l->channelFlags());
-        if (l->alphaLocked()) {
-            painter->setLockAlpha(l->alphaLocked());
-        }
-    }
-
+    if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) 
+        painter->setChannelFlags(l->paintChannelFlags());
 }
 
 void KisTool::setupPaintAction(KisRecordedPaintAction* action)

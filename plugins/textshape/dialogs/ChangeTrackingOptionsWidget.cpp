@@ -28,6 +28,16 @@ ChangeTrackingOptionsWidget::ChangeTrackingOptionsWidget(TextTool *tool, QWidget
     connect(widget.configureChangeTrackingButton, SIGNAL(clicked(bool)), this, SLOT(configureSettingsPressed()));
 }
 
+void ChangeTrackingOptionsWidget::toggleShowChanges(bool isChecked)
+{
+    widget.showChangesCheckBox->setChecked(isChecked);
+}
+
+void ChangeTrackingOptionsWidget::toggleRecordChanges(bool isChecked)
+{
+    widget.recordChangesCheckBox->setChecked(isChecked);
+}
+
 void ChangeTrackingOptionsWidget::recordChangesChanged(int isChecked)
 {
     m_tool->toggleRecordChanges(isChecked);

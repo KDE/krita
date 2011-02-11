@@ -113,11 +113,19 @@ const QString COMPOSITE_UNDEF        = "underfined";
 class PIGMENTCMS_EXPORT KoCompositeOp
 {
 public:
-    static QString categoryMix();
-    static QString categoryLight();
-    static QString categoryArithmetic();
     static QString categoryColor();
+    
+    static QString categoryArithmetic();
+    static QString categoryNegative();
+    static QString categoryLight();
+    static QString categoryDark();
+    static QString categoryHSY();
+    static QString categoryHSI();
+    static QString categoryHSL();
+    static QString categoryHSV();
+    static QString categoryMix();
     static QString categoryMisc();
+    
 public:
 
     /**

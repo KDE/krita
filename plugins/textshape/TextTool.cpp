@@ -561,7 +561,7 @@ void TextTool::showChangeTip()
 
 void TextTool::blinkCaret()
 {
-    if (! canvas()->canvasWidget()->hasFocus()) {
+    if (!(canvas()->canvasWidget() ? canvas()->canvasWidget()->hasFocus() : canvas()->canvasItem()->hasFocus())) {
         m_caretTimer.stop();
         m_caretTimerState = false; // not visible.
     }
@@ -622,8 +622,9 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     QAbstractTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
     selection.cursor = *(m_textEditor.data()->cursor());
-    selection.format.setBackground(canvas()->canvasWidget()->palette().brush(QPalette::Highlight));
-    selection.format.setForeground(canvas()->canvasWidget()->palette().brush(QPalette::HighlightedText));
+    QPalette palette = canvas()->canvasWidget() ? canvas()->canvasWidget()->palette() : canvas()->canvasItem()->palette();
+    selection.format.setBackground(palette.brush(QPalette::Highlight));
+    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
     pc.selections.append(selection);
     foreach (TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();

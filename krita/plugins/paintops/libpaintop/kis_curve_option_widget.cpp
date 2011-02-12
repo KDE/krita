@@ -69,7 +69,7 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 {
     m_curveOption->readOptionSetting(setting);
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->sensor());
-    m_curveOptionWidget->curveWidget->setCurve(m_curveOption->sensor()->curve());
+    updateCurve(m_curveOption->sensor());
 }
 
 bool KisCurveOptionWidget::isCheckable()

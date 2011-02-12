@@ -175,6 +175,7 @@ void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, cons
         }
     } else {
         KisDynamicSensor* sensor = getSensor(currentIndex);
+        Q_ASSERT(sensor);
         sensor->setCurve(curve);
         if(m_listSensor)
         {

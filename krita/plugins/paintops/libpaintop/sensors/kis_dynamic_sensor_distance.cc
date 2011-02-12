@@ -85,6 +85,7 @@ void KisDynamicSensorDistance::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorDistance::fromXML(const QDomElement& e)
 {
+    KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();
     m_length = e.attribute("length", "30").toInt();
 }

@@ -19,8 +19,9 @@
 
 #include <KoColorSpace.h>
 #include <kis_layer.h>
+#include <kis_paint_layer.h>
 
-ChannelModel::ChannelModel(QObject* parent): QAbstractListModel(parent), m_currentLayer(0)
+ChannelModel::ChannelModel(QObject* parent): QAbstractTableModel(parent), m_currentLayer(0)
 {
 }
 
@@ -30,46 +31,75 @@ ChannelModel::~ChannelModel()
 
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
-    if (m_currentLayer.isValid() && index.isValid()) {
+    if (index.isValid())
+    {
         switch (role) {
-            case Qt::DisplayRole: {
+            case Qt::DisplayRole:
                 return m_currentLayer->colorSpace()->channels().at(index.row())->name();
-            }
+            
             case Qt::CheckStateRole: {
-                if (m_currentLayer->channelFlags().isEmpty()) {
-                    return Qt::Checked;
+                Q_ASSERT(index.row() < rowCount());
+                Q_ASSERT(index.column() < columnCount());
+                
+                if (index.column() == 0) {
+                    QBitArray flags = m_currentLayer->channelFlags();
+                    return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Checked : Qt::Unchecked;
                 }
-                Q_ASSERT(index.row() < m_currentLayer->channelFlags().size());
-                return m_currentLayer->channelFlags().testBit(index.row()) ? Qt::Checked : Qt::Unchecked;
-                break;
+                
+                QBitArray flags = dynamic_cast<const KisPaintLayer*>(m_currentLayer.data())->channelLockFlags();
+                return (flags.isEmpty() || flags.testBit(index.row())) ? Qt::Unchecked : Qt::Checked;
             }
         }
     }
     return QVariant();
 }
 
+QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        if(section == 0)
+            return i18n("Enabled");
+        
+        return i18n("Locked");
+    }
+    
+    return QAbstractItemModel::headerData(section, orientation, role);
+}
+
+
 int ChannelModel::rowCount(const QModelIndex& parent) const
 {
-    if (m_currentLayer.isValid()) {
-        return m_currentLayer->colorSpace()->channels().size();
-    }
-    return 0;
+    return m_currentLayer ? m_currentLayer->colorSpace()->channelCount() : 0;
 }
+
+int ChannelModel::columnCount(const QModelIndex& parent) const
+{
+    return dynamic_cast<const KisPaintLayer*>(m_currentLayer.data()) ? 2 : 1;
+}
+
 
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (m_currentLayer.isValid() && index.isValid())
     {
         if (role == Qt::CheckStateRole) {
-            QBitArray channelFlags = m_currentLayer->channelFlags();
-            if (channelFlags.isEmpty()) {
-                channelFlags.resize(m_currentLayer->colorSpace()->channels().size());
-                for (int i = 0; i < m_currentLayer->colorSpace()->channels().size(); i++) {
-                    channelFlags.setBit(i, true);
-                }
+            Q_ASSERT(index.row() < rowCount());
+            Q_ASSERT(index.column() < columnCount());
+            
+            if (index.column() == 0) {
+                QBitArray flags = m_currentLayer->channelFlags();
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+                flags.setBit(index.row(), value.toInt() == Qt::Checked);
+                m_currentLayer->setChannelFlags(flags);
             }
-            channelFlags.setBit(index.row(), value.toInt() == Qt::Checked);
-            m_currentLayer->setChannelFlags(channelFlags);
+            else { //if (index.column() == 1)
+                KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(m_currentLayer.data());
+                QBitArray      flags      = paintLayer->channelLockFlags();
+                flags = flags.isEmpty() ? m_currentLayer->colorSpace()->channelFlags(true, true, true, true) : flags;
+                flags.setBit(index.row(), value.toInt() == Qt::Unchecked);
+                paintLayer->setChannelLockFlags(flags);
+            }
+            
             m_currentLayer->setDirty();
             return true;
         }

@@ -527,7 +527,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         KoColorSpaceRegistry::instance()->colorSpaceId(
       csName.first, csName.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
-        delete profile;
         profile = 0;
     }
 

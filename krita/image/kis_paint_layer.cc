@@ -152,13 +152,6 @@ KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() con
     l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
     l << KoDocumentSectionModel::Property(i18n("Alpha Channel"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaChannelDisabled());
     
-//     int pos = getAlphaChannelPos();
-//     
-//     if(pos != -1) {
-//         bool disableAlphaChannel = !(channelFlags().isEmpty() || channelFlags().at(pos));
-//         l << KoDocumentSectionModel::Property(i18n("Alpha Channel"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), disableAlphaChannel);
-//     }
-    
     return l;
 }
 
@@ -170,15 +163,6 @@ void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::Prop
         }
         else if (property.name == i18n("Alpha Channel")) {
             disableAlphaChannel(property.state.toBool());
-//             int pos = getAlphaChannelPos();
-//             
-//             if(pos != -1) {
-//                 bool      disableAlphaChannel = property.state.toBool();
-//                 QBitArray flags               = channelFlags().isEmpty() ? QBitArray(colorSpace()->channelCount(), true) : channelFlags();
-//                 
-//                 flags.setBit(pos, !disableAlphaChannel);
-//                 setChannelFlags(flags);
-//             }
         }
     }
     
@@ -195,26 +179,13 @@ bool KisPaintLayer::accept(KisNodeVisitor &v)
     return v.visit(this);
 }
 
-int KisPaintLayer::getAlphaChannelPos() const
-{
-    int pos = 0;
-    
-    foreach(const KoChannelInfo* info, colorSpace()->channels()) {
-        if(info->channelType() == KoChannelInfo::ALPHA)
-            return pos;
-        ++pos;
-    }
-    
-    return -1;
-}
-
-void KisPaintLayer::setPaintChannelFlags(const QBitArray& channelFlags)
+void KisPaintLayer::setChannelLockFlags(const QBitArray& channelFlags)
 {
     Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
     m_d->paintChannelFlags = channelFlags;
 }
 
-const QBitArray& KisPaintLayer::paintChannelFlags() const
+const QBitArray& KisPaintLayer::channelLockFlags() const
 {
     return m_d->paintChannelFlags;
 }

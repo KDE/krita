@@ -571,7 +571,7 @@ void KisTool::setupPainter(KisPainter* painter)
     painter->setPaintOpPreset(currentPaintOpPreset(), currentImage());
 
     if (KisPaintLayer* l = dynamic_cast<KisPaintLayer*>(currentNode().data())) 
-        painter->setChannelFlags(l->paintChannelFlags());
+        painter->setChannelFlags(l->channelLockFlags());
 }
 
 void KisTool::setupPaintAction(KisRecordedPaintAction* action)

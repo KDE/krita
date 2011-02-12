@@ -118,9 +118,11 @@ bool Layout::start()
     m_reset = false;
 
     bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+#if 0
     if (!ok) {
         kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
     }
+#endif
     return ok;
 }
 

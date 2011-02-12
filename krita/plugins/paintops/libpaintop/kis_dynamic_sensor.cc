@@ -111,16 +111,29 @@ QList<KoID> KisDynamicSensor::sensorsIds()
 }
 
 
-void KisDynamicSensor::toXML(QDomDocument&, QDomElement& e) const
+void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& e) const
 {
     e.setAttribute("id", id());
+    if(m_customCurve)
+    {
+        QDomElement curve_elt = doc.createElement("curve");
+        QDomText text = doc.createCDATASection(m_curve.toString());
+        curve_elt.appendChild(text);
+        e.appendChild(curve_elt);
+    }
 }
 
 void KisDynamicSensor::fromXML(const QDomElement& e)
 {
     Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
-
+    m_customCurve = false;
+    QDomElement curve_elt = e.firstChildElement("curve");
+    if(!curve_elt.isNull())
+    {
+        m_customCurve = true;
+        m_curve.fromString(curve_elt.text());
+    }
 }
 
 const KisCurveLabel& KisDynamicSensor::minimumLabel() const
@@ -141,4 +154,36 @@ void KisDynamicSensor::setMinimumLabel(const KisCurveLabel& _label)
 void KisDynamicSensor::setMaximumLabel(const KisCurveLabel& _label)
 {
     m_maximumLabel = _label;
+}
+
+qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
+{
+    qreal val = value(info);
+    if (m_customCurve) {
+        int offset = qRound(256.0 * val);
+        return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
+    } else {
+        return val;
+    }
+}
+
+void KisDynamicSensor::setCurve(const KisCubicCurve& curve)
+{
+    m_customCurve = true;
+    m_curve = curve;
+}
+
+const KisCubicCurve& KisDynamicSensor::curve() const
+{
+    return m_curve;
+}
+
+void KisDynamicSensor::removeCurve()
+{
+    m_customCurve = false;
+}
+
+bool KisDynamicSensor::hasCustomCurve() const
+{
+    return m_customCurve;
 }

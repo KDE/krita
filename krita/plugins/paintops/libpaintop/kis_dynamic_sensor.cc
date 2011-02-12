@@ -182,3 +182,8 @@ void KisDynamicSensor::removeCurve()
 {
     m_customCurve = false;
 }
+
+bool KisDynamicSensor::hasCustomCurve() const
+{
+    return m_customCurve;
+}

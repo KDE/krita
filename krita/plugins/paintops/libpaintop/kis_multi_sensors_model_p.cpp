@@ -129,7 +129,10 @@ KisDynamicSensor* KisMultiSensorsModel::getOrCreateSensorFromCache(const QString
 {
     if(m_sensorCache.contains(id)) return m_sensorCache.value(id);
     KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
-    sensor->setCurve(m_currentSensor->curve());
+    if(!m_listSensor || !m_listSensor->hasCustomCurve())
+    {
+        sensor->setCurve(m_currentSensor->curve());
+    }
     m_sensorCache[id] = sensor;
     return sensor;
 }
@@ -138,7 +141,10 @@ KisDynamicSensor* KisMultiSensorsModel::takeOrCreateSensorFromCache(const QStrin
 {
     if(m_sensorCache.contains(id)) return m_sensorCache.take(id);
     KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
-    sensor->setCurve(m_currentSensor->curve());
+    if(!m_listSensor || !m_listSensor->hasCustomCurve())
+    {
+        sensor->setCurve(m_currentSensor->curve());
+    }
     return sensor;
 }
 
@@ -150,7 +156,6 @@ void KisMultiSensorsModel::pushSensorToCache(KisDynamicSensor* sensor)
 
 void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
 {
-    qDebug() << useSameCurve;
     if(useSameCurve)
     {
         foreach(KisDynamicSensor* sensor, m_sensorCache)

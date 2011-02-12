@@ -114,6 +114,7 @@ public:
     void setCurve(const KisCubicCurve& curve);
     const KisCubicCurve& curve() const;
     void removeCurve();
+    bool hasCustomCurve() const;
 protected:
     virtual qreal value(const KisPaintInformation& info) = 0;
 protected:

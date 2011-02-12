@@ -31,7 +31,7 @@ public:
 
     KisDynamicSensorList();
     virtual ~KisDynamicSensorList();
-    virtual qreal parameter(const KisPaintInformation&);
+    virtual qreal value(const KisPaintInformation&);
     virtual void reset();
 
     virtual void toXML(QDomDocument&, QDomElement&) const;

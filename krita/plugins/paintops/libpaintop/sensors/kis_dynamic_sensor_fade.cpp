@@ -33,7 +33,7 @@ KisDynamicSensorFade::KisDynamicSensorFade() : KisDynamicSensor(FadeId), m_count
     setLength(DEFAULT_LENGTH);
 }
 
-qreal KisDynamicSensorFade::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
 {
     Q_UNUSED(pi);
     if (m_counter > m_length){

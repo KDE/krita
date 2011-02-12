@@ -31,7 +31,7 @@ KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(Distance
     setMaximumLabel(i18n("30 px"));
 }
 
-qreal KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
 {
     m_time += pi.movement().norm();
     if (m_time > m_length) {

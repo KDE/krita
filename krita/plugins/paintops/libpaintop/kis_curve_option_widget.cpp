@@ -67,7 +67,7 @@ void KisCurveOptionWidget::writeOptionSetting(KisPropertiesConfiguration* settin
 void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     m_curveOption->readOptionSetting(setting);
-    m_curveOptionWidget->curveWidget->setCurve(m_curveOption->curve());
+    m_curveOptionWidget->curveWidget->setCurve(m_curveOption->sensor()->curve());
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->sensor());
 }
 
@@ -98,7 +98,7 @@ QWidget* KisCurveOptionWidget::curveWidget()
 
 void KisCurveOptionWidget::transferCurve()
 {
-    m_curveOption->setCurve(m_curveOptionWidget->curveWidget->curve());
+    m_curveOption->sensor()->setCurve(m_curveOptionWidget->curveWidget->curve());
 
     emit sigSettingChanged();
 }

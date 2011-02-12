@@ -29,7 +29,7 @@ KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
     setMaximumLabel(i18n("Fast"));
 }
 
-qreal KisDynamicSensorSpeed::parameter(const KisPaintInformation& info) {
+qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     int dt = qMax(1, info.currentTime() - m_lastTime); // make sure dt > 1
     m_lastTime = info.currentTime();
     double currentMove = info.movement().norm() / dt;
@@ -49,7 +49,7 @@ KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(Rotation
     setMaximumLabel(i18n("360°"));
 }
 
-qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
+qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
 {
     /* so that we are in 0.0..1.0 */
     return 0.5 + info.angle() / (2.0 * M_PI);

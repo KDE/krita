@@ -128,7 +128,6 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
     Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
     m_customCurve = false;
-    
     QDomElement curve_elt = e.firstChildElement("curve");
     if(!curve_elt.isNull())
     {

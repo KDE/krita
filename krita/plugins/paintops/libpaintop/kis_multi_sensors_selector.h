@@ -17,6 +17,7 @@
 
 #include <QWidget>
 
+class KisCubicCurve;
 class QModelIndex;
 class KisDynamicSensor;
 
@@ -29,6 +30,7 @@ public:
     void setCurrent(KisDynamicSensor* _sensor);
     KisDynamicSensor* current();
     KisDynamicSensor* currentHighlighted();
+    void setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve);
 private slots:
     void sensorActivated(const QModelIndex& index);
 signals:

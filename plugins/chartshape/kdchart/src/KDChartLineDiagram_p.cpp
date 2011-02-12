@@ -84,9 +84,12 @@ void LineDiagram::LineDiagramType::paintThreeDLines(
     const QPointF& maxLimits = boundaries.second;
     const QPointF topLeft = project( from, maxLimits, depth, index  );
     const QPointF topRight = project ( to, maxLimits, depth, index  );
-
     const QPolygonF segment = QPolygonF() << from << topLeft << topRight << to;
-    const QBrush indexBrush ( diagram()->brush( index ) );
+
+    ThreeDLineAttributes threeDAttrs = diagram()->threeDLineAttributes( index );
+    QBrush indexBrush ( diagram()->brush( index ) );
+    indexBrush = threeDAttrs.threeDBrush( indexBrush, QRectF(topLeft, topRight) );
+
     const PainterSaver painterSaver( ctx->painter() );
 
     if( diagram()->antiAliasing() )
@@ -204,18 +207,6 @@ void LineDiagram::LineDiagramType::paintAreas(
     const QModelIndex& index, const QList< QPolygonF >& areas,
     const uint transparency )
 {
-    QColor trans = diagram()->brush( index ).color();
-    trans.setAlpha( transparency );
-    QPen indexPen = diagram()->pen(index);
-    indexPen.setColor( trans );
-    const PainterSaver painterSaver( ctx->painter() );
-
-    if( diagram()->antiAliasing() )
-        ctx->painter()->setRenderHint( QPainter::Antialiasing );
-
-    ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
-    ctx->painter()->setBrush( trans );
-
     QPainterPath path;
     for( int i = 0; i < areas.count(); ++i )
     {
@@ -224,6 +215,25 @@ void LineDiagram::LineDiagramType::paintAreas(
         reverseMapper().addPolygon( index.row(), index.column(), p );
         path.closeSubpath();
     }
+
+    ThreeDLineAttributes threeDAttrs = m_private->diagram->threeDLineAttributes( index );
+    QBrush trans = diagram()->brush( index );
+    if( threeDAttrs.isEnabled() ) {
+        trans = threeDAttrs.threeDBrush( trans, path.boundingRect() );
+    }
+    QColor transColor = trans.color();
+    transColor.setAlpha( transparency );
+    trans.setColor(transColor);
+    QPen indexPen = diagram()->pen(index);
+    indexPen.setBrush( trans );
+    const PainterSaver painterSaver( ctx->painter() );
+
+    if( diagram()->antiAliasing() )
+        ctx->painter()->setRenderHint( QPainter::Antialiasing );
+
+    ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
+    ctx->painter()->setBrush( trans );
+
     ctx->painter()->drawPath( path );
 }
 

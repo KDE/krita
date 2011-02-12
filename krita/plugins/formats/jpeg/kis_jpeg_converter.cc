@@ -185,7 +185,6 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         KoColorSpaceRegistry::instance()->colorSpaceId(
       modelId, Integer8BitsColorDepthID.id()))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << modelId;
-        delete profile;
         profile = 0;
     }
 

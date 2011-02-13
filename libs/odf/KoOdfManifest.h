@@ -33,20 +33,20 @@ class KoStore;
 class KOODF_EXPORT KoOdfManifestEntry
 {
 public:
-    KoOdfManifestEntry(const QString &fp, const QString &mt, const QString &v);
+    KoOdfManifestEntry(const QString &fullPath, const QString &mediatType, const QString &version);
     KoOdfManifestEntry(const KoOdfManifestEntry &other);
     ~KoOdfManifestEntry();
 
     KoOdfManifestEntry &operator=(const KoOdfManifestEntry &other);
 
     QString fullPath() const;
-    void setFullPath(const QString &fp);
+    void setFullPath(const QString &fullPath);
 
     QString mediaType() const;
-    void setMediaType(const QString &mt);
+    void setMediaType(const QString &mediaType);
 
     QString version() const;
-    void setVersion(const QString &v);
+    void setVersion(const QString &version);
 
 private:
     class Private;

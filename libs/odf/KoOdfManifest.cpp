@@ -40,12 +40,13 @@ KoOdfManifestEntry::Private::Private()
 // ----------------------------------------------------------------
 
 
-KoOdfManifestEntry::KoOdfManifestEntry(const QString &fp, const QString &mt, const QString &v)
+KoOdfManifestEntry::KoOdfManifestEntry(const QString &fullPath, const QString &mediaType,
+                                       const QString &version)
     : d(new Private())
 {
-    d->fullPath = fp;
-    d->mediaType = mt;
-    d->version = v;
+    d->fullPath = fullPath;
+    d->mediaType = mediaType;
+    d->version = version;
 }
 
 KoOdfManifestEntry::KoOdfManifestEntry(const KoOdfManifestEntry &other)
@@ -76,9 +77,9 @@ QString KoOdfManifestEntry::fullPath() const
     return d->fullPath;
 }
 
-void KoOdfManifestEntry::setFullPath(const QString &fp)
+void KoOdfManifestEntry::setFullPath(const QString &fullPath)
 {
-    d->fullPath = fp;
+    d->fullPath = fullPath;
 }
 
 QString KoOdfManifestEntry::mediaType() const
@@ -86,9 +87,9 @@ QString KoOdfManifestEntry::mediaType() const
     return d->mediaType;
 }
 
-void KoOdfManifestEntry::setMediaType(const QString &mt)
+void KoOdfManifestEntry::setMediaType(const QString &mediaType)
 {
-    d->mediaType = mt;
+    d->mediaType = mediaType;
 }
 
 QString KoOdfManifestEntry::version() const
@@ -96,8 +97,8 @@ QString KoOdfManifestEntry::version() const
     return d->version;
 }
 
-void KoOdfManifestEntry::setVersion(const QString &v)
+void KoOdfManifestEntry::setVersion(const QString &version)
 {
-    d->version = v;
+    d->version = version;
 }
 

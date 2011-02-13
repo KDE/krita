@@ -20,6 +20,7 @@
 
 #include <QAbstractListModel>
 
+class KisCubicCurve;
 class KisDynamicSensorList;
 class KisDynamicSensor;
 
@@ -34,6 +35,7 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     void setCurrentSensor(KisDynamicSensor* sensor);
     KisDynamicSensor* getSensor(const QModelIndex& index);
+    void setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve);
 signals:
     void sensorChanged(KisDynamicSensor* sensor);
     /**

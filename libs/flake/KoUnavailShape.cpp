@@ -85,6 +85,7 @@ KoUnavailShape::Private::Private()
 KoUnavailShape::Private::~Private()
 {
     qDeleteAll(manifestEntries);
+    qDeleteAll(embeddedFiles);
 }
 
 

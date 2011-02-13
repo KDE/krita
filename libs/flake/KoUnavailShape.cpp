@@ -121,13 +121,8 @@ void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
-    return;
-#if 0
-    applyConversion(painter, converter);
-    painter.setRenderHint(QPainter::Antialiasing);
 
-    draw(painter);
-#endif
+    return;
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
@@ -178,6 +173,47 @@ void KoUnavailShape::drawNull(QPainter &painter) const
 //                         Loading and Saving
 
 
+// The XML of a frame looks something like this:
+// 
+// 1. <draw:frame ...attributes...>
+// 2.   <draw:object xlink:href="./Object1" ...more attributes>
+// 3.   <draw:picture xlink:href="./ObjectReplacements/Object1" ...more attributes>
+// 4. </draw:frame>
+//
+// or
+// 
+// 1. <draw:frame ...attributes...>
+// 2.   <math:math>...inline xml here...</math:math>    
+// 3.   <draw:picture xlink:href="./ObjectReplacements/Object1" ...more attributes>
+// 4. </draw:frame>
+//
+// In our terminology, the xml statements on lines 2 and 3 above are
+// "objects".  In an ODF frame, only the first line, i.e. the first
+// object contains the real contents.  All the rest of the objects are
+// used / shown if we cannot handle the first one.  The most common
+// case is that there is only one object inside the frame OR that
+// there are 2 and the 2nd is a picture.
+//
+// Sometimes, e.g. in the case of embededd documents, the reference
+// points not to a file but to a directory structure inside the ODF
+// store. 
+//
+// When we load and save in the UnavailShape, we have to be general
+// enough to cover all possible cases of references and inline XML,
+// embedded files and embedded directory structures.
+//
+// We also have to be careful because we cannot reuse the object names
+// that are in the original files when saving.  Instead we need to
+// create new object names because the ones that were used in the
+// original file may already be used by other embedded files/objects
+// that are saved by other shapes.
+//
+// FIXME: There should only be ONE place where new object / file names
+//        are generated, not 3(?) like there are now:
+//        KoEmbeddedDocumentSaver, KoEmbeddedFileSaver and the
+//        KoImageCollection.
+//
+
 void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 {
     kDebug(30006) << "START SAVING ##################################################";
@@ -190,7 +226,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     // See also loadOdf() in loadOdfAttributes.
     saveOdfAttributes( context, OdfAllAttributes );
 
-#if 0
+#if 0   // Enable to get more detailed debug messages
     kDebug(30006) << "Object names: " << d->objectNames.size();
     for (int i = 0; i < d->objectNames.size(); ++i) {
         kDebug(30006) << i << ':' << d->objectNames.value(i);
@@ -206,7 +242,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     }
 #endif
 
-    // Write the already saved XML.
+    // Write the stored XML to the file, but don't reuse object names.
     for (int i = 0; i < d->frameContents.size(); ++i) {
         QByteArray          xmlArray(d->frameContents.value(i));
         QString             objectName(d->objectNames.value(i)); // Possibly empty.
@@ -215,12 +251,14 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
         QString newName = objectName;
         if (!objectName.isEmpty()) {
             newName = fileSaver.getFilename("UObject");
+            // FIXME: We must make a copy of the byte array here because
+            //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());
         }
 
         writer.addCompleteElement(xmlArray.data());
 
-        // If the objectName is empty, this may be an inline object.
+        // If the objectName is empty, this may be inline XML.
         // If so, we are done now.
         if (objectName.isEmpty())
             continue;
@@ -267,12 +305,14 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
 
     // Get the manifest.
     QList<KoOdfManifestEntry*> manifest = context.odfLoadingContext().manifestEntries();
-#if 0
+
+#if 0   // Enable to get more detailed debug messages
     kDebug(30006) << "MANIFEST: ";
     foreach (KoOdfManifestEntry *entry, manifest) {
         kDebug(30006) << entry->fullPath << entry->mediaType << entry->version;
     }
 #endif
+
     // Get the XML contents from the draw:frame.  As a side effect,
     // this extracts the object names from all xlink:href and stores
     // them into d->objectNames.  The saved xml contents itself is
@@ -323,7 +363,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
             KoOdfManifestEntry *temp = manifest.value(j);
 
             if (temp->fullPath() == entryName) {
-                entry = new KoOdfManifestEntry(*manifest.value(j));
+                entry = new KoOdfManifestEntry(*temp);
                 break;
             }
         }
@@ -331,7 +371,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
         d->isDirs.append(isDir);
     }
 
-#if 0
+#if 0   // Enable to get more detailed debug messages
     kDebug(30006) << "Object manifest entries:";
     for (int i = 0; i < d->manifestEntries.size(); ++i) {
         KoOdfManifestEntry *entry = d->manifestEntries.value(i);
@@ -343,6 +383,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     }
     kDebug(30006) << "END LOADING ####################################################";
 #endif
+
     return true;
 }
 
@@ -418,22 +459,6 @@ void KoUnavailShape::Private::saveXmlRecursive(const KoXmlElement &el, KoXmlWrit
 
     // End the element
     writer.endElement();
-
-#if 0
-    case TextNode:
-        writer.addTextNode();
-        break;
-
-    case CDATASectionNode:
-    case ProcessingInstructionNode:
-    case DocumentNode:
-    case DocumentTypeNode:
-    case NullNode:
-        // FALLTHROUGH
-    default:
-        // Shouldn't happen
-        break;
-#endif
 }
 
 

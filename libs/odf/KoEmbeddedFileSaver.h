@@ -53,7 +53,7 @@ public:
      */
     void embedFile(KoXmlWriter &writer, const char *element,
                    const QString &path, const QByteArray &mimeType,
-                   QByteArray contents);
+                   const QByteArray &contents);
 
     /**
      * Queues the file for saving into the store.
@@ -65,7 +65,7 @@ public:
      * part of an embedded object with embedded files within it.
      */
     void saveFile(const QString &path, const QByteArray &mimeType,
-                  QByteArray contents);
+                  const QByteArray &contents);
 
     /**
      *
@@ -76,7 +76,7 @@ public:
     /**
      * Save all embedded files to the store.
      */
-    bool saveEmbeddedFiles(KoOdfDocument::SavingContext &documentContext);
+    bool saveEmbeddedFiles(KoOdfDocument::SavingContext &documentContext) const;
 
 private:
     class Private;

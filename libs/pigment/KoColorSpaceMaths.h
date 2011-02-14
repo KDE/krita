@@ -560,6 +560,15 @@ namespace Arithmetic
     }
     
     template<class T>
+    inline T zeroValue() { return KoColorSpaceMathsTraits<T>::zeroValue; }
+    
+    template<class T>
+    inline T halfValue() { return KoColorSpaceMathsTraits<T>::halfValue; }
+    
+    template<class T>
+    inline T unitValue() { return KoColorSpaceMathsTraits<T>::unitValue; }
+    
+    template<class T>
     inline T unionShapeOpacy(T a, T b) {
         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
         return T(composite_type(a) + b - mul(a,b));

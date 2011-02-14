@@ -57,7 +57,7 @@ inline void cfSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TRe
 template<class HSXType, class TReal>
 inline void cfIncreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     using namespace Arithmetic;
-    TReal sat   = lerp(getSaturation<HSXType>(dr,dg,db), KoColorSpaceMathsTraits<TReal>::unitValue, getSaturation<HSXType>(sr,sg,sb));
+    TReal sat   = lerp(getSaturation<HSXType>(dr,dg,db), unitValue<TReal>(), getSaturation<HSXType>(sr,sg,sb));
     TReal light = getLightness<HSXType>(dr, dg, db);
     setSaturation<HSXType>(dr, dg, db, sat);
     setLightness<HSXType>(dr, dg, db, light);
@@ -66,7 +66,7 @@ inline void cfIncreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal&
 template<class HSXType, class TReal>
 inline void cfDecreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     using namespace Arithmetic;
-    TReal sat   = lerp(KoColorSpaceMathsTraits<TReal>::zeroValue, getSaturation<HSXType>(dr,dg,db), getSaturation<HSXType>(sr,sg,sb));
+    TReal sat   = lerp(zeroValue<TReal>(), getSaturation<HSXType>(dr,dg,db), getSaturation<HSXType>(sr,sg,sb));
     TReal light = getLightness<HSXType>(dr, dg, db);
     setSaturation<HSXType>(dr, dg, db, sat);
     setLightness<HSXType>(dr, dg, db, light);
@@ -87,13 +87,13 @@ template<class T>
 inline T cfColorBurn(T src, T dst) {
     using namespace Arithmetic;
     
-    if(dst == KoColorSpaceMathsTraits<T>::unitValue)
-        return KoColorSpaceMathsTraits<T>::unitValue;
+    if(dst == unitValue<T>())
+        return unitValue<T>();
     
     T invDst = inv(dst);
     
     if(src < invDst)
-        return KoColorSpaceMathsTraits<T>::zeroValue;
+        return zeroValue<T>();
     
     return inv(clamp<T>(div(invDst, src)));
 }
@@ -102,20 +102,20 @@ template<class T>
 inline T cfLinearBurn(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(src) + dst - KoColorSpaceMathsTraits<T>::unitValue);
+    return clamp<T>(composite_type(src) + dst - unitValue<T>());
 }
 
 template<class T>
 inline T cfColorDodge(T src, T dst) {
     using namespace Arithmetic;
     
-    if(dst == KoColorSpaceMathsTraits<T>::zeroValue)
-        return KoColorSpaceMathsTraits<T>::zeroValue;
+    if(dst == zeroValue<T>())
+        return zeroValue<T>();
     
     T invSrc = inv(src);
     
     if(invSrc < dst)
-        return KoColorSpaceMathsTraits<T>::unitValue;
+        return unitValue<T>();
     
     return Arithmetic::clamp<T>(div(dst, invSrc));
 }
@@ -146,9 +146,8 @@ inline T cfDivide(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(src == KoColorSpaceMathsTraits<T>::zeroValue)
-        return (dst == KoColorSpaceMathsTraits<T>::zeroValue) ?
-            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
+    if(src == zeroValue<T>())
+        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     return clamp<T>(div(dst, src));
 }
@@ -160,14 +159,14 @@ inline T cfHardLight(T src, T dst) {
     
     composite_type src2 = composite_type(src) + src;
     
-    if(src > KoColorSpaceMathsTraits<T>::halfValue) {
+    if(src > halfValue<T>()) {
         // screen(src*2.0 - 1.0, dst)
-        src2 -= KoColorSpaceMathsTraits<T>::unitValue;
-        return T((src2+dst) - (src2*dst / KoColorSpaceMathsTraits<T>::unitValue));
+        src2 -= unitValue<T>();
+        return T((src2+dst) - (src2*dst / unitValue<T>()));
     }
     
     // multiply(src*2.0, dst)
-    return clamp<T>(src2*dst / KoColorSpaceMathsTraits<T>::unitValue);
+    return clamp<T>(src2*dst / unitValue<T>());
 }
 
 template<class T>
@@ -190,26 +189,23 @@ inline T cfVividLight(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
-    if(src < KoColorSpaceMathsTraits<T>::halfValue) {
-    
-        if(src == KoColorSpaceMathsTraits<T>::zeroValue)
-            return (dst == KoColorSpaceMathsTraits<T>::unitValue) ?
-                KoColorSpaceMathsTraits<T>::unitValue : KoColorSpaceMathsTraits<T>::zeroValue;
+    if(src < halfValue<T>()) {
+        if(src == zeroValue<T>())
+            return (dst == unitValue<T>()) ? unitValue<T>() : zeroValue<T>();
             
         // min(1,max(0,1-(1-dst) / (2*src)))
         composite_type src2 = composite_type(src) + src;
         composite_type dsti = inv(dst);
-        return clamp<T>(KoColorSpaceMathsTraits<T>::unitValue - (dsti * KoColorSpaceMathsTraits<T>::unitValue / src2));
+        return clamp<T>(unitValue<T>() - (dsti * unitValue<T>() / src2));
     }
     
-    if(src == KoColorSpaceMathsTraits<T>::unitValue)
-        return (dst == KoColorSpaceMathsTraits<T>::zeroValue) ?
-            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
+    if(src == unitValue<T>())
+        return (dst == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     // min(1,max(0, dst / (2*(1-src)))
     composite_type srci2 = inv(src);
     srci2 += srci2;
-    return clamp<T>(composite_type(dst) * KoColorSpaceMathsTraits<T>::unitValue / srci2);
+    return clamp<T>(composite_type(dst) * unitValue<T>() / srci2);
 }
 
 template<class T>
@@ -219,7 +215,7 @@ inline T cfPinLight(T src, T dst) {
     // max(0, max(2*src-1, min(dst, 2*src)))
     composite_type src2 = composite_type(src) + src;
     composite_type a    = qMin<composite_type>(dst, src2);
-    composite_type b    = qMax<composite_type>(src2-KoColorSpaceMathsTraits<T>::unitValue, a);
+    composite_type b    = qMax<composite_type>(src2-Arithmetic::unitValue<T>(), a);
     return T(b);
 }
 
@@ -227,18 +223,18 @@ template<class T>
 inline T cfArcTangent(T src, T dst) {
     using namespace Arithmetic;
     
-    if(dst == KoColorSpaceMathsTraits<T>::zeroValue)
-        return (src == KoColorSpaceMathsTraits<T>::zeroValue) ?
-            KoColorSpaceMathsTraits<T>::zeroValue : KoColorSpaceMathsTraits<T>::unitValue;
+    if(dst == zeroValue<T>())
+        return (src == zeroValue<T>()) ? zeroValue<T>() : unitValue<T>();
     
     return scale<T>(2.0 * atan(scale<qreal>(src) / scale<qreal>(dst)) / Arithmetic::pi);
 }
 
 template<class T>
 inline T cfAllanon(T src, T dst) {
+    using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     // (dst + src) / 2   [or (dst + src) * 0.5]
-    return T((composite_type(src) + dst) * KoColorSpaceMathsTraits<T>::halfValue / KoColorSpaceMathsTraits<T>::unitValue);
+    return T((composite_type(src) + dst) * halfValue<T>() / unitValue<T>());
 }
 
 template<class T>
@@ -247,7 +243,7 @@ inline T cfLinearLight(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     // min(1,max(0,(dst + 2*src)-1))
-    return clamp<T>((composite_type(src) + src + dst) - KoColorSpaceMathsTraits<T>::unitValue);
+    return clamp<T>((composite_type(src) + src + dst) - unitValue<T>());
 }
 
 template<class T>
@@ -256,11 +252,10 @@ inline T cfParallel(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     
     // min(max(2 / (1/dst + 1/src), 0), 1)
-    composite_type unit = KoColorSpaceMathsTraits<T>::unitValue;
-    composite_type s    = (src != KoColorSpaceMathsTraits<T>::zeroValue) ? div<T>(unit, src) : unit;
-    composite_type d    = (dst != KoColorSpaceMathsTraits<T>::zeroValue) ? div<T>(unit, dst) : unit;
-    
-    return clamp<T>((unit+unit) * KoColorSpaceMathsTraits<T>::unitValue / (d+s));
+    composite_type unit = unitValue<T>();
+    composite_type s    = (src != zeroValue<T>()) ? div<T>(unit, src) : unit;
+    composite_type d    = (dst != zeroValue<T>()) ? div<T>(unit, dst) : unit;
+    return clamp<T>((unit+unit) * unit / (d+s));
 }
 
 template<class T>
@@ -268,29 +263,26 @@ inline T cfEquivalence(T src, T dst) {
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
     // 1 - abs(dst - src)
     composite_type x = composite_type(dst) - src;
-    return (x < KoColorSpaceMathsTraits<T>::zeroValue) ? T(-x) : T(x);
+    return (x < Arithmetic::zeroValue<T>()) ? T(-x) : T(x);
 }
 
 template<class T>
 inline T cfGrainMerge(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(dst) + src - KoColorSpaceMathsTraits<T>::halfValue);
+    return clamp<T>(composite_type(dst) + src - halfValue<T>());
 }
 
 template<class T>
 inline T cfGrainExtract(T src, T dst) {
     using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return clamp<T>(composite_type(dst) - src + KoColorSpaceMathsTraits<T>::halfValue);
+    return clamp<T>(composite_type(dst) - src + halfValue<T>());
 }
 
 template<class T>
 inline T cfHardMix(T src, T dst) {
-    if(dst > KoColorSpaceMathsTraits<T>::halfValue)
-        return cfColorDodge(src, dst);
-    
-    return cfColorBurn(src, dst);
+    return (dst > Arithmetic::halfValue<T>()) ? cfColorDodge(src,dst) : cfColorBurn(src,dst);
 }
 
 template<class T>
@@ -305,8 +297,8 @@ template<class T>
 inline T cfGammaDark(T src, T dst) {
     using namespace Arithmetic;
     
-    if(src == KoColorSpaceMathsTraits<T>::zeroValue)
-        return KoColorSpaceMathsTraits<T>::zeroValue;
+    if(src == zeroValue<T>())
+        return zeroValue<T>();
     
     // power(dst, 1/src)
     return scale<T>(pow(scale<qreal>(dst), 1.0/scale<qreal>(src)));

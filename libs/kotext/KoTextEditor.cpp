@@ -408,6 +408,19 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             QTextCharFormat f;
             f.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
             selection.mergeCharFormat(f);
+
+            QTextBlock startBlock = selection.document()->findBlock(selection.anchor());
+            QTextBlock endBlock = selection.document()->findBlock(selection.position());
+
+            if (startBlock != endBlock) {
+                do {
+                    startBlock = startBlock.next();
+                    QTextCursor cursor(startBlock);
+                    QTextBlockFormat blockFormat;
+                    blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                    cursor.mergeBlockFormat(blockFormat);
+                } while(startBlock != endBlock);
+            }
         }
     }
 }
@@ -1187,7 +1200,22 @@ void KoTextEditor::newLine()
         if (currentStyle == nextStyle)
             nextStyle = 0;
     }
+
+    int startPosition = d->caret.position();
+    QTextCharFormat format = d->caret.charFormat();
+    if (format.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+        format.clearProperty(KoCharacterStyle::ChangeTrackerId);
+    }
     d->caret.insertBlock();
+    int endPosition = d->caret.position();
+
+    //Mark the inserted text
+    d->caret.setPosition(startPosition);
+    d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
+
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
+
+    d->caret.clearSelection();
     QTextBlockFormat bf = d->caret.blockFormat();
     QVariant direction = bf.property(KoParagraphStyle::TextProgressionDirection);
     bf.setPageBreakPolicy(QTextFormat::PageBreak_Auto);

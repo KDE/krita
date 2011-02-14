@@ -43,7 +43,7 @@ inline void cfIncreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& 
 
 template<class HSXType, class TReal>
 inline void cfDecreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    addLightness<HSXType>(dr, dg, db, -getLightness<HSXType>(sr, sg, sb));
+    addLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb) - TReal(1.0));
 }
 
 template<class HSXType, class TReal>

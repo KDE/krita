@@ -56,7 +56,7 @@ public:
         srcAlpha = mul(srcAlpha, opacity);
         
         if(alphaLocked) {
-            if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            if(dstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
                         dst[i] = lerp(dst[i], compositeFunc(src[i],dst[i]), srcAlpha);
@@ -66,9 +66,9 @@ public:
             return dstAlpha;
         }
         else {
-            channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+            channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
             
-            if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            if(newDstAlpha != zeroValue<channels_type>()) {
                 for(qint32 i=0; i <channels_nb; i++) {
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
                         channels_type result = blend(src[i], srcAlpha, dst[i], dstAlpha, compositeFunc(src[i],dst[i]));
@@ -114,7 +114,7 @@ public:
         srcAlpha = mul(srcAlpha, opacity);
         
         if(alphaLocked) {
-            if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            if(dstAlpha != zeroValue<channels_type>()) {
                 float srcR = scale<float>(src[red_pos]);
                 float srcG = scale<float>(src[green_pos]);
                 float srcB = scale<float>(src[blue_pos]);
@@ -138,9 +138,9 @@ public:
             return dstAlpha;
         }
         else {
-            channels_type newDstAlpha = unionShapeOpacy(srcAlpha, dstAlpha);
+            channels_type newDstAlpha = unionShapeOpacity(srcAlpha, dstAlpha);
             
-            if(newDstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+            if(newDstAlpha != zeroValue<channels_type>()) {
                 float srcR = scale<float>(src[red_pos]);
                 float srcG = scale<float>(src[green_pos]);
                 float srcB = scale<float>(src[blue_pos]);

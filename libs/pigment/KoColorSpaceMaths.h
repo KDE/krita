@@ -589,7 +589,7 @@ namespace Arithmetic
     inline T unitValue() { return KoColorSpaceMathsTraits<T>::unitValue; }
     
     template<class T>
-    inline T unionShapeOpacy(T a, T b) {
+    inline T unionShapeOpacity(T a, T b) {
         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
         return T(composite_type(a) + b - mul(a,b));
     }

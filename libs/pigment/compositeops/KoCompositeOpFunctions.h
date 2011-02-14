@@ -329,7 +329,7 @@ template<class T>
 inline T cfDifference(T src, T dst) { return qMax(src,dst) - qMin(src,dst); }
 
 template<class T>
-inline T cfScreen(T src, T dst) { return Arithmetic::unionShapeOpacy(src, dst); }
+inline T cfScreen(T src, T dst) { return Arithmetic::unionShapeOpacity(src, dst); }
 
 template<class T>
 inline T cfDarkenOnly(T src, T dst) { return qMin(src, dst); }

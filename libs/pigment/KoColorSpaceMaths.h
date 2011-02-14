@@ -252,6 +252,14 @@ public:
     inline static traits_compositetype divide(_T a, _Tdst b) {
         return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
     }
+    
+    /**
+     * Inversion : unitValue - a
+     * @param a
+     */
+    inline static _T invert(_T a) {
+        return KoColorSpaceMathsTraits<_T>::unitValue - a;
+    }
 
     /**
      * Blending : (a * alpha) + b * (1 - alpha)
@@ -460,6 +468,12 @@ KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
 }
 
 template<>
+inline quint8 KoColorSpaceMaths<quint8>::invert(quint8 a)
+{
+    return ~a;
+}
+
+template<>
 inline quint8 KoColorSpaceMaths<quint8>::blend(quint8 a, quint8 b, quint8 c)
 {
     return UINT8_BLEND(a, b, c);
@@ -478,6 +492,12 @@ inline KoColorSpaceMathsTraits<quint16>::compositetype
 KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
 {
     return UINT16_DIVIDE(a, b);
+}
+
+template<>
+inline quint16 KoColorSpaceMaths<quint16>::invert(quint16 a)
+{
+    return ~a;
 }
 
 //------------------------------ various specialization ------------------------------//
@@ -530,7 +550,7 @@ namespace Arithmetic
     inline T mul(T a, T b, T c) { return T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
     
     template<class T>
-    inline T inv(T a) { return KoColorSpaceMathsTraits<T>::unitValue - a; }
+    inline T inv(T a) { return KoColorSpaceMaths<T>::invert(a); }
     
     template<class T>
     inline T lerp(T a, T b, T alpha) { return KoColorSpaceMaths<T>::blend(b, a, alpha); }
@@ -676,34 +696,6 @@ inline static TReal getLightness(TReal r, TReal g, TReal b) {
 }
 
 template<class HSXType, class TReal>
-inline void setLightness(TReal& r, TReal& g, TReal& b, TReal light)
-{
-    using namespace Arithmetic;
-    
-    TReal d = light - HSXType::getLightness(r, g, b);
-    
-    r += d;
-    g += d;
-    b += d;
-    
-    TReal l = HSXType::getLightness(r, g, b);
-    TReal n = min(r, g, b);
-    TReal x = max(r, g, b);
-    
-    if(n < TReal(0.0)) {
-        r = l + ((r-l) * l) / (l-n);
-        g = l + ((g-l) * l) / (l-n);
-        b = l + ((b-l) * l) / (l-n);
-    }
-    
-    if(x > TReal(1.0)) {
-        r = l + ((r-l) * (TReal(1.0)-l)) / (x-l);
-        g = l + ((g-l) * (TReal(1.0)-l)) / (x-l);
-        b = l + ((b-l) * (TReal(1.0)-l)) / (x-l);
-    }
-}
-
-template<class HSXType, class TReal>
 inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
 {
     using namespace Arithmetic;
@@ -717,20 +709,25 @@ inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
     TReal x = max(r, g, b);
     
     if(n < TReal(0.0)) {
-        r = l + ((r-l) * l) / (l-n);
-        g = l + ((g-l) * l) / (l-n);
-        b = l + ((b-l) * l) / (l-n);
+        TReal iln = TReal(1.0) / (l-n);
+        r = l + ((r-l) * l) * iln;
+        g = l + ((g-l) * l) * iln;
+        b = l + ((b-l) * l) * iln;
     }
     
-    if(x > TReal(1.0)) {
-        TReal xl = x - l;
-        
-        if(xl > std::numeric_limits<TReal>::epsilon()) {
-            r = l + ((r-l) * (TReal(1.0)-l)) / xl;
-            g = l + ((g-l) * (TReal(1.0)-l)) / xl;
-            b = l + ((b-l) * (TReal(1.0)-l)) / xl;
-        }
+    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon()) {
+        TReal il  = TReal(1.0) - l;
+        TReal ixl = TReal(1.0) / (x - l);
+        r = l + ((r-l) * il) * ixl;
+        g = l + ((g-l) * il) * ixl;
+        b = l + ((b-l) * il) * ixl;
     }
+}
+
+template<class HSXType, class TReal>
+inline void setLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    addLightness<HSXType>(r,g,b, light - HSXType::getLightness(r,g,b));
 }
 
 template<class HSXType, class TReal>

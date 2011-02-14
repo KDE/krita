@@ -378,8 +378,14 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int selectionBegin = qMin(checker.anchor(), checker.position());
             int selectionEnd = qMax(checker.anchor(), checker.position());
             checker.setPosition(selectionBegin);
-            idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+
+            if (!checker.atBlockStart()) {
+                idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+            } else {
+                idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.blockFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+            }
             checker.setPosition(selectionEnd);
+
             if (!checker.atEnd()) {
                 checker.movePosition(QTextCursor::NextCharacter);
                 idAfter = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
@@ -419,6 +425,12 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                     QTextBlockFormat blockFormat;
                     blockFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
                     cursor.mergeBlockFormat(blockFormat);
+
+                    QTextCharFormat blockCharFormat = cursor.blockCharFormat();
+                    if (blockCharFormat.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                        blockCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                        cursor.setBlockCharFormat(blockCharFormat);
+                    }
                 } while(startBlock != endBlock);
             }
         }

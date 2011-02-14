@@ -9,6 +9,7 @@ Name[pt_BR]=Área de canais
 Name[sv]=Kanaldockningsfönster
 Name[uk]=Панель швартування каналів
 Name[x-test]=xxChannel Dockerxx
+Name[zh_TW]=頻道嵌入器
 X-KDE-ServiceTypes=Krita/Dock
 Type=Service
 X-KDE-Library=kritachanneldocker

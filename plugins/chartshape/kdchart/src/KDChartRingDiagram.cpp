@@ -27,6 +27,7 @@
 #include "KDChartPaintContext.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartPieAttributes.h"
+#include "KDChartThreeDPieAttributes.h"
 #include "KDChartDataValueAttributes.h"
 
 #include <QPainter>
@@ -318,6 +319,7 @@ void RingDiagram::drawPieSurface( QPainter* painter,
 
         QModelIndex index( model()->index( dataset, pie, rootIndex() ) );
         const PieAttributes attrs( pieAttributes( index ) );
+        const ThreeDPieAttributes threeDAttrs( threeDPieAttributes( index ) );
 
     	const int rCount = rowCount();
     	const int colCount = columnCount();
@@ -327,7 +329,13 @@ void RingDiagram::drawPieSurface( QPainter* painter,
         QRectF drawPosition = d->position;//piePosition( dataset, pie );
 
         painter->setRenderHint ( QPainter::Antialiasing );
-        painter->setBrush( brush( index ) );
+
+        QBrush br = brush( index );
+        if( threeDAttrs.isEnabled() ) {
+            br = threeDAttrs.threeDBrush( br, drawPosition );
+        }
+        painter->setBrush( br );
+
         painter->setPen( pen( index ) );
 //        painter->setPen( pen );
         //painter->setPen( Qt::red );

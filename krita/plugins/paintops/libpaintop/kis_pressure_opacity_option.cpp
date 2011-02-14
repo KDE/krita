@@ -41,13 +41,13 @@ void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguratio
 {
     KisCurveOption::readOptionSetting(setting);
     if (setting->getString("OpacityVersion", "1") == "1") {
-        QList<QPointF> points = curve().points();
+        QList<QPointF> points = sensor()->curve().points();
         QList<QPointF> points_new;
         foreach(QPointF p, points)
         {
             points_new.push_back( QPointF(p.x() * 0.5, p.y()));
         }
-        setCurve(KisCubicCurve(points_new));
+        sensor()->setCurve(KisCubicCurve(points_new));
     }
 }
 

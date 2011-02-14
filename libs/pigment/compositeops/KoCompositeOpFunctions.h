@@ -37,11 +37,39 @@ inline void cfLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TRea
 }
 
 template<class HSXType, class TReal>
+inline void cfIncreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    addLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
+}
+
+template<class HSXType, class TReal>
+inline void cfDecreaseLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    addLightness<HSXType>(dr, dg, db, -getLightness<HSXType>(sr, sg, sb));
+}
+
+template<class HSXType, class TReal>
 inline void cfSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
-    TReal sat = getSaturation<HSXType>(sr, sg, sb);
-    TReal lum = getLightness<HSXType>(dr, dg, db);
+    TReal sat   = getSaturation<HSXType>(sr, sg, sb);
+    TReal light = getLightness<HSXType>(dr, dg, db);
     setSaturation<HSXType>(dr, dg, db, sat);
-    setLightness<HSXType>(dr, dg, db, lum);
+    setLightness<HSXType>(dr, dg, db, light);
+}
+
+template<class HSXType, class TReal>
+inline void cfIncreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    using namespace Arithmetic;
+    TReal sat   = lerp(getSaturation<HSXType>(dr,dg,db), KoColorSpaceMathsTraits<TReal>::unitValue, getSaturation<HSXType>(sr,sg,sb));
+    TReal light = getLightness<HSXType>(dr, dg, db);
+    setSaturation<HSXType>(dr, dg, db, sat);
+    setLightness<HSXType>(dr, dg, db, light);
+}
+
+template<class HSXType, class TReal>
+inline void cfDecreaseSaturation(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+    using namespace Arithmetic;
+    TReal sat   = lerp(KoColorSpaceMathsTraits<TReal>::zeroValue, getSaturation<HSXType>(dr,dg,db), getSaturation<HSXType>(sr,sg,sb));
+    TReal light = getLightness<HSXType>(dr, dg, db);
+    setSaturation<HSXType>(dr, dg, db, sat);
+    setLightness<HSXType>(dr, dg, db, light);
 }
 
 template<class HSXType, class TReal>

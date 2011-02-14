@@ -695,6 +695,36 @@ inline void setLightness(TReal& r, TReal& g, TReal& b, TReal light)
 }
 
 template<class HSXType, class TReal>
+inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    using namespace Arithmetic;
+    
+    r += light;
+    g += light;
+    b += light;
+    
+    TReal l = HSXType::getLightness(r, g, b);
+    TReal n = min(r, g, b);
+    TReal x = max(r, g, b);
+    
+    if(n < TReal(0.0)) {
+        r = l + ((r-l) * l) / (l-n);
+        g = l + ((g-l) * l) / (l-n);
+        b = l + ((b-l) * l) / (l-n);
+    }
+    
+    if(x > TReal(1.0)) {
+        TReal xl = x - l;
+        
+        if(xl > std::numeric_limits<TReal>::epsilon()) {
+            r = l + ((r-l) * (TReal(1.0)-l)) / xl;
+            g = l + ((g-l) * (TReal(1.0)-l)) / xl;
+            b = l + ((b-l) * (TReal(1.0)-l)) / xl;
+        }
+    }
+}
+
+template<class HSXType, class TReal>
 inline static TReal getSaturation(TReal r, TReal g, TReal b) {
     return HSXType::getSaturation(r, g, b);
 }

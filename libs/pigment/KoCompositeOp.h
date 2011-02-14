@@ -72,25 +72,41 @@ const QString COMPOSITE_VIVID_LIGHT  = "vivid_light";
 const QString COMPOSITE_LINEAR_LIGHT = "linear light";
 const QString COMPOSITE_PIN_LIGHT    = "pin_light";
 
-const QString COMPOSITE_HUE        = "hue";
-const QString COMPOSITE_COLOR      = "color";
-const QString COMPOSITE_SATURATION = "saturation";
-const QString COMPOSITE_LUMINIZE   = "luminize";
+const QString COMPOSITE_HUE            = "hue";
+const QString COMPOSITE_COLOR          = "color";
+const QString COMPOSITE_SATURATION     = "saturation";
+const QString COMPOSITE_INC_SATURATION = "inc_saturation";
+const QString COMPOSITE_DEC_SATURATION = "dec_saturation";
+const QString COMPOSITE_LUMINIZE       = "luminize";
+const QString COMPOSITE_INC_LUMINOSITY = "inc_luminosity";
+const QString COMPOSITE_DEC_LUMINOSITY = "dec_luminosity";
 
-const QString COMPOSITE_HUE_HSV        = "hue_hsv";
-const QString COMPOSITE_COLOR_HSV      = "color_hsv";
-const QString COMPOSITE_SATURATION_HSV = "saturation_hsv";
-const QString COMPOSITE_VALUE          = "value";
+const QString COMPOSITE_HUE_HSV            = "hue_hsv";
+const QString COMPOSITE_COLOR_HSV          = "color_hsv";
+const QString COMPOSITE_SATURATION_HSV     = "saturation_hsv";
+const QString COMPOSITE_INC_SATURATION_HSV = "inc_saturation_hsv";
+const QString COMPOSITE_DEC_SATURATION_HSV = "dec_saturation_hsv";
+const QString COMPOSITE_VALUE              = "value";
+const QString COMPOSITE_INC_VALUE          = "inc_value";
+const QString COMPOSITE_DEC_VALUE          = "dec_value";
 
-const QString COMPOSITE_HUE_HSL        = "hue_hsl";
-const QString COMPOSITE_COLOR_HSL      = "color_hsl";
-const QString COMPOSITE_SATURATION_HSL = "saturation_hsl";
-const QString COMPOSITE_LIGHTNESS      = "lightness";
+const QString COMPOSITE_HUE_HSL            = "hue_hsl";
+const QString COMPOSITE_COLOR_HSL          = "color_hsl";
+const QString COMPOSITE_SATURATION_HSL     = "saturation_hsl";
+const QString COMPOSITE_INC_SATURATION_HSL = "inc_saturation_hsl";
+const QString COMPOSITE_DEC_SATURATION_HSL = "dec_saturation_hsl";
+const QString COMPOSITE_LIGHTNESS          = "lightness";
+const QString COMPOSITE_INC_LIGHTNESS      = "inc_lightness";
+const QString COMPOSITE_DEC_LIGHTNESS      = "dec_lightness";
 
-const QString COMPOSITE_HUE_HSI        = "hue_hsi";
-const QString COMPOSITE_COLOR_HSI      = "color_hsi";
-const QString COMPOSITE_SATURATION_HSI = "saturation_hsi";
-const QString COMPOSITE_INTENSITY      = "intensity";
+const QString COMPOSITE_HUE_HSI            = "hue_hsi";
+const QString COMPOSITE_COLOR_HSI          = "color_hsi";
+const QString COMPOSITE_SATURATION_HSI     = "saturation_hsi";
+const QString COMPOSITE_INC_SATURATION_HSI = "inc_saturation_hsi";
+const QString COMPOSITE_DEC_SATURATION_HSI = "dec_saturation_hsi";
+const QString COMPOSITE_INTENSITY          = "intensity";
+const QString COMPOSITE_INC_INTENSITY      = "inc_intensity";
+const QString COMPOSITE_DEC_INTENSITY      = "dec_intensity";
 
 const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";

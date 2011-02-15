@@ -936,6 +936,24 @@ void KoTextEditor::insertTable(int rows, int columns)
     tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
     tableFormat.setMargin(5);
 
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (changeTracker && changeTracker->recordChanges()) {
+        QTextCharFormat charFormat = d->caret.charFormat();
+        QTextBlockFormat blockFormat = d->caret.blockFormat();
+        QString title = i18n("Key Press");
+
+        int changeId;
+        if (!d->caret.atBlockStart())
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        else
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        
+        if (!changeId)
+            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+
+        tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
+
     QTextTable *table = d->caret.insertTable(rows, columns, tableFormat);
 
     // Format the cells a bit.

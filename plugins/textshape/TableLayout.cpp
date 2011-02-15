@@ -373,6 +373,11 @@ void TableLayout::drawBackground(QPainter *painter, const KoTextDocumentLayout::
             for (int column = 0; column < m_table->columns(); ++column) {
                 QTextTableCell tableCell = m_table->cellAt(row, column);
                 KoChangeTrackerElement *changeElement = changeTracker->elementById(tableCell.format().property(KoCharacterStyle::ChangeTrackerId).toInt());
+                if (!changeElement) {
+                    //Check For table changes
+                    changeElement = changeTracker->elementById(m_table->format().property(KoCharacterStyle::ChangeTrackerId).toInt());
+                }
+
                 if (changeElement && changeElement->isEnabled()) {
                     switch(changeElement->getChangeType()) {
                         case KoGenChange::InsertChange:

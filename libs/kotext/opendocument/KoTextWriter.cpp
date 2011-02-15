@@ -1438,7 +1438,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         }
     } while(changeId);
 
-    if ((endBlock.blockNumber() != block.blockNumber()) && (endBlock.text().length())) {
+    if ((endBlock.blockNumber() != block.blockNumber()) && (endBlock.text().length()) && !(QTextCursor(endBlock).currentTable())) {
         //Check that the last fragment of this block is not a part of this change. If so, it is not a merge or a split
         QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();

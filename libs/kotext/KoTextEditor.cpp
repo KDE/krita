@@ -381,7 +381,11 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             if (!checker.atBlockStart()) {
                 idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
             } else {
-                idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.blockFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                if (!checker.currentTable()) {
+                    idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.blockFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                } else {
+                    idBefore = checker.currentTable()->format().intProperty(KoCharacterStyle::ChangeTrackerId);
+                }
             }
             checker.setPosition(selectionEnd);
 

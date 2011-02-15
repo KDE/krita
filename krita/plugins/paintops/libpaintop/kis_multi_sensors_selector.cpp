@@ -79,3 +79,8 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
     }
     emit(highlightedSensorChanged(sensor));
 }
+
+void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve)
+{
+    d->model->setCurrentCurve(d->form.sensorsList->currentIndex(), curve, useSameCurve);
+}

@@ -57,7 +57,7 @@ enum enumCursorStyle {
 const qint32 PRESSURE_LEVELS = 127;
 const double PRESSURE_MIN = 0.0;
 const double PRESSURE_MAX = 1.0;
-const double PRESSURE_DEFAULT = (PRESSURE_MAX - PRESSURE_MIN) / 2;
+const double PRESSURE_DEFAULT = PRESSURE_MAX;
 const double PRESSURE_THRESHOLD = 5.0 / 255.0;
 
 // copy of lcms.h

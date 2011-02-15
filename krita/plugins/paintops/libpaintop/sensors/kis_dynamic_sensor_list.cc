@@ -28,7 +28,7 @@ KisDynamicSensorList::~KisDynamicSensorList()
     qDeleteAll(m_list);
 }
 
-qreal KisDynamicSensorList::parameter(const KisPaintInformation& info)
+qreal KisDynamicSensorList::value(const KisPaintInformation& info)
 {
     qreal t = 1.0;
     foreach(KisDynamicSensor* sensor, m_list)

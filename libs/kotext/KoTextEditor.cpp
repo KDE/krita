@@ -378,7 +378,6 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int selectionBegin = qMin(checker.anchor(), checker.position());
             int selectionEnd = qMax(checker.anchor(), checker.position());
             checker.setPosition(selectionBegin);
-
             if (!checker.atBlockStart()) {
                 idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
             } else {
@@ -773,7 +772,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);
     d->caret.setPosition(endPosition, QTextCursor::KeepAnchor);
-    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Insert Inline Object"), format, format, false);
+    registerTrackedChange(d->caret, KoGenChange::InsertChange, i18n("Key Press"), format, format, false);
     d->caret.clearSelection();
 
     d->updateState(KoTextEditor::Private::NoOp);

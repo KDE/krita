@@ -1063,6 +1063,18 @@ void KoTextEditor::insertTableColumnLeft()
         int column = cell.column();
         table->insertColumns(column, 1);
         carsManager.insertColumns(column, 1, carsManager.columnStyle(column));
+
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            int changeId;
+            QString title(i18n("Insert Column Left"));
+            changeId = changeTracker->getInsertChangeId(title, 0);
+            for (int i=0; i < table->rows(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(i, column).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(i, column).setFormat(cellFormat);
+            }
+        }
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1089,6 +1101,18 @@ void KoTextEditor::insertTableColumnRight()
         } else {
             table->insertColumns(column, 1);
             carsManager.insertColumns(column, 1, carsManager.columnStyle(column-1));
+        }
+
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            int changeId;
+            QString title(i18n("Insert Column Right"));
+            changeId = changeTracker->getInsertChangeId(title, 0);
+            for (int i=0; i < table->rows(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(i, column).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(i, column).setFormat(cellFormat);
+            }
         }
     }
 

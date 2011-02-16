@@ -992,6 +992,18 @@ void KoTextEditor::insertTableRowAbove()
         int row = cell.row();
         table->insertRows(row, 1);
         carsManager.insertRows(row, 1, carsManager.rowStyle(row));
+    
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            int changeId;
+            QString title(i18n("Insert Row Above"));
+            changeId = changeTracker->getInsertChangeId(title, 0);
+            for (int i=0; i < table->columns(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(row, i).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(row, i).setFormat(cellFormat);
+            }
+        }
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1021,6 +1033,18 @@ void KoTextEditor::insertTableRowBelow()
         } else {
             table->insertRows(row, 1);
             carsManager.insertRows(row, 1, carsManager.rowStyle(row-1));
+        }
+
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            int changeId;
+            QString title(i18n("Insert Row Above"));
+            changeId = changeTracker->getInsertChangeId(title, 0);
+            for (int i=0; i < table->columns(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(row, i).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(row, i).setFormat(cellFormat);
+            }
         }
     }
 

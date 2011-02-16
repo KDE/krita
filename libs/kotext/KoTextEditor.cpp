@@ -377,18 +377,27 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             int changeId = 0;
             int selectionBegin = qMin(checker.anchor(), checker.position());
             int selectionEnd = qMax(checker.anchor(), checker.position());
+
             checker.setPosition(selectionBegin);
+            KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
             if (!checker.atBlockStart()) {
-                idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+                if (changeTracker->elementById(changeId)->getChangeType() == changeType)
+                    idBefore = changeId;
             } else {
                 if (!checker.currentTable()) {
-                    idBefore = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.blockFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());
+                    int changeId = checker.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
+                    if (changeTracker->elementById(changeId)->getChangeType() == changeType)
+                        idBefore = changeId;
                 } else {
                     idBefore = checker.currentTable()->format().intProperty(KoCharacterStyle::ChangeTrackerId);
+                    if (!idBefore) {
+                        idBefore = checker.currentTable()->cellAt(checker).format().intProperty(KoCharacterStyle::ChangeTrackerId);
+                    }
                 }
             }
-            checker.setPosition(selectionEnd);
 
+            checker.setPosition(selectionEnd);
             if (!checker.atEnd()) {
                 checker.movePosition(QTextCursor::NextCharacter);
                 idAfter = KoTextDocument(d->document).changeTracker()->mergeableId(changeType, title, checker.charFormat().property( KoCharacterStyle::ChangeTrackerId ).toInt());

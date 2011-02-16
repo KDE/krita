@@ -27,7 +27,8 @@
 class KoXmlWriter;
 
 /**
- * This class is used to save embedded files in ODF documents.
+ * This class is used to save embedded files and add mimetype
+ * informations about objects embedded in ODF documents.
  *
  * The difference between this and embedded objects / documents is
  * that embedded files are treated like blobs while embedded objects
@@ -40,6 +41,11 @@ public:
     KoEmbeddedFileSaver();
     ~KoEmbeddedFileSaver();
 
+    /**
+     * Get a unique file name with the given prefix, to be used as a name for an embedded file in the ODF store.
+     * @param the prefix of the filename to be created.
+     * return a unique file name for use in the odf store.
+     */
     QString getFilename(const QString &prefix);
 
     /**

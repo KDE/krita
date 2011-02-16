@@ -1147,8 +1147,20 @@ void KoTextEditor::deleteTableColumn()
             selectionColumn = cell.column();
             selectionColumnSpan = 1;
         }
-        table->removeColumns(selectionColumn, selectionColumnSpan);
-        carsManager.removeColumns(selectionColumn, selectionColumnSpan);
+
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            QString title(i18n("Delete Column"));
+            int changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
+            for (int i=0; i < table->rows(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(i, selectionColumn).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(i, selectionColumn).setFormat(cellFormat);
+            }
+        } else {
+            table->removeColumns(selectionColumn, selectionColumnSpan);
+            carsManager.removeColumns(selectionColumn, selectionColumnSpan);
+        }
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1173,8 +1185,20 @@ void KoTextEditor::deleteTableRow()
             selectionRow = cell.row();
             selectionRowSpan = 1;
         }
-        table->removeRows(selectionRow, selectionRowSpan);
-        carsManager.removeRows(selectionRow, selectionRowSpan);
+
+        KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        if (changeTracker && changeTracker->recordChanges()) {
+            QString title(i18n("Delete Row"));
+            int changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
+            for (int i=0; i < table->columns(); i++) {
+                QTextTableCellFormat cellFormat = table->cellAt(selectionRow, i).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+                table->cellAt(selectionRow, i).setFormat(cellFormat);
+            }
+        } else {
+            table->removeRows(selectionRow, selectionRowSpan);
+            carsManager.removeRows(selectionRow, selectionRowSpan);
+        }
     }
 
     d->updateState(KoTextEditor::Private::NoOp);

@@ -38,28 +38,34 @@
 #include <kis_global.h>
 #include <kis_paint_device.h>
 #include <kis_painter.h>
+#include <kis_image.h>
 #include <kis_selection.h>
 #include <kis_brush_based_paintop_settings.h>
 
-KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image)
-    : KisBrushBasedPaintOp(settings, painter), m_tempDev(0), m_smudgeRateOption("SmudgeRate"), m_colorRateOption("ColorRate")
+KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image):
+    KisBrushBasedPaintOp(settings, painter),
+    m_tempDev(0), m_image(image), m_firstRun(true),
+    m_smudgeRateOption("SmudgeRate"), m_colorRateOption("ColorRate")
 {
-    Q_UNUSED(image);
     Q_ASSERT(settings);
     Q_ASSERT(painter);
+    
     m_sizeOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
+    m_mergedPaintOption.readOptionSetting(settings);
+    
     m_sizeOption.sensor()->reset();
     m_smudgeRateOption.sensor()->reset();
     m_colorRateOption.sensor()->reset();
 
-    m_tempDev  = new KisPaintDevice(painter->device()->colorSpace());
-    m_firstRun = true;
+    m_tempDev     = new KisPaintDevice(painter->device()->colorSpace());
+    m_tempPainter = new KisPainter(m_tempDev);
 }
 
 KisSmudgeOp::~KisSmudgeOp()
 {
+    delete m_tempPainter;
 }
 
 qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
@@ -105,6 +111,8 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // to use it as an alpha/transparency mask
     maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     
+//     lock(true);
+    
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
     const KoCompositeOp* oldMode    = painter()->compositeOp();
@@ -121,18 +129,25 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     else m_firstRun = false;
     
-    // IMPORTANT: clear the temporary painting device to color black with zero opacity
-    //            it will only clear the extents of the brush
-    m_tempDev->clear(QRect(0, 0, brush->width(), brush->height()));
-    
-    KisPainter copyPainter(m_tempDev);
+    if(m_image && m_mergedPaintOption.isChecked()) {
+        m_tempPainter->setCompositeOp(COMPOSITE_COPY);
+        m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
+        m_image->lock();
+        m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, brush->width(), brush->width());
+        m_image->unlock();
+    }
+    else {
+        // IMPORTANT: clear the temporary painting device to color black with zero opacity
+        //            it will only clear the extents of the brush
+        m_tempDev->clear(QRect(0, 0, brush->width(), brush->height()));
+    }
     
     // reset composite mode and opacity
     // then cut out the area from the canvas under the brush
     // and blit it to the temporary painting device
-    copyPainter.setCompositeOp(COMPOSITE_OVER);
-    copyPainter.setOpacity(OPACITY_OPAQUE_U8);
-    copyPainter.bitBlt(0, 0, painter()->device(), x, y, brush->width(), brush->width());
+    m_tempPainter->setCompositeOp(COMPOSITE_OVER);
+    m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
+    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, brush->width(), brush->width());
     
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)
@@ -140,22 +155,22 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
         // this will apply the opacy (selected by the user) to copyPainter
         // (but fit the rate inbetween the range 0.0 to (1.0-SmudgeRate))
         qreal maxColorRate = qMax<qreal>(1.0-m_smudgeRateOption.getRate(), 0.2);
-        m_colorRateOption.apply(copyPainter, info, 0.0, maxColorRate, fpOpacity);
+        m_colorRateOption.apply(*m_tempPainter, info, 0.0, maxColorRate, fpOpacity);
         
         // paint a rectangle with the current color (foreground color)
         // into the temporary painting device and use the user selected
         // composite mode
-        copyPainter.setCompositeOp(oldMode);
-        copyPainter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        copyPainter.setPaintColor(painter()->paintColor());
-        copyPainter.paintRect(maskDab->bounds());
+        m_tempPainter->setCompositeOp(oldMode);
+        m_tempPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
+        m_tempPainter->setPaintColor(painter()->paintColor());
+        m_tempPainter->paintRect(maskDab->bounds());
     }
-    
-    copyPainter.end();
     
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldMode);
+    
+//     lock(false);
     
     return spacing(scale);
 }

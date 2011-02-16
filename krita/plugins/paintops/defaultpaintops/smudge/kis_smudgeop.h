@@ -31,6 +31,7 @@
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
+#include <kis_merged_paint_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -39,20 +40,21 @@ class KisPainter;
 
 class KisSmudgeOp : public KisBrushBasedPaintOp
 {
-
 public:
-
     KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSmudgeOp();
 
     qreal paintAt(const KisPaintInformation& info);
 
 private:
-    bool             m_firstRun;
-    KisPaintDeviceSP m_tempDev; // The temporary paint device
+    bool                  m_firstRun;
+    KisPaintDeviceSP      m_tempDev; // The temporary paint device
+    KisImageWSP           m_image;
+    KisPainter*           m_tempPainter;
     KisPressureSizeOption m_sizeOption;
     KisPressureRateOption m_smudgeRateOption;
     KisPressureRateOption m_colorRateOption;
+    KisMergetPaintOption  m_mergedPaintOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

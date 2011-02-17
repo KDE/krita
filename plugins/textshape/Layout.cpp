@@ -432,10 +432,7 @@ bool Layout::addLine()
     }
 
     // position inline objects
-    bool possibleRelayoutNeeded = positionInlineObjects();
-
-    if (possibleRelayoutNeeded) {
-
+    while (positionInlineObjects()) {
         if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
 
             if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {

@@ -378,8 +378,12 @@ bool Layout::addLine()
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data && line.isValid())
+        if (m_data && line.isValid()) {
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
+            m_data->setEndPosition(-1);
+        }
+
+
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)

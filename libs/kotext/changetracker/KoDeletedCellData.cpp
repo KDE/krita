@@ -17,3 +17,48 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QTextTableCellFormat>
+#include <QTextDocumentFragment>
+
+#include "KoDeletedCellData.h"
+
+KoDeletedCellData::KoDeletedCellData(int rowNumber, int columnNumber)
+{
+    this->row_number = rowNumber;
+    this->column_number = columnNumber;
+}
+
+KoDeletedCellData::~KoDeletedCellData()
+{
+}
+
+int KoDeletedCellData::rowNumber()
+{
+    return row_number;
+}
+
+int KoDeletedCellData::columnNumber()
+{
+    return column_number;
+}
+
+void KoDeletedCellData::setCellFormat(const QTextTableCellFormat &cellFormat)
+{
+    this->cell_format = cellFormat;
+}
+
+const QTextTableCellFormat& KoDeletedCellData::cellFormat()
+{
+    return this->cell_format;
+}
+
+void KoDeletedCellData::setCellContent(const QTextDocumentFragment &cellContent)
+{
+    this->cell_content = cellContent;
+}
+
+const QTextDocumentFragment& KoDeletedCellData::cellContent()
+{
+    return this->cell_content;
+}
+

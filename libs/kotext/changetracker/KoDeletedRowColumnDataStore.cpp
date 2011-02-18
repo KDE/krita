@@ -31,7 +31,7 @@ KoDeletedRowColumnDataStore::~KoDeletedRowColumnDataStore()
 
 KoDeletedRowData *KoDeletedRowColumnDataStore::addDeletedRow(QTextTable *table, int rowNumber, int changeId)
 {
-    KoDeletedRowData *deletedRowData = new KoDeletedRowData();
+    KoDeletedRowData *deletedRowData = new KoDeletedRowData(rowNumber);
     deletedRowDataMap.insert(changeId, deletedRowData);
     QVector<int> *tableChangeIds = tableChangeIdsMap.value(table, NULL);
     if (!tableChangeIds) {

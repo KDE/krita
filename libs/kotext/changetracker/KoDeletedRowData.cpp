@@ -19,13 +19,13 @@
 
 #include <QTextTableCellFormat>
 #include <QTextDocumentFragment>
+#include <QTextCursor>
+#include <QTextTable>
 
 #include "KoDeletedRowData.h"
 #include "KoDeletedCellData.h"
 
 #include <styles/KoTableRowStyle.h>
-
-#include <QTextTable>
 
 KoDeletedRowData::KoDeletedRowData(int rowNumber)
 {
@@ -34,6 +34,10 @@ KoDeletedRowData::KoDeletedRowData(int rowNumber)
 
 KoDeletedRowData::~KoDeletedRowData()
 {
+    KoDeletedCellData *cellData;
+    foreach (cellData, deleted_cells) {
+        delete cellData;
+    }
 }
 
 int KoDeletedRowData::rowNumber()
@@ -58,5 +62,17 @@ const QVector<KoDeletedCellData *>& KoDeletedRowData::deletedCells()
 
 void KoDeletedRowData::storeDeletedCells(QTextTable *table)
 {
+    QTextCursor cursor(table->document());
+    int columns = table->columns();
+    
+    for (int i=0; i<columns; i++) {
+        KoDeletedCellData *cellData = new KoDeletedCellData(row_number, i);
+        QTextTableCell cell = table->cellAt(row_number, i);
+        cursor.setPosition(cell.firstCursorPosition().position());
+        cursor.setPosition(cell.lastCursorPosition().position(), QTextCursor::KeepAnchor);
+        cellData->setCellFormat(cell.format().toTableCellFormat());
+        cellData->setCellContent(cursor.selection());
+        deleted_cells.push_back(cellData);
+    }
 }
 

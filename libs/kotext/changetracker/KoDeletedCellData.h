@@ -20,8 +20,32 @@
 #ifndef __KODELETEDCELLDATA_H__
 #define __KODELETEDCELLDATA_H__
 
+class QTextTableCellFormat;
+class QTextDocumentFragment;
+
 class KoDeletedCellData
 {
-};
+    public:
+        KoDeletedCellData(int rowNumber, int columnNumber);
 
+        ~KoDeletedCellData();
+
+        int rowNumber();
+
+        int columnNumber();
+
+        void setCellFormat(const QTextTableCellFormat &cellFormat);
+
+        const QTextTableCellFormat& cellFormat();
+
+        void setCellContent(const QTextDocumentFragment &cellContent);
+
+        const QTextDocumentFragment& cellContent();
+
+    private:
+        int row_number;
+        int column_number;
+        QTextTableCellFormat cell_format;
+        QTextDocumentFragment cell_content;
+};
 #endif

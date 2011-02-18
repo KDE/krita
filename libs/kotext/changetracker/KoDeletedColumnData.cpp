@@ -17,3 +17,43 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include "KoDeletedColumnData.h"
+#include "KoDeletedCellData.h"
+
+#include <styles/KoTableColumnStyle.h>
+
+#include <QTextTable>
+
+KoDeletedColumnData::KoDeletedColumnData(int columnNumber)
+{
+    this->column_number = columnNumber;
+}
+
+KoDeletedColumnData::~KoDeletedColumnData()
+{
+}
+
+int KoDeletedColumnData::columnNumber()
+{
+    return column_number;
+}
+
+void KoDeletedColumnData::setColumnStyle(KoTableColumnStyle *columnStyle)
+{
+    this->column_style = columnStyle;
+}
+
+KoTableColumnStyle *KoDeletedColumnData::columnStyle()
+{
+    return column_style;
+}
+
+const QVector<KoDeletedCellData *>& KoDeletedColumnData::deletedCells()
+{
+    return deleted_cells;
+}
+
+void KoDeletedColumnData::storeDeletedCells(QTextTable *table)
+{
+}
+

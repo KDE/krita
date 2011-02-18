@@ -117,6 +117,10 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
             this, SIGNAL(presetNameLineEditChanged(QString)));
             
+    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
+            this, SIGNAL(paintopActivated(QString)));
+
+            
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
 
@@ -263,5 +267,19 @@ void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 	m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
 }
 
+void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
+{
+   m_d->uiWdgPaintOpPresetSettings.paintopList->setPaintOpList(list);
+}
+
+void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+{
+    m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOp()
+{
+    return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
+}
 
 #include "kis_paintop_presets_popup.moc"

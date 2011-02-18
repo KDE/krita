@@ -17,3 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#ifndef __KODELETEDCELLDATA_H__
+#define __KODELETEDCELLDATA_H__
+
+class KoDeletedCellData
+{
+};
+
+#endif

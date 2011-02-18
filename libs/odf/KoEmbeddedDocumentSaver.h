@@ -27,7 +27,7 @@
 class KoXmlWriter;
 
 /**
- * This class is used to save embedded documents in ODF documents.
+ * This class is used to save embedded objects in ODF documents.
  *
  * @see KoEmbeddedFileSaver
  */

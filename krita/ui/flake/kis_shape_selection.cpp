@@ -1,6 +1,5 @@
 /*
  *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
- *  Copyright (c) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -115,8 +114,8 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
-    KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -154,8 +153,7 @@ bool KisShapeSelection::saveSelection(KoStore * store) const
     contentTmpWriter.startElement("office:body");
     contentTmpWriter.startElement("office:drawing");
 
-    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles,
-                                      documentContext.embeddedDocSaver);
+    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");

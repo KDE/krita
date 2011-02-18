@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
- * Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,7 +72,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
     Q_ASSERT(!store->bad());
 
     KoOdfWriteStore odfStore(store);
-    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedDocumentSaver embeddedSaver;
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     KoXmlWriter *contentWriter = odfStore.contentWriter();
@@ -84,8 +83,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles,
-                                                   embeddedDocSaver);
+    KoShapeSavingContext *context = helper.context(bodyWriter, mainStyles, embeddedSaver);
 
     if (!helper.writeBody()) {
         return false;
@@ -109,8 +107,8 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
     }
 
     // Save embedded objects and files
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
-    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
+    KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30006) << "save embedded documents failed";
         return false;
     }

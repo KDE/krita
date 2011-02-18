@@ -2,7 +2,6 @@
  *  Copyright (c) 2006-2008 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2011 Inge wallin <inge@lysator.liu.se>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -258,8 +257,8 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
-    KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -297,8 +296,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     contentTmpWriter.startElement("office:body");
     contentTmpWriter.startElement("office:drawing");
 
-    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles,
-                                      documentContext.embeddedDocSaver);
+    KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
@@ -325,7 +323,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     if (!store->close())
         return false;
 
-    embeddedDocSaver.saveEmbeddedDocuments(documentContext);
+    embeddedSaver.saveEmbeddedDocuments(documentContext);
 
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 

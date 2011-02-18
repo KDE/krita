@@ -74,7 +74,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     Q_ASSERT(!store->bad());
 
     KoOdfWriteStore odfStore(store);
-    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedDocumentSaver embeddedSaver;
 
     KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
     KoXmlWriter* contentWriter = odfStore.contentWriter();
@@ -85,7 +85,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedDocSaver);
+    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedSaver);
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
@@ -139,12 +139,12 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     // Save embedded objects and files
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
-    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
+    KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(32500) << "save embedded documents failed";
         return false;
     }
-
+ 
     // Write out manifest file
     if (!odfStore.closeManifestWriter()) {
         return false;

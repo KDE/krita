@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright 2007 Stefan Nikolaus     <stefan.nikolaus@kdemail.net>
-   Copyright 2007-2011 Inge Wallin    <inge@lysator.liu.se>
+   Copyright 2007-2010 Inge Wallin    <inge@lysator.liu.se>
    Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
@@ -1125,7 +1125,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
         saveOdfAttributes( context, OdfAllAttributes );
 
         bodyWriter.startElement( "draw:object" );
-        context.embeddedDocumentSaver().embedDocument( bodyWriter, d->document );
+        context.embeddedSaver().embedDocument( bodyWriter, d->document );
         bodyWriter.endElement(); // draw:object
 
         bodyWriter.endElement(); // draw:frame

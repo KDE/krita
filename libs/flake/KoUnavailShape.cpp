@@ -241,7 +241,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 {
     kDebug(30006) << "START SAVING ##################################################";
 
-    KoEmbeddedDocumentSaver &fileSaver = context.embeddedDocumentSaver();
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
     KoXmlWriter &writer    = context.xmlWriter();
 
     writer.startElement("draw:frame");

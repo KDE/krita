@@ -54,7 +54,7 @@ public:
     QHash<const KoShape *, QTransform> shapeOffsets;
 
     KoGenStyles& mainStyles;
-    KoEmbeddedDocumentSaver& embeddedDocSaver;
+    KoEmbeddedDocumentSaver& embeddedSaver;
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w, KoGenStyles &s,
@@ -65,13 +65,13 @@ KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w, KoGenSt
       subId(0),
       imageId(0),
       mainStyles(s),
-      embeddedDocSaver(ed)
+      embeddedSaver(ed)
 {
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-                                           KoEmbeddedDocumentSaver &embeddedDocSaver)
-    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedDocSaver))
+                                           KoEmbeddedDocumentSaver &embeddedSaver)
+    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
 {
     // by default allow saving of draw:id
     addOption(KoShapeSavingContext::DrawId);
@@ -97,9 +97,9 @@ KoGenStyles & KoShapeSavingContext::mainStyles()
     return d->mainStyles;
 }
 
-KoEmbeddedDocumentSaver &KoShapeSavingContext::embeddedDocumentSaver()
+KoEmbeddedDocumentSaver &KoShapeSavingContext::embeddedSaver()
 {
-    return d->embeddedDocSaver;
+    return d->embeddedSaver;
 }
 
 bool KoShapeSavingContext::isSet(ShapeSavingOption option) const

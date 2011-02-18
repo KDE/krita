@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,10 +36,10 @@ KoDragOdfSaveHelper::~KoDragOdfSaveHelper()
 }
 
 KoShapeSavingContext *KoDragOdfSaveHelper::context(KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
-                                                   KoEmbeddedDocumentSaver & embeddedDocSaver)
+                                                   KoEmbeddedDocumentSaver & embeddedSaver)
 {
     Q_D(KoDragOdfSaveHelper);
     Q_ASSERT(d->context == 0);
-    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedDocSaver);
+    d->context = new KoShapeSavingContext(*bodyWriter, mainStyles, embeddedSaver);
     return d->context;
 }

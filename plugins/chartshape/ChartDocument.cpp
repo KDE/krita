@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
 
    Copyright 2008 Johannes Simon <johannes.simon@gmail.com>
-   Copyright 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -130,9 +129,9 @@ bool ChartDocument::saveOdf( SavingContext &context )
     if ( !bodyWriter )
         return false;
 
-    KoEmbeddedDocumentSaver& embeddedDocSaver = context.embeddedDocSaver;
+    KoEmbeddedDocumentSaver& embeddedSaver = context.embeddedSaver;
 
-    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedDocSaver );
+    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedSaver );
 
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:chart" );

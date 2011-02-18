@@ -47,10 +47,10 @@ public:
     SavingContext(KoOdfWriteStore &odfStore,
                   KoEmbeddedDocumentSaver &embeddedDocSaver)
                 : odfStore(odfStore)
-                , embeddedDocSaver(embeddedDocSaver) {}
+                , embeddedSaver(embeddedDocSaver) {}
 
         KoOdfWriteStore &odfStore;
-        KoEmbeddedDocumentSaver &embeddedDocSaver;
+        KoEmbeddedDocumentSaver &embeddedSaver;
     };
 
     /**

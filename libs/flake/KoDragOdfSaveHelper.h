@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,8 +41,7 @@ public:
      *
      * The returned context is valid as long as the KoDragOdfSaveHelper is existing
      */
-    virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles,
-                                          KoEmbeddedDocumentSaver &embeddedDocSaver);
+    virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles, KoEmbeddedDocumentSaver &embeddedSaver);
 
     /**
      * This method is called for writing the body of odf document.

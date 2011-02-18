@@ -196,18 +196,22 @@ KoXmlWriter* KoOdfWriteStore::manifestWriter()
     return d->manifestWriter;
 }
 
-bool KoOdfWriteStore::closeManifestWriter()
+bool KoOdfWriteStore::closeManifestWriter(bool writeMainfest)
 {
     Q_ASSERT(d->manifestWriter);
-    d->manifestWriter->endElement();
-    d->manifestWriter->endDocument();
-    QBuffer* buffer = static_cast<QBuffer *>(d->manifestWriter->device());
-    delete d->manifestWriter; d->manifestWriter = 0;
-    bool ok = false;
-    if (d->store->open("META-INF/manifest.xml")) {
-        qint64 written = d->store->write(buffer->buffer());
-        ok = (written == (qint64) buffer->buffer().size() && d->store->close());
+    bool ok = true;
+    if (writeMainfest) {
+        d->manifestWriter->endElement();
+        d->manifestWriter->endDocument();
+        QBuffer* buffer = static_cast<QBuffer *>(d->manifestWriter->device());
+        if (d->store->open("META-INF/manifest.xml")) {
+            qint64 written = d->store->write(buffer->buffer());
+            ok = (written == (qint64) buffer->buffer().size() && d->store->close());
+        } else {
+            ok = false;
+        }
+        delete buffer;
     }
-    delete buffer;
+    delete d->manifestWriter; d->manifestWriter = 0;
     return ok;
 }

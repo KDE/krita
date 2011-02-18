@@ -889,6 +889,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -896,24 +897,28 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     // Save embedded objects
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
 
     if (store->open("meta.xml")) {
         if (!d->docInfo->saveOasis(store) || !store->close()) {
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }
         manifestWriter->addManifestEntry("meta.xml", "text/xml");
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
 
     if (d->docRdf && !d->docRdf->saveOasis(store, manifestWriter)) {
         d->lastErrorMessage = i18n("Not able to write RDF metadata. Partition full?");
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -921,12 +926,14 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     if (store->open("Thumbnails/thumbnail.png")) {
         if (!saveOasisPreview(store, manifestWriter) || !store->close()) {
             d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }
         // No manifest entry!
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -957,6 +964,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
             }
         } else {
             d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("VersionList.xml"));
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }

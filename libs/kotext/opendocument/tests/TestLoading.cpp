@@ -55,7 +55,6 @@
 #include <KoParagraphStyle.h>
 #include <KoText.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextSharedLoadingData.h>
 #include <KoTextSharedSavingData.h>
@@ -1093,10 +1092,9 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoStyleManager *styleMan = KoTextDocument(document).styleManager();
     Q_UNUSED(styleMan);
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
 
     KoGenChanges changes;
-    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver);
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedDocSaver);
 
     KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
     KoTextSharedSavingData *textSharedData = 0;

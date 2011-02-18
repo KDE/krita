@@ -44,7 +44,6 @@
 #include <KoDataCenterBase.h>
 #include <KoDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include <KoGenStyle.h>
 #include <KoImageCollection.h>
 #include <KoOdf.h>
@@ -260,8 +259,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     KoOdfWriteStore odfStore(store);
     KoXmlWriter* manifestWriter = odfStore.manifestWriter("application/vnd.oasis.opendocument.graphics");
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver embeddedFileSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
 
     if (!store->open("content.xml"))
         return false;
@@ -300,8 +298,7 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
     contentTmpWriter.startElement("office:drawing");
 
     KoShapeSavingContext shapeContext(contentTmpWriter, mainStyles,
-                                      documentContext.embeddedDocSaver,
-                                      documentContext.embeddedFileSaver);
+                                      documentContext.embeddedDocSaver);
 
     shapeContext.xmlWriter().startElement("draw:page");
     shapeContext.xmlWriter().addAttribute("draw:name", "");
@@ -329,7 +326,6 @@ bool KisShapeLayer::saveLayer(KoStore * store) const
         return false;
 
     embeddedDocSaver.saveEmbeddedDocuments(documentContext);
-    embeddedFileSaver.saveEmbeddedFiles(documentContext);
 
     manifestWriter->addManifestEntry("content.xml", "text/xml");
 

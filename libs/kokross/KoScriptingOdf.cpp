@@ -26,7 +26,6 @@
 #include <KoOdfWriteStore.h>
 #include <KoDocumentAdaptor.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 
 #include <KDebug>
 #include <QBuffer>
@@ -287,8 +286,7 @@ QByteArray KoScriptingOdfStore::getByteArray()
     KoOdfWriteStore odfStore(store);
     odfStore.manifestWriter("");
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
-    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    KoDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
     QByteArray mime = getMimeType();
     if (! m_document->saveOdf(documentContext)) {
         kWarning(32010)  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";

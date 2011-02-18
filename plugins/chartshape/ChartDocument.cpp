@@ -40,7 +40,6 @@
 #include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include <KoView.h>
 #include <KComponentData>
 #include <KDebug>
@@ -132,10 +131,8 @@ bool ChartDocument::saveOdf( SavingContext &context )
         return false;
 
     KoEmbeddedDocumentSaver& embeddedDocSaver = context.embeddedDocSaver;
-    KoEmbeddedFileSaver&     embeddedFileSaver = context.embeddedFileSaver;
 
-    KoShapeSavingContext savingContext( *bodyWriter, mainStyles,
-                                        embeddedDocSaver, embeddedFileSaver );
+    KoShapeSavingContext savingContext( *bodyWriter, mainStyles, embeddedDocSaver );
 
     bodyWriter->startElement( "office:body" );
     bodyWriter->startElement( "office:chart" );

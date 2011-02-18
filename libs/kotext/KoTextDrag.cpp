@@ -36,7 +36,6 @@
 #include <KoXmlWriter.h>
 #include <KoOdfDocument.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoEmbeddedFileSaver.h>
 #include "KoShapeSavingContext.h"
 #include <opendocument/KoTextSharedSavingData.h>
 
@@ -76,7 +75,6 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     KoOdfWriteStore odfStore(store);
     KoEmbeddedDocumentSaver embeddedDocSaver;
-    KoEmbeddedFileSaver     embeddedFileSaver;
 
     KoXmlWriter* manifestWriter = odfStore.manifestWriter(mimeType);
     KoXmlWriter* contentWriter = odfStore.contentWriter();
@@ -87,8 +85,7 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
 
     KoGenStyles mainStyles;
     KoXmlWriter *bodyWriter = odfStore.bodyWriter();
-    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles,
-                                                    embeddedDocSaver, embeddedFileSaver);
+    KoShapeSavingContext * context = helper.context(bodyWriter, mainStyles, embeddedDocSaver);
     KoGenChanges changes;
 
     KoSharedSavingData *sharedData = context->sharedData(KOTEXT_SHARED_SAVING_ID);
@@ -142,13 +139,9 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
     }
 
     // Save embedded objects and files
-    KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver, embeddedFileSaver);
+    KoOdfDocument::SavingContext documentContext(odfStore, embeddedDocSaver);
     if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(32500) << "save embedded documents failed";
-        return false;
-    }
-    if (!embeddedFileSaver.saveEmbeddedFiles(documentContext)) {
-        kDebug(32500) << "save embedded files failed";
         return false;
     }
 

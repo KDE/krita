@@ -60,11 +60,9 @@ KoPAOdfPageSaveHelper::~KoPAOdfPageSaveHelper()
 }
 
 KoShapeSavingContext * KoPAOdfPageSaveHelper::context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
-                                                       KoEmbeddedDocumentSaver & embeddedDocSaver,
-                                                       KoEmbeddedFileSaver & embeddedFileSaver)
+                                                       KoEmbeddedDocumentSaver & embeddedDocSaver)
 {
-    m_context = new KoPASavingContext( *bodyWriter, mainStyles,
-                                       embeddedDocSaver, embeddedFileSaver, 1 );
+    m_context = new KoPASavingContext( *bodyWriter, mainStyles, embeddedDocSaver, 1 );
     return m_context;
 }
 

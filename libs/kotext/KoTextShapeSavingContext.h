@@ -43,7 +43,6 @@ public:
      */
     KoTextShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                              KoEmbeddedDocumentSaver& embeddedDocSaver,
-                             KoEmbeddedFileSaver& embeddedFileSaver,
                              KoGenChanges& changes);
     virtual ~KoTextShapeSavingContext();
 

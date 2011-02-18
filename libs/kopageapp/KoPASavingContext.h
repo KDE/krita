@@ -44,12 +44,10 @@ public:
      * @param xmlWriter used for writing the data to
      * @param context the saving context
      * @param embeddedDocSaver for saving embedded documents
-     * @param embeddedFileSaver for saving embedded files
      * @param page the starting page number
      */
     KoPASavingContext( KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                        KoEmbeddedDocumentSaver &embeddedDocSaver,
-                       KoEmbeddedFileSaver &embeddedFileSaver,
                        int page); //TODO default
 
     /**

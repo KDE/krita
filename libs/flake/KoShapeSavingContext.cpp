@@ -37,8 +37,7 @@
 
 class KoShapeSavingContextPrivate {
 public:
-    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&,
-                                KoEmbeddedDocumentSaver&, KoEmbeddedFileSaver&);
+    KoShapeSavingContextPrivate(KoXmlWriter&, KoGenStyles&, KoEmbeddedDocumentSaver&);
 
     KoXmlWriter *xmlWriter;
     KoShapeSavingContext::ShapeSavingOptions savingOptions;
@@ -56,27 +55,23 @@ public:
 
     KoGenStyles& mainStyles;
     KoEmbeddedDocumentSaver& embeddedDocSaver;
-    KoEmbeddedFileSaver& embeddedFileSaver;
 };
 
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w, KoGenStyles &s,
-                                                         KoEmbeddedDocumentSaver &ed,
-                                                         KoEmbeddedFileSaver &ef)
+                                                         KoEmbeddedDocumentSaver &ed)
     : xmlWriter(&w),
       savingOptions(0),
       drawId(0),
       subId(0),
       imageId(0),
       mainStyles(s),
-      embeddedDocSaver(ed),
-      embeddedFileSaver(ef)
+      embeddedDocSaver(ed)
 {
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-                                           KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                           KoEmbeddedFileSaver &embeddedFileSaver)
-    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver))
+                                           KoEmbeddedDocumentSaver &embeddedDocSaver)
+    : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedDocSaver))
 {
     // by default allow saving of draw:id
     addOption(KoShapeSavingContext::DrawId);
@@ -105,11 +100,6 @@ KoGenStyles & KoShapeSavingContext::mainStyles()
 KoEmbeddedDocumentSaver &KoShapeSavingContext::embeddedDocumentSaver()
 {
     return d->embeddedDocSaver;
-}
-
-KoEmbeddedFileSaver &KoShapeSavingContext::embeddedFileSaver()
-{
-    return d->embeddedFileSaver;
 }
 
 bool KoShapeSavingContext::isSet(ShapeSavingOption option) const

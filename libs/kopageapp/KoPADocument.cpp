@@ -186,9 +186,7 @@ bool KoPADocument::saveOdf( SavingContext & documentContext )
     KoGenStyles mainStyles;
     KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    KoPASavingContext paContext(*bodyWriter, mainStyles,
-                                documentContext.embeddedDocSaver, documentContext.embeddedFileSaver,
-                                1);
+    KoPASavingContext paContext(*bodyWriter, mainStyles, documentContext.embeddedDocSaver, 1);
 
     saveOdfDocumentStyles( paContext );
 

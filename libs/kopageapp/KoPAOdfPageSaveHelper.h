@@ -42,8 +42,7 @@ public:
 
     /// reimplemented
     virtual KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles,
-                                            KoEmbeddedDocumentSaver & embeddedDocSaver,
-                                            KoEmbeddedFileSaver & embeddedFileSaver );
+                                            KoEmbeddedDocumentSaver & embeddedDocSaver );
 
     /// reimplemented
     virtual bool writeBody();

@@ -43,8 +43,7 @@ public:
      * The returned context is valid as long as the KoDragOdfSaveHelper is existing
      */
     virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles,
-                                          KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                          KoEmbeddedFileSaver &embeddedFileSaver);
+                                          KoEmbeddedDocumentSaver &embeddedDocSaver);
 
     /**
      * This method is called for writing the body of odf document.

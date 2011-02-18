@@ -46,7 +46,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoEmbeddedFileSaver.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 
 // The XML of a frame looks something like this:
@@ -87,7 +87,7 @@
 //
 // FIXME: There should only be ONE place where new object / file names
 //        are generated, not 3(?) like there are now:
-//        KoEmbeddedDocumentSaver, KoEmbeddedFileSaver and the
+//        KoEmbeddedDocumentSaver, KoEmbeddedDocumentSaver and the
 //        KoImageCollection.
 //
 
@@ -241,8 +241,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 {
     kDebug(30006) << "START SAVING ##################################################";
 
-    KoEmbeddedFileSaver &fileSaver = context.embeddedFileSaver();
-    KoXmlWriter         &writer    = context.xmlWriter();
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedDocumentSaver();
+    KoXmlWriter &writer    = context.xmlWriter();
 
     writer.startElement("draw:frame");
 

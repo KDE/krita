@@ -27,9 +27,8 @@
 
 KoPASavingContext::KoPASavingContext(KoXmlWriter &xmlWriter, KoGenStyles& mainStyles,
                                      KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                     KoEmbeddedFileSaver &embeddedFileSaver,
                                      int page)
-    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedDocSaver, embeddedFileSaver)
+    : KoShapeSavingContext(xmlWriter, mainStyles, embeddedDocSaver)
     , m_page( page )
     , m_masterPageIndex( 0 )
     , m_clearDrawIds( false )

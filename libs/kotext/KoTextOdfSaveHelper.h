@@ -42,8 +42,7 @@ public:
     virtual bool writeBody();
 
     virtual KoShapeSavingContext *context(KoXmlWriter *bodyWriter, KoGenStyles &mainStyles,
-                                          KoEmbeddedDocumentSaver &embeddedDocSaver,
-                                          KoEmbeddedFileSaver &embeddedFileSaver);
+                                          KoEmbeddedDocumentSaver &embeddedDocSaver);
 
     /**
      * The Rdf Model ownership is not taken, you must still delete it,

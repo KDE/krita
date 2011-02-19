@@ -39,7 +39,7 @@ KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPressureRateOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
     addPaintOpOption(new KisPressureRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
-    addPaintOpOption(new KisMergetPaintOptionWidget());
+    addPaintOpOption(new KisMergedPaintOptionWidget());
 }
 
 KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()

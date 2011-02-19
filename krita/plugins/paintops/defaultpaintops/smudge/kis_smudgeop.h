@@ -54,7 +54,7 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureRateOption m_smudgeRateOption;
     KisPressureRateOption m_colorRateOption;
-    KisMergetPaintOption  m_mergedPaintOption;
+    KisMergedPaintOption  m_mergedPaintOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

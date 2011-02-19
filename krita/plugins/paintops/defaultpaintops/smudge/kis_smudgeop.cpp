@@ -44,7 +44,7 @@
 
 KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter *painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
-    m_tempDev(0), m_image(image), m_firstRun(true),
+    m_firstRun(true), m_tempDev(0), m_image(image),
     m_smudgeRateOption("SmudgeRate"), m_colorRateOption("ColorRate")
 {
     Q_ASSERT(settings);
@@ -53,7 +53,7 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_sizeOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
-    m_mergedPaintOption.readOptionSetting(settings);
+//     m_mergedPaintOption.readOptionSetting(settings);
     
     m_sizeOption.sensor()->reset();
     m_smudgeRateOption.sensor()->reset();

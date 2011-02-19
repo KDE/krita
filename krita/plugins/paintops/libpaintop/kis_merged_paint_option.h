@@ -24,10 +24,10 @@
 
 #include <QLabel>
 
-class PAINTOP_EXPORT KisMergetPaintOption : public KisPaintOpOption
+class PAINTOP_EXPORT KisMergedPaintOption : public KisPaintOpOption
 {
 public:
-    KisMergetPaintOption():
+    KisMergedPaintOption():
         KisPaintOpOption(i18n("Merged Paint"), KisPaintOpOption::brushCategory(), false) { }
 
     virtual bool isCheckable() { return true; }
@@ -42,10 +42,10 @@ public:
     }
 };
 
-class PAINTOP_EXPORT KisMergetPaintOptionWidget: public KisMergetPaintOption
+class PAINTOP_EXPORT KisMergedPaintOptionWidget: public KisMergedPaintOption
 {
 public:
-    KisMergetPaintOptionWidget()
+    KisMergedPaintOptionWidget()
     {
         QLabel* lable = new QLabel(i18n("Use all visible layers merged together for painting operations."));
         lable->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);

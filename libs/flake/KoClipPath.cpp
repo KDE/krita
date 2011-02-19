@@ -98,10 +98,12 @@ public:
             else
                 clipPath |= m.map(path->outline());
         }
+        initialTransformToShape = transformToShape;
     }
 
-    QExplicitlySharedDataPointer<KoClipData> clipData;
-    QPainterPath clipPath;
+    QExplicitlySharedDataPointer<KoClipData> clipData; ///< the clip path data
+    QPainterPath clipPath; ///< the compiled clip path in shape coordinates of the clipped shape
+    QTransform initialTransformToShape; ///< initial transformation to shape coordinates of the clipped shape
 };
 
 KoClipPath::KoClipPath(KoClipData * clipData, const QTransform & transformToShape)
@@ -146,4 +148,14 @@ void KoClipPath::applyClipping(KoShape *shape, QPainter & painter, const KoViewC
 QPainterPath KoClipPath::path() const
 {
     return d->clipPath;
+}
+
+QList<KoPathShape*> KoClipPath::clipPathShapes() const
+{
+    return d->clipData->clipPathShapes();
+}
+
+QTransform KoClipPath::clipDataTransformation() const
+{
+    return d->initialTransformToShape;
 }

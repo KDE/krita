@@ -78,6 +78,15 @@ public:
     /// Returns the current clip path in shape coordinates of the clipped shape
     QPainterPath path() const;
     
+    /// Returns the clip path shapes 
+    QList<KoPathShape*> clipPathShapes() const;
+    
+    /** 
+     * Returns the transformation used to transform the clip data path shapes 
+     * to shape coordinates of the clipped shape
+     */
+    QTransform clipDataTransformation() const;
+
     /// Applies the clipping to the given painter
     static void applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter);
 

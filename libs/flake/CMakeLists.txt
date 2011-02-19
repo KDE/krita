@@ -159,6 +159,7 @@ set(flake_SRCS
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
     commands/KoShapeClipCommand.cpp
+    commands/KoShapeUnclipCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp

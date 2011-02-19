@@ -26,7 +26,6 @@
 
 class KoShape;
 class KoPathShape;
-class KoClipPath;
 class KoShapeControllerBase;
 
 /// The undo / redo command for setting the shape clip path
@@ -34,28 +33,31 @@ class FLAKE_EXPORT KoShapeClipCommand : public QUndoCommand
 {
 public:
     /**
-     * Command to set a new shape shadow.
+     * Command to set a new shape clipping path for multiple shape.
      * @param controller the controller to used for deleting.
-     * @param shapes a set of all the shapes that should get the new shadow.
-     * @param shadow the new shadow, the same for all given shapes
+     * @param shapes a set of all the shapes that should get the clipping path.
+     * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand( KoShapeControllerBase *controller, const QList<KoShape*> & shapes, const QList<KoPathShape*> clipPathShapes, QUndoCommand * parent = 0 );
+    KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> & shapes, const QList<KoPathShape*> clipPathShapes, QUndoCommand * parent = 0);
 
     /**
-     * Command to set a new shape shadow.
+     * Command to set a new shape clipping path for a single shape
      * @param controller the controller to used for deleting.
      * @param shape a single shape that should get the new shadow.
-     * @param shadow the new shadow
+     * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand( KoShapeControllerBase *controller, KoShape * shape, const QList<KoPathShape*> clipPathShapes, QUndoCommand *parent = 0 );
+    KoShapeClipCommand(KoShapeControllerBase *controller, KoShape * shape, const QList<KoPathShape*> clipPathShapes, QUndoCommand *parent = 0);
 
+    /// Destroys the command
     virtual ~KoShapeClipCommand();
+
     /// redo the command
-    void redo ();
+    void redo();
     /// revert the actions done in redo
-    void undo ();
+    void undo();
+
 private:
     class Private;
     Private * const d;

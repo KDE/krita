@@ -81,12 +81,13 @@ public:
                 // the original transformation from path shape to clipped shape
                 QTransform deltaTransform = pathShape->absoluteTransformation(0) * clipPath->clipDataTransformation();
                 pathShape->setTransformation(parentTransform*shapeTransform*deltaTransform);
+                pathShape->setZIndex(shape->zIndex()+1);
                 clipPathParents.append(shape->parent());
             }
         }
     }
 
-    /// reimplemeted from KoOdfPaste
+    /// reimplemented from KoOdfPaste
     virtual bool process(const KoXmlElement & body, KoOdfReadStore & odfStore) {
         KoOdfLoadingContext loadingContext(odfStore.styles(), odfStore.store());
         KoShapeLoadingContext context(loadingContext, controller->resourceManager());

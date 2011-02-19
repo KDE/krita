@@ -70,7 +70,6 @@
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "kis_paintop_settings_widget.h"
-#include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
 #include <kis_cmb_paintop.h>
 
@@ -194,9 +193,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
-
-//     m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
-//     m_brushChooser->setPopupWidget(m_brushEngineSelector);
 
     m_colorspace = view->image()->colorSpace();
 

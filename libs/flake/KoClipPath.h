@@ -36,14 +36,24 @@ class QPainterPath;
 class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
+    /// Creates clip path data from a single path shape, takes ownership of the path shape
     KoClipData(KoPathShape * clipPathShape);
+    
+    /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
     KoClipData(const QList<KoPathShape*> & clipPathShapes);
+    
+    /// Destroys the clip path data
     ~KoClipData();
+
+    /// Returns the clip path shapes
     QList<KoPathShape*> clipPathShapes() const;
+    
+    /// Gives up ownership of clip path shapes
     void removeClipShapesOwnership();
+
 private:
-    QList<KoPathShape*> m_clipPathShapes;
-    bool m_deleteClipShapes;
+    class Private;
+    Private * const d;
 };
 
 /// Clip path used to clip shapes
@@ -51,7 +61,7 @@ class FLAKE_EXPORT KoClipPath
 {
 public:
     /**
-     * Create a new shape clipping using the given path shape
+     * Create a new shape clipping using the given clip data
      * @param clipData shared clipping data conatining the clip paths
      * @param transformToShape transformation matrix to transform clipping paths to shape coordinates
      */

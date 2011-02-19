@@ -25,34 +25,50 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QPainter>
 
+class KoClipData::Private
+{
+public:
+    Private() : deleteClipShapes(true)
+    {
+    }
+    
+    ~Private()
+    {
+        if(deleteClipShapes)
+            qDeleteAll(clipPathShapes);
+    }
+    
+    QList<KoPathShape*> clipPathShapes;
+    bool deleteClipShapes;
+};
+
 KoClipData::KoClipData(KoPathShape * clipPathShape)
-    : m_deleteClipShapes(true)
+    : d(new Private())
 {
     Q_ASSERT(clipPathShape);
-    m_clipPathShapes.append(clipPathShape);
+    d->clipPathShapes.append(clipPathShape);
 }
 
 KoClipData::KoClipData(const QList<KoPathShape*> & clipPathShapes)
-    : m_deleteClipShapes(true)
+    : d(new Private())
 {
     Q_ASSERT(clipPathShapes.count());
-    m_clipPathShapes = clipPathShapes;
+    d->clipPathShapes = clipPathShapes;
 }
 
 KoClipData::~KoClipData()
 {
-    if(m_deleteClipShapes)
-        qDeleteAll(m_clipPathShapes);
+    delete d;
 }
 
 QList<KoPathShape*> KoClipData::clipPathShapes() const
 {
-    return m_clipPathShapes;
+    return d->clipPathShapes;
 }
 
 void KoClipData::removeClipShapesOwnership()
 {
-    m_deleteClipShapes = false;
+    d->deleteClipShapes = false;
 }
 
 class KoClipPath::Private

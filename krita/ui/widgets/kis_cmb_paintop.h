@@ -23,6 +23,7 @@
 #include <krita_export.h>
 #include "kcombobox.h"
 #include "kis_paintop_factory.h"
+#include <QListView>
 
 class KisPaintOpsModel;
 class KCategorizedSortFilterProxyModel;
@@ -31,7 +32,7 @@ class KCategorizedSortFilterProxyModel;
  * A combobox filled with the paintops
  */
 
-class KRITAUI_EXPORT KisCmbPaintop : public KComboBox
+class KRITAUI_EXPORT KisCmbPaintop : public QListView
 {
 
     Q_OBJECT
@@ -48,14 +49,10 @@ public:
     void setCurrent(const QString & paintOpId);
 
 signals:
-
     void activated(const QString&);
-    void highlighted(const QString&);
 
 private slots:
-
-    void slotOpActivated(int i);
-    void slotOpHighlighted(int i);
+    void slotOpActivated(const QModelIndex& index);
 
 private:
     // Prevent deprectated Qt3 method from being called. Use setCurrent instead.

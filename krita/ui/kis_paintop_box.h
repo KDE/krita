@@ -122,7 +122,6 @@ private:
     const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
-    KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
     QWidget* m_paintopWidget;

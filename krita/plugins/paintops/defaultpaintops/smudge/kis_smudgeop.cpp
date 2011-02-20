@@ -53,7 +53,7 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     m_sizeOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
-//     m_mergedPaintOption.readOptionSetting(settings);
+    m_mergedPaintOption.readOptionSetting(settings);
     
     m_sizeOption.sensor()->reset();
     m_smudgeRateOption.sensor()->reset();
@@ -111,8 +111,6 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // to use it as an alpha/transparency mask
     maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
     
-//     lock(true);
-    
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
     const KoCompositeOp* oldMode    = painter()->compositeOp();
@@ -169,8 +167,6 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldMode);
-    
-//     lock(false);
     
     return spacing(scale);
 }

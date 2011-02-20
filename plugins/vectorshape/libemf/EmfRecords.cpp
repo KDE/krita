@@ -93,6 +93,7 @@ BitBltRecord::BitBltRecord( QDataStream &stream, quint32 recordSize )
 
 BitBltRecord::~BitBltRecord()
 {
+    delete m_bitmap;
 }
 
 bool BitBltRecord::hasImage() const

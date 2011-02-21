@@ -341,7 +341,6 @@ KoMainWindow::KoMainWindow(const KComponentData &componentData)
     d->splitViewActionList.append(sep);
 
     d->toggleDockers = new KToggleAction(i18n("Show Dockers"), this);
-    d->toggleDockers->setCheckedState(KGuiItem(i18n("Hide Dockers")));
     d->toggleDockers->setChecked(true);
     actionCollection()->addAction("view_toggledockers", d->toggleDockers);
 

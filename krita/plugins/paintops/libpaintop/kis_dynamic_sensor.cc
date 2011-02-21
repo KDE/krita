@@ -117,7 +117,7 @@ void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& e) const
     if(m_customCurve)
     {
         QDomElement curve_elt = doc.createElement("curve");
-        QDomText text = doc.createCDATASection(m_curve.toString());
+        QDomText text = doc.createTextNode(m_curve.toString());
         curve_elt.appendChild(text);
         e.appendChild(curve_elt);
     }

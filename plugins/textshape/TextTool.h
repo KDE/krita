@@ -103,7 +103,6 @@ public:
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
     virtual QMap<QString, QWidget *> createOptionWidgets();
-//    virtual QWidget * createOptionWidget();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;

@@ -382,12 +382,12 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
             if (!checker.atBlockStart()) {
                 int changeId = checker.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-                if (changeTracker->elementById(changeId)->getChangeType() == changeType)
+                if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
                     idBefore = changeId;
             } else {
                 if (!checker.currentTable()) {
                     int changeId = checker.blockFormat().intProperty(KoCharacterStyle::ChangeTrackerId);
-                    if (changeTracker->elementById(changeId)->getChangeType() == changeType)
+                    if (changeId && changeTracker->elementById(changeId)->getChangeType() == changeType)
                         idBefore = changeId;
                 } else {
                     idBefore = checker.currentTable()->format().intProperty(KoCharacterStyle::ChangeTrackerId);

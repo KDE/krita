@@ -1220,7 +1220,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                         fr.start = currentFragment.position() - block.position();
                         fr.length = currentFragment.length();
                         fr.format = format;
-                        selections.append(fr);
+                        selections.prepend(fr);
                     }
                 }
             }

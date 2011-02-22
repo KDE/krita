@@ -504,13 +504,6 @@ public:
     static QString tagNameToDocumentType(const QString& localName);
 
     /**
-     *  Save the document. The default implementation is to call
-     *  saveXML(). This method exists only for applications that
-     *  don't use QDomDocument for saving, i.e. kword and kpresenter.
-     */
-    virtual bool saveToStream(QIODevice *dev);
-
-    /**
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
@@ -1019,6 +1012,8 @@ private:
 
     bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
     bool saveNativeFormatKOffice(KoStore *store);
+    bool saveToStream(QIODevice *dev);
+
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

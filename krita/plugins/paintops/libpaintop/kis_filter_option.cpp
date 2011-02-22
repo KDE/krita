@@ -158,7 +158,7 @@ void KisFilterOption::updateFilterConfigWidget()
     }
     m_currentFilterConfigWidget = 0;
 
-    if (m_currentFilter && m_image) {
+    if (m_currentFilter && m_image && m_paintDevice) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
                     m_paintDevice,

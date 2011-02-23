@@ -132,7 +132,7 @@ public:
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
-    virtual const KoViewConverter *viewConverter() const = 0;
+    virtual KoViewConverter *viewConverter() const = 0;
 
     /**
      * Return the widget that will be added to the scrollArea.

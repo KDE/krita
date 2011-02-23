@@ -138,7 +138,7 @@ KoShapeManager * KoPACanvasBase::masterShapeManager() const
     return d->masterShapeManager;
 }
 
-const KoViewConverter * KoPACanvasBase::viewConverter() const
+KoViewConverter * KoPACanvasBase::viewConverter() const
 {
     return d->view->viewMode()->viewConverter( const_cast<KoPACanvasBase *>( this ) );
 }

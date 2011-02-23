@@ -38,7 +38,7 @@
 #include <kis_iterator_ng.h>
 
 KisSimpleNoiseReducer::KisSimpleNoiseReducer()
-        : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction"))
+        : KisFilter(id(), categoryEnhance(), i18n("&Gaussian Noise Reduction..."))
 {
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);

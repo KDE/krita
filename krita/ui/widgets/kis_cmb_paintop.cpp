@@ -29,12 +29,10 @@
 #include <kis_categorized_item_delegate.h>
 
 KisCmbPaintop::KisCmbPaintop(QWidget * parent, const char * name)
-        : KComboBox(parent), m_lastModel(0), m_sortModel(0)
+        : QListView(parent), m_lastModel(0), m_sortModel(0)
 {
     setObjectName(name);
-    setEditable(false);
-    connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
-    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
+    connect(this, SIGNAL(activated(QModelIndex)), this, SLOT(slotOpActivated(QModelIndex)));
     setItemDelegate(new KisCategorizedItemDelegate(new QStyledItemDelegate));
     m_sortModel = new KCategorizedSortFilterProxyModel;
     m_sortModel->setSortRole(KisPaintOpsModel::PaintOpSortRole);
@@ -51,7 +49,6 @@ void KisCmbPaintop::setPaintOpList(const QList<KisPaintOpFactory*> & list)
     KisPaintOpsModel* model = new KisPaintOpsModel(list);
     m_sortModel->setSourceModel(model);
     m_sortModel->sort(0);
-    setMaxVisibleItems(list.size());
 
     delete m_lastModel;
     m_lastModel = model;
@@ -64,14 +61,14 @@ const QString& KisCmbPaintop::itemAt(int idx) const
 
 const QString& KisCmbPaintop::currentItem() const
 {
-    return itemAt(currentIndex());
+    return itemAt(currentIndex().row());
 }
 
 void KisCmbPaintop::setCurrent(const KisPaintOpFactory* op)
 {
     QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(op));
     if (index.isValid()) {
-        KComboBox::setCurrentIndex(index.row());
+        QListView::setCurrentIndex(index);
     }
 }
 
@@ -79,19 +76,13 @@ void KisCmbPaintop::setCurrent(const QString & paintOpId)
 {
     QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(paintOpId));
     if (index.isValid()) {
-        KComboBox::setCurrentIndex(index.row());
+        QListView::setCurrentIndex(index);
     }
 }
 
-void KisCmbPaintop::slotOpActivated(int i)
+void KisCmbPaintop::slotOpActivated(const QModelIndex& index)
 {
-    if (i >= m_lastModel->rowCount()) return;
-
-    emit activated(itemAt(i));
-}
-
-void KisCmbPaintop::slotOpHighlighted(int i)
-{
+    int i = index.row();
     if (i >= m_lastModel->rowCount()) return;
 
     emit activated(itemAt(i));

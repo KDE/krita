@@ -72,6 +72,7 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setShowConfigurationWidget(false);
 }
 
 void KisFilterMax::process(KisPaintDeviceSP device,
@@ -114,6 +115,7 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setShowConfigurationWidget(false);
 }
 
 void KisFilterMin::process(KisPaintDeviceSP device,

@@ -88,12 +88,9 @@ class ChartTableModel;
 class Layout;
 class TableSource;
 
-extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
-
-extern const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ];
-
-extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
-extern QColor defaultDataSetColor( int dataSetNum );
+QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
+QColor defaultDataSetColor(int dataSetNum);
+const char * odfCharttype(int charttype);
 
 
 class CHARTSHAPELIB_EXPORT ChartShape

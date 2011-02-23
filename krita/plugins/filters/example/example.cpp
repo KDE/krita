@@ -60,6 +60,7 @@ KisFilterInvert::KisFilterInvert() : KisColorTransformationFilter(id(), category
     setColorSpaceIndependence(FULLY_INDEPENDENT);
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
+    setShowConfigurationWidget(false);
 }
 
 KoColorTransformation* KisFilterInvert::createTransformation(const KoColorSpace* cs, const KisFilterConfiguration* config) const

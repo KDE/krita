@@ -3,6 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
+ * Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -54,10 +55,7 @@ public:
     /// when the canvas controller wants us to change zoom
     void requestZoomBy(const qreal factor)
     {
-        qreal zoom = zoomHandler->zoom();
-        action->setZoom(factor*zoom);
-        setZoom(KoZoomMode::ZOOM_CONSTANT, factor*zoom);
-        action->setEffectiveZoom(factor*zoom);
+        setZoom(KoZoomMode::ZOOM_CONSTANT, factor * zoomHandler->zoom());
     }
 
     void setZoom(KoZoomMode::Mode mode, qreal zoom)
@@ -161,7 +159,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
         d->action->setEffectiveZoom(zoom);
     }
 
-    d->zoomHandler->setZoom(zoom);
+    d->zoomHandler->setZoom(d->action->effectiveZoom());
 
     // Tell the canvasController that the zoom has changed
     // Actually canvasController doesn't know about zoom, but the document in pixels
@@ -187,7 +185,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom)
     // Finally ask the canvasController to recenter
     d->canvasController->recenterPreferred();
 
-    emit zoomChanged(mode, zoom);
+    emit zoomChanged(mode, d->action->effectiveZoom());
 }
 
 void KoZoomController::setAspectMode(bool status)

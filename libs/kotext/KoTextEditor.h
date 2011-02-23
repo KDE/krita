@@ -281,6 +281,7 @@ public slots:
 
 signals:
     void isBidiUpdated();
+    void cursorPositionChanged();
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

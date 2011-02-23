@@ -110,7 +110,7 @@ public: // KoCanvasBase implementation
     virtual void updateInputMethodInfo();
 
     const KisCoordinatesConverter* coordinatesConverter() const;
-    virtual const KoViewConverter *viewConverter() const;
+    virtual KoViewConverter *viewConverter() const;
 
     virtual QWidget* canvasWidget();
 

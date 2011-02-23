@@ -53,7 +53,6 @@ class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
-class KisBrushEngineSelector;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -122,7 +121,6 @@ private:
     const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
-    KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
     QWidget* m_paintopWidget;
@@ -134,7 +132,6 @@ private:
     QToolButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
-    KisBrushEngineSelector* m_brushEngineSelector;
     KisView2* m_view;
     QPushButton* m_paletteButton;
     KisPopupButton* m_workspaceWidget;

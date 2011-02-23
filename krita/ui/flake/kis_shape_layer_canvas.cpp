@@ -135,7 +135,7 @@ KoToolProxy * KisShapeLayerCanvas::toolProxy() const
     return 0;
 }
 
-const KoViewConverter *KisShapeLayerCanvas::viewConverter() const
+KoViewConverter *KisShapeLayerCanvas::viewConverter() const
 {
     return m_viewConverter;
 }

@@ -127,6 +127,9 @@ public:
      */
     bool supportsThreading() const;
 
+    /// If true, the filter wants to show a configuration widget
+    bool showConfigurationWidget();
+
     /**
      * Determine the colorspace independence of this filter.
      * @see ColorSpaceIndependence
@@ -145,6 +148,7 @@ protected:
     void setSupportsIncrementalPainting(bool v);
     void setSupportsThreading(bool v);
     void setColorSpaceIndependence(ColorSpaceIndependence v);
+    void setShowConfigurationWidget(bool v);
 
 protected:
 

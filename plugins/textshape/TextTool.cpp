@@ -648,8 +648,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         if ((data == m_textShapeData) && m_caretTimerState) {
             // paint caret
             int posInParag = m_textEditor.data()->position() - block.position();
-
-            //TODO what was the purpose of following code and why does it not set posInParag?
             if (posInParag <= block.layout()->preeditAreaPosition())
                 posInParag += block.layout()->preeditAreaText().length();
             m_textEditor.data()->position();

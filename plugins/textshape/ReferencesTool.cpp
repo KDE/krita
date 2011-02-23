@@ -18,9 +18,15 @@
  */
 
 #include "ReferencesTool.h"
+#include "dialogs/SimpleTableOfContentsWidget.h"
+#include "dialogs/SimpleCitationWidget.h"
+#include "dialogs/SimpleFootEndNotesWidget.h"
+#include "dialogs/SimpleCaptionsWidget.h"
 
 #include <KoCanvasBase.h>
 #include "TextShape.h"
+
+#include <kdebug.h>
 
 #include <KLocale>
 
@@ -62,9 +68,28 @@ void ReferencesTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QWidget* ReferencesTool::createOptionWidget()
+QMap<QString, QWidget*> ReferencesTool::createOptionWidgets()
 {
-    return 0;//widget;
+    QMap<QString, QWidget *> widgets;
+    SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(0);
+    SimpleCitationWidget *scw = new SimpleCitationWidget(0);
+    SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
+    SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
+
+    // Connect to/with simple table of contents option widget
+    connect(stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    // Connect to/with simple citation index option widget
+    connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    // Connect to/with simple citation index option widget
+    connect(sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+
+    widgets.insert(i18n("Table of Contents"), stocw);
+    widgets.insert(i18n("Footnotes & Endnotes"), sfenw);
+    widgets.insert(i18n("Citations"), scw);
+    widgets.insert(i18n("Captions"), scapw);
+    return widgets;
 }
 
 #include <ReferencesTool.moc>

@@ -27,8 +27,8 @@ SET ( textshape_SRCS
     TextLine.cpp
 
     ChangeTracker.cpp
-    ChangeTrackingTool.cpp
-    ChangeTrackingToolFactory.cpp
+    ReviewTool.cpp
+    ReviewToolFactory.cpp
     TextChanges.cpp
     TextChange.cpp
     FontSizeAction.cpp

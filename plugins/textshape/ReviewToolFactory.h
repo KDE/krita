@@ -17,17 +17,17 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETRACKINGTOOLFACTORY_H
-#define CHANGETRACKINGTOOLFACTORY_H
+#ifndef REVIEWTOOLFACTORY_H
+#define REVIEWTOOLFACTORY_H
 
 #include <KoToolFactoryBase.h>
 
 
-class ChangeTrackingToolFactory : public KoToolFactoryBase
+class ReviewToolFactory : public KoToolFactoryBase
 {
 public:
-    ChangeTrackingToolFactory();
-    ~ChangeTrackingToolFactory();
+    ReviewToolFactory();
+    ~ReviewToolFactory();
 
     KoToolBase * createTool(KoCanvasBase *canvas);
 

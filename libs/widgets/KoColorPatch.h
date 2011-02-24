@@ -38,7 +38,7 @@ public:
      * Set the color of this color patch
      * @param c the new color
      */
-    void setColor( const KoColor c );
+    void setColor( const KoColor &c );
 
     /**
      * @return current color shown by this patch

@@ -22,6 +22,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransformation.h>
 #include <kis_datamanager.h>
+#include <kis_fill_painter.h>
 
 KisColorSource::~KisColorSource() { }
 
@@ -45,13 +46,6 @@ KisUniformColorSource::~KisUniformColorSource()
     delete m_cachedColor;
 }
 
-void KisUniformColorSource::darken(qint32 v)
-{
-    KoColorTransformation* transfo = m_color->colorSpace()->createDarkenAdjustment(v, false, 0.0);
-    transfo->transform(m_color->data(),  m_color->data(), 1);
-    delete transfo;
-}
-
 void KisUniformColorSource::rotate(double)
 {}
 
@@ -60,7 +54,7 @@ void KisUniformColorSource::resize(double , double)
     // Do nothing as plain color does not have size
 }
 
-void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size)
+void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, const QPoint&)
 {
     Q_UNUSED(size);
     if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
@@ -71,19 +65,6 @@ void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size)
 
     dev->dataManager()->setDefaultPixel(m_cachedColor->data());
     dev->clear();
-}
-
-void KisUniformColorSource::colorAt(int x, int y, KoColor* c)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-
-    if (!m_cachedColor || !(*c->colorSpace() == *m_cachedColor->colorSpace())) {
-        if (m_cachedColor) delete m_cachedColor;
-        m_cachedColor = new KoColor(c->colorSpace());
-        m_cachedColor->fromKoColor(*m_color);
-    }
-    c->fromKoColor(*m_cachedColor);
 }
 
 const KoColor& KisUniformColorSource::uniformColor() const
@@ -195,13 +176,12 @@ void KisTotalRandomColorSource::selectColor(double)
 {
 }
 
-void KisTotalRandomColorSource::darken(qint32) {}
 void KisTotalRandomColorSource::applyColorTransformation(const KoColorTransformation*) {}
 const KoColorSpace* KisTotalRandomColorSource::colorSpace() const
 {
     return m_colorSpace;
 }
-void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect)
+void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect, const QPoint&)
 {
     KoColor kc(dev->colorSpace());
 
@@ -221,12 +201,6 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
     }
 
 }
-void KisTotalRandomColorSource::colorAt(int x, int y, KoColor* c)
-{
-    Q_UNUSED(x);
-    Q_UNUSED(y);
-    c->fromQColor(QColor((int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX), (int)((255.0*rand()) / RAND_MAX)));
-}
 
 bool KisTotalRandomColorSource::isUniformColor() const
 {
@@ -235,3 +209,64 @@ bool KisTotalRandomColorSource::isUniformColor() const
 
 void KisTotalRandomColorSource::rotate(double) {}
 void KisTotalRandomColorSource::resize(double , double) {}
+
+
+
+KisPatternColorSource::KisPatternColorSource(KisPaintDeviceSP _pattern, int _width, int _height, bool _locked) : m_device(_pattern), m_bounds(QRect(0, 0, _width, _height)), m_locked(_locked)
+{
+}
+
+KisPatternColorSource::~KisPatternColorSource()
+{
+}
+
+void KisPatternColorSource::selectColor(double mix)
+{
+    Q_UNUSED(mix);
+}
+
+void KisPatternColorSource::applyColorTransformation(const KoColorTransformation* transfo)
+{
+    Q_UNUSED(transfo);
+}
+
+const KoColorSpace* KisPatternColorSource::colorSpace() const
+{
+    return m_device->colorSpace();
+}
+
+void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, const QPoint& offset)
+{
+    KisFillPainter painter(device);
+    if(m_locked)
+    {
+        painter.fillRect(rect.x(), rect.y(), rect.width(), rect.height(), m_device, m_bounds);
+    } else {
+        int x = offset.x() % m_bounds.width();
+        int y = offset.y() % m_bounds.height();
+        
+        // Change the position, because the pattern is always applied starting from (0,0) in the paint device reference
+        device->setX(x);
+        device->setY(y);
+        painter.fillRect(rect.x() + x, rect.y() + y, rect.width(), rect.height(), m_device, m_bounds);
+        device->setX(0);
+        device->setY(0);
+    }
+}
+
+void KisPatternColorSource::rotate(double r)
+{
+  Q_UNUSED(r);
+}
+
+void KisPatternColorSource::resize(double xs, double ys)
+{
+  Q_UNUSED(xs);
+  Q_UNUSED(ys);
+}
+
+bool KisPatternColorSource::isUniformColor() const
+{
+    return false;
+}
+

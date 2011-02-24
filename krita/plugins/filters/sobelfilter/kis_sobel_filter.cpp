@@ -74,6 +74,7 @@
 //
 //     return KisFilterConfiguration::toString();
 // }
+#include <kis_iterator_ng.h>
 
 KisSobelFilter::KisSobelFilter() : KisFilter(id(), categoryEdgeDetection(), i18n("&Sobel..."))
 {
@@ -99,20 +100,14 @@ void KisSobelFilter::prepareRow(KisPaintDeviceSP src, quint8* data, quint32 x, q
 #define RMS(a, b) (sqrt ((a) * (a) + (b) * (b)))
 #define ROUND(x) ((int) ((x) + 0.5))
 
-void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
-                             KisProcessingInformation dstInfo,
-                             const QSize& size,
-                             const KisFilterConfiguration* configuration,
-                             KoUpdater* progressUpdater
+void KisSobelFilter::process(KisPaintDeviceSP device,
+                            const QRect& applyRect,
+                            const KisFilterConfiguration* configuration,
+                            KoUpdater* progressUpdater
                             ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
-
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(!device.isNull());
 
     //read the filter configuration values from the KisFilterConfiguration object
     bool doHorizontal = configuration->getBool("doHorizontally", true);
@@ -120,11 +115,11 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     bool keepSign = configuration->getBool("keepSign", true);
     bool makeOpaque = configuration->getBool("makeOpaque", true);
 
-    quint32 width = size.width();
-    quint32 height = size.height();
-    quint32 pixelSize = src->pixelSize();
+    quint32 width = applyRect.width();
+    quint32 height = applyRect.height();
+    quint32 pixelSize = device->pixelSize();
 
-    int cost = size.height();
+    int cost = applyRect.height();
 
     /*  allocate row buffers  */
     quint8* prevRow = new quint8[(width + 2) * pixelSize];
@@ -140,8 +135,8 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     quint8* cr = curRow + pixelSize;
     quint8* nr = nextRow + pixelSize;
 
-    prepareRow(src, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
-    prepareRow(src, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
+    prepareRow(device, pr, srcTopLeft.x(), srcTopLeft.y() - 1, width, height);
+    prepareRow(device, cr, srcTopLeft.x(), srcTopLeft.y(), width, height);
 
     quint32 counter = 0;
     quint8* d;
@@ -149,12 +144,12 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
     qint32 gradient, horGradient, verGradient;
     // loop through the rows, applying the sobel convolution
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width, dstInfo.selection());
+    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(srcTopLeft.x(), srcTopLeft.y(), width);
 
     for (quint32 row = 0; row < height; row++) {
 
         // prepare the next row
-        prepareRow(src, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
+        prepareRow(device, nr, srcTopLeft.x(), srcTopLeft.y() + row + 1, width, height);
         d = dest;
 
         for (quint32 col = 0; col < width * pixelSize; col++) {
@@ -185,14 +180,13 @@ void KisSobelFilter::process(KisConstProcessingInformation srcInfo,
         nr = tmp;
 
         //store the dest
-        dst->writeBytes(dest, dstTopLeft.x(), row, width, 1);
+        device->writeBytes(dest, srcTopLeft.x(), row, width, 1);
 
         if (makeOpaque) {
-            while (! dstIt.isDone()) {
-                dst->colorSpace()->setOpacity(dstIt.rawData(), OPACITY_OPAQUE_U8, 1);
-                ++dstIt;
-            }
-            dstIt.nextRow();
+            do {
+                device->colorSpace()->setOpacity(dstIt->rawData(), OPACITY_OPAQUE_U8, 1);
+            } while(dstIt->nextPixel());
+            dstIt->nextRow();
         }
         if (progressUpdater) progressUpdater->setProgress(row / cost);
     }

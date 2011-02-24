@@ -1,0 +1,16 @@
+[Desktop Entry]
+Name=Channel Docker
+Name[en_GB]=Channel Docker
+Name[et]=Kanalidokk
+Name[it]=Gancio dei canali
+Name[nl]=Kanaalvastzetter
+Name[pt]=Área de Canais
+Name[pt_BR]=Área de canais
+Name[sv]=Kanaldockningsfönster
+Name[uk]=Панель швартування каналів
+Name[x-test]=xxChannel Dockerxx
+Name[zh_TW]=頻道嵌入器
+X-KDE-ServiceTypes=Krita/Dock
+Type=Service
+X-KDE-Library=kritachanneldocker
+X-Krita-Version=4

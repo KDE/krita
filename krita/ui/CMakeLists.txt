@@ -52,7 +52,6 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_editor.cc
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
-    kis_brushengine_selector.cpp
     kis_canvas_resource_provider.cpp 
     kis_categorized_item_delegate.cpp
     kis_clipboard.cc 
@@ -95,6 +94,7 @@ set(kritaui_LIB_SRCS
     kis_view2.cpp 
     kis_zoom_manager.cc
     ko_favorite_resource_manager.cpp
+    kis_workspace_resource.cpp
     kisexiv2/kis_exif_io.cpp
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
@@ -110,9 +110,14 @@ set(kritaui_LIB_SRCS
     opengl/kis_texture_tile.cpp
     openrastertk/kis_open_raster_stack_load_visitor.cpp
     openrastertk/kis_open_raster_stack_save_visitor.cpp
+    recorder/kis_node_query_path_editor.cc
+    recorder/kis_recorded_action_creator.cc
+    recorder/kis_recorded_action_creator_factory.cc
+    recorder/kis_recorded_action_creator_factory_registry.cc
     recorder/kis_recorded_action_editor_factory.cc
     recorder/kis_recorded_action_editor_factory_registry.cc
     recorder/kis_recorded_filter_action_editor.cc
+    recorder/kis_recorded_filter_action_creator.cpp
     recorder/kis_recorded_paint_action_editor.cc
     tool/kis_selection_tool_helper.cpp 
     tool/kis_shape_tool_helper.cpp 
@@ -143,6 +148,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
+    widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_popup.cpp 
     widgets/kis_paintop_presets_chooser_popup.cpp
     widgets/kis_pattern_chooser.cc
@@ -154,6 +160,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
     widgets/kis_wdg_generator.cpp
+    widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
 )
 
@@ -210,6 +217,8 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgfilterselector.ui
     forms/wdgfilternodecreation.ui
     forms/wdgpaintactioneditor.ui
+    forms/wdgmultipliersdoublesliderspinbox.ui
+    forms/wdgnodequerypatheditor.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

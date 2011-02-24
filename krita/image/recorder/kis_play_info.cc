@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2009,2011 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +20,7 @@
 
 #include "kis_image.h"
 #include "kis_node.h"
+#include <kis_paint_device.h>
 
 struct KisPlayInfo::Private {
     KisImageWSP image;
@@ -31,6 +32,16 @@ KisPlayInfo::KisPlayInfo(KisImageWSP image, KisNodeSP currentNode)
 {
     d->image = image;
     d->currentNode = currentNode;
+}
+
+KisPlayInfo::KisPlayInfo(const KisPlayInfo& _rhs) : d(new Private(*_rhs.d))
+{
+}
+
+KisPlayInfo& KisPlayInfo::operator=(const KisPlayInfo& _rhs)
+{
+    *d = *_rhs.d;
+    return *this;
 }
 
 KisPlayInfo::~KisPlayInfo()

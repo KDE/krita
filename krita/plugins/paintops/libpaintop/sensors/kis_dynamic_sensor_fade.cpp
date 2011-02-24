@@ -29,9 +29,11 @@ static const int DEFAULT_LENGTH = 1000;
 
 KisDynamicSensorFade::KisDynamicSensorFade() : KisDynamicSensor(FadeId), m_counter(0), m_length(DEFAULT_LENGTH), m_periodic(false)
 {
+    setMinimumLabel(i18n("0"));
+    setLength(DEFAULT_LENGTH);
 }
 
-qreal KisDynamicSensorFade::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorFade::value(const KisPaintInformation&  pi)
 {
     Q_UNUSED(pi);
     if (m_counter > m_length){
@@ -61,9 +63,10 @@ void KisDynamicSensorFade::setPeriodic(bool periodic)
 void KisDynamicSensorFade::setLength(int length)
 {
     m_length = length;
+    setMaximumLabel(i18n("%1", length));
 }
 
-QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorFade::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorFadeConfiguration stc;
@@ -86,6 +89,7 @@ void KisDynamicSensorFade::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorFade::fromXML(const QDomElement& e)
 {
+    KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();
     m_length = e.attribute("length", QString::number(DEFAULT_LENGTH)).toInt();
 }

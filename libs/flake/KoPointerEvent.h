@@ -139,7 +139,7 @@ public:
     /**
      * return the pressure (or a default value). The range is 0.0 - 1.0
      * and the default pressure (this is the pressure that will be given
-     * when you use something like the mouse) is 0.5
+     * when you use something like the mouse) is 1.0
      */
     qreal pressure() const;
 

@@ -76,9 +76,7 @@ void KisToolEllipse::finishEllipse(const QRectF& rect)
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
-
-        QUndoCommand * cmd = canvas()->shapeController()->addShape(shape);
-        canvas()->addCommand(cmd);
+        addShape(shape);
     }
 }
 

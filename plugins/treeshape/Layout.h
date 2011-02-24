@@ -189,7 +189,6 @@ private:
     bool m_relayoutScheduled;
 
     KoShape *m_root; // container
-    KoShape *m_rootShape; // background shape
     QList<KoShape*> m_children;
     QList<KoShape*> m_connectors;
     QMap<KoShape*, KoConnectionShape*> m_bonds;

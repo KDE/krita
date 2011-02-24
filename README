@@ -1,11 +1,10 @@
-                          README for KOffice
+                          README for Calligra Suite
 
-KOffice is a collection of office applications linked together by a
+Calligra Suite is a collection of office applications linked together by a
 common base.  This common base assures that all office application can
 work together and also share a common look and feel.
 
-
-KOffice is free software, mostly under LGPL 2+ but also under the GPL.
+Calligra Suite is free software, mostly under LGPL 2+ but also under the GPL.
 See COPYING and COPYING.LIB for the details.  See also copyright and
 licensing notices in individual files.
 
@@ -13,12 +12,12 @@ licensing notices in individual files.
 Contents
 --------
 
-The applications currently included in KOffice (version 2.1) are:
+The applications currently included in Calligra Suite (version 2.1) are:
 
 Office productivity:
-- KWord      -  Word processor
-- KSpread    -  Spreadsheet calculator
-- KPresenter -  Presentation program
+- Words      -  Word processor
+- Tables     -  Spreadsheet calculator
+- Stage      -  Presentation program
 
 Graphics:
 - Karbon     -  Vector graphics 
@@ -27,7 +26,7 @@ Graphics:
 More information about Krita can be found at http://www.krita.org
 
 Management:
-- KPlato     -  Project planning
+- Plan       -  Project planning
 - Kexi       -  Integrated data management
 
 Advanced plugins:
@@ -37,49 +36,30 @@ Advanced plugins:
 The applications not yet part of the official release, but will
 be included in a next version:
 
-- Kivio      -  Flowcharting program
+- Flow      -  Flowcharting program
 
-More information can be found at http://www.koffice.org
+More information can be found at http://www.calligra-suite.org
 
 
 Building and running
 --------------------
 
-KOffice is based on the KDE libraries ( http://www.kde.org ) which are
-needed to run KOffice.  Note that you don't have to actually run the
-KDE desktop environment in order to use KOffice.  KOffice works fine
+Calligra Suite is based on the KDE libraries ( http://www.kde.org ) which are
+needed to run Calligra Suite.  Note that you don't have to actually run the
+KDE desktop environment in order to use Calligra Suite.  Calligra Suite works fine
 on any desktop or platform.
 
 You will need kdesupport, kdelibs and kdebase/runtime
-installed if you want to compile and run KOffice. Installing kdepimlibs
+installed if you want to compile and run Calligra Suite. Installing kdepimlibs
 gives more functionality.
 For importing some external file formats or other plugins, you may
 also need some other dependencies.  For more details on how to build
-KOffice from the sources, see
-http://wiki.koffice.org/index.php?title=Build_KOffice
+Calligra Suite from the sources, see
+
+http://community.kde.org/Calligra/Building/Building_Calligra
 
 
-Developers
-----------
-
-KOffice is created by the KDE community, consisting of Open Source
-programmers around the world.  All developers give their time/code to
-the community for everyone to benefit.
-
-If you have found a bug or missing feature you can always contact the
-developers of KOffice (via http://www.koffice.org) or delve into the
-source code yourself.
-
-The parts that are shared between all KOffice applications can be found
-in the libs/ subdirectory.  There classes like KoDocument can be found;
-these classes are extended in the project directories.
-
-Read the .h files in the respective directories for more info or read
-the online API docs which you can find at
-http://www.koffice.org/developer/apidocmain.php
-
-
-The KOffice source tree
+The Calligra Suite source tree
 -----------------------
 
 Here follows a short overview of the source code.
@@ -108,16 +88,16 @@ plugins/     some plugins, both flake shapes and other types.
 filters/     import and export filters for foreign file formats
 
 tools/       tools used internally (e.g. for testing) and released
-             with koffice, such as the koconverter file format 
+             with Calligra Suite, such as the koconverter file format 
              conversion tool.
 
 interfaces/  simplified external interfaces to some advanced data types
              such as charts.
 
-servicetypes/ desktop files for some service types provided by KOffice
+servicetypes/ desktop files for some service types provided by Calligra Suite
 
 templates/   templates for new documents.
-             NOTE: Out of date since they use the old KOffice file formats
+             NOTE: Out of date since they use the old Calligra Suite file formats
 
 kdgantt/     and advanced gantt chart library provided by an external vendor.
 
@@ -127,24 +107,21 @@ pics/        icons
 Contact info
 ------------
 
-User mailing list:      mailto:koffice@kde.org
-Developer mailing list: mailto:koffice-devel@kde.org
-Krita mailing list:     mailto:kimageshop@kde.org
+Developer and User mailing list: mailto:calligra-devel@kde.org
+Krita mailing list:              mailto:kimageshop@kde.org
 
 Subscribing and list information: http://www.kde.org/mailinglists
 Archives: http://lists.kde.org
 
-IRC channel for developers:  #koffice on irc.freenode.org
+IRC channel for developers:  #calligra on irc.freenode.org
 IRC channel for Krita: #krita on irc.freenode.org
 
-KOffice forums:         http://forum.kde.org/viewforum.php?f=96
+Calligra Suite forums:         http://forum.kde.org/viewforum.php?f=203
 Krita forums:           http://forum.kde.org/viewforum.php?f=136
 
-If you have questions about this README file or about KOffice in general,
-please mail to the KOffice mailing list: mailto:koffice@kde.org
+If you have questions about this README file or about Calligra Suite in general,
+please mail to the Calligra Suite mailing list: mailto:calligra-devel@kde.org
 
 
-Thomas Zander
-Chris Lee
 Inge Wallin
 Boudewijn Rempt

@@ -93,5 +93,6 @@ void KoRow::saveOdf(KoXmlWriter& writer, KoGenStyles& styles)
 
 void KoRow::finishSaveOdf(KoXmlWriter& writer, KoGenStyles& styles)
 {
+    Q_UNUSED(styles)
     writer.endElement();//table:row
 }

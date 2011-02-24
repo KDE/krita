@@ -61,9 +61,21 @@ bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext 
                 href.remove(0,2);
             }
             QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
-            if (mimetype.startsWith("image")) {
-                return true;
+            if (!mimetype.isEmpty()) {
+                return mimetype.startsWith("image");
             }
+            else {
+                return ( href.endsWith("bmp") ||
+                         href.endsWith("jpg") ||
+                         href.endsWith("gif") ||
+                         href.endsWith("eps") ||
+                         href.endsWith("png") ||
+                         href.endsWith("tif") ||
+                         href.endsWith("tiff"));
+            }
+        }
+        else {
+            return !KoXml::namedItemNS(e, KoXmlNS::office, "binary-data").isNull();
         }
     }
     return false;

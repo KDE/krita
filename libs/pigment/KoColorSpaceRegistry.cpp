@@ -22,6 +22,7 @@
 
 #include <QHash>
 
+#include <QReadWriteLock>
 #include <QStringList>
 #include <QDir>
 
@@ -185,10 +186,15 @@ void KoColorSpaceRegistry::addProfileAlias(const QString& name, const QString& t
     d->profileAlias[name] = to;
 }
 
+QString KoColorSpaceRegistry::profileAlias(const QString& _name) const
+{
+    return d->profileAlias.value(_name, _name);
+}
+
 const KoColorProfile *  KoColorSpaceRegistry::profileByName(const QString & _name) const
 {
     QReadLocker l(&d->registrylock);
-    return d->profileMap.value( d->profileAlias.value(_name, _name) , 0);
+    return d->profileMap.value( profileAlias(_name), 0);
 }
 
 QList<const KoColorProfile *>  KoColorSpaceRegistry::profilesFor(const QString &id) const
@@ -292,7 +298,9 @@ KoColorSpace* KoColorSpaceRegistry::grabColorSpace(const KoColorSpace* colorSpac
         KoColorSpace* cs = d->colorSpaceFactoryRegistry.value(colorSpace->id())->grabColorSpace(colorSpace->profile());
         return cs;
     }
-    warnPigment << "Unknow factory " << colorSpace->id() << " returning the colorspace itself";
+    if (colorSpace->id() != "ALPHA") {
+        warnPigment << "Unknow factory " << colorSpace->id() << " returning the colorspace itself";
+    }
     return const_cast<KoColorSpace*>(colorSpace);
 }
 

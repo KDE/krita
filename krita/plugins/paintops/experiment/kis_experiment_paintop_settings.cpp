@@ -24,6 +24,7 @@
 #include "kis_experimentop_option.h"
 #include "kis_experiment_shape_option.h"
 #include "kis_image.h"
+#include <kis_paintop_settings_widget.h>
 
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
@@ -31,23 +32,4 @@ bool KisExperimentPaintOpSettings::paintIncremental()
 }
 
 
-QRectF KisExperimentPaintOpSettings::paintOutlineRect(const QPointF& pos, KisImageWSP image, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return QRectF();
-    qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    width += 10;
-    height += 10;
-    QRectF rc = QRectF(0, 0, width, height);
-    return image->pixelToDocument(rc.translated(- QPoint(width * 0.5, height * 0.5))).translated(pos);
-}
 
-void KisExperimentPaintOpSettings::paintOutline(const QPointF& pos, KisImageWSP image, QPainter &painter, OutlineMode _mode) const
-{
-    if (_mode != CursorIsOutline) return;
-    qreal width = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    qreal height = getInt(EXPERIMENT_START_SIZE); /* scale();*/
-    painter.setPen(QColor(255,128,255));
-    painter.setCompositionMode(QPainter::RasterOp_SourceXorDestination);
-    painter.drawEllipse(image->pixelToDocument(QRectF(0, 0, width, height).translated(- QPoint(width * 0.5, height * 0.5))).translated(pos));
-}

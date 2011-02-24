@@ -2,6 +2,7 @@
  *  kis_paintop_box.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004-2008 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (C) 2011      Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +34,7 @@
 #include <kis_types.h>
 #include <kis_paintop_settings.h>
 
+class QToolButton;
 class QPushButton;
 class QString;
 class QHBoxLayout;
@@ -51,7 +53,6 @@ class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
-class KisBrushEngineSelector;
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -105,7 +106,6 @@ private:
     void setEnabledInternal(bool value);
 
 private slots:
-
     void updatePaintops();
     void nodeChanged(const KisNodeSP node);
     void eraseModeToggled(bool checked);
@@ -113,26 +113,28 @@ private slots:
     void slotSetCompositeMode(const QString& compositeOp);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
-
+    void slotWatchPresetNameLineEdit(const QString& text);
+    void slotHorizontalMirrorChanged(bool value);
+    void slotVerticalMirrorChanged(bool value);
 private:
 
     const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
-    KisCmbPaintop* m_cmbPaintops;
 
     QHBoxLayout* m_layout;
+    QWidget* m_paintopWidget;
     KisPaintOpSettingsWidget* m_optionWidget;
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
     KisPopupButton* m_brushChooser;
     KisCmbComposite* m_cmbComposite;
-    QPushButton* m_eraseModeButton;
+    QToolButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
-    KisBrushEngineSelector* m_brushEngineSelector;
     KisView2* m_view;
     QPushButton* m_paletteButton;
+    KisPopupButton* m_workspaceWidget;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;

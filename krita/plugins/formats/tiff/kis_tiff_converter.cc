@@ -258,11 +258,11 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
     }
     
     // Check that the profile is used by the color space
+    
     if (profile && !KoColorSpaceRegistry::instance()->colorSpaceFactory(
         KoColorSpaceRegistry::instance()->colorSpaceId(
       colorSpaceId.first, colorSpaceId.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << colorSpaceId.first << " " << colorSpaceId.second;
-        delete profile;
         profile = 0;
     }
 
@@ -334,9 +334,6 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         m_image->setResolution( POINT_TO_INCH(xres), POINT_TO_INCH(yres )); // It is the "invert" macro because we convert from pointer-per-inchs to points
         m_image->lock();
         Q_CHECK_PTR(m_image);
-        if (profile && profile->type() == "icc" &&  !profile->rawData().isEmpty()) {
-            m_image->addAnnotation(new KisAnnotation("icc", profile->name(), profile->rawData()));
-        }
     } else {
         m_image->lock();
         if (m_image->width() < (qint32)width || m_image->height() < (qint32)height) {

@@ -32,6 +32,7 @@
 #include <QMap>
 #include <QDebug>
 #include <QUndoCommand>
+#include <QMimeData>
 
 #include <ktemporaryfile.h>
 #include <kicon.h>
@@ -44,6 +45,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoGenStyle.h>
 #include <KoImageCollection.h>
+#include <KoOdf.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfWriteStore.h>
@@ -103,8 +105,6 @@ class KisShapeLayer::Private
 {
 public:
     KoViewConverter * converter;
-    qint32 x;
-    qint32 y;
     KisPaintDeviceSP paintDevice;
     KisShapeLayerCanvas * canvas;
     KoShapeControllerBase* controller;
@@ -167,8 +167,6 @@ void KisShapeLayer::initShapeLayer(KoShapeControllerBase* controller)
     setShapeId(KIS_SHAPE_LAYER_ID);
 
     m_d->converter = new KisImageViewConverter(image());
-    m_d->x = 0;
-    m_d->y = 0;
     m_d->paintDevice = new KisPaintDevice(image()->colorSpace());
     m_d->canvas = new KisShapeLayerCanvas(this, m_d->converter);
     m_d->canvas->setProjection(m_d->paintDevice);
@@ -199,24 +197,32 @@ KisPaintDeviceSP KisShapeLayer::paintDevice() const
 
 qint32 KisShapeLayer::x() const
 {
-    return m_d->x;
+    return m_d->paintDevice->x();
 }
 
 qint32 KisShapeLayer::y() const
 {
-    return m_d->y;
+    return m_d->paintDevice->y();
 }
 
 void KisShapeLayer::setX(qint32 x)
 {
-    m_d->x = x;
-    // FIXME: setDirty();
+    qint32 delta = x - this->x();
+    m_d->paintDevice->setX(x);
+    foreach (KoShape* shape, shapeManager()->shapes()) {
+        QPointF pos = shape->position();
+        shape->setPosition(QPointF(pos.x() + m_d->converter->viewToDocumentX(delta), pos.y()));
+    }
 }
 
 void KisShapeLayer::setY(qint32 y)
 {
-    m_d->y = y;
-    //FIXME: setDirty();
+    qint32 delta = y - this->y();
+    m_d->paintDevice->setY(y);
+    foreach (KoShape* shape, shapeManager()->shapes()) {
+        QPointF pos = shape->position();
+        shape->setPosition(QPointF(pos.x(), pos.y() + m_d->converter->viewToDocumentY(delta)));
+    }
 }
 
 bool KisShapeLayer::accept(KisNodeVisitor& visitor)

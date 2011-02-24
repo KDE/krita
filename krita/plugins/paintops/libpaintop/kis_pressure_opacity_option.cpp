@@ -26,8 +26,30 @@
 KisPressureOpacityOption::KisPressureOpacityOption()
         : KisCurveOption(i18n("Opacity"), "Opacity", KisPaintOpOption::brushCategory(), true)
 {
+    setMinimumLabel(i18n("Transparent"));
+    setMaximumLabel(i18n("Opaque"));
 }
 
+
+void KisPressureOpacityOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
+{
+    KisCurveOption::writeOptionSetting(setting);
+    setting->setProperty("OpacityVersion", "2");
+}
+
+void KisPressureOpacityOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    KisCurveOption::readOptionSetting(setting);
+    if (setting->getString("OpacityVersion", "1") == "1") {
+        QList<QPointF> points = sensor()->curve().points();
+        QList<QPointF> points_new;
+        foreach(QPointF p, points)
+        {
+            points_new.push_back( QPointF(p.x() * 0.5, p.y()));
+        }
+        sensor()->setCurve(KisCubicCurve(points_new));
+    }
+}
 
 quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInformation& info) const
 {
@@ -37,7 +59,7 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInfor
     }
     quint8 origOpacity = painter->opacity();
 
-    qreal opacity = (qreal)(origOpacity * computeValue(info) / PRESSURE_DEFAULT);
+    qreal opacity = (qreal)(origOpacity * computeValue(info));
     quint8 opacity2 = (quint8)qRound(qBound<qreal>(OPACITY_TRANSPARENT_U8, opacity, OPACITY_OPAQUE_U8));
 
     painter->setOpacity(opacity2);

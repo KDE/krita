@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008,2011 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2010 Geoffry Song <goffrie@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +21,8 @@
 #include "kis_debug.h"
 
 #include <kglobal.h>
+#include <QPen>
+#include <QPainter>
 
 struct KisPaintingAssistantHandle::Private {
     QList<KisPaintingAssistant*> assistants;
@@ -78,6 +81,17 @@ void KisPaintingAssistantHandle::mergeWith(KisPaintingAssistantHandleSP handle)
     }
 }
 
+QList<KisPaintingAssistantHandleSP> KisPaintingAssistantHandle::split()
+{
+    QList<KisPaintingAssistantHandleSP> newHandles;
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        KisPaintingAssistantHandleSP newHandle(new KisPaintingAssistantHandle(*this));
+        newHandles.append(newHandle);
+        assistant->replaceHandle(this, newHandle);
+    }
+    return newHandles;
+}
+
 
 struct KisPaintingAssistant::Private {
     QString id;
@@ -89,6 +103,20 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 {
     d->id = id;
     d->name = name;
+}
+
+void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path)
+{
+    painter.save();
+    QPen pen_a(QColor(0, 0, 0, 100), 2);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
+    QPen pen_b(Qt::white, 0.9);
+    pen_b.setCosmetic(true);
+    painter.setPen(pen_b);
+    painter.drawPath(path);
+    painter.restore();
 }
 
 void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles)
@@ -125,6 +153,13 @@ void KisPaintingAssistant::replaceHandle(KisPaintingAssistantHandleSP _handle, K
     Q_ASSERT(!d->handles.contains(_handle));
     _handle->unregisterAssistant(this);
     _with->registerAssistant(this);
+}
+
+void KisPaintingAssistant::addHandle(KisPaintingAssistantHandleSP handle)
+{
+    Q_ASSERT(!d->handles.contains(handle));
+    d->handles.append(handle);
+    handle->registerAssistant(this);
 }
 
 const QList<KisPaintingAssistantHandleSP>& KisPaintingAssistant::handles() const

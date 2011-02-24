@@ -32,6 +32,7 @@ class QButtonGroup;
 class KoCanvasBase;
 class KoInteractionStrategy;
 class KoPathToolHandle;
+class KoParameterShape;
 
 class KAction;
 
@@ -81,7 +82,6 @@ signals:
 protected:
     /// reimplemented
     virtual QMap<QString, QWidget *>  createOptionWidgets();
-
 
 private:
     void updateOptionsWidget();

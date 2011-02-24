@@ -35,25 +35,30 @@
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
+#include <kis_color_source_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
 
+    // Brush tip options
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisPressureMirrorOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption()));
     addPaintOpOption(new KisPressureSharpnessOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
+    addPaintOpOption(new KisPressureScatterOptionWidget());
+    
+    // Colors options
+    addPaintOpOption(new KisColorSourceOptionWidget);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption()));
     addPaintOpOption(new KisAirbrushOption(false));
-    addPaintOpOption(new KisPressureScatterOptionWidget());
     addPaintOpOption(new KisPaintActionTypeOption());
 }
 

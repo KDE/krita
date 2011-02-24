@@ -54,6 +54,8 @@ set(kotext_LIB_SRCS
     KoTextInlineRdf.cpp
     KoTextMeta.cpp
 
+    KoTableOfContentsGeneratorInfo.cpp
+
     styles/Styles_p.cpp
     styles/KoCharacterStyle.cpp
     styles/KoParagraphStyle.cpp
@@ -83,6 +85,11 @@ set(kotext_LIB_SRCS
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
     KoTextDrag.cpp
+
+    commands/DeleteTableRowCommand.cpp
+    commands/DeleteTableColumnCommand.cpp
+    commands/InsertTableRowCommand.cpp
+    commands/InsertTableColumnCommand.cpp
 )
 
 if( Soprano_FOUND )

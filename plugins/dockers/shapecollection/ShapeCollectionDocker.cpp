@@ -94,6 +94,9 @@ QDockWidget* ShapeCollectionDockerFactory::createDockWidget()
 
 void ShapeCollectionDocker::locationChanged(Qt::DockWidgetArea area)
 {
+    qDebug()<<"location chnaged";
+    resize(0,0);
+
     switch(area) {
         case Qt::TopDockWidgetArea:
         case Qt::BottomDockWidgetArea:
@@ -101,7 +104,7 @@ void ShapeCollectionDocker::locationChanged(Qt::DockWidgetArea area)
             break;
         case Qt::LeftDockWidgetArea:
         case Qt::RightDockWidgetArea:
-            m_spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+            m_spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
             break;
         default:
             break;
@@ -143,12 +146,14 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
 
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_layout->addItem(m_spacer, 1, 2);
+    m_layout->setRowStretch(1, 1);
+    m_layout->setColumnStretch(2, 1);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     connect(m_quickView, SIGNAL(clicked(const QModelIndex&)),
             this, SLOT(activateShapeCreationToolFromQuick(const QModelIndex&)));
-	    
+
     m_moreShapes = new QToolButton(mainWidget);
     m_moreShapes->setText(i18n("More"));
     m_moreShapes->setToolButtonStyle(Qt::ToolButtonIconOnly);

@@ -96,6 +96,11 @@ public:
      * will return the profile @p to when passed @p name as a parameter.
      */
     void addProfileAlias(const QString& name, const QString& to);
+    
+    /**
+     * @return the profile alias, or name if not aliased
+     */
+    QString profileAlias(const QString& name) const;
 
     /**
      * create a profile of the specified type.

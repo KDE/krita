@@ -79,6 +79,7 @@ qreal KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+    renderMirrorMask(rc,m_dab);
     painter()->setOpacity(origOpacity);
     return 1.0;
 }

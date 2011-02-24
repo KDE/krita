@@ -267,6 +267,7 @@ public:
 
 protected:
     friend class KisPaintDeviceTest;
+    friend class DataReaderThread;
 
     /**
      * Checks whether a src paint device can be used as source
@@ -423,6 +424,12 @@ public:
      * Creates a paint device thumbnail of the paint device, retaining
      * the aspect ratio. The width and height of the returned device
      * won't exceed \p maxw and \p maxw, but they may be smaller.
+     *
+     * @param maxw: maximum width
+     * @param maxh: maximum height
+     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
+     * @param rect: only this rect will be used for the thumbnail
+     *
      */
 
     KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
@@ -431,6 +438,11 @@ public:
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
      * The width and height of the returned QImage won't exceed \p maxw and \p maxw, but they may be smaller.
      * The colors are not corrected for display!
+     *
+     * @param maxw: maximum width
+     * @param maxh: maximum height
+     * @param selection: if present, only the selected pixels will be added to the thumbnail. May be 0
+     * @param rect: only this rect will be used for the thumbnail
      */
     virtual QImage createThumbnail(qint32 maxw, qint32 maxh, const KisSelection *selection, QRect rect = QRect());
 
@@ -569,8 +581,10 @@ public:
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const;
 
     KisRectIteratorSP createRectIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h);
+    KisRectIteratorSP createRectIteratorNG(const QRect& r);
 
     KisRectConstIteratorSP createRectConstIteratorNG(qint32 x, qint32 y, qint32 w, qint32 h) const;
+    KisRectConstIteratorSP createRectConstIteratorNG(const QRect& r) const;
 
     KisRandomAccessorSP createRandomAccessorNG(qint32 x, qint32 y);
 

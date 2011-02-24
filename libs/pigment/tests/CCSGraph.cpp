@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     } else if (graphType == "bestpath") {
         QString srcKey = args->getOption("src-key");
         QString dstKey = args->getOption("dst-key");
-        if (srcKey == "" || dstKey == "") {
+        if (srcKey.isEmpty() || dstKey.isEmpty()) {
             kError() << "src-key and dst-key must be specified for the graph bestpath";
             exit(EXIT_FAILURE);
         } else {

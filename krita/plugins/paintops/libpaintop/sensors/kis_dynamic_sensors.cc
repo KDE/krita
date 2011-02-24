@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2007,2010 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -18,15 +19,17 @@
 #include "kis_dynamic_sensors.h"
 KisDynamicSensorFuzzy::KisDynamicSensorFuzzy() : KisDynamicSensor(FuzzyId)
 {
-
+    setMinimumLabel(QString()); // TODO use dice icon
+    setMaximumLabel(QString());
 }
 
 KisDynamicSensorSpeed::KisDynamicSensorSpeed() : KisDynamicSensor(SpeedId)
 {
-
+    setMinimumLabel(i18n("Slow"));
+    setMaximumLabel(i18n("Fast"));
 }
 
-qreal KisDynamicSensorSpeed::parameter(const KisPaintInformation& info) {
+qreal KisDynamicSensorSpeed::value(const KisPaintInformation& info) {
     int dt = qMax(1, info.currentTime() - m_lastTime); // make sure dt > 1
     m_lastTime = info.currentTime();
     double currentMove = info.movement().norm() / dt;
@@ -36,14 +39,17 @@ qreal KisDynamicSensorSpeed::parameter(const KisPaintInformation& info) {
 
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle() : KisDynamicSensor(DrawingAngleId)
 {
-
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
 KisDynamicSensorRotation::KisDynamicSensorRotation() : KisDynamicSensor(RotationId)
 {
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
 }
 
-qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
+qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
 {
     /* so that we are in 0.0..1.0 */
     return 0.5 + info.angle() / (2.0 * M_PI);
@@ -51,16 +57,37 @@ qreal KisDynamicSensorDrawingAngle::parameter(const KisPaintInformation& info)
 
 KisDynamicSensorPressure::KisDynamicSensorPressure() : KisDynamicSensor(PressureId)
 {
-
+    setMinimumLabel(i18n("Low"));
+    setMaximumLabel(i18n("High"));
 }
 
 KisDynamicSensorXTilt::KisDynamicSensorXTilt() : KisDynamicSensor(XTiltId)
 {
-
+    setMinimumLabel(i18n("-30°"));
+    setMaximumLabel(i18n("30°"));
 }
 
 KisDynamicSensorYTilt::KisDynamicSensorYTilt() : KisDynamicSensor(YTiltId)
 {
-
+    setMinimumLabel(i18n("-30°"));
+    setMaximumLabel(i18n("30°"));
 }
 
+KisDynamicSensorAscension::KisDynamicSensorAscension() : KisDynamicSensor(AscensionId)
+{
+    setMinimumLabel(i18n("0°"));
+    setMaximumLabel(i18n("360°"));
+}
+
+KisDynamicSensorDeclination::KisDynamicSensorDeclination() : KisDynamicSensor(DeclinationId)
+{
+    setMinimumLabel(i18n("90°"));
+    setMaximumLabel(i18n("0°"));
+}
+
+
+KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(PerspectiveId)
+{
+    setMinimumLabel(i18n("Far"));
+    setMaximumLabel(i18n("Near"));
+}

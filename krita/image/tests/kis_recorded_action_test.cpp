@@ -27,15 +27,15 @@ class TestAction : public KisRecordedAction
 {
 public:
 
-    TestAction(const QString & id, const QString & name, const KisNodeQueryPath& path)
-            : KisRecordedAction(id, name, path) {
+    TestAction(const QString & id, const QString & name)
+            : KisRecordedAction(id, name) {
     }
 
-    void play(KisNodeSP /*node*/, const KisPlayInfo&) const {
+    void play(const KisPlayInfo&, KoUpdater*) const {
     }
 
     KisRecordedAction* clone() const {
-        return new TestAction(id(), name(), nodeQueryPath());
+        return new TestAction(id(), name());
     }
 
 };
@@ -43,7 +43,7 @@ public:
 
 void KisRecordedActionTest::testCreation()
 {
-    TestAction tc("bla", "bla", KisNodeQueryPath::fromString("/"));
+    TestAction tc("bla", "bla");
 }
 
 

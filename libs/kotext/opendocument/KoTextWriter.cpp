@@ -65,6 +65,7 @@
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
 #include <rdf/KoDocumentRdfBase.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
@@ -650,6 +651,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     if (!styleName.isEmpty())
         writer->addAttribute("text:style-name", styleName);
 
+    if ( const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData())) {
+        writer->addAttribute("text:id", context.subId(blockData));
+    }
+
     QTextBlock previousBlock = block.previous();
     if (previousBlock.isValid()) {
         QTextBlockFormat blockFormat = block.blockFormat();
@@ -672,6 +677,12 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
     QTextCharFormat blockCharFormat = cursor.blockCharFormat();
     QTextCharFormat previousCharFormat;
     QTextBlock::iterator it;
+    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(blockCharFormat)) {
+        // Write xml:id here for Rdf
+        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+        inlineRdf->saveOdf(context, writer);
+    }
+
     for (it = block.begin(); !(it.atEnd()); ++it) {
         QTextFragment currentFragment = it.fragment();
         const int fragmentStart = currentFragment.position();
@@ -681,25 +692,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         if (currentFragment.isValid()) {
             QTextCharFormat charFormat = currentFragment.charFormat();
             QTextCharFormat compFormat = charFormat;
-            bool identical;
             previousCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
             compFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
-            if (previousCharFormat == compFormat)
-                identical = true;
-            else
-                identical = false;
-
-            const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData());
-            if (blockData && (it == block.begin())) {
-                writer->addAttribute("text:id", context.subId(blockData));
-            }
-            //kDebug(30015) << "from:" << from << " to:" << to;
-            KoTextInlineRdf* inlineRdf;
-            if ((inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) && (it == block.begin())) {
-                // Write xml:id here for Rdf
-                kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                inlineRdf->saveOdf(context, writer);
-            }
 
             KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
@@ -733,6 +727,11 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                         if (!styleName.isEmpty()) {
                             writer->startElement("text:span", false);
                             writer->addAttribute("text:style-name", styleName);
+                            if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                                // Write xml:id here for Rdf
+                                kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                                inlineRdf->saveOdf(context, writer);
+                            }
                         }
                         else {
                             saveSpan = false;
@@ -790,9 +789,19 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     fragmentTagInformation.setTagName("text:a");
                     fragmentTagInformation.addAttribute("xlink:type", "simple");
                     fragmentTagInformation.addAttribute("xlink:href", charFormat.anchorHref());
+                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                        // Write xml:id here for Rdf
+                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                        inlineRdf->saveOdf(context, writer);
+                    }
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
                     fragmentTagInformation.addAttribute("text:style-name", styleName);
+                    if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
+                        // Write xml:id here for Rdf
+                        kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
+                        inlineRdf->saveOdf(context, writer);
+                    }
                 }
 
                 int changeId = openTagRegion(currentFragment.position(), KoTextWriter::Private::Span, fragmentTagInformation);
@@ -810,8 +819,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
-        } // if (fragment.valid())
-    } // foreach(fragment)
+        }
+    }
 
     //kDebug(30015) << "pairedInlineObjectStack.sz:" << pairedInlineObjectStack.size();
     if (to !=-1 && to < block.position() + block.length()) {
@@ -1114,7 +1123,16 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int fro
 {
 
     writer->startElement("text:table-of-content");
-        //TODO TOC styles
+
+        KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+        if (!info->tableOfContentData()->styleName.isNull())
+            {
+                writer->addAttribute("text:style-name",info->tableOfContentData()->styleName);
+            }
+        writer->addAttribute("text:name",info->tableOfContentData()->name);
+
+        info->saveOdf(writer);
+
         writer->startElement("text:index-body");
             // write the title (one p block)
             QTextCursor localBlock = toc->firstCursorPosition();
@@ -1451,6 +1469,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
             endBlockNumber = endBlock.blockNumber();
         }
     }
+
     return endBlockNumber;
 }
 
@@ -2176,8 +2195,8 @@ void KoTextWriter::Private::writeNode(QTextStream &outputXmlStream, KoXmlNode &n
 }
 
 void KoTextWriter::write(QTextDocument *document, int from, int to)
-{ 
-    d->document = document;  
+{
+    d->document = document;
     d->styleManager = KoTextDocument(document).styleManager();
     d->layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
 

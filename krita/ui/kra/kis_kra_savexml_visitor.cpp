@@ -113,6 +113,9 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
 
 bool KisSaveXmlVisitor::visit(KisAdjustmentLayer* layer)
 {
+    if (!layer->filter()) {
+        return false;
+    }
     QDomElement layerElement = m_doc.createElement(LAYER);
     saveLayer(layerElement, ADJUSTMENT_LAYER, layer);
     layerElement.setAttribute(FILTER_NAME, layer->filter()->name());
@@ -150,6 +153,9 @@ bool KisSaveXmlVisitor::visit(KisCloneLayer *layer)
 bool KisSaveXmlVisitor::visit(KisFilterMask *mask)
 {
     Q_ASSERT(mask);
+    if (!mask->filter()) {
+        return false;
+    }
     QDomElement el = m_doc.createElement(MASK);
     saveMask(el, FILTER_MASK, mask);
     el.setAttribute(FILTER_NAME, mask->filter()->name());

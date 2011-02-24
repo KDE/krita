@@ -98,9 +98,8 @@ KritaPhongBumpmap::~KritaPhongBumpmap()
 {
 }
 
-void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
-                                    KisProcessingInformation dstInfo,
-                                    const QSize& size,
+void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
+                                    const QRect& applyRect,
                                     const KisFilterConfiguration* config,
                                     KoUpdater* /*progressUpdater*/
                                     ) const
@@ -121,19 +120,16 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
 
     timer.start();
 
-    KisPaintDeviceSP src;
-    src = srcInfo.paintDevice();
-
     KoChannelInfo* m_heightChannel = 0;
 
-    foreach (KoChannelInfo* channel, src->colorSpace()->channels()) {
+    foreach (KoChannelInfo* channel, device->colorSpace()->channels()) {
         if (userChosenHeightChannel == channel->name())
             m_heightChannel = channel;
     }
 
     qDebug("Tiempo de preparacion: %d ms", timer.restart());
 
-    QRect inputArea(srcInfo.topLeft(), size);
+    QRect inputArea = applyRect;
     inputArea.adjust(-1, -1, 1, 1);
     QRect outputArea = inputArea.adjusted(1, 1, -1, -1);
     //QRect outputArea(dstInfo.topLeft().x()+1, dstInfo.topLeft().y()+1, size.width()-1, size.height()-1);
@@ -173,8 +169,8 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     const int ROWS_OF_TILES = inputArea.height() / TILE_HEIGHT;
     const int STRAY_COL_WIDTH = (TILE_OFFSET * COLS_OF_TILES) + inputArea.width() % TILE_WIDTH;
     const int STRAY_ROW_HEIGHT = (TILE_OFFSET * ROWS_OF_TILES) + inputArea.height() % TILE_HEIGHT;
-    const int X_READ_OFFSET = srcInfo.topLeft().x();
-    const int Y_READ_OFFSET = srcInfo.topLeft().y();
+    const int X_READ_OFFSET = applyRect.topLeft().x();
+    const int Y_READ_OFFSET = applyRect.topLeft().y();
     const int OUTPUT_OFFSET = 1;
 
     QVector<quint8*> tileChannels;
@@ -194,7 +190,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
             tileLimits.setWidth( TILE_WIDTH );
             tileLimits.setHeight( TILE_HEIGHT );
 
-            tileChannels = src->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
+            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
                                                 tileLimits.y() + Y_READ_OFFSET,
                                                 tileLimits.width(),
                                                 tileLimits.height()
@@ -229,7 +225,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
             tileLimits.setWidth( STRAY_COL_WIDTH );
             tileLimits.setHeight( TILE_HEIGHT );
 
-            tileChannels = src->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
+            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
                                                 tileLimits.y() + Y_READ_OFFSET,
                                                 tileLimits.width(),
                                                 tileLimits.height()
@@ -264,7 +260,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
             tileLimits.setWidth( TILE_WIDTH );
             tileLimits.setHeight( STRAY_ROW_HEIGHT );
 
-            tileChannels = src->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
+            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
                                                 tileLimits.y() + Y_READ_OFFSET,
                                                 tileLimits.width(),
                                                 tileLimits.height()
@@ -299,7 +295,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
         tileLimits.setWidth( STRAY_COL_WIDTH );
         tileLimits.setHeight( STRAY_ROW_HEIGHT );
 
-        tileChannels = src->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
+        tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
                                             tileLimits.y() + Y_READ_OFFSET,
                                             tileLimits.width(),
                                             tileLimits.height()
@@ -332,7 +328,7 @@ void KisFilterPhongBumpmap::process(KisConstProcessingInformation srcInfo,
     leHack.bitBlt(dstInfo.topLeft(), sneaky, sneaky->exactBounds());
     */
     //qDebug() << bumpmap.size();
-    dstInfo.paintDevice()->convertFromQImage(bumpmap, "", dstInfo.topLeft().x(), dstInfo.topLeft().y());
+    device->convertFromQImage(bumpmap, "", applyRect.topLeft().x(), applyRect.topLeft().y());
     qDebug("Tiempo deconversion: %d ms", timer.elapsed());
 
     delete [] bumpmapByteLines;

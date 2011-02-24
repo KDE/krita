@@ -76,6 +76,21 @@ bool KisMacroModel::removeRows(int row, int count, const QModelIndex & parent)
     return true;
 }
 
+void KisMacroModel::addAction(const QModelIndex& _after, const KisRecordedAction& _action)
+{
+    if(m_macro->actions().isEmpty())
+    {
+        beginInsertRows(QModelIndex(), 0, 0);
+        m_macro->addAction(_action);
+        endInsertRows();
+    } else {
+        int row = _after.row();
+        beginInsertRows(QModelIndex(), row, row);
+        m_macro->addAction(_action, m_macro->actions().at(row));
+        endInsertRows();
+    }
+}
+
 void KisMacroModel::duplicateAction(const QModelIndex& index)
 {
     if (index.isValid()) {

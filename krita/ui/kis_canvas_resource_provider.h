@@ -36,6 +36,7 @@ class KoCanvasBase;
 class KisView2;
 class KisPattern;
 class KisFilterConfiguration;
+class KisAbstractPerspectiveGrid;
 
 /**
  * KisCanvasResourceProvider contains the per-view current settings that
@@ -57,7 +58,10 @@ public:
         CurrentKritaNode,
         CurrentPaintOpPreset,
         CurrentGeneratorConfiguration,
-        CurrentCompositeOp
+        CurrentCompositeOp,
+        MirrorHorizontal,
+        MirrorVertical,
+        MirrorAxisCenter
     };
 
 
@@ -97,6 +101,15 @@ public:
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
+    QList<KisAbstractPerspectiveGrid*> perspectiveGrids() const;
+    void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
+    void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
+
+    void setMirrorHorizontal(bool mirrorHorizontal);
+    bool mirrorHorizontal() const;
+
+    void setMirrorVertical(bool mirrorVertical);
+    bool mirrorVertical() const;
 
 public slots:
 
@@ -146,6 +159,7 @@ private:
     KoResourceManager * m_resourceManager;
     const KoColorProfile * m_displayProfile;
     bool m_fGChanged;
+    QList<KisAbstractPerspectiveGrid*> m_perspectiveGrids;
 
     // This is a flag to handle a bug:
     // If pop up palette is visible and a new colour is selected, the new colour

@@ -69,6 +69,7 @@ public slots:
 
     void cut();
     void copy();
+    void copyMerged();
     void paste();
     void pasteNew();
     void pasteAt();
@@ -113,6 +114,8 @@ private:
     inline void rotatePointers(quint8  **p, quint32 n);
     void computeTransition(quint8* transition, quint8** buf, qint32 width);
 
+    void copyFromDevice(KisPaintDeviceSP device);
+    
     KisView2 * m_view;
     KisDoc2 * m_doc;
 
@@ -121,6 +124,7 @@ private:
     KisNodeCommandsAdapter* m_adapter;
 
     KAction *m_copy;
+    KAction *m_copyMerged;
     KAction *m_cut;
     KAction *m_paste;
     KAction *m_pasteAt;

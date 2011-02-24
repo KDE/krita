@@ -97,13 +97,6 @@ public:
         if(!m_projection) return true;
         QRect applyRect = m_updateRect & m_projection->extent();
 
-        /**
-         * FIXME: check whether it's right to leave a selection to
-         * a projection mechanism, not for the filter
-         */
-        KisConstProcessingInformation srcCfg(m_projection, applyRect.topLeft(), 0);
-        KisProcessingInformation dstCfg(originalDevice, applyRect.topLeft(), 0);
-
         Q_ASSERT(layer->nodeProgressProxy());
 
         KoProgressUpdater updater(layer->nodeProgressProxy());
@@ -111,8 +104,7 @@ public:
         QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
         // We do not create a transaction here, as srcDevice != dstDevice
-        filter->process(srcCfg, dstCfg, applyRect.size(),
-                        filterConfig, updaterPtr);
+        filter->process(m_projection, originalDevice, 0, applyRect, filterConfig, updaterPtr);
 
         updaterPtr->setProgress(100);
 

@@ -30,6 +30,7 @@ public:
         , margin(0)
         , preferredCenterFractionX(0.5)
         , preferredCenterFractionY(0.5)
+        , actionCollection(0)
     {
     }
 
@@ -39,12 +40,14 @@ public:
     QPoint documentOffset;
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
+    KActionCollection* actionCollection;
 };
 
-KoCanvasController::KoCanvasController()
+KoCanvasController::KoCanvasController(KActionCollection* actionCollection)
     : d(new Private())
 {
     proxyObject = new KoCanvasControllerProxyObject(this);
+    d->actionCollection = actionCollection;
 }
 
 KoCanvasController::~KoCanvasController()
@@ -142,6 +145,11 @@ KoCanvasControllerProxyObject::KoCanvasControllerProxyObject(KoCanvasController 
 void KoCanvasControllerProxyObject::updateDocumentSize(const QSize &newSize, bool recalculateCenter)
 {
     m_canvasController->updateDocumentSize(newSize, recalculateCenter);
+}
+
+KActionCollection* KoCanvasController::actionCollection() const
+{
+    return d->actionCollection;
 }
 
 

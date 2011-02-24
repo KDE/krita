@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2006, 2011 Sebastian Sauer <mail@dipe.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@ class QTextLayout;
 class KoInlineTextObjectManager;
 class KoViewConverter;
 class KoImageCollection;
+class KoTextAnchor;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -138,6 +140,9 @@ public:
     /// return the list of shapes that will be used to run all the text into.
     virtual QList<KoShape*> shapes() const;
 
+    /// reset all inline object which document position is bigger or equal to resetPosition
+    virtual void resetInlineObject(int resetPosition);
+
     /**
      * This inner class is an interface that allows the KoTextDocumentLayout to do rough layout
      * while the LayoutState implementation can do all the boring details.
@@ -155,10 +160,13 @@ public:
         virtual void reset() = 0;
         /// returns true if reset has been called.
         virtual bool isInterrupted() const = 0;
-        /// return the number of columns of the line to be layouted
+        /**
+         * return the number of columns of the line to be layouted.
+         * if numColumns() returns 0, use width() instead.
+         */
         virtual int numColumns() {
             return 0;
-        } // if numColumns() returns 0, use width() instead
+        }
         /// return the width of the line to be layouted
         virtual qreal width() = 0;
         /// return the x position of the line to be layouted
@@ -174,7 +182,7 @@ public:
         virtual QRectF expandVisibleRect(const QRectF &rect) const = 0;
         /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
         /// in shape and returns false. In that case you should try over with a new createLine
-        virtual bool addLine(QTextLine &line, bool processingLine = false) = 0;
+        virtual bool addLine() = 0;
         /// prepare for next paragraph; return false if there is no next parag.
         virtual bool nextParag() = 0;
         /// revert layout to the previous paragraph. Return false if there is no previous paragraph.
@@ -205,6 +213,22 @@ public:
         virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point) = 0;
         /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
         virtual qreal maxLineHeight() const = 0;
+        /// Registers the shape as being relevant for run around at this moment in time
+        virtual void registerRunAroundShape(KoShape *shape) = 0;
+        /// Updates the registration of the shape for run around
+        virtual void updateRunAroundShape(KoShape *shape) = 0;
+        /// Clear all registrations of shapest for run around
+        virtual void unregisterAllRunAroundShapes() = 0;
+        /// Create a QTextLine and possibly some behind the scenes auxillary info
+        virtual QTextLine createLine() = 0;
+        /// Fiddle with the width of the current textline until it fits
+        virtual void fitLineForRunAround(bool resetHorizontalPosition) = 0;
+        /// add inline object
+        virtual void insertInlineObject(KoTextAnchor * textAnchor) = 0;
+        /// reset all inline object which document position is bigger or equal to resetPosition
+        virtual void resetInlineObject(int resetPosition) = 0;
+        /// remove inline object
+        virtual void removeInlineObject(KoTextAnchor * textAnchor) = 0;
         /// the index in the list of shapes (or frameset) of the shape we are currently layouting.
         int shapeNumber;
         /// the shape that is currently being laid out

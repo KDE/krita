@@ -115,7 +115,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
     qreal tableWidth = 0;
     if (tableFormat.width().rawValue() == 0 || tableFormat.alignment() == Qt::AlignJustify) {
         // We got a zero width value or alignment is justify, so use 100% of parent.
-        tableWidth = parentWidth;
+        tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
     } else {
         if (tableFormat.width().type() == QTextLength::FixedLength) {
             // Fixed length value, so use the raw value directly.
@@ -127,7 +127,7 @@ void TableLayout::startNewTableRect(QPointF position, qreal parentWidth, int fro
         } else {
             // Unknown length type, so use 100% of parent.
             kWarning(32600) << "Unknown table width type";
-            tableWidth = parentWidth;
+            tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
         }
     }
 
@@ -576,7 +576,7 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell, const QTextChar
     const int row = cell.row();
     const int column = cell.column();
     const int rowSpan = fmt.tableCellRowSpan();
-    const int columnSpan = fmt.tableCellColumnSpan();
+    int columnSpan = fmt.tableCellColumnSpan();
 
     Q_ASSERT(row < m_tableLayoutData->m_rowPositions.size());
     TableRect tableRect = m_tableLayoutData->m_tableRects.last();
@@ -585,7 +585,9 @@ QRectF TableLayout::cellBoundingRect(const QTextTableCell &cell, const QTextChar
         --i;
         tableRect =  m_tableLayoutData->m_tableRects[i];
     }
-    Q_ASSERT(column + columnSpan <=  tableRect.columnPositions.size());
+
+    if (column + columnSpan > tableRect.columnPositions.size())
+        columnSpan = tableRect.columnPositions.size() - column;
 
     // Cell width.
     qreal width = 0;

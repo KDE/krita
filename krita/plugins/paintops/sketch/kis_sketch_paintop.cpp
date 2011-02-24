@@ -130,7 +130,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
         drawConnection(prevMouse,mousePosition);
     }
 
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    double scale = m_sizeOption.apply(pi2);
     double rotation = m_rotationOption.apply(pi2);
     
     setCurrentScale(scale);
@@ -254,6 +254,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
+    renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     KisVector2D end = toKisVector2D(pi2.pos());
@@ -265,7 +266,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
 
 
-double KisSketchPaintOp::paintAt(const KisPaintInformation& info)
+qreal KisSketchPaintOp::paintAt(const KisPaintInformation& info)
 {
     return paintLine(info, info).spacing;
 }

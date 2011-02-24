@@ -30,6 +30,8 @@
 #include "ListItemsHelper.h"
 #include "TextShape.h"
 #include "ToCGenerator.h"
+#include "FloatingAnchorStrategy.h"
+#include "InlineAnchorStrategy.h"
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextShapeData.h>
@@ -66,6 +68,12 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
+InlineObjectPosition::InlineObjectPosition(qreal ascent, qreal descent)
+        : m_ascent(ascent),
+        m_descent(descent)
+{
+}
+
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
         : m_styleManager(0),
@@ -91,10 +99,16 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_allTimeMinimumLeft(0),
         m_allTimeMaximumRight(0),
         m_maxLineHeight(0),
-        m_scaleFactor(1.0)
+        m_scaleFactor(1.0),
+        m_textAnchorIndex(0)
 {
     m_frameStack.reserve(5); // avoid reallocs
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
+}
+
+Layout::~Layout()
+{
+    unregisterAllRunAroundShapes();
 }
 
 bool Layout::start()
@@ -102,12 +116,20 @@ bool Layout::start()
     m_styleManager = KoTextDocument(m_parent->document()).styleManager();
     m_changeTracker = KoTextDocument(m_parent->document()).changeTracker();
     m_relativeTabs = KoTextDocument(m_parent->document()).relativeTabs();
-    if (m_reset)
+    if (m_reset) {
         resetPrivate();
-    else if (shape)
+    } else if (shape) {
         nextParag();
+    }
     m_reset = false;
-    return !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+
+    bool ok = !(layout == 0 || m_parent->shapes().count() <= shapeNumber);
+#if 0
+    if (!ok) {
+        kDebug() << "Starting layouting failed, shapeCount=" << m_parent->shapes().count() << "shapeNumber=" << shapeNumber << "layout=" << (layout ? layout->boundingRect() : QRectF()) << (layout ? layout->position() : QPointF());
+    }
+#endif
+    return ok;
 }
 
 void Layout::end()
@@ -115,6 +137,19 @@ void Layout::end()
     if (layout)
         layout->endLayout();
     layout = 0;
+}
+
+QTextLine Layout::createLine()
+{
+    m_textLine.createLine(this);
+    refreshCurrentPageOutlines();
+    m_textLine.setOutlines(m_currentLineOutlines);
+    return m_textLine.line;
+}
+
+void Layout::fitLineForRunAround(bool resetHorizontalPosition)
+{
+    m_textLine.fit(resetHorizontalPosition);
 }
 
 void Layout::reset()
@@ -137,9 +172,11 @@ qreal Layout::width()
     if (m_inTable) {
         QTextCursor tableFinder(m_block);
         QTextTable *table = tableFinder.currentTable();
-        m_tableLayout.setTable(table);
-        ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
-        m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        if (table) {
+            m_tableLayout.setTable(table);
+            ptWidth = m_tableLayout.cellContentRect(m_tableCell).width();
+            m_allTimeMaximumRight = qMax(m_allTimeMaximumRight, m_tableLayout.tableMaxX());
+        }
     }
     if (m_newParag)
         ptWidth -= resolveTextIndent();
@@ -211,8 +248,11 @@ struct LineKeeper
     QPointF position;
 };
 
-bool Layout::addLine(QTextLine &line, bool processingLine)
+bool Layout::addLine()
 {
+    QTextLine line = m_textLine.line;
+    bool processingLine = m_textLine.processingLine();
+
     if (m_blockData && m_block.textList() && m_block.layout()->lineCount() == 1) {
         // first line, lets check where the line ended up and adjust the positioning of the counter.
         QTextBlockFormat fmt = m_block.blockFormat();
@@ -234,11 +274,8 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    qreal objectHeight = 0.0;
-    if (line.textLength() == 1 && m_block.text().at(line.textStart()) == QChar::ObjectReplacementCharacter && line.descent() == 0.0 && line.ascent() == 0.0) {
-        // This is an anchor but not an inline anchor so set to some very small hight
-        height = 0.1;
-    }
+    qreal objectAscent = 0.0;
+    qreal objectDescent = 0.0;
     bool useFixedLineHeight = height != 0.0;
     QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {
@@ -264,10 +301,17 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             else {
                 // read max font height
                 height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
+
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
+                    if (m_fragmentIterator.atEnd()) {
+                     break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -275,7 +319,10 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
                         || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_changeTracker->displayChanges()) {
                         height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                        objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                        InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                        objectAscent = qMax(objectAscent, pos.m_ascent);
+                        objectDescent = qMax(objectDescent, pos.m_descent);
                     }
                 }
             }
@@ -328,7 +375,9 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
                 line = m_block.layout()->createLine();
-                line.setNumColumns(lk.columns, lk.lineWidth);
+                if (!line.isValid())
+                    break;
+                line.setLineWidth(lk.lineWidth);
                 line.setPosition(lk.position);
             }
             if(lineKeeps.isEmpty()) {
@@ -342,8 +391,12 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data)
+        if (m_data && line.isValid()) {
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
+            m_data->setEndPosition(-1);
+        }
+
+
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)
@@ -361,7 +414,7 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
             else if (linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height = qMax(height, objectHeight) + linespacing;
+        height = qMax(height, objectAscent) + objectDescent + linespacing;
     }
     qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
@@ -392,6 +445,16 @@ bool Layout::addLine(QTextLine &line, bool processingLine)
                 m_y = m_y_justBelowDropCaps; // make sure m_y is below the dropped characters
             m_y_justBelowDropCaps = 0;
             m_dropCapsAffectedLineWidthAdjust = 0;
+        }
+    }
+
+    // position inline objects
+    while (positionInlineObjects()) {
+        if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
+
+            if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
+                return false;
+            }
         }
     }
 
@@ -521,7 +584,7 @@ bool Layout::nextParag()
                 font = cursor.charFormat().font();
             }
             ListItemsHelper lih(textList, font);
-            lih.recalculate();
+            lih.recalculateBlock(m_block);
             m_blockData = dynamic_cast<KoTextBlockData*>(m_block.userData());
         }
     } else if (m_blockData) { // make sure it is empty
@@ -535,8 +598,12 @@ bool Layout::nextParag()
 
     const QVariant masterPageName = m_format.property(KoParagraphStyle::MasterPageName);
     if (! masterPageName.isNull() && m_currentMasterPage != masterPageName.toString()) {
+        // NOTE maybe following lines are not enough and we actually need to check if there is content on the current
+        // page and only page-break if there is to prevent empty pages caused by switching between master-pages.
+        if (! m_currentMasterPage.isNull()) { // no pagebreak for the first master-page
+            pagebreak = true; // new master-page means new page
+        }
         m_currentMasterPage = masterPageName.toString();
-        pagebreak = true; // new master-page means new page
     }
 
     // start a new shape if requested, but not if that would leave the current shape empty.
@@ -591,6 +658,21 @@ bool Layout::nextParag()
 
             // conversion here is required because Qt thinks in device units and we don't
             position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
+
+#if 0 // see bug 239143
+            // ODF 18.517.2 <style:tab-stop>
+            // The style:type attribute specifies the position of a tab stop.
+            switch(koTab.type) {
+            case QTextOption::RightTab:
+                position = qMax(0., position - shape->size().width());
+                break;
+            case QTextOption::CenterTab:
+            case QTextOption::DelimiterTab:
+            case QTextOption::LeftTab:
+                break;
+            }
+#endif
+
             tab.position = position;
             tab.type = koTab.type;
             tab.delimiter = koTab.delimiter;
@@ -761,8 +843,14 @@ void Layout::handleTable()
 
             // Position the table. Use position of previous block if it's empty.
             QTextBlock prevBlock = m_block.previous();
-            QPointF pos = prevBlock.length() == 1 ? prevBlock.layout()->lineAt(0).position() : QPointF(x(), y());
 
+            QPointF pos;
+
+            if(prevBlock.length() == 1 && prevBlock.blockNumber() == 0) {
+                pos = prevBlock.layout()->lineAt(0).position();
+            } else {
+                pos = QPointF(x(), y());
+            }
             // Start the first rect of the table.
             //kDebug(32500) << "initial layout about to start at " << pos;
             m_tableLayout.startNewTableRect(pos, shape->size().width(), 0);
@@ -1053,13 +1141,15 @@ void Layout::resetPrivate()
             if (m_block.layout() && m_block.layout()->lineCount() > 0) {
                 // block has been layouted. So use its offset.
                 m_y = m_block.layout()->lineAt(0).position().y();
-                if (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
+                while (m_y < data->documentOffset() - 0.126) { // 0.126 to account of rounding in Qt-scribe
                     // the last layed-out parag
                     Q_ASSERT(shapeNumber > 0);
                     // since we only recalc whole parags; we need to go back a little.
                     shapeNumber--;
                     shape = shapes[shapeNumber];
+                    Q_ASSERT(shape);
                     data = qobject_cast<KoTextShapeData*>(shape->userData());
+                    Q_ASSERT(data);
                     m_newShape = false;
                 }
                 if (m_y > data->documentOffset() + shape->size().height()) {
@@ -1200,7 +1290,6 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
     for (it = frame->begin(); !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
             m_tableLayout.setTable(table);
@@ -1211,7 +1300,7 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
                 retval.setBottom(m_tableLayout.cellBoundingRect(table->cellAt(table->lastPosition())).bottom());
                 return retval;
             }
-        } /*else if (subFrame) {
+        } /*else if (it.currentFrame()) { // subframe?
             // right now we don't care about sections
             textRectFrame(QTextFrame *frame, QTextCursor &cursor);
             continue;
@@ -1273,6 +1362,7 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
             m_tableLayout.setTable(table);
             m_tableLayout.drawBackground(painter, context);
             drawFrame(table, painter, context, inTable+1); // this actually only draws the text inside
+            m_tableLayout.setTable(table); // in case there was a sub table
             QVector<QLineF> accuBlankBorders;
             m_tableLayout.drawBorders(painter, &accuBlankBorders);
             painter->setPen(QPen(QColor(0,0,0,96)));
@@ -1347,9 +1437,10 @@ void Layout::drawFrame(QTextFrame *frame, QPainter *painter, const KoTextDocumen
                 }
             }
 
-           QRectF clipRect;                 // create an empty clipping rectangle
+            QRectF clipRect;                 // create an empty clipping rectangle
 
             if (wholeTable) {               // if we're in the table drawing
+                m_tableLayout.setTable(wholeTable);
                 QTextTableCell currentCell = wholeTable->cellAt(block.position());  // get the currently drawn cell
 
                 if (currentCell.isValid()) {                                        // and if the cell is valid
@@ -1759,16 +1850,18 @@ void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int s
             for (int i = firstLine ; i <= lastLine ; i++) {
                 QTextLine line = layout->lineAt(i);
                 if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                    qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                    qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
-                    x2 = qMin(line.naturalTextWidth() + line.cursorToX(line.textStart()), x2);
-
-                    // sometimes a fragment starts in the middle of a line, so calc offset
-                    int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
-
-                    drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
-                    decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    int p1 = currentFragment.position() - startOfBlock;
+                    if (block.text().at(p1) != QChar::ObjectReplacementCharacter) {
+                        int p2 = currentFragment.position() + currentFragment.length() - startOfBlock;
+                        int fragmentToLineOffset = qMax(currentFragment.position() - startOfBlock - line.textStart(),0);
+                        qreal x1 = line.cursorToX(p1);
+                        qreal x2 = line.cursorToX(p2);
+                        // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
+                        //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
+                        drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        decorateTabs(painter, tabList, line, currentFragment, startOfBlock);
+                    }
                 }
             }
         }
@@ -2038,14 +2131,15 @@ bool Layout::previousParag()
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
+    InlineObjectPosition pos(inlineObject.ascent(),inlineObject.descent());
+    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), pos);
 }
 
-qreal Layout::inlineCharHeight(const QTextFragment &fragment)
+InlineObjectPosition Layout::inlineCharHeight(const QTextFragment &fragment)
 {
     if (m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
-    return 0.0;
+    return InlineObjectPosition();
 }
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
@@ -2054,12 +2148,12 @@ qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
         return 0;
     Q_ASSERT(oldLength);
     QString text = m_block.text();
-    int pos = text.indexOf(QChar(0xFFFC), line.textStart());
+    int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
     bool firstFootnote = true;
     while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
         QTextCursor c1(m_block);
         c1.setPosition(m_block.position() + pos);
-        pos = text.indexOf(QChar(0xFFFC), pos + 1);
+        pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
         KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_parent->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
@@ -2148,25 +2242,25 @@ void Layout::updateFrameStack()
         QTextFrameFormat ff = frame->frameFormat();
         if (ff.hasProperty(KoText::TableOfContents) && ff.property(KoText::TableOfContents).toBool() == true) {
             // this frame is a TOC
-            bool found = false;
-            QList<QWeakPointer<ToCGenerator> >::Iterator iter = m_tocGenerators.begin();
-            while (iter != m_tocGenerators.end()) {
-                QWeakPointer<ToCGenerator> item = *iter;
+            QList<QWeakPointer<ToCGenerator> >::Iterator iter;
+            QWeakPointer<ToCGenerator> item;
+            for (iter = m_tocGenerators.begin(); iter != m_tocGenerators.end(); iter++) {
+                item = *iter;
                 if (item.isNull()) {
-                    iter = m_tocGenerators.erase(iter);
-                    continue;
-                }
-                if (item.data()->tocFrame() == frame) {
-                    found = true;
-                    break;
+                    m_tocGenerators.erase(iter);
+                } else {
+                    if (item.data()->tocFrame() == frame) {
+                        break;
+                    }
                 }
             }
-            if (!found) {
+            if (item.isNull()) {
                 ToCGenerator *tg = new ToCGenerator(frame);
+                tg->setPageWidth( shape->size().width() );
                 m_tocGenerators.append(QWeakPointer<ToCGenerator>(tg));
                 // connect to FinishedLayout
                 QObject::connect(m_parent, SIGNAL(finishedLayout()),
-                        tg, SLOT(documentLayoutFinished()));
+                                 tg, SLOT(documentLayoutFinished()));
             }
         }
     }
@@ -2177,3 +2271,140 @@ void Layout::setTabSpacing(qreal spacing)
     m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }
 
+void Layout::registerRunAroundShape(KoShape *s)
+{
+    QTransform matrix = s->absoluteTransformation(0);
+    matrix = matrix * shape->absoluteTransformation(0).inverted();
+    matrix.translate(0, documentOffsetInShape());
+    Outline *outline = new Outline(s, matrix);
+    m_outlines.insert(s,outline);
+}
+
+void Layout::updateRunAroundShape(KoShape *s)
+{
+    if (m_outlines.contains(s)) {
+        Outline *outline = m_outlines.value(s);
+        QTransform matrix = s->absoluteTransformation(0);
+        matrix = matrix * shape->absoluteTransformation(0).inverted();
+        matrix.translate(0, documentOffsetInShape());
+        outline->changeMatrix(matrix);
+        m_textLine.updateOutline(outline);
+        return;
+    }
+
+    // if no outline was found then create one
+    registerRunAroundShape(s);
+}
+
+void Layout::unregisterAllRunAroundShapes()
+{
+    qDeleteAll(m_outlines);
+    m_outlines.clear();
+}
+
+void Layout::insertInlineObject(KoTextAnchor * textAnchor)
+{
+    if (textAnchor != 0) {
+        if (textAnchor->behavesAsCharacter()) {
+            textAnchor->setAnchorStrategy(new InlineAnchorStrategy(textAnchor));
+        } else {
+            textAnchor->setAnchorStrategy(new FloatingAnchorStrategy(textAnchor));
+        }
+        m_textAnchors.append(textAnchor);
+    }
+}
+
+void Layout::resetInlineObject(int resetPosition)
+{
+    QList<KoTextAnchor *>::iterator iterBeginErase = m_textAnchors.end();
+    QList<KoTextAnchor *>::iterator iter;
+    for (iter = m_textAnchors.begin(); iter != m_textAnchors.end(); iter++) {
+
+        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
+        if ((*iter)->positionInDocument() >= resetPosition) {
+            (*iter)->anchorStrategy()->reset();
+
+            // delete outline
+            if (m_outlines.contains((*iter)->shape())) {
+                Outline *outline = m_outlines.value((*iter)->shape());
+                m_outlines.remove((*iter)->shape());
+                m_textLine.updateOutline(outline);
+                refreshCurrentPageOutlines();
+                delete outline;
+            }
+            (*iter)->setAnchorStrategy(0);
+
+            if (iterBeginErase == m_textAnchors.end()) {
+                iterBeginErase = iter;
+            }
+        }
+    }
+
+    m_textAnchors.erase(iterBeginErase,m_textAnchors.end());
+
+    // update m_textAnchorIndex if necesary
+    if (m_textAnchorIndex > m_textAnchors.size()) {
+        m_textAnchorIndex = m_textAnchors.size();
+    }
+}
+
+void Layout::removeInlineObject(KoTextAnchor * textAnchor)
+{
+    Q_UNUSED(textAnchor);
+}
+
+bool Layout::positionInlineObjects()
+{
+    while (m_textAnchorIndex < m_textAnchors.size()) {
+        KoTextAnchor *textAnchor = m_textAnchors[m_textAnchorIndex];
+        if (textAnchor->anchorStrategy()->positionShape(this) == false) {
+            break;
+        }
+        // move the index to next not positioned shape
+        m_textAnchorIndex++;
+
+        // create outline if the shape is positioned inside text
+        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough &&
+            !textAnchor->behavesAsCharacter()) {
+            updateRunAroundShape(textAnchor->shape());
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Layout::moveLayoutPosition(KoTextAnchor *textAnchor)
+{
+    int oldPosition = y();
+    QPointF relayoutPos = textAnchor->anchorStrategy()->relayoutPosition();
+    qreal recalcFrom = relayoutPos.y() + m_data->documentOffset();
+    // move position layout over the textAnchor linked shape
+    do {
+        if (recalcFrom >= y()) {
+            break;
+        }
+    } while (previousParag());
+
+    if (oldPosition != y()) {
+        return true;
+    }
+    return false;
+}
+
+void Layout::refreshCurrentPageOutlines()
+{
+    m_currentLineOutlines.clear();
+
+    TextShape *textShape = dynamic_cast<TextShape*>(shape);
+    if (textShape == 0) {
+        return;
+    }
+
+    // add current page children outlines to m_currentLineOutlines
+    foreach(KoShape *childShape, textShape->shapes()) {
+        if (m_outlines.contains(childShape)) {
+            m_currentLineOutlines.append(m_outlines.value(childShape));
+        }
+    }
+}

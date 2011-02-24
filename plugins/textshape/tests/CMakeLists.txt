@@ -14,12 +14,16 @@ set(TestDocumentLayout_test_SRCS
     TestDocumentLayout.cpp
     TestLists.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 
 kde4_add_unit_test(TestDocumentLayout TESTNAME shapes-text-TestDocumentLayout ${TestDocumentLayout_test_SRCS})
@@ -48,10 +52,11 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/FontDia.cpp
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -67,6 +72,7 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/ParagraphBulletsNumbers.cpp
     ../dialogs/ListsSpinBox.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/NewStyleWidget.cpp
@@ -82,10 +88,15 @@ set(TestChangeListCommand_test_SRCS
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 
 
@@ -104,12 +115,23 @@ target_link_libraries(TestChangesDatabase ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRA
 
 ########### next target ###############
 
-set(TestStylesModel_test_SRCS
-    TestStylesModel.cpp
-    ../dialogs/StylesModel.cpp
-)
-kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
-target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
+#set(TestStylesModel_test_SRCS
+#    TestStylesModel.cpp
+#    ../dialogs/StylesModel.cpp
+#    ../TextShape.cpp
+#    ../Layout.cpp
+#    ../TextLine.cpp
+#    ../Outline.cpp
+#    ../TableLayout.cpp
+#    ../TableLayoutData.cpp
+#    ../ListItemsHelper.cpp
+#    ../ToCGenerator.cpp
+#    ../ShrinkToFitShapeContainer.cpp
+#    ../FloatingAnchorStrategy.cpp
+#    ../InlineAnchorStrategy.cpp
+#)
+#kde4_add_unit_test(TestStylesModel TESTNAME shapes-text-TestStylesModel ${TestStylesModel_test_SRCS})
+#target_link_libraries(TestStylesModel kotext ${EXTRA_LIBS} komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
@@ -118,10 +140,14 @@ set(TestTableLayout_test_SRCS
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TextShape.cpp
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTableLayout TESTNAME shapes-text-TestTableLayout ${TestTableLayout_test_SRCS})
 target_link_libraries(TestTableLayout kotext komain ${QT_QTTEST_LIBRARY})
@@ -137,6 +163,10 @@ set(TestSections_test_SRCS
     ../ListItemsHelper.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestSections TESTNAME shapes-text-TestSections ${TestSections_test_SRCS})
 target_link_libraries(TestSections kotext ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -181,9 +211,11 @@ set(TestTextTool_test_SRCS
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/StyleManagerWelcome.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -193,6 +225,8 @@ set(TestTextTool_test_SRCS
     ../dialogs/ChangeTrackingOptionsWidget.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../ListItemsHelper.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
@@ -201,6 +235,9 @@ set(TestTextTool_test_SRCS
     ../TextTool.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestTextTool TESTNAME shapes-text-TestTextTool ${TestTextTool_test_SRCS})
 target_link_libraries(TestTextTool komain ${EXTRA_LIBS} ${QT_QTTEST_LIBRARY})
@@ -228,9 +265,10 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/InsertCharacter.cpp
     ../dialogs/StyleManagerDialog.cpp
     ../dialogs/ParagraphSettingsDialog.cpp
+    ../dialogs/SimpleStylesWidget.cpp
     ../dialogs/SimpleCharacterWidget.cpp
     ../dialogs/SimpleParagraphWidget.cpp
-    ../dialogs/ListStyleButton.cpp
+    ../dialogs/FormattingButton.cpp
     ../dialogs/SimpleTableWidget.cpp
     ../dialogs/QuickTableButton.cpp
     ../dialogs/StylesWidget.cpp
@@ -246,6 +284,7 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/ParagraphBulletsNumbers.cpp
     ../dialogs/ListsSpinBox.cpp
     ../dialogs/StylesModel.cpp
+    ../dialogs/StylesDelegate.cpp
     ../dialogs/ParagraphGeneral.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/NewStyleWidget.cpp
@@ -261,10 +300,15 @@ set(TestChangeTrackedDelete_test_SRCS
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../Layout.cpp
+    ../TextLine.cpp
+    ../Outline.cpp
     ../TableLayout.cpp
     ../TableLayoutData.cpp
     ../ToCGenerator.cpp
     ../ShrinkToFitShapeContainer.cpp
+    ../FontSizeAction.cpp
+    ../FloatingAnchorStrategy.cpp
+    ../InlineAnchorStrategy.cpp
 )
 kde4_add_unit_test(TestChangeTrackedDelete TESTNAME shapes-text-TestChangeTrackedDelete ${TestChangeTrackedDelete_test_SRCS})
 target_link_libraries(TestChangeTrackedDelete ${EXTRA_LIBS} komain kotext ${QT_QTTEST_LIBRARY})

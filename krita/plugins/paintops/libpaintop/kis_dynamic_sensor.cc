@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
- *
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -22,14 +23,22 @@
 #include "sensors/kis_dynamic_sensor_distance.h"
 #include "sensors/kis_dynamic_sensor_time.h"
 #include "sensors/kis_dynamic_sensor_fade.h"
+#include "sensors/kis_dynamic_sensor_list.h"
 
 KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
 {
+    setMinimumLabel(i18n("0.0"));
+    setMaximumLabel(i18n("1.0"));
 }
 
 KisDynamicSensor::~KisDynamicSensor() { }
 
-QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, KisSensorSelector*)
+KisDynamicSensor* KisDynamicSensor::clone() const
+{
+    return createFromXML(toXML());
+}
+
+QWidget* KisDynamicSensor::createConfigurationWidget(QWidget* parent, QWidget*)
 {
     Q_UNUSED(parent);
     return 0;
@@ -47,6 +56,10 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorXTilt();
     } else if (id.id() == YTiltId.id()) {
         return new KisDynamicSensorYTilt();
+    } else if (id.id() == AscensionId.id()) {
+        return new KisDynamicSensorAscension();
+    } else if (id.id() == DeclinationId.id()) {
+        return new KisDynamicSensorDeclination();
     } else if (id.id() == SpeedId.id()) {
         return new KisDynamicSensorSpeed();
     } else if (id.id() == DrawingAngleId.id()) {
@@ -61,6 +74,10 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorFuzzy();
     } else if (id.id() == FadeId.id()) {
         return new KisDynamicSensorFade();
+    } else if (id.id() == PerspectiveId.id()) {
+        return new KisDynamicSensorPerspective();
+    } else if (id.id() == SensorsListId.id()) {
+        return new KisDynamicSensorList();
     }
 
     dbgPlugins << "Unknown transform parameter :" << id.id();
@@ -89,19 +106,84 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId;
+    ids << PressureId << XTiltId << YTiltId << AscensionId << DeclinationId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId << PerspectiveId;
     return ids;
 }
 
 
-void KisDynamicSensor::toXML(QDomDocument&, QDomElement& e) const
+void KisDynamicSensor::toXML(QDomDocument& doc, QDomElement& e) const
 {
     e.setAttribute("id", id());
+    if(m_customCurve)
+    {
+        QDomElement curve_elt = doc.createElement("curve");
+        QDomText text = doc.createTextNode(m_curve.toString());
+        curve_elt.appendChild(text);
+        e.appendChild(curve_elt);
+    }
 }
 
 void KisDynamicSensor::fromXML(const QDomElement& e)
 {
     Q_UNUSED(e);
     Q_ASSERT(e.attribute("id", "") == id());
+    m_customCurve = false;
+    QDomElement curve_elt = e.firstChildElement("curve");
+    if(!curve_elt.isNull())
+    {
+        m_customCurve = true;
+        m_curve.fromString(curve_elt.text());
+    }
+}
 
+const KisCurveLabel& KisDynamicSensor::minimumLabel() const
+{
+    return m_minimumLabel;
+}
+
+const KisCurveLabel& KisDynamicSensor::maximumLabel() const
+{
+    return m_maximumLabel;
+}
+
+void KisDynamicSensor::setMinimumLabel(const KisCurveLabel& _label)
+{
+    m_minimumLabel = _label;
+}
+
+void KisDynamicSensor::setMaximumLabel(const KisCurveLabel& _label)
+{
+    m_maximumLabel = _label;
+}
+
+qreal KisDynamicSensor::parameter(const KisPaintInformation& info)
+{
+    qreal val = value(info);
+    if (m_customCurve) {
+        int offset = qRound(256.0 * val);
+        return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
+    } else {
+        return val;
+    }
+}
+
+void KisDynamicSensor::setCurve(const KisCubicCurve& curve)
+{
+    m_customCurve = true;
+    m_curve = curve;
+}
+
+const KisCubicCurve& KisDynamicSensor::curve() const
+{
+    return m_curve;
+}
+
+void KisDynamicSensor::removeCurve()
+{
+    m_customCurve = false;
+}
+
+bool KisDynamicSensor::hasCustomCurve() const
+{
+    return m_customCurve;
 }

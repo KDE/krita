@@ -92,7 +92,7 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     qreal rotation = m_rotationOption.apply(info);
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    qreal scale = m_sizeOption.apply(info);
 
     setCurrentRotation(rotation);
     setCurrentScale(scale);
@@ -107,8 +107,8 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
+    renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     return m_spacing;
 }
-

@@ -224,6 +224,7 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
         if (d->listStyle) {
             if (!d->list)
                 d->list = new KoList(block.document(), d->listStyle);
+            qDebug()<<"paragraph has"<<d->listStyle<<d->list;
             d->list->add(block, listLevel());
         } else {
             if (block.textList())
@@ -815,7 +816,11 @@ void KoParagraphStyle::setName(const QString &name)
 
 int KoParagraphStyle::styleId() const
 {
-    return propertyInt(StyleId);
+    // duplicate some code to avoid getting the parents style id
+    QVariant variant = d->stylesPrivate.value(StyleId);
+    if (variant.isNull())
+        return 0;
+    return variant.toInt();
 }
 
 void KoParagraphStyle::setStyleId(int id)
@@ -1162,7 +1167,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         QList<KoText::Tab> tabList;
         KoXmlElement tabStop;
         forEachElement(tabStop, tabStops) {
-            Q_ASSERT(tabStop.localName() == "tab-stop");
+            if(tabStop.localName() != "tab-stop")
+                continue;
+
             // Tab position
             KoText::Tab tab;
             tab.position = KoUnit::parseValue(tabStop.attributeNS(KoXmlNS::style, "position", QString()));

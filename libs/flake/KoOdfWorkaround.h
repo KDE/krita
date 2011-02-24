@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,6 +78,15 @@ namespace KoOdfWorkaround
     FLAKE_EXPORT void setFixPresentationPlaceholder(bool fix, KoShapeLoadingContext &context);
     FLAKE_EXPORT bool fixPresentationPlaceholder();
     FLAKE_EXPORT void fixPresentationPlaceholder(KoShape *shape);
+
+    /**
+     * OpenOffice and LibreOffice save gluepoint positions wrong when no align is specified.
+     * According to the specification for the above situation, the position should be saved
+     * as percent values relative to the shapes center point. OpenOffice seems to write
+     * these percent values converted to length units, where the millimeter value corresponds
+     * to the correct percent value (i.e. -5cm = -50mm = -50%).
+     */
+    FLAKE_EXPORT void fixGluePointPosition(QString &positionString, KoShapeLoadingContext &context);
 }
 
 #endif /* KOODFWORKAROUND_H */

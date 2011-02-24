@@ -253,11 +253,19 @@ enumBrushType KisBrush::brushType() const
     return d->brushType;
 }
 
+void KisBrush::toXML(QDomDocument& document , QDomElement& element) const
+{
+    element.setAttribute("BrushVersion", "2");
+}
+
 KisBrushSP KisBrush::fromXML(const QDomElement& element)
 {
-
-    return KisBrushRegistry::instance()->getOrCreateBrush(element);
-
+    KisBrushSP brush = KisBrushRegistry::instance()->getOrCreateBrush(element);
+    if(brush && element.attribute("BrushVersion", "1") == "1")
+    {
+        brush->setScale(brush->scale() * 2.0);
+    }
+    return brush;
 }
 
 qint32 KisBrush::maskWidth(double scale, double angle) const

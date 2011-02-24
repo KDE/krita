@@ -169,13 +169,14 @@ public:
         delete perspectiveGridManager;
         delete paintingAssistantManager;
         delete viewConverter;
+        delete statusBar;
     }
 
 public:
 
     KisCanvas2 *canvas;
     KisDoc2 *doc;
-    KoZoomHandler * viewConverter;
+    KisCoordinatesConverter * viewConverter;
     KoCanvasController * canvasController;
     KisCanvasResourceProvider * resourceProvider;
     KisFilterManager * filterManager;
@@ -229,9 +230,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     }
 
     m_d->doc = doc;
-    m_d->viewConverter = new KoZoomHandler();
+    m_d->viewConverter = new KisCoordinatesConverter();
 
-    KoCanvasControllerWidget *canvasController = new KisCanvasController(this);
+    KoCanvasControllerWidget *canvasController = new KisCanvasController(this, actionCollection());
     canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     canvasController->setDrawShadow(false);
@@ -283,13 +284,20 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
 
+    //Workaround, by default has the same shortcut as mirrorCanvas
+    KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
     if (shell())
     {
-        KoToolBoxFactory toolBoxFactory(m_d->canvasController, i18n("Tools"));
+        KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -860,7 +868,7 @@ void KisView2::slotFirstRun()
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
         doc->addShell(shell);
-        doc->showStartUpWidget(shell);
+        doc->showStartUpWidget(shell, true);
         doc->openUrl(fname);
     }
 

@@ -50,16 +50,27 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.superscript->setDefaultAction(tool->action("format_super"));
     widget.subscript->setDefaultAction(tool->action("format_sub"));
 
+    connect(widget.bold, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.italic, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.strikeOut, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.underline, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.textColor, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.backgroundColor, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.superscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.subscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+
     QComboBox *family = qobject_cast<QComboBox*> (tool->action("format_fontfamily")->requestWidget(this));
     if (family) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(family);
+        widget.fontsFrame->addWidget(family,0,0);
         connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
     QComboBox *size = qobject_cast<QComboBox*> (tool->action("format_fontsize")->requestWidget(this));
     if (size) { // kdelibs 4.1 didn't return anything here.
-        widget.fontsFrame->addWidget(size);
+        widget.fontsFrame->addWidget(size,0,1);
         connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
     }
+
+    widget.fontsFrame->setColumnStretch(0,1);
 }
 
 void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)

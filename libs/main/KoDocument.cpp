@@ -64,6 +64,8 @@
 #include <kdebug.h>
 #include <kdeprintdialog.h>
 #include <knotification.h>
+#include <kstandarddirs.h>
+#include <kdesktopfile.h>
 
 #include <QtCore/QBuffer>
 #include <QtCore/QDir>
@@ -216,7 +218,7 @@ class KoViewWrapperWidget : public QWidget
 public:
     KoViewWrapperWidget(QWidget *parent)
             : QWidget(parent) {
-        KGlobal::locale()->insertCatalog("koffice");
+        KGlobal::locale()->insertCatalog("calligra");
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
         m_view = 0;
@@ -854,6 +856,7 @@ bool KoDocument::saveNativeFormat(const QString & file)
     // OLD: bool oasis = d->specialOutputFlag == SaveAsOASIS;
     // OLD: QCString mimeType = oasis ? nativeOasisMimeType() : nativeFormatMimeType();
     QByteArray mimeType = d->outputMimeType;
+    kDebug(30003) << "KoDocument::savingTo mimeType=" << mimeType;
     QByteArray nativeOasisMime = nativeOasisMimeType();
     bool oasis = !mimeType.isEmpty() && (mimeType == nativeOasisMime || mimeType == nativeOasisMime + "-template" || mimeType.startsWith("application/vnd.oasis.opendocument"));
 
@@ -886,6 +889,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -893,24 +897,28 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     // Save embedded objects
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
 
     if (store->open("meta.xml")) {
         if (!d->docInfo->saveOasis(store) || !store->close()) {
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }
         manifestWriter->addManifestEntry("meta.xml", "text/xml");
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("meta.xml"));
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
 
     if (d->docRdf && !d->docRdf->saveOasis(store, manifestWriter)) {
         d->lastErrorMessage = i18n("Not able to write RDF metadata. Partition full?");
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -918,12 +926,14 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     if (store->open("Thumbnails/thumbnail.png")) {
         if (!saveOasisPreview(store, manifestWriter) || !store->close()) {
             d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }
         // No manifest entry!
     } else {
         d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("Thumbnails/thumbnail.png"));
+        odfStore.closeManifestWriter(false);
         delete store;
         return false;
     }
@@ -954,6 +964,7 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
             }
         } else {
             d->lastErrorMessage = i18n("Not able to write '%1'. Partition full?", QString("VersionList.xml"));
+            odfStore.closeManifestWriter(false);
             delete store;
             return false;
         }
@@ -1324,9 +1335,10 @@ bool KoDocument::openFile()
     // contain subtasks for filtering and loading
     DocumentProgressProxy proxyProgress(this);
     d->progressUpdater = new KoProgressUpdater(&proxyProgress,
-                                               KoProgressUpdater::Threaded,
+                                               KoProgressUpdater::Unthreaded,
                                                d->profileStream);
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
+    d->progressUpdater->start();
 
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
@@ -1366,6 +1378,9 @@ bool KoDocument::openFile()
 
             case KoFilter::PasswordProtected:
                 msg = i18n("Document is password protected"); break;
+
+            case KoFilter::InvalidFormat:
+                msg = i18n("Invalid file format"); break;
 
             case KoFilter::InternalError:
             case KoFilter::UnexpectedEOF:
@@ -1623,7 +1638,7 @@ bool KoDocument::loadNativeFormatFromStore(const QString& file)
     KoStore *store = KoStore::createStore(file, KoStore::Read, "", backend);
 
     if (store->bad()) {
-        d->lastErrorMessage = i18n("Not a valid KOffice file: %1", file);
+        d->lastErrorMessage = i18n("Not a valid Calligra file: %1", file);
         delete store;
         QApplication::restoreOverrideCursor();
         return false;
@@ -2392,11 +2407,29 @@ void KoDocument::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     if (!alwaysShow) {
         KConfigGroup cfgGrp(componentData().config(), "TemplateChooserDialog");
         QString fullTemplateName = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
-
         if (!fullTemplateName.isEmpty()) {
-            openTemplate(fullTemplateName);
-            shells().first()->setRootDocument(this);
-            return;
+            KUrl url(fullTemplateName);
+            QFileInfo fi(url.toLocalFile());
+            if (!fi.exists()) {
+                QString appName = KGlobal::mainComponent().componentName();
+                QString desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/*/" + fullTemplateName);
+                if (desktopfile.isEmpty()) {
+                    desktopfile = KGlobal::dirs()->findResource("data", appName + "/templates/" + fullTemplateName);
+                }
+                if (desktopfile.isEmpty()) {
+                    fullTemplateName.clear();
+                } else {
+                    KUrl templateURL;
+                    KDesktopFile f(desktopfile);
+                    templateURL.setPath(KUrl(desktopfile).directory() + '/' + f.readUrl());
+                    fullTemplateName = templateURL.toLocalFile();
+                }
+            }
+            if (!fullTemplateName.isEmpty()) {
+                openTemplate(fullTemplateName);
+                shells().first()->setRootDocument(this);
+                return;
+            }
         }
     }
 
@@ -2480,15 +2513,17 @@ QString KoDocument::templateType() const
     return d->templateType;
 }
 
-void KoDocument::deleteOpenPane()
+void KoDocument::deleteOpenPane(bool closing)
 {
     if (d->startUpWidget) {
         d->startUpWidget->hide();
         d->startUpWidget->deleteLater();
 
-        shells().first()->factory()->container("mainToolBar",
-                                               shells().first())->show();
-        shells().first()->setRootDocument(this);
+        if(!closing) {
+            shells().first()->setRootDocument(this);
+
+            shells().first()->factory()->container("mainToolBar", shells().first())->show();
+        }
     } else {
         emit closeEmbedInitDialog();
     }
@@ -2589,9 +2624,9 @@ void KoDocument::setEmpty()
     d->bEmpty = true;
 }
 
-QGraphicsItem *KoDocument::canvasItem()
+QGraphicsItem *KoDocument::canvasItem(bool create)
 {
-    if (!d->canvasItem) {
+    if (create && !d->canvasItem) {
         d->canvasItem = createCanvasItem();
     }
     return d->canvasItem;

@@ -32,9 +32,6 @@
 
 #include "krita_export.h"
 
-class KisConstProcessingInformation;
-class KisProcessingInformation;
-
 /**
  * Basic interface of a Krita filter.
  */
@@ -66,54 +63,35 @@ public:
     /**
      * Override this function with the implementation of your filter.
      *
-     * XXX: May the filter may assume that src and dst have the same
-     * colorspace? (bsar)
-     *
-     * @param src the source paint device
-     * @param dst the destination paint device
-     * @param size the size of the area that is filtered
+     * @param device the paint device to filter
+     * @param applyRect the rectangle where the filter is applied
      * @param config the parameters of the filter
      * @param progressUpdater to pass on the progress the filter is making
      */
-    virtual void process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
+    virtual void process(KisPaintDeviceSP device,
+                         const QRect& applyRect,
                          const KisFilterConfiguration* config,
-                         KoUpdater* progressUpdater
-                        ) const = 0;
-
+                         KoUpdater* progressUpdater = 0 ) const = 0;
+    
     /**
-     * Provided for convenience when no progress reporting is needed.
+     * Take the src paint device copy it to a temporary device, filter it,
+     * copy and apply the selection on the destination.
+     * 
+     * @param src the source paint device
+     * @param dst the destination paint device
+     * @param sel the selection
+     * @param applyRect the rectangle where the filter is applied
+     * @param config the parameters of the filter
+     * @param progressUpdater to pass on the progress the filter is making
      */
-    virtual void process(KisConstProcessingInformation src,
-                         KisProcessingInformation dst,
-                         const QSize& size,
-                         const KisFilterConfiguration* config
-                        ) const;
-
-
-    /**
-     * Provided for convenience only when source and destination are the same
-     */
-    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater) const;
-
-    /**
-     * Provided for convenience only when source and destination are the same and no progress reporting
-     * is necessary.
-     */
-    void process(KisPaintDeviceSP device, const QRect& rect, const KisFilterConfiguration* config) const;
-
-
+    void process(const KisPaintDeviceSP src,
+                 KisPaintDeviceSP dst,
+                 KisSelectionSP sel,
+                 const QRect& applyRect,
+                 const KisFilterConfiguration* config,
+                 KoUpdater* progressUpdater = 0 ) const;
+    
     bool workWith(const KoColorSpace* cs) const;
-    /**
-     * Used when threading is used -- the overlap margin is passed to the
-     * filter to use to compute pixels, but the margin is not pasted into the
-     * resulting image. Use this for convolution filters, for instance.
-     *
-     * This function is deprecated, use \ref neededRect instead
-     */
-    KDE_DEPRECATED virtual int overlapMarginNeeded(const KisFilterConfiguration* = 0) const;
 
     /**
      * Some filters need pixels outside the current processing rect to compute the new

@@ -344,6 +344,14 @@ public:
     }
 
     /**
+     * Same like \a addChildElement above but with QByteArray to explicit convert from QByteArray
+     * to QString using utf8 to prevent a dirty pitfall.
+     */
+    void addChildElement(const QString &elementName, const QByteArray& elementContents) {
+        m_properties[ChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
+    }
+
+    /**
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */

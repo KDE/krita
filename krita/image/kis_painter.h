@@ -161,7 +161,40 @@ public:
      *
      */
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
-    
+
+        /**
+     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
+     * srcDev onto the current paint device. @param srcX and @param srcY set the x and y
+     * positions of the origin top-left corner, @param dstX and @param dstY those of
+     * the destination.
+     * Any pixel read outside the limits of @param srcDev will return the
+     * default pixel, this is a property of \ref KisPaintDevice.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param op a pointer to the composite op used to blast the pixels from @param srcDev to the current paint device
+     * @param srcDev the source device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bitBltOldData(qint32 dstX, qint32 dstY,
+                const KisPaintDeviceSP srcDev,
+                qint32 srcX, qint32 srcY,
+                qint32 srcWidth, qint32 srcHeight);
+
+    /**
+     * Convenience method that uses QPoint and QRect.
+     *
+     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param srcDev the source device.
+     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
+     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     *
+     */
+    void bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
+
     /**
      * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
      * of @param srcDev on the current paint device. There is parameters
@@ -482,7 +515,9 @@ public:
      * will be deleted as soon as the KisPainter instance dies).
      */
     KisPaintOp* paintOp() const;
-
+    
+    void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
+    
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);
 
@@ -591,7 +626,7 @@ public:
     KisSelectionSP selection();
 
     void setGradient(const KoAbstractGradient* gradient);
-    const KoAbstractGradient* gradient();
+    const KoAbstractGradient* gradient() const;
 
     /**
     * Set the size of the tile in fillPainterPath, useful when optimizing the use of fillPainterPath

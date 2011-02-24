@@ -121,6 +121,11 @@ bool KisPaintOpPreset::load()
         dbgImage << "Fail to decode PNG";
         return false;
     }
+
+    //Workaround for broken presets
+    //Presets was saved with nested cdata section
+    preset.replace("<curve><![CDATA[", "<curve>");
+    preset.replace("]]></curve>", "</curve>");
     
     QDomDocument doc;
     if (!doc.setContent(preset)) {

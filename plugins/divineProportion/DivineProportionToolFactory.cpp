@@ -42,4 +42,3 @@ KoToolBase * DivineProportionToolFactory::createTool(KoCanvasBase *canvas)
     return new DivineProportionTool(canvas);
 }
 
-#include <DivineProportionToolFactory.moc>

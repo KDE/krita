@@ -119,32 +119,38 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
     if (h < 1) return;
 
     KisPaintDeviceSP patternLayer = pattern->paintDevice(device()->colorSpace());
+    fillRect(x1, y1, w, h, patternLayer, QRect(0, 0, pattern->width(), pattern->height()));
+}
 
+void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect)
+{
+    Q_ASSERT(deviceRect.x() == 0); // the case x,y != 0,0 is not yet implemented
+    Q_ASSERT(deviceRect.y() == 0);
     int sx, sy, sw, sh;
 
     int y = y1;
 
     if (y >= 0) {
-        sy = y % pattern->height();
+        sy = y % deviceRect.height();
     } else {
-        sy = pattern->height() - (((-y - 1) % pattern->height()) + 1);
+        sy = deviceRect.height() - (((-y - 1) % deviceRect.height()) + 1);
     }
 
     while (y < y1 + h) {
-        sh = qMin((y1 + h) - y, pattern->height() - sy);
+        sh = qMin((y1 + h) - y, deviceRect.height() - sy);
 
         int x = x1;
 
         if (x >= 0) {
-            sx = x % pattern->width();
+            sx = x % deviceRect.width();
         } else {
-            sx = pattern->width() - (((-x - 1) % pattern->width()) + 1);
+            sx = deviceRect.width() - (((-x - 1) % deviceRect.width()) + 1);
         }
 
         while (x < x1 + w) {
-            sw = qMin((x1 + w) - x, pattern->width() - sx);
+            sw = qMin((x1 + w) - x, deviceRect.width() - sx);
 
-            bitBlt(x, y, patternLayer, sx, sy, sw, sh);
+            bitBlt(x, y, device, sx, sy, sw, sh);
             x += sw; sx = 0;
         }
 

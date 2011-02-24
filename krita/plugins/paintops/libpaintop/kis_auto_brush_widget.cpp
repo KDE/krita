@@ -49,7 +49,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(QWidget *parent, const char* name)
 
     connect((QObject*)comboBoxShape, SIGNAL(activated(int)), this, SLOT(paramChanged()));
 
-    inputRadius->setRange(0.0, 1000.0, 2);
+    inputRadius->setRange(0.0, 10.0, 2);
+    inputRadius->addMultiplier(10.0);
+    inputRadius->addMultiplier(100.0);
     inputRadius->setExponentRatio(3.0);
     inputRadius->setValue(5.0);
     connect(inputRadius, SIGNAL(valueChanged(qreal)), this, SLOT(paramChanged()));
@@ -229,6 +231,11 @@ void KisAutoBrushWidget::setBrush(KisBrushSP brush)
     inputRandomness->setValue(aBrush->randomness() * 100);
     density->setValue(aBrush->density() * 100);
     
+    if(!aBrush->maskGenerator()->curveString().isEmpty()) {
+        KisCubicCurve curve;
+        curve.fromString(aBrush->maskGenerator()->curveString());
+        softnessCurve->setCurve(curve);  
+    }
 }
 
 

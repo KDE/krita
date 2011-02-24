@@ -31,28 +31,32 @@
 RulerAssistant::RulerAssistant()
         : KisPaintingAssistant("ruler", i18n("Ruler assistant"))
 {
-    QList<KisPaintingAssistantHandleSP> handles;
-    handles.push_back(new KisPaintingAssistantHandle(10, 10));
-    handles.push_back(new KisPaintingAssistantHandle(100, 100));
-    initHandles(handles);
 }
 
 QPointF RulerAssistant::project(const QPointF& pt) const
 {
     Q_ASSERT(handles().size() == 2);
-    double x1 = handles()[0]->x();
-    double y1 = handles()[0]->y();
-    double x2 = handles()[1]->x();
-    double y2 = handles()[1]->y();
-    double a1 = (y2 - y1) / (x2 - x1);
-    double b1 = y1 - x1 * a1;
-    double a2 = (x2 - x1) / (y1 - y2);
-    double b2 = pt.y() - a2 * pt.x();
-    double xm = (b2 - b1) / (a1 - a2);
-    return QPointF(xm, xm * a1 + b1);
+    QPointF pt1 = *handles()[0];
+    QPointF pt2 = *handles()[1];
+    
+    QPointF a = pt - pt1;
+    QPointF u = pt2 - pt1;
+    
+    qreal u_norm = sqrt(u.x() * u.x() + u.y() * u.y());
+    
+    if(u_norm == 0) return pt;
+    
+    u /= u_norm;
+    
+    double t = a.x() * u.x() + a.y() * u.y();
+    
+    if(t < 0.0) return pt1;
+    if(t > u_norm) return pt2;
+    
+    return t * u + pt1;
 }
 
-QPointF RulerAssistant::adjustPosition(const QPointF& pt) const
+QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)
 {
     return project(pt);
 }
@@ -71,36 +75,26 @@ inline double norm2(const QPointF& p)
 void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter)
 {
     Q_UNUSED(updateRect);
-    Q_ASSERT(handles().size() == 2);
+    if (handles().size() < 2) return;
 
     QTransform initialTransform = converter->documentToWidgetTransform();
 
     // Draw the gradient
     QPointF p1 = *handles()[0];
     QPointF p2 = *handles()[1];
-    gc.save();
-    {
-        QTransform gradientTransform = initialTransform;
-
-        gradientTransform.translate(p1.x(), p1.y());
-        gradientTransform.rotate(angle(p1, p2) / M_PI * 180);
-        gc.setTransform(gradientTransform);
-
-        QLinearGradient gradient(0, -30, 0, 30);
-        gradient.setColorAt(0, QColor(0, 0, 0, 0));
-        gradient.setColorAt(0.5, QColor(0, 0, 0, 100));
-        gradient.setColorAt(1, QColor(0, 0, 0, 0));
-        gc.setBrush(gradient);
-        gc.setPen(QPen(Qt::NoPen));
-        gc.drawRect(QRectF(0, -50, norm2(p2 - p1), 100));
-    }
-    gc.restore();
 
     gc.save();
     gc.setTransform(initialTransform);
-    gc.setPen(QColor(0, 0, 0, 125));
-    gc.drawLine(p1,p2);
+    QPainterPath path;
+    path.moveTo(p1);
+    path.lineTo(p2);
+    drawPath(gc, path);
     gc.restore();
+}
+
+QPointF RulerAssistant::buttonPosition() const
+{
+    return (*handles()[0] + *handles()[1]) * 0.5;
 }
 
 RulerAssistantFactory::RulerAssistantFactory()

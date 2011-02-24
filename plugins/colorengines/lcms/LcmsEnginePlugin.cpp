@@ -51,7 +51,7 @@
 #include "colorspaces/rgb_u16/RgbU16ColorSpace.h"
 
 K_PLUGIN_FACTORY(LcmsEnginePluginFactory, registerPlugin<LcmsEnginePlugin>();)
-K_EXPORT_PLUGIN(LcmsEnginePluginFactory("koffice"))
+K_EXPORT_PLUGIN(LcmsEnginePluginFactory("calligra"))
 
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
         : QObject(parent)

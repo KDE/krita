@@ -13,6 +13,10 @@ set(kritalibbrush_LIB_SRCS
     kis_abr_brush_collection.cpp
     kis_imagepipe_brush.cpp
     kis_imagepipe_brush_p.cpp
+    kis_png_brush.cpp
+    kis_png_brush_factory.cpp
+    kis_svg_brush.cpp
+    kis_svg_brush_factory.cpp
     kis_qimage_mask.cpp
     kis_scaled_brush.cpp
     kis_text_brush.cpp

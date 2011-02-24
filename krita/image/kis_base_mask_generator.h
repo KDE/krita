@@ -93,6 +93,9 @@ public:
     qreal softness() const;
     virtual void setSoftness(qreal softness);
     
+    QString curveString() const;
+    void setCurveString(const QString& curveString);
+    
 protected:
     struct Private {
         qreal diameter, ratio;
@@ -103,6 +106,7 @@ protected:
         qreal cs, ss;
         bool empty;
         Type type;
+        QString curveString;
     };
 
     Private* const d;

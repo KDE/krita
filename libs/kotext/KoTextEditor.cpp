@@ -40,6 +40,10 @@
 #include "styles/KoTableColumnStyle.h"
 #include "styles/KoTableRowStyle.h"
 #include "KoTableColumnAndRowStyleManager.h"
+#include "commands/DeleteTableRowCommand.h"
+#include "commands/DeleteTableColumnCommand.h"
+#include "commands/InsertTableRowCommand.h"
+#include "commands/InsertTableColumnCommand.h"
 
 #include <KLocale>
 #include <KUndoStack>
@@ -637,7 +641,7 @@ void KoTextEditor::setFontFamily(const QString &font)
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
-void KoTextEditor::setFontSize(int size)
+void KoTextEditor::setFontSize(qreal size)
 {
     d->updateState(KoTextEditor::Private::Format, i18n("Set Font Size"));
     QTextCharFormat format;
@@ -998,11 +1002,9 @@ void KoTextEditor::insertTable(int rows, int columns)
 
 void KoTextEditor::insertTableRowAbove()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Above"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int row = cell.row();
@@ -1020,18 +1022,16 @@ void KoTextEditor::insertTableRowAbove()
                 table->cellAt(row, i).setFormat(cellFormat);
             }
         }
+        */
+        addCommand(new InsertTableRowCommand(this, table, false));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableRowBelow()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Row Below"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int row = cell.row() +1;
@@ -1062,18 +1062,16 @@ void KoTextEditor::insertTableRowBelow()
                 table->cellAt(row, i).setFormat(cellFormat);
             }
         }
+        */
+        addCommand(new InsertTableRowCommand(this, table, true));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableColumnLeft()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Left"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int column = cell.column();
@@ -1091,18 +1089,16 @@ void KoTextEditor::insertTableColumnLeft()
                 table->cellAt(i, column).setFormat(cellFormat);
             }
         }
+        */
+        addCommand(new InsertTableColumnCommand(this, table, false));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::insertTableColumnRight()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Column Right"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         QTextTableCell cell = table->cellAt(d->caret);
         int column = cell.column()+1;
@@ -1130,18 +1126,16 @@ void KoTextEditor::insertTableColumnRight()
                 table->cellAt(i, column).setFormat(cellFormat);
             }
         }
+        */
+        addCommand(new InsertTableColumnCommand(this, table, true));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::deleteTableColumn()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Column"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         int selectionRow;
         int selectionColumn;
@@ -1168,18 +1162,16 @@ void KoTextEditor::deleteTableColumn()
             table->removeColumns(selectionColumn, selectionColumnSpan);
             carsManager.removeColumns(selectionColumn, selectionColumnSpan);
         }
+        */
+        addCommand(new DeleteTableColumnCommand(this, table));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::deleteTableRow()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Delete Row"));
-
     QTextTable *table = d->caret.currentTable();
-
     if (table) {
+        /*
         KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
         int selectionRow;
         int selectionColumn;
@@ -1206,9 +1198,9 @@ void KoTextEditor::deleteTableRow()
             table->removeRows(selectionRow, selectionRowSpan);
             carsManager.removeRows(selectionRow, selectionRowSpan);
         }
+        */
+        addCommand(new DeleteTableRowCommand(this, table));
     }
-
-    d->updateState(KoTextEditor::Private::NoOp);
 }
 
 void KoTextEditor::mergeTableCells()
@@ -1232,7 +1224,7 @@ void KoTextEditor::splitTableCells()
 
     if (table) {
         QTextTableCell cell = table->cellAt(d->caret);
-        table->splitCell(cell.row(), cell.column(),  cell.rowSpan(), cell.columnSpan());
+        table->splitCell(cell.row(), cell.column(),  1, 1);
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
@@ -1298,7 +1290,9 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
-    return d->caret.movePosition (operation, mode, n);
+    bool b = d->caret.movePosition (operation, mode, n);
+    emit cursorPositionChanged();
+    return b;
 }
 
 void KoTextEditor::newLine()
@@ -1428,6 +1422,7 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
 {
     d->caret.setPosition (pos, m);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::setVisualNavigation(bool b)

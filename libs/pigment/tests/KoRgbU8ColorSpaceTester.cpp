@@ -150,7 +150,7 @@ void KoRgbColorSpaceTester::testCompositeOps()
     QList<KoID> depthIDs = KoColorSpaceRegistry::instance()->colorDepthList(RGBAColorModelID.id(),
                            KoColorSpaceRegistry::AllColorSpaces);
 
-    foreach(KoID depthId, depthIDs) {
+    foreach(const KoID& depthId, depthIDs) {
         kDebug() << depthId.id();
         const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(
                                      RGBAColorModelID.id(), depthId.id(), "");

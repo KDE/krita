@@ -21,7 +21,10 @@
 #ifndef KOCOMPOSITEOPSOFTLIGHT_H_
 #define KOCOMPOSITEOPSOFTLIGHT_H_
 
+#include <math.h>
+
 #include "KoCompositeOpAlphaBase.h"
+#include <math.h>
 
 /**
  * A template version of the soft light composite operation to use in colorspaces.

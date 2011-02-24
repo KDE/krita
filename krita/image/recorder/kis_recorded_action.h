@@ -27,6 +27,7 @@ class KisNodeQueryPath;
 class KisPlayInfo;
 class KisRecordedActionLoadContext;
 class KisRecordedActionSaveContext;
+class KoUpdater;
 
 #include <krita_export.h>
 #include <kis_types.h>
@@ -37,13 +38,13 @@ class KisRecordedActionSaveContext;
 class KRITAIMAGE_EXPORT KisRecordedAction
 {
 public:
-    KisRecordedAction(const QString& id, const QString& name, const KisNodeQueryPath& path);
+    KisRecordedAction(const QString& id, const QString& name);
     KisRecordedAction(const KisRecordedAction&);
     virtual ~KisRecordedAction();
     /**
      * Play the action.
      */
-    virtual void play(KisNodeSP node, const KisPlayInfo&) const = 0;
+    virtual void play(const KisPlayInfo& _info, KoUpdater* _updater = 0) const = 0;
     /**
      * Clone this action.
      */
@@ -53,7 +54,6 @@ public:
     const QString& id() const;
     const QString& name() const;
     void setName(const QString& name);
-    const KisNodeQueryPath& nodeQueryPath() const;
 private:
     struct Private;
     Private* const d;

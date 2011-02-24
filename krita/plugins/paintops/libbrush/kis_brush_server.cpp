@@ -33,13 +33,15 @@
 #include "kis_abr_brush_collection.h"
 #include "kis_gbr_brush.h"
 #include "kis_imagepipe_brush.h"
+#include "kis_png_brush.h"
+#include "kis_svg_brush.h"
 
 class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResourceServerObserver<KisBrush>
 {
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr") {
+    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg") {
         addObserver(this, true);
     }
 
@@ -120,6 +122,10 @@ private:
             brush = new KisGbrBrush(filename);
         } else if (fileExtension == "gih") {
             brush = new KisImagePipeBrush(filename);
+        } else if (fileExtension == "png") {
+            brush = new KisPngBrush(filename);
+        } else if (fileExtension == "svg") {
+            brush = new KisSvgBrush(filename);
         }
         return brush;
     }

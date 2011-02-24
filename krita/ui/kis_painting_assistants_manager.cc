@@ -58,18 +58,34 @@ void KisPaintingAssistantsManager::addAssistant(KisPaintingAssistant* assistant)
 
 void KisPaintingAssistantsManager::removeAssistant(KisPaintingAssistant* assistant)
 {
+    delete assistant;
     d->assistants.removeAll(assistant);
     d->updateAction();
 }
 
-QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
+void KisPaintingAssistantsManager::removeAll()
+{
+    foreach (KisPaintingAssistant* assistant, d->assistants) {
+        delete assistant;
+    }
+    d->assistants.clear();
+    d->updateAction();
+}
+
+QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (d->assistants.empty()) return point;
-    if (d->assistants.count() == 1) return d->assistants.first()->adjustPosition(point);
-    QPointF best;
+    if (d->assistants.count() == 1) {
+        QPointF newpoint = d->assistants.first()->adjustPosition(point, strokeBegin);
+        // check for NaN
+        if (newpoint.x() != newpoint.x()) return point;
+        return newpoint;
+    }
+    QPointF best = point;
     double distance = DBL_MAX;
-    foreach(const KisPaintingAssistant* assistant, d->assistants) {
-        QPointF pt = assistant->adjustPosition(point);
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        QPointF pt = assistant->adjustPosition(point, strokeBegin);
+        if (pt.x() != pt.x()) continue;
         double d = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
         if (d < distance) {
             best = pt;
@@ -77,6 +93,13 @@ QPointF KisPaintingAssistantsManager::adjustPosition(const QPointF& point) const
         }
     }
     return best;
+}
+
+void KisPaintingAssistantsManager::endStroke()
+{
+    foreach(KisPaintingAssistant* assistant, d->assistants) {
+        assistant->endStroke();
+    }
 }
 
 void KisPaintingAssistantsManager::setup(KActionCollection * collection)
@@ -110,4 +133,9 @@ QList<KisPaintingAssistantHandleSP> KisPaintingAssistantsManager::handles()
         }
     }
     return hs;
+}
+
+QList<KisPaintingAssistant*> KisPaintingAssistantsManager::assistants()
+{
+    return d->assistants;
 }

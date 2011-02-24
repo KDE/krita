@@ -2,6 +2,7 @@
 Name=Krita Gif Export Filter
 Name[ca]=Filtre d'exportació Gif per al Krita
 Name[ca@valencia]=Filtre d'exportació Gif per al Krita
+Name[cs]=Exportní filtr do formátu Gif pro Kritu
 Name[da]=Gif-eksportfilter til Krita
 Name[de]=Krita Gif-Exportfilter
 Name[en_GB]=Krita Gif Export Filter
@@ -17,7 +18,7 @@ Name[nb]=GIF-eksportfilter for Krita
 Name[nds]=GIF-Exportfilter för Krita
 Name[nl]=GIF-exportfilter voor Krita
 Name[pt]=Filtro de Exportação de GIF para o Krita
-Name[pt_BR]=Filtro de Exportação para GIF para o Krita
+Name[pt_BR]=Filtro de exportação de GIF para o Krita
 Name[ru]=Фильтр экспорта рисунков Krita в GIF
 Name[sv]=Krita GIF-exportfilter
 Name[uk]=Фільтр експорту GIF для Krita

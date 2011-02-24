@@ -19,7 +19,7 @@
 #ifndef STYLESWIDGET_H
 #define STYLESWIDGET_H
 
-#include <QWidget>
+#include <QFrame>
 #include <QList>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -30,20 +30,18 @@ class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class StylesModel;
+class StylesDelegate;
 
-class StylesWidget : public QWidget
+class StylesWidget : public QFrame
 {
     Q_OBJECT
 public:
-    explicit StylesWidget(QWidget *parent = 0);
-
-    void setEmbedded(bool embed);
+    explicit StylesWidget(QWidget *parent = 0,  bool paragraphMode=true, Qt::WindowFlags f = 0);
 
 public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextBlockFormat &format);
     void setCurrentFormat(const QTextCharFormat &format);
-    void deleteStyleClicked();
 
 signals:
     void doneWithFocus();
@@ -51,11 +49,7 @@ signals:
     void characterStyleSelected(KoCharacterStyle *characterStyle, bool canDelete);
 
 private slots:
-    void newStyleClicked();
-    void editStyle();
     void applyStyle();
-    /// updates button state
-    void setCurrent(const QModelIndex &index);
 
 signals:
     void paragraphStyleSelected(KoParagraphStyle *style);
@@ -68,8 +62,10 @@ private:
     QTextBlockFormat m_currentBlockFormat;
     QTextCharFormat m_currentCharFormat;
     StylesModel *m_stylesModel;
+    StylesDelegate *m_stylesDelegate;
     bool m_blockSignals;
     bool m_isEmbedded;
+    bool m_isHovered;
 };
 
 #endif

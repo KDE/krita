@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QUndoCommand>
+#include <QMimeData>
 
 #include <ktemporaryfile.h>
 

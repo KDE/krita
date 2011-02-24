@@ -313,10 +313,10 @@ KoColorConversionTransformation* KoColorConversionSystem::createTransformationFr
         KoMultipleColorConversionTransformation* mccTransfo = new KoMultipleColorConversionTransformation(srcColorSpace, dstColorSpace, renderingIntent);
         transfo = mccTransfo;
         // Get the first intermediary color space
+        dbgPigmentCCS << pathOfNode[ 0 ].first->id() << " to " << pathOfNode[ 1 ].first->id();
         const KoColorSpace* intermCS =
             defaultColorSpaceForNode(pathOfNode[1].first);
         mccTransfo->appendTransfo(pathOfNode[1].second->createColorTransformation(srcColorSpace, intermCS, renderingIntent));
-        dbgPigmentCCS << pathOfNode[ 0 ].first->id() << " to " << pathOfNode[ 1 ].first->id();
         for (int i = 2; i < pathOfNode.size() - 1; i++) {
             dbgPigmentCCS << pathOfNode[ i - 1 ].first->id() << " to " << pathOfNode[ i ].first->id();
             const KoColorSpace* intermCS2 = defaultColorSpaceForNode(pathOfNode[i].first);

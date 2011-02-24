@@ -108,10 +108,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
     if (canvasses.contains(controller))
         origHash = canvasses.value(controller).first()->allTools;
 
-    bool readWrite = true;
-    if (controller->canvas())
-        readWrite = controller->canvas()->isReadWrite();
-
     QHash<QString, KoToolBase*> toolsHash;
     foreach(ToolHelper *tool, tools) {
         if (tool->inputDeviceAgnostic() && origHash.contains(tool->id())) {
@@ -126,7 +122,6 @@ CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *control
         kDebug(30006) << "Creating tool" << tool->id() << ". Activated on:" << tool->activationShapeId() << ", prio:" << tool->priority();
         KoToolBase *tl = tool->createTool(controller->canvas());
         Q_ASSERT(tl);
-        tl->setReadWrite(readWrite);
         uniqueToolIds.insert(tl, tool->uniqueId());
         toolsHash.insert(tool->id(), tl);
         tl->setObjectName(tool->id());
@@ -180,6 +175,7 @@ void KoToolManager::Private::setup()
 
 void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 {
+    Q_UNUSED(temporary);
     Q_ASSERT(tool);
     if (canvasData == 0)
         return;
@@ -203,9 +199,7 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(KAction *action, canvasData->activeTool->actions(
-                    canvasData->activeTool->isReadWrite() ? KoToolBase::ReadWriteAction
-                    : KoToolBase::ReadOnlyAction)) {
+        foreach(KAction *action, canvasData->activeTool->actions()) {
             action->setEnabled(false);
         }
         // repaint the decorations before we deactivate the tool as it might deleted
@@ -239,15 +233,6 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
 
     // we expect the tool to emit a cursor on activation.
     updateCursor(Qt::ForbiddenCursor);
-
-    foreach(KAction *action, canvasData->activeTool->actions()) {
-        action->setEnabled(true);
-        // XXX: how to handle actions for non-qwidget-based canvases?
-        KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
-        if (canvasControllerWidget) {
-            canvasControllerWidget->addAction(action);
-        }
-    }
 
     postSwitchTool(temporary);
 }
@@ -357,9 +342,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
     }
 
     // Activate the actions for the currently active tool
-    foreach(KAction *action, canvasData->activeTool->actions()) {
-        action->setEnabled(true);
-    }
+    activateActions(canvasData->canvas->actionCollection(), canvasData->activeTool->actions());
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
@@ -705,13 +688,6 @@ void KoToolManager::Private::switchToolByShortcut(QKeyEvent *event)
 {
     QKeySequence item(event->key() | ((Qt::ControlModifier | Qt::AltModifier) & event->modifiers()));
 
-    foreach (ToolHelper *th, tools) {
-        if (th->shortcut().contains(item)) {
-            event->accept();
-            switchTool(th->id(), false);
-            return;
-        }
-    }
     if (event->key() == Qt::Key_Space && event->modifiers() == 0) {
         switchTool(KoPanTool_ID, true);
     } else if (event->key() == Qt::Key_Escape && event->modifiers() == 0) {
@@ -724,6 +700,21 @@ void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
     switchTool(id, true);
 }
 
+void KoToolManager::Private::activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions)
+{
+    QHash<QString, KAction*>::const_iterator it( actions.constBegin());
+    for (; it != actions.constEnd(); ++it) {
+        if (ac) {
+            QAction* action = ac->action(it.key());
+                if (action) {
+                    ac->takeAction(action);
+                    it.value()->setShortcut(action->shortcut());
+                }
+                ac->addAction(it.key(), it.value());
+        }
+        it.value()->setEnabled(true);
+    }
+}
 
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
@@ -794,6 +785,11 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         for (; it != actions.constEnd(); ++it) {
             ac->addAction(it.key(), it.value());
         }
+    }
+    foreach(ToolHelper * th, d->tools) {
+        ToolAction* action = new ToolAction(this, th->id(), th->toolTip());
+        action->setShortcut(th->shortcut());
+        ac->addAction(th->id(), action);
     }
 }
 
@@ -927,28 +923,6 @@ QString KoToolManager::activeToolId() const
 {
     if (!d->canvasData) return QString();
     return d->canvasData->activeToolId;
-}
-
-void KoToolManager::updateReadWrite(KoCanvasController *cc, bool readWrite)
-{
-    if (d->canvasData && d->canvasData->activeTool
-            && d->canvasData->activeTool->isReadWrite() != readWrite) {
-        KoToolBase *tl = d->canvasData->activeTool;
-        if (readWrite) { // enable all
-            foreach (KAction *action, tl->actions())
-                action->setEnabled(true);
-        } else { // disable all destructive actions
-            QList<KAction*> actionsToEnable = tl->actions(KoToolBase::ReadOnlyAction).values();
-            foreach (KAction *action, tl->actions()) {
-                action->setEnabled(actionsToEnable.contains(action));
-            }
-        }
-    }
-    foreach (CanvasData *data, d->canvasses.value(cc)) {
-        foreach (KoToolBase *tool, data->allTools) {
-            tool->setReadWrite(readWrite);
-        }
-    }
 }
 
 KoToolManager::Private *KoToolManager::priv()

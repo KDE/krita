@@ -63,22 +63,24 @@ void KoOdfNumberDefinition::loadOdf(const KoXmlElement &element)
     const QString format = element.attributeNS(KoXmlNS::style, "num-format", QString());
     if (format.isEmpty()) {
         d->formatSpecification = Empty;
-    } else {
-        if (format[0] == '1') {
-            d->formatSpecification = Numeric;
-        }
-        else if (format[0] == 'a') {
-            d->formatSpecification = AlphabeticLowerCase;
-        }
-        else if (format[0] == 'A') {
-            d->formatSpecification = AlphabeticUpperCase;
-        }
-        else if (format[0] == 'i') {
-            d->formatSpecification = RomanLowerCase;
-        }
-        else if (format[0] == 'I') {
-            d->formatSpecification = RomanUpperCase;
-        }
+    }
+    else if (format[0] == '1') {
+        d->formatSpecification = Numeric;
+    }
+    else if (format[0] == 'a') {
+        d->formatSpecification = AlphabeticLowerCase;
+    }
+    else if (format[0] == 'A') {
+        d->formatSpecification = AlphabeticUpperCase;
+    }
+    else if (format[0] == 'i') {
+        d->formatSpecification = RomanLowerCase;
+    }
+    else if (format[0] == 'I') {
+        d->formatSpecification = RomanUpperCase;
+    }
+    else {
+        d->formatSpecification = Numeric;
     }
 
     //The style:num-prefix and style:num-suffix attributes specify what to display before and after the number.

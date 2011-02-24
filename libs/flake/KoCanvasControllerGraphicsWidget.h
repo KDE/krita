@@ -20,7 +20,7 @@
 #define KOCANVASCONTROLLERGRAPHICSWIDGET_H
 
 #include <QGraphicsWidget>
-
+#include <kactioncollection.h>
 #include <KoCanvasController.h>
 
 #include "flake_export.h"
@@ -31,6 +31,7 @@ class QPoint;
 class QSize;
 
 class KoCanvasBase;
+class KActionCollection;
 
 /**
  * A QGraphicsWidget that can embed a KOffice canvas, handling scrolling and zooming. You can
@@ -43,7 +44,7 @@ class FLAKE_EXPORT KoCanvasControllerGraphicsWidget : public QGraphicsWidget, pu
 
 public:
 
-    KoCanvasControllerGraphicsWidget(QGraphicsItem * parent = 0, Qt::WindowFlags wFlags = 0);
+    KoCanvasControllerGraphicsWidget(QGraphicsItem * parent = 0, Qt::WindowFlags wFlags = 0, KActionCollection * actionCollection = 0);
     virtual ~KoCanvasControllerGraphicsWidget();
 
     // KoCanvasController implementation
@@ -73,6 +74,12 @@ public:
     QCursor setCursor(const QCursor &cursor);
     void setZoomWithWheel(bool);
     void setVastScrolling(qreal);
+
+    // QGraphicsWidget overrides
+    virtual void  mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void  mousePressEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void  mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+    virtual void   wheelEvent ( QGraphicsSceneWheelEvent * event );
 
 private:
     class Private;

@@ -32,7 +32,6 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoGenStyle.h>
-#include <KoTextOnShapeContainer.h>
 
 #include <QPainter>
 #include <QTimer>
@@ -204,11 +203,8 @@ void PictureShape::saveOdf(KoShapeSavingContext &context) const
     writer.addAttribute("xlink:show", "embed");
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
-    if (parent()) {
-        parent()->saveOdfChildElements(context);
-    }
+    saveText(context);
     writer.endElement(); // draw:image
-    saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame
 
     context.addDataCenter(m_imageCollection);
@@ -242,7 +238,7 @@ bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadi
         }
     }
 
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }

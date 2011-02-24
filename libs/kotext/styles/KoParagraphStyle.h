@@ -407,13 +407,6 @@ public:
     void setAutoTextIndent(bool on);
     bool autoTextIndent() const;
 
-#if 0
-    as this is a duplicate of leftMargin, lets make it very clear we are using that one.
-    /// duplicated property from QTextBlockFormat
-    void setIndent(int indent);
-    /// duplicated property from QTextBlockFormat
-    int indent() const;
-#endif
     /// duplicated property from QTextBlockFormat
     void setNonBreakableLines(bool on);
     /// duplicated property from QTextBlockFormat

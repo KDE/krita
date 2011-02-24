@@ -132,7 +132,7 @@ public:
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
-    virtual const KoViewConverter *viewConverter() const = 0;
+    virtual KoViewConverter *viewConverter() const = 0;
 
     /**
      * Return the widget that will be added to the scrollArea.
@@ -240,22 +240,6 @@ public:
      * @return pointer to the guide data or zero if there is none
      */
     virtual KoGuidesData *guidesData();
-
-    /**
-     * Calling this will turn the canvas into a read/write or a read-only canvas.
-     * Note that upon calling this method no actions will be enabled/disabled
-     * as that is the responsibility of the KoToolManager. The KoToolManager
-     * should use this variable at next tool switch.
-     *
-     * @see KoToolManager::updateReadWrite(), isReadWrite()
-     */
-    void setReadWrite(bool readWrite);
-
-    /**
-     * @return returns true if this canvas is marked as allowing content changing actions
-     * @see setReadWrite(), KoToolManager::updateReadWrite()
-     */
-    bool isReadWrite() const;
 
     /// called by KoCanvasController to set the controller that handles this canvas.
     void setCanvasController(KoCanvasController *controller);

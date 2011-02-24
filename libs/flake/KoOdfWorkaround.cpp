@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Johannes Simon <johannes.simon@gmail.com>
-   Copyright (C) 2010 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2010,2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,6 +29,7 @@
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
 #include <KoStyleStack.h>
+#include <KoUnit.h>
 
 #include <QPen>
 #include <QColor>
@@ -226,4 +227,13 @@ KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoS
         }
     }
     return colorBackground;
+}
+
+void KoOdfWorkaround::fixGluePointPosition(QString &positionString, KoShapeLoadingContext &context)
+{
+    KoOdfLoadingContext::GeneratorType type(context.odfLoadingContext().generatorType());
+    if (type == KoOdfLoadingContext::OpenOffice && !positionString.endsWith('%')) {
+        const qreal pos = KoUnit::parseValue(positionString);
+        positionString = QString("%1%%").arg(KoUnit::toMillimeter(pos));
+    }
 }

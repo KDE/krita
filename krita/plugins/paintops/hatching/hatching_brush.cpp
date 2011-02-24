@@ -37,7 +37,6 @@ void inline myround (double *x) {
 
 HatchingBrush::HatchingBrush(const KisHatchingPaintOpSettings* settings)
 {
-    m_settings = new KisHatchingPaintOpSettings();
     m_settings = settings;
     
     // Initializing

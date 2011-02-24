@@ -27,10 +27,11 @@
 
 KisDynamicSensorDistance::KisDynamicSensorDistance() : KisDynamicSensor(DistanceId), m_time(0.0), m_length(30), m_periodic(true)
 {
-
+    setMinimumLabel(i18n("0 px"));
+    setMaximumLabel(i18n("30 px"));
 }
 
-qreal KisDynamicSensorDistance::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorDistance::value(const KisPaintInformation&  pi)
 {
     m_time += pi.movement().norm();
     if (m_time > m_length) {
@@ -58,9 +59,10 @@ void KisDynamicSensorDistance::setPeriodic(bool periodic)
 void KisDynamicSensorDistance::setLength(int length)
 {
     m_length = length;
+    setMaximumLabel(i18n("%1 px", length));
 }
 
-QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, KisSensorSelector* ss)
+QWidget* KisDynamicSensorDistance::createConfigurationWidget(QWidget* parent, QWidget* ss)
 {
     QWidget* wdg = new QWidget(parent);
     Ui_SensorDistanceConfiguration stc;
@@ -83,6 +85,7 @@ void KisDynamicSensorDistance::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorDistance::fromXML(const QDomElement& e)
 {
+    KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();
     m_length = e.attribute("length", "30").toInt();
 }

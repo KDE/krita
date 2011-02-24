@@ -21,6 +21,7 @@
 
 #include <QMutex>
 #include <QRunnable>
+#include <QThreadPool>
 
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"

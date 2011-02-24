@@ -20,6 +20,8 @@
 
 #include "ShrinkToFitShapeContainer.h"
 
+#include <KoShapeSavingContext.h>
+
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
     : KoShapeContainer(*(new ShrinkToFitShapeContainerPrivate(this, childShape)))
 {

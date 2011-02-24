@@ -124,13 +124,16 @@ void KisFilterHandler::showDialog()
         }
     }
 
-
-    KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image(), m_d->view->selection());
-    dialog->setFilter(m_d->filter);
-    connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
-            SLOT(apply(KisNodeSP, KisFilterConfiguration*)));
-    dialog->setVisible(true);
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    if (m_d->filter->showConfigurationWidget()) {
+        KisFilterDialog* dialog = new KisFilterDialog(m_d->view , m_d->view->activeNode(), m_d->view->image(), m_d->view->selection());
+        dialog->setFilter(m_d->filter);
+        connect(dialog, SIGNAL(sigPleaseApplyFilter(KisNodeSP, KisFilterConfiguration*)),
+                SLOT(apply(KisNodeSP, KisFilterConfiguration*)));
+        dialog->setVisible(true);
+        dialog->setAttribute(Qt::WA_DeleteOnClose);
+    } else {
+        apply(m_d->view->activeNode(), m_d->filter->defaultConfiguration(m_d->view->activeNode()->original()));
+    }
 }
 
 void KisFilterHandler::reapply()

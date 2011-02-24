@@ -18,7 +18,7 @@
 
 #include "kis_shape_layer_canvas.h"
 
-
+#include <QTimer>
 #include <QPainter>
 
 #include <KoShapeManager.h>
@@ -135,7 +135,7 @@ KoToolProxy * KisShapeLayerCanvas::toolProxy() const
     return 0;
 }
 
-const KoViewConverter *KisShapeLayerCanvas::viewConverter() const
+KoViewConverter *KisShapeLayerCanvas::viewConverter() const
 {
     return m_viewConverter;
 }

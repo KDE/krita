@@ -93,6 +93,7 @@ KisLayerManager::KisLayerManager(KisView2 * view, KisDoc2 * doc)
         , m_actLayerVis(false)
         , m_imageResizeToLayer(0)
         , m_flattenLayer(0)
+        , m_rasterizeLayer(0)
         , m_activeLayer(0)
         , m_commandsAdapter(new KisNodeCommandsAdapter(m_view))
 {
@@ -143,6 +144,10 @@ void KisLayerManager::setup(KActionCollection * actionCollection)
     actionCollection->addAction("flatten_layer", m_flattenLayer);
     connect(m_flattenLayer, SIGNAL(triggered()), this, SLOT(flattenLayer()));
 
+    m_rasterizeLayer  = new KAction(i18n("Rasterize Layer"), this);
+    actionCollection->addAction("rasterize_layer", m_rasterizeLayer);
+    connect(m_rasterizeLayer, SIGNAL(triggered()), this, SLOT(rasterizeLayer()));
+    
     m_layerSaveAs  = new KAction(KIcon("document-save"), i18n("Save Layer as Image..."), this);
     actionCollection->addAction("save_layer_as_image", m_layerSaveAs);
     connect(m_layerSaveAs, SIGNAL(triggered()), this, SLOT(saveLayerAsImage()));
@@ -180,6 +185,7 @@ void KisLayerManager::updateGUI()
     m_imageFlatten->setEnabled(nlayers > 1);
     m_imageMergeLayer->setEnabled(nlayers > 1 && layer && layer->prevSibling());
     m_flattenLayer->setEnabled(nlayers > 1 && layer && layer->firstChild());
+    m_rasterizeLayer->setEnabled(enable && layer->inherits("KisShapeLayer"));
 
     m_imageResizeToLayer->setEnabled(activeLayer());
 
@@ -302,8 +308,7 @@ void KisLayerManager::layerProperties()
 
             if (layer->name() != dlg.getName() ||
                     layer->opacity() != dlg.getOpacity() ||
-                    layer->compositeOp()->id() != dlg.getCompositeOp() ||
-                    oldChannelFlags != newChannelFlags
+                    layer->compositeOp()->id() != dlg.getCompositeOp()
                ) {
                 QApplication::setOverrideCursor(KisCursor::waitCursor());
                 m_view->undoAdapter()->addCommand(new KisLayerPropsCommand(layer,
@@ -313,6 +318,10 @@ void KisLayerManager::layerProperties()
                                                   oldChannelFlags, newChannelFlags));
                 QApplication::restoreOverrideCursor();
                 m_doc->setModified(true);
+            }
+            if (oldChannelFlags != newChannelFlags) {
+                layer->setChannelFlags(newChannelFlags);
+                layer->setDirty();
             }
         }
     }
@@ -395,6 +404,7 @@ void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent.data(), above.data());
+            m_view->nodeManager()->activateNode(layer);
 
             m_view->canvas()->update();
 
@@ -429,6 +439,7 @@ void KisLayerManager::addShapeLayer(KisNodeSP parent, KisNodeSP above)
         if (layer) {
             layer->setCompositeOp(COMPOSITE_OVER);
             m_commandsAdapter->addNode(layer.data(), parent, above.data());
+            m_view->nodeManager()->activateNode(layer);
             m_view->canvas()->update();
         } else {
             KMessageBox::error(m_view, i18n("Could not add layer to image."), i18n("Layer Error"));
@@ -468,6 +479,7 @@ void KisLayerManager::addAdjustmentLayer(KisNodeSP parent, KisNodeSP above)
         m_commandsAdapter->undoLastCommand();
     } else {
         adjl->setName(dlg.layerName());
+        m_view->nodeManager()->activateNode(adjl);
     }
 }
 
@@ -519,6 +531,7 @@ void KisLayerManager::addGeneratorLayer(KisNodeSP parent, KisNodeSP above, const
 
     KisGeneratorLayerSP l = new KisGeneratorLayer(image, name, generator, selection);
     m_commandsAdapter->addNode(l.data(), parent, above.data());
+    m_view->nodeManager()->activateNode(l);
     if (l->selection())
         l->setDirty(l->selection()->selectedExactRect());
     else
@@ -836,6 +849,32 @@ void KisLayerManager::flattenLayer()
     m_view->updateGUI();
 }
 
+void KisLayerManager::rasterizeLayer()
+{
+    KisImageWSP image = m_view->image();
+    if (!image) return;
+
+    KisLayerSP layer = activeLayer();
+    if (!layer) return;
+    
+    KisPaintLayerSP paintLayer = new KisPaintLayer(image, layer->name(), layer->opacity());
+    KisPainter gc(paintLayer->paintDevice());
+    QRect rc = layer->projection()->exactBounds();
+    gc.bitBlt(rc.topLeft(), layer->projection(), rc);
+    
+    m_commandsAdapter->beginMacro(i18n("Rasterize Layer"));
+    m_commandsAdapter->addNode(paintLayer.data(), layer->parent().data(), layer.data());
+    
+    int childCount = layer->childCount();
+    for (int i = 0; i < childCount; i++) {
+        m_commandsAdapter->moveNode(layer->firstChild(), paintLayer, paintLayer->lastChild());
+    }
+    m_commandsAdapter->removeNode(layer);
+    m_commandsAdapter->endMacro();
+    updateGUI();
+}
+
+
 void KisLayerManager::layersUpdated()
 {
     KisLayerSP layer = activeLayer();
@@ -884,10 +923,9 @@ void KisLayerManager::saveLayerAsImage()
     d.setCurrentImage(dst);
     KisPaintLayer* paintLayer = new KisPaintLayer(dst, "projection", l->opacity());
     KisPainter gc(paintLayer->paintDevice());
-    gc.bitBlt(QPoint(0, 0), l->projection(), l->projection()->exactBounds());
+    gc.bitBlt(QPoint(0, 0), l->projection(), r);
     dst->addNode(paintLayer, dst->rootLayer(), KisLayerSP(0));
 
-    dst->resize(paintLayer->exactBounds());
     dst->refreshGraph();
 
     d.setOutputMimeType(mimefilter.toLatin1());

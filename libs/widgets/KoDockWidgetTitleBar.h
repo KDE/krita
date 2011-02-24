@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (c) 2007 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
+   Copyright (c) 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -40,7 +40,7 @@ public:
     virtual QSize sizeHint() const;  ///< reimplemented from QWidget
 
     void setCollapsed(bool collapsed);
-    
+
     void setCollapsable(bool collapsable);
     void setTextVisible(bool visible);
     /// Define wether the text size should be ignored in @ref sizeHint

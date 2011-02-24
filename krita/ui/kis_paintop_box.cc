@@ -2,8 +2,9 @@
  *  kis_paintop_box.cc - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
- *  Copyright (c) 2009 Sven Langkamp (sven.langkamp@gmail.com)
+ *  Copyright (c) 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,6 +28,8 @@
 #include <QLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QToolButton>
+#include <QAction>
 
 #include <kactioncollection.h>
 #include <kis_debug.h>
@@ -36,6 +39,7 @@
 #include <kacceleratormanager.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
+#include <kseparator.h>
 
 #include <KoToolManager.h>
 #include <KoColorSpace.h>
@@ -64,8 +68,8 @@
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
+#include "widgets/kis_workspace_chooser.h"
 #include "kis_paintop_settings_widget.h"
-#include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
 #include <kis_cmb_paintop.h>
 
@@ -93,14 +97,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     setWindowTitle(i18n("Painter's Toolchest"));
 
-    m_cmbPaintops = new KisCmbPaintop(this, "KisPaintopBox::m_cmbPaintops");
-    m_cmbPaintops->setMinimumWidth(150);
-    m_cmbPaintops->setToolTip(i18n("Artist's materials"));
-
-#ifdef Q_WS_MAC
-    m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
-#endif
-
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
     m_settingsWidget->setToolTip(i18n("Edit brush settings"));
@@ -113,14 +109,39 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //m_presetWidget->setText(i18n("Select Brush"));
     m_presetWidget->setFixedSize(32, 32);
 
-    m_eraseModeButton = new QPushButton(this);
-    m_eraseModeButton->setIcon(KIcon("draw-eraser"));
-    m_eraseModeButton->setToolTip(i18n("Set eraser mode"));
+    m_eraseModeButton = new QToolButton(this);
     m_eraseModeButton->setFixedSize(32, 32);
     m_eraseModeButton->setCheckable(true);
-    m_eraseModeButton->setShortcut(Qt::Key_E);
+    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
+    eraseAction->setIcon(KIcon("draw-eraser"));
+    eraseAction->setShortcut(Qt::Key_E);
+    eraseAction->setCheckable(true);
+    m_eraseModeButton->setDefaultAction(eraseAction);
+    m_view->actionCollection()->addAction("erase_action", eraseAction);
 
-    connect(m_eraseModeButton, SIGNAL(toggled(bool)), this, SLOT(eraseModeToggled(bool)));
+    QToolButton* hMirrorButton = new QToolButton(this);
+    hMirrorButton->setFixedSize(32, 32);
+    hMirrorButton->setCheckable(true);
+    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+//     hMirrorAction->setShortcut(Qt::Key_H);
+    hMirrorAction->setCheckable(true);
+    hMirrorButton->setDefaultAction(hMirrorAction);
+    m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
+
+    QToolButton* vMirrorButton = new QToolButton(this);
+    vMirrorButton->setFixedSize(32, 32);
+    vMirrorButton->setCheckable(true);
+    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+//     vMirrorAction->setShortcut(Qt::Key_V);
+    vMirrorAction->setCheckable(true);
+    vMirrorButton->setDefaultAction(vMirrorAction);
+    m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
+
+    connect(eraseAction, SIGNAL(triggered(bool)), this, SLOT(eraseModeToggled(bool)));
+    connect(hMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(vMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotVerticalMirrorChanged(bool)));
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
@@ -139,16 +160,32 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //view->actionCollection()->addAction("palette_manager", action);
     //action->setDefaultWidget(m_paletteButton);
 
-    m_layout = new QHBoxLayout(this);
-    m_layout->addWidget(m_cmbPaintops);
+    m_workspaceWidget = new KisPopupButton(this);
+    m_workspaceWidget->setIcon(KIcon("document-multiple"));
+    m_workspaceWidget->setToolTip(i18n("Choose workspace"));
+    m_workspaceWidget->setFixedSize(32, 32);
+    m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(view));
+    
+    QHBoxLayout* baseLayout = new QHBoxLayout(this);
+    m_paintopWidget = new QWidget(this);
+    baseLayout->addWidget(m_paintopWidget);
+
+    m_layout = new QHBoxLayout(m_paintopWidget);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
     m_layout->addWidget(m_eraseModeButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
+    m_layout->addWidget(hMirrorButton);
+    m_layout->addWidget(vMirrorButton);
+    m_layout->addWidget(new KSeparator(Qt::Vertical, this));
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-//     m_layout->addWidget(m_brushChooser);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+
+    baseLayout->addWidget(m_workspaceWidget);
+    baseLayout->setContentsMargins(0, 0, 0, 0);
 
     m_presetsPopup = new KisPaintOpPresetsPopup(m_resourceProvider);
     m_settingsWidget->setPopupWidget(m_presetsPopup);
@@ -157,26 +194,29 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
-//     m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
-//     m_brushChooser->setPopupWidget(m_brushEngineSelector);
-
     m_colorspace = view->image()->colorSpace();
 
     updatePaintops();
     
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
-    connect(m_cmbPaintops, SIGNAL(activated(const QString&)), this, SLOT(slotSetPaintop(QString)));
+    connect(m_presetsPopup, SIGNAL(paintopActivated(QString)), this, SLOT(slotSetPaintop(QString)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
 
     connect(m_presetsPopup, SIGNAL(defaultPresetClicked()), this, SLOT(slotSetupDefaultPreset()));
+    
+    connect(m_presetsPopup, SIGNAL(presetNameLineEditChanged(QString)),
+            this, SLOT(slotWatchPresetNameLineEdit(QString)));
 
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
+    
+    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
+            m_presetsPopup, SLOT(resourceSelected(KoResource*)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -217,8 +257,8 @@ void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
         // ensure the the right paintop is selected
         // It might happen that you must change the paintop as the current one is not supported
         // by the new colorspace.
-        m_cmbPaintops->setCurrent( currentPaintop().id() );
-        if (m_cmbPaintops->currentItem() != currentPaintop().id()){
+        m_presetsPopup->setCurrentPaintOp( currentPaintop().id() );
+        if (m_presetsPopup->currentPaintOp() != currentPaintop().id()){
             kWarning() << "PaintOp " << currentPaintop().name() << " was not selected, as it is not supported by colorspace " 
             << m_colorspace->name();
         }
@@ -240,7 +280,7 @@ void KisPaintopBox::updatePaintops()
         }
     }
     
-    m_cmbPaintops->setPaintOpList(factoryList);
+    m_presetsPopup->setPaintOpList(factoryList);
 }
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
@@ -283,11 +323,11 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
         paintop = (*it);
     }
 
-    m_cmbPaintops->setCurrent(paintop.id());
-    if (m_cmbPaintops->currentItem() != paintop.id()){
+    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    if (m_presetsPopup->currentPaintOp() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
-        paintop = KoID(m_cmbPaintops->currentItem(), KisPaintOpRegistry::instance()->get(m_cmbPaintops->currentItem())->name());
+        paintop = KoID(m_presetsPopup->currentPaintOp(), KisPaintOpRegistry::instance()->get(m_presetsPopup->currentPaintOp())->name());
     }
     
     setCurrentPaintop(paintop);
@@ -362,8 +402,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     preset->settings()->setNode(m_resourceProvider->currentNode());
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
-    m_cmbPaintops->setCurrent(paintop.id());
-    if (m_cmbPaintops->currentItem() != paintop.id()){
+    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    if (m_presetsPopup->currentPaintOp() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
@@ -408,30 +448,33 @@ KisPaintOpPresetSP KisPaintopBox::activePreset(const KoID & paintop, const KoInp
 
 void KisPaintopBox::slotSaveActivePreset()
 {
-    KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
-    if (!preset)
+    KisPaintOpPresetSP curPreset = m_resourceProvider->currentPreset();
+    
+    if (!curPreset)
         return;
 
-    KisPaintOpPreset* newPreset = preset->clone();
-    newPreset->setImage(m_presetsPopup->cutOutOverlay());
-
+    KisPaintOpPreset* newPreset = curPreset->clone();
     KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
     QString saveLocation = rServer->saveLocation();
-
     QString name = m_presetsPopup->getPresetName();
+    QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
-    QFileInfo fileInfo;
-    fileInfo.setFile(saveLocation + name + newPreset->defaultFileExtension());
-
-    int i = 1;
-    while (fileInfo.exists()) {
-        fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
-        i++;
+    if (fileInfo.exists()) {
+        rServer->removeResource(rServer->getResourceByFilename(fileInfo.fileName()));
     }
+    
+//     int i = 1;
+//     while (fileInfo.exists()) {
+//         fileInfo.setFile(saveLocation + name + QString("%1").arg(i) + newPreset->defaultFileExtension());
+//         i++;
+//     }
 
+    newPreset->setImage(m_presetsPopup->cutOutOverlay());
     newPreset->setFilename(fileInfo.filePath());
     newPreset->setName(name);
 
+    m_presetsPopup->changeSavePresetButtonText(true);
+    
     rServer->addResource(newPreset);
 }
 
@@ -549,7 +592,7 @@ void KisPaintopBox::setCompositeOpInternal(const QString& id)
 
 void KisPaintopBox::setEnabledInternal(bool value)
 {
-    setEnabled(value);
+    m_paintopWidget->setEnabled(value);
     if(value) {
         m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));
@@ -577,5 +620,22 @@ void KisPaintopBox::slotSaveToFavouriteBrushes()
         m_view->canvasBase()->favoriteResourceManager()->showPaletteManager();
     }
 }
+
+void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
+{
+    KoResourceServer<KisPaintOpPreset>* rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
+    m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
+}
+
+void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorHorizontal(value);
+}
+
+void KisPaintopBox::slotVerticalMirrorChanged(bool value)
+{
+    m_resourceProvider->setMirrorVertical(value);
+}
+
 
 #include "kis_paintop_box.moc"

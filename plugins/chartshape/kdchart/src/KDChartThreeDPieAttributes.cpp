@@ -73,8 +73,6 @@ bool ThreeDPieAttributes::operator==( const ThreeDPieAttributes& r ) const
              AbstractThreeDAttributes::operator==(r));
 }
 
-
-
 void ThreeDPieAttributes::setUseShadowColors( bool shadowColors )
 {
     d->useShadowColors = shadowColors;

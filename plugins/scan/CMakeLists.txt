@@ -18,6 +18,6 @@ install(TARGETS kofficescan  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES  scan-kpresenter.rc  DESTINATION ${DATA_INSTALL_DIR}/kpresenter/kpartplugins)
 install( FILES  scan-krita.rc  DESTINATION ${DATA_INSTALL_DIR}/krita/kpartplugins)
-install( FILES  scan-kword.rc  DESTINATION ${DATA_INSTALL_DIR}/kword/kpartplugins)
+install( FILES  scan-words.rc  DESTINATION ${DATA_INSTALL_DIR}/words/kpartplugins)
 
 

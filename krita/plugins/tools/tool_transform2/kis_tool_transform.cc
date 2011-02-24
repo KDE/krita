@@ -1797,10 +1797,6 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
 
     KisPaintDeviceSP dev = currentNode()->paintDevice();
 
-    //// Create a lazy copy of the current state
-    //m_origDevice = new KisPaintDevice(*dev.data());
-    //Q_ASSERT(m_origDevice);
-
     KisSelectionSP selection = currentSelection();
     if (selection) {
         QRect r = selection->selectedExactRect();
@@ -1838,12 +1834,15 @@ void KisToolTransform::initTransform(ToolTransformArgs::TransfMode mode)
         initFreeTransform();
 
     if (!dev) {
-        m_origImg = NULL;
-        m_origSelectionImg = NULL;
+        m_origImg = 0;
+        m_origSelectionImg = 0;
     } else {
+#ifdef __GNUC__
+#warning "QIMAGE: This code potentially creates enormous QImages! See https://bugs.kde.org/show_bug.cgi?id=263170"
+#endif
+
         const KisImage *kisimage = image();
         m_transform = QTransform();
-        //m_origImg = new QImage(m_origDevice->convertToQImage(0, x, y, w, h));
         m_origImg = new QImage(dev->convertToQImage(0, x, y, w, h));
         if (selection) {
             m_origSelectionImg = new QImage(selection->convertToQImage(0, x, y, w, h));
@@ -2661,20 +2660,20 @@ void KisToolTransform::slotEditingFinished()
 
 void KisToolTransform::slotWarpButtonClicked(bool checked)
 {
-	if (checked)
-		initTransform(ToolTransformArgs::WARP);
-	else
-		initTransform(ToolTransformArgs::FREE_TRANSFORM);
+        if (checked)
+                initTransform(ToolTransformArgs::WARP);
+        else
+                initTransform(ToolTransformArgs::FREE_TRANSFORM);
 
     outlineChanged();
 }
 
 void KisToolTransform::slotFreeTransformButtonClicked(bool checked)
 {
-	if (!checked)
-		initTransform(ToolTransformArgs::WARP);
-	else
-		initTransform(ToolTransformArgs::FREE_TRANSFORM);
+        if (!checked)
+                initTransform(ToolTransformArgs::WARP);
+        else
+                initTransform(ToolTransformArgs::FREE_TRANSFORM);
 
     outlineChanged();
 }

@@ -129,7 +129,6 @@ public:
      */
     QPair<int, int> findExtent();
 
-private:
 
     /**
      * Update the xml:id, using during cut and paste as well as document save.
@@ -140,6 +139,8 @@ private:
      * Create a new and unique xml:id
      */
     QString createXmlId(KoXmlWriter *writer = 0);
+
+private:
 
     friend class KoRdfSemanticItem;
     friend class KoRdfFoaF;

@@ -51,6 +51,7 @@ public:
         , m_progress(0)
         , m_weight(weight)
         , m_interrupted(false)
+        , m_hasOutput(parent->hasOutput())
         , m_parent(parent)
     {
         setObjectName(name);
@@ -75,17 +76,13 @@ public:
     };
 
     void addPoint(int value) {
-        m_points.append(TimePoint(value));
+        if (m_hasOutput) {
+            m_points.append(TimePoint(value));
+        }
     }
 
     QList<TimePoint> getPoints() const {
         return m_points;
-    }
-
-    bool isSignificant(int value) const {
-        if (m_points.size() == 0) return true;
-        const TimePoint& tp = m_points.last();
-        return tp.value != value || tp.time.msecsTo(QTime::currentTime()) > 250;
     }
 
 public slots:
@@ -113,14 +110,10 @@ private:
     int m_progress; // always in percent
     int m_weight;
     bool m_interrupted;
+    bool m_hasOutput;
 
     KoProgressUpdater *m_parent;
     QList<TimePoint> m_points;
-
-    int min;
-    int max;
 };
-
-
 
 #endif

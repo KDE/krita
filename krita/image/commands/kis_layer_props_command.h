@@ -27,6 +27,7 @@
 #include <QBitArray>
 #include "kis_types.h"
 #include "kis_layer_command.h"
+#include "kis_paint_device.h"
 
 class KoCompositeOp;
 class KoColorSpace;
@@ -47,12 +48,14 @@ public:
      * @param opacity the new layer opacity
      * @param compositeOp the new layer composite op
      * @param name the new layer name
+     * @param undoChannelFlags specifies if the channel flags should be undoable, normally they are not but they can be if e.g the channels change
      */
     KisLayerPropsCommand(KisLayerSP layer,
                          qint32 oldOpacity, qint32 newOpactiy,
                          const QString&  oldCompositeOp, const QString& newCompositeOp,
                          const QString& oldName, const QString& newName,
-                         const QBitArray oldChannelFlags, const QBitArray newChannelFlags);
+                         const QBitArray oldChannelFlags, const QBitArray newChannelFlags,
+                         bool undoChannelFlags = false);
 
     virtual ~KisLayerPropsCommand();
     virtual void redo();
@@ -70,6 +73,7 @@ private:
 
     QBitArray m_oldChannelFlags;
     QBitArray m_newChannelFlags;
+    bool m_undoChannelFlags;
 };
 
 #endif

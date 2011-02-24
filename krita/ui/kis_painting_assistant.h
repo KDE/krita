@@ -36,7 +36,7 @@ class KisCoordinatesConverter;
 class KisPaintingAssistantHandle;
 typedef KisSharedPtr<KisPaintingAssistantHandle> KisPaintingAssistantHandleSP;
 class KisPaintingAssistant;
-
+class QPainterPath;
 
 /**
   * Represent an handle of the assistant, used to edit the parameters
@@ -51,6 +51,7 @@ public:
     KisPaintingAssistantHandle(const KisPaintingAssistantHandle&);
     ~KisPaintingAssistantHandle();
     void mergeWith(KisPaintingAssistantHandleSP);
+    QList<KisPaintingAssistantHandleSP> split();
     KisPaintingAssistantHandle& operator=(const QPointF&);
 private:
     void registerAssistant(KisPaintingAssistant*);
@@ -75,12 +76,22 @@ public:
     /**
      * Adjust the position given in parameter.
      * @param point the coordinates in point in the document reference
+     * @param strokeBegin the coordinates of the beginning of the stroke
      */
-    virtual QPointF adjustPosition(const QPointF& point) const = 0;
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin) = 0;
+    virtual void endStroke() { }
     virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter) = 0;
+    virtual QPointF buttonPosition() const = 0;
+    virtual int numHandles() const = 0;
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
+    void addHandle(KisPaintingAssistantHandleSP handle);
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
+public:
+    /**
+     * This will paint a path using a white and black colors.
+     */
+    static void drawPath(QPainter& painter, const QPainterPath& path);
 protected:
     void initHandles(QList<KisPaintingAssistantHandleSP> _handles);
 private:

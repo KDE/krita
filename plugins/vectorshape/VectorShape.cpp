@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2009 - 2010 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009 - 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +28,6 @@
 // Qt
 #include <QPen>
 #include <QPainter>
-#include <QByteArray>
 #include <QBuffer>
 #include <QDataStream>
 #include <QPixmap>
@@ -55,40 +54,33 @@
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_type(VectorTypeNone)
-    , m_bytes(0)
-    , m_size(0)
-    , m_ownsBytes(false)
 {
     setShapeId(VectorShape_SHAPEID);
     setCacheMode(KoShape::ScaledCache);
+
    // Default size of the shape.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 }
 
 VectorShape::~VectorShape()
 {
-    if (m_ownsBytes)
-        delete[] m_bytes;
 }
 
-void  VectorShape::setVectorBytes( char *bytes, int size, bool takeOwnership )
+// Methods specific to the vector shape.
+QByteArray  VectorShape::contents() const
 {
-    if (m_bytes != 0 && m_ownsBytes)
-        delete []m_bytes;
-
-    m_bytes = bytes;
-    m_size = size;
-    m_ownsBytes = takeOwnership;
+    return m_contents;
+}
+ 
+void VectorShape::setContents( const QByteArray &newContents )
+{
+    m_contents = newContents;
+    determineType();
 }
 
-char *VectorShape::vectorBytes()
+VectorShape::VectorType VectorShape::vectorType() const
 {
-    return m_bytes;
-}
-
-int VectorShape::vectorSize()
-{
-    return m_size;
+    return m_type;
 }
 
 
@@ -98,21 +90,10 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
     draw(painter);
 }
 
-void VectorShape::paintDecorations(QPainter &painter, const KoViewConverter &converter,
-                                   const KoCanvasBase *canvas)
-{
-    Q_UNUSED(canvas);
-
-    applyConversion(painter, converter);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    draw(painter);
-}
-
 void VectorShape::draw(QPainter &painter) const
 {
     // If the data is uninitialized, e.g. because loading failed, draw the null shape
-    if (m_size == 0) {
+    if (m_contents.count() == 0) {
         drawNull(painter);
         return;
     }
@@ -153,10 +134,8 @@ void VectorShape::drawWmf(QPainter &painter) const
     //drawNull(painter);
 
     KoWmfPaint  wmfPainter;
-    QByteArray  emfArray(m_bytes, m_size);
 
-    // FIXME: Switch name from emfArray
-    if (!wmfPainter.load(emfArray)) {
+    if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
         return;
     }
@@ -194,8 +173,7 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "-------------------------------------------";
 
     // Create a QBuffer to read from...
-    QByteArray  emfArray(m_bytes, m_size);
-    QBuffer     emfBuffer(&emfArray);
+    QBuffer     emfBuffer((QByteArray  *)&m_contents, 0);
     emfBuffer.open(QIODevice::ReadOnly);
 
     // ...but what we really want is a stream.
@@ -261,63 +239,61 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
-    // Store the size and make a sanity check.
-    // The size of the minimum EMF header record is 88.
-    m_size = store->size();
-    if (m_size < 88) {
-        m_size = 0;
+    int size = store->size();
+    if (size < 88) {
         store->close();
         return false;
     }
-
-    if (m_bytes && m_ownsBytes) {
-        delete []m_bytes;
-        m_bytes = 0;
-    }
-    m_bytes = new char[m_size];
-    m_ownsBytes = true;
-
-    qint64 bytesRead = store->read(m_bytes, m_size);
+    
+    m_contents = store->read(size);
     store->close();
-    if (bytesRead < m_size) {
-        kDebug(31000) << "Too few bytes read: " << bytesRead << " instead of " << m_size;
+    if (m_contents.count() < size) {
+        kDebug(31000) << "Too few bytes read: " << m_contents.count() << " instead of " << size;
         return false;
     }
 
-    if (isWmf())
-        m_type = VectorTypeWmf;
-    else if (isEmf())
-        m_type = VectorTypeEmf;
-    else
-        m_type = VectorTypeNone;
+    determineType();
 
     // Return true if we managed to identify the type.
     return m_type != VectorTypeNone;
 }
 
 
+void VectorShape::determineType()
+{
+    if (isWmf())
+        m_type = VectorTypeWmf;
+    else if (isEmf())
+        m_type = VectorTypeEmf;
+    else
+        m_type = VectorTypeNone;
+}
+
 bool VectorShape::isWmf() const
 {
     kDebug(31000) << "Check for WMF";
 
-    if (m_size < 10)
+    const char *data = m_contents.data();
+    const int   size = m_contents.count();
+
+    if (size < 10)
         return false;
 
     // This is how the 'file' command identifies a WMF.
-    if (m_bytes[0] == '\327' && m_bytes[1] == '\315' && m_bytes[2] == '\306' && m_bytes[3] == '\232')
+    if (data[0] == '\327' && data[1] == '\315' && data[2] == '\306' && data[3] == '\232')
     {
         // FIXME: Is this a compressed wmf?  Check it up.
         kDebug(31000) << "WMF identified: header 1";
         return true;
     }
 
-    if (m_bytes[0] == '\002' && m_bytes[1] == '\000' && m_bytes[2] == '\011' && m_bytes[3] == '\000')
+    if (data[0] == '\002' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
         kDebug(31000) << "WMF identified: header 2";
         return true;
     }
 
-    if (m_bytes[0] == '\001' && m_bytes[1] == '\000' && m_bytes[2] == '\011' && m_bytes[3] == '\000')
+    if (data[0] == '\001' && data[1] == '\000' && data[2] == '\011' && data[3] == '\000')
     {
         kDebug(31000) << "WMF identified: header 3";
         return true;
@@ -330,17 +306,20 @@ bool VectorShape::isEmf() const
 {
     kDebug(31000) << "Check for EMF";
 
+    const char *data = m_contents.data();
+    const int   size = m_contents.count();
+
     // This is how the 'file' command identifies an EMF.
     // 1. Check type
-    qint32 mark = read32(m_bytes, 0);
+    qint32 mark = read32(data, 0);
     if (mark != 0x00000001) {
         //kDebug(31000) << "Not an EMF: mark = " << mark << " instead of 0x00000001";
         return false;
     }
 
     // 2. An EMF has the string " EMF" at the start + offset 40.
-    if (m_size > 44 && m_bytes[40] == ' '
-        && m_bytes[41] == 'E' && m_bytes[42] == 'M' && m_bytes[43] == 'F')
+    if (size > 44 
+        && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
         kDebug(31000) << "EMF identified";
         return true;

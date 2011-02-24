@@ -29,6 +29,7 @@
 
 #include "KoInputDevice.h"
 #include "KoToolManager.h"
+#include <kaction.h>
 
 class KoToolFactoryBase;
 class KoShapeManager;
@@ -101,6 +102,8 @@ public:
 
     bool layerEnabled;
 
+private:
+    void activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions);
 };
 
 /// \internal
@@ -159,6 +162,23 @@ signals:
 
 private:
     KoShapeManager *m_shapeManager;
+};
+
+/// \internal
+/// Helper class to provide a action for tool shortcuts
+class ToolAction : public KAction
+{
+    Q_OBJECT
+public:
+    ToolAction(KoToolManager* toolManager, QString id, QString name);
+    virtual ~ToolAction();
+
+private slots:
+    void actionTriggered();
+
+private:
+    KoToolManager* m_toolManager;
+    QString m_toolID;
 };
 
 #endif

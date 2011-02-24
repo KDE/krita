@@ -34,12 +34,14 @@
 #include "kis_painter.h"
 
 #include <KoUpdater.h>
+#include <QMutex>
 
 class KRITAIMAGE_EXPORT KisFilterMask::Private
 {
 public:
 
     KisFilterConfiguration * filterConfig;
+    QMutex filterConfigMutex;
 };
 
 KisFilterMask::KisFilterMask()
@@ -81,6 +83,7 @@ QIcon KisFilterMask::icon() const
 
 void KisFilterMask::setFilter(KisFilterConfiguration * filterConfig)
 {
+    QMutexLocker l(&m_d->filterConfigMutex);
     Q_ASSERT(filterConfig);
     delete m_d->filterConfig;
     m_d->filterConfig = KisFilterRegistry::instance()->cloneConfiguration(filterConfig);
@@ -99,29 +102,32 @@ QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,
         warnKrita << "No filter configuration present";
         return QRect();
     }
-
-    KisFilterSP filter =
-        KisFilterRegistry::instance()->value(m_d->filterConfig->name());
-
-    if (!filter) {
-        warnKrita << "Could not retrieve filter \"" << m_d->filterConfig->name() << "\"";
-        return QRect();
+    KisFilterConfiguration* config;
+    {
+        QMutexLocker l(&m_d->filterConfigMutex);
+        config = KisFilterRegistry::instance()->cloneConfiguration(m_d->filterConfig);
     }
 
-    KisConstProcessingInformation srcInfo(src,  rc.topLeft(), 0);
-    KisProcessingInformation dstInfo(dst, rc.topLeft(), 0);
+    KisFilterSP filter =
+        KisFilterRegistry::instance()->value(config->name());
+
+    if (!filter) {
+        warnKrita << "Could not retrieve filter \"" << config->name() << "\"";
+        return QRect();
+    }
 
     KoProgressUpdater updater(nodeProgressProxy());
     updater.start(100, filter->name());
 
     QPointer<KoUpdater> updaterPtr = updater.startSubtask();
 
-    filter->process(srcInfo, dstInfo, rc.size(),
-                    m_d->filterConfig, updaterPtr);
+    filter->process(src, dst, 0, rc, config, updaterPtr);
 
     updaterPtr->setProgress(100);
 
-    return filter->changedRect(rc, m_d->filterConfig);
+    QRect r = filter->changedRect(rc, config);
+    delete config;
+    return r;
 }
 
 bool KisFilterMask::accept(KisNodeVisitor &v)

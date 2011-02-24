@@ -192,8 +192,8 @@ public:
     virtual void update() const;
 
     /**
-     * Create and return an iterator over all child shapes.
-     * @return an interator over all child shapes.
+     * Return the list of all child shapes.
+     * @return the list of all child shapes
      */
     QList<KoShape*> shapes() const;
 
@@ -201,8 +201,6 @@ public:
      * return the model for this container
      */
     KoShapeContainerModel *model() const;
-
-    virtual void saveOdfChildElements(KoShapeSavingContext &context) const;
 
 protected:
     /**
@@ -213,12 +211,12 @@ protected:
      */
     virtual void shapeCountChanged() { }
 
+    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+
     /// constructor
     KoShapeContainer(KoShapeContainerPrivate &);
 
 private:
-    void shapeChanged(ChangeType type, KoShape *shape = 0);
-
     Q_DECLARE_PRIVATE(KoShapeContainer)
 };
 

@@ -140,6 +140,8 @@ void KisImageConfig::setMemorySoftLimitPercent(qreal value)
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
+#elif defined Q_OS_FREEBSD
+#include <sys/sysctl.h>
 #endif
 
 #include <kdebug.h>
@@ -148,21 +150,30 @@ int KisImageConfig::totalRAM()
 {
     // let's think that default memory size is 1000MiB
     int totalMemory = 1000; // MiB
+    int error = 1;
 
 #if defined Q_OS_LINUX
     struct sysinfo info;
-    int error = sysinfo(&info);
 
+    error = sysinfo(&info);
     if(!error) {
         totalMemory = info.totalram * info.mem_unit / (1UL << 20);
-    } else {
+    }
+#elif defined Q_OS_FREEBSD
+    u_long physmem;
+    int mib[] = {CTL_HW, HW_PHYSMEM};
+    size_t len = sizeof(physmem);
+
+    error = sysctl(mib, 2, &physmem, &len, NULL, 0);
+    if(!error) {
+        totalMemory = physmem >> 20;
+    }
+#endif
+
+    if(error) {
         kWarning() << "Cannot get the size of your RAM."
                    << "Using default value of 1GiB.";
     }
-#else
-    kWarning() << "Cannot get the size of your RAM."
-               << "Using default value of 1GiB.";
-#endif
 
     return totalMemory;
 }

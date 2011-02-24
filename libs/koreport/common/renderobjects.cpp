@@ -17,7 +17,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "renderobjects.h"
-
+#include <kdebug.h>
 
 //
 // ORODocument
@@ -29,11 +29,11 @@ ORODocument::ORODocument(const QString & pTitle)
 
 ORODocument::~ORODocument()
 {
-    while (!m_pages.isEmpty()) {
-        OROPage * p = m_pages.takeFirst();
-        p->m_document = 0;
-        delete p;
-    }
+    qDeleteAll(m_pages);
+    m_pages.clear();
+
+    qDeleteAll(m_sections);
+    m_sections.clear();
 }
 
 void ORODocument::setTitle(const QString & pTitle)
@@ -90,15 +90,12 @@ OROPage::OROPage(ORODocument * pDocument)
 OROPage::~OROPage()
 {
     if (m_document) {
-        m_document->m_pages.removeAt(page());
+        m_document->m_pages.removeOne(this);
         m_document = 0;
     }
 
-    while (!m_primitives.isEmpty()) {
-        OROPrimitive* p = m_primitives.takeFirst();
-        p->m_page = 0;
-        delete p;
-    }
+    qDeleteAll(m_primitives);
+    m_primitives.clear();
 }
 
 int OROPage::page() const
@@ -145,19 +142,12 @@ OROSection::OROSection(ORODocument * pDocument)
 OROSection::~OROSection()
 {
     if (m_document) {
-        m_document->m_sections.removeAt(row());
+        m_document->m_sections.removeOne(this);
         m_document = 0;
     }
 
-    while (!m_primitives.isEmpty()) {
-        OROPrimitive* p = m_primitives.takeFirst();
-        delete p;
-    }
-}
-
-long OROSection::row() const
-{
-    return m_row;
+    qDeleteAll(m_primitives);
+    m_primitives.clear();
 }
 
 OROPrimitive* OROSection::primitive(int idx)
@@ -216,7 +206,7 @@ OROPrimitive::OROPrimitive(int pType)
 
 OROPrimitive::~OROPrimitive()
 {
-    if (m_page) {
+   if (m_page) {
         m_page->m_primitives.removeAt(m_page->m_primitives.indexOf(this));
         m_page = 0;
     }
@@ -239,7 +229,7 @@ OROTextBox::OROTextBox()
     m_lineStyle.lineColor = Qt::black;
     m_lineStyle.weight = 0;
     m_lineStyle.style = Qt::NoPen;
-
+    
     m_requiresPostProcessing = false; 
 }
 

@@ -21,6 +21,7 @@
 #include <QStringList>
 #include <kis_node.h>
 #include <kis_image.h>
+#include <kis_paint_device.h>
 
 struct PathElement {
     enum Type {

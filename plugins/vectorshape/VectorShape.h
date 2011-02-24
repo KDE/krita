@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2009-2010 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2009-2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +23,9 @@
 #define VECTORSHAPE_H
 
 
+// Qt
+#include <QByteArray>
+
 // KOffice
 #include <KoShape.h>
 #include <KoFrameShape.h>
@@ -38,6 +41,14 @@ class QPainter;
 
 class VectorShape : public KoShape, public KoFrameShape {
 public:
+    // Type of vector file. Add here when we get support for more.
+    enum VectorType {
+        VectorTypeNone,             // Uninitialized
+        VectorTypeWmf,              // Windows MetaFile
+        VectorTypeEmf               // Extended MetaFile
+        // ... more here later
+    };
+
     VectorShape();
     virtual ~VectorShape();
 
@@ -45,8 +56,6 @@ public:
 
     /// reimplemented from KoShape
     void paint(QPainter &painter, const KoViewConverter &converter);
-    /// reimplemented from KoShape
-    void paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas);
     /// reimplemented from KoShape
     virtual void saveOdf(KoShapeSavingContext & context) const;
     /// reimplemented from KoShape
@@ -56,19 +65,12 @@ public:
                                      KoShapeLoadingContext& context);
 
     // Methods specific to the vector shape.
-
-    void  setVectorBytes( char *bytes, int size, bool takeOwnership );
-    char *vectorBytes();
-    int   vectorSize();
+    QByteArray  contents() const;
+    void  setContents( const QByteArray &newContents );
+    VectorType  vectorType() const;
 
 private:
-    // Type of vector file. Add here when we get support for more.
-    enum VectorType {
-        VectorTypeNone,             // Uninitialized
-        VectorTypeWmf,              // Windows MetaFile
-        VectorTypeEmf               // Extended MetaFile
-        // ... more here later
-    };
+    void determineType();
 
     void draw(QPainter &painter) const;
     void drawNull(QPainter &painter) const;
@@ -81,10 +83,7 @@ private:
     // Member variables
 
     VectorType  m_type;
-
-    char  *m_bytes;       // Use char* instead of void* because of QByteArray
-    int    m_size;
-    bool   m_ownsBytes;   // True if the data is owned by this shape.
+    QByteArray  m_contents;
 };
 
 #endif

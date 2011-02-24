@@ -69,7 +69,7 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const {
         return rect;
     }
-    bool addLine(QTextLine &, bool) {
+    bool addLine() {
         return true;
     }
     bool nextParag() {
@@ -82,7 +82,7 @@ public:
         return 0;
     }
 
-    QRectF selectionBoundingBox(QTextCursor &cursor) {
+    QRectF selectionBoundingBox(QTextCursor &/*cursor*/) {
         return QRectF();
     }
 
@@ -101,6 +101,27 @@ public:
     }
     qreal maxLineHeight() const {
         return 0;
+    }
+    void registerRunAroundShape(KoShape *) {}
+    void updateRunAroundShape(KoShape *) {}
+    void unregisterAllRunAroundShapes() {}
+    QTextLine createLine() {
+        return layout->createLine();
+    }
+    void fitLineForRunAround(bool resetHorizontalPosition) {
+        Q_UNUSED(resetHorizontalPosition);
+    }
+
+    virtual void insertInlineObject(KoTextAnchor * textAnchor) {
+        Q_UNUSED(textAnchor);
+    }
+
+    virtual void resetInlineObject(int resetPosition) {
+        Q_UNUSED(resetPosition);
+    }
+
+    virtual void removeInlineObject(KoTextAnchor * textAnchor) {
+        Q_UNUSED(textAnchor);
     }
 };
 
@@ -424,6 +445,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
             // found our (first) shape to re-layout
             data->foul();
             m_state->reset();
+            resetInlineObject(position);
             scheduleLayout();
             return;
         }
@@ -524,7 +546,7 @@ void KoTextDocumentLayout::layout()
     if (! m_state->start())
         return;
     while (m_state->shape) {
-        QTextLine line = m_state->layout->createLine();
+        QTextLine line = m_state->createLine();
         if (!line.isValid()) { // end of parag
             qreal posY = m_state->y();
             bool moreText = m_state->nextParag();
@@ -543,7 +565,7 @@ void KoTextDocumentLayout::layout()
         else
             line.setLineWidth(m_state->width());
         line.setPosition(QPointF(m_state->x(), m_state->y()));
-        m_state->addLine(line);
+        m_state->addLine();
         if (m_state->shape == 0) { // shape is full!
             emit finishedLayout();
             return; // done!
@@ -556,13 +578,18 @@ QList<KoShape*> KoTextDocumentLayout::shapes() const
     return d->shapes;
 }
 
+void KoTextDocumentLayout::resetInlineObject(int resetPosition)
+{
+    m_state->resetInlineObject(resetPosition);
+}
+
 KoShape* KoTextDocumentLayout::shapeForPosition(int position) const
 {
     foreach(KoShape *shape, shapes()) {
         KoTextShapeData *data = qobject_cast<KoTextShapeData*>(shape->userData());
         if (data == 0)
             continue;
-        if (data->position() <= position && (data->endPosition() == -1 || data->endPosition() > position))
+        if (data->position() <= position && (data->endPosition() == -1 || data->endPosition() >= position))
             return shape;
     }
     return 0;

@@ -27,6 +27,7 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <kis_iterator_ng.h>
 
 typedef void (*funcMaxMin)(const quint8* , quint8* , uint);
 
@@ -71,30 +72,22 @@ KisFilterMax::KisFilterMax() : KisFilter(id(), categoryColors(), i18n("M&aximize
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setShowConfigurationWidget(false);
 }
 
-void KisFilterMax::process(KisConstProcessingInformation srcInfo,
-                           KisProcessingInformation dstInfo,
-                           const QSize& size,
+void KisFilterMax::process(KisPaintDeviceSP device,
+                           const QRect& rect,
                            const KisFilterConfiguration* config,
                            KoUpdater* progressUpdater
                           ) const
 {
     Q_UNUSED(config);
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
-
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
+    Q_ASSERT(device != 0);
 
     int pixelsProcessed = 0;
-    int totalCost = size.width() * size.height() / 100;
+    int totalCost = rect.width() * rect.height() / 100;
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
     funcMaxMin F;
@@ -108,15 +101,13 @@ void KisFilterMax::process(KisConstProcessingInformation srcInfo,
     } else {
         return;
     }
+    
+    KisRectIteratorSP it = device->createRectIteratorNG(rect);
 
-    while (! srcIt.isDone()) {
-        if (srcIt.isSelected()) {
-            F(srcIt.oldRawData(), dstIt.rawData(), nC);
-        }
+    do {
+        F(it->oldRawData(), it->rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-        ++srcIt;
-        ++dstIt;
-    }
+    } while(it->nextPixel());
 }
 
 KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize Channel"))
@@ -124,31 +115,24 @@ KisFilterMin::KisFilterMin() : KisFilter(id(), categoryColors(), i18n("M&inimize
     setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(FULLY_INDEPENDENT);
+    setShowConfigurationWidget(false);
 }
 
-void KisFilterMin::process(KisConstProcessingInformation srcInfo,
-                           KisProcessingInformation dstInfo,
-                           const QSize& size,
+void KisFilterMin::process(KisPaintDeviceSP device,
+                           const QRect& rect,
                            const KisFilterConfiguration* config,
                            KoUpdater* progressUpdater
                           ) const
 {
     Q_UNUSED(config);
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(src != 0);
-    Q_ASSERT(dst != 0);
-
-    KisRectIteratorPixel dstIt = dst->createRectIterator(dstTopLeft.x(), dstTopLeft.y(), size.width(), size.height(), dstInfo.selection());
-    KisRectConstIteratorPixel srcIt = src->createRectConstIterator(srcTopLeft.x(), srcTopLeft.y(), size.width(), size.height(), srcInfo.selection());
+    QPoint srcTopLeft = rect.topLeft();
+    Q_ASSERT(device != 0);
 
     int pixelsProcessed = 0;
-    int totalCost = size.width() * size.height() / 100;
+    int totalCost = rect.width() * rect.height() / 100;
     if (totalCost == 0) totalCost = 1;
 
-    const KoColorSpace * cs = src->colorSpace();
+    const KoColorSpace * cs = device->colorSpace();
     qint32 nC = cs->colorChannelCount();
 
     funcMaxMin F;
@@ -162,14 +146,11 @@ void KisFilterMin::process(KisConstProcessingInformation srcInfo,
     } else {
         return;
     }
+    KisRectIteratorSP it = device->createRectIteratorNG(rect);
 
-    while (! srcIt.isDone()) {
-        if (srcIt.isSelected()) {
-            F(srcIt.oldRawData(), dstIt.rawData(), nC);
-        }
+    do {
+        F(it->oldRawData(), it->rawData(), nC);
         if (progressUpdater) progressUpdater->setProgress((++pixelsProcessed) / totalCost);
-        ++srcIt;
-        ++dstIt;
-    }
+    } while(it->nextPixel());
 }
 

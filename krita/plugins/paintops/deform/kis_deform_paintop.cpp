@@ -94,9 +94,9 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         KisFixedPaintDeviceSP dab = cachedDab(painter()->device()->colorSpace());
 
         qint32 x;
-        double subPixelX;
+        qreal subPixelX;
         qint32 y;
-        double subPixelY;
+        qreal subPixelY;
 
         QPointF pt = info.pos();
         if (m_sizeProperties.jitterEnabled){
@@ -105,7 +105,7 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         }
 
         qreal rotation = m_rotationOption.apply(info);
-        qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+        qreal scale = m_sizeOption.apply(info);
         
         setCurrentRotation(rotation);
         setCurrentScale(scale);
@@ -132,6 +132,7 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
         painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
+        renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
         painter()->setOpacity(origOpacity);
         
         return m_spacing;
@@ -151,7 +152,7 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 }
 
 
-double KisDeformPaintOp::spacing(double /*pressure*/) const
+qreal KisDeformPaintOp::spacing(qreal /*pressure*/) const
 {
     return m_spacing;
 }

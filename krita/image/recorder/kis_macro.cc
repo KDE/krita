@@ -28,6 +28,7 @@
 #include "kis_undo_adapter.h"
 #include "kis_play_info.h"
 #include "kis_node_query_path.h"
+#include <kis_paint_device.h>
 
 struct KisMacro::Private {
     QList<KisRecordedAction*> actions;
@@ -83,33 +84,6 @@ void KisMacro::moveAction(const KisRecordedAction* action, const KisRecordedActi
         d->actions.append(_action);
     } else {
         d->actions.insert(d->actions.indexOf(const_cast<KisRecordedAction*>(before)), _action);
-    }
-}
-
-// TODO should be threaded instead
-#include <QApplication>
-
-void KisMacro::play(const KisPlayInfo& info) const
-{
-    dbgImage << "Start playing macro with " << d->actions.size() << " actions";
-    if (info.undoAdapter()) {
-        info.undoAdapter() ->beginMacro(i18n("Play macro"));
-    }
-
-
-    for (QList<KisRecordedAction*>::iterator it = d->actions.begin(); it != d->actions.end(); ++it) {
-        if (*it) {
-            QList<KisNodeSP> nodes = (*it)->nodeQueryPath().queryNodes(info.image(), info.currentNode());
-            foreach(const KisNodeSP node, nodes) {
-                dbgImage << "Play action : " << (*it)->name();
-                (*it)->play(node, info);
-            }
-        }
-        QApplication::processEvents();
-    }
-
-    if (info.undoAdapter()) {
-        info.undoAdapter() ->endMacro();
     }
 }
 

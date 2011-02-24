@@ -50,9 +50,8 @@
 #include "widgets/kis_curve_widget.h"
 
 
-#define bounds(x,a,b) (x<a ? a : (x>b ? b :x))
 
-KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WFlags f)
+KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, const QRect &bounds, Qt::WFlags f)
         : KisConfigWidget(parent, f), m_histogram(0)
 {
     Q_ASSERT(dev);
@@ -87,7 +86,7 @@ KisPerChannelConfigWidget::KisPerChannelConfigWidget(QWidget * parent, KisPaintD
     {
         KoHistogramProducerFactory *hpf;
         hpf = KoHistogramProducerFactoryRegistry::instance()->get(keys.at(0));
-	m_histogram = new KisHistogram(m_dev, m_dev->exactBounds(), hpf->generate(), LINEAR);
+	m_histogram = new KisHistogram(m_dev, bounds, hpf->generate(), LINEAR);
     }
 
     connect(m_page->curveWidget, SIGNAL(modified()), this, SIGNAL(sigConfigurationItemChanged()));
@@ -380,15 +379,14 @@ void KisPerChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& roo
 
 KisPerChannelFilter::KisPerChannelFilter() : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Color Adjustment curves..."))
 {
-    setSupportsPainting(false);
+    setSupportsPainting(true);
     setSupportsIncrementalPainting(false);
     setColorSpaceIndependence(TO_LAB16);
 }
 
 KisConfigWidget * KisPerChannelFilter::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, const KisImageWSP image) const
 {
-    Q_UNUSED(image);
-    return new KisPerChannelConfigWidget(parent, dev);
+    return new KisPerChannelConfigWidget(parent, dev, image->bounds());
 }
 
 KisFilterConfiguration * KisPerChannelFilter::factoryConfiguration(const KisPaintDeviceSP) const

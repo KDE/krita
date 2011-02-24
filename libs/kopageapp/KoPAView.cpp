@@ -179,7 +179,7 @@ void KoPAView::initGUI()
     setLayout( gridLayout );
 
     d->canvas = new KoPACanvas( this, d->doc, this );
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( this );
+    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget( actionCollection(), this );
     d->canvasController = canvasController;
     d->canvasController->setCanvas( d->canvas );
     KoToolManager::instance()->addController( d->canvasController );
@@ -240,8 +240,8 @@ void KoPAView::initGUI()
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
-        connect( canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &, QWidget*) ),
-             shell()->dockerManager(), SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &, QWidget*) ) );
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
+             shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &) ));
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -373,8 +373,7 @@ KoPAPageBase* KoPAView::activePage() const
 
 void KoPAView::updateReadWrite( bool readwrite )
 {
-    d->canvas->setReadWrite(readwrite);
-    KoToolManager::instance()->updateReadWrite(d->canvasController, readwrite);
+    Q_UNUSED(readwrite);
 }
 
 KoRuler* KoPAView::horizontalRuler()

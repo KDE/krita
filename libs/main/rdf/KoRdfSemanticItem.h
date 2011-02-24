@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QSharedData>
 #include <QMimeData>
-#include <KDateTime>
+#include <kdatetime.h>
 #include <Soprano/Soprano>
 
 #include "RdfForward.h"

@@ -22,12 +22,13 @@ KisCurveOption::KisCurveOption(const QString & label, const QString& name, const
         : m_label(label)
         , m_category(category)
         , m_sensor(0)
-        , m_customCurve(false)
         , m_name(name)
         , m_checkable(true)
         , m_checked(checked)
 {
     setSensor(KisDynamicSensor::id2Sensor(PressureId.id()));
+    setMinimumLabel(i18n("0.0"));
+    setMaximumLabel(i18n("1.0"));
 }
 
 KisCurveOption::~KisCurveOption()
@@ -45,27 +46,12 @@ const QString& KisCurveOption::category() const
     return m_category;
 }
 
-KisCubicCurve KisCurveOption::curve() const
-{
-    return m_curve;
-}
-
-void KisCurveOption::setCurve(const KisCubicCurve& curve)
-{
-    m_curve = curve;
-    m_customCurve = true;
-}
-
 void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
     }
-    setting->setProperty("Custom" + m_name, m_customCurve);
     setting->setProperty(QString(m_name + "Sensor"), sensor()->toXML());
-    if (m_customCurve) {
-        setting->setProperty("Curve" + m_name, qVariantFromValue(m_curve));
-    }
 }
 
 void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -73,14 +59,14 @@ void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting
     if (m_checkable) {
         setChecked(setting->getBool("Pressure" + m_name, false));
     }
-    m_customCurve = setting->getBool("Custom" + m_name, false);
+    bool customCurve = setting->getBool("Custom" + m_name, false);
 
     KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor")));
     if(sensor) {
         setSensor(sensor);
     }
-    if (m_customCurve) {
-        m_curve = setting->getCubicCurve("Curve" + m_name);
+    if (customCurve) {
+        m_sensor->setCurve(setting->getCubicCurve("Curve" + m_name));
     }
 }
 
@@ -109,4 +95,25 @@ bool KisCurveOption::isChecked() const
 void KisCurveOption::setChecked(bool checked)
 {
     m_checked = checked;
+}
+
+
+const KisCurveLabel& KisCurveOption::minimumLabel() const
+{
+    return m_minimumLabel;
+}
+
+const KisCurveLabel& KisCurveOption::maximumLabel() const
+{
+    return m_maximumLabel;
+}
+
+void KisCurveOption::setMinimumLabel(const KisCurveLabel& _label)
+{
+    m_minimumLabel = _label;
+}
+
+void KisCurveOption::setMaximumLabel(const KisCurveLabel& _label)
+{
+    m_maximumLabel = _label;
 }

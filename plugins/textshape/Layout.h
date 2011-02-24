@@ -23,6 +23,9 @@
 
 #include "TableLayout.h"
 
+#include "Outline.h"
+#include "TextLine.h"
+
 #include <KoTextDocumentLayout.h>
 #include <KoTextBlockData.h>
 #include <KoInsets.h>
@@ -31,6 +34,7 @@
 #include <QTextBlock>
 #include <QTextTableCell>
 #include <QHash>
+#include <QList>
 #include <QWeakPointer>
 
 class KoStyleManager;
@@ -41,6 +45,14 @@ class KoChangeTracker;
 class KoImageCollection;
 class ToCGenerator;
 
+class InlineObjectPosition
+{
+public:
+    InlineObjectPosition(qreal ascent = 0, qreal descent = 0);
+    qreal m_ascent;
+    qreal m_descent;
+};
+
 /**
  * The document layouter for KoText style docs.
  */
@@ -48,6 +60,8 @@ class Layout : public KoTextDocumentLayout::LayoutState
 {
 public:
     explicit Layout(KoTextDocumentLayout *parent);
+
+    virtual ~Layout();
     /// start layouting, return false when there is nothing to do
     virtual bool start();
     /// end layouting
@@ -65,7 +79,7 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const;
     /// Try to add line to shape and update internal vars.  Discards line if it doesn't fit
     /// in shape and returns false. In that case you should try over with a new createLine
-    virtual bool addLine(QTextLine &line, bool processingLine = false);
+    virtual bool addLine();
     /// prepare for next paragraph; return false if there is no next parag.
     virtual bool nextParag();
     virtual bool previousParag();
@@ -97,6 +111,24 @@ public:
     virtual qreal maxLineHeight() const {
         return m_maxLineHeight;
     }
+    /// Registers the shape as being relevant for run around at this moment in time
+    virtual void registerRunAroundShape(KoShape *shape);
+
+    /// Updates the registration of the shape for run around
+    virtual void updateRunAroundShape(KoShape *shape);
+
+    /// Clear all registrations of shapest for run around
+    virtual void unregisterAllRunAroundShapes();
+
+    virtual QTextLine createLine();
+
+    virtual void fitLineForRunAround(bool resetHorizontalPosition);
+    // add inline object
+    virtual void insertInlineObject(KoTextAnchor * textAnchor);
+    // remove all inline objects which document position is bigger or equal to resetPosition
+    virtual void resetInlineObject(int resetPosition);
+    // remove inline object
+    virtual void removeInlineObject(KoTextAnchor * textAnchor);
 private:
     friend class TestTableLayout; // to allow direct testing.
 
@@ -115,7 +147,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
 
-    qreal inlineCharHeight(const QTextFragment &fragment);
+    InlineObjectPosition inlineCharHeight(const QTextFragment &fragment);
 
     /**
      * Find a footnote and if there exists one reserve space for it at the bottom of the shape.
@@ -152,6 +184,23 @@ private:
 
     void updateFrameStack();
 
+    /**
+     * Try to position inline objects that are not positioned and create outline for them if needed.
+     *
+     * @return false if no relayout is needed.
+     */
+    bool positionInlineObjects();
+
+    /**
+     * Check position of text anchor linked shape and move layout position back if needed.
+     *
+     * @return false if layout position wasn't changed.
+     */
+    bool moveLayoutPosition(KoTextAnchor *textAnchor); //true layout position was modified
+
+    // Fill m_currentLineOutlines list with actual outlines for current page
+    void refreshCurrentPageOutlines();
+
 private:
     KoStyleManager *m_styleManager;
 
@@ -168,7 +217,7 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
+    QHash<int, InlineObjectPosition> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
     QVector<QTextFrame *> m_frameStack;
     QList<QWeakPointer<ToCGenerator> > m_tocGenerators;
@@ -195,6 +244,13 @@ private:
     qreal m_maxLineHeight;
     bool m_relativeTabs;
     qreal m_scaleFactor;
+
+    QHash<KoShape*,Outline*> m_outlines; // all outlines created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
+    QList<Outline*> m_currentLineOutlines; // outlines for current page
+    TextLine m_textLine;
+
+    QList<KoTextAnchor *> m_textAnchors; // list of all inserted inline objects
+    int m_textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 };
 
 #endif

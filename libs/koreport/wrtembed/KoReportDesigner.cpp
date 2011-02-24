@@ -186,6 +186,7 @@ KoReportDesigner::~KoReportDesigner()
     delete d->zoom;
     delete d;
     delete m_sectionData;
+    delete m_set;
 }
 
 ///The loading Code

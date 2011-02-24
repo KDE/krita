@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2011 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -247,7 +247,14 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     context.odfLoadingContext().setUseStylesAutoStyles( true );
     QList<KoPAPageBase *> masterPages;
 
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdfMasterPages");
+        updater->setProgress(0);
+    }
+
     QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
+    int count = 0;
     for ( ; it != masterStyles.constEnd(); ++it )
     {
         kDebug(30010) << "Master:" << it.key();
@@ -255,8 +262,15 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );
         context.addMasterPage( it.key(), masterPage );
+        if (updater) {
+            int progress = 100 * ++count / masterStyles.size();
+            updater->setProgress(progress);
+        }
     }
     context.odfLoadingContext().setUseStylesAutoStyles( false );
+    if (updater) {
+        updater->setProgress(100);
+    }
     return masterPages;
 }
 
@@ -264,6 +278,15 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
 {
     if (d->masterPages.isEmpty()) { // we require at least one master page. Auto create one if the doc was faulty.
         d->masterPages << newMasterPage();
+    }
+
+    int childNodesCount = 0;
+    int childCount = 0;
+    QPointer<KoUpdater> updater;
+    if (progressUpdater()) {
+        updater = progressUpdater()->startSubtask(5, "KoPADocument::loadOdfPages");
+        updater->setProgress(0);
+        childNodesCount = body.childNodesCount();
     }
 
     QList<KoPAPageBase *> pages;
@@ -275,6 +298,14 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
             page->loadOdf( element, context );
             pages.append( page );
         }
+
+        if (updater) {
+            int progress = 100 * ++childCount / childNodesCount;
+            updater->setProgress(progress);
+        }
+    }
+    if (updater) {
+        updater->setProgress(100);
     }
     return pages;
 }

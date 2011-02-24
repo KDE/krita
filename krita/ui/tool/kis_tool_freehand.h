@@ -101,7 +101,7 @@ private:
     /**
      * adjust a coordinates according to a KisPaintingAssitant, if available.
      */
-    QPointF adjustPosition(const QPointF& point);
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
     void queuePaintJob(FreehandPaintJob* job, FreehandPaintJob* previousJob);
     void showOutlineTemporary();
 
@@ -118,6 +118,7 @@ protected:
     KisPaintInformation m_previousPaintInformation;
     QPointF m_previousTangent;
     double m_dragDist;
+    QPointF m_strokeBegin;
 
     bool m_paintIncremental;
 

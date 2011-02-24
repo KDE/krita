@@ -4,6 +4,7 @@
  * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *   Contact: Suresh Chande suresh.chande@nokia.com
+ * Copyright (C) 2009-2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,7 +32,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoShapeSavingContext.h>
-#include <KoTextOnShapeContainer.h>
 #include <KoUnit.h>
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
@@ -75,36 +75,38 @@ void EnhancedPathShape::moveHandleAction(int handleId, const QPointF & point, Qt
 
 void EnhancedPathShape::updatePath(const QSizeF &)
 {
-    clear();
+    if (isParametricShape()) {
+        clear();
 
-    foreach (EnhancedPathCommand *cmd, m_commands)
-        cmd->execute();
+        foreach (EnhancedPathCommand *cmd, m_commands)
+            cmd->execute();
 
-    m_viewBound = outline().boundingRect();
+        m_viewBound = outline().boundingRect();
 
-    m_mirrorMatrix.reset();
-    m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
-    m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
-    m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
+        m_mirrorMatrix.reset();
+        m_mirrorMatrix.translate(m_viewBound.center().x(), m_viewBound.center().y());
+        m_mirrorMatrix.scale(m_mirrorHorizontally ? -1 : 1, m_mirrorVertically ? -1 : 1);
+        m_mirrorMatrix.translate(-m_viewBound.center().x(), -m_viewBound.center().y());
 
-    QTransform matrix;
-    matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
-    matrix = m_mirrorMatrix * m_viewMatrix * matrix;
+        QTransform matrix;
+        matrix.translate(m_viewBoxOffset.x(), m_viewBoxOffset.y());
+        matrix = m_mirrorMatrix * m_viewMatrix * matrix;
 
-    KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
-    for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
-        KoSubpath::const_iterator it((*pathIt)->constBegin());
-        for (; it != (*pathIt)->constEnd(); ++it) {
-            (*it)->map(matrix);
+        KoSubpathList::const_iterator pathIt(m_subpaths.constBegin());
+        for (; pathIt != m_subpaths.constEnd(); ++pathIt) {
+            KoSubpath::const_iterator it((*pathIt)->constBegin());
+            for (; it != (*pathIt)->constEnd(); ++it) {
+                (*it)->map(matrix);
+            }
         }
-    }
-    const int handleCount = m_enhancedHandles.count();
-    QList<QPointF> handles;
-    for (int i = 0; i < handleCount; ++i)
-        handles.append(matrix.map(m_enhancedHandles[i]->position()));
-    setHandles(handles);
+        const int handleCount = m_enhancedHandles.count();
+        QList<QPointF> handles;
+        for (int i = 0; i < handleCount; ++i)
+            handles.append(matrix.map(m_enhancedHandles[i]->position()));
+        setHandles(handles);
 
-    normalize();
+        normalize();
+    }
 }
 
 void EnhancedPathShape::setSize(const QSizeF &newSize)
@@ -351,9 +353,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         context.xmlWriter().addAttributePt("svg:width", m_viewBox.width()*currentSize.width()/m_viewBound.width());
         context.xmlWriter().addAttributePt("svg:height", m_viewBox.height()*currentSize.height()/m_viewBound.height());
 
-        if (parent())
-            parent()->saveOdfChildElements(context);
-        
+        saveText(context);
+
         context.xmlWriter().startElement("draw:enhanced-geometry");
         context.xmlWriter().addAttribute("svg:viewBox", QString("%1 %2 %3 %4").arg(m_viewBox.x()).arg(m_viewBox.y()).arg(m_viewBox.width()).arg(m_viewBox.height()));
 
@@ -363,13 +364,15 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
         if (m_mirrorVertically) {
             context.xmlWriter().addAttribute("draw:mirror-vertical", "true");
         }
-        
+
         QString modifiers;
         foreach (qreal modifier, m_modifiers)
             modifiers += QString::number(modifier) + ' ';
         context.xmlWriter().addAttribute("draw:modifiers", modifiers.trimmed());
 
-        context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        if (m_textArea.size() >= 4) {
+            context.xmlWriter().addAttribute("draw:text-areas", m_textArea.join(" "));
+        }
 
         QString path;
         foreach (EnhancedPathCommand * c, m_commands)
@@ -409,6 +412,9 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
         }
 
         m_textArea = enhancedGeometry.attributeNS(KoXmlNS::draw, "text-areas", "").split(' ');
+        if (m_textArea.size() >= 4) {
+            setResizeBehavior(TextFollowsPreferredTextRect);
+        }
 
         KoXmlElement grandChild;
         forEachElement(grandChild, enhancedGeometry) {
@@ -438,16 +444,17 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 #ifndef NWORKAROUND_ODF_BUGS
         KoOdfWorkaround::fixEnhancedPath(path, enhancedGeometry, context);
 #endif
+        // load the viewbox
+        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
+        if (!viewBox.isEmpty()) {
+            m_viewBox = viewBox;
+        }
+
         if (!path.isEmpty()) {
             parsePathData(path);
         }
 
-        // load the viewbox
-        QRectF viewBox = loadOdfViewbox(enhancedGeometry);
-        if (! viewBox.isEmpty()) {
-            m_viewBox = viewBox;
-        }
-        else {
+        if (viewBox.isEmpty()) {
             // if there is no view box defined make it is big as the path.
             m_viewBox = m_viewBound;
         }
@@ -470,7 +477,7 @@ bool EnhancedPathShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
 
     loadOdfAttributes(element, context, OdfMandatories | OdfTransformation | OdfAdditionalAttributes | OdfCommonChildElements);
 
-    KoTextOnShapeContainer::tryWrapShape(this, element, context);
+    loadText(element, context);
 
     return true;
 }
@@ -536,17 +543,13 @@ void EnhancedPathShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void EnhancedPathShape::updateTextArea()
 {
-    KoTextOnShapeContainer* tosContainer = dynamic_cast<KoTextOnShapeContainer*>(parent());
-    if (tosContainer) {
-        tosContainer->setResizeBehavior(KoTextOnShapeContainer::TextFollowsPreferredTextRect);
+    if (m_textArea.size() >= 4) {
         QRectF r = m_viewBox;
-        if (m_textArea.size() >= 4) {
-            r.setLeft(evaluateConstantOrReference(m_textArea[0]));
-            r.setTop(evaluateConstantOrReference(m_textArea[1]));
-            r.setRight(evaluateConstantOrReference(m_textArea[2]));
-            r.setBottom(evaluateConstantOrReference(m_textArea[3]));
-        }
+        r.setLeft(evaluateConstantOrReference(m_textArea[0]));
+        r.setTop(evaluateConstantOrReference(m_textArea[1]));
+        r.setRight(evaluateConstantOrReference(m_textArea[2]));
+        r.setBottom(evaluateConstantOrReference(m_textArea[3]));
         r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
-        tosContainer->setPreferredTextRect(r);
+        setPreferredTextRect(r);
     }
 }

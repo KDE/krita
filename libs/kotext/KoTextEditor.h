@@ -104,7 +104,7 @@ public slots:
 
     void setFontFamily(const QString &font);
 
-    void setFontSize(int size);
+    void setFontSize(qreal size);
 
     void setTextColor(const QColor &color);
 
@@ -281,6 +281,7 @@ public slots:
 
 signals:
     void isBidiUpdated();
+    void cursorPositionChanged();
 
 private:
     Q_PRIVATE_SLOT(d, void documentCommandAdded())

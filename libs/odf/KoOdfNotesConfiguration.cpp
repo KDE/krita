@@ -53,7 +53,7 @@ KoOdfNotesConfiguration::~KoOdfNotesConfiguration()
 }
 
 KoOdfNotesConfiguration::KoOdfNotesConfiguration(const KoOdfNotesConfiguration &other)
-    : d(new Private())
+    : QObject(), d(new Private())
 {
     d->noteClass = other.d->noteClass;
     d->citationTextStyle = other.d->citationTextStyle;

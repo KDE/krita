@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -112,6 +113,13 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
             
     connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
+    
+    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
+            this, SIGNAL(presetNameLineEditChanged(QString)));
+            
+    connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
+            this, SIGNAL(paintopActivated(QString)));
+
             
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
@@ -161,18 +169,32 @@ void KisPaintOpPresetsPopup::setPaintOpSettingsWidget(QWidget * widget)
     }
 
     if (widget) {
-
-        
-        
         widget->setFont(m_d->smallFont);
 
-        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+        widget->setMinimumSize(QSize(750, 450));
+        m_d->settingsWidget->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
         m_d->layout->addWidget(widget);
 
         m_d->layout->update();
         widget->show();
     }
 }
+
+void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
+{
+    QPalette palette;
+    
+    if (change) {
+        palette.setColor(QPalette::Base, QColor(255,200,200));
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+    else {
+        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
+        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+    }
+}
+
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
@@ -241,5 +263,24 @@ void KisPaintOpPresetsPopup::showScratchPad()
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(true);
 }
 
+void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
+{
+	m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+}
+
+void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)
+{
+   m_d->uiWdgPaintOpPresetSettings.paintopList->setPaintOpList(list);
+}
+
+void KisPaintOpPresetsPopup::setCurrentPaintOp(const QString& paintOpId)
+{
+    m_d->uiWdgPaintOpPresetSettings.paintopList->setCurrent(paintOpId);
+}
+
+QString KisPaintOpPresetsPopup::currentPaintOp()
+{
+    return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
+}
 
 #include "kis_paintop_presets_popup.moc"

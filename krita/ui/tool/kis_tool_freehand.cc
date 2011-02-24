@@ -48,6 +48,7 @@
 
 
 // Krita/ui
+#include "kis_abstract_perspective_grid.h"
 #include "kis_config.h"
 #include <opengl/kis_opengl.h>
 #include "canvas/kis_canvas2.h"
@@ -141,10 +142,18 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
      * FIXME: we need some better way to implement modifiers
      * for a paintop level
      */
+    QPointF pos = adjustPosition(e->point, e->point);
+    qreal perspective = 1.0;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(pos)) {
+            perspective = grid->distance(pos);
+            break;
+        }
+    }
     bool ignoreEvent = currentPaintOpPreset()->settings()->mousePressEvent(KisPaintInformation(convertToPixelCoord(e->point),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed()),e->modifiers());
+                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed()),e->modifiers());
     if (!ignoreEvent){
         e->accept();
         return;
@@ -165,10 +174,11 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
         setMode(KisTool::PAINT_MODE);
 
         initPaint(e);
-        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point)),
+        m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
                                                          KisVector2D::Zero(),
-                                                         e->rotation(), e->tangentialPressure(), m_strokeTimeMeasure.elapsed());
+                                                         e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed());
+        m_strokeBegin = e->point;
 
         e->accept();
     }
@@ -211,13 +221,22 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
     /**
      * Actual painting
      */
-    QPointF pos = convertToPixelCoord(adjustPosition(e->point));
+    QPointF adjusted = adjustPosition(e->point, m_strokeBegin);
+    QPointF pos = convertToPixelCoord(adjusted);
     QPointF dragVec = pos - m_previousPaintInformation.pos();
+
+    qreal perspective = 1.0;
+    foreach (const KisAbstractPerspectiveGrid* grid, static_cast<KisCanvas2*>(canvas())->view()->resourceProvider()->perspectiveGrids()) {
+        if (grid->contains(adjusted)) {
+            perspective = grid->distance(adjusted);
+            break;
+        }
+    }
 
     KisPaintInformation info =
         KisPaintInformation(pos, pressureToCurve(e->pressure()),
                             e->xTilt(), e->yTilt(), toKisVector2D(dragVec),
-                            e->rotation(), e->tangentialPressure(),
+                            e->rotation(), e->tangentialPressure(), perspective,
                             m_strokeTimeMeasure.elapsed());
 
     if (m_smooth) {
@@ -332,7 +351,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     m_painter->beginTransaction(m_transactionText);
 
     setupPainter(m_painter);
-
+    
     if (m_paintIncremental) {
         m_painter->setCompositeOp(m_compositeOp);
         m_painter->setOpacity(m_opacity);
@@ -395,6 +414,11 @@ void KisToolFreehand::endPaint()
         }
         m_paintJobs.clear();
     }
+    
+    if (m_assistant) {
+        static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->endStroke();
+    }
+    
 #ifdef ENABLE_RECORDING
     if (image() && m_pathPaintAction)
         image()->actionRecorder()->addAction(*m_pathPaintAction);
@@ -559,10 +583,10 @@ void KisToolFreehand::paint(QPainter& gc, const KoViewConverter &converter)
     }
 }
 
-QPointF KisToolFreehand::adjustPosition(const QPointF& point)
+QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
 {
     if (m_assistant) {
-        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point);
+        QPointF ap = static_cast<KisCanvas2*>(canvas())->view()->paintingAssistantManager()->adjustPosition(point, strokeBegin);
         return (1.0 - m_magnetism) * point + m_magnetism * ap;
     }
     return point;
@@ -606,7 +630,11 @@ void KisToolFreehand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
+#ifdef __GNUC__
 #warning "Remove adjusted() call -- it smells hacky"
+#else
+#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
+#endif
     m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
 
     canvas()->updateCanvas(m_oldOutlineRect);

@@ -21,6 +21,7 @@
 #include <KoShapeLayer.h>
 #include <KoShapeFactoryBase.h>
 #include <KoShapeUserData.h>
+#include <KoShapeLoadingContext.h>
 
 #include <kis_selection_component.h>
 #include <kis_types.h>

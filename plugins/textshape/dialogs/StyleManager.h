@@ -43,8 +43,6 @@ public slots:
     void save();
 
 private slots:
-    void buttonNewPressed();
-    void buttonDeletePressed();
     void addParagraphStyle(KoParagraphStyle*);
     void addCharacterStyle(KoCharacterStyle*);
     void removeParagraphStyle(KoParagraphStyle*);

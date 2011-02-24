@@ -40,7 +40,6 @@ public:
         : currentCursor(Qt::ArrowCursor),
         q(qq),
         canvas(canvas_),
-        readWrite(true),
         isInTextMode(false)
     {
     }
@@ -67,7 +66,6 @@ public:
     QSet<KAction*> readOnlyActions;
     KoToolBase *q;
     KoCanvasBase *canvas; ///< the canvas interface this tool will work for.
-    bool readWrite;
     bool isInTextMode;
 };
 

@@ -95,7 +95,7 @@ KisSmudgeOp::~KisSmudgeOp()
  of the current iteration.
 */
     
-double KisSmudgeOp::paintAt(const KisPaintInformation& info)
+qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
 {
     KisBrushSP brush = m_brush;
     
@@ -105,7 +105,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     if (!brush->canPaintFor(info)) return 1.0;
 
     // Grow the brush (this includes the mask) according to pressure or other parameters
-    double scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(info));
+    double scale = m_sizeOption.apply(info);
     if ((scale * brush->width()) <= 0.01 || (scale * brush->height()) <= 0.01) return 1.0;
     setCurrentScale(scale);
     
@@ -118,7 +118,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     is where the dab will be positioned and the fractional part determines
     the sub-pixel positioning. */
     qint32 x, y;
-    double xFraction, yFraction;
+    qreal xFraction, yFraction;
 
     splitCoordinate(pt.x(), &x, &xFraction);
     splitCoordinate(pt.y(), &y, &yFraction);
@@ -176,6 +176,7 @@ double KisSmudgeOp::paintAt(const KisPaintInformation& info)
     
     // This is the line that renders the extracted colors to the screen, with maskDab giving it the brush shape
     painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, 0, 0, extractionTopLeft.x(), extractionTopLeft.y(), sw, sh);
+    renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)),m_tempDev,extractionTopLeft.x(), extractionTopLeft.y(),maskDab);
     
     return spacing(scale);
 }

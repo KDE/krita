@@ -259,7 +259,7 @@ public:
     /**
      * Serialize this brush to XML.
      */
-    virtual void toXML(QDomDocument& , QDomElement&) const {};
+    virtual void toXML(QDomDocument& , QDomElement&) const;
 
     static KisBrushSP fromXML(const QDomElement& element);
 

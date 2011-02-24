@@ -33,6 +33,9 @@
 #include "kis_node_visitor.h"
 #include "kis_node_progress_proxy.h"
 
+#include "kis_safe_read_list.h"
+typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
+
 
 /**
  * The link between KisProjection ans KisImageUpdater
@@ -57,7 +60,7 @@ public:
 
     KisNodeWSP parent;
     KisNodeGraphListener * graphListener;
-    QList<KisNodeSP> nodes;
+    KisSafeReadNodeList nodes;
     KisNodeProgressProxy* nodeProgressProxy;
 };
 
@@ -75,8 +78,10 @@ KisNode::KisNode(const KisNode & rhs)
 {
     m_d->parent = 0;
     m_d->graphListener = rhs.m_d->graphListener;
-    foreach(const KisNodeSP & node, rhs.m_d->nodes) {
-        KisNodeSP children = node.data()->clone();
+
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, rhs.m_d->nodes) {
+        KisNodeSP children = (*iter)->clone();
         children->createNodeProgressProxy();
         m_d->nodes.append(children);
         children->setParent(this);
@@ -128,7 +133,12 @@ void KisNode::setGraphListener(KisNodeGraphListener * graphListener)
 
 KisNodeSP KisNode::parent() const
 {
-    return m_d->parent;
+    if (m_d->parent.isValid()) {
+        return m_d->parent;
+    }
+    else {
+        return 0;
+    }
 }
 
 KisBaseNodeSP KisNode::parentCallback() const
@@ -174,7 +184,7 @@ KisNodeSP KisNode::nextSibling() const
 
 quint32 KisNode::childCount() const
 {
-    return m_d->nodes.count();
+    return m_d->nodes.size();
 }
 
 
@@ -200,16 +210,24 @@ QList<KisNodeSP> KisNode::childNodes(const QStringList & nodeTypes, const KoProp
 {
     QList<KisNodeSP> nodes;
 
-    foreach(const KisNodeSP & node, m_d->nodes) {
-        if (!nodeTypes.isEmpty()) {
-            foreach(const QString & nodeType,  nodeTypes) {
-                if (node->inherits(nodeType.toAscii())) {
-                    if (properties.isEmpty() || node->check(properties))
-                        nodes.append(node);
+    KisSafeReadNodeList::const_iterator iter;
+    FOREACH_SAFE(iter, m_d->nodes) {
+        if (properties.isEmpty() || (*iter)->check(properties)) {
+            bool rightType = true;
+
+            if(!nodeTypes.isEmpty()) {
+                rightType = false;
+                foreach(const QString &nodeType,  nodeTypes) {
+                    if ((*iter)->inherits(nodeType.toAscii())) {
+                        rightType = true;
+                        break;
+                    }
                 }
             }
-        } else if (properties.isEmpty() || node->check(properties))
-            nodes.append(node);
+            if(rightType) {
+                nodes.append(*iter);
+            }
+        }
     }
     return nodes;
 }
@@ -278,12 +296,7 @@ bool KisNode::remove(quint32 index)
 
 bool KisNode::remove(KisNodeSP node)
 {
-    if (node->parent().data() != this) {
-        return false;
-    }
-
-    return remove(index(node));
-
+    return node->parent().data() == this ? remove(index(node)) : false;
 }
 
 KisNodeProgressProxy* KisNode::nodeProgressProxy() const

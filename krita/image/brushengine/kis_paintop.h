@@ -108,7 +108,7 @@ public:
     /**
      * Split the coordinate into whole + fraction, where fraction is always >= 0.
      */
-    static void splitCoordinate(double coordinate, qint32 *whole, double *fraction);
+    static void splitCoordinate(qreal coordinate, qint32 *whole, qreal *fraction);
 
     /**
      * returns the scale and rotation dynamically computed for the single dab
@@ -118,6 +118,10 @@ public:
     qreal currentScale() const;
     qreal currentRotation() const;
     
+    void setMirrorInformation(const QPointF &axisCenter,bool mirrorHorizontaly,bool mirrorVerticaly);
+    QPointF axisCenter() const;
+    
+    
 protected:
 
     void setCurrentScale(qreal scale);
@@ -126,8 +130,6 @@ protected:
     */
     void setCurrentRotation(qreal rotation);
     
-    static qreal scaleForPressure(qreal pressure);
-
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);
 
@@ -140,7 +142,13 @@ protected:
      * Return the paintdevice the painter this paintop is owned by
      */
     KisPaintDeviceSP source() const;
-
+    
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
+    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
 private:
     Private* const d;
 };

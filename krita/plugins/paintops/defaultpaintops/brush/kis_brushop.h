@@ -34,6 +34,7 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option.h>
+#include <kis_color_source_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -51,7 +52,7 @@ public:
     KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisBrushOp();
 
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
     virtual KisDistanceInformation paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist = KisDistanceInformation());
 
 private:
@@ -68,6 +69,7 @@ private:
     QList<KisPressureHSVOption*> m_hsvOptions;
     KoColorTransformation* m_hsvTransfo;
     KisPaintDeviceSP m_dab;
+    KisPaintDeviceSP m_colorSourceDevice;
 };
 
 #endif // KIS_BRUSHOP_H_

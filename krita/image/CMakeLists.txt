@@ -78,6 +78,7 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_node_to_top_command.cpp
    commands/kis_image_lock_command.cpp
    commands/kis_image_resize_command.cpp
+   commands/kis_image_set_resolution_command.cpp
    commands/kis_layer_command.cpp
    commands/kis_layer_props_command.cpp
    commands/kis_node_command.cpp
@@ -193,6 +194,7 @@ set(kritaimage_LIB_SRCS
    metadata/kis_meta_data_value.cc
    recorder/kis_action_recorder.cc
    recorder/kis_macro.cc
+   recorder/kis_macro_player.cc
    recorder/kis_node_query_path.cc
    recorder/kis_play_info.cc
    recorder/kis_recorded_action.cc
@@ -201,6 +203,7 @@ set(kritaimage_LIB_SRCS
    recorder/kis_recorded_action_save_context.cpp
    recorder/kis_recorded_filter_action.cpp
    recorder/kis_recorded_fill_paint_action.cpp
+   recorder/kis_recorded_node_action.cc
    recorder/kis_recorded_paint_action.cpp
    recorder/kis_recorded_path_paint_action.cpp
    recorder/kis_recorded_shape_paint_action.cpp

@@ -124,9 +124,10 @@ void TextShapeFactory::newDocumentResourceManager(KoResourceManager *manager)
         kWarning(32500) << "No KUndoStack found in the document resource manager, creating a new one";
         manager->setUndoStack(new KUndoStack(manager));
     }
-    variant.setValue(new KoStyleManager(manager));
-    manager->setResource(KoText::StyleManager, variant);
-
+    if (!manager->hasResource(KoText::StyleManager)) {
+        variant.setValue(new KoStyleManager(manager));
+        manager->setResource(KoText::StyleManager, variant);
+    }
     if (!manager->imageCollection())
         manager->setImageCollection(new KoImageCollection(manager));
 }

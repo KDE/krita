@@ -99,13 +99,13 @@ void KoEventActionRegistry::init()
     config.whiteList = "PresentationEventActionPlugins";
     config.blacklist = "PresentationEventActionPluginsDisabled";
     config.group = "koffice";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/PresentationEventAction"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/PresentationEventAction"),
                                      QString::fromLatin1("[X-PresentationEventAction-MinVersion] <= 0"),
                                      config);
 
     config.whiteList = "ScriptEventActionPlugins";
     config.blacklist = "ScriptEventActionPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KOffice/ScriptEventAction"),
+    KoPluginLoader::instance()->load(QString::fromLatin1("Calligra/ScriptEventAction"),
                                      QString::fromLatin1("[X-ScriptEventAction-MinVersion] <= 0"),
                                      config);
 }

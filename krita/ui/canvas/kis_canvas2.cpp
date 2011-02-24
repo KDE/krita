@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2006, 2010 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) Lukáš Tvrdý <lukast.dev@gmail.com>, (C) 2010
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,14 +29,11 @@
 #include <kis_debug.h>
 
 #include <KoUnit.h>
-#include <KoZoomHandler.h>
-#include <KoViewConverter.h>
 #include <KoShapeManager.h>
 #include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
-#include <KoZoomAction.h>
 #include <KoToolProxy.h>
 #include <KoSelection.h>
 
@@ -72,9 +70,8 @@ class KisCanvas2::KisCanvas2Private
 
 public:
 
-    KisCanvas2Private(KoCanvasBase * parent, KoViewConverter * viewConverter, KisView2 * view)
-        : coordinatesConverter(new KisCoordinatesConverter(viewConverter))
-        , viewConverter(viewConverter)
+    KisCanvas2Private(KoCanvasBase * parent, KisCoordinatesConverter* coordConverter, KisView2 * view)
+        : coordinatesConverter(coordConverter)
         , view(view)
         , canvasWidget(0)
         , shapeManager(new KoShapeManager(parent))
@@ -83,19 +80,16 @@ public:
         , currentCanvasUsesOpenGLShaders(false)
         , toolProxy(new KoToolProxy(parent))
         , favoriteResourceManager(0)
-        , canvasMirroredY(false)
         , vastScrolling(true) {
     }
 
     ~KisCanvas2Private() {
-        delete coordinatesConverter;
         delete favoriteResourceManager;
         delete shapeManager;
         delete toolProxy;
     }
 
     KisCoordinatesConverter *coordinatesConverter;
-    KoViewConverter *viewConverter;
     KisView2 *view;
     KisAbstractCanvasWidget *canvasWidget;
     KoShapeManager *shapeManager;
@@ -108,13 +102,12 @@ public:
     KisOpenGLImageTexturesSP openGLImageTextures;
 #endif
     KisPrescaledProjectionSP prescaledProjection;
-    bool canvasMirroredY;
     bool vastScrolling;
 };
 
-KisCanvas2::KisCanvas2(KoViewConverter * viewConverter, KisView2 * view, KoShapeControllerBase * sc)
+KisCanvas2::KisCanvas2(KisCoordinatesConverter* coordConverter, KisView2 * view, KoShapeControllerBase * sc)
     : KoCanvasBase(sc)
-    , m_d(new KisCanvas2Private(this, viewConverter, view))
+    , m_d(new KisCanvas2Private(this, coordConverter, view))
 {
     // a bit of duplication from slotConfigChanged()
     KisConfig cfg;
@@ -186,53 +179,37 @@ void KisCanvas2::pan(QPoint shift)
 
 void KisCanvas2::mirrorCanvas(bool enable)
 {
-    if(enable != m_d->canvasMirroredY) {
-        QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-        QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
-        newTransform *= QTransform::fromScale(-1,1);
-        m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
-        m_d->canvasMirroredY = enable;
-        notifyZoomChanged();
-
-        QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-        pan(shift);
-    }
+    m_d->coordinatesConverter->mirror(m_d->coordinatesConverter->widgetCenterPoint(), false, enable);
+    notifyZoomChanged();
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
-void KisCanvas2::rotateCanvas(qreal angle)
+void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-    QTransform newTransform = m_d->coordinatesConverter->postprocessingTransform();
-    QTransform temp; temp.rotate(angle);
-    newTransform *= temp;
-    m_d->coordinatesConverter->setPostprocessingTransform(newTransform);
+    m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    
+    if(updateOffset)
+        pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
+    else
+        updateCanvas();
 }
 
 void KisCanvas2::rotateCanvasRight15()
 {
-    rotateCanvas(15.);
+    rotateCanvas(15.0);
 }
 
 void KisCanvas2::rotateCanvasLeft15()
 {
-    rotateCanvas(-15.);
+    rotateCanvas(-15.0);
 }
 
 void KisCanvas2::resetCanvasTransformations()
 {
-    QPointF oldCenterPoint = m_d->coordinatesConverter->flakeCenterPoint();
-
-    m_d->coordinatesConverter->setPostprocessingTransform(QTransform());
+    m_d->coordinatesConverter->resetRotation(m_d->coordinatesConverter->widgetCenterPoint());
     notifyZoomChanged();
-
-    QPoint shift = m_d->coordinatesConverter->shiftFromFlakeCenterPoint(oldCenterPoint);
-    pan(shift);
+    pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
 }
 
 void KisCanvas2::addCommand(QUndoCommand *command)
@@ -285,9 +262,9 @@ const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
     return m_d->coordinatesConverter;
 }
 
-const KoViewConverter* KisCanvas2::viewConverter() const
+KoViewConverter* KisCanvas2::viewConverter() const
 {
-    return m_d->viewConverter;
+    return m_d->coordinatesConverter;
 }
 
 QWidget* KisCanvas2::canvasWidget()
@@ -518,7 +495,6 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
 
 void KisCanvas2::notifyZoomChanged()
 {
-    m_d->coordinatesConverter->notifyZoomChanged();
     adjustOrigin();
 
     if (!m_d->currentCanvasIsOpenGL) {

@@ -95,8 +95,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
         KoLineBorder* border = new KoLineBorder(1.0, currentFgColor().toQColor());
         path->setBorder(border);
 
-        QUndoCommand * cmd = canvas()->shapeController()->addShape(path);
-        canvas()->addCommand(cmd);
+        addShape(path);
     }
 
     notifyModified();

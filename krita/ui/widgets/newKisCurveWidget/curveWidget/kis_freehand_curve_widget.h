@@ -25,7 +25,7 @@
 #include <QMap>
 
 class KisFreehandCurveWidget : public KisCurveWidgetBase {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     KisFreehandCurveWidget(QWidget *parent = 0);
 

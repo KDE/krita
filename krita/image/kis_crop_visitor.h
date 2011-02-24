@@ -125,7 +125,7 @@ private:
         if (m_movelayers) {
             QPoint oldPos(layer->x(), layer->y());
             QPoint newPos(layer->x() - m_rect.x(), layer->y() - m_rect.y());
-            QUndoCommand *cmd = new KisNodeMoveCommand(layer, oldPos, newPos);
+            QUndoCommand *cmd = new KisNodeMoveCommand(layer, oldPos, newPos, layer->image());
             undoAdapter->addCommand(cmd);
         }
         return true;

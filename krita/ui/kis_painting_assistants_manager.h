@@ -38,9 +38,12 @@ public:
     ~KisPaintingAssistantsManager();
     void addAssistant(KisPaintingAssistant* assistant);
     void removeAssistant(KisPaintingAssistant* assistant);
-    QPointF adjustPosition(const QPointF& point) const;
+    void removeAll();
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    void endStroke();
     void setup(KActionCollection * collection);
     QList<KisPaintingAssistantHandleSP> handles();
+    QList<KisPaintingAssistant*> assistants();
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter);
 

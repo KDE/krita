@@ -256,6 +256,12 @@ bool KisDoc2::saveOdf(SavingContext &documentContext)
 
 bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 {
+    if (m_d->image) {
+        m_d->shapeController->setImage(0);
+        m_d->nodeModel->setImage(0);
+        m_d->image = 0;
+    }
+
     KoXmlElement root;
     QString attr;
     KoXmlNode node;
@@ -443,7 +449,7 @@ void KisDoc2::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     // print error if the lcms engine is not available
     if (!KoColorSpaceEngineRegistry::instance()->contains("icc")) {
         // need to wait 1 event since exiting here would not work.
-        m_d->error = i18n("The KOffice LittleCMS color management plugin is not installed. Krita will quit now.");
+        m_d->error = i18n("The Calligra LittleCMS color management plugin is not installed. Krita will quit now.");
         m_d->dieOnError = true;
         QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
     }

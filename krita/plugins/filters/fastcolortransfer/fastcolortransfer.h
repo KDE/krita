@@ -39,12 +39,10 @@ public:
     KisFilterFastColorTransfer();
 public:
     using KisFilter::process;
-    void process(KisConstProcessingInformation src,
-                 KisProcessingInformation dst,
-                 const QSize& size,
+    void process(KisPaintDeviceSP device,
+                 const QRect& applyRect,
                  const KisFilterConfiguration* config,
-                 KoUpdater* progressUpdater
-                ) const;
+                 KoUpdater* progressUpdater) const;
     static inline KoID id() {
         return KoID("colortransfer", i18n("Color Transfer"));
     }

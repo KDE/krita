@@ -89,7 +89,7 @@ public:
 
     QTransform localMatrix; ///< the shapes local transformation matrix
 
-    QVector<QPointF> connectors; ///< glue points in percent of size [0..1]
+    KoConnectionPoints connectors; ///< glue point id to data mapping
 
     KoShapeContainer *parent;
     QSet<KoShapeManager *> shapeManagers;
@@ -106,9 +106,11 @@ public:
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has
     KoFilterEffectStack *filterEffectStack; ///< stack of filter effects applied to the shape
     qreal transparency; ///< the shapes transparency
+    QString hyperLink; //hyperlink for this shape
 
     static const int MaxZIndex = 32767;
     int zIndex : 16; // keep maxZIndex in sync!
+    int runThrough : 16;
     int visible : 1;
     int printable : 1;
     int geometryProtected : 1;
@@ -120,6 +122,10 @@ public:
     KoShape::CacheMode cacheMode;
 
     KoShapeCache *cache;
+
+    KoShape::TextRunAroundSide textRunAroundSide;
+
+    qreal textRunAroundDistance;
 
     /**
      * @return the shape cache if there is one, else 0
@@ -135,6 +141,12 @@ public:
      * purge and remove the shape cache
      */
     void removeShapeCache();
+
+    /// Convert connection point position from shape coordinates, taking alignment into account
+    void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
+
+    /// Convert connection point position to shape coordinates, taking alignment into account
+    void convertToShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;
 
     Q_DECLARE_PUBLIC(KoShape)
 };

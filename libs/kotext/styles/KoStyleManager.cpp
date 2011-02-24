@@ -33,19 +33,26 @@
 #include "KoSectionStyle.h"
 #include "ChangeFollower.h"
 #include "KoTextDocument.h"
+#include "KoTextDocumentLayout.h"
 
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 
 #include <QTimer>
 #include <QUrl>
+#include <QTextLayout>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QPixmap>
+#include <QMap>
 #include <kdebug.h>
 #include <klocale.h>
 
 class KoStyleManager::Private
 {
 public:
-    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0) { }
+    Private() : updateTriggered(false), defaultParagraphStyle(0), defaultListStyle(0), outlineStyle(0)
+    , pixmapHelperDocument(0){ }
     ~Private() {
         qDeleteAll(automaticListStyles);
     }
@@ -68,6 +75,9 @@ public:
     KoParagraphStyle *defaultParagraphStyle;
     KoListStyle *defaultListStyle;
     KoListStyle *outlineStyle;
+
+    QTextDocument *pixmapHelperDocument;
+    QMap<int,QPixmap> pixmapMap; // map of pixmap representations of the styles
 };
 
 // static
@@ -78,8 +88,6 @@ KoStyleManager::KoStyleManager(QObject *parent)
 {
     d->defaultParagraphStyle = new KoParagraphStyle(this);
     d->defaultParagraphStyle->setName(i18n("Default"));
-    KoCharacterStyle *charStyle = d->defaultParagraphStyle->characterStyle();
-    charStyle->setName(i18n("Default"));
 
     add(d->defaultParagraphStyle);
 
@@ -97,6 +105,70 @@ KoStyleManager::~KoStyleManager()
 {
     delete d;
 }
+
+void KoStyleManager::setPixmapHelperDocument(QTextDocument *pixmapHelperDocument)
+{
+    if (d->pixmapHelperDocument)
+        return;
+    d->pixmapHelperDocument = pixmapHelperDocument;
+}
+
+QPixmap KoStyleManager::thumbnail(KoParagraphStyle *style)
+{
+    if (d->pixmapMap.contains(style->styleId())) {
+        return d->pixmapMap[style->styleId()];
+    }
+    QTextCursor cursor (d->pixmapHelperDocument);
+    QPixmap pm(250,48);
+
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+
+    p.translate(0, 1.5);
+    p.setRenderHint(QPainter::Antialiasing);
+    cursor.select(QTextCursor::Document);
+    cursor.setBlockFormat(QTextBlockFormat());
+    cursor.setBlockCharFormat(QTextCharFormat());
+    cursor.setCharFormat(QTextCharFormat());
+    cursor.insertText(style->name());
+    QTextBlock block = cursor.block();
+    style->applyStyle(block, true);
+    dynamic_cast<KoTextDocumentLayout*> (d->pixmapHelperDocument->documentLayout())->layout();
+
+    d->pixmapHelperDocument->drawContents(&p);
+
+    d->pixmapMap.insert(style->styleId(), pm);
+    return pm;
+}
+
+QPixmap KoStyleManager::thumbnail(KoCharacterStyle *style)
+{
+    if (d->pixmapMap.contains(style->styleId())) {
+        return d->pixmapMap[style->styleId()];
+    }
+    QTextCursor cursor (d->pixmapHelperDocument);
+    QPixmap pm(250,48);
+
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+
+    p.translate(0, 1.5);
+    p.setRenderHint(QPainter::Antialiasing);
+    cursor.select(QTextCursor::Document);
+    cursor.setBlockFormat(QTextBlockFormat());
+    cursor.setBlockCharFormat(QTextCharFormat());
+    cursor.setCharFormat(QTextCharFormat());
+    cursor.insertText(style->name());
+    QTextBlock block = cursor.block();
+    style->applyStyle(block);
+    dynamic_cast<KoTextDocumentLayout*> (d->pixmapHelperDocument->documentLayout())->layout();
+
+    d->pixmapHelperDocument->drawContents(&p);
+
+    d->pixmapMap.insert(style->styleId(), pm);
+    return pm;
+}
+
 
 void KoStyleManager::saveOdfDefaultStyles(KoGenStyles &mainStyles)
 {
@@ -238,7 +310,16 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (style->characterStyle()->name().isEmpty())
             style->characterStyle()->setName(style->name());
     }
-    // TODO add the list style too?
+    if (style->listStyle() && style->listStyle()->styleId() == 0)
+        add(style->listStyle());
+    KoParagraphStyle *root = style;
+    while (root->parentStyle()) {
+        root = root->parentStyle();
+        if (root->styleId() == 0)
+            add(root);
+    }
+    if (root != d->defaultParagraphStyle && root->parentStyle() == 0)
+        root->setParentStyle(d->defaultParagraphStyle);
 
     emit styleAdded(style);
 }

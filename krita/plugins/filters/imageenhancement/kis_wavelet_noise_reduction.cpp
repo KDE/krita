@@ -35,7 +35,7 @@
 #include <kis_processing_information.h>
 
 KisWaveletNoiseReduction::KisWaveletNoiseReduction()
-        : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer"))
+        : KisFilter(id(), categoryEnhance(), i18n("&Wavelet Noise Reducer..."))
 {
     setSupportsPainting(false);
     setSupportsIncrementalPainting(false);
@@ -61,39 +61,33 @@ KisFilterConfiguration* KisWaveletNoiseReduction::factoryConfiguration(const Kis
     return config;
 }
 
-void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
-                                       KisProcessingInformation dstInfo,
-                                       const QSize& areaSize,
-                                       const KisFilterConfiguration* config,
-                                       KoUpdater* progressUpdater
+void KisWaveletNoiseReduction::process(KisPaintDeviceSP device,
+                                      const QRect& applyRect,
+                                      const KisFilterConfiguration* config,
+                                      KoUpdater* progressUpdater
                                       ) const
 {
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    QPoint srcTopLeft = applyRect.topLeft();
+    Q_ASSERT(device);
     // TODO take selections into account
     float threshold;
 
     if (!config) {
-        config = defaultConfiguration(src);
+        config = defaultConfiguration(device);
     }
 
     threshold = config->getDouble("threshold", BEST_WAVELET_THRESHOLD_VALUE);
 
-    qint32 depth = src->colorSpace()->colorChannelCount();
+    qint32 depth = device->colorSpace()->colorChannelCount();
 
     int size;
-    int maxrectsize = qMax(areaSize.width(), areaSize.height());
+    int maxrectsize = qMax(applyRect.width(), applyRect.height());
     for (size = 2; size < maxrectsize; size *= 2) ;
 
-    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get(src->colorSpace()->mathToolboxId().id());
-    QRect srcRect(srcTopLeft, areaSize);
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->get(device->colorSpace()->mathToolboxId().id());
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(srcRect) * 2 + size*size*depth);
+        progressUpdater->setRange(0, mathToolbox->fastWaveletTotalSteps(applyRect) * 2 + size*size*depth);
     }
     int count = 0;
 //     connect(mathToolbox, SIGNAL(nextStep()), this, SLOT(incProgress()));
@@ -107,13 +101,13 @@ void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
     KisMathToolbox::KisWavelet* wav = 0;
 
     try {
-        buff = mathToolbox->initWavelet(src, srcRect);
+        buff = mathToolbox->initWavelet(device, applyRect);
     } catch (std::bad_alloc) {
         if (buff) delete buff;
         return;
     }
     try {
-        wav = mathToolbox->fastWaveletTransformation(src, srcRect, buff);
+        wav = mathToolbox->fastWaveletTransformation(device, applyRect, buff);
     } catch (std::bad_alloc) {
         if (wav) delete wav;
         return;
@@ -135,7 +129,7 @@ void KisWaveletNoiseReduction::process(KisConstProcessingInformation srcInfo,
 
 //     dbgFilters <<"Untransforming...";
 
-    mathToolbox->fastWaveletUntransformation(dst, QRect(dstTopLeft, areaSize), wav, buff);
+    mathToolbox->fastWaveletUntransformation(device, applyRect, wav, buff);
 
     delete wav;
     delete buff;

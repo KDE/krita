@@ -67,7 +67,7 @@ public:
     };
 
     /// Holds data about one border line.
-    struct BorderData {
+    struct KOODF_EXPORT BorderData {
         BorderData();
         BorderStyle  style; ///< The border style. (see KoBorder::BorderStyle)
         qreal width; ///< The thickness of the border, or 0 if there is no border

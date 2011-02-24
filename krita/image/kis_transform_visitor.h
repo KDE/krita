@@ -1,5 +1,10 @@
 /*
  *  Copyright (c) 2006 Casper Boemann <cbr@boemann.dk>
+ *  Copyright (c) 2010 Sven Langkamp <sven.langkamp@gmail.com>
+ *  Copyright (c) 2010 Marc Pegon <pe.marc@free.fr>
+ *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
+ *  Copyright (c) 2010 Boudewijn Rempt <boud@kde.org>
+ *
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -54,7 +59,8 @@ public:
 
     KisTransformVisitor(KisImageWSP image, qreal  xscale, qreal  yscale,
                         qreal  /*xshear*/, qreal  /*yshear*/, qreal angle,
-                        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter)
+                        qint32  tx, qint32  ty, KoUpdater *progress, KisFilterStrategy *filter,
+                        bool scaleOnlyShapes = false)
             : KisNodeVisitor()
             , m_sx(xscale)
             , m_sy(yscale)
@@ -63,7 +69,8 @@ public:
             , m_filter(filter)
             , m_angle(angle)
             , m_progress(progress)
-            , m_image(image) {
+            , m_image(image)
+            , m_scaleOnlyShapes(scaleOnlyShapes){
     }
 
     virtual ~KisTransformVisitor() {
@@ -142,6 +149,10 @@ public:
 private:
 
     void transformPaintDevice(KisNode * node) {
+        if(m_scaleOnlyShapes) {
+            return;
+        }
+
         KisPaintDeviceSP dev = node->paintDevice();
 
         KisTransaction transaction(i18n("Rotate Node"), dev);
@@ -152,10 +163,10 @@ private:
         transaction.commit(m_image->undoAdapter());
         node->setDirty();
     }
-    
+
     void transformMask(KisMask* mask) {
         KisSelectionSP selection = mask->selection();
-        if(selection->hasPixelSelection()) {
+        if(selection->hasPixelSelection() && !m_scaleOnlyShapes) {
             KisSelectionTransaction transaction(QString(), m_image, selection);
 
             KisPaintDeviceSP dev = selection->getOrCreatePixelSelection().data();
@@ -169,7 +180,7 @@ private:
             if (command)
                 m_image->undoAdapter()->addCommand(command);
         }
-        
+
         selection->updateProjection();
     }
 
@@ -180,6 +191,7 @@ private:
     qreal m_angle;
     KoUpdater *m_progress;
     KisImageWSP m_image;
+    bool m_scaleOnlyShapes;
 };
 
 

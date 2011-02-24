@@ -74,7 +74,7 @@ qreal SprayBrush::rotationAngle()
     if ( m_shapeDynamicsProperties->randomRotation ){
 
         if ( m_properties->gaussian ) {
-                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeDynamicsProperties->randomRotationWeight );
+                rotation = linearInterpolation(rotation ,M_PI * 2.0 * qBound<qreal>(0.0, m_rand->nextGaussian(0.0, 0.50) , 1.0), m_shapeDynamicsProperties->randomRotationWeight );
         } else {
                 rotation = linearInterpolation(rotation, M_PI * 2.0 * drand48(), m_shapeDynamicsProperties->randomRotationWeight );
         }
@@ -322,9 +322,9 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             QPointF pt = pos - hotSpot;
 
             qint32 ix;
-            double xFraction;
+            qreal xFraction;
             qint32 iy;
-            double yFraction;
+            qreal yFraction;
 
             KisPaintOp::splitCoordinate(pt.x(), &ix, &xFraction);
             KisPaintOp::splitCoordinate(pt.y(), &iy, &yFraction);

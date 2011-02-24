@@ -81,9 +81,16 @@ public:
     {
     public:
         StatusBarItem() // for QValueList
-                : m_widget(0), m_visible(false) {}
+            : m_widget(0),
+              m_connected(false),
+              m_hidden(false) {}
+
         StatusBarItem(QWidget * widget, int stretch, bool permanent)
-                : m_widget(widget), m_stretch(stretch), m_permanent(permanent), m_visible(false) {}
+            : m_widget(widget),
+              m_stretch(stretch),
+              m_permanent(permanent),
+              m_connected(false),
+              m_hidden(false) {}
 
         bool operator==(const StatusBarItem& rhs) {
             return m_widget == rhs.m_widget;
@@ -99,28 +106,32 @@ public:
 
         void ensureItemShown(KStatusBar * sb) {
             Q_ASSERT(m_widget);
-            if (!m_visible) {
+            if (!m_connected) {
                 if (m_permanent)
                     sb->addPermanentWidget(m_widget, m_stretch);
                 else
                     sb->addWidget(m_widget, m_stretch);
 
-                m_visible = true;
-                m_widget->show();
+                if(!m_hidden)
+                    m_widget->show();
+
+                m_connected = true;
             }
         }
         void ensureItemHidden(KStatusBar * sb) {
-            if (m_visible) {
+            if (m_connected) {
+                m_hidden = m_widget->isHidden();
                 sb->removeWidget(m_widget);
-                m_visible = false;
                 m_widget->hide();
+                m_connected = false;
             }
         }
     private:
         QWidget * m_widget;
         int m_stretch;
         bool m_permanent;
-        bool m_visible;  // true when the item has been added to the statusbar
+        bool m_connected;
+        bool m_hidden;
     };
 
     QList<StatusBarItem> statusBarItems; // Our statusbar items

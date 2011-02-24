@@ -17,9 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#define PARAGRAPH_STYLE 1000
-#define CHARACTER_STYLE 1001
-
 #include "StyleManager.h"
 
 #include "StylesWidget.h"
@@ -67,7 +64,6 @@ void StyleManager::setStyleManager(KoStyleManager *sm)
     Q_ASSERT(sm);
     m_styleManager = sm;
     widget.styles->setStyleManager(sm);
-    widget.styles->setEmbedded(true);
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
     widget.paragraphStylePage->setParagraphStyles(sm->paragraphStyles());
     connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
@@ -172,12 +168,6 @@ void StyleManager::save()
     m_blockSignals = false;
 }
 
-void StyleManager::buttonNewPressed()
-{
-    widget.stackedWidget->setCurrentWidget(widget.createPage);
-    // that widget will emit a new style which we will add using addParagraphStyle or addCharacterStyle
-}
-
 void StyleManager::addParagraphStyle(KoParagraphStyle *style)
 {
     widget.paragraphStylePage->save();
@@ -203,11 +193,6 @@ void StyleManager::addCharacterStyle(KoCharacterStyle *style)
 
     m_styleManager->add(style);
     widget.stackedWidget->setCurrentWidget(widget.welcomePage);
-}
-
-void StyleManager::buttonDeletePressed()
-{
-    widget.styles->deleteStyleClicked();
 }
 
 void StyleManager::removeParagraphStyle(KoParagraphStyle* style)

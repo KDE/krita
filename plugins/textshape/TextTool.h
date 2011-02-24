@@ -46,8 +46,8 @@ class KoTextEditor;
 class UndoTextCommand;
 
 class KAction;
-class KFontSizeAction;
 class KFontAction;
+class FontSizeAction;
 
 class QUndoCommand;
 
@@ -103,7 +103,6 @@ public:
     virtual KoToolSelection* selection();
     /// reimplemented from superclass
     virtual QMap<QString, QWidget *> createOptionWidgets();
-//    virtual QWidget * createOptionWidget();
 
     /// reimplemented from superclass
     virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
@@ -195,7 +194,7 @@ private slots:
     /// Set font family
     void setFontFamily(const QString &);
     /// Set Font size
-    void setFontSize(int size);
+    void setFontSize(qreal size);
     /// Default Format
     void setDefaultFormat();
     /// see KoTextSelectionHandler::insertIndexMarker
@@ -292,6 +291,7 @@ private:
     void finishedParagraph();
     void readConfig();
     void writeConfig();
+    void runUrl(KoPointerEvent *event, QString &url);
 
 private:
     friend class UndoTextCommand;
@@ -332,7 +332,7 @@ private:
     KAction *m_growWidthAction;
     KAction *m_growHeightAction;
     KAction *m_shrinkToFitAction;
-    KFontSizeAction *m_actionFormatFontSize;
+    FontSizeAction *m_actionFormatFontSize;
     KFontAction *m_actionFormatFontFamily;
     KoColorPopupAction *m_actionFormatTextColor;
     KoColorPopupAction *m_actionFormatBackgroundColor;

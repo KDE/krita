@@ -197,15 +197,16 @@ void KoCanvasControllerWidget::Private::activate()
 
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
     : QAbstractScrollArea(parent)
-    , KoCanvasController()
+    , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
     setFrameShape(NoFrame);
     d->viewportWidget = new Viewport(this);
     setViewport(d->viewportWidget);
 
+    //setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setAutoFillBackground(false);
     /*
       Fixes:   apps starting at zero zoom.
@@ -269,8 +270,8 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
         d->canvas->canvasWidget()->removeEventFilter(this);
     }
     canvas->setCanvasController(this);
-    d->viewportWidget->setCanvas(canvas->canvasWidget());
     d->canvas = canvas;
+    d->viewportWidget->setCanvas(canvas->canvasWidget());
     d->canvas->canvasWidget()->installEventFilter(this);
     d->canvas->canvasWidget()->setMouseTracking(true);
     setFocusProxy(d->canvas->canvasWidget());
@@ -502,15 +503,6 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
 
 void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
 {
-    QWidget *w = this;
-    while (w->parentWidget()) {
-        // XXX: This is an ugly hidden dependency
-        if (w->inherits("KoView")) {
-            emit toolOptionWidgetsChanged(widgetMap, w);
-            break;
-        }
-        w = w->parentWidget();
-    }
     emit toolOptionWidgetsChanged(widgetMap);
 }
 

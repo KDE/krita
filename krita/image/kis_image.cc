@@ -70,6 +70,18 @@
 #include "kis_update_scheduler.h"
 
 
+// #define SANITY_CHECKS
+
+#ifdef SANITY_CHECKS
+#define SANITY_CHECK_LOCKED(name)                                       \
+    if(!locked()) qDebug() << "Locking policy failed:" << name          \
+                           << "has been called without the image"       \
+                              "being locked";
+#else
+#define SANITY_CHECK_LOCKED(name)
+#endif
+
+
 KisAbstractUpdateScheduler* createUpdateScheduler(KisImageWSP image)
 {
     KisImageConfig config;
@@ -184,6 +196,7 @@ KisImage::~KisImage()
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
 {
+    SANITY_CHECK_LOCKED("aboutToAddANode");
     emit sigAboutToAddANode(parent, index);
 }
 
@@ -194,6 +207,7 @@ void KisImage::nodeHasBeenAdded(KisNode *parent, int index)
 
 void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 {
+    SANITY_CHECK_LOCKED("aboutToRemoveANode");
     emit sigAboutToRemoveANode(parent, index);
 }
 
@@ -205,6 +219,7 @@ void KisImage::nodeHasBeenRemoved(KisNode *parent, int index)
 
 void KisImage::aboutToMoveNode(KisNode *parent, int oldIndex, int newIndex)
 {
+    SANITY_CHECK_LOCKED("aboutToMoveNode");
     emit sigAboutToMoveNode(parent, oldIndex, newIndex);
 }
 
@@ -403,7 +418,7 @@ void KisImage::emitSizeChanged()
 }
 
 
-void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy)
+void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrategy *filterStrategy, bool scaleOnlyShapes)
 {
     // New image size. XXX: Pass along to discourage rounding errors?
     qint32 w, h;
@@ -415,9 +430,12 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
 
     m_d->adapter->beginMacro(i18n("Scale Image"));
     m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
-
-    KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy);
+    
+    if(!scaleOnlyShapes) {
+        m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
+    }
+    
+    KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy, scaleOnlyShapes);
     m_d->rootLayer->accept(visitor);
 
     m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), false));

@@ -2,6 +2,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../RulerAssistantCommon)
 
 set(kritarulerassistanttool_PART_SRCS
     RulerAssistant.cc
+    EllipseAssistant.cc
+    Ellipse.cc
+    SplineAssistant.cc
+    PerspectiveAssistant.cc
     ruler_assistant_tool.cc
     kis_ruler_assistant_tool.cc
     )

@@ -106,7 +106,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->setColumnStretch( 1, 1 );
     layout->setColumnStretch( 2, 2 );
     layout->setSpacing( 0 );
-    layout->setMargin( 3 );
+    layout->setMargin( 0 );
 
     updateRemoveButtonState();
 }

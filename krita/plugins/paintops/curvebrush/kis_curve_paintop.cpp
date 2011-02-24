@@ -74,6 +74,7 @@ KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
+    renderMirrorMask(rc,m_dab);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

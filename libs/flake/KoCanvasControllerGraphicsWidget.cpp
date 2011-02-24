@@ -31,11 +31,12 @@ class KoCanvasControllerGraphicsWidget::Private
 public:
 
     Private(KoCanvasControllerGraphicsWidget *qq)
-        : q(qq),
-        canvas(0),
-        ignoreScrollSignals(false),
-        zoomWithWheel(false),
-        vastScrollingFactor(0)
+        : q(qq)
+        , canvas(0)
+        , ignoreScrollSignals(false)
+        , isScrolling(false)
+        , zoomWithWheel(false)
+        , vastScrollingFactor(0)
     {
     }
 
@@ -52,15 +53,20 @@ public:
     KoCanvasControllerGraphicsWidget *q;
     KoCanvasBase * canvas;
     bool ignoreScrollSignals;
+    bool isScrolling;
     bool zoomWithWheel;
     qreal vastScrollingFactor;
-    QPointF m_oldPosition;
-    int m_margin;
-    bool m_ignoreScrollSignals;
+    QPointF oldPosition;
+    int margin;
+    QPointF currentPosition; // other implementations, based on QAbstractScrollArea or
+    // MPannableViewport already track the current position, we're a plain
+    // QGraphicsWidget, so we have to do that ourselves
+    QRectF range; // scrolling range in pixels
 };
 
-KoCanvasControllerGraphicsWidget::KoCanvasControllerGraphicsWidget(QGraphicsItem * parent, Qt::WindowFlags wFlags)
+KoCanvasControllerGraphicsWidget::KoCanvasControllerGraphicsWidget(QGraphicsItem * parent, Qt::WindowFlags wFlags, KActionCollection * actionCollection)
     : QGraphicsWidget(parent, wFlags)
+    , KoCanvasController(actionCollection)
     , d(new Private(this))
 {
 }
@@ -70,7 +76,7 @@ KoCanvasControllerGraphicsWidget::~KoCanvasControllerGraphicsWidget()
 }
 
 
-void KoCanvasControllerGraphicsWidget::scrollContentsBy(int dx, int dy)
+void KoCanvasControllerGraphicsWidget::scrollContentsBy(int /*dx*/, int /*dy*/)
 {
 }
 
@@ -79,11 +85,11 @@ QSize KoCanvasControllerGraphicsWidget::viewportSize() const
     return QSize();
 }
 
-void KoCanvasControllerGraphicsWidget::setDrawShadow(bool drawShadow)
+void KoCanvasControllerGraphicsWidget::setDrawShadow(bool /*drawShadow*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setCanvas(KoCanvasBase *canvas)
+void KoCanvasControllerGraphicsWidget::setCanvas(KoCanvasBase */*canvas*/)
 {
 }
 
@@ -112,27 +118,27 @@ int KoCanvasControllerGraphicsWidget::canvasOffsetY() const
     return 0;
 }
 
-void KoCanvasControllerGraphicsWidget::ensureVisible(const QRectF &rect, bool smooth)
+void KoCanvasControllerGraphicsWidget::ensureVisible(const QRectF &/*rect*/, bool /*smooth*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::ensureVisible(KoShape *shape)
+void KoCanvasControllerGraphicsWidget::ensureVisible(KoShape */*shape*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomIn(const QPoint &center)
+void KoCanvasControllerGraphicsWidget::zoomIn(const QPoint &/*center*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomOut(const QPoint &center)
+void KoCanvasControllerGraphicsWidget::zoomOut(const QPoint &/*center*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomBy(const QPoint &center, qreal zoom)
+void KoCanvasControllerGraphicsWidget::zoomBy(const QPoint &/*center*/, qreal /*zoom*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::zoomTo(const QRect &rect)
+void KoCanvasControllerGraphicsWidget::zoomTo(const QRect &/*rect*/)
 {
 }
 
@@ -140,7 +146,7 @@ void KoCanvasControllerGraphicsWidget::recenterPreferred()
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setPreferredCenter(const QPoint &viewPoint)
+void KoCanvasControllerGraphicsWidget::setPreferredCenter(const QPoint &/*viewPoint*/)
 {
 }
 
@@ -149,11 +155,11 @@ QPoint KoCanvasControllerGraphicsWidget::preferredCenter() const
     return QPoint();
 }
 
-void KoCanvasControllerGraphicsWidget::pan(const QPoint &distance)
+void KoCanvasControllerGraphicsWidget::pan(const QPoint &/*distance*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::setMargin(int margin)
+void KoCanvasControllerGraphicsWidget::setMargin(int /*margin*/)
 {
 }
 
@@ -162,15 +168,15 @@ QPoint KoCanvasControllerGraphicsWidget::scrollBarValue() const
     return QPoint();
 }
 
-void KoCanvasControllerGraphicsWidget::setScrollBarValue(const QPoint &value)
+void KoCanvasControllerGraphicsWidget::setScrollBarValue(const QPoint &/*value*/)
 {
 }
 
-void KoCanvasControllerGraphicsWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
+void KoCanvasControllerGraphicsWidget::updateDocumentSize(const QSize &/*sz*/, bool /*recalculateCenter*/)
 {
 }
 
-QCursor KoCanvasControllerGraphicsWidget::setCursor(const QCursor &cursor)
+QCursor KoCanvasControllerGraphicsWidget::setCursor(const QCursor &/*cursor*/)
 {
     return QCursor();
 }
@@ -183,3 +189,24 @@ void KoCanvasControllerGraphicsWidget::setVastScrolling(qreal)
 {
 }
 
+void KoCanvasControllerGraphicsWidget::mouseMoveEvent ( QGraphicsSceneMouseEvent * /*event*/ )
+{
+    d->isScrolling = true;
+}
+
+void KoCanvasControllerGraphicsWidget::mousePressEvent ( QGraphicsSceneMouseEvent * /*event */)
+{
+    // implement scrolling
+}
+
+void KoCanvasControllerGraphicsWidget::mouseReleaseEvent ( QGraphicsSceneMouseEvent * /*event*/ )
+{
+    d->isScrolling = false;
+}
+
+void KoCanvasControllerGraphicsWidget::wheelEvent ( QGraphicsSceneWheelEvent * /*event*/ )
+{
+    if (d->zoomWithWheel) {
+        // implement zooming
+    }
+}

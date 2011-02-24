@@ -37,6 +37,8 @@
 #include "kis_gbr_brush_factory.h"
 #include "kis_abr_brush_factory.h"
 #include "kis_text_brush_factory.h"
+#include "kis_png_brush_factory.h"
+#include "kis_svg_brush_factory.h"
 
 KisBrushRegistry::KisBrushRegistry()
 {
@@ -59,6 +61,8 @@ KisBrushRegistry* KisBrushRegistry::instance()
         s_instance->add(new KisGbrBrushFactory());
         s_instance->add(new KisAbrBrushFactory());
         s_instance->add(new KisTextBrushFactory());
+        s_instance->add(new KisPngBrushFactory());
+        s_instance->add(new KisSvgBrushFactory());
         KoPluginLoader::instance()->load("Krita/Brush", "Type == 'Service' and ([X-Krita-Version] == 4)");
     }
     return s_instance;

@@ -52,13 +52,16 @@ void BarDiagram::BarDiagramType::paintBars( PaintContext* ctx, const QModelIndex
     double usedDepth = 0;
 
     //Pending Michel: configure threeDBrush settings - shadowColor etc...
-    QBrush indexBrush ( diagram()->brush( index ) );
+    QBrush indexBrush( diagram()->brush( index ) );
     QPen indexPen( diagram()->pen( index ) );
     PainterSaver painterSaver( ctx->painter() );
     if ( diagram()->antiAliasing() )
         ctx->painter()->setRenderHint ( QPainter::Antialiasing );
+    if( threeDAttrs.isEnabled() )
+        indexBrush = threeDAttrs.threeDBrush( indexBrush, bar );
     ctx->painter()->setBrush( indexBrush );
     ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
+
     if ( threeDAttrs.isEnabled() ) {
         bool stackedMode = false;
         bool percentMode = false;

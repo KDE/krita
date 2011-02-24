@@ -362,12 +362,13 @@ public:
     int viewCount() const;
 
     /**
-     * @return a QGraphicsItem canvas displaying this document. The QGraphicsItem
-     * is created on first call. There is only one QGraphicsItem canvas that can
+     * @return a QGraphicsItem canvas displaying this document. There is only one QGraphicsItem canvas that can
      * be shown by many QGraphicsView subclasses (those should reimplement KoCanvasController
      * as well).
+     *
+     * @param create if true, a new canvas item is created if there wasn't one.
      */
-    QGraphicsItem *canvasItem();
+    QGraphicsItem *canvasItem(bool create = true);
 
     /**
      * Reimplemented from KParts::Part
@@ -412,6 +413,11 @@ public:
      * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
     virtual void showStartUpWidget(KoMainWindow *parent, bool alwaysShow = false);
+
+    /**
+     * Removes the startupWidget shown at application start up.
+     */
+    void deleteOpenPane(bool closing = false);
 
     /**
      *  Tells the document that its title has been modified, either because
@@ -496,13 +502,6 @@ public:
      *  e.g. i18n("Word Processing") for office:text.
      */
     static QString tagNameToDocumentType(const QString& localName);
-
-    /**
-     *  Save the document. The default implementation is to call
-     *  saveXML(). This method exists only for applications that
-     *  don't use QDomDocument for saving, i.e. kword and kpresenter.
-     */
-    virtual bool saveToStream(QIODevice *dev);
 
     /**
      *  Loads a document in the native format from a given URL.
@@ -1009,15 +1008,12 @@ private slots:
     void slotStarted(KIO::Job*);
     void startCustomDocument();
 
-    /**
-     * Removes the open widget shown at application start up.
-     */
-    void deleteOpenPane();
-
 private:
 
     bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
     bool saveNativeFormatKOffice(KoStore *store);
+    bool saveToStream(QIODevice *dev);
+
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

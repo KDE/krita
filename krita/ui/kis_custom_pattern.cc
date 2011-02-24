@@ -30,7 +30,9 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
+#include <kmessagebox.h>
 
+#include "kis_doc2.h"
 #include "kis_view2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -41,7 +43,7 @@
 #include "kis_paint_layer.h"
 
 KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QString& caption, KisView2* view)
-        : KisWdgCustomPattern(parent, name), m_view(view)
+    : KisWdgCustomPattern(parent, name), m_view(view)
 {
     Q_ASSERT(m_view);
     setWindowTitle(caption);
@@ -55,7 +57,8 @@ KisCustomPattern::KisCustomPattern(QWidget *parent, const char* name, const QStr
 
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(patternButton, SIGNAL(pressed()), this, SLOT(slotUsePattern()));
-    connect(exportButton, SIGNAL(pressed()), this, SLOT(slotExport()));
+    connect(updateButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentPattern()));
+    connect(cmbSource, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateCurrentPattern()));
 }
 
 KisCustomPattern::~KisCustomPattern()
@@ -64,12 +67,7 @@ KisCustomPattern::~KisCustomPattern()
     delete m_rServerAdapter;
 }
 
-void KisCustomPattern::showEvent(QShowEvent *)
-{
-    slotUpdateCurrentPattern(0);
-}
-
-void KisCustomPattern::slotUpdateCurrentPattern(int)
+void KisCustomPattern::slotUpdateCurrentPattern()
 {
     delete m_pattern;
     m_pattern = 0;
@@ -99,11 +97,6 @@ void KisCustomPattern::slotUpdateCurrentPattern(int)
             }
         }
     }
-}
-
-void KisCustomPattern::slotExport()
-{
-    ;
 }
 
 void KisCustomPattern::slotAddPredefined()
@@ -148,12 +141,38 @@ void KisCustomPattern::slotUsePattern()
 
 void KisCustomPattern::createPattern()
 {
+    if (!m_view) return;
+
+    KisPaintDeviceSP dev;
+    QString name;
     KisImageWSP image = m_view->image();
+    if (!image) return;
+    QRect rc = image->bounds();
 
-    if (!image)
-        return;
+    if (cmbSource->currentIndex() == 0) {
+        dev = m_view->activeNode()->projection();
+        name = m_view->activeNode()->name();
+        QRect rc2 = dev->exactBounds();
+        rc = rc.intersected(rc2);
+    }
+    else {
+        image->lock();
+        dev = image->projection();
+        image->unlock();
+        name = image->objectName();
+    }
+    if (!dev) return;
+    // warn when creating large patterns
 
-    m_pattern = new KisPattern(image->mergedImage().data(), 0, 0, image->width(), image->height());
+    QSize size = rc.size();
+    if (size.width() > 1000 || size.height() > 1000) {
+        lblWarning->setText(i18n("The current image is too big to create a pattern. "
+                                "The pattern will be scaled down."));
+        size.scale(1000, 1000, Qt::KeepAspectRatio);
+    }
+
+    m_pattern = new KisPattern(dev->createThumbnail(size.width(), size.height(), 0, rc), name);
+
 }
 
 

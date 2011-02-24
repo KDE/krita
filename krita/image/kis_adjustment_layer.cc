@@ -116,7 +116,7 @@ bool KisAdjustmentLayer::accept(KisNodeVisitor & v)
 
 QIcon KisAdjustmentLayer::icon() const
 {
-    return KIcon("tool_filter");
+    return KIcon("view-filter");
 }
 
 KoDocumentSectionModel::PropertyList KisAdjustmentLayer::sectionModelProperties() const

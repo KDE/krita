@@ -125,7 +125,7 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
         m_dab->clear();
     }
 
-    qreal scale = KisPaintOp::scaleForPressure(m_sizeOption.apply(pi2));
+    qreal scale = m_sizeOption.apply(pi2);
     qreal rotation = m_rotationOption.apply(pi2);
     quint8 origOpacity = m_opacityOption.apply(painter(), pi2);
 
@@ -137,6 +137,7 @@ KisDistanceInformation KisHairyPaintOp::paintLine(const KisPaintInformation &pi1
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
+    renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     KisVector2D end = toKisVector2D(pi2.pos());

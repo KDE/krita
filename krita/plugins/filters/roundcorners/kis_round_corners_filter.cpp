@@ -48,6 +48,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_types.h>
+#include <kis_iterator_ng.h>
 
 KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::categoryMap(), i18n("&Round Corners..."))
 {
@@ -55,92 +56,76 @@ KisRoundCornersFilter::KisRoundCornersFilter() : KisFilter(id(), KisFilter::cate
 
 }
 
-void KisRoundCornersFilter::process(KisConstProcessingInformation srcInfo,
-                                    KisProcessingInformation dstInfo,
-                                    const QSize& size,
+void KisRoundCornersFilter::process(KisPaintDeviceSP device,
+                                    const QRect& applyRect,
                                     const KisFilterConfiguration* config,
                                     KoUpdater* progressUpdater
                                    ) const
 {
-
-    const KisPaintDeviceSP src = srcInfo.paintDevice();
-    KisPaintDeviceSP dst = dstInfo.paintDevice();
-    QPoint dstTopLeft = dstInfo.topLeft();
-    QPoint srcTopLeft = srcInfo.topLeft();
+    QPoint srcTopLeft = applyRect.topLeft();
     Q_UNUSED(config);
-    Q_ASSERT(!src.isNull());
-    Q_ASSERT(!dst.isNull());
+    Q_ASSERT(!device.isNull());
 
-    if (!src ||
-            !dst ||
-            !size.isValid() ||
-            !config) {
+    if (!device || !config) {
         warnKrita << "Invalid parameters for round corner filter";
-        dbgPlugins << src << " " << dst << " " << size << " " << config;
+        dbgPlugins << device << " " << config;
         return;
     }
 
     //read the filter configuration values from the KisFilterConfiguration object
     qint32 radius = qMax(1, config->getInt("radius" , 30));
 
-    quint32 pixelSize = src->pixelSize();
+    quint32 pixelSize = device->pixelSize();
 
     if (progressUpdater) {
-        progressUpdater->setRange(0, size.height());
+        progressUpdater->setRange(0, applyRect.height());
     }
 
-    qint32 width = size.width();
-    qint32 height = size.height();
+    qint32 width = applyRect.width();
+    qint32 height = applyRect.height();
 
-    KisHLineIteratorPixel dstIt = dst->createHLineIterator(dstTopLeft.x(), dstTopLeft.y(), width, dstInfo.selection());
-    KisHLineConstIteratorPixel srcIt = src->createHLineConstIterator(srcTopLeft.x(), srcTopLeft.y(), width, srcInfo.selection());
+    KisHLineIteratorSP dstIt = device->createHLineIteratorNG(applyRect.x(), applyRect.y(), width);
 
-    const KoColorSpace* cs = src->colorSpace();
+    const KoColorSpace* cs = device->colorSpace();
 
-    qint32 x0 = dstTopLeft.x();
-    qint32 y0 = dstTopLeft.y();
-    for (qint32 y = 0; y < size.height(); y++) {
-        qint32 x = dstTopLeft.x();
-        while (!srcIt.isDone()) {
-            if (srcIt.isSelected()) {
-                memcpy(dstIt.rawData(), srcIt.oldRawData(), pixelSize);
-                if (x <= radius && y <= radius) {
-                    double dx = radius - x;
-                    double dy = radius - y;
-                    double dradius = static_cast<double>(radius);
-                    if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
-                    }
-                } else if (x >= x0 + width - radius && y <= radius) {
-                    double dx = x + radius - x0 - width;
-                    double dy = radius - y;
-                    double dradius = static_cast<double>(radius);
-                    if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
-                    }
-                } else if (x <= radius && y >= y0 + height - radius) {
-                    double dx = radius - x;
-                    double dy = y + radius - y0 - height;
-                    double dradius = static_cast<double>(radius);
-                    if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
-                    }
-                } else if (x >= x0 + width - radius && y >= y0 + height - radius) {
+    qint32 x0 = srcTopLeft.x();
+    qint32 y0 = srcTopLeft.y();
+    for (qint32 y = 0; y < applyRect.height(); y++) {
+        qint32 x = applyRect.x();
+        do {
+            if (x <= radius && y <= radius) {
+                double dx = radius - x;
+                double dy = radius - y;
+                double dradius = static_cast<double>(radius);
+                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
+                }
+            } else if (x >= x0 + width - radius && y <= radius) {
+                double dx = x + radius - x0 - width;
+                double dy = radius - y;
+                double dradius = static_cast<double>(radius);
+                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
+                }
+            } else if (x <= radius && y >= y0 + height - radius) {
+                double dx = radius - x;
+                double dy = y + radius - y0 - height;
+                double dradius = static_cast<double>(radius);
+                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
+                }
+            } else if (x >= x0 + width - radius && y >= y0 + height - radius) {
 
-                    double dx = x + radius - x0 - width;
-                    double dy = y + radius - y0 - height;
-                    double dradius = static_cast<double>(radius);
-                    if (dx >= sqrt(dradius*dradius - dy*dy)) {
-                        cs->setOpacity(dstIt.rawData(), OPACITY_TRANSPARENT_U8, 1);
-                    }
+                double dx = x + radius - x0 - width;
+                double dy = y + radius - y0 - height;
+                double dradius = static_cast<double>(radius);
+                if (dx >= sqrt(dradius*dradius - dy*dy)) {
+                    cs->setOpacity(dstIt->rawData(), OPACITY_TRANSPARENT_U8, 1);
                 }
             }
-            ++srcIt;
-            ++dstIt;
             ++x;
-        }
-        srcIt.nextRow();
-        dstIt.nextRow();
+        } while(dstIt->nextPixel());
+        dstIt->nextRow();
         if (progressUpdater) progressUpdater->setValue(y);
     }
 }

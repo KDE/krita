@@ -28,15 +28,11 @@
 class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
 {
 public:
-    KisCanvasController(QWidget *parent);
+    KisCanvasController(QWidget *parent, KActionCollection * actionCollection);
     ~KisCanvasController();
 
-    void setCanvas(KoCanvasBase *canvas);
-    bool eventFilter(QObject *watched, QEvent *event);
-
-protected:
-    void scrollToCenterPoint(const QPoint &center);
-    void zoomRelativeToPoint(const QPoint &widgetPoint, qreal zoomLevel);
+    virtual void setCanvas(KoCanvasBase *canvas);
+    virtual bool eventFilter(QObject *watched, QEvent *event);
 
 private:
     struct Private;

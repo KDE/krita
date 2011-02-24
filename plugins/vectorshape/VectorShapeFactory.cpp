@@ -26,8 +26,8 @@
 
 // KOffice
 #include <KoXmlNS.h>
-#include "KoShapeControllerBase.h"
 #include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 
 
 // KDE
@@ -54,8 +54,21 @@ KoShape *VectorShapeFactory::createDefaultShape(KoResourceManager */*documentRes
 
 bool VectorShapeFactory::supports(const KoXmlElement & e, KoShapeLoadingContext &context) const
 {
-    Q_UNUSED(context);
-    return e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw;
+    if (e.localName() == "image" && e.namespaceURI() == KoXmlNS::draw) {
+        QString href = e.attribute("href");
+        if (!href.isEmpty()) {
+            // check the mimetype
+            if (href.startsWith("./")) {
+                href.remove(0,2);
+            }
+            QString mimetype = context.odfLoadingContext().mimeTypeForPath(href);
+            // don't try to load image types
+            return !mimetype.startsWith("image");
+        }
+        return true;
+    }
+
+    return false;
 }
 
 QList<KoShapeConfigWidgetBase*> VectorShapeFactory::createShapeOptionPanels()

@@ -55,8 +55,16 @@ void KisNodeMoveCommand::undo()
 
 void KisNodeMoveCommand::moveTo(const QPoint& pos)
 {
+    /**
+     * FIXME: Hack alert:
+     * Our iterators don't have guarantees on thread-safety
+     * when the offset varies. When it is fixed, remove the locking.
+     * see: KisIterator::stressTest(), KisToolMove::mousePressEvent()
+     */
+    m_image->lock();
     m_node->setX(pos.x());
     m_node->setY(pos.y());
+    m_image->unlock();
 
     m_node->setDirty(m_updateRect);
     

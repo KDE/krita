@@ -53,7 +53,7 @@ public:
     /**
      *  Document me
      */
-    double paintAt(const KisPaintInformation& info);
+    qreal paintAt(const KisPaintInformation& info);
 
     /*
     /// Absorb the color beneath the brush

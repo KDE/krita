@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,32 +20,32 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 #include <QMultiHash>
 #include <QIcon>
+#include <QPixmap>
+#include <QMap>
 
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
 class QSignalMapper;
+class TextShape;
 
-class StylesModel : public QAbstractItemModel
+class StylesModel : public QAbstractListModel
 {
     Q_OBJECT
 
 public:
-    explicit StylesModel(KoStyleManager *styleManager, QObject *parent = 0);
+    explicit StylesModel(KoStyleManager *styleManager, bool paragraphMode, QObject *parent = 0);
     ~StylesModel();
 
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    virtual QModelIndex parent(const QModelIndex &child) const;
+    virtual QModelIndex index(int row, int column=0, const QModelIndex &parent = QModelIndex()) const;
 
     virtual int rowCount(const QModelIndex &parent) const;
-    virtual int columnCount(const QModelIndex &parent) const;
 
     virtual QVariant data(const QModelIndex &index, int role) const;
 
-    virtual bool hasChildren(const QModelIndex &parent) const;
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
     KoParagraphStyle *paragraphStyleForIndex(const QModelIndex &index) const;
@@ -67,31 +68,28 @@ public slots:
     void setCurrentCharacterStyle(int styleId, bool unchanged);
 
 private slots:
-    void addParagraphStyle(KoParagraphStyle*, bool recalc = true);
-    void addCharacterStyle(KoCharacterStyle*, bool recalc = true);
-    void removeParagraphStyle(KoParagraphStyle*, bool recalc = true);
-    void removeCharacterStyle(KoCharacterStyle*, bool recalc = true);
+    void addParagraphStyle(KoParagraphStyle*);
+    void addCharacterStyle(KoCharacterStyle*);
+    void removeParagraphStyle(KoParagraphStyle*);
+    void removeCharacterStyle(KoCharacterStyle*);
     void updateName(int styleId);
 
 protected:
-    void recalculate();
-
-    QList<int> m_styleList; // top level list of items
-    QMultiHash<int, int> m_relations; // parent-child relations.
+    QList<int> m_styleList; // list of style IDs
 
 private:
-    QModelIndex parent(int needle, const QList<int> &haystack) const;
-
     KoStyleManager *m_styleManager;
 
     int m_currentParagraphStyle;
     int m_currentCharacterStyle;
     bool m_pureParagraphStyle;
     bool m_pureCharacterStyle;
+    bool m_paragraphMode;
 
     QIcon m_paragIcon, m_charIcon;
 
     QSignalMapper *m_styleMapper;
+    TextShape *m_tmpTextShape;
 };
 
 #endif

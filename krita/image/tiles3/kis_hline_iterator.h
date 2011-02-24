@@ -46,6 +46,8 @@ public:
     virtual quint8* rawData();
     virtual qint32 nConseqPixels() const;
     virtual bool nextPixels(qint32 n);
+    virtual qint32 x() const;
+    virtual qint32 y() const;
     
 private:
     qint32 m_x;        // current x position

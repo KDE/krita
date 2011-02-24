@@ -54,6 +54,7 @@ private:
     bool enabled;
     int height;
     double depth;
+    bool threeDBrushEnabled;
 };
 
 inline AbstractThreeDAttributes::AbstractThreeDAttributes( Private * p ) : _d( p ) { init(); }

@@ -42,6 +42,7 @@
 
 #include "kis_tool.h"
 #include "KoCompositeOp.h"
+#include <QCheckBox>
 
 class QEvent;
 class QKeyEvent;
@@ -136,6 +137,7 @@ private slots:
 
     void slotPopupQuickHelp();
     void slotSetOpacity(int opacityPerCent);
+
     void slotSetCompositeMode(const QString& compositeOp);
 
 protected slots:
@@ -144,7 +146,6 @@ protected slots:
 
 
 protected:
-
     quint8 m_opacity;
     const KoCompositeOp * m_compositeOp;
     bool m_paintOutline;
@@ -160,7 +161,7 @@ private:
 
     QLabel *m_lbOpacity;
     KisSliderSpinBox *m_slOpacity;
-
+    
     bool m_supportOutline;
 
     /**

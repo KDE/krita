@@ -67,11 +67,14 @@ void KoPAPageBase::paintBackground( QPainter & painter, const KoViewConverter & 
     KoPageLayout layout = pageLayout();
     painter.setPen( Qt::black );
 
-    if( background() )
-    {
+    if (background()) {
         QPainterPath p;
         p.addRect( QRectF( 0.0, 0.0, layout.width, layout.height ) );
         background()->paint( painter, p );
+    }
+    else {
+        painter.setBrush(Qt::white);
+        painter.drawRect(QRectF(0.0, 0.0, layout.width, layout.height));
     }
 
     painter.restore();

@@ -2152,7 +2152,7 @@ QString KoTextWriter::Private::findChangeIdForListItemMerge(const KoXmlElement &
 
 void KoTextWriter::Private::writeAttributes(QTextStream &outputXmlStream, KoXmlElement &element)
 {
-    QList<QPair<QString, QString> > attributes = element.attributeNSNames();
+    QList<QPair<QString, QString> > attributes = element.attributeFullNames();
 
     QPair<QString, QString> attributeNamePair;
     foreach (attributeNamePair, attributes) {

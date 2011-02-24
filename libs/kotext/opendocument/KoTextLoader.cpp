@@ -176,9 +176,9 @@ public:
             changeTracker(0),
             shape(s),
             loadSpanLevel(0),
+            loadSpanInitialPos(0),
             openedElements(0),
             deleteMergeStarted(false),
-            loadSpanInitialPos(0),
             inTable(false)
     {
         dt.start();
@@ -906,7 +906,7 @@ void KoTextLoader::Private::copyTagStart(const KoXmlElement &element, QTextStrea
     QString nodeName  = QString("ns%1") + ":" + element.localName();
     nodeName = nodeName.arg(index);
     xmlStream << "<" << nodeName;
-    QList<QPair<QString, QString> > attributeNSNames = element.attributeNSNames();
+    QList<QPair<QString, QString> > attributeNSNames = element.attributeFullNames();
 
     QPair<QString, QString> attributeName;
     foreach(attributeName, attributeNSNames) {
@@ -2251,7 +2251,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
 
             KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor, cursor.charFormat());
+                textObjectManager->insertInlineObject(cursor, anchor);
             }
 
             if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "")

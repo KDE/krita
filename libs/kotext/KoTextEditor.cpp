@@ -791,7 +791,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
         format.clearProperty(KoCharacterStyle::ChangeTrackerId);
     }
 
-    layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner, d->caret.charFormat());
+    layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
 
     int endPosition = d->caret.position();
     d->caret.setPosition(startPosition);

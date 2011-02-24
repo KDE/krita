@@ -202,7 +202,7 @@ public:
         FootNotesConfiguration,
         EndNotesConfiguration,
         LineNumberingConfiguration,
-        RelativeTabs
+        RelativeTabs,
         HeadingList
     };
 

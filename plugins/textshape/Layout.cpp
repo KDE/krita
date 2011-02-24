@@ -375,8 +375,7 @@ bool Layout::addLine()
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
                 Q_ASSERT(this->layout == m_block.layout());
-                m_textLine.createLine(this);
-                line = m_textLine.line;
+                line = createLine();
                 if (!line.isValid())
                     break;
                 line.setLineWidth(lk.lineWidth);

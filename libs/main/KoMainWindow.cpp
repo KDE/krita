@@ -1352,6 +1352,7 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
 
     // TODO for remote files we have to first save locally and then upload.
     printJob->printer().setOutputFileName(pdfFileName);
+    printJob->printer().setColorMode(QPrinter::Color);
     printJob->startPrinting(KoPrintJob::DeleteWhenDone);
     return printJob;
 }

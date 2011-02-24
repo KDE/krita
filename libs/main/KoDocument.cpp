@@ -88,6 +88,8 @@
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
+#include <kactioncollection.h>
+#include "KoUndoStackAction.h"
 
 QList<KoDocument*> *KoDocument::s_documentList = 0;
 
@@ -375,8 +377,6 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->pageLayout.rightMargin = 0;
 
     d->undoStack = new KUndoStack(this);
-    d->undoStack->createUndoAction(actionCollection());
-    d->undoStack->createRedoAction(actionCollection());
 
     KConfigGroup cfgGrp(componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));

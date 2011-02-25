@@ -681,9 +681,6 @@ void KisView2::connectCurrentImage()
 
     m_d->canvas->connectCurrentImage();
 
-    connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
-            m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
-
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
     }

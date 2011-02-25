@@ -131,7 +131,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     QPointF pt = info.pos() - hotSpot;
 
     setCurrentScale(scale);
-    
+
     // Split the coordinates into integer plus fractional parts. The integer
     // is where the dab will be positioned and the fractional part determines
     // the sub-pixel positioning.
@@ -145,7 +145,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     xFraction = yFraction = 0.0;
 
     QPoint srcPoint;
-    
+
     if(m_moveSourcePoint)
     {
         srcPoint = QPoint(x - static_cast<qint32>(settings->offset().x()),
@@ -314,7 +314,7 @@ qreal KisDuplicateOp::paintAt(const KisPaintInformation& info)
     sh = dstRect.height();
 
     painter()->bitBltWithFixedSelection(dstRect.x(), dstRect.y(), m_srcdev, dab, sx, sy, 0, 0, sw, sh);
-    renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
+    painter()->renderMirrorMask(QRect(dstRect.topLeft(),dstRect.size()),m_srcdev,0,0,dab);
 
     return spacing(scale);
 }

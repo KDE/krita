@@ -65,6 +65,10 @@ public:
 protected:
     void setMinimumLabel(const KisCurveLabel& _label);
     void setMaximumLabel(const KisCurveLabel& _label);
+    /**
+     * Read the option using the prefix in argument
+     */
+    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
 
 protected:
 

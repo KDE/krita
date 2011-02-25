@@ -34,3 +34,13 @@ double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
     if (!isChecked()) return 1.0;
     return computeValue(info);
 }
+
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    if(setting->hasProperty("Pressure" + m_name))
+    {
+        KisCurveOption::readOptionSetting(setting);
+    } else {
+        readNamedOptionSetting("Size", setting);
+    }
+}

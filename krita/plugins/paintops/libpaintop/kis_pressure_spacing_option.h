@@ -33,8 +33,7 @@ class PAINTOP_EXPORT KisPressureSpacingOption : public KisCurveOption
 public:
     KisPressureSpacingOption();
     double apply(const KisPaintInformation & info) const;
-
-
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 };
 
 #endif

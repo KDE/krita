@@ -37,7 +37,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBoxLength">
+      <widget class="KisSliderSpinBox" name="spinBoxLength">
        <property name="minimum">
         <number>1</number>
        </property>
@@ -60,6 +60,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

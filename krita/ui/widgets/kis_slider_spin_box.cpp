@@ -431,6 +431,30 @@ void KisSliderSpinBox::setRange(int minimum, int maximum)
     update();
 }
 
+int KisSliderSpinBox::minimum() const
+{
+    const Q_D(KisSliderSpinBox);
+    return d->minimum;
+}
+
+void KisSliderSpinBox::setMinimum(int minimum)
+{
+    Q_D(KisSliderSpinBox);
+    setRange(minimum, d->maximum);
+}
+
+int KisSliderSpinBox::maximum() const
+{
+    const Q_D(KisSliderSpinBox);
+    return d->maximum;
+}
+
+void KisSliderSpinBox::setMaximum(int maximum)
+{
+    Q_D(KisSliderSpinBox);
+    setRange(d->minimum, maximum);
+}
+
 int KisSliderSpinBox::value()
 {
     Q_D(KisSliderSpinBox);
@@ -440,6 +464,7 @@ int KisSliderSpinBox::value()
 void KisSliderSpinBox::setValue(int value)
 {
     setInternalValue(value);
+    update();
 }
 
 QString KisSliderSpinBox::valueString() const

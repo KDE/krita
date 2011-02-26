@@ -45,7 +45,6 @@
 #include "kis_image.h"
 #include "kis_statusbar.h"
 #include "kis_config.h"
-#include "../../libs/widgets/KoZoomHandler.h"
 
 KisZoomManager::KisZoomManager(KisView2 * view, KoZoomHandler * zoomHandler,
                                KoCanvasController * canvasController)

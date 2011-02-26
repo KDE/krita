@@ -2353,6 +2353,12 @@ void KisPainter::setMirrorInformation(const QPointF& axisCenter, bool mirrorHori
     d->mirrorVerticaly = mirrorVerticaly;
 }
 
+void KisPainter::copyMirrorInformation(KisPainter* painter)
+{
+    painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
+}
+
+
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {
 

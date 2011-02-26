@@ -27,14 +27,20 @@ class QWidget;
 class KoColorSpace;
 
 #include "kis_types.h"
-#define PUBLISH_OPERATOR(name) \
-    class OperatorFactory { \
-    public: \
-        OperatorFactory() \
-        { \
-            KisToneMappingOperatorsRegistry::instance()->add(new name()); \
-        } \
-    }; \
+#define PUBLISH_OPERATOR(name)                                                  \
+    class OperatorFactory {                                                     \
+    public:                                                                     \
+        OperatorFactory()                                                       \
+        {                                                                       \
+            name* op = new name();                                              \
+            if(op->colorSpace())                                                \
+            {                                                                   \
+                KisToneMappingOperatorsRegistry::instance()->add(new name());   \
+            } else {                                                            \
+                delete op;                                                      \
+            }                                                                   \
+        }                                                                       \
+    };                                                                          \
     static OperatorFactory operatorFactory;
 
 class KisToneMappingOperator

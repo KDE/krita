@@ -87,7 +87,7 @@ public:
 
     // Called by The Memento Manager after every commit
     inline void kickPooler() {
-        m_pooler.kick();
+//        m_pooler.kick();
 
         //FIXME: maybe, rename a function?
         m_swapper.kick();

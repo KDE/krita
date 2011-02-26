@@ -31,20 +31,32 @@
     <layout class="QHBoxLayout" name="hl" stretch="0,0">
      <item>
       <widget class="QLabel" name="Factor">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
-        <string>Length</string>
+        <string>Length:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="spinBoxLength">
-       <property name="minimum">
+      <widget class="KisSliderSpinBox" name="spinBoxLength" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimum" stdset="0">
         <number>1</number>
        </property>
-       <property name="maximum">
+       <property name="maximum" stdset="0">
         <number>99999</number>
        </property>
-       <property name="value">
+       <property name="value" stdset="0">
         <number>1000</number>
        </property>
       </widget>

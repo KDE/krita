@@ -166,6 +166,7 @@ KisDoc2::~KisDoc2()
     delete m_d->shapeController;
     delete m_d->nodeModel;
 
+    m_d->image->notifyAboutToBeDeleted();
     // The following line trigger the deletion of the image
     m_d->image.clear();
 

@@ -82,6 +82,8 @@ void KisNodeModel::setImage(KisImageWSP image)
             SLOT(endRemoveNodes(KisNode*, int)));
     connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
             SLOT(nodeChanged(KisNode*)));
+    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()),
+            SLOT(imageDeleted()));
 }
 
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
@@ -131,6 +133,9 @@ QModelIndex KisNodeModel::indexFromNode(const KisNodeSP node) const
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
     //dbgUI <<"KisNodeModel::rowCount" << parent;
+    if (!m_d->image) {
+        return 0;
+    }
 
     if (!parent.isValid()) {
         if (m_d->image) {
@@ -159,7 +164,7 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 {
     //dbgUI <<"KisNodeModel::index(row =" << row <<", column=" << column <<", parent=" << parent <<" parent is valid:" << parent.isValid();
 
-    if (!hasIndex(row, column, parent)) {
+    if (!m_d->image || !hasIndex(row, column, parent)) {
         //dbgUI << "Does not have index";
         return QModelIndex();
     }
@@ -196,7 +201,8 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
     //dbgUI <<"KisNodeModel::parent " << index;
-    if (!index.isValid())
+    kDebug() << "image " << m_d->image;
+    if (!m_d->image || !index.isValid())
         return QModelIndex();
 
     Q_ASSERT(index.model() == this);
@@ -506,6 +512,12 @@ void KisNodeModel::updateNodes()
     }
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
+}
+
+void KisNodeModel::imageDeleted()
+{
+    m_d->image = 0;
+    reset();
 }
 
 #include "kis_node_model.moc"

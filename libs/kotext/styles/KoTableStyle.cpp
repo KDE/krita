@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -479,13 +480,29 @@ void KoTableStyle::removeDuplicates(const KoTableStyle &other)
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
+bool KoTableStyle::isEmpty() const
+{
+    return d->stylesPrivate.isEmpty();
+}
+
 void KoTableStyle::saveOdf(KoGenStyle &style)
 {
-    Q_UNUSED(style);
-/*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
-        if (key == QTextFormat::BlockAlignment) {
+        if (key == QTextFormat::FrameWidth) {
+            QVariant variantWidth = value(QTextFormat::FrameWidth);
+            if (!variantWidth.canConvert<QTextLength>())
+            {
+                qFatal("Unable to convert to QTextLength");
+            }
+            QTextLength width = variantWidth.value<QTextLength>();
+            if (width.type() == QTextLength::PercentageLength) {
+                style.addProperty("fo:rel-width", QString("%1%%").arg(width.rawValue()), KoGenStyle::TableType);
+            } else if (width.type() == QTextLength::FixedLength) {
+                style.addProperty("fo:width", QString("%1 pt").arg(width.rawValue()), KoGenStyle::TableType);
+            }
+        }
+        /*if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;
             alignValue = d->stylesPrivate.value(key).toInt(&ok);
@@ -533,9 +550,8 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         } else if (key == QTextFormat::BlockTopMargin) {
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);*/
     }
-*/
 }
 
 #include <KoTableStyle.moc>

@@ -24,6 +24,7 @@
 #include <QtGui/QTransform>
 #include <QtGui/QPainterPath>
 #include <QtGui/QPainter>
+#include <qgraphicsitem.h>
 
 class KoClipData::Private
 {
@@ -82,12 +83,14 @@ public:
     {
     }
 
-    void compileClipPath(const QTransform &transformToShape)
+    void compileClipPath(KoShape *shapeToClip)
     {
         QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
         if(!clipShapes.count())
             return;
 
+        QTransform transformToShape = shapeToClip->absoluteTransformation(0).inverted();
+        
         foreach(KoPathShape * path, clipShapes) {
             if(!path)
                 continue;
@@ -106,10 +109,10 @@ public:
     QTransform initialTransformToShape; ///< initial transformation to shape coordinates of the clipped shape
 };
 
-KoClipPath::KoClipPath(KoClipData * clipData, const QTransform & transformToShape)
+KoClipPath::KoClipPath(KoShape *shapeToClip, KoClipData * clipData)
     : d( new Private(clipData) )
 {
-    d->compileClipPath(transformToShape);
+    d->compileClipPath(shapeToClip);
 }
 
 KoClipPath::~KoClipPath()

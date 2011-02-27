@@ -60,7 +60,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase * controller, const
     d->clipData = new KoClipData(clipPathShapes);
     foreach(KoShape * shape, d->shapesToClip) {
         d->oldClipPaths.append(shape->clipPath());
-        d->newClipPaths.append(new KoClipPath(d->clipData.data(), shape->absoluteTransformation(0).inverted()));
+        d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
     }
 
     foreach(KoPathShape * path, clipPathShapes) {
@@ -77,7 +77,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase * controller, KoSha
     d->clipPathShapes = clipPathShapes;
     d->clipData = new KoClipData(clipPathShapes);
     d->oldClipPaths.append(shape->clipPath());
-    d->newClipPaths.append(new KoClipPath(d->clipData.data(), shape->absoluteTransformation(0).inverted()));
+    d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
 
     foreach(KoPathShape * path, clipPathShapes) {
         d->oldParents.append(path->parent());

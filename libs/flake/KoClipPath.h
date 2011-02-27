@@ -62,10 +62,10 @@ class FLAKE_EXPORT KoClipPath
 public:
     /**
      * Create a new shape clipping using the given clip data
+     * @param shapeToClip the shape to clip
      * @param clipData shared clipping data conatining the clip paths
-     * @param transformToShape transformation matrix to transform clipping paths to shape coordinates
      */
-    KoClipPath(KoClipData * clipData, const QTransform & transformToShape);
+    KoClipPath(KoShape *shapeToClip, KoClipData * clipData);
 
     ~KoClipPath();
 

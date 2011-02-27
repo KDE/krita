@@ -115,7 +115,7 @@ public:
 			    float M22, float Dx, float Dy );
     void extTextOutA( const ExtTextOutARecord &extTextOutA );
     void extTextOutW( const QPoint &referencePoint, const QString &textString );
-    void moveToEx( const quint32 x, const quint32 y );
+    void moveToEx( const qint32 x, const qint32 y );
     void saveDC();
     void restoreDC( const qint32 savedDC );
     void lineTo( const QPoint &finishPoint );

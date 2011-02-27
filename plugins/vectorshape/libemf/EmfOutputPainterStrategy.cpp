@@ -1036,7 +1036,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     m_painter->setPen(savePen);
 }
 
-void OutputPainterStrategy::moveToEx( const quint32 x, const quint32 y )
+void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;

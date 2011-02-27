@@ -64,6 +64,7 @@
 #include <kis_transaction.h>
 #include <kis_slider_spin_box.h>
 #include <QComboBox>
+#include <QStackedWidget>
 
 #define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
@@ -72,6 +73,9 @@ static const int MAXIMUM_BRUSHES = 50;
 KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor, const QString & transactionText)
     : KisToolPaint(canvas, cursor)
     , m_transactionText(transactionText)
+    , m_mirrorVertically(false)
+    , m_mirrorHorizontally(true)
+    , m_translateRadius(100)
 {
     m_explicitShowOutline = false;
 
@@ -111,7 +115,32 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
+
+    m_airbrushTimer = new QTimer(this);
+    m_rate = 100;
+    m_isAirbrushing = false;
+    connect(m_airbrushTimer, SIGNAL(timeout()), this, SLOT(timeoutPaint()));
+
 }
+
+void KisToolMultihand::timeoutPaint()
+{
+    Q_ASSERT(currentPaintOpPreset()->settings()->isAirbrushing());
+    if (currentImage() && !m_painters.isEmpty()) {
+
+        for (int i = 0; i < m_painters.size(); i++){
+            KisPainter * painter = m_painters.at(i);
+            KisPaintInformation pi1 = m_previousPaintInformation;
+            pi1.setPos( m_brushTransforms.at(i).map(pi1.pos()) );
+            paintAt(pi1, m_painters[i]);
+
+            QRegion r = m_painters[i]->takeDirtyRegion();
+            currentNode()->setDirty(r);
+        }
+
+    }
+}
+
 
 KisToolMultihand::~KisToolMultihand()
 {
@@ -123,7 +152,12 @@ void KisToolMultihand::initTransformations()
     if (axisPoint.isNull()){
         axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
-    m_brushTransforms.resize(m_brushesCount);
+
+    // mirror mode decide own number of brushes
+    if (m_currentTransformMode != MIRROR) {
+        m_brushTransforms.resize(m_brushesCount);
+    }
+
     QTransform m;
 
     if (m_currentTransformMode == SYMETRY) {
@@ -142,22 +176,53 @@ void KisToolMultihand::initTransformations()
             angle += angleAddition;
         }
     } else if (m_currentTransformMode == MIRROR) {
-        if (m_brushCounter->value() != 2) {
-            m_brushCounter->setValue(2);
-            m_brushCounter->update();
+        m_brushesCount = 1;
+        if (m_mirrorHorizontally && m_mirrorVertically) {
+            m_brushesCount = 4;
+        } else if (m_mirrorHorizontally || m_mirrorVertically){
+            m_brushesCount = 2;
+        } else {
+            m_brushesCount = 1;
         }
-        for (int i = 0; i < m_brushesCount ; i++){
+
+        m_brushCounter->setValue(m_brushesCount);
+        m_brushCounter->update();
+        m_brushTransforms.resize(m_brushesCount);
+        int position = 0;
+
+        m.reset();
+        m_brushTransforms[position] = m;
+        position++;
+
+        if (m_mirrorHorizontally){
             m.reset();
             m.translate(axisPoint.x(),axisPoint.y());
-
             m.scale(-1,1);
-
             m.translate(-axisPoint.x(), -axisPoint.y());
-            m_brushTransforms[i] = m;
+            m_brushTransforms[position] = m;
+            position++;
         }
+
+        if (m_mirrorVertically){
+            m.reset();
+            m.translate(axisPoint.x(),axisPoint.y());
+            m.scale(1,-1);
+            m.translate(-axisPoint.x(), -axisPoint.y());
+            m_brushTransforms[position] = m;
+            position++;
+        }
+
+        if (m_mirrorVertically && m_mirrorHorizontally){
+            m.reset();
+            m.translate(axisPoint.x(),axisPoint.y());
+            m.scale(-1,-1);
+            m.translate(-axisPoint.x(), -axisPoint.y());
+            m_brushTransforms[position] = m;
+        }
+
     } else // if (m_currentTransformMode == TRANSLATE)
     {
-        int m_areaRadius = 100;
+        int m_areaRadius = m_translateRadius;
         for (int i = 0; i < m_brushesCount ; i++){
             m.reset();
             m.translate(axisPoint.x(),axisPoint.y());
@@ -238,8 +303,16 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
 
         setMode(KisTool::PAINT_MODE);
 
-        initPaint(e);
         initTransformations();
+        initPaint(e);
+
+        m_rate = currentPaintOpPreset()->settings()->rate();
+        m_isAirbrushing = currentPaintOpPreset()->settings()->isAirbrushing();
+
+
+        if (m_isAirbrushing) {
+            m_airbrushTimer->start(m_rate);
+        }
 
         m_previousPaintInformation = KisPaintInformation(convertToPixelCoord(adjustPosition(e->point, e->point)),
                                                          pressureToCurve(e->pressure()), e->xTilt(), e->yTilt(),
@@ -357,6 +430,10 @@ void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
     }
 
     m_previousPaintInformation = info;
+
+    if (m_painters[0] && m_painters[0]->paintOp() && m_isAirbrushing) {
+        m_airbrushTimer->start(m_rate);
+    }
 }
 
 void KisToolMultihand::mouseReleaseEvent(KoPointerEvent* e)
@@ -490,6 +567,7 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
 
 void KisToolMultihand::endPaint()
 {
+    m_airbrushTimer->stop();
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     if(canvas2) {
         canvas2->view()->enableControls();
@@ -821,6 +899,33 @@ QWidget * KisToolMultihand::createOptionWidget()
     addOptionWidgetOption(m_transformModes);
     addOptionWidgetOption(m_brushCounter);
 
+    m_modeCustomOption = new QStackedWidget(optionWidget);
+
+    QWidget * symmetryWidget = new QWidget(m_modeCustomOption);
+    m_modeCustomOption->addWidget(symmetryWidget);
+
+    QWidget * mirrorWidget = new QWidget(m_modeCustomOption);
+    m_mirrorHorizontallyChCkBox = new QCheckBox(i18n("Horizontally"));
+    m_mirrorHorizontallyChCkBox->setChecked(m_mirrorHorizontally);
+    m_mirrorVerticallyChCkBox = new QCheckBox(i18n("Vertically"));
+    m_mirrorVerticallyChCkBox->setChecked(m_mirrorVertically);
+    connect(m_mirrorHorizontallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorHorizontally(bool)));
+    connect(m_mirrorVerticallyChCkBox,SIGNAL(toggled(bool)),this, SLOT(slotSetMirrorVertically(bool)));
+    QGridLayout * mirrorLayout = new QGridLayout(mirrorWidget);
+    mirrorLayout->addWidget(m_mirrorHorizontallyChCkBox,0,0);
+    mirrorLayout->addWidget(m_mirrorVerticallyChCkBox,0,1);
+    mirrorWidget->setLayout(mirrorLayout);
+    m_modeCustomOption->addWidget(mirrorWidget);
+
+    QWidget * translateWidget = new QWidget(m_modeCustomOption);
+    m_translateRadiusSlider = new KisSliderSpinBox(translateWidget);
+    m_translateRadiusSlider->setRange(0, 200);
+    m_translateRadiusSlider->setValue(m_translateRadius);
+    connect(m_translateRadiusSlider,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
+    m_modeCustomOption->addWidget(translateWidget);
+
+    addOptionWidgetOption(m_modeCustomOption);
+
     return optionWidget;
 }
 
@@ -832,6 +937,9 @@ void KisToolMultihand::slotSetBrushCount(int count)
 void KisToolMultihand::slotSetCurrentTransformMode(int qcomboboxIndex)
 {
     m_currentTransformMode = enumTransforModes( m_transformModes->itemData(qcomboboxIndex).toInt() );
+    if (m_modeCustomOption) {
+        m_modeCustomOption->setCurrentIndex(qcomboboxIndex);
+    }
 }
 
 void KisToolMultihand::slotSetSmoothness(int smoothness)
@@ -842,6 +950,21 @@ void KisToolMultihand::slotSetSmoothness(int smoothness)
 void KisToolMultihand::slotSetMagnetism(int magnetism)
 {
     m_magnetism = expf(magnetism / (double)MAXIMUM_MAGNETISM) / expf(1.0);
+}
+
+void KisToolMultihand::slotSetMirrorHorizontally(bool mirror)
+{
+    m_mirrorHorizontally = mirror;
+}
+
+void KisToolMultihand::slotSetMirrorVertically(bool mirror)
+{
+    m_mirrorVertically = mirror;
+}
+
+void KisToolMultihand::slotSetTranslateRadius(int radius)
+{
+    m_translateRadius = radius;
 }
 
 

@@ -28,6 +28,7 @@
 // OpenGL
 #include <opengl/kis_opengl.h>
 
+class QStackedWidget;
 class KisTransaction;
 class KisPainter;
 class KAction;
@@ -120,6 +121,10 @@ private:
     KisSliderSpinBox *m_sliderSmoothness;
     QComboBox * m_transformModes;
     KisSliderSpinBox *m_brushCounter;
+    QStackedWidget *m_modeCustomOption;
+    QCheckBox *m_mirrorVerticallyChCkBox;
+    QCheckBox *m_mirrorHorizontallyChCkBox;
+    KisSliderSpinBox *m_translateRadiusSlider;
 
 private slots:
     void increaseBrushSize();
@@ -130,6 +135,10 @@ private slots:
     void slotSetMagnetism(int magnetism);
     void slotSetBrushCount(int count);
     void slotSetCurrentTransformMode(int qcomboboxIndex);
+    void slotSetMirrorVertically(bool mirror);
+    void slotSetMirrorHorizontally(bool mirror);
+    void slotSetTranslateRadius(int radius);
+    void timeoutPaint();
 
 protected:
 
@@ -164,6 +173,9 @@ private:
     QVector<QTransform> m_brushTransforms;
     QPointF m_translatedBrush;
     KisTransaction * m_transaction;
+    bool m_mirrorVertically;
+    bool m_mirrorHorizontally;
+    int m_translateRadius;
 
     enum enumTransforModes { SYMETRY, MIRROR, TRANSLATE, CUSTOM };
 
@@ -175,6 +187,9 @@ private:
     QRectF m_oldOutlineRect;
     bool m_explicitShowOutline;
 
+    QTimer *m_airbrushTimer;
+    qint32 m_rate;
+    bool m_isAirbrushing;
 
     QRegion m_incrementalDirtyRegion;
     QList<FreehandPaintJob*> m_paintJobs;

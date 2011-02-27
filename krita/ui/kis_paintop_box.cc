@@ -395,6 +395,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         Q_ASSERT(m_presetWidget);
         connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
         m_presetsPopup->setPreset(preset);
+        KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
+        QString pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+        m_settingsWidget->setIcon(QIcon(pixFilename));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
@@ -594,10 +597,8 @@ void KisPaintopBox::setEnabledInternal(bool value)
 {
     m_paintopWidget->setEnabled(value);
     if(value) {
-        m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     } else {
-        m_settingsWidget->setIcon(KIcon("paintop_settings_disabled"));
         m_presetWidget->setIcon(KIcon("paintop_presets_disabled"));
     }
 }

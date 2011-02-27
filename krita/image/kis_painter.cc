@@ -77,7 +77,6 @@ struct KisPainter::Private {
     KoUpdater*                  progressUpdater;
 
     QRegion                     dirtyRegion;
-    QRect                       dirtyRect;
     KisPaintOp*                 paintOp;
     QRect                       bounds;
     KoColor                     paintColor;
@@ -96,7 +95,6 @@ struct KisPainter::Private {
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
     QBitArray                   channelFlags;
-    bool                        useBoundingDirtyRect;
     const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
@@ -153,9 +151,6 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
-
-    KConfigGroup cfg = KGlobal::config()->group("");
-    d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
 }
 
 KisPainter::~KisPainter()
@@ -246,16 +241,9 @@ KisTransaction* KisPainter::takeTransaction()
 
 QRegion KisPainter::takeDirtyRegion()
 {
-    if (d->useBoundingDirtyRect) {
-        QRegion r(d->dirtyRect);
-        d->dirtyRegion = QRegion();
-        d->dirtyRect = QRect();
-        return r;
-    } else {
-        QRegion r = d->dirtyRegion;
-        d->dirtyRegion = QRegion();
-        return r;
-    }
+    QRegion r = d->dirtyRegion;
+    d->dirtyRegion = QRegion();
+    return r;
 }
 
 
@@ -267,17 +255,9 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
         return d->dirtyRegion;
     }
 
-    if (d->useBoundingDirtyRect) {
-        d->dirtyRect = d->dirtyRect.united(r);
-        return QRegion(d->dirtyRect);
-    } else {
-        d->dirtyRegion += QRegion(r);
-        return d->dirtyRegion;
-    }
+    d->dirtyRegion += r;
+    return d->dirtyRegion;
 }
-
-
-
 
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
@@ -2352,6 +2332,12 @@ void KisPainter::setMirrorInformation(const QPointF& axisCenter, bool mirrorHori
     d->mirrorHorizontaly = mirrorHorizontaly;
     d->mirrorVerticaly = mirrorVerticaly;
 }
+
+void KisPainter::copyMirrorInformation(KisPainter* painter)
+{
+    painter->setMirrorInformation(d->axisCenter, d->mirrorHorizontaly, d->mirrorVerticaly);
+}
+
 
 void KisPainter::setMaskImageSize(qint32 width, qint32 height)
 {

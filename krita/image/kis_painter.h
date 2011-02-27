@@ -543,6 +543,11 @@ public:
 
     void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
 
+    /**
+     * copy the mirror information to other painter
+     */
+    void copyMirrorInformation(KisPainter * painter);
+
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);
 

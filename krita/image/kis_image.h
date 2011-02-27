@@ -475,6 +475,11 @@ public:
     /** end of an iteration over the annotations of this image */
     vKisAnnotationSP_it endAnnotations();
 
+    /**
+     * Called before the image is delted and sends the sigAboutToBeDeleted signal
+     */
+    void notifyAboutToBeDeleted();
+
 signals:
 
     /// Emitted after a layer's properties (visible, locked, opacity, composite op, name, ...) change
@@ -545,6 +550,11 @@ signals:
      * Inform the model that a node was changed
      */
     void sigNodeChanged(KisNode * node);
+
+    /**
+     * Inform that the image is going to be deleted
+     */
+    void sigAboutToBeDeleted();
 
 public slots:
 

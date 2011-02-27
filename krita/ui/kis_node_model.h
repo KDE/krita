@@ -81,6 +81,7 @@ private slots:
     void nodeChanged(KisNode * node);
     
     void updateNodes();
+    void imageDeleted();
     
 private:
 

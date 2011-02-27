@@ -42,14 +42,6 @@ class FreehandPaintJobExecutor;
 
 #include "kis_paintop_settings.h"
 
-enum KDE_DEPRECATED enumBrushMode {
-    PAINT,
-    HOVER,
-    EDIT_BRUSH,
-    PAN,
-    COLOR_PICKING
-};
-
 class KRITAUI_EXPORT KisToolFreehand : public KisToolPaint
 {
 
@@ -123,7 +115,6 @@ protected:
     bool m_paintIncremental;
 
     QString m_transactionText;
-    enumBrushMode m_mode;
     KisPainter *m_painter;
     bool m_smooth;
     double m_smoothness;

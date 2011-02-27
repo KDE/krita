@@ -20,5 +20,6 @@ install(TARGETS kritaparticlepaintop  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
 
 install( FILES  kritaparticlepaintop.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  krita-particle.png DESTINATION ${DATA_INSTALL_DIR}/krita/images)
 
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2010-2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_experimentop_option.h"
 
+class KisFixedPainter;
 class QPointF;
 class KisPainter;
 
@@ -44,29 +45,26 @@ public:
     virtual qreal paintAt(const KisPaintInformation& info);
 
 private:
-    void fillPainterPath(const QPainterPath &path);
-    
-private:
     const KisExperimentPaintOpSettings* m_settings;
 
     KisPaintDeviceSP m_currentLayerDevice;
-    
+
     QVector<QRect> m_previousDabs;
     bool m_isFirst;
-    
+
     QPainterPath m_path;
     QImage m_polygonMaskImage;
     KisFixedPaintDeviceSP m_polygonDevice;
-    
+
     KisPressureRotationOption m_rotationOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureOpacityOption m_opacityOption;
     ExperimentOption m_experimentOption;
 
     int m_displacement; // 7
-    int m_multiplier; 
+    int m_multiplier;
     bool m_smoothing;
-    
+
     QPainterPath applyDisplace(const QPainterPath& path, int speed);
     QPointF getAngle(const QPointF &p1,const QPointF &p2, double distance);
     int getCursorSpeed(const QPointF &p1,const QPointF &p2){
@@ -74,12 +72,16 @@ private:
         int diffY = qAbs(p1.y() - p2.y());
         return diffX + diffY;
     }
-    
+
+    KisPainter * m_copyPainter;
+    KisFixedPainter * m_fixedPainter;
+
+    QVector<QRect> m_previousRects;
+    QRect m_previousRect;
+
     void curveTo(QPainterPath &path, QPointF pt);
     void addPosition(const QPointF &pos);
 
-    void clearPreviousDab();
-    void clearPreviousDab2();
 };
 
 #endif // KIS_EXPERIMENT_PAINTOP_H_

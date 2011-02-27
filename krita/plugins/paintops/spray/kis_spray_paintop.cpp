@@ -53,7 +53,7 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
     m_sizeOption.sensor()->reset();
 
     m_brushOption.readOptionSetting(settings);
-    
+
     m_colorProperties.fillProperties(settings);
     m_properties.loadSettings(settings);
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
@@ -61,12 +61,12 @@ KisSprayPaintOp::KisSprayPaintOp(const KisSprayPaintOpSettings *settings, KisPai
 
     // TODO: what to do with proportional sizes?
     m_shapeDynamicsProperties.loadSettings(settings);
-    
-    m_sprayBrush.setProperties( &m_properties,&m_colorProperties, 
+
+    m_sprayBrush.setProperties( &m_properties,&m_colorProperties,
                                 &m_shapeProperties, &m_shapeDynamicsProperties,m_brushOption.brush());
-    
+
     m_sprayBrush.setFixedDab( cachedDab() );
-    
+
     // spacing
     if ((m_properties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_properties.diameter * 0.5 * m_properties.spacing;
@@ -96,18 +96,18 @@ qreal KisSprayPaintOp::paintAt(const KisPaintInformation& info)
 
     setCurrentRotation(rotation);
     setCurrentScale(scale);
-    
+
     m_sprayBrush.paint( m_dab,
-                        m_settings->node()->paintDevice(), 
-                        info, 
+                        m_settings->node()->paintDevice(),
+                        info,
                         rotation,
                         scale,
-                        painter()->paintColor(), 
+                        painter()->paintColor(),
                         painter()->backgroundColor());
 
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    renderMirrorMask(rc, m_dab);
+    painter()->renderMirrorMask(rc, m_dab);
     painter()->setOpacity(origOpacity);
 
     return m_spacing;

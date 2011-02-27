@@ -68,6 +68,12 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
+InlineObjectPosition::InlineObjectPosition(qreal ascent, qreal descent)
+        : m_ascent(ascent),
+        m_descent(descent)
+{
+}
+
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
         : m_styleManager(0),
@@ -268,7 +274,8 @@ bool Layout::addLine()
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    qreal objectHeight = 0.0;
+    qreal objectAscent = 0.0;
+    qreal objectDescent = 0.0;
     bool useFixedLineHeight = height != 0.0;
     QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {
@@ -294,14 +301,17 @@ bool Layout::addLine()
             else {
                 // read max font height
                 height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
+
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
-//sebsauer this cannot work, see bug first document attached to bug #239143
-//                     if (!m_fragmentIterator.atEnd()) {
-//                         break;
-//                     }
+                    if (m_fragmentIterator.atEnd()) {
+                     break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -309,7 +319,10 @@ bool Layout::addLine()
                         || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_changeTracker->displayChanges()) {
                         height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                        objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                        InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                        objectAscent = qMax(objectAscent, pos.m_ascent);
+                        objectDescent = qMax(objectDescent, pos.m_descent);
                     }
                 }
             }
@@ -361,7 +374,8 @@ bool Layout::addLine()
             m_block.layout()->clearLayout();
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
-                line = m_block.layout()->createLine();
+                Q_ASSERT(this->layout == m_block.layout());
+                line = createLine();
                 if (!line.isValid())
                     break;
                 line.setLineWidth(lk.lineWidth);
@@ -378,8 +392,12 @@ bool Layout::addLine()
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data && line.isValid())
+        if (m_data && line.isValid()) {
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
+            m_data->setEndPosition(-1);
+        }
+
+
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)
@@ -397,7 +415,7 @@ bool Layout::addLine()
             else if (linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height = qMax(height, objectHeight) + linespacing;
+        height = qMax(height, objectAscent) + objectDescent + linespacing;
     }
     qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
@@ -432,10 +450,7 @@ bool Layout::addLine()
     }
 
     // position inline objects
-    bool possibleRelayoutNeeded = positionInlineObjects();
-
-    if (possibleRelayoutNeeded) {
-
+    while (positionInlineObjects()) {
         if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
 
             if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
@@ -2189,14 +2204,15 @@ bool Layout::previousParag()
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
+    InlineObjectPosition pos(inlineObject.ascent(),inlineObject.descent());
+    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), pos);
 }
 
-qreal Layout::inlineCharHeight(const QTextFragment &fragment)
+InlineObjectPosition Layout::inlineCharHeight(const QTextFragment &fragment)
 {
     if (m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
-    return 0.0;
+    return InlineObjectPosition();
 }
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)

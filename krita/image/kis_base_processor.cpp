@@ -51,6 +51,7 @@ struct KisBaseProcessor::Private {
             , supportsAdjustmentLayers(false)
             , supportsIncrementalPainting(true)
             , supportsThreading(true)
+            , showConfigurationWidget(true)
             , colorSpaceIndependence(FULLY_INDEPENDENT) {
     }
 
@@ -63,6 +64,7 @@ struct KisBaseProcessor::Private {
     bool supportsAdjustmentLayers;
     bool supportsIncrementalPainting;
     bool supportsThreading;
+    bool showConfigurationWidget;
     ColorSpaceIndependence colorSpaceIndependence;
 };
 
@@ -185,4 +187,14 @@ void KisBaseProcessor::setSupportsThreading(bool v)
 void KisBaseProcessor::setColorSpaceIndependence(ColorSpaceIndependence v)
 {
     d->colorSpaceIndependence = v;
+}
+
+bool KisBaseProcessor::showConfigurationWidget()
+{
+    return d->showConfigurationWidget;
+}
+
+void KisBaseProcessor::setShowConfigurationWidget(bool v)
+{
+    d->showConfigurationWidget = v;
 }

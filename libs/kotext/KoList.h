@@ -23,6 +23,7 @@
 #include "styles/KoListStyle.h"
 
 #include <QMetaType>
+#include <QWeakPointer>
 
 class KoListPrivate;
 

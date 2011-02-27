@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Johannes Schaub <litb_devel@web.de>
+   Copyright (C) 2011 Arjen Hiemstra <ahiemstra@heimr.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -51,8 +52,52 @@ public:
     /// \return true if \c mode isn't dependent on windowsize
     static bool isConstant(const QString& mode)
     { return toMode(mode) == ZOOM_CONSTANT; }
+
+    /**
+     * Return the minimum zoom possible for documents.
+     *
+     * \return The minimum zoom possible.
+     */
+    static qreal minimumZoom();
+    /**
+     * Return the maximum zoom possible for documents.
+     *
+     * \return The maximum zoom possible.
+     */
+    static qreal maximumZoom();
+    /**
+     * Clamp the zoom value so that mimimumZoom <= zoom <= maximumZoom.
+     *
+     * \param zoom The value to clamp.
+     *
+     * \return minimumZoom if zoom < minimumZoom, maximumZoom if zoom >
+     * maximumZoom, zoom if otherwise.
+     */
+    static qreal clampZoom(qreal zoom);
+
+    /**
+     * Set the minimum zoom possible for documents.
+     * 
+     * Note that after calling this, any existing KoZoomAction instances
+     * should be recreated.
+     * 
+     * \param zoom The minimum zoom to use.
+     */
+    static void setMinimumZoom(qreal zoom);
+    /**
+     * Set the maximum zoom possible for documents.
+     * 
+     * Note that after calling this, any existing KoZoomAction instances
+     * should be recreated.
+     *
+     * \param zoom The maximum zoom to use.
+     */
+    static void setMaximumZoom(qreal zoom);
+    
 private:
     static const char * modes[];
+    static qreal minimumZoomValue;
+    static qreal maximumZoomValue;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoZoomMode::Modes)

@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -426,7 +427,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
-           KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+            KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
@@ -564,8 +565,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             QTextTableCell cell = table->cellAt(r, c);
             if ((cell.row() == r) && (cell.column() == c)) {
                 writer->startElement("table:table-cell");
-                writer->addAttribute("rowSpan", cell.rowSpan());
-                writer->addAttribute("columnSpan", cell.columnSpan());
+                if (cell.rowSpan() > 1)
+                    writer->addAttribute("table:number-rows-spanned", cell.rowSpan());
+                if (cell.columnSpan() > 1)
+                    writer->addAttribute("table:number-columns-spanned", cell.columnSpan());
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();

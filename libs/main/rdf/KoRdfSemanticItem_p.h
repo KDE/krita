@@ -20,7 +20,9 @@
 #ifndef __rdf_KoRdfSemanticItem_p_h__
 #define __rdf_KoRdfSemanticItem_p_h__
 
-class KoRdfSemanticItemPrivate
+#include <komain_export.h>
+
+class KOMAIN_EXPORT KoRdfSemanticItemPrivate
 {
 public:
     KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations

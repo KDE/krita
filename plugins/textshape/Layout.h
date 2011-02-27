@@ -45,6 +45,14 @@ class KoChangeTracker;
 class KoImageCollection;
 class ToCGenerator;
 
+class InlineObjectPosition
+{
+public:
+    InlineObjectPosition(qreal ascent = 0, qreal descent = 0);
+    qreal m_ascent;
+    qreal m_descent;
+};
+
 /**
  * The document layouter for KoText style docs.
  */
@@ -140,7 +148,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
 
-    qreal inlineCharHeight(const QTextFragment &fragment);
+    InlineObjectPosition inlineCharHeight(const QTextFragment &fragment);
 
     /**
      * Find a footnote and if there exists one reserve space for it at the bottom of the shape.
@@ -210,7 +218,7 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
+    QHash<int, InlineObjectPosition> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
     QVector<QTextFrame *> m_frameStack;
     QList<QWeakPointer<ToCGenerator> > m_tocGenerators;

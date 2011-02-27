@@ -51,13 +51,13 @@ KisTileDataStore::KisTileDataStore()
       m_memoryMetric(0)
 {
     m_clockIterator = m_tileDataList.end();
-    m_pooler.start();
+//    m_pooler.start();
     m_swapper.start();
 }
 
 KisTileDataStore::~KisTileDataStore()
 {
-    m_pooler.terminatePooler();
+//    m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
 
     if(numTiles() > 0) {

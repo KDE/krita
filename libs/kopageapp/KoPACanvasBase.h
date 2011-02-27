@@ -59,7 +59,7 @@ public:
     virtual KoGuidesData * guidesData();
 
     KoToolProxy * toolProxy() const;
-    const KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const;
     KoUnit unit() const;
 
     /// XXX

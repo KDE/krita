@@ -37,7 +37,7 @@ OutputPainterStrategy::OutputPainterStrategy()
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_image( 0 )
-      // FIXME: Initialize all vars here!
+    , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
@@ -53,8 +53,11 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
+    , m_windowExtIsSet(false)
+    , m_viewportExtIsSet(false)
+    , m_windowViewportIsSet(false)
     , m_image( 0 )
-      // FIXME: Initialize all vars here!
+    , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
@@ -386,11 +389,11 @@ void OutputPainterStrategy::recalculateWorldTransform()
     // FIXME: Check windowExt == 0 in any direction
     if (m_windowExtIsSet && m_viewportExtIsSet) {
         // Both window and viewport are set.
-        m_windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
-        m_windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
+        qreal windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
+        qreal windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
 
         m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
-        m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
+        m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
         m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
     }
 

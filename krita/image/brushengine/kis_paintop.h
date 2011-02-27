@@ -96,7 +96,7 @@ public:
                                     const KisPaintInformation &pi2,
                                     const KisDistanceInformation& savedDist = KisDistanceInformation());
 
-    
+
      /**
      * Whether this paintop can paint. Can be false in case that some setting isn't read correctly.
      * @return if paintop is ready for painting, default is true
@@ -117,11 +117,7 @@ public:
      */
     qreal currentScale() const;
     qreal currentRotation() const;
-    
-    void setMirrorInformation(const QPointF &axisCenter,bool mirrorHorizontaly,bool mirrorVerticaly);
-    QPointF axisCenter() const;
-    
-    
+
 protected:
 
     void setCurrentScale(qreal scale);
@@ -129,7 +125,7 @@ protected:
     * Set rotation in radians
     */
     void setCurrentRotation(qreal rotation);
-    
+
     KisFixedPaintDeviceSP cachedDab();
     KisFixedPaintDeviceSP cachedDab(const KoColorSpace *cs);
 
@@ -142,13 +138,7 @@ protected:
      * Return the paintdevice the painter this paintop is owned by
      */
     KisPaintDeviceSP source() const;
-    
-    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
-    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
-    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+
 private:
     Private* const d;
 };

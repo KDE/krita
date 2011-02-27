@@ -64,24 +64,34 @@ void zoomhandler_test::testApi()
     QCOMPARE( zoomHandler.zoomedResolutionX(), 50.);
     QCOMPARE( zoomHandler.zoomedResolutionY(), 60.);
 
-    zoomHandler.setZoom( 0.1 ); // is 10%
-    QCOMPARE( zoomHandler.zoomInPercent(), 10);
+    zoomHandler.setZoom( 0.2 ); // is 20%
+    QCOMPARE( zoomHandler.zoomInPercent(), 20);
     QCOMPARE( zoomHandler.resolutionX(), 128. );
     QCOMPARE( zoomHandler.resolutionY(), 129. );
-    QCOMPARE( zoomHandler.zoomedResolutionX(), 12.8 );
-    QCOMPARE( zoomHandler.zoomedResolutionY(), 12.9 );
+    QCOMPARE( zoomHandler.zoomedResolutionX(), 25.6 );
+    QCOMPARE( zoomHandler.zoomedResolutionY(), 25.8 );
     zoomHandler.zoom( &x, &y );
-    QVERIFY( x == 12.8 && y == 12.9 );
+    QVERIFY( x == 25.6 && y == 25.8 );
 
     zoomHandler.setZoom( 1. );
-    zoomHandler.setZoom( 0.1 );
-    QCOMPARE( zoomHandler.zoomInPercent(), 10 );
+    zoomHandler.setZoom( 0.2 );
+    QCOMPARE( zoomHandler.zoomInPercent(), 20 );
     QCOMPARE( zoomHandler.resolutionX(), 128. );
     QCOMPARE( zoomHandler.resolutionY(), 129. );
-    QCOMPARE( zoomHandler.zoomedResolutionX(), 12.8 );
-    QCOMPARE( zoomHandler.zoomedResolutionY(), 12.9 );
+    QCOMPARE( zoomHandler.zoomedResolutionX(), 25.6 );
+    QCOMPARE( zoomHandler.zoomedResolutionY(), 25.8 );
     zoomHandler.zoom( &x, &y );
-    QVERIFY( x == 12.8 && y == 12.9 );
+    QVERIFY( x == 25.6 && y == 25.8 );
+
+    zoomHandler.setZoom( 0.1 );
+    QCOMPARE( zoomHandler.zoom(), 0.2 );
+
+    zoomHandler.setZoom( 10.0 );
+    QCOMPARE( zoomHandler.zoom(), 5.0 );
+
+    KoZoomMode::setMaximumZoom(10.0);
+    zoomHandler.setZoom(10.0);
+    QCOMPARE( zoomHandler.zoom(), 10.0 );
 
     zoomHandler.setZoomMode( KoZoomMode::ZOOM_CONSTANT );
     QCOMPARE( zoomHandler.zoomMode(), KoZoomMode::ZOOM_CONSTANT );

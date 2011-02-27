@@ -257,6 +257,8 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->setSpacing(1);
 
     m_optionWidgetLayout = new QGridLayout();
+    m_optionWidgetLayout->setColumnStretch(1, 1);
+
     verticalLayout->addLayout(m_optionWidgetLayout);
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);

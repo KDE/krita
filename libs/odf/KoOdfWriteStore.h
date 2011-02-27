@@ -106,9 +106,11 @@ public:
     KoXmlWriter *manifestWriter();
 
     /**
-     * Close the manifest writer, writing its contents to manifest.xml
+     * Close the manifest writer.
+     * @param writeMainfest If true then on closing we also write the contents to the manifest.xml else
+     *    we only close the writer and don't write the content to the manifest.xml
      */
-    bool closeManifestWriter();
+    bool closeManifestWriter(bool writeMainfest = true);
 
 private:
     struct Private;

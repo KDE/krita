@@ -93,7 +93,7 @@ KisAutoContrast::KisAutoContrast() : KisFilter(id(), categoryAdjust(), i18n("&Au
     setSupportsPainting(false);
     setSupportsThreading(false);
     setColorSpaceIndependence(TO_LAB16);
-
+    setShowConfigurationWidget(false);
 }
 
 bool KisAutoContrast::workWith(const KoColorSpace* cs) const
@@ -197,14 +197,14 @@ void KisAutoContrast::process(KisPaintDeviceSP device,
 KisDesaturateFilter::KisDesaturateFilter()
         : KisColorTransformationFilter(id(), categoryAdjust(), i18n("&Desaturate"))
 {
-
+    setSupportsPainting(true);
+    setSupportsIncrementalPainting(false);
+    setColorSpaceIndependence(TO_LAB16);
+    setShowConfigurationWidget(false);
 }
 
 KisDesaturateFilter::~KisDesaturateFilter()
 {
-    setSupportsPainting(true);
-    setSupportsIncrementalPainting(false);
-    setColorSpaceIndependence(TO_LAB16);
 }
 
 bool KisDesaturateFilter::workWith(const KoColorSpace* cs) const

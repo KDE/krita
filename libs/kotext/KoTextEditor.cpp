@@ -1062,7 +1062,9 @@ void KoTextEditor::mergeCharFormat(const QTextCharFormat &modifier)
 
 bool KoTextEditor::movePosition(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode, int n)
 {
-    return d->caret.movePosition (operation, mode, n);
+    bool b = d->caret.movePosition (operation, mode, n);
+    emit cursorPositionChanged();
+    return b;
 }
 
 void KoTextEditor::newLine()
@@ -1177,6 +1179,7 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
 {
     d->caret.setPosition (pos, m);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::setVisualNavigation(bool b)

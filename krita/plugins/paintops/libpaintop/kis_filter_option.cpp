@@ -99,7 +99,7 @@ bool KisFilterOption::ignoreAlpha() const
 
 void KisFilterOption::setNode(KisNodeSP node)
 {
-    if (node) {
+    if (node && node->paintDevice()) {
         m_paintDevice = node->paintDevice();
 
         // The "not m_currentFilterConfigWidget" is a corner case
@@ -158,7 +158,7 @@ void KisFilterOption::updateFilterConfigWidget()
     }
     m_currentFilterConfigWidget = 0;
 
-    if (m_currentFilter && m_image) {
+    if (m_currentFilter && m_image && m_paintDevice) {
         m_currentFilterConfigWidget =
             m_currentFilter->createConfigurationWidget(m_options->grpFilterOptions,
                     m_paintDevice,

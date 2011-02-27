@@ -200,8 +200,6 @@ private:
     QSize         m_viewportExt;
     bool          m_windowExtIsSet;
     bool          m_viewportExtIsSet;
-    qreal         m_windowViewportScaleX;
-    qreal         m_windowViewportScaleY;
     bool          m_windowViewportIsSet;
 
 #if 0

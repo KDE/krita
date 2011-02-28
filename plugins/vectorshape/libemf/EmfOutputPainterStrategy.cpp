@@ -22,7 +22,7 @@
 
 #include <KDebug>
 
-#define DEBUG_PAINTER_TRANSFORM 1
+#define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {

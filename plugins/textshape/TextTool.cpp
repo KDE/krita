@@ -1641,7 +1641,6 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
     SimpleTableWidget *stw = new SimpleTableWidget(this, 0);
-    ChangeTrackingOptionsWidget *ctw = new ChangeTrackingOptionsWidget(this, 0);
 
     // Connect to/with simple character widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), scw, SLOT(setStyleManager(KoStyleManager *)));
@@ -1660,10 +1659,6 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     connect(ssw, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(setStyle(KoCharacterStyle*)));
     connect(ssw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
-    connect(ctw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(m_actionShowChanges, SIGNAL(triggered(bool)), ctw, SLOT(toggleShowChanges(bool)));
-    connect(m_actionRecordChanges, SIGNAL(triggered(bool)), ctw, SLOT(toggleRecordChanges(bool)));
-
     // Connect to/with simple table widget (docker)
     connect(this, SIGNAL(styleManagerChanged(KoStyleManager *)), stw, SLOT(setStyleManager(KoStyleManager *)));
     connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
@@ -1675,7 +1670,6 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     widgets.insert(i18n("Paragraph"), spw);
     widgets.insert(i18n("Styles"), ssw);
     widgets.insert(i18n("Table"), stw);
-    widgets.insert(i18n("Change Tracking"), ctw);
     return widgets;
 }
 

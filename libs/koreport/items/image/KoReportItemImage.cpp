@@ -112,7 +112,7 @@ void KoReportItemImage::createProperties()
 {
     m_set = new KoProperty::Set(0, "Image");
 
-    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     QStringList keys, strings;
     keys << "clip" << "stretch";

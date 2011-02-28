@@ -106,7 +106,7 @@ void KoReportItemText::createProperties()
     QStringList keys, strings;
 
     //_query = new KoProperty::Property ( "Query", QStringList(), QStringList(), "Data Source", "Query" );
-    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     keys << "left" << "center" << "right";
     strings << i18n("Left") << i18n("Center") << i18n("Right");

@@ -74,7 +74,7 @@ void KoReportItemCheck::createProperties()
     strings << i18n("Cross") << i18n("Tick") << i18n("Dot");
     m_checkStyle = new KoProperty::Property("check-style", keys, strings, "Cross", i18n("Style"));
 
-    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
     m_controlSource->setOption("extraValueAllowed", "true");
 
     m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));

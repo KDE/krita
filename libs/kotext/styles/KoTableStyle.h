@@ -84,6 +84,7 @@ public:
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);
+    bool mayBreakBetweenRows() const;
 
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);

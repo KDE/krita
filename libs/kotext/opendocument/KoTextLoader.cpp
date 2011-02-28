@@ -2042,8 +2042,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 
 void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &columns)
 {
-    KoTableColumnAndRowStyleManager *tcarManager = reinterpret_cast<KoTableColumnAndRowStyleManager *>
-                                                   (tbl->format().property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     int rows = tbl->rows();
     int repeatColumn = tblTag.attributeNS(KoXmlNS::table, "number-columns-repeated", "1").toInt();
     QString columnStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
@@ -2051,7 +2050,7 @@ void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &c
         KoTableColumnStyle *columnStyle = d->textSharedData->tableColumnStyle(columnStyleName, d->stylesDotXml);
         if (columnStyle) {
             for (int c = columns; c < columns + repeatColumn; c++) {
-                tcarManager->setColumnStyle(c, *columnStyle);
+                tcarManager.setColumnStyle(c, *columnStyle);
             }
         }
     }
@@ -2060,7 +2059,7 @@ void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &c
     if (!defaultCellStyleName.isEmpty()) {
         KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
         for (int c = columns; c < columns + repeatColumn; c++) {
-            tcarManager->setDefaultColumnCellStyle(c, cellStyle);
+            tcarManager.setDefaultColumnCellStyle(c, cellStyle);
         }
     }
 
@@ -2073,22 +2072,21 @@ void KoTextLoader::loadTableColumn(KoXmlElement &tblTag, QTextTable *tbl, int &c
 
 void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &rows)
 {
-    KoTableColumnAndRowStyleManager *tcarManager = reinterpret_cast<KoTableColumnAndRowStyleManager *>
-                                                   (tbl->format().property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
 
     int columns = tbl->columns();
     QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
     if (!rowStyleName.isEmpty()) {
         KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
         if (rowStyle) {
-            tcarManager->setRowStyle(rows, *rowStyle);
+            tcarManager.setRowStyle(rows, *rowStyle);
         }
     }
 
     QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
     if (!defaultCellStyleName.isEmpty()) {
         KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
-        tcarManager->setDefaultRowCellStyle(rows, cellStyle);
+        tcarManager.setDefaultRowCellStyle(rows, cellStyle);
     }
 
     rows++;
@@ -2136,8 +2134,7 @@ void KoTextLoader::loadTableRow(KoXmlElement &tblTag, QTextTable *tbl, QList<QRe
 
 void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell)
 {
-    KoTableColumnAndRowStyleManager *tcarManager = reinterpret_cast<KoTableColumnAndRowStyleManager *>
-                                                   (tbl->format().property(KoTableStyle::ColumnAndRowStyleManager).value<void *>());
+    KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(tbl);
     const int currentRow = tbl->rows() - 1;
     QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
 
@@ -2154,10 +2151,10 @@ void KoTextLoader::loadTableCell(KoXmlElement &rowTag, QTextTable *tbl, QList<QR
         KoTableCellStyle *cellStyle = 0;
         if (!cellStyleName.isEmpty()) {
             cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
-        } else if (tcarManager->defaultRowCellStyle(currentRow)) {
-            cellStyle = tcarManager->defaultRowCellStyle(currentRow);
-        } else if (tcarManager->defaultColumnCellStyle(currentCell)) {
-            cellStyle = tcarManager->defaultColumnCellStyle(currentCell);
+        } else if (tcarManager.defaultRowCellStyle(currentRow)) {
+            cellStyle = tcarManager.defaultRowCellStyle(currentRow);
+        } else if (tcarManager.defaultColumnCellStyle(currentCell)) {
+            cellStyle = tcarManager.defaultColumnCellStyle(currentCell);
         }
 
         QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();

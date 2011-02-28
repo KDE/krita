@@ -1100,6 +1100,11 @@ vKisAnnotationSP_it KisImage::endAnnotations()
     return m_d->annotations.end();
 }
 
+void KisImage::notifyAboutToBeDeleted()
+{
+    emit sigAboutToBeDeleted();
+}
+
 KisPerspectiveGrid* KisImage::perspectiveGrid()
 {
     if (m_d->perspectiveGrid == 0)

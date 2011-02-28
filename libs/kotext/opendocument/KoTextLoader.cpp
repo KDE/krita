@@ -1254,10 +1254,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     }
 
                     columns = columns + repeatColumn;
-                    if (rows > 0)
-                        tbl->resize(rows, columns);
-                    else
-                        tbl->resize(1, columns);
+                    tbl->resize(qMax(1, rows), columns);
                 } else if (tblLocalName == "table-row") {
                     QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!rowStyleName.isEmpty()) {
@@ -1274,10 +1271,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     }
 
                     rows++;
-                    if (columns > 0)
-                        tbl->resize(rows, columns);
-                    else
-                        tbl->resize(rows, 1);
+                    tbl->resize(rows, qMax(1, columns));
                     // Added a row
                     int currentCell = 0;
                     KoXmlElement rowTag;

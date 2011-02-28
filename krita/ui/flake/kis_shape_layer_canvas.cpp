@@ -85,6 +85,10 @@ KoShapeManager *KisShapeLayerCanvas::shapeManager() const
 void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 {
     dbgImage << "KisShapeLayerCanvas::updateCanvas()" << rc;
+    //image is 0, if parentLayer is being deleted so don't update
+    if (!m_parentLayer->image()) {
+        return;
+    }
 
     QRect r = m_viewConverter->documentToView(rc).toRect();
     r.adjust(-2, -2, 2, 2); // for antialias

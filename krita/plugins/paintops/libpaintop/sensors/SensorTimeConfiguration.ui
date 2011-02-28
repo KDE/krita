@@ -31,20 +31,32 @@
     <layout class="QHBoxLayout">
      <item>
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>Duration:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spinBoxDuration">
-       <property name="minimum">
+      <widget class="KisSliderSpinBox" name="spinBoxDuration" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimum" stdset="0">
         <number>1</number>
        </property>
-       <property name="maximum">
+       <property name="maximum" stdset="0">
         <number>9999</number>
        </property>
-       <property name="value">
+       <property name="value" stdset="0">
         <number>30</number>
        </property>
       </widget>
@@ -60,6 +72,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

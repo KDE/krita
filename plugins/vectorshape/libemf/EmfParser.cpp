@@ -496,7 +496,7 @@ bool Parser::readRecord( QDataStream &stream )
         break;
     case EMR_MOVETOEX:
 	{
-	    quint32 x, y;
+	    qint32 x, y;
 	    stream >> x >> y;
 	    mOutput->moveToEx( x, y );
             //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
@@ -821,7 +821,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -837,7 +837,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -853,7 +853,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -869,7 +869,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -885,7 +885,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -910,7 +910,7 @@ bool Parser::readRecord( QDataStream &stream )
             }
             for ( quint32 i = 0; i < numberOfPolylines; ++i ) {
                 for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    quint16 x, y;
+                    qint16 x, y;
                     stream >> x >> y;
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
@@ -935,7 +935,7 @@ bool Parser::readRecord( QDataStream &stream )
             }
             for ( quint32 i = 0; i < numberOfPolygons; ++i ) {
                 for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    quint16 x, y;
+                    qint16 x, y;
                     stream >> x >> y;
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }

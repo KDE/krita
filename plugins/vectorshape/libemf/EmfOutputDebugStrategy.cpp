@@ -281,7 +281,7 @@ void OutputDebugStrategy::extTextOutW( const QPoint &referencePoint, const QStri
     kDebug(33100) << "EMR_EXTTEXTOUTW:" << referencePoint << textString;
 }
 
-void OutputDebugStrategy::moveToEx( const quint32 x, const quint32 y )
+void OutputDebugStrategy::moveToEx( const qint32 x, const qint32 y )
 {
     kDebug(33100) << "EMR_MOVETOEX" << QPoint( x, y );
 }

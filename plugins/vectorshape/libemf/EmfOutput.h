@@ -371,7 +371,7 @@ public:
        \param x the X coordinate of the point to move to
        \param y the Y coordiante of the point to move to
     */
-    virtual void moveToEx( const quint32 x, const quint32 y ) = 0;
+    virtual void moveToEx( const qint32 x, const qint32 y ) = 0;
 
     /**
        Handler for the EMR_SAVEDC record type

@@ -47,7 +47,7 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     if (image){
         m_dynaBrush.setCanvasSize(image->width(), image->height());
     }else{
-        // some dummy values for scratchpad 
+        // some dummy values for scratchpad
         m_dynaBrush.setCanvasSize(1000, 1000);
     }
 
@@ -67,7 +67,7 @@ KisDynaPaintOp::KisDynaPaintOp(const KisDynaPaintOpSettings *settings, KisPainte
     m_properties.enableLine = settings->getBool(DYNA_ENABLE_LINE);
     m_properties.useTwoCircles = settings->getBool(DYNA_USE_TWO_CIRCLES);
     m_properties.useFixedAngle = settings->getBool(DYNA_USE_FIXED_ANGLE);
-    
+
     m_dynaBrush.setProperties( &m_properties );
 }
 
@@ -97,7 +97,7 @@ KisDistanceInformation KisDynaPaintOp::paintLine(const KisPaintInformation &pi1,
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc,m_dab);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

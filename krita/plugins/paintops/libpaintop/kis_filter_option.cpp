@@ -99,7 +99,7 @@ bool KisFilterOption::ignoreAlpha() const
 
 void KisFilterOption::setNode(KisNodeSP node)
 {
-    if (node) {
+    if (node && node->paintDevice()) {
         m_paintDevice = node->paintDevice();
 
         // The "not m_currentFilterConfigWidget" is a corner case

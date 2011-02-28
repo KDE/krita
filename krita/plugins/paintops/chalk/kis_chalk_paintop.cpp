@@ -45,11 +45,11 @@ KisChalkPaintOp::KisChalkPaintOp(const KisChalkPaintOpSettings *settings, KisPai
     m_opacityOption.sensor()->reset();
 
     m_properties.readOptionSetting(settings);
-    
+
     KoColorTransformation* transfo = 0;
     if (m_properties.inkDepletion && m_properties.useSaturation){
         transfo = painter->device()->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
-    }    
+    }
     m_chalkBrush = new ChalkBrush( &m_properties, transfo );
 }
 
@@ -79,7 +79,7 @@ qreal KisChalkPaintOp::paintAt(const KisPaintInformation& info)
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-    renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc,m_dab);
     painter()->setOpacity(origOpacity);
     return 1.0;
 }

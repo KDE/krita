@@ -31,6 +31,7 @@ class KoViewConverter;
 class QPainter;
 class QTransform;
 class QPainterPath;
+class QSizeF;
 
 /// Shared clip path data
 class FLAKE_EXPORT KoClipData : public QSharedData
@@ -63,7 +64,7 @@ public:
     /**
      * Create a new shape clipping using the given clip data
      * @param shapeToClip the shape to clip
-     * @param clipData shared clipping data conatining the clip paths
+     * @param clipData shared clipping data containing the clip paths
      */
     KoClipPath(KoShape *shapeToClip, KoClipData * clipData);
 
@@ -75,8 +76,11 @@ public:
     /// Returns the current clip rule
     Qt::FillRule clipRule() const;
 
-    /// Returns the current clip path in shape coordinates of the clipped shape
+    /// Returns the current clip path with coordinates in percent of the clipped shape size
     QPainterPath path() const;
+    
+    /// Returns the current clip path scaled to match the specified shape size
+    QPainterPath pathForSize(const QSizeF &size) const;
     
     /// Returns the clip path shapes 
     QList<KoPathShape*> clipPathShapes() const;

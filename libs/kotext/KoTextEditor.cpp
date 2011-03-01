@@ -1150,35 +1150,13 @@ void KoTextEditor::deleteTableRow()
 {
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        /*
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        int selectionRow;
-        int selectionColumn;
-        int selectionRowSpan;
-        int selectionColumnSpan;
-        if(d->caret.hasComplexSelection()) {
-            d->caret.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
-        } else {
-            QTextTableCell cell = table->cellAt(d->caret);
-            selectionRow = cell.row();
-            selectionRowSpan = 1;
-        }
-
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+        int changeId = 0;
         if (changeTracker && changeTracker->recordChanges()) {
             QString title(i18n("Delete Row"));
-            int changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
-            for (int i=0; i < table->columns(); i++) {
-                QTextTableCellFormat cellFormat = table->cellAt(selectionRow, i).format().toTableCellFormat();
-                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                table->cellAt(selectionRow, i).setFormat(cellFormat);
-            }
-        } else {
-            table->removeRows(selectionRow, selectionRowSpan);
-            carsManager.removeRows(selectionRow, selectionRowSpan);
+            changeId = changeTracker->getDeleteChangeId(title, QTextDocumentFragment(), 0);
         }
-        */
-        addCommand(new DeleteTableRowCommand(this, table));
+        addCommand(new DeleteTableRowCommand(this, table, changeId));
     }
 }
 

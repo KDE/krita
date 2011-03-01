@@ -1032,26 +1032,13 @@ void KoTextEditor::insertTableColumnLeft()
 {
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        /*
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int column = cell.column();
-        table->insertColumns(column, 1);
-        carsManager.insertColumns(column, 1, carsManager.columnStyle(column));
-
+        int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            int changeId;
             QString title(i18n("Insert Column Left"));
             changeId = changeTracker->getInsertChangeId(title, 0);
-            for (int i=0; i < table->rows(); i++) {
-                QTextTableCellFormat cellFormat = table->cellAt(i, column).format().toTableCellFormat();
-                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                table->cellAt(i, column).setFormat(cellFormat);
-            }
         }
-        */
-        addCommand(new InsertTableColumnCommand(this, table, false));
+        addCommand(new InsertTableColumnCommand(this, table, false, changeId));
     }
 }
 
@@ -1059,36 +1046,13 @@ void KoTextEditor::insertTableColumnRight()
 {
     QTextTable *table = d->caret.currentTable();
     if (table) {
-        /*
-        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(table);
-        QTextTableCell cell = table->cellAt(d->caret);
-        int column = cell.column()+1;
-        if (column == table->columns()) {
-            table->appendColumns(1);
-            carsManager.setColumnStyle(column, carsManager.columnStyle(column-1));
-            // Copy the cells style. for the bottomright cell which Qt doesn't
-            QTextTableCell cell = table->cellAt(table->rows()-1, column-1);
-            QTextCharFormat format = cell.format();
-            cell = table->cellAt(table->rows()-1, column);
-            cell.setFormat(format);
-        } else {
-            table->insertColumns(column, 1);
-            carsManager.insertColumns(column, 1, carsManager.columnStyle(column-1));
-        }
-
+        int changeId = 0;
         KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
         if (changeTracker && changeTracker->recordChanges()) {
-            int changeId;
             QString title(i18n("Insert Column Right"));
             changeId = changeTracker->getInsertChangeId(title, 0);
-            for (int i=0; i < table->rows(); i++) {
-                QTextTableCellFormat cellFormat = table->cellAt(i, column).format().toTableCellFormat();
-                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
-                table->cellAt(i, column).setFormat(cellFormat);
-            }
         }
-        */
-        addCommand(new InsertTableColumnCommand(this, table, true));
+        addCommand(new InsertTableColumnCommand(this, table, true, changeId));
     }
 }
 

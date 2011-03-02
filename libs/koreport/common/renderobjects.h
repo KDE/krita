@@ -252,6 +252,13 @@ public:
 
     bool requiresPostProcessing(){return m_requiresPostProcessing;}
     void setRequiresPostProcessing(bool pp = true){m_requiresPostProcessing = pp;}
+    
+    bool wordWrap(){return m_wordWrap;}
+    void setWordWrap(bool ww){m_wordWrap = ww;}
+    
+    bool canGrow(){return m_canGrow;}
+    void setCanGrow(bool cg){m_canGrow = cg;}
+
 protected:
     QSizeF m_size;
     QString m_text;
@@ -259,6 +266,8 @@ protected:
     KRLineStyleData m_lineStyle;
     Qt::Alignment m_alignment;
     int m_flags; // Qt::AlignmentFlag and Qt::TextFlag OR'd
+    bool m_wordWrap;
+    bool m_canGrow;
     bool m_requiresPostProcessing;
 };
 

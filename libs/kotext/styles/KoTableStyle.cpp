@@ -498,6 +498,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
             QVariant variantWidth = value(QTextFormat::FrameWidth);
             if (!variantWidth.canConvert<QTextLength>())
             {
+                // This should never happen
                 qFatal("Unable to convert to QTextLength");
             }
             QTextLength width = variantWidth.value<QTextLength>();
@@ -528,6 +529,14 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockLeftMargin) {
+            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockRightMargin) {
+            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockTopMargin) {
+            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockBottomMargin) {
+            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::TableType);
         }
     }
 
@@ -548,16 +557,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
             }
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())
-                style.addProperty("style:border-bodel", "collapsing", KoGenStyle::ParagraphType);
-    // Margin
-        } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockRightMargin) {
-            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockTopMargin) {
-            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);*/
+                style.addProperty("style:border-bodel", "collapsing", KoGenStyle::ParagraphType);*/
 }
 
 #include <KoTableStyle.moc>

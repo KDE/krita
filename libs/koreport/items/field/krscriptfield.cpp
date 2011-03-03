@@ -176,24 +176,5 @@ void Field::setSize(const QSizeF &s)
 {
     m_field->m_size.setPointSize(s);
 }
-
-void Field::loadFromFile(const QString &fn)
-{
-    QFile file(fn);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        m_field->m_controlSource->setValue("$Unable to read " + fn);
-        return;
-    }
-    QTextStream in(&file);
-    QString data = in.readAll();
-    /*
-     *    while (!in.atEnd()) {
-     *      QString line = in.readLine();
-     *      process_line(line);
-     }*/
-    m_field->m_controlSource->setValue('$' + data);
- }
-     
      
 }

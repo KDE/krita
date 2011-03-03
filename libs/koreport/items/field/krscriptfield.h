@@ -70,7 +70,6 @@ public slots:
     QSizeF size();
     void setSize(const QSizeF&);
     
-    void loadFromFile(const QString&);
 private:
     KoReportItemField *m_field;
 

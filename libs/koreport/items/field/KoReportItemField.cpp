@@ -249,7 +249,7 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
             QRect temp(tb->position().x(), tb->position().y(), 5000, tb->size().height()); // a large vertical height
             r = metrics.boundingRect(temp, tb->flags(), str);
         }
-        tb->setSize(r.size());
+        tb->setSize(r.size() + QSize(4,4));
     }
     
     if (page) {
@@ -266,7 +266,7 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     if (!page) {
         delete tb;
     }
-    return 0; //Item doesnt stretch the section height
+    return m_pos.toScene().y() + tb->size().height();
 }
 
 

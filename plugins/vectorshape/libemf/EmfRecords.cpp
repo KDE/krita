@@ -386,6 +386,7 @@ EmrTextObject::EmrTextObject( QDataStream &stream, quint32 size, TextType textTy
 
     stream >> m_offString;
     size -= 4;
+
     // 36 bytes for the body of the parent structure (EMR_EXTTEXTOUTA or EMR_EXTTEXTOUTW)
     // then parts of the EmrText structure
     quint32 offString = m_offString - 36 - 8 - 4 - 4; 

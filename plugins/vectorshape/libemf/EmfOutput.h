@@ -348,7 +348,7 @@ public:
        \param referencePoint the starting point for the output text
        \param textString the text to output
     */
-    virtual void extTextOutW( const QPoint &referencePoint, const QString &textString ) = 0;
+    virtual void extTextOutW( const EmrTextObject &textObject ) = 0;
 
     /**
        Handler for the EMR_BEGINPATH record type

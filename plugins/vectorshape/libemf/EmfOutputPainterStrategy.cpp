@@ -987,8 +987,11 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
     m_painter->restore();
 }
 
-void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QString &text )
+void OutputPainterStrategy::extTextOutW( const EmrTextObject &textObject )
 {
+    const QPoint  &referencePoint = textObject.referencePoint();
+    const QString &text = textObject.textString();
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << referencePoint << text;
 #endif
@@ -999,7 +1002,9 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
-        kDebug(31000) << "TA_UPDATECP";
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "TA_UPDATECP: use current logical position";
+#endif
         x = m_currentCoords.x();
         y = m_currentCoords.y();
     }

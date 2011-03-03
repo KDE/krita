@@ -803,7 +803,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    size -= 4;
 
             EmrTextObject emrText( stream, size, EmrTextObject::SixteenBitChars );
-            mOutput->extTextOutW( emrText.referencePoint(), emrText.textString() );
+            mOutput->extTextOutW( emrText );
 	}
 	break;
         case EMR_SETLAYOUT:

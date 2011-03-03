@@ -22,6 +22,7 @@
 
 #include <KDebug>
 
+#include "EmfObjects.h"
 
 namespace Libemf
 {

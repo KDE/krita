@@ -22,6 +22,9 @@
 
 #include <KDebug>
 
+#include "EmfObjects.h"
+
+
 #define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf

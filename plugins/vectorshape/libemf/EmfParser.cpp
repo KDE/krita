@@ -26,6 +26,10 @@
 // KDE
 #include <KDebug>
 
+// LibEmf
+#include "EmfRecords.h"
+#include "EmfObjects.h"
+
 
 // 0 - No debug
 // 1 - Print a lot of debug info

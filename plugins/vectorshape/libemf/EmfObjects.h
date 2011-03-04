@@ -68,25 +68,27 @@ public:
     EmrTextObject( QDataStream &stream, quint32 size, TextType textType );
     ~EmrTextObject();
     
-    /**
-        The reference point for the text output
-     */
+    /// The reference point for the text output
     QPoint referencePoint() const;
     
-    /**
-        The text to be output
-     */
+    /// Options for rectangle
+    quint32 options() const;
+
+    // Clipping and/or opaquing rectangle 
+    QRect rectangle() const;
+
+    /// The text to be output
     QString textString() const;
 
 private:
 
-    QPoint m_referencePoint;
-    quint32 m_charCount;
-    quint32 m_offString;
-    quint32 m_options;
-    QRect m_rectangle;
-    quint32 m_offDx;
-    QString m_textString;
+    QPoint  m_referencePoint;   // reference point used to position the string
+    quint32 m_charCount;        // number of characters (internal use only)
+    quint32 m_offString;        // offset to output string (internal use only)
+    quint32 m_options;          // specifies how to use the rectangle
+    QRect   m_rectangle;        // clipping and/or opaquing rectangle
+    quint32 m_offDx;            // offset to intercharacter spacing array (internal use only)
+    QString m_textString;       // the text string to output
 
     // Convenience function to handle a 2-byte wide char stream
     QString recordWChars( QDataStream &stream, int numChars );

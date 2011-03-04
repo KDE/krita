@@ -990,13 +990,16 @@ void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
     m_painter->restore();
 }
 
-void OutputPainterStrategy::extTextOutW( const EmrTextObject &textObject )
+void OutputPainterStrategy::extTextOutW( const QRect &bounds, const EmrTextObject &textObject )
 {
     const QPoint  &referencePoint = textObject.referencePoint();
     const QString &text = textObject.textString();
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << referencePoint << text;
+    kDebug(31000) << "Ref point: " << referencePoint
+                  << "options: " << hex << textObject.options() << dec
+                  << "rectangle: " << textObject.rectangle()
+                  << "text: " << text;
 #endif
 
     int  x = referencePoint.x();
@@ -1029,10 +1032,12 @@ void OutputPainterStrategy::extTextOutW( const EmrTextObject &textObject )
     else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
         y -= height;
     }
-
 #if DEBUG_EMFPAINT
+    kDebug(31000) << "width = " << width << "height = " << height;
+
     kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
-                  << "ascent = " << fm.ascent() << " height = " << fm.height()
+                  << "ascent = " << fm.ascent() << "descent = " << fm.descent()
+                  << " height = " << fm.height()
                   << "leading = " << fm.leading();
     kDebug(31000) << "actual point = " << x << y;
 #endif

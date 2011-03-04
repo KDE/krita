@@ -110,6 +110,16 @@ QString EmrTextObject::textString() const
     return m_textString;
 }
 
+quint32 EmrTextObject::options() const
+{
+    return m_options;
+}
+
+QRect EmrTextObject::rectangle() const
+{
+    return m_rectangle;
+}
+
 QString EmrTextObject::recordWChars( QDataStream &stream, int numChars )
 {
     QString text;

@@ -277,9 +277,10 @@ void OutputDebugStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
              << extTextOutA.textString();
 }
 
-void OutputDebugStrategy::extTextOutW( const EmrTextObject &textObject )
+void OutputDebugStrategy::extTextOutW( const QRect &bounds, const EmrTextObject &textObject )
 {
-    kDebug(33100) << "EMR_EXTTEXTOUTW:" << textObject.referencePoint()
+    kDebug(33100) << "EMR_EXTTEXTOUTW:" << bounds
+                  << textObject.referencePoint()
                   << textObject.textString();
 }
 

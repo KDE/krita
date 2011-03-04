@@ -171,6 +171,48 @@ namespace Libemf
         TA_RTLREADING   = 0x0100
     };
 
+    // ----------------------------------------------------------------
+    //                             EMF enums
+
+    /**
+       Background fill mode
+       
+       See [MS-EMF] Section 2.1.4
+    */
+    enum BackgroundMode {
+        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
+        OPAQUE      = 0x02  ///< Equivalent to Qt::OpaqueMode
+    };
+    
+    /**
+       Parameters for text output.
+       
+       See [MS-EMF] Section 2.1.1.11
+    */
+    enum TextOutputOptions {
+        ETO_OPAQUE            = 0x000002,
+        ETO_CLIPPED           = 0x000004,
+        ETO_GLYPH_INDEX       = 0x000010,
+        ETO_RTLREADING        = 0x000080,
+        ETO_NO_RECT           = 0x000100,
+        ETO_SMALL_CHARS       = 0x000200,
+        ETO_NUMERICSLOCAL     = 0x000400,
+        ETO_NUMERICSLATIN     = 0x000800,
+        ETO_IGNORELANGUAGE    = 0x001000,
+        ETO_PDY               = 0x002000,
+        ETO_REVERSE_INDEX_MAP = 0x010000
+    };
+
+    /**
+       Graphics mode, used to interpret shape data such as rectangles
+       
+       See [MS-EMF] Section 2.1.16
+    */
+    enum GraphicsMode {
+        GM_COMPATIBLE = 0x01,
+        GM_ADVANCED   = 0x02
+    };
+    
     /**
        Stock Objects
 
@@ -205,17 +247,7 @@ namespace Libemf
     */
     enum PolygonFillMode {
 	    ALTERNATE = 0x01, ///< Equivalent to Qt::OddEvenFill
-	    WINDING = 0x02    ///< Equivalent to Qt::WindingFill
-    };
-    
-    /**
-       Background fill mode
-       
-       See [MS-EMF] Section 2.1.4
-    */
-    enum BackgroundMode {
-        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
-        OPAQUE = 0x2        ///< Equivalent to Qt::OpaqueMode
+	    WINDING   = 0x02  ///< Equivalent to Qt::WindingFill
     };
     
     /**
@@ -231,4 +263,6 @@ namespace Libemf
         RGN_COPY = 0x05   ///< Equivalent to Qt::ReplaceClip
     };
 }
+
+
 #endif

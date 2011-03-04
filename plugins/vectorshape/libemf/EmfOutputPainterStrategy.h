@@ -115,7 +115,7 @@ public:
     void setWorldTransform( float M11, float M12, float M21,
 			    float M22, float Dx, float Dy );
     void extTextOutA( const ExtTextOutARecord &extTextOutA );
-    void extTextOutW( const EmrTextObject &textObject );
+    void extTextOutW( const QRect &bounds, const EmrTextObject &textObject );
     void moveToEx( const qint32 x, const qint32 y );
     void saveDC();
     void restoreDC( const qint32 savedDC );

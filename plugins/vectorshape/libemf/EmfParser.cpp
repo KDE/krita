@@ -789,25 +789,32 @@ bool Parser::readRecord( QDataStream &stream )
         break;
     case EMR_EXTTEXTOUTW:
 	{
+            QRect bounds;
+            quint32 iGraphicsMode;
+	    float exScale;
+	    float eyScale;
+
 	    //kDebug(33100) << "size:" << size;
 	    size -= 8;
-	    soakBytes( stream, 16 ); // the Bounds
+
+            stream >> bounds;
+	    //kDebug(31000) << "bounds:" << bounds;
 	    size -= 16;
-	    soakBytes( stream, 4 ); // iGraphicsMode
+
+            stream >> iGraphicsMode;
+	    //kDebug(31000) << "graphics mode:" << iGraphicsMode;
 	    size -= 4;
 
-	    quint32 exScale;
 	    stream >> exScale;
-	    //kDebug(33100) << "exScale:" << exScale;
-	    size -= 4;
-
-	    quint32 eyScale;
 	    stream >> eyScale;
-	    //kDebug(33100) << "eyScale:" << eyScale;
-	    size -= 4;
+            if (iGraphicsMode == GM_COMPATIBLE) {
+                kDebug(31000) << "exScale:" << exScale;
+                kDebug(31000) << "eyScale:" << eyScale;
+            }
+	    size -= 8;
 
             EmrTextObject emrText( stream, size, EmrTextObject::SixteenBitChars );
-            mOutput->extTextOutW( emrText );
+            mOutput->extTextOutW( bounds, emrText );
 	}
 	break;
         case EMR_SETLAYOUT:

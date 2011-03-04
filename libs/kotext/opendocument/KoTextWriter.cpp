@@ -785,6 +785,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             QTextCharFormat compFormat = charFormat;
             previousCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
             compFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
+            
+            if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+                saveODF12Change(charFormat);
+            }
 
             KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject

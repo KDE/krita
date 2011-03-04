@@ -39,7 +39,7 @@ static int compareMap(const QMap<QString, QString> &map1, const QMap<QString, QS
 }
 
 
-KoGenChange::KoGenChange()
+KoGenChange::KoGenChange(KoGenChange::ChangeFormat changeFormat):m_changeFormat(changeFormat)
 {
 }
 
@@ -69,6 +69,49 @@ void KoGenChange::writeChangeMetaData(KoXmlWriter* writer) const
 }
 
 void KoGenChange::writeChange(KoXmlWriter *writer, const QString &name) const
+{
+    if (m_changeFormat == KoGenChange::ODF_1_2) {
+        writeODF12Change(writer, name);
+    } else {
+        writeDeltaXmlChange(writer, name);
+    }
+}
+
+void KoGenChange::writeODF12Change(KoXmlWriter *writer, const QString &name) const
+{
+    writer->startElement("text:changed-region");
+    writer->addAttribute("text:id", name);
+
+    const char* elementName;
+    switch (m_type) {
+    case KoGenChange::DeleteChange:
+        elementName = "text:deletion";
+        break;
+    case KoGenChange::FormatChange:
+        elementName = "text:format-change";
+        break;
+    case KoGenChange::InsertChange:
+        elementName = "text:insertion";
+        break;
+    default:
+        elementName = "text:format-change"; //should not happen, format-change is probably the most harmless of the three.
+    }   
+    writer->startElement(elementName);
+    if (!m_changeMetaData.isEmpty()) {
+        writer->startElement("office:change-info");
+        writeChangeMetaData(writer);
+        if (m_literalData.contains("changeMetaData"))
+            writer->addCompleteElement(m_literalData.value("changeMetaData").toUtf8());
+        writer->endElement(); // office:change-info
+    }   
+    if ((m_type == KoGenChange::DeleteChange) && m_literalData.contains("deleteChangeXml"))
+        writer->addCompleteElement(m_literalData.value("deleteChangeXml").toUtf8());
+
+    writer->endElement(); // text:insertion/format/deletion
+    writer->endElement(); // text:change
+}
+
+void KoGenChange::writeDeltaXmlChange(KoXmlWriter *writer, const QString &name) const
 {
     writer->startElement("delta:change-transaction");
     writer->addAttribute("delta:change-id", name);

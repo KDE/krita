@@ -780,6 +780,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             else
                 identical = false;
 
+            if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+                saveODF12Change(charFormat);
+            }
+
             const KoTextBlockData *blockData = dynamic_cast<const KoTextBlockData *>(block.userData());
             if (blockData && (it == block.begin())) {
                 writer->addAttribute("text:id", context.subId(blockData));

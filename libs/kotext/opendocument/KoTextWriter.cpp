@@ -150,6 +150,8 @@ public:
 
     void saveChange(QTextCharFormat format);
     void saveChange(int changeId);
+    void saveODF12Change(QTextCharFormat format);
+    QString generateDeleteChangeXml(KoDeleteChangeMarker *marker);
     int openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation);
     void closeTagRegion(int changeId);
     QStack<const char *> openedTagStack;
@@ -180,6 +182,8 @@ public:
 
     QStack<int> changeStack;
     QMap<int, QString> changeTransTable;
+    QList<int> savedDeleteChanges;
+
     // Things like bookmarks need to be properly turn down
     // during a cut and paste operation when their end marker
     // is not included in the selection.
@@ -273,6 +277,78 @@ void KoTextWriter::Private::saveChange(int changeId)
     changeTracker->saveInlineChange(changeId, change);
     QString changeName = sharedData->genChanges().insert(change);
     changeTransTable.insert(changeId, changeName);
+}
+
+void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
+{
+    if (!changeTracker /*&& changeTracker->isEnabled()*/)
+        return;//The change tracker exist and we are allowed to save tracked changes
+
+    int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
+
+    //First we need to check if the eventual already opened change regions are still valid
+    foreach(int change, changeStack) {
+        if (!changeId || !changeTracker->isParent(change, changeId)) {
+            writer->startElement("text:change-end", false);
+            writer->addAttribute("text:change-id", changeTransTable.value(change));
+            writer->endElement();
+            changeStack.pop();
+        }
+    }
+
+    if (changeId) { //There is a tracked change
+        if (changeTracker->elementById(changeId)->getChangeType() != KoGenChange::DeleteChange) {
+            //Now start a new change region if not already done
+            if (!changeStack.contains(changeId)) {
+                QString changeName = changeTransTable.value(changeId);
+                writer->startElement("text:change-start", false);
+                writer->addAttribute("text:change-id",changeName);
+                writer->endElement();
+                changeStack.push(changeId);
+            }
+        }
+    }
+
+    KoDeleteChangeMarker *changeMarker;
+    if (layout && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format)))) {
+        if (!savedDeleteChanges.contains(changeMarker->changeId())) {
+            QString deleteChangeXml = generateDeleteChangeXml(changeMarker);
+            changeMarker->setDeleteChangeXml(deleteChangeXml);
+            changeMarker->saveOdf(context);
+            savedDeleteChanges.append(changeMarker->changeId());
+        }
+    }
+}
+
+QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
+{
+    //Create a QTextDocument from the Delete Fragment
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+    cursor.insertFragment(changeTracker->elementById(marker->changeId())->getDeleteData());
+
+    //Save the current writer
+    KoXmlWriter &oldWriter = context.xmlWriter();
+
+    //Create a new KoXmlWriter pointing to a QBuffer
+    QByteArray xmlArray;
+    QBuffer xmlBuffer(&xmlArray);
+    KoXmlWriter newXmlWriter(&xmlBuffer);
+
+    //Set our xmlWriter as the writer to be used
+    writer = &newXmlWriter;
+    context.setXmlWriter(newXmlWriter);
+
+    //Call writeBlocks to generate the xml
+    QHash<QTextList *,QString> listStyles = saveListStyles(doc.firstBlock(), doc.characterCount());
+    writeBlocks(&doc, 0, doc.characterCount(),listStyles);
+
+    //Restore the actual xml writer
+    writer = &oldWriter;
+    context.setXmlWriter(oldWriter);
+
+    QString generatedXmlString(xmlArray);
+    return generatedXmlString;
 }
 
 int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation)

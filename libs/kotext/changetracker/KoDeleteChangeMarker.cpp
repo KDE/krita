@@ -57,6 +57,7 @@ public:
     QString text;
     int id;
     int position;
+    QString deleteChangeXml;
     QHash<KoListStyle::ListIdType, KoListStyle *> deletedListStyles;
 };
 
@@ -145,6 +146,11 @@ QTextDocument* KoDeleteChangeMarker::document() const
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
     Q_UNUSED(context);
+}
+
+void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
+{
+    d->deleteChangeXml = deleteChangeXml;
 }
 
 void KoDeleteChangeMarker::setDeletedListStyle(KoListStyle::ListIdType id, KoListStyle *style)

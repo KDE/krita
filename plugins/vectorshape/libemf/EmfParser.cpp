@@ -782,11 +782,6 @@ bool Parser::readRecord( QDataStream &stream )
 	}
 	break;
     case EMR_EXTTEXTOUTA:
-        {
-            ExtTextOutARecord extTextOutARecord( stream, size );
-            mOutput->extTextOutA( extTextOutARecord );
-        }
-        break;
     case EMR_EXTTEXTOUTW:
 	{
             QRect bounds;
@@ -813,8 +808,12 @@ bool Parser::readRecord( QDataStream &stream )
             }
 	    size -= 8;
 
-            EmrTextObject emrText( stream, size, EmrTextObject::SixteenBitChars );
-            mOutput->extTextOutW( bounds, emrText );
+            // The only difference between ExtTextOutA and ...W is
+            // that A uses 8 bit chars and W uses 16 bit chars.
+            EmrTextObject emrText(stream, size,
+                                  (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
+                                                            : EmrTextObject::SixteenBitChars);
+            mOutput->extTextOut( bounds, emrText );
 	}
 	break;
         case EMR_SETLAYOUT:

@@ -332,23 +332,13 @@ public:
     virtual void extCreateFontIndirectW( const ExtCreateFontIndirectWRecord &extCreateFontIndirectW ) = 0;
 
     /**
-       Handler for the EMR_EXTTEXTOUTA record type.
+       Handler for text rendering, as described in the the
+       EMR_EXTTEXTOUTW and EMR_EXTTEXTOUTA record types.
 
-       This record type specifies how to output a text string
-
-       \param extTextOutA the record contents
+       \param bounds the bounds used for e.g. clipping 
+       \param texObject The object describing the text.
     */
-    virtual void extTextOutA( const ExtTextOutARecord &extTextOutA ) = 0;
-
-    /**
-       Handler for the EMR_EXTTEXTOUTW record type.
-
-       This record type specifies how to output a text string
-
-       \param referencePoint the starting point for the output text
-       \param textString the text to output
-    */
-    virtual void extTextOutW( const QRect &bounds, const EmrTextObject &textObject ) = 0;
+    virtual void extTextOut( const QRect &bounds, const EmrTextObject &textObject ) = 0;
 
     /**
        Handler for the EMR_BEGINPATH record type

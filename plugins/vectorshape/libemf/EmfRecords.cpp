@@ -375,35 +375,4 @@ void ExtCreateFontIndirectWRecord::soakBytes( QDataStream &stream, int numBytes 
     }
 }
 
-/*****************************************************************************/
-
-ExtTextOutARecord::ExtTextOutARecord( QDataStream &stream, quint32 size )
-{
-    size -= 8;
-    stream >> m_bounds;
-    size -= 16;
-    stream >> m_iGraphicsMode;
-    size -= 4;
-    stream >> m_exScale;
-    size -= 4;
-    stream >> m_eyScale;
-    size -= 4;
-    m_emrText = new EmrTextObject( stream, size, EmrTextObject::EightBitChars );
-}
-
-ExtTextOutARecord::~ExtTextOutARecord()
-{
-   delete m_emrText;
-}
-
-QPoint ExtTextOutARecord::referencePoint() const
-{
-    return m_emrText->referencePoint();
-}
-
-QString ExtTextOutARecord::textString() const
-{
-    return m_emrText->textString();
-}
-
 }

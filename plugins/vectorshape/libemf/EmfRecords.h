@@ -324,43 +324,6 @@ private:
     void soakBytes( QDataStream &stream, int numBytes );
 };
 
-/*****************************************************************************/
-
-/** 
-    Simple representation of an EMR_EXTTEXTOUTA Record
-
-    See MS-EMF Section 2.2.4 for details
-*/
-class ExtTextOutARecord
-{
-public:
-    /**
-       Constructor for EMR_EXTTEXTOUTA Record
-
-       \param stream the stream to read the record structure from
-       \param size the number of bytes in this record
-    */
-    ExtTextOutARecord( QDataStream &stream, quint32 size );
-    ~ExtTextOutARecord();
-
-    /**
-        The reference point for the text output
-     */
-    QPoint referencePoint() const;
-    
-    /**
-        The text to be output
-     */
-    QString textString() const;
-
-private:
-    QRect m_bounds;
-    quint32 m_iGraphicsMode;
-    float m_exScale;
-    float m_eyScale;
-    EmrTextObject *m_emrText;
-};
-
 }
 
 #endif

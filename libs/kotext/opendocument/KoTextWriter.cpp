@@ -273,7 +273,14 @@ void KoTextWriter::Private::saveChange(int changeId)
 {
     if(changeTransTable.value(changeId).length())
         return;
+
     KoGenChange change;
+    if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+        change.setChangeFormat(KoGenChange::ODF_1_2);
+    } else {
+        change.setChangeFormat(KoGenChange::DELTAXML);
+    }
+
     changeTracker->saveInlineChange(changeId, change);
     QString changeName = sharedData->genChanges().insert(change);
     changeTransTable.insert(changeId, changeName);

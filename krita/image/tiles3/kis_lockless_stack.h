@@ -107,6 +107,9 @@ public:
     }
 
     void clear() {
+        // a fast-path without write ops
+        if(!m_top) return;
+
         m_deleteBlockers.ref();
 
         Node *top = m_top.fetchAndStoreOrdered(0);

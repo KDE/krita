@@ -787,8 +787,8 @@ bool Parser::readRecord( QDataStream &stream )
             QRect bounds;
             quint32 iGraphicsMode;
             // FIXME: These should really be floats, but that crashes
-            // for a test file where eyScale contains
-            // NaN. Unfortunately this file contains secret data and
+            // for a test file where eyScale contains NaN. 
+            // Unfortunately this file contains secret data and
             // can't be committed into the test suite.  Let's just
             // work around the problem until we support scaling anyway.
 	    quint32 exScale;
@@ -807,10 +807,12 @@ bool Parser::readRecord( QDataStream &stream )
 
 	    stream >> exScale;
 	    stream >> eyScale;
+#if DEBUG_EMFPARSER
             if (iGraphicsMode == GM_COMPATIBLE) {
                 kDebug(31000) << "exScale:" << exScale;
                 kDebug(31000) << "eyScale:" << eyScale;
             }
+#endif
 	    size -= 8;
 
             // The only difference between ExtTextOutA and ...W is

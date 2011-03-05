@@ -54,7 +54,7 @@
  * @ingroup KOfficeMacros
  * @brief Release version of KOffice, at compile time
 */
-#define KOFFICE_VERSION_RELEASE 80
+#define KOFFICE_VERSION_RELEASE 71
 
 /**
  * @ingroup KOfficeMacros

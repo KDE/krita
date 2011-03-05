@@ -84,7 +84,7 @@ public:
      * Increments usersCount of a TD and refs shared pointer counter
      * Used by KisTile for COW
      */
-    inline bool acquire() const;
+    inline bool acquire();
 
     /**
      * Decrements usersCount of a TD and derefs shared pointer counter

@@ -786,8 +786,13 @@ bool Parser::readRecord( QDataStream &stream )
 	{
             QRect bounds;
             quint32 iGraphicsMode;
-	    float exScale;
-	    float eyScale;
+            // FIXME: These should really be floats, but that crashes
+            // for a test file where eyScale contains
+            // NaN. Unfortunately this file contains secret data and
+            // can't be committed into the test suite.  Let's just
+            // work around the problem until we support scaling anyway.
+	    quint32 exScale;
+	    quint32 eyScale;
 
 	    //kDebug(33100) << "size:" << size;
 	    size -= 8;

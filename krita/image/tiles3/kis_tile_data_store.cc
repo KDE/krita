@@ -283,3 +283,13 @@ void KisTileDataStore::debugClear()
         iter = m_tileDataList.erase(iter);
     }
 }
+
+void KisTileDataStore::testingSuspendPooler()
+{
+    m_pooler.terminatePooler();
+}
+
+void KisTileDataStore::testingResumePooler()
+{
+    m_pooler.start();
+}

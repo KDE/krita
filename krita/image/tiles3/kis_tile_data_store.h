@@ -133,6 +133,10 @@ private:
 
     void debugSwapAll();
     void debugClear();
+
+    friend class KisTiledDataManagerTest;
+    void testingSuspendPooler();
+    void testingResumePooler();
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;

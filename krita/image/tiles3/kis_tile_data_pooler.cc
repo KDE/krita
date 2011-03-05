@@ -150,13 +150,15 @@ inline bool KisTileDataPooler::interestingTileData(KisTileData* td)
 
 void KisTileDataPooler::run()
 {
+    m_shouldExitFlag = false;
+
     while (1) {
         DEBUG_SIMPLE_ACTION("went to bed... Zzz...");
 
         waitForWork();
 
         if (m_shouldExitFlag)
-            return;
+            break;
 
         QThread::msleep(0);
         DEBUG_SIMPLE_ACTION("cycle started");

@@ -19,7 +19,7 @@
  */
 #include "SimpleParagraphWidget.h"
 #include "TextTool.h"
-#include "../ListItemsHelper.h"
+#include <ListItemsHelper.h>
 #include "../commands/ChangeListCommand.h"
 #include "FormattingButton.h"
 

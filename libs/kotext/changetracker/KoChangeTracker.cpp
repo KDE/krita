@@ -26,7 +26,6 @@
 #include <KoXmlNS.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextDocument.h>
-#include <KoTextDocumentLayout.h>
 #include <KoList.h>
 #include <KoListStyle.h>
 
@@ -397,18 +396,19 @@ QTextDocumentFragment KoChangeTracker::generateDeleteFragment(QTextCursor &curso
     int changeId = marker->changeId();
     QTextCursor editCursor(cursor);
     QTextDocument *document = cursor.document();
-    
+
     QTextDocument deletedDocument;
     QTextDocument deleteCursor(&deletedDocument);
 
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    
-    for (int i = cursor.anchor();i <= cursor.position(); i++) {
-        if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
-            editCursor.setPosition(i+1);
-            KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(editCursor));
-            if (testMarker)
-                editCursor.deletePreviousChar();
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
+    if (textObjectManager) {
+        for (int i = cursor.anchor();i <= cursor.position(); i++) {
+            if (document->characterAt(i) == QChar::ObjectReplacementCharacter) {
+                editCursor.setPosition(i+1);
+                KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(textObjectManager->inlineTextObject(editCursor));
+                if (testMarker)
+                    editCursor.deletePreviousChar();
+            }
         }
     }
 

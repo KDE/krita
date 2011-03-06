@@ -339,6 +339,10 @@ set(KOTEXT_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kotext
                    ${KOODF_INCLUDES}
                    ${CMAKE_SOURCE_DIR}/libs/main)
 
+# TextLayout depends on kotext
+set(TEXTLAYOUT_INCLUDES ${KOTEXT_INCLUDES}
+                   ${CMAKE_SOURCE_DIR}/libs/textlayout)
+
 # komain depends on kotext & flake
 set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${KOTEXT_INCLUDES}
@@ -351,7 +355,11 @@ if(SHOULD_BUILD_SCRIPTING)
 endif(SHOULD_BUILD_SCRIPTING)
 
 # kopageapp
-set(KOPAGEAPP_INCLUDES ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
+set(KOPAGEAPP_INCLUDES ${TEXTLAYOUT_INCLUDES}
+                    ${PIGMENT_INCLUDES}
+                    ${KOMAIN_INCLUDES}
+                    ${CMAKE_SOURCE_DIR}/libs/widgets
+                    ${CMAKE_SOURCE_DIR}/libs/kopageapp ${CMAKE_SOURCE_DIR}/libs/kopageapp/commands ${CMAKE_BINARY_DIR}/libs/kopageapp )
 
 # koproperty
 SET(KOPROPERTY_TARGETNAME koproperty)                           # TODO remove when we move to independent place
@@ -424,7 +432,7 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-    macro_optional_add_subdirectory(words)
+#    macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
 if (SHOULD_BUILD_KFORMULA)
@@ -508,7 +516,7 @@ add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
 add_subdirectory(templates)
-add_subdirectory(tools)
+#add_subdirectory(tools)
 add_subdirectory(filters)
 
 macro_display_feature_log()

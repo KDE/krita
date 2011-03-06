@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QTextDocument>
 #include <QTextTable>
+#include <QTextCursor>
 #include <QStack>
 #include <QTextTableCellFormat>
 #include <QBuffer>
@@ -41,7 +42,6 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableCellStyle.h"
-#include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 #include "KoTextInlineRdf.h"
@@ -74,7 +74,6 @@ public:
     : context(context),
     sharedData(0),
     writer(0),
-    layout(0),
     styleManager(0),
     changeTracker(0),
     rdfData(0)
@@ -104,7 +103,6 @@ public:
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
 
-    KoTextDocumentLayout *layout;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
     KoDocumentRdfBase *rdfData;
@@ -213,8 +211,9 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
             }
         }
     }
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
     KoDeleteChangeMarker *changeMarker;
-    if (layout && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format)))) {
+    if (textObjectManager && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(textObjectManager->inlineTextObject(format)))) {
         if (!savedDeleteChanges.contains(changeMarker->changeId())) {
             QString deleteChangeXml = generateDeleteChangeXml(changeMarker);
             changeMarker->setDeleteChangeXml(deleteChangeXml);
@@ -427,7 +426,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
             saveChange(charFormat);
 
-            KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
+            KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
@@ -804,11 +804,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 {
     d->document = document;
     d->styleManager = KoTextDocument(document).styleManager();
-    d->layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-
     d->changeTracker = KoTextDocument(document).changeTracker();
-
-    if (d->layout) Q_ASSERT(d->layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
 

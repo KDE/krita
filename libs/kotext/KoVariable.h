@@ -90,7 +90,7 @@ protected:
      * If this is a type of variable that needs to change its value based on that
      * you should implement this method and act on it.
      */
-    virtual void variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument);
+    virtual void variableMoved(const QTextDocument *document, int posInDocument);
 
     friend class KoVariableManager;
     /**

@@ -28,6 +28,7 @@
 #include <QTextFragment>
 #include <QTextList>
 #include <QTextStream>
+#include <QTextCursor>
 
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoCharacterStyle.h"
@@ -37,7 +38,6 @@
 #include "styles/KoStyleManager.h"
 #include "KoTextDocument.h"
 #include "KoTextBlockData.h"
-#include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoInlineNote.h>
@@ -123,8 +123,7 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
     QString attrs;
 
     if (textFormat.objectType() == QTextFormat::UserObject + 1) {
-        KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
-        KoInlineTextObjectManager *inlineObjectManager = lay ? lay->inlineTextObjectManager() : 0;
+        KoInlineTextObjectManager *inlineObjectManager = KoTextDocument(document).inlineTextObjectManager();
         KoInlineObject *inlineObject = inlineObjectManager->inlineTextObject(textFormat);
         if (KoBookmark *bookmark = dynamic_cast<KoBookmark *>(inlineObject)) {
             if (bookmark->type() == KoBookmark::SinglePosition) {
@@ -1263,9 +1262,8 @@ void KoTextDebug::dumpFragment(const QTextFragment &fragment, QTextStream &out)
 {
     depth += INDENT;
 
-    KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) : 0;
     QTextCharFormat charFormat = fragment.charFormat();
-    KoInlineObject *inlineObject = lay ? lay->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+    KoInlineObject *inlineObject = KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(charFormat);
     if (inlineObject) {
         QString cf = inlineObjectAttributes(charFormat);
 

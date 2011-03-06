@@ -11,7 +11,6 @@ set(kotext_LIB_SRCS
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
     KoTextBlockPaintStrategyBase.cpp
-    KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
     KoTextDocument.cpp
@@ -37,7 +36,6 @@ set(kotext_LIB_SRCS
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
-    KoTextShapeContainerModel.cpp
     KoTextShapeSavingContext.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp

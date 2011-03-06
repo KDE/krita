@@ -87,8 +87,6 @@ public:
     // get the text indent accounting for auto-text-indent
     qreal resolveTextIndent();
     virtual bool setFollowupShape(KoShape *shape);
-    /// called by the KoTextDocumentLayout to notify the LayoutState of a successfully resized inline object
-    virtual void registerInlineObject(const QTextInlineObject &inlineObject);
     virtual QTextTableCell hitTestTable(QTextTable *table, const QPointF &point);
 
     /// calc a bounding box rect of the selection
@@ -105,30 +103,14 @@ public:
         return m_dropCapsNChars;
     }
 
-    /// set default tab size for this document
-    virtual void setTabSpacing(qreal spacing);
     /// Inner shapes possibly intersect and split line into more parts. This returns max part height.
     virtual qreal maxLineHeight() const {
         return m_maxLineHeight;
     }
-    /// Registers the shape as being relevant for run around at this moment in time
-    virtual void registerRunAroundShape(KoShape *shape);
-
-    /// Updates the registration of the shape for run around
-    virtual void updateRunAroundShape(KoShape *shape);
-
-    /// Clear all registrations of shapest for run around
-    virtual void unregisterAllRunAroundShapes();
-
     virtual QTextLine createLine();
 
     virtual void fitLineForRunAround(bool resetHorizontalPosition);
-    // add inline object
-    virtual void insertInlineObject(KoTextAnchor * textAnchor);
-    // remove all inline objects which document position is bigger or equal to resetPosition
-    virtual void resetInlineObject(int resetPosition);
-    // remove inline object
-    virtual void removeInlineObject(KoTextAnchor * textAnchor);
+
 private:
     friend class TestTableLayout; // to allow direct testing.
 
@@ -147,8 +129,6 @@ private:
     void drawTrackedChangeItem(QPainter *painter, QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
-
-    InlineObjectPosition inlineCharHeight(const QTextFragment &fragment);
 
     /**
      * Find a footnote and if there exists one reserve space for it at the bottom of the shape.
@@ -199,14 +179,8 @@ private:
      */
     bool moveLayoutPosition(KoTextAnchor *textAnchor); //true layout position was modified
 
-    // Fill m_currentLineOutlines list with actual outlines for current page
-    void refreshCurrentPageOutlines();
 
 private:
-    KoStyleManager *m_styleManager;
-
-    KoChangeTracker *m_changeTracker;
-
     qreal m_y;
     QTextBlock m_block;
     KoTextBlockData *m_blockData;
@@ -218,7 +192,6 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QHash<int, InlineObjectPosition> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
     QVector<QTextFrame *> m_frameStack;
     QList<QWeakPointer<ToCGenerator> > m_tocGenerators;
@@ -243,15 +216,10 @@ private:
     qreal m_allTimeMinimumLeft;
     qreal m_allTimeMaximumRight;
     qreal m_maxLineHeight;
-    bool m_relativeTabs;
     qreal m_scaleFactor;
 
-    QHash<KoShape*,Outline*> m_outlines; // all outlines created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
-    QList<Outline*> m_currentLineOutlines; // outlines for current page
     TextLine m_textLine;
 
-    QList<KoTextAnchor *> m_textAnchors; // list of all inserted inline objects
-    int m_textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 };
 
 #endif

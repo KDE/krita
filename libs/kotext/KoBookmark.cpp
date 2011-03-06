@@ -139,11 +139,6 @@ KoBookmark *KoBookmark::endBookmark()
     return d->endBookmark;
 }
 
-KoShape *KoBookmark::shape()
-{
-    return shapeForPosition(d->document, d->posInDocument);
-}
-
 int KoBookmark::position()
 {
     return d->posInDocument;

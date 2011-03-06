@@ -930,6 +930,7 @@ void KoPAView::goToLastPage()
 
 void KoPAView::findDocumentSetNext( QTextDocument * document )
 {
+#if 0
     KoPAPageBase * page = 0;
     KoShape * startShape = 0;
     KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout*>(document->documentLayout()) : 0;
@@ -978,10 +979,12 @@ void KoPAView::findDocumentSetNext( QTextDocument * document )
         }
         // do until you find the same start shape or you are on the same page again only if there was none
     } while ( page != startShape );
+#endif
 }
 
 void KoPAView::findDocumentSetPrevious( QTextDocument * document )
 {
+#if 0
     KoPAPageBase * page = 0;
     KoShape * startShape = 0;
     KoTextDocumentLayout *lay = document ? qobject_cast<KoTextDocumentLayout*>(document->documentLayout()) : 0;
@@ -1034,6 +1037,7 @@ void KoPAView::findDocumentSetPrevious( QTextDocument * document )
         }
         // do until you find the same start shape or you are on the same page again only if there was none
     } while ( shape != startShape );
+#endif
 }
 
 void KoPAView::updatePageNavigationActions()

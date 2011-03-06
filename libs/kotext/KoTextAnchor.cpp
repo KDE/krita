@@ -21,9 +21,6 @@
 
 #include "KoTextAnchor.h"
 #include "KoInlineObject_p.h"
-#include "KoTextDocumentLayout.h"
-#include "KoTextShapeContainerModel.h"
-#include "KoTextShapeData.h"
 #include "KoStyleStack.h"
 #include "KoOdfLoadingContext.h"
 
@@ -57,7 +54,7 @@ public:
             shape(s),
             document(0),
             position(-1),
-            model(0),
+//TODO            model(0),
             behaveAsCharacter(false),
             verticalPos(KoTextAnchor::VTop),
             verticalRel(KoTextAnchor::VLine),
@@ -77,7 +74,7 @@ public:
     /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
     void setContainer(KoShapeContainer *container)
     {
-        if (container == 0) {
+/*TODO        if (container == 0) {
             if (model)
                 model->removeAnchor(parent);
             model = 0;
@@ -98,7 +95,7 @@ public:
             model->addAnchor(parent);
         }
         Q_ASSERT(model == theModel);
-    }
+*/    }
 
     virtual QDebug printDebug(QDebug dbg) const
     {
@@ -115,7 +112,7 @@ public:
     const QTextDocument *document;
     int position;
     QTextCharFormat format;
-    KoTextShapeContainerModel *model;
+//TODO    KoTextShapeContainerModel *model;
     QPointF distance;
     bool behaveAsCharacter;
     KoTextAnchor::VerticalPos verticalPos;
@@ -142,8 +139,8 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
 KoTextAnchor::~KoTextAnchor()
 {
     Q_D(KoTextAnchor);
-    if (d->model)
-        d->model->removeAnchor(this);
+//TODO    if (d->model)
+//TODO        d->model->removeAnchor(this);
     if (d->anchorStrategy != 0) {
         delete d->anchorStrategy;
     }
@@ -216,7 +213,7 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     d->document = document;
     d->position = posInDocument;
     d->format = format;
-    d->setContainer(dynamic_cast<KoShapeContainer*>(shapeForPosition(document, posInDocument)));
+    //TODO d->setContainer(dynamic_cast<KoShapeContainer*>(shapeForPosition(document, posInDocument)));
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -717,7 +714,7 @@ bool KoTextAnchor::behavesAsCharacter() const
 void KoTextAnchor::detachFromModel()
 {
     Q_D(KoTextAnchor);
-    d->model = 0;
+//TODO    d->model = 0;
 }
 
 QRectF KoTextAnchor::pageRect()

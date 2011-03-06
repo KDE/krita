@@ -70,16 +70,10 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
-InlineObjectPosition::InlineObjectPosition(qreal ascent, qreal descent)
-        : m_ascent(ascent),
-        m_descent(descent)
-{
-}
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
-        : m_styleManager(0),
-        m_changeTracker(0),
+        :
         m_blockData(0),
         m_data(0),
         m_reset(true),
@@ -89,7 +83,6 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_textShape(0),
         m_demoText(false),
         m_endOfDemoText(false),
-        m_defaultTabSizing(0),
         m_currentTabStop(0),
         m_dropCapsNChars(0),
         m_dropCapsAffectsNMoreLines(0),
@@ -101,16 +94,13 @@ Layout::Layout(KoTextDocumentLayout *parent)
         m_allTimeMinimumLeft(0),
         m_allTimeMaximumRight(0),
         m_maxLineHeight(0),
-        m_scaleFactor(1.0),
-        m_textAnchorIndex(0)
+        m_scaleFactor(1.0)
 {
     m_frameStack.reserve(5); // avoid reallocs
-    setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 }
 
 Layout::~Layout()
 {
-    unregisterAllRunAroundShapes();
 }
 
 bool Layout::start()
@@ -2172,19 +2162,6 @@ bool Layout::previousParag()
     return true;
 }
 
-void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
-{
-    InlineObjectPosition pos(inlineObject.ascent(),inlineObject.descent());
-    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), pos);
-}
-
-InlineObjectPosition Layout::inlineCharHeight(const QTextFragment &fragment)
-{
-    if (m_inlineObjectHeights.contains(fragment.position()))
-        return m_inlineObjectHeights[fragment.position()];
-    return InlineObjectPosition();
-}
-
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)
 {
     if (m_parent->inlineTextObjectManager() == 0 || m_textShape == 0)
@@ -2309,11 +2286,6 @@ void Layout::updateFrameStack()
     }
 }
 
-void Layout::setTabSpacing(qreal spacing)
-{
-    m_defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
-}
-
 void Layout::registerRunAroundShape(KoShape *s)
 {
     QTransform matrix = s->absoluteTransformation(0);
@@ -2339,11 +2311,6 @@ void Layout::updateRunAroundShape(KoShape *s)
     registerRunAroundShape(s);
 }
 
-void Layout::unregisterAllRunAroundShapes()
-{
-    qDeleteAll(m_outlines);
-    m_outlines.clear();
-}
 
 void Layout::insertInlineObject(KoTextAnchor * textAnchor)
 {
@@ -2357,39 +2324,6 @@ void Layout::insertInlineObject(KoTextAnchor * textAnchor)
     }
 }
 
-void Layout::resetInlineObject(int resetPosition)
-{
-    QList<KoTextAnchor *>::iterator iterBeginErase = m_textAnchors.end();
-    QList<KoTextAnchor *>::iterator iter;
-    for (iter = m_textAnchors.begin(); iter != m_textAnchors.end(); iter++) {
-
-        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
-        if ((*iter)->positionInDocument() >= resetPosition) {
-            (*iter)->anchorStrategy()->reset();
-
-            // delete outline
-            if (m_outlines.contains((*iter)->shape())) {
-                Outline *outline = m_outlines.value((*iter)->shape());
-                m_outlines.remove((*iter)->shape());
-                m_textLine.updateOutline(outline);
-                refreshCurrentPageOutlines();
-                delete outline;
-            }
-            (*iter)->setAnchorStrategy(0);
-
-            if (iterBeginErase == m_textAnchors.end()) {
-                iterBeginErase = iter;
-            }
-        }
-    }
-
-    m_textAnchors.erase(iterBeginErase,m_textAnchors.end());
-
-    // update m_textAnchorIndex if necesary
-    if (m_textAnchorIndex > m_textAnchors.size()) {
-        m_textAnchorIndex = m_textAnchors.size();
-    }
-}
 
 void Layout::removeInlineObject(KoTextAnchor * textAnchor)
 {
@@ -2435,19 +2369,3 @@ bool Layout::moveLayoutPosition(KoTextAnchor *textAnchor)
     return false;
 }
 
-void Layout::refreshCurrentPageOutlines()
-{
-    m_currentLineOutlines.clear();
-
-    TextShape *textShape = dynamic_cast<TextShape*>(shape);
-    if (textShape == 0) {
-        return;
-    }
-
-    // add current page children outlines to m_currentLineOutlines
-    foreach(KoShape *childShape, textShape->shapes()) {
-        if (m_outlines.contains(childShape)) {
-            m_currentLineOutlines.append(m_outlines.value(childShape));
-        }
-    }
-}

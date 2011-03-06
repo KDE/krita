@@ -1,10 +1,11 @@
 project( textPlugin)
 
 add_subdirectory( pics )
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 include_directories(
     ${KOTEXT_INCLUDES}
+    ${TEXTLAYOUT_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/libs/widgets/colorwidgets/
@@ -20,11 +21,7 @@ SET ( textshape_SRCS
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
     ToCGenerator.cpp
-    Layout.cpp
-    ListItemsHelper.cpp
-    ShrinkToFitShapeContainer.cpp
-    Outline.cpp
-    TextLine.cpp
+    #ShrinkToFitShapeContainer.cpp
 
     ChangeTracker.cpp
     ReviewTool.cpp
@@ -35,12 +32,6 @@ SET ( textshape_SRCS
 
     ReferencesTool.cpp
     ReferencesToolFactory.cpp
-
-    TableLayout.cpp
-    TableLayoutData.cpp
-    
-    FloatingAnchorStrategy.cpp
-    InlineAnchorStrategy.cpp
 
     dialogs/StylesWidget.cpp
     dialogs/SimpleCharacterWidget.cpp
@@ -124,7 +115,7 @@ kde4_add_ui_files(textshape_SRCS
 
 kde4_add_plugin(textshape ${textshape_SRCS})
 
-target_link_libraries(textshape kotext komain ${EXTRA_LIBS})
+target_link_libraries(textshape kotext textlayout komain ${EXTRA_LIBS})
 if( Soprano_FOUND )
     target_link_libraries(textshape ${SOPRANO_LIBRARIES})
 endif( Soprano_FOUND )

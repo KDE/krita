@@ -34,6 +34,7 @@ class KoListLevelProperties;
 class KoShapeLoadingContext;
 class KoGenStyle;
 
+
 /**
  * This class groups all styling-options for lists.
  * See KoParagraphStyle::setListStyle()
@@ -243,5 +244,6 @@ private:
     class Private;
     Private * const d;
 };
+
 
 #endif

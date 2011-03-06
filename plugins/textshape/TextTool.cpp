@@ -593,6 +593,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (selectEnd < selectStart)
         qSwap(selectStart, selectEnd);
     QList<TextShape *> shapesToPaint;
+#if 0
+TODO
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
         foreach (KoShape *shape, lay->shapes()) {
@@ -685,6 +687,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         painter.restore();
     }
+#endif
 }
 
 void TextTool::updateSelectedShape(const QPointF &point)
@@ -793,33 +796,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
             connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
-
-             // check and remove the demo text.
-            bool demoTextOn = true;
-            foreach (KoShape *shape, lay->shapes()) {
-                TextShape *ts = dynamic_cast<TextShape*>(shape);
-                if (ts && !ts->demoText()) { // if any shape in the series has it turned off, we don't have it anymore.
-                    demoTextOn = false;
-                    break;
-                }
-            }
-
-            if (demoTextOn) {
-                QTextDocument *doc = m_textShapeData->document();
-                doc->setUndoRedoEnabled(false); // removes undo history
-                KoTextDocument document(doc);
-                document.clearText();
-                KoStyleManager *styleManager = document.styleManager();
-                if (styleManager) {
-                    QTextBlock block = doc->begin();
-                    styleManager->defaultParagraphStyle()->applyStyle(block);
-                }
-                m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
-                foreach (KoShape *shape, lay->shapes()) {
-                    TextShape *ts = dynamic_cast<TextShape*>(shape);
-                    if (ts) ts->setDemoText(false);
-                }
-            }
         }
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
@@ -1312,6 +1288,8 @@ void TextTool::ensureCursorVisible()
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
+#if 0
+TODO
     if (m_textShapeData->endPosition() < textEditor->position() || m_textShapeData->position() > textEditor->position()) {
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
@@ -1330,7 +1308,7 @@ void TextTool::ensureCursorVisible()
             }
         }
     }
-
+#endif
     QRectF cursorPos = caretRect(textEditor->position());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
@@ -1376,15 +1354,21 @@ void TextTool::updateActions()
     m_actionFormatFontSize->setFontSize(cf.fontPointSize());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
-    KoTextDocument::ResizeMethod resizemethod = m_textShapeData ? KoTextDocument(m_textShapeData->document()).resizeMethod() : KoTextDocument::AutoResize;
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_shrinkToFitAction->setChecked(resizemethod == KoTextDocument::ShrinkToFitResize);
+    KoTextDocumentLayout::ResizeMethod resizemethod = KoTextDocumentLayout::AutoResize;
+    if(m_textShapeData) {
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_growWidthAction->setChecked(resizemethod == KoTextDocument::AutoGrowWidth || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
+        resizemethod = lay->resizeMethod();
+    }
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
+    m_shrinkToFitAction->setChecked(resizemethod == KoTextDocumentLayout::ShrinkToFitResize);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextDocument::AutoResize);
-    m_growHeightAction->setChecked(resizemethod == KoTextDocument::AutoGrowHeight || resizemethod == KoTextDocument::AutoGrowWidthAndHeight);
+    m_growWidthAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
+    m_growWidthAction->setChecked(resizemethod == KoTextDocumentLayout::AutoGrowWidth || resizemethod == KoTextDocumentLayout::AutoGrowWidthAndHeight);
+
+    m_growHeightAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
+    m_growHeightAction->setChecked(resizemethod == KoTextDocumentLayout::AutoGrowHeight || resizemethod == KoTextDocumentLayout::AutoGrowWidthAndHeight);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
@@ -1536,6 +1520,8 @@ void TextTool::repaintSelection()
 
 void TextTool::repaintSelection(QTextCursor &cursor)
 {
+    #if 0
+    TODO move to text painting proper in textlayout
     int startPosition = cursor.selectionStart();
     int endPosition = cursor.selectionEnd();
     QList<TextShape *> shapes;
@@ -1563,7 +1549,9 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         rect = ts->absoluteTransformation(0).mapRect(rect);
         canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
+    #endif
 }
+
 QRectF TextTool::caretRect(int position) const
 {
     if (!m_textShapeData)
@@ -2142,6 +2130,8 @@ void TextTool::shapeDataRemoved()
         const QTextDocument *doc = m_textEditor.data()->document();
         Q_ASSERT(doc);
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+        #if 0
+        TODO
         if (!lay || lay->shapes().isEmpty()) {
             emit done();
             return;
@@ -2149,6 +2139,7 @@ void TextTool::shapeDataRemoved()
         m_textShape = static_cast<TextShape*>(lay->shapes().first());
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        #endif
     }
 }
 
@@ -2202,47 +2193,27 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::setGrowWidthToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowWidth, enabled));
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::AutoGrowWidth, enabled));
     updateActions();
 }
 
 void TextTool::setGrowHeightToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::AutoGrowHeight, enabled));
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::AutoGrowHeight, enabled));
     updateActions();
 }
 
 void TextTool::setShrinkToFit(bool enabled)
 {
-    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShape, KoTextDocument::ShrinkToFitResize, enabled));
-    updateActions();
-}
-
-void TextTool::shapeAddedToDoc(KoShape *shape)
-{
-    // calling ensureCursorVisible below is a rather intrusive thing to do for the user
-    // so make doube sure we need it!
-    if (!m_textShapeData)
-        return;
-    TextShape *ts = dynamic_cast<TextShape*>(shape);
-    if (!ts)
-        return;
-    KoTextShapeData *data = qobject_cast<KoTextShapeData*>(ts->userData());
-    if (!data)
-        return;
-    if (data->document() != m_textShapeData->document())
-        return;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    const QList<KoShape*> shapes = lay->shapes();
-    // only when the new one is directly after our current one should we do the move
-    if (shapes.indexOf(ts) - shapes.indexOf(m_textShape) > 1)
-        return;
-    // in case the new frame added is a freshly appended frame
-    // allow the layouter to do some work and then optionally move the view to follow the cursor
-    QTimer::singleShot(0, this, SLOT(ensureCursorVisible()));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::ShrinkToFitResize, enabled));
+    updateActions();
 }
-
 
 void TextTool::readConfig()
 {

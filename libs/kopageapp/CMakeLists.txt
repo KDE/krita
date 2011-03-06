@@ -1,7 +1,5 @@
 include_directories( 
-    ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${PIGMENT_INCLUDES}
+    ${KOPAGEAPP_INCLUDES}
 )
 
 if(KDE4_BUILD_TESTS)

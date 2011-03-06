@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007,2009,2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -233,7 +234,7 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
     if (lay) {
-        lay->interruptLayout();
+//TODO        lay->interruptLayout();
 
         if (d->children.contains(child)) {
             Relation relation = d->children.value(child);

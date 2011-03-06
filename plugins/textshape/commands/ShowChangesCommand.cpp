@@ -89,10 +89,12 @@ void ShowChangesCommand::enableDisableChanges()
           insertDeletedChanges();
         else
           removeDeletedChanges();
-
+#if 0
+TODO
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
         if (lay)
           lay->scheduleLayout();
+        #endif
     }
 }
 
@@ -146,10 +148,12 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
             KoTextAnchor *anchor = dynamic_cast<KoTextAnchor *>(object);
             if (!anchor)
                 continue;
-           
+
             KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
+            #if 0
+            TODO
             KoShapeContainer *container = dynamic_cast<KoShapeContainer *>(lay->shapeForPosition(i));
-            
+
             // a very ugly hack. Since this class is going away soon, it should be okay
             if (!container)
                 container = dynamic_cast<KoShapeContainer *>((lay->shapes()).at(0));
@@ -160,6 +164,7 @@ void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
                 shapeCommand->redo();
                 m_shapeCommands.push_front(shapeCommand);
             }
+            #endif
         }
     }
 }

@@ -31,7 +31,6 @@
 #include "KoTextEditor.h"
 #include "styles/KoStyleManager.h"
 #include "KoInlineTextObjectManager.h"
-#include "KoTextDocumentLayout.h"
 #include "styles/KoParagraphStyle.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
@@ -96,10 +95,6 @@ void KoTextDocument::setInlineTextObjectManager(KoInlineTextObjectManager *manag
     QVariant v;
     v.setValue(manager);
     m_document->addResource(KoTextDocument::InlineTextManager, InlineObjectTextManagerURL, v);
-
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    if (lay)
-        lay->setInlineTextObjectManager(manager);
 }
 
 KoStyleManager *KoTextDocument::styleManager() const
@@ -246,20 +241,6 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     QVariant resource = m_document->resource(KoTextDocument::InlineTextManager,
             InlineObjectTextManagerURL);
     return resource.value<KoInlineTextObjectManager *>();
-}
-
-void KoTextDocument::setResizeMethod(KoTextDocument::ResizeMethod method)
-{
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    Q_ASSERT(layout);
-    layout->setResizeMethod(method);
-}
-
-KoTextDocument::ResizeMethod KoTextDocument::resizeMethod() const
-{
-    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*>(m_document->documentLayout());
-    Q_ASSERT(layout);
-    return layout->resizeMethod();
 }
 
 void KoTextDocument::setRelativeTabs(bool relative)

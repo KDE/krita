@@ -47,8 +47,6 @@
 #include <KoTextBlockData.h>
 #include "KoTextDebug.h"
 #include "KoTextDocument.h"
-#include <KoTextDocumentLayout.h>
-#include <KoTextShapeData.h>
 #include "KoTextSharedLoadingData.h"
 #include <KoUnit.h>
 #include <KoVariable.h>
@@ -346,9 +344,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                             KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
                             changeElement->setDeleteChangeMarker(deleteChangemarker);
                             changeElement->setEnabled(true);
-                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-                            if (layout) {
-                                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+                            if (textObjectManager) {
                                 textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                             }
                         }
@@ -369,14 +366,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, b
                     } else {
                         KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
                         if (obj) {
-                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-                            if (layout) {
-                                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                                if (textObjectManager) {
-                                    KoVariableManager *varManager = textObjectManager->variableManager();
-                                    if (varManager) {
-                                        textObjectManager->insertInlineObject(cursor, obj);
-                                    }
+                            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+                            if (textObjectManager) {
+                                KoVariableManager *varManager = textObjectManager->variableManager();
+                                if (varManager) {
+                                    textObjectManager->insertInlineObject(cursor, obj);
                                 }
                             }
                         } else {
@@ -848,11 +842,10 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-    if (layout) {
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+    if (textObjectManager) {
         KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
         if (note->loadOdf(noteElem, d->context, d->styleManager, d->changeTracker)) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
             textObjectManager->insertInlineObject(cursor, note);
         } else {
             kWarning(32500) << "Error while loading the text note element!";
@@ -1000,10 +993,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 KoChangeTrackerElement *changeElement = d->changeTracker->elementById(changeId);
                 changeElement->setDeleteChangeMarker(deleteChangemarker);
                 changeElement->setEnabled(true);
-                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-
-                if (layout) {
-                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+                KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+                if (textObjectManager) {
                     textObjectManager->insertInlineObject(cursor, deleteChangemarker);
                 }
 
@@ -1013,10 +1004,9 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
 #ifdef KOOPENDOCUMENTLOADER_DEBUG
             kDebug(30015) << "loading a text:meta";
 #endif
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-            if (layout) {
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+            if (textObjectManager) {
                 const QTextDocument *document = cursor.block().document();
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
                 KoTextMeta* startmark = new KoTextMeta(document);
                 textObjectManager->insertInlineObject(cursor, startmark);
 
@@ -1040,10 +1030,10 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
             QString bookmarkName = ts.attribute("name");
 
-            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-            if (layout) {
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+            if (textObjectManager) {
                 const QTextDocument *document = cursor.block().document();
-                KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
+
                 // For cut and paste, make sure that the name is unique.
                 QString uniqBookmarkName = createUniqueBookmarkName(textObjectManager->bookmarkManager(),
                                            bookmarkName,
@@ -1100,16 +1090,11 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         } else {
             KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(ts, d->context);
 
-            if (obj) {
-                KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-                if (layout) {
-                    KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-                    if (textObjectManager) {
-                        KoVariableManager *varManager = textObjectManager->variableManager();
-                        if (varManager) {
-                            textObjectManager->insertInlineObject(cursor, obj);
-                        }
-                    }
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+            if (obj && textObjectManager) {
+                KoVariableManager *varManager = textObjectManager->variableManager();
+                if (varManager) {
+                    textObjectManager->insertInlineObject(cursor, obj);
                 }
             } else {
 #if 0 //1.6:
@@ -1387,12 +1372,9 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
         anchor->loadOdf(element, d->context);
         d->textSharedData->shapeInserted(shape, element, d->context);
 
-        KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(cursor.block().document()->documentLayout());
-        if (layout) {
-            KoInlineTextObjectManager *textObjectManager = layout->inlineTextObjectManager();
-            if (textObjectManager) {
-                textObjectManager->insertInlineObject(cursor, anchor);
-            }
+        KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
+        if (textObjectManager) {
+            textObjectManager->insertInlineObject(cursor, anchor);
         }
     }
     return shape;

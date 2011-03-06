@@ -101,9 +101,6 @@ public:
     /// @return the end bookmark if the type is StartBookmark
     KoBookmark *endBookmark();
 
-    /// @return the KoShape where this bookmark is located
-    KoShape *shape();
-
     /// @return the exact cursor position of this bookmark in document
     int position();
 

@@ -23,8 +23,6 @@
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
 
-#include "Layout.h"
-
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 #include <KoTextShapeData.h>
@@ -39,6 +37,7 @@
 class KoInlineTextObjectManager;
 class KoPageProvider;
 class KoImageCollection;
+class KoTextDocument;
 class TextShape;
 
 /**
@@ -67,18 +66,6 @@ public:
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
-
-    /**
-     * Set the shape's text to be demo text or not.
-     * If true, replace the content with an lorem ipsum demo text and don't complain
-     *   when there is not enough space at the end
-     * If false; remove the demo text again.
-     */
-    void setDemoText(bool on);
-    /// return if the content of this shape is demo text.
-    bool demoText() const {
-        return m_demoText;
-    }
 
     /**
      * From KoShape reimplemented method to load the TextShape from ODF.
@@ -120,9 +107,6 @@ public:
 
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    KoTextDocument::ResizeMethod resizeMethod() const;
-    void setResizeMethod(KoTextDocument::ResizeMethod resizemethod);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);

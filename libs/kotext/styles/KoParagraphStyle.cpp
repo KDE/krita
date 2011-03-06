@@ -26,7 +26,6 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"

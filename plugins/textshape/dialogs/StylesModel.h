@@ -26,6 +26,8 @@
 #include <QPixmap>
 #include <QMap>
 
+class KoStyleThumbnailer;
+
 class KoStyleManager;
 class KoParagraphStyle;
 class KoCharacterStyle;
@@ -79,6 +81,7 @@ protected:
 
 private:
     KoStyleManager *m_styleManager;
+    KoStyleThumbnailer *m_styleThumbnailer;
 
     int m_currentParagraphStyle;
     int m_currentCharacterStyle;

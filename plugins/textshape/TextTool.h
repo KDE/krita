@@ -272,8 +272,7 @@ private slots:
     void debugTextDocument();
     /// print debug about the details of the styles on the current text document
     void debugTextStyles();
-    /// the document we are editing has received an extra shape
-    void shapeAddedToDoc(KoShape *shape);
+
     void ensureCursorVisible();
 
     void testSlot(bool);

@@ -25,7 +25,6 @@
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
 #include "KoTextDocument.h"
-#include "KoTextDocumentLayout.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
@@ -178,9 +177,8 @@ bool KoTextEditor::Private::deleteInlineObjects(bool backwards)
     // Also note that the below code needs unit testing since I found some issues already
     /*
     QTextCursor cursor(*d->caret);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->textShapeData->document()->documentLayout());
-    Q_ASSERT(layout);
-    KoInlineTextObjectManager *manager = layout->inlineObjectTextManager();
+
+    KoInlineTextObjectManager *manager = KoTextocument(d->document).inlineObjectTextManager();
     KoInlineObject *object;
     bool found = false;
 
@@ -220,10 +218,6 @@ return found;
 
 void KoTextEditor::Private::deleteSelection()
 {
-#ifndef NDEBUG
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    Q_ASSERT(layout);
-#endif
     QTextCursor delText = QTextCursor(caret);
     if (!delText.hasSelection())
         delText.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
@@ -380,11 +374,6 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
 
         return;
     }
-#ifndef NDEBUG
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineTextObjectManager());
-#endif
 
     if (changeType != KoGenChange::DeleteChange) {
         //first check if there already is an identical change registered just before or just after the selection. If so, merge appropriatly.
@@ -698,9 +687,6 @@ void KoTextEditor::addBookmark(const QString &name)
     KoBookmark *bookmark = new KoBookmark(name, d->document);
     int startPos = -1, endPos = -1, caretPos = -1;
 
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineTextObjectManager());
     if (d->caret.hasSelection()) {
         startPos = d->caret.selectionStart();
         endPos = d->caret.selectionEnd();
@@ -710,14 +696,14 @@ void KoTextEditor::addBookmark(const QString &name)
         KoBookmark *endBookmark = new KoBookmark(name, d->document);
         bookmark->setType(KoBookmark::StartBookmark);
         endBookmark->setType(KoBookmark::EndBookmark);
-        layout->inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
+        KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
         bookmark->setEndBookmark(endBookmark);
         d->caret.setPosition(startPos);
     } else {
         bookmark->setType(KoBookmark::SinglePosition);
     }
     // TODO the macro & undo things
-    layout->inlineTextObjectManager()->insertInlineObject(d->caret, bookmark);
+    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, bookmark);
     if (startPos != -1) {
         // TODO repaint selection properly
         if (caretPos == startPos) {
@@ -741,11 +727,8 @@ bool KoTextEditor::insertIndexMarker()
         return false; // can't insert one on a whitespace as that does not indicate a word.
 
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Index"));
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineTextObjectManager());
     KoTextLocator *tl = new KoTextLocator();
-    layout->inlineTextObjectManager()->insertInlineObject(d->caret, tl);
+    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, tl);
     d->updateState(KoTextEditor::Private::NoOp);
     return true;
 }
@@ -753,10 +736,7 @@ bool KoTextEditor::insertIndexMarker()
 void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
 {//TODO changeTracking
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Variable"));
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
-    Q_ASSERT(layout);
-    Q_ASSERT(layout->inlineTextObjectManager());
-    layout->inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
+    KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, inliner);
     d->updateState(KoTextEditor::Private::NoOp);
 }
 

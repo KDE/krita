@@ -21,7 +21,6 @@
 #define KOTEXTANCHOR_H
 
 #include "KoInlineObject.h"
-#include "KoTextDocumentLayout.h"
 
 #include "kotext_export.h"
 
@@ -40,7 +39,7 @@ public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
 
-    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state) = 0;
+    //virtual bool positionShape(KoTextDocumentLayout *layout) = 0;
 
     virtual bool isPositioned() = 0;
 

@@ -18,8 +18,6 @@
  */
 #include "KoVariable.h"
 #include "KoInlineObject_p.h"
-#include "KoTextDocumentLayout.h"
-#include "KoTextShapeData.h"
 
 #include <KoShape.h>
 
@@ -27,6 +25,7 @@
 #include <QPainter>
 #include <QFontMetricsF>
 #include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 #include <QTextInlineObject>
 #include <QDebug>
 
@@ -61,6 +60,15 @@ KoVariable::~KoVariable()
 {
 }
 
+class PublicLayout : public QAbstractTextDocumentLayout
+{
+public:
+    void publicDocumentChanged(int position, int charsRemoved, int charsAdded)
+    {
+        documentChanged(position, charsRemoved, charsAdded);
+    }
+};
+
 void KoVariable::setValue(const QString &value)
 {
     Q_D(KoVariable);
@@ -69,9 +77,9 @@ void KoVariable::setValue(const QString &value)
     d->value = value;
     d->modified = true;
     if (d->document) {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(d->document->documentLayout());
+        PublicLayout *lay = (PublicLayout *)d->document->documentLayout();
         if (lay)
-            lay->documentChanged(d->lastPositionInDocument, 0, 0);
+            lay->publicDocumentChanged(d->lastPositionInDocument, 0, 0);
     }
 }
 
@@ -83,7 +91,7 @@ void KoVariable::updatePosition(const QTextDocument *document, QTextInlineObject
     Q_UNUSED(object);
     Q_UNUSED(format);
     // Variables are always 'in place' so the position is 100% defined by the text layout.
-    variableMoved(shapeForPosition(d->document, posInDocument), d->document, posInDocument);
+    variableMoved(d->document, posInDocument);
 }
 
 void KoVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -129,9 +137,8 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.draw(&painter, rect.topLeft());
 }
 
-void KoVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+void KoVariable::variableMoved(const QTextDocument *document, int posInDocument)
 {
-    Q_UNUSED(shape);
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
 }

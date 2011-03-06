@@ -24,7 +24,6 @@
 #include "kotext_export.h"
 
 class QTextCursor;
-class KoTextShapeData;
 class KoCanvasBase;
 
 #include <QSharedPointer>
@@ -40,7 +39,7 @@ public:
      * Note: RdfModel ownership is not taken. You must ensure that it remains
      * valid for the lifetime of the object.
      */
-    KoTextPaste(KoTextShapeData *shapeData, QTextCursor &cursor,
+    KoTextPaste(QTextCursor &cursor,
                 KoCanvasBase *canvas, Soprano::Model *rdfModel);
     virtual ~KoTextPaste();
 

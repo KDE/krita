@@ -302,6 +302,8 @@ void ToCGenerator::update()
     foreach (const BlockPair &blockPair, m_originalBlocksInToc) {
         QTextBlock tocEntryBlock = blockPair.first;
         QTextBlock headingBlock = blockPair.second;
+        #if 0
+        TODO
         KoShape *shape = layout->shapeForPosition(headingBlock.position());
         if (shape) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
@@ -319,6 +321,7 @@ void ToCGenerator::update()
                 }
             }
         }
+        #endif
     }
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();

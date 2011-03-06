@@ -20,6 +20,8 @@
 #ifndef LISTITEMSHELPER_H
 #define LISTITEMSHELPER_H
 
+#include "kotext_export.h"
+
 #include <KoListStyle.h>
 
 #include <QFont>
@@ -39,15 +41,15 @@ struct ListStyleItem {
     QString name;
 };
 
-QString intToRoman(int n);
-QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
-QString intToScript(int n, KoListStyle::Style type);
-QString intToScriptList(int n, KoListStyle::Style type);
+KOTEXT_EXPORT QString intToRoman(int n);
+KOTEXT_EXPORT QString intToAlpha(int n, Capitalisation caps, bool letterSynchronization);
+KOTEXT_EXPORT QString intToScript(int n, KoListStyle::Style type);
+KOTEXT_EXPORT QString intToScriptList(int n, KoListStyle::Style type);
 
 /// return international list items (bullets/arabic/roman)
-QList<ListStyleItem> genericListStyleItems();
+KOTEXT_EXPORT QList<ListStyleItem> genericListStyleItems();
 /// return non-latin list items (bullets/arabic/roman)
-QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
+KOTEXT_EXPORT QList<ListStyleItem> otherListStyleItems(); // we may want to split this method up into different world regions.
 }
 
 /// \internal helper class for calculating text-lists prefixes and indents

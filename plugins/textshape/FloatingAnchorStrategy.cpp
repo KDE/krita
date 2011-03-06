@@ -205,10 +205,7 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
          break;
 
      case KoTextAnchor::HChar:
-         if (m_anchor->positionInDocument() == block.position()) { // at first position of parag.
-             anchorBoundingRect.setX(state->x() + containerBoundingRect.x());
-             anchorBoundingRect.setWidth(0.1); // just some small value
-         } else if (layout->lineCount() != 0) {
+         if (layout->lineCount() != 0) {
              QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
              if (tl.isValid()) {
                  anchorBoundingRect.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()) + containerBoundingRect.x());

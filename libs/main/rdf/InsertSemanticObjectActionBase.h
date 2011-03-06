@@ -21,7 +21,7 @@
 #define __rdf_InsertSemanticObjectActionBase_h__
 
 #include "RdfForward.h"
-#include <KAction>
+#include <kaction.h>
 
 class KoCanvasBase;
 class KoTextEditor;

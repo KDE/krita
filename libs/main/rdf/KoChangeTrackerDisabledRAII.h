@@ -20,6 +20,8 @@
 #ifndef __KoChangeTrackerDisabledRAII_h__
 #define __KoChangeTrackerDisabledRAII_h__
 
+#include "komain_export.h"
+
 class KoChangeTracker;
 
 /**
@@ -36,7 +38,7 @@ class KoChangeTracker;
  * @see KoChangeTracker
  *
  */
-class KoChangeTrackerDisabledRAII
+class KOMAIN_EXPORT KoChangeTrackerDisabledRAII
 {
 public:
     KoChangeTrackerDisabledRAII(KoChangeTracker *changeTracker);

@@ -4,7 +4,7 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com> 
+ *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     KisColorSourceOption colorSourceOption;
     colorSourceOption.readOptionSetting(settings);
     m_colorSource = colorSourceOption.createColorSource(painter);
-    
+
     m_hsvOptions.append(KisPressureHSVOption::createHueOption());
     m_hsvOptions.append(KisPressureHSVOption::createSaturationOption());
     m_hsvOptions.append(KisPressureHSVOption::createValueOption());
@@ -64,8 +64,9 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
             m_hsvTransfo = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
-    
+
     m_sizeOption.readOptionSetting(settings);
+    m_spacingOption.readOptionSetting(settings);
     m_mirrorOption.readOptionSetting(settings);
     m_opacityOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
@@ -74,7 +75,7 @@ KisBrushOp::KisBrushOp(const KisBrushBasedPaintOpSettings *settings, KisPainter 
     m_rotationOption.readOptionSetting(settings);
     m_mixOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
-    
+
     m_sizeOption.sensor()->reset();
     m_mirrorOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
@@ -100,7 +101,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     Q_ASSERT(brush);
     if (!brush)
         return 1.0;
-    
+
     if (!brush->canPaintFor(info))
         return 1.0;
 
@@ -110,13 +111,13 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     KisPaintDeviceSP device = painter()->device();
 
     qreal rotation = m_rotationOption.apply(info);
-    
+
     setCurrentScale(scale);
     setCurrentRotation(rotation);
-    
+
     QPointF hotSpot = brush->hotSpot(scale, scale, rotation);
     // return info.pos() if sensor is not enabled
-    QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale); 
+    QPointF pos = m_scatterOption.apply(info, qMax(brush->width(), brush->height()) * scale);
     QPointF pt = pos - hotSpot;
 
     // Split the coordinates into integer plus fractional parts. The integer
@@ -128,7 +129,7 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     qreal yFraction;
 
     m_sharpnessOption.apply(info, pt, x, y, xFraction, yFraction);
-    
+
     quint8 origOpacity = m_opacityOption.apply(painter(), info);
     m_colorSource->selectColor(m_mixOption.apply(info) );
     m_darkenOption.apply(m_colorSource, info);
@@ -158,20 +159,20 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
                 m_colorSourceDevice->clear();
             }
             m_colorSource->colorize(m_colorSourceDevice, QRect(0, 0, brush->maskWidth(scale, rotation), brush->maskHeight(scale, rotation)), info.pos().toPoint() );
-            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));            
+            brush->mask(dab, m_colorSourceDevice, scale, scale, rotation, info, xFraction, yFraction, m_softnessOption.apply(info));
         }
     }
-    
+
     MirrorProperties mirrors = m_mirrorOption.apply(info);
     dab->mirror(mirrors.horizontalMirror, mirrors.verticalMirror);
 
     m_sharpnessOption.applyTreshold( dab );
-    
+
     painter()->bltFixed(QPoint(x, y), dab, dab->bounds());
-    renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
+    painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
 
-    return spacing(scale);
+    return spacing(m_spacingOption.apply(info));
 }
 
 KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
@@ -183,14 +184,14 @@ KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, con
         } else {
             m_dab->clear();
         }
-        
+
         KisPainter p(m_dab);
         p.setPaintColor(painter()->paintColor());
         p.drawDDALine(pi1.pos(), pi2.pos());
 
-        QRect rc = m_dab->extent();  
+        QRect rc = m_dab->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_dab, rc.x(), rc.y(), rc.width(), rc.height());
-        
+
         return KisDistanceInformation(0.0, 0.0);
     }
     return KisPaintOp::paintLine(pi1, pi2, savedDist);

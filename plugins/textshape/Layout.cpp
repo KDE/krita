@@ -8,6 +8,8 @@
  * Copyright (C) 2009-2010 Casper Boemann <cbo@boemann.dk>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -67,6 +69,12 @@
 extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
+
+InlineObjectPosition::InlineObjectPosition(qreal ascent, qreal descent)
+        : m_ascent(ascent),
+        m_descent(descent)
+{
+}
 
 // ---------------- layout helper ----------------
 Layout::Layout(KoTextDocumentLayout *parent)
@@ -268,7 +276,8 @@ bool Layout::addLine()
     }
 
     qreal height = m_format.doubleProperty(KoParagraphStyle::FixedLineHeight);
-    qreal objectHeight = 0.0;
+    qreal objectAscent = 0.0;
+    qreal objectDescent = 0.0;
     bool useFixedLineHeight = height != 0.0;
     QTextBlock::Iterator preLineFragmentIterator(m_fragmentIterator);
     if (useFixedLineHeight) {
@@ -294,14 +303,17 @@ bool Layout::addLine()
             else {
                 // read max font height
                 height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
+
                 while (!(m_fragmentIterator.atEnd() || m_fragmentIterator.fragment().contains(
                              m_block.position() + line.textStart() + line.textLength() - 1))) {
                     m_fragmentIterator++;
-//sebsauer this cannot work, see bug first document attached to bug #239143
-//                     if (!m_fragmentIterator.atEnd()) {
-//                         break;
-//                     }
+                    if (m_fragmentIterator.atEnd()) {
+                     break;
+                    }
                     if (!m_changeTracker
                         || !m_changeTracker->displayChanges()
                         || !m_changeTracker->containsInlineChanges(m_fragmentIterator.fragment().charFormat())
@@ -309,7 +321,10 @@ bool Layout::addLine()
                         || (m_changeTracker->elementById(m_fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_changeTracker->displayChanges()) {
                         height = qMax(height, m_fragmentIterator.fragment().charFormat().fontPointSize());
-                        objectHeight = qMax(objectHeight, inlineCharHeight(m_fragmentIterator.fragment()));
+
+                        InlineObjectPosition pos = inlineCharHeight(m_fragmentIterator.fragment());
+                        objectAscent = qMax(objectAscent, pos.m_ascent);
+                        objectDescent = qMax(objectDescent, pos.m_descent);
                     }
                 }
             }
@@ -361,7 +376,8 @@ bool Layout::addLine()
             m_block.layout()->clearLayout();
             m_block.layout()->beginLayout();
             foreach(const LineKeeper &lk, lineKeeps) {
-                line = m_block.layout()->createLine();
+                Q_ASSERT(this->layout == m_block.layout());
+                line = createLine();
                 if (!line.isValid())
                     break;
                 line.setLineWidth(lk.lineWidth);
@@ -378,8 +394,12 @@ bool Layout::addLine()
         if (m_textShape) // kword uses a dummy shape which is not a text shape
             m_textShape->markLayoutDone();
         nextShape();
-        if (m_data && line.isValid())
+        if (m_data && line.isValid()) {
             m_data->setPosition(m_block.position() + (entireParagraphMoved ? 0 : line.textStart() + line.textLength()));
+            m_data->setEndPosition(-1);
+        }
+
+
 
         // the demo-text feature means we have exactly the same amount of text as we have frame-space
         if (m_demoText)
@@ -397,7 +417,7 @@ bool Layout::addLine()
             else if (linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height = qMax(height, objectHeight) + linespacing;
+        height = qMax(height, objectAscent) + objectDescent + linespacing;
     }
     qreal minimum = m_format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
@@ -432,10 +452,7 @@ bool Layout::addLine()
     }
 
     // position inline objects
-    bool possibleRelayoutNeeded = positionInlineObjects();
-
-    if (possibleRelayoutNeeded) {
-
+    while (positionInlineObjects()) {
         if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
 
             if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
@@ -1936,73 +1953,115 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
     QTextList *list = block.textList();
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
-        QTextCharFormat cf;
-        bool filled = false;
+        QTextCharFormat chFormatMaxFontSize;
+
+        KoCharacterStyle *cs = 0;
         if (m_styleManager) {
             const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
-            KoCharacterStyle *cs = m_styleManager->characterStyle(id);
+            cs = m_styleManager->characterStyle(id);
             if (!cs) {
                 KoParagraphStyle *ps = m_styleManager->paragraphStyle(
                                        block.blockFormat().intProperty(KoParagraphStyle::StyleId));
-                if (ps)
+                if (ps && !ps->hasDefaults()) {
                     cs = ps->characterStyle();
-            }
-            if (cs) {
-                cs->applyStyle(cf);
-                filled = true;
+                }
             }
         }
-        if (!filled) {
-            // use first char of first block.
-            QTextBlock firstBlockOfList = list->item(0);
-            QTextCursor cursor(firstBlockOfList);
-            cf = cursor.charFormat();
+
+        if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
+                cs->applyStyle(chFormatMaxFontSize);
+        } else {
+            // use format from the actual block of the list item
+            QTextCharFormat chFormatBlock;
+            if (block.text().size() == 0) {
+                chFormatBlock = block.charFormat();
+            } else {
+                chFormatBlock = block.begin().fragment().charFormat();
+            }
+
+            chFormatMaxFontSize = chFormatBlock;
+
+            QTextBlock::iterator it;
+            QTextFragment currentFragment;
+            for (it = block.begin(); !it.atEnd(); ++it) {
+                currentFragment = it.fragment();
+                if ( currentFragment.isValid() && (chFormatMaxFontSize.fontPointSize() < currentFragment.charFormat().fontPointSize()) ) {
+                    chFormatMaxFontSize = currentFragment.charFormat();
+                }
+            }
+        }
+
+        // fetch the text properties of the list-level-style-bullet
+        if (listFormat.hasProperty(KoListStyle::MarkCharacterStyleId)) {
+            QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
+            QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
+            if (!textPropertiesCharStyle.isNull()) {
+                textPropertiesCharStyle->applyStyle( chFormatMaxFontSize );
+            }
         }
 
         if (! data->counterText().isEmpty()) {
-            QFont font(cf.font(), m_parent->paintDevice());
-            QTextLayout layout(data->counterText(), font, m_parent->paintDevice());
+            QFont font(chFormatMaxFontSize.font(), m_parent->paintDevice());
+
+            QString result = data->counterText();
+            KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
+            if (listStyle == KoListStyle::SquareItem            || listStyle == KoListStyle::DiscItem       ||
+                listStyle == KoListStyle::CircleItem            || listStyle == KoListStyle::BoxItem        ||
+                listStyle == KoListStyle::RhombusItem           || listStyle == KoListStyle::CustomCharItem ||
+                listStyle == KoListStyle::HeavyCheckMarkItem    || listStyle == KoListStyle::BallotXItem    ||
+                listStyle == KoListStyle::RightArrowItem        || listStyle == KoListStyle::RightArrowHeadItem)
+            {
+                QChar bulletChar(listFormat.intProperty(KoListStyle::BulletCharacter));
+                result = bulletChar;
+            }
+
+            QTextLayout layout(result , font, m_parent->paintDevice());
+
             QList<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
             format.start = 0;
             format.length = data->counterText().length();
-            format.format = cf;
+            format.format = chFormatMaxFontSize;
+
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
 
             Qt::Alignment align = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
-            if (align == 0)
+
+            if (align == 0) {
                 align = Qt::AlignLeft;
-            else if (align != Qt::AlignLeft)
+            }
+            else if (align != Qt::AlignLeft) {
                 align |= Qt::AlignAbsolute;
+            }
+
             QTextOption option(align);
             option.setTextDirection(block.layout()->textOption().textDirection());
-            if (option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft())
+
+            if (option.textDirection() == Qt::RightToLeft || data->counterText().isRightToLeft()) {
                 option.setAlignment(Qt::AlignRight);
+            }
+
             layout.setTextOption(option);
             layout.beginLayout();
+
             QTextLine line = layout.createLine();
             line.setLineWidth(data->counterWidth());
             layout.endLayout();
+
             QPointF counterPosition = data->counterPosition();
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
                 counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
             }
+
             layout.draw(painter, counterPosition);
         }
 
-        KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-        if (listStyle == KoListStyle::SquareItem || listStyle == KoListStyle::DiscItem ||
-                listStyle == KoListStyle::CircleItem || listStyle == KoListStyle::BoxItem ||
-                listStyle == KoListStyle::RhombusItem || listStyle == KoListStyle::CustomCharItem ||
-                listStyle == KoListStyle::HeavyCheckMarkItem || listStyle == KoListStyle::BallotXItem ||
-                listStyle == KoListStyle::RightArrowItem || listStyle == KoListStyle::RightArrowHeadItem
-           ) {
-            QFontMetricsF fm(cf.font(), m_parent->paintDevice());
 #if 0
-// helper lines to show the anatomy of this font.
+            QFontMetricsF fm(chFormatMaxFontSize.font(), m_parent->paintDevice());
+            // helper lines to show the anatomy of this font.
             painter->setPen(Qt::green);
             painter->drawLine(QLineF(-1, data->counterPosition().y(), 200, data->counterPosition().y()));
             painter->setPen(Qt::yellow);
@@ -2012,84 +2071,10 @@ void Layout::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCol
             painter->setPen(Qt::gray);
             painter->drawLine(QLineF(-1, data->counterPosition().y() + fm.height(), 200, data->counterPosition().y() + fm.height()));
 #endif
-            painter->save();
-            QColor bulletColor = listFormat.colorProperty(KoListStyle::BulletColor);
-            if (bulletColor.isValid()) {
-                painter->setBrush(bulletColor);
-                painter->setPen(QPen(bulletColor));
-            }
-            else {
-                bulletColor = QColor(Qt::black);
-            }
 
-            qreal width = fm.xHeight();
-            qreal y = data->counterPosition().y() + fm.ascent() - fm.xHeight(); // at top of text.
-            int percent = listFormat.intProperty(KoListStyle::BulletSize);
-            if (percent > 0)
-                width *= percent / 100.0;
-            y -= width / 10.; // move it up just slightly
-            qreal x = qMax(qreal(1), data->counterPosition().x() + fm.width(listFormat.stringProperty(KoListStyle::ListItemPrefix)));
-            switch (listStyle) {
-            case KoListStyle::SquareItem: {
-                painter->fillRect(QRectF(x, y, width, width), QBrush(bulletColor));
-            }
-            break;
-            case KoListStyle::DiscItem:
-                painter->setBrush(bulletColor);
-                // fall through!
-            case KoListStyle::CircleItem: {
-                painter->drawEllipse(QRectF(x, y, width, width));
-            }
-            break;
-            case KoListStyle::BoxItem: {
-                painter->drawRect(QRectF(x, y, width, width));
-            }
-            break;
-            case KoListStyle::RhombusItem: {
-                painter->translate(QPointF(x + (width / 2.0), y));
-                painter->rotate(45.0);
-                painter->fillRect(QRectF(0, 0, width, width), QBrush(bulletColor));
-            }
-            break;
-            case KoListStyle::RightArrowItem: {
-                const qreal half = width / 2.0;
-                painter->translate(QPointF(x, y));
-                QPointF points[] = { QPointF(half, 0), QPointF(width, half), QPointF(half, width) };
-                painter->drawPolyline(points, 3);
-                painter->drawLine(QLineF(0, half, width, half));
-            }
-            break;
-            case KoListStyle::RightArrowHeadItem: {
-                painter->translate(QPointF(x, y));
-                QPointF points[] = { QPointF(0, 0), QPointF(width, width / 2.0), QPointF(0, width) };
-                painter->drawPolyline(points, 3);
-            }
-            break;
-            case KoListStyle::HeavyCheckMarkItem: {
-                const qreal half = width / 2.0;
-                painter->translate(QPointF(x, y));
-                QPointF points[] = { QPointF(half, half), QPointF(half, width), QPointF(width, 0) };
-                painter->drawPolyline(points, 3);
-            }
-            break;
-            case KoListStyle::BallotXItem: {
-                painter->translate(QPointF(x, y));
-                painter->drawLine(QLineF(0.0, 0.0, width, width));
-                painter->drawLine(QLineF(0.0, width, width, 0.0));
-            }
-            break;
-            case KoListStyle::CustomCharItem:
-                if (!QChar(listFormat.intProperty(KoListStyle::BulletCharacter)).isNull()){
-                    painter->drawText(0, 0, QChar(listFormat.intProperty(KoListStyle::BulletCharacter)));
-                }
-                break;
-            default:; // others we ignore.
-            }
-
-            painter->restore();
-
-        } else if (listStyle == KoListStyle::ImageItem && imageCollection) {
-            QFontMetricsF fm(cf.font(), m_parent->paintDevice());
+        KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
+        if (listStyle == KoListStyle::ImageItem && imageCollection) {
+            QFontMetricsF fm(chFormatMaxFontSize.font(), m_parent->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);
@@ -2189,14 +2174,15 @@ bool Layout::previousParag()
 
 void Layout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), inlineObject.height());
+    InlineObjectPosition pos(inlineObject.ascent(),inlineObject.descent());
+    m_inlineObjectHeights.insert(m_block.position() + inlineObject.textPosition(), pos);
 }
 
-qreal Layout::inlineCharHeight(const QTextFragment &fragment)
+InlineObjectPosition Layout::inlineCharHeight(const QTextFragment &fragment)
 {
     if (m_inlineObjectHeights.contains(fragment.position()))
         return m_inlineObjectHeights[fragment.position()];
-    return 0.0;
+    return InlineObjectPosition();
 }
 
 qreal Layout::findFootnote(const QTextLine &line, int *oldLength)

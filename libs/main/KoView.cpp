@@ -29,6 +29,7 @@
 #include "KoMainWindow.h"
 #include "KoViewAdaptor.h"
 #include "KoDockFactoryBase.h"
+#include "KoUndoStackAction.h"
 
 #include <kactioncollection.h>
 #include <kglobalsettings.h>
@@ -443,6 +444,9 @@ void KoView::setupGlobalActions()
     KAction *actionNewView  = new KAction(KIcon("window-new"), i18n("&New View"), this);
     actionCollection()->addAction("view_newview", actionNewView);
     connect(actionNewView, SIGNAL(triggered(bool)), this, SLOT(newView()));
+
+    actionCollection()->addAction("edit_undo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::UNDO));
+    actionCollection()->addAction("edit_redo", new KoUndoStackAction(d->document->undoStack(), KoUndoStackAction::RED0));
 }
 
 void KoView::newView()

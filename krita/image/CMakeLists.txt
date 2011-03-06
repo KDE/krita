@@ -174,6 +174,7 @@ set(kritaimage_LIB_SRCS
    kis_transformation_mask.cpp
    kis_transparency_mask.cc
    kis_undo_adapter.cc
+   krita_utils.cpp
    kis_dumb_undo_adapter.cpp
    kis_outline_generator.cpp
    metadata/kis_meta_data_entry.cc

@@ -22,7 +22,10 @@
 
 #include <KDebug>
 
-#define DEBUG_PAINTER_TRANSFORM 1
+#include "EmfObjects.h"
+
+
+#define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {
@@ -37,7 +40,7 @@ OutputPainterStrategy::OutputPainterStrategy()
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
     , m_image( 0 )
-      // FIXME: Initialize all vars here!
+    , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
@@ -53,8 +56,11 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
+    , m_windowExtIsSet(false)
+    , m_viewportExtIsSet(false)
+    , m_windowViewportIsSet(false)
     , m_image( 0 )
-      // FIXME: Initialize all vars here!
+    , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
     , m_currentCoords()
@@ -386,11 +392,11 @@ void OutputPainterStrategy::recalculateWorldTransform()
     // FIXME: Check windowExt == 0 in any direction
     if (m_windowExtIsSet && m_viewportExtIsSet) {
         // Both window and viewport are set.
-        m_windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
-        m_windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
+        qreal windowViewportScaleX = qreal(m_viewportExt.width()) / qreal(m_windowExt.width());
+        qreal windowViewportScaleY = qreal(m_viewportExt.height()) / qreal(m_windowExt.height());
 
         m_worldTransform.translate(-m_windowOrg.x(), -m_windowOrg.y());
-        m_worldTransform.scale(m_windowViewportScaleX, m_windowViewportScaleY);
+        m_worldTransform.scale(windowViewportScaleX, windowViewportScaleY);
         m_worldTransform.translate(m_viewportOrg.x(), m_viewportOrg.y());
     }
 
@@ -946,48 +952,16 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
     m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
 }
 
-void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
+void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
+    const QPoint  &referencePoint = textObject.referencePoint();
+    const QString &text = textObject.textString();
+
 #if DEBUG_EMFPAINT
-    kDebug(31000);//FIXME << extTextOutA;
-#endif
-
-    m_painter->save();
-
-    m_painter->setPen( m_textPen );
-
-    // Set position to the reference point. It's assumed that this is the baseline.
-    QPoint       position = extTextOutA.referencePoint();
-    QFontMetrics fontMetrics = m_painter->fontMetrics();
-    switch ( m_textAlignMode & TA_VERTMASK ) {
-        case TA_TOP:
-            position += QPoint( 0, fontMetrics.ascent() );
-            break;
-        case TA_BOTTOM:
-            position -= QPoint( 0, fontMetrics.descent() );
-            break;
-        case TA_BASELINE:
-            // do nothing
-            break;
-        default:
-            kDebug(33100) << "Unexpected vertical positioning mode:" << m_textAlignMode;
-    }
-    // TODO: Handle the rest of the test alignment mode flags
-
-    m_painter->drawText( position, extTextOutA.textString() );
-#if DEBUG_EMFPAINT
-    kDebug(33100) << "extTextOutA: ref.point = "
-                  << extTextOutA.referencePoint().x() << extTextOutA.referencePoint().y()
-                  << ", Text = " << extTextOutA.textString().toLatin1().data();
-#endif
-
-    m_painter->restore();
-}
-
-void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QString &text )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << referencePoint << text;
+    kDebug(31000) << "Ref point: " << referencePoint
+                  << "options: " << hex << textObject.options() << dec
+                  << "rectangle: " << textObject.rectangle()
+                  << "text: " << text;
 #endif
 
     int  x = referencePoint.x();
@@ -996,7 +970,9 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
-        kDebug(31000) << "TA_UPDATECP";
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "TA_UPDATECP: use current logical position";
+#endif
         x = m_currentCoords.x();
         y = m_currentCoords.y();
     }
@@ -1005,23 +981,30 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     int width  = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
     int height = fm.height();
 
-    // Horizontal align.  These flags are supposed to be mutually exclusive.
-    if ((m_textAlignMode & TA_CENTER) == TA_CENTER)
+    // Make (x, y) be the coordinates of the upper left corner of the
+    // rectangle surrounding the text.
+    //
+    // FIXME: Handle RTL text.
+
+    // Horizontal align.  Default is TA_LEFT.
+    if ((m_textAlignMode & TA_HORZMASK) == TA_CENTER)
         x -= (width / 2);
-    else if ((m_textAlignMode & TA_RIGHT) == TA_RIGHT)
+    else if ((m_textAlignMode & TA_HORZMASK) == TA_RIGHT)
         x -= width;
 
-    // Vertical align.
-    if ((m_textAlignMode & TA_BASELINE) == TA_BASELINE)
-        //y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
+    // Vertical align.  Default is TA_TOP
+    if ((m_textAlignMode & TA_VERTMASK) == TA_BASELINE)
         y -= (height - fm.descent());
-    else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
+    else if ((m_textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
         y -= height;
     }
 
 #if DEBUG_EMFPAINT
+    kDebug(31000) << "width = " << width << "height = " << height;
+
     kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
-                  << "ascent = " << fm.ascent() << " height = " << fm.height()
+                  << "ascent = " << fm.ascent() << "descent = " << fm.descent()
+                  << " height = " << fm.height()
                   << "leading = " << fm.leading();
     kDebug(31000) << "actual point = " << x << y;
 #endif
@@ -1033,7 +1016,7 @@ void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QSt
     m_painter->setPen(savePen);
 }
 
-void OutputPainterStrategy::moveToEx( const quint32 x, const quint32 y )
+void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;

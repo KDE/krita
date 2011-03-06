@@ -43,7 +43,8 @@ public:
     virtual void deactivate();
 
 protected:
-    virtual QWidget* createOptionWidget();
+    /// reimplemented from superclass
+    virtual QMap<QString, QWidget *> createOptionWidgets();
 
 private:
     KoCanvasBase *m_canvas;

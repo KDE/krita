@@ -34,8 +34,8 @@
 #include <Soprano/Soprano>
 #include <QTextBlockUserData>
 #include <QTreeWidgetItem>
-#include <KAction>
-#include <KDateTime>
+#include <kaction.h>
+#include <kdatetime.h>
 
 class QDomDocument;
 class KoStore;

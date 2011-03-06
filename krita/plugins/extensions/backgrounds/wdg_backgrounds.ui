@@ -17,7 +17,7 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="lblName">
      <property name="text">
-      <string>TextLabel</string>
+      <string comment="KDE::DoNotExtract">TextLabel</string>
      </property>
     </widget>
    </item>

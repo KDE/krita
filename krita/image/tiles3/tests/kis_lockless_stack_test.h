@@ -33,6 +33,8 @@ private slots:
     void testOperations();
     void stressTestLockless();
     void stressTestQStack();
+
+    void stressTestClear();
 };
 
 #endif /* KIS_LOCKLESS_STACK_TEST_H */

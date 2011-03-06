@@ -69,16 +69,16 @@ KisDeformPaintOp::KisDeformPaintOp(const KisDeformPaintOpSettings *settings, Kis
     m_deformBrush.initDeformAction();
 
     m_dev = source();
-    
+
     if ((m_sizeProperties.diameter * 0.5) > 1) {
         m_ySpacing = m_xSpacing = m_sizeProperties.diameter * 0.5 * m_sizeProperties.spacing;
     } else {
         m_ySpacing = m_xSpacing = 1.0;
     }
     m_spacing = m_xSpacing;
-    
-    
-    
+
+
+
 }
 
 KisDeformPaintOp::~KisDeformPaintOp()
@@ -106,10 +106,10 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
 
         qreal rotation = m_rotationOption.apply(info);
         qreal scale = m_sizeOption.apply(info);
-        
+
         setCurrentRotation(rotation);
         setCurrentScale(scale);
-        
+
         rotation += m_sizeProperties.rotation;
         scale *= m_sizeProperties.scale;
 
@@ -118,23 +118,23 @@ qreal KisDeformPaintOp::paintAt(const KisPaintInformation& info)
         splitCoordinate(pos.x(), &x, &subPixelX);
         splitCoordinate(pos.y(), &y, &subPixelY);
 
-        KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev, 
+        KisFixedPaintDeviceSP mask = m_deformBrush.paintMask(dab, m_dev,
                                                              scale,rotation,
-                                                             info.pos(), 
+                                                             info.pos(),
                                                              subPixelX,subPixelY,
                                                              x,y
                                                              );
 
-        // this happens for the first dab of the move mode, we need more information for being able to move 
+        // this happens for the first dab of the move mode, we need more information for being able to move
         if (!mask){
             return m_spacing;
         }
 
         quint8 origOpacity = m_opacityOption.apply(painter(), info);
         painter()->bltFixedWithFixedSelection(x,y, dab, mask, mask->bounds().width() ,mask->bounds().height() );
-        renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
+        painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(mask->bounds().width() ,mask->bounds().height())),dab,mask);
         painter()->setOpacity(origOpacity);
-        
+
         return m_spacing;
 #else
         if (!m_dab) {

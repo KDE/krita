@@ -39,7 +39,7 @@ KisCurvePaintOp::KisCurvePaintOp(const KisCurvePaintOpSettings *settings, KisPai
     Q_ASSERT(settings);
     Q_UNUSED(image);
     m_curveBrush.setPainter(painter);
-    
+
     m_curveBrush.setMode( settings->getInt(CURVE_MODE) );
     m_curveBrush.setMinimalDistance( settings->getInt(CURVE_MIN_DISTANCE) );
     m_curveBrush.setInterval(settings->getInt(CURVE_INTERVAL) );
@@ -74,7 +74,7 @@ KisDistanceInformation KisCurvePaintOp::paintLine(const KisPaintInformation& pi1
     QRect rc = m_dab->extent();
 
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc,m_dab);
 
     KisVector2D end = toKisVector2D(pi2.pos());
     KisVector2D start = toKisVector2D(pi1.pos());

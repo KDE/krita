@@ -18,6 +18,14 @@
 
 #include <stdlib.h>
 
+#if defined(_WIN32) || defined(_WIN64)
+#define srand48 srand
+inline double drand48()
+{
+    return double(rand()) / RAND_MAX;
+}
+#endif
+
 #include <qtest_kde.h>
 
 #include "kis_stroke_benchmark.h"

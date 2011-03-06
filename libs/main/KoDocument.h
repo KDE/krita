@@ -54,6 +54,7 @@ class KoOpenPane;
 class KUndoStack;
 class KoTextEditor;
 class KoProgressUpdater;
+class KoProgressProxy;
 
 class KoVersionInfo
 {
@@ -504,13 +505,6 @@ public:
     static QString tagNameToDocumentType(const QString& localName);
 
     /**
-     *  Save the document. The default implementation is to call
-     *  saveXML(). This method exists only for applications that
-     *  don't use QDomDocument for saving, i.e. kword and kpresenter.
-     */
-    virtual bool saveToStream(QIODevice *dev);
-
-    /**
      *  Loads a document in the native format from a given URL.
      *  Reimplement if your native format isn't XML.
      *
@@ -588,6 +582,12 @@ public:
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
     KoProgressUpdater *progressUpdater() const;
+
+    /**
+     * Set a custom progress proxy to use to report loading
+     * progress to.
+     */
+    void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
      * Appends the shell to the list of shells which show this
@@ -1019,6 +1019,8 @@ private:
 
     bool saveNativeFormatODF(KoStore *store, const QByteArray &mimeType);
     bool saveNativeFormatKOffice(KoStore *store);
+    bool saveToStream(QIODevice *dev);
+
 
     /// @return the current KoMainWindow shell
     KoMainWindow *currentShell();

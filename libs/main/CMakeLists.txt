@@ -52,6 +52,7 @@ set(komain_LIB_SRCS
     KoFilterChainLinkList.cpp
     KoImageSelectionWidget.cpp
     KoStandardAction.cpp
+    KoUndoStackAction.cpp
     config/KoConfigDocumentPage.cpp
     config/KoConfigGridPage.cpp
     config/KoConfigMiscPage.cpp

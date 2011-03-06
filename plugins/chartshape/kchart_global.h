@@ -38,9 +38,6 @@ enum ChartType {
     BubbleChartType,
     SurfaceChartType,
     GanttChartType,
-
-    // FIXME: Get rid of LastChartType. Only DataSet uses this to determine if
-    // it is assigned its own chart type or not, which can be done otherwise.
     LastChartType               // Not an actual type, just a place holder
 };
 const int NUM_CHARTTYPES = int ( LastChartType );

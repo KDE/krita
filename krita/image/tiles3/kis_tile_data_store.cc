@@ -42,7 +42,28 @@
 #define DEBUG_FREE_ACTION(td)
 #endif
 
+#ifdef DEBUG_HIT_MISS
+qint64 __preclone_miss = 0;
+qint64 __preclone_hit = 0;
 
+qint64 __preclone_miss_user_count = 0;
+qint64 __preclone_miss_age = 0;
+
+#define DEBUG_COUNT_PRECLONE_HIT(td) __preclone_hit++
+#define DEBUG_COUNT_PRECLONE_MISS(td) __preclone_miss++; __preclone_miss_user_count+=td->numUsers(); __preclone_miss_age+=td->age()
+#define DEBUG_REPORT_PRECLONE_EFFICIENCY()                      \
+    qDebug() << "Hits:" << __preclone_hit                       \
+             << "of" << __preclone_hit + __preclone_miss        \
+             << "("                                             \
+             << qreal(__preclone_hit) / (__preclone_hit + __preclone_miss)       \
+             << ")"                                             \
+             << "miss users" << qreal(__preclone_miss_user_count) / __preclone_miss \
+             << "miss age" << qreal(__preclone_miss_age) / __preclone_miss
+#else
+#define DEBUG_COUNT_PRECLONE_HIT(td)
+#define DEBUG_COUNT_PRECLONE_MISS(td)
+#define DEBUG_REPORT_PRECLONE_EFFICIENCY()
+#endif
 
 KisTileDataStore::KisTileDataStore()
     : m_pooler(this),
@@ -51,13 +72,13 @@ KisTileDataStore::KisTileDataStore()
       m_memoryMetric(0)
 {
     m_clockIterator = m_tileDataList.end();
-//    m_pooler.start();
+    m_pooler.start();
     m_swapper.start();
 }
 
 KisTileDataStore::~KisTileDataStore()
 {
-//    m_pooler.terminatePooler();
+    m_pooler.terminatePooler();
     m_swapper.terminateSwapper();
 
     if(numTiles() > 0) {
@@ -126,11 +147,13 @@ KisTileData *KisTileDataStore::duplicateTileData(KisTileData *rhs)
 
     if (rhs->m_clonesStack.pop(td)) {
         DEBUG_PRECLONE_ACTION("+ Pre-clone HIT", rhs, td);
+        DEBUG_COUNT_PRECLONE_HIT(rhs);
     } else {
         rhs->blockSwapping();
         td = new KisTileData(*rhs);
         rhs->unblockSwapping();
         DEBUG_PRECLONE_ACTION("- Pre-clone #MISS#", rhs, td);
+        DEBUG_COUNT_PRECLONE_MISS(rhs);
     }
 
     registerTileData(td);
@@ -231,6 +254,7 @@ void KisTileDataStore::endIteration(KisTileDataStoreReverseIterator* iterator)
 {
     delete iterator;
     m_listLock.unlock();
+    DEBUG_REPORT_PRECLONE_EFFICIENCY();
 }
 
 KisTileDataStoreClockIterator* KisTileDataStore::beginClockIteration()
@@ -276,12 +300,13 @@ void KisTileDataStore::debugClear()
 {
     QMutexLocker lock(&m_listLock);
 
-    KisTileDataListIterator iter = m_tileDataList.begin();
-
-    while(iter != m_tileDataList.end()) {
-        delete *iter;
-        iter = m_tileDataList.erase(iter);
+    foreach(KisTileData *item, m_tileDataList) {
+        delete item;
     }
+
+    m_tileDataList.clear();
+    m_numTiles = 0;
+    m_memoryMetric = 0;
 }
 
 void KisTileDataStore::testingSuspendPooler()

@@ -128,10 +128,15 @@ const KoGenChange* KoGenChanges::change(const QString& name) const
 
 void KoGenChanges::saveOdfChanges(KoXmlWriter* xmlWriter) const
 {
-    xmlWriter->startElement("delta:tracked-changes");
-
     QMap<KoGenChange, QString> changesList = changes();
     QMap<KoGenChange, QString>::const_iterator it = changesList.constBegin();
+
+    if ((it != changesList.constEnd()) && (it.key().changeFormat() == KoGenChange::DELTAXML)) {
+        xmlWriter->startElement("delta:tracked-changes");
+    } else {
+        xmlWriter->startElement("text:tracked-changes");
+    }
+
     for (; it != changesList.constEnd() ; ++it) {
         it.key().writeChange(xmlWriter, it.value());
     }

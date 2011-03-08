@@ -315,7 +315,9 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Paragraph Overlapping")  << "ChangeTracking/overlapping/text-delete-within-added-p/text-delete-within-added-p-tracked.odt" << "DeltaXML";
     QTest::newRow("List Overlapping")  << "ChangeTracking/overlapping/insert-list-item-delete-list/insert-list-item-delete-list-tracked.odt" << "DeltaXML";
     QTest::newRow("Paragraph Add Then Merge")  << "ChangeTracking/multiple-changes/para-add-then-merge/para-add-merge-tracked.odt" << "DeltaXML";
-     
+    
+    //ODF 1.2 Change Tracking tests     
+    QTest::newRow("Simple Text Insertion")  << "ChangeTracking/odf12/simple-text-addition/simple-text-addition-tracked.odt" << "ODF12";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

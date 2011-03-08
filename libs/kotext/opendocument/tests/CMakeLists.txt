@@ -27,10 +27,3 @@ target_link_libraries(normalizeWhiteSpace kotext ${QT_QTTEST_LIBRARY})
 set(TestChangeTracking_test_SRCS TestChangeTracking.cpp)
 kde4_add_unit_test(TestChangeTracking TESTNAME kotext-odf-TestChangeTracking ${TestChangeTracking_test_SRCS})
 target_link_libraries(TestChangeTracking kotext ${QT_QTTEST_LIBRARY})
-
-########### next target ###############
-if( Soprano_FOUND )
-set(TestChangeLoading_SRCS TestChangeLoading.cpp)
-kde4_add_unit_test(TestChangeLoading TESTNAME kotext-odf-TestChangeLoading ${TestChangeLoading_SRCS})
-target_link_libraries(TestChangeLoading kotext komain ${QT_QTTEST_LIBRARY})
-endif( Soprano_FOUND )

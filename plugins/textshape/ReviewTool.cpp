@@ -154,8 +154,6 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
         QList<TextShape *> shapesToPaint;
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
-            #if 0
-            TODO
             foreach(KoShape *shape, lay->shapes()) {
                 TextShape *ts = dynamic_cast<TextShape*>(shape);
                 if (! ts)
@@ -172,7 +170,6 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                 }
                 shapesToPaint << ts;
             }
-            #endif
         }
         if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
             return;

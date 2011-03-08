@@ -22,6 +22,7 @@
 #include "TextShape.h"
 #include "ShrinkToFitShapeContainer.h"
 #include <KoTextSharedLoadingData.h>
+#include "SimpleRootAreaProvider.h"
 
 #define synchronized(T) QMutex T; \
     for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
@@ -90,7 +91,8 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     setCacheMode(KoShape::ScaledCache);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
-    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
+    SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(this);
+    KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(lay);
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);

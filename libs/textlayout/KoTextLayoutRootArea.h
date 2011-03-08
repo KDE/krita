@@ -26,6 +26,8 @@
 
 #include <QRectF>
 
+class KoShape;
+
 /**
  * When laying out text it happens in areas that can occupy space of various size.
  */
@@ -33,12 +35,18 @@ class KOTEXT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 {
 public:
     /// constructor
-    explicit KoTextLayoutRootArea(KoTextLayoutArea *parent);
+    explicit KoTextLayoutRootArea();
     virtual ~KoTextLayoutRootArea();
 
     /// Layouts as much as it can
-    virtual void layout(HierarchicalCursor *cursor) = 0;
+    virtual void layout(HierarchicalCursor *cursor);
 
+    /// Sets an associated shape which can be retrieved with associatedShape()
+    /// KoTextLayoutRootArea doesn't use it for anything.
+    void setAssociatedShape(KoShape *shape);
+
+    /// Retruns the shape set with setAssociatedShape()
+    KoShape *associatedShape();
 
 private:
     class Private;

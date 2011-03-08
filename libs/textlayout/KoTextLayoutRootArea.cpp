@@ -22,10 +22,12 @@
 
 class KoTextLayoutRootArea::Private
 {
+public:
+    KoShape *shape;
 };
 
-KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextLayoutArea *parent)
-  : KoTextLayoutArea(parent)
+KoTextLayoutRootArea::KoTextLayoutRootArea()
+  : KoTextLayoutArea(0)
   , d(new Private)
 {
 }
@@ -40,3 +42,12 @@ void KoTextLayoutRootArea::layout(HierarchicalCursor *cursor)
     //d->area->layout(iter, boundingRect());
 }
 
+void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
+{
+    d->shape = shape;
+}
+
+KoShape *KoTextLayoutRootArea::associatedShape()
+{
+    return d->shape;
+}

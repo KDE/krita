@@ -22,6 +22,7 @@ SET ( textshape_SRCS
     TextToolFactory.cpp
     ToCGenerator.cpp
     #ShrinkToFitShapeContainer.cpp
+    SimpleRootAreaProvider.cpp
 
     ChangeTracker.cpp
     ReviewTool.cpp

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Johannes Simon <johannes.simon@gmail.com>
+ * Copyright (C) 2011 KO GmbH <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -67,8 +68,6 @@ struct KoTextDocumentLayout::Private
     KoStyleManager *styleManager;
 
     KoChangeTracker *changeTracker;
-
-    QList<KoShape *> shapes;
 
     KoInlineTextObjectManager *inlineTextObjectManager;
     KoTextLayoutRootAreaProvider *provider;
@@ -436,7 +435,12 @@ KoTextDocumentLayout::ResizeMethod KoTextDocumentLayout::resizeMethod() const
 
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
-    return d->shapes;
+    QList<KoShape*> listOfShapes;
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (rootArea->associatedShape())
+            listOfShapes.append(rootArea->associatedShape());
+    }
+    return listOfShapes;
 }
 
 

@@ -593,8 +593,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (selectEnd < selectStart)
         qSwap(selectStart, selectEnd);
     QList<TextShape *> shapesToPaint;
-#if 0
-TODO
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
         foreach (KoShape *shape, lay->shapes()) {
@@ -687,7 +685,6 @@ TODO
 
         painter.restore();
     }
-#endif
 }
 
 void TextTool::updateSelectedShape(const QPointF &point)

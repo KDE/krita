@@ -17,25 +17,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTLAYOUTROOTAREAPROVIDER_H
-#define KOTEXTLAYOUTROOTAREAPROVIDER_H
+#include "KoTextLayoutRootAreaProvider.h"
 
-#include "kotext_export.h"
-
-class KoTextLayoutRootArea;
-
-/**
- * When laying out text we need an area where upon the text will be placed.
- * A KoTextLayoutRootAreaProvider provides the layout process with such areas
- */
-class KOTEXT_EXPORT KoTextLayoutRootAreaProvider
+KoTextLayoutRootAreaProvider::KoTextLayoutRootAreaProvider()
 {
-public:
-    /// constructor
-    explicit KoTextLayoutRootAreaProvider();
-    virtual ~KoTextLayoutRootAreaProvider();
+}
 
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old) = 0;
-};
-
-#endif
+KoTextLayoutRootAreaProvider::~KoTextLayoutRootAreaProvider()
+{
+}

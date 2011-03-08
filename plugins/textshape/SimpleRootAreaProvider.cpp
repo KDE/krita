@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,25 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTEXTLAYOUTROOTAREAPROVIDER_H
-#define KOTEXTLAYOUTROOTAREAPROVIDER_H
+#include "SimpleRootAreaProvider.h"
 
-#include "kotext_export.h"
+#include "KoTextLayoutRootArea.h"
+#include "TextShape.h"
 
-class KoTextLayoutRootArea;
-
-/**
- * When laying out text we need an area where upon the text will be placed.
- * A KoTextLayoutRootAreaProvider provides the layout process with such areas
- */
-class KOTEXT_EXPORT KoTextLayoutRootAreaProvider
+SimpleRootAreaProvider::SimpleRootAreaProvider(TextShape *textshape)
+    : m_textShape(textshape)
+    , m_area(new KoTextLayoutRootArea())
 {
-public:
-    /// constructor
-    explicit KoTextLayoutRootAreaProvider();
-    virtual ~KoTextLayoutRootAreaProvider();
+    m_area->setAssociatedShape(textshape);
+}
 
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old) = 0;
-};
-
-#endif
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous)
+{
+    if (previous) {
+        return m_area;
+    }
+    else
+        return 0;
+}

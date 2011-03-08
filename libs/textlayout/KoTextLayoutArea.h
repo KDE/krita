@@ -48,16 +48,16 @@ public:
     virtual void layout(HierarchicalCursor *cursor) = 0;
 
     /// Returns the bounding rectangle in textdocument coordinates.
-    virtual QRectF boundingRect() const = 0;
+//    virtual QRectF boundingRect() const = 0;
 
     virtual qreal maximalAllowedY() const;
-
+/*
     /// Sets the position in textdocument coordinates.
     virtual void setPosition(QPointF position) = 0;
 
     /// Sets the size in textdocument coordinates.
     virtual void setSize(QSizeF size) = 0;
-
+*/
     /// A pointer to the parent
     KoTextLayoutArea *parent; // you should treat it as read only
 };

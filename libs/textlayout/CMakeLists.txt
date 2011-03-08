@@ -6,6 +6,7 @@ include_directories(${TEXTLAYOUT_INCLUDES})
 set(textlayout_LIB_SRCS
     KoTextLayoutArea.cpp
     KoTextLayoutRootArea.cpp
+    KoTextLayoutRootAreaProvider.cpp
     KoTextDocumentLayout.cpp
     ListItemsHelper.cpp
     KoStyleThumbnailer.cpp

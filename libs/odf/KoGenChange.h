@@ -81,6 +81,11 @@ public:
         return m_type;
     }
 
+    /// Return the format to be used to save changes
+    KoGenChange::ChangeFormat changeFormat() const {
+        return m_changeFormat;
+    }
+
     /// Add a property to the style
     void addChangeMetaData(const QString &propName, const QString &propValue) {
         m_changeMetaData.insert(propName, propValue);

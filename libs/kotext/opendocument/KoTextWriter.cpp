@@ -294,7 +294,7 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
     int changeId = format.property(KoCharacterStyle::ChangeTrackerId).toInt();
 
     //First we need to check if the eventual already opened change regions are still valid
-    foreach(int change, changeStack) {
+    while (int change = changeStack.top()) {
         if (!changeId || !changeTracker->isParent(change, changeId)) {
             writer->startElement("text:change-end", false);
             writer->addAttribute("text:change-id", changeTransTable.value(change));
@@ -939,6 +939,15 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
     
+    if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+        while (int change = changeStack.top()) {
+            writer->startElement("text:change-end", false);
+            writer->addAttribute("text:change-id", changeTransTable.value(change));
+            writer->endElement();
+            changeStack.pop();
+        }   
+    }
+
     closeTagRegion(changeId);
 }
 

@@ -43,7 +43,7 @@ private:
     bool verifyContentXml(QString &originalFileName, QString &roundTripFileName);
 
 private:
-    QTextDocument *documentFromOdt(const QString &odt);
+    QTextDocument *documentFromOdt(const QString &odt, const QString &changeFormat);
     QString documentToOdt(QTextDocument *);
     KComponentData *componentData;
 };

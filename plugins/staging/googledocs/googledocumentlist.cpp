@@ -19,11 +19,9 @@
 #include "googledocumentlist.h"
 #include "googledocument.h"
 
-#include <stdio.h>
-
 GoogleDocumentList::GoogleDocumentList()
 {
-    docModel = new QStandardItemModel(0, 2);
+    docModel = new QStandardItemModel(0, 3);
 }
 
 void GoogleDocumentList::setEtag(const QString  &etag)
@@ -69,16 +67,27 @@ QString GoogleDocumentList::author ()
 void GoogleDocumentList::append(GoogleDocument *entry)
 {
     if (entry != 0 ) {
-        m_entries.append(entry);
+        QString iconPath = "";
+        if (QString::compare(entry->documentType(), "document", Qt::CaseInsensitive) == 0) {
+            iconPath = ":/images/document.png";
+        } else if (QString::compare(entry->documentType(), "spreadsheet", Qt::CaseInsensitive) == 0) {
+            iconPath = ":/images/spreadsheet.png";
+        } else if (QString::compare(entry->documentType(), "presentation", Qt::CaseInsensitive) == 0) {
+            iconPath = ":/images/presentation.png";
+        } else {
+            delete entry;
+            return;
+        }
 
-        //count = docModel->rowCount();
-        docModel->insertRow(0);
-        docModel->setData(docModel->index(0, 0), entry->title());
-        docModel->setData(docModel->index(0, 1), entry->documentUrl());
-       /*qDebug() << "Resource ID : " << entry->id();
-        qDebug() << "Title : " << entry->title();
-        qDebug() << "Author : " << entry->author();
-        qDebug() << "Url : " << entry->documentUrl();*/
+        m_entries.append(entry);
+        int rows = docModel->rowCount();
+        docModel->insertRows(rows, 1, QModelIndex());
+        docModel->setData(docModel->index(rows, 0, QModelIndex()), entry->title());
+        docModel->setData(docModel->index(rows, 0, QModelIndex()),
+                          QPixmap(iconPath),
+                          Qt::DecorationRole);
+        docModel->setData(docModel->index(rows, 1, QModelIndex()), entry->documentUrl());
+        docModel->setData(docModel->index(rows, 2, QModelIndex()), entry->documentType());
     }
 }
 

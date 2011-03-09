@@ -19,32 +19,13 @@
   <property name="windowTitle">
    <string>Google Document List</string>
   </property>
-  <widget class="QListWidget" name="listWidget">
-   <property name="geometry">
-    <rect>
-     <x>-2</x>
-     <y>4</y>
-     <width>771</width>
-     <height>261</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="layoutMode">
-    <enum>QListView::Batched</enum>
-   </property>
-  </widget>
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
-     <x>610</x>
-     <y>270</y>
+     <x>552</x>
+     <y>276</y>
      <width>81</width>
-     <height>41</height>
+     <height>29</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -57,7 +38,30 @@
     <enum>Qt::RightToLeft</enum>
    </property>
    <property name="text">
-    <string>Ok</string>
+    <string>Download</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeButton">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>275</y>
+     <width>93</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </widget>
+  <widget class="QListView" name="listView">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>766</width>
+     <height>268</height>
+    </rect>
    </property>
   </widget>
  </widget>

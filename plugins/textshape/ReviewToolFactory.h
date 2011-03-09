@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
-#include "ReferencesToolFactory.h"
-#include "ReviewToolFactory.h"
-#include "TextShapeFactory.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#ifndef REVIEWTOOLFACTORY_H
+#define REVIEWTOOLFACTORY_H
 
-#include <kpluginfactory.h>
+#include <KoToolFactoryBase.h>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
-K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
 
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+class ReviewToolFactory : public KoToolFactoryBase
 {
-    KoToolRegistry::instance()->add(new TextToolFactory());
-    KoToolRegistry::instance()->add(new ReviewToolFactory());
-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
-    KoShapeRegistry::instance()->add(new TextShapeFactory());
-}
+public:
+    ReviewToolFactory();
+    ~ReviewToolFactory();
 
-#include <TextPlugin.moc>
+    KoToolBase * createTool(KoCanvasBase *canvas);
+
+    virtual bool canCreateTool(KoCanvasBase* canvas) const;
+};
+
+#endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
-#include "ReferencesToolFactory.h"
-#include "ReviewToolFactory.h"
-#include "TextShapeFactory.h"
+#include "SimpleCaptionsWidget.h"
+#include "TextTool.h"
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <KAction>
+#include <KDebug>
 
-#include <kpluginfactory.h>
+#include <QWidget>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
-K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
-
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+SimpleCaptionsWidget::SimpleCaptionsWidget(QWidget *parent)
+        : QWidget(parent),
+        m_blockSignals(false)
 {
-    KoToolRegistry::instance()->add(new TextToolFactory());
-    KoToolRegistry::instance()->add(new ReviewToolFactory());
-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
-    KoShapeRegistry::instance()->add(new TextShapeFactory());
+    widget.setupUi(this);
+//    widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
+
+//    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }
 
-#include <TextPlugin.moc>
+void SimpleCaptionsWidget::setStyleManager(KoStyleManager *sm)
+{
+    m_styleManager = sm;
+}
+
+#include <SimpleCaptionsWidget.moc>

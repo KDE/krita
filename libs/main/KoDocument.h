@@ -54,6 +54,7 @@ class KoOpenPane;
 class KUndoStack;
 class KoTextEditor;
 class KoProgressUpdater;
+class KoProgressProxy;
 
 class KoVersionInfo
 {
@@ -581,6 +582,12 @@ public:
      * accurate. If no active progress reporter is present, 0 is returned.
      **/
     KoProgressUpdater *progressUpdater() const;
+
+    /**
+     * Set a custom progress proxy to use to report loading
+     * progress to.
+     */
+    void setProgressProxy(KoProgressProxy *progressProxy);
 
     /**
      * Appends the shell to the list of shells which show this

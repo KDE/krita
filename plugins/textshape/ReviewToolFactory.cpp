@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ChangeTrackingToolFactory.h"
-#include "ChangeTrackingTool.h"
+#include "ReviewToolFactory.h"
+#include "ReviewTool.h"
 #include "TextShape.h"
 
 #include <KoCanvasBase.h>
@@ -27,26 +27,26 @@
 
 #include <klocale.h>
 
-ChangeTrackingToolFactory::ChangeTrackingToolFactory()
-        : KoToolFactoryBase("ChangeTrackingToolFactory_ID")
+ReviewToolFactory::ReviewToolFactory()
+        : KoToolFactoryBase("ReviewToolFactory_ID")
 {
-    setToolTip(i18n("Change Tracking tool"));
+    setToolTip(i18n("Review tool"));
     setToolType(dynamicToolType());
     setIcon("tool-changetracking");
     setPriority(3);
     setActivationShapeId(TextShape_SHAPEID);
 }
 
-ChangeTrackingToolFactory::~ChangeTrackingToolFactory()
+ReviewToolFactory::~ReviewToolFactory()
 {
 }
 
-KoToolBase * ChangeTrackingToolFactory::createTool(KoCanvasBase *canvas)
+KoToolBase *ReviewToolFactory::createTool(KoCanvasBase *canvas)
 {
-    return new ChangeTrackingTool(canvas);
+    return new ReviewTool(canvas);
 }
 
-bool ChangeTrackingToolFactory::canCreateTool(KoCanvasBase* canvas) const
+bool ReviewToolFactory::canCreateTool(KoCanvasBase* canvas) const
 {
     if (canvas->shapeController()->resourceManager() && canvas->shapeController()->resourceManager()->hasResource(KoText::ChangeTracker))
         return true;

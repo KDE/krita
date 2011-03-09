@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Pierre Ducroquet <pinaraf@pinaraf.info>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -38,6 +39,7 @@
 #include <KoImageCollection.h>
 #include <KoImageData.h>
 #include <KoOdfNumberDefinition.h>
+#include <KoGenStyle.h>
 
 class KoListLevelProperties::Private
 {
@@ -225,6 +227,20 @@ int KoListLevelProperties::characterStyleId() const
     return propertyInt(KoListStyle::CharacterStyleId);
 }
 
+void KoListLevelProperties::setMarkCharacterStyle(QSharedPointer< KoCharacterStyle > style)
+{
+    setProperty(KoListStyle::MarkCharacterStyleId, QVariant::fromValue< QSharedPointer<KoCharacterStyle> >(style));
+}
+
+QSharedPointer<KoCharacterStyle> KoListLevelProperties::markCharacterStyle() const
+{
+    const QVariant v = d->stylesPrivate.value(KoListStyle::MarkCharacterStyleId);
+    if (v.isNull()) {
+        return static_cast< QSharedPointer<KoCharacterStyle> >(0);
+    }
+    return v.value< QSharedPointer<KoCharacterStyle> >();
+}
+
 void KoListLevelProperties::setBulletCharacter(QChar character)
 {
     setProperty(KoListStyle::BulletCharacter, (int) character.unicode());
@@ -233,16 +249,6 @@ void KoListLevelProperties::setBulletCharacter(QChar character)
 QChar KoListLevelProperties::bulletCharacter() const
 {
     return propertyInt(KoListStyle::BulletCharacter);
-}
-
-void KoListLevelProperties::setBulletColor(QColor color)
-{
-    setProperty(KoListStyle::BulletColor, color);
-}
-
-QColor KoListLevelProperties::bulletColor() const
-{
-    return propertyColor(KoListStyle::BulletColor);
 }
 
 void KoListLevelProperties::setRelativeBulletSize(int percent)
@@ -384,6 +390,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                                  "display-levels", QString());
 
     const QString styleName = style.attributeNS(KoXmlNS::text, "style-name", QString());
+    KoCharacterStyle *cs = 0;
     if (!styleName.isEmpty()) {
 //         kDebug(32500) << "Should use the style =>" << styleName << "<=";
 
@@ -393,7 +400,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             textSharedData = dynamic_cast<KoTextSharedLoadingData *>(sharedData);
         }
         if (textSharedData) {
-            KoCharacterStyle *cs = textSharedData->characterStyle(styleName, context.useStylesAutoStyles());
+            cs = textSharedData->characterStyle(styleName, context.useStylesAutoStyles());
             if (!cs) {
                kWarning(32500) << "Missing KoCharacterStyle!";
             }
@@ -406,6 +413,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
     }
 
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
+
+        // special case bullets:
+        //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
+        //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
 
         //1.6: KoParagCounter::loadOasisListStyle
         QString bulletChar = style.attributeNS(KoXmlNS::text, "bullet-char", QString());
@@ -446,7 +457,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                 break;
             default:
                 QChar customBulletChar = bulletChar[0];
-                kDebug(32500) << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16);
+                kDebug(32500) << "Unhandled bullet code 0x" << QString::number((uint)customBulletChar.unicode(), 16) << bulletChar;
                 kDebug(32500) << "Should use the style =>" << style.attributeNS(KoXmlNS::text, "style-name", QString()) << "<=";
                 setStyle(KoListStyle::CustomCharItem);
                 /*
@@ -563,12 +574,12 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         qreal ti = textindent.isEmpty() ? 0 : KoUnit::parseValue(textindent);
                         qreal ml = marginleft.isEmpty() ? 0 : KoUnit::parseValue(marginleft);
                         setIndent(qMax<qreal>(0.0, ti + ml));
-                
+
                         setMinimumWidth(0);
                         setMinimumDistance(0);
-                        
+
                         //TODO support ODF 18.829 text:label-followed-by and 18.832 text:list-tab-stop-position
-                     }   
+                     }
                 }
             } else { // default is mode == "label-width-and-position"
                 // The text:space-before, text:min-label-width, text:minimum-label-distance and fo:text-align attributes
@@ -599,10 +610,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                     setHeight(KoUnit::parseValue(height));
             }
         } else if (localName == "text-properties") {
-            // TODO
-            QString color(property.attributeNS(KoXmlNS::fo, "color"));
-            if (!color.isEmpty())
-                setBulletColor(QColor(color));
+            QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
+            context.styleStack().save();
+            context.styleStack().push(style);
+            context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
+            charStyle->loadOdf(scontext);
+            context.styleStack().restore();
+            setMarkCharacterStyle(charStyle);
         }
     }
 }
@@ -690,13 +704,17 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
         writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
 
     writer->endElement(); // list-level-properties
-    
-    writer->startElement("style:text-properties", false);
 
-    if (d->stylesPrivate.contains(KoListStyle::BulletColor))
-        writer->addAttribute("fo:color",bulletColor().name());
-    
-    writer->endElement(); // text-properties
+    // text properties
+
+    if (d->stylesPrivate.contains(KoListStyle::MarkCharacterStyleId)) {
+        KoGenStyle liststyle(KoGenStyle::ListStyle);
+
+        QSharedPointer<KoCharacterStyle> cs = markCharacterStyle();
+        cs->saveOdf(liststyle);
+
+        liststyle.writeStyleProperties(writer, KoGenStyle::TextType);
+    }
 
 //   kDebug(32500) << "Key KoListStyle::ListItemPrefix :" << d->stylesPrivate.value(KoListStyle::ListItemPrefix);
 //   kDebug(32500) << "Key KoListStyle::ListItemSuffix :" << d->stylesPrivate.value(KoListStyle::ListItemSuffix);

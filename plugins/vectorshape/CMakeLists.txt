@@ -21,6 +21,7 @@ SET ( VectorShape_SRCS
     #VectorToolFactory.cpp
 
     libemf/EmfRecords.cpp
+    libemf/EmfObjects.cpp
     libemf/EmfHeader.cpp
     libemf/BitmapHeader.cpp
     libemf/Bitmap.cpp

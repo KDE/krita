@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,27 +16,37 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextPlugin.h"
-#include "TextToolFactory.h"
-#include "ReferencesToolFactory.h"
-#include "ReviewToolFactory.h"
-#include "TextShapeFactory.h"
+#ifndef SIMPLECITATIONINDEXWIDGET_H
+#define SIMPLECITATIONINDEXWIDGET_H
 
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <ui_SimpleCitationWidget.h>
+#include <KoListStyle.h>
 
-#include <kpluginfactory.h>
+#include <QWidget>
+#include <QTextBlock>
 
-K_PLUGIN_FACTORY(TextPluginFactory, registerPlugin<TextPlugin>();)
-K_EXPORT_PLUGIN(TextPluginFactory("TextShape"))
+class TextTool;
+class KoStyleManager;
 
-TextPlugin::TextPlugin(QObject * parent, const QVariantList &)
-        : QObject(parent)
+class SimpleCitationWidget : public QWidget
 {
-    KoToolRegistry::instance()->add(new TextToolFactory());
-    KoToolRegistry::instance()->add(new ReviewToolFactory());
-    KoToolRegistry::instance()->add(new ReferencesToolFactory());
-    KoShapeRegistry::instance()->add(new TextShapeFactory());
-}
+    Q_OBJECT
+public:
+    explicit SimpleCitationWidget(QWidget *parent = 0);
 
-#include <TextPlugin.moc>
+public slots:
+    void setStyleManager(KoStyleManager *sm);
+
+signals:
+    void doneWithFocus();
+    
+private:
+    Ui::SimpleCitationWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    bool m_comboboxHasBidiItems;
+    QTextBlock m_currentBlock;
+    TextTool *m_tool;
+};
+
+#endif

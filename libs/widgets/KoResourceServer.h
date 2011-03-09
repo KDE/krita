@@ -92,9 +92,9 @@ protected:
 template <class T> class KoResourceServer : public KoResourceServerBase {
 
 public:
-    KoResourceServer(const QString& type, const QString& extensions)
+    KoResourceServer(const QString& type, const QString& extensions, bool deleteResource = true)
         : KoResourceServerBase(type, extensions)
-
+        , m_deleteResource(deleteResource)
         {
         }
 
@@ -182,8 +182,7 @@ public:
     }
     
     /// Remove a resource from Resource Server but not from a file
-    /// if deleteResource is true. the resource will be deleted by resource server
-    bool removeResourceFromServer(T* resource, bool deleteResource = true){
+    bool removeResourceFromServer(T* resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
@@ -193,7 +192,7 @@ public:
         m_resources.removeAt(m_resources.indexOf(resource));
         notifyRemovingResource(resource);
         
-        if (deleteResource) { 
+        if (m_deleteResource) { 
             delete resource;
         }
         
@@ -226,7 +225,9 @@ public:
             m_resourcesByFilename.remove(resource->shortFilename());
             m_resources.removeAt(m_resources.indexOf(resource));
             notifyRemovingResource(resource);
-            delete resource;
+            if (m_deleteResource) { 
+                delete resource;
+            }
         } else {
             // TODO: save blacklist to config file and load it again on next start
             m_resourceBlackList << resource;
@@ -390,6 +391,7 @@ private:
     QList<T*> m_resourceBlackList;
     QList<T*> m_resources; ///< list of resources in order of addition
     QList<KoResourceServerObserver<T>*> m_observers;
+    bool m_deleteResource;
 
 };
 

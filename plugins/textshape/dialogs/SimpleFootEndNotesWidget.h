@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2010 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,22 +16,37 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef SIMPLEFOOTENDNOTESWIDGET_H
+#define SIMPLEFOOTENDNOTESWIDGET_H
 
-#ifndef CHANGETRACKINGTOOLFACTORY_H
-#define CHANGETRACKINGTOOLFACTORY_H
+#include <ui_SimpleFootEndNotesWidget.h>
+#include <KoListStyle.h>
 
-#include <KoToolFactoryBase.h>
+#include <QWidget>
+#include <QTextBlock>
 
+class TextTool;
+class KoStyleManager;
 
-class ChangeTrackingToolFactory : public KoToolFactoryBase
+class SimpleFootEndNotesWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    ChangeTrackingToolFactory();
-    ~ChangeTrackingToolFactory();
+    explicit SimpleFootEndNotesWidget(QWidget *parent = 0);
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+public slots:
+    void setStyleManager(KoStyleManager *sm);
 
-    virtual bool canCreateTool(KoCanvasBase* canvas) const;
+signals:
+    void doneWithFocus();
+    
+private:
+    Ui::SimpleFootEndNotesWidget widget;
+    KoStyleManager *m_styleManager;
+    bool m_blockSignals;
+    bool m_comboboxHasBidiItems;
+    QTextBlock m_currentBlock;
+    TextTool *m_tool;
 };
 
 #endif

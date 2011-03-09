@@ -145,7 +145,29 @@ QTextDocument* KoDeleteChangeMarker::document() const
 
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
-    Q_UNUSED(context);
+    KoGenChange change;
+    if (d->changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+        change.setChangeFormat(KoGenChange::ODF_1_2);
+    } else {
+        change.setChangeFormat(KoGenChange::DELTAXML);
+    }
+    
+    QString changeName;
+    KoTextSharedSavingData *sharedData = 0;
+    if (context.sharedData(KOTEXT_SHARED_SAVING_ID)) {
+        sharedData = dynamic_cast<KoTextSharedSavingData*>(context.sharedData(KOTEXT_SHARED_SAVING_ID));
+        if (!sharedData) {
+            kWarning(32500) << "There is no KoTextSharedSavingData in the context. This should not be the case";
+            return;
+        }   
+    }   
+    d->changeTracker->saveInlineChange(d->id, change);
+    change.addChildElement("deleteChangeXml", d->deleteChangeXml);
+    changeName = sharedData->genChanges().insert(change);
+
+    context.xmlWriter().startElement("text:change", false);
+    context.xmlWriter().addAttribute("text:change-id", changeName);
+    context.xmlWriter().endElement();
 }
 
 void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)

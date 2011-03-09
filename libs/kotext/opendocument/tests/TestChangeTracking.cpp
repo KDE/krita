@@ -318,6 +318,7 @@ void TestChangeTracking::testChangeTracking_data()
     
     //ODF 1.2 Change Tracking tests     
     QTest::newRow("Simple Text Insertion")  << "ChangeTracking/odf12/simple-text-addition/simple-text-addition-tracked.odt" << "ODF12";
+    QTest::newRow("Simple Text Deletion")  << "ChangeTracking/odf12/simple-text-deletion/simple-text-deletion-tracked.odt" << "ODF12";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

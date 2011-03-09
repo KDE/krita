@@ -274,6 +274,11 @@ void KoTextWriter::Private::saveChange(int changeId)
     if(changeTransTable.value(changeId).length())
         return;
 
+    if ((changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) &&
+         (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2)) {
+        return;
+    }
+
     KoGenChange change;
     if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
         change.setChangeFormat(KoGenChange::ODF_1_2);

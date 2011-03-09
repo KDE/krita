@@ -275,19 +275,81 @@ void InsertDeleteChangesCommand::insertDeleteChanges()
     }
 }
 
+class RemoveDeleteChangesCommand:public QUndoCommand
+{
+    public:
+        RemoveDeleteChangesCommand(QTextDocument *document, QUndoCommand *parent=0);
+        void redo();
+
+    private:
+        QTextDocument *m_document;
+        void removeDeleteChanges();
+};
+
+RemoveDeleteChangesCommand::RemoveDeleteChangesCommand(QTextDocument *document,QUndoCommand *parent):QUndoCommand("Insert Delete Changes",parent),m_document(document)
+{
+}
+
+void RemoveDeleteChangesCommand::redo()
+{
+    removeDeleteChanges();
+}
+
+void RemoveDeleteChangesCommand::removeDeleteChanges()
+{
+    int numDeletedChars = 0;
+    QVector<KoChangeTrackerElement *> elementVector;
+    KoTextDocument(m_document).changeTracker()->getDeletedChanges(elementVector);
+    qSort(elementVector.begin(), elementVector.end(), isPositionLessThan);
+
+    foreach(KoChangeTrackerElement *element, elementVector) {
+        if (element->isValid() && element->getDeleteChangeMarker()) {
+            QTextCursor caret(element->getDeleteChangeMarker()->document());
+            QTextCharFormat f;
+            int deletePosition = element->getDeleteChangeMarker()->position() + 1 - numDeletedChars;
+            caret.setPosition(deletePosition);
+            int deletedLength = KoChangeTracker::fragmentLength(element->getDeleteData());
+            caret.setPosition(deletePosition + deletedLength, QTextCursor::KeepAnchor);
+            caret.removeSelectedText();
+            numDeletedChars += KoChangeTracker::fragmentLength(element->getDeleteData());
+        }
+    }
+}
+
 void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *rdfData, int from, int to) const
 {
     Q_D(const KoTextShapeData);
     InsertDeleteChangesCommand *insertCommand = new InsertDeleteChangesCommand(document());
-    if (!KoTextDocument(document()).changeTracker()->displayChanges()) {
-        KoTextDocument(document()).textEditor()->addCommand(insertCommand, false);
+    RemoveDeleteChangesCommand *removeCommand = new RemoveDeleteChangesCommand(document());
+
+    KoChangeTracker *changeTracker = KoTextDocument(document()).changeTracker();
+    KoChangeTracker::ChangeSaveFormat changeSaveFormat;
+    if (changeTracker) {
+        changeSaveFormat = changeTracker->saveFormat();
+        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
+            KoTextDocument(document()).textEditor()->addCommand(insertCommand, false);
+        }
+
+        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
+            KoTextDocument(document()).textEditor()->addCommand(removeCommand, false);
+        }
     }
 
     KoTextWriter writer(context, rdfData);
     writer.write(d->document, from, to);
 
-    insertCommand->undo();
-    delete insertCommand;
+    if (changeTracker) {
+        changeSaveFormat = changeTracker->saveFormat();
+        if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {
+            insertCommand->undo();
+            delete insertCommand;
+        }
+
+        if (changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::ODF_1_2)) {
+            removeCommand->undo();
+            delete removeCommand;
+        }
+    }
 }
 
 void KoTextShapeData::relayoutFor(KoTextPage &textPage)

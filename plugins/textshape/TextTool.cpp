@@ -757,12 +757,12 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
         if (plugin)
             plugin->setCurrentCursorPosition(m_textEditor.data()->document(), m_textEditor.data()->position());
+
+        event->ignore();
     }
 
     if (event->button() ==  Qt::MidButton) // Paste
         paste();
-    else
-        event->ignore();
 }
 
 const QTextCursor TextTool::cursor()

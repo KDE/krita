@@ -323,27 +323,6 @@ void KoTableStyle::setMasterPageName(const QString &name)
     setProperty(MasterPageName, name);
 }
 
-void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
-{
-    if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
-        d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
-
-    if (d->name.isEmpty()) // if no style:display-name is given us the style:name
-        d->name = element->attributeNS(KoXmlNS::style, "name", QString());
-
-    QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
-    if (! masterPage.isEmpty()) {
-        setMasterPageName(masterPage);
-    }
-    context.styleStack().save();
-    QString family = element->attributeNS(KoXmlNS::style, "family", "table");
-    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
-
-    context.styleStack().setTypeProperties("table");   // load all style attributes from "style:table-properties"
-    loadOdfProperties(context.styleStack());   // load the KoTableStyle from the stylestack
-    context.styleStack().restore();
-}
-
 Qt::Alignment KoTableStyle::alignmentFromString(const QString &align)
 {
     Qt::Alignment alignment = Qt::AlignLeft;
@@ -375,6 +354,27 @@ QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 bool KoTableStyle::mayBreakBetweenRows() const
 {
     return propertyBoolean(KoTableStyle::MayBreakBetweenRows);
+}
+
+void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
+{
+    if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
+        d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
+
+    if (d->name.isEmpty()) // if no style:display-name is given us the style:name
+        d->name = element->attributeNS(KoXmlNS::style, "name", QString());
+
+    QString masterPage = element->attributeNS(KoXmlNS::style, "master-page-name", QString());
+    if (! masterPage.isEmpty()) {
+        setMasterPageName(masterPage);
+    }
+    context.styleStack().save();
+    QString family = element->attributeNS(KoXmlNS::style, "family", "table");
+    context.addStyles(element, family.toLocal8Bit().constData());   // Load all parents - only because we don't support inheritance.
+
+    context.styleStack().setTypeProperties("table");   // load all style attributes from "style:table-properties"
+    loadOdfProperties(context.styleStack());   // load the KoTableStyle from the stylestack
+    context.styleStack().restore();
 }
 
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
@@ -453,7 +453,6 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     
     // border-model 
     if (styleStack.hasProperty(KoXmlNS::table, "border-model")) {
-        // OASIS spec says it's "auto"/"always", not a boolean.
         QString val = styleStack.property(KoXmlNS::table, "border-model");
         setCollapsingBorderModel(val =="collapsing");
     }
@@ -528,6 +527,17 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockLeftMargin) {
+            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockRightMargin) {
+            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockTopMargin) {
+            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::TableType);
+        } else if (key == QTextFormat::BlockBottomMargin) {
+            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::TableType);
+        } else if (key == KoTableStyle::CollapsingBorders) {
+            if (collapsingBorderModel())
+                style.addProperty("table:border-model", "collapsing", KoGenStyle::TableType);
         }
     }
 
@@ -545,19 +555,8 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                     direction = "tb";
                 if (!direction.isEmpty())
                     style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
-            }
-        } else if (key == KoTableStyle::CollapsingBorders) {
-            if (collapsingBorderModel())
-                style.addProperty("style:border-bodel", "collapsing", KoGenStyle::ParagraphType);
-    // Margin
-        } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockRightMargin) {
-            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockTopMargin) {
-            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
-        } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);*/
+            }*/
+    
 }
 
 #include <KoTableStyle.moc>

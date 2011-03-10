@@ -527,13 +527,13 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
-        } else if (key == QTextFormat::BlockLeftMargin) {
+        } else if (key == QTextFormat::FrameLeftMargin) {
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::BlockRightMargin) {
+        } else if (key == QTextFormat::FrameRightMargin) {
             style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::BlockTopMargin) {
+        } else if (key == QTextFormat::FrameTopMargin) {
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::BlockBottomMargin) {
+        } else if (key == QTextFormat::FrameBottomMargin) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::TableType);
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())

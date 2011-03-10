@@ -1128,7 +1128,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         else if (hit(item, KStandardShortcut::End)) {
             // Goto end of the document. Default: Ctrl-End
             if (m_textShapeData) {
-                QTextBlock last = m_textShapeData->document()->end().previous();
+                QTextBlock last = m_textShapeData->document()->lastBlock();
                 destinationPosition = last.position() + last.length() - 1;
             }
         } else if (hit(item, KStandardShortcut::Prior)) { // page up
@@ -1985,7 +1985,7 @@ void TextTool::selectAll()
     if (!textEditor || !m_textShapeData)
         return;
     const int selectionLength = qAbs(textEditor->position() - textEditor->anchor());
-    QTextBlock lastBlock = m_textShapeData->document()->end().previous();
+    QTextBlock lastBlock = m_textShapeData->document()->lastBlock();
     textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();

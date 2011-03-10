@@ -344,12 +344,12 @@ QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
         internalName = QString(QUrl::toPercentEncoding(originalTableStyle->name(), "", " ")).replace('%', '_');
     }
     KoTableStyle tableStyle(table.format());
-    if ((originalTableStyle) && (*originalTableStyle == tableStyle)) { // This is the real unmodified character style
+    if ((originalTableStyle) && (*originalTableStyle == tableStyle)) { // This is the real unmodified table style
         KoGenStyle style(KoGenStyle::TableStyle, "table");
         originalTableStyle->saveOdf(style);
         generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
     } else { // There are manual changes... We'll have to store them then
-        KoGenStyle style(KoGenStyle::TableStyle, "table", internalName);
+        KoGenStyle style(KoGenStyle::TableAutoStyle, "table", internalName);
         if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
             style.setAutoStyleInStylesDotXml(true);
         if (originalTableStyle)

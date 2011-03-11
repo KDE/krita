@@ -36,60 +36,6 @@ namespace Libemf
 {
 
     /**
-       MapModes
-
-       See [MS-EMF] Section 2.1.21
-    */
-    typedef enum {
-        MM_TEXT        = 0x01,
-        MM_LOMETRIC    = 0x02,
-        MM_HIMETRIC    = 0x03,
-        MM_LOENGLISH   = 0x04,
-        MM_HIENGLISH   = 0x05,
-        MM_TWIPS       = 0x06,
-        MM_ISOTROPIC   = 0x07,
-        MM_ANISOTROPIC = 0x08
-    } MapMode;
-
-    /**
-       World Transform modification modes
-
-       See [MS-EMF] Section 2.1.24
-    */
-    enum ModifyWorldTransformMode {
-        MWT_IDENTITY            = 0x01,
-        MWT_LEFTMULTIPLY        = 0x02,
-        MWT_RIGHTMULTIPLY       = 0x03,
-        MWT_SET                 = 0x04
-    };
-
-    /**
-       Pen Styles
-
-       See [MS-EMF] Section 2.1.25
-    */
-    enum PenStyle {
-	PS_COSMETIC      = 0x00000000,
-	PS_ENDCAP_ROUND  = 0x00000000,
-	PS_JOIN_ROUND    = 0x00000000,
-	PS_SOLID         = 0x00000000,
-	PS_DASH          = 0x00000001,
-	PS_DOT           = 0x00000002,
-	PS_DASHDOT       = 0x00000003,
-	PS_DASHDOTDOT    = 0x00000004,
-	PS_NULL          = 0x00000005,
-	PS_INSIDEFRAME   = 0x00000006,
-	PS_USERSTYLE     = 0x00000007,
-	PS_ALTERNATE     = 0x00000008,
-	PS_ENDCAP_SQUARE = 0x00000100,
-	PS_ENDCAP_FLAT   = 0x00000200,
-	PS_JOIN_BEVEL    = 0x00001000,
-	PS_JOIN_MITER    = 0x00002000,
-	PS_GEOMETRIC     = 0x00010000
-    };
-
-
-    /**
        Image bit/byte organisation
 
        See [MS-WMF] Section 2.1.1.3
@@ -187,9 +133,9 @@ namespace Libemf
     /**
        Parameters for text output.
        
-       See [MS-EMF] Section 2.1.1.11
+       See [MS-EMF] Section 2.1.11
     */
-    enum TextOutputOptions {
+    enum TextOutOptions {
         ETO_OPAQUE            = 0x000002,
         ETO_CLIPPED           = 0x000004,
         ETO_GLYPH_INDEX       = 0x000010,
@@ -213,6 +159,59 @@ namespace Libemf
         GM_ADVANCED   = 0x02
     };
     
+    /**
+       MapModes
+
+       See [MS-EMF] Section 2.1.21
+    */
+    typedef enum {
+        MM_TEXT        = 0x01,
+        MM_LOMETRIC    = 0x02,
+        MM_HIMETRIC    = 0x03,
+        MM_LOENGLISH   = 0x04,
+        MM_HIENGLISH   = 0x05,
+        MM_TWIPS       = 0x06,
+        MM_ISOTROPIC   = 0x07,
+        MM_ANISOTROPIC = 0x08
+    } MapMode;
+
+    /**
+       World Transform modification modes
+
+       See [MS-EMF] Section 2.1.24
+    */
+    enum ModifyWorldTransformMode {
+        MWT_IDENTITY            = 0x01,
+        MWT_LEFTMULTIPLY        = 0x02,
+        MWT_RIGHTMULTIPLY       = 0x03,
+        MWT_SET                 = 0x04
+    };
+
+    /**
+       Pen Styles
+
+       See [MS-EMF] Section 2.1.25
+    */
+    enum PenStyle {
+	PS_COSMETIC      = 0x00000000,
+	PS_ENDCAP_ROUND  = 0x00000000,
+	PS_JOIN_ROUND    = 0x00000000,
+	PS_SOLID         = 0x00000000,
+	PS_DASH          = 0x00000001,
+	PS_DOT           = 0x00000002,
+	PS_DASHDOT       = 0x00000003,
+	PS_DASHDOTDOT    = 0x00000004,
+	PS_NULL          = 0x00000005,
+	PS_INSIDEFRAME   = 0x00000006,
+	PS_USERSTYLE     = 0x00000007,
+	PS_ALTERNATE     = 0x00000008,
+	PS_ENDCAP_SQUARE = 0x00000100,
+	PS_ENDCAP_FLAT   = 0x00000200,
+	PS_JOIN_BEVEL    = 0x00001000,
+	PS_JOIN_MITER    = 0x00002000,
+	PS_GEOMETRIC     = 0x00010000
+    };
+
     /**
        Stock Objects
 

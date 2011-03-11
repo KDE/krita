@@ -961,7 +961,7 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
     kDebug(31000) << "Ref point: " << textObject.referencePoint()
                   << "options: " << hex << textObject.options() << dec
                   << "rectangle: " << textObject.rectangle()
-                  << "text: " << text;
+                  << "text: " << textObject.textString();
 #endif
 
     const QString &text = textObject.textString();

@@ -54,6 +54,8 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+#include <KoTableColumnAndRowStyleManager.h>
+#include <KoTableColumnStyle.h>
 
 #include <opendocument/KoTextSharedSavingData.h>
 #include <changetracker/KoChangeTracker.h>
@@ -585,11 +587,24 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
+    KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
     writer->startElement("table:table");
     writer->addAttribute("table:style-name", saveTableStyle(*table));
     for (int c = 0 ; c < table->columns() ; c++) {
+        KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
+        int repetition = 0;
+        for (; repetition < (table->columns() - c) ; repetition++)
+        {
+            if (columnStyle != tcarManager.columnStyle(c + repetition + 1))
+                break;
+        }
         writer->startElement("table:table-column");
+        if (repetition > 0)
+        {
+            writer->addAttribute("table:number-columns-repeated", repetition + 1);
+        }
         writer->endElement(); // table:table-column
+        c += repetition;
     }
     for (int r = 0 ; r < table->rows() ; r++) {
         writer->startElement("table:table-row");

@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -132,6 +133,9 @@ public:
 
     /// Compare the properties of this style with the other.
     bool operator==(const KoTableColumnStyle &other) const;
+    
+    /// Compare the properties of this style with the other.
+    bool operator!=(const KoTableColumnStyle &other) const;
 
     /**
      * Load the style form the element

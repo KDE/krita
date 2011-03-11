@@ -92,6 +92,7 @@ public:
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QString saveTableStyle(const QTextTable &table);
+    QString saveTableColumnStyle(const KoTableColumnStyle &columnStyle, int columnNumber, const QString &tableStyleName);
     
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
@@ -364,6 +365,24 @@ QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
     return generatedName;
 }
 
+QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& tableColumnStyle, int columnNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enouch for everyone
+    QString columnName = QChar('A' + int(columnNumber % 26));
+    if (columnNumber > 25)
+        columnName.prepend(QChar('A' + int(columnNumber/26)));
+    QString generatedName = tableStyleName + "." + columnName;
+    
+    KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    tableColumnStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName, KoGenStyles::DontAddNumberToName);
+    return generatedName;
+}
+
 // A convinience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
@@ -589,7 +608,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 {
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
     writer->startElement("table:table");
-    writer->addAttribute("table:style-name", saveTableStyle(*table));
+    QString tableStyleName = saveTableStyle(*table);
+    writer->addAttribute("table:style-name", tableStyleName);
     for (int c = 0 ; c < table->columns() ; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;
@@ -599,6 +619,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 break;
         }
         writer->startElement("table:table-column");
+        QString columnStyleName = saveTableColumnStyle(columnStyle, c, tableStyleName);
         if (repetition > 0)
         {
             writer->addAttribute("table:number-columns-repeated", repetition + 1);

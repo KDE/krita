@@ -173,7 +173,7 @@ void KoTableColumnStyle::setBreakBefore(bool on)
     setProperty(BreakBefore, on);
 }
 
-bool KoTableColumnStyle::breakBefore()
+bool KoTableColumnStyle::breakBefore() const
 {
     return propertyBoolean(BreakBefore);
 }
@@ -183,7 +183,7 @@ void KoTableColumnStyle::setBreakAfter(bool on)
     setProperty(BreakAfter, on);
 }
 
-bool KoTableColumnStyle::breakAfter()
+bool KoTableColumnStyle::breakAfter() const
 {
     return propertyBoolean(BreakAfter);
 }
@@ -284,18 +284,22 @@ void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
-void KoTableColumnStyle::saveOdf(KoGenStyle &style)
+void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
-    Q_UNUSED(style);
-/*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
             if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
+                style.addProperty("fo:break-before", "page", KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {
             if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
-        } 
-*/
+                style.addProperty("fo:break-after", "page", KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::ColumnWidth) {
+            //TODO
+            //style.addProperty("style:column-width", 42, KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::RelativeColumnWidth) {
+            //TODO
+            //style.addProperty("style:rel-column-width", 42, KoGenStyle::TableColumnType);
+        }
+    }
 }

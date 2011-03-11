@@ -90,13 +90,13 @@ public:
     void setBreakBefore(bool on);
 
     /// Get break before. See §7.19.2 of [XSL].
-    bool breakBefore();
+    bool breakBefore() const;
 
     /// Set break after. See §7.19.1 of [XSL].
     void setBreakAfter(bool on);
 
     /// Get break after. See §7.19.1 of [XSL].
-    bool breakAfter();
+    bool breakAfter() const;
 
     /// Set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableColumnStyle *parent);
@@ -145,7 +145,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style) const;
 
     /**
      * Returns true if this table column style has the property set.

@@ -51,6 +51,12 @@ KisBrushSP KisGbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
     }
     brush->setSpacing(spacing);
 
+    double angle = brushDefinition.attribute("angle", "0.0").toDouble();
+    brush->setAngle(angle);
+
+    double scale = brushDefinition.attribute("scale", "1.0").toDouble();
+    brush->setScale(scale);
+
     return brush;
 
 }

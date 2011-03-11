@@ -484,7 +484,7 @@ void KisGbrBrush::toXML(QDomDocument& d, QDomElement& e) const
     Q_UNUSED(d);
     e.setAttribute("type", "gbr_brush");
     e.setAttribute("filename", shortFilename());
-    e.setAttribute("spacing", spacing());
+    e.setAttribute("spacing", QString::number(spacing()));
     KisBrush::toXML(d, e);
 }
 

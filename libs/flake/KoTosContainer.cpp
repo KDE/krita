@@ -241,6 +241,7 @@ KoShape *KoTosContainer::textShape() const
 
 void KoTosContainer::shapeChanged(ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(shape);
     Q_D(KoTosContainer);
     if (d->model == 0) {
         return;

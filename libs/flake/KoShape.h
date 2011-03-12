@@ -639,7 +639,7 @@ public:
     KoShapeShadow *shadow() const;
 
     /// Sets a new clip path, removing the old one
-    void setClipPath( KoClipPath * clipPath );
+    void setClipPath(KoClipPath *clipPath);
 
     /// Returns the currently set clip path or 0 if there is no clip path set
     KoClipPath * clipPath() const;

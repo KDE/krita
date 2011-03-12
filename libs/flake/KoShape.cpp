@@ -132,8 +132,7 @@ KoShapePrivate::~KoShapePrivate()
         delete fill;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
-    if (clipPath)
-        delete clipPath;
+    delete clipPath;
     qDeleteAll(eventActions);
 }
 
@@ -1155,7 +1154,7 @@ KoShapeShadow *KoShape::shadow() const
     return d->shadow;
 }
 
-void KoShape::setClipPath( KoClipPath * clipPath )
+void KoShape::setClipPath(KoClipPath *clipPath)
 {
     Q_D(KoShape);
     d->clipPath = clipPath;

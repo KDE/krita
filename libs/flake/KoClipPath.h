@@ -38,17 +38,17 @@ class FLAKE_EXPORT KoClipData : public QSharedData
 {
 public:
     /// Creates clip path data from a single path shape, takes ownership of the path shape
-    KoClipData(KoPathShape * clipPathShape);
-    
+    KoClipData(KoPathShape *clipPathShape);
+
     /// Creates clip path data from multiple path shapes, takes ownership of the path shapes
-    KoClipData(const QList<KoPathShape*> & clipPathShapes);
-    
+    KoClipData(const QList<KoPathShape*> &clipPathShapes);
+
     /// Destroys the clip path data
     ~KoClipData();
 
     /// Returns the clip path shapes
     QList<KoPathShape*> clipPathShapes() const;
-    
+
     /// Gives up ownership of clip path shapes
     void removeClipShapesOwnership();
 
@@ -66,7 +66,7 @@ public:
      * @param shapeToClip the shape to clip
      * @param clipData shared clipping data containing the clip paths
      */
-    KoClipPath(KoShape *shapeToClip, KoClipData * clipData);
+    KoClipPath(KoShape *shapeToClip, KoClipData *clipData);
 
     ~KoClipPath();
 
@@ -78,21 +78,21 @@ public:
 
     /// Returns the current clip path with coordinates in percent of the clipped shape size
     QPainterPath path() const;
-    
+
     /// Returns the current clip path scaled to match the specified shape size
     QPainterPath pathForSize(const QSizeF &size) const;
-    
-    /// Returns the clip path shapes 
+
+    /// Returns the clip path shapes
     QList<KoPathShape*> clipPathShapes() const;
-    
-    /** 
-     * Returns the transformation used to transform the clip data path shapes 
+
+    /**
+     * Returns the transformation used to transform the clip data path shapes
      * to shape coordinates of the clipped shape
      */
     QTransform clipDataTransformation() const;
 
     /// Applies the clipping to the given painter
-    static void applyClipping(KoShape *shape, QPainter & painter, const KoViewConverter &converter);
+    static void applyClipping(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
 
 private:
     class Private;

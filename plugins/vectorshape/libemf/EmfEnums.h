@@ -261,6 +261,17 @@ namespace Libemf
         RGN_DIFF = 0x04,
         RGN_COPY = 0x05   ///< Equivalent to Qt::ReplaceClip
     };
+
+    /**
+       Comment type as defined for the EMR_COMMENT record.
+
+       See [MS-EMF] section 2.3.3
+     */
+    enum CommentType {
+        EMR_COMMENT_EMFSPOOL = 0x00000000,
+        EMR_COMMENT_EMFPLUS  = 0x2B464D45,
+        EMR_COMMENT_PUBLIC   = 0x43494447
+    };
 }
 
 

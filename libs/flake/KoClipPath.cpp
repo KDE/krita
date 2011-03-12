@@ -98,14 +98,14 @@ public:
     {
     }
 
-    void compileClipPath(KoShape *shapeToClip)
+    void compileClipPath(KoShape *clippedShape)
     {
         QList<KoPathShape*> clipShapes = clipData->clipPathShapes();
         if (!clipShapes.count())
             return;
 
-        initialShapeSize = shapeToClip->outline().boundingRect().size();
-        initialTransformToShape = shapeToClip->absoluteTransformation(0).inverted();
+        initialShapeSize = clippedShape->outline().boundingRect().size();
+        initialTransformToShape = clippedShape->absoluteTransformation(0).inverted();
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
 
@@ -127,10 +127,10 @@ public:
     QSizeF initialShapeSize; ///< initial size of clipped shape
 };
 
-KoClipPath::KoClipPath(KoShape *shapeToClip, KoClipData *clipData)
+KoClipPath::KoClipPath(KoShape *clippedShape, KoClipData *clipData)
         : d( new Private(clipData) )
 {
-    d->compileClipPath(shapeToClip);
+    d->compileClipPath(clippedShape);
 }
 
 KoClipPath::~KoClipPath()
@@ -148,10 +148,10 @@ Qt::FillRule KoClipPath::clipRule() const
     return d->clipPath.fillRule();
 }
 
-void KoClipPath::applyClipping(KoShape *shapeToClip, QPainter &painter, const KoViewConverter &converter)
+void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter)
 {
     QPainterPath clipPath;
-    KoShape *shape = shapeToClip;
+    KoShape *shape = clippedShape;
     while (shape) {
         if (shape->clipPath()) {
             QTransform m = scaleFromPercent(shape->outline().boundingRect().size()) * shape->absoluteTransformation(0);
@@ -187,7 +187,22 @@ QList<KoPathShape*> KoClipPath::clipPathShapes() const
     return d->clipData->clipPathShapes();
 }
 
-QTransform KoClipPath::clipDataTransformation() const
+QTransform KoClipPath::clipDataTransformation(KoShape *clippedShape) const
 {
-    return d->initialTransformToShape;
+    if (!clippedShape)
+        return d->initialTransformToShape;
+
+    // the current transformation of the clipped shape
+    QTransform currentShapeTransform = clippedShape->absoluteTransformation(0);
+
+    // calculate the transformation which represents any resizing of the clipped shape
+    const QSizeF currentShapeSize = clippedShape->outline().boundingRect().size();
+    const qreal sx = currentShapeSize.width() / d->initialShapeSize.width();
+    const qreal sy = currentShapeSize.height() / d->initialShapeSize.height();
+    QTransform scaleTransform = QTransform().scale(sx, sy);
+
+    // 1. transform to initial clipped shape coordinates
+    // 2. apply resizing transfromation
+    // 3. convert to current clipped shape document coordinates
+    return d->initialTransformToShape * scaleTransform * currentShapeTransform;
 }

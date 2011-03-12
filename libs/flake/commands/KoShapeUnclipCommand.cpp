@@ -73,14 +73,10 @@ public:
             paste(KoOdf::Text, drag.mimeData());
 
             // apply transformations
-            KoShapeContainer *parent = shape->parent();
-            QTransform shapeTransform = shape->absoluteTransformation(0);
-            QTransform parentTransform = parent ? parent->absoluteTransformation(0).inverted() : QTransform();
             for (int i = pathShapeCount; i < clipPathShapes.count(); ++i) {
                 KoPathShape *pathShape = clipPathShapes[i];
-                // the original transformation from path shape to clipped shape
-                QTransform deltaTransform = pathShape->absoluteTransformation(0) * clipPath->clipDataTransformation();
-                pathShape->setTransformation(parentTransform*shapeTransform*deltaTransform);
+                // apply transformation so that it matches the current clipped shapes clip path
+                pathShape->applyAbsoluteTransformation(clipPath->clipDataTransformation(shape));
                 pathShape->setZIndex(shape->zIndex()+1);
                 clipPathParents.append(shape->parent());
             }

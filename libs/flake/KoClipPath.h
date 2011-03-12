@@ -63,10 +63,10 @@ class FLAKE_EXPORT KoClipPath
 public:
     /**
      * Create a new shape clipping using the given clip data
-     * @param shapeToClip the shape to clip
+     * @param clippedShape the shape to clip
      * @param clipData shared clipping data containing the clip paths
      */
-    KoClipPath(KoShape *shapeToClip, KoClipData *clipData);
+    KoClipPath(KoShape *clippedShape, KoClipData *clipData);
 
     ~KoClipPath();
 
@@ -86,13 +86,16 @@ public:
     QList<KoPathShape*> clipPathShapes() const;
 
     /**
-     * Returns the transformation used to transform the clip data path shapes
-     * to shape coordinates of the clipped shape
+     * Returns the transformation from the clip data path shapes to the
+     * current document coordinates of the specified clipped shape.
+     * If the specified clipped shape is null, the transformation 
+     * from clip data path shapes to shape coordinates of the clipped shape 
+     * at the time of creating this clip path is being returned.
      */
-    QTransform clipDataTransformation() const;
+    QTransform clipDataTransformation(KoShape *clippedShape) const;
 
     /// Applies the clipping to the given painter
-    static void applyClipping(KoShape *shape, QPainter &painter, const KoViewConverter &converter);
+    static void applyClipping(KoShape *clippedShape, QPainter &painter, const KoViewConverter &converter);
 
 private:
     class Private;

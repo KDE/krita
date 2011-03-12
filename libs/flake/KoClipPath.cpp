@@ -104,7 +104,7 @@ public:
         if (!clipShapes.count())
             return;
 
-        initialShapeSize = shapeToClip->outlineRect().size();
+        initialShapeSize = shapeToClip->outline().boundingRect().size();
         initialTransformToShape = shapeToClip->absoluteTransformation(0).inverted();
 
         QTransform transformToShape = initialTransformToShape * scaleToPercent(initialShapeSize);
@@ -154,7 +154,7 @@ void KoClipPath::applyClipping(KoShape *shapeToClip, QPainter &painter, const Ko
     KoShape *shape = shapeToClip;
     while (shape) {
         if (shape->clipPath()) {
-            QTransform m = scaleFromPercent(shape->outlineRect().size()) * shape->absoluteTransformation(0);
+            QTransform m = scaleFromPercent(shape->outline().boundingRect().size()) * shape->absoluteTransformation(0);
             if (clipPath.isEmpty())
                 clipPath = m.map(shape->clipPath()->path());
             else

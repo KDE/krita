@@ -29,7 +29,7 @@
 class KoShapeClipCommand::Private
 {
 public:
-    Private(KoShapeControllerBase * c)
+    Private(KoShapeControllerBase *c)
             : controller(c), executed(false) {
     }
 
@@ -48,29 +48,29 @@ public:
     QList<KoClipPath*> newClipPaths;
     QList<KoShapeContainer*> oldParents;
     QExplicitlySharedDataPointer<KoClipData> clipData;
-    KoShapeControllerBase * controller;
+    KoShapeControllerBase *controller;
     bool executed;
 };
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase * controller, const QList<KoShape*> & shapes, const QList<KoPathShape*> clipPathShapes, QUndoCommand * parent)
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent)
         : QUndoCommand(parent), d(new Private(controller))
 {
     d->shapesToClip = shapes;
     d->clipPathShapes = clipPathShapes;
     d->clipData = new KoClipData(clipPathShapes);
-    foreach(KoShape * shape, d->shapesToClip) {
+    foreach(KoShape *shape, d->shapesToClip) {
         d->oldClipPaths.append(shape->clipPath());
         d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
     }
 
-    foreach(KoPathShape * path, clipPathShapes) {
+    foreach(KoPathShape *path, clipPathShapes) {
         d->oldParents.append(path->parent());
     }
 
     setText(i18n("Clip Shape"));
 }
 
-KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase * controller, KoShape * shape, const QList<KoPathShape*> clipPathShapes, QUndoCommand *parent)
+KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent)
         : QUndoCommand(parent), d(new Private(controller))
 {
     d->shapesToClip.append(shape);
@@ -79,7 +79,7 @@ KoShapeClipCommand::KoShapeClipCommand(KoShapeControllerBase * controller, KoSha
     d->oldClipPaths.append(shape->clipPath());
     d->newClipPaths.append(new KoClipPath(shape, d->clipData.data()));
 
-    foreach(KoPathShape * path, clipPathShapes) {
+    foreach(KoPathShape *path, clipPathShapes) {
         d->oldParents.append(path->parent());
     }
 

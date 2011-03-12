@@ -39,7 +39,7 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> & shapes, const QList<KoPathShape*> clipPathShapes, QUndoCommand * parent = 0);
+    KoShapeClipCommand(KoShapeControllerBase *controller, const QList<KoShape*> &shapes, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent = 0);
 
     /**
      * Command to set a new shape clipping path for a single shape
@@ -48,7 +48,7 @@ public:
      * @param clipPathShapes the path shapes to be used a clipping path
      * @param parent the parent command used for macro commands
      */
-    KoShapeClipCommand(KoShapeControllerBase *controller, KoShape * shape, const QList<KoPathShape*> clipPathShapes, QUndoCommand *parent = 0);
+    KoShapeClipCommand(KoShapeControllerBase *controller, KoShape *shape, const QList<KoPathShape*> &clipPathShapes, QUndoCommand *parent = 0);
 
     /// Destroys the command
     virtual ~KoShapeClipCommand();

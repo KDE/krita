@@ -333,7 +333,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
 
         // let the painting strategy paint the shape
         d->strategy->paint(shape, painter, converter, forPrint);
-        
+
         painter.restore();
     }
 

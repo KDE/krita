@@ -19,7 +19,7 @@
 */
 
 #include "TreeShape.h"
-#include "Layout.h"
+#include "TreeLayout.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
 #include "KoConnectionShape.h"
@@ -40,7 +40,7 @@
 #include "kdebug.h"
 
 TreeShape::TreeShape(KoResourceManager *documentResources)
-            : KoShapeContainer(new Layout(this))
+            : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
     m_nextShape = 0;
@@ -62,7 +62,7 @@ TreeShape::TreeShape(KoResourceManager *documentResources)
 }
 
 TreeShape::TreeShape(KoShape *shape, KoResourceManager *documentResources)
-            : KoShapeContainer(new Layout(this))
+            : KoShapeContainer(new TreeLayout(this))
             , m_documentResources(documentResources)
 {
     m_nextShape = 0;
@@ -298,7 +298,7 @@ void TreeShape::addChild(KoShape* tree, KoShape* connector)
 
 KoShape* TreeShape::connector(KoShape *shape)
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->connector(shape);
 }
@@ -312,7 +312,7 @@ void TreeShape::setRoot(KoShape* shape, TreeShape::RootType type)
 
 KoShape* TreeShape::root() const
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->root();
 }
@@ -324,7 +324,7 @@ TreeShape::RootType TreeShape::rootType() const
 
 void TreeShape::setStructure(TreeShape::TreeType structure)
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     kDebug() << "";
     layout->setStructure(structure);
@@ -332,7 +332,7 @@ void TreeShape::setStructure(TreeShape::TreeType structure)
 
 TreeShape::TreeType TreeShape::structure() const
 {
-    Layout *layout = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *layout = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(layout);
     return layout->structure();
 }
@@ -393,9 +393,9 @@ TreeShape::TreeType TreeShape::proposeStructure()
     return layout()->proposeStructure();
 }
 
-Layout* TreeShape::layout() const
+TreeLayout* TreeShape::layout() const
 {
-    Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
+    TreeLayout *l = dynamic_cast<TreeLayout*>(KoShapeContainer::model());
     Q_ASSERT(l);
     return l;
 }

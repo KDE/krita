@@ -43,8 +43,7 @@ struct Finalizer {
     }
 };
 
-#include "Layout.h"
-//#include "TextLayerShape.h"
+#include "TextShapeLayout.h"
 
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
@@ -94,7 +93,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
-    lay->setLayout(new Layout(lay));
+    lay->setLayout(new TextShapeLayout(lay));
     lay->addShape(this);
     m_textShapeData->document()->setDocumentLayout(lay);
 
@@ -141,7 +140,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
         if (! lay->hasLayouter()) {
-            lay->setLayout(new Layout(lay));
+            lay->setLayout(new TextShapeLayout(lay));
         }
         if (!m_pageProvider) {
             return;
@@ -499,7 +498,7 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     if (!lay->hasLayouter()) {
-        lay->setLayout(new Layout(lay));
+        lay->setLayout(new TextShapeLayout(lay));
     }
 
     if (asynchronous) {

@@ -23,7 +23,7 @@
 #include <QObject>
 #include <qtest_kde.h>
 
-#include "../Layout.h"
+#include "../TextShapeLayout.h"
 #include "MockTextShape.h"
 
 #include <KoTextShapeData.h>
@@ -110,7 +110,7 @@ private:
     QTextBlock m_block;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
-    Layout *m_textLayout;
+    TextShapeLayout *m_textLayout;
 };
 
 #endif

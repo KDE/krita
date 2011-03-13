@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include"FloatingAnchorStrategy.h"
-#include"Layout.h"
+#include "FloatingAnchorStrategy.h"
+#include "TextShapeLayout.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>

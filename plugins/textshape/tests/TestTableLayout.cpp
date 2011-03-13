@@ -52,7 +52,7 @@ void TestTableLayout::initTest(int rows, int columns,
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
 
     // Layout state (layout helper).
-    m_textLayout = new Layout(m_layout);
+    m_textLayout = new TextShapeLayout(m_layout);
     Q_ASSERT(m_textLayout);
     m_layout->setLayout(m_textLayout);
 

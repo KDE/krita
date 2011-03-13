@@ -295,11 +295,9 @@ void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::ColumnWidth) {
-            //TODO
-            //style.addProperty("style:column-width", 42, KoGenStyle::TableColumnType);
+            style.addPropertyPt("style:column-width", columnWidth(), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::RelativeColumnWidth) {
-            //TODO
-            //style.addProperty("style:rel-column-width", 42, KoGenStyle::TableColumnType);
+            style.addProperty("style:rel-column-width", QString("%1*").arg(relativeColumnWidth()), KoGenStyle::TableColumnType);
         }
     }
 }

@@ -85,7 +85,7 @@ class Axis;
 class ThreeDScene;
 class CellRegion;
 class ChartTableModel;
-class Layout;
+class ChartLayout;
 class TableSource;
 
 QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
@@ -118,7 +118,7 @@ public:
     TextLabelData  *footerData() const;
     Legend         *legend() const;
     PlotArea       *plotArea() const;
-    Layout         *layout() const;
+    ChartLayout         *layout() const;
 
     /**
      * Returns a list of all labels in this chart, visible and hidden.

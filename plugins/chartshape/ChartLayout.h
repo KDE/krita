@@ -64,11 +64,11 @@ namespace KChart {
  * Layout elements with the same position that are in one of the positions B, D, G or E
  * will be placed more towards the center based on a "weight".
  */
-class Layout : public KoShapeContainerModel
+class ChartLayout : public KoShapeContainerModel
 {
 public:
-    Layout();
-    ~Layout();
+    ChartLayout();
+    ~ChartLayout();
 
     /**
      * Adds a floating shape to the layout.

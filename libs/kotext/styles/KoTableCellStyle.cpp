@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -582,11 +583,18 @@ void KoTableCellStyle::removeDuplicates(const KoTableCellStyle &other)
 
 void KoTableCellStyle::saveOdf(KoGenStyle &style)
 {
-    Q_UNUSED(style);
-/*
+    Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
-        if (key == QTextFormat::BlockAlignment) {
+        if (key == CellBackgroundBrush) {
+            QBrush backBrush = background();
+            if (backBrush.style() != Qt::NoBrush)
+                style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
+        }
+    }
+/*        if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;
             alignValue = d->stylesPrivate.value(key).toInt(&ok);

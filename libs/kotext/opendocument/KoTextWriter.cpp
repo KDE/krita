@@ -93,6 +93,7 @@ public:
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QString saveTableStyle(const QTextTable &table);
     QString saveTableColumnStyle(const KoTableColumnStyle &columnStyle, int columnNumber, const QString &tableStyleName);
+    QString saveTableCellStyle(const QTextTableCellFormat &cellFormat, int columnNumber, const QString &tableStyleName);
     
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
@@ -367,7 +368,7 @@ QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
 
 QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& tableColumnStyle, int columnNumber, const QString& tableStyleName)
 {
-    // 26*26 columns should be enouch for everyone
+    // 26*26 columns should be enough for everyone
     QString columnName = QChar('A' + int(columnNumber % 26));
     if (columnNumber > 25)
         columnName.prepend(QChar('A' + int(columnNumber/26)));
@@ -383,7 +384,26 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
     return generatedName;
 }
 
-// A convinience function to get a listId from a list-format
+QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& cellFormat, int columnNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enough for everyone
+    QString columnName = QChar('A' + int(columnNumber % 26));
+    if (columnNumber > 25)
+        columnName.prepend(QChar('A' + int(columnNumber/26)));
+    QString generatedName = tableStyleName + "." + columnName;
+    
+    KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    KoTableCellStyle cellStyle(cellFormat);
+    cellStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName);
+    return generatedName;
+}
+
+// A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
     KoListStyle::ListIdType listId;
@@ -620,6 +640,7 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         }
         writer->startElement("table:table-column");
         QString columnStyleName = saveTableColumnStyle(columnStyle, c, tableStyleName);
+        writer->addAttribute("table:style-name", columnStyleName);
         if (repetition > 0)
         {
             writer->addAttribute("table:number-columns-repeated", repetition + 1);
@@ -644,11 +665,14 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 if (KoTextInlineRdf* inlineRdf = v.value<KoTextInlineRdf*>()) {
                     inlineRdf->saveOdf(context, writer);
                 }
+                
+                QString cellStyleName = saveTableCellStyle(cellFormat, c, tableStyleName);
+                writer->addAttribute("table:style-name", cellStyleName);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
                 writer->startElement("table:covered-table-cell");
             }
-            writer->endElement(); // table:table-cell
+            writer->endElement(); // table:table-cell OR table:covered-table-cell
         }
         writer->endElement(); // table:table-row
     }

@@ -22,7 +22,7 @@
 #include <QPointF>
 #include <QMap>
 
-#include "Layout.h"
+#include "TreeLayout.h"
 #include "TreeShape.h"
 
 #include "KoShape.h"
@@ -31,7 +31,7 @@
 #include "kdebug.h"
 
 
-Layout::Layout(KoShapeContainer *container)
+TreeLayout::TreeLayout(KoShapeContainer *container)
     : m_container(container)
     , m_structure(TreeShape::FollowParent)
     , m_structureToPropose(TreeShape::OrgDown)
@@ -42,11 +42,11 @@ Layout::Layout(KoShapeContainer *container)
 {
 }
 
-Layout::~Layout()
+TreeLayout::~TreeLayout()
 {
 }
 
-void Layout::add(KoShape *shape)
+void TreeLayout::add(KoShape *shape)
 {
     Q_ASSERT(!m_children.contains(shape));
     TreeShape *tree = dynamic_cast<TreeShape*>(shape);
@@ -80,7 +80,7 @@ void Layout::add(KoShape *shape)
     scheduleRelayout();
 }
 
-void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
+void TreeLayout::attachConnector(KoShape* shape, KoConnectionShape *connector)
 {
     Q_ASSERT(m_children.contains(shape));
     Q_ASSERT(m_connectors.contains(connector));
@@ -88,7 +88,7 @@ void Layout::attachConnector(KoShape* shape, KoConnectionShape *connector)
     //scheduleRelayout();
 }
 
-void Layout::setRoot(KoShape *shape, TreeShape::RootType type)
+void TreeLayout::setRoot(KoShape *shape, TreeShape::RootType type)
 {
     m_root = shape;
     m_rootType = type;
@@ -100,16 +100,16 @@ void Layout::setRoot(KoShape *shape, TreeShape::RootType type)
     m_children.removeOne(m_root);
 }
 
-KoShape* Layout::root() const
+KoShape* TreeLayout::root() const
 {
     return m_root;
 }
 
-TreeShape::RootType Layout::rootType() const
+TreeShape::RootType TreeLayout::rootType() const
 {
     return m_rootType;
 }
-void Layout::setStructure(TreeShape::TreeType structure)
+void TreeLayout::setStructure(TreeShape::TreeType structure)
 {
     // should be replaced in future with something more smart
     m_structureToPropose = structure;
@@ -140,12 +140,12 @@ void Layout::setStructure(TreeShape::TreeType structure)
     m_container->update();
 }
 
-TreeShape::TreeType Layout::structure() const
+TreeShape::TreeType TreeLayout::structure() const
 {
     return m_proposedStructure;
 }
 
-void Layout::setConnectionType(KoConnectionShape::Type type)
+void TreeLayout::setConnectionType(KoConnectionShape::Type type)
 {
     m_connectionType = type;
     m_connectionTypeSeted = true;
@@ -155,12 +155,12 @@ void Layout::setConnectionType(KoConnectionShape::Type type)
     }
 }
 
-KoConnectionShape::Type Layout::connectionType() const
+KoConnectionShape::Type TreeLayout::connectionType() const
 {
     return m_connectionType;
 }
 
-void Layout::remove(KoShape *shape)
+void TreeLayout::remove(KoShape *shape)
 {
     int pos = m_children.indexOf(shape);
     if (pos != -1) {
@@ -180,13 +180,13 @@ void Layout::remove(KoShape *shape)
     }
 }
 
-KoShape* Layout::connector(KoShape *shape)
+KoShape* TreeLayout::connector(KoShape *shape)
 {
     Q_ASSERT(m_children.contains(shape));
     return dynamic_cast<KoShape*>(m_bonds[shape]);
 }
 
-KoShape* Layout::proposePosition(KoShape* shape)
+KoShape* TreeLayout::proposePosition(KoShape* shape)
 {
     if (m_children.isEmpty())
         return 0;
@@ -255,41 +255,41 @@ KoShape* Layout::proposePosition(KoShape* shape)
     return nextShape;
 }
 
-TreeShape::TreeType Layout::proposeStructure()
+TreeShape::TreeType TreeLayout::proposeStructure()
 {
     return m_structureToPropose;
 }
 
-void Layout::setClipped(const KoShape *shape, bool clipping)
+void TreeLayout::setClipped(const KoShape *shape, bool clipping)
 {
     Q_UNUSED(shape);
     Q_UNUSED(clipping);
 }
 
-bool Layout::isClipped(const KoShape *shape) const
+bool TreeLayout::isClipped(const KoShape *shape) const
 {
     Q_UNUSED(shape);
     return false;
 }
 
-void Layout::setInheritsTransform(const KoShape *shape, bool inherit)
+void TreeLayout::setInheritsTransform(const KoShape *shape, bool inherit)
 {
     Q_UNUSED(shape);
     Q_UNUSED(inherit);
 }
 
-bool Layout::inheritsTransform(const KoShape *shape) const
+bool TreeLayout::inheritsTransform(const KoShape *shape) const
 {
     Q_UNUSED(shape);
     return true;
 }
 
-int Layout::count() const
+int TreeLayout::count() const
 {
     return m_children.size()+m_connectors.size()+1;
 }
 
-QList<KoShape*> Layout::shapes() const
+QList<KoShape*> TreeLayout::shapes() const
 {
     //kDebug() << "";
     QList<KoShape*> all;
@@ -299,7 +299,7 @@ QList<KoShape*> Layout::shapes() const
     return all;
 }
 
-void Layout::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
+void TreeLayout::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
 {
     Q_UNUSED(container);
     switch(type) {
@@ -311,12 +311,12 @@ void Layout::containerChanged(KoShapeContainer *container, KoShape::ChangeType t
     }
 }
 
-bool Layout::isChildLocked(const KoShape *shape) const
+bool TreeLayout::isChildLocked(const KoShape *shape) const
 {
     return shape->isGeometryProtected();
 }
 
-void Layout::childChanged(KoShape *shape, KoShape::ChangeType type)
+void TreeLayout::childChanged(KoShape *shape, KoShape::ChangeType type)
 {
     Q_UNUSED(shape);
 
@@ -338,12 +338,12 @@ void Layout::childChanged(KoShape *shape, KoShape::ChangeType type)
     }
 }
 
-void Layout::scheduleRelayout()
+void TreeLayout::scheduleRelayout()
 {
     m_relayoutScheduled = true;
 }
 
-void Layout::layout()
+void TreeLayout::layout()
 {
     //kDebug() << "start";
     Q_ASSERT(!m_doingLayout);
@@ -404,7 +404,7 @@ void Layout::layout()
     kDebug() << "end";
 }
 
-void Layout::buildOrgUp()
+void TreeLayout::buildOrgUp()
 {
     qreal fromChildToChild = 5;
     qreal fromParentToChild = 50;
@@ -448,7 +448,7 @@ void Layout::buildOrgUp()
     }
 }
 
-void Layout::buildOrgDown()
+void TreeLayout::buildOrgDown()
 {
     qreal fromChildToChild = 5;
     qreal fromParentToChild = 50;
@@ -488,7 +488,7 @@ void Layout::buildOrgDown()
     }
 }
 
-void Layout::buildOrgLeft()
+void TreeLayout::buildOrgLeft()
 {
     qreal fromChildToChild = 5;
     qreal fromParentToChild = 50;
@@ -532,7 +532,7 @@ void Layout::buildOrgLeft()
     }
 }
 
-void Layout::buildOrgRight()
+void TreeLayout::buildOrgRight()
 {
     qreal fromChildToChild = 5;
     qreal fromParentToChild = 50;
@@ -572,12 +572,12 @@ void Layout::buildOrgRight()
     }
 }
 
-void Layout::buildOrgClockwise()
+void TreeLayout::buildOrgClockwise()
 {
 
 }
 
-void Layout::buildOrgAntiClockwise()
+void TreeLayout::buildOrgAntiClockwise()
 {
 
 }

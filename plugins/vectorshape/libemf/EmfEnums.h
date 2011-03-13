@@ -248,7 +248,7 @@ namespace Libemf
 	    ALTERNATE = 0x01, ///< Equivalent to Qt::OddEvenFill
 	    WINDING   = 0x02  ///< Equivalent to Qt::WindingFill
     };
-    
+
     /**
       Clipping region mode
       
@@ -269,8 +269,14 @@ namespace Libemf
      */
     enum CommentType {
         EMR_COMMENT_EMFSPOOL = 0x00000000,
-        EMR_COMMENT_EMFPLUS  = 0x2B464D45,
-        EMR_COMMENT_PUBLIC   = 0x43494447
+        EMR_COMMENT_EMFPLUS  = 0x2B464D45, // The string "EMF+"
+        EMR_COMMENT_PUBLIC   = 0x43494447,
+
+        // The following value is not defined in [MS-EMF].pdf, but
+        // according to google it means that the file was created by
+        // Microsoft Graph.  It is present in one test file
+        // (Presentation_tips.ppt).
+        EMR_COMMENT_MSGR     = 0x5247534d // The string MSGR
     };
 }
 

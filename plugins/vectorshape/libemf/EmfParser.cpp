@@ -744,7 +744,7 @@ bool Parser::readRecord( QDataStream &stream )
 
             switch (commentIdentifier) {
             case EMR_COMMENT_EMFSPOOL:
-                kDebug(31000) << "EMR_EMFSPOOL";
+                kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
                 soakBytes( stream, size-16 ); // because we already took 16.
                 break;
             case EMR_COMMENT_EMFPLUS:
@@ -757,8 +757,13 @@ bool Parser::readRecord( QDataStream &stream )
                 kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
                 soakBytes( stream, size-20 ); // because we already took 20.
                 break;
+            case EMR_COMMENT_MSGR:
+                kDebug(31000) << "EMR_COMMENT_MSGR";
+                soakBytes( stream, size-16 ); // because we already took 16.
+                break;
             default:
-                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec;
+                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                              << "datasize =" << dataSize;
                 soakBytes( stream, size-16 ); // because we already took 16.
             }
         }

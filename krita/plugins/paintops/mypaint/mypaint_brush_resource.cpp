@@ -84,6 +84,8 @@ public:
         list << new BrushInputDefinition("random",   0.0,  0.0,  0.5,  1.0, 1.0,  i18n("Fast random noise, changing at each evaluation. Evenly distributed between 0 and 1."));
         list << new BrushInputDefinition("stroke",   0.0,  0.0,  0.5,  1.0, 1.0,  i18n("This input slowly goes from zero to one while you draw a stroke. It can also be configured to jump back to zero periodically while you move. Look at the 'stroke duration' and 'stroke hold time' settings."));
         list << new BrushInputDefinition("direction",0.0,  0.0,  0.0,  180.0, 180.0, i18n("The angle of the stroke, in degrees. The value will stay between 0.0 and 180.0, effectively ignoring turns of 180 degrees."));
+        list << new BrushInputDefinition("tilt_declination",0.0,  0.0,  0.0,  90.0, 90.0, i18n("Declination of stylus tilt. 0 when stylus is parallel to tablet and 90.0 when it's perpendicular to tablet."));
+        list << new BrushInputDefinition("tilt_ascension",-180.0,  -180.0,  0.0,  180.0, 180.0, i18n("Right ascension of stylus tilt. 0 when stylus working end points to you, +90 when rotated 90 degrees clockwise, -90 when rotated 90 degrees counterclockwise."));
         list << new BrushInputDefinition("custom",   None, -2.0,  0.0, +2.0, None, i18n("This is a user defined input. Look at the 'custom input' setting for details."));
 
         int i = 0;
@@ -179,9 +181,10 @@ public:
         list << new BrushSettingDefinition("change_color_hsv_s", i18n("change color satur. (HSV)"), false, -2.0, 0.0, 2.0, i18n("Change the color saturation using the HSV color model. HSV changes are applied before HSL.\n-1.0 more grayish\n 0.0 disable\n 1.0 more saturated"));
         list << new BrushSettingDefinition("smudge", i18n("smudge"), false, 0.0, 0.0, 1.0, i18n("Paint with the smudge color instead of the brush color. The smudge color is slowly changed to the color you are painting on.\n 0.0 do not use the smudge color\n 0.5 mix the smudge color with the brush color\n 1.0 use only the smudge color"));
         list << new BrushSettingDefinition("smudge_length", i18n("smudge length"), false, 0.0, 0.5, 1.0, i18n("This controls how fast the smudge color becomes the color you are painting on.\n0.0 immediately change the smudge color\n1.0 never change the smudge color"));
+        list << new BrushSettingDefinition("smudge_radius_log", i18n("smudge radius"), false, -1.6, 0.0, 1.6, i18n("This modifies the radius of the circle where color is picked up for smudging.\n 0.0 use the brush radius \n-0.7 half the brush radius\n+0.7 twice the brush radius\n+1.6 five times the brush radius (slow)"));
         list << new BrushSettingDefinition("eraser", i18n("eraser"), false, 0.0, 0.0, 1.0, i18n("how much this tool behaves like an eraser\n 0.0 normal painting\n 1.0 standard eraser\n 0.5 pixels go towards 50% transparency"));
 
-        list << new BrushSettingDefinition("stroke_treshold", i18n("stroke threshold"), true, 0.0, 0.0, 0.5, i18n("How much pressure is needed to start a stroke. This affects the stroke input only. Mypaint does not need a minimal pressure to start drawing."));
+        list << new BrushSettingDefinition("stroke_threshold", i18n("stroke threshold"), true, 0.0, 0.0, 0.5, i18n("How much pressure is needed to start a stroke. This affects the stroke input only. Mypaint does not need a minimal pressure to start drawing."));
         list << new BrushSettingDefinition("stroke_duration_logarithmic", i18n("stroke duration"), false, -1.0, 4.0, 7.0, i18n("How far you have to move until the stroke input reaches 1.0. This value is logarithmic (negative values will not invert the process)."));
         list << new BrushSettingDefinition("stroke_holdtime", i18n("stroke hold time"), false, 0.0, 0.0, 10.0, i18n("This defines how long the stroke input stays at 1.0. After that it will reset to 0.0 and start growing again, even if the stroke is not yet finished.\n2.0 means twice as long as it takes to go from 0.0 to 1.0\n9.9 and bigger stands for infinite"));
         list << new BrushSettingDefinition("custom_input", i18n("custom input"), false, -5.0, 0.0, 5.0, i18n("Set the custom input to this value. If it is slowed down, move it towards this value (see below). The idea is that you make this input depend on a mixture of pressure/speed/whatever, and then make other this depend on this 'custom input' instead of repeating this combination everywhere you need it.\nIf you make it change 'by random' you can generate a slow (smooth) random input."));
@@ -196,6 +199,8 @@ public:
             dict[def->cname] = def;
             def->index = i++;
         }
+        Q_ASSERT(i == BRUSH_SETTINGS_COUNT);
+
     }
 
 };
@@ -237,7 +242,7 @@ public:
 
     void set_base_value(float value)
     {
-        if (base_value == value) return;
+//         if (base_value == value) return;
         base_value = value;
         parent_brush->set_base_value(brush_setting_definition->index, value);
     }
@@ -319,6 +324,7 @@ public:
 
             Q_ASSERT(s_brush_input_definitions->dict.contains(command));
             BrushInputDefinition* input = s_brush_input_definitions->dict[command];
+
             vPoints points;
 
             foreach(const QString& sPoint, parts) {
@@ -437,6 +443,11 @@ BrushSetting* MyPaintBrushResource::setting_by_cname(const QString& cname)
     return m_settings[settingDefinition->index];
 }
 
+float MyPaintBrushResource::setting_value_by_cname(const QString& cname)
+{
+    return setting_by_cname(cname)->base_value;
+}
+
 void MyPaintBrushResource::get_color_hsv(float* h, float* s, float* v)
 {
     *h = setting_by_cname("color_h")->base_value;
@@ -475,3 +486,5 @@ QRgb MyPaintBrushResource::get_color_rgb()
 bool MyPaintBrushResource::is_eraser() {
     return setting_by_cname("eraser")->base_value > 0.9;
 }
+
+

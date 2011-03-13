@@ -1323,8 +1323,7 @@ QRectF Layout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor &cursor)
                 // TODO set bottom of rect
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
             if (line.isValid())
-                retval.setBottom
-                (line.y() + line.height());
+                retval.setBottom(line.y() + line.height());
         }
     }
     return retval;

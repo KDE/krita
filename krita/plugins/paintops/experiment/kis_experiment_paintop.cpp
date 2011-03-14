@@ -48,7 +48,7 @@
 #include "kis_fixed_painter.h"
 
 static const QColor BLACK(Qt::black);
-static const QBrush WHITE_BRUSH(Qt::white);
+static const QBrush KIS_WHITE_BRUSH(Qt::white);
 
 KisExperimentPaintOp::KisExperimentPaintOp(const KisExperimentPaintOpSettings *settings, KisPainter * painter, KisImageSP image)
     : KisPaintOp( painter )

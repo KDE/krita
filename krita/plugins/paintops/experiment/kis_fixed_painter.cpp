@@ -32,7 +32,7 @@
 #include "kis_fixed_paint_device.h"
 
 static const QColor BLACK(Qt::black);
-static const QBrush WHITE_BRUSH(Qt::white);
+static const QBrush KIS_WHITE_BRUSH(Qt::white);
 
 struct KisFixedPainter::Private {
     KisFixedPaintDeviceSP device;
@@ -90,7 +90,7 @@ QRect KisFixedPainter::fillPainterPath(const QPainterPath& path)
     pathPainter.setRenderHint(QPainter::Antialiasing, true);
     pathPainter.translate(-boundingRect.topLeft());
     pathPainter.translate(1,1);
-    pathPainter.fillPath(path, WHITE_BRUSH);
+    pathPainter.fillPath(path, KIS_WHITE_BRUSH);
 
     //convert to device
     QRect polygonRect(0,0,fillRectSize.width(), fillRectSize.height());

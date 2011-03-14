@@ -1313,17 +1313,19 @@ QRectF TextShapeLayout::selectionBoundingBoxFrame(QTextFrame *frame, QTextCursor
         }
         if(cursor.selectionStart() >= block.position()
             && cursor.selectionStart() < block.position() + block.length()) {
-                // TODO set top of rect
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());
-            if (line.isValid())
+            if (line.isValid()) {
                 retval.setTop(line.y());
+                retval.setLeft(line.cursorToX(cursor.selectionStart() - block.position()));
+            }
         }
         if(cursor.selectionEnd() >= block.position()
             && cursor.selectionEnd() < block.position() + block.length()) {
-                // TODO set bottom of rect
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
-            if (line.isValid())
+            if (line.isValid()) {
                 retval.setBottom(line.y() + line.height());
+                retval.setRight(line.cursorToX(cursor.selectionEnd() - block.position()));
+            }
         }
     }
     return retval;

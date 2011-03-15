@@ -33,12 +33,13 @@ public:
     LoginWindow(QWidget *parent = 0);
     ~LoginWindow();
     GoogleDocumentService * googleService() {  return gdoc; }
-    void setShowProgressIndicator(bool visible);
+    void showProgressIndicator(bool visible);
 
 private slots:
     void loginService();
     void serviceSelected(int index);
-    void authenticated(bool success);
+    void authenticated(bool success, QString errorString);
+    void updateProgress(QString msg);
 
 private:
     Ui_Dialog *m_authDialog;

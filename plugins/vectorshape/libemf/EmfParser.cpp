@@ -737,23 +737,33 @@ bool Parser::readRecord( QDataStream &stream )
         case EMR_COMMENT:
         {
             quint32 dataSize;
+            quint32 commentIdentifier;
+
             stream >> dataSize;
-            quint32 maybeIdentifier;
-            stream >> maybeIdentifier;
-            if ( maybeIdentifier == 0x2B464D45 ) {
-                // EMFPLUS
-                //kDebug(33100) << "EMR_COMMENT_EMFPLUS";
+            stream >> commentIdentifier;
+
+            switch (commentIdentifier) {
+            case EMR_COMMENT_EMFSPOOL:
+                kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
                 soakBytes( stream, size-16 ); // because we already took 16.
-            } else if ( maybeIdentifier == 0x00000000 ) {
-                //kDebug(33100) << "EMR_EMFSPOOL";
+                break;
+            case EMR_COMMENT_EMFPLUS:
+                kDebug(31000) << "EMR_COMMENT_EMFPLUS";
                 soakBytes( stream, size-16 ); // because we already took 16.
-            } else if ( maybeIdentifier ==  0x43494447 ) {
+                break;
+            case EMR_COMMENT_PUBLIC:
                 quint32 commentType;
                 stream >> commentType;
-                //kDebug(33100) << "EMR_COMMENT_PUBLIC" << commentType;
+                kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
                 soakBytes( stream, size-20 ); // because we already took 20.
-            } else {
-                //kDebug(33100) << "EMR_COMMENT" << dataSize << maybeIdentifier;
+                break;
+            case EMR_COMMENT_MSGR:
+                kDebug(31000) << "EMR_COMMENT_MSGR";
+                soakBytes( stream, size-16 ); // because we already took 16.
+                break;
+            default:
+                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                              << "datasize =" << dataSize;
                 soakBytes( stream, size-16 ); // because we already took 16.
             }
         }

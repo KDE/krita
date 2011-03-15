@@ -30,11 +30,11 @@
 class QSizeF;
 class KoConnectionShape;
 
-class Layout : public KoShapeContainerModel
+class TreeLayout : public KoShapeContainerModel
 {
 public:
-    Layout(KoShapeContainer *container);
-    ~Layout();
+    TreeLayout(KoShapeContainer *container);
+    ~TreeLayout();
 
     /**
      * Adds a shape to the layout.

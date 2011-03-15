@@ -22,7 +22,7 @@
 class KoColumn;
 class KoRow;
 class KoCell;
-#include "KoTableStyle.h"
+#include "KoTblStyle.h"
 
 class KoXmlWriter;
 class KoGenStyles;
@@ -62,8 +62,8 @@ public:
 
     void saveOdf(KoXmlWriter& writer, KoGenStyles& styles);
 
-    KoTableStyle::Ptr tableStyle();
-    void setTableStyle(KoTableStyle::Ptr style);
+    KoTblStyle::Ptr tableStyle();
+    void setTableStyle(KoTblStyle::Ptr style);
 
 //     KoTableTemplate* tableTemplate();
 //     void setTableTemplate(KoTableTemplate* tableTemplate);
@@ -95,7 +95,7 @@ private:
     int m_rowCount;
     int m_columnCount;
 
-    KoTableStyle::Ptr m_style;
+    KoTblStyle::Ptr m_style;
 //     KoTableTemplate* m_template;
 //     TableTemplateFlags m_templateFlags;
 

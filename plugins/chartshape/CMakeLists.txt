@@ -35,7 +35,7 @@ SET (chartshape_LIB_SRCS
     ChartConfigWidget.cpp
     ChartTableView.cpp
     ScreenConversions.cpp
-    Layout.cpp
+    ChartLayout.cpp
     SingleModelHelper.cpp
     OdfLoadingHelper.cpp
     dialogs/TableEditorDialog.cpp

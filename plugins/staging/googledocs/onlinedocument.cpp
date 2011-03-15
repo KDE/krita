@@ -47,27 +47,32 @@ OnlineDocument::~OnlineDocument()
 
 void OnlineDocument::slotOnlineDocument()
 {
-    GoogleDocumentService *m_gDoc;
     LoginWindow *login = new LoginWindow();
     if (login->exec()) {
         m_gDoc = login->googleService();
-        connect(m_gDoc, SIGNAL(receivedDocument(const QString &)), this,
-                SLOT(receivedOnlineDocument(const QString &)));
+        connect(m_gDoc, SIGNAL(receivedDocument(QString )), this,
+                SLOT(receivedOnlineDocument(QString )));
     }
-    delete login;
+    //delete login;
 }
 
-void OnlineDocument::receivedOnlineDocument(const QString & path)
+void OnlineDocument::receivedOnlineDocument(QString  path)
 {
-    KoView *view = dynamic_cast<KoView *>(parent());
-    if (!view) {
-        return;
+//    KoView *view = dynamic_cast<KoView *>(parent());
+//    if (!view) {
+//        return;
+//    }
+//
+//    KUrl url;
+//    url.setPath(path);
+//    KoDocument *kodoc = view->koDocument();
+//
+//    kodoc->openUrl(url);
+    qDebug() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
+    QList <KoDocument *>* docList = KoDocument::documentList();
+    if (docList->count() > 0) {
+        KUrl url;
+        url.setPath(path);
+        docList->first()->openUrl(url);
     }
-
-    KUrl url;
-    url.setPath(path);
-    KoDocument *kodoc = view->koDocument();
-
-    kodoc->openUrl(url);
-
 }

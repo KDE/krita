@@ -36,20 +36,22 @@ class GoogleDocumentService : public QObject
 public:
     GoogleDocumentService();
     void clientLogin(const QString & username, const QString & password);
-    void listDocuments();
     void getDocument();
-    void downloadDocument (GoogleDocument *);
+    void downloadDocument (const QString & url, const QString & type);
     bool alreadyAuthenticated() { return loggedin; }
 
 signals:
-    void receivedDocument(const QString & path);
-    void userAuthenticated(bool success);
+    void receivedDocument(QString path);
+    void userAuthenticated(bool success, QString error);
+    void progressUpdate(const QString &msg);
+    void showingDocumentList();
 
 private slots:
     void handleNetworkData(QNetworkReply *networkReply);
 
 private:
     void hideDocumentListWindow();
+    void listDocuments();
 
     QXmlSimpleReader xmlReader;
     QXmlInputSource  xmlInput;

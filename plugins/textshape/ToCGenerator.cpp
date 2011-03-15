@@ -135,6 +135,8 @@ void ToCGenerator::generate()
 
     QVariant data = cursor.currentFrame()->format().property(KoText::TableOfContentsData);
     m_tocInfo = data.value<KoTableOfContentsGeneratorInfo*>();
+    if (!m_tocInfo)
+        return;
     TableOfContent * m_tocData = m_tocInfo->tableOfContentData();
 
     QTextDocument *doc = m_ToCFrame->document();

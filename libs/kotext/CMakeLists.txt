@@ -125,6 +125,7 @@ install(
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
+    KoTextDocumentLayout.h
     KoText.h
     KoList.h
     KoTextLocator.h

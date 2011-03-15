@@ -20,24 +20,23 @@
 
 #include <QList>
 #include <QtGui/QListWidgetItem>
+#include <QDebug>
 
 #include "googledocumentservice.h"
 #include "googledocumentlist.h"
 #include "googledocument.h"
 
-DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, QList<GoogleDocument *> & gList)
+DocumentListWindow::DocumentListWindow(GoogleDocumentService *service, GoogleDocumentList *gList)
         : m_docListDialog(new Ui_ListDialog),
           m_gService(service)
 {
     m_docListDialog->setupUi(this);
-    connect(m_docListDialog->listWidget, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(getClickedDocument(QListWidgetItem *)));
+    connect(m_docListDialog->listView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(getClickedDocument(const QModelIndex &)));
     connect(m_docListDialog->okButton, SIGNAL(clicked()), this, SLOT(fetchDocument()));
+    connect(m_docListDialog->closeButton, SIGNAL(clicked()), this, SLOT(close()));
 
-    m_documentList = gList;
-    foreach (GoogleDocument *doc, m_documentList) {
-        m_docListDialog->listWidget->addItem(doc->title());
-    }
-
+    m_documentList = gList->entries();
+    m_docListDialog->listView->setModel(gList->documentModel());
     show();
 }
 
@@ -48,25 +47,33 @@ DocumentListWindow::~DocumentListWindow()
 
 void DocumentListWindow::fetchDocument()
 {
-    int index = m_docListDialog->listWidget->currentRow();
-    m_gService->downloadDocument(m_documentList[index]);
+    int selectedRow = m_docListDialog->listView->currentIndex().row();
+    qDebug() << m_docListDialog->listView->model()->index(selectedRow, 2).data();
+    m_gService->downloadDocument(m_docListDialog->listView->model()->index(selectedRow, 1).data().toString(),
+                                 m_docListDialog->listView->model()->index(selectedRow, 2).data().toString());
     m_docListDialog->okButton->setEnabled(false);
 }
 
-void DocumentListWindow::getClickedDocument(QListWidgetItem */*item*/)
+void DocumentListWindow::getClickedDocument( const QModelIndex & index)
 {
+    Q_UNUSED(index);
 }
 
 QString DocumentListWindow::currentDocument()
 {
-    int index = m_docListDialog->listWidget->currentRow();
-    QString ext = ".odt";
+    int selectedRow = m_docListDialog->listView->currentIndex().row();
+    QString name  = m_docListDialog->listView->model()->index(selectedRow, 0).data().toString();
+    QString type = m_docListDialog->listView->model()->index(selectedRow, 2).data().toString();
+    QString ext = "";
 
-    if (QString::compare(m_documentList[index]->documentType(), "spreadsheet") == 0 )
+    if (QString::compare(type, "document", Qt::CaseInsensitive) == 0 ) {
+            ext = ".odt";
+    } else if (QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0 ) {
         ext = ".ods";
-    else if (QString::compare(m_documentList[index]->documentType(), "presentation") == 0 )
+    } else if (QString::compare(type, "presentation", Qt::CaseInsensitive) == 0 ) {
         ext = ".ppt";
+    }
 
-    return (m_documentList[index]->title() + ext);
+    return (name + ext);
 }
 

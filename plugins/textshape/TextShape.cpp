@@ -43,6 +43,11 @@ struct Finalizer {
     }
 };
 
+<<<<<<< HEAD
+=======
+#include "TextShapeLayout.h"
+
+>>>>>>> master
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
 #include <KoChangeTracker.h>
@@ -91,6 +96,11 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document());
+<<<<<<< HEAD
+=======
+    lay->setLayout(new TextShapeLayout(lay));
+    lay->addShape(this);
+>>>>>>> master
     m_textShapeData->document()->setDocumentLayout(lay);
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
@@ -120,6 +130,12 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     }
 
     if (m_textShapeData->endPosition() < 0) { // not layouted yet.
+<<<<<<< HEAD
+=======
+        if (! lay->hasLayouter()) {
+            lay->setLayout(new TextShapeLayout(lay));
+        }
+>>>>>>> master
         if (!m_pageProvider) {
             return;
         }
@@ -425,6 +441,12 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
+<<<<<<< HEAD
+=======
+    if (!lay->hasLayouter()) {
+        lay->setLayout(new TextShapeLayout(lay));
+    }
+>>>>>>> master
 
     if (asynchronous) {
         synchronized(m_mutex) {

@@ -56,7 +56,7 @@ void TestDocumentLayout::initForNewTest(const QString &initText)
     m_doc = m_layout->document();
     Q_ASSERT(m_doc);
     m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
-    m_textLayout = new Layout(m_layout);
+    m_textLayout = new TextShapeLayout(m_layout);
     m_layout->setLayout(m_textLayout);
     m_styleManager = new KoStyleManager();
     KoTextDocument(m_doc).setStyleManager(m_styleManager);

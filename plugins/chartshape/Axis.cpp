@@ -75,7 +75,7 @@
 #include "KDChartConvertions.h"
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
 
@@ -1698,7 +1698,7 @@ void Axis::Private::updatePosition()
 
     // KDChart
     kdAxis->setPosition( PositionToKDChartAxisPosition( position ) );
-    Layout *layout = plotArea->parent()->layout();
+    ChartLayout *layout = plotArea->parent()->layout();
     layout->setPosition( title, position );
     layout->layout();
 

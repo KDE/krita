@@ -23,7 +23,7 @@
 #include <QPointF>
 
 // KChart
-#include "Layout.h"
+#include "ChartLayout.h"
 
 // KOffice
 #include <KoShapeContainer.h>
@@ -36,7 +36,7 @@ static QPointF itemPosition( KoShape *shape );
 static QSizeF itemSize( KoShape *shape );
 static void setItemPosition( KoShape *shape, const QPointF& pos );
 
-class Layout::LayoutData
+class ChartLayout::LayoutData
 {
 public:
     Position pos;
@@ -51,33 +51,33 @@ public:
           inheritsTransform(true) {}
 };
 
-Layout::Layout()
+ChartLayout::ChartLayout()
     : m_doingLayout( false )
     , m_relayoutScheduled( false )
 {
 }
 
-Layout::~Layout()
+ChartLayout::~ChartLayout()
 {
     foreach( LayoutData *data, m_layoutItems.values() )
         delete data;
 }
 
-void Layout::add( KoShape *shape )
+void ChartLayout::add( KoShape *shape )
 {
     Q_ASSERT( !m_layoutItems.contains( shape ) );
     m_layoutItems.insert( shape, new LayoutData( FloatingPosition, 0 ) );
     scheduleRelayout();
 }
 
-void Layout::add( KoShape *shape, Position pos, int weight )
+void ChartLayout::add( KoShape *shape, Position pos, int weight )
 {
     Q_ASSERT( !m_layoutItems.contains( shape ) );
     m_layoutItems.insert( shape, new LayoutData( pos, weight ) );
     scheduleRelayout();
 }
 
-void Layout::remove( KoShape *shape )
+void ChartLayout::remove( KoShape *shape )
 {
     if ( m_layoutItems.contains( shape ) ) {
         // delete LayoutData
@@ -87,39 +87,39 @@ void Layout::remove( KoShape *shape )
     }
 }
 
-void Layout::setClipped( const KoShape *shape, bool clipping )
+void ChartLayout::setClipped( const KoShape *shape, bool clipping )
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     m_layoutItems.value( const_cast<KoShape*>(shape) )->clipped = clipping;
 }
 
-bool Layout::isClipped( const KoShape *shape ) const
+bool ChartLayout::isClipped( const KoShape *shape ) const
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     return m_layoutItems.value( const_cast<KoShape*>(shape) )->clipped;
 }
 
-void Layout::setInheritsTransform(const KoShape *shape, bool inherit)
+void ChartLayout::setInheritsTransform(const KoShape *shape, bool inherit)
 {
     m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform = inherit;
 }
 
-bool Layout::inheritsTransform(const KoShape *shape) const
+bool ChartLayout::inheritsTransform(const KoShape *shape) const
 {
     return m_layoutItems.value(const_cast<KoShape*>(shape))->inheritsTransform;
 }
 
-int Layout::count() const
+int ChartLayout::count() const
 {
     return m_layoutItems.size();
 }
 
-QList<KoShape*> Layout::shapes() const
+QList<KoShape*> ChartLayout::shapes() const
 {
     return m_layoutItems.keys();
 }
 
-void Layout::containerChanged( KoShapeContainer *container, KoShape::ChangeType type )
+void ChartLayout::containerChanged( KoShapeContainer *container, KoShape::ChangeType type )
 {
     switch( type ) {
     case KoShape::SizeChanged:
@@ -131,12 +131,12 @@ void Layout::containerChanged( KoShapeContainer *container, KoShape::ChangeType 
     }
 }
 
-bool Layout::isChildLocked( const KoShape *shape ) const
+bool ChartLayout::isChildLocked( const KoShape *shape ) const
 {
     return shape->isGeometryProtected();
 }
 
-void Layout::setPosition( const KoShape *shape, Position pos, int weight )
+void ChartLayout::setPosition( const KoShape *shape, Position pos, int weight )
 {
     Q_ASSERT( m_layoutItems.contains( const_cast<KoShape*>(shape) ) );
     LayoutData *data = m_layoutItems.value( const_cast<KoShape*>(shape) );
@@ -145,7 +145,7 @@ void Layout::setPosition( const KoShape *shape, Position pos, int weight )
     scheduleRelayout();
 }
 
-void Layout::childChanged( KoShape *shape, KoShape::ChangeType type )
+void ChartLayout::childChanged( KoShape *shape, KoShape::ChangeType type )
 {
     Q_UNUSED( shape );
 
@@ -166,12 +166,12 @@ void Layout::childChanged( KoShape *shape, KoShape::ChangeType type )
     }
 }
 
-void Layout::scheduleRelayout()
+void ChartLayout::scheduleRelayout()
 {
     m_relayoutScheduled = true;
 }
 
-void Layout::layout()
+void ChartLayout::layout()
 {
     Q_ASSERT( !m_doingLayout );
 
@@ -252,7 +252,7 @@ void Layout::layout()
 
 
 
-qreal Layout::layoutTop( const QMap<int, KoShape*>& shapes )
+qreal ChartLayout::layoutTop( const QMap<int, KoShape*>& shapes )
 {
     qreal top = 0.0;
     qreal pX = m_containerSize.width() / 2.0;
@@ -264,7 +264,7 @@ qreal Layout::layoutTop( const QMap<int, KoShape*>& shapes )
     return top;
 }
 
-qreal Layout::layoutBottom( const QMap<int, KoShape*>& shapes )
+qreal ChartLayout::layoutBottom( const QMap<int, KoShape*>& shapes )
 {
     qreal bottom = m_containerSize.height();
     qreal pX = m_containerSize.width() / 2.0;
@@ -276,7 +276,7 @@ qreal Layout::layoutBottom( const QMap<int, KoShape*>& shapes )
     return bottom;
 }
 
-qreal Layout::layoutStart( const QMap<int, KoShape*>& shapes )
+qreal ChartLayout::layoutStart( const QMap<int, KoShape*>& shapes )
 {
     qreal start = 0.0;
     qreal pY = m_containerSize.height() / 2.0;
@@ -288,7 +288,7 @@ qreal Layout::layoutStart( const QMap<int, KoShape*>& shapes )
     return start;
 }
 
-qreal Layout::layoutEnd( const QMap<int, KoShape*>& shapes )
+qreal ChartLayout::layoutEnd( const QMap<int, KoShape*>& shapes )
 {
     qreal end = m_containerSize.width();
     qreal pY = m_containerSize.height() / 2.0;
@@ -300,28 +300,28 @@ qreal Layout::layoutEnd( const QMap<int, KoShape*>& shapes )
     return end;
 }
 
-void Layout::layoutTopStart( KoShape *shape )
+void ChartLayout::layoutTopStart( KoShape *shape )
 {
     if ( !shape )
         return;
     setItemPosition( shape, QPointF( 0, 0 ) );
 }
 
-void Layout::layoutBottomStart( KoShape *shape )
+void ChartLayout::layoutBottomStart( KoShape *shape )
 {
     if ( !shape )
         return;
     setItemPosition( shape, QPointF( 0, m_containerSize.height() - itemSize( shape ).height() ) );
 }
 
-void Layout::layoutTopEnd( KoShape *shape )
+void ChartLayout::layoutTopEnd( KoShape *shape )
 {
     if ( !shape )
         return;
     setItemPosition( shape, QPointF( m_containerSize.width() - itemSize( shape ).width(), 0 ) );
 }
 
-void Layout::layoutBottomEnd( KoShape *shape )
+void ChartLayout::layoutBottomEnd( KoShape *shape )
 {
     if ( !shape )
         return;

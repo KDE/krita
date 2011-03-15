@@ -21,7 +21,6 @@
 #define KOSHAPEPRIVATE_H
 
 #include "KoShape.h"
-
 #include <QPixmapCache>
 #include <QPoint>
 #include <QPaintDevice>
@@ -101,6 +100,7 @@ public:
     KoShape *q_ptr;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
+    KoClipPath * clipPath; ///< the current clip path
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has

@@ -30,7 +30,10 @@
 #include "kis_brush_based_paintop.h"
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
+#include <kis_pressure_rotation_option.h>
+#include <kis_pressure_scatter_option.h>
 #include <kis_merged_paint_option.h>
 
 class KisBrushBasedPaintOpSettings;
@@ -47,14 +50,17 @@ public:
     qreal paintAt(const KisPaintInformation& info);
 
 private:
-    bool                  m_firstRun;
-    KisPaintDeviceSP      m_tempDev; // The temporary paint device
-    KisImageWSP           m_image;
-    KisPainter*           m_tempPainter;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureRateOption m_smudgeRateOption;
-    KisPressureRateOption m_colorRateOption;
-    KisMergedPaintOption  m_mergedPaintOption;
+    bool                      m_firstRun;
+    KisPaintDeviceSP          m_tempDev; // The temporary paint device
+    KisImageWSP               m_image;
+    KisPainter*               m_tempPainter;
+    KisPressureSizeOption     m_sizeOption;
+    KisPressureSpacingOption  m_spacingOption;
+    KisPressureRateOption     m_smudgeRateOption;
+    KisPressureRateOption     m_colorRateOption;
+    KisMergedPaintOption      m_mergedPaintOption;
+    KisPressureRotationOption m_rotationOption;
+    KisPressureScatterOption  m_scatterOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

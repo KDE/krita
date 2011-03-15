@@ -51,13 +51,19 @@ KisSmudgeOp::KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainte
     Q_ASSERT(painter);
     
     m_sizeOption.readOptionSetting(settings);
+    m_spacingOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
     m_mergedPaintOption.readOptionSetting(settings);
+    m_rotationOption.readOptionSetting(settings);
+    m_scatterOption.readOptionSetting(settings);
     
     m_sizeOption.sensor()->reset();
+    m_spacingOption.sensor()->reset();
     m_smudgeRateOption.sensor()->reset();
     m_colorRateOption.sensor()->reset();
+    m_rotationOption.sensor()->reset();
+    m_scatterOption.sensor()->reset();
 
     m_tempDev     = new KisPaintDevice(painter->device()->colorSpace());
     m_tempPainter = new KisPainter(m_tempDev);
@@ -80,15 +86,18 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
         return 1.0;
     
     // get the scaling factor calculated by the size option
-    double scale = m_sizeOption.apply(info);
+    qreal scale    = m_sizeOption.apply(info);
+    qreal rotation = m_rotationOption.apply(info);
     
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
         return 1.0;
     
     setCurrentScale(scale);
+    setCurrentRotation(rotation);
     
-    QPointF point = info.pos() - brush->hotSpot(scale, scale);
+    QPointF scatteredPos = m_scatterOption.apply(info, qreal(brush->width() + brush->height()) / 2.0 * scale);
+    QPointF point        = scatteredPos - brush->hotSpot(scale, scale, rotation);
     
     qint32 x, y;
     qreal xFraction, yFraction; // will not be used
@@ -100,11 +109,11 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // Extract the brush mask (maskDab) from brush with the correct scaled size
     if(brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
         // This is for bitmap brushes
-        maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, 0.0, info, 0.0, 0.0);
+        maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
     } else {
         // This is for parametric brushes, those created in the Autobrush popup config dialogue
         maskDab = cachedDab();
-        brush->mask(maskDab, painter()->paintColor(), scale, scale, 0.0, info, 0.0, 0.0);
+        brush->mask(maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
     }
     
     // transforms the fixed paint device with the current brush to alpha color space
@@ -167,6 +176,9 @@ qreal KisSmudgeOp::paintAt(const KisPaintInformation& info)
     // restore orginal opacy and composite mode values
     painter()->setOpacity(oldOpacity);
     painter()->setCompositeOp(oldMode);
+    
+    if(m_spacingOption.isChecked())
+        return spacing(m_spacingOption.apply(info));
     
     return spacing(scale);
 }

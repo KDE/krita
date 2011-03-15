@@ -85,6 +85,12 @@ set(komain_LIB_SRCS
     KoAction.cpp
     KoExecutePolicy.cpp
     KoJobsListPolicy.cpp
+
+    KoFindBase.cpp
+    KoFindMatch.cpp
+    KoFindDialog.cpp
+    KoFindText.cpp
+    KoFindToolbar.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -184,6 +190,11 @@ install( FILES
     KoFilterChain.h
     KoFilterChainLinkList.h
     KoFilterManager.h
+    KoFindBase.h
+    KoFindText.h
+    KoFindToolbar.h
+    KoFindDialog.h
+    KoFindMatch.h
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h

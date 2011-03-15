@@ -17,13 +17,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "TextLine.h"
+#include "RunAroundHelper.h"
 #include "Outline.h"
+
+#include "KoTextLayoutArea.h"
 
 const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
 #define MIN_WIDTH   0.01f
 
-TextLine::TextLine()
+RunAroundHelper::RunAroundHelper()
 {
     m_lineRect = QRectF();
     m_updateValidOutlines = false;
@@ -32,27 +34,27 @@ TextLine::TextLine()
     m_restartOnNextShape = false;
 }
 
-void TextLine::createLine(KoTextDocumentLayout::LayoutState *state) {
-    m_state = state;
-    line = m_state->layout->createLine();
+void RunAroundHelper::setLine(KoTextLayoutArea *area, QTextLine l) {
+    m_area = area;
+    line = l;
 }
 
-void TextLine::setRestartOnNextShape(bool restartOnNextShape)
+void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
 {
     m_restartOnNextShape = restartOnNextShape;
 }
 
-void TextLine::setOutlines(const QList<Outline*> &outlines)
+void RunAroundHelper::setOutlines(const QList<Outline*> &outlines)
 {
     m_outlines = &outlines;
 }
 
-bool TextLine::processingLine()
+bool RunAroundHelper::processingLine()
 {
     return m_processingLine;
 }
 
-void TextLine::updateOutline(Outline *outline)
+void RunAroundHelper::updateOutline(Outline *outline)
 {
     QRectF outlineLineRect = outline->cropToLine(m_lineRect);
     if (outlineLineRect.isValid()) {
@@ -60,13 +62,13 @@ void TextLine::updateOutline(Outline *outline)
     }
 }
 
-void TextLine::fit(const bool resetHorizontalPosition)
+void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
 {
     if (resetHorizontalPosition) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;
     }
-    const qreal maxLineWidth = m_state->width();
+    const qreal maxLineWidth = m_area->width();
     // Make sure at least some text is fitted if the basic width (page, table cell, column)
     // is too small
     if (maxLineWidth <= 0.) {
@@ -80,7 +82,7 @@ void TextLine::fit(const bool resetHorizontalPosition)
         //if (m_state->layout->lineCount() > 1 || m_state->layout->text().length() > 0)
             line.setNumColumns(1);
 
-        line.setPosition(QPointF(m_state->x(), m_state->y()));
+        line.setPosition(position);
         return;
     }
 
@@ -88,14 +90,14 @@ void TextLine::fit(const bool resetHorizontalPosition)
     line.setLineWidth(maxLineWidth);
     const qreal maxLineHeight = line.height();
     const qreal maxNaturalTextWidth = line.naturalTextWidth();
-    QRectF lineRect(m_state->x(), m_state->y(), maxLineWidth, maxLineHeight);
+    QRectF lineRect(position, QSizeF(maxLineWidth, maxLineHeight));
     QRectF lineRectPart;
     qreal movedDown = 0;
-    if (m_state->maxLineHeight() > 0) {
-        movedDown = m_state->maxLineHeight();
-    } else {
+//FIXME    if (m_state->maxLineHeight() > 0) {
+//        movedDown = m_state->maxLineHeight();
+//    } else {
         movedDown = 10;
-    }
+//    }
 
     while (!lineRectPart.isValid()) {
         // The line rect could be split into no further linerectpart, so we have
@@ -108,7 +110,8 @@ void TextLine::fit(const bool resetHorizontalPosition)
         lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
         if (!lineRectPart.isValid()) {
             m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-            lineRect = QRectF(m_state->x(), m_state->y() + movedDown, maxLineWidth, maxLineHeight);
+            lineRect = QRectF(position, QSizeF(maxLineWidth, maxLineHeight));
+            lineRect.setY(lineRect.y() + movedDown);
             movedDown += 10;
         }
     }
@@ -118,7 +121,7 @@ void TextLine::fit(const bool resetHorizontalPosition)
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
 }
 
-void TextLine::validateOutlines()
+void RunAroundHelper::validateOutlines()
 {
     m_validOutlines.clear();
     foreach (Outline *outline, *m_outlines) {
@@ -126,7 +129,7 @@ void TextLine::validateOutlines()
     }
 }
 
-void TextLine::validateOutline(Outline *outline)
+void RunAroundHelper::validateOutline(Outline *outline)
 {
     QRectF outlineLineRect = outline->cropToLine(m_lineRect);
     if (outlineLineRect.isValid()) {
@@ -134,7 +137,7 @@ void TextLine::validateOutline(Outline *outline)
     }
 }
 
-void TextLine::createLineParts()
+void RunAroundHelper::createLineParts()
 {
     m_lineParts.clear();
     if (m_validOutlines.isEmpty()) {
@@ -184,14 +187,14 @@ void TextLine::createLineParts()
     }
 }
 
-QRectF TextLine::minimizeHeightToLeastNeeded(const QRectF &lineRect)
+QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
 {
     QRectF lineRectBase = lineRect;
     // Get width of one char or shape (as-char).
     m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
     // Make sure width is not wider than state allows.
-    if (m_textWidth > m_state->width()) {
-        m_textWidth = m_state->width();
+    if (m_textWidth > m_area->width()) {
+        m_textWidth = m_area->width();
     }
     line.setLineWidth(m_textWidth);
     // Base linerect height on the width calculated above.
@@ -199,7 +202,7 @@ QRectF TextLine::minimizeHeightToLeastNeeded(const QRectF &lineRect)
     return lineRectBase;
 }
 
-void TextLine::updateLineParts(const QRectF &lineRect)
+void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 {
     if (m_lineRect != lineRect || m_updateValidOutlines) {
         m_lineRect = lineRect;
@@ -209,7 +212,7 @@ void TextLine::updateLineParts(const QRectF &lineRect)
     }
 }
 
-QRectF TextLine::getLineRectPart()
+QRectF RunAroundHelper::getLineRectPart()
 {
     //TODO korinpa: use binary search tree ?
     QRectF retVal;
@@ -222,7 +225,7 @@ QRectF TextLine::getLineRectPart()
     return retVal;
 }
 
-void TextLine::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
+void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
     qreal width = m_textWidth;
     qreal maxWidth = minLineRectPart.width() - leftIndent;
     qreal height;
@@ -241,7 +244,7 @@ void TextLine::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIn
     }
 }
 
-QRectF TextLine::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
+QRectF RunAroundHelper::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
     const qreal leftIndent = lineRect.left();
     QRectF minLineRect = minimizeHeightToLeastNeeded(lineRect);
     updateLineParts(minLineRect);
@@ -272,7 +275,7 @@ QRectF TextLine::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextW
     return lineRectPart;
 }
 
-void TextLine::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
+void RunAroundHelper::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
     if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_processingLine = false;

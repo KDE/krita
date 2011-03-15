@@ -109,6 +109,11 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
     delete d;
 }
 
+bool KoTextDocumentLayout::relativeTabs() const
+{
+    return KoTextDocument(document()).relativeTabs();
+}
+
 void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *iom)
 {
     d->inlineTextObjectManager = iom;

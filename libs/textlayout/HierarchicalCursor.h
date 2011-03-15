@@ -21,6 +21,7 @@
 
 
 #include <QTextFrame>
+#include <QTextLine>
 
 class HierarchicalCursor
 {
@@ -28,7 +29,9 @@ public:
     HierarchicalCursor();
     HierarchicalCursor *subCursor();
     QTextFrame::iterator it;
-    int positionInBlock;
+    // the following can be seen as the "sub cursor" of text blocks
+    QTextLine line;
+    QTextBlock::Iterator fragmentIterator;
 };
 
 #endif

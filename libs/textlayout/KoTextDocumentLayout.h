@@ -90,6 +90,9 @@ public:
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
 
+    /// are the tabs relative to indent or not
+    bool relativeTabs() const;
+
     /**
      * Expands the give rect in the horizontal dimension,
      * so that everything in the document will be visible

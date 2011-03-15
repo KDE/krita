@@ -17,27 +17,30 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef RUNAROUNDHELPER_H
+#define RUNAROUNDHELPER_H
 
 #include "Outline.h"
-#include <KoTextDocumentLayout.h>
 
 #include <QList>
 #include <QTextLine>
 #include <QRectF>
 
-class TextLine
+class KoTextLayoutArea;
+
+class RunAroundHelper
 {
 public:
-    TextLine();
-    void createLine(KoTextDocumentLayout::LayoutState *state);
+    RunAroundHelper();
+    void setLine(KoTextLayoutArea *area, QTextLine l);
     void setRestartOnNextShape(bool restartOnNextShape);
     void setOutlines(const QList<Outline*> &outlines);
     bool processingLine();
     void updateOutline(Outline *outline);
-    void fit(const bool resetHorizontalPosition = false);
+    void fit(const bool resetHorizontalPosition, QPointF position);
     QTextLine line;
 private:
-    KoTextDocumentLayout::LayoutState *m_state;
+    KoTextLayoutArea *m_area;
     const QList<Outline*> *m_outlines;
     QList<Outline*> m_validOutlines;
     QList<QRectF> m_lineParts;
@@ -57,3 +60,5 @@ private:
     QRectF getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth);
     void checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth);
 };
+
+#endif

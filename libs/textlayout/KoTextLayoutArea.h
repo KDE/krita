@@ -24,7 +24,14 @@
 
 #include "HierarchicalCursor.h"
 
+#include <KoText.h>
+
 #include <QRectF>
+
+class KoStyleManager;
+class KoTextDocumentLayout;
+class KoTextBlockData;
+class QTextList;
 
 /**
  * When layout'ing text it is chopped into physical area of space.
@@ -45,7 +52,7 @@ public:
     virtual ~KoTextLayoutArea();
 
     /// Layouts as much as it can
-    virtual void layout(HierarchicalCursor *cursor) = 0;
+    virtual void layout(HierarchicalCursor *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
 //    virtual QRectF boundingRect() const = 0;
@@ -56,10 +63,34 @@ public:
     virtual void setPosition(QPointF position) = 0;
 
     /// Sets the size in textdocument coordinates.
-    virtual void setSize(QSizeF size) = 0;
+    virtual void setWidth(qreal width) = 0;
 */
+    virtual KoText::Direction parentTextDirection() const;
+
+    virtual qreal left() const;
+
+    virtual qreal right() const;
+
     /// A pointer to the parent
     KoTextLayoutArea *parent; // you should treat it as read only
+
+    qreal listIndent() const;
+    qreal textIndent(QTextBlock block) const;
+    qreal x() const;
+    qreal width() const;
+    
+private:
+    void layoutBlock(HierarchicalCursor *cursor);
+    QTextLine createLine(HierarchicalCursor *cursor);
+
+    KoTextDocumentLayout *m_documentLayout;
+    KoStyleManager *m_styleManager;
+
+    qreal m_x;
+    qreal m_y;
+    qreal m_width;
+    qreal m_listIndent;
+    qreal m_defaultTabSizing;
 };
 
 #endif

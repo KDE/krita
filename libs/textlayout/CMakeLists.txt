@@ -11,6 +11,8 @@ set(textlayout_LIB_SRCS
     ListItemsHelper.cpp
     KoStyleThumbnailer.cpp
     KoTextShapeContainerModel.cpp
+    RunAroundHelper.cpp
+    Outline.cpp
 )
 
 

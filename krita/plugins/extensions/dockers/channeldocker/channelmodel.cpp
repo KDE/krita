@@ -31,7 +31,7 @@ ChannelModel::~ChannelModel()
 
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
-    if (index.isValid())
+    if (m_currentLayer.isValid() && index.isValid())
     {
         switch (role) {
             case Qt::DisplayRole:
@@ -69,7 +69,7 @@ QVariant ChannelModel::headerData(int section, Qt::Orientation orientation, int 
 
 int ChannelModel::rowCount(const QModelIndex& parent) const
 {
-    return m_currentLayer ? m_currentLayer->colorSpace()->channelCount() : 0;
+    return m_currentLayer.isValid() ? m_currentLayer->colorSpace()->channelCount() : 0;
 }
 
 int ChannelModel::columnCount(const QModelIndex& parent) const

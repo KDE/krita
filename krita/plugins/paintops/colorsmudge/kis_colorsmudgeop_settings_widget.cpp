@@ -26,8 +26,8 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
-#include <kis_merged_paint_option.h>
 
+#include "kis_merged_paint_option.h"
 #include "kis_rate_option_widget.h"
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):

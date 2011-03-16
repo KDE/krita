@@ -27,8 +27,8 @@
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
-#include <kis_merged_paint_option.h>
 
+#include "kis_merged_paint_option.h"
 #include "kis_rate_option.h"
 
 class KisBrushBasedPaintOpSettings;

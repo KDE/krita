@@ -18,6 +18,7 @@
 
 #include "kis_colorsmudgeop.h"
 
+#include <cmath>
 #include <QRect>
 
 #include <KoColorSpaceRegistry.h>
@@ -36,7 +37,8 @@
 KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings, KisPainter* painter, KisImageWSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_firstRun(true), m_tempDev(0), m_image(image),
-    m_smudgeRateOption("SmudgeRate"), m_colorRateOption("ColorRate")
+    m_smudgeRateOption("SmudgeRate"),
+    m_colorRateOption("ColorRate")
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
@@ -79,6 +81,10 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // get the scaling factor calculated by the size option
     qreal scale    = m_sizeOption.apply(info);
     qreal rotation = m_rotationOption.apply(info);
+    qreal diagonal = std::sqrt(brush->width()*brush->width() + brush->height()*brush->height());
+    
+    qint32 maxBrushWidth  = m_rotationOption.isChecked() ? qint32(diagonal*1.2) : brush->width();
+    qint32 maxBrushHeight = m_rotationOption.isChecked() ? qint32(diagonal*1.2) : brush->height();
     
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
@@ -87,7 +93,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     setCurrentScale(scale);
     setCurrentRotation(rotation);
     
-    QPointF scatteredPos = m_scatterOption.apply(info, qreal(brush->width() + brush->height()) / 2.0 * scale);
+    QPointF scatteredPos = m_scatterOption.apply(info, diagonal*scale);
     QPointF point        = scatteredPos - brush->hotSpot(scale, scale, rotation);
     
     qint32 x, y;
@@ -131,13 +137,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);
         m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
         m_image->lock();
-        m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, brush->width(), brush->width());
+        m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, maxBrushWidth, maxBrushHeight);
         m_image->unlock();
     }
     else {
         // IMPORTANT: clear the temporary painting device to color black with zero opacity
         //            it will only clear the extents of the brush
-        m_tempDev->clear(QRect(0, 0, brush->width(), brush->height()));
+        m_tempDev->clear(QRect(0, 0, maxBrushWidth, maxBrushHeight));
     }
     
     // reset composite mode and opacity
@@ -145,7 +151,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // and blit it to the temporary painting device
     m_tempPainter->setCompositeOp(COMPOSITE_OVER);
     m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, brush->width(), brush->width());
+    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, maxBrushWidth, maxBrushHeight);
     
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)

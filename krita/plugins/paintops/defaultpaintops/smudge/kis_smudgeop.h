@@ -5,7 +5,6 @@
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,12 +28,9 @@
 
 #include "kis_brush_based_paintop.h"
 #include <kis_types.h>
+#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option.h>
-#include <kis_merged_paint_option.h>
 
 class KisBrushBasedPaintOpSettings;
 
@@ -43,24 +39,25 @@ class KisPainter;
 
 class KisSmudgeOp : public KisBrushBasedPaintOp
 {
+
 public:
+
     KisSmudgeOp(const KisBrushBasedPaintOpSettings *settings, KisPainter * painter, KisImageWSP image);
     virtual ~KisSmudgeOp();
 
     qreal paintAt(const KisPaintInformation& info);
 
 private:
-    bool                      m_firstRun;
-    KisPaintDeviceSP          m_tempDev; // The temporary paint device
-    KisImageWSP               m_image;
-    KisPainter*               m_tempPainter;
-    KisPressureSizeOption     m_sizeOption;
-    KisPressureSpacingOption  m_spacingOption;
-    KisPressureRateOption     m_smudgeRateOption;
-    KisPressureRateOption     m_colorRateOption;
-    KisMergedPaintOption      m_mergedPaintOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureScatterOption  m_scatterOption;
+    bool m_firstRun;
+    // The "temporary paint device"
+    KisPaintDeviceSP m_tempDev;
+    // The size of the rectangle encompassing the whole data in the temporary device needs to be cached for speed
+    QRect m_wholeTempData;
+    KoColor m_color;
+    
+    KisPressureSizeOption m_sizeOption;
+    KisPressureOpacityOption m_opacityOption;
+    KisPressureRateOption m_rateOption;
 };
 
 #endif // KIS_SMUDGEOP_H_

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
- * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,37 +22,55 @@
 
 #include <klocale.h>
 
-#include <kis_painter.h>
+#include <kis_paint_device.h>
 #include <widgets/kis_curve_widget.h>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
 
-KisPressureRateOption::KisPressureRateOption(const QString& name, const QString& label, bool checked, const QString& category)
-    : KisCurveOption(label, name, category, checked) { }
+KisPressureRateOption::KisPressureRateOption()
+        : KisCurveOption(i18n("Rate"), "Rate", KisPaintOpOption::brushCategory(), true)
+{
+}
+
+void KisPressureRateOption::setRate(int rate)
+{
+    m_rate = rate;
+}
+
+int KisPressureRateOption::rate() const
+{
+    return m_rate;
+}
 
 void KisPressureRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty(m_name + "Value", m_rate);
+    setting->setProperty("RateValue", m_rate);
+    setting->setProperty("RateVersion", "2");
 }
 
 void KisPressureRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    m_rate = setting->getDouble(m_name + "Value");
+    if (setting->getString("RateVersion", "1") == "1") {
+        m_rate = setting->getInt("RatePressure");
+        setChecked(true);
+    } else {
+        m_rate = setting->getInt("RateValue");
+    }
 }
 
-void KisPressureRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
+quint8 KisPressureRateOption::apply(quint8 opacity, const KisPaintInformation& info) const
 {
-    if(!isChecked()) {
-        painter.setOpacity((quint8)(scaleMax * 255.0));
-        return;
-    }
-    
-    qreal  rate    = scaleMin + (scaleMax - scaleMin) * (m_rate * multiplicator); // scale m_rate into the range scaleMin - scaleMax
-    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
+    opacity = (m_rate * 255) / 100;
 
-    painter.setOpacity(opacity);
+    if (isChecked()) {
+        opacity = qBound((qint32)OPACITY_TRANSPARENT_U8,
+                         (qint32)(double(opacity) * computeValue(info) / PRESSURE_DEFAULT),
+                         (qint32)OPACITY_OPAQUE_U8);
+    }
+
+    return opacity;
 }
 

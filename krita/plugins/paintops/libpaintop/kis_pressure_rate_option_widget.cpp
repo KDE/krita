@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
  * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
- * Copyright (C) Silvio Heinrich <plassy@web.de>, (C) 2011
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,8 +19,6 @@
  */
 
 #include "kis_pressure_rate_option_widget.h"
-#include "kis_pressure_rate_option.h"
-#include <kis_slider_spin_box.h>
 
 #include <QWidget>
 #include <QCheckBox>
@@ -32,22 +29,23 @@
 
 #include <klocale.h>
 
-KisPressureRateOptionWidget::KisPressureRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked)
-    : KisCurveOptionWidget(new KisPressureRateOption(name, label, checked))
+#include "kis_pressure_rate_option.h"
+
+KisPressureRateOptionWidget::KisPressureRateOptionWidget()
+    : KisCurveOptionWidget(new KisPressureRateOption())
 {
     QWidget* w = new QWidget;
-    QLabel* rateLabel = new QLabel(sliderLabel);
-    m_rateSlider = new KisDoubleSliderSpinBox();
-    m_rateSlider->setRange(0.0, 1.0, 2);
-    m_rateSlider->setSingleStep(0.01);
-    m_rateSlider->setValue(0.3);
-    
-    connect(m_rateSlider, SIGNAL(valueChanged(qreal)),SLOT(rateChanged(qreal)));
-    
+    QLabel* rateLabel = new QLabel(i18n("Rate: "));
+    m_rateSlider = new QSlider();
+    m_rateSlider->setMinimum(0);
+    m_rateSlider->setMaximum(100);
+    m_rateSlider->setPageStep(1);
+    m_rateSlider->setValue(90);
+    m_rateSlider->setOrientation(Qt::Horizontal);
+    connect(m_rateSlider, SIGNAL(valueChanged(int)),SLOT(rateChanged(int)));
     QHBoxLayout* hl = new QHBoxLayout;
     hl->addWidget(rateLabel);
     hl->addWidget(m_rateSlider);
-    hl->setStretchFactor(m_rateSlider, 1);
 
     QVBoxLayout* vl = new QVBoxLayout;
     vl->addLayout(hl);
@@ -61,10 +59,10 @@ KisPressureRateOptionWidget::KisPressureRateOptionWidget(const QString& label, c
 void KisPressureRateOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_rateSlider->setValue(static_cast<KisPressureRateOption*>(curveOption())->getRate());
+    m_rateSlider->setValue(static_cast<KisPressureRateOption*>(curveOption())->rate());
 }
 
-void KisPressureRateOptionWidget::rateChanged(qreal rate)
+void KisPressureRateOptionWidget::rateChanged(int rate)
 {
     static_cast<KisPressureRateOption*>(curveOption())->setRate(rate);
     emit sigSettingChanged();

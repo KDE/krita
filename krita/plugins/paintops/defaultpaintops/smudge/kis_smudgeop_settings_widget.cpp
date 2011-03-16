@@ -4,7 +4,6 @@
  *  Copyright (c) 2004 Clarence Dang <dang@kde.org>
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
- *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,14 +24,12 @@
 #include "kis_brush_based_paintop_settings.h"
 #include <kis_properties_configuration.h>
 #include <kis_paintop_options_widget.h>
+#include <kis_pressure_darken_option.h>
+#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_rate_option_widget.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option_widget.h>
-#include <kis_merged_paint_option.h>
 
 KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
@@ -40,12 +37,10 @@ KisSmudgeOpSettingsWidget::KisSmudgeOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSpacingOption()));
-    addPaintOpOption(new KisPressureRateOptionWidget(i18n("Smudge Rate"), i18n("Rate: "), "SmudgeRate", true));
-    addPaintOpOption(new KisPressureRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
-    addPaintOpOption(new KisPressureScatterOptionWidget());
-    addPaintOpOption(new KisMergedPaintOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption));
+    addPaintOpOption(new KisPressureRateOptionWidget());
+
 }
 
 KisSmudgeOpSettingsWidget::~KisSmudgeOpSettingsWidget()
@@ -56,7 +51,7 @@ KisPropertiesConfiguration* KisSmudgeOpSettingsWidget::configuration() const
 {
     KisBrushBasedPaintOpSettings *config = new KisBrushBasedPaintOpSettings();
     config->setOptionsWidget(const_cast<KisSmudgeOpSettingsWidget*>(this));
-    config->setProperty("paintop", "smudge"); // TODO: make this a const id string
+    config->setProperty("paintop", "smudge"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
 }

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- * Copyright (C) Silvio Heinrich <plassy@web.de>, (C) 2011
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,7 +27,6 @@
 
 class QSlider;
 class KisPropertiesConfiguration;
-class KisPainter;
 
 /**
  * The pressure opacity option defines a curve that is used to
@@ -37,22 +35,25 @@ class KisPainter;
 class PAINTOP_EXPORT KisPressureRateOption : public KisCurveOption
 {
 public:
-    KisPressureRateOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());
+    KisPressureRateOption();
 
     /**
      * Set the opacity of the painter based on the rate
-     * and the curve (if checked)
+     * and the curve (if checked) and return the old opacity
+     * of the painter.
      */
-    void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0, qreal multiplicator=1.0) const;
+    quint8 apply(quint8 opacity, const KisPaintInformation& info) const;
 
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
-    void setRate(qreal rate) { m_rate = qBound<qreal>(0.0, rate, 1.0); }
-    qreal getRate() const { return m_rate; }
+    void setRate(int rate);
+    
+    int rate() const;
     
 private:
-    qreal m_rate;
+    int m_rate;
 };
 
 #endif

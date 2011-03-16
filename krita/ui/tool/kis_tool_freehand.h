@@ -107,6 +107,7 @@ private slots:
     void hideOutline();
 protected:
 
+    KisPaintInformation m_olderPaintInformation;
     KisPaintInformation m_previousPaintInformation;
     QPointF m_previousTangent;
     double m_dragDist;

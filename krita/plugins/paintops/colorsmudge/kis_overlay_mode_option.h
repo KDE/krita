@@ -15,8 +15,8 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef _KIS_MERGED_PAINT_OPTION_H_
-#define _KIS_MERGED_PAINT_OPTION_H_
+#ifndef _KIS_OVERLAYMODE_OPTION_H_
+#define _KIS_OVERLAYMODE_OPTION_H_
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
@@ -24,11 +24,11 @@
 
 #include <QLabel>
 
-class PAINTOP_EXPORT KisMergedPaintOption : public KisPaintOpOption
+class PAINTOP_EXPORT KisOverlayModeOption : public KisPaintOpOption
 {
 public:
-    KisMergedPaintOption():
-        KisPaintOpOption(i18n("Merged Paint"), KisPaintOpOption::brushCategory(), false) { }
+    KisOverlayModeOption():
+        KisPaintOpOption(i18n("Overlay Mode"), KisPaintOpOption::brushCategory(), false) { }
 
     virtual bool isCheckable() { return true; }
     
@@ -42,15 +42,15 @@ public:
     }
 };
 
-class PAINTOP_EXPORT KisMergedPaintOptionWidget: public KisMergedPaintOption
+class PAINTOP_EXPORT KisOverlayModeOptionWidget: public KisOverlayModeOption
 {
 public:
-    KisMergedPaintOptionWidget()
+    KisOverlayModeOptionWidget()
     {
-        QLabel* lable = new QLabel(i18n("Use all visible layers merged together for painting operations."));
-        lable->setAlignment(Qt::AlignVCenter|Qt::AlignLeft);
+        QLabel* lable = new QLabel(i18n("Paints on the current layer\nbut uses all layers that are currently visible for smudge input"));
+        lable->setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
         setConfigurationPage(lable);
     }
 };
 
-#endif // _KIS_MERGED_PAINT_OPTION_H_
+#endif // _KIS_OVERLAYMODE_OPTION_H_

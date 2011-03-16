@@ -27,7 +27,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 
-#include "kis_merged_paint_option.h"
+#include "kis_overlay_mode_option.h"
 #include "kis_rate_option_widget.h"
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -41,7 +41,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());
-    addPaintOpOption(new KisMergedPaintOptionWidget());
+    addPaintOpOption(new KisOverlayModeOptionWidget());
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }

@@ -28,7 +28,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
 
-#include "kis_merged_paint_option.h"
+#include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 
 class KisBrushBasedPaintOpSettings;
@@ -53,7 +53,7 @@ private:
     KisPressureSpacingOption  m_spacingOption;
     KisRateOption             m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
-    KisMergedPaintOption      m_mergedPaintOption;
+    KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
 };

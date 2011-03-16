@@ -47,7 +47,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_spacingOption.readOptionSetting(settings);
     m_smudgeRateOption.readOptionSetting(settings);
     m_colorRateOption.readOptionSetting(settings);
-    m_mergedPaintOption.readOptionSetting(settings);
+    m_overlayModeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
     
@@ -133,7 +133,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     }
     else m_firstRun = false;
     
-    if(m_image && m_mergedPaintOption.isChecked()) {
+    if(m_image && m_overlayModeOption.isChecked()) {
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);
         m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
         m_image->lock();

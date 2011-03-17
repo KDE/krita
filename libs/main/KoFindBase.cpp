@@ -28,6 +28,8 @@ public:
     Private() : currentMatch(0) { }
     KoFindMatchList matches;
     int currentMatch;
+
+    KoFindOptions options;
 };
 
 KoFindBase::KoFindBase(QObject* parent)
@@ -56,6 +58,11 @@ KoFindMatch KoFindBase::currentMatch() const
         return d->matches.at(d->currentMatch);
     }
     return KoFindMatch();
+}
+
+KoFindBase::KoFindOptions KoFindBase::options() const
+{
+    return d->options;
 }
 
 void KoFindBase::setMatches(const KoFindBase::KoFindMatchList& matches)
@@ -89,12 +96,18 @@ void KoFindBase::findNext()
         return;
     }
 
+    bool wrap = false;
     d->currentMatch++;
     if(d->currentMatch >= d->matches.count()) {
         d->currentMatch = 0;
+        wrap = true;
+    }
+    
+    emit matchFound(d->matches.at(d->currentMatch));
+
+    if(wrap) {
         emit wrapAround();
     }
-    emit matchFound(d->matches.at(d->currentMatch));
 }
 
 void KoFindBase::findPrevious()
@@ -102,13 +115,18 @@ void KoFindBase::findPrevious()
     if(d->matches.count() == 0) {
         return;
     }
-    
+
+    bool wrap = false;
     d->currentMatch--;
     if(d->currentMatch < 0) {
         d->currentMatch = d->matches.count() - 1;
-        emit wrapAround();
+        wrap = true;
     }
     emit matchFound(d->matches.at(d->currentMatch));
+
+    if(wrap) {
+        emit wrapAround();
+    }
 }
 
 void KoFindBase::finished()
@@ -120,4 +138,9 @@ void KoFindBase::finished()
 void KoFindBase::clearMatches()
 {
 
+}
+
+void KoFindBase::setOptions(const KoFindBase::KoFindOptions &options)
+{
+    d->options = options;
 }

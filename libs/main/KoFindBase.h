@@ -39,6 +39,16 @@ class KOMAIN_EXPORT KoFindBase : public QObject
     Q_OBJECT
 public:
     typedef QList<KoFindMatch> KoFindMatchList;
+
+    enum KoFindOption
+    {
+        FindCaseSensitive, ///< Match only if cases are equal.
+        FindWholeWords, ///< Match only whole words.
+        FindRegularExpression, ///< Match using a regular expression instead of simple substring matching.
+        FindWithinSelection, ///< Search only within the current selection.
+        FindFromCursor, ///< Start searching from the current cursor position.
+    };
+    Q_DECLARE_FLAGS(KoFindOptions, KoFindOption);
     
     explicit KoFindBase(QObject* parent = 0);
     virtual ~KoFindBase();
@@ -69,6 +79,11 @@ public:
      */
     KoFindMatch currentMatch() const;
 
+    /**
+     * Retrieve the current set of options.
+     */
+    KoFindOptions options() const;
+
 public Q_SLOTS:
     /**
      * Search for a string in the document associated with this
@@ -95,6 +110,13 @@ public Q_SLOTS:
      * This clears all highlighting and other markers.
      */
     virtual void finished();
+    /**
+     * Set the current set of options. This will be used for the
+     * next call to find(), and not modify the current set of matches.
+     *
+     * \param options The new options.
+     */
+    virtual void setOptions(const KoFindOptions &options);
 
 Q_SIGNALS:
     /**
@@ -155,5 +177,7 @@ private:
     class Private;
     Private * const d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KoFindBase::KoFindOptions);
 
 #endif // KOFINDBASE_H

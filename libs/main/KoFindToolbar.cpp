@@ -21,8 +21,11 @@
 
 
 #include "KoFindToolbar.h"
+
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QToolButton>
+#include <QtGui/QMenu>
+#include <QtGui/QApplication>
 
 #include <KDE/KLocalizedString>
 #include <KDE/KLineEdit>
@@ -31,24 +34,26 @@
 #include <KDE/KHistoryComboBox>
 #include <KDE/KAction>
 #include <KDE/KActionCollection>
+#include <KDE/KColorScheme>
 
 #include "KoFindBase.h"
-#include <KColorScheme>
-#include <QMenu>
-#include <QShowEvent>
 
 class KoFindToolbar::Private
 {
 public:
     Private(KoFindToolbar *qq) : q(qq) { }
-    void textEdited(QString text);
+    
     void matchFound();
     void noMatchFound();
     void searchWrapped();
+    void addToHistory();
+    void find(const QString &pattern);
+    void caseSensitiveChanged(bool value);
+    void wholeWordsChanged(bool value);
 
     KoFindToolbar *q;
 
-    KoFindBase *find;
+    KoFindBase *finder;
 
     QToolButton *closeButton;
     KHistoryComboBox *searchLine;
@@ -62,21 +67,22 @@ public:
 
 QStringList KoFindToolbar::Private::completionItems = QStringList(); 
 
-KoFindToolbar::KoFindToolbar(KoFindBase* find, KActionCollection *ac, QWidget* parent, Qt::WindowFlags f)
+KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget* parent, Qt::WindowFlags f)
     : QWidget(parent, f), d(new Private(this))
 {
     QHBoxLayout *layout = new QHBoxLayout();
 
-    d->find = find;
-    connect(d->find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound()));
-    connect(d->find, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
-    connect(d->find, SIGNAL(wrapAround()), this, SLOT(searchWrapped()));
+    d->finder = finder;
+    connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound()));
+    connect(d->finder, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
+    connect(d->finder, SIGNAL(wrapAround()), this, SLOT(searchWrapped()));
 
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
     d->closeButton->setIcon(KIcon("dialog-close"));
     d->closeButton->setShortcut(QKeySequence(Qt::Key_Escape));
     connect(d->closeButton, SIGNAL(clicked(bool)), this, SLOT(hide()));
+    connect(d->closeButton, SIGNAL(clicked(bool)), d->finder, SLOT(finished()));
     layout->addWidget(d->closeButton);
 
     layout->addWidget(new QLabel(i18n("Find:"), this));
@@ -84,7 +90,10 @@ KoFindToolbar::KoFindToolbar(KoFindBase* find, KActionCollection *ac, QWidget* p
     d->searchLine = new KHistoryComboBox(true, this);
     d->searchLine->setCompletedItems(d->completionItems);
     d->searchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->searchLine, SIGNAL(editTextChanged(QString)), this, SLOT(textEdited(QString)));
+    connect(d->searchLine, SIGNAL(editTextChanged(QString)), this, SLOT(find(QString)));
+    connect(d->searchLine, SIGNAL(returnPressed()), d->finder, SLOT(findNext()));
+    connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
+    connect(d->searchLine, SIGNAL(cleared()), finder, SLOT(finished()));
     layout->addWidget(d->searchLine);
 
     d->nextButton = new QToolButton(this);
@@ -92,8 +101,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase* find, KActionCollection *ac, QWidget* p
     d->nextButton->setText(i18nc("Next search result", "Next"));
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
-    connect(d->nextButton, SIGNAL(clicked(bool)), d->find, SLOT(findNext()));
-    connect(d->find, SIGNAL(hasMatchesChanged(bool)), d->nextButton, SLOT(setEnabled(bool)));
+    connect(d->nextButton, SIGNAL(clicked(bool)), d->finder, SLOT(findNext()));
+    connect(d->nextButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
+    connect(d->finder, SIGNAL(hasMatchesChanged(bool)), d->nextButton, SLOT(setEnabled(bool)));
     layout->addWidget(d->nextButton);
 
     d->previousButton = new QToolButton(this);
@@ -101,16 +111,28 @@ KoFindToolbar::KoFindToolbar(KoFindBase* find, KActionCollection *ac, QWidget* p
     d->previousButton->setText(i18nc("Previous search result", "Previous"));
     d->previousButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->previousButton->setEnabled(false);
-    connect(d->previousButton, SIGNAL(clicked(bool)), d->find, SLOT(findPrevious()));
-    connect(d->find, SIGNAL(hasMatchesChanged(bool)), d->previousButton, SLOT(setEnabled(bool)));
+    connect(d->previousButton, SIGNAL(clicked(bool)), d->finder, SLOT(findPrevious()));
+    connect(d->previousButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
+    connect(d->finder, SIGNAL(hasMatchesChanged(bool)), d->previousButton, SLOT(setEnabled(bool)));
     layout->addWidget(d->previousButton);
 
     d->optionsButton = new QToolButton(this);
     d->optionsButton->setText(i18nc("Search options", "Options"));
+    
     QMenu* menu = new QMenu(d->optionsButton);
-    menu->addAction(i18n("Case Sensitive"));
-    menu->addAction(i18n("Whole Words Only"));
+    
+    QAction *action = new QAction(i18n("Case Sensitive"), menu);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(caseSensitiveChanged(bool)));
+    menu->addAction(action);
+    
+    action = new QAction(i18n("Whole Words Only"), menu);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(wholeWordsChanged(bool)));
+    menu->addAction(action);
+    
     d->optionsButton->setMenu(menu);
+    d->optionsButton->setPopupMode(QToolButton::InstantPopup);
     layout->addWidget(d->optionsButton);
 
     d->information = new KSqueezedTextLabel(this);
@@ -118,13 +140,15 @@ KoFindToolbar::KoFindToolbar(KoFindBase* find, KActionCollection *ac, QWidget* p
 
     setLayout(layout);
 
-    ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(show()));
+    ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(activate()));
 
-    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->find, SLOT(findNext()));
-    connect(find, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
+    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->finder, SLOT(findNext()));
+    connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
+    connect(findNextAction, SIGNAL(triggered(bool)), this, SLOT(activate()));
     findNextAction->setEnabled(false);
-    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->find, SLOT(findPrevious()));
-    connect(find, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
+    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->finder, SLOT(findPrevious()));
+    connect(finder, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
+    connect(findPrevAction, SIGNAL(triggered(bool)), this, SLOT(activate()));
     findPrevAction->setEnabled(false);
 }
 
@@ -133,18 +157,12 @@ KoFindToolbar::~KoFindToolbar()
     delete d;
 }
 
-void KoFindToolbar::showEvent(QShowEvent* evt)
+void KoFindToolbar::activate()
 {
-    if(!evt->spontaneous()) {
-        d->searchLine->setFocus();
+    if(!isVisible()) {
+        show();
     }
-}
-
-void KoFindToolbar::Private::textEdited(QString text)
-{
-    if(text.length() > 1) {
-        find->find(text);
-    }
+    d->searchLine->setFocus();
 }
 
 void KoFindToolbar::Private::matchFound()
@@ -167,6 +185,34 @@ void KoFindToolbar::Private::noMatchFound()
 void KoFindToolbar::Private::searchWrapped()
 {
     information->setText(i18n("Search hit bottom, continuing from top."));
+}
+
+void KoFindToolbar::Private::addToHistory()
+{
+    searchLine->addToHistory(searchLine->currentText());
+}
+
+void KoFindToolbar::Private::find(const QString& pattern)
+{
+    if(pattern.length() > 0) {
+        finder->find(pattern);
+    } else {
+        finder->finished();
+        information->setText(QString());
+        searchLine->setPalette(qApp->palette());
+    }
+}
+
+void KoFindToolbar::Private::caseSensitiveChanged(bool value)
+{
+    finder->setOptions(finder->options() ^ KoFindBase::FindCaseSensitive );
+    find(searchLine->currentText());
+}
+
+void KoFindToolbar::Private::wholeWordsChanged(bool value)
+{
+    finder->setOptions(finder->options() ^ KoFindBase::FindWholeWords );
+    find(searchLine->currentText());
 }
 
 #include "KoFindToolbar.moc"

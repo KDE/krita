@@ -35,17 +35,20 @@ public:
     explicit KoFindToolbar(KoFindBase* find, KActionCollection* ac, QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~KoFindToolbar();
 
-protected:
-virtual void showEvent(QShowEvent* evt);
+public Q_SLOTS:
+    void activate();
 
 private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void textEdited(QString text));
     Q_PRIVATE_SLOT(d, void matchFound());
     Q_PRIVATE_SLOT(d, void noMatchFound());
     Q_PRIVATE_SLOT(d, void searchWrapped());
+    Q_PRIVATE_SLOT(d, void addToHistory());
+    Q_PRIVATE_SLOT(d, void wholeWordsChanged(bool value));
+    Q_PRIVATE_SLOT(d, void caseSensitiveChanged(bool value));
+    Q_PRIVATE_SLOT(d, void find(const QString &pattern));
 };
 
 #endif // KOFINDTOOLBAR_H

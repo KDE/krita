@@ -35,7 +35,7 @@ public:
     void setLine(KoTextLayoutArea *area, QTextLine l);
     void setRestartOnNextShape(bool restartOnNextShape);
     void setOutlines(const QList<Outline*> &outlines);
-    bool processingLine();
+    bool stayOnBaseline();
     void updateOutline(Outline *outline);
     void fit(const bool resetHorizontalPosition, QPointF position);
     QTextLine line;
@@ -47,7 +47,7 @@ private:
     QRectF m_lineRect;
     qreal m_horizontalPosition;
     bool m_updateValidOutlines;
-    bool m_processingLine;
+    bool m_stayOnBaseline;
     qreal m_textWidth;
     bool m_restartOnNextShape;
     void validateOutlines();

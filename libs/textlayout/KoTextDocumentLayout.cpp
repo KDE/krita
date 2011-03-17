@@ -99,6 +99,9 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
     d->provider = provider;
     setPaintDevice(d->paintDevice);
 
+    d->styleManager = KoTextDocument(m_parent->document()).styleManager();
+    d->changeTracker = KoTextDocument(m_parent->document()).changeTracker();
+
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 }
 
@@ -119,9 +122,19 @@ void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager 
     d->inlineTextObjectManager = iom;
 }
 
-KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager()
+KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const
 {
     return d->inlineTextObjectManager;
+}
+
+KoChangeTracker *KoTextDocumentLayout::changeTracker() const
+{
+    return d->changeTracker;
+}
+
+KoStyleManager *KoTextDocumentLayout::styleManager() const
+{
+    return d->styleManager;
 }
 
 QRectF KoTextDocumentLayout::blockBoundingRect(const QTextBlock &block) const

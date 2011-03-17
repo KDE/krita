@@ -30,7 +30,7 @@ RunAroundHelper::RunAroundHelper()
     m_lineRect = QRectF();
     m_updateValidOutlines = false;
     m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-    m_processingLine = false;
+    m_stayOnBaseline = false;
     m_restartOnNextShape = false;
 }
 
@@ -49,9 +49,9 @@ void RunAroundHelper::setOutlines(const QList<Outline*> &outlines)
     m_outlines = &outlines;
 }
 
-bool RunAroundHelper::processingLine()
+bool RunAroundHelper::stayOnBaseline()
 {
-    return m_processingLine;
+    return m_stayOnBaseline;
 }
 
 void RunAroundHelper::updateOutline(Outline *outline)
@@ -66,7 +66,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
 {
     if (resetHorizontalPosition) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-        m_processingLine = false;
+        m_stayOnBaseline = false;
     }
     const qreal maxLineWidth = m_area->width();
     // Make sure at least some text is fitted if the basic width (page, table cell, column)
@@ -278,9 +278,9 @@ QRectF RunAroundHelper::getLineRect(const QRectF &lineRect, const qreal maxNatur
 void RunAroundHelper::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
     if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
-        m_processingLine = false;
+        m_stayOnBaseline = false;
     } else {
         m_horizontalPosition = lineRectPart.right();
-        m_processingLine = true;
+        m_stayOnBaseline = true;
     }
 }

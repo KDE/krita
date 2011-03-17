@@ -40,6 +40,8 @@
 #include <KoTextBlockData.h>
 #include <KoTextBlockBorderData.h>
 #include <KoText.h>
+#include <KoChangeTracker.h>
+#include <KoChangeTrackerElement.h>
 
 #include <KDebug>
 
@@ -91,14 +93,22 @@ void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
     }
 }
 
-
+// layoutBlock() method is structured like this:
+//
+// 1) Setup various helper values
+//   a) related to or influenced by lists
+//   b) related to or influenced by tabs
+//   c) related to or influenced by dropcaps
+// 2)layout each line (possibly restarting where we stopped earlier)
+//   a) fit line into sub lines with as needed for text runaround
+//   b) make sure we keep above maximalAllowedY
+//   c) calls addLine()
 void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
 {
     QTextBlock block = cursor->it.currentBlock();
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     QTextBlockFormat format = block.blockFormat();
 
-    bool isRtl;
     int dropCapsNChars;
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsAffectedLineWidthAdjust;
@@ -108,9 +118,9 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     if (dir == KoText::InheritDirection)
         dir = parentTextDirection();
     if (dir == KoText::AutoDirection)
-        isRtl = block.text().isRightToLeft();
+        m_isRtl = block.text().isRightToLeft();
     else
-        isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
+        m_isRtl =  dir == KoText::RightLeftTopBottom || dir == KoText::PerhapsRightLeftTopBottom;
 
 
     // initialize list item stuff for this parag.
@@ -119,10 +129,10 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
         QTextListFormat format = textList->format();
         int styleId = format.intProperty(KoListStyle::CharacterStyleId);
         KoCharacterStyle *charStyle = 0;
-        if (styleId > 0 && m_styleManager)
-            charStyle = m_styleManager->characterStyle(styleId);
-        if (!charStyle && m_styleManager) { // try the one from paragraph style
-            KoParagraphStyle *ps = m_styleManager->paragraphStyle(
+        if (styleId > 0 && m_documentLayout->styleManager())
+            charStyle = m_documentLayout->styleManager()->characterStyle(styleId);
+        if (!charStyle && m_documentLayout->styleManager()) { // try the one from paragraph style
+            KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
                                        format.intProperty(KoParagraphStyle::StyleId));
             if (ps)
                 charStyle = ps->characterStyle();
@@ -172,7 +182,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     QVariant variant = format.property(KoParagraphStyle::TabPositions);
     qreal tabOffset = - left();
     if (m_documentLayout->relativeTabs()) {
-        tabOffset += (isRtl ? format.rightMargin() : (format.leftMargin() + listIndent())) ;
+        tabOffset += (m_isRtl ? format.rightMargin() : (format.leftMargin() + listIndent())) ;
     }
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
     qreal position = tabOffset * qt_defaultDpiY() / 72.;
@@ -207,8 +217,8 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     }
     option.setTabs(tabs);
 
-    option.setAlignment(QStyle::visualAlignment(isRtl ? Qt::RightToLeft : Qt::LeftToRight, format.alignment()));
-    if (isRtl)
+    option.setAlignment(QStyle::visualAlignment(m_isRtl ? Qt::RightToLeft : Qt::LeftToRight, format.alignment()));
+    if (m_isRtl)
         option.setTextDirection(Qt::RightToLeft);
     else
         option.setTextDirection(Qt::LeftToRight);
@@ -273,8 +283,8 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
 
         int dropCapsStyleId = format.intProperty(KoParagraphStyle::DropCapsTextStyle);
         KoCharacterStyle *dropCapsCharStyle = 0;
-        if (dropCapsStyleId > 0 && m_styleManager) {
-            dropCapsCharStyle = m_styleManager->characterStyle(dropCapsStyleId);
+        if (dropCapsStyleId > 0 && m_documentLayout->styleManager()) {
+            dropCapsCharStyle = m_documentLayout->styleManager()->characterStyle(dropCapsStyleId);
             dropCapsCharStyle->applyStyle(dropCapsFormatRange.format);
         }
         QFont f(dropCapsFormatRange.format.font(), m_documentLayout->paintDevice());
@@ -324,7 +334,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
         m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
         // if list set list-indent. Do this after borders init to we can account for them.
         // Also after we account for indents etc so the y() pos is correct.
-        if (isRtl)
+        if (m_isRtl)
             blockData->setCounterPosition(QPointF(right() -
                         blockData->counterWidth() - format.leftMargin(), m_y));
         else {
@@ -336,7 +346,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     m_width = right() - left() - listIndent();
     m_width -= format.leftMargin() + format.rightMargin();
 
-    if (isRtl) {
+    if (m_isRtl) {
         m_x = left() + format.rightMargin();
         m_width -= blockData->counterWidth() + blockData->counterSpacing();
     } else {
@@ -354,7 +364,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     if (dropCapsNChars>0)
         m_width =  dropCapsAffectedLineWidthAdjust+10;
 
-    if (false /*FIXME firstLine*/) {
+    if (cursor->line.isValid()==false) {
         m_x += textIndent(block);
         m_width -= textIndent(block);
     } else
@@ -364,26 +374,58 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     RunAroundHelper runAroundHelper;
     runAroundHelper.setLine(this, cursor->line);
 
-    //refreshCurrentPageOutlines();
-    //runAroundHelper.setOutlines(m_currentLineOutlines);
+    //FIXME refreshCurrentPageOutlines();
+    //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
+
+    qreal maxLineHeight = 0;
+    qreal y_justBelowDropCaps = 0;
+
     while (cursor->line.isValid()) {
-        //runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x, m_y));
+        //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x, m_y));
         //FIXME While above is commented out we should set width
         cursor->line.setLineWidth(width());
         cursor->line.setPosition(QPointF(x(), m_y));
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
         if (bottomOfText > maximalAllowedY()) {
-            return; // done! We can not fit any more lines within our allowed space
+            // We can not fit line within our allowed space
+            if (format.nonBreakableLines()) {
+                //set an invalid line so we start this block from beginning next time
+                cursor->line = QTextLine();
+            }
+            return /*FIXME false*/; //to indicate block was not done!
         }
 
-        //cursor->textLine.fit( /* resetHorizontalPosition */ true, QPointF(x, m_y));
+        maxLineHeight = qMax(maxLineHeight, addLine(cursor, blockData));
+        //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ true, QPointF(x, m_y));
+
+        if (true /*FIXME !runAroundHelper.stayOnBaseline()*/) {
+            m_y += maxLineHeight;
+            maxLineHeight = 0;
+        }
+
+        // drop caps
+        if (dropCapsNChars > 0) { // we just laid out the dropped chars
+            y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
+            m_y = cursor->line.y();              // keep the same y for the next line
+            cursor->line.setPosition(cursor->line.position() - QPointF(0, dropCapsPositionAdjust));
+            dropCapsNChars = 0;
+        } else if (dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
+            dropCapsAffectsNMoreLines--;
+            if (dropCapsAffectsNMoreLines == 0) {   // no more drop-cap-affected lines
+                if (m_y < y_justBelowDropCaps)
+                    m_y = y_justBelowDropCaps; // make sure m_y is below the dropped characters
+                y_justBelowDropCaps = 0;
+                dropCapsAffectedLineWidthAdjust = 0;
+            }
+        }
+
 
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
         runAroundHelper.setLine(this, cursor->line);
-        //refreshCurrentPageOutlines();
-        //runAroundHelper.setOutlines(m_currentLineOutlines);
+        //FIXME refreshCurrentPageOutlines();
+        //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
     }
     cursor->line = QTextLine(); //set an invalid line to indicate we are done with block
 }
@@ -413,6 +455,122 @@ qreal KoTextLayoutArea::x() const
 qreal KoTextLayoutArea::width() const
 {
     return m_width;
+}
+
+qreal KoTextLayoutArea::addLine(HierarchicalCursor *cursor, KoTextBlockData *blockData)
+{
+    QTextBlock block = cursor->it.currentBlock();
+    QTextLine line =  cursor->line;
+    QTextBlockFormat format = block.blockFormat();
+
+    if (blockData && block.textList() && block.layout()->lineCount() == 1) {
+        // first line, lets check where the line ended up and adjust the positioning of the counter.
+        if ((format.alignment() & Qt::AlignHCenter) == Qt::AlignHCenter) {
+            const qreal padding = (line.width() - line.naturalTextWidth() ) / 2;
+            qreal newX;
+            if (m_isRtl)
+                newX = line.x() + line.width() - padding + blockData->counterSpacing();
+            else
+                newX = line.x() + padding - blockData->counterWidth() - blockData->counterSpacing();
+            blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        }
+        else if (!m_isRtl && x() < line.x()) {// move the counter more left.
+            blockData->setCounterPosition(blockData->counterPosition() + QPointF(line.x() - x(), 0));
+        } else if (m_isRtl && x() + width() > line.x() + line.width() + 0.1) { // 0.1 to account for qfixed rounding
+           const qreal newX = line.x() + line.width() + blockData->counterSpacing();
+           blockData->setCounterPosition(QPointF(newX, blockData->counterPosition().y()));
+        }
+    }
+
+    qreal height = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    qreal objectAscent = 0.0;
+    qreal objectDescent = 0.0;
+    bool useFixedLineHeight = height != 0.0;
+    if (useFixedLineHeight) {
+        // QTextLine has its position at the top of the line. So if the ascent changes between lines in a parag
+        // because of different font sizes, for example, we have to adjust the position to make the fixed
+        // line height be from baseline to baseline instead of from top-of-line to top-of-line
+        QTextLayout *layout = block.layout();
+        if (layout->lineCount() > 1) {
+            QTextLine prevLine = layout->lineAt(layout->lineCount()-2);
+            Q_ASSERT(prevLine.isValid());
+            if (qAbs(prevLine.y() + height - line.y()) < 0.15) { // don't adjust when the line is not where we expect it.
+                const qreal prevBaseline = prevLine.y() + prevLine.ascent();
+                line.setPosition(QPointF(line.x(), prevBaseline + height - line.ascent()));
+            }
+        }
+    } else { // not fixed lineheight
+        const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
+        if (useFontProperties) {
+            height = line.height();
+        } else {
+            if (cursor->fragmentIterator.atEnd()) // no text in parag.
+                height = block.charFormat().fontPointSize();
+            else {
+                // read max font height
+                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize());
+
+                InlineObjectExtend pos = m_documentLayout->inlineObjectExtend(cursor->fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
+
+                while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
+                             block.position() + line.textStart() + line.textLength() - 1))) {
+                    cursor->fragmentIterator++;
+                    if (cursor->fragmentIterator.atEnd()) {
+                     break;
+                    }
+                    if (!m_documentLayout->changeTracker()
+                        || !m_documentLayout->changeTracker()->displayChanges()
+                        || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                        || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                        || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                        || m_documentLayout->changeTracker()->displayChanges()) {
+                        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize());
+
+                        InlineObjectExtend pos = m_documentLayout->inlineObjectExtend(cursor->fragmentIterator.fragment());
+                        objectAscent = qMax(objectAscent, pos.m_ascent);
+                        objectDescent = qMax(objectDescent, pos.m_descent);
+                    }
+                }
+            }
+            if (height < 0.01) height = 12; // default size for uninitialized styles.
+        }
+    }
+
+    // add linespacing
+    if (! useFixedLineHeight) {
+        qreal linespacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
+        if (linespacing == 0.0) { // unset
+            int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
+            if (percent != 0)
+                linespacing = height * ((percent - 100) / 100.0);
+            else if (linespacing == 0.0)
+                linespacing = height * 0.2; // default
+        }
+        height = qMax(height, objectAscent) + objectDescent + linespacing;
+    }
+    qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+    if (minimum > 0.0)
+        height = qMax(height, minimum);
+    //rounding problems due to Qt-scribe internally using ints.
+    //also used when line was moved down because of intersections with other shapes
+    if (qAbs(m_y - line.y()) >= 0.126) {
+        m_y = line.y();
+    }
+
+/*FIXME
+    // position inline objects
+    while (positionInlineObjects()) {
+        if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
+
+            if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
+                return 0;
+            }
+        }
+    }
+*/
+    return height; // line successfully added
 }
 
 /*

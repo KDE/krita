@@ -78,19 +78,21 @@ public:
     qreal textIndent(QTextBlock block) const;
     qreal x() const;
     qreal width() const;
-    
+
 private:
     void layoutBlock(HierarchicalCursor *cursor);
-    QTextLine createLine(HierarchicalCursor *cursor);
+
+    /// Returns vertical height of line
+    qreal addLine(HierarchicalCursor *cursor, KoTextBlockData *blockData);
 
     KoTextDocumentLayout *m_documentLayout;
-    KoStyleManager *m_styleManager;
 
     qreal m_x;
     qreal m_y;
     qreal m_width;
     qreal m_listIndent;
     qreal m_defaultTabSizing;
+    bool m_isRtl;
 };
 
 #endif

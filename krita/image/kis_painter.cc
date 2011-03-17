@@ -386,6 +386,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] dstBytes;
+    delete[] srcBytes;
 
     addDirtyRect(QRect(dstX, dstY, srcWidth, srcHeight));
 }

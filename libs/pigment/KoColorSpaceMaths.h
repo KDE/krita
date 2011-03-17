@@ -231,17 +231,16 @@ template < typename _T, typename _Tdst = _T >
 class KoColorSpaceMaths
 {
     typedef KoColorSpaceMathsTraits<_T> traits;
-    typedef typename traits::compositetype traits_compositetype;
+    typedef typename traits::compositetype src_compositetype;
+    typedef typename KoColorSpaceMathsTraits<_Tdst>::compositetype dst_compositetype;
+    
 public:
-    inline static traits_compositetype multiply(traits_compositetype a,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b) {
-        return ((traits_compositetype)a * b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
+    inline static _Tdst multiply(_T a, _Tdst b) {
+        return (dst_compositetype(a)*b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
     }
     
-    inline static traits_compositetype multiply(traits_compositetype a,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype c) {
-        return ((traits_compositetype)a * b * c) / (KoColorSpaceMathsTraits<_Tdst>::unitValue * KoColorSpaceMathsTraits<_Tdst>::unitValue);
+    inline static _Tdst multiply(_T a, _Tdst b, _Tdst c) {
+        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_Tdst>::unitValue);
     }
 
     /**
@@ -249,8 +248,8 @@ public:
      * @param a
      * @param b
      */
-    inline static traits_compositetype divide(_T a, _Tdst b) {
-        return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
+    inline static dst_compositetype divide(_T a, _Tdst b) {
+        return (dst_compositetype(a) *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
     }
     
     /**
@@ -258,7 +257,7 @@ public:
      * @param a
      */
     inline static _T invert(_T a) {
-        return KoColorSpaceMathsTraits<_T>::unitValue - a;
+        return traits::unitValue - a;
     }
 
     /**
@@ -268,7 +267,7 @@ public:
      * @param alpha
      */
     inline static _T blend(_T a, _T b, _T alpha) {
-        traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) / traits::unitValue;
+        src_compositetype c = ((src_compositetype(a) - b) * alpha) / traits::unitValue;
         return c + b;
     }
 
@@ -276,13 +275,11 @@ public:
      * This function will scale a value of type _T to fit into a _Tdst.
      */
     inline static _Tdst scaleToA(_T a) {
-        return (traits_compositetype)a >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+        return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
     }
 
-    inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp(typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val) {
-        return qBound((typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,
-                      val,
-                      (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype)KoColorSpaceMathsTraits<_Tdst>::max);
+    inline static dst_compositetype clamp(dst_compositetype val) {
+        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 };
 
@@ -448,16 +445,16 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
 //------------------------------ quint8 specialization ------------------------------//
 
 template<>
-inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b)
+inline quint8 KoColorSpaceMaths<quint8>::multiply(quint8 a, quint8 b)
 {
-    return UINT8_MULT(a, b);
+    return (quint8)UINT8_MULT(a, b);
 }
 
 
 template<>
-inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b, qint32 c)
+inline quint8 KoColorSpaceMaths<quint8>::multiply(quint8 a, quint8 b, quint8 c)
 {
-    return UINT8_MULT3(a, b, c);
+    return (quint8)UINT8_MULT3(a, b, c);
 }
 
 template<>
@@ -482,9 +479,9 @@ inline quint8 KoColorSpaceMaths<quint8>::blend(quint8 a, quint8 b, quint8 c)
 //------------------------------ quint16 specialization ------------------------------//
 
 template<>
-inline qint64 KoColorSpaceMaths<quint16>::multiply(qint64 a, qint64 b)
+inline quint16 KoColorSpaceMaths<quint16>::multiply(quint16 a, quint16 b)
 {
-    return UINT16_MULT(a, b);
+    return (quint16)UINT16_MULT(a, b);
 }
 
 template<>
@@ -544,10 +541,22 @@ namespace Arithmetic
     const static qreal pi = 3.14159265358979323846;
     
     template<class T>
-    inline T mul(T a, T b) { return T(KoColorSpaceMaths<T>::multiply(a, b)); }
+    inline T mul(T a, T b) { return KoColorSpaceMaths<T>::multiply(a, b); }
     
     template<class T>
-    inline T mul(T a, T b, T c) { return T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
+    inline T mul(T a, T b, T c) { return KoColorSpaceMaths<T>::multiply(a, b, c); }
+    
+//     template<class T>
+//     inline T mul(T a, T b) {
+//         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+//         return T(composite_type(a) * b / KoColorSpaceMathsTraits<T>::unitValue);
+//     }
+//     
+//     template<class T>
+//     inline T mul(T a, T b, T c) {
+//         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+//         return T((composite_type(a) * b * c) / (composite_type(KoColorSpaceMathsTraits<T>::unitValue) * KoColorSpaceMathsTraits<T>::unitValue));
+//     }
     
     template<class T>
     inline T inv(T a) { return KoColorSpaceMaths<T>::invert(a); }

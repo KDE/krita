@@ -31,6 +31,7 @@
 class QTextDocument;
 class QTextCursor;
 class KoResourceManager;
+class KoCanvasBase;
 class KOMAIN_EXPORT KoFindText : public KoFindBase
 {
     Q_OBJECT
@@ -41,8 +42,8 @@ public:
     void highlightMatch(const KoFindMatch& match);
 
 Q_SIGNALS:
-    void findDocumentSetNext(QTextDocument* document);
-    void findDocumentSetPrevious(QTextDocument* document);
+    //void findDocumentSetNext(QTextDocument* document);
+    //void findDocumentSetPrevious(QTextDocument* document);
 
 protected:
     virtual void findImpl(const QString& pattern, QList< KoFindMatch >& matchList);
@@ -54,8 +55,6 @@ private:
 
     Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant&))
 };
-
-//uint qHash(const QTextCursor& cursor);
 
 Q_DECLARE_METATYPE(QTextDocument*);
 Q_DECLARE_METATYPE(QTextCursor);

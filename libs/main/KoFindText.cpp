@@ -24,24 +24,26 @@
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextBlock>
 #include <QtGui/QTextLayout>
+#include <QtGui/QPalette>
+#include <QtGui/QStyle>
+#include <QtGui/QApplication>
 
 #include <KDE/KDebug>
 
 #include "KoResourceManager.h"
 #include "KoText.h"
-#include "KoStyleManager.h"
-#include <KoTextBlockData.h>
-#include <KoTextBlockPaintStrategyBase.h>
-#include <QPalette>
-#include <QStyle>
-#include <QApplication>
-
+#include "KoTextDocumentLayout.h"
+#include "KoShape.h"
+#include "KoTextShapeData.h"
+#include "KoCanvasBase.h"
 
 class KoFindText::Private
 {
     public:
         Private() : document(0) { }
+        
         void resourceChanged(int key, const QVariant& variant);
+        void highlightText(const QTextCursor &text, QTextCharFormat *format);
 
         QTextDocument *document;
 
@@ -84,7 +86,15 @@ KoFindText::~KoFindText()
 
 void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList)
 {
-    QTextDocument::FindFlags flags = 0; //QTextDocument::FindCaseSensitively;
+    KoFindOptions opts = options();
+    QTextDocument::FindFlags flags;
+
+    if(opts & FindCaseSensitive) {
+        flags |= QTextDocument::FindCaseSensitively;
+    }
+    if(opts & FindWholeWords) {
+        flags |= QTextDocument::FindWholeWords;
+    }
 
     if(!d->document) {
         QVariant doc = d->resourceManager->resource(KoText::CurrentTextDocument);
@@ -102,101 +112,15 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
     
     QTextCursor cursor = d->document->find(pattern, 0, flags);
     while(!cursor.isNull()) {
-        //overrides.clear();
-//         QTextLayout::FormatRange override;
-//         override.format = *(d->highlightFormat);
-//         override.start = cursor.anchor();
-//         //< cursor.position() ? cursor.anchor() : cursor.position();
-//         //qDebug() << "Override Start:" << override.start;
-//         override.length = qAbs(cursor.position() - cursor.anchor());
-//         //qDebug() << "Override Length:" << override.length;
-//         overrides = cursor.block().layout()->additionalFormats();
-//         overrides.append(override);
-//         cursor.block().layout()->setAdditionalFormats(overrides);
-        d->oldFormats.append(QPair<QTextCursor, QTextCharFormat>(cursor, cursor.charFormat()));
-        cursor.mergeCharFormat(*d->highlightFormat);
+        d->highlightText(cursor, d->highlightFormat);
         
         KoFindMatch match;
         match.setContainer(QVariant::fromValue(d->document));
         match.setLocation(QVariant::fromValue(cursor));
         matchList.append(match);
+        
         cursor = d->document->find(pattern, cursor, flags);
-
-        //qDebug() << "==========";
     }
-
-//      if (start) {
-//         start = false;
-//         restarted = false;
-//         strategy->reset();
-//         startDocument = document;
-//         lastKnownPosition = QTextCursor(document);
-//         if (selectedText) {
-//             int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-//             int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-//             if (selectionEnd < selectionStart) {
-//                 qSwap(selectionStart, selectionEnd);
-//             }
-//             // TODO the SelectedTextPosition and SelectedTextAnchor are not highlighted yet
-//             // it would be cool to have the highlighted ligher when searching in selected text
-//             provider->setResource(KoText::SelectedTextPosition, selectionStart);
-//             provider->setResource(KoText::SelectedTextAnchor, selectionEnd);
-//             if ((options & KFind::FindBackwards) != 0) {
-//                 lastKnownPosition.setPosition(selectionEnd);
-//                 endPosition.setPosition(selectionStart);
-//             } else {
-//                 lastKnownPosition.setPosition(selectionStart);
-//                 endPosition.setPosition(selectionEnd);
-//             }
-//             startPosition = lastKnownPosition;
-//         } else {
-//             if ((options & KFind::FromCursor) != 0) {
-//                 lastKnownPosition.setPosition(provider->intResource(KoText::CurrentTextPosition));
-//             } else {
-//                 lastKnownPosition.setPosition(0);
-//             }
-//             endPosition = lastKnownPosition;
-//             startPosition = lastKnownPosition;
-//         }
-//         //kDebug() << "start" << lastKnownPosition.position();
-//     }
-// 
-//     QRegExp regExp;
-//     //QString pattern = strategy->dialog()->pattern();
-//     //if (options & KFind::RegularExpression) {
-//     //    regExp = QRegExp(pattern);
-//     //}
-// 
-//     QTextCursor cursor;
-//     if (!regExp.isEmpty() && regExp.isValid()) {
-//         cursor = document->find(regExp, lastKnownPosition, flags);
-//     } else {
-//         cursor = document->find(pattern, lastKnownPosition, flags);
-//     }
-// 
-//     //kDebug() << "r" << restarted << "c > e" << ( document == startDocument && cursor > endPosition ) << ( startDocument == document && findDirection->positionReached(  cursor, endPosition ) )<< "e" << cursor.atEnd() << "n" << cursor.isNull();
-//     if ((((document == startDocument) && restarted) || selectedText)
-//             && (cursor.isNull() || findDirection->positionReached(cursor, endPosition))) {
-//         restarted = false;
-//         strategy->displayFinalDialog();
-//         lastKnownPosition = startPosition;
-//         return;
-//     } else if (cursor.isNull()) {
-//         restarted = true;
-//         findDirection->nextDocument(document, this);
-//         lastKnownPosition = QTextCursor(document);
-//         findDirection->positionCursor(lastKnownPosition);
-//         // restart from the beginning
-//         parseSettingsAndFind();
-//         return;
-//     } else {
-//         // found something
-//         bool goOn = strategy->foundMatch(cursor, findDirection);
-//         lastKnownPosition = cursor;
-//         if (goOn) {
-//             parseSettingsAndFind();
-//         }
-//     }
 }
 
 void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
@@ -220,81 +144,58 @@ void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
 
 void KoFindText::clearMatches()
 {
-//     KoFindMatchList matchList = matches();
-//     foreach(const KoFindMatch &match, matchList) {
-//         QTextCursor cursor = match.location().value<QTextCursor>();
-//         //cursor.block().layout()->clearAdditionalFormats();
-//         if(d->oldFormats.contains(cursor)) {
-//             cursor.setCharFormat(d->oldFormats.value(cursor));
-//         }
-//     }
-    for(QList< QPair<QTextCursor, QTextCharFormat> >::iterator itr = d->oldFormats.begin(); itr != d->oldFormats.end(); ++itr) {
-        itr->first.setCharFormat(itr->second);
+    KoFindMatchList matchList = matches();
+    foreach(const KoFindMatch &match, matchList) {
+        QTextCursor cursor = match.location().value<QTextCursor>();
+        cursor.block().layout()->clearAdditionalFormats();
     }
-    
-    d->oldFormats.clear();
+    setCurrentMatch(0);
 }
 
 void KoFindText::highlightMatch(const KoFindMatch& match)
 {
-//     d->previousMatch.setCharFormat(d->previousMatchFormat);
-// 
+    if(!d->previousMatch.isNull()) {
+        d->highlightText(d->previousMatch, d->highlightFormat);
+    }
+
     QTextCursor cursor = match.location().value<QTextCursor>();
-// 
     d->previousMatch = cursor;
-//     d->previousMatchFormat = cursor.charFormat();
-
-//     QTextCharFormat format;
-//     format.setBackground(qApp->palette().highlight());
-//     format.setForeground(qApp->palette().highlightedText());
-//     cursor.mergeCharFormat(format);
-    
-    QTextLayout::FormatRange override;
-    override.format = *(d->currentMatchFormat);
-    override.start = cursor.anchor();
-    override.length = qAbs(cursor.position() - cursor.anchor());
-    QList<QTextLayout::FormatRange> overrides = cursor.block().layout()->additionalFormats();
-    overrides.append(override);
-    cursor.block().layout()->setAdditionalFormats(overrides);
+    d->highlightText(cursor, d->currentMatchFormat);
 }
 
-void KoFindText::repaintCanvas()
+void KoFindText::Private::highlightText(const QTextCursor& text, QTextCharFormat* format)
 {
-//     const int startPosition = cursor->selectionStart();
-//     const int endPosition = cursor->selectionEnd();
-//     QList<KoShape *> shapes;
-//     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(cursor->document()->documentLayout());
-// 
-//     Q_ASSERT(lay);
-//     foreach (KoShape* shape, lay->shapes()) {
-//         KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData *>(shape->userData());
-//         if (shapeData == 0)
-//             continue;
-// 
-//         const int from = shapeData->position();
-//         const int end = shapeData->endPosition();
-//         if ((from <= startPosition && end >= startPosition && end <= endPosition)
-//             || (from >= startPosition && end <= endPosition) // shape totally included
-//             || (from <= endPosition && end >= endPosition)
-//            )
-//             shapes.append(shape);
-//     }
-// 
-//     // loop over all shapes that contain the text and update per shape.
-//     QRectF repaintRect = lay->selectionBoundingBox(*cursor);
-//     foreach (KoShape *shape, shapes) {
-//         QRectF rect = repaintRect;
-//         KoTextShapeData *shapeData = static_cast<KoTextShapeData *>(shape->userData());
-//         rect.moveTop(rect.y() - shapeData->documentOffset());
-//         rect = shape->absoluteTransformation(0).mapRect(rect);
-//         canvas()->updateCanvas(shape->boundingRect().intersected(rect));
-//     }
-}
+    QList<QTextLayout::FormatRange> overrides = text.block().layout()->additionalFormats();
+    QList<QTextLayout::FormatRange>::iterator itr;
+    QVector<int> positions;
 
-// uint qHash(const QTextCursor& cursor)
-// {
-//     qDebug() << cursor.blockNumber() + cursor.anchor() + cursor.position() + cursor.positionInBlock();
-//     return cursor.blockNumber() + cursor.anchor() + cursor.position() + cursor.positionInBlock();
-// }
+    int highlightStart = qMin(text.anchor(), text.position()) - text.block().position();
+    int highlightLength = qAbs(text.position() - text.anchor());
+
+    int i = 0;
+    for(itr = overrides.begin(); itr != overrides.end(); ++itr, ++i) {
+        if(itr->start != highlightStart) {
+            continue;
+        }
+        if(itr->length != highlightLength) {
+            continue;
+        }
+        
+        positions.append(i);
+        break;
+    }
+
+    foreach(int i, positions) {
+        overrides.removeAt(i);
+    }
+
+    QTextLayout::FormatRange override;
+    override.format = *(format);
+    override.start = highlightStart;
+    override.length = highlightLength;
+
+    overrides.append(override);
+    text.block().layout()->setAdditionalFormats(overrides);
+}
 
 #include "KoFindText.moc"

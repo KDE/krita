@@ -253,10 +253,10 @@ public:
     bool requiresPostProcessing(){return m_requiresPostProcessing;}
     void setRequiresPostProcessing(bool pp = true){m_requiresPostProcessing = pp;}
     
-    bool wordWrap(){return m_wordWrap;}
+    bool wordWrap() const {return m_wordWrap;}
     void setWordWrap(bool ww){m_wordWrap = ww;}
     
-    bool canGrow(){return m_canGrow;}
+    bool canGrow() const {return m_canGrow;}
     void setCanGrow(bool cg){m_canGrow = cg;}
 
 protected:

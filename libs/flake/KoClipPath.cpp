@@ -165,7 +165,7 @@ void KoClipPath::applyClipping(KoShape *clippedShape, QPainter &painter, const K
 
     if (!clipPath.isEmpty()) {
         QTransform viewMatrix;
-        double zoomX, zoomY;
+        qreal zoomX, zoomY;
         converter.zoom(&zoomX, &zoomY);
         viewMatrix.scale(zoomX, zoomY);
         painter.setClipPath(viewMatrix.map(clipPath), Qt::IntersectClip);

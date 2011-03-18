@@ -737,7 +737,33 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             QRectF clipRect; // create an empty clipping rectangle
 
-            drawTrackedChangeItem(painter, block);
+            for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
+                QTextFragment currentFragment = it.fragment();
+                if (currentFragment.isValid()) {
+                    QTextCharFormat format = currentFragment.charFormat();
+                    int changeId = format.intProperty(KoCharacterStyle::ChangeTrackerId);
+                    if (changeId && m_documentLayout->changeTracker() && m_documentLayout->changeTracker()->displayChanges()) {
+                        KoChangeTrackerElement *changeElement = m_documentLayout->changeTracker()->elementById(changeId);
+                        switch(changeElement->getChangeType()) {
+                            case (KoGenChange::InsertChange):
+                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getInsertionBgColor()));
+                            break;
+                            case (KoGenChange::FormatChange):
+                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getFormatChangeBgColor()));
+                            break;
+                            case (KoGenChange::DeleteChange):
+                            format.setBackground(QBrush(m_documentLayout->changeTracker()->getDeletionBgColor()));
+                            break;
+                        }
+
+                        QTextLayout::FormatRange fr;
+                        fr.start = currentFragment.position() - block.position();
+                        fr.length = currentFragment.length();
+                        fr.format = format;
+                        selections.prepend(fr);
+                    }
+                }
+            }
             if (clipRect.isValid()) {
                 painter->save();
                 painter->setClipRect(clipRect, Qt::IntersectClip);
@@ -887,104 +913,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             painter->drawPixmap(x, y, width, height, idata.pixmap());
         }
     }
-}
-
-void KoTextLayoutArea::drawTrackedChangeItem(QPainter *painter, QTextBlock &block)
-{
-    if (!m_documentLayout->changeTracker())
-        return;
-    QTextLayout *layout = block.layout();
-//    QList<QTextLayout::FormatRange> ranges = layout->additionalFormats();
-
-    QTextBlock::iterator it;
-    int startOfBlock = -1;
-    QFont oldFont = painter->font();
-
-    for (it = block.begin(); !it.atEnd(); ++it) {
-        QTextFragment currentFragment = it.fragment();
-        if (currentFragment.isValid()) {
-            QTextCharFormat fmt = currentFragment.charFormat();
-            painter->setFont(fmt.font());
-            if (startOfBlock == -1)
-                startOfBlock = currentFragment.position(); // start of this block w.r.t. the document
-            if (m_documentLayout->changeTracker()->containsInlineChanges(fmt)) {
-                KoChangeTrackerElement *changeElement = m_documentLayout->changeTracker()->elementById(fmt.property(KoCharacterStyle::ChangeTrackerId).toInt());
-                if (m_documentLayout->changeTracker()->displayChanges() && changeElement->isEnabled()) {
-                    int firstLine = layout->lineForTextPosition(currentFragment.position() - startOfBlock).lineNumber();
-                    int lastLine = layout->lineForTextPosition(currentFragment.position() + currentFragment.length() - startOfBlock).lineNumber();
-                    for (int i = firstLine ; i <= lastLine ; i++) {
-                        QTextLine line = layout->lineAt(i);
-                        if (layout->isValidCursorPosition(currentFragment.position() - startOfBlock)) {
-                            qreal x1 = line.cursorToX(currentFragment.position() - startOfBlock);
-                            qreal x2 = line.cursorToX(currentFragment.position() + currentFragment.length() - startOfBlock);
-
-                            switch(changeElement->getChangeType()) {
-                                case (KoGenChange::InsertChange):
-                                    if (m_documentLayout->changeTracker()->displayChanges())
-                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_documentLayout->changeTracker()->getInsertionBgColor());
-                                    break;
-                                case (KoGenChange::FormatChange):
-                                    if (m_documentLayout->changeTracker()->displayChanges())
-                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_documentLayout->changeTracker()->getFormatChangeBgColor());
-                                    break;
-                                case (KoGenChange::DeleteChange):
-                                    if (m_documentLayout->changeTracker()->displayChanges())
-                                        painter->fillRect(x1, line.y(), x2-x1, line.height(), m_documentLayout->changeTracker()->getDeletionBgColor());
-                                    break;
-                            }
-                        }
-                    }
-                }
-/*
-                QList<QTextLayout::FormatRange>::Iterator iter = ranges.begin();
-                const int fragmentBegin = currentFragment.position() - startOfBlock;
-                const int fragmentEnd = fragmentBegin + currentFragment.length;
-                while (iter != ranges.end()) {
-                    QTextLayout::FormatRange r = *(iter);
-                    const int rStart = r.start;
-                    const int rEnd = r.start + r.length;
-                    QTextCharFormat rFormat = r.format;
-                    if ((rEnd >= fragmentBegin && rEnd <= fragmentEnd) || (fragmentEnd >= rStart && fragmentEnd <= rEnd)) { //intersect
-                        ranges.erase(iter);
-
-                        break;
-                    }
-                ++iter;
-                }
-
-
-
-                QTextLayout::FormatRange range;
-                range.start = currentFragment.position() - startOfBlock;
-                range.length = currentFragment.length();
-                KoChangeTrackerElement *changeElement = m_documentLayout->changeTracker()->elementById(fmt.property(KoCharacterStyle::ChangeTrackerId).toInt());
-                QTextCharFormat format;
-                switch(changeElement->getChangeType()) {
-                    case (KoGenChange::insertChange):
-                        //                painter->save();
-                        //                painter->setBackground(QBrush(Qt::green));
-                        format.setBackground(QBrush(Qt::green));
-//                        painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,255,0,255));
-                        //                painter->restore();
-                        break;
-                    case (KoGenChange::formatChange):
-                        //                painter->save();
-                        //                painter->setBackground(QBrush(Qt::blue));
-//                        painter->fillRect(x1, line.y(), x2-x1, line.height(), QColor(0,0,255,255));
-                        format.setBackground(QBrush(Qt::blue));
-                        //                painter->restore();
-                        break;
-                    case (KoGenChange::deleteChange):
-                        break;
-                }
-                range.format = format;
-                kDebug() << "added range: pos: " << range.start << " length: " << range.length << " color: " << range.format.background().color();
-                ranges.append(range);*/
-            }
-        }
-    }
-    painter->setFont(oldFont);
-//    layout->setAdditionalFormats(ranges);
 }
 
 /**

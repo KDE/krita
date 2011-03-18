@@ -92,8 +92,6 @@ private:
 
     void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
 
-    void drawTrackedChangeItem(QPainter *painter, QTextBlock &block);
-
     void decorateParagraph(QPainter *painter, const QTextBlock &block);
 
     void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;

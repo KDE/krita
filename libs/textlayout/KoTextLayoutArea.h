@@ -26,11 +26,14 @@
 
 #include <KoText.h>
 
+#include <KoTextDocumentLayout.h>
+
 #include <QRectF>
 
 class KoStyleManager;
 class KoTextDocumentLayout;
 class KoTextBlockData;
+class KoImageCollection;
 class QTextList;
 
 /**
@@ -42,7 +45,7 @@ class QTextList;
  * Each of these are implemeted through subclasses, and this is just the interface
  *
  * Layout happens until maximalAllowedY() is reached. That maximum may be set by
- * The RootArea, but it may also be set by for example a row in a table with fixed height.
+ * the RootArea, but it may also be set by for example a row in a table with fixed height.
  */
 class KOTEXT_EXPORT KoTextLayoutArea
 {
@@ -51,7 +54,7 @@ public:
     explicit KoTextLayoutArea(KoTextLayoutArea *parent);
     virtual ~KoTextLayoutArea();
 
-    /// Layouts as much as it can
+    /// Layouts as much as we can
     virtual void layout(HierarchicalCursor *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
@@ -79,11 +82,25 @@ public:
     qreal x() const;
     qreal width() const;
 
+    void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
+
 private:
     void layoutBlock(HierarchicalCursor *cursor);
 
     /// Returns vertical height of line
     qreal addLine(HierarchicalCursor *cursor, KoTextBlockData *blockData);
+
+    void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
+
+    void drawTrackedChangeItem(QPainter *painter, QTextBlock &block);
+
+    void decorateParagraph(QPainter *painter, const QTextBlock &block);
+
+    void drawStrikeOuts(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+
+    void drawUnderlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const;
+
+    int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
 
     KoTextDocumentLayout *m_documentLayout;
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -48,7 +49,12 @@ public:
     void containerChanged(KoShapeContainer *, KoShape::ChangeType) { }
     bool isChildLocked(const KoShape *child) const {
         Q_ASSERT(child->parent());
-        return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+	if (child->parent()) {
+	   return child->isGeometryProtected() || child->parent()->isGeometryProtected();
+	}
+	else {
+	    return child->isGeometryProtected();
+	}
     }
     void setInheritsTransform(const KoShape *, bool ) { }
     bool inheritsTransform(const KoShape *) const {

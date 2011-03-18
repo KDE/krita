@@ -33,7 +33,7 @@ public:
 
     KisDynamicSensorFade();
     virtual ~KisDynamicSensorFade() { }
-    virtual qreal parameter(const KisPaintInformation&);
+    virtual qreal value(const KisPaintInformation&);
     virtual void reset();
     virtual QWidget* createConfigurationWidget(QWidget* parent, QWidget*);
 public slots:

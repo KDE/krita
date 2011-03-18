@@ -9,6 +9,7 @@ add_subdirectory(demo)
 
 set(libemf_LIB_SRCS 
      EmfRecords.cpp
+     EmfObjects.cpp
      EmfHeader.cpp
      BitmapHeader.cpp
      EmfParser.cpp
@@ -32,6 +33,7 @@ set(libemf_LIB_SRCS
 #    FILES
 #    EmfEnums.h
 #    EmfRecords.h
+#    EmfObjects.h
 #    EmfHeader.h
 #    Bitmap.h
 #    EmfParser.h

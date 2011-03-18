@@ -85,15 +85,12 @@ class Axis;
 class ThreeDScene;
 class CellRegion;
 class ChartTableModel;
-class Layout;
+class ChartLayout;
 class TableSource;
 
-extern const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ];
-
-extern const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ];
-
-extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
-extern QColor defaultDataSetColor( int dataSetNum );
+QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
+QColor defaultDataSetColor(int dataSetNum);
+const char * odfCharttype(int charttype);
 
 
 class CHARTSHAPELIB_EXPORT ChartShape
@@ -121,7 +118,7 @@ public:
     TextLabelData  *footerData() const;
     Legend         *legend() const;
     PlotArea       *plotArea() const;
-    Layout         *layout() const;
+    ChartLayout         *layout() const;
 
     /**
      * Returns a list of all labels in this chart, visible and hidden.

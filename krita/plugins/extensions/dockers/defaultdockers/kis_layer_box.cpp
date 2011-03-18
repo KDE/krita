@@ -160,6 +160,12 @@ KisLayerBox::KisLayerBox()
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
 
+    m_nodeModel = new KisNodeModel(this);
+    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
+    connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
+    m_wdgLayerBox->listLayers->setModel(m_nodeModel);
 }
 
 KisLayerBox::~KisLayerBox()
@@ -172,6 +178,7 @@ void KisLayerBox::setCanvas(KoCanvasBase * canvas)
     disconnect();
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
+    setImage(m_canvas->view()->image());
 }
 
 void KisLayerBox::setImage(KisImageWSP image)
@@ -190,12 +197,7 @@ void KisLayerBox::setImage(KisImageWSP image)
         if (!m_nodeModel.isNull()) {
             m_nodeModel->disconnect(this);
         }
-        m_nodeModel = view->document()->nodeModel();
-        m_wdgLayerBox->listLayers->setModel(m_nodeModel);
-        connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(updateUI()));
-        connect(m_nodeModel, SIGNAL(modelReset()), this, SLOT(updateUI()));
+        m_nodeModel->setImage(image);
 
         if (m_nodeManager->activeNode()) {
             setCurrentNode(m_nodeManager->activeNode());

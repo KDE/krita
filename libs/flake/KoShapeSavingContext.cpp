@@ -78,6 +78,7 @@ KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &
 
 KoShapeSavingContext::~KoShapeSavingContext()
 {
+    delete d;
 }
 
 KoXmlWriter & KoShapeSavingContext::xmlWriter()

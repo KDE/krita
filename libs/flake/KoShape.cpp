@@ -43,6 +43,7 @@
 #include "KoLineBorder.h"
 #include "ShapeDeleter_p.h"
 #include "KoShapeShadow.h"
+#include "KoClipPath.h"
 #include "KoEventAction.h"
 #include "KoEventActionRegistry.h"
 #include "KoOdfWorkaround.h"
@@ -89,6 +90,7 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       border(0),
       q_ptr(shape),
       shadow(0),
+      clipPath(0),
       filterEffectStack(0),
       transparency(0.0),
       zIndex(0),
@@ -130,6 +132,7 @@ KoShapePrivate::~KoShapePrivate()
         delete fill;
     if (filterEffectStack && !filterEffectStack->deref())
         delete filterEffectStack;
+    delete clipPath;
     qDeleteAll(eventActions);
 }
 
@@ -1151,6 +1154,20 @@ KoShapeShadow *KoShape::shadow() const
     return d->shadow;
 }
 
+void KoShape::setClipPath(KoClipPath *clipPath)
+{
+    Q_D(KoShape);
+    d->clipPath = clipPath;
+    d->shapeChanged(ClipPathChanged);
+    notifyChanged();
+}
+
+KoClipPath * KoShape::clipPath() const
+{
+    Q_D(const KoShape);
+    return d->clipPath;
+}
+
 QTransform KoShape::transform() const
 {
     Q_D(const KoShape);
@@ -1258,6 +1275,33 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
                           .arg(bottom, 10, 'f').arg(left, 10, 'f'));
 
     }
+
+    QString wrap;
+    switch (textRunAroundSide()) {
+        case BiggestRunAroundSide:
+            wrap = "biggest";
+            break;
+        case LeftRunAroundSide:
+            wrap = "left";
+            break;
+        case RightRunAroundSide:
+            wrap = "right";
+            break;
+        case AutoRunAroundSide:
+            wrap = "dynamic";
+            break;
+        case BothRunAroundSide:
+            wrap = "parallel";
+            break;
+        case NoRunAround:
+            wrap = "none";
+            break;
+        case RunThrough:
+            wrap = "run-through";
+            break;
+    }
+    style.addProperty("style:wrap", wrap);
+    style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1795,34 +1839,6 @@ void KoShape::saveOdfAttributes(KoShapeSavingContext &context, int attributes) c
         for (; it != d->additionalAttributes.constEnd(); ++it) {
             context.xmlWriter().addAttribute(it.key().toUtf8(), it.value());
         }
-
-        QString value;
-        switch (textRunAroundSide()) {
-        case BiggestRunAroundSide:
-            value = "biggest";
-            break;
-        case LeftRunAroundSide:
-            value = "left";
-            break;
-        case RightRunAroundSide:
-            value = "right";
-            break;
-        case AutoRunAroundSide:
-            value = "dynamic";
-            break;
-        case BothRunAroundSide:
-            value = "parallel";
-            break;
-        case NoRunAround:
-            value = "none";
-            break;
-        case RunThrough:
-            value = "run-through";
-            break;
-        }
-        context.xmlWriter().addAttribute("style:wrap", value);
-
-        context.xmlWriter().addAttribute("fo:margin", QString::number(textRunAroundDistance()) + "pt");
     }
 }
 

@@ -504,19 +504,15 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
     if (png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen)) {
         QByteArray profile_rawdata;
         // XXX: Hardcoded for icc type -- is that correct for us?
-        if (QString::compare(profile_name, "icc") == 0) {
-            profile_rawdata.resize(proflen);
-            memcpy(profile_rawdata.data(), profile_data, proflen);
-            profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
-            Q_CHECK_PTR(profile);
-            if (profile) {
+        profile_rawdata.resize(proflen);
+        memcpy(profile_rawdata.data(), profile_data, proflen);
+        profile = KoColorSpaceRegistry::instance()->createColorProfile(csName.first, csName.second, profile_rawdata);
+        Q_CHECK_PTR(profile);
+        if (profile) {
 //                 dbgFile << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo();
-                if (!profile->isSuitableForOutput()) {
-                    dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
-                }
+            if (!profile->isSuitableForOutput()) {
+                dbgFile << "the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
             }
-        } else {
-            dbgFile << "Profile isn not ICC, skiped.";
         }
     } else {
         dbgFile << "no embedded profile, will use the default profile";
@@ -527,7 +523,6 @@ KisImageBuilder_Result KisPNGConverter::buildImage(QIODevice* iod)
         KoColorSpaceRegistry::instance()->colorSpaceId(
       csName.first, csName.second))->profileIsCompatible(profile)) {
         warnFile << "The profile " << profile->name() << " is not compatible with the color space model " << csName.first << " " << csName.second;
-        delete profile;
         profile = 0;
     }
 

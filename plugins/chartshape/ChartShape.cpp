@@ -102,7 +102,7 @@
 #include "TextLabelDummy.h"
 #include "ChartDocument.h"
 #include "ChartTableModel.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
 #include "SingleModelHelper.h"
@@ -119,7 +119,7 @@ namespace KChart {
 /// @see ChartShape::setEnableUserInteraction()
 static bool ENABLE_USER_INTERACTION = true;
 
-const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
+static const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:bar",
     "chart:line",
     "chart:area",
@@ -133,7 +133,7 @@ const char *ODF_CHARTTYPES[ NUM_CHARTTYPES ] = {
     "chart:gantt"
 };
 
-const ChartSubtype  defaultSubtypes[ NUM_CHARTTYPES ] = {
+static const ChartSubtype defaultSubtypes[ NUM_CHARTTYPES ] = {
     NormalChartSubtype,     // Bar
     NormalChartSubtype,     // Line
     NormalChartSubtype,     // Area
@@ -197,9 +197,19 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter,
 }
 
 
-const int NUM_DEFAULT_DATASET_COLORS = 12;
+const char * odfCharttype(int charttype)
+{
+    Q_ASSERT(charttype < LastChartType);
+    if (charttype >= LastChartType || charttype < 0) {
+        charttype = 0;
+    }
+    return ODF_CHARTTYPES[charttype];
+}
 
-const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
+
+static const int NUM_DEFAULT_DATASET_COLORS = 12;
+
+static const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
 {
     "#004586",
     "#ff420e",
@@ -355,7 +365,7 @@ void ChartShape::Private::setChildVisible( KoShape *child, bool doShow )
 
 ChartShape::ChartShape(KoResourceManager *resourceManager)
     : KoFrameShape( KoXmlNS::draw, "object" )
-    , KoShapeContainer( new Layout )
+    , KoShapeContainer( new ChartLayout )
     , d ( new Private( this ) )
 {
     d->resourceManager = resourceManager;
@@ -499,7 +509,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     KoLineBorder *border = new KoLineBorder( 0, Qt::black );
     setBorder( border );
 
-    Layout *l = layout();
+    ChartLayout *l = layout();
     l->setPosition( d->plotArea, CenterPosition );
     l->setPosition( d->title,    TopPosition, 0 );
     l->setPosition( d->subTitle, TopPosition, 1 );
@@ -589,9 +599,9 @@ PlotArea *ChartShape::plotArea() const
     return d->plotArea;
 }
 
-Layout *ChartShape::layout() const
+ChartLayout *ChartShape::layout() const
 {
-    Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
+    ChartLayout *l = dynamic_cast<ChartLayout*>(KoShapeContainer::model());
     Q_ASSERT( l );
     return l;
 }

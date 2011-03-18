@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009,2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
@@ -259,8 +259,9 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rd
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
-        // TODO pass style manager so that on copy and paste we can recognice the same styles
-        d->textSharedData->loadOdfStyles(context, 0);
+        KoResourceManager *rm = context.documentResourceManager();
+        KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager*>();
+        d->textSharedData->loadOdfStyles(context, styleManager);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_LOADING_ID, d->textSharedData);
         } else {
@@ -1254,10 +1255,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     }
 
                     columns = columns + repeatColumn;
-                    if (rows > 0)
-                        tbl->resize(rows, columns);
-                    else
-                        tbl->resize(1, columns);
+                    tbl->resize(qMax(1, rows), columns);
                 } else if (tblLocalName == "table-row") {
                     QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
                     if (!rowStyleName.isEmpty()) {
@@ -1274,10 +1272,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     }
 
                     rows++;
-                    if (columns > 0)
-                        tbl->resize(rows, columns);
-                    else
-                        tbl->resize(rows, 1);
+                    tbl->resize(rows, qMax(1, columns));
                     // Added a row
                     int currentCell = 0;
                     KoXmlElement rowTag;

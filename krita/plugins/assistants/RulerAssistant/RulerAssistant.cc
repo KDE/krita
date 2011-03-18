@@ -36,17 +36,24 @@ RulerAssistant::RulerAssistant()
 QPointF RulerAssistant::project(const QPointF& pt) const
 {
     Q_ASSERT(handles().size() == 2);
-    const QLineF line(*handles()[0], *handles()[1]);
-    const qreal
-        dx = line.dx(),
-        dy = line.dy(),
-        dx2 = dx * dx,
-        dy2 = dy * dy,
-        invsqrlen = 1.0 / (dx2 + dy2);
-    QPointF r(dx2 * pt.x() + dy2 * line.x1() + dx * dy * (pt.y() - line.y1()),
-            dx2 * line.y1() + dy2 * pt.y() + dx * dy * (pt.x() - line.x1()));
-    r *= invsqrlen;
-    return r;
+    QPointF pt1 = *handles()[0];
+    QPointF pt2 = *handles()[1];
+    
+    QPointF a = pt - pt1;
+    QPointF u = pt2 - pt1;
+    
+    qreal u_norm = sqrt(u.x() * u.x() + u.y() * u.y());
+    
+    if(u_norm == 0) return pt;
+    
+    u /= u_norm;
+    
+    double t = a.x() * u.x() + a.y() * u.y();
+    
+    if(t < 0.0) return pt1;
+    if(t > u_norm) return pt2;
+    
+    return t * u + pt1;
 }
 
 QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/)

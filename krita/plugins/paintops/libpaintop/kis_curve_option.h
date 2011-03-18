@@ -65,33 +65,21 @@ public:
 protected:
     void setMinimumLabel(const KisCurveLabel& _label);
     void setMaximumLabel(const KisCurveLabel& _label);
+    /**
+     * Read the option using the prefix in argument
+     */
+    void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting);
 
 protected:
 
     double computeValue(const KisPaintInformation& info) const {
-        double v = m_sensor->parameter(info);
-        
-        if (customCurve()) {
-            return scaleToCurve(v);
-        } else {
-            return v;
-        }
+        return m_sensor->parameter(info);
     }
 
-    double scaleToCurve(double pressure) const {
-        int offset = qRound(256.0 * pressure);
-        return m_curve.floatTransfer(257)[qBound(0, offset, 256)];
-    }
-
-    bool customCurve() const {
-        return m_customCurve;
-    }
 
 protected:
     QString m_label, m_category;
     KisDynamicSensor* m_sensor;
-    bool m_customCurve;
-    KisCubicCurve m_curve;
     QString m_name;
     bool m_checkable;
     bool m_checked;

@@ -70,7 +70,6 @@
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
 #include "kis_paintop_settings_widget.h"
-#include "kis_brushengine_selector.h"
 #include "ko_favorite_resource_manager.h"
 #include <kis_cmb_paintop.h>
 
@@ -97,14 +96,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     KAcceleratorManager::setNoAccel(this);
 
     setWindowTitle(i18n("Painter's Toolchest"));
-
-    m_cmbPaintops = new KisCmbPaintop(this, "KisPaintopBox::m_cmbPaintops");
-    m_cmbPaintops->setMinimumWidth(150);
-    m_cmbPaintops->setToolTip(i18n("Artist's materials"));
-
-#ifdef Q_WS_MAC
-    m_cmbPaintops->setAttribute(Qt::WA_MacSmallSize, true);
-#endif
 
     m_settingsWidget = new KisPopupButton(this);
     m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
@@ -180,7 +171,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     baseLayout->addWidget(m_paintopWidget);
 
     m_layout = new QHBoxLayout(m_paintopWidget);
-    m_layout->addWidget(m_cmbPaintops);
     m_layout->addWidget(m_settingsWidget);
     m_layout->addWidget(m_presetWidget);
     m_layout->addWidget(labelMode);
@@ -204,16 +194,13 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
-//     m_brushEngineSelector = new KisBrushEngineSelector(m_view, this);
-//     m_brushChooser->setPopupWidget(m_brushEngineSelector);
-
     m_colorspace = view->image()->colorSpace();
 
     updatePaintops();
     
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
-    connect(m_cmbPaintops, SIGNAL(activated(const QString&)), this, SLOT(slotSetPaintop(QString)));
+    connect(m_presetsPopup, SIGNAL(paintopActivated(QString)), this, SLOT(slotSetPaintop(QString)));
 
     connect(m_presetsPopup, SIGNAL(savePresetClicked()), this, SLOT(slotSaveActivePreset()));
 
@@ -270,8 +257,8 @@ void KisPaintopBox::colorSpaceChanged(const KoColorSpace *cs)
         // ensure the the right paintop is selected
         // It might happen that you must change the paintop as the current one is not supported
         // by the new colorspace.
-        m_cmbPaintops->setCurrent( currentPaintop().id() );
-        if (m_cmbPaintops->currentItem() != currentPaintop().id()){
+        m_presetsPopup->setCurrentPaintOp( currentPaintop().id() );
+        if (m_presetsPopup->currentPaintOp() != currentPaintop().id()){
             kWarning() << "PaintOp " << currentPaintop().name() << " was not selected, as it is not supported by colorspace " 
             << m_colorspace->name();
         }
@@ -293,7 +280,7 @@ void KisPaintopBox::updatePaintops()
         }
     }
     
-    m_cmbPaintops->setPaintOpList(factoryList);
+    m_presetsPopup->setPaintOpList(factoryList);
 }
 
 void KisPaintopBox::resourceSelected(KoResource* resource)
@@ -336,11 +323,11 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
         paintop = (*it);
     }
 
-    m_cmbPaintops->setCurrent(paintop.id());
-    if (m_cmbPaintops->currentItem() != paintop.id()){
+    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    if (m_presetsPopup->currentPaintOp() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
-        paintop = KoID(m_cmbPaintops->currentItem(), KisPaintOpRegistry::instance()->get(m_cmbPaintops->currentItem())->name());
+        paintop = KoID(m_presetsPopup->currentPaintOp(), KisPaintOpRegistry::instance()->get(m_presetsPopup->currentPaintOp())->name());
     }
     
     setCurrentPaintop(paintop);
@@ -408,6 +395,9 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         Q_ASSERT(m_presetWidget);
         connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotUpdatePreset()));
         m_presetsPopup->setPreset(preset);
+        KisPaintOpFactory* paintOp = KisPaintOpRegistry::instance()->get(paintop.id());
+        QString pixFilename = KisFactory2::componentData().dirs()->findResource("kis_images", paintOp->pixmap());
+        m_settingsWidget->setIcon(QIcon(pixFilename));
     } else {
         m_presetsPopup->setPaintOpSettingsWidget(0);
     }
@@ -415,8 +405,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
     preset->settings()->setNode(m_resourceProvider->currentNode());
     m_resourceProvider->slotPaintOpPresetActivated(preset);
 
-    m_cmbPaintops->setCurrent(paintop.id());
-    if (m_cmbPaintops->currentItem() != paintop.id()){
+    m_presetsPopup->setCurrentPaintOp(paintop.id());
+    if (m_presetsPopup->currentPaintOp() != paintop.id()){
         // Must change the paintop as the current one is not supported
         // by the new colorspace.
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
@@ -607,10 +597,8 @@ void KisPaintopBox::setEnabledInternal(bool value)
 {
     m_paintopWidget->setEnabled(value);
     if(value) {
-        m_settingsWidget->setIcon(KIcon("paintop_settings_02"));
         m_presetWidget->setIcon(KIcon("paintop_settings_01"));
     } else {
-        m_settingsWidget->setIcon(KIcon("paintop_settings_disabled"));
         m_presetWidget->setIcon(KIcon("paintop_presets_disabled"));
     }
 }

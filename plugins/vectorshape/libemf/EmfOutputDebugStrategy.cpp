@@ -22,6 +22,7 @@
 
 #include <KDebug>
 
+#include "EmfObjects.h"
 
 namespace Libemf
 {
@@ -270,18 +271,14 @@ void OutputDebugStrategy::selectObject( const quint32 ihObject )
     kDebug(33100) << "EMR_SELECTOBJECT" << ihObject;
 }
 
-void OutputDebugStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
+void OutputDebugStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
-    kDebug(33100) << "EMR_EXTTEXTOUTA:" << extTextOutA.referencePoint()
-             << extTextOutA.textString();
+    kDebug(33100) << "EMR_EXTTEXTOUTW:" << bounds
+                  << textObject.referencePoint()
+                  << textObject.textString();
 }
 
-void OutputDebugStrategy::extTextOutW( const QPoint &referencePoint, const QString &textString )
-{
-    kDebug(33100) << "EMR_EXTTEXTOUTW:" << referencePoint << textString;
-}
-
-void OutputDebugStrategy::moveToEx( const quint32 x, const quint32 y )
+void OutputDebugStrategy::moveToEx( const qint32 x, const qint32 y )
 {
     kDebug(33100) << "EMR_MOVETOEX" << QPoint( x, y );
 }

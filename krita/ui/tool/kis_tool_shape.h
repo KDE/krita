@@ -65,7 +65,6 @@ protected:
     void addShape(KoShape* shape);
 
 private:
-    QGridLayout *m_optionLayout;
     WdgGeometryOptions *m_shapeOptionsWidget;
 };
 

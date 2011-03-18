@@ -390,13 +390,13 @@ void KisView2::dropEvent(QDropEvent *event)
         KMenu popup;
         popup.setObjectName("drop_popup");
 
-        QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
-        QAction *insertAsNewLayers = new QAction(i18n("Insert as New Layers"), &popup);
+        QAction *insertAsNewLayer = new KAction(i18n("Insert as New Layer"), &popup);
+        QAction *insertAsNewLayers = new KAction(i18n("Insert as New Layers"), &popup);
 
-        QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
-        QAction *openInNewDocuments = new QAction(i18n("Open in New Documents"), &popup);
+        QAction *openInNewDocument = new KAction(i18n("Open in New Document"), &popup);
+        QAction *openInNewDocuments = new KAction(i18n("Open in New Documents"), &popup);
 
-        QAction *cancel = new QAction(i18n("Cancel"), &popup);
+        QAction *cancel = new KAction(i18n("Cancel"), &popup);
 
         if (urls.count() == 1) {
             if (!image().isNull()) {
@@ -680,9 +680,6 @@ void KisView2::connectCurrentImage()
     }
 
     m_d->canvas->connectCurrentImage();
-
-    connect(m_d->doc->nodeModel(), SIGNAL(nodeActivated(KisNodeSP)),
-            m_d->nodeManager, SLOT(activateNode(KisNodeSP)));
 
     if (m_d->controlFrame) {
         connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));

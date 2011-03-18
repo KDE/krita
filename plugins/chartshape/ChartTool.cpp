@@ -415,8 +415,8 @@ void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const CellRegion
 
 void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
 {
+    Q_ASSERT( d->shape );
     Q_ASSERT( dataSet );
-
     if ( dataSet )
         dataSet->setChartType( type );
     d->shape->update();
@@ -434,6 +434,7 @@ void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
 
 void ChartTool::setDataSetBrush( DataSet *dataSet, const QColor& color )
 {
+    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
 
@@ -442,6 +443,7 @@ void ChartTool::setDataSetBrush( DataSet *dataSet, const QColor& color )
 }
 void ChartTool::setDataSetPen( DataSet *dataSet, const QColor& color )
 {
+    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
 
@@ -451,6 +453,7 @@ void ChartTool::setDataSetPen( DataSet *dataSet, const QColor& color )
 
 void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
 {
+    Q_ASSERT( d->shape );
     if ( !dataSet || !axis )
         return;
 
@@ -461,6 +464,7 @@ void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
 
 void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
 {
+    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
 
@@ -474,6 +478,7 @@ void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
 
 void ChartTool::setDataSetShowLabels( DataSet *dataSet, bool b )
 {
+    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
 

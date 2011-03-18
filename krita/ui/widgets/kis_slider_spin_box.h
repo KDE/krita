@@ -88,11 +88,18 @@ class KRITAUI_EXPORT KisSliderSpinBox : public KisAbstractSliderSpinBox
 {
     Q_OBJECT
     Q_DECLARE_PRIVATE(KisSliderSpinBox)
+    Q_PROPERTY( int minimum READ minimum WRITE setMinimum )
+    Q_PROPERTY( int maximum READ maximum WRITE setMaximum )
 public:
     KisSliderSpinBox(QWidget* parent = 0);
     ~KisSliderSpinBox();
 
     void setRange(int minimum, int maximum);
+    
+    int minimum() const;
+    void setMinimum(int minimum);
+    int maximum() const;
+    void setMaximum(int maximum);
 
     ///Get the value, don't use value()
     int value();
@@ -102,6 +109,7 @@ public:
 
     void setSingleStep(int value);
     void setPageStep(int value);
+    
 protected:
     virtual QString valueString() const;
     virtual void setInternalValue(int value);

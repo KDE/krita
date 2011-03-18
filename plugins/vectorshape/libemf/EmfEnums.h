@@ -36,60 +36,6 @@ namespace Libemf
 {
 
     /**
-       MapModes
-
-       See [MS-EMF] Section 2.1.21
-    */
-    typedef enum {
-        MM_TEXT        = 0x01,
-        MM_LOMETRIC    = 0x02,
-        MM_HIMETRIC    = 0x03,
-        MM_LOENGLISH   = 0x04,
-        MM_HIENGLISH   = 0x05,
-        MM_TWIPS       = 0x06,
-        MM_ISOTROPIC   = 0x07,
-        MM_ANISOTROPIC = 0x08
-    } MapMode;
-
-    /**
-       World Transform modification modes
-
-       See [MS-EMF] Section 2.1.24
-    */
-    enum ModifyWorldTransformMode {
-        MWT_IDENTITY            = 0x01,
-        MWT_LEFTMULTIPLY        = 0x02,
-        MWT_RIGHTMULTIPLY       = 0x03,
-        MWT_SET                 = 0x04
-    };
-
-    /**
-       Pen Styles
-
-       See [MS-EMF] Section 2.1.25
-    */
-    enum PenStyle {
-	PS_COSMETIC      = 0x00000000,
-	PS_ENDCAP_ROUND  = 0x00000000,
-	PS_JOIN_ROUND    = 0x00000000,
-	PS_SOLID         = 0x00000000,
-	PS_DASH          = 0x00000001,
-	PS_DOT           = 0x00000002,
-	PS_DASHDOT       = 0x00000003,
-	PS_DASHDOTDOT    = 0x00000004,
-	PS_NULL          = 0x00000005,
-	PS_INSIDEFRAME   = 0x00000006,
-	PS_USERSTYLE     = 0x00000007,
-	PS_ALTERNATE     = 0x00000008,
-	PS_ENDCAP_SQUARE = 0x00000100,
-	PS_ENDCAP_FLAT   = 0x00000200,
-	PS_JOIN_BEVEL    = 0x00001000,
-	PS_JOIN_MITER    = 0x00002000,
-	PS_GEOMETRIC     = 0x00010000
-    };
-
-
-    /**
        Image bit/byte organisation
 
        See [MS-WMF] Section 2.1.1.3
@@ -171,6 +117,101 @@ namespace Libemf
         TA_RTLREADING   = 0x0100
     };
 
+    // ----------------------------------------------------------------
+    //                             EMF enums
+
+    /**
+       Background fill mode
+       
+       See [MS-EMF] Section 2.1.4
+    */
+    enum BackgroundMode {
+        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
+        OPAQUE      = 0x02  ///< Equivalent to Qt::OpaqueMode
+    };
+    
+    /**
+       Parameters for text output.
+       
+       See [MS-EMF] Section 2.1.11
+    */
+    enum TextOutOptions {
+        ETO_OPAQUE            = 0x000002,
+        ETO_CLIPPED           = 0x000004,
+        ETO_GLYPH_INDEX       = 0x000010,
+        ETO_RTLREADING        = 0x000080,
+        ETO_NO_RECT           = 0x000100,
+        ETO_SMALL_CHARS       = 0x000200,
+        ETO_NUMERICSLOCAL     = 0x000400,
+        ETO_NUMERICSLATIN     = 0x000800,
+        ETO_IGNORELANGUAGE    = 0x001000,
+        ETO_PDY               = 0x002000,
+        ETO_REVERSE_INDEX_MAP = 0x010000
+    };
+
+    /**
+       Graphics mode, used to interpret shape data such as rectangles
+       
+       See [MS-EMF] Section 2.1.16
+    */
+    enum GraphicsMode {
+        GM_COMPATIBLE = 0x01,
+        GM_ADVANCED   = 0x02
+    };
+    
+    /**
+       MapModes
+
+       See [MS-EMF] Section 2.1.21
+    */
+    typedef enum {
+        MM_TEXT        = 0x01,
+        MM_LOMETRIC    = 0x02,
+        MM_HIMETRIC    = 0x03,
+        MM_LOENGLISH   = 0x04,
+        MM_HIENGLISH   = 0x05,
+        MM_TWIPS       = 0x06,
+        MM_ISOTROPIC   = 0x07,
+        MM_ANISOTROPIC = 0x08
+    } MapMode;
+
+    /**
+       World Transform modification modes
+
+       See [MS-EMF] Section 2.1.24
+    */
+    enum ModifyWorldTransformMode {
+        MWT_IDENTITY            = 0x01,
+        MWT_LEFTMULTIPLY        = 0x02,
+        MWT_RIGHTMULTIPLY       = 0x03,
+        MWT_SET                 = 0x04
+    };
+
+    /**
+       Pen Styles
+
+       See [MS-EMF] Section 2.1.25
+    */
+    enum PenStyle {
+	PS_COSMETIC      = 0x00000000,
+	PS_ENDCAP_ROUND  = 0x00000000,
+	PS_JOIN_ROUND    = 0x00000000,
+	PS_SOLID         = 0x00000000,
+	PS_DASH          = 0x00000001,
+	PS_DOT           = 0x00000002,
+	PS_DASHDOT       = 0x00000003,
+	PS_DASHDOTDOT    = 0x00000004,
+	PS_NULL          = 0x00000005,
+	PS_INSIDEFRAME   = 0x00000006,
+	PS_USERSTYLE     = 0x00000007,
+	PS_ALTERNATE     = 0x00000008,
+	PS_ENDCAP_SQUARE = 0x00000100,
+	PS_ENDCAP_FLAT   = 0x00000200,
+	PS_JOIN_BEVEL    = 0x00001000,
+	PS_JOIN_MITER    = 0x00002000,
+	PS_GEOMETRIC     = 0x00010000
+    };
+
     /**
        Stock Objects
 
@@ -205,19 +246,9 @@ namespace Libemf
     */
     enum PolygonFillMode {
 	    ALTERNATE = 0x01, ///< Equivalent to Qt::OddEvenFill
-	    WINDING = 0x02    ///< Equivalent to Qt::WindingFill
+	    WINDING   = 0x02  ///< Equivalent to Qt::WindingFill
     };
-    
-    /**
-       Background fill mode
-       
-       See [MS-EMF] Section 2.1.4
-    */
-    enum BackgroundMode {
-        TRANSPARENT = 0x01, ///< Equivalent to Qt::TransparentMode
-        OPAQUE = 0x2        ///< Equivalent to Qt::OpaqueMode
-    };
-    
+
     /**
       Clipping region mode
       
@@ -230,5 +261,24 @@ namespace Libemf
         RGN_DIFF = 0x04,
         RGN_COPY = 0x05   ///< Equivalent to Qt::ReplaceClip
     };
+
+    /**
+       Comment type as defined for the EMR_COMMENT record.
+
+       See [MS-EMF] section 2.3.3
+     */
+    enum CommentType {
+        EMR_COMMENT_EMFSPOOL = 0x00000000,
+        EMR_COMMENT_EMFPLUS  = 0x2B464D45, // The string "EMF+"
+        EMR_COMMENT_PUBLIC   = 0x43494447,
+
+        // The following value is not defined in [MS-EMF].pdf, but
+        // according to google it means that the file was created by
+        // Microsoft Graph.  It is present in one test file
+        // (Presentation_tips.ppt).
+        EMR_COMMENT_MSGR     = 0x5247534d // The string MSGR
+    };
 }
+
+
 #endif

@@ -75,7 +75,7 @@
 #include "KDChartConvertions.h"
 #include "ChartProxyModel.h"
 #include "TextLabelDummy.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
 
@@ -492,6 +492,7 @@ void Axis::Private::createBarDiagram()
     // Propagate existing settings
     KDChart::ThreeDBarAttributes attributes( kdBarDiagram->threeDBarAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdBarDiagram->setThreeDBarAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
@@ -523,6 +524,7 @@ void Axis::Private::createLineDiagram()
     // Propagate existing settings
     KDChart::ThreeDLineAttributes attributes( kdLineDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdLineDiagram->setThreeDLineAttributes( attributes );
 
     KDChart::LineAttributes lineAttr = kdLineDiagram->lineAttributes();
@@ -569,6 +571,7 @@ void Axis::Private::createAreaDiagram()
     // Propagate existing settings
     KDChart::ThreeDLineAttributes attributes( kdAreaDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdAreaDiagram->setThreeDLineAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
@@ -590,6 +593,7 @@ void Axis::Private::createCircleDiagram()
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdCircleDiagram->threeDPieAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdCircleDiagram->setThreeDPieAttributes( attributes );
 
     // Initialize with default values that are specified in PlotArea
@@ -613,6 +617,7 @@ void Axis::Private::createRingDiagram()
     // Propagate existing settings
     KDChart::ThreeDPieAttributes attributes( kdRingDiagram->threeDPieAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdRingDiagram->setThreeDPieAttributes( attributes );
 
     // Initialize with default values that are specified in PlotArea
@@ -669,6 +674,7 @@ void Axis::Private::createScatterDiagram()
     // Propagate existing settings
     KDChart::ThreeDLineAttributes attributes( kdScatterDiagram->threeDLineAttributes() );
     attributes.setEnabled( plotArea->isThreeD() );
+    attributes.setThreeDBrushEnabled( plotArea->isThreeD() );
     kdScatterDiagram->setThreeDLineAttributes( attributes );
 
     plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
@@ -1692,7 +1698,7 @@ void Axis::Private::updatePosition()
 
     // KDChart
     kdAxis->setPosition( PositionToKDChartAxisPosition( position ) );
-    Layout *layout = plotArea->parent()->layout();
+    ChartLayout *layout = plotArea->parent()->layout();
     layout->setPosition( title, position );
     layout->layout();
 
@@ -1742,6 +1748,7 @@ void Axis::setThreeD( bool threeD )
         KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
+        attributes.setThreeDBrushEnabled( threeD );
         d->kdBarDiagram->setThreeDBarAttributes( attributes );
     }
 
@@ -1749,6 +1756,7 @@ void Axis::setThreeD( bool threeD )
         KDChart::ThreeDLineAttributes attributes( d->kdLineDiagram->threeDLineAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
+        attributes.setThreeDBrushEnabled( threeD );
         d->kdLineDiagram->setThreeDLineAttributes( attributes );
     }
 
@@ -1756,6 +1764,7 @@ void Axis::setThreeD( bool threeD )
         KDChart::ThreeDLineAttributes attributes( d->kdAreaDiagram->threeDLineAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
+        attributes.setThreeDBrushEnabled( threeD );
         d->kdAreaDiagram->setThreeDLineAttributes( attributes );
     }
 
@@ -1763,6 +1772,7 @@ void Axis::setThreeD( bool threeD )
         KDChart::ThreeDPieAttributes attributes( d->kdCircleDiagram->threeDPieAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
+        attributes.setThreeDBrushEnabled( threeD );
         d->kdCircleDiagram->setThreeDPieAttributes( attributes );
     }
 
@@ -1770,6 +1780,7 @@ void Axis::setThreeD( bool threeD )
         KDChart::ThreeDPieAttributes attributes( d->kdRingDiagram->threeDPieAttributes() );
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
+        attributes.setThreeDBrushEnabled( threeD );
         d->kdRingDiagram->setThreeDPieAttributes( attributes );
     }
 

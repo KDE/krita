@@ -31,6 +31,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QToolTip>
 #include <QtGui/QApplication>
+#include <QtGui/QHeaderView>
 
 #include <KLocale>
 #include <KIconLoader>
@@ -293,6 +294,7 @@ EditorView::EditorView(QWidget* parent)
     setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     setAnimated(false);
     setAllColumnsShowFocus(true);
+    header()->setMovable(false);
 //    setEditTriggers(QAbstractItemView::AllEditTriggers);
     
     setEditTriggers(

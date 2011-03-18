@@ -127,7 +127,7 @@ public:
     const KisPaintDeviceSP device() const;
     KisPaintDeviceSP device();
 
-    
+
 
     /**
      * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
@@ -161,7 +161,40 @@ public:
      *
      */
     void bitBlt(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
-    
+
+    /**
+     * Blast a region of srcWidth @param srcWidth and srcHeight @param srcHeight from @param
+     * srcDev onto the current paint device. @param srcX and @param srcY set the x and y
+     * positions of the origin top-left corner, @param dstX and @param dstY those of
+     * the destination.
+     * Any pixel read outside the limits of @param srcDev will return the
+     * default pixel, this is a property of \ref KisPaintDevice.
+     *
+     * @param dstX the destination x-coordinate
+     * @param dstY the destination y-coordinate
+     * @param op a pointer to the composite op used to blast the pixels from @param srcDev to the current paint device
+     * @param srcDev the source device
+     * @param srcX the source x-coordinate
+     * @param srcY the source y-coordinate
+     * @param srcWidth the width of the region to be manipulated
+     * @param srcHeight the height of the region to be manipulated
+     */
+    void bitBltOldData(qint32 dstX, qint32 dstY,
+                const KisPaintDeviceSP srcDev,
+                qint32 srcX, qint32 srcY,
+                qint32 srcWidth, qint32 srcHeight);
+
+    /**
+     * Convenience method that uses QPoint and QRect.
+     *
+     * @param pos the destination coordinate, it replaces @param dstX and @param dstY.
+     * @param srcDev the source device.
+     * @param srcRect the rectangle describing the area to blast from @param srcDev into the current paint device.
+     * @param srcRect replaces @param srcX, @param srcY, @param srcWidth and @param srcHeight.
+     *
+     */
+    void bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev, const QRect & srcRect);
+
     /**
      * Blasts a @param selection of srcWidth @param srcWidth and srcHeight @param srcHeight
      * of @param srcDev on the current paint device. There is parameters
@@ -195,7 +228,7 @@ public:
                                   qint32 selX, qint32 selY,
                                   qint32 srcX, qint32 srcY,
                                   quint32 srcWidth, quint32 srcHeight);
-    
+
     /**
      * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
      * equal to 0. Best used when @param selection and the desired area of @param srcDev have exactly
@@ -280,7 +313,7 @@ public:
                                     qint32 selX, qint32 selY,
                                     qint32 srcX, qint32 srcY,
                                     quint32 srcWidth, quint32 srcHeight);
-                                    
+
     /**
      * Convenience method that assumes @param selX, @param selY, @param srcX and @param srcY are
      * equal to 0. Best used when @param selection and @param srcDev have exactly the same
@@ -297,6 +330,31 @@ public:
                                     const KisFixedPaintDeviceSP srcDev,
                                     const KisFixedPaintDeviceSP selection,
                                     quint32 srcWidth, quint32 srcHeight);
+
+    /**
+     * First you need to setup the painter with setMirrorInformation,
+     * then these set of methods provide way to render the devices mirrored
+     * according the axisCenter vertically or horizontally or both.
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab this device will be mirrored in-place, it means that it will be changed
+     */
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask);
+    void renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask);
+
+    /**
+     * Special method for some paintop that needs to know which areas where covered by the dab
+     * E.g. experimental (shape) paintop needs to know it to be able to copy appriate regions from
+     * internal device to the layer device
+     *
+     * @param rc rectangle area covered by dab
+     * @param dab this device will be mirrored in-place, it means that it will be changed
+     * @return vector of rectangular dirty regions of the painter's device
+     */
+    QVector<QRect> regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab);
 
     /**
       * The methods in this class do not tell the paintdevice to update, but they calculate the
@@ -405,7 +463,7 @@ public:
      * Draw the path using the Pen
      */
     void drawPainterPath(const QPainterPath& path, const QPen& pen);
-    
+
     /**
      * paint an unstroked one-pixel wide line from specified start position to the
      * specified end position.
@@ -418,8 +476,8 @@ public:
      * specified end position. Scanline algorithm is used.
      */
     void drawLine(const QPointF &start, const QPointF &end, qreal width, bool antialias);
-    
-    
+
+
     /**
      * paints an unstroked, aliased one-pixel line using the DDA algorithm from specified start position to the
      * specified end position.
@@ -482,9 +540,14 @@ public:
      * will be deleted as soon as the KisPainter instance dies).
      */
     KisPaintOp* paintOp() const;
-    
+
     void setMirrorInformation(const QPointF &axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly);
-    
+
+    /**
+     * copy the mirror information to other painter
+     */
+    void copyMirrorInformation(KisPainter * painter);
+
     /// Set the current pattern
     void setPattern(const KisPattern * pattern);
 

@@ -22,7 +22,6 @@ KisCurveOption::KisCurveOption(const QString & label, const QString& name, const
         : m_label(label)
         , m_category(category)
         , m_sensor(0)
-        , m_customCurve(false)
         , m_name(name)
         , m_checkable(true)
         , m_checked(checked)
@@ -47,42 +46,32 @@ const QString& KisCurveOption::category() const
     return m_category;
 }
 
-KisCubicCurve KisCurveOption::curve() const
-{
-    return m_curve;
-}
-
-void KisCurveOption::setCurve(const KisCubicCurve& curve)
-{
-    m_curve = curve;
-    m_customCurve = true;
-}
-
 void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     if (m_checkable) {
         setting->setProperty("Pressure" + m_name, isChecked());
     }
-    setting->setProperty("Custom" + m_name, m_customCurve);
     setting->setProperty(QString(m_name + "Sensor"), sensor()->toXML());
-    if (m_customCurve) {
-        setting->setProperty("Curve" + m_name, qVariantFromValue(m_curve));
-    }
 }
 
 void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    if (m_checkable) {
-        setChecked(setting->getBool("Pressure" + m_name, false));
-    }
-    m_customCurve = setting->getBool("Custom" + m_name, false);
+    readNamedOptionSetting(m_name, setting);
+}
 
-    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor")));
+void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
+{
+    if (m_checkable) {
+        setChecked(setting->getBool("Pressure" + prefix, false));
+    }
+    bool customCurve = setting->getBool("Custom" + prefix, false);
+
+    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(prefix + "Sensor")));
     if(sensor) {
         setSensor(sensor);
     }
-    if (m_customCurve) {
-        m_curve = setting->getCubicCurve("Curve" + m_name);
+    if (customCurve) {
+        m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
     }
 }
 

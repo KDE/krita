@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOTABLESTYLE_H
-#define KOTABLESTYLE_H
+#ifndef KOTBLSTYLE_H
+#define KOTBLSTYLE_H
 
 #include "KoStyle.h"
 #include "koodf_export.h"
@@ -25,20 +25,20 @@
 #include <QColor>
 
 /**
- * A \class KoTableStyle represents a style for a Table in
+ * A \class KoTblStyle represents a style for a Table in
  * a ODF document.
- * 
- * As all the styles it can be shared. 
+ *
+ * As all the styles it can be shared.
  **/
 
-class KOODF_EXPORT KoTableStyle : public KoStyle
+class KOODF_EXPORT KoTblStyle : public KoStyle
 {
-    KoTableStyle();
+    KoTblStyle();
 
 public:
-    KOSTYLE_DECLARE_SHARED_POINTER(KoTableStyle)
+    KOSTYLE_DECLARE_SHARED_POINTER(KoTblStyle)
 
-    ~KoTableStyle();
+    ~KoTblStyle();
 
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;

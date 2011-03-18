@@ -112,7 +112,7 @@ KisDynamicSensor* KisMultiSensorsModel::getSensor(const QModelIndex& index)
 {
     if(!index.isValid()) return 0;
     QString id = KisDynamicSensor::sensorsIds()[index.row()].id();
-    if(m_currentSensor->id() == id)
+    if(m_currentSensor && m_currentSensor->id() == id)
     {
         return m_currentSensor;
     } else if(m_listSensor) {
@@ -127,22 +127,66 @@ KisDynamicSensor* KisMultiSensorsModel::getSensor(const QModelIndex& index)
 
 KisDynamicSensor* KisMultiSensorsModel::getOrCreateSensorFromCache(const QString& id)
 {
-   if(m_sensorCache.contains(id)) return m_sensorCache.value(id);
-   KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
-   m_sensorCache[id] = sensor;
-   return sensor;
+    if(m_sensorCache.contains(id)) return m_sensorCache.value(id);
+    KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
+    if(!m_listSensor || !m_listSensor->hasCustomCurve())
+    {
+        sensor->setCurve(m_currentSensor->curve());
+    }
+    m_sensorCache[id] = sensor;
+    return sensor;
 }
 
 KisDynamicSensor* KisMultiSensorsModel::takeOrCreateSensorFromCache(const QString& id)
 {
-   if(m_sensorCache.contains(id)) return m_sensorCache.take(id);
-   return KisDynamicSensor::id2Sensor(id);
+    if(m_sensorCache.contains(id)) return m_sensorCache.take(id);
+    KisDynamicSensor* sensor = KisDynamicSensor::id2Sensor(id);
+    if(!m_listSensor || !m_listSensor->hasCustomCurve())
+    {
+        sensor->setCurve(m_currentSensor->curve());
+    }
+    return sensor;
 }
 
 void KisMultiSensorsModel::pushSensorToCache(KisDynamicSensor* sensor)
 {
     Q_ASSERT(!m_sensorCache.contains(sensor->id()));
     m_sensorCache[sensor->id()] = sensor;
+}
+
+void KisMultiSensorsModel::setCurrentCurve(const QModelIndex& currentIndex, const KisCubicCurve& curve, bool useSameCurve)
+{
+    if(useSameCurve)
+    {
+        foreach(KisDynamicSensor* sensor, m_sensorCache)
+        {
+            sensor->setCurve(curve);
+            sensor->removeCurve();
+        }
+        m_currentSensor->setCurve(curve);
+        if(m_listSensor)
+        {
+            foreach(const QString& id, m_listSensor->sensorIds())
+            {
+                KisDynamicSensor* sensor =  m_listSensor->getSensor(id);
+                sensor->setCurve(curve);
+                sensor->removeCurve();
+            }
+        }
+    } else {
+        KisDynamicSensor* sensor = getSensor(currentIndex);
+        Q_ASSERT(sensor);
+        sensor->setCurve(curve);
+        if(m_listSensor)
+        {
+            m_listSensor->removeCurve();
+        }
+    }
+}
+
+QModelIndex KisMultiSensorsModel::sensorIndex(KisDynamicSensor* arg1)
+{
+    return index(KisDynamicSensor::sensorsIds().indexOf(KoID(arg1->id())));
 }
 
 #include "kis_multi_sensors_model_p.moc"

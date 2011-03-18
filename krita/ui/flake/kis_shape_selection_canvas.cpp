@@ -69,7 +69,7 @@ KoToolProxy * KisShapeSelectionCanvas::toolProxy() const
     return 0;
 }
 
-const KoViewConverter *KisShapeSelectionCanvas::viewConverter() const
+KoViewConverter *KisShapeSelectionCanvas::viewConverter() const
 {
     return 0;
 }

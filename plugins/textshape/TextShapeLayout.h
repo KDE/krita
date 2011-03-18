@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LAYOUT_H
-#define LAYOUT_H
+#ifndef TEXTSHAPELAYOUT_H
+#define TEXTSHAPELAYOUT_H
 
 #include "TableLayout.h"
 
@@ -45,15 +45,23 @@ class KoChangeTracker;
 class KoImageCollection;
 class ToCGenerator;
 
+class InlineObjectPosition
+{
+public:
+    InlineObjectPosition(qreal ascent = 0, qreal descent = 0);
+    qreal m_ascent;
+    qreal m_descent;
+};
+
 /**
  * The document layouter for KoText style docs.
  */
-class Layout : public KoTextDocumentLayout::LayoutState
+class TextShapeLayout : public KoTextDocumentLayout::LayoutState
 {
 public:
-    explicit Layout(KoTextDocumentLayout *parent);
+    explicit TextShapeLayout(KoTextDocumentLayout *parent);
 
-    virtual ~Layout();
+    virtual ~TextShapeLayout();
     /// start layouting, return false when there is nothing to do
     virtual bool start();
     /// end layouting
@@ -117,7 +125,7 @@ public:
     virtual void fitLineForRunAround(bool resetHorizontalPosition);
     // add inline object
     virtual void insertInlineObject(KoTextAnchor * textAnchor);
-    // reset all inline object which document position is bigger or equal to resetPosition
+    // remove all inline objects which document position is bigger or equal to resetPosition
     virtual void resetInlineObject(int resetPosition);
     // remove inline object
     virtual void removeInlineObject(KoTextAnchor * textAnchor);
@@ -140,7 +148,7 @@ private:
     void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     void decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock);
 
-    qreal inlineCharHeight(const QTextFragment &fragment);
+    InlineObjectPosition inlineCharHeight(const QTextFragment &fragment);
 
     /**
      * Find a footnote and if there exists one reserve space for it at the bottom of the shape.
@@ -210,7 +218,7 @@ private:
     KoInsets m_borderInsets;
     KoInsets m_shapeBorder;
     KoTextDocumentLayout *m_parent;
-    QHash<int, qreal> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
+    QHash<int, InlineObjectPosition> m_inlineObjectHeights; // maps text-position to whole-line-height of an inline object
     TextShape *m_textShape;
     QVector<QTextFrame *> m_frameStack;
     QList<QWeakPointer<ToCGenerator> > m_tocGenerators;

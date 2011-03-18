@@ -5,6 +5,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1008,7 +1009,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         if (ok)
             setDefaultOutlineLevel(level);
     }
-    
+
     // 15.5.30 - 31
     if (element->hasAttributeNS(KoXmlNS::text, "number-lines")) {
         setLineNumbering(element->attributeNS(KoXmlNS::text, "number-lines", "false") == "true");
@@ -1019,7 +1020,7 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
                 setLineNumberStartValue(startValue);
                 }
             }
-    }           
+    }
 
     //1.6: KoTextFormat::load
     KoCharacterStyle *charstyle = characterStyle();
@@ -1751,6 +1752,15 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         style.addChildElement("style:tab-stops", elementContents);
 
     }
+}
+
+bool KoParagraphStyle::hasDefaults() const
+{
+    int size=d->stylesPrivate.properties().size();
+    if ((size == 0) || (size==1 && d->stylesPrivate.properties().contains(StyleId))) {
+        return true;
+    }
+    return false;
 }
 
 #include <KoParagraphStyle.moc>

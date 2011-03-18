@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include"InlineAnchorStrategy.h"
-#include"Layout.h"
+#include "InlineAnchorStrategy.h"
+#include "TextShapeLayout.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
@@ -102,9 +102,8 @@ QPointF InlineAnchorStrategy::relayoutPosition()
 
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout)
 {
-    if (m_anchor->positionInDocument() == block.position()) { // at first position of parag.
-        newPosition.setX(state->x());
-    } else if (layout->lineCount() != 0) {
+    Q_UNUSED(state)
+    if (layout->lineCount() != 0) {
         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
         if (tl.isValid()) {
             newPosition.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()));

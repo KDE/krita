@@ -31,7 +31,7 @@ KisDynamicSensorTime::KisDynamicSensorTime() : KisDynamicSensor(TimeId), m_time(
     setLength(3);
 }
 
-qreal KisDynamicSensorTime::parameter(const KisPaintInformation&  pi)
+qreal KisDynamicSensorTime::value(const KisPaintInformation&  pi)
 {
     m_time += pi.currentTime() - m_lastTime;
     m_lastTime = pi.currentTime();
@@ -85,6 +85,7 @@ void KisDynamicSensorTime::toXML(QDomDocument& doc, QDomElement& e) const
 
 void KisDynamicSensorTime::fromXML(const QDomElement& e)
 {
+    KisDynamicSensor::fromXML(e);
     m_periodic = e.attribute("periodic", "0").toInt();
     m_length = e.attribute("duration", "30").toInt();
 }

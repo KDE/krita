@@ -29,7 +29,7 @@ struct KisMultiSensorsSelector::Private
   QHBoxLayout* layout;
 };
 
-KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : d(new Private)
+KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : QWidget(parent), d(new Private)
 {
     d->currentConfigWidget = 0;
     d->form.setupUi(this);
@@ -50,6 +50,7 @@ KisMultiSensorsSelector::~KisMultiSensorsSelector()
 void KisMultiSensorsSelector::setCurrent(KisDynamicSensor* _sensor)
 {
     d->model->setCurrentSensor(_sensor);
+    d->form.sensorsList->setCurrentIndex(d->model->sensorIndex(_sensor)); // make sure the first element is selected
     KisDynamicSensor* sensor = currentHighlighted();
     if(!sensor)
     {
@@ -78,4 +79,9 @@ void KisMultiSensorsSelector::sensorActivated(const QModelIndex& index)
         d->layout->addWidget(d->currentConfigWidget);
     }
     emit(highlightedSensorChanged(sensor));
+}
+
+void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool useSameCurve)
+{
+    d->model->setCurrentCurve(d->form.sensorsList->currentIndex(), curve, useSameCurve);
 }

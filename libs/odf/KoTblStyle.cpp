@@ -16,68 +16,68 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "KoTableStyle.h"
+#include "KoTblStyle.h"
 
-KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoTableStyle)
+KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoTblStyle)
 
 namespace {
-    class BreakStyleMap : public QMap<KoTableStyle::BreakType, QString>
+    class BreakStyleMap : public QMap<KoTblStyle::BreakType, QString>
     {
     public:
         BreakStyleMap()
         {
-            insert(KoTableStyle::NoBreak, QString());
-            insert(KoTableStyle::AutoBreak, "auto");
-            insert(KoTableStyle::ColumnBreak, "column");
-            insert(KoTableStyle::PageBreak, "page");
+            insert(KoTblStyle::NoBreak, QString());
+            insert(KoTblStyle::AutoBreak, "auto");
+            insert(KoTblStyle::ColumnBreak, "column");
+            insert(KoTblStyle::PageBreak, "page");
         }
     } breakStyleMap;
 
-    class HorizontalAlignMap : public QMap<KoTableStyle::HorizontalAlign, QString>
+    class HorizontalAlignMap : public QMap<KoTblStyle::HorizontalAlign, QString>
     {
     public:
         HorizontalAlignMap()
         {
-            insert(KoTableStyle::CenterAlign, "center");
-            insert(KoTableStyle::LeftAlign, "left");
-            insert(KoTableStyle::MarginsAlign, "margins");
-            insert(KoTableStyle::RightAlign, "right");
+            insert(KoTblStyle::CenterAlign, "center");
+            insert(KoTblStyle::LeftAlign, "left");
+            insert(KoTblStyle::MarginsAlign, "margins");
+            insert(KoTblStyle::RightAlign, "right");
         }
     } horizontalAlignMap;
 
-    class BorderModelMap : public QMap<KoTableStyle::BorderModel, QString>
+    class BorderModelMap : public QMap<KoTblStyle::BorderModel, QString>
     {
     public:
         BorderModelMap()
         {
-            insert(KoTableStyle::CollapsingModel, "collapsing");
-            insert(KoTableStyle::SeparatingModel, "separating");
+            insert(KoTblStyle::CollapsingModel, "collapsing");
+            insert(KoTblStyle::SeparatingModel, "separating");
         }
     } borderModelMap;
 
-    class KeepWithNextMap : public QMap<KoTableStyle::KeepWithNext, QString>
+    class KeepWithNextMap : public QMap<KoTblStyle::KeepWithNext, QString>
     {
     public:
         KeepWithNextMap()
         {
-            insert(KoTableStyle::AutoKeepWithNext, "auto");
-            insert(KoTableStyle::AlwaysKeepWithNext, "always");
+            insert(KoTblStyle::AutoKeepWithNext, "auto");
+            insert(KoTblStyle::AlwaysKeepWithNext, "always");
         }
     } keepWithNextMap;
 
-    class WritingModeMap : public QMap<KoTableStyle::WritingMode, QString>
+    class WritingModeMap : public QMap<KoTblStyle::WritingMode, QString>
     {
     public:
         WritingModeMap()
         {
-            insert(KoTableStyle::LrTbWrittingMode, "lr-tb");
-            insert(KoTableStyle::RlTbWrittingMode, "rl-tb");
-            insert(KoTableStyle::TbRlWrittingMode, "tb-rl");
-            insert(KoTableStyle::TbLrWrittingMode, "tb-lr");
-            insert(KoTableStyle::LrWrittingMode, "lr");
-            insert(KoTableStyle::RlWrittingMode, "rl");
-            insert(KoTableStyle::TbWrittingMode, "tb");
-            insert(KoTableStyle::PageWrittingMode, "page");
+            insert(KoTblStyle::LrTbWrittingMode, "lr-tb");
+            insert(KoTblStyle::RlTbWrittingMode, "rl-tb");
+            insert(KoTblStyle::TbRlWrittingMode, "tb-rl");
+            insert(KoTblStyle::TbLrWrittingMode, "tb-lr");
+            insert(KoTblStyle::LrWrittingMode, "lr");
+            insert(KoTblStyle::RlWrittingMode, "rl");
+            insert(KoTblStyle::TbWrittingMode, "tb");
+            insert(KoTblStyle::PageWrittingMode, "page");
         }
     } writingModeMap;
 
@@ -85,7 +85,7 @@ namespace {
     const char* familyName = "table";
 }
 
-KoTableStyle::KoTableStyle()
+KoTblStyle::KoTblStyle()
 : KoStyle()
 , m_backgroundColor()
 , m_breakAfter(NoBreak)
@@ -105,177 +105,177 @@ KoTableStyle::KoTableStyle()
 {
 }
 
-KoTableStyle::~KoTableStyle()
+KoTblStyle::~KoTblStyle()
 {
 }
 
-void KoTableStyle::setAllowBreakBetweenRows(bool allow)
+void KoTblStyle::setAllowBreakBetweenRows(bool allow)
 {
     m_allowBreakBetweenRows = allow;
 }
 
-bool KoTableStyle::allowBreakBetweenRows() const
+bool KoTblStyle::allowBreakBetweenRows() const
 {
     return m_allowBreakBetweenRows;
 }
 
-void KoTableStyle::setBackgroundColor(const QColor& color)
+void KoTblStyle::setBackgroundColor(const QColor& color)
 {
     m_backgroundColor = color;
 }
 
-QColor KoTableStyle::backgroundColor() const
+QColor KoTblStyle::backgroundColor() const
 {
     return m_backgroundColor;
 }
 
-void KoTableStyle::setWidth(qreal width, KoTableStyle::WidthUnit unit)
+void KoTblStyle::setWidth(qreal width, KoTblStyle::WidthUnit unit)
 {
     m_width = width;
     m_widthUnit = unit;
 }
 
-qreal KoTableStyle::width() const
+qreal KoTblStyle::width() const
 {
     return m_width;
 }
 
-KoTableStyle::WidthUnit KoTableStyle::widthUnit() const
+KoTblStyle::WidthUnit KoTblStyle::widthUnit() const
 {
     return m_widthUnit;
 }
 
-void KoTableStyle::setLeftMargin(qreal left)
+void KoTblStyle::setLeftMargin(qreal left)
 {
     m_leftMargin = left;
 }
 
-qreal KoTableStyle::leftMargin() const
+qreal KoTblStyle::leftMargin() const
 {
     return m_leftMargin;
 }
 
-void KoTableStyle::setTopMargin(qreal top)
+void KoTblStyle::setTopMargin(qreal top)
 {
     m_topMargin = top;
 }
 
-qreal KoTableStyle::topMargin() const
+qreal KoTblStyle::topMargin() const
 {
     return m_topMargin;
 }
 
-void KoTableStyle::setRightMargin(qreal right)
+void KoTblStyle::setRightMargin(qreal right)
 {
     m_rightMargin = right;
 }
 
-qreal KoTableStyle::rightMargin() const
+qreal KoTblStyle::rightMargin() const
 {
     return m_rightMargin;
 }
 
-void KoTableStyle::setBottomMargin(qreal bottom)
+void KoTblStyle::setBottomMargin(qreal bottom)
 {
     m_bottomMargin = bottom;
 }
 
-qreal KoTableStyle::bottomMargin() const
+qreal KoTblStyle::bottomMargin() const
 {
     return m_bottomMargin;
 }
 
-void KoTableStyle::setHorizontalAlign(KoTableStyle::HorizontalAlign align)
+void KoTblStyle::setHorizontalAlign(KoTblStyle::HorizontalAlign align)
 {
     m_horizontalAlign = align;
 }
 
-KoTableStyle::HorizontalAlign KoTableStyle::horizontalAlign() const
+KoTblStyle::HorizontalAlign KoTblStyle::horizontalAlign() const
 {
     return m_horizontalAlign;
 }
 
-void KoTableStyle::setDisplay(bool display)
+void KoTblStyle::setDisplay(bool display)
 {
     m_display = display;
 }
 
-bool KoTableStyle::display() const
+bool KoTblStyle::display() const
 {
     return m_display;
 }
 
-void KoTableStyle::setBreakBefore(KoTableStyle::BreakType breakBefore)
+void KoTblStyle::setBreakBefore(KoTblStyle::BreakType breakBefore)
 {
     m_breakBefore = breakBefore;
 }
 
-KoTableStyle::BreakType KoTableStyle::breakBefore() const
+KoTblStyle::BreakType KoTblStyle::breakBefore() const
 {
     return m_breakBefore;
 }
 
-void KoTableStyle::setBreakAfter(KoTableStyle::BreakType breakAfter)
+void KoTblStyle::setBreakAfter(KoTblStyle::BreakType breakAfter)
 {
     m_breakAfter = breakAfter;
 }
 
-KoTableStyle::BreakType KoTableStyle::breakAfter() const
+KoTblStyle::BreakType KoTblStyle::breakAfter() const
 {
     return m_breakAfter;
 }
 
-void KoTableStyle::setBorderModel(KoTableStyle::BorderModel bordelModel)
+void KoTblStyle::setBorderModel(KoTblStyle::BorderModel bordelModel)
 {
     m_borderModel = bordelModel;
 }
 
-KoTableStyle::BorderModel KoTableStyle::borderModel() const
+KoTblStyle::BorderModel KoTblStyle::borderModel() const
 {
     return m_borderModel;
 }
 
-void KoTableStyle::setKeepWithNext(KoTableStyle::KeepWithNext keepWithNext)
+void KoTblStyle::setKeepWithNext(KoTblStyle::KeepWithNext keepWithNext)
 {
     m_keepWithNext = keepWithNext;
 }
 
-KoTableStyle::KeepWithNext KoTableStyle::keepWithNext() const
+KoTblStyle::KeepWithNext KoTblStyle::keepWithNext() const
 {
     return m_keepWithNext;
 }
 
-void KoTableStyle::setWritingMode(KoTableStyle::WritingMode writingMode)
+void KoTblStyle::setWritingMode(KoTblStyle::WritingMode writingMode)
 {
     m_writingMode = writingMode;
 }
 
-KoTableStyle::WritingMode KoTableStyle::writingMode() const
+KoTblStyle::WritingMode KoTblStyle::writingMode() const
 {
     return m_writingMode;
 }
 
-KoGenStyle::Type KoTableStyle::automaticstyleType() const
+KoGenStyle::Type KoTblStyle::automaticstyleType() const
 {
     return KoGenStyle::TableAutoStyle;
 }
 
-KoGenStyle::Type KoTableStyle::styleType() const
+KoGenStyle::Type KoTblStyle::styleType() const
 {
     return KoGenStyle::TableStyle;
 }
 
-const char* KoTableStyle::styleFamilyName() const
+const char* KoTblStyle::styleFamilyName() const
 {
     return familyName;
 }
 
-QString KoTableStyle::defaultPrefix() const
+QString KoTblStyle::defaultPrefix() const
 {
     return prefix;
 }
 
-void KoTableStyle::prepareStyle(KoGenStyle& style) const
+void KoTblStyle::prepareStyle(KoGenStyle& style) const
 {
     if(m_backgroundColor.isValid()) {
         style.addProperty("fo:background-color", m_backgroundColor.name());

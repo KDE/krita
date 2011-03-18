@@ -29,6 +29,7 @@
 
 #include "kis_serializable_configuration.h"
 #include "kis_curve_label.h"
+#include <kis_cubic_curve.h>
 
 class QWidget;
 class KisPaintInformation;
@@ -70,7 +71,7 @@ public:
     /**
      * @return the value of this sensor for the given KisPaintInformation
      */
-    virtual qreal parameter(const KisPaintInformation& info) = 0;
+    qreal parameter(const KisPaintInformation& info);
     /**
      * This function is call before beginning a stroke to reset the sensor.
      * Default implementation does nothing.
@@ -110,13 +111,20 @@ public:
     virtual void fromXML(const QDomElement&);
     const KisCurveLabel& minimumLabel() const;
     const KisCurveLabel& maximumLabel() const;
-    
+    void setCurve(const KisCubicCurve& curve);
+    const KisCubicCurve& curve() const;
+    void removeCurve();
+    bool hasCustomCurve() const;
+protected:
+    virtual qreal value(const KisPaintInformation& info) = 0;
 protected:
     void setMinimumLabel(const KisCurveLabel& _label);
     void setMaximumLabel(const KisCurveLabel& _label);
 private:
     const KoID& m_id;
     KisCurveLabel m_minimumLabel, m_maximumLabel;
+    bool m_customCurve;
+    KisCubicCurve m_curve;
 };
 
 #endif

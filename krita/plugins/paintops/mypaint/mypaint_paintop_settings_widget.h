@@ -42,10 +42,8 @@ public:
 
     MyPaintBrushResource* brush() const;
 
-private slots:
-
-    void brushSelected(const QModelIndex&);
-
+    void changePaintOpSize(qreal x, qreal y);
+    
 private:
     Ui::WdgMyPaintOptions* m_options;
     MyBrushResourcesListModel* m_model;

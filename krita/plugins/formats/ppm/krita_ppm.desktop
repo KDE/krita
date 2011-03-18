@@ -1,6 +1,5 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Comment=
 Exec=krita %u
 GenericName=
 Icon=krita
@@ -62,7 +61,6 @@ Name[x-test]=xxKritaxx
 Name[zh_CN]=Krita
 Name[zh_TW]=繪圖_Krita
 NoDisplay=true
-Path=
 StartupNotify=true
 Terminal=false
 Type=Application

@@ -49,6 +49,10 @@ public:
     // returns the depth(), if is isEnabled() is true, otherwise returns 0.0
     double validDepth() const;
 
+    bool isThreeDBrushEnabled() const;
+    void setThreeDBrushEnabled( bool enabled );
+    virtual QBrush threeDBrush( const QBrush& brush, const QRectF& rect ) const;
+
     bool operator==( const AbstractThreeDAttributes& ) const;
     inline bool operator!=( const AbstractThreeDAttributes& other ) const { return !operator==(other); }
 

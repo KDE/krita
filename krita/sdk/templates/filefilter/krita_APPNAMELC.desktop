@@ -1,6 +1,5 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Comment=
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[bg]=Приложение за рисуване и обработка на изображения
@@ -48,7 +47,7 @@ GenericName[x-test]=xxApplication for Drawing and Handling of Imagesxx
 GenericName[zh_CN]=绘制和操纵图像的应用程序
 GenericName[zh_TW]=影像繪製與處理應用程式
 Icon=krita
-MimeType=image/%{APPNAMELC}
+MimeType=image/%{APPNAMELC};
 Name=Krita
 Name[af]=Krita
 Name[bg]=Krita
@@ -105,7 +104,6 @@ Name[xh]=Krita
 Name[x-test]=xxKritaxx
 Name[zh_CN]=Krita
 Name[zh_TW]=繪圖_Krita
-Path=
 StartupNotify=true
 Terminal=false
 Type=Application

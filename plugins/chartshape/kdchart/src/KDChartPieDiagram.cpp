@@ -493,11 +493,13 @@ void PieDiagram::drawPieSurface( QPainter* painter,
         QRectF drawPosition = piePosition( dataset, pie );
 
         painter->setRenderHint ( QPainter::Antialiasing );
-        painter->setBrush( brush( index ) );
+        QBrush br = brush( index );
+        if( threeDAttrs.isEnabled() ) {
+            br = threeDAttrs.threeDBrush( br, drawPosition );
+        }
+        painter->setBrush( br );
+
         painter->setPen( pen( index ) );
-//        if ( threeDAttrs.isEnabled() )
-//            pen.setColor( QColor( 0, 0, 0 ) );
-//        painter->setPen( pen );
 
         if ( angleLen == 360 ) {
             // full circle, avoid nasty line in the middle

@@ -47,7 +47,7 @@ public:
     KoShapeManager *shapeManager() const;
     void updateCanvas(const QRectF& rc);
     KoToolProxy * toolProxy() const;
-    const KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const;
     QWidget* canvasWidget();
     const QWidget* canvasWidget() const;
     KoUnit unit() const;

@@ -33,8 +33,10 @@
 #include <KoViewConverter.h>
 
 #include "kis_config.h"
+#include "kis_image_config.h"
 #include "kis_config_notifier.h"
 #include "kis_image.h"
+#include "krita_utils.h"
 
 #include "kis_coordinates_converter.h"
 #include "kis_projection_backend.h"
@@ -97,6 +99,7 @@ struct KisPrescaledProjection::Private {
 
     QImage prescaledQImage;
 
+    QSize updatePatchSize;
     QSize canvasSize;
     QSize viewportSize;
     KisImageWSP image;
@@ -169,6 +172,10 @@ void KisPrescaledProjection::updateSettings()
     }
 
     setMonitorProfile(KoColorSpaceRegistry::instance()->profileByName(cfg.monitorProfile()));
+
+    KisImageConfig imageConfig;
+    m_d->updatePatchSize.setWidth(imageConfig.updatePatchWidth());
+    m_d->updatePatchSize.setHeight(imageConfig.updatePatchHeight());
 }
 
 void KisPrescaledProjection::viewportMoved(const QPointF &offset)
@@ -212,8 +219,19 @@ void KisPrescaledProjection::viewportMoved(const QPointF &offset)
 
     foreach(QRect rect, rects) {
         //gc.fillRect(rect, QColor(128, 0, 0, 255));
-        KisPPUpdateInfoSP info = getUpdateInformation(rect, QRect());
-        drawUsingBackend(gc, info);
+
+        QRect imageRect =
+            m_d->coordinatesConverter->viewportToImage(rect).toAlignedRect();
+        QVector<QRect> patches =
+            KritaUtils::splitRectIntoPatches(imageRect, m_d->updatePatchSize);
+
+        foreach(const QRect& rc, patches) {
+            QRect viewportPatch =
+                m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
+
+            KisPPUpdateInfoSP info = getUpdateInformation(viewportPatch, QRect());
+            drawUsingBackend(gc, info);
+        }
     }
 
     m_d->prescaledQImage = newImage;
@@ -271,7 +289,18 @@ void KisPrescaledProjection::recalculateCache(KisUpdateInfoSP info)
 
 void KisPrescaledProjection::preScale()
 {
-    preScale(QRect(QPoint(0, 0), m_d->viewportSize));
+    QRect viewportRect(QPoint(0, 0), m_d->viewportSize);
+    QRect imageRect =
+        m_d->coordinatesConverter->viewportToImage(viewportRect).toAlignedRect();
+
+    QVector<QRect> patches =
+        KritaUtils::splitRectIntoPatches(imageRect, m_d->updatePatchSize);
+
+    foreach(const QRect& rc, patches) {
+        QRect viewportPatch =
+            m_d->coordinatesConverter->imageToViewport(rc).toAlignedRect();
+        preScale(viewportPatch);
+    }
 }
 
 QRect KisPrescaledProjection::preScale(const QRect & rc)

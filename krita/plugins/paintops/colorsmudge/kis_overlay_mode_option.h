@@ -41,7 +41,7 @@ public:
     }
 };
 
-class PAINTOP_EXPORT KisOverlayModeOptionWidget: public KisOverlayModeOption
+class KisOverlayModeOptionWidget: public KisOverlayModeOption
 {
 public:
     KisOverlayModeOptionWidget()

@@ -69,21 +69,24 @@ void KisNodeModel::setImage(KisImageWSP image)
     if (m_d->image) {
         m_d->image->disconnect(this);
     }
-    m_d->image = image;
-    connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)), SLOT(layersChanged()));
 
-    connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
-            SLOT(beginInsertNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeHasBeenAdded(KisNode*, int)),
-            SLOT(endInsertNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigAboutToRemoveANode(KisNode*, int)),
-            SLOT(beginRemoveNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeHasBeenRemoved(KisNode*, int)),
-            SLOT(endRemoveNodes(KisNode*, int)));
-    connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
-            SLOT(nodeChanged(KisNode*)));
-    connect(m_d->image, SIGNAL(sigAboutToBeDeleted()),
-            SLOT(imageDeleted()));
+    m_d->image = image;
+
+    if(m_d->image) {
+        connect(m_d->image, SIGNAL(sigPostLayersChanged(KisGroupLayerSP)),
+                SLOT(layersChanged()));
+        connect(m_d->image, SIGNAL(sigAboutToAddANode(KisNode*, int)),
+                SLOT(beginInsertNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeHasBeenAdded(KisNode*, int)),
+                SLOT(endInsertNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigAboutToRemoveANode(KisNode*, int)),
+                SLOT(beginRemoveNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeHasBeenRemoved(KisNode*, int)),
+                SLOT(endRemoveNodes(KisNode*, int)));
+        connect(m_d->image, SIGNAL(sigNodeChanged(KisNode*)),
+                SLOT(nodeChanged(KisNode*)));
+    }
+    reset();
 }
 
 KisNodeSP KisNodeModel::nodeFromIndex(const QModelIndex &index)
@@ -201,7 +204,6 @@ QModelIndex KisNodeModel::index(int row, int column, const QModelIndex &parent) 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
 {
     //dbgUI <<"KisNodeModel::parent " << index;
-    kDebug() << "image " << m_d->image;
     if (!m_d->image || !index.isValid())
         return QModelIndex();
 
@@ -512,12 +514,6 @@ void KisNodeModel::updateNodes()
     }
     m_d->updateTimer->stop();
     m_d->updateQueue.clear();
-}
-
-void KisNodeModel::imageDeleted()
-{
-    m_d->image = 0;
-    reset();
 }
 
 #include "kis_node_model.moc"

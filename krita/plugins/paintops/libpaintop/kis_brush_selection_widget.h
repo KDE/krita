@@ -53,21 +53,22 @@ public:
     void setImage(KisImageWSP image);
 
     void setCurrentBrush(KisBrushSP brush);
-    
+
     void setBrushSize(qreal dxPixels, qreal dyPixels);
+    QSizeF brushSize() const;
     bool presetIsValid() { return m_presetIsValid; }
 
 signals:
 
     void sigBrushChanged();
-    
+
 private slots:
     void buttonClicked(int id);
 
 private:
     void setCurrentWidget(QWidget * widget);
     void addChooser(const QString & text, QWidget * widget, int id);
-    
+
 private:
     enum Type {
       AUTOBRUSH,
@@ -75,16 +76,16 @@ private:
       CUSTOMBRUSH,
       TEXTBRUSH
     };
-    
+
     bool m_presetIsValid;
-    
+
     Ui_WdgBrushChooser uiWdgBrushChooser;
     QGridLayout * m_layout;
     QWidget * m_currentBrushWidget;
     QHash<int, QWidget*> m_chooserMap;
     QButtonGroup * m_buttonGroup;
     QSize m_mininmumSize;
-    
+
     KisAutoBrushWidget * m_autoBrushWidget;
     KisBrushChooser * m_brushChooser;
     KisTextBrushChooser * m_textBrushWidget;

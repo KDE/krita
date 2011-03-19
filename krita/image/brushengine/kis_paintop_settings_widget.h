@@ -49,9 +49,9 @@ public:
     virtual void setImage(KisImageWSP image) {
         m_image = image;
     }
-    
+
     /**
-     * XXX: Document!
+     * @see KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
      */
     virtual void changePaintOpSize(qreal x, qreal y) {
         Q_UNUSED(x);
@@ -59,12 +59,19 @@ public:
     }
 
     /**
+     * @see KisPaintOpSettings::paintOpSize()
+     */
+    virtual QSizeF paintOpSize() const {
+        return QSizeF(1.0, 1.0);
+    };
+
+    /**
      * This is true for all of the paintop widget except for the Custom brush tab in the Brush tip dialog
      */
     virtual bool presetIsValid(){
         return true;
     }
-    
+
     /**
      * Some paintops are more complicated and require full canvas with layers, projections and KisImage etc.
      * Example is duplicate paintop. In this case simple canvas like scratchbox does not work.

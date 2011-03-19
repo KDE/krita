@@ -53,8 +53,8 @@ public:
     uint oldHandleRadius;
     KIntNumInput * grabSensitivity;
     uint oldGrabSensitivity;
-    KoUnitDoubleSpinBox* copyOffset;
-    qreal oldCopyOffset;
+    KoUnitDoubleSpinBox* pasteOffset;
+    qreal oldPasteOffset;
     QCheckBox *pasteAtCursor;
     bool oldPasteAtCursor;
 };
@@ -68,7 +68,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
 
     d->oldGrabSensitivity = 3;
     d->oldHandleRadius = 3;
-    d->oldCopyOffset = 10.0;
+    d->oldPasteOffset = 10.0;
     d->oldPasteAtCursor = false;
 
     if (d->config->hasGroup("Misc")) {
@@ -76,7 +76,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
 
         d->oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", d->oldGrabSensitivity);
         d->oldHandleRadius = miscGroup.readEntry("HandleRadius", d->oldHandleRadius);
-        d->oldCopyOffset = miscGroup.readEntry("CopyOffset", d->oldCopyOffset);
+        d->oldPasteOffset = miscGroup.readEntry("CopyOffset", d->oldPasteOffset);
         d->oldPasteAtCursor = miscGroup.readEntry("PasteAtCursor", d->oldPasteAtCursor);
     }
 
@@ -117,14 +117,14 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
     grid->addWidget(d->grabSensitivity, 2, 1);
 
-    grid->addWidget(new QLabel(i18n("Copy offset:"), tmpQGroupBox), 3, 0);
+    grid->addWidget(new QLabel(i18n("Paste offset:"), tmpQGroupBox), 3, 0);
 
-    d->copyOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
-    d->copyOffset->setMinMaxStep(-1000, 1000, 0.1);
-    d->copyOffset->setValue(d->oldCopyOffset);
-    d->copyOffset->setUnit(unit);
-    d->copyOffset->setDisabled(d->oldPasteAtCursor);
-    grid->addWidget(d->copyOffset, 3, 1);
+    d->pasteOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
+    d->pasteOffset->setMinMaxStep(-1000, 1000, 0.1);
+    d->pasteOffset->setValue(d->oldPasteOffset);
+    d->pasteOffset->setUnit(unit);
+    d->pasteOffset->setDisabled(d->oldPasteAtCursor);
+    grid->addWidget(d->pasteOffset, 3, 1);
 
     grid->addWidget(new QLabel(i18n("Paste at Cursor"), tmpQGroupBox), 4, 0);
     d->pasteAtCursor = new QCheckBox(tmpQGroupBox);
@@ -137,7 +137,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
 
     connect(d->unit, SIGNAL(activated(int)), SIGNAL(unitChanged(int)));
     connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
-    connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->copyOffset, SLOT(setDisabled(bool)));
+    connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->pasteOffset, SLOT(setDisabled(bool)));
 }
 
 KoConfigMiscPage::~KoConfigMiscPage()
@@ -166,8 +166,8 @@ void KoConfigMiscPage::apply()
         miscGroup.writeEntry("GrabSensitivity", currentGrabSensitivity);
     }
 
-    qreal currentCopyOffset = d->copyOffset->value();
-    if (currentCopyOffset != d->oldCopyOffset) {
+    qreal currentCopyOffset = d->pasteOffset->value();
+    if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
     }
 
@@ -186,9 +186,9 @@ void KoConfigMiscPage::slotDefault()
 void KoConfigMiscPage::slotUnitChanged(int u)
 {
     KoUnit unit = KoUnit((KoUnit::Unit) u);
-    d->copyOffset->blockSignals(true);
-    d->copyOffset->setUnit(unit);
-    d->copyOffset->blockSignals(false);
+    d->pasteOffset->blockSignals(true);
+    d->pasteOffset->setUnit(unit);
+    d->pasteOffset->blockSignals(false);
 }
 
 #include <KoConfigMiscPage.moc>

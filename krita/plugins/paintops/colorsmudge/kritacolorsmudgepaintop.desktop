@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=Color Smudge Brush
+Name[pt]=Pincel de Fumo a Cores
+Name[uk]=Кольоровий пензель для розмазування
+Name[x-test]=xxColor Smudge Brushxx
 X-KDE-ServiceTypes=Krita/Paintop
 Type=Service
 X-KDE-Library=kritacolorsmudgepaintop

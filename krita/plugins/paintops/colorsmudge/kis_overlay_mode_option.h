@@ -19,12 +19,11 @@
 #define _KIS_OVERLAYMODE_OPTION_H_
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 #include <klocale.h>
 
 #include <QLabel>
 
-class PAINTOP_EXPORT KisOverlayModeOption : public KisPaintOpOption
+class KisOverlayModeOption : public KisPaintOpOption
 {
 public:
     KisOverlayModeOption():

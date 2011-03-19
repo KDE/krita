@@ -23,13 +23,12 @@
 
 #include "kis_curve_option.h"
 #include <kis_paint_information.h>
-#include <krita_export.h>
 #include <kis_types.h>
 
 class KisPropertiesConfiguration;
 class KisPainter;
 
-class PAINTOP_EXPORT KisRateOption: public KisCurveOption
+class KisRateOption: public KisCurveOption
 {
 public:
     KisRateOption(const QString& name, const QString& label="", bool checked=true, const QString& category=KisPaintOpOption::brushCategory());

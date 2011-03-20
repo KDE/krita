@@ -203,7 +203,7 @@ void KisLayerBox::setImage(KisImageWSP image)
             m_nodeManager->disconnect(this);
         }
         m_nodeManager = m_canvas->view()->nodeManager();
-
+        m_nodeModel->setImage(m_image);
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
 
         // cold start
@@ -216,8 +216,10 @@ void KisLayerBox::setImage(KisImageWSP image)
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP)), m_nodeManager, SLOT(moveNode(KisNodeSP, KisNodeSP)));
         connect(m_nodeModel, SIGNAL(requestMoveNode(KisNodeSP, KisNodeSP, int)), m_nodeManager, SLOT(moveNodeAt(KisNodeSP, KisNodeSP, int)));
     }
+    else {
+        m_nodeModel->setImage(m_image);
+    }
 
-    m_nodeModel->setImage(m_image);
     m_wdgLayerBox->listLayers->expandAll();
     m_wdgLayerBox->listLayers->scrollToBottom();
 }
@@ -411,13 +413,11 @@ void KisLayerBox::slotRmClicked()
 void KisLayerBox::slotRaiseClicked()
 {
     m_nodeManager->raiseNode();
-    setCurrentNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotLowerClicked()
 {
     m_nodeManager->lowerNode();
-    setCurrentNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotPropertiesClicked()

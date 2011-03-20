@@ -27,13 +27,14 @@
 #include "komain_export.h"
 
 class KoDocument;
+class KoResourceManager;
 
 class KOMAIN_EXPORT KoConfigMiscPage : public KVBox
 {
     Q_OBJECT
 
 public:
-    explicit KoConfigMiscPage(KoDocument* doc, char* name = 0L);
+    explicit KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentResources, char* name = 0L);
     ~KoConfigMiscPage();
 
     void apply();

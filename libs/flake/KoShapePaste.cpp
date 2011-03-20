@@ -36,6 +36,7 @@
 #include "KoShapeControllerBase.h"
 #include "KoShapeRegistry.h"
 #include "KoCanvasController.h"
+#include "KoResourceManager.h"
 #include "commands/KoShapeCreateCommand.h"
 
 #include <KGlobal>
@@ -80,16 +81,11 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
     }
     context.setZIndex(zIndex);
 
-    QPointF copyOffset(10.0, 10.0);
-    bool pasteAtCursor = false;
-    // read copy offset from settings
-    KSharedConfigPtr config = KGlobal::config();
-    if (config->hasGroup("Misc")) {
-        KConfigGroup miscGroup = config->group("Misc");
-        const qreal offset = miscGroup.readEntry("CopyOffset", 10.0);
-        copyOffset = QPointF(offset, offset);
-        pasteAtCursor = miscGroup.readEntry("PasteAtCursor", pasteAtCursor);
-    }
+    KoResourceManager *rm = d->canvas->shapeController()->resourceManager();
+    Q_ASSERT(rm);
+
+    QPointF pasteOffset(rm->pasteOffset(), rm->pasteOffset());
+    const bool pasteAtCursor = rm->pasteAtCursor();
 
     // get hold of the canvas' shape manager
     KoShapeManager *sm = d->canvas->shapeManager();
@@ -157,7 +153,7 @@ bool KoShapePaste::process(const KoXmlElement & body, KoOdfReadStore & odfStore)
                     if (qAbs(s->size().height() - shape->size().height()) > 0.001)
                         continue;
                     // move it and redo our iteration.
-                    QPointF move(copyOffset);
+                    QPointF move(pasteOffset);
                     d->canvas->clipToDocument(shape, move);
                     if (move.x() != 0 || move.y() != 0) {
                         shape->setPosition(shape->position() + move);

@@ -24,6 +24,7 @@
 #include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoResourceManager.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -40,12 +41,13 @@
 class KoConfigMiscPage::Private
 {
 public:
-    Private(KoDocument* doc)
-            : doc(doc)
+    Private(KoDocument* doc, KoResourceManager *documentResources)
+            : doc(doc), docResources(documentResources)
     {}
 
     KoDocument* doc;
     KSharedConfigPtr config;
+    KoResourceManager *docResources;
 
     KoUnit oldUnit;
     QComboBox *unit;
@@ -59,8 +61,8 @@ public:
     bool oldPasteAtCursor;
 };
 
-KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
-        : d(new Private(doc))
+KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentResources, char* name)
+        : d(new Private(doc, documentResources))
 {
     setObjectName(name);
 
@@ -68,8 +70,8 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
 
     d->oldGrabSensitivity = 3;
     d->oldHandleRadius = 3;
-    d->oldPasteOffset = 10.0;
-    d->oldPasteAtCursor = false;
+    d->oldPasteOffset = d->docResources->pasteOffset();
+    d->oldPasteAtCursor = d->docResources->pasteAtCursor();
 
     if (d->config->hasGroup("Misc")) {
         KConfigGroup miscGroup = d->config->group("Misc");
@@ -170,11 +172,18 @@ void KoConfigMiscPage::apply()
     if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
     }
+    if (currentCopyOffset != d->docResources->pasteOffset()) {
+        d->docResources->setPasteOffset(currentCopyOffset);
+    }
 
     const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
     if (currentPasteAtCursor != d->oldPasteAtCursor) {
         miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
     }
+    if (currentPasteAtCursor != d->docResources->pasteAtCursor()) {
+        d->docResources->enablePasteAtCursor(currentPasteAtCursor);
+    }
+    
     // FIXME how is the handle radius and grap sensitivitiy set?
 }
 

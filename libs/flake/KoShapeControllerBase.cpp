@@ -21,6 +21,9 @@
 #include "KoShapeControllerBase.h"
 #include "KoResourceManager.h"
 #include "KoShapeRegistry.h"
+#include <KGlobal>
+#include <KConfig>
+#include <KConfigGroup>
 
 class KoShapeControllerBasePrivate
 {
@@ -32,6 +35,15 @@ public:
         foreach (const QString &id, registry->keys()) {
             KoShapeFactoryBase *shapeFactory = registry->value(id);
             shapeFactory->newDocumentResourceManager(resourceManager);
+        }
+        // read persistent application wide resources
+        KSharedConfigPtr config = KGlobal::config();
+        if (config->hasGroup("Misc")) {
+            KConfigGroup miscGroup = config->group("Misc");
+            const qreal pasteOffset = miscGroup.readEntry("CopyOffset", 10.0);
+            resourceManager->setPasteOffset(pasteOffset);
+            const bool pasteAtCursor = miscGroup.readEntry("PasteAtCursor", true);
+            resourceManager->enablePasteAtCursor(pasteAtCursor);
         }
     }
 

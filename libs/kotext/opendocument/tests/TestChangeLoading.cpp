@@ -35,10 +35,10 @@
 #include <KTemporaryFile>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <KoTextShapeData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoTextWriter.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <kcomponentdata.h>
@@ -46,7 +46,6 @@
 #include <KoListStyle.h>
 #include <KoTableStyle.h>
 #include <KoTableCellStyle.h>
-#include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -113,21 +112,16 @@ QTextDocument *TestChangeLoading::documentFromOdt(const QString &odt)
     textSharedLoadingData->loadOdfStyles(shapeLoadingContext, styleManager);
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
     QTextDocument *document = new QTextDocument;
-    textShapeData->setDocument(document, false /* ownership */);
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
-    textShapeData->document()->setDocumentLayout(layout);
     KoTextDocument(document).setChangeTracker(changeTracker);
+    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager);
 
-    if (!textShapeData->loadOdf(body, shapeLoadingContext, rdf)) {
-        qDebug() << "KoTextShapeData failed to load ODT";
-    }
+    KoTextLoader loader(shapeLoadingContext, 0, 0);
+    QTextCursor cursor(document);
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     delete readStore;
-    delete textShapeData;
     return document;
 }
 
@@ -185,18 +179,17 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
         }
     }
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
-    textShapeData->setDocument(document, false /* ownership */);
-    if (qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
-        // Setup layout and managers just like kotext
-        KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-        textShapeData->document()->setDocumentLayout(layout);
-        layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
+    // Setup layout and managers just like kotext
+    if(!KoTextDocument(document).inlineTextObjectManager()) {
         KoStyleManager *styleManager = new KoStyleManager;
-        KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
+        KoTextDocument(document).setStyleManager(styleManager);
+        KoChangeTracker* changeTracker = new KoChangeTracker;
+        KoTextDocument(document).setChangeTracker(changeTracker);
+        KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager);
     }
 
-    textShapeData->saveOdf(context,rdf);
+    KoTextWriter writer(context, 0);
+    writer.write(document, 0, -1);
 
     contentTmpFile.close();
 
@@ -228,7 +221,6 @@ QString TestChangeLoading::documentToOdt(QTextDocument *document)
 
 
     delete store;
-    delete textShapeData;
 
     return odt;
 }
@@ -252,10 +244,9 @@ void TestChangeLoading::testSimpleDeleteSaving()
 void TestChangeLoading::verifySimpleDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(45).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(46);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
     QCOMPARE(deleteData.toPlainText(), QString("This is a deleted text."));
 }
@@ -279,10 +270,9 @@ void TestChangeLoading::testMultiParaDeleteSaving()
 void TestChangeLoading::verifyMultiParaDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(81).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(82);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
     QTextDocument deletedDocument;
     QTextCursor deletedCursor(&deletedDocument);
@@ -305,10 +295,9 @@ void TestChangeLoading::testPartialListItemDeleteLoading()
 void TestChangeLoading::verifyPartialListItemDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(48).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(49);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
     
     QTextDocument deleteDocument;
@@ -345,10 +334,9 @@ void TestChangeLoading::testListItemDeleteLoading()
 void TestChangeLoading::verifyListItemDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(52).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(53);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
 
     QTextDocument deleteDocument;
@@ -387,10 +375,9 @@ void TestChangeLoading::testListDeleteLoading()
 void TestChangeLoading::verifyListDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(9).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(10);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
 
     QTextDocument deleteDocument;
@@ -441,10 +428,9 @@ void TestChangeLoading::testTableDeleteSaving()
 void TestChangeLoading::verifyTableDelete(QTextDocument *document)
 {
     QTextCursor cursor(document);
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     QCOMPARE(document->characterAt(23).unicode(), (ushort)(QChar::ObjectReplacementCharacter));
     cursor.setPosition(24);
-    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(cursor));
+    KoDeleteChangeMarker *testMarker = dynamic_cast<KoDeleteChangeMarker*>(KoTextDocument(document).inlineTextObjectManager()->inlineTextObject(cursor));
     QTextDocumentFragment deleteData =  KoTextDocument(document).changeTracker()->elementById(testMarker->changeId())->getDeleteData();
         QTextDocument deleteDocument;
     QTextCursor deleteCursor(&deleteDocument);

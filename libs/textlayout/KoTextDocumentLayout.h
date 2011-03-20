@@ -69,11 +69,6 @@ public:
     explicit KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider = 0);
     virtual ~KoTextDocumentLayout();
 
-    /**
-     * Register the manager for inline objects which is needed to notify variables of layout changes.
-     */
-    void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
-
     /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 

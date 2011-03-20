@@ -24,11 +24,9 @@
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KTemporaryFile>
-#include <KoTextShapeData.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
-#include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -41,6 +39,8 @@
 #include <kstandarddirs.h>
 #include <KDebug>
 #include <kcomponentdata.h>
+
+#include <QTextCursor>
 
 TestLoadStyle::TestLoadStyle()
 {
@@ -98,21 +98,15 @@ QTextDocument *TestLoadStyle::documentFromOdt(const QString &odt)
     textSharedLoadingData->loadOdfStyles(shapeLoadingContext, styleManager);
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
     QTextDocument *document = new QTextDocument;
-    textShapeData->setDocument(document, false /* ownership */);
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
-    textShapeData->document()->setDocumentLayout(layout);
     KoTextDocument(document).setChangeTracker(changeTracker);
 
-    if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
-        qDebug() << "KoTextShapeData failed to load ODT";
-    }
+    KoTextLoader loader(shapeLoadingContext, 0, 0);
+    QTextCursor cursor(document);
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     delete readStore;
-    delete textShapeData;
     return document;
 }
 

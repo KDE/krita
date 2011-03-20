@@ -101,6 +101,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
+    d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 }
@@ -115,11 +116,6 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
 bool KoTextDocumentLayout::relativeTabs() const
 {
     return KoTextDocument(document()).relativeTabs();
-}
-
-void KoTextDocumentLayout::setInlineTextObjectManager(KoInlineTextObjectManager *iom)
-{
-    d->inlineTextObjectManager = iom;
 }
 
 KoInlineTextObjectManager *KoTextDocumentLayout::inlineTextObjectManager() const

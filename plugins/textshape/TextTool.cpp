@@ -510,15 +510,20 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
     QTextDocument *document = new QTextDocument();
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
+
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
-    layout->setInlineTextObjectManager(inlineManager);
-    document->setDocumentLayout(layout);
+    KoTextDocument(document).setInlineTextObjectManager(inlineManager);
+
     m_textEditor = new KoTextEditor(document);
+    KoTextDocument(document).setTextEditor(m_textEditor.data());
+
     m_changeTracker = new KoChangeTracker();
     KoTextDocument(document).setChangeTracker(m_changeTracker);
+
     KoTextDocument(document).setUndoStack(new KUndoStack());
-    KoTextDocument(document).setTextEditor(m_textEditor.data());
+
+    KoTextDocumentLayout *layout = new KoTextDocumentLayout(document);
+    document->setDocumentLayout(layout);
 }
 #endif
 

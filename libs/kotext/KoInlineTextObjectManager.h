@@ -36,9 +36,8 @@ class QAction;
 /**
  * A container to register all the inlineTextObjects with.
  * Inserting an inline-object in a QTextDocument should be done via this manager which will
- * insert a placeholder in the text and if you add the KoInlineTextObjectManager to the
- * KoTextDocumentLayout for that specific textDocument, your inline text object will get painted
- * properly.
+ * insert a placeholder in the text and you should add the KoInlineTextObjectManager to the
+ * KoTextDocument.
  */
 class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
 {

@@ -13,6 +13,8 @@ set(textlayout_LIB_SRCS
     KoTextShapeContainerModel.cpp
     RunAroundHelper.cpp
     Outline.cpp
+
+    KoTextShapeData.cpp
 )
 
 
@@ -34,6 +36,8 @@ install(
     FILES
     KoTextDocumentLayout.h
     KoStyleThumbnailer.h
+
+    KoTextShapeData.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

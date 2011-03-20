@@ -6,7 +6,6 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
-    KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
@@ -125,13 +124,11 @@ install(
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
-    KoTextDocumentLayout.h
     KoText.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h
     KoTextPaste.h
-    KoTextShapeData.h
     KoVariable.h
     KoVariableManager.h
     KoTextRdfCore.h

@@ -21,7 +21,8 @@
 
 #include <KoXmlWriter.h>
 #include <KoOdf.h>
-#include "KoTextShapeData.h"
+#include <KoTextShapeDataBase.h>
+#include "KoTextWriter.h"
 #include <KoGenChanges.h>
 #include <KoShapeSavingContext.h>
 
@@ -29,7 +30,7 @@
 #include "KoTextSopranoRdfModel_p.h"
 
 struct KoTextOdfSaveHelper::Private {
-    Private(KoTextShapeData *shapeData, int from, int to)
+    Private(KoTextShapeDataBase *shapeData, int from, int to)
         : shapeData(shapeData),
         from(from),
         to(to),
@@ -38,7 +39,7 @@ struct KoTextOdfSaveHelper::Private {
     }
 
     KoShapeSavingContext *context;
-    KoTextShapeData *shapeData;
+    KoTextShapeDataBase *shapeData;
 
     int from;
     int to;
@@ -47,7 +48,7 @@ struct KoTextOdfSaveHelper::Private {
 };
 
 
-KoTextOdfSaveHelper::KoTextOdfSaveHelper(KoTextShapeData * shapeData, int from, int to)
+KoTextOdfSaveHelper::KoTextOdfSaveHelper(KoTextShapeDataBase * shapeData, int from, int to)
         : d(new Private(shapeData, from, to))
 {
 }
@@ -66,7 +67,9 @@ bool KoTextOdfSaveHelper::writeBody()
     bodyWriter.startElement("office:body");
     bodyWriter.startElement(KoOdf::bodyContentElement(KoOdf::Text, true));
 
-    d->shapeData->saveOdf(*d->context, 0, d->from, d->to);
+//    d->shapeData->saveOdf(*d->context, 0, d->from, d->to);
+    KoTextWriter writer(*d->context, 0);
+    writer.write(d->shapeData->document(), d->from, d->to);
 
     bodyWriter.endElement(); // office:element
     bodyWriter.endElement(); // office:body

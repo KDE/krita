@@ -87,6 +87,8 @@ enum DocumentResource {
     UndoStack,              ///< The document-wide undo stack (KUndoStack)
     ImageCollection,        ///< The KoImageCollection for the document
     OdfDocument,            ///< The document this canvas shows (KoOdfDocument)
+    PasteOffset,            ///< Application wide paste offset
+    PasteAtCursor,          ///< Application wide paste at cursor setting
 
     KarbonStart = 1000,      ///< Base number for karbon specific values.
     KexiStart = 2000,        ///< Base number for kexi specific values.
@@ -217,6 +219,20 @@ public:
     /// Returns the actual grab sensitivity
     int grabSensitivity() const;
 
+    /**
+     * Offset used for pasting shapes to a document.
+     */
+    void setPasteOffset(qreal pasteOffset);
+    /// Returns the current paste offset
+    qreal pasteOffset() const;
+    
+    /**
+     * Enables/disables pasting shape at cursor position
+     */
+    void enablePasteAtCursor(bool enable);
+    /// Returns current state of paste at cursor setting
+    bool pasteAtCursor() const;
+    
     /// Sets the border resource
     void setActiveBorder(const KoLineBorder &border);
 

@@ -83,9 +83,6 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     qreal rotation = m_rotationOption.apply(info);
     qreal diagonal = std::sqrt(brush->width()*brush->width() + brush->height()*brush->height());
     
-    qint32 maxBrushWidth  = m_rotationOption.isChecked() ? qint32(diagonal*1.2) : brush->width();
-    qint32 maxBrushHeight = m_rotationOption.isChecked() ? qint32(diagonal*1.2) : brush->height();
-    
     // don't paint anything if the brush is too samll
     if((scale*brush->width()) <= 0.01 || (scale*brush->height()) <= 0.01)
         return 1.0;
@@ -101,49 +98,59 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     splitCoordinate(point.x(), &x, &xFraction);
     splitCoordinate(point.y(), &y, &yFraction);
     
-    KisFixedPaintDeviceSP maskDab = 0;
-    
-    // Extract the brush mask (maskDab) from brush with the correct scaled size
-    if(brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
-        // This is for bitmap brushes
-        maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
-    } else {
-        // This is for parametric brushes, those created in the Autobrush popup config dialogue
-        maskDab = cachedDab();
-        brush->mask(maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
-    }
-    
-    // transforms the fixed paint device with the current brush to alpha color space
-    // to use it as an alpha/transparency mask
-    maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
-    
     // save the old opacity value and composite mode
     quint8               oldOpacity = painter()->opacity();
     const KoCompositeOp* oldMode    = painter()->compositeOp();
     qreal                fpOpacity  = qreal(oldOpacity) / 255.0;
     
     if(!m_firstRun) {
+        // if color is disabled (only smudge) and "overlay mode is enabled
+        // then first blit the region under the brush from the image projection
+        // to the painting device to prevent a rapid build up of alpha value
+        // if the color to be smudged is semy transparent
+        if(m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
+            painter()->setCompositeOp(COMPOSITE_COPY);
+            painter()->setOpacity(OPACITY_OPAQUE_U8);
+            m_image->lock();
+            painter()->bitBlt(x, y, m_image->projection(), x, y, m_maskDab->bounds().width(), m_maskDab->bounds().height());
+            m_image->unlock();
+        }
+        
         // set opacity calculated by the rate option
         m_smudgeRateOption.apply(*painter(), info, 0.0, 1.0, fpOpacity);
         
         // then blit the temporary painting device on the canvas at the current brush position
         // the alpha mask (maskDab) will be used here to only blit the pixels that are in the area (shape) of the brush
         painter()->setCompositeOp(COMPOSITE_COPY);
-        painter()->bitBltWithFixedSelection(x, y, m_tempDev, maskDab, maskDab->bounds().width(), maskDab->bounds().height());
+        painter()->bitBltWithFixedSelection(x, y, m_tempDev, m_maskDab, m_maskDab->bounds().width(), m_maskDab->bounds().height());
     }
     else m_firstRun = false;
     
+    // Extract the brush mask (m_maskDab) from brush with the correct scaled size
+    if(brush->brushType() == IMAGE || brush->brushType() == PIPE_IMAGE) {
+        // This is for bitmap brushes
+        m_maskDab = brush->paintDevice(painter()->device()->colorSpace(), scale, rotation, info, 0.0, 0.0);
+    } else {
+        // This is for parametric brushes, those created in the Autobrush popup config dialogue
+        m_maskDab = cachedDab();
+        brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
+    }
+    
+    // transforms the fixed paint device with the current brush to alpha color space
+    // to use it as an alpha/transparency mask
+    m_maskDab->convertTo(KoColorSpaceRegistry::instance()->alpha8());
+
     if(m_image && m_overlayModeOption.isChecked()) {
         m_tempPainter->setCompositeOp(COMPOSITE_COPY);
         m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
         m_image->lock();
-        m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, maxBrushWidth, maxBrushHeight);
+        m_tempPainter->bitBlt(0, 0, m_image->projection(), x, y, m_maskDab->bounds().width(), m_maskDab->bounds().height());
         m_image->unlock();
     }
     else {
         // IMPORTANT: clear the temporary painting device to color black with zero opacity
         //            it will only clear the extents of the brush
-        m_tempDev->clear(QRect(0, 0, maxBrushWidth, maxBrushHeight));
+        m_tempDev->clear(m_maskDab->bounds());
     }
     
     // reset composite mode and opacity
@@ -151,7 +158,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
     // and blit it to the temporary painting device
     m_tempPainter->setCompositeOp(COMPOSITE_OVER);
     m_tempPainter->setOpacity(OPACITY_OPAQUE_U8);
-    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, maxBrushWidth, maxBrushHeight);
+    m_tempPainter->bitBlt(0, 0, painter()->device(), x, y, m_maskDab->bounds().width(), m_maskDab->bounds().height());
     
     // if the user selected the color smudge option
     // we will mix some color into the temorary painting device (m_tempDev)
@@ -166,8 +173,9 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // composite mode
         m_tempPainter->setCompositeOp(oldMode);
         m_tempPainter->setFillStyle(KisPainter::FillStyleForegroundColor);
+        m_tempPainter->setStrokeStyle(KisPainter::StrokeStyleNone);
         m_tempPainter->setPaintColor(painter()->paintColor());
-        m_tempPainter->paintRect(maskDab->bounds());
+        m_tempPainter->paintRect(m_maskDab->bounds());
     }
     
     // restore orginal opacy and composite mode values

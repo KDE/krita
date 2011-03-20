@@ -41,7 +41,7 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     m_sprayShapeDynamicOption = new KisSprayShapeDynamicsOption();
     m_ColorOption = new KisColorOption();
     m_brushOption = new KisBrushOptionWidget();
-    
+
     addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_brushOption);
     addPaintOpOption(m_sprayShapeOption);
@@ -72,4 +72,11 @@ void KisSprayPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     Q_UNUSED(y);
     m_sprayOption->setDiameter( m_sprayOption->diameter() + qRound(x) );
+}
+
+QSizeF KisSprayPaintOpSettingsWidget::paintOpSize() const
+{
+    qreal width = m_sprayOption->diameter();
+    qreal height = width * m_sprayOption->brushAspect();
+    return QSizeF(width, height);
 }

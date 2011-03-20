@@ -26,6 +26,10 @@
 // KDE
 #include <KDebug>
 
+// LibEmf
+#include "EmfRecords.h"
+#include "EmfObjects.h"
+
 
 // 0 - No debug
 // 1 - Print a lot of debug info
@@ -496,7 +500,7 @@ bool Parser::readRecord( QDataStream &stream )
         break;
     case EMR_MOVETOEX:
 	{
-	    quint32 x, y;
+	    qint32 x, y;
 	    stream >> x >> y;
 	    mOutput->moveToEx( x, y );
             //kDebug(33100) << "xx EMR_MOVETOEX" << x << y;
@@ -733,23 +737,33 @@ bool Parser::readRecord( QDataStream &stream )
         case EMR_COMMENT:
         {
             quint32 dataSize;
+            quint32 commentIdentifier;
+
             stream >> dataSize;
-            quint32 maybeIdentifier;
-            stream >> maybeIdentifier;
-            if ( maybeIdentifier == 0x2B464D45 ) {
-                // EMFPLUS
-                //kDebug(33100) << "EMR_COMMENT_EMFPLUS";
+            stream >> commentIdentifier;
+
+            switch (commentIdentifier) {
+            case EMR_COMMENT_EMFSPOOL:
+                kDebug(31000) << "EMR_COMMENT_EMFSPOOL";
                 soakBytes( stream, size-16 ); // because we already took 16.
-            } else if ( maybeIdentifier == 0x00000000 ) {
-                //kDebug(33100) << "EMR_EMFSPOOL";
+                break;
+            case EMR_COMMENT_EMFPLUS:
+                kDebug(31000) << "EMR_COMMENT_EMFPLUS";
                 soakBytes( stream, size-16 ); // because we already took 16.
-            } else if ( maybeIdentifier ==  0x43494447 ) {
+                break;
+            case EMR_COMMENT_PUBLIC:
                 quint32 commentType;
                 stream >> commentType;
-                //kDebug(33100) << "EMR_COMMENT_PUBLIC" << commentType;
+                kDebug(31000) << "EMR_COMMENT_PUBLIC type" << commentType;
                 soakBytes( stream, size-20 ); // because we already took 20.
-            } else {
-                //kDebug(33100) << "EMR_COMMENT" << dataSize << maybeIdentifier;
+                break;
+            case EMR_COMMENT_MSGR:
+                kDebug(31000) << "EMR_COMMENT_MSGR";
+                soakBytes( stream, size-16 ); // because we already took 16.
+                break;
+            default:
+                kDebug(31000) << "EMR_COMMENT unknown type" << hex << commentIdentifier << dec
+                              << "datasize =" << dataSize;
                 soakBytes( stream, size-16 ); // because we already took 16.
             }
         }
@@ -778,32 +792,45 @@ bool Parser::readRecord( QDataStream &stream )
 	}
 	break;
     case EMR_EXTTEXTOUTA:
-        {
-            ExtTextOutARecord extTextOutARecord( stream, size );
-            mOutput->extTextOutA( extTextOutARecord );
-        }
-        break;
     case EMR_EXTTEXTOUTW:
 	{
+            QRect bounds;
+            quint32 iGraphicsMode;
+            // FIXME: These should really be floats, but that crashes
+            // for a test file where eyScale contains NaN. 
+            // Unfortunately this file contains secret data and
+            // can't be committed into the test suite.  Let's just
+            // work around the problem until we support scaling anyway.
+	    quint32 exScale;
+	    quint32 eyScale;
+
 	    //kDebug(33100) << "size:" << size;
 	    size -= 8;
-	    soakBytes( stream, 16 ); // the Bounds
+
+            stream >> bounds;
+	    //kDebug(31000) << "bounds:" << bounds;
 	    size -= 16;
-	    soakBytes( stream, 4 ); // iGraphicsMode
+
+            stream >> iGraphicsMode;
+	    //kDebug(31000) << "graphics mode:" << iGraphicsMode;
 	    size -= 4;
 
-	    quint32 exScale;
 	    stream >> exScale;
-	    //kDebug(33100) << "exScale:" << exScale;
-	    size -= 4;
-
-	    quint32 eyScale;
 	    stream >> eyScale;
-	    //kDebug(33100) << "eyScale:" << eyScale;
-	    size -= 4;
+#if DEBUG_EMFPARSER
+            if (iGraphicsMode == GM_COMPATIBLE) {
+                kDebug(31000) << "exScale:" << exScale;
+                kDebug(31000) << "eyScale:" << eyScale;
+            }
+#endif
+	    size -= 8;
 
-            EmrTextObject emrText( stream, size, EmrTextObject::SixteenBitChars );
-            mOutput->extTextOutW( emrText.referencePoint(), emrText.textString() );
+            // The only difference between ExtTextOutA and ...W is
+            // that A uses 8 bit chars and W uses 16 bit chars.
+            EmrTextObject emrText(stream, size,
+                                  (type == EMR_EXTTEXTOUTA) ? EmrTextObject::EightBitChars
+                                                            : EmrTextObject::SixteenBitChars);
+            mOutput->extTextOut( bounds, emrText );
 	}
 	break;
         case EMR_SETLAYOUT:
@@ -821,7 +848,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -837,7 +864,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -853,7 +880,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -869,7 +896,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -885,7 +912,7 @@ bool Parser::readRecord( QDataStream &stream )
 	    stream >> count;
 	    QList<QPoint> aPoints;
 	    for (quint32 i = 0; i < count; ++i) {
-		quint16 x, y;
+		qint16 x, y;
 		stream >> x;
 		stream >> y;
 		aPoints.append( QPoint( x, y ) );
@@ -910,7 +937,7 @@ bool Parser::readRecord( QDataStream &stream )
             }
             for ( quint32 i = 0; i < numberOfPolylines; ++i ) {
                 for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    quint16 x, y;
+                    qint16 x, y;
                     stream >> x >> y;
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }
@@ -935,7 +962,7 @@ bool Parser::readRecord( QDataStream &stream )
             }
             for ( quint32 i = 0; i < numberOfPolygons; ++i ) {
                 for ( int j = 0; j < aPoints[i].size(); ++j ) {
-                    quint16 x, y;
+                    qint16 x, y;
                     stream >> x >> y;
                     aPoints[i].replace( j,  QPoint( x, y ) );
                 }

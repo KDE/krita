@@ -19,7 +19,7 @@
 #ifndef KOTABLEPROPERTIES_H
 #define KOTABLEPROPERTIES_H
 
-#include "KoTableStyle.h"
+#include "KoTblStyle.h"
 
 class KoTableTemplate;
 

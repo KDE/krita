@@ -27,6 +27,7 @@
 #include <QDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QTimer>
 
 const QString GoogleDocumentService::GOOGLE_DOCUMENT_URL = "docs.google.com";
 const QString GoogleDocumentService::GOOGLE_SPREADSHEET_URL = "spreadsheets.google.com";
@@ -73,9 +74,9 @@ void GoogleDocumentService::listDocuments()
     requestHeader.setRawHeader("GData-Version", "3.0");
     requestHeader.setRawHeader("Content-Type", "application/atom+xml");
     requestHeader.setRawHeader("Authorization", authToken.toUtf8());
-    qDebug() << ">>>>>>>>>>>>>> List Documents " << authToken;
 
     networkManager.get(requestHeader);
+    emit progressUpdate("Successfully authenticated!!! Retreiving document list...");
 }
 
 void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
@@ -84,8 +85,7 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
     bool ok = false;
     if (!networkReply->error()) {
         if (!loggedin) {
-            QByteArray m_data = networkReply->readAll();
-            QString text(m_data.data());
+            QString text(networkReply->readAll());
             text = text.right(text.length() - text.indexOf("Auth=") - 5);
             authToken = QString("GoogleLogin auth=") + text.left(text.indexOf("\n"));
             if(authToken.length() > 20) {
@@ -95,11 +95,11 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
                     clientLogin(this->username, this->password);
                     return;
                 }
+                listDocuments();
                 spreadAuthToken = authToken;
                 authToken = "";
                 loggedin = true;
-                emit userAuthenticated(loggedin);
-                listDocuments();
+                emit userAuthenticated(loggedin, "");
             }
         }
         else if (waitingForDoc) {
@@ -117,43 +117,45 @@ void GoogleDocumentService::handleNetworkData(QNetworkReply *networkReply)
             xmlInput.setData(networkReply->readAll());
             qDebug() << "Part received.........";
             if (newInformation) {
+                emit progressUpdate("Parsing document list...");
                 ok = xmlReader.parse(&xmlInput, true);
                 newInformation = false;
                 getDocument();
             }
         }
+    } else {
+        QString errorString(networkReply->readAll());
+        errorString = errorString.right(errorString.length() - errorString.indexOf("Error=") - 6);
+        emit userAuthenticated(false, errorString);
     }
-    else {
-        qDebug() << networkReply->readAll();
-    }
-
-    networkReply->deleteLater();
 }
 
 void GoogleDocumentService::getDocument()
 {
     QList<GoogleDocument *> gList = gHandler->documentList()->entries();
-    if(gList.count() > 0)
-        documentList = new DocumentListWindow(this, gList);
+    if(gList.count() > 0) {
+        emit showingDocumentList();
+        documentList = new DocumentListWindow(this, gHandler->documentList());
+    }
     else
-        QMessageBox msgBox(QMessageBox::NoIcon, i18n("Office Viewer"), i18n("No Documents Found !!!"));
+        QMessageBox msgBox(QMessageBox::Information, i18n("Online Document Services"), i18n("No Documents Found !!!"));
 }
 
-void GoogleDocumentService::downloadDocument(GoogleDocument *doc)
+void GoogleDocumentService::downloadDocument(const QString & _url, const QString & _type)
 {
     authToken = docAuthToken;
-    QString url = doc->documentUrl();
-    QString type = doc->documentType();
+    QString url = _url;
+    QString type = _type;
     url.replace("docId", "docID", Qt::CaseInsensitive);
     QString exportFormat = "";
 
-    if(QString::compare(type, "spreadsheet") == 0) {
+    if(QString::compare(type, "spreadsheet", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=ods&format=ods";
         authToken = spreadAuthToken;
-    } else if(QString::compare(type, "presentation") == 0) {
+    } else if(QString::compare(type, "presentation", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=ppt&format=ppt";
     }
-    else if(QString::compare(type, "document") == 0) {
+    else if(QString::compare(type, "document", Qt::CaseInsensitive) == 0) {
         exportFormat = "&exportFormat=odt&format=odt";
     }
 

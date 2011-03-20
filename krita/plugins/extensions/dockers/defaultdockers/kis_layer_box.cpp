@@ -400,11 +400,13 @@ void KisLayerBox::slotRmClicked()
 void KisLayerBox::slotRaiseClicked()
 {
     m_nodeManager->raiseNode();
+    setCurrentNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotLowerClicked()
 {
     m_nodeManager->lowerNode();
+    setCurrentNode(m_nodeManager->activeNode());
 }
 
 void KisLayerBox::slotPropertiesClicked()

@@ -41,7 +41,7 @@ public:
     base_value = 0;
   }
   ~Mapping() {
-    delete[] pointsList;
+    delete pointsList;
   }
 
   void set_n (int input, int n)
@@ -67,7 +67,7 @@ public:
     assert (index < p->n);
 
     if (index > 0) {
-      assert (x > p->xvalues[index-1]);
+      assert (x >= p->xvalues[index-1]);
     }
 
     p->xvalues[index] = x;
@@ -110,13 +110,13 @@ public:
           y1 = p->yvalues[i];
         }
 
-        //g_print ("%d/%d x0=%f,x1=%f\n", i, p->n, x0, x1);
+        if (x0 == x1) {
+          y = y0;
+        } else {
+          // linear interpolation
+          y = (y1*(x - x0) + y0*(x1 - x)) / (x1 - x0);
+        }
 
-        // linear interpolation
-        float m, q;
-        m = (y1-y0)/(x1-x0);
-        q = y0 - m*x0;
-        y = m*x + q;
         result += y;
       }
     }
@@ -126,7 +126,7 @@ public:
   // used in python for the global pressure mapping
   float calculate_single_input (float input)
   {
-    assert(inputs == 1); 
+    assert(inputs == 1);
     return calculate(&input);
   }
 };

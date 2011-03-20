@@ -32,7 +32,7 @@ class KoShapeSavingContext;
 class KoShapeLoadingContext;
 class KoShape;
 class KoConnectionShape;
-class Layout;
+class TreeLayout;
 class QPainter;
 
 class TreeShape : public KoShapeContainer
@@ -80,7 +80,7 @@ public:
 
 private:
 //     virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
-    virtual Layout *layout() const;
+    virtual TreeLayout *layout() const;
 
     KoResourceManager *m_documentResources;
     KoShape *m_nextShape;

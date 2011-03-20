@@ -76,7 +76,7 @@
 #include "ThreeDScene.h"
 #include "ChartProxyModel.h"
 #include "ScreenConversions.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 
 using namespace KChart;
 

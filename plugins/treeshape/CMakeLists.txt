@@ -3,7 +3,7 @@ include_directories(  )
 ########### Flake Plugin library ###############
 
 SET (treeshape_LIB_SRCS
-    Layout.cpp
+    TreeLayout.cpp
     TreeShape.cpp
 
     TreeShapeConfigWidget.cpp

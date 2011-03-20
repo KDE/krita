@@ -41,14 +41,14 @@ class BrushResourceServer : public KoResourceServer<KisBrush>, public KoResource
 
 public:
 
-    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg") {
+    BrushResourceServer() : KoResourceServer<KisBrush>("kis_brushes", "*.gbr:*.gih:*.abr:*.png:*.svg", false) {
         addObserver(this, true);
     }
 
     ~BrushResourceServer() {
         foreach(KisBrush* brush, m_brushes)
         {
-            removeResourceFromServer(brush, false);
+            removeResourceFromServer(brush);
         }
     }
 

@@ -38,7 +38,7 @@ public slots:
     void slotLayerActivated(KisLayerSP layer);
     
 private:
-    KisLayerSP m_currentLayer;
+    KisLayerWSP m_currentLayer;
 };
 
 #endif // CHANNELMODEL_H

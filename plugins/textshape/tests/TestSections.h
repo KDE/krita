@@ -5,7 +5,7 @@
 #include <QString>
 #include <qtest_kde.h>
 
-#include "../Layout.h"
+#include "../TextShapeLayout.h"
 #include "MockTextShape.h"
 
 class KoTextDocumentLayout;
@@ -54,7 +54,7 @@ private:
     QTextTable *m_table;
     KoTextDocumentLayout *m_layout;
     KoStyleManager *m_styleManager;
-    Layout *m_textLayout;
+    TextShapeLayout *m_textLayout;
     MockTextShape *m_shape;
 
     // Default styles for the test.

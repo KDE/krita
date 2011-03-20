@@ -199,6 +199,8 @@ void KoPathShape::loadStyle(const KoXmlElement & element, KoShapeLoadingContext 
     if (styleStack.hasProperty(KoXmlNS::svg, "fill-rule")) {
         QString rule = styleStack.property(KoXmlNS::svg, "fill-rule");
         d->fillRule = rule == "nonzero" ?  Qt::WindingFill : Qt::OddEvenFill;
+    } else {
+        d->fillRule = Qt::WindingFill;
     }
 }
 

@@ -588,7 +588,11 @@ public:
      * @returns a QVariant which holds the property value.
      */
     QVariant value(int key) const;
-
+    /**
+     * Returns true if this pragraph style has default properties
+     * Note that the value of StyleId property is not considered
+     */
+    bool hasDefaults() const;
 signals:
     void nameChanged(const QString &newName);
 

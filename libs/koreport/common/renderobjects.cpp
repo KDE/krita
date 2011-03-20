@@ -231,6 +231,9 @@ OROTextBox::OROTextBox()
     m_lineStyle.style = Qt::NoPen;
     
     m_requiresPostProcessing = false; 
+
+    m_wordWrap = false;
+    m_canGrow = false;
 }
 
 OROTextBox::~OROTextBox()

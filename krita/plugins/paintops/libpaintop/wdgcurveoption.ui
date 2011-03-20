@@ -27,7 +27,7 @@
    <item row="1" column="4">
     <widget class="QLabel" name="label_ymax">
      <property name="text">
-      <string>TextLabel</string>
+      <string comment="KDE::DoNotExtract">TextLabel</string>
      </property>
     </widget>
    </item>
@@ -47,14 +47,14 @@
    <item row="3" column="4">
     <widget class="QLabel" name="label_ymin">
      <property name="text">
-      <string>TextLabel</string>
+      <string comment="KDE::DoNotExtract">TextLabel</string>
      </property>
     </widget>
    </item>
    <item row="4" column="1">
     <widget class="QLabel" name="label_xmin">
      <property name="text">
-      <string>TextLabel</string>
+      <string comment="KDE::DoNotExtract">TextLabel</string>
      </property>
     </widget>
    </item>
@@ -74,7 +74,7 @@
    <item row="4" column="3">
     <widget class="QLabel" name="label_xmax">
      <property name="text">
-      <string>TextLabel</string>
+      <string comment="KDE::DoNotExtract">TextLabel</string>
      </property>
     </widget>
    </item>

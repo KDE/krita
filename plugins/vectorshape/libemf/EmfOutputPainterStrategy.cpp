@@ -22,7 +22,10 @@
 
 #include <KDebug>
 
-#define DEBUG_PAINTER_TRANSFORM 1
+#include "EmfObjects.h"
+
+
+#define DEBUG_PAINTER_TRANSFORM 0
 
 namespace Libemf
 {
@@ -949,94 +952,108 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
     m_painter->setBackground( QBrush( QColor( red, green, blue ) ) );
 }
 
-void OutputPainterStrategy::extTextOutA( const ExtTextOutARecord &extTextOutA )
+
+#define DEBUG_TEXTOUT 0
+
+void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
 #if DEBUG_EMFPAINT
-    kDebug(31000);//FIXME << extTextOutA;
+    kDebug(31000) << "Ref point: " << textObject.referencePoint()
+                  << "options: " << hex << textObject.options() << dec
+                  << "rectangle: " << textObject.rectangle()
+                  << "text: " << textObject.textString();
 #endif
 
-    m_painter->save();
-
-    m_painter->setPen( m_textPen );
-
-    // Set position to the reference point. It's assumed that this is the baseline.
-    QPoint       position = extTextOutA.referencePoint();
-    QFontMetrics fontMetrics = m_painter->fontMetrics();
-    switch ( m_textAlignMode & TA_VERTMASK ) {
-        case TA_TOP:
-            position += QPoint( 0, fontMetrics.ascent() );
-            break;
-        case TA_BOTTOM:
-            position -= QPoint( 0, fontMetrics.descent() );
-            break;
-        case TA_BASELINE:
-            // do nothing
-            break;
-        default:
-            kDebug(33100) << "Unexpected vertical positioning mode:" << m_textAlignMode;
-    }
-    // TODO: Handle the rest of the test alignment mode flags
-
-    m_painter->drawText( position, extTextOutA.textString() );
-#if DEBUG_EMFPAINT
-    kDebug(33100) << "extTextOutA: ref.point = "
-                  << extTextOutA.referencePoint().x() << extTextOutA.referencePoint().y()
-                  << ", Text = " << extTextOutA.textString().toLatin1().data();
-#endif
-
-    m_painter->restore();
-}
-
-void OutputPainterStrategy::extTextOutW( const QPoint &referencePoint, const QString &text )
-{
-#if DEBUG_EMFPAINT
-    kDebug(31000) << referencePoint << text;
-#endif
-
-    int  x = referencePoint.x();
-    int  y = referencePoint.y();
+    const QString &text = textObject.textString();
+    int  x = textObject.referencePoint().x();
+    int  y = textObject.referencePoint().y();
 
     // The TA_UPDATECP flag tells us to use the current position
     if (m_textAlignMode & TA_UPDATECP) {
         // (left, top) position = current logical position
-        kDebug(31000) << "TA_UPDATECP";
+#if DEBUG_EMFPAINT
+        kDebug(31000) << "TA_UPDATECP: use current logical position";
+#endif
         x = m_currentCoords.x();
         y = m_currentCoords.y();
     }
 
     QFontMetrics  fm = m_painter->fontMetrics();
-    int width  = fm.width(text) + fm.descent();    // fm.width(text) isn't right with Italic text
-    int height = fm.height();
+    int textWidth  = fm.width(text) + fm.descent(); // fm.width(text) isn't right with Italic text
+    int textHeight = fm.height();
 
-    // Horizontal align.  These flags are supposed to be mutually exclusive.
-    if ((m_textAlignMode & TA_CENTER) == TA_CENTER)
-        x -= (width / 2);
-    else if ((m_textAlignMode & TA_RIGHT) == TA_RIGHT)
-        x -= width;
+    // Make (x, y) be the coordinates of the upper left corner of the
+    // rectangle surrounding the text.
+    //
+    // FIXME: Handle RTL text.
 
-    // Vertical align.
-    if ((m_textAlignMode & TA_BASELINE) == TA_BASELINE)
-        //y -= fm.ascent();  // (height - fm.descent()) is used in qwmf.  This should be the same.
-        y -= (height - fm.descent());
-    else if ((m_textAlignMode & TA_BOTTOM) == TA_BOTTOM) {
-        y -= height;
+    // Horizontal align.  Default is TA_LEFT.
+    if ((m_textAlignMode & TA_HORZMASK) == TA_CENTER)
+        x -= (textWidth / 2);
+    else if ((m_textAlignMode & TA_HORZMASK) == TA_RIGHT)
+        x -= textWidth;
+
+    // Vertical align.  Default is TA_TOP
+    if ((m_textAlignMode & TA_VERTMASK) == TA_BASELINE)
+        y -= (textHeight - fm.descent());
+    else if ((m_textAlignMode & TA_VERTMASK) == TA_BOTTOM) {
+        y -= textHeight;
     }
 
 #if DEBUG_EMFPAINT
-    kDebug(31000) << "font = " << m_painter->font() << " pointSize = " << m_painter->font().pointSize()
-                  << "ascent = " << fm.ascent() << " height = " << fm.height()
+    kDebug(31000) << "textWidth = " << textWidth << "height = " << textHeight;
+
+    kDebug(31000) << "font = " << m_painter->font()
+                  << "pointSize = " << m_painter->font().pointSize()
+                  << "ascent = " << fm.ascent() << "descent = " << fm.descent()
+                  << "height = " << fm.height()
                   << "leading = " << fm.leading();
     kDebug(31000) << "actual point = " << x << y;
 #endif
 
+    // Debug code that paints a rectangle around the output area.
+#if DEBUG_TEXTOUT
+    m_painter->save();
+    m_painter->setWorldTransform(m_outputTransform);
+    m_painter->setPen(Qt::black);
+    m_painter->drawRect(bounds);
+    m_painter->restore();
+#endif
+
+    // Actual painting starts here.
+    m_painter->save();
+
+    // Find out how much we have to scale the text to make it fit into
+    // the output rectangle.  Normally this wouldn't be necessary, but
+    // when fonts are switched, the replacement fonts are sometimes
+    // wider than the original fonts.
+    QRect  worldRect(m_worldTransform.mapRect(QRect(x, y, textWidth, textHeight)));
+    kDebug(31000) << "rects:" << QRect(x, y, textWidth, textHeight) << worldRect;
+    qreal  scaleX = qreal(1.0);
+    qreal  scaleY = qreal(1.0);
+    if (bounds.width() < worldRect.width())
+        scaleX = qreal(bounds.width()) / qreal(worldRect.width());
+    if (bounds.height() < worldRect.height())
+        scaleY = qreal(bounds.height()) / qreal(worldRect.height());
+    kDebug(31000) << "scale:" << scaleX << scaleY;
+
+    if (scaleX < qreal(1.0) || scaleY < qreal(1.0)) {
+        m_painter->translate(-x, -y);
+        m_painter->scale(scaleX, scaleY);
+        m_painter->translate(x / scaleX, y / scaleY);
+    }
+
     // Use the special pen defined by mTextPen for text.
     QPen  savePen = m_painter->pen();
     m_painter->setPen(m_textPen);
-    m_painter->drawText(x, y, width, height, Qt::AlignLeft|Qt::AlignTop, text);
+    m_painter->drawText(int(x / scaleX), int(y / scaleY), textWidth, textHeight,
+                        Qt::AlignLeft|Qt::AlignTop, text);
     m_painter->setPen(savePen);
+
+    m_painter->restore();
 }
 
-void OutputPainterStrategy::moveToEx( const quint32 x, const quint32 y )
+void OutputPainterStrategy::moveToEx( const qint32 x, const qint32 y )
 {
 #if DEBUG_EMFPAINT
     kDebug(31000) << x << y;

@@ -38,13 +38,16 @@ KoReportItemField::KoReportItemField(QDomNode & element)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_horizontalAlignment->setValue(element.toElement().attribute("report:horizontal-align"));
     m_verticalAlignment->setValue(element.toElement().attribute("report:vertical-align"));
 
-    parseReportRect(element.toElement(), &m_pos, &m_size);
+    m_canGrow->setValue(element.toElement().attribute("report:can-grow"));
+    m_wordWrap->setValue(element.toElement().attribute("report:word-wrap"));
     
+    parseReportRect(element.toElement(), &m_pos, &m_size);
+
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
@@ -77,7 +80,7 @@ void KoReportItemField::createProperties()
 
     QStringList keys, strings;
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
     m_controlSource->setOption("extraValueAllowed", "true");
 
@@ -105,6 +108,9 @@ void KoReportItemField::createProperties()
     m_lineColor = new KoProperty::Property("line-color", Qt::black, i18n("Line Color"));
     m_lineStyle = new KoProperty::Property("line-style", Qt::NoPen, i18n("Line Style"), i18n("Line Style"), KoProperty::LineStyle);
 
+    m_wordWrap = new KoProperty::Property("word-wrap", QVariant(false), i18n("Word Wrap"));
+    m_canGrow = new KoProperty::Property("can-grow", QVariant(false), i18n("Can Grow"));
+    
 #if 0 //Field Totals
     //TODO I do not think we need these
     m_trackTotal = new KoProperty::Property("TrackTotal", QVariant(false), i18n("Track Total"));
@@ -124,33 +130,39 @@ void KoReportItemField::createProperties()
     m_set->addProperty(m_lineWeight);
     m_set->addProperty(m_lineColor);
     m_set->addProperty(m_lineStyle);
+    m_set->addProperty(m_wordWrap);
+    m_set->addProperty(m_canGrow);
+    
     //_set->addProperty ( _trackTotal );
     //_set->addProperty ( _trackBuiltinFormat );
     //_set->addProperty ( _useSubTotal );
     //_set->addProperty ( _trackTotalFormat );
 }
 
-Qt::Alignment KoReportItemField::textFlags() const
+int KoReportItemField::textFlags() const
 {
-    Qt::Alignment align;
+    int flags;
     QString t;
     t = m_horizontalAlignment->value().toString();
     if (t == "center")
-        align = Qt::AlignHCenter;
+        flags = Qt::AlignHCenter;
     else if (t == "right")
-        align = Qt::AlignRight;
+        flags = Qt::AlignRight;
     else
-        align = Qt::AlignLeft;
+        flags = Qt::AlignLeft;
 
     t = m_verticalAlignment->value().toString();
     if (t == "center")
-        align |= Qt::AlignVCenter;
+        flags |= Qt::AlignVCenter;
     else if (t == "bottom")
-        align |= Qt::AlignBottom;
+        flags |= Qt::AlignBottom;
     else
-        align |= Qt::AlignTop;
+        flags |= Qt::AlignTop;
 
-    return align;
+    if (m_wordWrap->value().toBool() == true) {
+        flags |= Qt::TextWordWrap;
+    }
+    return flags;
 }
 
 KRTextStyleData KoReportItemField::textStyle()
@@ -201,9 +213,11 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     tb->setFlags(textFlags());
     tb->setTextStyle(textStyle());
     tb->setLineStyle(lineStyle());
-
+    tb->setCanGrow(m_canGrow->value().toBool());
+    tb->setWordWrap(m_wordWrap->value().toBool());
+    
     QString str;
-
+    
     QString ids = itemDataSource();
     if (ids.left(1) == "=" && script) { //Everything after = is treated as code
         if (!ids.contains("PageTotal()")) {
@@ -218,8 +232,26 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     } else {
         str = data.toString();
     }
-    
+
     tb->setText(str);
+    
+    //Work out the size of the text
+    if (tb->canGrow()) {
+        QRect r;
+        if (tb->wordWrap()) {
+            //Grow vertically
+            QFontMetrics metrics(font());
+            QRect temp(tb->position().x(), tb->position().y(), tb->size().width(), 5000); // a large vertical height
+            r = metrics.boundingRect(temp, tb->flags(), str);
+        } else {
+            //Grow Horizontally
+            QFontMetrics metrics(font());
+            QRect temp(tb->position().x(), tb->position().y(), 5000, tb->size().height()); // a large vertical height
+            r = metrics.boundingRect(temp, tb->flags(), str);
+        }
+        tb->setSize(r.size() + QSize(4,4));
+    }
+    
     if (page) {
         page->addPrimitive(tb);
     }
@@ -234,7 +266,7 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
     if (!page) {
         delete tb;
     }
-    return 0; //Item doesnt stretch the section height
+    return m_pos.toScene().y() + tb->size().height();
 }
 
 

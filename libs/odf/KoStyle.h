@@ -32,7 +32,7 @@
  * As all the styles it can be shared
  **/
 
-class KoStyle
+class KOODF_EXPORT KoStyle
 {
 public:
     KoStyle();

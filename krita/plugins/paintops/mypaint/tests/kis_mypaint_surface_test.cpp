@@ -24,6 +24,7 @@
 #include <KoColorSpaceRegistry.h>
 
 #include <kis_paint_device.h>
+#include <kis_painter.h>
 
 #include "../mypaint_surface.h"
 
@@ -33,7 +34,8 @@ void KisMyPaintSurfaceTest::testCreation()
     KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
 
-    MyPaintSurface surface(src, dst);
+    KisPainter painter(dst);
+    MyPaintSurface surface(src, &painter);
 
     Q_UNUSED(surface);
 }
@@ -43,7 +45,8 @@ void KisMyPaintSurfaceTest::testDrawDab()
     KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
     KisPaintDeviceSP dst = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
 
-    MyPaintSurface surface(src, dst);
+    KisPainter painter(dst);
+    MyPaintSurface surface(src, &painter);
 
     surface.draw_dab(500.0, 500.0, 100.0, 0.0, 0.0, 1.0, 1.0, 1.0);
     QImage result = dst->convertToQImage(0);
@@ -59,7 +62,8 @@ void KisMyPaintSurfaceTest::testGetColor()
     QImage source(QString(FILES_DATA_DIR) + QDir::separator() + "draw_dab.png");
     src->convertFromQImage(source, "");
     src->move(400, 400);
-    MyPaintSurface surface(src, dst);
+    KisPainter painter(dst);
+    MyPaintSurface surface(src, &painter);
 
     float r = 0.0;
     float g = 0.0;

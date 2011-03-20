@@ -2,6 +2,7 @@
  *  Copyright (c) 2006, 2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2007 Emanuele Tamponi <emanuele@valinor.it>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,102 +25,81 @@
 
 #include <KoColorSpaceMaths.h>
 
-#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
-#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
-
 /**
  * Generic implementation of the COPY composite op. That respect selection.
  */
 template<class _CSTraits>
 class KoCompositeOpCopy2 : public KoCompositeOp
 {
-
     typedef typename _CSTraits::channels_type channels_type;
+    static const qint32 channels_nb = _CSTraits::channels_nb;
+    static const qint32 alpha_pos   = _CSTraits::alpha_pos;
+    
+    template<class T>
+    inline static T mul(T a, T b) { return T(KoColorSpaceMaths<T>::multiply(a, b)); }
+    
+    template<class T>
+    inline static T mul(T a, T b, T c) { return T(KoColorSpaceMaths<T>::multiply(a, b, c)); }
+    
+    template<class T>
+    inline static T lerp(T a, T b, T alpha) { return KoColorSpaceMaths<T>::blend(b, a, alpha); }
+    
+    template<class TRet, class T>
+    inline static TRet scale(T a) { return KoColorSpaceMaths<T,TRet>::scaleToA(a); }
 
 public:
-
     explicit KoCompositeOpCopy2(KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix(), false) {
-    }
+        : KoCompositeOp(cs, COMPOSITE_COPY, i18n("Copy"), KoCompositeOp::categoryMix(), false) { }
 
-public:
     using KoCompositeOp::composite;
-
-    void composite(quint8 *dstRowStart,
-                   qint32 dstRowStride,
-                   const quint8 *srcRowStart,
-                   qint32 srcRowStride,
-                   const quint8 *maskRowStart,
-                   qint32 maskRowStride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const
-    {
-        Q_UNUSED(channelFlags);
-        if(maskRowStart == 0 && U8_opacity == OPACITY_OPAQUE_U8)
-        {
-            quint8 *dst = dstRowStart;
-            const quint8 *src = srcRowStart;
-            quint8 bytesPerPixel = _CSTraits::pixelSize;
-            while (rows > 0) {
-                if (srcRowStride == 0) {
-                    quint8* dstN = dst;
-                    qint32 columns = cols;
-                    while (columns > 0) {
-                        memcpy(dstN, src, bytesPerPixel);
-                        dstN += bytesPerPixel;
-                        --columns;
-                    }
-                } else {
-                    memcpy(dst, src, cols * bytesPerPixel);
+    
+    virtual void composite(quint8 *dstRowStart       , qint32 dstRowStride ,
+                           const quint8 *srcRowStart , qint32 srcRowStride ,
+                           const quint8 *maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
+        
+        const QBitArray& flags   = channelFlags.isEmpty() ? QBitArray(channels_nb, true) : channelFlags;
+        bool             useMask = maskRowStart != 0;
+        qint32           srcInc  = srcRowStride != 0 ? channels_nb : 0;
+        channels_type    opacity = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
+        
+        for(; rows>0; --rows) {
+            const quint8*        msk = maskRowStart;
+            const channels_type* src = reinterpret_cast<const channels_type*>(srcRowStart);
+            channels_type*       dst = reinterpret_cast<channels_type*>(dstRowStart);
+            
+            for(qint32 c=cols; c>0; --c) {
+                channels_type srcAlpha   = (alpha_pos != -1) ? scale<channels_type>(src[alpha_pos]) : KoColorSpaceMathsTraits<channels_type>::unitValue;
+                channels_type dstAlpha   = (alpha_pos != -1) ? scale<channels_type>(dst[alpha_pos]) : KoColorSpaceMathsTraits<channels_type>::unitValue;
+                channels_type blendAlpha = useMask ? mul(opacity, scale<channels_type>(*msk)) : opacity;
+                channels_type blendColor = mul(srcAlpha, blendAlpha);
+                
+                if(dstAlpha != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                    // blend the color channels
+                    for(qint32 i=0; i<channels_nb; ++i)
+                        if(i != alpha_pos && flags.testBit(i)) 
+                            dst[i] = lerp(dst[i], src[i], blendColor);
                 }
-
-                dst += dstRowStride;
-                src += srcRowStride;
-                --rows;
-            }
-        } else {
-            qint32 srcInc = (srcRowStride == 0) ? 0 : _CSTraits::channels_nb;
-            channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
-            while (rows > 0)
-            {
-                const channels_type *srcN = reinterpret_cast<const channels_type *>(srcRowStart);
-                channels_type *dstN = reinterpret_cast<channels_type *>(dstRowStart);
-                const quint8 *mask = maskRowStart;
-
-                qint32 columns = cols;
-
-                while (columns > 0)
-                {
-                    channels_type blend;
-                    // compute the blend
-                    if (!mask){
-                        blend = opacity;
-                    }else if (*mask == OPACITY_OPAQUE_U8){
-                        blend = opacity;
-                        ++mask;
-                    } else {
-                        blend = KoColorSpaceMaths<channels_type, quint8>::multiply(opacity, *mask);
-                        ++mask;
-                    }
-                    
-                    for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                        dstN[i] = KoColorSpaceMaths<channels_type>::blend(srcN[i], dstN[i], blend);
-                    }
-                    --columns;
-                    srcN += srcInc;
-                    dstN += _CSTraits::channels_nb;
+                else {
+                    // don't blend if the color of the destination is undefined (has zero opacity)
+                    // copy the source channel instead
+                    for(qint32 i=0; i<channels_nb; ++i)
+                        if(i != alpha_pos && flags.testBit(i)) 
+                            dst[i] = src[i];
                 }
-
-                rows--;
-                srcRowStart += srcRowStride;
-                dstRowStart += dstRowStride;
-                if (maskRowStart) {
-                    maskRowStart += maskRowStride;
-                }
+                
+                // blend the alpha channel if there exists one
+                if(alpha_pos != -1)
+                    dst[alpha_pos] = lerp(dstAlpha, srcAlpha, blendAlpha);
+                
+                src += srcInc;
+                dst += channels_nb;
+                ++msk;
             }
             
+            srcRowStart  += srcRowStride;
+            dstRowStart  += dstRowStride;
+            maskRowStart += maskRowStride;
         }
     }
 };

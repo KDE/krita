@@ -5,5 +5,10 @@ install( FILES
     chrome.kpp  
     Fur.kpp  
     shaded.kpp  
-    Sketchy.kpp
+    Sketchy.kpp  
+    ColorSmudge\ -\ Brush.kpp  
+    ColorSmudge\ -\ Oil\ Paint.kpp  
+    ColorSmudge\ -\ Structure\ Brush.kpp  
+    ColorSmudge\ -\ Wet\ Paint.kpp  
+    ColorSmudge\ -\ Smudge\ Only.kpp
 DESTINATION  ${DATA_INSTALL_DIR}/krita/paintoppresets)

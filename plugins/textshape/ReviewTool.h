@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETRACKINGTOOL_H
-#define CHANGETRACKINGTOOL_H
+#ifndef REVIEWTOOL_H
+#define REVIEWTOOL_H
 
 #include <KoToolBase.h>
 
@@ -39,13 +39,13 @@ class QTreeView;
 
 /// This tool allows to manipulate the tracked changes of a document. You can accept or reject changes.
 
-class ChangeTrackingTool : public KoToolBase
+class ReviewTool : public KoToolBase
 {
     Q_OBJECT
 public:
-    ChangeTrackingTool(KoCanvasBase *canvas);
+    ReviewTool(KoCanvasBase *canvas);
 
-    ~ChangeTrackingTool();
+    ~ReviewTool();
 
     virtual void mouseReleaseEvent(KoPointerEvent* event);
     virtual void mouseMoveEvent(KoPointerEvent* event);
@@ -56,7 +56,7 @@ public:
     virtual void deactivate();
 
 protected:
-    virtual QWidget* createOptionWidget();
+    virtual QMap<QString, QWidget*> createOptionWidgets();
 
 private slots:
     void acceptChange();

@@ -361,8 +361,9 @@ void Viewport::resetLayout()
             m_canvas->update();
         }
     }
-    if (m_drawShadow)
-      update();
+    if (m_drawShadow) {
+        update();
+    }
 
     emit sizeChanged();
 #if 0

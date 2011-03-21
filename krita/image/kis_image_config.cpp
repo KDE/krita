@@ -107,14 +107,19 @@ void KisImageConfig::setSwapWindowSize(int value)
     m_config.writeEntry("swapWindowSize", value);
 }
 
-int KisImageConfig::memoryHardLimit() const
+int KisImageConfig::tilesHardLimit() const
 {
-    return totalRAM() * memoryHardLimitPercent() / 100;
+    return totalRAM() * (memoryHardLimitPercent() - memoryPoolLimitPercent()) / 100;
 }
 
-int KisImageConfig::memorySoftLimit() const
+int KisImageConfig::tilesSoftLimit() const
 {
-    return totalRAM() * memorySoftLimitPercent() / 100;
+    return totalRAM() * (memorySoftLimitPercent() - memoryPoolLimitPercent()) / 100;
+}
+
+int KisImageConfig::poolLimit() const
+{
+    return totalRAM() * memoryPoolLimitPercent() / 100;
 }
 
 qreal KisImageConfig::memoryHardLimitPercent() const
@@ -135,6 +140,16 @@ qreal KisImageConfig::memorySoftLimitPercent() const
 void KisImageConfig::setMemorySoftLimitPercent(qreal value)
 {
     m_config.writeEntry("memorySoftLimitPercent", value);
+}
+
+qreal KisImageConfig::memoryPoolLimitPercent() const
+{
+    return m_config.readEntry("memoryPoolLimitPercent", 2.);
+}
+
+void KisImageConfig::setMemoryPoolLimitPercent(qreal value)
+{
+    m_config.writeEntry("memoryPoolLimitPercent", value);
 }
 
 

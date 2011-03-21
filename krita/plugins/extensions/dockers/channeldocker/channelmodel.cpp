@@ -30,7 +30,7 @@ ChannelModel::~ChannelModel()
 
 QVariant ChannelModel::data(const QModelIndex& index, int role) const
 {
-    if (m_currentLayer && index.isValid()) {
+    if (m_currentLayer.isValid() && index.isValid()) {
         switch (role) {
             case Qt::DisplayRole: {
                 return m_currentLayer->colorSpace()->channels().at(index.row())->name();
@@ -50,7 +50,7 @@ QVariant ChannelModel::data(const QModelIndex& index, int role) const
 
 int ChannelModel::rowCount(const QModelIndex& parent) const
 {
-    if (m_currentLayer) {
+    if (m_currentLayer.isValid()) {
         return m_currentLayer->colorSpace()->channels().size();
     }
     return 0;
@@ -58,7 +58,7 @@ int ChannelModel::rowCount(const QModelIndex& parent) const
 
 bool ChannelModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (m_currentLayer && index.isValid())
+    if (m_currentLayer.isValid() && index.isValid())
     {
         if (role == Qt::CheckStateRole) {
             QBitArray channelFlags = m_currentLayer->channelFlags();

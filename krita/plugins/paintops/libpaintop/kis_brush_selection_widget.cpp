@@ -42,12 +42,12 @@
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
         : QWidget(parent), m_currentBrushWidget(0)
-{ 
+{
     uiWdgBrushChooser.setupUi(this);
 
     m_buttonGroup = new QButtonGroup(this);
     m_buttonGroup->setExclusive(true);
-    
+
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
     m_layout->setSpacing(0);
     m_layout->setMargin(0);
@@ -69,13 +69,13 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(QWidget * parent)
     addChooser(i18n("Text Brush"), m_textBrushWidget, TEXTBRUSH);
 
     connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(buttonClicked(int)));
-    
+
     foreach(QWidget * widget, m_chooserMap.values()) {
          m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
     }
-    
+
     setCurrentWidget(m_autoBrushWidget);
-    
+
     m_presetIsValid = true;
 }
 
@@ -163,13 +163,29 @@ void KisBrushSelectionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 {
     if (m_buttonGroup->checkedId() == AUTOBRUSH){
         m_autoBrushWidget->setBrushSize(dxPixels, dyPixels);
-
     }else if (m_buttonGroup->checkedId() == PREDEFINEDBRUSH){
-    
         m_brushChooser->setBrushSize(dxPixels, dyPixels);
-    
     }
 }
+
+
+QSizeF KisBrushSelectionWidget::brushSize() const
+{
+    switch (m_buttonGroup->checkedId()) {
+        case AUTOBRUSH: {
+            return m_autoBrushWidget->brushSize();
+        }
+        case PREDEFINEDBRUSH: {
+            return m_brushChooser->brushSize();
+        }
+        default: {
+            break;
+        }
+    }
+    // return neutral value
+    return QSizeF(1.0, 1.0);
+}
+
 
 
 void KisBrushSelectionWidget::buttonClicked(int id)
@@ -192,7 +208,7 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 
     m_currentBrushWidget->show();
     m_buttonGroup->button(m_chooserMap.key(widget))->setChecked(true);
-    
+
     m_presetIsValid = (m_buttonGroup->checkedId() != CUSTOMBRUSH);
 }
 
@@ -203,7 +219,7 @@ void KisBrushSelectionWidget::addChooser(const QString& text, QWidget* widget, i
     button->setAutoRaise(true);
     button->setCheckable(true);
     uiWdgBrushChooser.brushChooserButtonLayout->addWidget(button);
-    
+
     m_buttonGroup->addButton(button, id);
     m_chooserMap[m_buttonGroup->id(button)] = widget;
     widget->hide();

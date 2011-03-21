@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -37,6 +38,7 @@
 #include "compositeops/KoCompositeOpSoftlight.h"
 #include "compositeops/KoCompositeOpHardlight.h"
 #include "compositeops/KoCompositeOpCopy2.h"
+#include "compositeops/KoCompositeOpCopyOpacy.h"
 
 /**
  * This function add to the colorspace all the composite ops defined by
@@ -59,6 +61,7 @@ void addStandardCompositeOps(KoColorSpace* cs)
     cs->addCompositeOp(new KoCompositeOpSubtract<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpSoftlight<_Traits_>(cs));
     cs->addCompositeOp(new KoCompositeOpHardlight<_Traits_>(cs));
+    cs->addCompositeOp(new KoCompositeOpCopyOpacy<_Traits_>(cs));
 }
 
 #endif

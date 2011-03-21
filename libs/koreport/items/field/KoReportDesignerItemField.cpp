@@ -131,6 +131,8 @@ void KoReportDesignerItemField::buildXML(QDomDocument & doc, QDomElement & paren
     addPropertyAsAttribute(&entity, m_controlSource);
     addPropertyAsAttribute(&entity, m_verticalAlignment);
     addPropertyAsAttribute(&entity, m_horizontalAlignment);
+    addPropertyAsAttribute(&entity, m_wordWrap);
+    addPropertyAsAttribute(&entity, m_canGrow);
     entity.setAttribute("report:z-index", zValue());
 
     // bounding rect

@@ -49,14 +49,14 @@ KisBrushSizeOption::KisBrushSizeOption()
     connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->jitterMove, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    
+
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMove, SLOT(setEnabled(bool)));
     setConfigurationPage(m_options);
 }
 
 KisBrushSizeOption::~KisBrushSizeOption()
 {
-    delete m_options; 
+    delete m_options;
 }
 
 
@@ -69,6 +69,11 @@ int KisBrushSizeOption::diameter() const
 void KisBrushSizeOption::setDiameter(int diameter)
 {
         m_options->diameter->setValue(diameter);
+}
+
+qreal KisBrushSizeOption::brushAspect() const
+{
+    return m_options->aspectBox->value();
 }
 
 
@@ -94,7 +99,7 @@ void KisBrushSizeOption::readOptionSetting(const KisPropertiesConfiguration* set
     m_options->densityBox->setValue( setting->getDouble(BRUSH_DENSITY) );
     m_options->jitterMove->setValue( setting->getDouble(BRUSH_JITTER_MOVEMENT) );
     m_options->jitterMoveBox->setChecked( setting->getBool(BRUSH_JITTER_MOVEMENT_ENABLED) );
-    
+
 }
 
 void KisBrushSizeOption::setSpacing(qreal spacing)

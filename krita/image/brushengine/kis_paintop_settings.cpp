@@ -162,6 +162,16 @@ void KisPaintOpSettings::changePaintOpSize(qreal x, qreal y)
     }
 }
 
+
+QSizeF KisPaintOpSettings::paintOpSize() const
+{
+    if(!d->settingsWidget.isNull()) {
+        return d->settingsWidget.data()->paintOpSize();
+    }
+    return QSizeF(1.0,1.0);
+}
+
+
 QString KisPaintOpSettings::modelName() const
 {
     return d->modelName;
@@ -208,7 +218,7 @@ QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal
     QRectF ellipse(0,0,width * scale,height * scale);
     ellipse.translate(-ellipse.center());
     path.addEllipse(ellipse);
-        
+
     QTransform m;
     m.reset();
     m.rotate( rotation );

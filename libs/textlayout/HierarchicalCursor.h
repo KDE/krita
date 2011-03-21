@@ -32,6 +32,7 @@ public:
     // the following can be seen as the "sub cursor" of text blocks
     QTextLine line;
     QTextBlock::Iterator fragmentIterator;
+    bool atEnd() {return it.atEnd();}
 };
 
 #endif

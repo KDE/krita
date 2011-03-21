@@ -332,13 +332,13 @@ return;
         if (d->rootArea) {
             //layout all that can fit into that root area
             d->rootArea->layout(d->layoutPosition);
-        }
+        } else
+            break;
     } while (continueLayout());
-/*
+
     if (d->layoutPosition->atEnd()) {
         emit finishedLayout();
     }
-*/
 }
 
 void KoTextDocumentLayout::interruptLayout()

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2008 Lukas Tvrdy <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,33 +16,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
-#define KIS_CHALKPAINTOP_SETTINGS_WIDGET_H_
+#ifndef __KIS_TILE_DATA_POOLER_TEST_H
+#define __KIS_TILE_DATA_POOLER_TEST_H
 
-#include <kis_paintop_options_widget.h>
+#include <QtTest/QtTest>
 
-#include "ui_wdgchalkoptions.h"
-
-class KisPaintActionTypeOption;
-class KisChalkOpOption;
-class KisPressureOpacityOption;
-
-class KisChalkPaintOpSettingsWidget : public KisPaintOpOptionsWidget
+class KisTileDataPoolerTest : public QObject
 {
     Q_OBJECT
 
-public:
-    KisChalkPaintOpSettingsWidget(QWidget* parent = 0);
-    virtual ~KisChalkPaintOpSettingsWidget();
-
-    KisPropertiesConfiguration* configuration() const;
-
-    ///Reimplemented
-    void changePaintOpSize(qreal x, qreal y);
-    virtual QSizeF paintOpSize() const;
-
-public:
-    KisChalkOpOption* m_chalkOption;
+private slots:
+    void testCycles();
 };
 
-#endif
+#endif /* __KIS_TILE_DATA_POOLER_TEST_H */

@@ -43,7 +43,8 @@ public:
     MyPaintBrushResource* brush() const;
 
     void changePaintOpSize(qreal x, qreal y);
-    
+    virtual QSizeF paintOpSize() const;
+
 private:
     Ui::WdgMyPaintOptions* m_options;
     MyBrushResourcesListModel* m_model;

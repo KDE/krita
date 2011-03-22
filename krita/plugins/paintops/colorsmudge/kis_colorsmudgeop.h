@@ -56,6 +56,7 @@ private:
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
+    KisFixedPaintDeviceSP     m_maskDab;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

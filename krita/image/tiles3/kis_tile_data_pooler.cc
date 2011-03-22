@@ -23,6 +23,8 @@
 #include "kis_tile_data_store_iterators.h"
 #include "kis_debug.h"
 #include "kis_tile_data_pooler.h"
+#include "kis_image_config.h"
+
 
 const qint32 KisTileDataPooler::MAX_NUM_CLONES = 16;
 const qint32 KisTileDataPooler::MAX_TIMEOUT = 60000; // 01m00s
@@ -51,21 +53,52 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
     } while(0)                                                          \
 
 #define DEBUG_TILE_STATISTICS() debugTileStatistics()
+
+#define DEBUG_LISTS(mem, beggers, beggersMem, donors, donorsMem)        \
+    do {                                                                \
+    qDebug() << "--- getLists finished ---";                            \
+    qDebug() << "  memoryOccupied:" << mem << "/" << m_memoryLimit;     \
+    qDebug() << "  donors:" << donors.size()                            \
+             << "(mem:" << donorsMem << ")";                            \
+    qDebug() << "  beggers:" << beggers.size()                          \
+             << "(mem:" << beggersMem << ")";                           \
+    qDebug() << "--- ----------------- ---";                            \
+    } while(0)
+
+#define DEBUG_ALLOC_CLONE(mem, totalMem)                                \
+        qDebug() << "Alloc mem for clones:" << mem                      \
+                 << "\tMem usage:" << totalMem << "/" << m_memoryLimit
+
+#define DEBUG_FREE_CLONE(freed, demanded)                               \
+            qDebug() << "Freed mem for clones:" << freed                \
+                     << "/" << qAbs(demanded)
+
 #else
 #define DEBUG_CLONE_ACTION(td, numClones)
 #define DEBUG_SIMPLE_ACTION(action)
 #define RUNTIME_SANITY_CHECK(td)
 #define DEBUG_TILE_STATISTICS()
+#define DEBUG_LISTS(mem, beggers, beggersMem, donors, donorsMem)
+#define DEBUG_ALLOC_CLONE(mem, totalMem)
+#define DEBUG_FREE_CLONE(freed, demanded)
 #endif
 
 
-KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store)
-        : QThread()
+KisTileDataPooler::KisTileDataPooler(KisTileDataStore *store, qint32 memoryLimit)
+    : QThread()
 {
     m_shouldExitFlag = 0;
     m_store = store;
     m_timeout = MIN_TIMEOUT;
     m_lastCycleHadWork = false;
+
+    if(memoryLimit >= 0) {
+        m_memoryLimit = memoryLimit;
+    }
+    else {
+        KisImageConfig config;
+        m_memoryLimit = MiB_TO_METRIC(config.poolLimit());
+    }
 }
 
 KisTileDataPooler::~KisTileDataPooler()
@@ -137,45 +170,33 @@ void KisTileDataPooler::waitForWork()
     }
 }
 
-inline bool KisTileDataPooler::interestingTileData(KisTileData* td)
-{
-    /**
-     * We have to look after all clones we created.
-     * That is why we recheck all tiles with non-empty clones lists
-     */
-
-    return td->m_state == KisTileData::NORMAL &&
-           (td->m_usersCount > 1 || !td->m_clonesStack.isEmpty());
-}
-
 void KisTileDataPooler::run()
 {
+    if(!m_memoryLimit) return;
+
+    m_shouldExitFlag = false;
+
     while (1) {
         DEBUG_SIMPLE_ACTION("went to bed... Zzz...");
 
         waitForWork();
 
         if (m_shouldExitFlag)
-            return;
+            break;
 
         QThread::msleep(0);
         DEBUG_SIMPLE_ACTION("cycle started");
 
 
         KisTileDataStoreReverseIterator *iter = m_store->beginReverseIteration();
-        KisTileData *item;
+        QList<KisTileData*> beggers;
+        QList<KisTileData*> donors;
+        qint32 memoryOccupied;
 
-        while(iter->hasNext()) {
-            item = iter->next();
-            if (interestingTileData(item)) {
+        getLists(iter, beggers, donors, memoryOccupied);
 
-                qint32 clonesNeeded = numClonesNeeded(item);
-                if (clonesNeeded) {
-                    m_lastCycleHadWork = true;
-                    cloneTileData(item, clonesNeeded);
-                }
-            }
-        }
+        m_lastCycleHadWork =
+            processLists(beggers, donors, memoryOccupied);
 
         m_store->endIteration(iter);
 
@@ -183,6 +204,127 @@ void KisTileDataPooler::run()
         DEBUG_TILE_STATISTICS();
         DEBUG_SIMPLE_ACTION("cycle finished");
     }
+}
+
+inline int KisTileDataPooler::clonesMetric(KisTileData *td, int numClones) {
+    return numClones * td->pixelSize();
+}
+
+inline int KisTileDataPooler::clonesMetric(KisTileData *td) {
+    return td->m_clonesStack.size() * td->pixelSize();
+}
+
+inline void KisTileDataPooler::tryFreeOrphanedClones(KisTileData *td)
+{
+    qint32 extraClones = -numClonesNeeded(td);
+
+    if(extraClones > 0) {
+        cloneTileData(td, -extraClones);
+    }
+}
+
+inline qint32 KisTileDataPooler::needMemory(KisTileData *td)
+{
+    qint32 clonesNeeded = !td->age() ? qMax(0, numClonesNeeded(td)) : 0;
+    return clonesMetric(td, clonesNeeded);
+}
+
+inline qint32 KisTileDataPooler::canDonorMemory(KisTileData *td)
+{
+    return td->age() && clonesMetric(td);
+}
+
+template<class Iter>
+void KisTileDataPooler::getLists(Iter *iter,
+                                 QList<KisTileData*> &beggers,
+                                 QList<KisTileData*> &donors,
+                                 qint32 &memoryOccupied)
+{
+    memoryOccupied = 0;
+
+    qint32 needMemoryTotal = 0;
+    qint32 canDonorMemoryTotal = 0;
+
+    qint32 neededMemory;
+    qint32 donoredMemory;
+
+    KisTileData *item;
+
+    while(iter->hasNext()) {
+        item = iter->next();
+
+        tryFreeOrphanedClones(item);
+
+        if((neededMemory = needMemory(item))) {
+            needMemoryTotal += neededMemory;
+            beggers.append(item);
+        }
+        else if((donoredMemory = canDonorMemory(item))) {
+            canDonorMemoryTotal += donoredMemory;
+            donors.append(item);
+        }
+
+        memoryOccupied += clonesMetric(item);
+    }
+
+    DEBUG_LISTS(memoryOccupied,
+                beggers, needMemoryTotal,
+                donors, canDonorMemoryTotal);
+}
+
+qint32 KisTileDataPooler::tryGetMemory(QList<KisTileData*> &donors,
+                                       qint32 memoryMetric)
+{
+    qint32 memoryFreed = 0;
+
+    QMutableListIterator<KisTileData*> iter(donors);
+    iter.toBack();
+
+    while(iter.hasPrevious() && memoryFreed < memoryMetric) {
+        KisTileData *item = iter.previous();
+
+        qint32 numClones = item->m_clonesStack.size();
+        cloneTileData(item, -numClones);
+        memoryFreed += clonesMetric(item, numClones);
+
+        iter.remove();
+    }
+
+    return memoryFreed;
+}
+
+bool KisTileDataPooler::processLists(QList<KisTileData*> &beggers,
+                                     QList<KisTileData*> &donors,
+                                     qint32 memoryOccupied)
+{
+    bool hadWork = false;
+
+
+    foreach(KisTileData *item, beggers) {
+        qint32 clonesNeeded = numClonesNeeded(item);
+        qint32 clonesMemory = clonesMetric(item, clonesNeeded);
+
+        qint32 memoryLeft =
+            m_memoryLimit - (memoryOccupied + clonesMemory);
+
+        if(memoryLeft < 0) {
+            qint32 freedMemory = tryGetMemory(donors, -memoryLeft);
+            memoryOccupied -= freedMemory;
+
+            DEBUG_FREE_CLONE(freedMemory, memoryLeft);
+
+            if(m_memoryLimit < memoryOccupied + clonesMemory)
+                break;
+        }
+
+        cloneTileData(item, clonesNeeded);
+        DEBUG_ALLOC_CLONE(clonesMemory, memoryOccupied);
+
+        memoryOccupied += clonesMemory;
+        hadWork = true;
+    }
+
+    return hadWork;
 }
 
 void KisTileDataPooler::debugTileStatistics()

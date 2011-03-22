@@ -107,9 +107,20 @@ public:
     }
 
     void clear() {
+        // a fast-path without write ops
+        if(!m_top) return;
+
         m_deleteBlockers.ref();
 
-        Node *top = m_freeNodes.fetchAndStoreOrdered(0);
+        Node *top = m_top.fetchAndStoreOrdered(0);
+
+        int removedChunkSize = 0;
+        Node *tmp = top;
+        while(tmp) {
+            removedChunkSize++;
+            tmp = tmp->next;
+        }
+        m_numNodes.fetchAndAddOrdered(-removedChunkSize);
 
         while(top) {
             Node *next = top->next;

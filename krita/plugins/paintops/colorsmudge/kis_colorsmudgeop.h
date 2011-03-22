@@ -19,11 +19,13 @@
 #ifndef _KIS_COLORSMUDGEOP_H_
 #define _KIS_COLORSMUDGEOP_H_
 
+#include <QRect>
 #include <KoColorSpace.h>
 
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
 #include <kis_pressure_size_option.h>
+#include <kis_pressure_opacity_option.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
@@ -43,20 +45,27 @@ public:
     virtual ~KisColorSmudgeOp();
 
     qreal paintAt(const KisPaintInformation& info);
+    
+private:
+    void updateMask(const KisPaintInformation& info, double scale, double rotation);
 
 private:
     bool                      m_firstRun;
+    double                    m_rotation;
     KisPaintDeviceSP          m_tempDev;
     KisImageWSP               m_image;
     KisPainter*               m_tempPainter;
     KisPressureSizeOption     m_sizeOption;
+    KisPressureOpacityOption  m_opacityOption;
     KisPressureSpacingOption  m_spacingOption;
     KisRateOption             m_smudgeRateOption;
     KisRateOption             m_colorRateOption;
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
+    QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
+    KisFixedPaintDeviceSP     m_colorDev;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

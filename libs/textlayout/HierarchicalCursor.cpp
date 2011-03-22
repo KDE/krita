@@ -16,23 +16,17 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef HIERARICHALCURSOR_H
-#define HIERARICHALCURSOR_H
-
+#include "HierarchicalCursor.h"
 
 #include <QTextFrame>
 #include <QTextLine>
 
-class HierarchicalCursor
+HierarchicalCursor::HierarchicalCursor(QTextFrame *frame)
 {
-public:
-    HierarchicalCursor(QTextFrame *frame);
-    HierarchicalCursor *subCursor();
-    QTextFrame::iterator it;
-    // the following can be seen as the "sub cursor" of text blocks
-    QTextLine line;
-    QTextBlock::Iterator fragmentIterator;
-    bool atEnd() {return it.atEnd();}
-};
+    it = frame->begin();
+}
 
-#endif
+HierarchicalCursor *subCursor()
+{
+    return 0;
+}

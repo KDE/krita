@@ -32,8 +32,8 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(TextShape *textshape)
 KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous)
 {
     if (previous) {
-        return m_area;
+        return 0;;
     }
     else
-        return 0;
+        return m_area;
 }

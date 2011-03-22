@@ -24,6 +24,8 @@
 #include <KoTextSharedLoadingData.h>
 #include "SimpleRootAreaProvider.h"
 
+#include <KoTextLayoutRootArea.h>
+
 #define synchronized(T) QMutex T; \
     for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
 
@@ -92,10 +94,13 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(this);
+    m_textShapeData->setRootArea(provider->provide(0));
+
+    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
+
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(lay);
 
-    KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
     setCollisionDetection(true);
 
     QObject::connect(m_textShapeData, SIGNAL(relayout()), lay, SLOT(scheduleLayout()), Qt::QueuedConnection);
@@ -121,7 +126,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         background()->paint(painter, p);
     }
 
-    if (m_textShapeData->endPosition() < 0) { // not layouted yet.
+    if (m_textShapeData->isDirty()) { // not layouted yet.
         if (!m_pageProvider) {
             return;
         }
@@ -135,14 +140,14 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             m_paintRegion = painter.clipRegion();
             if (!m_textShapeData->page() || page->pageNumber() != m_textShapeData->page()->pageNumber()) {
                 m_textShapeData->setPage(page);
-                m_textShapeData->foul();
+                m_textShapeData->setDirty();
                 lay->interruptLayout();
                 m_textShapeData->fireResizeEvent();
             }
 
             if (lay) {
                 while (m_textShapeData->isDirty() || lay->isInterrupted()){
-                    m_textShapeData->foul();
+                    m_textShapeData->setDirty();
                     lay->layout();
                 }
             }
@@ -159,7 +164,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    lay->draw(&painter, context);
+    m_textShapeData->rootArea()->paint(&painter, context); // only need to draw ourselves
     painter.restore();
 
     if (m_footnotes) {
@@ -189,7 +194,7 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
-        m_textShapeData->foul();
+        m_textShapeData->setDirty();
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay)
             lay->interruptLayout();

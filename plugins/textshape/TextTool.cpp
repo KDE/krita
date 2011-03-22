@@ -593,10 +593,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (!m_textShapeData)
         return;
 
-    int selectStart = m_textEditor.data()->position();
-    int selectEnd = m_textEditor.data()->anchor();
-    if (selectEnd < selectStart)
-        qSwap(selectStart, selectEnd);
     QList<TextShape *> shapesToPaint;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     if (lay) {
@@ -606,8 +602,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 continue;
             KoTextShapeData *data = ts->textShapeData();
             // check if shape contains some of the selection, if not, skip
-            if (!((data->endPosition() >= selectStart && data->position() <= selectEnd)
-                    || (data->position() <= selectStart && data->endPosition() >= selectEnd)))
+            if (!data->isCursorVisible(m_textEditor.data()->cursor()))
                 continue;
             if (painter.hasClipping()) {
                 QRect rect = converter.documentToView(ts->boundingRect()).toRect();
@@ -633,7 +628,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     foreach (TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();
         Q_ASSERT(data);
-        if (data->endPosition() == -1)
+        if (data->isDirty())
             continue;
 
         painter.save();
@@ -642,8 +637,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(shapeMatrix * painter.transform());
         painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
         painter.translate(0, -data->documentOffset());
-        if ((data->endPosition() >= selectStart && data->position() <= selectEnd)
-                || (data->position() <= selectStart && data->endPosition() >= selectEnd)) {
+        if (data->isCursorVisible(m_textEditor.data()->cursor())) {
             QRectF clip = textRect(*m_textEditor.data()->cursor());
             painter.save();
             painter.setClipRect(clip, Qt::IntersectClip);
@@ -707,8 +701,6 @@ void TextTool::updateSelectedShape(const QPointF &point)
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
                 const bool sameDocument = m_textShapeData ? d->document() == m_textShapeData->document() : false;
-                if (sameDocument && d->position() < 0)
-                    continue; // don't change to a shape that has no text
                 m_textShape = textShape;
                 if (sameDocument)
                     break; // stop looking.
@@ -889,12 +881,12 @@ int TextTool::pointToPosition(const QPointF & point) const
         return -1;
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
-    caretPos = qMax(caretPos, m_textShapeData->position());
-    if (m_textShapeData->endPosition() == -1) {
+    if (m_textShapeData->isDirty()) {
         kWarning(32500) << "Clicking in not fully laid-out textframe";
         m_textShapeData->fireResizeEvent(); // requests a layout run ;)
     }
-    caretPos = qMin(caretPos, m_textShapeData->endPosition());
+//FIXME    caretPos = qMax(caretPos, m_textShapeData->position());
+//    caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }
 
@@ -931,7 +923,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     int position = pointToPosition(event->point);
 
     if (event->buttons() == Qt::NoButton) {
-        if (!m_textShapeData || m_textShapeData->endPosition() == position) {
+        if (!m_textShapeData ){//FIXME|| m_textShapeData->endPosition() == position) {
             useCursor(Qt::IBeamCursor);
             return;
         }

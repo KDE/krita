@@ -61,13 +61,7 @@ public:
 //    virtual QRectF boundingRect() const = 0;
 
     virtual qreal maximalAllowedY() const;
-/*
-    /// Sets the position in textdocument coordinates.
-    virtual void setPosition(QPointF position) = 0;
 
-    /// Sets the size in textdocument coordinates.
-    virtual void setWidth(qreal width) = 0;
-*/
     virtual KoText::Direction parentTextDirection() const;
 
     virtual qreal left() const;
@@ -83,6 +77,8 @@ public:
     qreal width() const;
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
+
+    void setDocumentLayout(KoTextDocumentLayout *documentLayout);
 
 private:
     void layoutBlock(HierarchicalCursor *cursor);

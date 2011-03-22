@@ -101,9 +101,10 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
-    d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
+
+    d->layoutPosition = new HierarchicalCursor(doc->rootFrame());
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
@@ -166,6 +167,9 @@ void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLa
 
 void KoTextDocumentLayout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
+    // WARNING Text shapes ask their root area directly to paintDevice.
+    // It saves a lot of extra traversal, that is quite costly for big
+    // documents
     Q_UNUSED(painter);
     Q_UNUSED(context);
     //TODO m_state->draw(painter, context);
@@ -323,13 +327,13 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::layout()
 {
-return;
     do {
         // request a Root Area
         d->rootArea = d->provider->provide(d->rootArea);
 
-        d->rootAreaList.append(d->rootArea);
         if (d->rootArea) {
+            d->rootAreaList.append(d->rootArea);
+            d->rootArea->setDocumentLayout(this);
             //layout all that can fit into that root area
             d->rootArea->layout(d->layoutPosition);
         } else

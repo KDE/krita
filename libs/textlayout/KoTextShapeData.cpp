@@ -2,6 +2,7 @@
  * Copyright (C) 2006, 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,9 +24,11 @@
 #include <KoTextShapeDataBase.h>
 #include <KoTextShapeDataBase_p.h>
 #include "KoTextDocument.h"
-#include "KoTextEditor.h"
+#include <KoTextEditor.h>
 #include "styles/KoStyleManager.h"
 #include "styles/KoParagraphStyle.h"
+
+#include <KoTextLayoutRootArea.h>
 
 #include <KDebug>
 #include <QUrl>
@@ -51,13 +54,11 @@ class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 {
 public:
     KoTextShapeDataPrivate()
-            : ownsDocument(true),
-            dirty(true),
-            offset(0.0),
-            position(-1),
-            endPosition(-1),
-            direction(KoText::AutoDirection),
-            textpage(0)
+            : ownsDocument(true)
+            , offset(0.0)
+            , direction(KoText::AutoDirection)
+            , textpage(0)
+            , rootArea(0)
     {
     }
 
@@ -70,11 +71,10 @@ public:
     }
 
     bool ownsDocument;
-    bool dirty;
     qreal offset;
-    int position, endPosition;
     KoText::Direction direction;
     KoTextPage *textpage;
+    KoTextLayoutRootArea *rootArea;
 };
 
 
@@ -132,46 +132,17 @@ void KoTextShapeData::setDocumentOffset(qreal offset)
     d->offset = offset;
 }
 
-int KoTextShapeData::position() const
-{
-    Q_D(const KoTextShapeData);
-    return d->position;
-}
-
-void KoTextShapeData::setPosition(int position)
+void KoTextShapeData::setDirty()
 {
     Q_D(KoTextShapeData);
-    d->position = position;
+    d->rootArea->setDirty();
 }
 
-int KoTextShapeData::endPosition() const
-{
-    Q_D(const KoTextShapeData);
-    return d->endPosition;
-}
-
-void KoTextShapeData::setEndPosition(int position)
-{
-    Q_D(KoTextShapeData);
-    d->endPosition = position;
-}
-
-void KoTextShapeData::foul()
-{
-    Q_D(KoTextShapeData);
-    d->dirty = true;
-}
-
-void KoTextShapeData::wipe()
-{
-    Q_D(KoTextShapeData);
-    d->dirty = false;
-}
 
 bool KoTextShapeData::isDirty() const
 {
     Q_D(const KoTextShapeData);
-    return d->dirty;
+    return d->rootArea->isDirty();
 }
 
 void KoTextShapeData::fireResizeEvent()
@@ -202,6 +173,23 @@ KoTextPage* KoTextShapeData::page() const
 {
     Q_D(const KoTextShapeData);
     return d->textpage;
+}
+
+bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
+{
+    return false;
+}
+
+void KoTextShapeData::setRootArea(KoTextLayoutRootArea *rootArea)
+{
+    Q_D(KoTextShapeData);
+    d->rootArea = rootArea;
+}
+
+KoTextLayoutRootArea *KoTextShapeData::rootArea()
+{
+    Q_D(const KoTextShapeData);
+    return d->rootArea;
 }
 
 bool KoTextShapeData::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData, KoShape *shape)

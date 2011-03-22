@@ -48,6 +48,18 @@ public:
     /// Retruns the shape set with setAssociatedShape()
     KoShape *associatedShape();
 
+    void setDirty();
+
+    bool isDirty();
+
+    virtual qreal maximalAllowedY() const;
+
+    virtual KoText::Direction parentTextDirection() const;
+
+    virtual qreal left() const;
+
+    virtual qreal right() const;
+
 private:
     class Private;
     Private * const d;

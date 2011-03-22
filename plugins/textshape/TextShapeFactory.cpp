@@ -94,11 +94,11 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
     QString text("text");
-    if (params->contains(text)) {
+    //if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
         QTextCursor cursor(shapeData->document());
-        cursor.insertText(params->stringProperty(text));
-    }
+        cursor.insertText("Hello new Text layout engine");//params->stringProperty(text));
+    //}
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }

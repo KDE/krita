@@ -28,12 +28,14 @@
 #include <KoXmlReaderForward.h>
 
 class QTextDocument;
+class QTextCursor;
 class KoXmlWriter;
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
 class KoTextShapeDataPrivate;
 class KoTextPage;
 class KoDocumentRdfBase;
+class KoTextLayoutRootArea;
 
 /**
  * The data store that is held by each TextShape instance.
@@ -71,36 +73,8 @@ public:
      */
     void setDocumentOffset(qreal offset);
 
-    /**
-     * Return the position in the text-document that this shape shows.
-     * It returns -1 if this shape contains no text.
-     * Note that the text needs to be layouted separately for this to be updated.
-     */
-    int position() const;
-    /**
-     * Set the position in the text-document that this shape shows, or -1 if there is no text.
-     * This is set by the text-layout engine.
-     * @param position the new position
-     */
-    void setPosition(int position);
-    /**
-     * Return the end-position in the text-document that this shape shows.
-     * It returns -1 if this shape contains no text.
-     * Note that the text needs to be layouted separately for this to be updated.
-     */
-    int endPosition() const;
-    /**
-     * Set the end-position in the text-document that this shape shows, or -1 if there is no text.
-     * This is set by the text-layout engine.
-     * @param position the new position
-     */
-    void setEndPosition(int position);
-
     /// mark shape as dirty triggering a re-layout of its text.
-    void foul();
-
-    /// mark shape as not-dirty
-    void wipe();
+    void setDirty();
 
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const;
@@ -108,10 +82,19 @@ public:
     /// emits a relayout
     void fireResizeEvent();
 
+    /// returns true if the selection of the cursor is visible in this shape
+    bool isCursorVisible(QTextCursor *cursor) const;
+
     /// Set the provider that provides us the number of the \p page this shape is on.
     void setPage(KoTextPage* textpage);
     /// Returns the provider that provides us the number of the page this shape is on.
     KoTextPage* page() const;
+
+    /// Set the rootArea that is associated to the textshape
+    void setRootArea(KoTextLayoutRootArea *rootArea);
+
+    /// the rootArea that is associated to the textshape
+    KoTextLayoutRootArea *rootArea();
 
     /**
     * Load the TextShape from ODF.

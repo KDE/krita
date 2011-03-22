@@ -69,6 +69,11 @@ KoTextLayoutArea::~KoTextLayoutArea()
 {
 }
 
+void KoTextLayoutArea::setDocumentLayout(KoTextDocumentLayout *documentLayout)
+{
+    m_documentLayout = documentLayout;
+}
+
 void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
 {
     while(!(cursor->it.atEnd())) {
@@ -80,18 +85,16 @@ void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
             // We are currently dealing with a table
             // Let's create KoTextLayoutTableArea and let that handle the table
             // tableArea = ...;
-            if (true /*tableArea->layout(cursor->subCursor())*/) {
-                ++(cursor->it);
+            if (false /*tableArea->layout(cursor->subCursor())*/) {
+                return;
             }
         } else if (subFrame) {
             // We are currently dealing with a frame of some sorts besides table
             // Right now we'll just skip it as we know of no such subframes
-            ++(cursor->it);
-        } else {
-            if (block.isValid()) {
-                layoutBlock(cursor);
-            }
+        } else if (block.isValid()) {
+            layoutBlock(cursor);
         }
+        ++(cursor->it);
     }
 }
 
@@ -228,8 +231,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
 
     option.setUseDesignMetrics(true);
 
-    // drop caps
-
+    // Drop caps
     // first remove any drop-caps related formatting that's already there in the layout.
     // we'll do it all afresh now.
     QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
@@ -367,11 +369,12 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
     if (dropCapsNChars>0)
         m_width =  dropCapsAffectedLineWidthAdjust+10;
 
-    if (cursor->line.isValid()==false) {
+    if (cursor->line.isValid() == false) {
         m_x += textIndent(block);
         m_width -= textIndent(block);
-    } else
         cursor->line = layout->createLine();
+        cursor->fragmentIterator = block.begin();
+    }
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
@@ -642,7 +645,8 @@ qreal KoTextLayoutArea::maximalAllowedY() const
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const
 {
-    return KoText::LeftRightTopBottom;
+    Q_ASSERT(parent); //Root areas should overload this method
+    return parent->parentTextDirection();
 }
 
 qreal KoTextLayoutArea::left() const

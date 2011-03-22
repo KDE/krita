@@ -230,7 +230,7 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
     }
     KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
     Q_ASSERT(data);
-    data->foul();
+    data->setDirty();
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
     if (lay) {

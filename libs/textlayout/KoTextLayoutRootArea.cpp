@@ -19,11 +19,19 @@
 
 #include "KoTextLayoutRootArea.h"
 
+#include <KoShape.h>
+
 
 class KoTextLayoutRootArea::Private
 {
 public:
+    Private()
+        : shape(0)
+        , dirty(true)
+    {
+    }
     KoShape *shape;
+    bool dirty;
 };
 
 KoTextLayoutRootArea::KoTextLayoutRootArea()
@@ -39,7 +47,8 @@ KoTextLayoutRootArea::~KoTextLayoutRootArea()
 void KoTextLayoutRootArea::layout(HierarchicalCursor *cursor)
 {
     Q_UNUSED(cursor);
-    //d->area->layout(iter, boundingRect());
+    KoTextLayoutArea::layout(cursor);
+    d->dirty = false;
 }
 
 void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
@@ -50,4 +59,34 @@ void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
 KoShape *KoTextLayoutRootArea::associatedShape()
 {
     return d->shape;
+}
+
+void KoTextLayoutRootArea::setDirty()
+{
+    d->dirty = true;
+}
+
+bool KoTextLayoutRootArea::isDirty()
+{
+    return d->dirty;
+}
+
+qreal KoTextLayoutRootArea::maximalAllowedY() const
+{
+    return 500;
+}
+
+KoText::Direction KoTextLayoutRootArea::parentTextDirection() const
+{
+    return KoText::LeftRightTopBottom;
+}
+
+qreal KoTextLayoutRootArea::left() const
+{
+    return 0.0;
+}
+
+qreal KoTextLayoutRootArea::right() const
+{
+    return d->shape->size().width();
 }

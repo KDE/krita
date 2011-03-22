@@ -158,6 +158,13 @@ protected:
     void setCurrentMatch(int index);
 
     /**
+     * Retrieve the index of the current match.
+     *
+     * \return The index of the current match.
+     */
+    int currentMatchIndex();
+
+    /**
      * This method should be implemented to do the actual searching.
      *
      * \param pattern The pattern to search for.

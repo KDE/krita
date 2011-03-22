@@ -75,6 +75,11 @@ void KoFindBase::setCurrentMatch(int index)
     d->currentMatch = index;
 }
 
+int KoFindBase::currentMatchIndex()
+{
+    return d->currentMatch;
+}
+
 void KoFindBase::find(const QString& pattern)
 {
     clearMatches();

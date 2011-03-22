@@ -65,3 +65,9 @@ quint8 KisPressureOpacityOption::apply(KisPainter * painter, const KisPaintInfor
     painter->setOpacity(opacity2);
     return origOpacity;
 }
+
+qreal KisPressureOpacityOption::getOpacityf(const KisPaintInformation& info)
+{
+    return isChecked() ? computeValue(info) : 1.0;
+}
+

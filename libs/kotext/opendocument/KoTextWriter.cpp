@@ -69,6 +69,7 @@
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
 #endif
+#include <KoTableRowStyle.h>
 
 class KoTextWriter::Private
 {
@@ -93,6 +94,7 @@ public:
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
     QString saveTableStyle(const QTextTable &table);
     QString saveTableColumnStyle(const KoTableColumnStyle &columnStyle, int columnNumber, const QString &tableStyleName);
+    QString saveTableRowStyle(const KoTableRowStyle &rowStyle, int rowNumber, const QString &tableStyleName);
     QString saveTableCellStyle(const QTextTableCellFormat &cellFormat, int columnNumber, const QString &tableStyleName);
     
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
@@ -384,6 +386,21 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
     return generatedName;
 }
 
+QString KoTextWriter::Private::saveTableRowStyle(const KoTableRowStyle& tableRowStyle, int rowNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enough for everyone
+    QString generatedName = tableStyleName + "." + (rowNumber + 1);
+    
+    KoGenStyle style(KoGenStyle::TableRowAutoStyle, "table-row");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    tableRowStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName, KoGenStyles::DontAddNumberToName);
+    return generatedName;
+}
+
 QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& cellFormat, int columnNumber, const QString& tableStyleName)
 {
     // 26*26 columns should be enough for everyone
@@ -650,6 +667,14 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     }
     for (int r = 0 ; r < table->rows() ; r++) {
         writer->startElement("table:table-row");
+        
+        KoTableRowStyle rowStyle = tcarManager.rowStyle(r);
+        if (!rowStyle.isEmpty())
+        {
+            QString rowStyleName = saveTableRowStyle(rowStyle, r, tableStyleName);
+            writer->addAttribute("table:style-name", rowStyleName);
+        }
+        
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
             if ((cell.row() == r) && (cell.column() == c)) {

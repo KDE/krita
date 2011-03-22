@@ -151,7 +151,7 @@ void KoTableRowStyle::setBackground(const QBrush &brush)
 
 void KoTableRowStyle::clearBackground()
 {
-    d->stylesPrivate.remove(QTextCharFormat::BackgroundBrush);
+    d->stylesPrivate.remove(QTextFormat::BackgroundBrush);
 }
 
 QBrush KoTableRowStyle::background() const
@@ -169,7 +169,7 @@ void KoTableRowStyle::setBreakBefore(bool on)
     setProperty(BreakBefore, on);
 }
 
-bool KoTableRowStyle::breakBefore()
+bool KoTableRowStyle::breakBefore() const
 {
     return propertyBoolean(BreakBefore);
 }
@@ -179,20 +179,20 @@ void KoTableRowStyle::setBreakAfter(bool on)
     setProperty(BreakAfter, on);
 }
 
-bool KoTableRowStyle::breakAfter()
+bool KoTableRowStyle::breakAfter() const
 {
     return propertyBoolean(BreakAfter);
 }
 
 void KoTableRowStyle::setMinimumRowHeight(const qreal height)
 {
-    setProperty(MinumumRowHeight, height);
+    setProperty(MinimumRowHeight, height);
 }
 
 
 qreal KoTableRowStyle::minimumRowHeight() const
 {
-    return propertyDouble(MinumumRowHeight);
+    return propertyDouble(MinimumRowHeight);
 }
 
 void KoTableRowStyle::setRowHeight(qreal height)
@@ -327,18 +327,36 @@ void KoTableRowStyle::removeDuplicates(const KoTableRowStyle &other)
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
-void KoTableRowStyle::saveOdf(KoGenStyle &style)
+bool KoTableRowStyle::isEmpty() const
 {
-    Q_UNUSED(style);
-/*
+    return d->stylesPrivate.isEmpty();
+}
+
+void KoTableRowStyle::saveOdf(KoGenStyle &style) const
+{
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
-        if (key == KoTableRowStyle::BreakBefore) {
+        if (key == QTextFormat::BackgroundBrush) {
+            QBrush backBrush = background();
+            if (backBrush.style() != Qt::NoBrush)
+                style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableRowType);
+            else
+                style.addProperty("fo:background-color", "transparent", KoGenStyle::TableRowType);
+        } else if (key == MinimumRowHeight) {
+            style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
+        } else if (key == RowHeight) {
+            style.addPropertyPt("style:row-height", rowHeight(), KoGenStyle::TableRowType);
+        } else if (key == MinimumRowHeight) {
+            style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
+        } else if (key == BreakBefore) {
             if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
-        } else if (key == KoTableRowStyle::BreakAfter) {
+                style.addProperty("fo:break-before", "page", KoGenStyle::TableRowType);
+        } else if (key == BreakAfter) {
             if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
-        } 
-*/
+                style.addProperty("fo:break-after", "page", KoGenStyle::TableRowType);
+        } else if (key == KeepTogether) {
+            if (keepTogether())
+                style.addProperty("fo:keep-together", "always", KoGenStyle::TableRowType);
+        }
+    }
 }

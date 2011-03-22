@@ -78,8 +78,6 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentR
 
         d->oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", d->oldGrabSensitivity);
         d->oldHandleRadius = miscGroup.readEntry("HandleRadius", d->oldHandleRadius);
-        d->oldPasteOffset = miscGroup.readEntry("CopyOffset", d->oldPasteOffset);
-        d->oldPasteAtCursor = miscGroup.readEntry("PasteAtCursor", d->oldPasteAtCursor);
     }
 
     KoUnit unit = d->doc->unit();
@@ -171,19 +169,15 @@ void KoConfigMiscPage::apply()
     qreal currentCopyOffset = d->pasteOffset->value();
     if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
-    }
-    if (currentCopyOffset != d->docResources->pasteOffset()) {
         d->docResources->setPasteOffset(currentCopyOffset);
     }
 
     const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
     if (currentPasteAtCursor != d->oldPasteAtCursor) {
         miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
-    }
-    if (currentPasteAtCursor != d->docResources->pasteAtCursor()) {
         d->docResources->enablePasteAtCursor(currentPasteAtCursor);
     }
-    
+
     // FIXME how is the handle radius and grap sensitivitiy set?
 }
 

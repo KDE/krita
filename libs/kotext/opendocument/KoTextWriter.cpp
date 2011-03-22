@@ -389,7 +389,7 @@ QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& ta
 QString KoTextWriter::Private::saveTableRowStyle(const KoTableRowStyle& tableRowStyle, int rowNumber, const QString& tableStyleName)
 {
     // 26*26 columns should be enough for everyone
-    QString generatedName = tableStyleName + "." + (rowNumber + 1);
+    QString generatedName = tableStyleName + "." + QString::number(rowNumber + 1);
     
     KoGenStyle style(KoGenStyle::TableRowAutoStyle, "table-row");
     

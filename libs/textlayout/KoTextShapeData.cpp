@@ -177,7 +177,7 @@ KoTextPage* KoTextShapeData::page() const
 
 bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
 {
-    return false;
+    return true;
 }
 
 void KoTextShapeData::setRootArea(KoTextLayoutRootArea *rootArea)

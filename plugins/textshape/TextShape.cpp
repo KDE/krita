@@ -25,6 +25,7 @@
 #include "SimpleRootAreaProvider.h"
 
 #include <KoTextLayoutRootArea.h>
+#include <KoTextEditor.h>
 
 #define synchronized(T) QMutex T; \
     for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
@@ -154,22 +155,31 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         }
     }
 */
-    QAbstractTextDocumentLayout::PaintContext pc;
-    KoTextDocumentLayout::PaintContext context;
-    context.textContext = pc;
-    context.viewConverter = &converter;
-    context.imageCollection = m_imageCollection;
+    KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
+
+    KoTextDocumentLayout::PaintContext pc;
+    QAbstractTextDocumentLayout::Selection selection;
+    selection.cursor = *(textEditor->cursor());
+    //FIXME QPalette palette = canvas()->canvasWidget() ? canvas()->canvasWidget()->palette() : canvas()->canvasItem()->palette();
+    //selection.format.setBackground(palette.brush(QPalette::Highlight));
+    //selection.format.setForeground(palette.brush(QPalette::HighlightedText));
+    selection.format.setBackground(QColor(Qt::blue)); //FIXME delete line if above is fixed
+    selection.format.setForeground(QColor(Qt::white)); //FIXME delete line if above is fixed
+
+    pc.textContext.selections.append(selection);
+    pc.viewConverter = &converter;
+    pc.imageCollection = m_imageCollection;
 
     painter.setClipRect(outlineRect(), Qt::IntersectClip);
 
     painter.save();
     painter.translate(0, -m_textShapeData->documentOffset());
-    m_textShapeData->rootArea()->paint(&painter, context); // only need to draw ourselves
+    m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
     if (m_footnotes) {
         painter.translate(0, size().height() - m_footnotes->size().height());
-        m_footnotes->documentLayout()->draw(&painter, pc);
+        m_footnotes->documentLayout()->draw(&painter, pc.textContext);
     }
     m_paintRegion = QRegion();
 }
@@ -391,7 +401,7 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     bool ok = m_textShapeData->loadOdf(element, context, 0, this);
-//TODO    if (ok)
+//FIXME    if (ok)
 //        ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
     return ok;
 }

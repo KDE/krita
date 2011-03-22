@@ -75,10 +75,54 @@ void KoTextLayoutArea::setDocumentLayout(KoTextDocumentLayout *documentLayout)
     m_documentLayout = documentLayout;
 }
 
+QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+    QRectF retval(-5E6,0,105E6,1);
+    QRectF in;
+qDebug() << in << retval << (in|retval);
+    if (m_startOfArea == 0) // We have not been layouted yet
+        return QRectF();
+
+    QTextFrame::iterator it = m_startOfArea->it;
+    for (; !(it.atEnd()); ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        QTextBlockFormat format = block.blockFormat();
+
+        if (table) {
+            continue;
+        } else if (subFrame) {
+            continue;
+        } else {
+            if (!block.isValid())
+                continue;
+        }
+
+        QTextLayout *layout = block.layout();
+        if(cursor.selectionStart() >= block.position()
+            && cursor.selectionStart() < block.position() + block.length()) {
+                // TODO set top of rect
+            QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());
+            if (line.isValid())
+                retval.setTop(line.y());
+        }
+        if(cursor.selectionEnd() >= block.position()
+            && cursor.selectionEnd() < block.position() + block.length()) {
+                // TODO set bottom of rect
+            QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
+            if (line.isValid())
+                retval.setBottom
+                (line.y() + line.height());
+        }
+    }
+    return retval;
+}
+
 void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
 {
     m_startOfArea = new HierarchicalCursor(cursor);
-
+    m_y = 0; //TODO should be y of area
     while(!(cursor->it.atEnd())) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());

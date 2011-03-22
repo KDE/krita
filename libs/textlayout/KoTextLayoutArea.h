@@ -80,6 +80,9 @@ public:
 
     void setDocumentLayout(KoTextDocumentLayout *documentLayout);
 
+    /// Calc a bounding box rect of the selection
+    virtual QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
 private:
     void layoutBlock(HierarchicalCursor *cursor);
 

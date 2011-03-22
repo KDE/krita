@@ -104,7 +104,7 @@ public:
     QRectF expandVisibleRect(const QRectF &rect) const;
 
     /// Calc a bounding box rect of the selection
-    virtual QRectF selectionBoundingBox(QTextCursor &cursor);
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
     /// Draws the layout on the given painter with the given context.
     virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);

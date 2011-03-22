@@ -151,10 +151,13 @@ QRectF KoTextDocumentLayout::expandVisibleRect(const QRectF &rect) const
     return rect;
 }
 
-QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor)
+QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 {
-    Q_UNUSED(cursor);
-    return QRectF();
+    QRectF retval;
+    foreach(const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        retval |= rootArea->selectionBoundingBox(cursor);
+    }
+    return retval;
 }
 
 

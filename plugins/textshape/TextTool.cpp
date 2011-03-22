@@ -68,6 +68,8 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 
+#include <KoTextLayoutRootArea.h>
+
 #include <kdebug.h>
 #include <KRun>
 #include <KStandardShortcut>
@@ -618,13 +620,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
 
-    QAbstractTextDocumentLayout::PaintContext pc;
-    QAbstractTextDocumentLayout::Selection selection;
-    selection.cursor = *(m_textEditor.data()->cursor());
-    QPalette palette = canvas()->canvasWidget() ? canvas()->canvasWidget()->palette() : canvas()->canvasItem()->palette();
-    selection.format.setBackground(palette.brush(QPalette::Highlight));
-    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-    pc.selections.append(selection);
     foreach (TextShape *ts, shapesToPaint) {
         KoTextShapeData *data = ts->textShapeData();
         Q_ASSERT(data);
@@ -637,13 +632,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
         painter.setTransform(shapeMatrix * painter.transform());
         painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
         painter.translate(0, -data->documentOffset());
-        if (data->isCursorVisible(m_textEditor.data()->cursor())) {
-            QRectF clip = textRect(*m_textEditor.data()->cursor());
-            painter.save();
-            painter.setClipRect(clip, Qt::IntersectClip);
-            data->document()->documentLayout()->draw(&painter, pc);
-            painter.restore();
-        }
+
         if ((data == m_textShapeData) && m_caretTimerState) {
             // paint caret
             int posInParag = m_textEditor.data()->position() - block.position();
@@ -1514,10 +1503,6 @@ void TextTool::repaintSelection()
 
 void TextTool::repaintSelection(QTextCursor &cursor)
 {
-    #if 0
-    TODO move to text painting proper in textlayout
-    int startPosition = cursor.selectionStart();
-    int endPosition = cursor.selectionEnd();
     QList<TextShape *> shapes;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
@@ -1526,12 +1511,7 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
 
-        const int from = textShape->textShapeData()->position();
-        const int end = textShape->textShapeData()->endPosition();
-        if ((from <= startPosition && end >= startPosition && end <= endPosition)
-            || (from >= startPosition && end <= endPosition) // shape totally included
-            || (from <= endPosition && end >= endPosition)
-           )
+        if (textShape->textShapeData()->isCursorVisible(&cursor))
             shapes.append(textShape);
     }
 
@@ -1543,7 +1523,6 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         rect = ts->absoluteTransformation(0).mapRect(rect);
         canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
-    #endif
 }
 
 QRectF TextTool::caretRect(int position) const

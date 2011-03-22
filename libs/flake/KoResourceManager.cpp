@@ -37,7 +37,6 @@ KoResourceManager::KoResourceManager(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
-    setGrabSensitivity(3);
 }
 
 KoResourceManager::~KoResourceManager()

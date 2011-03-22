@@ -62,6 +62,7 @@ extern int qt_defaultDpiY();
 
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p)
  : parent(p)
+ , m_startOfArea(0)
 {
 }
 
@@ -76,6 +77,8 @@ void KoTextLayoutArea::setDocumentLayout(KoTextDocumentLayout *documentLayout)
 
 void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
 {
+    m_startOfArea = new HierarchicalCursor(cursor);
+
     while(!(cursor->it.atEnd())) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
@@ -96,6 +99,7 @@ void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
         }
         ++(cursor->it);
     }
+    m_endOfArea = new HierarchicalCursor(cursor);
 }
 
 // layoutBlock() method is structured like this:
@@ -667,7 +671,10 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     const QRegion clipRegion = painter->clipRegion();
     KoTextBlockBorderData *lastBorder = 0;
 
-    QTextFrame::iterator it;//FIXME = frame->begin();
+    if (m_startOfArea == 0) // We have not been layouted yet
+        return;
+
+    QTextFrame::iterator it = m_startOfArea->it;
     for (; !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());

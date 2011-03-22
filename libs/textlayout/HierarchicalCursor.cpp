@@ -26,6 +26,14 @@ HierarchicalCursor::HierarchicalCursor(QTextFrame *frame)
     it = frame->begin();
 }
 
+HierarchicalCursor::HierarchicalCursor(HierarchicalCursor *other)
+{
+    it = other->it;
+    line = other->line;
+    fragmentIterator = other->fragmentIterator;
+}
+
+
 HierarchicalCursor *subCursor()
 {
     return 0;

@@ -167,12 +167,11 @@ void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLa
 
 void KoTextDocumentLayout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
-    // WARNING Text shapes ask their root area directly to paintDevice.
+    // WARNING Text shapes ask their root area directly to paint.
     // It saves a lot of extra traversal, that is quite costly for big
     // documents
     Q_UNUSED(painter);
     Q_UNUSED(context);
-    //TODO m_state->draw(painter, context);
 }
 
 

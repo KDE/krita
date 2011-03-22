@@ -104,6 +104,8 @@ private:
     qreal m_listIndent;
     qreal m_defaultTabSizing;
     bool m_isRtl;
+    HierarchicalCursor *m_startOfArea;
+    HierarchicalCursor *m_endOfArea;
 };
 
 #endif

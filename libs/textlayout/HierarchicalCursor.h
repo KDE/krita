@@ -27,6 +27,7 @@ class HierarchicalCursor
 {
 public:
     HierarchicalCursor(QTextFrame *frame);
+    HierarchicalCursor(HierarchicalCursor *other);
     HierarchicalCursor *subCursor();
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks

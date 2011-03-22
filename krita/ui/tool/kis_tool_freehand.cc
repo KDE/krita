@@ -99,6 +99,9 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     m_outlineTimer.setSingleShot(true);
     connect(&m_outlineTimer, SIGNAL(timeout()), this, SLOT(hideOutline()));
+
+    m_strokeTimer.setSingleShot(true);
+    connect(&m_strokeTimer, SIGNAL(timeout()), this, SLOT(finishStroke()));
 }
 
 KisToolFreehand::~KisToolFreehand()
@@ -254,6 +257,7 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
             m_previousTangent = newTangent;
         }
         m_olderPaintInformation = m_previousPaintInformation;
+        m_strokeTimer.start(100);
     } else {
         paintLine(m_previousPaintInformation, info);
     }
@@ -269,14 +273,9 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
         if (!m_hasPaintAtLeastOnce) {
             paintAt(m_previousPaintInformation);
         } else if (m_smooth) {
-            QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 3.0);
-            QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
-            QPointF control2 = m_previousPaintInformation.pos() - newTangent;
-            paintBezierCurve(m_olderPaintInformation,
-                            control1,
-                            control2,
-                            m_previousPaintInformation);
+            finishStroke();
         }
+        m_strokeTimer.stop();
 
         endPaint();
         setMode(KisTool::HOVER_MODE);
@@ -285,6 +284,22 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
     else {
         KisToolPaint::mouseReleaseEvent(e);
     }
+}
+
+void KisToolFreehand::finishStroke()
+{
+    if (mode() != KisTool::PAINT_MODE) {
+        // shouldn't happen
+        return;
+    }
+    QPointF newTangent = (m_previousPaintInformation.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 3.0);
+    QPointF control1 = m_olderPaintInformation.pos() + m_previousTangent;
+    QPointF control2 = m_previousPaintInformation.pos() - newTangent;
+    paintBezierCurve(m_olderPaintInformation,
+                    control1,
+                    control2,
+                    m_previousPaintInformation);
+    m_previousTangent = QPointF(0.0, 0.0);
 }
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)

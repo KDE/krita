@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Image Splitter
+X-KDE-ServiceTypes=Krita/ViewPlugin
+Type=Service
+X-KDE-Library=kritaimagesplit
+X-Krita-Version=4

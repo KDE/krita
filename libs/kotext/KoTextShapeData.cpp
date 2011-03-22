@@ -86,6 +86,7 @@ public:
     int position, endPosition;
     KoText::Direction direction;
     KoTextPage *textpage;
+    QVector<QAbstractTextDocumentLayout::Selection> selections;
 };
 
 
@@ -141,6 +142,18 @@ void KoTextShapeData::setDocumentOffset(qreal offset)
 {
     Q_D(KoTextShapeData);
     d->offset = offset;
+}
+
+QVector< QAbstractTextDocumentLayout::Selection > KoTextShapeData::selections() const
+{
+    Q_D(const KoTextShapeData);
+    return d->selections;
+}
+
+void KoTextShapeData::setSelections(const QVector< QAbstractTextDocumentLayout::Selection >& newSelections)
+{
+    Q_D(KoTextShapeData);
+    d->selections = newSelections;
 }
 
 int KoTextShapeData::position() const

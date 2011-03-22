@@ -26,6 +26,7 @@
 #include <KoTextShapeDataBase.h>
 #include <KoInsets.h>
 #include <KoXmlReaderForward.h>
+#include <QAbstractTextDocumentLayout>
 
 class QTextDocument;
 class KoXmlWriter;
@@ -123,6 +124,9 @@ public:
     void setPage(KoTextPage* textpage);
     /// Returns the provider that provides us the number of the page this shape is on.
     KoTextPage* page() const;
+
+    QVector<QAbstractTextDocumentLayout::Selection> selections() const;
+    void setSelections(const QVector<QAbstractTextDocumentLayout::Selection> &newSelections);
 
     /**
     * Load the TextShape from ODF.

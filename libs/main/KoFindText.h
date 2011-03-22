@@ -41,10 +41,14 @@ public:
 
     void highlightMatch(const KoFindMatch& match);
 
+    virtual void findNext();
+    virtual void findPrevious();
+
+
 Q_SIGNALS:
     //void findDocumentSetNext(QTextDocument* document);
     //void findDocumentSetPrevious(QTextDocument* document);
-
+    
 protected:
     virtual void findImpl(const QString& pattern, QList< KoFindMatch >& matchList);
     virtual void clearMatches();

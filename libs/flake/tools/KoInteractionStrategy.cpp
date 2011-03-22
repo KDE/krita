@@ -19,6 +19,9 @@
 
 #include "KoInteractionStrategy.h"
 #include "KoInteractionStrategy_p.h"
+#include "KoCanvasBase.h"
+#include "KoShapeController.h"
+#include "KoResourceManager.h"
 
 #include <QUndoCommand>
 
@@ -60,4 +63,14 @@ KoToolBase *KoInteractionStrategy::tool() const
 {
     Q_D(const KoInteractionStrategy);
     return d->tool;
+}
+
+uint KoInteractionStrategy::handleRadius() const
+{
+    return tool()->canvas()->shapeController()->resourceManager()->handleRadius();
+}
+
+uint KoInteractionStrategy::grabSensitivity() const
+{
+    return tool()->canvas()->shapeController()->resourceManager()->grabSensitivity();
 }

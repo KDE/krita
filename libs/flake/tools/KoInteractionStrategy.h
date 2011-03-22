@@ -98,6 +98,12 @@ protected:
 
     KoInteractionStrategyPrivate *d_ptr;
 
+    /// Convenience function to get the global handle radius
+    uint handleRadius() const;
+
+    /// Cenvenience function to get the global grab sensitivity
+    uint grabSensitivity() const;
+
 private:
     Q_DECLARE_PRIVATE(KoInteractionStrategy)
 };

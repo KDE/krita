@@ -400,6 +400,12 @@ protected:
      */
     void setPopupActionList(const QList<QAction*> &list);
 
+    /// Convenience function to get the current handle radius
+    uint handleRadius() const;
+
+    /// Convencience function to get the current grab sensitivity
+    uint grabSensitivity() const;
+
     /**
     * Returns a handle grab rect at the given position.
     *

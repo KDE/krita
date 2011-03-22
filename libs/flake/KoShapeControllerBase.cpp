@@ -44,6 +44,10 @@ public:
             resourceManager->setPasteOffset(pasteOffset);
             const bool pasteAtCursor = miscGroup.readEntry("PasteAtCursor", true);
             resourceManager->enablePasteAtCursor(pasteAtCursor);
+            const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 3);
+            resourceManager->setGrabSensitivity(grabSensitivity);
+            const uint handleRadius = miscGroup.readEntry("HandleRadius", 3);
+            resourceManager->setHandleRadius(handleRadius);
         }
     }
 

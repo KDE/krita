@@ -23,6 +23,7 @@
 #include "KoPointerEvent.h"
 #include "KoResourceManager.h"
 #include "KoViewConverter.h"
+#include "KoShapeController.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -34,9 +35,14 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
     Q_D(KoToolBase);
     if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No KoResourceManager");
+        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
         if (crp)
-            connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
+                    this, SLOT(resourceChanged(int, const QVariant &)));
+        KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
+        Q_ASSERT_X(scrm, "KoToolBase::KoToolBase", "No Document KoResourceManager");
+        if (scrm)
+            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
     }
 }
@@ -228,11 +234,23 @@ void KoToolBase::setStatusText(const QString &statusText)
     emit statusTextChanged(statusText);
 }
 
+uint KoToolBase::handleRadius() const
+{
+    Q_D(const KoToolBase);
+    return d->canvas->shapeController()->resourceManager()->handleRadius();
+}
+
+uint KoToolBase::grabSensitivity() const
+{
+    Q_D(const KoToolBase);
+    return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+}
+
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceManager()->grabSensitivity();
+    uint handleSize = 2*grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -242,7 +260,7 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceManager()->handleRadius();
+    uint handleSize = 2*handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;

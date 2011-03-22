@@ -59,7 +59,7 @@ void MoveConnectionPointStrategy::finishInteraction(Qt::KeyboardModifiers /*modi
 
 QUndoCommand* MoveConnectionPointStrategy::createCommand()
 {
-    int grabDistance = tool()->canvas()->resourceManager()->grabSensitivity();
+    int grabDistance = grabSensitivity();
     const qreal dx = m_newPoint.position.x()-m_oldPoint.position.x();
     const qreal dy = m_newPoint.position.y()-m_oldPoint.position.y();
     // check if we have moved the connection point at least a little bit

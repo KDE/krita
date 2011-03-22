@@ -1,6 +1,6 @@
 include_directories(${TEXTLAYOUT_INCLUDES})
 
-#add_subdirectory( tests )
+add_subdirectory( tests )
 
 ########### next target ###############
 set(textlayout_LIB_SRCS

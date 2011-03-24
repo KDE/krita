@@ -26,6 +26,7 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QMenu>
 #include <QtGui/QApplication>
+#include <QtCore/QDebug>
 
 #include <KDE/KLocalizedString>
 #include <KDE/KLineEdit>
@@ -45,11 +46,13 @@ public:
     
     void matchFound();
     void noMatchFound();
-    void searchWrapped();
+    void searchWrapped(bool direction);
     void addToHistory();
     void find(const QString &pattern);
-    void caseSensitiveChanged(bool value);
-    void wholeWordsChanged(bool value);
+    void caseSensitiveChanged();
+    void wholeWordsChanged();
+    void selectionOnlyChanged();
+    void fromCursorChanged();
 
     KoFindToolbar *q;
 
@@ -75,7 +78,8 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
     d->finder = finder;
     connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound()));
     connect(d->finder, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
-    connect(d->finder, SIGNAL(wrapAround()), this, SLOT(searchWrapped()));
+    connect(d->finder, SIGNAL(wrapAround(bool)), this, SLOT(searchWrapped(bool)));
+    finder->setOptions(finder->options() ^ KoFindBase::FindFromCursor);
 
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
@@ -123,12 +127,23 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
     
     QAction *action = new QAction(i18n("Case Sensitive"), menu);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(caseSensitiveChanged(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(caseSensitiveChanged()));
     menu->addAction(action);
     
     action = new QAction(i18n("Whole Words Only"), menu);
     action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(wholeWordsChanged(bool)));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(wholeWordsChanged()));
+    menu->addAction(action);
+
+    action = new QAction(i18n("Selection Only"), menu);
+    action->setCheckable(true);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(selectionOnlyChanged()));
+    menu->addAction(action);
+
+    action = new QAction(i18n("From Cursor"), menu);
+    action->setCheckable(true);
+    action->setChecked(true);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(fromCursorChanged()));
     menu->addAction(action);
     
     d->optionsButton->setMenu(menu);
@@ -163,6 +178,7 @@ void KoFindToolbar::activate()
         show();
     }
     d->searchLine->setFocus();
+    d->find(d->searchLine->currentText());
 }
 
 void KoFindToolbar::Private::matchFound()
@@ -182,9 +198,13 @@ void KoFindToolbar::Private::noMatchFound()
     information->setText(i18n("No matches found"));
 }
 
-void KoFindToolbar::Private::searchWrapped()
+void KoFindToolbar::Private::searchWrapped(bool direction)
 {
-    information->setText(i18n("Search hit bottom, continuing from top."));
+    if(direction) {
+        information->setText(i18n("Search hit bottom, continuing from top."));
+    } else {
+        information->setText(i18n("Search hit top, continuing from bottom."));
+    }
 }
 
 void KoFindToolbar::Private::addToHistory()
@@ -203,15 +223,27 @@ void KoFindToolbar::Private::find(const QString& pattern)
     }
 }
 
-void KoFindToolbar::Private::caseSensitiveChanged(bool value)
+void KoFindToolbar::Private::caseSensitiveChanged()
 {
     finder->setOptions(finder->options() ^ KoFindBase::FindCaseSensitive );
     find(searchLine->currentText());
 }
 
-void KoFindToolbar::Private::wholeWordsChanged(bool value)
+void KoFindToolbar::Private::wholeWordsChanged()
 {
     finder->setOptions(finder->options() ^ KoFindBase::FindWholeWords );
+    find(searchLine->currentText());
+}
+
+void KoFindToolbar::Private::fromCursorChanged()
+{
+    finder->setOptions(finder->options() ^ KoFindBase::FindFromCursor);
+    find(searchLine->currentText());
+}
+
+void KoFindToolbar::Private::selectionOnlyChanged()
+{
+    finder->setOptions(finder->options() ^ KoFindBase::FindWithinSelection);
     find(searchLine->currentText());
 }
 

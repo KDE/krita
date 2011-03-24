@@ -44,11 +44,13 @@ private:
 
     Q_PRIVATE_SLOT(d, void matchFound());
     Q_PRIVATE_SLOT(d, void noMatchFound());
-    Q_PRIVATE_SLOT(d, void searchWrapped());
+    Q_PRIVATE_SLOT(d, void searchWrapped(bool direction));
     Q_PRIVATE_SLOT(d, void addToHistory());
-    Q_PRIVATE_SLOT(d, void wholeWordsChanged(bool value));
-    Q_PRIVATE_SLOT(d, void caseSensitiveChanged(bool value));
     Q_PRIVATE_SLOT(d, void find(const QString &pattern));
+    Q_PRIVATE_SLOT(d, void wholeWordsChanged());
+    Q_PRIVATE_SLOT(d, void caseSensitiveChanged());
+    Q_PRIVATE_SLOT(d, void fromCursorChanged());
+    Q_PRIVATE_SLOT(d, void selectionOnlyChanged());
 };
 
 #endif // KOFINDTOOLBAR_H

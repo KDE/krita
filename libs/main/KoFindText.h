@@ -39,8 +39,6 @@ public:
     KoFindText(KoResourceManager *provider, QObject *parent = 0);
     virtual ~KoFindText();
 
-    void highlightMatch(const KoFindMatch& match);
-
     virtual void findNext();
     virtual void findPrevious();
 

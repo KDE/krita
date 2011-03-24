@@ -36,7 +36,7 @@
 #include "KoShape.h"
 #include "KoTextShapeData.h"
 #include "KoCanvasBase.h"
-#include <KoShapeManager.h>
+#include "KoShapeManager.h"
 
 class KoFindText::Private
 {
@@ -51,13 +51,17 @@ class KoFindText::Private
         KoResourceManager *resourceManager;
 
         QTextCursor selection;
+        QVector<QAbstractTextDocumentLayout::Selection> selections;
+
+        int selectionStart;
+        int selectionEnd;
 
         static QTextCharFormat *highlightFormat;
         static QTextCharFormat *currentMatchFormat;
-
-        QVector<QAbstractTextDocumentLayout::Selection> selections;
+        static QTextCharFormat *currentSelectionFormat;
 };
 
+QTextCharFormat * KoFindText::Private::CurrentSelectionFormat = 0;
 QTextCharFormat * KoFindText::Private::highlightFormat = 0;
 QTextCharFormat * KoFindText::Private::currentMatchFormat = 0;
 
@@ -77,6 +81,11 @@ KoFindText::KoFindText(KoResourceManager* provider, QObject* parent)
         d->currentMatchFormat->setBackground(qApp->palette().highlight());
         d->currentMatchFormat->setForeground(qApp->palette().highlightedText());
     }
+
+    if(!d->currentSelectionFormat) {
+        d->currentSelectionFormat = new QTextCharFormat();
+        d->currentSelectionFormat->setBackground(qApp->palette().alternateBase());
+    }
 }
 
 KoFindText::~KoFindText()
@@ -87,7 +96,7 @@ KoFindText::~KoFindText()
 void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList)
 {
     KoFindOptions opts = options();
-    QTextDocument::FindFlags flags;
+    QTextDocument::FindFlags flags = 0;
 
     if(opts & FindCaseSensitive) {
         flags |= QTextDocument::FindCaseSensitively;
@@ -123,6 +132,10 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
         cursor = d->document->find(pattern, cursor, flags);
     }
 
+    if(d->selections.size() > 0) {
+        d->selections[0].format = *(d->currentMatchFormat);
+    }
+    
     d->updateSelections();
 }
 
@@ -134,51 +147,43 @@ void KoFindText::clearMatches()
     setCurrentMatch(0);
 }
 
-void KoFindText::highlightMatch(const KoFindMatch& match)
+void KoFindText::findNext()
 {
+    if(d->selections.size() == 0)
+        return;
+    
+    d->selections[currentMatchIndex()].format = *(d->highlightFormat);
+    KoFindBase::findNext();
     d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
     d->updateSelections();
 }
 
-void KoFindText::findNext()
-{
-    d->selections[currentMatchIndex()].format = *(d->highlightFormat);
-    KoFindBase::findNext();
-}
-
 void KoFindText::findPrevious()
 {
+    if(d->selections.size() == 0)
+        return;
+    
     d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findPrevious();
+    d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
+    d->updateSelections();
 }
 
 void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
 {
     if (key == KoText::CurrentTextDocument) {
         document = static_cast<QTextDocument*>(variant.value<void*>());
+    } else if(key == KoText::CurrentTextPosition) {
+        selectionStart = variant.toInt();
+    } else if(key == KoText::CurrentTextAnchor) {
+        selectionEnd = variant.toInt();
     }
-    /*else if (key == KoText::CurrentTextPosition || key == KoText::CurrentTextAnchor) {
-        if (!inFind) {
-            const int selectionStart = provider->intResource(KoText::CurrentTextPosition);
-            const int selectionEnd = provider->intResource(KoText::CurrentTextAnchor);
-            findStrategy.dialog()->setHasSelection(selectionEnd != selectionStart);
-            replaceStrategy.dialog()->setHasSelection(selectionEnd != selectionStart);
-
-            start = true;
-            provider->clearResource(KoText::SelectedTextPosition);
-            provider->clearResource(KoText::SelectedTextAnchor);
-        }
-    }*/
 }
 
 void KoFindText::Private::updateSelections()
 {
-    QList<KoShape*> shapes = qobject_cast<KoTextDocumentLayout*>(document->documentLayout())->shapes();
-    foreach(KoShape* shape, shapes)
-    {
-        KoTextShapeData *textShapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-        textShapeData->setSelections(selections);
-    }
+    KoTextDocument doc(document);
+    doc.setSelections(selections);
 }
 
 #include "KoFindText.moc"

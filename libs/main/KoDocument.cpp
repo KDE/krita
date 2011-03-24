@@ -88,6 +88,8 @@
 #define INTERNAL_PROTOCOL "intern"
 #define INTERNAL_PREFIX "intern:/"
 // Warning, keep it sync in koStore.cc
+#include <kactioncollection.h>
+#include "KoUndoStackAction.h"
 
 QList<KoDocument*> *KoDocument::s_documentList = 0;
 
@@ -113,6 +115,7 @@ class KoDocument::Private
 public:
     Private() :
             progressUpdater(0),
+            progressProxy(0),
             profileStream(0),
             filterManager(0),
             specialOutputFlag(0),   // default is native format
@@ -162,6 +165,7 @@ public:
     KoDocumentRdfBase *docRdf;
 #endif
     KoProgressUpdater *progressUpdater;
+    KoProgressProxy *progressProxy;
     QTextStream *profileStream;
     QTime profileReferenceTime;
 
@@ -375,8 +379,6 @@ KoDocument::KoDocument(QWidget *parentWidget, QObject *parent, bool singleViewMo
     d->pageLayout.rightMargin = 0;
 
     d->undoStack = new KUndoStack(this);
-    d->undoStack->createUndoAction(actionCollection());
-    d->undoStack->createRedoAction(actionCollection());
 
     KConfigGroup cfgGrp(componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
@@ -1333,10 +1335,22 @@ bool KoDocument::openFile()
 
     // create the main progress monitoring object for loading, this can
     // contain subtasks for filtering and loading
-    DocumentProgressProxy proxyProgress(this);
-    d->progressUpdater = new KoProgressUpdater(&proxyProgress,
-                                               KoProgressUpdater::Unthreaded,
-                                               d->profileStream);
+    QScopedPointer<KoProgressProxy> internalProgress;
+    KoProgressProxy *progressProxy = 0;
+    if (d->progressProxy) {
+        progressProxy = d->progressProxy;
+    }
+    else {
+        progressProxy = new DocumentProgressProxy(this);
+        // make sure the object gets deleted on destruction
+        // only delete the object create by ourselfs
+        internalProgress.reset(progressProxy);
+    }
+
+    d->progressUpdater = new KoProgressUpdater(progressProxy,
+            KoProgressUpdater::Unthreaded,
+            d->profileStream);
+
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start();
 
@@ -1506,6 +1520,11 @@ bool KoDocument::openFile()
 KoProgressUpdater *KoDocument::progressUpdater() const
 {
     return d->progressUpdater;
+}
+
+void KoDocument::setProgressProxy(KoProgressProxy *progressProxy)
+{
+    d->progressProxy = progressProxy;
 }
 
 // shared between openFile and koMainWindow's "create new empty document" code

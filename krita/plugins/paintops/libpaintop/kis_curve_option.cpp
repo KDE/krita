@@ -56,17 +56,22 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
 
 void KisCurveOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-    if (m_checkable) {
-        setChecked(setting->getBool("Pressure" + m_name, false));
-    }
-    bool customCurve = setting->getBool("Custom" + m_name, false);
+    readNamedOptionSetting(m_name, setting);
+}
 
-    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(m_name + "Sensor")));
+void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfiguration* setting)
+{
+    if (m_checkable) {
+        setChecked(setting->getBool("Pressure" + prefix, false));
+    }
+    bool customCurve = setting->getBool("Custom" + prefix, false);
+
+    KisDynamicSensor* sensor = KisDynamicSensor::createFromXML(setting->getString(QString(prefix + "Sensor")));
     if(sensor) {
         setSensor(sensor);
     }
     if (customCurve) {
-        m_sensor->setCurve(setting->getCubicCurve("Curve" + m_name));
+        m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
     }
 }
 

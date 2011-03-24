@@ -59,3 +59,9 @@ void KisChalkPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
         m_chalkOption->setRadius( m_chalkOption->radius() + qRound(x) );
     }
 }
+
+QSizeF KisChalkPaintOpSettingsWidget::paintOpSize() const
+{
+    qreal width = m_chalkOption->radius() * 2.0 + 1.0;
+    return QSizeF(width, width);
+}

@@ -2,6 +2,7 @@
  * Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2010 Nandita Suri <suri.nandita@gmail.com>
+ * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -124,6 +125,7 @@ public:
         Level,          ///< list nesting level, is 1 or higher, or zero when implied
         DisplayLevel,   ///< show this many levels. Is always lower than the (implied) level.
         CharacterStyleId,///< CharacterStyle used for markup of the counter
+        MarkCharacterStyleId, ///< This stores the character style used for the mark of the list item
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
         BulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
@@ -138,7 +140,6 @@ public:
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
         BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
-        BulletColor     ///< color of the counter
     };
 
     /**

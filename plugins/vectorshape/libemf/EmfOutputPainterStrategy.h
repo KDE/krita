@@ -48,6 +48,7 @@
 namespace Libemf
 {
 
+class EmrTextObject;
 
 /**
     QPainter based output strategy for EMF Parser.
@@ -113,9 +114,8 @@ public:
 			       float M21, float M22, float Dx, float Dy );
     void setWorldTransform( float M11, float M12, float M21,
 			    float M22, float Dx, float Dy );
-    void extTextOutA( const ExtTextOutARecord &extTextOutA );
-    void extTextOutW( const QPoint &referencePoint, const QString &textString );
-    void moveToEx( const quint32 x, const quint32 y );
+    void extTextOut( const QRect &bounds, const EmrTextObject &textObject );
+    void moveToEx( const qint32 x, const qint32 y );
     void saveDC();
     void restoreDC( const qint32 savedDC );
     void lineTo( const QPoint &finishPoint );

@@ -70,13 +70,13 @@ bool GoogleContentHandler::characters ( const QString & ch )
 
 bool GoogleContentHandler::endDocument ()
 {
-    //qDebug() << "GoogleContentHandler::endDocument()";
+//    qDebug() << "GoogleContentHandler::endDocument()";
     return true;
 }
 
-bool GoogleContentHandler::endElement ( const QString & /*namespaceURI*/, const QString & /*localName*/, const QString & /*qName */)
+bool GoogleContentHandler::endElement ( const QString & /*namespaceURI*/, const QString & localName, const QString & /*qName */)
 {
-    //printName(localName);
+//    printName(localName);
     QString element = m_nodeStack.pop();
     if (QString::compare(element, "entry") == 0) {
         insideEntry = false;
@@ -134,12 +134,16 @@ bool GoogleContentHandler::startElement ( const QString & /*namespaceURI*/, cons
         m_docEntry->setEtag(atts.value("gd:etag"));
         insideEntry = true;
     }
-    if ( insideEntry && (QString::compare(localName, "content", Qt::CaseInsensitive) == 0 ) && (m_docEntry != 0)) {
-        m_docEntry->setDocumentUrl(atts.value("src"));
+    if ( insideEntry && (m_docEntry != 0)) {
+        if (QString::compare(localName, "content", Qt::CaseInsensitive) == 0 ) {
+            m_docEntry->setDocumentUrl(atts.value("src"));
+        } else if ((QString::compare(localName, "category", Qt::CaseInsensitive) == 0 ) &&
+                   QString::compare(atts.value("scheme"), "http://schemas.google.com/g/2005#kind", Qt::CaseInsensitive) == 0){
+            m_docEntry->setDocumentType(atts.value("label"));
+        }
     }
 
-    //printName(localName);
-
+//    printName(localName);
     return true;
 }
 

@@ -21,11 +21,6 @@
 #include "kis_image_config.h"
 #include "tiles3/kis_tile_data.h"
 
-#define MiB (1ULL << 20)
-
-#define MiB_TO_METRIC(v) (v * (MiB / (KisTileData::WIDTH * KisTileData::HEIGHT)))
-#define METRIC_TO_TILES(metric, pixelSize) (metric / pixelSize)
-
 
 /*
        Limits Diagram
@@ -67,8 +62,8 @@ public:
     KisStoreLimits() {
         KisImageConfig config;
 
-        m_emergencyThreshold = MiB_TO_METRIC(config.memoryHardLimit());
-        m_softLimitThreshold = MiB_TO_METRIC(config.memorySoftLimit());
+        m_emergencyThreshold = MiB_TO_METRIC(config.tilesHardLimit());
+        m_softLimitThreshold = MiB_TO_METRIC(config.tilesSoftLimit());
 
         m_hardLimitThreshold = m_emergencyThreshold - m_emergencyThreshold / 8;
         m_hardLimit = m_hardLimitThreshold - m_hardLimitThreshold / 8;

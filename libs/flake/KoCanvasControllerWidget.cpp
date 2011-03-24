@@ -86,7 +86,7 @@ public:
 void KoCanvasControllerWidget::Private::setDocumentOffset()
 {
     // The margins scroll the canvas widget inside the viewport, not
-    // the document. The documentOffset is meant the be the value that
+    // the document. The documentOffset is meant to be the value that
     // the canvas must add to the update rect in its paint event, to
     // compensate.
 

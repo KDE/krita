@@ -50,7 +50,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
 
     m_properties.fillProperties(settings);
     m_colorProperties.fillProperties(settings);
-    
+
     m_xSpacing = m_properties.gridWidth * m_properties.scale;
     m_ySpacing = m_properties.gridHeight * m_properties.scale;
     m_spacing = m_xSpacing;
@@ -63,7 +63,7 @@ KisGridPaintOp::KisGridPaintOp(const KisGridPaintOpSettings *settings, KisPainte
 #ifdef BENCHMARK
     m_count = m_total = 0;
 #endif
-    
+
 }
 
 KisGridPaintOp::~KisGridPaintOp()
@@ -103,11 +103,11 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
     qreal xStep = gridWidth / (qreal)divide;
 
     KisRandomSubAccessorPixel acc = m_settings->node()->paintDevice()->createRandomSubAccessor();
-    
+
     QRectF tile;
     KoColor color( painter()->paintColor() );
-   
-    qreal vertBorder = m_properties.vertBorder; 
+
+    qreal vertBorder = m_properties.vertBorder;
     qreal horzBorder = m_properties.horizBorder;
     if (m_properties.randomBorder){
         if (vertBorder == horzBorder){
@@ -117,13 +117,13 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             horzBorder *= drand48();
         }
     }
-    
+
     bool shouldColor = true;
     // fill the tile
     if (m_colorProperties.fillBackground){
         m_dab->fill(dabPosition.x(), dabPosition.y(), gridWidth, gridHeight, painter()->backgroundColor().data());
     }
-    
+
     for (int y = 0; y < divide; y++){
         for (int x = 0; x < divide; x++){
             // determine the tile size
@@ -142,7 +142,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
 
                 // mix the color with background color
                 if (m_colorProperties.mixBgColor)
-                {       
+                {
                     KoMixColorsOp * mixOp = source()->colorSpace()->mixColorsOp();
 
                     const quint8 *colors[2];
@@ -153,8 +153,8 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     int MAX_16BIT = 255;
                     qreal blend = info.pressure();
 
-                    colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT); 
-                    colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT); 
+                    colorWeights[0] = static_cast<quint16>( blend * MAX_16BIT);
+                    colorWeights[1] = static_cast<quint16>( (1.0 - blend) * MAX_16BIT);
                     mixOp->mixColors(colors, colorWeights, 2, color.data() );
                 }
 
@@ -168,7 +168,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
                     transfo = m_dab->colorSpace()->createColorTransformation("hsv_adjustment", params);
                     transfo->transform(color.data(), color.data() , 1);
                 }
-                
+
                 if (m_colorProperties.useRandomOpacity){
                     qreal alpha = drand48();
                     color.setOpacity( alpha );
@@ -178,7 +178,7 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
                 if ( !m_colorProperties.colorPerParticle ){
                     shouldColor = false;
                 }
-                
+
                 m_painter->setPaintColor(color);
             }
 
@@ -186,10 +186,10 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             switch (m_properties.shape){
                 case 0:
                 {
-                            m_painter->paintEllipse( tile ); 
+                            m_painter->paintEllipse( tile );
                             break;
                 }
-                case 1: 
+                case 1:
                 {
                             // anti-aliased version
                             //m_painter->paintRect(tile);
@@ -219,12 +219,12 @@ qreal KisGridPaintOp::paintAt(const KisPaintInformation& info)
             }
         }
     }
-    
+
     QRect rc = m_dab->extent();
     painter()->bitBlt(rc.topLeft(), m_dab, rc);
-    renderMirrorMask(rc,m_dab);
+    painter()->renderMirrorMask(rc,m_dab);
 
-    
+
 #ifdef BENCHMARK
     int msec = time.elapsed();
     kDebug() << msec << " ms/dab " << "[average: " << m_total / (qreal)m_count << "]";
@@ -244,6 +244,6 @@ void KisGridProperties::fillProperties(const KisPropertiesConfiguration* setting
     scale = setting->getDouble(GRID_SCALE);
     vertBorder  = setting->getDouble(GRID_VERTICAL_BORDER);
     horizBorder = setting->getDouble(GRID_HORIZONTAL_BORDER);
-    
+
     shape = setting->getInt(GRIDSHAPE_SHAPE);
 }

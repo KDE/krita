@@ -106,6 +106,44 @@ public:
         return result;
     }
 
+    void clear() {
+        // a fast-path without write ops
+        if(!m_top) return;
+
+        m_deleteBlockers.ref();
+
+        Node *top = m_top.fetchAndStoreOrdered(0);
+
+        int removedChunkSize = 0;
+        Node *tmp = top;
+        while(tmp) {
+            removedChunkSize++;
+            tmp = tmp->next;
+        }
+        m_numNodes.fetchAndAddOrdered(-removedChunkSize);
+
+        while(top) {
+            Node *next = top->next;
+
+            if (m_deleteBlockers == 1) {
+                /**
+                 * We  are the only owner of top contents.
+                 * So we can delete it freely.
+                 */
+                cleanUpNodes();
+                freeList(top);
+                next = 0;
+            }
+            else {
+                releaseNode(top);
+            }
+
+            top = next;
+        }
+
+        m_deleteBlockers.deref();
+    }
+
     /**
      * This is impossible to measure the size of the stack
      * in highly concurrent environment. So we return approximate
@@ -130,10 +168,9 @@ private:
     }
 
     inline void cleanUpNodes() {
-        Node *top = m_freeNodes;
+        Node *top = m_freeNodes.fetchAndStoreOrdered(0);
         if(top) {
-            if(m_freeNodes.testAndSetOrdered(top, 0))
-                freeList(top);
+            freeList(top);
         }
     }
 

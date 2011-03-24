@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

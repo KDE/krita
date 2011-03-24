@@ -166,6 +166,14 @@ protected:
     bool isMasterUsed( KoPAPageBase * page );
     void editPaste();
 
+public slots:
+
+    /// Copy Page
+    void copyPage();
+
+    /// Delete the current page
+    void deletePage();
+
 protected slots:
 
     void viewSnapToGrid(bool snap);
@@ -191,12 +199,6 @@ protected slots:
 
     /// Called when the selection changed
     virtual void selectionChanged();
-
-    /// Copy Page
-    void copyPage();
-
-    /// Delete the current page
-    void deletePage();
 
     /// Called when the clipboard changed
     virtual void clipboardDataChanged();

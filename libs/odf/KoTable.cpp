@@ -192,12 +192,12 @@ bool KoTable::printable() const
     return m_printable;
 }
 
-void KoTable::setTableStyle(KoTableStyle::Ptr style)
+void KoTable::setTableStyle(KoTblStyle::Ptr style)
 {
     m_style = style;
 }
 
-KoTableStyle::Ptr KoTable::tableStyle()
+KoTblStyle::Ptr KoTable::tableStyle()
 {
     return m_style;
 }

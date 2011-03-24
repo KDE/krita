@@ -42,9 +42,20 @@ KisBrushSP KisGbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
     }
     if(!brush)
         return 0;
-    
-    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble();
+
+    bool result;
+    QLocale c(QLocale::German);
+    double spacing = brushDefinition.attribute("spacing", "1.0").toDouble(&result);
+    if (!result){
+        spacing = c.toDouble(brushDefinition.attribute("spacing"));
+    }
     brush->setSpacing(spacing);
+
+    double angle = brushDefinition.attribute("angle", "0.0").toDouble();
+    brush->setAngle(angle);
+
+    double scale = brushDefinition.attribute("scale", "1.0").toDouble();
+    brush->setScale(scale);
 
     return brush;
 

@@ -72,10 +72,14 @@ KisZoomManager::~KisZoomManager()
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
 {
+    KoZoomMode::setMinimumZoom(0.00391);
+    KoZoomMode::setMaximumZoom(256.0);
+
     KisConfig cfg;
     m_zoomController = new KoZoomController(m_canvasController, m_zoomHandler, actionCollection, KoZoomAction::AspectMode, this);
     m_zoomHandler->setZoomMode(KoZoomMode::ZOOM_PIXELS);
     m_zoomHandler->setZoom(1.0);
+
 
     KisImageWSP image = m_view->image();
     m_zoomController->setPageSize(QSizeF(image->width() / image->xRes(), image->height() / image->yRes()));

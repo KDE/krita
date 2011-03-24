@@ -25,18 +25,19 @@
 
 class GoogleDocumentService;
 class GoogleDocument;
+class GoogleDocumentList;
 
 class DocumentListWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    DocumentListWindow(GoogleDocumentService *service, QList<GoogleDocument *> & gList);
+    DocumentListWindow(GoogleDocumentService *service, GoogleDocumentList *gList);
     ~DocumentListWindow();
     QString currentDocument();
 
 private slots:
-    void getClickedDocument(QListWidgetItem *item);
+    void getClickedDocument(const QModelIndex & index);
     void fetchDocument();
 
 private:

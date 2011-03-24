@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ChangeTrackingTool.h"
+#include "ReviewTool.h"
 
 #include <KoCanvasBase.h>
 #include <KoChangeTracker.h>
@@ -51,8 +51,9 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 #include <QVector>
+#include <QLabel>
 
-ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoToolBase(canvas),
+ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
     m_disableShowChangesOnExit(false),
     m_textEditor(0),
     m_textShapeData(0),
@@ -69,18 +70,18 @@ ChangeTrackingTool::ChangeTrackingTool(KoCanvasBase* canvas): KoToolBase(canvas)
     connect(action, SIGNAL(triggered()), this, SLOT(showTrackedChangeManager()));
 }
 
-ChangeTrackingTool::~ChangeTrackingTool()
+ReviewTool::~ReviewTool()
 {
     delete m_trackedChangeManager;
     delete m_model;
 }
 
-void ChangeTrackingTool::mouseReleaseEvent(KoPointerEvent* event)
+void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
 {
     event->ignore();
 }
 
-void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
+void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 {
     updateSelectedShape(event->point);
     int position = pointToPosition(event->point);
@@ -98,7 +99,7 @@ void ChangeTrackingTool::mouseMoveEvent(KoPointerEvent* event)
     }
 }
 
-void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
+void ReviewTool::mousePressEvent(KoPointerEvent* event)
 {
     int position = pointToPosition(event->point);
     QTextCursor cursor(m_textShapeData->document());
@@ -117,7 +118,7 @@ void ChangeTrackingTool::mousePressEvent(KoPointerEvent* event)
     }
 }
 
-void ChangeTrackingTool::updateSelectedShape(const QPointF &point)
+void ReviewTool::updateSelectedShape(const QPointF &point)
 {
     if (! m_textShape->boundingRect().contains(point)) {
         QRectF area(point, QSizeF(1, 1));
@@ -137,7 +138,7 @@ void ChangeTrackingTool::updateSelectedShape(const QPointF &point)
     }
 }
 
-int ChangeTrackingTool::pointToPosition(const QPointF & point) const
+int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_textEditor->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
@@ -149,7 +150,7 @@ int ChangeTrackingTool::pointToPosition(const QPointF & point) const
     return caretPos;
 }
 
-void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& converter)
+void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
@@ -225,7 +226,7 @@ void ChangeTrackingTool::paint(QPainter& painter, const KoViewConverter& convert
     }
 }
 
-QVector<QRectF> *ChangeTrackingTool::textRect ( int startPosition, int endPosition )
+QVector<QRectF> *ReviewTool::textRect ( int startPosition, int endPosition )
 {
     QVector<QRectF> *retVec = new QVector<QRectF>();
     Q_ASSERT(startPosition >= 0);
@@ -282,12 +283,12 @@ QVector<QRectF> *ChangeTrackingTool::textRect ( int startPosition, int endPositi
     }
 }
 
-void ChangeTrackingTool::keyPressEvent(QKeyEvent* event)
+void ReviewTool::keyPressEvent(QKeyEvent* event)
 {
     KoToolBase::keyPressEvent(event);
 }
 
-void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
+void ReviewTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     Q_UNUSED(toolActivation);
     foreach(KoShape *shape, shapes) {
@@ -306,7 +307,7 @@ void ChangeTrackingTool::activate(ToolActivation toolActivation, const QSet<KoSh
     m_textShape->update();
 }
 
-void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
+void ReviewTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = data == 0 || m_textShapeData == 0 || m_textShapeData->document() != data->document();
 /*
@@ -359,16 +360,18 @@ void ChangeTrackingTool::setShapeData(KoTextShapeData *data)
     }
 }
 
-void ChangeTrackingTool::deactivate()
+void ReviewTool::deactivate()
 {
     m_textShape = 0;
     setShapeData(0);
     canvas()->canvasWidget()->setFocus();
 }
 
-QWidget* ChangeTrackingTool::createOptionWidget()
+QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
 {
+    QMap<QString, QWidget *> widgets;
     QWidget *widget = new QWidget();
+    widget->setObjectName("hmm");
 
     m_changesTreeView = new QTreeView(widget);
     m_changesTreeView->setModel(m_model);
@@ -386,10 +389,21 @@ QWidget* ChangeTrackingTool::createOptionWidget()
 
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
-    return widget;
+
+    widgets.insert(i18n("Changes"), widget);
+    QWidget *dummy = new QWidget();
+    dummy->setObjectName("dummy1");
+    widgets.insert(i18n("Spell checking"), dummy);
+    dummy = new QWidget();
+    dummy->setObjectName("dummy2");
+    widgets.insert(i18n("Comments"), dummy);
+    dummy = new QWidget();
+    dummy->setObjectName("dummy3");
+    widgets.insert(i18n("Statistics"), dummy);
+    return widgets;
 }
 
-void ChangeTrackingTool::acceptChange()
+void ReviewTool::acceptChange()
 {
     if (m_changesTreeView->currentIndex().isValid()) {
         AcceptChangeCommand *command = new AcceptChangeCommand(m_model->changeItemData(m_changesTreeView->currentIndex()).changeId,
@@ -400,7 +414,7 @@ void ChangeTrackingTool::acceptChange()
     }
 }
 
-void ChangeTrackingTool::rejectChange()
+void ReviewTool::rejectChange()
 {
     if (m_changesTreeView->currentIndex().isValid()) {
         RejectChangeCommand *command = new RejectChangeCommand(m_model->changeItemData(m_changesTreeView->currentIndex()).changeId,
@@ -411,14 +425,14 @@ void ChangeTrackingTool::rejectChange()
     }
 }
 
-void ChangeTrackingTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem)
+void ReviewTool::selectedChangeChanged(QModelIndex newItem, QModelIndex previousItem)
 {
     Q_UNUSED(newItem);
     Q_UNUSED(previousItem);
     canvas()->updateCanvas(m_textShape->boundingRect());
 }
 
-void ChangeTrackingTool::showTrackedChangeManager()
+void ReviewTool::showTrackedChangeManager()
 {
 /*    Q_ASSERT(m_model);
     m_trackedChangeManager = new TrackedChangeManager();
@@ -432,4 +446,4 @@ void ChangeTrackingTool::showTrackedChangeManager()
     //    dia->show();
 }
 
-#include <ChangeTrackingTool.moc>
+#include <ReviewTool.moc>

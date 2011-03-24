@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2001-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007,2009 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007,2009,2011 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2007-2009 Thorsten Zachmann <zachmann@kde.org>
@@ -414,8 +414,9 @@ KoTextLoader::KoTextLoader(KoShapeLoadingContext &context, KoShape *shape)
 
     if (!d->textSharedData) {
         d->textSharedData = new KoTextSharedLoadingData();
-        // TODO pass style manager so that on copy and paste we can recognice the same styles
-        d->textSharedData->loadOdfStyles(context, 0);
+        KoResourceManager *rm = context.documentResourceManager();
+        KoStyleManager *styleManager = rm->resource(KoText::StyleManager).value<KoStyleManager*>();
+        d->textSharedData->loadOdfStyles(context, styleManager);
         if (!sharedData) {
             context.addSharedData(KOTEXT_SHARED_LOADING_ID, d->textSharedData);
         } else {
@@ -2004,9 +2005,7 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                 } else if (tblLocalName == "table-row") {
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->openChangeRegion(tblTag);
-
                     loadTableRow(tblTag, tbl, spanStore, cursor, rows);
-
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->closeChangeRegion(tblTag);
                 }

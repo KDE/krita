@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef LAYOUT_H
-#define LAYOUT_H
+#ifndef TEXTSHAPELAYOUT_H
+#define TEXTSHAPELAYOUT_H
 
 #include "TableLayout.h"
 
@@ -56,12 +56,12 @@ public:
 /**
  * The document layouter for KoText style docs.
  */
-class Layout : public KoTextDocumentLayout::LayoutState
+class TextShapeLayout : public KoTextDocumentLayout::LayoutState
 {
 public:
-    explicit Layout(KoTextDocumentLayout *parent);
+    explicit TextShapeLayout(KoTextDocumentLayout *parent);
 
-    virtual ~Layout();
+    virtual ~TextShapeLayout();
     /// start layouting, return false when there is nothing to do
     virtual bool start();
     /// end layouting

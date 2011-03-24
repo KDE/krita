@@ -34,7 +34,7 @@ KoReportItemCheck::KoReportItemCheck(QDomNode &element) : m_value(false)
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:control-source"));
+    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
     Z = element.toElement().attribute("report:z-index").toDouble();
     m_foregroundColor->setValue(element.toElement().attribute("fo:foreground-color"));
     m_checkStyle->setValue(element.toElement().attribute("report:check-style"));
@@ -74,7 +74,7 @@ void KoReportItemCheck::createProperties()
     strings << i18n("Cross") << i18n("Tick") << i18n("Dot");
     m_checkStyle = new KoProperty::Property("check-style", keys, strings, "Cross", i18n("Style"));
 
-    m_controlSource = new KoProperty::Property("control-source", QStringList(), QStringList(), QString(), i18n("Control Source"));
+    m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
     m_controlSource->setOption("extraValueAllowed", "true");
 
     m_foregroundColor = new KoProperty::Property("foreground-color", Qt::black, i18n("Foreground Color"));
@@ -141,7 +141,7 @@ int KoReportItemCheck::render(OROPage* page, OROSection* section,  QPointF offse
         kDebug() << "Check Value:" << str;
         if (str == "t" || str == "true" || str == "1")
             v = true;
-    
+
     } else {
         v = value();
     }

@@ -71,6 +71,7 @@ public:
     virtual void push(int value) = 0;
     virtual int pop() = 0;
     virtual bool isEmpty() = 0;
+    virtual void clear() = 0;
 };
 
 class KisTestingLocklessStack : public KisAbstractIntStack
@@ -85,13 +86,17 @@ public:
 
         bool result = m_stack.pop(value);
         Q_ASSERT(result);
-        Q_UNUSED(result); // for relesae build
+        Q_UNUSED(result); // for release build
 
         return value;
     }
 
     bool isEmpty() {
         return m_stack.isEmpty();
+    }
+
+    void clear() {
+        m_stack.clear();
     }
 
 private:
@@ -123,6 +128,12 @@ public:
         return result;
     }
 
+    void clear() {
+        m_mutex.lock();
+        m_stack.clear();
+        m_mutex.unlock();
+    }
+
 private:
     QStack<int> m_stack;
     QMutex m_mutex;
@@ -140,7 +151,6 @@ public:
     }
 
     void run() {
-        qsrand(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
             qint32 type = i % NUM_TYPES;
             int newValue;
@@ -226,6 +236,58 @@ void KisLocklessStackTest::stressTestQStack()
     runStressTest(stack);
 }
 
+class KisStressClearJob : public QRunnable
+{
+public:
+    KisStressClearJob(KisLocklessStack<int> &stack, qint32 startValue)
+        : m_stack(stack), m_startValue(startValue)
+    {
+    }
+
+    void run() {
+        for(qint32 i = 0; i < NUM_CYCLES; i++) {
+            qint32 type = i % 4;
+            int newValue;
+
+            switch(type) {
+            case 0:
+            case 1:
+                newValue = m_startValue + i;
+                m_stack.push(newValue);
+                break;
+            case 2:
+                int tmp;
+                m_stack.pop(tmp);
+                break;
+            case 3:
+                m_stack.clear();
+                break;
+            }
+        }
+    }
+
+private:
+    KisLocklessStack<int> &m_stack;
+    qint32 m_startValue;
+};
+
+void KisLocklessStackTest::stressTestClear()
+{
+    KisLocklessStack<int> stack;
+    KisStressClearJob *job;
+
+    QThreadPool pool;
+    pool.setMaxThreadCount(NUM_THREADS);
+
+    for(qint32 i = 0; i < NUM_THREADS; i++) {
+        job = new KisStressClearJob(stack, 1);
+        pool.start(job);
+    }
+    pool.waitForDone();
+
+    stack.clear();
+    QVERIFY(stack.isEmpty());
+}
 
 QTEST_KDEMAIN(KisLocklessStackTest, NoGUI)
 #include "kis_lockless_stack_test.moc"

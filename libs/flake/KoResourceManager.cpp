@@ -157,6 +157,26 @@ int KoResourceManager::grabSensitivity() const
     return resource(KoCanvasResource::GrabSensitivity).toInt();
 }
 
+void KoResourceManager::setPasteOffset(qreal pasteOffset)
+{
+    setResource(KoDocumentResource::PasteOffset, QVariant(pasteOffset));
+}
+
+qreal KoResourceManager::pasteOffset() const
+{
+    return resource(KoDocumentResource::PasteOffset).toDouble();
+}
+
+void KoResourceManager::enablePasteAtCursor(bool enable)
+{
+    setResource(KoDocumentResource::PasteAtCursor, QVariant(enable));
+}
+
+bool KoResourceManager::pasteAtCursor() const
+{
+    return resource(KoDocumentResource::PasteAtCursor).toBool();
+}
+
 void KoResourceManager::setActiveBorder(const KoLineBorder &border)
 {
     QVariant v;

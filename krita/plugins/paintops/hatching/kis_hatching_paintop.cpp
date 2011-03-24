@@ -117,7 +117,7 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 
     //DECLARING EMPTY pixel-only paint device, note that it is a smart pointer
     KisFixedPaintDeviceSP maskDab = 0;
-    
+
     /*--------copypasted from SmudgeOp-------
     ---This IF-ELSE block is used to turn the mask created in the BrushTip dialogue
     into a beautiful SELECTION MASK (it's an opacity multiplier), intended to give
@@ -194,9 +194,9 @@ qreal KisHatchingPaintOp::paintAt(const KisPaintInformation& info)
 
     // The most important line, the one that paints to the screen.
     painter()->bitBltWithFixedSelection(x, y, m_hatchedDab, maskDab, sw, sh);
-    renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab,0,0, maskDab);
+    painter()->renderMirrorMask(QRect(QPoint(x,y),QSize(sw,sh)), m_hatchedDab,0,0, maskDab);
     painter()->setOpacity(origOpacity);
-    
+
     /*-----It took me very long to realize the importance of this line, this is
     the line that makes all brushes be slow, even if they're small, yay!-------*/
     return spacing(scale);

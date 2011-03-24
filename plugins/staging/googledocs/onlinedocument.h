@@ -21,6 +21,8 @@
 
 #include <kparts/plugin.h>
 
+class GoogleDocumentService;
+
 class OnlineDocument : public KParts::Plugin
 {
     Q_OBJECT
@@ -30,7 +32,10 @@ class OnlineDocument : public KParts::Plugin
 
     private slots:
         void slotOnlineDocument();
-        void receivedOnlineDocument(const QString & path);
+        void receivedOnlineDocument(QString path);
+
+private:
+    GoogleDocumentService *m_gDoc;
 };
 
 #endif

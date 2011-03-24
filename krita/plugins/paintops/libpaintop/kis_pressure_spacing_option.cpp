@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (c) 2011 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETRACKINGTOOLFACTORY_H
-#define CHANGETRACKINGTOOLFACTORY_H
+#include "kis_pressure_spacing_option.h"
 
-#include <KoToolFactoryBase.h>
+#include <klocale.h>
 
-
-class ChangeTrackingToolFactory : public KoToolFactoryBase
+KisPressureSpacingOption::KisPressureSpacingOption()
+        : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), true )
 {
-public:
-    ChangeTrackingToolFactory();
-    ~ChangeTrackingToolFactory();
+    setMinimumLabel(i18n("0%"));
+    setMaximumLabel(i18n("100%"));
+}
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
 
-    virtual bool canCreateTool(KoCanvasBase* canvas) const;
-};
+double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
+{
+    if (!isChecked()) return 1.0;
+    return computeValue(info);
+}
 
-#endif
+void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
+{
+    if(setting->hasProperty("Pressure" + m_name))
+    {
+        KisCurveOption::readOptionSetting(setting);
+    } else {
+        readNamedOptionSetting("Size", setting);
+    }
+}

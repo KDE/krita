@@ -49,7 +49,7 @@
 
 struct KisPaintOp::Private {
     Private()
-            : dab(0),currentScale(1.0),currentRotation(0), mirrorHorizontaly(false),mirrorVerticaly(false) {
+            : dab(0),currentScale(1.0),currentRotation(0) {
     }
 
     KisFixedPaintDeviceSP dab;
@@ -58,9 +58,6 @@ struct KisPaintOp::Private {
     KisPainter* painter;
     qreal currentScale;
     qreal currentRotation;
-    QPointF axisCenter;
-    bool mirrorHorizontaly;
-    bool mirrorVerticaly;
 };
 
 
@@ -104,14 +101,6 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-void KisPaintOp::setMirrorInformation(const QPointF& axisCenter, bool mirrorHorizontaly, bool mirrorVerticaly)
-{
-    d->axisCenter = axisCenter;
-    d->mirrorHorizontaly = mirrorHorizontaly;
-    d->mirrorVerticaly = mirrorVerticaly;
-}
-
-
 static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
                                const KisPaintInformation &pi1,
                                const KisVector2D &control1,
@@ -141,9 +130,9 @@ static KisDistanceInformation paintBezierCurve(KisPaintOp *paintOp,
         KisVector2D l4 = (l3 + r2) / 2;
 
         KisVector2D midMovement = (pi1.movement() + pi2.movement()) * 0.5;
-        
+
         KisPaintInformation middlePI = KisPaintInformation::mix(toQPointF(l4), 0.5, pi1, pi2, midMovement);
-        
+
         newDistance = paintBezierCurve(paintOp, pi1, l2, l3, middlePI, savedDist);
         newDistance = paintBezierCurve(paintOp, middlePI, r2, r3, pi2, newDistance);
     }
@@ -231,141 +220,3 @@ void KisPaintOp::setCurrentScale(qreal scale)
     d->currentScale = scale;
 }
 
-void KisPaintOp::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
-{
-    int x = rc.topLeft().x();
-    int y = rc.topLeft().y();
-    
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
-
-    if (d->mirrorHorizontaly && d->mirrorVerticaly){
-        dab->mirror(true, false);
-        d->painter->bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        dab->mirror(false,true);
-        d->painter->bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
-        dab->mirror(true, false);
-        d->painter->bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        
-    }else if (d->mirrorHorizontaly){
-        dab->mirror(true, false);
-        d->painter->bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-    }else if (d->mirrorVerticaly){
-        dab->mirror(false, true);
-        d->painter->bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-    }
-
-}
-
-QVector<QRect> KisPaintOp::regionsRenderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab)
-{
-    QVector<QRect> region;
-    int x = rc.topLeft().x();
-    int y = rc.topLeft().y();
-    
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
-
-    if (d->mirrorHorizontaly && d->mirrorVerticaly){
-        dab->mirror(true, false);
-        d->painter->bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-        
-        dab->mirror(false,true);
-        d->painter->bltFixed(mirrorX, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,mirrorY),rc.size()) );
-        
-        dab->mirror(true, false);
-        d->painter->bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-        
-    }else if (d->mirrorHorizontaly){
-        dab->mirror(true, false);
-        d->painter->bltFixed(mirrorX, y, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(mirrorX,y),rc.size()) );
-    }else if (d->mirrorVerticaly){
-        dab->mirror(false, true);
-        d->painter->bltFixed(x, mirrorY, dab, 0,0,rc.width(),rc.height());
-        region.append( QRect(QPoint(x,mirrorY),rc.size()) );
-    }
-    return region;
-}
-
-
-void KisPaintOp::renderMirrorMask(QRect rc, KisFixedPaintDeviceSP dab, KisFixedPaintDeviceSP mask)
-{
-    int x = rc.topLeft().x();
-    int y = rc.topLeft().y();
-    
-    int mirrorX = -((x+rc.width()) - d->axisCenter.x()) + d->axisCenter.x();
-    int mirrorY = -((y+rc.height()) - d->axisCenter.y()) + d->axisCenter.y();
-
-    if (d->mirrorHorizontaly && d->mirrorVerticaly){
-        dab->mirror(true, false);
-        mask->mirror(true, false);
-        d->painter->bltFixedWithFixedSelection(mirrorX,y, dab, mask, rc.width() ,rc.height() );
-        
-        dab->mirror(false,true);
-        mask->mirror(false, true);
-        d->painter->bltFixedWithFixedSelection(mirrorX,mirrorY, dab, mask, rc.width() ,rc.height() );
-        
-        dab->mirror(true, false);
-        mask->mirror(true, false);
-        d->painter->bltFixedWithFixedSelection(x,mirrorY, dab, mask, rc.width() ,rc.height() );
-        
-    }else if (d->mirrorHorizontaly){
-        dab->mirror(true, false);
-        mask->mirror(true, false);
-        d->painter->bltFixedWithFixedSelection(mirrorX,y, dab, mask, rc.width() ,rc.height() );
-        
-    }else if (d->mirrorVerticaly){
-        dab->mirror(false, true);
-        mask->mirror(false, true);
-        d->painter->bltFixedWithFixedSelection(x,mirrorY, dab, mask, rc.width() ,rc.height() );
-    }
-
-}
-
-
-void KisPaintOp::renderMirrorMask(QRect rc, KisPaintDeviceSP dab){
-    if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(d->painter->device()->colorSpace());
-        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
-        mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
-        
-        dab->readBytes(mirrorDab->data(),rc);
-        
-        renderMirrorMask( QRect(rc.topLeft(),dabRc.size()), mirrorDab);
-    }
-}
-
-void KisPaintOp::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, KisFixedPaintDeviceSP mask){
-    if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(d->painter->device()->colorSpace());
-        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
-        mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
-        dab->readBytes(mirrorDab->data(),rc);
-        renderMirrorMask(rc, mirrorDab, mask);
-    }
-}
-
-void KisPaintOp::renderMirrorMask(QRect rc, KisPaintDeviceSP dab, int sx, int sy, KisFixedPaintDeviceSP mask)
-{
-    if (d->mirrorHorizontaly || d->mirrorVerticaly){
-        KisFixedPaintDeviceSP mirrorDab = new KisFixedPaintDevice(d->painter->device()->colorSpace());
-        QRect dabRc( QPoint(0,0), QSize(rc.width(),rc.height()) );
-        mirrorDab->setRect(dabRc);
-        mirrorDab->initialize();
-        dab->readBytes(mirrorDab->data(),QRect(QPoint(sx,sy),rc.size()));
-        renderMirrorMask(rc, mirrorDab, mask);
-    }
-}
-
-
-
-QPointF KisPaintOp::axisCenter() const
-{
-    return d->axisCenter;
-}

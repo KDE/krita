@@ -170,7 +170,7 @@ void KisCustomBrushWidget::createBrush()
 
     if (m_brush){
         // don't delete shared pointer, please
-        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(  m_brush.data(), false );
+        bool removedCorrectly = KisBrushServer::instance()->brushServer()->removeResourceFromServer(  m_brush.data() );
         if (!removedCorrectly){
             kWarning() << "Brush was not removed correctly for the resource server";
         }

@@ -25,6 +25,7 @@
 #include "rotation_icons.h"
 
 #include <math.h>
+#include <limits>
 
 #include <QPainter>
 #include <QPen>
@@ -917,6 +918,113 @@ void KisToolTransform::keyReleaseEvent(QKeyEvent *event)
     KisTool::keyReleaseEvent(event);
 }
 
+/* A sort of gradient descent method is used to find the correct scale
+   factors when scaling up/down the image from one of its corners,
+   when there is a perspective projection.
+   gradientDescent_f(scaleX, scaleY) is the function we want to make equal to zero.
+ */
+double KisToolTransform::gradientDescent_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY) {
+    v1 = QVector3D(v1.x() * scaleX, v1.y() * scaleY, v1.z());
+    v1 = shear(v1.x(), v1.y(), v1.z());
+    v1 = rotZ(v1.x(), v1.y(), v1.z());
+    v1 = rotY(v1.x(), v1.y(), v1.z());
+    v1 = rotX(v1.x(), v1.y(), v1.z());
+    if (v1.z() > m_cameraPos.z()) {
+        return std::numeric_limits<double>::max();
+    }
+    v1 = QVector3D(perspective(v1.x(), v1.y(), v1.z()));
+
+    v2 = QVector3D(v2.x() * scaleX, v2.y() * scaleY, v2.z());
+    v2 = shear(v2.x(), v2.y(), v2.z());
+    v2 = rotZ(v2.x(), v2.y(), v2.z());
+    v2 = rotY(v2.x(), v2.y(), v2.z());
+    v2 = rotX(v2.x(), v2.y(), v2.z());
+    if (v2.z() > m_cameraPos.z()) {
+        return std::numeric_limits<double>::max();
+    }
+    v2 = QVector3D(perspective(v2.x(), v2.y(), v2.z()));
+
+    QVector3D v(v2 - v1 - desired);
+
+    return v.lengthSquared();
+}
+
+/* Approximation of the 1st partial derivative of f at point (scaleX, scaleY) */
+double KisToolTransform::gradientDescent_partialDeriv1_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon) {
+    return (gradientDescent_f(v1,v2,desired,scaleX+epsilon,scaleY) - gradientDescent_f(v1,v2,desired,scaleX-epsilon,scaleY)) / (2 * epsilon);
+}
+
+/* Approximation of the 2nd partial derivative of f at point (scaleX, scaleY) */
+double KisToolTransform::gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon) {
+    return (gradientDescent_f(v1,v2,desired,scaleX,scaleY+epsilon) - gradientDescent_f(v1,v2,desired,scaleX,scaleY-epsilon)) / (2 * epsilon);
+}
+
+/* The gradient descent
+   When scaling up/down from the top right corner :
+   v1 is the vector from center to top right corner
+   v2 is the vector from center to bottom left corner
+   Let T(v) be the vector obtained after transforming v1 (scale, shear, rotations, perspective)
+   We Want T(v2)-T(v1) to match the vector "desired"
+   x0 and y0 are the first scale factos to be tested
+   epsilon is the precision we want to obtain normsquared(T(v2)-T(v1)-desired) <= epsilon
+   gradStep, nbIt1, nbIt2 are technical parameters to adjust the algorithm
+   epsilon_deriv is the precision for the approximation of the derivative of gradientDescent_f
+   x_min, y_min are the obtained scale factors
+   1 is returned if correct scale factors have been found, or else 0 (in that case x_min, y_min are unchanged
+*/
+int KisToolTransform::gradientDescent(QVector3D v1, QVector3D v2, QVector3D desired, double x0, double y0, double epsilon, double gradStep, int nbIt1, int nbIt2, double epsilon_deriv, double *x_min, double *y_min) {
+   double val = gradientDescent_f(v1, v2, desired, x0, y0);
+   double derivX, derivY;
+   double x1, y1; 
+   int exit;
+   double step;
+   for (int i = 0; i < nbIt1 && val > epsilon; ++i) {
+      step = gradStep;
+      derivX = gradientDescent_partialDeriv1_f(v1, v2, desired, x0, y0, epsilon_deriv);
+      derivY = gradientDescent_partialDeriv2_f(v1, v2, desired, x0, y0, epsilon_deriv);
+      if (derivX == 0 && derivY == 0) {
+          // might happen if f is not computable around x0, y0
+          x0 /= 2;
+          y0 /= 2;
+          continue;
+      }
+
+      int j = 0;
+      exit = 0;
+      do {
+         if (j > nbIt2) {
+            exit = 1;
+            break;
+         }   
+         x1 = x0 - step * derivX;
+         y1 = y0 - step * derivY;
+
+         if(gradientDescent_f(v1, v2, desired, x1, y1) >= val) {
+            step /= 2;
+         } else {
+            break;
+         }   
+         ++j;
+      } while(1);
+      if (exit) {
+         break;
+      } else {
+         x0 = x1; 
+         y0 = y1; 
+         val = gradientDescent_f(v1, v2, desired, x0, y0);
+      }   
+   }   
+
+   if (val <= epsilon) {
+      *x_min = x0;
+      *y_min = y0;
+
+      return 1;
+   } else {
+      return 0;
+   }
+}
+
 // the interval for the dichotomy is [0, b]
 // b can be positive or negative (depending on whether the scale factor
 // we want to approach is supposed to be positive or negative)
@@ -1445,7 +1553,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
                 t = QVector3D(perspective(t.x(), t.y(), t.z()));
 
                 double desiredLength = t.length();
-                m_scaleY_wOutModifier = dichotomyScaleY(v1, v2, NONE, desiredLength, b, 0.00001, 64, 10);
+                m_scaleY_wOutModifier = dichotomyScaleY(v1, v2, NONE, desiredLength, b, 0.05, 64, 10);
             } else {
                 // we invert the movement vector from the position of the decoration at click
                 t = QVector3D(mousePos) - v1Proj;
@@ -1520,7 +1628,7 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
                 t = QVector3D(perspective(t.x(), t.y(), t.z()));
 
                 double desiredLength = t.length();
-                m_scaleX_wOutModifier = dichotomyScaleX(v1, v2, NONE, desiredLength, b, 0.00001, 64, 10);
+                m_scaleX_wOutModifier = dichotomyScaleX(v1, v2, NONE, desiredLength, b, 0.05, 64, 10);
             } else {
                 // we invert the movement vector from the position of the decoration at click
                 t = QVector3D(mousePos) - v1Proj;
@@ -1588,15 +1696,35 @@ void KisToolTransform::mouseMoveEvent(KoPointerEvent *event)
             }
 
             // we invert the movement vector from the position of the decoration at click
-            t = QVector3D(mousePos) - v1Proj;
-            t = invperspective(t.x(), t.y(), m_clickPlane);
-            t = invrotX(t.x(), t.y(), t.z());
-            t = invrotY(t.x(), t.y(), t.z());
-            t = invrotZ(t.x(), t.y(), t.z());
-            t = invshear(t.x(), t.y(), t.z());
+            if (m_clickArgs.aX() || m_clickArgs.aY()) {
+                t = QVector3D(mousePos) - v1Proj;
 
-            m_scaleX_wOutModifier = signX * t.x() / m_originalWidth2 / 2.;
-            m_scaleY_wOutModifier = signY * t.y() / m_originalHeight2 / 2.;
+                QVector3D desired(t);
+
+                t = invperspective(t.x(), t.y(), m_clickPlane);
+                t = invrotX(t.x(), t.y(), t.z());
+                t = invrotY(t.x(), t.y(), t.z());
+                t = invrotZ(t.x(), t.y(), t.z());
+                t = invshear(t.x(), t.y(), t.z());
+
+                double initScaleX = signX * t.x() / m_originalWidth2 / 2.;
+                double initScaleY = signY * t.y() / m_originalHeight2 / 2.;
+
+                if (!gradientDescent(v1, v2, desired, initScaleX, initScaleY, 0.05, 1, 1000, 100, 0.001, &m_scaleX_wOutModifier, &m_scaleY_wOutModifier)) {
+                    m_scaleX_wOutModifier = initScaleX;
+                    m_scaleY_wOutModifier = initScaleY;
+                }
+            } else {
+                t = QVector3D(mousePos) - v1Proj;
+                t = invperspective(t.x(), t.y(), m_clickPlane);
+                t = invrotX(t.x(), t.y(), t.z());
+                t = invrotY(t.x(), t.y(), t.z());
+                t = invrotZ(t.x(), t.y(), t.z());
+                t = invshear(t.x(), t.y(), t.z());
+
+                m_scaleX_wOutModifier = signX * t.x() / m_originalWidth2 / 2.;
+                m_scaleY_wOutModifier = signY * t.y() / m_originalHeight2 / 2.;
+            }
 
             // applies the shift modifier
             if (event->modifiers() & Qt::ShiftModifier) {

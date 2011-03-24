@@ -23,11 +23,10 @@
 #ifndef KOTEXTSHAPE_H
 #define KOTEXTSHAPE_H
 
-#include "Layout.h"
-
 #include <KoShapeContainer.h>
 #include <KoFrameShape.h>
 #include <KoTextShapeData.h>
+#include <KoTextDocument.h>
 
 #include <QTextDocument>
 #include <QPainter>
@@ -35,6 +34,7 @@
 #include <QWaitCondition>
 
 #define TextShape_SHAPEID "TextShapeID"
+
 
 class KoInlineTextObjectManager;
 class KoPageProvider;

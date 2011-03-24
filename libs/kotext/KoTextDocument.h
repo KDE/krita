@@ -23,6 +23,7 @@
 #define KOTEXTDOCUMENT_H
 
 #include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 #include <QUrl>
 
 #include "KoList.h"
@@ -35,7 +36,6 @@ class KUndoStack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
-
 
 /**
  * KoTextDocument provides an easy mechanism to set and access the
@@ -121,6 +121,19 @@ public:
     /// Return the KoList that holds \a listId
     KoList *list(KoListStyle::ListIdType listId) const;
 
+    /// Return the selections used during painting.
+    QVector<QAbstractTextDocumentLayout::Selection> selections() const;
+
+    /**
+     * Set the selections to use for painting.
+     *
+     * The selections are used to apply temporary styling to
+     * parts of a document.
+     *
+     * \param selections The new selections to use.
+     */
+    void setSelections(const QVector<QAbstractTextDocumentLayout::Selection> &selections);
+
     /// Returns the KoInlineTextObjectManager
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 
@@ -204,6 +217,7 @@ public:
         LineNumberingConfiguration,
         RelativeTabs,
         HeadingList
+        Selections
     };
 
     static const QUrl StyleManagerURL;
@@ -217,6 +231,7 @@ public:
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
+    static const QUrl SelectionsURL;
 
 private:
     QTextDocument *m_document;

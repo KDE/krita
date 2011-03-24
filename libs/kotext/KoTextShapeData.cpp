@@ -144,18 +144,6 @@ void KoTextShapeData::setDocumentOffset(qreal offset)
     d->offset = offset;
 }
 
-QVector< QAbstractTextDocumentLayout::Selection > KoTextShapeData::selections() const
-{
-    Q_D(const KoTextShapeData);
-    return d->selections;
-}
-
-void KoTextShapeData::setSelections(const QVector< QAbstractTextDocumentLayout::Selection >& newSelections)
-{
-    Q_D(KoTextShapeData);
-    d->selections = newSelections;
-}
-
 int KoTextShapeData::position() const
 {
     Q_D(const KoTextShapeData);

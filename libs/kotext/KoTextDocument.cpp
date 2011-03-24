@@ -23,6 +23,7 @@
 #include <QTextCursor>
 #include <QUrl>
 #include <QVariant>
+#include <QVariantList>
 
 #include <kdebug.h>
 #include <KUndoStack>
@@ -38,6 +39,8 @@
 #include "KoOdfNotesConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
 
+Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection);
+
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
@@ -49,6 +52,7 @@ const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesc
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
 const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
+const QUrl KoTextDocument::SelectionsURL = QUrl("kotext://selections");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -253,6 +257,29 @@ void KoTextDocument::clearText()
     QTextCursor cursor(m_document);
     cursor.select(QTextCursor::Document);
     cursor.removeSelectedText();
+}
+
+QVector< QAbstractTextDocumentLayout::Selection > KoTextDocument::selections() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::Selections, SelectionsURL);
+    QVariantList variants = resource.toList();
+
+    QVector<QAbstractTextDocumentLayout::Selection> selections(variants.size());
+    foreach(const QVariant &variant, variants) {
+        selections.append(variant.value<QAbstractTextDocumentLayout::Selection>());
+    }
+
+    return selections;
+}
+
+void KoTextDocument::setSelections(const QVector< QAbstractTextDocumentLayout::Selection >& selections)
+{
+    QVariantList variants;
+    foreach(const QAbstractTextDocumentLayout::Selection &selection, selections) {
+        variants.append(QVariant::fromValue<QAbstractTextDocumentLayout::Selection>(selection));
+    }
+
+    m_document->addResource(KoTextDocument::Selections, SelectionsURL, variants);
 }
 
 KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const

@@ -88,11 +88,12 @@ void KoFindBase::find(const QString& pattern)
 
     emit hasMatchesChanged(d->matches.count() > 0);
     if(d->matches.count() > 0) {
-        emit highlight();
         emit matchFound(d->matches.at(0));
     } else {
         emit noMatchFound();
     }
+
+    emit updateCanvas();
 }
 
 void KoFindBase::findNext()
@@ -111,8 +112,10 @@ void KoFindBase::findNext()
     emit matchFound(d->matches.at(d->currentMatch));
 
     if(wrap) {
-        emit wrapAround();
+        emit wrapAround(true);
     }
+
+    emit updateCanvas();
 }
 
 void KoFindBase::findPrevious()
@@ -130,14 +133,17 @@ void KoFindBase::findPrevious()
     emit matchFound(d->matches.at(d->currentMatch));
 
     if(wrap) {
-        emit wrapAround();
+        emit wrapAround(false);
     }
+
+    emit updateCanvas();
 }
 
 void KoFindBase::finished()
 {
     clearMatches();
     d->matches.clear();
+    emit updateCanvas();
 }
 
 void KoFindBase::clearMatches()

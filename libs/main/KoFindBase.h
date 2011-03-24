@@ -42,11 +42,12 @@ public:
 
     enum KoFindOption
     {
-        FindCaseSensitive, ///< Match only if cases are equal.
-        FindWholeWords, ///< Match only whole words.
-        FindRegularExpression, ///< Match using a regular expression instead of simple substring matching.
-        FindWithinSelection, ///< Search only within the current selection.
-        FindFromCursor, ///< Start searching from the current cursor position.
+        FindOptionUnknown = 0x0, ///< Unknown option.
+        FindCaseSensitive = 0x1, ///< Match only if cases are equal.
+        FindWholeWords = 0x2, ///< Match only whole words.
+        FindRegularExpression = 0x4, ///< Match using a regular expression instead of simple substring matching.
+        FindWithinSelection = 0x8, ///< Search only within the current selection.
+        FindFromCursor = 0x10, ///< Start searching from the current cursor position.
     };
     Q_DECLARE_FLAGS(KoFindOptions, KoFindOption);
     
@@ -120,23 +121,26 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     /**
-     * Emitted when searching has finished and the matches should be
-     * highlighted. Use matches() to retrieve the list of matches.
-     */
-    void highlight();
-    /**
      * Emitted whenever a match is found. The argument is the first
      * match if there are more then one.
      */
     void matchFound(KoFindMatch match);
+    /**
+     * Emitted when the canvas should be redrawn due to a change in
+     * the underlying list of matches.
+     */
+    void updateCanvas();
     /**
      * Emitted when there is no match found for the current pattern.
      */
     void noMatchFound();
     /**
      * Emitted whenever a call to findNext/findPrevious wraps around.
+     *
+     * \param direction True if searched wrapped while searching forward,
+     * false if searching backward.
      */
-    void wrapAround();
+    void wrapAround(bool direction);
     /**
      * Emitted after find() was called and matches were found.
      */

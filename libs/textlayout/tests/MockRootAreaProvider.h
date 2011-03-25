@@ -22,8 +22,6 @@
 
 #include "KoTextLayoutRootAreaProvider.h"
 
-class MockRootArea;
-
 class MockRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
@@ -32,7 +30,7 @@ public:
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old);
 
-    MockRootArea *m_area;
+    KoTextLayoutRootArea *m_area;
 };
 
 #endif

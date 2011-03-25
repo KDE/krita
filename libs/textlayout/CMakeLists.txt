@@ -5,6 +5,7 @@ add_subdirectory( tests )
 ########### next target ###############
 set(textlayout_LIB_SRCS
     KoTextLayoutArea.cpp
+    KoTextLayoutTableArea.cpp
     KoTextLayoutRootArea.cpp
     KoTextLayoutRootAreaProvider.cpp
     KoTextDocumentLayout.cpp
@@ -13,7 +14,8 @@ set(textlayout_LIB_SRCS
     KoTextShapeContainerModel.cpp
     RunAroundHelper.cpp
     Outline.cpp
-    HierarchicalCursor.cpp
+    FrameIterator.cpp
+    TableIterator.cpp
     KoTextShapeData.cpp
 )
 

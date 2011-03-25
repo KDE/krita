@@ -44,11 +44,11 @@ KoTextLayoutRootArea::~KoTextLayoutRootArea()
 {
 }
 
-void KoTextLayoutRootArea::layout(HierarchicalCursor *cursor)
+bool KoTextLayoutRootArea::layout(FrameIterator *cursor)
 {
-    Q_UNUSED(cursor);
-    KoTextLayoutArea::layout(cursor);
     d->dirty = false;
+
+    return KoTextLayoutArea::layout(cursor);
 }
 
 void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
@@ -71,22 +71,7 @@ bool KoTextLayoutRootArea::isDirty()
     return d->dirty;
 }
 
-qreal KoTextLayoutRootArea::maximalAllowedY() const
-{
-    return 500;
-}
-
 KoText::Direction KoTextLayoutRootArea::parentTextDirection() const
 {
     return KoText::LeftRightTopBottom;
-}
-
-qreal KoTextLayoutRootArea::left() const
-{
-    return 0.0;
-}
-
-qreal KoTextLayoutRootArea::right() const
-{
-    return d->shape->size().width();
 }

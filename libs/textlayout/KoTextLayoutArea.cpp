@@ -78,8 +78,9 @@ void KoTextLayoutArea::setDocumentLayout(KoTextDocumentLayout *documentLayout)
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval(-5E6,0,105E6,1);
-    QRectF in;
-qDebug() << in << retval << (in|retval);
+    QRectF r1(-5E6,0,105E6,0);
+    QRectF r2(-5E6,10,105E6,1);
+qDebug() << r1 << r2 << (r1|r2) << r1.isValid();
     if (m_startOfArea == 0) // We have not been layouted yet
         return QRectF();
 
@@ -99,17 +100,14 @@ qDebug() << in << retval << (in|retval);
                 continue;
         }
 
-        QTextLayout *layout = block.layout();
         if(cursor.selectionStart() >= block.position()
             && cursor.selectionStart() < block.position() + block.length()) {
-                // TODO set top of rect
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());
             if (line.isValid())
                 retval.setTop(line.y());
         }
         if(cursor.selectionEnd() >= block.position()
             && cursor.selectionEnd() < block.position() + block.length()) {
-                // TODO set bottom of rect
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
             if (line.isValid())
                 retval.setBottom
@@ -119,31 +117,43 @@ qDebug() << in << retval << (in|retval);
     return retval;
 }
 
-void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
+bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
-    m_startOfArea = new HierarchicalCursor(cursor);
-    m_y = 0; //TODO should be y of area
+    m_startOfArea = new FrameIterator(cursor);
+    m_y = top();
+
     while(!(cursor->it.atEnd())) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
 
         if (table) {
-            // We are currently dealing with a table
             // Let's create KoTextLayoutTableArea and let that handle the table
-            // tableArea = ...;
-            if (false /*tableArea->layout(cursor->subCursor())*/) {
-                return;
+            KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table);
+            if (tableArea->layout(cursor->tableIterator(table)) == false) {
+                m_endOfArea = new FrameIterator(cursor);
+                m_y = tableArea->bottom();
+                setBottom(m_y);
+                return false;
             }
+            m_y = tableArea->bottom();
+            delete cursor->currentTableIterator;
+            cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            // We are currently dealing with a frame of some sorts besides table
-            // Right now we'll just skip it as we know of no such subframes
+            // Right now we'll just skip it, as we know of no subframes
         } else if (block.isValid()) {
-            layoutBlock(cursor);
+            if (layoutBlock(cursor) == false) {
+                m_endOfArea = new FrameIterator(cursor);
+                setBottom(m_y);
+                return false;
+            }
         }
         ++(cursor->it);
     }
-    m_endOfArea = new HierarchicalCursor(cursor);
+
+    m_endOfArea = new FrameIterator(cursor);
+    setBottom(m_y);
+    return true; // we have layouted till the end of the frame
 }
 
 // layoutBlock() method is structured like this:
@@ -154,10 +164,10 @@ void KoTextLayoutArea::layout(HierarchicalCursor *cursor)
 //   c) related to or influenced by dropcaps
 // 2)layout each line (possibly restarting where we stopped earlier)
 //   a) fit line into sub lines with as needed for text runaround
-//   b) make sure we keep above maximalAllowedY
+//   b) make sure we keep above maximumAllowedBottom
 //   c) calls addLine()
 //   d) update dropcaps related variables
-void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
+bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 {
     QTextBlock block = cursor->it.currentBlock();
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
@@ -436,18 +446,18 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
 
     while (cursor->line.isValid()) {
         //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x, m_y));
-        //FIXME While above is commented out we should set width
+        //FIXME When above runaround is no longer commented out we should not set width and pos
         cursor->line.setLineWidth(width());
         cursor->line.setPosition(QPointF(x(), m_y));
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
-        if (bottomOfText > maximalAllowedY()) {
+        if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
             if (format.nonBreakableLines()) {
                 //set an invalid line so we start this block from beginning next time
                 cursor->line = QTextLine();
             }
-            return /*FIXME false*/; //to indicate block was not done!
+            return false; //to indicate block was not done!
         }
 
         maxLineHeight = qMax(maxLineHeight, addLine(cursor, blockData));
@@ -482,6 +492,7 @@ void KoTextLayoutArea::layoutBlock(HierarchicalCursor *cursor)
         //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
     }
     cursor->line = QTextLine(); //set an invalid line to indicate we are done with block
+    return true;
 }
 
 qreal KoTextLayoutArea::listIndent() const
@@ -511,7 +522,7 @@ qreal KoTextLayoutArea::width() const
     return m_width;
 }
 
-qreal KoTextLayoutArea::addLine(HierarchicalCursor *cursor, KoTextBlockData *blockData)
+qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockData)
 {
     QTextBlock block = cursor->it.currentBlock();
     QTextLine line =  cursor->line;
@@ -685,10 +696,9 @@ void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData)
     m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 }
 */
-qreal KoTextLayoutArea::maximalAllowedY() const
+qreal KoTextLayoutArea::maximumAllowedBottom() const
 {
-    Q_ASSERT(parent); //Root areas (only to have parent==0) should overload this method
-    return parent->maximalAllowedY();
+    return m_maximalAllowedBottom;
 }
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const
@@ -697,16 +707,37 @@ KoText::Direction KoTextLayoutArea::parentTextDirection() const
     return parent->parentTextDirection();
 }
 
+void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom)
+{
+    m_left = left;
+    m_right = right;
+    m_top = top;
+    m_maximalAllowedBottom = maximumAllowedBottom;
+}
+
 qreal KoTextLayoutArea::left() const
 {
-    Q_ASSERT(parent); //Root areas should overload this method
-    return parent->left();
+    return m_left;
 }
 
 qreal KoTextLayoutArea::right() const
 {
-    Q_ASSERT(parent); //Root areas should overload this method
-    return parent->right();
+    return m_right;
+}
+
+qreal KoTextLayoutArea::top() const
+{
+    return m_top;
+}
+
+qreal KoTextLayoutArea::bottom() const
+{
+    return m_bottom;
+}
+
+void KoTextLayoutArea::setBottom(qreal bottom)
+{
+    m_bottom = bottom;
 }
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)

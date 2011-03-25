@@ -39,7 +39,8 @@ public:
     virtual ~KoTextLayoutRootArea();
 
     /// Layouts as much as it can
-    virtual void layout(HierarchicalCursor *cursor);
+    /// Returns true if it has reached the end of the frame
+    bool layout(FrameIterator *cursor);
 
     /// Sets an associated shape which can be retrieved with associatedShape()
     /// KoTextLayoutRootArea doesn't use it for anything.
@@ -52,13 +53,7 @@ public:
 
     bool isDirty();
 
-    virtual qreal maximalAllowedY() const;
-
     virtual KoText::Direction parentTextDirection() const;
-
-    virtual qreal left() const;
-
-    virtual qreal right() const;
 
 private:
     class Private;

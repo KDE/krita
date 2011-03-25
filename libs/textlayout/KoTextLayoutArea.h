@@ -22,7 +22,7 @@
 
 #include "kotext_export.h"
 
-#include "HierarchicalCursor.h"
+#include "FrameIterator.h"
 
 #include <KoText.h>
 
@@ -55,18 +55,38 @@ public:
     virtual ~KoTextLayoutArea();
 
     /// Layouts as much as we can
-    virtual void layout(HierarchicalCursor *cursor);
+    bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
 //    virtual QRectF boundingRect() const = 0;
 
-    virtual qreal maximalAllowedY() const;
 
     virtual KoText::Direction parentTextDirection() const;
 
-    virtual qreal left() const;
+    /// Sets the left,right and top coordinate of the reference rect we place ourselves within
+    /// The content may be smaller or bigger than that depending on our margins
+    void setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom);
 
-    virtual qreal right() const;
+    /// The left coordinate of the reference rect we place ourselves within
+    /// The content may be smaller or bigger than that depending on our margins
+    qreal left() const;
+
+    /// The right coordinate of the reference rect we place ourselves within
+    /// The content may be smaller or bigger than that depending on our margins
+    qreal right() const;
+
+    /// The top coordinate of the reference rect we place ourselves within
+    /// The content may be smaller or bigger than that depending on our margins
+    qreal top() const;
+
+    /// The bottom coordinate of the reference rect we place ourselves within
+    /// The content may be smaller or bigger than that depending on our margins
+    /// bottom() can be used to place contents following this area
+    qreal bottom() const;
+
+    /// The maximum allowed bottom coordinate of the reference rect we place ourselves within
+    /// The real bottom will be determined during layout
+    qreal maximumAllowedBottom() const;
 
     /// A pointer to the parent
     KoTextLayoutArea *parent; // you should treat it as read only
@@ -83,11 +103,14 @@ public:
     /// Calc a bounding box rect of the selection
     virtual QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
+protected:
+    void setBottom(qreal bottom);
+
 private:
-    void layoutBlock(HierarchicalCursor *cursor);
+    bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line
-    qreal addLine(HierarchicalCursor *cursor, KoTextBlockData *blockData);
+    qreal addLine(FrameIterator *cursor, KoTextBlockData *blockData);
 
     void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
 
@@ -101,14 +124,20 @@ private:
 
     KoTextDocumentLayout *m_documentLayout;
 
-    qreal m_x;
+    qreal m_left; // reference area left
+    qreal m_right; // reference area right
+    qreal m_top; // reference area top
+    qreal m_bottom; // reference area top
+    qreal m_maximalAllowedBottom;
+
+    qreal m_x; // text area starts here as defined by margins etc (so not == m_left)
     qreal m_y;
-    qreal m_width;
+    qreal m_width; // of text area as defined by margins etc (so not == m_right - m_left)
     qreal m_listIndent;
     qreal m_defaultTabSizing;
     bool m_isRtl;
-    HierarchicalCursor *m_startOfArea;
-    HierarchicalCursor *m_endOfArea;
+    FrameIterator *m_startOfArea;
+    FrameIterator *m_endOfArea;
 };
 
 #endif

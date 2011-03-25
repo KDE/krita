@@ -31,7 +31,7 @@
 #include "KoTextLayoutRootAreaProvider.h"
 #include "InlineObjectExtend.h"
 #include "Outline.h"
-#include "HierarchicalCursor.h"
+#include "FrameIterator.h"
 
 #include <KoTextAnchor.h>
 #include <KoInsets.h>
@@ -63,6 +63,7 @@ struct KoTextDocumentLayout::Private
        , rootArea(0)
        , textAnchorIndex(0)
        , defaultTabSizing(0)
+       , y(0)
     {
     }
     KoStyleManager *styleManager;
@@ -74,7 +75,7 @@ struct KoTextDocumentLayout::Private
     KoPostscriptPaintDevice *paintDevice;
     QList<KoTextLayoutRootArea *> rootAreaList;
     KoTextLayoutRootArea *rootArea;
-    HierarchicalCursor *layoutPosition;
+    FrameIterator *layoutPosition;
 
     QHash<int, InlineObjectExtend> inlineObjectExtends; // maps text-position to whole-line-height of an inline object
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
@@ -83,8 +84,8 @@ struct KoTextDocumentLayout::Private
     QHash<KoShape*,Outline*> outlines; // all outlines created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<Outline*> currentLineOutlines; // outlines for current page
 
-    bool m_relativeTabs;
     qreal defaultTabSizing;
+    qreal y;
 
     KoTextDocumentLayout::ResizeMethod resizeMethod;
 };
@@ -104,7 +105,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 
-    d->layoutPosition = new HierarchicalCursor(doc->rootFrame());
+    d->layoutPosition = new FrameIterator(doc->rootFrame());
 }
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
@@ -290,6 +291,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
 //TODO place m_currentLayoutIterator at position
 //and m_rootArea at corresponding root area and then do layout
+qDebug() << "FIXME MISSING Document changed and we should request to be layouted";
 }
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
@@ -336,10 +338,15 @@ void KoTextDocumentLayout::layout()
         if (d->rootArea) {
             d->rootAreaList.append(d->rootArea);
             d->rootArea->setDocumentLayout(this);
+            d->rootArea->setReferenceRect(d->rootArea->left(), d->rootArea->right(),
+                                          d->y, d->y + d->rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
             d->rootArea->layout(d->layoutPosition);
-        } else
+            d->y = d->rootArea->bottom(); // layout method just set this
+        } else {
+            d->y = 0;
             break;
+        }
     } while (continueLayout());
 
     if (d->layoutPosition->atEnd()) {
@@ -349,7 +356,7 @@ void KoTextDocumentLayout::layout()
 
 void KoTextDocumentLayout::interruptLayout()
 {
-    //TODO make sure the currentLayout process is stopped and that we start over the next time
+    //TODO make sure the currentLayout process is stopped
 }
 
 

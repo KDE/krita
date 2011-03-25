@@ -21,29 +21,15 @@
 
 #include "KoTextLayoutRootArea.h"
 
-class MockRootArea : public KoTextLayoutRootArea
-{
-public:
-    MockRootArea() : KoTextLayoutRootArea() {}
- 
-    virtual qreal maximalAllowedY() const
-    {
-        return 1000;
-    }
-
-    virtual qreal right() const
-    {
-        return 200;
-    }
-};
-
 MockRootAreaProvider::MockRootAreaProvider()
-    : m_area(new MockRootArea())
+    : m_area(new KoTextLayoutRootArea())
 {
 }
 
 KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextLayoutRootArea *previous)
 {
+    m_area->setReferenceRect(0, 200, 0, 1000);
+
     if (previous) {
         return 0;;
     }

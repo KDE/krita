@@ -16,25 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "HierarchicalCursor.h"
+#ifndef FRAMEITERATOR_H
+#define FRAMEITERATOR_H
+
 
 #include <QTextFrame>
 #include <QTextLine>
+#include <QTextTableCell>
 
-HierarchicalCursor::HierarchicalCursor(QTextFrame *frame)
+class TableIterator;
+
+class FrameIterator
 {
-    it = frame->begin();
-}
+public:
+    FrameIterator(QTextFrame *frame);
+    FrameIterator(QTextTableCell frame);
+    FrameIterator(FrameIterator *other);
+    TableIterator *tableIterator(bool create);
+    QTextFrame::iterator it;
+    // the following can be seen as the "sub cursor" of text blocks
+    QTextLine line;
+    QTextBlock::Iterator fragmentIterator;
+    TableIterator *currentTableIterator;
+    bool atEnd() {return it.atEnd();}
+};
 
-HierarchicalCursor::HierarchicalCursor(HierarchicalCursor *other)
-{
-    it = other->it;
-    line = other->line;
-    fragmentIterator = other->fragmentIterator;
-}
-
-
-HierarchicalCursor *subCursor()
-{
-    return 0;
-}
+#endif

@@ -16,24 +16,32 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef HIERARICHALCURSOR_H
-#define HIERARICHALCURSOR_H
+#ifndef TABLEITERATOR_H
+#define TABLEITERATOR_H
 
 
-#include <QTextFrame>
-#include <QTextLine>
+#include <QTextTable>
+#include <QVector>
 
-class HierarchicalCursor
+class FrameIterator;
+class KoTextLayoutArea;
+
+class TableIterator
 {
 public:
-    HierarchicalCursor(QTextFrame *frame);
-    HierarchicalCursor(HierarchicalCursor *other);
-    HierarchicalCursor *subCursor();
-    QTextFrame::iterator it;
-    // the following can be seen as the "sub cursor" of text blocks
-    QTextLine line;
-    QTextBlock::Iterator fragmentIterator;
-    bool atEnd() {return it.atEnd();}
+    TableIterator(QTextTable *table);
+    TableIterator(TableIterator *other);
+    ~TableIterator();
+
+    FrameIterator *frameIterator(int column);
+
+    QTextTable *table;
+    int row;
+    int headerRows;
+    qreal headerPositionX;
+    QVector<FrameIterator *> frameIterators;
+    QVector<qreal> headerRowPositions; // we will only fill those of header rows
+    QVector<QVector<KoTextLayoutArea *> > headerCellAreas;
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (C) 2011 Casper Boemann <cbo@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,25 +17,35 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SimpleRootAreaProvider.h"
+#ifndef KOTEXTLAYOUTTABLEAREA_H
+#define KOTEXTLAYOUTTABLEAREA_H
 
-#include "KoTextLayoutRootArea.h"
-#include "TextShape.h"
+#include "kotext_export.h"
 
-SimpleRootAreaProvider::SimpleRootAreaProvider(TextShape *textshape)
-    : m_textShape(textshape)
-    , m_area(new KoTextLayoutRootArea())
+#include "KoTextLayoutArea.h"
+
+class TableIterator;
+
+/**
+ * This class represent a (full width) piece of a table
+ */
+class KOTEXT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 {
-    m_area->setAssociatedShape(textshape);
-}
+public:
+    /// constructor
+    explicit KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea *parent);
+    virtual ~KoTextLayoutTableArea();
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous)
-{
-    m_area->setReferenceRect(0, m_textShape->size().width(), 0, m_textShape->size().height());
+    /// Layouts as much as it can
+    /// Returns true if it has reached the end of the table
+    bool layout(TableIterator *cursor);
 
-    if (previous) {
-        return 0;
-    }
-    else
-        return m_area;
-}
+private:
+    void layoutColumns();
+    bool layoutRow(TableIterator *cursor);
+
+    class Private;
+    Private * const d;
+};
+
+#endif

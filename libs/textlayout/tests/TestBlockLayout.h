@@ -43,13 +43,13 @@ private slots:
     void initTestCase();
 
     /// make sure empty paragraphs are initialized properly
-//    void testEmptyParag();
+    void testEmptyParag();
 
     /// Test breaking lines based on the width of the shape.
     void testLineBreaking();
-#if 0
-    /// Test breaking lines for frames with different widths.
-    void testMultiFrameLineBreaking();
+
+//    /// Test breaking lines for frames with different widths.
+//    void testMultiFrameLineBreaking();
     /// Tests incrementing Y pos based on the font size
     void testBasicLineSpacing();
     /// Tests incrementing Y pos based on the font size
@@ -57,45 +57,29 @@ private slots:
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
     /// test data integrety for multiple shapes.
-    void testShapePosition();
-    void testShapePosition2();
+//    void testShapePosition();
+//    void testShapePosition2();
 
 // Block styles
     /// Test top, left, right and bottom margins of paragraphs.
     void testMargins();
-    void testMultipageMargins();
+//    void testMultipageMargins();
     void testTextIndent();
     void testBasicTextAlignments();
     void testTextAlignments();
-    void testPageBreak();
-    void testPageBreak2();
-    void testNonBreakableLines();
+//    void testPageBreak();
+//    void testPageBreak2();
+//    void testNonBreakableLines();
 
-// Lists
-    void testBasicList();
-    void testNumberedList();
-    void testInterruptedLists(); // consecutiveNumbering
-    void testNestedLists();
-    void testNestedPrefixedLists();
-    void testAutoRestartList();
-    void testListParagraphIndent();
-    void testRomanNumbering();
-    void testUpperAlphaNumbering();
-    void testRestartNumbering();
-    void testRightToLeftList();
-    void testLetterSynchronization();
-    void testInvalidateLists();
-    void testCenteredItems();
-    void testMultiLevel();
 
 // relativeBulletSize
 
     //etc
-    void testParagOffset();
+//    void testParagOffset();
     void testParagraphBorders();
     void testBorderData();
     void testDropCaps();
-#endif
+
 private:
     void setupTest(const QString &initText = QString());
 

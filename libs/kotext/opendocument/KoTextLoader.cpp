@@ -1199,8 +1199,6 @@ void KoTextLoader::loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor)
     }
 }
 
-#include <QDebug>
-
 void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
 {
     QTextTableFormat tableFormat;

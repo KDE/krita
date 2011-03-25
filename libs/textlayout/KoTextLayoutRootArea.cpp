@@ -34,8 +34,8 @@ public:
     bool dirty;
 };
 
-KoTextLayoutRootArea::KoTextLayoutRootArea()
-  : KoTextLayoutArea(0)
+KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
+  : KoTextLayoutArea(0, documentLayout)
   , d(new Private)
 {
 }

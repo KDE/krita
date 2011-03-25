@@ -27,11 +27,13 @@
 FrameIterator::FrameIterator(QTextFrame *frame)
 {
     it = frame->begin();
+    currentTableIterator = 0;
 }
 
 FrameIterator::FrameIterator(QTextTableCell cell)
 {
     it = cell.begin();
+    currentTableIterator = 0;
 }
 
 FrameIterator::FrameIterator(FrameIterator *other)
@@ -39,7 +41,10 @@ FrameIterator::FrameIterator(FrameIterator *other)
     it = other->it;
     line = other->line;
     fragmentIterator = other->fragmentIterator;
-    currentTableIterator = 0;
+    if (other->currentTableIterator)
+        currentTableIterator = new TableIterator(other->currentTableIterator);
+    else
+        currentTableIterator = 0;
 }
 
 
@@ -49,7 +54,6 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
         delete currentTableIterator;
         currentTableIterator = 0;
     } else if(currentTableIterator == 0) {
-        delete currentTableIterator;
         currentTableIterator = new TableIterator(table);
     }
     return currentTableIterator;

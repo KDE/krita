@@ -30,7 +30,7 @@ public:
     SimpleRootAreaProvider(TextShape *textshape);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old);
+    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old, KoTextDocumentLayout *documentLayout);
 
     TextShape *m_textShape;
 

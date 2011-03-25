@@ -24,13 +24,16 @@
 
 SimpleRootAreaProvider::SimpleRootAreaProvider(TextShape *textshape)
     : m_textShape(textshape)
-    , m_area(new KoTextLayoutRootArea())
+    , m_area(0)
 {
-    m_area->setAssociatedShape(textshape);
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous, KoTextDocumentLayout *documentLayout)
 {
+    if(m_area == 0)
+        m_area = new KoTextLayoutRootArea(documentLayout);
+    m_area->setAssociatedShape(m_textShape);
+
     m_area->setReferenceRect(0, m_textShape->size().width(), 0, m_textShape->size().height());
 
     if (previous) {

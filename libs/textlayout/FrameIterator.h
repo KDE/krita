@@ -25,6 +25,8 @@
 #include <QTextTableCell>
 
 class TableIterator;
+class QTextTable;
+class KoTextLayoutTableArea;
 
 class FrameIterator
 {
@@ -32,7 +34,7 @@ public:
     FrameIterator(QTextFrame *frame);
     FrameIterator(QTextTableCell frame);
     FrameIterator(FrameIterator *other);
-    TableIterator *tableIterator(bool create);
+    TableIterator *tableIterator(QTextTable *);
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks
     QTextLine line;

@@ -29,6 +29,8 @@
 
 #include "KoTextLayoutArea.h"
 
+#include "KoTextLayoutTableArea.h"
+#include "TableIterator.h"
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
@@ -60,19 +62,18 @@ extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
 
-KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p)
+KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : parent(p)
+ , m_documentLayout(documentLayout)
  , m_startOfArea(0)
 {
 }
 
 KoTextLayoutArea::~KoTextLayoutArea()
 {
-}
-
-void KoTextLayoutArea::setDocumentLayout(KoTextDocumentLayout *documentLayout)
-{
-    m_documentLayout = documentLayout;
+    qDeleteAll(m_tableAreas);
+    delete m_startOfArea;
+    delete m_endOfArea;
 }
 
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
@@ -129,7 +130,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
         if (table) {
             // Let's create KoTextLayoutTableArea and let that handle the table
-            KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table);
+            KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
+            m_tableAreas.append(tableArea);
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 m_y = tableArea->bottom();
@@ -750,6 +752,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         return;
 
     QTextFrame::iterator it = m_startOfArea->it;
+    int tableAreaIndex = 0;
     for (; !(it.atEnd()); ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -757,8 +760,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextBlockFormat format = block.blockFormat();
 
         if (table) {
+            m_tableAreas[tableAreaIndex]->paint(painter, context);
+            ++tableAreaIndex;
             continue;
         } else if (subFrame) {
+            // we know of no frames at this point so just skip it
             continue;
         } else {
             if (!block.isValid())

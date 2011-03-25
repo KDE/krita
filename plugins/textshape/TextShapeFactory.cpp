@@ -97,7 +97,14 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     //if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
         QTextCursor cursor(shapeData->document());
-        cursor.insertText("Hello new Text layout engine");//params->stringProperty(text));
+        //cursor.insertText(params->stringProperty(text));
+        cursor.insertText("Hello new Text layout engine");
+        cursor.insertText("\nLine two");
+        cursor.insertText("\nLine three");
+        cursor.insertText("\nLine four");
+        cursor.insertText("\nLine five");
+        cursor.insertText("\nLine six");
+        cursor.insertTable(3,3);
     //}
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());

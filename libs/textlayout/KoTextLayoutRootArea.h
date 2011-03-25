@@ -35,7 +35,7 @@ class KOTEXT_EXPORT KoTextLayoutRootArea : public KoTextLayoutArea
 {
 public:
     /// constructor
-    explicit KoTextLayoutRootArea();
+    explicit KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout);
     virtual ~KoTextLayoutRootArea();
 
     /// Layouts as much as it can

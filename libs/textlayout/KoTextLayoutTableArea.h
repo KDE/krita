@@ -33,16 +33,19 @@ class KOTEXT_EXPORT KoTextLayoutTableArea : public KoTextLayoutArea
 {
 public:
     /// constructor
-    explicit KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea *parent);
+    explicit KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
     virtual ~KoTextLayoutTableArea();
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the table
     bool layout(TableIterator *cursor);
 
+    void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
+
 private:
     void layoutColumns();
     bool layoutRow(TableIterator *cursor);
+    QRectF cellBoundingRect(const QTextTableCell &cell) const;
 
     class Private;
     Private * const d;

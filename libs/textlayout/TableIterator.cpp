@@ -31,7 +31,7 @@ TableIterator::TableIterator(QTextTable *t)
     for (int col = 0; col < table->columns(); ++col) {
         frameIterators[col] = 0;
     }
-    row = -1;
+    row = 0;
     headerRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
     headerRowPositions.resize(headerRows);
     headerCellAreas.resize(headerRows);
@@ -68,6 +68,7 @@ TableIterator::TableIterator(TableIterator *other)
 
 
 TableIterator::~TableIterator()
+{
     for (int col = 0; col < table->columns(); ++col) {
         delete frameIterators[col];
     }

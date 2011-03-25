@@ -333,11 +333,10 @@ void KoTextDocumentLayout::layout()
 {
     do {
         // request a Root Area
-        d->rootArea = d->provider->provide(d->rootArea);
+        d->rootArea = d->provider->provide(d->rootArea, this);
 
         if (d->rootArea) {
             d->rootAreaList.append(d->rootArea);
-            d->rootArea->setDocumentLayout(this);
             d->rootArea->setReferenceRect(d->rootArea->left(), d->rootArea->right(),
                                           d->y, d->y + d->rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area

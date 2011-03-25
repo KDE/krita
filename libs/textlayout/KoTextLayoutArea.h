@@ -25,10 +25,10 @@
 #include "FrameIterator.h"
 
 #include <KoText.h>
-
 #include <KoTextDocumentLayout.h>
 
 #include <QRectF>
+#include <QList>
 
 class KoStyleManager;
 class KoTextDocumentLayout;
@@ -51,7 +51,7 @@ class KOTEXT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor
-    explicit KoTextLayoutArea(KoTextLayoutArea *parent);
+    explicit KoTextLayoutArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
     virtual ~KoTextLayoutArea();
 
     /// Layouts as much as we can
@@ -98,13 +98,12 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
-    void setDocumentLayout(KoTextDocumentLayout *documentLayout);
-
     /// Calc a bounding box rect of the selection
     virtual QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
 protected:
     void setBottom(qreal bottom);
+    KoTextDocumentLayout *documentLayout() {return m_documentLayout;}
 
 private:
     bool layoutBlock(FrameIterator *cursor);
@@ -136,6 +135,7 @@ private:
     qreal m_listIndent;
     qreal m_defaultTabSizing;
     bool m_isRtl;
+    QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
 };

@@ -23,6 +23,7 @@
 #include "kotext_export.h"
 
 class KoTextLayoutRootArea;
+class KoTextDocumentLayout;
 
 /**
  * When laying out text we need an area where upon the text will be placed.
@@ -35,7 +36,8 @@ public:
     explicit KoTextLayoutRootAreaProvider();
     virtual ~KoTextLayoutRootAreaProvider();
 
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old) = 0;
+    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old,
+                                     KoTextDocumentLayout *documentLayout) = 0;
 };
 
 #endif

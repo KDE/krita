@@ -95,12 +95,13 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
     SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(this);
-    m_textShapeData->setRootArea(provider->provide(0));
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
 
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(lay);
+ 
+    m_textShapeData->setRootArea(provider->provide(0, lay));
 
     setCollisionDetection(true);
 

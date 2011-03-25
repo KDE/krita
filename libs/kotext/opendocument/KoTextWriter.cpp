@@ -647,6 +647,8 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
     writer->startElement("table:table");
     QString tableStyleName = saveTableStyle(*table);
     writer->addAttribute("table:style-name", tableStyleName);
+    int numberHeadingRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
+    
     for (int c = 0 ; c < table->columns() ; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;
@@ -665,6 +667,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         writer->endElement(); // table:table-column
         c += repetition;
     }
+    
+    if (numberHeadingRows)
+        writer->startElement("table:table-header-rows");
+    
     for (int r = 0 ; r < table->rows() ; r++) {
         writer->startElement("table:table-row");
         
@@ -700,7 +706,14 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             writer->endElement(); // table:table-cell OR table:covered-table-cell
         }
         writer->endElement(); // table:table-row
+        
+        if (r + 1 == numberHeadingRows) {
+            writer->endElement();   // table:table-header-rows
+            writer->startElement("table:table-rows");
+        }
     }
+    if (numberHeadingRows)
+        writer->endElement();   // table:table-rows
     writer->endElement(); // table:table
 }
 

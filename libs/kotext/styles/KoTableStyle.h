@@ -60,7 +60,8 @@ public:
         ColumnAndRowStyleManager,     ///< QVariant of a KoColumnAndRowStyleManager
                                                              /// It's not really a property of KoTableStyle but defined here for convenience
         CollapsingBorders,     ///< If true, then the table has collapsing border model
-        MasterPageName         ///< Optional name of the master-page
+        MasterPageName,         ///< Optional name of the master-page
+        NumberHeadingRows,      ///< Count the number of heading rows
     };
 
     /// Constructor

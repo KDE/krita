@@ -299,7 +299,10 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
             emit statusTextChanged(i18n("Click to select text shape."));
     } else {
         useCursor( QCursor( Qt::ArrowCursor ) );
-        emit statusTextChanged("");
+        if (m_currentShape)
+            emit statusTextChanged( i18n("Press return to finish editing.") );
+        else
+            emit statusTextChanged("");
     }
 }
 

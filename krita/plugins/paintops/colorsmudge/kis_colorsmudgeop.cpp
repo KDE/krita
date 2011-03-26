@@ -50,6 +50,7 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_overlayModeOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
+    m_gradientOption.readOptionSetting(settings);
     
     m_sizeOption.sensor()->reset();
     m_opacityOption.sensor()->reset();
@@ -58,13 +59,9 @@ KisColorSmudgeOp::KisColorSmudgeOp(const KisBrushBasedPaintOpSettings* settings,
     m_colorRateOption.sensor()->reset();
     m_rotationOption.sensor()->reset();
     m_scatterOption.sensor()->reset();
+    m_gradientOption.sensor()->reset();
     
-    KoColor color(painter->paintColor(), painter->device()->colorSpace());
-    qint32  diagonal(std::sqrt(m_brush->width()*m_brush->width() + m_brush->height()*m_brush->height()) + 0.5);
-    
-    m_colorDev = new KisFixedPaintDevice(painter->device()->colorSpace());
-    m_colorDev->fill(0, 0, diagonal, diagonal, color.data());
-    
+    m_gradient    = painter->gradient();
     m_tempDev     = new KisPaintDevice(painter->device()->colorSpace());
     m_tempPainter = new KisPainter(m_tempDev);
 }
@@ -213,10 +210,13 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         m_colorRateOption.apply(*m_tempPainter, info, 0.0, maxColorRate, fpOpacity);
         
         // paint a rectangle with the current color (foreground color)
+        // or a gradient color (if enabled)
         // into the temporary painting device and use the user selected
         // composite mode
+        KoColor color = painter()->paintColor();
+        m_gradientOption.apply(color, m_gradient, info);
         m_tempPainter->setCompositeOp(oldMode);
-        m_tempPainter->bltFixed(QPoint(0,0), m_colorDev, m_maskBounds);
+        m_tempPainter->fill(0, 0, m_maskBounds.width(), m_maskBounds.height(), color);
     }
     
     // restore orginal opacy and composite mode values

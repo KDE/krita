@@ -30,6 +30,7 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
+#include <kis_pressure_gradient_option.h>
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
@@ -45,6 +46,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());
     addPaintOpOption(new KisOverlayModeOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption()));
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }

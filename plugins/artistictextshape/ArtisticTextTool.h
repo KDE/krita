@@ -62,7 +62,6 @@ protected:
     void addToTextCursor( const QString &str );
 
 private slots:
-    void attachPath();
     void detachPath();
     void convertText();
     void blinkCursor();
@@ -85,11 +84,9 @@ private:
     QTransform cursorTransform() const;
 
     ArtisticTextShape * m_currentShape;
-    KoPathShape * m_path;
-    KoPathShape * m_tmpPath;
+    KoPathShape * m_hoverPath;
     QPainterPath m_textCursorShape;
 
-    QAction * m_attachPath;
     QAction * m_detachPath;
     QAction * m_convertText;
 

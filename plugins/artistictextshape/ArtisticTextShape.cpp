@@ -232,6 +232,7 @@ void ArtisticTextShape::setSize( const QSizeF &newSize )
         applyTransformation( matrix );
         update();
     }
+    KoShape::setSize(newSize);
 }
 
 QPainterPath ArtisticTextShape::outline() const

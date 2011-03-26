@@ -105,7 +105,7 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
         bool   sizeChanged     = qAbs(width-m_maskBounds.width()) > MAX_SIZE_DIFF || qAbs(height-m_maskBounds.height()) > MAX_SIZE_DIFF;
         
         // calculate a new brush mask only if the size or rotation of the brush changed significantly
-        if(sizeChanged || rotationChanged) {
+        if(sizeChanged || rotationChanged || m_maskDab.isNull()) {
             m_maskDab = cachedDab();
             m_brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
             m_rotation   = rotation;

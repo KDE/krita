@@ -39,8 +39,7 @@
 #include "ArtisticTextShapeLoadingUpdater.h"
 
 ArtisticTextShape::ArtisticTextShape()
-    : m_text( i18n( "Artistic Text" ) )
-    , m_font(QFont("ComicSans", 20), &m_paintDevice)
+    : m_font(QFont("ComicSans", 20), &m_paintDevice)
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
     , m_textAnchor( AnchorStart )
 {

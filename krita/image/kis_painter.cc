@@ -738,6 +738,68 @@ void KisPainter::bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev
     bitBltOldData(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
+void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor& color)
+{
+    /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
+     * initializing they perform some dummy passes with those parameters, and it must not crash */
+    if(width == 0 || height == 0 || d->device.isNull())
+        return;
+    
+    /* Create an intermediate byte array to hold information before it is written
+     * to the current paint device (aka: d->device) */
+    quint8* dstBytes = new quint8[width * height * d->device->pixelSize()];
+    d->device->readBytes(dstBytes, x, y, width, height);
+    
+    KoColor srcColor(color, d->colorSpace);
+    
+    // TODO: use the d->selection && !isDeselected() combo
+    if (d->selection) {
+        /* d->selection is a KisPaintDevice, so first a readBytes is performed to
+         * get the area of interest... */
+        quint8* selBytes = new quint8[width * height * d->selection->pixelSize()];
+        d->selection->readBytes(selBytes, x, y, width, height);
+        
+        // ...and then blit.
+        d->colorSpace->bitBlt(
+            dstBytes,
+            width * d->device->pixelSize(),
+            d->colorSpace,
+            srcColor.data(),
+            0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+            selBytes,
+            width * d->selection->pixelSize(),
+            d->opacity,
+            height,
+            width,
+            d->compositeOp,
+            d->channelFlags);
+        
+        delete[] selBytes;
+    }
+    else {
+        // Here we blit ignoring d->selection, note the zeroes.
+        d->colorSpace->bitBlt(
+            dstBytes,
+            width * d->device->pixelSize(),
+            d->colorSpace,
+            srcColor.data(),
+            0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+            0,
+            0,
+            d->opacity,
+            height,
+            width,
+            d->compositeOp,
+            d->channelFlags);
+    }
+    
+    d->device->writeBytes(dstBytes, x, y, width, height);
+    
+    delete[] dstBytes;
+    
+    addDirtyRect(QRect(x, y, width, height));
+}
+
 void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                           const KisFixedPaintDeviceSP srcDev,
                           qint32 srcX, qint32 srcY,

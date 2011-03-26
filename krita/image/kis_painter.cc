@@ -58,6 +58,7 @@
 #include "kis_vec.h"
 #include "kis_iterators_pixel.h"
 #include "kis_random_accessor.h"
+#include "kis_random_accessor_ng.h"
 #include "kis_paintop.h"
 #include "kis_selection.h"
 #include "kis_fill_painter.h"
@@ -751,11 +752,11 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
     
-    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(x, y);
+    KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
     
     if(d->selection) {
         
-        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(x, y);
+        KisRandomConstAccessorSP maskIt = d->selection->createRandomConstAccessorNG(x, y);
         
         while(rowsRemaining > 0) {
             
@@ -776,18 +777,18 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 columns = qMin(columns, columnsRemaining);
                 
                 qint32 dstRowStride = d->device->rowStride(dstX, dstY);
-                dstIt.moveTo(dstX, dstY);
+                dstIt->moveTo(dstX, dstY);
                 
                 qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
-                maskIt.moveTo(dstX, dstY);
+                maskIt->moveTo(dstX, dstY);
                 
                 d->colorSpace->bitBlt(
-                    dstIt.rawData(),
+                    dstIt->rawData(),
                     dstRowStride,
                     d->colorSpace,
                     srcColor.data(),
                     0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
-                    maskIt.rawData(),
+                    maskIt->oldRawData(),
                     maskRowStride,
                     d->opacity,
                     rows,
@@ -818,10 +819,10 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
                 qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
                 qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
-                dstIt.moveTo(dstX, dstY);
+                dstIt->moveTo(dstX, dstY);
                 
                 d->colorSpace->bitBlt(
-                    dstIt.rawData(),
+                    dstIt->rawData(),
                     dstRowStride,
                     d->colorSpace,
                     srcColor.data(),

@@ -24,6 +24,9 @@
 
 #include "KoTextLayoutArea.h"
 
+#include <QVector>
+#include <QLineF>
+
 class TableIterator;
 
 /**
@@ -46,6 +49,8 @@ private:
     void layoutColumns();
     bool layoutRow(TableIterator *cursor);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
+    void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell);
+    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, bool collapsing, QTextTableCell tableCell, QVector<QLineF> *accuBlankBorders);
 
     class Private;
     Private * const d;

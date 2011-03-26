@@ -346,11 +346,12 @@ void KoTextDocumentLayout::layout()
             d->y = 0;
             break;
         }
-    } while (continueLayout());
+        if (d->layoutPosition->it == document()->rootFrame()->end()) {
+            emit finishedLayout();
+            return;
+        }
 
-    if (d->layoutPosition->atEnd()) {
-        emit finishedLayout();
-    }
+    } while (continueLayout());
 }
 
 void KoTextDocumentLayout::interruptLayout()

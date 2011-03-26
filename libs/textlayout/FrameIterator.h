@@ -40,7 +40,6 @@ public:
     QTextLine line;
     QTextBlock::Iterator fragmentIterator;
     TableIterator *currentTableIterator;
-    bool atEnd() {return it.atEnd();}
 };
 
 #endif

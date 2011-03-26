@@ -123,15 +123,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_startOfArea = new FrameIterator(cursor);
     m_y = top();
 
-    while(!(cursor->it.atEnd())) {
+   while (true) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
-
         if (table) {
             // Let's create KoTextLayoutTableArea and let that handle the table
             KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
             m_tableAreas.append(tableArea);
+            tableArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 m_y = tableArea->bottom();
@@ -150,12 +150,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 return false;
             }
         }
+        if (cursor->it.atEnd()) {
+            m_endOfArea = new FrameIterator(cursor);
+            setBottom(m_y);
+            return true; // we have layouted till the end of the frame
+        }
+
         ++(cursor->it);
     }
-
-    m_endOfArea = new FrameIterator(cursor);
-    setBottom(m_y);
-    return true; // we have layouted till the end of the frame
 }
 
 // layoutBlock() method is structured like this:
@@ -171,7 +173,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 //   d) update dropcaps related variables
 bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 {
-    QTextBlock block = cursor->it.currentBlock();
+    QTextBlock block(cursor->it.currentBlock());
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     QTextBlockFormat format = block.blockFormat();
 
@@ -751,9 +753,14 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
 
+    
     QTextFrame::iterator it = m_startOfArea->it;
+    QTextFrame::iterator stop = m_endOfArea->it;
+    if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {
+        ++stop;
+    }
     int tableAreaIndex = 0;
-    for (; !(it.atEnd()); ++it) {
+    for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
@@ -827,8 +834,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 }
             }
 
-            QRectF clipRect; // create an empty clipping rectangle
-
             for (QTextBlock::iterator it = block.begin(); !(it.atEnd()); ++it) {
                 QTextFragment currentFragment = it.fragment();
                 if (currentFragment.isValid()) {
@@ -856,14 +861,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     }
                 }
             }
-            if (clipRect.isValid()) {
-                painter->save();
-                painter->setClipRect(clipRect, Qt::IntersectClip);
-            }
+
             layout->draw(painter, QPointF(0, 0), selections);
-            if (clipRect.isValid()) {
-                painter->restore();
-            }
+
             decorateParagraph(painter, block);
 
             if (lastBorder && lastBorder != border) {

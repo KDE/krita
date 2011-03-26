@@ -161,11 +161,9 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     KoTextDocumentLayout::PaintContext pc;
     QAbstractTextDocumentLayout::Selection selection;
     selection.cursor = *(textEditor->cursor());
-    //FIXME QPalette palette = canvas()->canvasWidget() ? canvas()->canvasWidget()->palette() : canvas()->canvasItem()->palette();
-    //selection.format.setBackground(palette.brush(QPalette::Highlight));
-    //selection.format.setForeground(palette.brush(QPalette::HighlightedText));
-    selection.format.setBackground(QColor(Qt::blue)); //FIXME delete line if above is fixed
-    selection.format.setForeground(QColor(Qt::white)); //FIXME delete line if above is fixed
+    QPalette palette = pc.textContext.palette;
+    selection.format.setBackground(palette.brush(QPalette::Highlight));
+    selection.format.setForeground(palette.brush(QPalette::HighlightedText));
 
     pc.textContext.selections.append(selection);
     pc.viewConverter = &converter;

@@ -98,12 +98,14 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
         QTextCursor cursor(shapeData->document());
         //cursor.insertText(params->stringProperty(text));
-        cursor.insertText("Hello new Text layout engine");
+        cursor.insertText("Hello new Text layout engine f f fd fd fds gfd fd fd dsf gfd fds sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
         cursor.insertText("\nLine two");
         cursor.insertText("\nLine three");
-        cursor.insertText("\nLine four");
-        cursor.insertText("\nLine five");
-        cursor.insertText("\nLine six");
+        //cursor.insertText("\nLine four");
+        //cursor.insertText("\nLine five");
+        //cursor.insertText("\nLine six");
+        cursor.insertTable(3,3);
+        cursor.insertText("Cell 1 Line one");
         cursor.insertTable(3,3);
     //}
     if (documentResources) {

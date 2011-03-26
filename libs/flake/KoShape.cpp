@@ -383,10 +383,12 @@ void KoShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoShape);
     QSizeF oldSize(size());
+
+    // always set size, as d->size and size() may vary
+    d->size = newSize;
+
     if (oldSize == newSize)
         return;
-
-    d->size = newSize;
 
     notifyChanged();
     d->shapeChanged(SizeChanged);
@@ -644,8 +646,8 @@ QPainterPath KoShape::outline() const
 
 QRectF KoShape::outlineRect() const
 {
-    Q_D(const KoShape);
-    return QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001))));
+    const QSizeF s = size();
+    return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(), qreal(0.0001)), qMax(s.height(), qreal(0.0001))));
 }
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const

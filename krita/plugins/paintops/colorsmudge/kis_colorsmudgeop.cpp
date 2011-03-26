@@ -96,20 +96,26 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
         m_maskBounds = m_maskDab->bounds();
     } else {
         // This is for parametric brushes, those created in the Autobrush popup config dialogue
-        const qint32 MAX_SIZE_DIFF = 1;
-        const double MAX_ROT_DIFF  = 2.0;
+        const static qint32 MAX_SIZE_DIFF = 1;
+        const static double MAX_ROT_DIFF  = 5.0 * M_PI/180.0;
         
-        qint32 width           = m_brush->maskWidth(scale, rotation);
-        qint32 height          = m_brush->maskHeight(scale, rotation);
-        bool   rotationChanged = qAbs(rotation-m_rotation) > MAX_ROT_DIFF;
-        bool   sizeChanged     = qAbs(width-m_maskBounds.width()) > MAX_SIZE_DIFF || qAbs(height-m_maskBounds.height()) > MAX_SIZE_DIFF;
+        qint32  width           = m_brush->maskWidth(scale, rotation);
+        qint32  height          = m_brush->maskHeight(scale, rotation);
+        quint32 index           = m_brush->brushIndex(info);
+        double  angle           = m_brush->maskAngle(rotation);
+        bool    rotationChanged = qAbs(angle-m_angle) > MAX_ROT_DIFF;
+        bool    sizeChanged     = qAbs(width-m_maskBounds.width()) > MAX_SIZE_DIFF || qAbs(height-m_maskBounds.height()) > MAX_SIZE_DIFF;
+        bool    indexChanged    = index != m_brushIndex;
+        
+        if(rotationChanged || m_maskDab.isNull())
+            m_angle = angle;
         
         // calculate a new brush mask only if the size or rotation of the brush changed significantly
-        if(sizeChanged || rotationChanged || m_maskDab.isNull()) {
+        if(sizeChanged || rotationChanged || m_maskDab.isNull() || indexChanged) {
             m_maskDab = cachedDab();
             m_brush->mask(m_maskDab, painter()->paintColor(), scale, scale, rotation, info, 0.0, 0.0);
-            m_rotation   = rotation;
             m_maskBounds = m_maskDab->bounds();
+            m_brushIndex = index;
         }
     }
     
@@ -120,13 +126,10 @@ void KisColorSmudgeOp::updateMask(const KisPaintInformation& info, double scale,
 
 qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
 {
-    // Simple error catching
-    if (!painter()->device())
-        return 1.0;
-    
     KisBrushSP brush = m_brush;
     
-    if(!brush || !brush->canPaintFor(info))
+    // Simple error catching
+    if(!painter()->device() || !brush || !brush->canPaintFor(info))
         return 1.0;
     
     // get the scaling factor calculated by the size option
@@ -158,7 +161,7 @@ qreal KisColorSmudgeOp::paintAt(const KisPaintInformation& info)
         // if color is disabled (only smudge) and "overlay mode is enabled
         // then first blit the region under the brush from the image projection
         // to the painting device to prevent a rapid build up of alpha value
-        // if the color to be smudged is semy transparent
+        // if the color to be smudged is semi transparent
         if(m_image && m_overlayModeOption.isChecked() && !m_colorRateOption.isChecked()) {
             painter()->setCompositeOp(COMPOSITE_COPY);
             painter()->setOpacity(OPACITY_OPAQUE_U8);

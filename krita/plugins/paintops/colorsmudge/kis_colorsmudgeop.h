@@ -51,7 +51,8 @@ private:
 
 private:
     bool                      m_firstRun;
-    double                    m_rotation;
+    double                    m_angle;
+    quint32                   m_brushIndex;
     KisPaintDeviceSP          m_tempDev;
     KisImageWSP               m_image;
     KisPainter*               m_tempPainter;

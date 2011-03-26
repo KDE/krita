@@ -171,7 +171,7 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
 
 
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas), m_currentShape(0), m_hoverPath(0), m_textCursor( -1 ), m_showCursor( true )
+    : KoToolBase(canvas), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_textCursor( -1 ), m_showCursor( true )
 {
     m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
@@ -236,26 +236,18 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             m_hoverPath = 0;
             return;
         }
-    }
-    ArtisticTextShape *hit = 0;
-
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( handleGrabRect(event->point) );
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach( KoShape *shape, shapes ) {
-        hit = dynamic_cast<ArtisticTextShape*>( shape );
-        if( hit ) {
-            if ( hit != m_currentShape ) {
-                selection->deselectAll();
-                enableTextCursor( false );
-                m_currentShape = hit;
-                emit shapeSelected(m_currentShape, canvas());
-                enableTextCursor( true );
-                selection->select( m_currentShape );
-            }
-            break;
+    } else if (m_hoverText) {
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        if(m_hoverText != m_currentShape) {
+            // if we hit another text shape, select that shape
+            selection->deselectAll();
+            enableTextCursor( false );
+            m_currentShape = m_hoverText;
+            emit shapeSelected(m_currentShape, canvas());
+            enableTextCursor( true );
+            selection->select( m_currentShape );
         }
-    }
-    if ( hit ) {
+        // change the text cursor position
         QPointF pos = event->point;
         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
         const int len = m_currentShape->text().length();
@@ -279,13 +271,14 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
 {
     m_hoverPath = 0;
-    ArtisticTextShape *textShape = 0;
+    m_hoverText = 0;
 
+    // find text or path shape cursor position
     QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( handleGrabRect(event->point) );
     foreach( KoShape * shape, shapes ) {
         ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
         if ( text ) {
-            textShape = text;
+            m_hoverText = text;
             break;
         }
         KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
@@ -294,12 +287,13 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
             break;
         }
     }
+    // update cursor and status text
     if( m_hoverPath && m_currentShape) {
         useCursor( QCursor( Qt::PointingHandCursor ) );
         emit statusTextChanged(i18n("Click to put text on path."));
-    } else if ( textShape ) {
+    } else if ( m_hoverText ) {
         useCursor( QCursor( Qt::IBeamCursor ) );
-        if (textShape == m_currentShape)
+        if (m_hoverText == m_currentShape)
             emit statusTextChanged(i18n("Click to change cursor position."));
         else
             emit statusTextChanged(i18n("Click to select text shape."));
@@ -396,6 +390,7 @@ void ArtisticTextTool::deactivate()
         m_currentShape = 0;
     }
     m_hoverPath = 0;
+    m_hoverText = 0;
 }
 
 void ArtisticTextTool::updateActions()

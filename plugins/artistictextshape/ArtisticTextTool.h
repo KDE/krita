@@ -83,9 +83,10 @@ private:
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
 
-    ArtisticTextShape * m_currentShape;
-    KoPathShape * m_hoverPath;
-    QPainterPath m_textCursorShape;
+    ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
+    ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
+    KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
+    QPainterPath m_textCursorShape;     ///< our visual text cursor representation
 
     QAction * m_detachPath;
     QAction * m_convertText;

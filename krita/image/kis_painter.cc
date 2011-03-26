@@ -6,6 +6,7 @@
  *  Copyright (c) 2004 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2008-2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (c) 2010 José Luis Vergara Toloza <pentalis@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -738,6 +739,7 @@ void KisPainter::bitBltOldData(const QPoint & pos, const KisPaintDeviceSP srcDev
     bitBltOldData(pos.x(), pos.y(), srcDev, srcRect.x(), srcRect.y(), srcRect.width(), srcRect.height());
 }
 
+
 void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor& color)
 {
     /* This check for nonsense ought to be a Q_ASSERT. However, when paintops are just
@@ -745,60 +747,106 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     if(width == 0 || height == 0 || d->device.isNull())
         return;
     
-    /* Create an intermediate byte array to hold information before it is written
-     * to the current paint device (aka: d->device) */
-    quint8* dstBytes = new quint8[width * height * d->device->pixelSize()];
-    d->device->readBytes(dstBytes, x, y, width, height);
-    
     KoColor srcColor(color, d->colorSpace);
+    qint32  dstY          = y;
+    qint32  rowsRemaining = height;
     
-    // TODO: use the d->selection && !isDeselected() combo
-    if (d->selection) {
-        /* d->selection is a KisPaintDevice, so first a readBytes is performed to
-         * get the area of interest... */
-        quint8* selBytes = new quint8[width * height * d->selection->pixelSize()];
-        d->selection->readBytes(selBytes, x, y, width, height);
+    KisRandomAccessorPixel dstIt = d->device->createRandomAccessor(x, y);
+    
+    if(d->selection) {
         
-        // ...and then blit.
-        d->colorSpace->bitBlt(
-            dstBytes,
-            width * d->device->pixelSize(),
-            d->colorSpace,
-            srcColor.data(),
-            0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
-            selBytes,
-            width * d->selection->pixelSize(),
-            d->opacity,
-            height,
-            width,
-            d->compositeOp,
-            d->channelFlags);
+        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(x, y);
         
-        delete[] selBytes;
+        while(rowsRemaining > 0) {
+            
+            qint32 dstX                 = x;
+            qint32 columnsRemaining     = width;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousSelRows = d->selection->numContiguousRows(dstY, dstX, dstX+width-1);
+            
+            qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
+            rows = qMin(rows, rowsRemaining);
+            
+            while (columnsRemaining > 0) {
+                
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                
+                qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
+                columns = qMin(columns, columnsRemaining);
+                
+                qint32 dstRowStride = d->device->rowStride(dstX, dstY);
+                dstIt.moveTo(dstX, dstY);
+                
+                qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
+                maskIt.moveTo(dstX, dstY);
+                
+                d->colorSpace->bitBlt(
+                    dstIt.rawData(),
+                    dstRowStride,
+                    d->colorSpace,
+                    srcColor.data(),
+                    0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+                    maskIt.rawData(),
+                    maskRowStride,
+                    d->opacity,
+                    rows,
+                    columns,
+                    d->compositeOp,
+                    d->channelFlags
+                );
+                
+                dstX             += columns;
+                columnsRemaining -= columns;
+            }
+            
+            dstY          += rows;
+            rowsRemaining -= rows;
+        }
     }
     else {
-        // Here we blit ignoring d->selection, note the zeroes.
-        d->colorSpace->bitBlt(
-            dstBytes,
-            width * d->device->pixelSize(),
-            d->colorSpace,
-            srcColor.data(),
-            0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
-            0,
-            0,
-            d->opacity,
-            height,
-            width,
-            d->compositeOp,
-            d->channelFlags);
+        
+        while(rowsRemaining > 0) {
+            
+            qint32 dstX                 = x;
+            qint32 columnsRemaining     = width;
+            qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 rows                 = qMin(numContiguousDstRows, rowsRemaining);
+            
+            while(columnsRemaining > 0) {
+                
+                qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
+                qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
+                dstIt.moveTo(dstX, dstY);
+                
+                d->colorSpace->bitBlt(
+                    dstIt.rawData(),
+                    dstRowStride,
+                    d->colorSpace,
+                    srcColor.data(),
+                    0, // srcRowStride is set to zero to use the compositeOp with only a single color pixel
+                    0,
+                    0,
+                    d->opacity,
+                    rows,
+                    columns,
+                    d->compositeOp,
+                    d->channelFlags
+                );
+                
+                dstX             += columns;
+                columnsRemaining -= columns;
+            }
+            
+            dstY          += rows;
+            rowsRemaining -= rows;
+        }
     }
-    
-    d->device->writeBytes(dstBytes, x, y, width, height);
-    
-    delete[] dstBytes;
     
     addDirtyRect(QRect(x, y, width, height));
 }
+
 
 void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                           const KisFixedPaintDeviceSP srcDev,

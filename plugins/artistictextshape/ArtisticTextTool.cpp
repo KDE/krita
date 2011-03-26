@@ -183,6 +183,7 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     setTextMode(true);
 }
@@ -561,6 +562,24 @@ void ArtisticTextTool::textChanged()
     kDebug() << "current text =" << m_currentText;
     
     setTextCursorInternal( m_currentShape->text().length() );
+}
+
+void ArtisticTextTool::shapeSelectionChanged()
+{
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection->isSelected(m_currentShape))
+        return;
+
+    foreach (KoShape *shape, selection->selectedShapes()) {
+        ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(shape);
+        if(text) {
+            enableTextCursor( false );
+            m_currentShape = text;
+            emit shapeSelected(m_currentShape, canvas());
+            enableTextCursor( true );
+            break;
+        }
+    }
 }
 
 #include <ArtisticTextTool.moc>

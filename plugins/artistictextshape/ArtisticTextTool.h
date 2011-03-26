@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -66,14 +66,15 @@ private slots:
     void convertText();
     void blinkCursor();
     void textChanged();
-    
+    void shapeSelectionChanged();
+
 signals:
     void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
+
 private:
     class AddTextRangeCommand;
     class RemoveTextRangeCommand;
-    
+
 private:
     void updateActions();
     void setTextCursorInternal( int textCursor );

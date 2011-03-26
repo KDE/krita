@@ -349,9 +349,7 @@ void ArtisticTextShape::setStartOffset( qreal offset )
         return;
 
     update();
-    m_startOffset = offset;
-    m_startOffset = qMin( qreal(1.0), m_startOffset );
-    m_startOffset = qMax( qreal(0.0), m_startOffset );
+    m_startOffset = qBound(0.0, offset, 1.0);
     updateSizeAndPosition();
     update();
     notifyChanged();

@@ -58,8 +58,7 @@ public:
     bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
-//    virtual QRectF boundingRect() const = 0;
-
+    QRectF boundingRect() const;
 
     virtual KoText::Direction parentTextDirection() const;
 
@@ -128,6 +127,7 @@ private:
     qreal m_top; // reference area top
     qreal m_bottom; // reference area top
     qreal m_maximalAllowedBottom;
+    QRectF m_boundingRect;
 
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;

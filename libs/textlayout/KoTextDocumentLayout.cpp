@@ -146,12 +146,6 @@ QSizeF KoTextDocumentLayout::documentSize() const
     return QSizeF();
 }
 
-QRectF KoTextDocumentLayout::expandVisibleRect(const QRectF &rect) const
-{
-    Q_UNUSED(rect);
-    return rect;
-}
-
 QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval;

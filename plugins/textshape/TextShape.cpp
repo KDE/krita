@@ -191,12 +191,9 @@ QPointF TextShape::convertScreenPos(const QPointF &point) const
 
 QRectF TextShape::outlineRect() const
 {
-    QRectF rect(QPointF(0,0), size());
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    if (lay) {
-        rect = lay->expandVisibleRect(rect);
-    }
-    return rect;
+    QRectF rect = m_textShapeData->rootArea()->boundingRect();
+    rect.moveTop(-m_textShapeData->documentOffset());
+    return rect | QRectF(QPointF(0, 0), size());
 }
 
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)

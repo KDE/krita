@@ -95,14 +95,6 @@ public:
     /// are the tabs relative to indent or not
     bool relativeTabs() const;
 
-    /**
-     * Expands the give rect in the horizontal dimension,
-     * so that everything in the document will be visible
-     * Notably this can give a negative x coord
-     * the vertical dimensions are never touched or relied upon
-     */
-    QRectF expandVisibleRect(const QRectF &rect) const;
-
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 

@@ -488,6 +488,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
 
+        m_boundingRect.setLeft(qMin(cursor->line.x(), m_boundingRect.x()));
+        m_boundingRect.setRight(qMax(cursor->line.x()+cursor->line.width(),
+                                     m_boundingRect.right()));
+
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
         runAroundHelper.setLine(this, cursor->line);
@@ -705,6 +709,13 @@ void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData)
     m_borderInsets.right += m_format.doubleProperty(KoParagraphStyle::RightPadding);
 }
 */
+
+QRectF KoTextLayoutArea::boundingRect() const
+{
+    return m_boundingRect;
+}
+
+
 qreal KoTextLayoutArea::maximumAllowedBottom() const
 {
     return m_maximalAllowedBottom;
@@ -721,6 +732,7 @@ void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qrea
     m_left = left;
     m_right = right;
     m_top = top;
+    m_boundingRect.setTop(top);
     m_maximalAllowedBottom = maximumAllowedBottom;
 }
 
@@ -746,6 +758,7 @@ qreal KoTextLayoutArea::bottom() const
 
 void KoTextLayoutArea::setBottom(qreal bottom)
 {
+    m_boundingRect.setBottom(bottom);
     m_bottom = bottom;
 }
 

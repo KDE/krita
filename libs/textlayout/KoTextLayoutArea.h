@@ -135,6 +135,7 @@ private:
     qreal m_listIndent;
     qreal m_defaultTabSizing;
     bool m_isRtl;
+    qreal m_bottomSpacing;
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;

@@ -24,6 +24,7 @@
 #include <qtest_kde.h>
 
 #include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
 
 class QPainter;
 class KoViewConverter;
@@ -45,11 +46,9 @@ private slots:
     /// make sure empty paragraphs are initialized properly
     void testEmptyParag();
 
-    /// Test breaking lines based on the width of the shape.
+    /// Test breaking lines based on the width of the reference rect.
     void testLineBreaking();
 
-//    /// Test breaking lines for frames with different widths.
-//    void testMultiFrameLineBreaking();
     /// Tests incrementing Y pos based on the font size
     void testBasicLineSpacing();
     /// Tests incrementing Y pos based on the font size
@@ -57,20 +56,18 @@ private slots:
     /// Tests advanced linespacing options provided in our style.
     void testAdvancedLineSpacing();
     /// test data integrety for multiple shapes.
-//    void testShapePosition();
-//    void testShapePosition2();
 
-// Block styles
-    /// Test top, left, right and bottom margins of paragraphs.
-    void testMargins();
-//    void testMultipageMargins();
+    /// Test distance above and below paragraphs.
+    void testBlockSpacing();
+
+    /// Test left and right margins of paragraphs.
+    void testLeftRightMargins();
+
+    /// Test first line indent of paragraphs.
     void testTextIndent();
+    
     void testBasicTextAlignments();
     void testTextAlignments();
-//    void testPageBreak();
-//    void testPageBreak2();
-//    void testNonBreakableLines();
-
 
 // relativeBulletSize
 
@@ -89,6 +86,7 @@ private:
     QTextBlock m_block;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
+    KoTextLayoutRootArea *m_area;
 };
 
 #endif

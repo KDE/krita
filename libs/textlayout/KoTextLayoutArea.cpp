@@ -122,8 +122,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     m_startOfArea = new FrameIterator(cursor);
     m_y = top();
+    m_bottomSpacing = 0;
 
-   while (true) {
+    while (true) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
@@ -131,6 +132,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             // Let's create KoTextLayoutTableArea and let that handle the table
             KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
             m_tableAreas.append(tableArea);
+            m_y += m_bottomSpacing;
             tableArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
@@ -138,6 +140,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 setBottom(m_y);
                 return false;
             }
+            m_bottomSpacing = 0;
             m_y = tableArea->bottom();
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
@@ -152,6 +155,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         }
         if (cursor->it.atEnd()) {
             m_endOfArea = new FrameIterator(cursor);
+            m_y += m_bottomSpacing;
             setBottom(m_y);
             return true; // we have layouted till the end of the frame
         }
@@ -230,6 +234,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         blockData = new KoTextBlockData();
         block.setUserData(blockData);
     }
+
+    m_y += qMax(m_bottomSpacing, format.topMargin());
+
     blockData->setEffectiveTop(m_y);
 
     QTextLayout *layout = block.layout();
@@ -470,6 +477,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (true /*FIXME !runAroundHelper.stayOnBaseline()*/) {
             m_y += maxLineHeight;
             maxLineHeight = 0;
+            m_x -= textIndent(block);
+            m_width += textIndent(block);
         }
 
         // drop caps
@@ -496,6 +505,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
     }
     cursor->line = QTextLine(); //set an invalid line to indicate we are done with block
+
+    m_bottomSpacing = format.bottomMargin();
+
     return true;
 }
 

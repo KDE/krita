@@ -64,6 +64,8 @@ void TestBlockLayout::setupTest(const QString &initText)
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
+    m_area = provider->provide(0, m_layout);
+
     m_block = m_doc->begin();
     if (initText.length() > 0) {
         QTextCursor cursor(m_doc);
@@ -109,7 +111,6 @@ void TestBlockLayout::testBasicLineSpacing()
     qreal lineSpacing18 = fontHeight18 * 1.2; // 120% is the normal lineSpacing.
 
     // QCOMPARE(blockLayout->lineCount(), 15);
-    QCOMPARE(blockLayout->lineForTextPosition(1).width(), 200.0);
     QTextLine line;
     for (int i = 0; i < 15; i++) {
         line = blockLayout->lineAt(i);
@@ -150,30 +151,9 @@ void TestBlockLayout::testBasicLineSpacing()
 
     for (int i = 2; i < 15; i++) {
         line = blockLayout->lineAt(i);
-//qDebug() << "i: " << i << " gives: " << line.y() << " + " <<  line.ascent() << ", " << line.descent() << " = " << line.height();
+//qDebug() << "i: " << i << " gives: " << line.y() << (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12);
         QVERIFY(qAbs(line.y() - (lineSpacing12 + lineSpacing18 + (i - 2) * lineSpacing12)) < ROUNDING);
     }
-// Test widget to show what we have
-    /*
-        class Widget : public QWidget {
-          public:
-            Widget(KWTextDocumentLayout *layout) {
-                m_layout = layout;
-            }
-            void paintEvent (QPaintEvent * e) {
-                QPainter painter( this );
-                QAbstractTextDocumentLayout::PaintContext pc;
-                pc.cursorPosition = -1;
-                m_layout->draw( &painter, pc);
-            }
-          private:
-            KWTextDocumentLayout *m_layout;
-        };
-
-        QMainWindow mw;
-        mw.setCentralWidget(new Widget(m_layout));
-        mw.show();
-        m_app->exec(); */
 }
 
 void TestBlockLayout::testBasicLineSpacing2()
@@ -277,7 +257,84 @@ void TestBlockLayout::testAdvancedLineSpacing()
     QCOMPARE(blockLayout->lineAt(0).y(), 112 + height);
 }
 
-void TestBlockLayout::testMargins()
+// Test that spacing between blocks are the max of bottomMargin and topMargin
+// of the top and bottom block respectively
+// If the block doesn't connect to another block (top and bottom of pages or
+// table cells, oif blocks are intersperced with say a table. Then it's
+// just the plain margin
+// For completeness sake we test with 3 blocks just to make sure it works
+void TestBlockLayout::testBlockSpacing()
+{
+    setupTest(m_loremIpsum);
+    QTextCursor cursor(m_doc);
+    QTextCursor cursor1(m_doc);
+
+    // create second parag
+    cursor.setPosition(m_loremIpsum.length());
+    cursor.insertText("\n");
+    cursor.insertText(m_loremIpsum);
+
+    // create third parag
+    cursor.insertText("\n");
+    cursor.insertText(m_loremIpsum);
+    m_layout->layout();
+
+    QTextBlock block2 = m_doc->begin().next();
+    QTextBlock block3 = m_doc->begin().next().next();
+
+    QTextCursor cursor2(block2);
+    QTextCursor cursor3(block3);
+
+    // and test spacing between blocks
+    QTextBlockFormat bf1 = cursor1.blockFormat();
+    QTextLayout *block1Layout = m_block.layout();
+    QTextBlockFormat bf2 = cursor2.blockFormat();
+    QTextLayout *block2Layout = block2.layout();
+    QTextBlockFormat bf3 = cursor3.blockFormat();
+    QTextLayout *block3Layout = block3.layout();
+    int lastLineNum = block1Layout->lineCount() - 1;
+    const qreal lineSpacing = 12.0 * 1.2;
+
+    qreal spaces[3] = {0.0, 3.0, 6.0};
+    for (int t1 = 0; t1 < 3; ++t1) {
+        for (int t2 = 0; t2 < 3; ++t2) {
+            for (int t3 = 0; t3 < 3; ++t3) {
+                for (int b1 = 0; b1 < 3; ++b1) {
+                    bf1.setTopMargin(spaces[t1]);
+                    bf1.setBottomMargin(spaces[b1]);
+                    cursor1.setBlockFormat(bf1);
+                    for (int b2 = 0; b2 < 3; ++b2) {
+                        bf2.setTopMargin(spaces[t2]);
+                        bf2.setBottomMargin(spaces[b2]);
+                        cursor2.setBlockFormat(bf2);
+                        for (int b3 = 0; b3 < 3; ++b3) {
+                            bf3.setTopMargin(spaces[t3]);
+                            bf3.setBottomMargin(spaces[b3]);
+                            cursor3.setBlockFormat(bf3);
+                            m_layout->layout();
+
+                            // Now lets do the actual testing
+                            //Above first block is just plain
+                            QVERIFY(qAbs(block1Layout->lineAt(0).y() - spaces[t1]) < ROUNDING);
+
+                            // Between 1st and 2nd block is max of spaces
+                            QVERIFY(qAbs((block2Layout->lineAt(0).y() - block1Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b1], spaces[t2])) < ROUNDING);
+
+
+                            // Between 2nd and 3rd block is max of spaces
+                            QVERIFY(qAbs((block3Layout->lineAt(0).y() - block2Layout->lineAt(lastLineNum).y() - lineSpacing) - qMax(spaces[b2], spaces[t3])) < ROUNDING);
+
+                            //Below 3rd block is just plain
+                            //QVERIFY(qAbs(bottom()-block3Layout->lineAt(lastLineNum).y() - lineSpacing - spaces[t1]) < ROUNDING);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void TestBlockLayout::testLeftRightMargins()
 {
     setupTest(m_loremIpsum);
     QTextCursor cursor(m_doc);
@@ -301,41 +358,61 @@ void TestBlockLayout::testMargins()
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0);
     QCOMPARE(blockLayout->lineAt(0).width(), 185.0); // still uses the right margin of 15
 
+    // create second parag
     cursor.setPosition(m_loremIpsum.length());
     cursor.insertText("\n");
     bf.setTopMargin(12);
     cursor.setBlockFormat(bf);
-    cursor.insertText(m_loremIpsum);// create second parag
+    cursor.insertText(m_loremIpsum);
     m_layout->layout();
     QCOMPARE(blockLayout->lineAt(0).x(), 0.0); // parag 1
     QCOMPARE(blockLayout->lineAt(0).width(), 185.0);
 
     // and test parag 2
     QTextBlock block2 = m_doc->begin().next();
-    QTextLayout *layout = block2.layout();
-    QCOMPARE(layout->lineAt(0).x(), 0.0);
-    QCOMPARE(layout->lineAt(0).width(), 185.0);
-
-    QTextLine lastLineOfParag1 = blockLayout->lineAt(blockLayout->lineCount() - 1);
-    QTextLine firstLineOfParag2 =  layout->lineAt(0);
-    const qreal FONTSIZE = 12.0;
-    const qreal BottomParag1 = lastLineOfParag1.y() + (FONTSIZE * 1.2);
-    QVERIFY(qAbs(firstLineOfParag2.y() - BottomParag1  - 12.0) < ROUNDING);
+    QTextLayout *block2Layout = block2.layout();
+    QCOMPARE(block2Layout->lineAt(0).x(), 0.0);
+    QCOMPARE(block2Layout->lineAt(0).width(), 185.0);
 }
 
 void TestBlockLayout::testTextIndent()
 {
     setupTest(m_loremIpsum);
     QTextCursor cursor(m_doc);
-    QTextBlockFormat format = cursor.blockFormat();
-    format.setTextIndent(20);
-    cursor.setBlockFormat(format);
+    QTextBlockFormat bf = cursor.blockFormat();
+    bf.setTextIndent(20);
+    cursor.setBlockFormat(bf);
 
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
 
     QCOMPARE(blockLayout->lineAt(0).x(), 20.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 180.0);
     QCOMPARE(blockLayout->lineAt(1).x(), 0.0);
+    QCOMPARE(blockLayout->lineAt(1).width(), 200.0);
+
+    // Add som left margin to check for no correlation
+    bf.setLeftMargin(15.0);
+    cursor.setBlockFormat(bf);
+    m_layout->layout();
+    QCOMPARE(blockLayout->lineAt(0).x(), 35.0);
+    QCOMPARE(blockLayout->lineAt(0).width(), 165.0);
+    QCOMPARE(blockLayout->lineAt(1).x(), 15.0);
+    QCOMPARE(blockLayout->lineAt(1).width(), 185.0);
+
+    // create second parag and see it works too
+    cursor.setPosition(m_loremIpsum.length());
+    cursor.insertText("\n");
+    bf.setTopMargin(12);
+    cursor.setBlockFormat(bf);
+    cursor.insertText(m_loremIpsum);
+    m_layout->layout();
+    QTextBlock block2 = m_doc->begin().next();
+    QTextLayout *block2Layout = block2.layout();
+    QCOMPARE(block2Layout->lineAt(0).x(), 35.0);
+    QCOMPARE(block2Layout->lineAt(0).width(), 165.0);
+    QCOMPARE(block2Layout->lineAt(1).x(), 15.0);
+    QCOMPARE(block2Layout->lineAt(1).width(), 185.0);
 }
 
 void TestBlockLayout::testBasicTextAlignments()
@@ -642,6 +719,7 @@ void TestBlockLayout::testDropCaps()
     qreal heightNormalLine = line.height();
     qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
+    qDebug() <<line.position().x();
     QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since

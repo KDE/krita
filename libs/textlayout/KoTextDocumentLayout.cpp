@@ -291,7 +291,6 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
 //TODO place m_currentLayoutIterator at position
 //and m_rootArea at corresponding root area and then do layout
-qDebug() << "FIXME MISSING Document changed and we should request to be layouted";
 }
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
@@ -331,6 +330,11 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::layout()
 {
+    d->rootArea = 0;
+    delete d->layoutPosition;
+    d->layoutPosition = new FrameIterator(document()->rootFrame());
+    d->y = 0;
+
     do {
         // request a Root Area
         d->rootArea = d->provider->provide(d->rootArea, this);

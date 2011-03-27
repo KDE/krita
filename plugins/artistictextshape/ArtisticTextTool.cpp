@@ -212,16 +212,42 @@ QTransform ArtisticTextTool::cursorTransform() const
 
 void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    if ( ! m_currentShape || !m_showCursor )
+    if (! m_currentShape)
         return;
 
-    painter.save();
-    m_currentShape->applyConversion( painter, converter );
-    painter.setBrush( Qt::black );
-    painter.setWorldTransform( cursorTransform(), true );
-    painter.setClipping( false );
-    painter.drawPath( m_textCursorShape );
-    painter.restore();
+    if (m_showCursor) {
+        painter.save();
+        m_currentShape->applyConversion( painter, converter );
+        painter.setBrush( Qt::black );
+        painter.setWorldTransform( cursorTransform(), true );
+        painter.setClipping( false );
+        painter.drawPath( m_textCursorShape );
+        painter.restore();
+    }
+
+    if (m_currentShape->isOnPath()) {
+        const QPainterPath baseline = m_currentShape->baseline();
+        const qreal offset = m_currentShape->startOffset();
+        QPointF offsetPoint = baseline.pointAtPercent(offset);
+
+        QTransform transform;
+        transform.translate( offsetPoint.x(), offsetPoint.y() );
+        transform.rotate(360. - baseline.angleAtPercent(offset));
+
+        QSizeF paintSize = handlePaintRect(QPointF()).size();
+        QPainterPath handle;
+        handle.moveTo(0, 0);
+        handle.lineTo(0.5*paintSize.width(), paintSize.height());
+        handle.lineTo(-0.5*paintSize.width(), paintSize.height());
+        handle.closeSubpath();
+
+        painter.save();
+        m_currentShape->applyConversion( painter, converter );
+        painter.setPen(Qt::blue);
+        painter.setBrush(Qt::white);
+        painter.drawPath(transform.map(handle));
+        painter.restore();
+    }
 }
 
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )

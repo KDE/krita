@@ -47,6 +47,8 @@
 
 #include <float.h>
 
+const int BlinkInterval = 500;
+
 class ArtisticTextTool::AddTextRangeCommand : public QUndoCommand
 {
     public:
@@ -224,6 +226,7 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.drawPath( m_textCursorShape );
         painter.restore();
     }
+    m_showCursor = !m_showCursor;
 
     if (m_currentShape->isOnPath()) {
         const QPainterPath baseline = m_currentShape->baseline();
@@ -258,7 +261,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             m_showCursor = false;
             updateTextCursorArea();
             canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_hoverPath ) );
-            m_blinkingCursor.start( 500 );
+            m_blinkingCursor.start( BlinkInterval );
             updateActions();
             m_hoverPath = 0;
             return;
@@ -270,6 +273,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             selection->deselectAll();
             enableTextCursor( false );
             m_currentShape = m_hoverText;
+            m_currentText = m_currentShape->text();
             emit shapeSelected(m_currentShape, canvas());
             enableTextCursor( true );
             selection->select( m_currentShape );
@@ -290,7 +294,6 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             }
         }
         setTextCursorInternal( hit );
-        m_currentText = m_currentShape->text();
     }
     event->ignore();
 }
@@ -384,8 +387,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         if(m_currentShape)
             break;
     }
-    if( m_currentShape == 0 ) 
-    {
+    if( m_currentShape == 0 )  {
         // none found
         emit done();
         return;
@@ -394,19 +396,17 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         emit shapeSelected(m_currentShape, canvas());
     }
 
-    enableTextCursor( true );
+    m_hoverText = 0;
+    m_hoverPath = 0;
 
     createTextCursorShape();
-
+    enableTextCursor( true );
     updateActions();
-
     emit statusTextChanged( i18n("Press return to finish editing.") );
 }
 
 void ArtisticTextTool::blinkCursor()
 {
-    updateTextCursorArea();
-    m_showCursor = !m_showCursor;
     updateTextCursorArea();
 }
 
@@ -509,7 +509,7 @@ void ArtisticTextTool::enableTextCursor( bool enable )
         if( m_currentShape )
             setTextCursorInternal( m_currentShape->text().length() );
         connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
-        m_blinkingCursor.start( 500 );
+        m_blinkingCursor.start( BlinkInterval );
     } else {
         m_blinkingCursor.stop();
         disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );

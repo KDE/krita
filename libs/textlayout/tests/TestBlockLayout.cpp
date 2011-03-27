@@ -719,7 +719,6 @@ void TestBlockLayout::testDropCaps()
     qreal heightNormalLine = line.height();
     qreal linexpos = line.position().x();
     QCOMPARE(line.position().y(), 0.0); // aligned top
-    qDebug() <<line.position().x();
     QVERIFY(line.position().x() > 20.0); // can't get a tight-boundingrect here.
 
     // Now test that a following block is moved inward by the same about since

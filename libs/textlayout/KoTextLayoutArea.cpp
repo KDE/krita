@@ -65,6 +65,7 @@ extern int qt_defaultDpiY();
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : parent(p)
  , m_documentLayout(documentLayout)
+ , m_dropCapsWidth(0)
  , m_startOfArea(0)
 {
 }
@@ -181,9 +182,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
     QTextBlockFormat format = block.blockFormat();
 
-    int dropCapsNChars;
     int dropCapsAffectsNMoreLines = 0;
-    qreal dropCapsAffectedLineWidthAdjust;
     qreal dropCapsPositionAdjust;
 
     KoText::Direction dir = static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
@@ -368,8 +367,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         for (int i=0; i < 5; ++i) {
             QFontMetricsF fm(f);
             QRectF rect = fm.tightBoundingRect(dropCapsText);
-            dropCapsAffectedLineWidthAdjust = rect.width();
-            dropCapsAffectedLineWidthAdjust += fm.rightBearing(lastChar);
+            m_dropCapsWidth = rect.width();
+            m_dropCapsWidth += fm.rightBearing(lastChar);
             const qreal diff = dropCapsHeight - rect.height();
             dropCapsPositionAdjust = rect.top() + fm.ascent();
             if (qAbs(diff < 0.5)) // good enough
@@ -387,10 +386,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         formatRanges.append(dropCapsFormatRange);
         layout->setAdditionalFormats(formatRanges);
 
-        dropCapsNChars = dropCapsLength + firstNonSpace;
-        dropCapsAffectsNMoreLines = (dropCapsNChars > 0) ? dropCapsLines : 0;
+        m_dropCapsNChars = dropCapsLength + firstNonSpace;
+        dropCapsAffectsNMoreLines = (m_dropCapsNChars > 0) ? dropCapsLines : 0;
     } else {
-        dropCapsNChars = 0;
+        m_dropCapsNChars = 0;
     }
 
     layout->setTextOption(option);
@@ -430,17 +429,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //FIXME m_x += m_borderInsets.left;
     //FIXME m_width -= m_borderInsets.left + m_borderInsets.right;
 
-    if (dropCapsNChars == 0) {
-        m_x += dropCapsAffectedLineWidthAdjust;
-        m_width -= dropCapsAffectedLineWidthAdjust;
-    }
-
-    if (dropCapsNChars>0)
-        m_width =  dropCapsAffectedLineWidthAdjust+10;
-
+    m_indent = 0;
     if (cursor->line.isValid() == false) {
-        m_x += textIndent(block);
-        m_width -= textIndent(block);
+        m_indent = textIndent(block);
         cursor->line = layout->createLine();
         cursor->fragmentIterator = block.begin();
     }
@@ -477,23 +468,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (true /*FIXME !runAroundHelper.stayOnBaseline()*/) {
             m_y += maxLineHeight;
             maxLineHeight = 0;
-            m_x -= textIndent(block);
-            m_width += textIndent(block);
+            m_indent = 0;
         }
 
         // drop caps
-        if (dropCapsNChars > 0) { // we just laid out the dropped chars
+        if (m_dropCapsNChars > 0) { // we just laid out the dropped chars
             y_justBelowDropCaps = m_y; // save the y position just below the dropped characters
             m_y = cursor->line.y();              // keep the same y for the next line
             cursor->line.setPosition(cursor->line.position() - QPointF(0, dropCapsPositionAdjust));
-            dropCapsNChars = 0;
+            m_dropCapsNChars = 0;
         } else if (dropCapsAffectsNMoreLines > 0) { // we just laid out a drop-cap-affected line
             dropCapsAffectsNMoreLines--;
             if (dropCapsAffectsNMoreLines == 0) {   // no more drop-cap-affected lines
                 if (m_y < y_justBelowDropCaps)
                     m_y = y_justBelowDropCaps; // make sure m_y is below the dropped characters
                 y_justBelowDropCaps = 0;
-                dropCapsAffectedLineWidthAdjust = 0;
+                m_dropCapsWidth = 0;
             }
         }
 
@@ -530,12 +520,15 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block) const
 
 qreal KoTextLayoutArea::x() const
 {
-    return m_x;
+    return m_x + m_indent + (m_dropCapsNChars == 0 ? m_dropCapsWidth : 0.0);
 }
 
 qreal KoTextLayoutArea::width() const
 {
-    return m_width;
+    if (m_dropCapsNChars > 0) {
+        return m_dropCapsWidth + 10;
+    }
+    return m_width - m_indent - m_dropCapsWidth;
 }
 
 qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockData)

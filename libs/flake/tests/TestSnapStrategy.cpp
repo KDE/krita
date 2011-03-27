@@ -751,7 +751,7 @@ void TestSnapStrategy::testExtensionDirection()
     */
     ExtensionSnapStrategy toTestThree;
     QPointF expectedPointThree(0,0);
-    QPointF paramPositionThree();
+    QPointF paramPositionThree(1,1);
     KoPathPoint paramPointThree;
     paramPointThree.setPoint(paramPositionThree);
     paramPointThree.setParent(&shapeOne); 

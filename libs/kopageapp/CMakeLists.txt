@@ -69,6 +69,7 @@ install(FILES
     KoPageApp.h
     KoPALoadingContext.h
     KoPAPage.h
+    KoPAMasterPage.h
     KoPAPageBase.h
     KoPAPageContainerModel.h
     KoPASavingContext.h

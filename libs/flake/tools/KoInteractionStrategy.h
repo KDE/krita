@@ -2,6 +2,7 @@
 
    Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2007, 2009 Thomas Zander <zander@kde.org>
+   Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -97,6 +98,12 @@ protected:
     KoInteractionStrategy(KoInteractionStrategyPrivate &);
 
     KoInteractionStrategyPrivate *d_ptr;
+
+    /// Convenience function to get the global handle radius
+    uint handleRadius() const;
+
+    /// Cenvenience function to get the global grab sensitivity
+    uint grabSensitivity() const;
 
 private:
     Q_DECLARE_PRIVATE(KoInteractionStrategy)

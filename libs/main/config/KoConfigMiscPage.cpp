@@ -68,17 +68,10 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentR
 
     d->config = d->doc->componentData().config();
 
-    d->oldGrabSensitivity = 3;
-    d->oldHandleRadius = 3;
+    d->oldGrabSensitivity = d->docResources->grabSensitivity();
+    d->oldHandleRadius = d->docResources->handleRadius();
     d->oldPasteOffset = d->docResources->pasteOffset();
     d->oldPasteAtCursor = d->docResources->pasteAtCursor();
-
-    if (d->config->hasGroup("Misc")) {
-        KConfigGroup miscGroup = d->config->group("Misc");
-
-        d->oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", d->oldGrabSensitivity);
-        d->oldHandleRadius = miscGroup.readEntry("HandleRadius", d->oldHandleRadius);
-    }
 
     KoUnit unit = d->doc->unit();
 
@@ -159,17 +152,28 @@ void KoConfigMiscPage::apply()
     uint currentHandleRadius = d->handleRadius->value();
     if (currentHandleRadius != d->oldHandleRadius) {
         miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
+        d->docResources->setHandleRadius(currentHandleRadius);
     }
 
     uint currentGrabSensitivity = d->grabSensitivity->value();
     if (currentGrabSensitivity != d->oldGrabSensitivity) {
         miscGroup.writeEntry("GrabSensitivity", currentGrabSensitivity);
+        d->docResources->setGrabSensitivity(currentGrabSensitivity);
     }
 
     qreal currentCopyOffset = d->pasteOffset->value();
     if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
         d->docResources->setPasteOffset(currentCopyOffset);
+<<<<<<< HEAD
+    }
+
+    const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
+    if (currentPasteAtCursor != d->oldPasteAtCursor) {
+        miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
+        d->docResources->enablePasteAtCursor(currentPasteAtCursor);
+=======
+>>>>>>> master
     }
 
     const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
@@ -177,8 +181,6 @@ void KoConfigMiscPage::apply()
         miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
         d->docResources->enablePasteAtCursor(currentPasteAtCursor);
     }
-
-    // FIXME how is the handle radius and grap sensitivitiy set?
 }
 
 void KoConfigMiscPage::slotDefault()

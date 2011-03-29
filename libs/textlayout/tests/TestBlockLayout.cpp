@@ -530,7 +530,7 @@ void TestBlockLayout::testParagraphBorders()
     QCOMPARE(blockLayout->lineAt(0).width(), 200.0 - 8.0 - 11.0);
     block = block.next();
     blockLayout = block.layout();
-    //qDebug() << blockLayout->lineAt(0).y();
+    //kDebug() << "blockLayout->lineAt(0).y() "<<blockLayout->lineAt(0).y();
     QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.0 + 14.4 + 10)) < ROUNDING);  // 14.4 is 12 pt font + 20% linespacing
 
     // borders + padding create the total inset.
@@ -693,7 +693,7 @@ void TestBlockLayout::testDropCaps()
     QTextBlock block = m_doc->begin();
     QTextBlock secondblock = block.next();
     style.applyStyle(block);
-    
+
     m_layout->layout();
 
     // dummy version, caps is still false.

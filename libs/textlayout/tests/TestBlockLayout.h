@@ -65,14 +65,14 @@ private slots:
 
     /// Test first line indent of paragraphs.
     void testTextIndent();
-    
+
     void testBasicTextAlignments();
     void testTextAlignments();
 
 // relativeBulletSize
 
     //etc
-//    void testParagOffset();
+    //void testParagOffset();
     void testParagraphBorders();
     void testBorderData();
     void testDropCaps();

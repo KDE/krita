@@ -1531,16 +1531,11 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
     //        handle that in some other way.
     Q_ASSERT( newModel );
 
-
-    if (    ( isPolar( newChartType ) && !isPolar( d->plotAreaChartType ) )
-         || ( !isPolar( newChartType ) && isPolar( d->plotAreaChartType ) ) )
-    {
-        foreach ( DataSet *dataSet, d->dataSets ) {
-            if ( dataSet->chartType() != LastChartType ) {
-                dataSet->setChartType( LastChartType );
-                dataSet->setChartSubType( NoChartSubtype );
-            }
-        }
+    foreach ( DataSet *dataSet, d->dataSets ) {
+        //if ( dataSet->chartType() != LastChartType ) {
+            dataSet->setChartType( LastChartType );
+            dataSet->setChartSubType( NoChartSubtype );
+        //}
     }
 
     KDChart::AbstractDiagram *oldDiagram = d->getDiagram( oldChartType );
@@ -1602,7 +1597,6 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
                 type = KDChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType( type );
-
         }
         break;
     case LineChartType:
@@ -1671,6 +1665,11 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         break;
     default:;
         // FIXME: Implement more chart types
+    }
+    Q_FOREACH( DataSet* set,  d->dataSets )
+    {
+        set->setChartType( d->plotAreaChartType );
+        set->setChartSubType( subType );
     }
 }
 

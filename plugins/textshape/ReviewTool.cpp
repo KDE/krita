@@ -21,6 +21,7 @@
 #include "ReviewTool.h"
 
 #include <KoCanvasBase.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoChangeTracker.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
@@ -120,12 +121,10 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
 int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit);
     if (m_textShapeData->isDirty()) {
         m_textShapeData->fireResizeEvent(); // requests a layout run ;)
     }
-    //FIXME caretPos = qMin(caretPos, m_textShapeData->endPosition());
-    //caretPos = qMax(caretPos, m_textShapeData->position());
     return caretPos;
 }
 

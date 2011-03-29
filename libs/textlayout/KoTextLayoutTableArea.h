@@ -45,6 +45,11 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
+    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+
+    /// Calc a bounding box rect of the selection
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
 private:
     void layoutColumns();
     bool layoutRow(TableIterator *cursor);

@@ -18,13 +18,14 @@
  */
 
 #include "ReferencesTool.h"
+#include "TextShape.h"
 #include "dialogs/SimpleTableOfContentsWidget.h"
 #include "dialogs/SimpleCitationWidget.h"
 #include "dialogs/SimpleFootEndNotesWidget.h"
 #include "dialogs/SimpleCaptionsWidget.h"
 
+#include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
-#include "TextShape.h"
 
 #include <kdebug.h>
 

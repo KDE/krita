@@ -97,8 +97,10 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
+    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+
     /// Calc a bounding box rect of the selection
-    virtual QRectF selectionBoundingBox(QTextCursor &cursor) const;
+    QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
 protected:
     void setBottom(qreal bottom);

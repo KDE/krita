@@ -193,7 +193,7 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
         QTextFrame *subFrame = it.currentFrame();
 
         if (table) {
-            QTextTableCell cell;// TODO =  d->rootAream_state->hitTestTable(table, point);
+            QTextTableCell cell;// TODO =  m_state->hitTestTable(table, point);
             if (cell.isValid()) {
                 position = hitTestIterated(cell.begin(), cell.end(), point,
                                 accuracy);
@@ -203,10 +203,6 @@ int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame
             }
             continue;
         } else if (subFrame) {
-            position = hitTestIterated(subFrame->begin(), subFrame->end(), point, accuracy);
-            if (position != -1)
-                return position;
-            continue;
         } else {
             if (!block.isValid())
                 continue;

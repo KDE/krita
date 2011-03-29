@@ -869,13 +869,11 @@ int TextTool::pointToPosition(const QPointF & point) const
     if (!m_textShape || !m_textShapeData)
         return -1;
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor.data()->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit);
     if (m_textShapeData->isDirty()) {
         kWarning(32500) << "Clicking in not fully laid-out textframe";
         m_textShapeData->fireResizeEvent(); // requests a layout run ;)
     }
-//FIXME    caretPos = qMax(caretPos, m_textShapeData->position());
-//    caretPos = qMin(caretPos, m_textShapeData->endPosition());
     return caretPos;
 }
 

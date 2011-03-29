@@ -88,6 +88,112 @@ KoTextLayoutTableArea::~KoTextLayoutTableArea()
     delete d->endOfArea;
 }
 
+int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+{
+    int lastRow = d->endOfArea->row;
+    if (d->endOfArea->frameIterators[0] == 0) {
+        --lastRow;
+    }
+    if (lastRow <  d->startOfArea->row) {
+        return -1; // empty
+    }
+
+    int firstRow = qMax(d->startOfArea->row, d->headerRows);
+    QPointF headerPoint = point + QPointF(d->headerOffsetX, d->headerOffsetY);
+
+
+    if (d->headerRows) {
+        if (headerPoint.y() < d->rowPositions[0]) {
+            //place at beginning of first cell area
+        }
+    } else {
+        if (point.y() < d->rowPositions[firstRow]) {
+            //place at end of last cell area
+        }
+    }
+
+    // Test normal cells.
+    for (int row = firstRow; row <= lastRow; ++row) {
+        if (point.y() > d->rowPositions[row] && point.y() < d->rowPositions[row+1]) {
+            if (point.x() < d->columnPositions[1]) {
+                return d->cellAreas[row][0]->hitTest(point, accuracy);
+            }
+            if (point.x() > d->columnPositions[d->table->columns() - 1]) {
+                QTextTableCell tableCell = d->table->cellAt(row, d->table->columns() - 1);
+                return d->cellAreas[tableCell.row()][tableCell.column()]->hitTest(point, accuracy);
+            }
+            for (int column = 1; column < d->table->columns(); ++column) {
+                if ((point.x() > d->columnPositions[column] && point.x() < d->columnPositions[column+1])) {
+                    QTextTableCell tableCell = d->table->cellAt(row, column);
+                    return d->cellAreas[tableCell.row()][tableCell.column()]->hitTest(point, accuracy);
+                }
+            }
+        }
+    }
+
+    // Test header row cells.
+    for (int row = 0; row <= d->headerRows; ++row) {
+        if ((headerPoint.y() > d->rowPositions[row] && point.y() < d->rowPositions[row+1])) {
+            if (headerPoint.x() < d->columnPositions[1]) {
+                return d->cellAreas[row][0]->hitTest(headerPoint, accuracy);
+            }
+            if (headerPoint.x() > d->columnPositions[d->table->columns() - 1]) {
+                QTextTableCell tableCell = d->table->cellAt(row, d->table->columns() - 1);
+                return d->cellAreas[tableCell.row()][tableCell.column()]->hitTest(headerPoint, accuracy);
+            }
+            for (int column = 1; column < d->table->columns(); ++column) {
+                if ((headerPoint.x() > d->columnPositions[column] && headerPoint.x() < d->columnPositions[column+1])) {
+                    QTextTableCell tableCell = d->table->cellAt(row, column);
+                    return d->cellAreas[tableCell.row()][tableCell.column()]->hitTest(headerPoint, accuracy);
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+    int lastRow = d->endOfArea->row;
+    if (d->endOfArea->frameIterators[0] == 0) {
+        --lastRow;
+    }
+    if (lastRow <  d->startOfArea->row) {
+        return boundingRect(); // empty
+    }
+
+    int firstRow = qMax(d->startOfArea->row, d->headerRows);
+    QTextTableCell startTableCell = d->table->cellAt(cursor.selectionStart());
+    QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
+
+    if (startTableCell == endTableCell) {
+        return d->cellAreas[startTableCell.row()][startTableCell.column()]->selectionBoundingBox(cursor);
+    } else {
+        int selectionRow;
+        int selectionColumn;
+        int selectionRowSpan;
+        int selectionColumnSpan;
+        cursor.selectedTableCells(&selectionRow, &selectionRowSpan, &selectionColumn, &selectionColumnSpan);
+
+        qreal top, bottom;
+
+        if (selectionRow < d->headerRows) {
+            top = d->rowPositions[selectionRow] + d->headerOffsetY;
+        } else {
+            top = d->rowPositions[qMin(qMax(firstRow, selectionRow), lastRow)];
+        }
+
+        if (selectionRow + selectionRowSpan < d->headerRows) {
+            bottom = d->rowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
+        } else {
+            bottom = d->rowPositions[qMax(firstRow, selectionRow + selectionRowSpan)];
+        }
+
+        return QRectF(d->columnPositions[selectionColumn], top,
+                      d->columnPositions[selectionColumn + selectionRowSpan] - d->columnPositions[selectionColumn], bottom - top);
+    }
+}
+
 bool KoTextLayoutTableArea::layout(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
@@ -440,7 +546,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     bool collapsing = tableStyle.collapsingBorderModel();
 
     // Draw header row cell backgrounds and contents AND borders.
-    for (int row = firstRow; row <= lastRow; ++row) {
+    for (int row = 0; row <= d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
             /*
@@ -493,7 +599,10 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
 
     // Possibly paint the selection of the entire cell
     foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
-        if (selection.cursor.hasComplexSelection()) {
+        QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
+        QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
+
+        if (startTableCell != endTableCell && startTableCell.isValid()) {
             int selectionRow;
             int selectionColumn;
             int selectionRowSpan;
@@ -516,6 +625,8 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
 
 void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, bool collapsing, QTextTableCell tableCell, QVector<QLineF> *accuBlankBorders)
 {
+    Q_UNUSED(context);
+
     int row = tableCell.row();
     int column = tableCell.column();
 

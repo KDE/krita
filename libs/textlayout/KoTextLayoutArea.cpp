@@ -77,23 +77,116 @@ KoTextLayoutArea::~KoTextLayoutArea()
     delete m_endOfArea;
 }
 
-QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
+int KoTextLayoutArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
-    QRectF retval(-5E6,0,105E6,1);
-    QRectF r1(-5E6,0,105E6,0);
-    QRectF r2(-5E6,10,105E6,1);
-qDebug() << r1 << r2 << (r1|r2) << r1.isValid();
     if (m_startOfArea == 0) // We have not been layouted yet
-        return QRectF();
+        return -1;
+
+    int position = -1;
+    bool basicallyFound = false;
 
     QTextFrame::iterator it = m_startOfArea->it;
-    for (; !(it.atEnd()); ++it) {
+    QTextFrame::iterator stop = m_endOfArea->it;
+    if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {
+        ++stop;
+    }
+    int tableAreaIndex = 0;
+    for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
 
         if (table) {
+            if (point.y() > m_tableAreas[tableAreaIndex]->top()
+                    && point.y() < m_tableAreas[tableAreaIndex]->bottom()) {
+                return m_tableAreas[tableAreaIndex]->hitTest(point, accuracy);
+            }
+            ++tableAreaIndex;
+            continue;
+        } else if (subFrame) {
+            continue;
+        } else {
+            if (!block.isValid())
+                continue;
+        }
+        if (basicallyFound) // a subsequent table or lines have now had their chance
+            return position;
+
+        QTextLayout *layout = block.layout();
+        QTextFrame::iterator next = it;
+        next++;
+        if (next != stop && point.y() > layout->boundingRect().bottom()) {
+            // just skip this block.
+            continue;
+        }
+
+        for (int i = 0; i < layout->lineCount(); i++) {
+            QTextLine line = layout->lineAt(i);
+            if (point.y() > line.y() + line.height()) {
+                position = block.position() + line.textStart() + line.textLength();
+                continue;
+            }
+            if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
+                return -1;
+            }
+            if (accuracy == Qt::ExactHit && // left or right of line
+                    (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
+                return -1;
+            }
+            if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
+                // totally right of RTL text means the position is the start of the text.
+                //TODO how about the other side?
+                return block.position() + line.textStart();
+            }
+            if (point.x() > line.x() + line.naturalTextWidth()) {
+                // right of line
+                basicallyFound = true;
+                position = block.position() + line.textStart() + line.textLength();
+                continue;
+            }
+            return block.position() + line.xToCursor(point.x());
+        }
+    }
+    return position;
+}
+
+QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
+{
+    QRectF retval(-5E6,0,105E6,1);
+
+    if (m_startOfArea == 0) // We have not been layouted yet
+        return QRectF();
+
+    QTextFrame::iterator it = m_startOfArea->it;
+    QTextFrame::iterator stop = m_endOfArea->it;
+    if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {
+        ++stop;
+    }
+    int tableAreaIndex = 0;
+    for (; it != stop; ++it) {
+        QTextBlock block = it.currentBlock();
+        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
+        QTextFrame *subFrame = it.currentFrame();
+        QTextBlockFormat format = block.blockFormat();
+
+        if (table) {
+            if (cursor.selectionEnd() < table->firstPosition()) {
+                return retval;
+            }
+            if (cursor.selectionStart() > table->lastPosition()) {
+                ++tableAreaIndex;
+                continue;
+            }
+            if (cursor.selectionStart() > table->firstPosition() && cursor.selectionEnd() < table->lastPosition()) {
+                return m_tableAreas[tableAreaIndex]->selectionBoundingBox(cursor);
+            }
+            if (cursor.selectionStart() > table->firstPosition()) {
+                retval = m_tableAreas[tableAreaIndex]->boundingRect();
+            } else {
+                retval |= m_tableAreas[tableAreaIndex]->boundingRect();
+            }
+            ++tableAreaIndex;
             continue;
         } else if (subFrame) {
             continue;
@@ -102,6 +195,9 @@ qDebug() << r1 << r2 << (r1|r2) << r1.isValid();
                 continue;
         }
 
+        if(cursor.selectionEnd() < block.position()) {
+            return retval;
+        }
         if(cursor.selectionStart() >= block.position()
             && cursor.selectionStart() < block.position() + block.length()) {
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());

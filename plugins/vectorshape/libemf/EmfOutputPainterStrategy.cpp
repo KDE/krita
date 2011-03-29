@@ -147,6 +147,7 @@ void OutputPainterStrategy::init( const Header *header )
 
     // Calculate translation if we should center the EMF in the
     // area and keep the aspect ratio.
+#if 0 // Should apparently be upper left.  See bug 265868
     if ( m_keepAspectRatio ) {
         m_painter->translate((m_outputSize.width() / scaleX - headerBoundsSize.width()) / 2,
                              (m_outputSize.height() / scaleY - headerBoundsSize.height()) / 2);
@@ -154,6 +155,7 @@ void OutputPainterStrategy::init( const Header *header )
         printPainterTransform("after translation for keeping center in the shape");
 #endif
     }
+#endif
 
     m_outputTransform = m_painter->transform();
     m_worldTransform = QTransform();

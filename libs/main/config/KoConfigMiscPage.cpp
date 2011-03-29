@@ -165,15 +165,6 @@ void KoConfigMiscPage::apply()
     if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
         d->docResources->setPasteOffset(currentCopyOffset);
-<<<<<<< HEAD
-    }
-
-    const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
-    if (currentPasteAtCursor != d->oldPasteAtCursor) {
-        miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
-        d->docResources->enablePasteAtCursor(currentPasteAtCursor);
-=======
->>>>>>> master
     }
 
     const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();

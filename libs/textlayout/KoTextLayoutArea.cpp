@@ -678,11 +678,23 @@ qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockDat
         if (useFontProperties) {
             height = line.height();
         } else {
-            if (cursor->fragmentIterator.atEnd()) // no text in parag.
-                height = block.charFormat().fontPointSize();
-            else {
+            if (cursor->fragmentIterator.atEnd()) {// no text in parag.
+
+                qreal fontStretch = 1;
+                // stretch line height to ms-word size
+                if (block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                    fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                }
+                height = block.charFormat().fontPointSize() * fontStretch;
+            } else {
+
+                qreal fontStretch = 1;
+                // stretch line height to ms-word size
+                if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                }
                 // read max font height
-                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize());
+                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
 
                 InlineObjectExtend pos = m_documentLayout->inlineObjectExtend(cursor->fragmentIterator.fragment());
                 objectAscent = qMax(objectAscent, pos.m_ascent);
@@ -700,7 +712,13 @@ qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockDat
                         || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
                         || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                         || m_documentLayout->changeTracker()->displayChanges()) {
-                        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize());
+                        qreal fontStretch = 1;
+                        // stretch line height to ms-word size
+                        if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                        }
+                        // read max font height
+                        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
 
                         InlineObjectExtend pos = m_documentLayout->inlineObjectExtend(cursor->fragmentIterator.fragment());
                         objectAscent = qMax(objectAscent, pos.m_ascent);

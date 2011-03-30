@@ -27,6 +27,7 @@ class KoPathShape;
 class ArtisticTextShape;
 class KoToolBase;
 
+/// A strategy to change the offset of a text when put on a path
 class MoveStartOffsetStrategy : public KoInteractionStrategy
 {
 public:
@@ -40,11 +41,11 @@ public:
     // reimplemnted from KoInteractionStrategy
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 private:
-    ArtisticTextShape *m_text;
-    KoPathShape *m_baselineShape;
-    qreal m_oldStartOffset;
-    QList<qreal> m_segmentLengths;
-    qreal m_totalLength;
+    ArtisticTextShape *m_text;      ///< the text shape we are working on
+    KoPathShape *m_baselineShape;   ///< path shape the text is put on
+    qreal m_oldStartOffset;         ///< the intial start offset
+    QList<qreal> m_segmentLengths;  ///< cached lenths of baseline path segments
+    qreal m_totalLength;            ///< total length of baseline path
 };
 
 #endif // MOVESTARTOFFSETSTRATEGY_H

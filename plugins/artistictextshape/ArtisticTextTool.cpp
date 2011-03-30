@@ -22,6 +22,7 @@
 #include "AttachTextToPathCommand.h"
 #include "DetachTextFromPathCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
+#include "MoveStartOffsetStrategy.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -31,6 +32,7 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <KoLineBorder.h>
+#include <KoInteractionStrategy.h>
 
 #include <KLocale>
 #include <KIcon>
@@ -171,10 +173,9 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
 };
 
 
-
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
-    , m_textCursor( -1 ), m_showCursor( true )
+    , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
     m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
@@ -193,6 +194,7 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
 ArtisticTextTool::~ArtisticTextTool()
 {
+    delete m_currentStrategy;
 }
 
 QTransform ArtisticTextTool::cursorTransform() const
@@ -218,7 +220,7 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
     if (! m_currentShape)
         return;
 
-    if (m_showCursor) {
+    if (m_showCursor && m_blinkingCursor.isActive()) {
         painter.save();
         m_currentShape->applyConversion( painter, converter );
         painter.setBrush( Qt::black );
@@ -239,8 +241,17 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
     }
 }
 
+void ArtisticTextTool::repaintDecorations()
+{
+    canvas()->updateCanvas(offsetHandleShape().boundingRect());
+}
+
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 {
+    if (m_hoverHandle) {
+        enableTextCursor(false);
+        m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
+    }
     if (m_hoverPath && m_currentShape) {
         if (!m_currentShape->isOnPath() || m_currentShape->baselineShape() != m_hoverPath) {
             m_blinkingCursor.stop();
@@ -288,6 +299,11 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
 {
     m_hoverPath = 0;
     m_hoverText = 0;
+
+    if (m_currentStrategy) {
+        m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+        return;
+    }
 
     const bool textOnPath = m_currentShape && m_currentShape->isOnPath();
     if (textOnPath) {
@@ -350,7 +366,15 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
 
 void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    Q_UNUSED(event);
+    if (m_currentStrategy) {
+        m_currentStrategy->finishInteraction(event->modifiers());
+        QUndoCommand *cmd = m_currentStrategy->createCommand();
+        if (cmd)
+            canvas()->addCommand(cmd);
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+        enableTextCursor(true);
+    }
     updateActions();
 }
 
@@ -526,6 +550,7 @@ void ArtisticTextTool::enableTextCursor( bool enable )
         m_blinkingCursor.stop();
         disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         setTextCursorInternal( -1 );
+        m_showCursor = false;
     }
 }
 

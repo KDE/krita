@@ -27,6 +27,7 @@
 #include <QtCore/QTimer>
 
 class QAction;
+class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
 class ArtisticTextTool : public KoToolBase 
@@ -38,7 +39,8 @@ public:
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
+    /// reimplemented
+    virtual void repaintDecorations();
     /// reimplemented
     virtual void mousePressEvent( KoPointerEvent *event ) ;
     /// reimplemented
@@ -100,6 +102,8 @@ private:
     QTimer m_blinkingCursor;
     bool m_showCursor;
     QString m_currentText;
+
+    KoInteractionStrategy *m_currentStrategy;
 };
 
 #endif // ARTISTICTEXTTOOL_H

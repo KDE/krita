@@ -15,6 +15,7 @@ SET ( ArtisticTextShape_SRCS
     ChangeTextOffsetCommand.cpp
     ChangeTextFontCommand.cpp
     ChangeTextAnchorCommand.cpp
+    MoveStartOffsetStrategy.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS

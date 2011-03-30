@@ -61,7 +61,7 @@ class KoFindText::Private
         static QTextCharFormat *currentSelectionFormat;
 };
 
-QTextCharFormat * KoFindText::Private::CurrentSelectionFormat = 0;
+QTextCharFormat * KoFindText::Private::currentSelectionFormat = 0;
 QTextCharFormat * KoFindText::Private::highlightFormat = 0;
 QTextCharFormat * KoFindText::Private::currentMatchFormat = 0;
 

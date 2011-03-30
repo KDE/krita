@@ -74,9 +74,11 @@ void KisTileDataSwapper::kick()
 
 void KisTileDataSwapper::terminateSwapper()
 {
-    m_d->shouldExitFlag = 1;
-    kick();
-    wait();
+    unsigned long exitTimeout = 100;
+    do {
+        m_d->shouldExitFlag = true;
+        kick();
+    } while(!wait(exitTimeout));
 }
 
 void KisTileDataSwapper::waitForWork()

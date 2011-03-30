@@ -25,6 +25,7 @@
 #include "KoResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoShapeController.h"
+#include "KoShapeControllerBase.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -40,11 +41,13 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
         if (crp)
             connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
+
+        // can be 0 in the case of Tables
         KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
-        Q_ASSERT_X(scrm, "KoToolBase::KoToolBase", "No Document KoResourceManager");
-        if (scrm)
+        if (scrm) {
             connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
+        }
     }
 }
 
@@ -56,6 +59,18 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 KoToolBase::~KoToolBase()
 {
     delete d_ptr;
+}
+
+/// Ultimately only called from Tables
+void KoToolBase::updateShapeController(KoShapeControllerBase *shapeController)
+{
+    if (shapeController) {
+        KoResourceManager *scrm = shapeController->resourceManager();
+        if (scrm) {
+            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
+                    this, SLOT(resourceChanged(int, const QVariant &)));
+        }
+    }
 }
 
 void KoToolBase::deactivate()

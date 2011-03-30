@@ -112,9 +112,11 @@ void KisTileDataPooler::kick()
 
 void KisTileDataPooler::terminatePooler()
 {
-    m_shouldExitFlag = 1;
-    kick();
-    wait();
+    unsigned long exitTimeout = 100;
+    do {
+        m_shouldExitFlag = true;
+        kick();
+    } while(!wait(exitTimeout));
 }
 
 qint32 KisTileDataPooler::numClonesNeeded(KisTileData *td) const

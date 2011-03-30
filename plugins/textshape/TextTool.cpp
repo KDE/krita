@@ -2288,8 +2288,6 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
 
     event->accept();
     new KRun(url, 0);
-    m_textEditor.data()->setPosition(0);
-    ensureCursorVisible();
 }
 
 void TextTool::debugTextDocument()

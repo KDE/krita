@@ -34,6 +34,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
+class KoShapeControllerBase;
 
 class KAction;
 class QAction;
@@ -67,6 +68,13 @@ public:
      */
     explicit KoToolBase(KoCanvasBase *canvas);
     virtual ~KoToolBase();
+
+    /**
+     * connect the tool to the new shapecontroller. Old connections are removed.
+     *
+     * @param shapeController the new shape controller
+     */
+    void updateShapeController(KoShapeControllerBase *shapeController);
 
     /**
      * request a repaint of the decorations to be made. This triggers

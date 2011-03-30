@@ -36,7 +36,26 @@
 #include <KoShapeLoadingContext.h>
 #include "KoTextSharedLoadingData.h"
 
+#ifdef SHOULD_BUILD_FONT_CONVERSION
+#include <string.h>
+#include <fontconfig.h>
+#include <fcfreetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_GLYPH_H
+#include FT_TYPES_H
+#include FT_OUTLINE_H
+#include FT_RENDER_H
+#include FT_TRUETYPE_TABLES_H
+#include FT_TRUETYPE_TABLES_H
+#include FT_SFNT_NAMES_H
+#endif
+
 #include <KDebug>
+
+#ifdef SHOULD_BUILD_FONT_CONVERSION
+    QMap<QString,qreal> textScaleMap;
+#endif //SHOULD_BUILD_FONT_CONVERSION
 
 class KoCharacterStyle::Private
 {
@@ -84,6 +103,20 @@ public:
     //This should be called after all charFormat properties are merged to the cursor.
     void ensureMinimalProperties(QTextCursor &cursor, bool blockCharFormatAlso);
 
+    // problem with fonts in linux and windows is that true type fonts have more than one metric
+    // they have normal metric placed in font header table
+    //           microsoft metric placed in os2 table
+    //           apple metric placed in os2 table
+    // ms-word is probably using CreateFontIndirect and GetOutlineTextMetric function to calculate line height
+    // and this functions are using windows gdi environment which is using microsoft font metric placed in os2 table
+    // qt on linux is using normal font metric
+    // this two metrics are different and change from font to font
+    // this font stretch is needed if we want to have exact line height as in ms-word and oo
+    //
+    // font_size * font_stretch = windows_font_height
+    qreal calculateFontStretch(QString fontFamily);
+
+
     StylePrivate hardCodedDefaultStyle;
 
     QString name;
@@ -96,6 +129,7 @@ KoCharacterStyle::Private::Private()
     hardCodedDefaultStyle.add(QTextFormat::FontFamily, QString("Sans Serif"));
     hardCodedDefaultStyle.add(QTextFormat::FontPointSize, 12.0);
     hardCodedDefaultStyle.add(QTextFormat::ForegroundBrush, QBrush(Qt::black));
+    hardCodedDefaultStyle.add(KoCharacterStyle::FontStretch, 1);
 }
 
 
@@ -142,6 +176,144 @@ void KoCharacterStyle::Private::ensureMinimalProperties(QTextCursor &cursor, boo
         cursor.mergeBlockCharFormat(format);
 }
 
+qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
+{
+    qreal stretch = 1;
+#ifdef SHOULD_BUILD_FONT_CONVERSION
+
+    if (textScaleMap.contains(fontFamily)) {
+        return textScaleMap.value(fontFamily);
+    }
+
+    FcResult result = FcResultMatch;
+    FT_Library  library;
+    FT_Face face;
+    int id = 0;
+    int error = 0;
+    QByteArray fontName = fontFamily.toAscii();
+
+    FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, NULL);
+    if (font == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        return 1;
+    }
+
+    // find font
+    FcPattern *matched = 0;
+    matched = FcFontMatch (0, font, &result);
+    if (matched == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        return 1;
+    }
+
+    // get font family name
+    char * str = 0;
+    result = FcPatternGetString (matched, FC_FAMILY, 0,(FcChar8**) &str);
+    if (result != FcResultMatch || str == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // check if right font was found
+    QByteArray foundFontFamily = QByteArray::fromRawData(str, strlen(str));
+    if (foundFontFamily != fontName) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // get path to font
+    str = 0;
+    result = FcPatternGetString (matched, FC_FILE, 0,(FcChar8**) &str);
+    if (result != FcResultMatch) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // get index of font inside the font file
+    result = FcPatternGetInteger (matched, FC_INDEX, 0, &id);
+    if (result != FcResultMatch) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // initialize freetype
+    error = FT_Init_FreeType( &library );
+    if (error) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // get font metric
+    error = FT_New_Face (library,(char *) str, id, &face);
+    if (error) {
+        kDebug() << "Can't calculate font stretch for " << fontFamily;
+        FT_Done_FreeType(library);
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // get font metric os2 table
+    TT_OS2      *os2;
+    os2 = (TT_OS2 *) FT_Get_Sfnt_Table (face, ft_sfnt_os2);
+    if(os2 == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // get font metric header table
+    TT_Header   *header;
+    header = (TT_Header *) FT_Get_Sfnt_Table (face, ft_sfnt_head);
+    if(header == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // check if the data is valid
+    if (header->Units_Per_EM == 0 || (os2->usWinAscent + os2->usWinDescent) == 0) {
+        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
+        FcPatternDestroy (font);
+        FcPatternDestroy (matched);
+        return 1;
+    }
+
+    // compute font height stretch
+    // font_size * font_stretch = windows_font_height
+    qreal height = os2->usWinAscent + os2->usWinDescent;
+    height = height * (2048 / header->Units_Per_EM);
+    stretch = (1.215 * height)/2500;
+
+    FT_Done_Face(face);
+    FT_Done_FreeType(library);
+    FcPatternDestroy (font);
+    FcPatternDestroy (matched);
+
+    textScaleMap.insert(fontFamily, stretch);
+#endif //SHOULD_BUILD_FONT_CONVERSION
+
+    return stretch;
+}
 KoCharacterStyle::KoCharacterStyle(QObject *parent)
         : QObject(parent), d(new Private())
 {
@@ -452,6 +624,7 @@ static QString exportOdfFontStyleHint(QFont::StyleHint hint)
 void KoCharacterStyle::setFontFamily(const QString &family)
 {
     d->setProperty(QTextFormat::FontFamily, family);
+    setFontStretch(d->calculateFontStretch(family));
 }
 QString KoCharacterStyle::fontFamily() const
 {
@@ -713,6 +886,17 @@ void KoCharacterStyle::setFontCapitalization(QFont::Capitalization capitalizatio
 QFont::Capitalization KoCharacterStyle::fontCapitalization() const
 {
     return (QFont::Capitalization) d->propertyInt(QTextFormat::FontCapitalization);
+}
+
+
+void KoCharacterStyle::setFontStretch(qreal stretch)
+{
+    d->setProperty(KoCharacterStyle::FontStretch, stretch);
+}
+
+qreal KoCharacterStyle::fontStretch() const
+{
+    return d->propertyDouble(KoCharacterStyle::FontStretch);
 }
 
 void KoCharacterStyle::setCountry(const QString &country)
@@ -1190,6 +1374,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     generateKey();
     addRef();
 #endif
+
 }
 
 bool KoCharacterStyle::operator==(const KoCharacterStyle &other) const

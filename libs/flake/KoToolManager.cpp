@@ -101,7 +101,8 @@ KoToolManager::Private::~Private()
 {
     qDeleteAll(tools);
 }
-    // helper method.
+
+// helper method.
 CanvasData *KoToolManager::Private::createCanvasData(KoCanvasController *controller, KoInputDevice device)
 {
     QHash<QString, KoToolBase*> origHash;
@@ -810,6 +811,19 @@ void KoToolManager::removeCanvasController(KoCanvasController *controller)
     d->detachCanvas(controller);
     disconnect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     disconnect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
+}
+
+void KoToolManager::updateShapeControllerBase(KoShapeControllerBase *shapeController, KoCanvasController *canvasController)
+{
+    if (!d->canvasses.keys().contains(canvasController))
+        return;
+
+    QList<CanvasData *> canvasses = d->canvasses[canvasController];
+    foreach(CanvasData *canvas, canvasses) {
+        foreach(KoToolBase *tool, canvas->allTools.values()) {
+            tool->updateShapeController(shapeController);
+        }
+    }
 }
 
 void KoToolManager::switchToolRequested(const QString & id)

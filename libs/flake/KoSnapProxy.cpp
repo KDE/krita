@@ -103,6 +103,7 @@ QList<QPointF> KoSnapProxy::pointsFromShape(KoShape * shape)
 
 QList<KoPathSegment> KoSnapProxy::segmentsInRect(const QRectF &rect)
 {
+    
     QList<KoShape*> shapes = shapesInRect(rect, true);
     QList<KoPathPoint*> ignoredPoints = m_snapGuide->ignoredPathPoints();
 
@@ -144,6 +145,7 @@ QList<KoShape*> KoSnapProxy::shapes(bool omitEditedShape)
 
     // filter all hidden and ignored shapes
     foreach(KoShape * shape, allShapes) {
+      
         if (! shape->isVisible(true))
             continue;
         if (ignoredShapes.contains(shape))

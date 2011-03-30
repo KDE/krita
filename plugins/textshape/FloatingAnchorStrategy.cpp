@@ -23,6 +23,7 @@
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
+#include <kdebug.h>
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor)
         : KoAnchorStrategy(),

@@ -37,6 +37,7 @@ class KoTextBlockData;
 class KoImageCollection;
 class KoInlineNote;
 class QTextList;
+class KoTextBlockBorderData;
 
 /**
  * When layout'ing text it is chopped into physical area of space.
@@ -138,10 +139,6 @@ private:
 
     void updateBorders(KoTextBlockData *blockData, QTextBlock *block);
 
-    qreal resolveTextIndent(QTextBlock *block);
-
-    qreal listIndent(KoTextBlockData *blockData, QTextBlock *block);
-
     KoTextDocumentLayout *m_documentLayout;
 
     qreal m_left; // reference area left
@@ -150,7 +147,7 @@ private:
     qreal m_bottom; // reference area top
     qreal m_maximalAllowedBottom;
     QRectF m_boundingRect;
-    KoInsets m_borderInsets;
+    KoTextBlockBorderData *m_prevBorder;
     bool m_rootAreaIsNew;
 
     qreal m_x; // text area starts here as defined by margins (so not == m_left)

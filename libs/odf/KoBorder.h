@@ -136,11 +136,34 @@ public:
     void setBottomBorderSpacing(qreal width);
     qreal bottomBorderSpacing() const;
 
+    void setTlbrBorderStyle(BorderStyle style);
+    BorderStyle tlbrBorderStyle() const;
+    void setTlbrBorderColor(const QColor &color);
+    QColor tlbrBorderColor() const;
+    void setTlbrBorderWidth(qreal width);
+    qreal tlbrBorderWidth() const;
+    void setTlbrInnerBorderWidth(qreal width);
+    qreal tlbrInnerBorderWidth() const;
+    void setTlbrBorderSpacing(qreal width);
+    qreal tlbrBorderSpacing() const;
+
+    void setTrblBorderStyle(BorderStyle style);
+    BorderStyle trblBorderStyle() const;
+    void setTrblBorderColor(const QColor &color);
+    QColor trblBorderColor() const;
+    void setTrblBorderWidth(qreal width);
+    qreal trblBorderWidth() const;
+    void setTrblInnerBorderWidth(qreal width);
+    qreal trblInnerBorderWidth() const;
+    void setTrblBorderSpacing(qreal width);
+    qreal trblBorderSpacing() const;
+
     BorderData leftBorderData() const;
     BorderData topBorderData() const;
     BorderData rightBorderData() const;
     BorderData bottomBorderData() const;
-
+    BorderData tlbrBorderData() const;
+    BorderData trblBorderData() const;
 
     /**
      * Load the style from the element

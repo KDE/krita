@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@
 #include "AttachTextToPathCommand.h"
 #include "DetachTextFromPathCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
+#include "MoveStartOffsetStrategy.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -31,6 +32,7 @@
 #include <KoShapeController.h>
 #include <KoShapeContainer.h>
 #include <KoLineBorder.h>
+#include <KoInteractionStrategy.h>
 
 #include <KLocale>
 #include <KIcon>
@@ -46,6 +48,8 @@
 #include <QtCore/QPointer>
 
 #include <float.h>
+
+const int BlinkInterval = 500;
 
 class ArtisticTextTool::AddTextRangeCommand : public QUndoCommand
 {
@@ -169,14 +173,10 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
 };
 
 
-
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 ), m_showCursor( true )
+    : KoToolBase(canvas), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
+    , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_attachPath  = new QAction(KIcon("artistictext-attach-path"), i18n("Attach Path"), this);
-    m_attachPath->setEnabled( false );
-    connect( m_attachPath, SIGNAL(triggered()), this, SLOT(attachPath()) );
-
     m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
@@ -187,12 +187,14 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 
     KoShapeManager *manager = canvas->shapeManager();
     connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
+    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
     setTextMode(true);
 }
 
 ArtisticTextTool::~ArtisticTextTool()
 {
+    delete m_currentStrategy;
 }
 
 QTransform ArtisticTextTool::cursorTransform() const
@@ -215,40 +217,65 @@ QTransform ArtisticTextTool::cursorTransform() const
 
 void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    if ( ! m_currentShape || !m_showCursor )
+    if (! m_currentShape)
         return;
 
-    painter.save();
-    m_currentShape->applyConversion( painter, converter );
-    painter.setBrush( Qt::black );
-    painter.setWorldTransform( cursorTransform(), true );
-    painter.setClipping( false );
-    painter.drawPath( m_textCursorShape );
-    painter.restore();
+    if (m_showCursor && m_blinkingCursor.isActive()) {
+        painter.save();
+        m_currentShape->applyConversion( painter, converter );
+        painter.setBrush( Qt::black );
+        painter.setWorldTransform( cursorTransform(), true );
+        painter.setClipping( false );
+        painter.drawPath( m_textCursorShape );
+        painter.restore();
+    }
+    m_showCursor = !m_showCursor;
+
+    if (m_currentShape->isOnPath()) {
+        painter.save();
+        m_currentShape->applyConversion( painter, converter );
+        painter.setPen(Qt::blue);
+        painter.setBrush(m_hoverHandle ? Qt::red : Qt::white);
+        painter.drawPath(offsetHandleShape());
+        painter.restore();
+    }
+}
+
+void ArtisticTextTool::repaintDecorations()
+{
+    canvas()->updateCanvas(offsetHandleShape().boundingRect());
 }
 
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 {
-    ArtisticTextShape *hit = 0;
-    QRectF roi( event->point, QSizeF(1,1) );
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach( KoShape *shape, shapes ) 
-    {
-        hit = dynamic_cast<ArtisticTextShape*>( shape );
-        if( hit ) {
-            if ( hit != m_currentShape ) {
-                selection->deselectAll();
-                enableTextCursor( false );
-                m_currentShape = hit;
-                emit shapeSelected(m_currentShape, canvas());
-                enableTextCursor( true );
-                selection->select( m_currentShape );
-            }
-            break;
-        }
+    if (m_hoverHandle) {
+        enableTextCursor(false);
+        m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
     }
-    if ( hit ) {
+    if (m_hoverPath && m_currentShape) {
+        if (!m_currentShape->isOnPath() || m_currentShape->baselineShape() != m_hoverPath) {
+            m_blinkingCursor.stop();
+            m_showCursor = false;
+            updateTextCursorArea();
+            canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_hoverPath ) );
+            m_blinkingCursor.start( BlinkInterval );
+            updateActions();
+            m_hoverPath = 0;
+            return;
+        }
+    } else if (m_hoverText) {
+        KoSelection *selection = canvas()->shapeManager()->selection();
+        if(m_hoverText != m_currentShape) {
+            // if we hit another text shape, select that shape
+            selection->deselectAll();
+            enableTextCursor( false );
+            m_currentShape = m_hoverText;
+            m_currentText = m_currentShape->text();
+            emit shapeSelected(m_currentShape, canvas());
+            enableTextCursor( true );
+            selection->select( m_currentShape );
+        }
+        // change the text cursor position
         QPointF pos = event->point;
         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
         const int len = m_currentShape->text().length();
@@ -264,45 +291,90 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             }
         }
         setTextCursorInternal( hit );
-        m_currentText = m_currentShape->text();
     }
     event->ignore();
 }
 
 void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    m_tmpPath = 0;
-    ArtisticTextShape *textShape = 0;
+    m_hoverPath = 0;
+    m_hoverText = 0;
 
-    QRectF roi( event->point, QSizeF(1,1) );
-    QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( roi );
-    foreach( KoShape * shape, shapes )
-    {
-        ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
-        if ( text )
-        {
-            textShape = text;
-            break;
-        }
-        KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        if ( path )
-        {
-            m_tmpPath = path;
-            break;
+    if (m_currentStrategy) {
+        m_currentStrategy->handleMouseMove(event->point, event->modifiers());
+        return;
+    }
+
+    const bool textOnPath = m_currentShape && m_currentShape->isOnPath();
+    if (textOnPath) {
+        QPainterPath handle = offsetHandleShape();
+        QPointF handleCenter = handle.boundingRect().center();
+        if (handleGrabRect(event->point).contains(handleCenter)) {
+            // mouse is on offset handle
+            if (!m_hoverHandle)
+                canvas()->updateCanvas(handle.boundingRect());
+            m_hoverHandle = true;
+        } else {
+            if (m_hoverHandle)
+                canvas()->updateCanvas(handle.boundingRect());
+            m_hoverHandle = false;
         }
     }
-    if( m_tmpPath )
+    if (!m_hoverHandle) {
+        // find text or path shape at cursor position
+        QList<KoShape*> shapes = canvas()->shapeManager()->shapesAt( handleGrabRect(event->point) );
+        if (shapes.contains(m_currentShape)) {
+            m_hoverText = m_currentShape;
+        } else {
+            foreach( KoShape * shape, shapes ) {
+                ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
+                if ( text ) {
+                    m_hoverText = text;
+                    break;
+                }
+                KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+                if ( path ) {
+                    m_hoverPath = path;
+                    break;
+                }
+            }
+        }
+    }
+
+    const bool hoverOnBaseline = textOnPath && m_currentShape->baselineShape() == m_hoverPath;
+    // update cursor and status text
+    if( m_hoverPath && m_currentShape && !hoverOnBaseline) {
         useCursor( QCursor( Qt::PointingHandCursor ) );
-    else if ( textShape )
+        emit statusTextChanged(i18n("Click to put text on path."));
+    } else if ( m_hoverText ) {
         useCursor( QCursor( Qt::IBeamCursor ) );
-    else
+        if (m_hoverText == m_currentShape)
+            emit statusTextChanged(i18n("Click to change cursor position."));
+        else
+            emit statusTextChanged(i18n("Click to select text shape."));
+    } else if (m_hoverHandle) {
         useCursor( QCursor( Qt::ArrowCursor ) );
+        emit statusTextChanged( i18n("Drag handle to change start offset.") );
+    } else {
+        useCursor( QCursor( Qt::ArrowCursor ) );
+        if (m_currentShape)
+            emit statusTextChanged( i18n("Press return to finish editing.") );
+        else
+            emit statusTextChanged("");
+    }
 }
 
 void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
 {
-    Q_UNUSED(event);
-    m_path = m_tmpPath;
+    if (m_currentStrategy) {
+        m_currentStrategy->finishInteraction(event->modifiers());
+        QUndoCommand *cmd = m_currentStrategy->createCommand();
+        if (cmd)
+            canvas()->addCommand(cmd);
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+        enableTextCursor(true);
+    }
     updateActions();
 }
 
@@ -351,8 +423,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         if(m_currentShape)
             break;
     }
-    if( m_currentShape == 0 ) 
-    {
+    if( m_currentShape == 0 )  {
         // none found
         emit done();
         return;
@@ -361,19 +432,17 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         emit shapeSelected(m_currentShape, canvas());
     }
 
-    enableTextCursor( true );
+    m_hoverText = 0;
+    m_hoverPath = 0;
 
     createTextCursorShape();
-
+    enableTextCursor( true );
     updateActions();
-
     emit statusTextChanged( i18n("Press return to finish editing.") );
 }
 
 void ArtisticTextTool::blinkCursor()
 {
-    updateTextCursorArea();
-    m_showCursor = !m_showCursor;
     updateTextCursorArea();
 }
 
@@ -386,31 +455,18 @@ void ArtisticTextTool::deactivate()
         enableTextCursor( false );
         m_currentShape = 0;
     }
-    m_path = 0;
+    m_hoverPath = 0;
+    m_hoverText = 0;
 }
 
 void ArtisticTextTool::updateActions()
 {
-    m_attachPath->setEnabled( m_path != 0 );
-    if( m_currentShape )
-    {
+    if( m_currentShape ) {
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
     } else {
         m_detachPath->setEnabled( false );
         m_convertText->setEnabled( false );
-    }
-}
-
-void ArtisticTextTool::attachPath()
-{
-    if( m_path && m_currentShape ) {
-        m_blinkingCursor.stop();
-        m_showCursor = false;
-        updateTextCursorArea();
-        canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_path ) );
-        m_blinkingCursor.start( 500 );
-        updateActions();
     }
 }
 
@@ -453,22 +509,18 @@ QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
     
     QGridLayout * layout = new QGridLayout(pathWidget);
     
-    QToolButton * attachButton = new QToolButton(pathWidget);
-    attachButton->setDefaultAction( m_attachPath );
-    layout->addWidget( attachButton, 0, 0 );
-    
     QToolButton * detachButton = new QToolButton(pathWidget);
     detachButton->setDefaultAction( m_detachPath );
-    layout->addWidget( detachButton, 0, 1 );
+    layout->addWidget( detachButton, 0, 0 );
     
     QToolButton * convertButton = new QToolButton(pathWidget);
     convertButton->setDefaultAction( m_convertText );
-    layout->addWidget( convertButton, 0, 3 );
+    layout->addWidget( convertButton, 0, 2 );
     
     layout->setSpacing(0);
     layout->setMargin(6);
     layout->setRowStretch(3, 1);
-    layout->setColumnStretch(2, 1);
+    layout->setColumnStretch(1, 1);
     
     widgets.insert(i18n("Text On Path"), pathWidget);
     
@@ -493,11 +545,12 @@ void ArtisticTextTool::enableTextCursor( bool enable )
         if( m_currentShape )
             setTextCursorInternal( m_currentShape->text().length() );
         connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
-        m_blinkingCursor.start( 500 );
+        m_blinkingCursor.start( BlinkInterval );
     } else {
         m_blinkingCursor.stop();
         disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         setTextCursorInternal( -1 );
+        m_showCursor = false;
     }
 }
 
@@ -572,6 +625,47 @@ void ArtisticTextTool::textChanged()
     kDebug() << "current text =" << m_currentText;
     
     setTextCursorInternal( m_currentShape->text().length() );
+}
+
+void ArtisticTextTool::shapeSelectionChanged()
+{
+    KoSelection *selection = canvas()->shapeManager()->selection();
+    if (selection->isSelected(m_currentShape))
+        return;
+
+    foreach (KoShape *shape, selection->selectedShapes()) {
+        ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(shape);
+        if(text) {
+            enableTextCursor( false );
+            m_currentShape = text;
+            emit shapeSelected(m_currentShape, canvas());
+            enableTextCursor( true );
+            break;
+        }
+    }
+}
+
+QPainterPath ArtisticTextTool::offsetHandleShape()
+{
+    QPainterPath handle;
+    if (!m_currentShape || !m_currentShape->isOnPath())
+        return handle;
+
+    const QPainterPath baseline = m_currentShape->baseline();
+    const qreal offset = m_currentShape->startOffset();
+    QPointF offsetPoint = baseline.pointAtPercent(offset);
+    QSizeF paintSize = handlePaintRect(QPointF()).size();
+
+    handle.moveTo(0, 0);
+    handle.lineTo(0.5*paintSize.width(), paintSize.height());
+    handle.lineTo(-0.5*paintSize.width(), paintSize.height());
+    handle.closeSubpath();
+
+    QTransform transform;
+    transform.translate( offsetPoint.x(), offsetPoint.y() );
+    transform.rotate(360. - baseline.angleAtPercent(offset));
+
+    return transform.map(handle);
 }
 
 #include <ArtisticTextTool.moc>

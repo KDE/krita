@@ -8,12 +8,21 @@ endif(MSVC)
 
 ########### next target ###############
 
-set(TestDocumentLayout_test_SRCS
+set(TestBlockLayout_test_SRCS
  TestBlockLayout.cpp
  MockRootAreaProvider.cpp
 )
-kde4_add_unit_test(TestBlockLayout TESTNAME libs-kotext-TestBlockLayout  ${TestDocumentLayout_test_SRCS})
+kde4_add_unit_test(TestBlockLayout TESTNAME libs-kotext-TestBlockLayout  ${TestBlockLayout_test_SRCS})
 target_link_libraries(TestBlockLayout kotext textlayout komain ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestTableLayout_test_SRCS
+ TestTableLayout.cpp
+ MockRootAreaProvider.cpp
+)
+kde4_add_unit_test(TestTableLayout TESTNAME libs-kotext-TestTableLayout  ${TestTableLayout_test_SRCS})
+target_link_libraries(TestTableLayout kotext textlayout komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 

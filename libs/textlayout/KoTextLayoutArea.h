@@ -26,6 +26,7 @@
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
+#include <KoInsets.h>
 
 #include <QRectF>
 #include <QList>
@@ -135,6 +136,12 @@ private:
 
     int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
 
+    void updateBorders(KoTextBlockData *blockData, QTextBlock *block);
+
+    qreal resolveTextIndent(QTextBlock *block);
+
+    qreal listIndent(KoTextBlockData *blockData, QTextBlock *block);
+
     KoTextDocumentLayout *m_documentLayout;
 
     qreal m_left; // reference area left
@@ -143,6 +150,8 @@ private:
     qreal m_bottom; // reference area top
     qreal m_maximalAllowedBottom;
     QRectF m_boundingRect;
+    KoInsets m_borderInsets;
+    bool m_rootAreaIsNew;
 
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;

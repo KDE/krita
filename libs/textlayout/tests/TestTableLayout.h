@@ -17,76 +17,58 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef TESTBLOCKLAYOUT_H
-#define TESTBLOCKLAYOUT_H
+#ifndef TESTTABLELAYOUT_H
+#define TESTTABLELAYOUT_H
 
 #include <QObject>
 #include <qtest_kde.h>
 
 #include <KoTextDocumentLayout.h>
 #include <KoTextLayoutRootArea.h>
+#include <KoTextLayoutTableArea.h>
 
 class QPainter;
 class KoViewConverter;
 class KoStyleManager;
 class QTextDocument;
 class QTextLayout;
+class QTextTable;
 
 #define ROUNDING 0.126
 
-class TestBlockLayout : public QObject
+class TestTableLayout : public QObject
 {
     Q_OBJECT
 public:
-    TestBlockLayout() {}
+    TestTableLayout() {}
 
 private slots:
     void initTestCase();
 
-    /// make sure empty paragraphs are initialized properly
-    void testEmptyParag();
+    /// make sure our private method setupTest() does what we think it does
+    void testSetupTest();
 
-    /// Test breaking lines based on the width of the reference rect.
-    void testLineBreaking();
+    /// Test width and column layout within reference rect.
+    void testColumnLayout();
 
-    /// Tests incrementing Y pos based on the font size
-    void testBasicLineSpacing();
-    /// Tests incrementing Y pos based on the font size
-    void testBasicLineSpacing2();
-    /// Tests advanced linespacing options provided in our style.
-    void testAdvancedLineSpacing();
-    /// test data integrety for multiple shapes.
-
-    /// Test distance above and below paragraphs.
-    void testBlockSpacing();
-
-    /// Test left and right margins of paragraphs.
-    void testLeftRightMargins();
-
-    /// Test first line indent of paragraphs.
-    void testTextIndent();
-
-    void testBasicTextAlignments();
-    void testTextAlignments();
-
-// relativeBulletSize
-
-    //etc
-    //void testParagOffset();
-    void testParagraphBorders();
-    void testBorderData();
-    void testDropCaps();
 
 private:
-    void setupTest(const QString &initText = QString());
+    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText);
 
 private:
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
     QTextBlock m_block;
+    QTextBlock m_mergedCellBlock;
+    QTextBlock m_topRightCellBlock;
+    QTextBlock m_midRightCellBlock;
+    QTextBlock m_bottomLeftCellBlock;
+    QTextBlock m_bottomMidCellBlock;
+    QTextBlock m_bottomRightCellBlock;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
     KoTextLayoutRootArea *m_area;
+    QTextTable *m_table;
 };
 
 #endif

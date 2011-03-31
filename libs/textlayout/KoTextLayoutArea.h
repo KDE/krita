@@ -34,6 +34,7 @@ class KoStyleManager;
 class KoTextDocumentLayout;
 class KoTextBlockData;
 class KoImageCollection;
+class KoInlineNote;
 class QTextList;
 
 /**
@@ -106,11 +107,23 @@ protected:
     void setBottom(qreal bottom);
     KoTextDocumentLayout *documentLayout() {return m_documentLayout;}
 
+    /// If this area has the responsibility to show footnotes then store
+    /// it so it can later bein the m_pregisteredFootnotes
+    virtual void preregisterFootNote(KoInlineNote *note);
+
+    /// Takes all preregistered footnotes and create Areas out of them
+    void confirmFootNotes();
+
 private:
     bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line
     qreal addLine(FrameIterator *cursor, KoTextBlockData *blockData);
+
+    /// looks for footnotes and preregisters them
+    void findFootNotes(QTextBlock block, const QTextLine &line);
+
+    void clearPreregisteredFootNotes();
 
     void drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection);
 
@@ -144,6 +157,11 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
+
+    qreal m_preregisteredFootNotesHeight;
+    qreal m_footNotesHeight;
+    QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
+    QList<KoTextLayoutArea *> m_footNoteAreas;
 };
 
 #endif

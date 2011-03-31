@@ -47,6 +47,9 @@
 #include <KoChangeTrackerElement.h>
 #include <KoImageData.h>
 #include <KoImageCollection.h>
+#include <KoInlineNote.h>
+#include <KoInlineNote.h>
+#include <KoInlineTextObjectManager.h>
 
 #include <KDebug>
 
@@ -73,6 +76,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
 KoTextLayoutArea::~KoTextLayoutArea()
 {
     qDeleteAll(m_tableAreas);
+    qDeleteAll(m_footNoteAreas);
+    qDeleteAll(m_preregisteredFootNoteAreas);
     delete m_startOfArea;
     delete m_endOfArea;
 }
@@ -220,6 +225,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_startOfArea = new FrameIterator(cursor);
     m_y = top();
     m_bottomSpacing = 0;
+    m_footNotesHeight = 0;
+    m_preregisteredFootNotesHeight = 0;
 
     while (true) {
         QTextBlock block = cursor->it.currentBlock();
@@ -549,14 +556,19 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->line.setPosition(QPointF(x(), m_y));
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
+
+        findFootNotes(block, cursor->line);
+
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
             if (format.nonBreakableLines()) {
                 //set an invalid line so we start this block from beginning next time
                 cursor->line = QTextLine();
             }
+            clearPreregisteredFootNotes();
             return false; //to indicate block was not done!
         }
+        confirmFootNotes();
 
         maxLineHeight = qMax(maxLineHeight, addLine(cursor, blockData));
         //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ true, QPointF(x, m_y));
@@ -785,7 +797,7 @@ void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData)
                    KoParagraphStyle::BottomBorderSpacing, KoParagraphStyle::BottomInnerBorderWidth);
 
     // check if prev parag had a border.
-    QTextBlock prev = m_block.previous();
+    QTextBlock prev = block.previous();
     KoTextBlockBorderData *prevBorder = 0;
     if (prev.isValid()) {
         KoTextBlockData *bd = dynamic_cast<KoTextBlockData*>(prev.userData());
@@ -795,7 +807,7 @@ void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData)
     if (border.hasBorders()) {
         if (blockData == 0) {
             blockData = new KoTextBlockData();
-            m_block.setUserData(blockData);
+            block.setUserData(blockData);
         }
 
         // then check if we can merge with the previous parags border.
@@ -832,7 +844,9 @@ QRectF KoTextLayoutArea::boundingRect() const
 
 qreal KoTextLayoutArea::maximumAllowedBottom() const
 {
-    return m_maximalAllowedBottom;
+    return m_maximalAllowedBottom - m_footNotesHeight
+                    - m_preregisteredFootNotesHeight;
+
 }
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const
@@ -874,6 +888,61 @@ void KoTextLayoutArea::setBottom(qreal bottom)
 {
     m_boundingRect.setBottom(bottom);
     m_bottom = bottom;
+}
+
+void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
+{
+    if (m_documentLayout->inlineTextObjectManager() == 0) {
+        return;
+    }
+    
+    QString text = block.text();
+    int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
+
+    while (pos >= 0 && pos <= line.textStart() + line.textLength()) {
+        QTextCursor c1(block);
+        c1.setPosition(block.position() + pos);
+        c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+        KoInlineNote *note = dynamic_cast<KoInlineNote*>(m_documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+        if (note && note->type() == KoInlineNote::Footnote) {
+            preregisterFootNote(note);
+        }
+
+        pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+    }
+}
+
+void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
+{
+    if (parent == 0) {
+        // TODO once we support footnotes at end of document this is
+        // where we need to add some code
+
+        // FIXME actually create an footNoteArea and append it
+        m_preregisteredFootNotesHeight += 14;
+        //m_preregisteredFootNoteAreas.append(footNoteArea);
+        return;
+    }
+    parent->preregisterFootNote(note);
+}
+
+void KoTextLayoutArea::confirmFootNotes()
+{
+    m_footNotesHeight += m_preregisteredFootNotesHeight;
+    m_footNoteAreas.append(m_preregisteredFootNoteAreas);
+    m_preregisteredFootNotesHeight = 0;
+    m_preregisteredFootNoteAreas.clear();
+    if (parent) {
+        parent->confirmFootNotes();
+    }
+}
+
+void KoTextLayoutArea::clearPreregisteredFootNotes()
+{
+    m_preregisteredFootNotesHeight = 0;
+    m_preregisteredFootNoteAreas.clear();
+    parent->clearPreregisteredFootNotes();
 }
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)

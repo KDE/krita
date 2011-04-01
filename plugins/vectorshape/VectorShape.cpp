@@ -56,8 +56,6 @@ VectorShape::VectorShape()
     , m_type(VectorTypeNone)
 {
     setShapeId(VectorShape_SHAPEID);
-    setCacheMode(KoShape::ScaledCache);
-
    // Default size of the shape.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
 }

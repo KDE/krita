@@ -370,7 +370,6 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
 {
     d->resourceManager = resourceManager;
     setShapeId( ChartShapeId );
-    setCacheMode(KoShape::ScaledCache);
 
     // Instantiated all children first
     d->proxyModel = new ChartProxyModel( &d->tableSource );

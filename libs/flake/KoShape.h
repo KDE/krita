@@ -132,12 +132,6 @@ public:
         ClipPathChanged ///< the shapes clip path has changed
     };
 
-    /// See QGraphicsItem::CacheMode
-    enum CacheMode {
-        NoCache, ///< no cache -- the default
-        ScaledCache, ///< cache at every zoomlevel
-    };
-
     /// The behavior text should do when intersecting this shape.
     enum TextRunAroundSide {
         BiggestRunAroundSide,   ///< Run other text around the side that has the most space
@@ -981,17 +975,6 @@ public:
      */
     KoShapePrivate *priv();
 
-    /**
-     * Returns the cache mode for this shape. The default mode is NoCache (i.e.,
-     * cache is disabled and all painting is immediate).
-     */
-    CacheMode cacheMode() const;
-
-    /**
-     * Set the shape's cache mode to @param mode.
-     */
-    void setCacheMode(CacheMode cacheMode);
-
 protected:
     /// constructor
     KoShape(KoShapePrivate &);
@@ -1077,8 +1060,6 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
-
-    friend class KoShapeManagerCachedPaintingStrategy;
     KoShapePrivate *d_ptr;
 
 private:

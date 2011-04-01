@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include <QtCore/QTimer>
 
 class QAction;
+class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
 class ArtisticTextTool : public KoToolBase 
@@ -38,13 +39,16 @@ public:
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
+    /// reimplemented
+    virtual void repaintDecorations();
     /// reimplemented
     virtual void mousePressEvent( KoPointerEvent *event ) ;
     /// reimplemented
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented
@@ -62,19 +66,19 @@ protected:
     void addToTextCursor( const QString &str );
 
 private slots:
-    void attachPath();
     void detachPath();
     void convertText();
     void blinkCursor();
     void textChanged();
-    
+    void shapeSelectionChanged();
+
 signals:
     void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
+
 private:
     class AddTextRangeCommand;
     class RemoveTextRangeCommand;
-    
+
 private:
     void updateActions();
     void setTextCursorInternal( int textCursor );
@@ -84,12 +88,15 @@ private:
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
 
-    ArtisticTextShape * m_currentShape;
-    KoPathShape * m_path;
-    KoPathShape * m_tmpPath;
-    QPainterPath m_textCursorShape;
+    /// Returns the offset handle shape for the current text shape
+    QPainterPath offsetHandleShape();
 
-    QAction * m_attachPath;
+    ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
+    ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
+    KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
+    QPainterPath m_textCursorShape;     ///< our visual text cursor representation
+    bool m_hoverHandle;
+
     QAction * m_detachPath;
     QAction * m_convertText;
 
@@ -97,6 +104,8 @@ private:
     QTimer m_blinkingCursor;
     bool m_showCursor;
     QString m_currentText;
+
+    KoInteractionStrategy *m_currentStrategy;
 };
 
 #endif // ARTISTICTEXTTOOL_H

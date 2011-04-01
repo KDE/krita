@@ -106,7 +106,7 @@ bool KoDrag::setOdf(const char *mimeType, KoDragOdfSaveHelper &helper)
         return false;
     }
 
-    // Save embedded objects and files
+    // Save embedded objects
     KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30006) << "save embedded documents failed";

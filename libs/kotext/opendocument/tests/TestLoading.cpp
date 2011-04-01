@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -1091,10 +1090,10 @@ QString TestLoading::documentToOdt(QTextDocument *document)
     KoGenStyles mainStyles;
     KoStyleManager *styleMan = KoTextDocument(document).styleManager();
     Q_UNUSED(styleMan);
-    KoEmbeddedDocumentSaver embeddedDocSaver;
+    KoEmbeddedDocumentSaver embeddedSaver;
 
     KoGenChanges changes;
-    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedDocSaver);
+    KoShapeSavingContext context(xmlWriter, mainStyles, embeddedSaver);
 
     KoSharedSavingData *sharedData = context.sharedData(KOTEXT_SHARED_SAVING_ID);
     KoTextSharedSavingData *textSharedData = 0;

@@ -3,7 +3,6 @@
  * Copyright (C) 2000-2005 David Faure <faure@kde.org>
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -887,8 +886,8 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
     store->disallowNameExpansion();
     KoOdfWriteStore odfStore(store);
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
-    KoEmbeddedDocumentSaver embeddedDocSaver;
-    SavingContext documentContext(odfStore, embeddedDocSaver);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -897,8 +896,8 @@ bool KoDocument::saveNativeFormatODF(KoStore *store, const QByteArray &mimeType)
         return false;
     }
 
-    // Save embedded objects and files
-    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
+    // Save embedded objects
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
         odfStore.closeManifestWriter(false);
         delete store;
@@ -1866,8 +1865,8 @@ bool KoDocument::addVersion(const QString& comment)
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     Q_UNUSED(manifestWriter); // XXX why?
 
-    KoEmbeddedDocumentSaver embeddedDocSaver;
-    SavingContext documentContext(odfStore, embeddedDocSaver);
+    KoEmbeddedDocumentSaver embeddedSaver;
+    SavingContext documentContext(odfStore, embeddedSaver);
 
     if (!saveOdf(documentContext)) {
         kDebug(30003) << "saveOdf failed";
@@ -1875,8 +1874,8 @@ bool KoDocument::addVersion(const QString& comment)
         return false;
     }
 
-    // Save embedded objects and files
-    if (!embeddedDocSaver.saveEmbeddedDocuments(documentContext)) {
+    // Save embedded objects
+    if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(30003) << "save embedded documents failed";
         delete store;
         return false;

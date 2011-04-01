@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2008 Pierre Stirnweiss \pierre.stirnweiss_koffice@gadz.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -138,13 +137,13 @@ bool KoTextDrag::setOdf(const char * mimeType, KoTextOdfSaveHelper &helper)
         return false;
     }
 
-    // Save embedded objects and files
+    // Save embedded objects
     KoOdfDocument::SavingContext documentContext(odfStore, embeddedSaver);
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         kDebug(32500) << "save embedded documents failed";
         return false;
     }
- 
+
     // Write out manifest file
     if (!odfStore.closeManifestWriter()) {
         return false;

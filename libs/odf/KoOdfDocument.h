@@ -4,7 +4,6 @@
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -44,10 +43,9 @@ public:
 
     // context passed on saving to saveOdf
     struct SavingContext {
-    SavingContext(KoOdfWriteStore &odfStore,
-                  KoEmbeddedDocumentSaver &embeddedDocSaver)
+        SavingContext(KoOdfWriteStore &odfStore, KoEmbeddedDocumentSaver &embeddedSaver)
                 : odfStore(odfStore)
-                , embeddedSaver(embeddedDocSaver) {}
+                , embeddedSaver(embeddedSaver) {}
 
         KoOdfWriteStore &odfStore;
         KoEmbeddedDocumentSaver &embeddedSaver;

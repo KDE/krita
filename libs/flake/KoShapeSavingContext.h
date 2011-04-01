@@ -74,7 +74,7 @@ public:
      * @brief Constructor
      * @param xmlWriter used for writing the xml
      * @param mainStyles for saving the styles
-     * @param embeddedSaver for saving embedded documents and files
+     * @param embeddedSaver for saving embedded documents
      */
     KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
                          KoEmbeddedDocumentSaver &embeddedSaver);

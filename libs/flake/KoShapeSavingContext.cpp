@@ -3,7 +3,6 @@
    Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
-   Copyright (C) 2011 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -57,20 +56,20 @@ public:
     KoEmbeddedDocumentSaver& embeddedSaver;
 };
 
-KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w, KoGenStyles &s,
-                                                         KoEmbeddedDocumentSaver &ed)
-    : xmlWriter(&w),
-      savingOptions(0),
-      drawId(0),
-      subId(0),
-      imageId(0),
-      mainStyles(s),
-      embeddedSaver(ed)
+KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
+        KoGenStyles &s, KoEmbeddedDocumentSaver &e)
+        : xmlWriter(&w),
+        savingOptions(0),
+        drawId(0),
+        subId(0),
+        imageId(0),
+        mainStyles(s),
+        embeddedSaver(e)
 {
 }
 
 KoShapeSavingContext::KoShapeSavingContext(KoXmlWriter &xmlWriter, KoGenStyles &mainStyles,
-                                           KoEmbeddedDocumentSaver &embeddedSaver)
+        KoEmbeddedDocumentSaver &embeddedSaver)
     : d(new KoShapeSavingContextPrivate(xmlWriter, mainStyles, embeddedSaver))
 {
     // by default allow saving of draw:id

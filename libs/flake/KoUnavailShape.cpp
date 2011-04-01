@@ -86,9 +86,8 @@
 // that are saved by other shapes.
 //
 // FIXME: There should only be ONE place where new object / file names
-//        are generated, not 3(?) like there are now:
-//        KoEmbeddedDocumentSaver, KoEmbeddedDocumentSaver and the
-//        KoImageCollection.
+//        are generated, not 2(?) like there are now:
+//        KoEmbeddedDocumentSaver and the KoImageCollection.
 //
 
 

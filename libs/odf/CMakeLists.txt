@@ -30,7 +30,6 @@ set(koodf_LIB_SRCS
     KoGenChanges.cpp
     KoOdfDocument.cpp
     KoEmbeddedDocumentSaver.cpp
-    #KoEmbeddedFileSaver.cpp
     KoBorder.cpp
     KoPageLayout.cpp
     KoPageFormat.cpp

@@ -274,6 +274,26 @@ else(WIN32)
 endif(WIN32)
 
 ##
+## Test for Fontconfig
+##
+macro_optional_find_package(Fontconfig)
+macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+
+##
+## Test for Freetype
+##
+macro_optional_find_package(Freetype)
+macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+    set(FONTCONFIG_INCLUDE_DIR "")
+    set(FREETYPE_INCLUDE_DIRS "")
+else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+  
+
+##
 ## Test endianess
 ##
 include (TestBigEndian)

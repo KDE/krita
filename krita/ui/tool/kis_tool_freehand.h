@@ -88,6 +88,7 @@ protected slots:
 
     void setSmooth(bool smooth);
     void setAssistant(bool assistant);
+    void finishStroke();
 
 private:
     /**
@@ -107,6 +108,8 @@ private slots:
     void hideOutline();
 protected:
 
+    QTimer m_strokeTimer;
+    KisPaintInformation m_olderPaintInformation;
     KisPaintInformation m_previousPaintInformation;
     QPointF m_previousTangent;
     double m_dragDist;

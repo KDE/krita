@@ -29,7 +29,7 @@ public:
         // this allows to setup the component still in designer and it is needed for showing slider
         spacingSpin->setRange(spacingSpin->minimum(), spacingSpin->maximum(), 0.25, spacingSpin->showSlider());
         scaleSpin->setRange(scaleSpin->minimum(), scaleSpin->maximum(), 0.25, spacingSpin->showSlider());
-        
+
     }
 };
 
@@ -50,11 +50,11 @@ KisSprayOpOption::KisSprayOpOption()
     connect(m_options->aspectSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->rotationSPBox, SIGNAL(valueChanged(double)),SIGNAL(sigSettingChanged()));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)),SIGNAL(sigSettingChanged()));
-    
+
     connect(m_options->countRadioButton, SIGNAL(toggled(bool)), m_options->particlesSpinBox, SLOT(setEnabled(bool)));
     connect(m_options->densityRadioButton, SIGNAL(toggled(bool)), m_options->coverageSpin, SLOT(setEnabled(bool)));
     connect(m_options->jitterMoveBox, SIGNAL(toggled(bool)), m_options->jitterMovementSpin, SLOT(setEnabled(bool)));
-    
+
     setConfigurationPage(m_options);
 }
 
@@ -105,4 +105,9 @@ void KisSprayOpOption::setDiameter(int diameter) const
 int KisSprayOpOption::diameter() const
 {
     return m_options->diameterSpinBox->value();
+}
+
+qreal KisSprayOpOption::brushAspect() const
+{
+    return m_options->aspectSPBox->value();
 }

@@ -9,7 +9,7 @@
    version 2 of the License, or (at your option) any later version.
 
    This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   but WITHOUT ANY WARRANTY without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
@@ -315,6 +315,7 @@ QPainterPath KoPathShape::outline() const
 {
     QPainterPath path;
     foreach(KoSubpath * subpath, m_subpaths) {
+//qDebug() << "Inside foreach in KoPathShape::outline()";
         KoPathPoint * lastPoint = subpath->first();
         bool activeCP = false;
         foreach(KoPathPoint * currPoint, *subpath) {
@@ -717,6 +718,7 @@ KoPathPoint * KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) cons
     if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
         return 0;
 
+qDebug() << "subpath is correctly returned by KoPathShape::pointByIndex()";
     return subpath->at(pointIndex.second);
 }
 

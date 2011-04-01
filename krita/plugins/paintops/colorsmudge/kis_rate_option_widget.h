@@ -25,7 +25,7 @@
 
 class KisDoubleSliderSpinBox;
 
-class PAINTOP_EXPORT KisRateOptionWidget: public KisCurveOptionWidget
+class KisRateOptionWidget: public KisCurveOptionWidget
 {
     Q_OBJECT
     

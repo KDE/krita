@@ -26,10 +26,9 @@
 
 /**
  * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
- * 
+ *
  * As all the styles it can be shared
  */
-
 class KOODF_EXPORT KoCellStyle : public KoStyle
 {
     KoCellStyle();
@@ -56,6 +55,12 @@ public:
     qreal bottomPadding() const;
     void setBottomPadding(qreal padding);
 
+    QString verticalAlign() const;
+    void setVerticalAlign(const QString& align);
+
+    bool glyphOrientation() const;
+    void setGlyphOrientation(bool orientation);
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -71,6 +76,9 @@ private:
     qreal m_topPadding;
     qreal m_rightPadding;
     qreal m_bottomPadding;
+
+    QString m_verticalAlign;
+    bool m_glyphOrientation;
 };
 
 #endif

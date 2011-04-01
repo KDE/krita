@@ -170,14 +170,25 @@ public:
     qint32 height() const;
 
     /**
-     * @return the width of the mask for the given scale
+     * @return the width of the mask for the given scale and angle
      */
     qint32 maskWidth(double scale, double angle) const;
 
     /**
-     * @return the height of the mask for the given scale
+     * @return the height of the mask for the given scale and angle
      */
     qint32 maskHeight(double scale, double angle) const;
+    
+    /**
+     * @return the angle of the mask adding the given angle
+     */
+    double maskAngle(double angle=0) const;
+    
+    /**
+     * @return the index of the brush
+     *         if the brush consists of multiple images
+     */
+    virtual quint32 brushIndex(const KisPaintInformation& info) const;
 
     /**
      * The brush type defines how the brush is used.

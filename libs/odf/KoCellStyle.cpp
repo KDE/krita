@@ -35,6 +35,8 @@ KoCellStyle::KoCellStyle()
 , m_topPadding(0.0)
 , m_rightPadding(0.0)
 , m_bottomPadding(0.0)
+, m_verticalAlign("")
+, m_glyphOrientation(true)
 {
 }
 
@@ -118,6 +120,26 @@ void KoCellStyle::setRightPadding(qreal padding)
     m_rightPadding = padding;
 }
 
+QString KoCellStyle::verticalAlign() const
+{
+    return m_verticalAlign;
+}
+
+void KoCellStyle::setVerticalAlign(const QString& align)
+{
+    m_verticalAlign = align;
+}
+
+bool KoCellStyle::glyphOrientation() const
+{
+    return m_glyphOrientation;
+}
+
+void KoCellStyle::setGlyphOrientation(bool orientation)
+{
+    m_glyphOrientation = orientation;
+}
+
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
     m_borders->saveOdf(style);
@@ -136,5 +158,11 @@ void KoCellStyle::prepareStyle( KoGenStyle& style ) const
     }
     if(m_bottomPadding != 0) {
         style.addPropertyPt("fo:padding-bottom", m_bottomPadding);
+    }
+    if (!m_verticalAlign.isEmpty()) {
+        style.addProperty("style:vertical-align", m_verticalAlign);
+    }
+    if (!m_glyphOrientation) {
+        style.addProperty("style:glyph-orientation-vertical", "0");
     }
 }

@@ -161,7 +161,9 @@ class KisPaintDevice::Private
 public:
 
     Private(KisPaintDevice *paintDevice)
-        : cache(paintDevice)
+        : cache(paintDevice),
+          x(0),
+          y(0)
     {
     }
 
@@ -170,72 +172,60 @@ public:
     qint32 x;
     qint32 y;
     KoColorSpace* colorSpace;
-    qint32 pixelSize;
-    qint32 nChannels;
-
     PaintDeviceCache cache;
 };
-
 
 KisPaintDevice::KisPaintDevice(const KoColorSpace * colorSpace, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
-    setObjectName(name);
-
-    Q_ASSERT(colorSpace);
-
-    m_d->x = 0;
-    m_d->y = 0;
-
-    m_d->pixelSize = colorSpace->pixelSize();
-    m_d->nChannels = colorSpace->channelCount();
-
-    quint8 *defaultPixel = new quint8 [ m_d->pixelSize ];
-    memset(defaultPixel, 0, m_d->pixelSize);
-
-    m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
-    delete [] defaultPixel;
-    Q_CHECK_PTR(m_datamanager);
-    m_d->cache.setupCache();
-
-    m_d->parent = 0;
-
-    m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
-    setDefaultBounds(new KisDefaultBounds());
+    init(0, colorSpace, new KisDefaultBounds(), 0, name);
 }
 
 KisPaintDevice::KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds, const QString& name)
     : QObject(0)
     , m_d(new Private(this))
 {
-    setObjectName(name);
+    init(0, colorSpace, defaultBounds, parent, name);
+}
+
+KisPaintDevice::KisPaintDevice(KisDataManagerSP explicitDataManager,
+                               KisPaintDeviceSP src,
+                               const QString& name)
+    : QObject(0)
+    , m_d(new Private(this))
+{
+    init(explicitDataManager, src->colorSpace(), src->defaultBounds(), 0, name);
+    m_d->x = src->x();
+    m_d->y = src->y();
+}
+
+void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
+                          const KoColorSpace *colorSpace,
+                          KisDefaultBoundsSP defaultBounds,
+                          KisNodeWSP parent, const QString& name)
+{
     Q_ASSERT(colorSpace);
-
-    m_d->x = 0;
-    m_d->y = 0;
-
-    setParentNode(parent);
+    setObjectName(name);
 
     m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
-
     Q_ASSERT(m_d->colorSpace);
 
-    m_d->pixelSize = m_d->colorSpace->pixelSize();
-    m_d->nChannels = m_d->colorSpace->channelCount();
+    if(explicitDataManager) {
+        m_datamanager = explicitDataManager;
+    }
+    else {
+        const qint32 pixelSize = colorSpace->pixelSize();
+        KoColor defaultPixel(Qt::transparent, colorSpace);
 
-    quint8 *defaultPixel = new quint8[ m_d->pixelSize ];
-    m_d->colorSpace->fromQColor(Qt::black, defaultPixel);
-    m_d->colorSpace->setOpacity(defaultPixel, OPACITY_TRANSPARENT_U8, 1);
-
-    m_datamanager = new KisDataManager(m_d->pixelSize, defaultPixel);
-    delete [] defaultPixel;
-    Q_CHECK_PTR(m_datamanager);
+        m_datamanager = new KisDataManager(pixelSize, defaultPixel.data());
+        Q_CHECK_PTR(m_datamanager);
+    }
     m_d->cache.setupCache();
 
     setDefaultBounds(defaultBounds);
+    setParentNode(parent);
 }
-
 
 KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     : QObject()
@@ -243,22 +233,19 @@ KisPaintDevice::KisPaintDevice(const KisPaintDevice& rhs)
     , m_d(new Private(this))
 {
     if (this != &rhs) {
-        m_d->parent = 0;
-        if (rhs.m_datamanager) {
-            m_datamanager = new KisDataManager(*rhs.m_datamanager);
-            Q_CHECK_PTR(m_datamanager);
-            m_d->cache.setupCache();
-        } else {
-            warnKrita << "rhs " << rhs.objectName() << " has no datamanager\n";
-        }
+        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(rhs.m_d->colorSpace);
+        Q_ASSERT(m_d->colorSpace);
+
         m_d->x = rhs.m_d->x;
         m_d->y = rhs.m_d->y;
 
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(rhs.m_d->colorSpace);
-        m_d->pixelSize = rhs.m_d->pixelSize;
-        m_d->nChannels = rhs.m_d->nChannels;
+        Q_ASSERT(rhs.m_datamanager);
+        m_datamanager = new KisDataManager(*rhs.m_datamanager);
+        Q_CHECK_PTR(m_datamanager);
+        m_d->cache.setupCache();
 
         setDefaultBounds(rhs.defaultBounds());
+        setParentNode(0);
     }
 }
 
@@ -271,26 +258,24 @@ KisPaintDevice::~KisPaintDevice()
 void KisPaintDevice::prepareClone(KisPaintDeviceSP src)
 {
     clear();
-    m_d->parent = 0;
     m_d->x = src->x();
     m_d->y = src->y();
 
     if(!(*colorSpace() == *src->colorSpace())) {
-        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
-        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(src->colorSpace());
-        m_d->nChannels = m_d->colorSpace->channelCount();
-
-        if ((quint32)m_d->pixelSize != m_d->colorSpace->pixelSize()) {
+        if (m_d->colorSpace->pixelSize() != src->colorSpace()->pixelSize()) {
             m_datamanager = 0;
             m_datamanager = new KisDataManager(src->pixelSize(), src->defaultPixel());
-            m_d->pixelSize = src->pixelSize();
             m_d->cache.setupCache();
         }
         else {
             setDefaultPixel(src->defaultPixel());
         }
+
+        KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
+        m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(src->colorSpace());
     }
     setDefaultBounds(src->defaultBounds());
+    setParentNode(0);
 
     Q_ASSERT(fastBitBltPossible(src));
 }
@@ -432,7 +417,9 @@ QRect KisPaintDevice::calculateExactBounds() const
     // XXX: a small optimization is possible by using H/V line iterators in the first
     //      and third cases, at the cost of making the code a bit more complex
 
+    const qint32 pixelSize = this->pixelSize();
     const quint8* defaultPixel = m_datamanager->defaultPixel();
+
     KisRandomConstAccessorSP accessor = createRandomConstAccessorNG(x, y);
 
     bool found = false;
@@ -440,7 +427,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 y2 = y; y2 < y + h ; ++y2) {
             for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, m_d->pixelSize) != 0) {
+                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
                     boundY2 = y2;
                     found = true;
                     break;
@@ -455,7 +442,7 @@ QRect KisPaintDevice::calculateExactBounds() const
     for (qint32 y2 = y + h - 1; y2 >= y ; --y2) {
         for (qint32 x2 = x + w - 1; x2 >= x || found; --x2) {
             accessor->moveTo(x2, y2);
-            if (memcmp(accessor->oldRawData(), defaultPixel, m_d->pixelSize) != 0) {
+            if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
                 boundH2 = y2 - boundY2 + 1;
                 found = true;
                 break;
@@ -469,7 +456,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x; x2 < x + w ; ++x2) {
             for (qint32 y2 = y; y2 < y + h || found; ++y2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, m_d->pixelSize) != 0) {
+                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
                     boundX2 = x2;
                     found = true;
                     break;
@@ -487,7 +474,7 @@ QRect KisPaintDevice::calculateExactBounds() const
         for (qint32 x2 = x + w - 1; x2 >= x; --x2) {
             for (qint32 y2 = y + h -1; y2 >= y || found; --y2) {
                 accessor->moveTo(x2, y2);
-                if (memcmp(accessor->oldRawData(), defaultPixel, m_d->pixelSize) != 0) {
+                if (memcmp(accessor->oldRawData(), defaultPixel, pixelSize) != 0) {
                     boundW2 = x2 - boundX2 + 1;
                     found = true;
                     break;
@@ -649,8 +636,6 @@ void KisPaintDevice::setDataManager(KisDataManagerSP data, const KoColorSpace * 
     if(colorSpace) {
         KoColorSpaceRegistry::instance()->releaseColorSpace(m_d->colorSpace);
         m_d->colorSpace = KoColorSpaceRegistry::instance()->grabColorSpace(colorSpace);
-        m_d->pixelSize = m_d->colorSpace->pixelSize();
-        m_d->nChannels = m_d->colorSpace->channelCount();
         emit colorSpaceChanged(colorSpace);
     }
 }
@@ -708,9 +693,9 @@ QImage KisPaintDevice::convertToQImage(const KoColorProfile *  dstProfile, qint3
 
     quint8 * data;
     try {
-        data = new quint8 [w * h * m_d->pixelSize];
+        data = new quint8 [w * h * pixelSize()];
     } catch (std::bad_alloc) {
-        warnKrita << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << m_d->pixelSize;
+        warnKrita << "KisPaintDevice::convertToQImage std::bad_alloc for " << w << " * " << h << " * " << pixelSize();
         //delete[] data; // data is not allocated, so don't free it
         return QImage();
     }
@@ -754,6 +739,8 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
     else if (srcHeight > srcWidth)
         w = qint32(double(srcWidth) / srcHeight * h);
 
+    const qint32 pixelSize = this->pixelSize();
+
     KisRandomConstAccessorPixel iter = createRandomConstAccessor(0, 0, selection);
     KisRandomAccessorPixel dstIter = thumbnail->createRandomAccessor(0, 0);
 
@@ -763,7 +750,7 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDevice(qint32 w, qint32 h, const
             qint32 iX = srcX0 + (x * srcWidth) / w;
             iter.moveTo(iX, iY);
             dstIter.moveTo(x,  y);
-            memcpy(dstIter.rawData(), iter.rawData(), m_d->pixelSize);
+            memcpy(dstIter.rawData(), iter.rawData(), pixelSize);
         }
     }
 
@@ -1160,15 +1147,16 @@ KisDataManagerSP KisPaintDevice::dataManager() const
 
 quint32 KisPaintDevice::pixelSize() const
 {
-    Q_ASSERT(m_d->pixelSize > 0);
-    return m_d->pixelSize;
+    quint32 _pixelSize = m_d->colorSpace->pixelSize();
+    Q_ASSERT(_pixelSize > 0);
+    return _pixelSize;
 }
 
 quint32 KisPaintDevice::channelCount() const
 {
-    Q_ASSERT(m_d->nChannels > 0);
-    return m_d->nChannels;
-    ;
+    quint32 _channelCount = m_d->colorSpace->channelCount();
+    Q_ASSERT(_channelCount > 0);
+    return _channelCount;
 }
 
 KoColorSpace * KisPaintDevice::colorSpace()

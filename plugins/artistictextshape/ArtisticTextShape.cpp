@@ -39,8 +39,7 @@
 #include "ArtisticTextShapeLoadingUpdater.h"
 
 ArtisticTextShape::ArtisticTextShape()
-    : m_text( i18n( "Artistic Text" ) )
-    , m_font(QFont("ComicSans", 20), &m_paintDevice)
+    : m_font(QFont("ComicSans", 20), &m_paintDevice)
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
     , m_textAnchor( AnchorStart )
 {
@@ -232,6 +231,7 @@ void ArtisticTextShape::setSize( const QSizeF &newSize )
         applyTransformation( matrix );
         update();
     }
+    KoShape::setSize(newSize);
 }
 
 QPainterPath ArtisticTextShape::outline() const
@@ -349,9 +349,7 @@ void ArtisticTextShape::setStartOffset( qreal offset )
         return;
 
     update();
-    m_startOffset = offset;
-    m_startOffset = qMin( qreal(1.0), m_startOffset );
-    m_startOffset = qMax( qreal(0.0), m_startOffset );
+    m_startOffset = qBound(0.0, offset, 1.0);
     updateSizeAndPosition();
     update();
     notifyChanged();

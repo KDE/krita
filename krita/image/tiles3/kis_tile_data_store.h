@@ -87,7 +87,7 @@ public:
 
     // Called by The Memento Manager after every commit
     inline void kickPooler() {
-//        m_pooler.kick();
+        m_pooler.kick();
 
         //FIXME: maybe, rename a function?
         m_swapper.kick();
@@ -133,11 +133,16 @@ private:
 
     void debugSwapAll();
     void debugClear();
+
+    friend class KisTiledDataManagerTest;
+    void testingSuspendPooler();
+    void testingResumePooler();
 private:
     KisTileDataPooler m_pooler;
     KisTileDataSwapper m_swapper;
 
     friend class KisTileDataStoreTest;
+    friend class KisTileDataPoolerTest;
     KisSwappedDataStore m_swappedStore;
 
     KisTileDataListIterator m_clockIterator;
@@ -153,6 +158,13 @@ private:
      */
     qint64 m_memoryMetric;
 };
+
+template<typename T>
+inline T MiB_TO_METRIC(T value)
+{
+    unsigned long long __MiB = 1ULL << 20;
+    return value * (__MiB / (KisTileData::WIDTH * KisTileData::HEIGHT));
+}
 
 #endif /* KIS_TILE_DATA_STORE_H_ */
 

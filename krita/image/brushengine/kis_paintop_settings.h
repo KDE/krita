@@ -54,7 +54,7 @@ public:
     virtual ~KisPaintOpSettings();
 
     /**
-     * 
+     *
      */
     virtual void setOptionsWidget(KisPaintOpSettingsWidget* widget);
 
@@ -111,7 +111,7 @@ public:
     * If this paintop deposit the paint even when not moving, the tool needs to know the rate of it in miliseconds
     */
     virtual int rate() const{
-        return 100; 
+        return 100;
     }
 
     /**
@@ -148,22 +148,32 @@ public:
 
     /**
      * Returns the brush outline in pixel coordinates. Tool is responsible for conversion into view coordinates.
-     * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline 
+     * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like duplicate paintop indicating the duplicate position
      */
     virtual QPainterPath brushOutline(const QPointF& pos, OutlineMode mode, qreal scale = 1.0, qreal rotation = 0.0) const;
-    
+
     /**
     * Useful for simple elliptical brush outline.
     */
     QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation) const;
-    
+
     /**
-     * XXX: document!
+     * The behaviour might be different per paintop. Most of the time
+     * the brush diameter is increased by x pixels, y ignored
+     *
+     * @param x is add to the the diameter or radius (according the paintop)
+     *  It might be also negative, to decrease the value of the brush diameter/radius.
+     *  x is in pixels
+     * @param y is unused, it supposed to be used to change some different attribute
+     * of the brush like softness or density
      */
     virtual void changePaintOpSize(qreal x, qreal y);
-    
-    // XXX: I'd like to be able to get at the size as well
+
+    /**
+     * @return The width and the height of the brush mask/dab in pixels
+     */
+    virtual QSizeF paintOpSize() const;
 
     /**
      * @return filename of the 3D brush model, empty if no brush is set
@@ -174,12 +184,12 @@ public:
      * Set filename of 3D brush model. By default no brush is set
      */
     void setModelName(const QString & modelName);
-    
+
     /// Check if the settings are valid, setting might be invalid through missing brushes etc
     /// Overwrite if the settings of a paintop can be invalid
     /// @return state of the settings, default implementation is true
     virtual bool isValid();
-    
+
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

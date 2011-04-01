@@ -19,12 +19,11 @@
 #define _KIS_OVERLAYMODE_OPTION_H_
 
 #include <kis_paintop_option.h>
-#include <krita_export.h>
 #include <klocale.h>
 
 #include <QLabel>
 
-class PAINTOP_EXPORT KisOverlayModeOption : public KisPaintOpOption
+class KisOverlayModeOption : public KisPaintOpOption
 {
 public:
     KisOverlayModeOption():
@@ -42,12 +41,17 @@ public:
     }
 };
 
-class PAINTOP_EXPORT KisOverlayModeOptionWidget: public KisOverlayModeOption
+class KisOverlayModeOptionWidget: public KisOverlayModeOption
 {
 public:
     KisOverlayModeOptionWidget()
     {
-        QLabel* lable = new QLabel(i18n("Paints on the current layer\nbut uses all layers that are currently visible for smudge input"));
+        QLabel* lable = new QLabel(
+            i18n("Paints on the current layer\n\
+            but uses all layers that are currently visible for smudge input\n\
+            NOTE: This mode is only able to work correctly with a fully opaque background")
+        );
+        
         lable->setAlignment(Qt::AlignVCenter|Qt::AlignHCenter);
         setConfigurationPage(lable);
     }

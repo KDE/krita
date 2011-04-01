@@ -28,7 +28,7 @@
 /**
  * A \class KoStyle is the base for all of the styles used in KoOdf.
  * Allows to easily share the styles amoung different compononents.
- * 
+ *
  * As all the styles it can be shared
  **/
 
@@ -43,6 +43,9 @@ public:
     void setName(QString name);
     QString name() const;
 
+    void setAutoStyleInStylesDotXml(bool b);
+    bool autoStyleInStylesDotXml() const;
+
 protected:
     virtual void prepareStyle(KoGenStyle& style) const =0;
     virtual QString defaultPrefix() const =0;
@@ -55,6 +58,7 @@ private:
 
     bool m_autoStyle;
     QString m_name;
+    bool m_autoStyleInStylesDotXml;
 };
 
 #define KOSTYLE_DECLARE_SHARED_POINTER(class) \

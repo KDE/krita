@@ -882,7 +882,9 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 {
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
-    parent->clearPreregisteredFootNotes();
+    if (parent) {
+        parent->clearPreregisteredFootNotes();
+    }
 }
 
 void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)

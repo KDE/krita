@@ -148,7 +148,6 @@ private:
     qreal m_maximalAllowedBottom;
     QRectF m_boundingRect;
     KoTextBlockBorderData *m_prevBorder;
-    bool m_rootAreaIsNew;
 
     qreal m_x; // text area starts here as defined by margins (so not == m_left)
     qreal m_y;

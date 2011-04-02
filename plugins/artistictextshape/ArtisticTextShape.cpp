@@ -598,16 +598,16 @@ void ArtisticTextShape::cacheGlyphOutlines()
     }
 }
 
-void ArtisticTextShape::shapeChanged(ChangeType type, KoShape * shape)
+void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
-    if( m_path && shape == m_path )
-    {
-        if( type == KoShape::Deleted )
-        {
+    if( m_path && shape == m_path ) {
+        if( type == KoShape::Deleted ) {
+            // baseline shape was deleted
             m_path = 0;
-        }
-        else
-        {
+        } else if (type == KoShape::ParentChanged && !shape->parent()) {
+            // baseline shape was probably removed from the document
+            m_path = 0;
+        } else {
             update();
             // use the paths outline converted to document coordinates as the baseline
             m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );

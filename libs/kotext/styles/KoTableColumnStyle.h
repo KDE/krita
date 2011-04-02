@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -89,13 +90,13 @@ public:
     void setBreakBefore(bool on);
 
     /// Get break before. See §7.19.2 of [XSL].
-    bool breakBefore();
+    bool breakBefore() const;
 
     /// Set break after. See §7.19.1 of [XSL].
     void setBreakAfter(bool on);
 
     /// Get break after. See §7.19.1 of [XSL].
-    bool breakAfter();
+    bool breakAfter() const;
 
     /// Set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableColumnStyle *parent);
@@ -132,6 +133,9 @@ public:
 
     /// Compare the properties of this style with the other.
     bool operator==(const KoTableColumnStyle &other) const;
+    
+    /// Compare the properties of this style with the other.
+    bool operator!=(const KoTableColumnStyle &other) const;
 
     /**
      * Load the style form the element
@@ -141,7 +145,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style) const;
 
     /**
      * Returns true if this table column style has the property set.

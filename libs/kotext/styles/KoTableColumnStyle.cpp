@@ -225,6 +225,16 @@ void KoTableColumnStyle::setMasterPageName(const QString &name)
     setProperty(MasterPageName, name);
 }
 
+bool KoTableColumnStyle::optimalColumnWidth() const
+{
+    return propertyBoolean(OptimalColumnWidth);
+}
+
+void KoTableColumnStyle::setOptimalColumnWidth(bool state)
+{
+    setProperty(OptimalColumnWidth, state);
+}
+
 void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
@@ -257,15 +267,17 @@ void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::style, "rel-column-width")) {
         setRelativeColumnWidth(styleStack.property(KoXmlNS::style, "rel-column-width").remove('*').toDouble());
     }
+    // Optimal column width
+    if (styleStack.hasProperty(KoXmlNS::style, "use-optimal-column-width")) {
+        setOptimalColumnWidth(styleStack.property(KoXmlNS::style, "use-optimal-column-width") == "true");
+    }
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
-            setBreakBefore(true);
+        setBreakBefore(styleStack.property(KoXmlNS::fo, "break-before") != "auto");
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
-            setBreakAfter(true);
+        setBreakAfter(styleStack.property(KoXmlNS::fo, "break-after") != "auto");
     }
 }
 
@@ -291,9 +303,15 @@ void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
         if (key == KoTableColumnStyle::BreakBefore) {
             if (breakBefore())
                 style.addProperty("fo:break-before", "page", KoGenStyle::TableColumnType);
+            else
+                style.addProperty("fo:break-before", "auto", KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::TableColumnType);
+            else
+                style.addProperty("fo:break-after", "auto", KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::OptimalColumnWidth) {
+            style.addProperty("style:use-optimal-column-width", optimalColumnWidth(), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::ColumnWidth) {
             style.addPropertyPt("style:column-width", columnWidth(), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::RelativeColumnWidth) {

@@ -59,6 +59,7 @@ public:
         StyleId = QTextTableFormat::UserProperty + 1,
         ColumnWidth,         ///< Column width.
         RelativeColumnWidth, ///< Relative column width.
+        OptimalColumnWidth,  ///< Use optimal column width
         BreakBefore,         ///< If true, insert a frame break before this table
         BreakAfter,          ///< If true, insert a frame break after this table
         MasterPageName       ///< Optional name of the master-page
@@ -86,6 +87,12 @@ public:
     /// Get the column width.
     qreal relativeColumnWidth() const;
 
+    /// Get the optimalColumnWidth state
+    bool optimalColumnWidth() const;
+    
+    /// Set the optimalColumnWidth state
+    void setOptimalColumnWidth(bool state);
+    
     /// Set break before. See §7.19.2 of [XSL].
     void setBreakBefore(bool on);
 

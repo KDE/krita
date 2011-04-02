@@ -185,10 +185,10 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 ++tableAreaIndex;
                 continue;
             }
-            if (cursor.selectionStart() > table->firstPosition() && cursor.selectionEnd() < table->lastPosition()) {
+            if (cursor.selectionStart() >= table->firstPosition() && cursor.selectionEnd() <= table->lastPosition()) {
                 return m_tableAreas[tableAreaIndex]->selectionBoundingBox(cursor);
             }
-            if (cursor.selectionStart() > table->firstPosition()) {
+            if (cursor.selectionStart() >= table->firstPosition()) {
                 retval = m_tableAreas[tableAreaIndex]->boundingRect();
             } else {
                 retval |= m_tableAreas[tableAreaIndex]->boundingRect();

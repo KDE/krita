@@ -948,8 +948,13 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             repaintSelection(); // will erase selection
         else
             repaintCaret();
+
         m_textEditor.data()->setPosition(position, QTextCursor::KeepAnchor);
-        repaintSelection();
+
+        if (m_textEditor.data()->hasSelection())
+            repaintSelection();
+        else
+            repaintCaret();
     }
 
     updateSelectionHandler();

@@ -187,8 +187,8 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
             bottom = d->rowPositions[selectionRow + selectionRowSpan] + d->headerOffsetY;
         } else {
             bottom = d->rowPositions[d->headerRows] + d->headerOffsetY;
-            if (selectionRow + selectionRowSpan > firstRow) {
-                bottom = d->rowPositions[selectionRow + selectionRowSpan];
+            if (selectionRow + selectionRowSpan >= firstRow) {
+                bottom = d->rowPositions[qMin(selectionRow + selectionRowSpan, lastRow + 1)];
             }
         }
 

@@ -144,7 +144,6 @@ QString KoTextDebug::inlineObjectAttributes(const QTextCharFormat &textFormat)
                 attrs.append(" type=\"endnote\"");
             }
             attrs.append(QString(" label=\"%1\"").arg(note->label()));
-            attrs.append(QString(" text=\"%1\"").arg(note->text().toPlainText()));
         } else {
             attrs.append(" type=\"inlineobject\">");
         }

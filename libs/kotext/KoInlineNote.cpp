@@ -26,13 +26,11 @@
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
-#include "changetracker/KoChangeTracker.h"
-#include "styles/KoStyleManager.h"
 
 #include <KDebug>
 
-#include <QTextDocumentFragment>
 #include <QTextDocument>
+#include <QTextFrame>
 #include <QTextCursor>
 #include <QString>
 #include <QTextInlineObject>
@@ -44,15 +42,20 @@
 class KoInlineNote::Private
 {
 public:
-    Private(KoInlineNote::Type t) : autoNumbering(false), type(t) {}
-    QTextDocumentFragment text;
+    Private(KoInlineNote::Type t)
+        : textFrame(0)
+        , autoNumbering(false)
+        , type(t)
+    {
+    }
+
+    QTextFrame *textFrame;
     QString label;
     QString id;
     QString author;
     QDateTime date;
     bool autoNumbering;
     KoInlineNote::Type type;
-    QWeakPointer<KoStyleManager> styleManager;
 };
 
 KoInlineNote::KoInlineNote(Type type)
@@ -65,14 +68,14 @@ KoInlineNote::~KoInlineNote()
     delete d;
 }
 
-void KoInlineNote::setText(const QTextDocumentFragment &text)
+void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 {
-    d->text = text;
-}
+    // We create our own subframe
 
-void KoInlineNote::setText(const QString &text)
-{
-    setText(QTextDocumentFragment::fromPlainText(text));
+    QTextCursor cursor(motherFrame->lastCursorPosition());
+    QTextFrameFormat format;
+
+    d->textFrame = cursor.insertFrame(format);
 }
 
 void KoInlineNote::setLabel(const QString &text)
@@ -85,9 +88,9 @@ void KoInlineNote::setId(const QString &id)
     d->id = id;
 }
 
-QTextDocumentFragment KoInlineNote::text() const
+QTextFrame *KoInlineNote::textFrame() const
 {
-    return d->text;
+    return d->textFrame;
 }
 
 QString KoInlineNote::label() const
@@ -166,21 +169,10 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     layout.draw(&painter, rect.topLeft());
 }
 
-bool KoInlineNote::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context)
 {
-    return loadOdf(element, context, 0, 0);
-}
-
-bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker)
-{
-    QTextDocument *document = new QTextDocument();
-    QTextCursor cursor(document);
-    KoTextDocument textDocument(document);
-    textDocument.setStyleManager(styleManager);
-    d->styleManager = styleManager;
-    textDocument.setChangeTracker(changeTracker);
-
     KoTextLoader loader(context);
+    QTextCursor cursor(d->textFrame);
 
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "note") {
 
@@ -192,7 +184,6 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
             d->type = Endnote;
         }
         else {
-            delete document;
             return false;
         }
 
@@ -219,25 +210,17 @@ bool KoInlineNote::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
         loader.loadBody(element, cursor); // would skip author and date, and do just the <text-p> and <text-list> elements
     }
     else {
-        delete document;
         return false;
     }
 
-    d->text = QTextDocumentFragment(document);
-    delete document;
     return true;
 }
 
 void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 {
     KoXmlWriter *writer = &context.xmlWriter();
-    QTextDocument *document = new QTextDocument();
-    KoTextDocument textDocument(document);
-    Q_ASSERT(!d->styleManager.isNull());
-    textDocument.setStyleManager(d->styleManager.data());
 
-    QTextCursor cursor(document);
-    cursor.insertFragment(d->text);
+    QTextCursor cursor(d->textFrame);
 
     if (d->type == Footnote || d->type == Endnote) {
         writer->startElement("text:note", false);
@@ -254,7 +237,7 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
 
         writer->startElement("text:note-body", false);
         KoTextWriter textWriter(context);
-        textWriter.write(document, 0);
+        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
         writer->endElement();
 
         writer->endElement();
@@ -273,10 +256,8 @@ void KoInlineNote::saveOdf(KoShapeSavingContext & context)
         }
 
         KoTextWriter textWriter(context);
-        textWriter.write(document, 0);
+        textWriter.write(d->textFrame->document(), d->textFrame->firstPosition(),d->textFrame->lastPosition());
 
         writer->endElement();
     }
-
-    delete document;
 }

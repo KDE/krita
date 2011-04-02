@@ -46,7 +46,11 @@ const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
 const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotesconfiguration");
 const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
+const QUrl KoTextDocument::EndNotesFrameURL = QUrl("kotext://endnotesframe");
+const QUrl KoTextDocument::FootNotesFrameURL = QUrl("kotext://footnotesframe");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
+
+Q_DECLARE_METATYPE(QTextFrame*)
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -242,6 +246,46 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     QVariant resource = m_document->resource(KoTextDocument::InlineTextManager,
             InlineObjectTextManagerURL);
     return resource.value<KoInlineTextObjectManager *>();
+}
+
+QTextFrame *KoTextDocument::footNotesFrame()
+{
+    QVariant resource = m_document->resource(KoTextDocument::FootNotesFrame,
+            FootNotesFrameURL);
+
+    QTextFrame *frame = resource.value<QTextFrame *>();
+
+    if (frame == 0) {
+        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+        QTextFrameFormat format;
+
+        frame = cursor.insertFrame(format);
+
+        resource.setValue(frame);
+        m_document->addResource(KoTextDocument::FootNotesFrame, FootNotesFrameURL, resource);
+    }
+    return frame;
+}
+
+QTextFrame *KoTextDocument::endNotesFrame()
+{
+    QVariant resource = m_document->resource(KoTextDocument::EndNotesFrame,
+            EndNotesFrameURL);
+
+    QTextFrame *frame = resource.value<QTextFrame *>();
+
+    if (frame == 0) {
+        QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
+        QTextFrameFormat format;
+
+        // FIXME place cursor before any foot notes frame
+
+        frame = cursor.insertFrame(format);
+
+        resource.setValue(frame);
+        m_document->addResource(KoTextDocument::EndNotesFrame, EndNotesFrameURL, resource);
+    }
+    return frame;
 }
 
 void KoTextDocument::setRelativeTabs(bool relative)

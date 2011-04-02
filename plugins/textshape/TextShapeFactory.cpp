@@ -32,6 +32,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
+#include <KoInlineNote.h>
 
 #include <klocale.h>
 #include <KUndoStack>
@@ -62,7 +63,12 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     KoInlineTextObjectManager *manager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
-        manager = variant.value<KoInlineTextObjectManager*>();
+        if (variant.isValid()) {
+            manager = variant.value<KoInlineTextObjectManager*>();
+        }
+    }
+    if (!manager) {
+        manager = new KoInlineTextObjectManager();
     }
     TextShape *text = new TextShape(manager);
     if (documentResources) {
@@ -96,14 +102,17 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     QString text("text");
     //if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
+        KoInlineTextObjectManager *textObjectManager = KoTextDocument(shapeData->document()).inlineTextObjectManager();
+        KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+        note->setMotherFrame(KoTextDocument(shapeData->document()).footNotesFrame());
+        note->setLabel("1");
+        QTextCursor footnoteCursor(note->textFrame());
+        footnoteCursor.insertText("This is a footnote");
         QTextCursor cursor(shapeData->document());
         //cursor.insertText(params->stringProperty(text));
-        cursor.insertText("Hello new Text layout engine f f fd fd fds gfd fd fd dsf gfd fds sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
-        cursor.insertText("\nLine two");
-        cursor.insertText("\nLine three");
-        //cursor.insertText("\nLine four");
-        //cursor.insertText("\nLine five");
-        //cursor.insertText("\nLine six");
+        cursor.insertText("Hello new Text layout engine f f fd fs sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
+        //if(textObjectManager)
+            textObjectManager->insertInlineObject(cursor, note);
         cursor.insertTable(3,3);
         cursor.insertText("Cell 1 Line one");
         cursor.insertTable(3,3);

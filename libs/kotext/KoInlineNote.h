@@ -28,7 +28,7 @@ class KoShapeLoadingContext;
 class KoChangeTracker;
 class KoStyleManager;
 
-class QTextDocumentFragment;
+class QTextFrame;
 
 /**
  * This object is an inline object, which means it is anchored in the text-flow and it can hold note info.
@@ -53,19 +53,11 @@ public:
     virtual ~KoInlineNote();
 
     /**
-     * Set the text that backs this note.
+     * Set the textframe where we will create our own textframe within
+     * Our textframe is the one containing the real note contents.
      * @param text the new text
      */
-    void setText(const QTextDocumentFragment &text);
-
-
-    /**
-     * Set the text that backs this note. The text will have no
-     * formatting.
-     *
-     * @param text the new text
-     */
-    void setText(const QString &text);
+    void setMotherFrame(QTextFrame *text);
 
     /**
      * Set the label that is shown at the spot this inline note is inserted.
@@ -80,7 +72,7 @@ public:
     void setId(const QString &id);
 
     /// return the current text
-    QTextDocumentFragment text() const;
+    QTextFrame *textFrame() const;
 
     /// return the current label
     QString label() const;
@@ -103,7 +95,6 @@ public:
     Type type() const;
 
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context, KoStyleManager *styleManager, KoChangeTracker *changeTracker);
 
     ///reimplemented
     void saveOdf(KoShapeSavingContext &context);

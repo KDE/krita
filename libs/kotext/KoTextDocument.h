@@ -123,6 +123,12 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// Returns the QTextFrame where we store foot notes
+    QTextFrame *footNotesFrame();
+
+    /// Returns the QTextFrame where we store end notes
+    QTextFrame *endNotesFrame();
+
     /**
      * Specifies if tabs are relative to paragraph indent.
      *
@@ -156,6 +162,8 @@ public:
         FootNotesConfiguration,
         EndNotesConfiguration,
         LineNumberingConfiguration,
+        FootNotesFrame,
+        EndNotesFrame,
         RelativeTabs
     };
 
@@ -168,6 +176,8 @@ public:
     static const QUrl FootNotesConfigurationURL;
     static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
+    static const QUrl FootNotesFrameURL;
+    static const QUrl EndNotesFrameURL;
     static const QUrl RelativeTabsURL;
 
 private:

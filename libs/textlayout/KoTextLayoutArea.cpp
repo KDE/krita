@@ -70,6 +70,8 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_documentLayout(documentLayout)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
+ , m_preregisteredFootNotesHeight(0)
+ , m_footNotesHeight(0)
 {
 }
 
@@ -786,7 +788,6 @@ qreal KoTextLayoutArea::maximumAllowedBottom() const
 {
     return m_maximalAllowedBottom - m_footNotesHeight
                     - m_preregisteredFootNotesHeight;
-
 }
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const
@@ -835,7 +836,7 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
     if (m_documentLayout->inlineTextObjectManager() == 0) {
         return;
     }
-    
+
     QString text = block.text();
     int pos = text.indexOf(QChar::ObjectReplacementCharacter, line.textStart());
 
@@ -856,12 +857,17 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
 void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
 {
     if (parent == 0) {
-        // TODO once we support footnotes at end of document this is
-        // where we need to add some code
+        // TODO to support footnotes at end of document this is
+        // where we need to add some extra condition
 
-        // FIXME actually create an footNoteArea and append it
-        m_preregisteredFootNotesHeight += 14;
-        //m_preregisteredFootNoteAreas.append(footNoteArea);
+        FrameIterator iter(note->textFrame());
+        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(0, m_documentLayout);
+
+        footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
+        footNoteArea->layout(&iter);
+
+        m_preregisteredFootNotesHeight += footNoteArea->bottom();
+        m_preregisteredFootNoteAreas.append(footNoteArea);
         return;
     }
     parent->preregisterFootNote(note);
@@ -1018,6 +1024,14 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     }
     if (lastBorder)
         lastBorder->paint(*painter);
+
+    painter->save();
+    painter->translate(0, bottom());
+    foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
+        footerArea->paint(painter, context);
+        painter->translate(0, footerArea->bottom());
+    }
+    painter->restore();
 }
 
 void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, KoImageCollection *imageCollection)

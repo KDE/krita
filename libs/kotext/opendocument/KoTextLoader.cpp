@@ -845,8 +845,16 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
 {
     KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
     if (textObjectManager) {
-        KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-        if (note->loadOdf(noteElem, d->context, d->styleManager, d->changeTracker)) {
+        QString className = noteElem.attributeNS(KoXmlNS::text, "note-class");
+        KoInlineNote *note = 0;
+        if (className == "footnote") {
+            note = new KoInlineNote(KoInlineNote::Footnote);
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
+        } else {
+            note = new KoInlineNote(KoInlineNote::Endnote);
+            note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
+        }
+        if (note->loadOdf(noteElem, d->context)) {
             textObjectManager->insertInlineObject(cursor, note);
         } else {
             kWarning(32500) << "Error while loading the text note element!";

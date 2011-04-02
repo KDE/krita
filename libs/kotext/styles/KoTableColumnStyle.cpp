@@ -168,24 +168,24 @@ qreal KoTableColumnStyle::relativeColumnWidth() const
     return propertyDouble(RelativeColumnWidth);
 }
 
-void KoTableColumnStyle::setBreakBefore(bool on)
+void KoTableColumnStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakBefore, on);
+    setProperty(BreakBefore, state);
 }
 
-bool KoTableColumnStyle::breakBefore() const
+KoText::KoTextBreakProperty KoTableColumnStyle::breakBefore() const
 {
-    return propertyBoolean(BreakBefore);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableColumnStyle::setBreakAfter(bool on)
+void KoTableColumnStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakAfter, on);
+    setProperty(BreakAfter, state);
 }
 
-bool KoTableColumnStyle::breakAfter() const
+KoText::KoTextBreakProperty KoTableColumnStyle::breakAfter() const
 {
-    return propertyBoolean(BreakAfter);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
 }
 
 KoTableColumnStyle *KoTableColumnStyle::parentStyle() const
@@ -274,10 +274,10 @@ void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        setBreakBefore(styleStack.property(KoXmlNS::fo, "break-before") != "auto");
+        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        setBreakAfter(styleStack.property(KoXmlNS::fo, "break-after") != "auto");
+        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 }
 
@@ -301,15 +301,9 @@ void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::TableColumnType);
-            else
-                style.addProperty("fo:break-before", "auto", KoGenStyle::TableColumnType);
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::TableColumnType);
-            else
-                style.addProperty("fo:break-after", "auto", KoGenStyle::TableColumnType);
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::OptimalColumnWidth) {
             style.addProperty("style:use-optimal-column-width", optimalColumnWidth(), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::ColumnWidth) {

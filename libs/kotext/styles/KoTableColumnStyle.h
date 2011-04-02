@@ -94,16 +94,16 @@ public:
     void setOptimalColumnWidth(bool state);
     
     /// Set break before. See §7.19.2 of [XSL].
-    void setBreakBefore(bool on);
+    void setBreakBefore(KoText::KoTextBreakProperty state);
 
     /// Get break before. See §7.19.2 of [XSL].
-    bool breakBefore() const;
+    KoText::KoTextBreakProperty breakBefore() const;
 
     /// Set break after. See §7.19.1 of [XSL].
-    void setBreakAfter(bool on);
+    void setBreakAfter(KoText::KoTextBreakProperty state);
 
     /// Get break after. See §7.19.1 of [XSL].
-    bool breakAfter() const;
+    KoText::KoTextBreakProperty breakAfter() const;
 
     /// Set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableColumnStyle *parent);

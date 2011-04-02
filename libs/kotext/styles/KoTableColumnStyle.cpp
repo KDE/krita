@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -172,7 +173,7 @@ void KoTableColumnStyle::setBreakBefore(bool on)
     setProperty(BreakBefore, on);
 }
 
-bool KoTableColumnStyle::breakBefore()
+bool KoTableColumnStyle::breakBefore() const
 {
     return propertyBoolean(BreakBefore);
 }
@@ -182,7 +183,7 @@ void KoTableColumnStyle::setBreakAfter(bool on)
     setProperty(BreakAfter, on);
 }
 
-bool KoTableColumnStyle::breakAfter()
+bool KoTableColumnStyle::breakAfter() const
 {
     return propertyBoolean(BreakAfter);
 }
@@ -273,23 +274,30 @@ bool KoTableColumnStyle::operator==(const KoTableColumnStyle &other) const
     return other.d == d;
 }
 
+bool KoTableColumnStyle::operator!=(const KoTableColumnStyle &other) const
+{
+    return other.d != d;
+}
+
 void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 {
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
-void KoTableColumnStyle::saveOdf(KoGenStyle &style)
+void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
-    Q_UNUSED(style);
-/*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
             if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
+                style.addProperty("fo:break-before", "page", KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {
             if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
-        } 
-*/
+                style.addProperty("fo:break-after", "page", KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::ColumnWidth) {
+            style.addPropertyPt("style:column-width", columnWidth(), KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::RelativeColumnWidth) {
+            style.addProperty("style:rel-column-width", QString("%1*").arg(relativeColumnWidth()), KoGenStyle::TableColumnType);
+        }
+    }
 }

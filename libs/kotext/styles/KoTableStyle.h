@@ -70,7 +70,7 @@ public:
     /// Destructor
     ~KoTableStyle();
 
-    /// Creates a KoTableStyle that represents the formatting of \a block.
+    /// Creates a KoTableStyle that represents the formatting of \a table.
     static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
@@ -84,6 +84,7 @@ public:
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);
+    bool mayBreakBetweenRows() const;
 
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);
@@ -164,6 +165,9 @@ public:
     bool operator==(const KoTableStyle &other) const;
 
     void removeDuplicates(const KoTableStyle &other);
+    
+    /// return true when there are keys defined for this style
+    bool isEmpty() const;
 
     /**
      * Load the style form the element

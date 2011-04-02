@@ -41,6 +41,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
@@ -88,6 +89,8 @@ public:
 
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
+    QString saveTableStyle(const QTextTable &table);
+    
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
@@ -331,6 +334,34 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
     return generatedName;
 }
 
+QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
+{
+    KoTableStyle *originalTableStyle = styleManager->tableStyle(table.format().intProperty(KoTableStyle::StyleId));
+    QString generatedName;
+    QString internalName = "";
+    if (originalTableStyle)
+    {
+        internalName = QString(QUrl::toPercentEncoding(originalTableStyle->name(), "", " ")).replace('%', '_');
+    }
+    KoTableStyle tableStyle(table.format());
+    if ((originalTableStyle) && (*originalTableStyle == tableStyle)) { // This is the real unmodified character style
+        KoGenStyle style(KoGenStyle::TableStyle, "table");
+        originalTableStyle->saveOdf(style);
+        generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
+    } else { // There are manual changes... We'll have to store them then
+        KoGenStyle style(KoGenStyle::TableStyle, "table", internalName);
+        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+            style.setAutoStyleInStylesDotXml(true);
+        if (originalTableStyle)
+            tableStyle.removeDuplicates(*originalTableStyle);
+        if (!tableStyle.isEmpty()) {
+            tableStyle.saveOdf(style);
+            generatedName = context.mainStyles().insert(style, "Table");
+        }
+    }
+    return generatedName;
+}
+
 // A convinience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
@@ -555,6 +586,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
     writer->startElement("table:table");
+    writer->addAttribute("table:style-name", saveTableStyle(*table));
     for (int c = 0 ; c < table->columns() ; c++) {
         writer->startElement("table:table-column");
         writer->endElement(); // table:table-column

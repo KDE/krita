@@ -29,7 +29,7 @@
 #include "kdebug.h"
 #include "KoSnapData.h"
 
-class FLAKE_TEST_EXPORT MockShape : public KoShape
+class MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
@@ -46,7 +46,7 @@ public:
     int paintedCount;
 };
 
-class FLAKE_TEST_EXPORT MockContainer : public KoShapeContainer
+class MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model) : KoShapeContainer(model), paintedCount(0) {}
@@ -65,7 +65,7 @@ public:
     int paintedCount;
 };
 
-class FLAKE_TEST_EXPORT MockGroup : public KoShapeGroup
+class MockGroup : public KoShapeGroup
 {
     void paintComponent(QPainter &painter, const KoViewConverter &converter) {
         Q_UNUSED(painter);
@@ -75,7 +75,7 @@ class FLAKE_TEST_EXPORT MockGroup : public KoShapeGroup
 
 class KoToolProxy;
 
-class FLAKE_TEST_EXPORT MockCanvas : public KoCanvasBase
+class MockCanvas : public KoCanvasBase
 {
 public:
     MockCanvas(KoShapeControllerBase *aKoShapeControllerBase =0)//made for TestSnapStrategy.cpp
@@ -129,7 +129,7 @@ public:
         KoGuidesData *m_guideData;
 };
 
-class FLAKE_TEST_EXPORT MockShapeController : public KoShapeControllerBase
+class MockShapeController : public KoShapeControllerBase
 {
 public:
     void addShape(KoShape* shape) {
@@ -145,7 +145,7 @@ private:
     QSet<KoShape * > m_shapes;
 };
 
-class FLAKE_TEST_EXPORT MockContainerModel : public KoShapeContainerModel
+class MockContainerModel : public KoShapeContainerModel
 {
 public:
     MockContainerModel() {

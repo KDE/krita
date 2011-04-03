@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -62,6 +63,10 @@ public:
         CollapsingBorders,     ///< If true, then the table has collapsing border model
         MasterPageName,         ///< Optional name of the master-page
         NumberHeadingRows,      ///< Count the number of heading rows
+<<<<<<< HEAD
+=======
+        Visible,                ///< If true, the table is visible
+>>>>>>> master
     };
 
     /// Constructor
@@ -71,7 +76,7 @@ public:
     /// Destructor
     ~KoTableStyle();
 
-    /// Creates a KoTableStyle that represents the formatting of \a block.
+    /// Creates a KoTableStyle that represents the formatting of \a table.
     static KoTableStyle *fromTable(const QTextTable &table, QObject *parent = 0);
 
     /// creates a clone of this style with the specified parent
@@ -82,9 +87,12 @@ public:
 
     /// The property specifies if the table should be kept together with the next paragraph
     void setKeepWithNext(bool keep);
+    
+    bool keepWithNext() const;
 
     /// The property specifies if the table should allow it to be break. Break within a row is specified per row
     void setMayBreakBetweenRows(bool allow);
+    bool mayBreakBetweenRows() const;
 
     /// See similar named method on QTextBlockFormat
     void setBackground(const QBrush &brush);
@@ -93,10 +101,13 @@ public:
     /// See similar named method on QTextBlockFormat
     void clearBackground();
 
-    void setBreakBefore(bool on);
-    bool breakBefore();
-    void setBreakAfter(bool on);
-    bool breakAfter();
+    void setBreakBefore(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakAfter();
+
+    void setVisible(bool on);
+    bool visible();
     
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();
@@ -165,6 +176,9 @@ public:
     bool operator==(const KoTableStyle &other) const;
 
     void removeDuplicates(const KoTableStyle &other);
+    
+    /// return true when there are keys defined for this style
+    bool isEmpty() const;
 
     /**
      * Load the style form the element

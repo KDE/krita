@@ -249,13 +249,11 @@ void ArtisticTextShape::createOutline()
 {
     m_outline = QPainterPath();
 
-    if( isOnPath() )
-    {
+    if( isOnPath() ) {
         m_charOffsets.clear();
         QFontMetricsF metrics( m_font );
-        int textLength = m_text.length();
+        const int textLength = m_text.length();
         qreal charPos = m_startOffset * m_baseline.length();
-
         qreal anchorPoint = 0.0;
         if( m_textAnchor == AnchorMiddle )
             anchorPoint = 0.5 * metrics.width( m_text );
@@ -268,8 +266,7 @@ void ArtisticTextShape::createOutline()
 
         m_charOffsets.resize( textLength + 1 );
         int charIdx = 0;
-        for( ;charIdx < textLength; ++charIdx )
-        {
+        for( ;charIdx < textLength; ++charIdx ) {
             QString actChar( m_text[charIdx] );
             // get the percent value of the actual char position
             qreal t = m_baseline.percentAtLength( charPos );
@@ -277,8 +274,7 @@ void ArtisticTextShape::createOutline()
             if( t >= 1.0 )
                 break;
 
-            if( t >= 0.0 )
-            {
+            if( t >= 0.0 ) {
                 // get the path point of the given path position
                 pathPoint = m_baseline.pointAtPercent( t );
 
@@ -287,8 +283,13 @@ void ArtisticTextShape::createOutline()
 
             m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
             charPos += metrics.width( actChar );
-            if( t < 0.0 )
+            if( t <= 0.0 ) {
+                // if this is not the first character but our position is still
+                // zero or less, disable the previous character from display
+                if (charIdx)
+                    m_charOffsets[charIdx-1] = -1;
                 continue;
+            }
 
             // get the angle at the given path position
             if( t >= 1.0 )
@@ -301,9 +302,7 @@ void ArtisticTextShape::createOutline()
             m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
         }
         m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
-    }
-    else
-    {
+    } else {
         m_outline.addText( QPointF(), m_font, m_text );
     }
 }
@@ -598,16 +597,16 @@ void ArtisticTextShape::cacheGlyphOutlines()
     }
 }
 
-void ArtisticTextShape::shapeChanged(ChangeType type, KoShape * shape)
+void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
-    if( m_path && shape == m_path )
-    {
-        if( type == KoShape::Deleted )
-        {
+    if( m_path && shape == m_path ) {
+        if( type == KoShape::Deleted ) {
+            // baseline shape was deleted
             m_path = 0;
-        }
-        else
-        {
+        } else if (type == KoShape::ParentChanged && !shape->parent()) {
+            // baseline shape was probably removed from the document
+            m_path = 0;
+        } else {
             update();
             // use the paths outline converted to document coordinates as the baseline
             m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );

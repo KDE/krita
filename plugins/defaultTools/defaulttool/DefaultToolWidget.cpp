@@ -204,9 +204,9 @@ void DefaultToolWidget::sizeHasChanged()
             // calculate the matrix we would apply to the local shape matrix
             // that tells us the effective scale values we have to use for the resizing
             QTransform localMatrix = shapeMatrix * resizeMatrix * shapeMatrix.inverted();
-            // save the effective scale values
-            qreal scaleX = localMatrix.m11();
-            qreal scaleY = localMatrix.m22();
+            // save the effective scale values, without any mirroring portion
+            const qreal scaleX = qAbs(localMatrix.m11());
+            const qreal scaleY = qAbs(localMatrix.m22());
 
             // calculate the scale matrix which is equivalent to our resizing above
             QTransform scaleMatrix = (QTransform().scale( scaleX, scaleY ));

@@ -199,6 +199,9 @@ ArtisticTextTool::~ArtisticTextTool()
 
 QTransform ArtisticTextTool::cursorTransform() const
 {
+    if (!m_currentShape)
+        return QTransform();
+
     QTransform transform( m_currentShape->absoluteTransformation(0) );
     QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
@@ -234,6 +237,11 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
     if (m_currentShape->isOnPath()) {
         painter.save();
         m_currentShape->applyConversion( painter, converter );
+        if (!m_currentShape->baselineShape()) {
+            painter.setPen(Qt::DotLine);
+            painter.setBrush(Qt::NoBrush);
+            painter.drawPath(m_currentShape->baseline());
+        }
         painter.setPen(Qt::blue);
         painter.setBrush(m_hoverHandle ? Qt::red : Qt::white);
         painter.drawPath(offsetHandleShape());
@@ -244,6 +252,10 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
 void ArtisticTextTool::repaintDecorations()
 {
     canvas()->updateCanvas(offsetHandleShape().boundingRect());
+    if (m_currentShape && m_currentShape->isOnPath()) {
+        if (!m_currentShape->baselineShape())
+            canvas()->updateCanvas(m_currentShape->baseline().boundingRect());
+    }
 }
 
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
@@ -252,18 +264,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         enableTextCursor(false);
         m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
     }
-    if (m_hoverPath && m_currentShape) {
-        if (!m_currentShape->isOnPath() || m_currentShape->baselineShape() != m_hoverPath) {
-            m_blinkingCursor.stop();
-            m_showCursor = false;
-            updateTextCursorArea();
-            canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_hoverPath ) );
-            m_blinkingCursor.start( BlinkInterval );
-            updateActions();
-            m_hoverPath = 0;
-            return;
-        }
-    } else if (m_hoverText) {
+    if (m_hoverText) {
         KoSelection *selection = canvas()->shapeManager()->selection();
         if(m_hoverText != m_currentShape) {
             // if we hit another text shape, select that shape
@@ -328,31 +329,31 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
         } else {
             foreach( KoShape * shape, shapes ) {
                 ArtisticTextShape * text = dynamic_cast<ArtisticTextShape*>( shape );
-                if ( text ) {
+                if (text && !m_hoverText) {
                     m_hoverText = text;
-                    break;
                 }
                 KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-                if ( path ) {
+                if (path && !m_hoverPath) {
                     m_hoverPath = path;
-                    break;
                 }
+                if(m_hoverPath && m_hoverText)
+                    break;
             }
         }
     }
 
     const bool hoverOnBaseline = textOnPath && m_currentShape->baselineShape() == m_hoverPath;
     // update cursor and status text
-    if( m_hoverPath && m_currentShape && !hoverOnBaseline) {
-        useCursor( QCursor( Qt::PointingHandCursor ) );
-        emit statusTextChanged(i18n("Click to put text on path."));
-    } else if ( m_hoverText ) {
+    if ( m_hoverText ) {
         useCursor( QCursor( Qt::IBeamCursor ) );
         if (m_hoverText == m_currentShape)
             emit statusTextChanged(i18n("Click to change cursor position."));
         else
             emit statusTextChanged(i18n("Click to select text shape."));
-    } else if (m_hoverHandle) {
+    } else if( m_hoverPath && m_currentShape && !hoverOnBaseline) {
+        useCursor( QCursor( Qt::PointingHandCursor ) );
+        emit statusTextChanged(i18n("Double click to put text on path."));
+    } else  if (m_hoverHandle) {
         useCursor( QCursor( Qt::ArrowCursor ) );
         emit statusTextChanged( i18n("Drag handle to change start offset.") );
     } else {
@@ -376,6 +377,22 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
         enableTextCursor(true);
     }
     updateActions();
+}
+
+void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
+{
+    if (m_hoverPath && m_currentShape) {
+        if (!m_currentShape->isOnPath() || m_currentShape->baselineShape() != m_hoverPath) {
+            m_blinkingCursor.stop();
+            m_showCursor = false;
+            updateTextCursorArea();
+            canvas()->addCommand( new AttachTextToPathCommand( m_currentShape, m_hoverPath ) );
+            m_blinkingCursor.start( BlinkInterval );
+            updateActions();
+            m_hoverPath = 0;
+            return;
+        }
+    }
 }
 
 void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
@@ -439,6 +456,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     enableTextCursor( true );
     updateActions();
     emit statusTextChanged( i18n("Press return to finish editing.") );
+    repaintDecorations();
 }
 
 void ArtisticTextTool::blinkCursor()

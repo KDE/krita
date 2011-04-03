@@ -63,6 +63,7 @@ public:
         CollapsingBorders,     ///< If true, then the table has collapsing border model
         MasterPageName,         ///< Optional name of the master-page
         NumberHeadingRows,      ///< Count the number of heading rows
+        Visible,                ///< If true, the table is visible
     };
 
     /// Constructor
@@ -101,6 +102,9 @@ public:
     KoText::KoTextBreakProperty breakBefore();
     void setBreakAfter(KoText::KoTextBreakProperty state);
     KoText::KoTextBreakProperty breakAfter();
+
+    void setVisible(bool on);
+    bool visible();
     
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();

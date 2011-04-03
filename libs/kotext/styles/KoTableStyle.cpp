@@ -361,6 +361,18 @@ bool KoTableStyle::mayBreakBetweenRows() const
     return propertyBoolean(KoTableStyle::MayBreakBetweenRows);
 }
 
+bool KoTableStyle::visible()
+{
+    if (hasProperty(Visible))
+        return propertyBoolean(Visible);
+    return true;
+}
+
+void KoTableStyle::setVisible(bool on)
+{
+    setProperty(Visible, on);
+}
+
 void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
@@ -388,6 +400,10 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         // KoText::directionFromString()
     }
 
+    if (styleStack.hasProperty(KoXmlNS::table, "display")) {
+        setVisible(styleStack.property(KoXmlNS::table, "display") == "true");
+    }
+    
     // Width
     if (styleStack.hasProperty(KoXmlNS::style, "width")) {
         setWidth(QTextLength(QTextLength::FixedLength, KoUnit::parseValue(styleStack.property(KoXmlNS::style, "width"))));
@@ -433,9 +449,8 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 
-    if (styleStack.hasProperty(KoXmlNS::fo, "may-break-between-rows")) {
-        if (styleStack.property(KoXmlNS::fo, "may-break-between-rows") == "true")
-            setMayBreakBetweenRows(true);
+    if (styleStack.hasProperty(KoXmlNS::style, "may-break-between-rows")) {
+        setMayBreakBetweenRows(styleStack.property(KoXmlNS::style, "may-break-between-rows") == "true");
     }
 
 
@@ -521,7 +536,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoTableStyle::BreakAfter) {
             style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::MayBreakBetweenRows) {
-            style.addProperty("fo;may-break-between-rows", mayBreakBetweenRows(), KoGenStyle::TableType);
+            style.addProperty("style:may-break-between-rows", mayBreakBetweenRows(), KoGenStyle::TableType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
@@ -539,11 +554,15 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())
                 style.addProperty("table:border-model", "collapsing", KoGenStyle::TableType);
+            else
+                style.addProperty("table:border-model", "separating", KoGenStyle::TableType);
         } else if (key == KoTableStyle::KeepWithNext) {
             if (keepWithNext())
                 style.addProperty("fo:keep-with-next", "always", KoGenStyle::TableType);
             else
-                style.addProperty("fo:keep-with-next", "none", KoGenStyle::TableType);
+                style.addProperty("fo:keep-with-next", "auto", KoGenStyle::TableType);
+        } else if (key == KoTableStyle::Visible) {
+            style.addProperty("table:display", visible(), KoGenStyle::TableType);
         }
     }
 

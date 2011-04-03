@@ -170,6 +170,11 @@ void KoTableStyle::setKeepWithNext(bool keep)
     d->setProperty(KeepWithNext, keep);
 }
 
+bool KoTableStyle::keepWithNext() const
+{
+    return propertyBoolean(KeepWithNext);
+}
+
 void KoTableStyle::setMayBreakBetweenRows(bool allow)
 {
     d->setProperty(MayBreakBetweenRows, allow);
@@ -195,24 +200,24 @@ QBrush KoTableStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoTableStyle::setBreakBefore(bool on)
+void KoTableStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakBefore, on);
+    setProperty(BreakBefore, state);
 }
 
-bool KoTableStyle::breakBefore()
+KoText::KoTextBreakProperty KoTableStyle::breakBefore()
 {
-    return propertyBoolean(BreakBefore);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableStyle::setBreakAfter(bool on)
+void KoTableStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakAfter, on);
+    setProperty(BreakAfter, state);
 }
 
-bool KoTableStyle::breakAfter()
+KoText::KoTextBreakProperty KoTableStyle::breakAfter()
 {
-    return propertyBoolean(BreakAfter);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
 }
 
 void KoTableStyle::setCollapsingBorderModel(bool on)
@@ -417,18 +422,15 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
         // OASIS spec says it's "auto"/"always", not a boolean.
         QString val = styleStack.property(KoXmlNS::fo, "keep-with-next");
-        if (val == "true" || val == "always")
-            setKeepWithNext(true);
+        setKeepWithNext(val == "true" || val == "always");
     }
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a table.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
-            setBreakBefore(true);
+        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
-            setBreakAfter(true);
+        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::fo, "may-break-between-rows")) {
@@ -515,11 +517,9 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                     style.addProperty("table:align", alignment, KoGenStyle::TableType);
             }
         } else if (key == KoTableStyle::BreakBefore) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::TableType);
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::BreakAfter) {
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::TableType);
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableType);
         } else if (key == KoTableStyle::MayBreakBetweenRows) {
             style.addProperty("fo;may-break-between-rows", mayBreakBetweenRows(), KoGenStyle::TableType);
         } else if (key == QTextFormat::BackgroundBrush) {
@@ -539,6 +539,11 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())
                 style.addProperty("table:border-model", "collapsing", KoGenStyle::TableType);
+        } else if (key == KoTableStyle::KeepWithNext) {
+            if (keepWithNext())
+                style.addProperty("fo:keep-with-next", "always", KoGenStyle::TableType);
+            else
+                style.addProperty("fo:keep-with-next", "none", KoGenStyle::TableType);
         }
     }
 

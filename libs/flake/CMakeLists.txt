@@ -48,6 +48,7 @@ set(flake_SRCS
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
+    KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
@@ -235,6 +236,7 @@ install(
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
+    KoDeferredShapeFactory.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h

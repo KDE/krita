@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Text Shape
+X-KDE-ServiceTypes=Calligra/Deferred
+Type=Service
+X-KDE-Library=textshape-deferred
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1

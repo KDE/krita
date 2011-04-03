@@ -19,8 +19,10 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
+#include <QMutexLocker>
+#include <QMutex>
 #include "KoShapeFactoryBase.h"
+#include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
 #include <KoProperties.h>
 
@@ -30,10 +32,11 @@ class KoShapeFactoryBase::Private
 {
 public:
     Private(const QString &i, const QString &n)
-            : id(i),
-            name(n),
-            loadingPriority(0),
-            hidden(false)
+        : deferredFactory(0),
+          id(i),
+          name(n),
+          loadingPriority(0),
+          hidden(false)
     {
     }
 
@@ -42,6 +45,10 @@ public:
             delete t.properties;
         templates.clear();
     }
+
+    KoDeferredShapeFactoryBase *deferredFactory;
+
+    QMutex pluginLoadingMutex;
 
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactoryBase*> configPanels;
@@ -53,12 +60,14 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
     bool hidden;
+    QString deferredPluginName;
 };
 
 
-KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name)
-        : d(new Private(id, name))
+KoShapeFactoryBase::KoShapeFactoryBase(const QString deferredPluginName, const QString &id, const QString &name)
+    : d(new Private(id, name))
 {
+    d->deferredPluginName = deferredPluginName;
 }
 
 KoShapeFactoryBase::~KoShapeFactoryBase()
@@ -169,7 +178,21 @@ void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
     Q_UNUSED(manager);
 }
 
+KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources = 0) const
+{
+
+}
+
 KoShape *KoShapeFactoryBase::createShape(const KoProperties*, KoResourceManager *documentResources) const
 {
     return createDefaultShape(documentResources);
+}
+
+
+void KoShapeFactoryBase::getDeferredPlugin()
+{
+    QMutexLocker(&d->pluginLoadingMutex);
+    if (d->deferredFactory) return;
+
+
 }

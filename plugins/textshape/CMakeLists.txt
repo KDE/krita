@@ -16,7 +16,7 @@ include_directories(
 SET ( textshape_SRCS
     TextPlugin.cpp
     TextShape.cpp
-    TextShapeFactory.cpp
+    TextShapeDeferredFactory.cpp
     TextTool.cpp
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp

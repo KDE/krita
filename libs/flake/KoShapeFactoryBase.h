@@ -96,7 +96,7 @@ public:
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(const QString &id, const QString &name);
+    KoShapeFactoryBase(const QString deferredPluginName, const QString &id, const QString &name);
     virtual ~KoShapeFactoryBase();
 
     /**
@@ -206,7 +206,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -291,6 +291,9 @@ protected:
     void setHidden(bool hidden);
 
 private:
+
+    void getDeferredPlugin();
+
     class Private;
     Private * const d;
 };

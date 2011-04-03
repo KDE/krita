@@ -244,8 +244,10 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
     
     KoXmlDocument *generatedXmlReader = new KoXmlDocument;
-    if (!generatedXmlReader->setContent(generatedXmlOutput))
+    if (!generatedXmlReader->setContent(generatedXmlOutput)) {
+        kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
         kFatal() << "Unable to set content";
+    }
     
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();

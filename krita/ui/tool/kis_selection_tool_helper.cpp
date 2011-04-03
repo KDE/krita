@@ -66,11 +66,10 @@ void KisSelectionToolHelper::selectPixelSelection(KisPixelSelectionSP selection,
 
     KisPixelSelectionSP pixelSelection = m_layer->selection()->getOrCreatePixelSelection();
 
-    if (! hasSelection || action == SELECTION_REPLACE) {
-        pixelSelection->clear();
-        if (action == SELECTION_SUBTRACT)
-            pixelSelection->invert();
+    if (!hasSelection && action == SELECTION_SUBTRACT) {
+        pixelSelection->invert();
     }
+
     pixelSelection->applySelection(selection, action);
 
     QRect dirtyRect = m_image->bounds();

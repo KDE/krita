@@ -445,7 +445,7 @@ public:
      *
      */
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
+    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.

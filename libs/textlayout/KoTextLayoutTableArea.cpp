@@ -60,7 +60,7 @@ public:
 
 
 KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout)
-  : KoTextLayoutArea(0, documentLayout)
+  : KoTextLayoutArea(parent, documentLayout)
   , d(new Private)
 {
     Q_ASSERT(table);

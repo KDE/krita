@@ -37,9 +37,9 @@ public:
     TableIterator *tableIterator(QTextTable *);
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks
-    QTextLine line;
-    QTextBlock::Iterator fragmentIterator;
-    TableIterator *currentTableIterator;
+    QTextLine line;   //useful if it is pointing to a table. invalid if about to start a new bloco
+    QTextBlock::Iterator fragmentIterator;   //useful if it is pointing to a table
+    TableIterator *currentTableIterator;  //useful if it is pointing to a table
 };
 
 #endif

@@ -596,6 +596,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
 
+        // Store bounding rect so if we have 
         m_boundingRect.setLeft(qMin(cursor->line.x(), m_boundingRect.x()));
         m_boundingRect.setRight(qMax(cursor->line.x()+cursor->line.width(),
                                      m_boundingRect.right()));

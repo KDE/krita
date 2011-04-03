@@ -14,7 +14,7 @@ set(textlayout_LIB_SRCS
     KoStyleThumbnailer.cpp
     KoTextShapeContainerModel.cpp
     RunAroundHelper.cpp
-    Outline.cpp
+    KoTextLayoutObstruction.cpp
     FrameIterator.cpp
     TableIterator.cpp
     KoTextShapeData.cpp

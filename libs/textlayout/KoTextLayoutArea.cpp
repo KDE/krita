@@ -34,6 +34,7 @@
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
+#include "KoTextLayoutObstruction.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -543,8 +544,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     RunAroundHelper runAroundHelper;
     runAroundHelper.setLine(this, cursor->line);
 
-    //FIXME refreshCurrentPageOutlines();
-    //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
+    //FIXME refreshCurrentPageObstructions();
+    //FIXME runAroundHelper.setObstructions(m_currentLineObstructions);
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
@@ -604,8 +605,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
         runAroundHelper.setLine(this, cursor->line);
-        //FIXME refreshCurrentPageOutlines();
-        //FIXME runAroundHelper.setOutlines(m_currentLineOutlines);
+        //FIXME refreshCurrentPageObstructions();
+        //FIXME runAroundHelper.setObstructions(m_currentLineObstructions);
     }
     cursor->line = QTextLine(); //set an invalid line to indicate we are done with block
 

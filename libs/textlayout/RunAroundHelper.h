@@ -20,7 +20,7 @@
 #ifndef RUNAROUNDHELPER_H
 #define RUNAROUNDHELPER_H
 
-#include "Outline.h"
+#include "KoTextLayoutObstruction.h"
 
 #include <QList>
 #include <QTextLine>
@@ -34,24 +34,24 @@ public:
     RunAroundHelper();
     void setLine(KoTextLayoutArea *area, QTextLine l);
     void setRestartOnNextShape(bool restartOnNextShape);
-    void setOutlines(const QList<Outline*> &outlines);
+    void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
     bool stayOnBaseline();
-    void updateOutline(Outline *outline);
+    void updateObstruction(KoTextLayoutObstruction *obstruction);
     void fit(const bool resetHorizontalPosition, QPointF position);
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;
-    const QList<Outline*> *m_outlines;
-    QList<Outline*> m_validOutlines;
+    const QList<KoTextLayoutObstruction*> *m_obstructions;
+    QList<KoTextLayoutObstruction*> m_validObstructions;
     QList<QRectF> m_lineParts;
     QRectF m_lineRect;
     qreal m_horizontalPosition;
-    bool m_updateValidOutlines;
+    bool m_updateValidObstructions;
     bool m_stayOnBaseline;
     qreal m_textWidth;
     bool m_restartOnNextShape;
-    void validateOutlines();
-    void validateOutline(Outline *outline);
+    void validateObstructions();
+    void validateObstruction(KoTextLayoutObstruction *obstruction);
     void createLineParts();
     QRectF minimizeHeightToLeastNeeded(const QRectF &lineRect);
     void updateLineParts(const QRectF &lineRect);

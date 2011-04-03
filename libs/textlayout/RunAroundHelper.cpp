@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "RunAroundHelper.h"
-#include "Outline.h"
+#include "KoTextLayoutObstruction.h"
 
 #include "KoTextLayoutArea.h"
 
@@ -28,7 +28,7 @@ const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
 RunAroundHelper::RunAroundHelper()
 {
     m_lineRect = QRectF();
-    m_updateValidOutlines = false;
+    m_updateValidObstructions = false;
     m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
     m_stayOnBaseline = false;
     m_restartOnNextShape = false;
@@ -44,9 +44,9 @@ void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
     m_restartOnNextShape = restartOnNextShape;
 }
 
-void RunAroundHelper::setOutlines(const QList<Outline*> &outlines)
+void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
 {
-    m_outlines = &outlines;
+    m_obstructions = &obstructions;
 }
 
 bool RunAroundHelper::stayOnBaseline()
@@ -54,11 +54,11 @@ bool RunAroundHelper::stayOnBaseline()
     return m_stayOnBaseline;
 }
 
-void RunAroundHelper::updateOutline(Outline *outline)
+void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
 {
-    QRectF outlineLineRect = outline->cropToLine(m_lineRect);
-    if (outlineLineRect.isValid()) {
-        m_updateValidOutlines = true;
+    QRectF obstructionLineRect = obstruction->cropToLine(m_lineRect);
+    if (obstructionLineRect.isValid()) {
+        m_updateValidObstructions = true;
     }
 }
 
@@ -104,7 +104,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
         // to move the lineRect down a bit and try again
         // No line rect part was enough big, to fit the line. Recreate line rect further down
         // (and that is devided into new line parts). Line rect is at different position to
-        // outlines, so new parts are completely different. if there are no outlines, then we
+        // obstructions, so new parts are completely different. if there are no obstructions, then we
         // have only one line part which is full line rect
 
         lineRectPart = getLineRect(lineRect, maxNaturalTextWidth);
@@ -121,56 +121,56 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
 }
 
-void RunAroundHelper::validateOutlines()
+void RunAroundHelper::validateObstructions()
 {
-    m_validOutlines.clear();
-    foreach (Outline *outline, *m_outlines) {
-        validateOutline(outline);
+    m_validObstructions.clear();
+    foreach (KoTextLayoutObstruction *obstruction, *m_obstructions) {
+        validateObstruction(obstruction);
     }
 }
 
-void RunAroundHelper::validateOutline(Outline *outline)
+void RunAroundHelper::validateObstruction(KoTextLayoutObstruction *obstruction)
 {
-    QRectF outlineLineRect = outline->cropToLine(m_lineRect);
-    if (outlineLineRect.isValid()) {
-        m_validOutlines.append(outline);
+    QRectF obstructionLineRect = obstruction->cropToLine(m_lineRect);
+    if (obstructionLineRect.isValid()) {
+        m_validObstructions.append(obstruction);
     }
 }
 
 void RunAroundHelper::createLineParts()
 {
     m_lineParts.clear();
-    if (m_validOutlines.isEmpty()) {
+    if (m_validObstructions.isEmpty()) {
         // Add whole line rect
         m_lineParts.append(m_lineRect);
     } else {
         QList<QRectF> lineParts;
         QRectF rightLineRect = m_lineRect;
-        qSort(m_validOutlines.begin(), m_validOutlines.end(), Outline::compareRectLeft);
-        // Devide rect to parts, part can be invalid when outlines are not disjunct.
-        foreach (Outline *validOutline, m_validOutlines) {
-            QRectF leftLineRect = validOutline->getLeftLinePart(rightLineRect);
+        qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
+        // Devide rect to parts, part can be invalid when obstructions are not disjunct.
+        foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
+            QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);
             lineParts.append(leftLineRect);
-            QRectF lineRect = validOutline->getRightLinePart(rightLineRect);
+            QRectF lineRect = validObstruction->getRightLinePart(rightLineRect);
             if (lineRect.isValid()) {
                 rightLineRect = lineRect;
             }
         }
         lineParts.append(rightLineRect);
-        Q_ASSERT(m_validOutlines.size() + 1 == lineParts.size());
+        Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());
         // Select invalid parts because of wrap.
-        for (int i = 0; i < m_validOutlines.size(); i++) {
-            Outline *outline = m_validOutlines.at(i);
-            if (outline->noTextAround()) {
+        for (int i = 0; i < m_validObstructions.size(); i++) {
+            KoTextLayoutObstruction *obstruction = m_validObstructions.at(i);
+            if (obstruction->noTextAround()) {
                 lineParts.replace(i, QRectF());
                 lineParts.replace(i + 1, QRect());
-            } else if (outline->textOnLeft()) {
+            } else if (obstruction->textOnLeft()) {
                 lineParts.replace(i + 1, QRect());
-            } else if (outline->textOnRight()) {
+            } else if (obstruction->textOnRight()) {
                 lineParts.replace(i, QRectF());
-            } else if (outline->textOnBiggerSide()) {
-                QRectF leftReft = outline->getLeftLinePart(m_lineRect);
-                QRectF rightRect = outline->getRightLinePart(m_lineRect);
+            } else if (obstruction->textOnBiggerSide()) {
+                QRectF leftReft = obstruction->getLeftLinePart(m_lineRect);
+                QRectF rightRect = obstruction->getRightLinePart(m_lineRect);
                 if (leftReft.width() < rightRect.width()) {
                     lineParts.replace(i, QRectF());
                 } else {
@@ -204,10 +204,10 @@ QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
 
 void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 {
-    if (m_lineRect != lineRect || m_updateValidOutlines) {
+    if (m_lineRect != lineRect || m_updateValidObstructions) {
         m_lineRect = lineRect;
-        m_updateValidOutlines = false;
-        validateOutlines();
+        m_updateValidObstructions = false;
+        validateObstructions();
         createLineParts();
     }
 }

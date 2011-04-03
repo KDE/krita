@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef OUTLINE_H
-#define OUTLINE_H
+#ifndef KOTEXTLAYOUTOBSTRUCTION_H
+#define KOTEXTLAYOUTOBSTRUCTION_H
 
 #include <QTransform>
 #include <QMultiMap>
@@ -28,12 +28,12 @@
 class KoShape;
 
 ///  Class that allows us with the runaround of QPainterPaths
-class Outline
+class KoTextLayoutObstruction
 {
 public:
-    Outline(KoShape *shape, const QTransform &matrix);
+    KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);
 
-    void init(const QTransform &matrix, const QPainterPath &outline, qreal distance);
+    void init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance);
 
     QRectF limit(const QRectF &content);
 
@@ -59,7 +59,7 @@ public:
 
     bool noTextAround() const;
 
-    static bool compareRectLeft(Outline *o1, Outline *o2);
+    static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
     enum Side { None, Left, Right, Empty, Both, Bigger }; // TODO support Auto
     Side m_side;

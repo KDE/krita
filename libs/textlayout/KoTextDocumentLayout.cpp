@@ -30,7 +30,7 @@
 #include "KoTextLayoutRootArea.h"
 #include "KoTextLayoutRootAreaProvider.h"
 #include "InlineObjectExtend.h"
-#include "Outline.h"
+#include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 
 #include <KoTextAnchor.h>
@@ -81,8 +81,8 @@ struct KoTextDocumentLayout::Private
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     int textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 
-    QHash<KoShape*,Outline*> outlines; // all outlines created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
-    QList<Outline*> currentLineOutlines; // outlines for current page
+    QHash<KoShape*,KoTextLayoutObstruction*> obstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
+    QList<KoTextLayoutObstruction*> currentLineObstructions; // obstructions for current page
 
     qreal defaultTabSizing;
     qreal y;
@@ -111,7 +111,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
 {
-    unregisterAllRunAroundShapes();
+    unregisterAllObstructions();
 
     delete d;
 }
@@ -372,10 +372,10 @@ void KoTextDocumentLayout::registerInlineObject(const QTextInlineObject &inlineO
    //TODO d->inlineObjectExtends.insert(m_block.position() + inlineObject.textPosition(), pos);
 }
 
-void KoTextDocumentLayout::unregisterAllRunAroundShapes()
+void KoTextDocumentLayout::unregisterAllObstructions()
 {
-    qDeleteAll(d->outlines);
-    d->outlines.clear();
+    qDeleteAll(d->obstructions);
+    d->obstructions.clear();
 }
 
 InlineObjectExtend KoTextDocumentLayout::inlineObjectExtend(const QTextFragment &fragment)
@@ -395,13 +395,13 @@ void KoTextDocumentLayout::resetInlineObject(int resetPosition)
         if ((*iter)->positionInDocument() >= resetPosition) {
             (*iter)->anchorStrategy()->reset();
 
-            // delete outline
-            if (d->outlines.contains((*iter)->shape())) {
-                Outline *outline = d->outlines.value((*iter)->shape());
-                d->outlines.remove((*iter)->shape());
-                //TODO m_textLine.updateOutline(outline);
-                refreshCurrentPageOutlines();
-                delete outline;
+            // delete obstruction
+            if (d->obstructions.contains((*iter)->shape())) {
+                KoTextLayoutObstruction *obstruction = d->obstructions.value((*iter)->shape());
+                d->obstructions.remove((*iter)->shape());
+                //TODO m_textLine.updateObstruction(obstruction);
+                refreshCurrentPageObstructions();
+                delete obstruction;
             }
             (*iter)->setAnchorStrategy(0);
 
@@ -419,19 +419,19 @@ void KoTextDocumentLayout::resetInlineObject(int resetPosition)
     }
 }
 
-void KoTextDocumentLayout::refreshCurrentPageOutlines()
+void KoTextDocumentLayout::refreshCurrentPageObstructions()
 {
-/*    m_currentLineOutlines.clear();
+/*    m_currentLineObstructions.clear();
 
     TextShape *textShape = dynamic_cast<TextShape*>(shape);
     if (textShape == 0) {
         return;
     }
 
-    // add current page children outlines to m_currentLineOutlines
+    // add current page children obstructions to m_currentLineObstructions
     foreach(KoShape *childShape, textShape->shapes()) {
-        if (m_outlines.contains(childShape)) {
-            m_currentLineOutlines.append(m_outlines.value(childShape));
+        if (m_obstructions.contains(childShape)) {
+            m_currentLineObstructions.append(m_obstructions.value(childShape));
         }
     }
 */

@@ -141,13 +141,13 @@ public:
     InlineObjectExtend inlineObjectExtend(const QTextFragment&);
 
     /// Registers the shape as being relevant for run around at this moment in time
-    void registerRunAroundShape(KoShape *shape);
+    void registerObstruction(KoShape *shape);
 
     /// Updates the registration of the shape for run around
-    void updateRunAroundShape(KoShape *shape);
+    void updateObstruction(KoShape *shape);
 
     /// Clear all registrations of shapest for run around
-    void unregisterAllRunAroundShapes();
+    void unregisterAllObstructions();
 
 
     /**
@@ -231,8 +231,8 @@ protected:
 
     void registerInlineObject(const QTextInlineObject &inlineObject);
     
-    // Fill m_currentLineOutlines list with actual outlines for current page
-    void refreshCurrentPageOutlines();
+    // Fill m_currentLineObstructions list with actual obstructions for current page
+    void refreshCurrentPageObstructions();
 
 private:
     class Private;

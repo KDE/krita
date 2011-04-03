@@ -18,12 +18,12 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "Outline.h"
+#include "KoTextLayoutObstruction.h"
 #include <KoShapeContainer.h>
 
 #include <qnumeric.h>
 
-Outline::Outline(KoShape *shape, const QTransform &matrix)
+KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix)
     : m_side(None),
     m_polygon(QPolygonF()),
     m_line(QRectF()),
@@ -31,7 +31,7 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
 {
     QPainterPath path = shape->outline();
 
-    //TODO check if path is convex. otherwise do triangulation and create more convex outlines
+    //TODO check if path is convex. otherwise do triangulation and create more convex obstructions
     init(matrix, path, shape->textRunAroundDistance());
 
     if (shape->textRunAroundSide() == KoShape::NoRunAround) {
@@ -52,10 +52,10 @@ Outline::Outline(KoShape *shape, const QTransform &matrix)
     }
 }
 
-void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal distance)
+void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath &obstruction, qreal distance)
 {
     m_distance = distance;
-    QPainterPath path =  matrix.map(outline);
+    QPainterPath path =  matrix.map(obstruction);
     m_bounds = path.boundingRect();
     if (distance >= 0.0) {
         QTransform grow = matrix;
@@ -71,7 +71,7 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
         grow.scale(scaleX, scaleY);
         grow.translate(-m_bounds.width() / 2.0, -m_bounds.height() / 2.0);
 
-        path =  grow.map(outline);
+        path =  grow.map(obstruction);
         // kDebug() <<"Grow" << distance <<", Before:" << m_bounds <<", after:" << path.boundingRect();
         m_bounds = path.boundingRect();
     }
@@ -92,20 +92,20 @@ void Outline::init(const QTransform &matrix, const QPainterPath &outline, qreal 
 
 }
 
-qreal Outline::xAtY(const QLineF &line, qreal y)
+qreal KoTextLayoutObstruction::xAtY(const QLineF &line, qreal y)
 {
     if (line.dx() == 0)
         return line.x1();
     return line.x1() + (y - line.y1()) / line.dy() * line.dx();
 }
 
-void Outline::changeMatrix(const QTransform &matrix)
+void KoTextLayoutObstruction::changeMatrix(const QTransform &matrix)
 {
     m_edges.clear();
     init(matrix, m_shape->outline(), m_distance);
 }
 
-QRectF Outline::cropToLine(const QRectF &lineRect)
+QRectF KoTextLayoutObstruction::cropToLine(const QRectF &lineRect)
 {
     if (m_bounds.intersects(lineRect)) {
         m_line = lineRect;
@@ -161,14 +161,14 @@ QRectF Outline::cropToLine(const QRectF &lineRect)
     return m_line;
 }
 
-QRectF Outline::getLeftLinePart(const QRectF &lineRect) const
+QRectF KoTextLayoutObstruction::getLeftLinePart(const QRectF &lineRect) const
 {
     QRectF leftLinePart = lineRect;
     leftLinePart.setRight(m_line.left());
     return leftLinePart;
 }
 
-QRectF Outline::getRightLinePart(const QRectF &lineRect) const
+QRectF KoTextLayoutObstruction::getRightLinePart(const QRectF &lineRect) const
 {
     QRectF rightLinePart = lineRect;
     if (m_line.right() > rightLinePart.left()) {
@@ -177,27 +177,27 @@ QRectF Outline::getRightLinePart(const QRectF &lineRect) const
     return rightLinePart;
 }
 
-bool Outline::textOnLeft() const
+bool KoTextLayoutObstruction::textOnLeft() const
 {    
     return  m_side == Left;
 }
 
-bool Outline::textOnRight() const
+bool KoTextLayoutObstruction::textOnRight() const
 {
     return m_side == Right;
 }
 
-bool Outline::textOnBiggerSide() const
+bool KoTextLayoutObstruction::textOnBiggerSide() const
 {
     return m_side == Bigger;
 }
 
-bool Outline::noTextAround() const
+bool KoTextLayoutObstruction::noTextAround() const
 {
     return m_side == Empty;
 }
 
-bool Outline::compareRectLeft(Outline *o1, Outline *o2)
+bool KoTextLayoutObstruction::compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2)
 {
     return o1->m_line.left() < o2->m_line.left();
 }

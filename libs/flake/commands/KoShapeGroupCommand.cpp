@@ -129,7 +129,7 @@ void KoShapeGroupCommand::redo()
         KoShape * shape = d->shapes[i];
         shape->setZIndex(zIndex++);
 
-        if(d->container->inheritsTransform(shape)) {
+        if(d->inheritTransform[i]) {
             shape->applyAbsoluteTransformation(groupTransform);
         }
         else {

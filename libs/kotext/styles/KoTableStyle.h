@@ -63,10 +63,7 @@ public:
         CollapsingBorders,     ///< If true, then the table has collapsing border model
         MasterPageName,         ///< Optional name of the master-page
         NumberHeadingRows,      ///< Count the number of heading rows
-<<<<<<< HEAD
-=======
         Visible,                ///< If true, the table is visible
->>>>>>> master
     };
 
     /// Constructor

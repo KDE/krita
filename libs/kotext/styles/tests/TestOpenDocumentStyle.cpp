@@ -20,6 +20,7 @@
 #include "TestOpenDocumentStyle.h"
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
+#include <KoTableStyle.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
@@ -34,15 +35,14 @@
 #include <QDomElement>
 
 Attribute::Attribute(const QDomElement& element)
+    : m_references()
 {
     if (element.firstChildElement() != element.lastChildElement()) {
         kFatal() << "We don't handle complex attributes so far";
     }
     QDomElement content = element.firstChildElement();
     if (content.tagName() == "ref") {
-        m_referenceName = content.attribute("name");
-    } else {
-        m_referenceName = QString::null;
+        m_references << content.attribute("name");
     }
     m_name = element.attribute("name");
     m_values = listValuesFromNode(element);
@@ -60,46 +60,67 @@ QStringList Attribute::listValues()
 
 QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
 {
-    if (m_referenceName.isNull()) {
+    QStringList result;
+    if (m_references.size() == 0) {
         // Parse the content of the attribute
         QDomElement content = m_node.firstChildElement();
         if (content.tagName() == "choice") {
-            QStringList result;
             QDomElement valueChild = content.firstChildElement();
             do {
                 if (valueChild.tagName() == "value") {
                     result << valueChild.text();
+                } else if (valueChild.tagName() == "ref") {
+                    m_references << valueChild.attribute("name");
                 } else {
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
                 valueChild = valueChild.nextSiblingElement();
             } while (!valueChild.isNull());
-            return result;
         } else {
             kFatal() << "Unhandled attribute value node " << content.tagName();
         }
-    } else {
-        if (m_referenceName == "boolean") {
-            return QStringList() << "true" << "false";
-        } else if (m_referenceName == "positiveLength") {
-            return QStringList() << "42px" << "42pt" << "12cm";
-        } else if (m_referenceName == "relativeLength") {
-            return QStringList() << "42*";
+    }
+    foreach (QString reference, m_references) {
+        if (reference == "boolean") {
+            result << "true" << "false";
+        } else if (reference == "positiveLength") {
+            result << "42px" << "42pt" << "12cm";
+        } else if (reference == "length") {
+            result << "42px" << "42pt" << "12cm" << "-5in";
+        } else if (reference == "nonNegativeLength") {
+            result << "42px" << "42pt" << "12cm" << "0in";
+        } else if (reference == "relativeLength") {
+            result << "42*";
+        } else if (reference == "shadowType") {
+            kWarning() << "Not fully supported : shadowType.";
+            result << "none";
+        } else if (reference == "color") {
+            result << "#ABCDEF" << "#0a1234";
+        } else if (reference == "positiveInteger") {
+            result << "0" << "42";
+        } else if (reference == "percent") {
+            result << "-50%" << "0%" << "100%" << "42%";
         } else {
-            kFatal() << "Unhandled reference " << m_referenceName;
+            kFatal() << "Unhandled reference " << reference;
         }
     }
-    return QStringList();
+    return result;
 }
 
 bool Attribute::compare(const QString& initialValue, const QString& outputValue)
 {
+    if (outputValue.isEmpty())
+        return false;
     if (initialValue == outputValue)
         return true;
-    if (m_referenceName.isNull())
-        return false;
-    if (m_referenceName == "positiveLength") {
-        return KoUnit::parseValue(initialValue) == KoUnit::parseValue(outputValue);
+    foreach (QString reference, m_references) {
+        if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
+            if (KoUnit::parseValue(initialValue) == KoUnit::parseValue(outputValue))
+                return true;
+        } else if (reference == "color") {
+            if (initialValue.toLower() == outputValue.toLower())
+                return true;
+        }
     }
     return false;
 }
@@ -251,6 +272,26 @@ void TestOpenDocumentStyle::testTableColumnStyle()
     QFETCH(QString, value);
     
     QVERIFY(basicTestFunction<KoTableColumnStyle>(KoGenStyle::TableColumnStyle, "table-column", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

@@ -39,7 +39,7 @@ class Attribute : public QObject {
 
     private:
         QStringList listValuesFromNode(const QDomElement &element);
-        QString m_referenceName;
+        QStringList m_references;
         QString m_name;
         QStringList m_values;
 };
@@ -66,6 +66,8 @@ class TestOpenDocumentStyle : public QObject
         void initTestCase();
         void testTableColumnStyle();
         void testTableColumnStyle_data();
+        void testTableStyle();
+        void testTableStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

@@ -47,6 +47,24 @@ FrameIterator::FrameIterator(FrameIterator *other)
         currentTableIterator = 0;
 }
 
+bool FrameIterator::operator ==(const FrameIterator &other)
+{
+    if (it != other.it)
+        return false;
+
+    if (currentTableIterator) {
+        if (currentTableIterator != other.currentTableIterator)
+            return false;
+        return *currentTableIterator == *(other.currentTableIterator);
+    } else {
+        if (line.isValid() != other.line.isValid())
+            return false;
+        if (line.isValid() == false)
+            return true; // both lines were invalid ie the same
+
+        return line.textStart() == other.line.textStart();
+    }
+}
 
 TableIterator *FrameIterator::tableIterator(QTextTable *table)
 {

@@ -22,23 +22,27 @@
 #include "KoTextLayoutRootArea.h"
 #include "TextShape.h"
 
-SimpleRootAreaProvider::SimpleRootAreaProvider(TextShape *textshape)
+SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape)
     : m_textShape(textshape)
     , m_area(0)
+    , m_textShapeData(data)
+
 {
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextLayoutRootArea *previous, KoTextDocumentLayout *documentLayout)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
-    if(m_area == 0)
+    if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
-    m_area->setAssociatedShape(m_textShape);
+        m_area->setAssociatedShape(m_textShape);
+        m_area->setReferenceRect(0, m_textShape->size().width(), 0, m_textShape->size().height());
+        m_textShapeData->setRootArea(m_area);
 
-    m_area->setReferenceRect(0, m_textShape->size().width(), 0, m_textShape->size().height());
-
-    if (previous) {
-        return 0;
-    }
-    else
         return m_area;
+    }
+    return 0;
+}
+
+void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
+{
 }

@@ -36,8 +36,10 @@ public:
     explicit KoTextLayoutRootAreaProvider();
     virtual ~KoTextLayoutRootAreaProvider();
 
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old,
-                                     KoTextDocumentLayout *documentLayout) = 0;
+    // provide another root area
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout) = 0;
+
+    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis) = 0;
 };
 
 #endif

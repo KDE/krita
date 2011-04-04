@@ -93,14 +93,12 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
     setShapeId(TextShape_SHAPEID);
     m_textShapeData = new KoTextShapeData();
     setUserData(m_textShapeData);
-    SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(this);
+    SimpleRootAreaProvider *provider = new SimpleRootAreaProvider(m_textShapeData, this);
 
     KoTextDocument(m_textShapeData->document()).setInlineTextObjectManager(inlineTextObjectManager);
 
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_textShapeData->document(), provider);
     m_textShapeData->document()->setDocumentLayout(lay);
- 
-    m_textShapeData->setRootArea(provider->provide(0, lay));
 
     setCollisionDetection(true);
 
@@ -114,6 +112,10 @@ TextShape::~TextShape()
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
+    if (m_textShapeData->isDirty()) { // not layouted yet.
+        return;
+    }
+
     QTextDocument *doc = m_textShapeData->document();
     Q_ASSERT(doc);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
@@ -127,11 +129,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         background()->paint(painter, p);
     }
 
-    if (m_textShapeData->isDirty()) { // not layouted yet.
-        if (!m_pageProvider) {
-            return;
-        }
-    }
 /*TODO
     if (m_pageProvider) {
         KoTextPage *page = m_pageProvider->page(this);
@@ -190,9 +187,12 @@ QPointF TextShape::convertScreenPos(const QPointF &point) const
 
 QRectF TextShape::outlineRect() const
 {
-    QRectF rect = m_textShapeData->rootArea()->boundingRect();
-    rect.moveTop(-m_textShapeData->documentOffset());
-    return rect | QRectF(QPointF(0, 0), size());
+    if (m_textShapeData->rootArea()) {
+        QRectF rect = m_textShapeData->rootArea()->boundingRect();
+        rect.moveTop(-m_textShapeData->documentOffset());
+        return rect | QRectF(QPointF(0, 0), size());
+    }
+    return QRectF(QPointF(0,0), size());
 }
 
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)

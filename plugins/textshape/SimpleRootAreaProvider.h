@@ -23,18 +23,22 @@
 #include "KoTextLayoutRootAreaProvider.h"
 
 class TextShape;
+class KoTextShapeData;
 
 class SimpleRootAreaProvider : public KoTextLayoutRootAreaProvider
 {
 public:
-    SimpleRootAreaProvider(TextShape *textshape);
+    SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old, KoTextDocumentLayout *documentLayout);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
+
+    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
 
     TextShape *m_textShape;
 
     KoTextLayoutRootArea *m_area;
+    KoTextShapeData *m_textShapeData;
 };
 
 #endif

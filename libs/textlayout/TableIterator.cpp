@@ -74,6 +74,22 @@ TableIterator::~TableIterator()
     }
 }
 
+bool TableIterator::operator ==(const TableIterator &other)
+{
+    if (table != other.table)
+        return false;
+
+    if (row != other.row)
+
+    for (int col = 0; col < table->columns(); ++col) {
+        if (frameIterators[col]) {
+            if (!(*frameIterators[col] ==
+                            *(other.frameIterators[col])));
+                return false;
+        }
+    }
+}
+
 FrameIterator *TableIterator::frameIterator(int column)
 {
     if (row == table->rows()) {

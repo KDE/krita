@@ -226,8 +226,8 @@ protected:
     /// same as hitTest but for a range specified by an iterator
     int hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF & point, Qt::HitTestAccuracy accuracy) const;
 
-    /// should we ontinue layout when done with current root area
-    bool continueLayout();
+    /// should we continue layout when done with current root area
+    bool continuousLayout();
 
     void registerInlineObject(const QTextInlineObject &inlineObject);
     

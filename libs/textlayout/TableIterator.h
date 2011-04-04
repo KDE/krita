@@ -33,6 +33,8 @@ public:
     TableIterator(TableIterator *other);
     ~TableIterator();
 
+    bool operator ==(const TableIterator &other);
+
     FrameIterator *frameIterator(int column);
 
     QTextTable *table;

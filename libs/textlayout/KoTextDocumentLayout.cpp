@@ -280,8 +280,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-//TODO place m_currentLayoutIterator at position
-//and m_rootArea at corresponding root area and then do layout
+//TODO make corresponding root area as dirty and then do layout
 }
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
@@ -351,27 +350,63 @@ void KoTextDocumentLayout::layout()
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
 
-    do {
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        bool shouldLayout = false;
+        d->rootArea = rootArea;
+
+        if (rootArea->top() != d->y) {
+            shouldLayout = true;
+        }
+        if (rootArea->isDirty()) {
+            shouldLayout = true;
+        }
+        if (rootArea->isStartingAt(d->layoutPosition)) {
+            shouldLayout = true;
+        }
+
+        if (shouldLayout) {
+            d->rootArea->setReferenceRect(d->rootArea->left(),
+                                          d->rootArea->right(),
+                                          d->y,
+                                          d->y + d->rootArea->maximumAllowedBottom());
+            //layout all that can fit into that root area
+            d->rootArea->layout(d->layoutPosition);
+
+            if (d->layoutPosition->it == document()->rootFrame()->end()) {
+                d->provider->releaseAllAfter(d->rootArea);
+                emit finishedLayout();
+                return;
+            }
+            if (!continuousLayout()) {
+                return; // let's take a break
+            }
+        }
+        d->y = rootArea->bottom(); // layout method just set this
+    }
+
+    while (d->layoutPosition->it != document()->rootFrame()->end()) {
         // request a Root Area
-        d->rootArea = d->provider->provide(d->rootArea, this);
+        d->rootArea = d->provider->provide(this);
 
         if (d->rootArea) {
             d->rootAreaList.append(d->rootArea);
             d->rootArea->setReferenceRect(d->rootArea->left(), d->rootArea->right(),
-                                          d->y, d->y + d->rootArea->maximumAllowedBottom());
+                                            d->y, d->y + d->rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
             d->rootArea->layout(d->layoutPosition);
-            d->y = d->rootArea->bottom(); // layout method just set this
-        } else {
-            d->y = 0;
-            break;
-        }
-        if (d->layoutPosition->it == document()->rootFrame()->end()) {
-            emit finishedLayout();
-            return;
-        }
 
-    } while (continueLayout());
+            if (d->layoutPosition->it == document()->rootFrame()->end()) {
+                emit finishedLayout();
+                return;
+            }
+            if (!continuousLayout()) {
+                return; // let's take a break
+            }
+        } else {
+            return; // with no more space there is nothing else we can do
+        }
+        d->y = d->rootArea->bottom(); // layout method just set this
+    }
 }
 
 void KoTextDocumentLayout::interruptLayout()
@@ -381,7 +416,7 @@ void KoTextDocumentLayout::interruptLayout()
 
 
 
-bool KoTextDocumentLayout::continueLayout()
+bool KoTextDocumentLayout::continuousLayout()
 {
     return true;
 }

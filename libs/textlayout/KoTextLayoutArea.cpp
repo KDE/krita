@@ -71,6 +71,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_documentLayout(documentLayout)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
+ , m_endOfArea()
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
 {
@@ -223,8 +224,24 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     return retval;
 }
 
+bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor)
+{
+    if (m_startOfArea) {
+        return *m_startOfArea == *cursor;
+    }
+
+    return false;
+}
+
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
+    qDeleteAll(m_tableAreas);
+    qDeleteAll(m_footNoteAreas);
+    qDeleteAll(m_preregisteredFootNoteAreas);
+    delete m_startOfArea;
+    delete m_endOfArea;
+    m_dropCapsWidth = 0;
+
     m_startOfArea = new FrameIterator(cursor);
     m_y = top();
     m_bottomSpacing = 0;

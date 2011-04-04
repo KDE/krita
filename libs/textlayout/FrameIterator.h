@@ -34,6 +34,9 @@ public:
     FrameIterator(QTextFrame *frame);
     FrameIterator(QTextTableCell frame);
     FrameIterator(FrameIterator *other);
+
+    bool operator ==(const FrameIterator &other);
+
     TableIterator *tableIterator(QTextTable *);
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks

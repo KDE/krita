@@ -28,7 +28,8 @@ public:
     MockRootAreaProvider();
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextLayoutRootArea *old, KoTextDocumentLayout *documentLayout);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
+    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
 
     KoTextLayoutRootArea *m_area;
 };

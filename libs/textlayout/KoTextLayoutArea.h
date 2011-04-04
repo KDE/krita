@@ -57,6 +57,9 @@ public:
     explicit KoTextLayoutArea(KoTextLayoutArea *parent, KoTextDocumentLayout *documentLayout);
     virtual ~KoTextLayoutArea();
 
+    /// Returns true if the area starts at the cursor position
+    bool isStartingAt(FrameIterator *cursor);
+
     /// Layouts as much as we can
     bool layout(FrameIterator *cursor);
 

@@ -135,14 +135,19 @@ void KoTextShapeData::setDocumentOffset(qreal offset)
 void KoTextShapeData::setDirty()
 {
     Q_D(KoTextShapeData);
-    d->rootArea->setDirty();
+    if (d->rootArea) {
+        d->rootArea->setDirty();
+    }
 }
 
 
 bool KoTextShapeData::isDirty() const
 {
     Q_D(const KoTextShapeData);
-    return d->rootArea->isDirty();
+    if (d->rootArea) {
+        return d->rootArea->isDirty();
+    }
+    return true;
 }
 
 void KoTextShapeData::fireResizeEvent()

@@ -65,7 +65,7 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
-    m_area = provider->provide(0, m_layout);
+//    m_area = provider->provide(m_layout);
 
     m_block = m_doc->begin();
     QTextCursor cursor(m_doc);

@@ -26,16 +26,16 @@ MockRootAreaProvider::MockRootAreaProvider()
 {
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextLayoutRootArea *previous, KoTextDocumentLayout *documentLayout)
+KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
-    if(m_area == 0)
+    if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
-
-    m_area->setReferenceRect(0, 200, 0, 1000);
-
-    if (previous) {
-        return 0;;
-    }
-    else
+        m_area->setReferenceRect(0, 200, 0, 1000);
         return m_area;
+    }
+    return 0;
+}
+
+void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
+{
 }

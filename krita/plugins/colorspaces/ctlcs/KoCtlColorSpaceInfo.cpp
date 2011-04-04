@@ -109,11 +109,13 @@ struct KoCtlColorSpaceInfo::Private {
     quint32 pixelSize;
     GTLCore::PixelDescription* pixelDescription;
     int alphaPos;
+    bool userVisible;
 };
 
 KoCtlColorSpaceInfo::KoCtlColorSpaceInfo(const QString& _xmlfile) : d(new Private)
 {
     d->fileName = _xmlfile;
+    d->userVisible = true;
 }
 
 KoCtlColorSpaceInfo::~KoCtlColorSpaceInfo()
@@ -184,6 +186,10 @@ bool KoCtlColorSpaceInfo::load()
                 d->colorModelId = KoID(e.attribute("colorModelId"), i18n(e.attribute("colorModelName").toUtf8().data()));
                 FILL_MEMBER("name", name);
                 FILL_MEMBER("id", id);
+                if(e.hasAttribute("userVisible"))
+                {
+                    d->userVisible = e.attribute("userVisible") == "true";
+                }
             } else if (e.tagName() == "defaultProfile") {
                 FILL_MEMBER("name", defaultProfile);
             } else if (e.tagName() == "isHdr") {

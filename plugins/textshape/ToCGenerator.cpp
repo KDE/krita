@@ -116,14 +116,14 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
 }
 
 
-static bool isWhitespaceOnly(const QString& text)
+static QString removeWhitespacePrefix(const QString& text)
 {
-    for (int i = 0; i < text.length(); i++) {
-        if (!text[i].isSpace()) {
-            return false;
-        }
+    int firstNonWhitespaceCharIndex = 0;
+    int lenght = text.length();
+    while ((firstNonWhitespaceCharIndex < lenght) && (text.at(firstNonWhitespaceCharIndex).isSpace())) {
+        firstNonWhitespaceCharIndex++;
     }
-    return true;
+    return text.right(lenght - firstNonWhitespaceCharIndex);
 }
 
 
@@ -162,10 +162,16 @@ void ToCGenerator::generate()
     QTextBlock block = doc->begin();
     int blockId = 0;
     while (block.isValid()) {
-        // Choose only TOC blocks
-        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !block.text().isEmpty() && !isWhitespaceOnly(block.text())) {
+        QString tocEntryText = block.text();
+        // causes problems when rendering the tabstop
+        // see Layout::decorateParagraph
+        tocEntryText.remove(QChar::ObjectReplacementCharacter);
+        // some headings contain tabs, replace all occurences with spaces
+        tocEntryText.replace('\t',' ');
+        tocEntryText = removeWhitespacePrefix(tocEntryText);
+        // Choose only TOC blocks -- headings with outline level
+        if (block.blockFormat().hasProperty(KoParagraphStyle::OutlineLevel) && !tocEntryText.isEmpty()) {
             cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
-
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
@@ -202,7 +208,7 @@ void ToCGenerator::generate()
 
                                 if (target.isNull()) {
                                     // generate unique name for the bookmark
-                                    target = bd->counterText() + block.text() + "|outline" + QString::number(blockId);
+                                    target = bd->counterText() + tocEntryText + "|outline" + QString::number(blockId);
                                     blockId++;
 
                                     // insert new KoBookmark
@@ -240,13 +246,7 @@ void ToCGenerator::generate()
                         }
                         case IndexEntry::TEXT: {
                             //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
-                            QString text = block.text();
-                            // causes problems when rendering the tabstop
-                            // see Layout::decorateParagraph
-                            text.remove(QChar::ObjectReplacementCharacter);
-                            // some headings contain tabs, replace them with space
-                            text.replace('\t',' ');
-                            cursor.insertText(text);
+                            cursor.insertText(tocEntryText);
                             break;
                         }
                         case IndexEntry::TAB_STOP: {

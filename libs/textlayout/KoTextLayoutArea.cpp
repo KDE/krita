@@ -67,7 +67,7 @@ extern int qt_defaultDpiY();
 #define DropCapsAdditionalFormattingId 25602902
 
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
- : parent(p)
+ : m_parent(p)
  , m_documentLayout(documentLayout)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
@@ -794,8 +794,13 @@ qreal KoTextLayoutArea::maximumAllowedBottom() const
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const
 {
-    Q_ASSERT(parent); //Root areas should overload this method
-    return parent->parentTextDirection();
+    Q_ASSERT(m_parent); //Root areas should overload this method
+    return m_parent->parentTextDirection();
+}
+
+KoTextLayoutArea *KoTextLayoutArea::parent() const
+{
+    return m_parent;
 }
 
 void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom)
@@ -858,7 +863,7 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
 
 void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
 {
-    if (parent == 0) {
+    if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
         // where we need to add some extra condition
 
@@ -872,7 +877,7 @@ void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
         m_preregisteredFootNoteAreas.append(footNoteArea);
         return;
     }
-    parent->preregisterFootNote(note);
+    m_parent->preregisterFootNote(note);
 }
 
 void KoTextLayoutArea::confirmFootNotes()
@@ -881,8 +886,8 @@ void KoTextLayoutArea::confirmFootNotes()
     m_footNoteAreas.append(m_preregisteredFootNoteAreas);
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
-    if (parent) {
-        parent->confirmFootNotes();
+    if (m_parent) {
+        m_parent->confirmFootNotes();
     }
 }
 
@@ -890,8 +895,8 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 {
     m_preregisteredFootNotesHeight = 0;
     m_preregisteredFootNoteAreas.clear();
-    if (parent) {
-        parent->clearPreregisteredFootNotes();
+    if (m_parent) {
+        m_parent->clearPreregisteredFootNotes();
     }
 }
 

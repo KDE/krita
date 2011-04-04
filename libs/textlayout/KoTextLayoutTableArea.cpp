@@ -43,7 +43,6 @@ public:
     Private()
     {
     }
-    KoTextLayoutArea *parent;
     QVector<QVector<KoTextLayoutArea *> > cellAreas;
     TableIterator *startOfArea;
     TableIterator *endOfArea;
@@ -67,7 +66,6 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
     Q_ASSERT(parent);
 
     d->table = table;
-    d->parent = parent;
 
     // Resize geometry vectors for the table.
     d->rowPositions.resize(table->rows() + 1);

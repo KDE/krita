@@ -65,6 +65,8 @@ public:
 
     virtual KoText::Direction parentTextDirection() const;
 
+    KoTextLayoutArea *parent() const;
+
     /// Sets the left,right and top coordinate of the reference rect we place ourselves within
     /// The content may be smaller or bigger than that depending on our margins
     void setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom);
@@ -89,9 +91,6 @@ public:
     /// The maximum allowed bottom coordinate of the reference rect we place ourselves within
     /// The real bottom will be determined during layout
     qreal maximumAllowedBottom() const;
-
-    /// A pointer to the parent
-    KoTextLayoutArea *parent; // you should treat it as read only
 
     qreal listIndent() const;
     qreal textIndent(QTextBlock block) const;
@@ -138,6 +137,8 @@ private:
     int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
 
     void updateBorders(KoTextBlockData *blockData, QTextBlock *block);
+
+    KoTextLayoutArea *m_parent; //  A pointer to the parent
 
     KoTextDocumentLayout *m_documentLayout;
 

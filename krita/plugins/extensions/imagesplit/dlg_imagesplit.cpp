@@ -2,6 +2,7 @@
  *  dlg_imagesplit.cc - part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -28,7 +29,7 @@
 #include <kis_paint_device.h>
 #include <kis_background.h>
 
-DlgImagesplit::DlgImagesplit(KisView2* view)
+DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeFilter)
         : KDialog(view)
         , m_view(view)
 {
@@ -42,10 +43,16 @@ DlgImagesplit::DlgImagesplit(KisView2* view)
     connect(this, SIGNAL(applyClicked()),this, SLOT(applyClicked()));
 
     setMainWidget(m_page);
-    m_page->setMinimumWidth (176);
-    m_page->setMinimumHeight(116);
+    m_page->lineEdit->setText(suffix);
+    m_page->setMinimumWidth (224);
+    m_page->setMinimumHeight(167);
+    resize(m_page->sizeHint());
+    m_page->cmbFileType->clear();
+    m_page->cmbFileType->addItems(listMimeFilter);
+    m_page->cmbFileType->setCurrentIndex(0);
 
     connect(m_page->chkAutoSave,SIGNAL(stateChanged(int)),SLOT(lineEditEnable()));
+    connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));
 }
 
 DlgImagesplit::~DlgImagesplit()
@@ -57,11 +64,15 @@ void DlgImagesplit::lineEditEnable()
     if(m_page->chkAutoSave->isChecked()) {
         m_page->lblSuffix->setEnabled(true);
         m_page->lineEdit->setEnabled(true);
+        m_page->lblFileType->setEnabled(true);
+        m_page->cmbFileType->setEnabled(true);
     }
     else
     {
         m_page->lblSuffix->setEnabled(false);
         m_page->lineEdit->setEnabled(false);
+        m_page->lblFileType->setEnabled(false);
+        m_page->cmbFileType->setEnabled(false);
     }
 
 }
@@ -87,6 +98,11 @@ int DlgImagesplit::verticalLines()
 QString DlgImagesplit::suffix()
 {
     return m_page->lineEdit->text();
+}
+
+void DlgImagesplit::setMimeType(int index)
+{
+    cmbIndex=index;
 }
 
 void DlgImagesplit::applyClicked()

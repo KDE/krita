@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>222</width>
-    <height>160</height>
+    <width>224</width>
+    <height>201</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <property name="geometry">
     <rect>
      <x>11</x>
-     <y>12</y>
-     <width>207</width>
-     <height>147</height>
+     <y>14</y>
+     <width>196</width>
+     <height>176</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -75,17 +75,27 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="2">
+    <item row="3" column="1" colspan="3">
      <widget class="QLineEdit" name="lineEdit">
       <property name="enabled">
        <bool>true</bool>
       </property>
       <property name="text">
-       <string>imageSplit</string>
+       <string/>
       </property>
      </widget>
     </item>
     <item row="4" column="0">
+     <widget class="QLabel" name="lblFileType">
+      <property name="text">
+       <string>File Type</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="3">
+     <widget class="QComboBox" name="cmbFileType"/>
+    </item>
+    <item row="5" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>

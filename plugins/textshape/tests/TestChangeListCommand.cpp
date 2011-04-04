@@ -210,7 +210,7 @@ void TestChangeListCommand::joinList2()
     QCOMPARE(tl->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
 
     // now apply the 'DecimalItem' on 'parag3' and expect it to join with the list already set on 'parag4'
-    block = doc.end().previous(); // parag4
+    block = doc.lastBlock(); // parag4
     QCOMPARE(block.text(), QString("parag4"));
     QTextList *numberedList = block.textList();
     QVERIFY(numberedList);

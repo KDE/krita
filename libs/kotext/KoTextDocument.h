@@ -27,7 +27,6 @@
 
 #include "KoList.h"
 
-#include "changetracker/KoChangeTracker.h"
 #include "KoOdfNotesConfiguration.h"
 
 class KoStyleManager;
@@ -35,6 +34,7 @@ class KoInlineTextObjectManager;
 class KUndoStack;
 class KoTextEditor;
 class KoOdfLineNumberingConfiguration;
+class KoChangeTracker;
 
 
 /**

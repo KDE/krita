@@ -21,42 +21,10 @@
 #define KOSHAPEPRIVATE_H
 
 #include "KoShape.h"
-
-#include <QPixmapCache>
 #include <QPoint>
 #include <QPaintDevice>
 
 #include <KoCanvasBase.h>
-
-/**
- * Contains the information needed for caching the contents of a shape.
- *
- * There are two possibilities: one cache made at 100% zoom at 72 dpi,
- * or a cache for every zoomlevel at the current resolution. The cache
- * is one big QPixMap for the entire shape.
- */
-class KoShapeCache
-{
-public:
-    struct DeviceData {
-        DeviceData() : allExposed(true) {}
-
-        QImage image;
-
-        // List of logical exposed rects in document coordinates
-        // These are the rects that are queued for updating, not
-        // the rects that have already been painted.
-        QVector<QRectF> exposed;
-        // true if the whole shape has been exposed and asked to redraw
-        bool allExposed;
-    };
-
-    // Map the cache to the canvas it is shown on (in QGraphicsView this is QPaintDevice)
-    QMap<KoShapeManager *, DeviceData *> deviceData;
-
-    // Empty cache
-    void purge();
-};
 
 class KoShapePrivate
 {
@@ -101,6 +69,7 @@ public:
     KoShape *q_ptr;
     QList<KoShape*> dependees; ///< list of shape dependent on this shape
     KoShapeShadow * shadow; ///< the current shape shadow
+    KoClipPath * clipPath; ///< the current clip path
     QMap<QString, QString> additionalAttributes;
     QMap<QByteArray, QString> additionalStyleAttributes;
     QSet<KoEventAction *> eventActions; ///< list of event actions the shape has
@@ -119,28 +88,9 @@ public:
     int detectCollision : 1;
     int protectContent : 1;
 
-    KoShape::CacheMode cacheMode;
-
-    KoShapeCache *cache;
-
     KoShape::TextRunAroundSide textRunAroundSide;
 
     qreal textRunAroundDistance;
-
-    /**
-     * @return the shape cache if there is one, else 0
-     */
-    KoShapeCache *maybeShapeCache() const;
-
-    /**
-     * return the shape cache if there is one, else create on
-     */
-    KoShapeCache *shapeCache() const;
-
-    /**
-     * purge and remove the shape cache
-     */
-    void removeShapeCache();
 
     /// Convert connection point position from shape coordinates, taking alignment into account
     void convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const;

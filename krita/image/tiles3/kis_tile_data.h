@@ -44,7 +44,21 @@ inline quint32 KisTileData::pixelSize() const {
     return m_pixelSize;
 }
 
-inline bool KisTileData::acquire() const {
+inline bool KisTileData::acquire() {
+    /**
+     * We need to ensure the clones in the stack are
+     * consistent with the data. When we have a single
+     * user, the most probably, the clone has already
+     * started stinking.
+     * So just clean it up.
+     */
+    if(m_usersCount == 1) {
+        KisTileData *clone;
+        while(m_clonesStack.pop(clone)) {
+            delete clone;
+        }
+    }
+
     bool _ref = ref();
     m_usersCount.ref();
     return _ref;

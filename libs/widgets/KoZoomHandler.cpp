@@ -79,7 +79,6 @@ void KoZoomHandler::setZoom( qreal zoom )
         zoom = 1.0;
     }
 
-    zoom = KoZoomMode::clampZoom(zoom);
     KoViewConverter::setZoom(zoom);
     if( zoom == 1.0 ) {
         m_zoomedResolutionX = m_resolutionX;

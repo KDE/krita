@@ -38,6 +38,8 @@
 namespace Libemf
 {
 
+class EmrTextObject;
+
 
 /*****************************************************************************/
 
@@ -320,99 +322,6 @@ private:
 
     // Routine to throw away a specific number of bytes
     void soakBytes( QDataStream &stream, int numBytes );
-};
-
-/*****************************************************************************/
-
-/** 
-    Simple representation of an EmrText object
-
-    See MS-EMF Section 2.2.4 for details
-*/
-class EmrTextObject
-{
-public:
-    /**
-      The type of text to read
-      */
-    enum TextType { EightBitChars, SixteenBitChars };
-    
-    /**
-       Constructor for EmrText object
-
-       \param stream the stream to read the record structure from
-       \param size the number of bytes in this record
-       \param textType whether the text is normal (EightBitChars) or wide
-       characters (SixteenBitChars)
-    */
-    EmrTextObject( QDataStream &stream, quint32 size, TextType textType );
-    ~EmrTextObject();
-    
-    /**
-        The reference point for the text output
-     */
-    QPoint referencePoint() const;
-    
-    /**
-        The text to be output
-     */
-    QString textString() const;
-
-private:
-
-    QPoint m_referencePoint;
-    quint32 m_charCount;
-    quint32 m_offString;
-    quint32 m_options;
-    QRect m_rectangle;
-    quint32 m_offDx;
-    QString m_textString;
-
-    // Convenience function to handle a 2-byte wide char stream
-    QString recordWChars( QDataStream &stream, int numChars );
-
-    // Convenience function to handle a 1-byte wide char stream
-    QString recordChars( QDataStream &stream, int numChars );
-
-    // Routine to throw away a specific number of bytes
-    void soakBytes( QDataStream &stream, int numBytes );
-};
-
-/*****************************************************************************/
-
-/** 
-    Simple representation of an EMR_EXTTEXTOUTA Record
-
-    See MS-EMF Section 2.2.4 for details
-*/
-class ExtTextOutARecord
-{
-public:
-    /**
-       Constructor for EMR_EXTTEXTOUTA Record
-
-       \param stream the stream to read the record structure from
-       \param size the number of bytes in this record
-    */
-    ExtTextOutARecord( QDataStream &stream, quint32 size );
-    ~ExtTextOutARecord();
-
-    /**
-        The reference point for the text output
-     */
-    QPoint referencePoint() const;
-    
-    /**
-        The text to be output
-     */
-    QString textString() const;
-
-private:
-    QRect m_bounds;
-    quint32 m_iGraphicsMode;
-    float m_exScale;
-    float m_eyScale;
-    EmrTextObject *m_emrText;
 };
 
 }

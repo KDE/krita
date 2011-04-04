@@ -55,9 +55,10 @@ public:
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setBrushSize(qreal dxPixels, qreal dyPixels);
-    
+    QSizeF brushSize() const;
+
     bool presetIsValid();
-    
+
 private slots:
     void brushChanged();
 
@@ -65,7 +66,7 @@ private:
 
     KisBrushSelectionWidget * m_brushSelectionWidget;
     KisBrushOption m_brushOption;
-    
+
 };
 
 #endif

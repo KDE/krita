@@ -247,6 +247,6 @@ void ShapeResizeStrategy::paint( QPainter &painter, const KoViewConverter &conve
 {
     SelectionDecorator decorator (KoFlake::NoHandle, false, false);
     decorator.setSelection(tool()->canvas()->shapeManager()->selection());
-    decorator.setHandleRadius( tool()->canvas()->resourceManager()->handleRadius() );
+    decorator.setHandleRadius(handleRadius());
     decorator.paint(painter, converter);
 }

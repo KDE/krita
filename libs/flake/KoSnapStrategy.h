@@ -25,11 +25,12 @@
 #include <QtCore/QPointF>
 #include <QtGui/QPainterPath>
 
+class TestSnapStrategy;
 class KoPathPoint;
 class KoSnapProxy;
 class KoViewConverter;
 
-class KoSnapStrategy
+class FLAKE_TEST_EXPORT KoSnapStrategy
 {
 public:
     KoSnapStrategy(KoSnapGuide::Strategy type);
@@ -59,7 +60,7 @@ private:
 };
 
 /// snaps to x- or y-coordinates of path points
-class OrthogonalSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT OrthogonalSnapStrategy : public KoSnapStrategy
 {
 public:
     OrthogonalSnapStrategy();
@@ -71,7 +72,7 @@ private:
 };
 
 /// snaps to path points
-class NodeSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT NodeSnapStrategy : public KoSnapStrategy
 {
 public:
     NodeSnapStrategy();
@@ -80,8 +81,9 @@ public:
 };
 
 /// snaps extension lines of path shapes
-class ExtensionSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT ExtensionSnapStrategy : public KoSnapStrategy
 {
+    friend class TestSnapStrategy;
 public:
     ExtensionSnapStrategy();
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
@@ -94,7 +96,7 @@ private:
 };
 
 /// snaps to intersections of shapes
-class IntersectionSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT IntersectionSnapStrategy : public KoSnapStrategy
 {
 public:
     IntersectionSnapStrategy();
@@ -103,7 +105,7 @@ public:
 };
 
 /// snaps to the canvas grid
-class GridSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT GridSnapStrategy : public KoSnapStrategy
 {
 public:
     GridSnapStrategy();
@@ -112,8 +114,9 @@ public:
 };
 
 /// snaps to shape bounding boxes
-class BoundingBoxSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT BoundingBoxSnapStrategy : public KoSnapStrategy
 {
+    friend class TestSnapStrategy;
 public:
     BoundingBoxSnapStrategy();
     virtual bool snap(const QPointF &mousePosition, KoSnapProxy * proxy, qreal maxSnapDistance);
@@ -124,7 +127,7 @@ private:
 };
 
 /// snaps to line guides
-class LineGuideSnapStrategy : public KoSnapStrategy
+class FLAKE_TEST_EXPORT LineGuideSnapStrategy : public KoSnapStrategy
 {
 public:
     LineGuideSnapStrategy();

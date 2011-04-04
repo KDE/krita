@@ -62,6 +62,8 @@ public: // From mypaint/lib/brush.py Brush_Lowlevel, which inherits brushlib/Bru
 
     BrushSetting* setting_by_cname(const QString& cname);
 
+    float setting_value_by_cname(const QString& cname);
+    
     void get_color_hsv(float* h, float* s, float* v);
 
     void set_color_hsv(float h, float s, float v);

@@ -36,7 +36,6 @@ set(flake_SRCS
     KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
-    KoShapeManagerCachedPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
@@ -118,6 +117,7 @@ set(flake_SRCS
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
+    KoClipPath.cpp
     commands/KoShapeGroupCommand.cpp
     commands/KoShapeAlignCommand.cpp
     commands/KoShapeBackgroundCommand.cpp
@@ -157,6 +157,8 @@ set(flake_SRCS
     commands/KoShapeRenameCommand.cpp
     commands/KoPathPointMergeCommand.cpp
     commands/KoShapeTransparencyCommand.cpp
+    commands/KoShapeClipCommand.cpp
+    commands/KoShapeUnclipCommand.cpp
     tools/KoCreatePathTool.cpp
     tools/KoCreatePathToolFactory.cpp
     tools/KoCreateShapeStrategy.cpp
@@ -263,7 +265,6 @@ install(
     KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeManagerPaintingStrategy.h
-    KoShapeManagerCachedPaintingStrategy.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h

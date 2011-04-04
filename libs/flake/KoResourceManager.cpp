@@ -2,6 +2,7 @@
    Copyright (c) 2006 Boudewijn Rempt (boud@valdyas.org)
    Copyright (C) 2007, 2010 Thomas Zander <zander@kde.org>
    Copyright (c) 2008 Carlos Licea <carlos.licea@kdemail.net>
+   Copyright (c) 2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,7 +38,6 @@ KoResourceManager::KoResourceManager(QObject *parent)
         : QObject(parent),
         d(new Private())
 {
-    setGrabSensitivity(3);
 }
 
 KoResourceManager::~KoResourceManager()
@@ -129,13 +129,13 @@ void KoResourceManager::setHandleRadius(int handleRadius)
     // do not allow arbitrary small handles
     if (handleRadius < 3)
         handleRadius = 3;
-    setResource(KoCanvasResource::HandleRadius, QVariant(handleRadius));
+    setResource(KoDocumentResource::HandleRadius, QVariant(handleRadius));
 }
 
 int KoResourceManager::handleRadius() const
 {
-    if (d->resources.contains(KoCanvasResource::HandleRadius))
-        return d->resources.value(KoCanvasResource::HandleRadius).toInt();
+    if (d->resources.contains(KoDocumentResource::HandleRadius))
+        return d->resources.value(KoDocumentResource::HandleRadius).toInt();
     return 3; // default value.
 }
 
@@ -149,12 +149,32 @@ void KoResourceManager::setGrabSensitivity(int grabSensitivity)
     // do not allow arbitrary small handles
     if (grabSensitivity < 1)
         grabSensitivity = 1;
-    setResource(KoCanvasResource::GrabSensitivity, QVariant(grabSensitivity));
+    setResource(KoDocumentResource::GrabSensitivity, QVariant(grabSensitivity));
 }
 
 int KoResourceManager::grabSensitivity() const
 {
-    return resource(KoCanvasResource::GrabSensitivity).toInt();
+    return resource(KoDocumentResource::GrabSensitivity).toInt();
+}
+
+void KoResourceManager::setPasteOffset(qreal pasteOffset)
+{
+    setResource(KoDocumentResource::PasteOffset, QVariant(pasteOffset));
+}
+
+qreal KoResourceManager::pasteOffset() const
+{
+    return resource(KoDocumentResource::PasteOffset).toDouble();
+}
+
+void KoResourceManager::enablePasteAtCursor(bool enable)
+{
+    setResource(KoDocumentResource::PasteAtCursor, QVariant(enable));
+}
+
+bool KoResourceManager::pasteAtCursor() const
+{
+    return resource(KoDocumentResource::PasteAtCursor).toBool();
 }
 
 void KoResourceManager::setActiveBorder(const KoLineBorder &border)

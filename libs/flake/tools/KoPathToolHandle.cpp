@@ -35,6 +35,7 @@
 #include "KoConnectionShape.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
+#include "KoShapeController.h"
 #include <QtGui/QPainter>
 
 KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
@@ -44,6 +45,11 @@ KoPathToolHandle::KoPathToolHandle(KoPathTool *tool)
 
 KoPathToolHandle::~KoPathToolHandle()
 {
+}
+
+uint KoPathToolHandle::handleRadius() const
+{
+    return m_tool->canvas()->shapeController()->resourceManager()->handleRadius();
 }
 
 PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType)
@@ -64,8 +70,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter)
     KoPathPoint::PointType type = KoPathPoint::Node;
     if (selection && selection->contains(m_activePoint))
         type = KoPathPoint::All;
-    int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
-    m_activePoint->paint(painter, handleRadius, type);
+    m_activePoint->paint(painter, handleRadius(), type);
     painter.restore();
 }
 
@@ -158,8 +163,7 @@ void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter)
     painter.save();
     painter.setTransform(m_parameterShape->absoluteTransformation(&converter) * painter.transform());
 
-    int handleRadius = m_tool->canvas()->resourceManager()->handleRadius();
-    m_parameterShape->paintHandle(painter, converter, m_handleId, handleRadius);
+    m_parameterShape->paintHandle(painter, converter, m_handleId, handleRadius());
     painter.restore();
 }
 

@@ -139,3 +139,21 @@ KoText::Direction KoText::directionFromString(const QString &writingMode)
         return KoText::InheritDirection;
     return KoText::AutoDirection;
 }
+
+KoText::KoTextBreakProperty KoText::textBreakFromString(const QString& textBreak)
+{
+    if (textBreak == "page")
+        return KoText::PageBreak;
+    if (textBreak == "column")
+        return KoText::ColumnBreak;
+    return KoText::NoBreak;
+}
+
+QString KoText::textBreakToString(KoText::KoTextBreakProperty textBreak)
+{
+    if (textBreak == KoText::PageBreak)
+        return "page";
+    if (textBreak == KoText::ColumnBreak)
+        return "column";
+    return "auto";
+}

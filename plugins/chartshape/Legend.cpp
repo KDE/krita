@@ -56,7 +56,7 @@
 // Kchart
 #include "PlotArea.h"
 #include "ScreenConversions.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "OdfLoadingHelper.h"
 
 using namespace KChart;

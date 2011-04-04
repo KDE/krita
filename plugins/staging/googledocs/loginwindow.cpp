@@ -20,6 +20,8 @@
 #include "googledocumentservice.h"
 #include "documentlistwindow.h"
 
+#include <QMessageBox>
+
 
 LoginWindow::LoginWindow(QWidget *parent)
         : QDialog(parent),
@@ -30,13 +32,14 @@ LoginWindow::LoginWindow(QWidget *parent)
     QStringList onlineServices;
     onlineServices << "Google Documents";
     // Add services here
-    //onlineServices << "Slide Share";
     m_authDialog->comboBox->addItems(onlineServices);
 
     connect(m_authDialog->loginButton, SIGNAL(clicked()), this, SLOT(loginService()));
     connect(m_authDialog->comboBox, SIGNAL(activated(int)), this, SLOT(serviceSelected(int)));
 
     m_authDialog->userEdit->setFocus();
+    showProgressIndicator(false);
+    setWindowTitle("Online Document Services");
     show();
 }
 
@@ -49,9 +52,12 @@ void LoginWindow::loginService()
 {
     if (0 == m_authDialog->comboBox->currentIndex()) {
         gdoc = new GoogleDocumentService();
-        setShowProgressIndicator(true);
+        showProgressIndicator(true);
+        m_authDialog->label->setText("Signing in...");
         gdoc->clientLogin(m_authDialog->userEdit->text(), m_authDialog->passwordEdit->text());
-        connect(gdoc, SIGNAL(userAuthenticated(bool)), this, SLOT(authenticated(bool)));
+        connect(gdoc, SIGNAL(userAuthenticated(bool, QString)), this, SLOT(authenticated(bool, QString)));
+        connect(gdoc, SIGNAL(progressUpdate(QString)), this, SLOT(updateProgress(QString)));
+        connect(gdoc, SIGNAL(showingDocumentList()), this, SLOT(close()));
     }
 }
 
@@ -68,15 +74,28 @@ void LoginWindow::serviceSelected(int index)
     }
 }
 
-void LoginWindow::authenticated(bool success)
+void LoginWindow::authenticated(bool success, QString errorString)
 {
     if (success) {
-        gdoc->listDocuments();
-        setShowProgressIndicator(false);
-        accept();
+//        showProgressIndicator(false);
+//        m_authDialog->label->setText("Successfully authenticated!!! Retreiving document list...");
+//        accept();
+    } else {
+        QString msg = "Error occured while signing in ";
+        if (!errorString.isEmpty()) {
+            msg = msg + "- " + errorString;
+        }
+        m_authDialog->label->setText(msg);
+        showProgressIndicator(false);
     }
 }
 
-void LoginWindow::setShowProgressIndicator(bool /*visible*/)
+void LoginWindow::showProgressIndicator(bool visible)
 {
+    m_authDialog->progressBar->setVisible(visible);
+}
+
+void LoginWindow::updateProgress(QString msg)
+{
+    m_authDialog->label->setText(msg);
 }

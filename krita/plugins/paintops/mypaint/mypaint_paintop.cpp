@@ -29,25 +29,24 @@
 #include "mypaint_brush_resource.h"
 #include "mypaint_paintop_settings.h"
 #include "mypaint_surface.h"
+#include <kis_paint_information.h>
 
 MyPaint::MyPaint(const MyPaintSettings *settings, KisPainter * painter, KisImageWSP image)
     : KisPaintOp(painter)
     , m_settings(settings)
+    , m_firstPoint(true)
 {
     Q_ASSERT(settings);
     Q_UNUSED(image);
 
-    m_surface = new MyPaintSurface(settings->node()->projection(), painter->device());
+    m_surface = new MyPaintSurface(settings->node()->projection(), painter);
     MyPaintFactory *factory = static_cast<MyPaintFactory*>(KisPaintOpRegistry::instance()->get("mypaintbrush"));
     m_brush = factory->brush(settings->getString("filename"));
-    m_brush->set_base_value(BRUSH_RADIUS_LOGARITHMIC, 2.0); // Hack to get it working
-    m_brush->new_stroke();
+    m_brush->set_base_value(BRUSH_RADIUS_LOGARITHMIC, settings->getFloat("radius_logarithmic"));
     QColor c = painter->paintColor().toQColor();
     qreal h, s, v, a;
     c.getHsvF(&h, &s, &v, &a);
     m_brush->set_color_hsv((float)h, (float)s, (float)v);
-    m_mypaintThinksStrokeHasEnded = false;
-    m_eventTime.start(); // GTK puts timestamps in its events, Qt doesn't, so fake it.
 }
 
 MyPaint::~MyPaint()
@@ -57,15 +56,7 @@ MyPaint::~MyPaint()
 
 qreal MyPaint::paintAt(const KisPaintInformation& info)
 {
-    if (m_mypaintThinksStrokeHasEnded) {
-        m_settings->brush()->new_stroke();
-    }
-    m_mypaintThinksStrokeHasEnded =
-                        m_brush->stroke_to(m_surface,
-                                           info.pos().x(),
-                                           info.pos().y(),
-                                           info.pressure(),
-                                           qreal(m_eventTime.elapsed()) / 1000);
+    Q_UNUSED(info);
     return 1.0;
 }
 
@@ -75,20 +66,19 @@ KisDistanceInformation MyPaint::paintLine(const KisPaintInformation &pi1, const 
 
     if (!painter()) return KisDistanceInformation();
 
-    if (m_mypaintThinksStrokeHasEnded) {
-        m_brush->new_stroke();
+    if(m_firstPoint){
+        m_brush->stroke_to(m_surface,
+                           pi1.pos().x(), pi1.pos().y(),
+                           0,
+                           0.0, 0.0,
+                           10.0);
+        m_firstPoint = false;
     }
-    m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
-                                                       pi1.pos().x(), pi1.pos().y(),
-                                                       pi1.pressure(),
-                                                       qreal(m_eventTime.elapsed()) / 1000);
-    if (m_mypaintThinksStrokeHasEnded) {
-        m_brush->new_stroke();
-    }
-    m_mypaintThinksStrokeHasEnded = m_brush->stroke_to(m_surface,
-                                                       pi2.pos().x(), pi2.pos().y(),
-                                                       pi2.pressure(),
-                                                       qreal(m_eventTime.elapsed()) / 1000);
+    m_brush->stroke_to(m_surface,
+                       pi2.pos().x(), pi2.pos().y(),
+                       pi2.pressure(),
+                       pi2.xTilt() / 60.0, pi2.yTilt() / 60.0,
+                       qreal(pi2.currentTime() - pi1.currentTime()) / 1000);
 
     // not sure what to do with these...
     KisVector2D end = toKisVector2D(pi2.pos());

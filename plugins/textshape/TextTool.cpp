@@ -757,12 +757,12 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
         KoTextEditingPlugin *plugin = m_textEditingPlugins->spellcheck();
         if (plugin)
             plugin->setCurrentCursorPosition(m_textEditor.data()->document(), m_textEditor.data()->position());
+
+        event->ignore();
     }
 
     if (event->button() ==  Qt::MidButton) // Paste
         paste();
-    else
-        event->ignore();
 }
 
 const QTextCursor TextTool::cursor()
@@ -1128,7 +1128,7 @@ void TextTool::keyPressEvent(QKeyEvent *event)
         else if (hit(item, KStandardShortcut::End)) {
             // Goto end of the document. Default: Ctrl-End
             if (m_textShapeData) {
-                QTextBlock last = m_textShapeData->document()->end().previous();
+                QTextBlock last = m_textShapeData->document()->lastBlock();
                 destinationPosition = last.position() + last.length() - 1;
             }
         } else if (hit(item, KStandardShortcut::Prior)) { // page up
@@ -1564,6 +1564,7 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
 }
+
 QRectF TextTool::caretRect(int position) const
 {
     if (!m_textShapeData)
@@ -1985,7 +1986,7 @@ void TextTool::selectAll()
     if (!textEditor || !m_textShapeData)
         return;
     const int selectionLength = qAbs(textEditor->position() - textEditor->anchor());
-    QTextBlock lastBlock = m_textShapeData->document()->end().previous();
+    QTextBlock lastBlock = m_textShapeData->document()->lastBlock();
     textEditor->setPosition(lastBlock.position() + lastBlock.length() - 1);
     textEditor->setPosition(0, QTextCursor::KeepAnchor);
     repaintSelection();
@@ -2288,8 +2289,6 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
 
     event->accept();
     new KRun(url, 0);
-    m_textEditor.data()->setPosition(0);
-    ensureCursorVisible();
 }
 
 void TextTool::debugTextDocument()

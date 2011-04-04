@@ -264,6 +264,12 @@ private:
     inline void switchPoints(QPointF *p1, QPointF *p2);
     // Sets m_function according to mouse position and modifier
     void setTransformFunction(QPointF mousePos, Qt::KeyboardModifiers modifiers);
+
+    double gradientDescent_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY);
+    double gradientDescent_partialDeriv1_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
+    double gradientDescent_partialDeriv2_f(QVector3D v1, QVector3D v2, QVector3D desired, double scaleX, double scaleY, double epsilon);
+    int gradientDescent(QVector3D v1, QVector3D v2, QVector3D desired, double x0, double y0, double epsilon, double gradStep, int nbIt1, int nbIt2, double epsilon_deriv, double *x_min, double *y_min);
+
     // Dichotomic search of scaleX when there is perspective
     double dichotomyScaleX(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);
     double dichotomyScaleY(QVector3D v1, QVector3D v2, DICHO_DROP flag, double desired, double b, double precision, double maxIterations1, double maxIterations2);

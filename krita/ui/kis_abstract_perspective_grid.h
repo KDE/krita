@@ -26,6 +26,10 @@
 class KisAbstractPerspectiveGrid
 {
 public:
+
+
+    virtual ~KisAbstractPerspectiveGrid() {}
+
     virtual bool contains(const QPointF& pt) const = 0;
     /**
      * Returns the reciprocal of the distance from the given point

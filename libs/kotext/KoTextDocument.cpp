@@ -36,6 +36,7 @@
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "KoOdfNotesConfiguration.h"
+#include "changetracker/KoChangeTracker.h"
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");

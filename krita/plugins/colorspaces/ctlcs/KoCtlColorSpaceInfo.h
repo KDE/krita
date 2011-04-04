@@ -70,6 +70,7 @@ public:
     const GTLCore::PixelDescription& pixelDescription() const;
     int alphaPos() const;
     QList<KoCtlAccumulator*> accumulators() const;
+    bool userVisible() const;
 private:
     struct Private;
     Private* const d;

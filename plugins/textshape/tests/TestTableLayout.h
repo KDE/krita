@@ -12,7 +12,7 @@
 #include <QString>
 #include <qtest_kde.h>
 
-#include "../Layout.h"
+#include "../TextShapeLayout.h"
 #include "../TextShape.h"
 
 class MockTextShape;
@@ -106,7 +106,7 @@ private:
     KoTextDocumentLayout *m_layout;
     KoStyleManager *m_styleManager;
     KoTableColumnAndRowStyleManager m_tableColumnAndRowStyleManager;
-    Layout *m_textLayout;
+    TextShapeLayout *m_textLayout;
     MockTextShape *m_shape;
 
     // Default styles for the test table.

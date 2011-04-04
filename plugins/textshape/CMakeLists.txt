@@ -20,7 +20,7 @@ SET ( textshape_SRCS
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
     ToCGenerator.cpp
-    Layout.cpp
+    TextShapeLayout.cpp
     ListItemsHelper.cpp
     ShrinkToFitShapeContainer.cpp
     Outline.cpp

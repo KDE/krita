@@ -27,11 +27,11 @@ class KoCanvasBase;
 #include <QtCore/QList>
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
-
+#include "flake_export.h"
 /**
  * This class provides access to different shape related snap targets to snap strategies.
  */
-class KoSnapProxy
+class FLAKE_TEST_EXPORT KoSnapProxy
 {
 public:
     KoSnapProxy(KoSnapGuide *snapGuide);

@@ -94,7 +94,6 @@ QDockWidget* ShapeCollectionDockerFactory::createDockWidget()
 
 void ShapeCollectionDocker::locationChanged(Qt::DockWidgetArea area)
 {
-    qDebug()<<"location chnaged";
     resize(0,0);
 
     switch(area) {

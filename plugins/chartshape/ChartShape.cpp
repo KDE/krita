@@ -102,7 +102,7 @@
 #include "TextLabelDummy.h"
 #include "ChartDocument.h"
 #include "ChartTableModel.h"
-#include "Layout.h"
+#include "ChartLayout.h"
 #include "TableSource.h"
 #include "OdfLoadingHelper.h"
 #include "SingleModelHelper.h"
@@ -365,12 +365,11 @@ void ChartShape::Private::setChildVisible( KoShape *child, bool doShow )
 
 ChartShape::ChartShape(KoResourceManager *resourceManager)
     : KoFrameShape( KoXmlNS::draw, "object" )
-    , KoShapeContainer( new Layout )
+    , KoShapeContainer( new ChartLayout )
     , d ( new Private( this ) )
 {
     d->resourceManager = resourceManager;
     setShapeId( ChartShapeId );
-    setCacheMode(KoShape::ScaledCache);
 
     // Instantiated all children first
     d->proxyModel = new ChartProxyModel( &d->tableSource );
@@ -509,7 +508,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     KoLineBorder *border = new KoLineBorder( 0, Qt::black );
     setBorder( border );
 
-    Layout *l = layout();
+    ChartLayout *l = layout();
     l->setPosition( d->plotArea, CenterPosition );
     l->setPosition( d->title,    TopPosition, 0 );
     l->setPosition( d->subTitle, TopPosition, 1 );
@@ -599,9 +598,9 @@ PlotArea *ChartShape::plotArea() const
     return d->plotArea;
 }
 
-Layout *ChartShape::layout() const
+ChartLayout *ChartShape::layout() const
 {
-    Layout *l = dynamic_cast<Layout*>(KoShapeContainer::model());
+    ChartLayout *l = dynamic_cast<ChartLayout*>(KoShapeContainer::model());
     Q_ASSERT( l );
     return l;
 }
@@ -1017,6 +1016,8 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     if ( !plotareaElem.isNull() ) {
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;
+        d->plotArea->setChartType( chartType );
+        d->plotArea->setChartSubType( chartSubType() );
     }
 
     // 4. Load the title.

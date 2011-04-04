@@ -75,9 +75,6 @@ void KisSelectionMask::setSelection(KisSelectionSP selection)
         gc.fillRect(image()->bounds(), KoColor(Qt::white, cs), MAX_SELECTED);
         gc.end();
     }
-
-    this->selection()->setInterestedInDirtyness(true);
-
     setDirty();
 }
 

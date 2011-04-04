@@ -62,6 +62,7 @@ class KoEventAction;
 class KoShapePrivate;
 class KoFilterEffectStack;
 class KoSnapData;
+class KoClipPath;
 
 /**
  *
@@ -127,13 +128,8 @@ public:
         ContentChanged, ///< the content of the shape changed e.g. a new image inside a pixmap/text change inside a textshape
         TextRunAroundChanged, ///< used after a setTextRunAroundSide()
         ChildChanged, ///< a child of a container was changed/removed. This is propagated to all parents
-        ConnectionPointChanged ///< a connection point has changed
-    };
-
-    /// See QGraphicsItem::CacheMode
-    enum CacheMode {
-        NoCache, ///< no cache -- the default
-        ScaledCache, ///< cache at every zoomlevel
+        ConnectionPointChanged, ///< a connection point has changed
+        ClipPathChanged ///< the shapes clip path has changed
     };
 
     /// The behavior text should do when intersecting this shape.
@@ -636,6 +632,12 @@ public:
     /// Returns the currently set shadow or 0 if there is no shadow set
     KoShapeShadow *shadow() const;
 
+    /// Sets a new clip path, removing the old one
+    void setClipPath(KoClipPath *clipPath);
+
+    /// Returns the currently set clip path or 0 if there is no clip path set
+    KoClipPath * clipPath() const;
+
     /**
      * Setting the shape to keep its aspect-ratio has the effect that user-scaling will
      * keep the width/hight ratio intact so as not to distort shapes that rely on that
@@ -973,17 +975,6 @@ public:
      */
     KoShapePrivate *priv();
 
-    /**
-     * Returns the cache mode for this shape. The default mode is NoCache (i.e.,
-     * cache is disabled and all painting is immediate).
-     */
-    CacheMode cacheMode() const;
-
-    /**
-     * Set the shape's cache mode to @param mode.
-     */
-    void setCacheMode(CacheMode cacheMode);
-
 protected:
     /// constructor
     KoShape(KoShapePrivate &);
@@ -1069,8 +1060,6 @@ protected:
     /// return the current matrix that contains the rotation/scale/position of this shape
     QTransform transform() const;
 
-
-    friend class KoShapeManagerCachedPaintingStrategy;
     KoShapePrivate *d_ptr;
 
 private:

@@ -48,7 +48,7 @@ IF (TINY)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING FALSE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -68,7 +68,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_KDGANTT FALSE)
     set(SHOULD_BUILD_KOUNAVAIL FALSE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_F_OFFICE FALSE)
+    set(SHOULD_BUILD_MOBILE FALSE)
     set(SHOULD_BUILD_KOREPORT FALSE)
     set(SHOULD_BUILD_BRAINDUMP FALSE)
     set(SHOULD_BUILD_CALLIGRA FALSE)
@@ -88,7 +88,7 @@ ELSE()
     set(SHOULD_BUILD_KDGANTT TRUE)
     set(SHOULD_BUILD_KOUNAVAIL TRUE)
     set(SHOULD_BUILD_SCRIPTING TRUE)
-    set(SHOULD_BUILD_F_OFFICE TRUE)
+    set(SHOULD_BUILD_MOBILE TRUE)
     set(SHOULD_BUILD_KOREPORT TRUE)
     set(SHOULD_BUILD_BRAINDUMP TRUE)
     set(SHOULD_BUILD_CALLIGRA TRUE)
@@ -272,6 +272,26 @@ if(WIN32)
 else(WIN32)
     set (KDE4_ICON_DIR  ${CMAKE_INSTALL_PREFIX}/share/icons)
 endif(WIN32)
+
+##
+## Test for Fontconfig
+##
+macro_optional_find_package(Fontconfig)
+macro_log_feature(FONTCONFIG_FOUND "Fontconfig" "Library for configuring and customizing font access" "http://fontconfig.org" FALSE "" "Required to handle exact font size")
+
+##
+## Test for Freetype
+##
+macro_optional_find_package(Freetype)
+macro_log_feature(FREETYPE_FOUND "Freetype" "A Free, High-Quality, and Portable Font Engine" "http://www.freetype.org/" FALSE "" "Required to handle exact font size")
+
+if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND) 
+    set(FONTCONFIG_INCLUDE_DIR "")
+    set(FREETYPE_INCLUDE_DIRS "")
+else(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+	add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
+endif(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
+  
 
 ##
 ## Test endianess
@@ -476,9 +496,9 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
-if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS AND SHOULD_BUILD_KPRESENTER)
-    set(SHOULD_BUILD_KOABSTRACTION TRUE)
-endif()
+if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
+    set(SHOULD_BUILD_KOABSTRACTION FALSE)
+endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_KPRESENTER)
 
 if(SHOULD_BUILD_KOABSTRACTION)
     # koabstraction depends on kotext & flake
@@ -489,7 +509,7 @@ if(SHOULD_BUILD_KOABSTRACTION)
                         ${KOMAIN_INCLUDES}
                         ${CMAKE_SOURCE_DIR}/tools/koabstraction)
 else(SHOULD_BUILD_KOABSTRACTION)
-    set(SHOULD_BUILD_F_OFFICE FALSE)
+    set(SHOULD_BUILD_MOBILE FALSE)
 endif(SHOULD_BUILD_KOABSTRACTION)
 
 if(SHOULD_BUILD_TABLES AND SHOULD_BUILD_WORDS)
@@ -532,7 +552,7 @@ macro_display_application_enabled(karbon ${SHOULD_BUILD_KARBON})
 macro_display_application_enabled(braindump ${SHOULD_BUILD_BRAINDUMP})
 macro_display_application_enabled(kformula ${SHOULD_BUILD_KFORMULA})
 macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
-macro_display_application_enabled(f-office ${SHOULD_BUILD_F_OFFICE})
+macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
 

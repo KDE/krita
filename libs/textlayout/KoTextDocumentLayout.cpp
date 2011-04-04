@@ -304,6 +304,31 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj)
         obj->updatePosition(document(), item, position, cf);
+
+#if 0
+    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(f.toCharFormat()));
+    if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
+        KoShape *parent = anchor->shape()->parent();
+        if (parent) {
+            KWPage page = m_frameSet->pageManager()->page(parent);
+            QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
+            QRectF pageContentRect = parent->boundingRect();
+            int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
+
+            anchor->setPageRect(pageRect);
+            //TODO get the right position for headers and footers
+            anchor->setPageContentRect(pageContentRect);
+            anchor->setPageNumber(pageNumber);
+
+            // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
+            if (!anchor->anchorStrategy()) {
+                //place anchored object outside the page view, and let the layout position it right. It is better than make it invisible.
+                anchor->shape()->setPosition(QPointF(0,100000000));
+                m_state->insertInlineObject(anchor);
+            }
+        }
+    }
+#endif
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)

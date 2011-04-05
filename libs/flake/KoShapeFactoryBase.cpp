@@ -180,7 +180,7 @@ void KoShapeFactoryBase::setHidden(bool hidden)
 void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
 {
     d->resourceManagers.append(manager);
-    connect(manager, SIGNAL(), this, SLOT(pruneDocumentResourceManager(QObject*)));
+    connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
 QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const

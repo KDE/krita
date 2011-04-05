@@ -70,7 +70,8 @@ QPointF SplineAssistant::project(const QPointF& pt) const
     Q_ASSERT(handles().size() == 4);
     // minimize d(t), but keep t in the same neighbourhood as before (unless starting a new stroke)
     // (this is a rather inefficient method)
-    qreal min_t, d_min_t = std::numeric_limits<qreal>::max();
+    qreal min_t = std::numeric_limits<qreal>::max();
+    d_min_t = std::numeric_limits<qreal>::max();
     for (qreal t = 0; t <= 1; t += 1e-3) {
         qreal d_t = D(t, *handles()[0], *handles()[2], *handles()[3], *handles()[1], pt);
         if (d_t < d_min_t) {
@@ -111,7 +112,7 @@ void SplineAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, cons
     path.moveTo(pts[0]);
     path.cubicTo(pts[2], pts[3], pts[1]);
     drawPath(gc, path);
-    
+
     gc.restore();
 }
 

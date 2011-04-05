@@ -39,10 +39,10 @@ PerspectiveAssistant::PerspectiveAssistant()
 inline qreal distsqr(const QPointF& pt, const QLineF& line)
 {
     // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
-    
+
     // magnitude of (p2 - p1) x (p1 - pt)
     const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
-    
+
     return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
 }
 
@@ -55,7 +55,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
         if (!quad(poly)) return nullPoint;
         // avoid problems with multiple assistants: only snap if starting in the grid
         if (!poly.containsPoint(strokeBegin, Qt::OddEvenFill)) return nullPoint;
-        
+
         const qreal
             dx = pt.x() - strokeBegin.x(),
             dy = pt.y() - strokeBegin.y();
@@ -63,7 +63,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
             // allow some movement before snapping
             return strokeBegin;
         }
-        
+
         // construct transformation
         QTransform transform;
         if (!QTransform::squareToQuad(poly, transform)) return nullPoint; // shouldn't happen
@@ -168,6 +168,7 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
 // draw a vanishing point marker
 inline QPainterPath drawX(QPainter& gc, const QPointF& pt)
 {
+    Q_UNUSED(gc);
     QPainterPath path;
     path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
     path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
@@ -218,7 +219,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         }
         drawPath(gc, path);
         gc.restore();
-        
+
         // draw vanishing points
         QPointF intersection(0, 0);
         if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {

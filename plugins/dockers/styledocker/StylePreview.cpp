@@ -56,7 +56,7 @@ StylePreview::StylePreview(QWidget * parent)
     setMaximumHeight(int(PANEL_SIZEY));
 
     installEventFilter(this);
-    update(m_stroke, m_fill);
+    QFrame::update();
 }
 
 StylePreview::~StylePreview()
@@ -132,7 +132,7 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
                 emit strokeSelected();
             }
         }
-        update(m_stroke, m_fill);
+        QFrame::update();
     }
 
     return false;

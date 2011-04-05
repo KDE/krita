@@ -25,6 +25,7 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 
+#include <KoResourceManager.h>
 #include "KoShapeFactoryBase.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
@@ -63,6 +64,7 @@ public:
     QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
     bool hidden;
     QString deferredPluginName;
+    QList<KoResourceManager *> resourceManagers;
 };
 
 
@@ -175,8 +177,15 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager */*manager*/)
+void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
 {
+    d->resourceManagers.append(manager);
+    connect(manager, SIGNAL(), this, SLOT(pruneDocumentResourceManager(QObject*)));
+}
+
+QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
+{
+    return d->resourceManagers;
 }
 
 KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
@@ -227,4 +236,10 @@ void KoShapeFactoryBase::getDeferredPlugin()
         }
     }
 
+}
+
+void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
+{
+    KoResourceManager *r = qobject_cast<KoResourceManager*>(obj);
+    d->resourceManagers.removeAll(r);
 }

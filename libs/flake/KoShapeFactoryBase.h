@@ -201,6 +201,7 @@ public:
      */
     virtual void KDE_DEPRECATED newDocumentResourceManager(KoResourceManager *manager);
 
+
     /**
      * This method should be implemented by factories to create a shape that the user
      * gets when doing a base insert. For example from a script.  The created shape

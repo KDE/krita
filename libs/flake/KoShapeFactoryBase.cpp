@@ -175,17 +175,13 @@ void KoShapeFactoryBase::setHidden(bool hidden)
     d->hidden = hidden;
 }
 
-void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
+void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager */*manager*/)
 {
-    if (!d->deferredPluginName.isEmpty()) {
-        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
-        Q_ASSERT(d->deferredFactory);
-        d->deferredFactory->newDocumentResourceManager(manager);
-    }
 }
 
 KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
 {
+    qDebug() << "going to defer for createDefaultShape()" << d->deferredPluginName;
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
@@ -197,6 +193,7 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResou
 KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
                                          KoResourceManager *documentResources) const
 {
+    qDebug() << "going to defer for createShape()" << d->deferredPluginName;
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
@@ -210,11 +207,12 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
 
 void KoShapeFactoryBase::getDeferredPlugin()
 {
+    qDebug() << "getDeferredPlugin();" << d->deferredPluginName;
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
     const QString serviceType = "Calligra/Deferred";
-    QString query = QString::fromLatin1("(Type == 'Service' and (Name == '%1')").arg(d->deferredPluginName);
+    QString query = QString::fromLatin1("(Type == 'Service') and (Name == '%1')").arg(d->deferredPluginName);
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     Q_ASSERT(offers.size() > 0);
 

@@ -41,6 +41,7 @@ class KoTextLayoutTableArea::Private
 {
 public:
     Private()
+     : startOfArea(0)
     {
     }
     QVector<QVector<KoTextLayoutArea *> > cellAreas;
@@ -84,6 +85,7 @@ KoTextLayoutTableArea::~KoTextLayoutTableArea()
     }
     delete d->startOfArea;
     delete d->endOfArea;
+    delete d;
 }
 
 int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
@@ -486,6 +488,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor)
 
 void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
+    if (d->startOfArea == 0) // We have not been layouted yet
+        return;
+
     int lastRow = d->endOfArea->row;
     if (d->endOfArea->frameIterators[0] == 0) {
         --lastRow;

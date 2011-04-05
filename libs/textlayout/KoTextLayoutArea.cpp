@@ -236,8 +236,11 @@ bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor)
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(m_tableAreas);
+    m_tableAreas.clear();
     qDeleteAll(m_footNoteAreas);
+    m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
+    m_preregisteredFootNoteAreas.clear();
     delete m_startOfArea;
     delete m_endOfArea;
     m_dropCapsWidth = 0;

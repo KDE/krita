@@ -60,7 +60,6 @@ struct KoTextDocumentLayout::Private
     Private(KoTextDocumentLayout *)
        : styleManager(0)
        , changeTracker(0)
-       , rootArea(0)
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
@@ -74,7 +73,6 @@ struct KoTextDocumentLayout::Private
     KoTextLayoutRootAreaProvider *provider;
     KoPostscriptPaintDevice *paintDevice;
     QList<KoTextLayoutRootArea *> rootAreaList;
-    KoTextLayoutRootArea *rootArea;
     FrameIterator *layoutPosition;
 
     QHash<int, InlineObjectExtend> inlineObjectExtends; // maps text-position to whole-line-height of an inline object
@@ -345,14 +343,12 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
 
 void KoTextDocumentLayout::layout()
 {
-    d->rootArea = 0;
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         bool shouldLayout = false;
-        d->rootArea = rootArea;
 
         if (rootArea->top() != d->y) {
             shouldLayout = true;
@@ -365,15 +361,13 @@ void KoTextDocumentLayout::layout()
         }
 
         if (shouldLayout) {
-            d->rootArea->setReferenceRect(d->rootArea->left(),
-                                          d->rootArea->right(),
+            rootArea->setReferenceRect(rootArea->left(),
+                                          rootArea->right(),
                                           d->y,
-                                          d->y + d->rootArea->maximumAllowedBottom());
+                                          d->y + rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
-            d->rootArea->layout(d->layoutPosition);
-
-            if (d->layoutPosition->it == document()->rootFrame()->end()) {
-                d->provider->releaseAllAfter(d->rootArea);
+            if (rootArea->layout(d->layoutPosition)) {
+                d->provider->releaseAllAfter(rootArea);
                 emit finishedLayout();
                 return;
             }
@@ -386,14 +380,14 @@ void KoTextDocumentLayout::layout()
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
         // request a Root Area
-        d->rootArea = d->provider->provide(this);
+        KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
-        if (d->rootArea) {
-            d->rootAreaList.append(d->rootArea);
-            d->rootArea->setReferenceRect(d->rootArea->left(), d->rootArea->right(),
-                                            d->y, d->y + d->rootArea->maximumAllowedBottom());
+        if (rootArea) {
+            d->rootAreaList.append(rootArea);
+            rootArea->setReferenceRect(rootArea->left(), rootArea->right(),
+                                            d->y, d->y + rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
-            d->rootArea->layout(d->layoutPosition);
+            rootArea->layout(d->layoutPosition);
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 emit finishedLayout();
@@ -405,7 +399,7 @@ void KoTextDocumentLayout::layout()
         } else {
             return; // with no more space there is nothing else we can do
         }
-        d->y = d->rootArea->bottom(); // layout method just set this
+        d->y = rootArea->bottom(); // layout method just set this
     }
 }
 

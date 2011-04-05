@@ -74,7 +74,6 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
 
-    
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {

@@ -214,4 +214,15 @@ void KoShapeFactoryBase::getDeferredPlugin()
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     Q_ASSERT(offers.size() > 0);
 
+    foreach(KSharedPtr<KService> service, offers) {
+        QString error = 0;
+        KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
+        if (plugin) {
+            d->deferredFactory = plugin;
+        }
+        else {
+            kWarning(30003) << "loading plugin" << service->name() << "failed, " << error;
+        }
+    }
+
 }

@@ -27,6 +27,7 @@
 
 #include "flake_export.h"
 
+#include <KoShapeFactoryBase.h>
 
 class KoShape;
 class KoResourceManager;
@@ -37,9 +38,12 @@ class KoProperties;
  * class that this class really creates the shape; it's the plugin entry point for the
  * actualy shape plugins.
  */
-class FLAKE_EXPORT KoDeferredShapeFactoryBase
+class FLAKE_EXPORT KoDeferredShapeFactoryBase : public QObject
 {
+    Q_OBJECT
 public:
+
+    KoDeferredShapeFactoryBase(QObject *parent);
 
     virtual ~KoDeferredShapeFactoryBase();
 
@@ -69,7 +73,6 @@ public:
      * @see KoShapeTemplate::properties
      */
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const = 0;
-
 
 };
 

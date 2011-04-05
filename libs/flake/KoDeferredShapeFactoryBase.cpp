@@ -16,12 +16,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 #include "KoDeferredShapeFactoryBase.h"
-#include "KoShape.h"
-#include <KoProperties.h>
 
-#include <kdebug.h>
+KoDeferredShapeFactoryBase::KoDeferredShapeFactoryBase(QObject *parent)
+    : QObject(parent)
+{
+
+}
 
 KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase()
 {

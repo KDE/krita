@@ -190,7 +190,6 @@ QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
 
 KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
 {
-    qDebug() << "going to defer for createDefaultShape()" << d->deferredPluginName;
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
@@ -202,7 +201,6 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResou
 KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
                                          KoResourceManager *documentResources) const
 {
-    qDebug() << "going to defer for createShape()" << d->deferredPluginName;
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
@@ -216,7 +214,6 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
 
 void KoShapeFactoryBase::getDeferredPlugin()
 {
-    qDebug() << "getDeferredPlugin();" << d->deferredPluginName;
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 

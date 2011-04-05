@@ -187,15 +187,19 @@ public:
     bool hidden() const;
 
     /**
-     * This slot is called whenever there is a new document resource
+     * This method is called whenever there is a new document resource
      * manager that is created. The factory may reimplement this in
      * order to get existing resources or put factory specific resources in.
      * In case the factory creates new resources it is adviced to parent
      * them to the manager (which is a QObject) for memory management
      * purposes.
+     *
+     * FIXME: this method is only used by Tables. We should refactor so
+     * it is no longer necessary.
+     *
      * @param manager the new manager
      */
-    virtual void newDocumentResourceManager(KoResourceManager *manager);
+    virtual void KDE_DEPRECATED newDocumentResourceManager(KoResourceManager *manager);
 
     /**
      * This method should be implemented by factories to create a shape that the user

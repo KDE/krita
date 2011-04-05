@@ -74,6 +74,16 @@ public:
      */
     virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
 
+    /**
+     * This slot is called whenever there is a new document resource
+     * manager that is created. The factory may reimplement this in
+     * order to get existing resources or put factory specific resources in.
+     * In case the factory creates new resources it is adviced to parent
+     * them to the manager (which is a QObject) for memory management
+     * purposes.
+     * @param manager the new manager
+     */
+    virtual void KDE_DEPRECATED newDocumentResourceManager(KoResourceManager *manager) = 0;
 };
 
 #endif

@@ -177,7 +177,11 @@ void KoShapeFactoryBase::setHidden(bool hidden)
 
 void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
 {
-    Q_UNUSED(manager);
+    if (!d->deferredPluginName.isEmpty()) {
+        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        Q_ASSERT(d->deferredFactory);
+        d->deferredFactory->newDocumentResourceManager(manager);
+    }
 }
 
 KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const

@@ -21,7 +21,7 @@ SET ( textshape_SRCS
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
     ToCGenerator.cpp
-    #ShrinkToFitShapeContainer.cpp
+    ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
 
     ChangeTracker.cpp

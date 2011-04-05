@@ -150,11 +150,6 @@ bool KoTextShapeData::isDirty() const
     return true;
 }
 
-void KoTextShapeData::fireResizeEvent()
-{
-    emit relayout();
-}
-
 void KoTextShapeData::setPageDirection(KoText::Direction direction)
 {
     Q_D(KoTextShapeData);

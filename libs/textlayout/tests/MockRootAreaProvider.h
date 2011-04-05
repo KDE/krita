@@ -30,6 +30,7 @@ public:
     /// reimplemented
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
+    virtual void doPostLayout(KoTextLayoutRootArea *rootArea) {}
 
     KoTextLayoutRootArea *m_area;
 };

@@ -35,6 +35,8 @@ public:
 
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
 
+    virtual void doPostLayout(KoTextLayoutRootArea *rootArea);
+
     TextShape *m_textShape;
 
     KoTextLayoutRootArea *m_area;

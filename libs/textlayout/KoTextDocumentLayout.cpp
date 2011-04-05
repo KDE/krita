@@ -174,77 +174,8 @@ void KoTextDocumentLayout::draw(QPainter *painter, const KoTextDocumentLayout::P
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
-    int position = hitTestIterated(document()->rootFrame()->begin(),
-                        document()->rootFrame()->end(), point, accuracy);
-    if (accuracy != Qt::ExactHit && position == -1)
-        return document()->rootFrame()->lastPosition();
-    return position;
-}
-
-int KoTextDocumentLayout::hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF &point, Qt::HitTestAccuracy accuracy) const
-{
-    int position = -1;
-    bool basicallyFound = false;
-    QTextFrame::iterator it = begin;
-    for (it = begin; it != end; ++it) {
-        QTextBlock block = it.currentBlock();
-        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = it.currentFrame();
-
-        if (table) {
-            QTextTableCell cell;// TODO =  m_state->hitTestTable(table, point);
-            if (cell.isValid()) {
-                position = hitTestIterated(cell.begin(), cell.end(), point,
-                                accuracy);
-                if (position == -1)
-                    position = cell.lastPosition();
-                return position;
-            }
-            continue;
-        } else if (subFrame) {
-        } else {
-            if (!block.isValid())
-                continue;
-        }
-        if (basicallyFound) // a subsequent table or lines have now had their chance
-            return position;
-
-        // kDebug(32500) <<"hitTest[" << point.x() <<"," << point.y() <<"]";
-        QTextLayout *layout = block.layout();
-        if (point.y() > layout->boundingRect().bottom()) {
-            // just skip this block.
-            continue;
-        }
-
-        for (int i = 0; i < layout->lineCount(); i++) {
-            QTextLine line = layout->lineAt(i);
-            // kDebug(32500) <<" + line[" << line.textStart() <<"]:" << line.y() <<"-" << line.height();
-            if (point.y() > line.y() + line.height()) {
-                position = block.position() + line.textStart() + line.textLength();
-                continue;
-            }
-            if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
-                return -1;
-            }
-            if (accuracy == Qt::ExactHit && // left or right of line
-                    (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
-                return -1;
-            }
-            if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
-                // totally right of RTL text means the position is the start of the text.
-                //TODO how about the other side?
-                return block.position() + line.textStart();
-            }
-            if (point.x() > line.x() + line.naturalTextWidth()) {
-                // right of line
-                basicallyFound = true;
-                position = block.position() + line.textStart() + line.textLength();
-                continue;
-            }
-            return block.position() + line.xToCursor(point.x());
-        }
-    }
-    return position;
+    Q_ASSERT(false); //we should no longer cal this method
+    return -1;
 }
 
 int KoTextDocumentLayout::pageCount() const
@@ -376,10 +307,13 @@ void KoTextDocumentLayout::layout()
                                           d->y + rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
             if (rootArea->layout(d->layoutPosition)) {
+                d->provider->doPostLayout(rootArea);
                 d->provider->releaseAllAfter(rootArea);
                 emit finishedLayout();
                 return;
             }
+            d->provider->doPostLayout(rootArea);
+
             if (!continuousLayout()) {
                 return; // let's take a break
             }
@@ -397,6 +331,7 @@ void KoTextDocumentLayout::layout()
                                             d->y, d->y + rootArea->maximumAllowedBottom());
             //layout all that can fit into that root area
             rootArea->layout(d->layoutPosition);
+            d->provider->doPostLayout(rootArea);
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 emit finishedLayout();
@@ -406,18 +341,12 @@ void KoTextDocumentLayout::layout()
                 return; // let's take a break
             }
         } else {
+            emit finishedLayout();
             return; // with no more space there is nothing else we can do
         }
         d->y = rootArea->bottom(); // layout method just set this
     }
 }
-
-void KoTextDocumentLayout::interruptLayout()
-{
-    //TODO make sure the currentLayout process is stopped
-}
-
-
 
 bool KoTextDocumentLayout::continuousLayout()
 {
@@ -510,7 +439,10 @@ void KoTextDocumentLayout::setResizeMethod(KoTextDocumentLayout::ResizeMethod me
     if (d->resizeMethod == method)
         return;
     d->resizeMethod = method;
-    //TODO scheduleLayout();
+
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        rootArea->setDirty();
+    }
 }
 
 KoTextDocumentLayout::ResizeMethod KoTextDocumentLayout::resizeMethod() const

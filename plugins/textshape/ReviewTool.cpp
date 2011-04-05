@@ -122,9 +122,6 @@ int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
     int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit);
-    if (m_textShapeData->isDirty()) {
-        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
-    }
     return caretPos;
 }
 

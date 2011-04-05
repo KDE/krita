@@ -46,3 +46,8 @@ KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *docu
 void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
 }
+
+void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
+{
+    rootArea->associatedShape()->update();
+}

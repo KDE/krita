@@ -116,11 +116,6 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    /**
-     * Make sure that the current layout run stops
-     */
-    void interruptLayout();
-
     /// Add a shape to the list of shapes that the text can occupy.
     void addShape(KoShape *shape);
 

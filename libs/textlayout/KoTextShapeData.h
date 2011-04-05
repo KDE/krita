@@ -79,9 +79,6 @@ public:
     /// return if the shape is marked dirty and its text content needs to be relayout
     bool isDirty() const;
 
-    /// emits a relayout
-    void fireResizeEvent();
-
     /// returns true if the selection of the cursor is visible in this shape
     bool isCursorVisible(QTextCursor *cursor) const;
 
@@ -139,15 +136,6 @@ public:
      * new paragraphs default direction.
      */
     KoText::Direction pageDirection() const;
-
-signals:
-    /**
-     * emitted when the shape thinks it should be relayouted, for example after
-     * it has been resized.
-     * Note that this event is compressed internally to avoid duplicate layout
-     * requests.
-     */
-    void relayout();
 
 private:
     Q_DECLARE_PRIVATE(KoTextShapeData)

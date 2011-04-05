@@ -40,6 +40,8 @@ public:
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout) = 0;
 
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis) = 0;
+    
+    virtual void doPostLayout(KoTextLayoutRootArea *rootArea) = 0;
 };
 
 #endif

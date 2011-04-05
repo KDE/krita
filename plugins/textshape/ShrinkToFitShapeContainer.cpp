@@ -91,9 +91,9 @@ void ShrinkToFitShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement 
 {
     KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(shape->userData());
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data ? data->document()->documentLayout() : 0);
-    if (!lay || lay->resizeMethod() != KoTextDocument::ShrinkToFitResize)
+    if (!lay || lay->resizeMethod() != KoTextDocumentLayout::ShrinkToFitResize)
         return;
-    
+
     KoShapeContainer *oldParent = shape->parent();
     ShrinkToFitShapeContainer *tos = wrapShape(shape, context.documentResourceManager());
     if (!tos->loadOdf(element, context)) {
@@ -108,11 +108,11 @@ void ShrinkToFitShapeContainer::unwrapShape(KoShape *shape)
 
     removeShape(shape);
     shape->setParent(parent());
-    
+
     QSet<KoShape*> delegates = toolDelegates();
     delegates.remove(shape);
     setToolDelegates(delegates);
-    
+
     shape->setPosition(position());
     shape->setSize(size());
     shape->rotate(rotation());

@@ -200,10 +200,6 @@ void TextShape::shapeChanged(ChangeType type, KoShape *shape)
     Q_UNUSED(shape);
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay)
-            lay->interruptLayout();
-        m_textShapeData->fireResizeEvent();
     }
 }
 
@@ -441,7 +437,6 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     if (asynchronous) {
         synchronized(m_mutex) {
             if (m_textShapeData->isDirty()) {
-                m_textShapeData->fireResizeEvent(); // triggers a relayout
                 if (QThread::currentThread() != QApplication::instance()->thread()) {
                     // only wait if this is called in the non-main thread.
                     // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.

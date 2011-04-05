@@ -234,8 +234,6 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
 
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
     if (lay) {
-//TODO        lay->interruptLayout();
-
         if (d->children.contains(child)) {
             Relation relation = d->children.value(child);
             if (relation.anchor) {
@@ -243,6 +241,5 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
             }
         }
     }
-    data->fireResizeEvent();
 }
 

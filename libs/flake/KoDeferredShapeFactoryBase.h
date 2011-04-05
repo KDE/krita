@@ -72,7 +72,7 @@ public:
      * @see createDefaultShape() newDocumentResourceManager()
      * @see KoShapeTemplate::properties
      */
-    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createShape(const KoProperties *params, KoResourceManager *documentResources = 0) const;
 
 };
 

@@ -236,7 +236,7 @@ install(
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
-    KoDeferredShapeFactory.h
+    KoDeferredShapeFactoryBase.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h

@@ -18,9 +18,9 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
-
 #include "KoFindBase.h"
+
+#include "KoFindOptionSet.h"
 
 class KoFindBase::Private
 {
@@ -29,7 +29,7 @@ public:
     KoFindMatchList matches;
     int currentMatch;
 
-    KoFindOptions options;
+    KoFindOptionSet *options;
 };
 
 KoFindBase::KoFindBase(QObject* parent)
@@ -60,7 +60,7 @@ KoFindMatch KoFindBase::currentMatch() const
     return KoFindMatch();
 }
 
-KoFindBase::KoFindOptions KoFindBase::options() const
+KoFindOptionSet * KoFindBase::options() const
 {
     return d->options;
 }
@@ -154,7 +154,7 @@ void KoFindBase::clearMatches()
 
 }
 
-void KoFindBase::setOptions(const KoFindBase::KoFindOptions &options)
+void KoFindBase::setOptions(KoFindOptionSet *newOptions)
 {
-    d->options = options;
+    d->options = newOptions;
 }

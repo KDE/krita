@@ -34,7 +34,7 @@ class QVariant;
  * document. Thus, we need to encapsulate the results into
  * something more generic. This class serves that function.
  *
- * Due to this generalisation this class only stores QVariant
+ * This generalisation means this class only stores QVariant
  * values. The contents of these variants is dependent on the
  * KoFindBase-derived search implementation and the documentation
  * of these classes should be consulted for details regarding

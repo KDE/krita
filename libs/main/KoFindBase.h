@@ -28,28 +28,21 @@
 #include "KoFindMatch.h"
 #include "komain_export.h"
 
+class KoFindOptionSet;
 /**
  * Base class for searching and finding strings in a document.
  *
  * This class provides the base API that needs to be implemented
- * when searching in a document.
+ * when searching in a document. Each application should create an
+ * instance of a concrete implementation of this class to support
+ * searching. Which concrete implementation to create depends on
+ * the type of data that is being searched.C
  */
 class KOMAIN_EXPORT KoFindBase : public QObject
 {
     Q_OBJECT
 public:
     typedef QList<KoFindMatch> KoFindMatchList;
-
-    enum KoFindOption
-    {
-        FindOptionUnknown = 0x0, ///< Unknown option.
-        FindCaseSensitive = 0x1, ///< Match only if cases are equal.
-        FindWholeWords = 0x2, ///< Match only whole words.
-        FindRegularExpression = 0x4, ///< Match using a regular expression instead of simple substring matching.
-        FindWithinSelection = 0x8, ///< Search only within the current selection.
-        FindFromCursor = 0x10, ///< Start searching from the current cursor position.
-    };
-    Q_DECLARE_FLAGS(KoFindOptions, KoFindOption);
     
     explicit KoFindBase(QObject* parent = 0);
     virtual ~KoFindBase();
@@ -83,7 +76,7 @@ public:
     /**
      * Retrieve the current set of options.
      */
-    KoFindOptions options() const;
+    KoFindOptionSet * options() const;
 
 public Q_SLOTS:
     /**
@@ -111,13 +104,6 @@ public Q_SLOTS:
      * This clears all highlighting and other markers.
      */
     virtual void finished();
-    /**
-     * Set the current set of options. This will be used for the
-     * next call to find(), and not modify the current set of matches.
-     *
-     * \param options The new options.
-     */
-    virtual void setOptions(const KoFindOptions &options);
 
 Q_SIGNALS:
     /**
@@ -184,11 +170,16 @@ protected:
      */
     virtual void clearMatches();
 
+    /**
+     * Set the current option set.
+     *
+     * \param newOptions The new option set.
+     */
+    void setOptions(KoFindOptionSet *newOptions);
+
 private:
     class Private;
     Private * const d;
 };
-
-Q_DECLARE_OPERATORS_FOR_FLAGS(KoFindBase::KoFindOptions);
 
 #endif // KOFINDBASE_H

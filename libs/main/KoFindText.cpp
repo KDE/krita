@@ -29,6 +29,7 @@
 #include <QtGui/QApplication>
 
 #include <KDE/KDebug>
+#include <KDE/KLocalizedString>
 
 #include "KoResourceManager.h"
 #include "KoText.h"
@@ -37,6 +38,8 @@
 #include "KoTextShapeData.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
+#include "KoFindOptionSet.h"
+#include "KoFindOption.h"
 
 class KoFindText::Private
 {
@@ -86,6 +89,11 @@ KoFindText::KoFindText(KoResourceManager* provider, QObject* parent)
         d->currentSelectionFormat = new QTextCharFormat();
         d->currentSelectionFormat->setBackground(qApp->palette().alternateBase());
     }
+
+    KoFindOptionSet *options = new KoFindOptionSet();
+    options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
+    options->addOption("wholeWords", i18n("Whole Words Only"), i18n("Match only whole words"), QVariant::fromValue<bool>(false));
+    setOptions(options);
 }
 
 KoFindText::~KoFindText()
@@ -95,30 +103,30 @@ KoFindText::~KoFindText()
 
 void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList)
 {
-    KoFindOptions opts = options();
+    KoFindOptionSet *opts = options();
     QTextDocument::FindFlags flags = 0;
 
-    if(opts & FindCaseSensitive) {
+    if(opts->option("caseSensitive")->value().toBool()) {
         flags |= QTextDocument::FindCaseSensitively;
     }
-    if(opts & FindWholeWords) {
+    if(opts->option("wholeWords")->value().toBool()) {
         flags |= QTextDocument::FindWholeWords;
     }
 
     int start = 0;
     bool findInSelection = false;
-    if(opts & FindWithinSelection && d->selectionStart != d->selectionEnd) {
-        QAbstractTextDocumentLayout::Selection selection;
-        QTextCursor cursor;
-        cursor.setPosition(d->selectionStart);
-        cursor.setPosition(d->selectionEnd, QTextCursor::KeepAnchor);
-        selection.cursor = cursor;
-        selection.format = *(d->currentSelectionFormat);
-        d->selections.append(selection);
-
-        findInSelection = true;
-        start = d->selectionStart;
-    }
+//     if(opts & FindWithinSelection && d->selectionStart != d->selectionEnd) {
+//         QAbstractTextDocumentLayout::Selection selection;
+//         QTextCursor cursor;
+//         cursor.setPosition(d->selectionStart);
+//         cursor.setPosition(d->selectionEnd, QTextCursor::KeepAnchor);
+//         selection.cursor = cursor;
+//         selection.format = *(d->currentSelectionFormat);
+//         d->selections.append(selection);
+// 
+//         findInSelection = true;
+//         start = d->selectionStart;
+//     }
 
     if(!d->document) {
         QVariant doc = d->resourceManager->resource(KoText::CurrentTextDocument);
@@ -133,9 +141,9 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
     }
 
     int position = 0;
-    if(opts & FindFromCursor) {
-        position = d->resourceManager->intResource(KoText::CurrentTextPosition);
-    }
+//     if(opts & FindFromCursor) {
+//         position = d->resourceManager->intResource(KoText::CurrentTextPosition);
+//     }
 
     int currentMatch = 0;
     bool matchFound;

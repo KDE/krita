@@ -38,6 +38,8 @@
 #include <KDE/KColorScheme>
 
 #include "KoFindBase.h"
+#include "KoFindOptionSet.h"
+#include "KoFindOption.h"
 
 class KoFindToolbar::Private
 {
@@ -49,10 +51,7 @@ public:
     void searchWrapped(bool direction);
     void addToHistory();
     void find(const QString &pattern);
-    void caseSensitiveChanged();
-    void wholeWordsChanged();
-    void selectionOnlyChanged();
-    void fromCursorChanged();
+    void optionChanged();
 
     KoFindToolbar *q;
 
@@ -79,7 +78,6 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
     connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound()));
     connect(d->finder, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
     connect(d->finder, SIGNAL(wrapAround(bool)), this, SLOT(searchWrapped(bool)));
-    finder->setOptions(finder->options() ^ KoFindBase::FindFromCursor);
 
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
@@ -125,26 +123,18 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
     
     QMenu* menu = new QMenu(d->optionsButton);
     
-    QAction *action = new QAction(i18n("Case Sensitive"), menu);
-    action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(caseSensitiveChanged()));
-    menu->addAction(action);
-    
-    action = new QAction(i18n("Whole Words Only"), menu);
-    action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(wholeWordsChanged()));
-    menu->addAction(action);
-
-    action = new QAction(i18n("Selection Only"), menu);
-    action->setCheckable(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(selectionOnlyChanged()));
-    menu->addAction(action);
-
-    action = new QAction(i18n("From Cursor"), menu);
-    action->setCheckable(true);
-    action->setChecked(true);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(fromCursorChanged()));
-    menu->addAction(action);
+    QList<KoFindOption*> options = finder->options()->options();
+    foreach(KoFindOption* option, options) {
+        KAction *action = new KAction(option->title(), menu);
+        action->setHelpText(option->description());
+        action->setObjectName(option->name());
+        if(option->value().type() == QVariant::Bool) {
+            action->setCheckable(true);
+            action->setChecked(option->value().toBool());
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(optionChanged()));
+        }
+        menu->addAction(action);
+    }
     
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
@@ -223,28 +213,13 @@ void KoFindToolbar::Private::find(const QString& pattern)
     }
 }
 
-void KoFindToolbar::Private::caseSensitiveChanged()
+void KoFindToolbar::Private::optionChanged()
 {
-    finder->setOptions(finder->options() ^ KoFindBase::FindCaseSensitive );
-    find(searchLine->currentText());
-}
-
-void KoFindToolbar::Private::wholeWordsChanged()
-{
-    finder->setOptions(finder->options() ^ KoFindBase::FindWholeWords );
-    find(searchLine->currentText());
-}
-
-void KoFindToolbar::Private::fromCursorChanged()
-{
-    finder->setOptions(finder->options() ^ KoFindBase::FindFromCursor);
-    find(searchLine->currentText());
-}
-
-void KoFindToolbar::Private::selectionOnlyChanged()
-{
-    finder->setOptions(finder->options() ^ KoFindBase::FindWithinSelection);
-    find(searchLine->currentText());
+    QAction *action = qobject_cast<QAction*>(q->sender());
+    if(action) {
+        finder->options()->setOptionValue(action->objectName(), action->isChecked());
+        find(searchLine->currentText());
+    }
 }
 
 #include "KoFindToolbar.moc"

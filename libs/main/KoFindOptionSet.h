@@ -18,9 +18,10 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KOFINDOPTIONS_H
-#define KOFINDOPTIONS_H
+#ifndef KOFINDOPTIONSET_H
+#define KOFINDOPTIONSET_H
 
+#include "komain_export.h"
 #include <QtCore/QObject>
 
 class KoFindOption;
@@ -34,7 +35,7 @@ class KoFindOption;
  * KoFindBase::options(). The individual options can then be retrieved
  * from the KoFindOptions instance and used to populate the UI.
  */
-class KoFindOptions : public QObject
+class KOMAIN_EXPORT KoFindOptionSet : public QObject
 {
     Q_OBJECT
 public:
@@ -43,26 +44,26 @@ public:
      *
      * Constructs an instance without any options.
      */
-    explicit KoFindOptions(QObject* parent = 0);
+    explicit KoFindOptionSet(QObject* parent = 0);
     /**
      * Destructor.
      */
-    virtual ~KoFindOptions();
+    virtual ~KoFindOptionSet();
 
     /**
      * Retrieve a specific option.
      *
-     * \param id The id of the option to retrieve.
+     * \param name The name of the option to retrieve.
      *
-     * \return The option corresponding to the id.
+     * \return The option corresponding to the id, or 0 if it was not found.
      */
-    KoFindOption option(int id);
+    KoFindOption * option(const QString& name) const;
     /**
      * Retrieve a list of all properties.
      *
      * \return A list of options.
      */
-    const QList< KoFindOption > options() const;
+    QList< KoFindOption* > options() const;
 
     /**
      * Add an empty option.
@@ -70,12 +71,15 @@ public:
      * This will add an option with no title, description or value set.
      * You should set these values yourself before using the option.
      *
-     * \return The new option, which has a unique ID for this set of options.
+     * \param name A name to identify the option by.
+     *
+     * \return The new option.
      */
-    KoFindOption addOption();
+    KoFindOption * addOption(const QString &name);
     /**
      * Add a new option.
      *
+     * \param name A name to identify the option by.
      * \param title The title of the option, for example "Case Sensitive".
      * \param description A description for the option, for example "Only generate a match if
      * the case of the possibly matched text matches that of the text to search for".
@@ -83,40 +87,34 @@ public:
      *
      * \return The option just created.
      */
-    KoFindOption addOption(const QString &title, const QString &description, const QVariant &value);
+    KoFindOption * addOption(const QString &name, const QString &title, const QString &description, const QVariant &value);
 
     /**
      * Remove an option from the set.
      *
-     * \param id The ID of the option to remove.
+     * \param name The name of the option to remove.
      */
-    void removeOption(int id);
-    /**
-     * Remove an option from the set.
-     *
-     * \param opt The option to remove.
-     */
-    void removeOption(const KoFindOption &remove);
+    void removeOption(const QString &name);
 
 public Q_SLOTS:
     /**
      * Set the value of an option.
      *
-     * \param id The id of th option to set.
+     * \param name The name of the option to set.
      * \param value The value to set the option to.
      */
-    void setOptionValue(int id, const QVariant &value);
+    void setOptionValue(const QString &name, const QVariant &value);
     /**
-     * Set an option.
+     * Replace an option with another one.
      *
-     * This will replace the option corresponding to the id of the option
-     * with the option passed.
+     * \param name The name of the option to replace.
+     * \param newOption The new option to replace the old option with.
      */
-    void setOption(const KoFindOption &newOption);
+    void replaceOption(const QString &name, KoFindOption *newOption);
 
 private:
     class Private;
     Private * const d;
 };
 
-#endif // KOFINDOPTIONS_H
+#endif // KOFINDOPTIONSET_H

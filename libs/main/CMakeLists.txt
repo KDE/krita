@@ -92,7 +92,7 @@ set(komain_LIB_SRCS
     KoFindText.cpp
     KoFindToolbar.cpp
     KoFindOption.cpp
-    KoFindOptions.cpp
+    KoFindOptionSet.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}

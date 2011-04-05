@@ -247,6 +247,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
     m_startOfArea = new FrameIterator(cursor);
     m_y = top();
+    setBottom(top());
     m_bottomSpacing = 0;
     m_footNotesHeight = 0;
     m_preregisteredFootNotesHeight = 0;

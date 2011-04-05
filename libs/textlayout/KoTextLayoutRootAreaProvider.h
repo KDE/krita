@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include <QSizeF>
+
 class KoTextLayoutRootArea;
 class KoTextDocumentLayout;
 
@@ -36,12 +38,20 @@ public:
     explicit KoTextLayoutRootAreaProvider();
     virtual ~KoTextLayoutRootAreaProvider();
 
-    // provide another root area
+    /// Provides an new root area
     virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout) = 0;
 
+    /// Release all root areas that are after the "afterThis" root area
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis) = 0;
-    
+
+    /// This method allows the provider to do any post processing like
+    ///   - painting it
+    ///   - changing it's size
+    ///   - do other things to other structures (eg resizing the textshape)
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea) = 0;
+
+    /// Returns a suggested a size for the root area
+    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
 };
 
 #endif

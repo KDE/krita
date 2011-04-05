@@ -37,6 +37,8 @@ public:
 
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea);
 
+    virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
+
     TextShape *m_textShape;
 
     KoTextLayoutRootArea *m_area;

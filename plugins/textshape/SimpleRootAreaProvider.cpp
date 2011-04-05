@@ -35,7 +35,6 @@ KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *docu
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
         m_area->setAssociatedShape(m_textShape);
-        m_area->setReferenceRect(0, m_textShape->size().width(), 0, m_textShape->size().height());
         m_textShapeData->setRootArea(m_area);
 
         return m_area;
@@ -49,5 +48,13 @@ void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 {
+    rootArea->setBottom(rootArea->top()
+            + rootArea->associatedShape()->size().height());
+
     rootArea->associatedShape()->update();
+}
+
+QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+{
+    return m_textShape->size();
 }

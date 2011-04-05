@@ -55,6 +55,8 @@ public:
 
     virtual KoText::Direction parentTextDirection() const;
 
+    void setBottom(qreal b);
+
 private:
     class Private;
     Private * const d;

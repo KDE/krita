@@ -76,3 +76,8 @@ KoText::Direction KoTextLayoutRootArea::parentTextDirection() const
 {
     return KoText::LeftRightTopBottom;
 }
+
+void KoTextLayoutRootArea::setBottom(qreal b)
+{
+    KoTextLayoutArea::setBottom(b);
+}

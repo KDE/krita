@@ -30,7 +30,6 @@ KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *docume
 {
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
-        m_area->setReferenceRect(0, 200, 0, 1000);
         return m_area;
     }
     return 0;
@@ -38,4 +37,9 @@ KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *docume
 
 void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
+}
+
+QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
+{
+    return QSizeF(200,1000);
 }

@@ -197,7 +197,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         lastBorder->paint(*painter);
 
     painter->save();
-    painter->translate(0, bottom());
+    painter->translate(0, bottom() - top() - m_footNotesHeight);
     foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
         footerArea->paint(painter, context);
         painter->translate(0, footerArea->bottom());

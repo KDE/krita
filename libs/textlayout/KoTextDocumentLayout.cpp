@@ -301,11 +301,10 @@ void KoTextDocumentLayout::layout()
         }
 
         if (shouldLayout) {
-            rootArea->setReferenceRect(rootArea->left(),
-                                          rootArea->right(),
-                                          d->y,
-                                          d->y + rootArea->maximumAllowedBottom());
-            //layout all that can fit into that root area
+            QSizeF size = d->provider->suggestSize(rootArea);
+            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+
+            // Layout all that can fit into that root area
             if (rootArea->layout(d->layoutPosition)) {
                 d->provider->doPostLayout(rootArea);
                 d->provider->releaseAllAfter(rootArea);
@@ -315,21 +314,21 @@ void KoTextDocumentLayout::layout()
             d->provider->doPostLayout(rootArea);
 
             if (!continuousLayout()) {
-                return; // let's take a break
+                return; // Let's take a break
             }
         }
-        d->y = rootArea->bottom(); // layout method just set this
+        d->y = rootArea->bottom(); // (post)Layout method(s) just set this
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
-        // request a Root Area
+        // Request a Root Area
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
             d->rootAreaList.append(rootArea);
-            rootArea->setReferenceRect(rootArea->left(), rootArea->right(),
-                                            d->y, d->y + rootArea->maximumAllowedBottom());
-            //layout all that can fit into that root area
+            QSizeF size = d->provider->suggestSize(rootArea);
+            rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
+            // Layout all that can fit into that root area
             rootArea->layout(d->layoutPosition);
             d->provider->doPostLayout(rootArea);
 
@@ -344,7 +343,7 @@ void KoTextDocumentLayout::layout()
             emit finishedLayout();
             return; // with no more space there is nothing else we can do
         }
-        d->y = rootArea->bottom(); // layout method just set this
+        d->y = rootArea->bottom(); // (post)Layout method(s) just set this
     }
 }
 

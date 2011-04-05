@@ -96,7 +96,7 @@ public:
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(const QString deferredPluginName, const QString &id, const QString &name);
+    KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString::null);
     virtual ~KoShapeFactoryBase();
 
     /**

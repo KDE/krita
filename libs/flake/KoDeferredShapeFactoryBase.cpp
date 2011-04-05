@@ -23,13 +23,8 @@
 
 #include <kdebug.h>
 
-class KoDeferredShapeFactoryBase::Private
+KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase()
 {
-public:
 
-    ~Private() {
-    }
-
-};
-
+}
 

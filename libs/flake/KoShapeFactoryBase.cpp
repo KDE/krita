@@ -21,6 +21,10 @@
  */
 #include <QMutexLocker>
 #include <QMutex>
+
+#include <kservice.h>
+#include <kservicetypetrader.h>
+
 #include "KoShapeFactoryBase.h"
 #include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
@@ -47,9 +51,7 @@ public:
     }
 
     KoDeferredShapeFactoryBase *deferredFactory;
-
     QMutex pluginLoadingMutex;
-
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactoryBase*> configPanels;
     const QString id;
@@ -64,7 +66,7 @@ public:
 };
 
 
-KoShapeFactoryBase::KoShapeFactoryBase(const QString deferredPluginName, const QString &id, const QString &name)
+KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName)
     : d(new Private(id, name))
 {
     d->deferredPluginName = deferredPluginName;
@@ -178,14 +180,27 @@ void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
     Q_UNUSED(manager);
 }
 
-KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources = 0) const
+KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
 {
-
+    if (!d->deferredPluginName.isEmpty()) {
+        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        Q_ASSERT(d->deferredFactory);
+        return d->deferredFactory->createDefaultShape(documentResources);
+    }
+    return 0;
 }
 
-KoShape *KoShapeFactoryBase::createShape(const KoProperties*, KoResourceManager *documentResources) const
+KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
+                                         KoResourceManager *documentResources) const
 {
-    return createDefaultShape(documentResources);
+    if (!d->deferredPluginName.isEmpty()) {
+        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        Q_ASSERT(d->deferredFactory);
+        return d->deferredFactory->createShape(properties, documentResources);
+    }
+    else {
+        return createDefaultShape(documentResources);
+    }
 }
 
 
@@ -194,5 +209,9 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
+    const QString serviceType = "Calligra/Deferred";
+    QString query = QString::fromLatin1("(Type == 'Service' and (Name == '%1')").arg(d->deferredPluginName);
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    Q_ASSERT(offers.size() > 0);
 
 }

@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,6 +59,7 @@ public:
         StyleId = QTextTableFormat::UserProperty + 1,
         ColumnWidth,         ///< Column width.
         RelativeColumnWidth, ///< Relative column width.
+        OptimalColumnWidth,  ///< Use optimal column width
         BreakBefore,         ///< If true, insert a frame break before this table
         BreakAfter,          ///< If true, insert a frame break after this table
         MasterPageName       ///< Optional name of the master-page
@@ -85,17 +87,23 @@ public:
     /// Get the column width.
     qreal relativeColumnWidth() const;
 
+    /// Get the optimalColumnWidth state
+    bool optimalColumnWidth() const;
+    
+    /// Set the optimalColumnWidth state
+    void setOptimalColumnWidth(bool state);
+    
     /// Set break before. See §7.19.2 of [XSL].
-    void setBreakBefore(bool on);
+    void setBreakBefore(KoText::KoTextBreakProperty state);
 
     /// Get break before. See §7.19.2 of [XSL].
-    bool breakBefore();
+    KoText::KoTextBreakProperty breakBefore() const;
 
     /// Set break after. See §7.19.1 of [XSL].
-    void setBreakAfter(bool on);
+    void setBreakAfter(KoText::KoTextBreakProperty state);
 
     /// Get break after. See §7.19.1 of [XSL].
-    bool breakAfter();
+    KoText::KoTextBreakProperty breakAfter() const;
 
     /// Set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableColumnStyle *parent);
@@ -132,6 +140,9 @@ public:
 
     /// Compare the properties of this style with the other.
     bool operator==(const KoTableColumnStyle &other) const;
+    
+    /// Compare the properties of this style with the other.
+    bool operator!=(const KoTableColumnStyle &other) const;
 
     /**
      * Load the style form the element
@@ -141,7 +152,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style) const;
 
     /**
      * Returns true if this table column style has the property set.

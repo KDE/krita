@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -167,24 +168,24 @@ qreal KoTableColumnStyle::relativeColumnWidth() const
     return propertyDouble(RelativeColumnWidth);
 }
 
-void KoTableColumnStyle::setBreakBefore(bool on)
+void KoTableColumnStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakBefore, on);
+    setProperty(BreakBefore, state);
 }
 
-bool KoTableColumnStyle::breakBefore()
+KoText::KoTextBreakProperty KoTableColumnStyle::breakBefore() const
 {
-    return propertyBoolean(BreakBefore);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableColumnStyle::setBreakAfter(bool on)
+void KoTableColumnStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakAfter, on);
+    setProperty(BreakAfter, state);
 }
 
-bool KoTableColumnStyle::breakAfter()
+KoText::KoTextBreakProperty KoTableColumnStyle::breakAfter() const
 {
-    return propertyBoolean(BreakAfter);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
 }
 
 KoTableColumnStyle *KoTableColumnStyle::parentStyle() const
@@ -224,6 +225,16 @@ void KoTableColumnStyle::setMasterPageName(const QString &name)
     setProperty(MasterPageName, name);
 }
 
+bool KoTableColumnStyle::optimalColumnWidth() const
+{
+    return propertyBoolean(OptimalColumnWidth);
+}
+
+void KoTableColumnStyle::setOptimalColumnWidth(bool state)
+{
+    setProperty(OptimalColumnWidth, state);
+}
+
 void KoTableColumnStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
@@ -256,15 +267,17 @@ void KoTableColumnStyle::loadOdfProperties(KoStyleStack &styleStack)
     if (styleStack.hasProperty(KoXmlNS::style, "rel-column-width")) {
         setRelativeColumnWidth(styleStack.property(KoXmlNS::style, "rel-column-width").remove('*').toDouble());
     }
+    // Optimal column width
+    if (styleStack.hasProperty(KoXmlNS::style, "use-optimal-column-width")) {
+        setOptimalColumnWidth(styleStack.property(KoXmlNS::style, "use-optimal-column-width") == "true");
+    }
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
-            setBreakBefore(true);
+        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
-            setBreakAfter(true);
+        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 }
 
@@ -273,23 +286,30 @@ bool KoTableColumnStyle::operator==(const KoTableColumnStyle &other) const
     return other.d == d;
 }
 
+bool KoTableColumnStyle::operator!=(const KoTableColumnStyle &other) const
+{
+    return other.d != d;
+}
+
 void KoTableColumnStyle::removeDuplicates(const KoTableColumnStyle &other)
 {
     d->stylesPrivate.removeDuplicates(other.d->stylesPrivate);
 }
 
-void KoTableColumnStyle::saveOdf(KoGenStyle &style)
+void KoTableColumnStyle::saveOdf(KoGenStyle &style) const
 {
-    Q_UNUSED(style);
-/*
     QList<int> keys = d->stylesPrivate.keys();
     foreach(int key, keys) {
         if (key == KoTableColumnStyle::BreakBefore) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableColumnType);
         } else if (key == KoTableColumnStyle::BreakAfter) {
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
-        } 
-*/
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::OptimalColumnWidth) {
+            style.addProperty("style:use-optimal-column-width", optimalColumnWidth(), KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::ColumnWidth) {
+            style.addPropertyPt("style:column-width", columnWidth(), KoGenStyle::TableColumnType);
+        } else if (key == KoTableColumnStyle::RelativeColumnWidth) {
+            style.addProperty("style:rel-column-width", QString("%1*").arg(relativeColumnWidth()), KoGenStyle::TableColumnType);
+        }
+    }
 }

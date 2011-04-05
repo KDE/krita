@@ -148,22 +148,6 @@ public:
      */
     QRect selectedExactRect() const;
 
-    /**
-     * If the parent paint device is interested in keeping up to date
-     * with the dirtyness of this selection, set to true
-     */
-    void setInterestedInDirtyness(bool b);
-
-    /**
-     * returns true if the parent paint device is interested in
-     * keeping up with the dirtyness of the selection.
-     */
-    bool interestedInDirtyness() const;
-
-    virtual void setDirty(const QRect & rc);
-    virtual void setDirty(const QRegion & region);
-    virtual void setDirty();
-
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 

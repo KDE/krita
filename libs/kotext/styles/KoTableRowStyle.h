@@ -54,7 +54,7 @@ public:
         StyleId = QTextTableFormat::UserProperty + 1,
         // Linespacing properties
         KeepTogether,    ///< If true, the row is not allowed to break
-        MinumumRowHeight,    ///< a qreal specifying the minimum row height in pt
+        MinimumRowHeight,    ///< a qreal specifying the minimum row height in pt
         RowHeight,      ///< a qreal specifying the exact row height in pt
         BreakBefore,    ///< If true, insert a frame break before this table row
         BreakAfter,     ///< If true, insert a frame break after this table row
@@ -78,9 +78,9 @@ public:
     void clearBackground();
 
     void setBreakBefore(bool on);
-    bool breakBefore();
+    bool breakBefore() const;
     void setBreakAfter(bool on);
-    bool breakAfter();
+    bool breakAfter() const;
 
     /// Set minimum height of row
     void setMinimumRowHeight(const qreal height);
@@ -132,7 +132,7 @@ public:
      */
     void loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context);
 
-    void saveOdf(KoGenStyle &style);
+    void saveOdf(KoGenStyle &style) const;
 
     /**
      * Returns true if this table column style has the property set.
@@ -157,6 +157,10 @@ public:
      */
     QVariant value(int key) const;
 
+    /**
+     * Returns true if this table row style is empty.
+     */
+    bool isEmpty() const;
 private:
     /**
      * Load the style from the \a KoStyleStack style stack using the

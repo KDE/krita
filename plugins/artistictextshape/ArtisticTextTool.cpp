@@ -199,6 +199,9 @@ ArtisticTextTool::~ArtisticTextTool()
 
 QTransform ArtisticTextTool::cursorTransform() const
 {
+    if (!m_currentShape)
+        return QTransform();
+
     QTransform transform( m_currentShape->absoluteTransformation(0) );
     QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
@@ -234,6 +237,11 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
     if (m_currentShape->isOnPath()) {
         painter.save();
         m_currentShape->applyConversion( painter, converter );
+        if (!m_currentShape->baselineShape()) {
+            painter.setPen(Qt::DotLine);
+            painter.setBrush(Qt::NoBrush);
+            painter.drawPath(m_currentShape->baseline());
+        }
         painter.setPen(Qt::blue);
         painter.setBrush(m_hoverHandle ? Qt::red : Qt::white);
         painter.drawPath(offsetHandleShape());
@@ -244,6 +252,10 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
 void ArtisticTextTool::repaintDecorations()
 {
     canvas()->updateCanvas(offsetHandleShape().boundingRect());
+    if (m_currentShape && m_currentShape->isOnPath()) {
+        if (!m_currentShape->baselineShape())
+            canvas()->updateCanvas(m_currentShape->baseline().boundingRect());
+    }
 }
 
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
@@ -444,6 +456,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     enableTextCursor( true );
     updateActions();
     emit statusTextChanged( i18n("Press return to finish editing.") );
+    repaintDecorations();
 }
 
 void ArtisticTextTool::blinkCursor()

@@ -156,6 +156,10 @@ public:
      * \see layout
      */
     void scheduleRelayout();
+    /**
+     * Sets the horizontal and vertical margin that will be applied during layout
+     */
+    void setMargins ( qreal hMargin, qreal vMargin );
 
 private:
     /**
@@ -191,6 +195,8 @@ private:
     bool m_doingLayout;
     bool m_relayoutScheduled;
     QSizeF m_containerSize;
+    qreal m_hMargin;
+    qreal m_vMargin;
     QMap<KoShape*, LayoutData*> m_layoutItems;
 };
 

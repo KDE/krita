@@ -102,7 +102,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 
     setCollisionDetection(true);
 
-    QObject::connect(m_textShapeData, SIGNAL(relayout()), lay, SLOT(scheduleLayout()), Qt::QueuedConnection);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
 }
 
 TextShape::~TextShape()
@@ -129,7 +129,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         background()->paint(painter, p);
     }
 
-/*TODO
+/*TODO FIXME pagenumber support done here
     if (m_pageProvider) {
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {

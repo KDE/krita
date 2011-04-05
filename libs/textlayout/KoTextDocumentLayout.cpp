@@ -278,7 +278,11 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-//TODO make corresponding root area as dirty and then do layout
+//TODO FIXME make corresponding root area as dirty and then do layout
+// right now we are just marking all as dirty
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        rootArea->setDirty();
+    }
 }
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
@@ -339,6 +343,11 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
         obj->resize(document(), item, position, cf, paintDevice());
         registerInlineObject(item);
     }
+}
+
+void KoTextDocumentLayout::emitLayoutIsDirty()
+{
+    emit layoutIsDirty();
 }
 
 void KoTextDocumentLayout::layout()

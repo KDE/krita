@@ -117,13 +117,6 @@ public:
     virtual int pageCount() const;
 
     /**
-     * Actually do the layout of the text.
-     * This method will layout the text into sections,tables and textlines, chunk by chunk.
-     * It may interrupt itself.
-     */
-    virtual void layout();
-
-    /**
      * Make sure that the current layout run stops
      */
     void interruptLayout();
@@ -213,7 +206,26 @@ signals:
      */
     void finishedLayout();
 
+    /**
+     * Signal is emitted when emitLayoutIsDirty() is called which happens at
+     * least when a root area is marked as dirty.
+     * @see emitLayoutIsDirty
+     */
+    void layoutIsDirty();
+
 public slots:
+    /**
+     * Does the layout of the text.
+     * This method will layout the text into sections,tables and textlines,
+     * chunk by chunk.
+     * It may interrupt itself, @see contiuousLayout
+     * calling this method when the layout is not dirty, doesn't take that much
+     * time as it doesn't do much, although it does check every root area
+     */
+    virtual void layout();
+
+
+    void emitLayoutIsDirty();
 
 protected:
     /// reimplemented

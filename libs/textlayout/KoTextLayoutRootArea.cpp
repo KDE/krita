@@ -64,6 +64,7 @@ KoShape *KoTextLayoutRootArea::associatedShape()
 void KoTextLayoutRootArea::setDirty()
 {
     d->dirty = true;
+    documentLayout()->emitLayoutIsDirty();
 }
 
 bool KoTextLayoutRootArea::isDirty()

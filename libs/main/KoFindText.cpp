@@ -41,8 +41,8 @@
 class KoFindText::Private
 {
     public:
-        Private() : document(0) { }
-        
+        Private() : document(0), selectionStart(-1), selectionEnd(-1) { }
+
         void resourceChanged(int key, const QVariant& variant);
         void updateSelections();
 
@@ -105,6 +105,21 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
         flags |= QTextDocument::FindWholeWords;
     }
 
+    int start = 0;
+    bool findInSelection = false;
+    if(opts & FindWithinSelection && d->selectionStart != d->selectionEnd) {
+        QAbstractTextDocumentLayout::Selection selection;
+        QTextCursor cursor;
+        cursor.setPosition(d->selectionStart);
+        cursor.setPosition(d->selectionEnd, QTextCursor::KeepAnchor);
+        selection.cursor = cursor;
+        selection.format = *(d->currentSelectionFormat);
+        d->selections.append(selection);
+
+        findInSelection = true;
+        start = d->selectionStart;
+    }
+
     if(!d->document) {
         QVariant doc = d->resourceManager->resource(KoText::CurrentTextDocument);
         if(doc.isValid()) {
@@ -117,25 +132,49 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
         return;
     }
 
-    QTextCursor cursor = d->document->find(pattern, 0, flags);
+    int position = 0;
+    if(opts & FindFromCursor) {
+        position = d->resourceManager->intResource(KoText::CurrentTextPosition);
+    }
+
+    int currentMatch = 0;
+    bool matchFound;
+    QTextCursor cursor = d->document->find(pattern, start, flags);
     while(!cursor.isNull()) {
+        if(findInSelection && d->selectionEnd <= cursor.position()) {
+            break;
+        }
+
         QAbstractTextDocumentLayout::Selection selection;
         selection.cursor = cursor;
         selection.format = *(d->highlightFormat);
         d->selections.append(selection);
-        
+
         KoFindMatch match;
         match.setContainer(QVariant::fromValue(d->document));
         match.setLocation(QVariant::fromValue(cursor));
         matchList.append(match);
-        
+
+        if(position <= qMin(cursor.anchor(), cursor.position())) {
+            matchFound = true;
+        }
+
+        if(!matchFound) {
+            currentMatch++;
+        }
+
         cursor = d->document->find(pattern, cursor, flags);
     }
 
     if(d->selections.size() > 0) {
-        d->selections[0].format = *(d->currentMatchFormat);
+        if(position >= d->selections.size()) {
+            position = 0;
+        }
+
+        setCurrentMatch(position);
+        d->selections[position].format = *(d->currentMatchFormat);
     }
-    
+
     d->updateSelections();
 }
 
@@ -143,7 +182,10 @@ void KoFindText::clearMatches()
 {
     d->selections.clear();
     d->updateSelections();
-    
+
+    d->selectionStart = -1;
+    d->selectionEnd = -1;
+
     setCurrentMatch(0);
 }
 
@@ -151,7 +193,7 @@ void KoFindText::findNext()
 {
     if(d->selections.size() == 0)
         return;
-    
+
     d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findNext();
     d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
@@ -162,7 +204,7 @@ void KoFindText::findPrevious()
 {
     if(d->selections.size() == 0)
         return;
-    
+
     d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findPrevious();
     d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
@@ -173,10 +215,16 @@ void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
 {
     if (key == KoText::CurrentTextDocument) {
         document = static_cast<QTextDocument*>(variant.value<void*>());
-    } else if(key == KoText::CurrentTextPosition) {
+    } else if(key == KoText::SelectedTextPosition) {
+       // qDebug() << "SelectionChanged";
+//         if(selectionStart == -1) {
         selectionStart = variant.toInt();
+//         }
     } else if(key == KoText::CurrentTextAnchor) {
+       // qDebug() << "SelectionChanged";
+//         if(selectionEnd == -1) {
         selectionEnd = variant.toInt();
+//         }
     }
 }
 

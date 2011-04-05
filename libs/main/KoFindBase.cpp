@@ -87,8 +87,11 @@ void KoFindBase::find(const QString& pattern)
     findImpl(pattern, d->matches);
 
     emit hasMatchesChanged(d->matches.count() > 0);
-    if(d->matches.count() > 0) {
-        emit matchFound(d->matches.at(0));
+    if(d->matches.size() > 0) {
+        if(d->currentMatch >= d->matches.size()) {
+            d->currentMatch = 0;
+        }
+        emit matchFound(d->matches.at(d->currentMatch));
     } else {
         emit noMatchFound();
     }
@@ -108,7 +111,7 @@ void KoFindBase::findNext()
         d->currentMatch = 0;
         wrap = true;
     }
-    
+
     emit matchFound(d->matches.at(d->currentMatch));
 
     if(wrap) {

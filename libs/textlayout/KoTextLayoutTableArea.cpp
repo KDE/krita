@@ -510,7 +510,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     painter->fillRect(tableRect, d->table->format().background());
 
     // Draw header row backgrounds
-    for (int row = 0; row <= d->headerRows; ++row) {
+    for (int row = 0; row < d->headerRows; ++row) {
         QRectF rowRect(d->columnPositions[0], d->rowPositions[row], d->tableWidth, d->rowPositions[row+1] - d->rowPositions[row]);
 
         KoTableRowStyle rowStyle = d->carsManager.rowStyle(row);
@@ -539,6 +539,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
              * requested.
              */
             if (row == tableCell.row() && column == tableCell.column()) {
+                qDebug() <<"calling paint normal cell";
                 paintCell(painter, context, tableCell);
             }
         }
@@ -552,7 +553,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     bool collapsing = tableStyle.collapsingBorderModel();
 
     // Draw header row cell backgrounds and contents AND borders.
-    for (int row = 0; row <= d->headerRows; ++row) {
+    for (int row = 0; row < d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
             /*
@@ -561,6 +562,7 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
              * requested.
              */
             if (row == tableCell.row() && column == tableCell.column()) {
+                qDebug() <<"calling paint headerrow cell";
                 paintCell(painter, context, tableCell);
 
                 paintCellBorders(painter, context, collapsing, tableCell, &accuBlankBorders);

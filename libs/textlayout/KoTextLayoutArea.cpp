@@ -282,14 +282,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 return false;
             }
         }
+
+        ++(cursor->it);
+
         if (cursor->it.atEnd()) {
             m_endOfArea = new FrameIterator(cursor);
             m_y += m_bottomSpacing;
             setBottom(m_y);
             return true; // we have layouted till the end of the frame
         }
-
-        ++(cursor->it);
     }
 }
 

@@ -539,7 +539,6 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
              * requested.
              */
             if (row == tableCell.row() && column == tableCell.column()) {
-                qDebug() <<"calling paint normal cell";
                 paintCell(painter, context, tableCell);
             }
         }
@@ -562,7 +561,6 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
              * requested.
              */
             if (row == tableCell.row() && column == tableCell.column()) {
-                qDebug() <<"calling paint headerrow cell";
                 paintCell(painter, context, tableCell);
 
                 paintCellBorders(painter, context, collapsing, tableCell, &accuBlankBorders);

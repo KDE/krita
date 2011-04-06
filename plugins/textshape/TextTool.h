@@ -261,7 +261,8 @@ private slots:
     void shapeAddedToCanvas();
 
     void blinkCaret();
-
+    void relayoutContent();
+    
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
 

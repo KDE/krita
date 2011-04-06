@@ -60,6 +60,8 @@ struct KoTextDocumentLayout::Private
     Private(KoTextDocumentLayout *)
        : styleManager(0)
        , changeTracker(0)
+       , inlineTextObjectManager(0)
+       , provider(0)
        , rootArea(0)
        , textAnchorIndex(0)
        , defaultTabSizing(0)
@@ -114,6 +116,11 @@ KoTextDocumentLayout::~KoTextDocumentLayout()
     unregisterAllObstructions();
 
     delete d;
+}
+
+KoTextLayoutRootAreaProvider *KoTextDocumentLayout::provider() const
+{
+    return d->provider;
 }
 
 bool KoTextDocumentLayout::relativeTabs() const

@@ -452,7 +452,7 @@ endif(BUILD_kexi AND SHOULD_BUILD_KEXI)
 ###################
 
 if(SHOULD_BUILD_WORDS)
-#    macro_optional_add_subdirectory(words)
+   macro_optional_add_subdirectory(words)
 endif(SHOULD_BUILD_WORDS)
 
 if (SHOULD_BUILD_KFORMULA)

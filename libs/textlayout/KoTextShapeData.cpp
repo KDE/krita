@@ -55,7 +55,6 @@ class KoTextShapeDataPrivate : public KoTextShapeDataBasePrivate
 public:
     KoTextShapeDataPrivate()
             : ownsDocument(true)
-            , offset(0.0)
             , direction(KoText::AutoDirection)
             , textpage(0)
             , rootArea(0)
@@ -71,7 +70,6 @@ public:
     }
 
     bool ownsDocument;
-    qreal offset;
     KoText::Direction direction;
     KoTextPage *textpage;
     KoTextLayoutRootArea *rootArea;
@@ -123,13 +121,7 @@ void KoTextShapeData::setDocument(QTextDocument *document, bool transferOwnershi
 qreal KoTextShapeData::documentOffset() const
 {
     Q_D(const KoTextShapeData);
-    return d->offset;
-}
-
-void KoTextShapeData::setDocumentOffset(qreal offset)
-{
-    Q_D(KoTextShapeData);
-    d->offset = offset;
+    return d->rootArea ? d->rootArea->top() : 0.0;
 }
 
 void KoTextShapeData::setDirty()

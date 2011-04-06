@@ -69,6 +69,9 @@ public:
     explicit KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootAreaProvider *provider = 0);
     virtual ~KoTextDocumentLayout();
 
+    /// return the rootAreaProvider.
+    KoTextLayoutRootAreaProvider *provider() const;
+
     /// return the currently set manager, or 0 if none is set.
     KoInlineTextObjectManager *inlineTextObjectManager() const;
 

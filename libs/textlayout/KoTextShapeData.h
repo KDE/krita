@@ -66,13 +66,7 @@ public:
      * return the amount of points into the document (y) this shape will display.
      */
     qreal documentOffset() const;
-    /**
-     * Set the amount of points into the document (y direction) that is relevant for this
-     * data-shape.  This allows multiple shapes to all use one document at different offsets
-     * into the document.
-     */
-    void setDocumentOffset(qreal offset);
-
+    
     /// mark shape as dirty triggering a re-layout of its text.
     void setDirty();
 

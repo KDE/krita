@@ -30,6 +30,7 @@
 
 class KoCanvasController;
 class KoShapeControllerBase;
+class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
 class KoCreateShapesTool;
@@ -204,6 +205,13 @@ public slots:
      * @param id the id of the tool
      */
     void switchToolRequested(const QString &id);
+
+
+    /**
+     * a new tool has become known to mankind
+     */
+    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
+
 
 signals:
     /**

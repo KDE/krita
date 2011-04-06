@@ -927,6 +927,12 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
     }
 }
 
+void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
+{
+    qDebug() << "we got a new tool factory" << toolFactory->id();
+    // XXX: do the stuff we need to do
+}
+
 KoToolManager* KoToolManager::instance()
 {
     K_GLOBAL_STATIC(KoToolManager, s_instance)
@@ -943,6 +949,5 @@ KoToolManager::Private *KoToolManager::priv()
 {
     return d;
 }
-
 
 #include <KoToolManager.moc>

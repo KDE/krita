@@ -31,6 +31,7 @@
 #include "tools/KoZoomToolFactory.h"
 #include "tools/KoPanTool.h"
 #include "tools/KoPanToolFactory.h"
+#include "KoToolManager.h"
 
 #include <KoPluginLoader.h>
 
@@ -80,4 +81,11 @@ KoToolRegistry* KoToolRegistry::instance()
         s_instance->init();
     }
     return s_instance;
+}
+
+void KoToolRegistry::addDeferred(KoToolFactoryBase *toolFactory)
+{
+    qDebug() << ">>>>>>>>>>>> adding deferred tool" << toolFactory->id();
+    add(toolFactory);
+    KoToolManager::instance()->addDeferredToolFactory(toolFactory);
 }

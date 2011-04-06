@@ -251,7 +251,7 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
     else
     {
         positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        positivePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionNorthWest );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
     }
     positivePosition.setHorizontalPadding( 0.0 );
     positivePosition.setVerticalPadding( -100.0 );
@@ -271,7 +271,7 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
     else
     {
         negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        negativePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionSouthWest );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
     }
     negativePosition.setHorizontalPadding( 0.0 );
     negativePosition.setVerticalPadding( 100.0 );
@@ -530,7 +530,7 @@ void DataSet::Private::setAttributesAccordingToType()
     else
     {
         positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-        positivePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionNorthWest );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
     }
     positivePosition.setHorizontalPadding( 0.0 );
     positivePosition.setVerticalPadding( -100.0 );
@@ -550,7 +550,7 @@ void DataSet::Private::setAttributesAccordingToType()
     else
     {
         negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-        negativePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionSouthWest );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
     }
     negativePosition.setHorizontalPadding( 0.0 );
     negativePosition.setVerticalPadding( 100.0 );
@@ -574,7 +574,7 @@ void DataSet::Private::setAttributesAccordingToType()
         else
         {
             positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
-            positivePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionNorthWest );
+            positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
         }
         positivePosition.setHorizontalPadding( 0.0 );
         positivePosition.setVerticalPadding( -100.0 );
@@ -594,7 +594,7 @@ void DataSet::Private::setAttributesAccordingToType()
         else
         {
             negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
-            negativePosition.setReferencePosition( KDChartEnums::KDChartEnums::PositionSouthWest );
+            negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
         }
         negativePosition.setHorizontalPadding( 0.0 );
         negativePosition.setVerticalPadding( 100.0 );

@@ -62,7 +62,6 @@ struct KoTextDocumentLayout::Private
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
-       , rootArea(0)
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)

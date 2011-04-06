@@ -584,8 +584,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
+
+            // in case we resume layout on next page the line is reused later
+            // but if not then we need to make sure the line becomes invisible
+            // we use m_maximalAllowedBottom because we don't want to be below
+            // footnotes too
+            cursor->line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+
             if (format.nonBreakableLines()) {
                 //set an invalid line so we start this block from beginning next time
+                // TODO clear layout?
                 cursor->line = QTextLine();
             }
             clearPreregisteredFootNotes();

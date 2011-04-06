@@ -112,8 +112,6 @@ TextShape::~TextShape()
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
 {
-    kDebug();
-
     if (m_textShapeData->isDirty()) { // not layouted yet.
         return;
     }
@@ -200,7 +198,6 @@ QRectF TextShape::outlineRect() const
 void TextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
-    kDebug() << type;
     if (type == PositionChanged || type == SizeChanged || type == CollisionDetected) {
         m_textShapeData->setDirty();
     }
@@ -414,7 +411,6 @@ QTextDocument *TextShape::footnoteDocument()
 
 void TextShape::markLayoutDone()
 {
-    kDebug();
     synchronized(m_mutex) {
         m_waiter.wakeAll();
     }
@@ -422,13 +418,11 @@ void TextShape::markLayoutDone()
 
 void TextShape::update() const
 {
-    kDebug();
     KoShapeContainer::update();
 }
 
 void TextShape::update(const QRectF &shape) const
 {
-    kDebug() << shape;
     // this is done to avoid updates which are called during the paint event and not needed.
     if (!m_paintRegion.contains(shape.toRect())) {
         KoShape::update(shape);
@@ -437,7 +431,6 @@ void TextShape::update(const QRectF &shape) const
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
-    kDebug();
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
 

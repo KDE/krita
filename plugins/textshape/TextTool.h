@@ -315,6 +315,7 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
+    int m_caretColorState;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;

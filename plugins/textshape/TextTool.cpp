@@ -106,8 +106,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_allowResourceManagerUpdates(true),
         m_prevCursorPosition(-1),
         m_caretTimer(this),
-        m_caretTimerState(true),
-        m_currentCommand(0),
+        m_caretTimerState(true)
+        , m_caretColorState(0)
+        , m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
         m_textTyping(false),
@@ -585,7 +586,8 @@ void TextTool::blinkCaret()
         m_caretTimerState = false; // not visible.
     }
     else {
-        m_caretTimerState = !m_caretTimerState;
+        m_caretTimerState = true;
+        m_caretColorState = 1 - m_caretColorState;
     }
     repaintCaret();
 }
@@ -667,9 +669,8 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
                 if (tl.isValid()) {
                     const int posInParag = m_textEditor.data()->position() - block.position();
-                    QPen caretPen(m_textEditor.data()->charFormat().foreground(), 1.0);
+                    QPen caretPen = QPen(m_caretColorState == 1 ? QColor(0,0,0,200) : QColor(255,255,255,200), 0);
                     painter.setPen(caretPen);
-
                     painter.setRenderHint(QPainter::Antialiasing,false);
                     if (tl.ascent() > 0) {
                         QPointF caretBasePos;

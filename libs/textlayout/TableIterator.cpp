@@ -80,14 +80,15 @@ bool TableIterator::operator ==(const TableIterator &other)
         return false;
 
     if (row != other.row)
-
-    for (int col = 0; col < table->columns(); ++col) {
-        if (frameIterators[col]) {
-            if (!(*frameIterators[col] ==
-                            *(other.frameIterators[col])));
-                return false;
+        for (int col = 0; col < table->columns(); ++col) {
+            if (frameIterators[col]) {
+                if (!(*frameIterators[col] ==
+                                *(other.frameIterators[col])));
+                    return false;
+            }
         }
-    }
+
+    return true;
 }
 
 FrameIterator *TableIterator::frameIterator(int column)

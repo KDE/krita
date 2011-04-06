@@ -36,7 +36,7 @@ class KoFindOptionSet;
  * when searching in a document. Each application should create an
  * instance of a concrete implementation of this class to support
  * searching. Which concrete implementation to create depends on
- * the type of data that is being searched.C
+ * the type of data that is being searched.
  */
 class KOMAIN_EXPORT KoFindBase : public QObject
 {
@@ -104,6 +104,19 @@ public Q_SLOTS:
      * This clears all highlighting and other markers.
      */
     virtual void finished();
+    /**
+     * Replace the current match with a new value.
+     *
+     * \param value The new value to change the current match to.
+     */
+    virtual void replaceCurrent(const QVariant &value);
+    /**
+     * Replace all occurrences of the currently matched text
+     * with the new value.
+     *
+     * \param value The new value to change the matches to.
+     */
+    virtual void replaceAll(const QVariant &value);
 
 Q_SIGNALS:
     /**
@@ -160,6 +173,14 @@ protected:
      * \param pattern The pattern to search for.
      */
     virtual void findImpl(const QString &pattern, KoFindMatchList &matchList) = 0;
+
+    /**
+     * This method should be implemented to do the actual replacing.
+     *
+     * \param match The match that should be replaced.
+     * \param value The new value to replace the match with.
+     */
+    virtual void replaceImpl(const KoFindMatch &match, const QVariant &value) = 0;
 
     /**
      * Clean up the current matches.

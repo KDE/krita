@@ -186,6 +186,11 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
     d->updateSelections();
 }
 
+void KoFindText::replaceImpl(const KoFindMatch& match, const QVariant& value)
+{
+    //Does nothing at the moment...
+}
+
 void KoFindText::clearMatches()
 {
     d->selections.clear();
@@ -224,15 +229,9 @@ void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
     if (key == KoText::CurrentTextDocument) {
         document = static_cast<QTextDocument*>(variant.value<void*>());
     } else if(key == KoText::SelectedTextPosition) {
-       // qDebug() << "SelectionChanged";
-//         if(selectionStart == -1) {
         selectionStart = variant.toInt();
-//         }
-    } else if(key == KoText::CurrentTextAnchor) {
-       // qDebug() << "SelectionChanged";
-//         if(selectionEnd == -1) {
+    } else if(key == KoText::SelectedTextAnchor) {
         selectionEnd = variant.toInt();
-//         }
     }
 }
 

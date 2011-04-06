@@ -197,6 +197,8 @@ install( FILES
     KoFindToolbar.h
     KoFindDialog.h
     KoFindMatch.h
+    KoFindOption.h
+    KoFindOptionSet.h
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h

@@ -28,14 +28,30 @@
 
 class KActionCollection;
 class KoFindBase;
+/**
+ * \brief A search toolbar widget.
+ *
+ * This class implements a search toolbar containing an autocomplete text
+ * field, previous/next buttons and an options selector. It uses the methods
+ * provided by KoFindBase to find and navigate search matches.
+ */
 class KOMAIN_EXPORT KoFindToolbar : public QWidget
 {
     Q_OBJECT
 public:
+    /**
+     * Constructor.
+     *
+     * \param find The KoFindBase instance this toolbar operates on.
+     * \param ac An action collection that will get several find-related actions added to it.
+     */
     explicit KoFindToolbar(KoFindBase* find, KActionCollection* ac, QWidget* parent = 0, Qt::WindowFlags f = 0);
     virtual ~KoFindToolbar();
 
 public Q_SLOTS:
+    /**
+     * Set focus to this widget and make sure it is visible.
+     */
     void activate();
 
 private:

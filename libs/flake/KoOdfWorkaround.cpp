@@ -25,6 +25,7 @@
 #include "KoShape.h"
 #include <KoPathShape.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfWorkaround.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoColorBackground.h>
@@ -221,7 +222,7 @@ KoColorBackground *KoOdfWorkaround::fixBackgroundColor(const KoShape *shape, KoS
             const QString color(styleStack.property(KoXmlNS::draw, "fill-color"));
             if (color.isEmpty()) {
                 colorBackground = new KoColorBackground(QColor(153, 204, 255));
-            } else { 
+            } else {
                 colorBackground = new KoColorBackground(color);
             }
         }
@@ -235,5 +236,12 @@ void KoOdfWorkaround::fixGluePointPosition(QString &positionString, KoShapeLoadi
     if (type == KoOdfLoadingContext::OpenOffice && !positionString.endsWith('%')) {
         const qreal pos = KoUnit::parseValue(positionString);
         positionString = QString("%1%%").arg(KoUnit::toMillimeter(pos));
+    }
+}
+
+void KoOdfWorkaround::fixMissingFillRule(Qt::FillRule& fillRule, KoShapeLoadingContext& context)
+{
+    if ((context.odfLoadingContext().generatorType() == KoOdfLoadingContext::OpenOffice)) {
+        fillRule = Qt::OddEvenFill;
     }
 }

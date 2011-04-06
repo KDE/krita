@@ -936,6 +936,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             useCursor(Qt::IBeamCursor);
             return;
         }
+
         QTextCursor cursor(*(m_textEditor.data()->cursor()));
         cursor.setPosition(position);
 

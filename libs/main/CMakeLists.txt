@@ -88,7 +88,6 @@ set(komain_LIB_SRCS
 
     KoFindBase.cpp
     KoFindMatch.cpp
-    KoFindDialog.cpp
     KoFindText.cpp
     KoFindToolbar.cpp
     KoFindOption.cpp
@@ -195,7 +194,6 @@ install( FILES
     KoFindBase.h
     KoFindText.h
     KoFindToolbar.h
-    KoFindDialog.h
     KoFindMatch.h
     KoFindOption.h
     KoFindOptionSet.h

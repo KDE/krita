@@ -26,7 +26,6 @@
 #include <KoTextShapeDataBase.h>
 #include <KoInsets.h>
 #include <KoXmlReaderForward.h>
-#include <QAbstractTextDocumentLayout>
 
 class QTextDocument;
 class KoXmlWriter;

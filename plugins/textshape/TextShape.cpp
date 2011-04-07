@@ -85,8 +85,6 @@ struct Finalizer {
 TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
         : KoShapeContainer(new KoTextShapeContainerModel())
         , KoFrameShape(KoXmlNS::draw, "text-box")
-        , m_footnotes(0)
-        , m_demoText(false)
         , m_pageProvider(0)
         , m_imageCollection(0)
 {
@@ -107,7 +105,6 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 
 TextShape::~TextShape()
 {
-    delete m_footnotes;
 }
 
 void TextShape::paintComponent(QPainter &painter, const KoViewConverter &converter)
@@ -168,10 +165,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     m_textShapeData->rootArea()->paint(&painter, pc); // only need to draw ourselves
     painter.restore();
 
-    if (m_footnotes) {
-        painter.translate(0, size().height() - m_footnotes->size().height());
-        m_footnotes->documentLayout()->draw(&painter, pc.textContext);
-    }
     m_paintRegion = QRegion();
 }
 
@@ -391,18 +384,6 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingC
 //FIXME    if (ok)
 //        ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
     return ok;
-}
-
-QTextDocument *TextShape::footnoteDocument()
-{
-    if (m_footnotes == 0) {
-        m_footnotes = new QTextDocument();
-        m_footnotes->setUseDesignMetrics(true);
-        m_footnotes->documentLayout()->setPaintDevice(new KoPostscriptPaintDevice());
-        m_footnotes->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false));
-        m_footnotes->setPageSize(size());
-    }
-    return m_footnotes;
 }
 
 void TextShape::markLayoutDone()

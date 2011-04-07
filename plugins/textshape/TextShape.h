@@ -93,11 +93,6 @@ public:
         return m_textShapeData;
     }
 
-    bool hasFootnoteDocument() {
-        return m_footnotes != 0 && !m_footnotes->isEmpty();
-    }
-    QTextDocument *footnoteDocument();
-
     void markLayoutDone();
 
     virtual void update() const;
@@ -123,9 +118,6 @@ private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     KoTextShapeData *m_textShapeData;
-    QTextDocument *m_footnotes;
-
-    bool m_demoText;
     mutable QMutex m_mutex;
     mutable QWaitCondition m_waiter;
     KoPageProvider *m_pageProvider;

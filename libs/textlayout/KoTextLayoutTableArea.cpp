@@ -585,8 +585,10 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
         }
     }
 
+    QPen pen(painter->pen());
     painter->setPen(QPen(QColor(0,0,0,96)));
     painter->drawLines(accuBlankBorders);
+    painter->setPen(pen);
 }
 
 void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell)

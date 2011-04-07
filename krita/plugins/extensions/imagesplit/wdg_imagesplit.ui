@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>224</width>
-    <height>201</height>
+    <width>200</width>
+    <height>194</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,47 +16,38 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>11</x>
-     <y>14</y>
-     <width>196</width>
-     <height>176</height>
+     <x>12</x>
+     <y>12</y>
+     <width>169</width>
+     <height>180</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" colspan="2">
-     <widget class="QLabel" name="lblHorizontalSplitLines">
-      <property name="text">
-       <string>Horizontal Lines</string>
-      </property>
-     </widget>
+    <item row="0" column="0">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblHorizontalSplitLines">
+        <property name="text">
+         <string>Horizontal Lines</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KIntSpinBox" name="intHorizontalSplitLines"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblVerticalSplitLines">
+        <property name="text">
+         <string>Vertical Lines     </string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KIntSpinBox" name="intVerticalSplitLines"/>
+      </item>
+     </layout>
     </item>
-    <item row="0" column="2">
-     <widget class="KIntSpinBox" name="intHorizontalSplitLines"/>
-    </item>
-    <item row="1" column="0" colspan="2">
-     <widget class="QLabel" name="lblVerticalSplitLines">
-      <property name="text">
-       <string>Vertical Lines     </string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="2">
-     <widget class="KIntSpinBox" name="intVerticalSplitLines"/>
-    </item>
-    <item row="1" column="3">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="2" column="0" colspan="3">
+    <item row="1" column="0">
      <widget class="QCheckBox" name="chkAutoSave">
       <property name="font">
        <font>
@@ -68,34 +59,38 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="0">
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblSuffix">
+        <property name="text">
+         <string>Suffix      </string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblFileType">
+        <property name="text">
+         <string>File Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="cmbFileType"/>
+      </item>
+     </layout>
+    </item>
     <item row="3" column="0">
-     <widget class="QLabel" name="lblSuffix">
-      <property name="text">
-       <string>Suffix </string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QLineEdit" name="lineEdit">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="lblFileType">
-      <property name="text">
-       <string>File Type</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="3">
-     <widget class="QComboBox" name="cmbFileType"/>
-    </item>
-    <item row="5" column="1">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>

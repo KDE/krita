@@ -44,8 +44,8 @@ DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeF
 
     setMainWidget(m_page);
     m_page->lineEdit->setText(suffix);
-    m_page->setMinimumWidth (224);
-    m_page->setMinimumHeight(167);
+    m_page->setMinimumWidth (200);
+    m_page->setMinimumHeight(160);
     resize(m_page->sizeHint());
     m_page->cmbFileType->clear();
     m_page->cmbFileType->addItems(listMimeFilter);

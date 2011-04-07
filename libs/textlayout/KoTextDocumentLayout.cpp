@@ -440,6 +440,7 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
     Q_UNUSED(position);
     return 0;
 }
+
 void KoTextDocumentLayout::setResizeMethod(KoTextDocumentLayout::ResizeMethod method)
 {
     if (d->resizeMethod == method)
@@ -456,6 +457,11 @@ KoTextDocumentLayout::ResizeMethod KoTextDocumentLayout::resizeMethod() const
     return d->resizeMethod;
 }
 
+QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const
+{
+    return d->rootAreaList;
+}
+
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     QList<KoShape*> listOfShapes;
@@ -465,6 +471,5 @@ QList<KoShape*> KoTextDocumentLayout::shapes() const
     }
     return listOfShapes;
 }
-
 
 #include <KoTextDocumentLayout.moc>

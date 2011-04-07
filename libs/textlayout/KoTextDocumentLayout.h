@@ -196,6 +196,7 @@ public:
      */
     ResizeMethod resizeMethod() const;
 
+    QList<KoTextLayoutRootArea *> rootAreas() const;
     QList<KoShape*> shapes() const;
 
 signals:

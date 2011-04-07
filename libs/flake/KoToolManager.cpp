@@ -930,7 +930,16 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
     qDebug() << "we got a new tool factory" << toolFactory->id();
-    // XXX: do the stuff we need to do
+
+    ToolHelper *t = new ToolHelper(toolFactory);
+    d->tools.append(t);
+    // connect to all tools so we can hear their button-clicks
+    connect(t, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+
+    // now create tools for all existing canvases
+    foreach(KoCanvasController *controller, d->canvasses.keys()) {
+
+    }
 }
 
 KoToolManager* KoToolManager::instance()

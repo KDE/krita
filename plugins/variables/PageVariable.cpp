@@ -30,6 +30,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
+#include <QFontMetricsF>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
+#include <QTextInlineObject>
+#include <QDebug>
+
 PageVariable::PageVariable()
         : KoVariable(true),
         m_type(PageNumber),
@@ -72,7 +78,7 @@ void PageVariable::propertyChanged(Property property, const QVariant &value)
     }
 }
 
-void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *document, int posInDocument)
+void PageVariable::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
@@ -81,17 +87,19 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
         break;
     case PageNumber:
         if (value().isEmpty() || ! m_fixed) {
-            if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
+            setValue("0");
+            KoVariable::resize(document, object, posInDocument, format, pd);
+            /*if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
                 KoTextPage* page = shapeData->page();
                 int pagenumber = 0;
                 if (page) {
                     pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
                 }
                 setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
-            }
+            }*/
         }
         break;
-    case PageContinuation:
+    case PageContinuation:/*
         if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
             KoTextPage* page = shapeData->page();
             int pagenumber = 0;
@@ -99,7 +107,7 @@ void PageVariable::variableMoved(const KoShape *shape, const QTextDocument *docu
                 pagenumber = page->pageNumber(m_pageselect);
             }
             setValue(pagenumber >= 0 ? m_continuation : QString());
-        }
+        }*/
         break;
     }
 }

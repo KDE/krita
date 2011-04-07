@@ -129,7 +129,6 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         background()->paint(painter, p);
     }
 
-/*TODO FIXME pagenumber support done here
     if (m_pageProvider) {
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {
@@ -138,20 +137,17 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             m_paintRegion = painter.clipRegion();
             if (!m_textShapeData->page() || page->pageNumber() != m_textShapeData->page()->pageNumber()) {
                 m_textShapeData->setPage(page);
-                m_textShapeData->setDirty();
-                lay->interruptLayout();
-                m_textShapeData->fireResizeEvent();
+                //m_textShapeData->setDirty();
             }
 
             if (lay) {
-                while (m_textShapeData->isDirty() || lay->isInterrupted()){
-                    m_textShapeData->setDirty();
+                while (m_textShapeData->isDirty()){
                     lay->layout();
                 }
             }
         }
     }
-*/
+
     KoTextEditor *textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
 
     KoTextDocumentLayout::PaintContext pc;

@@ -529,8 +529,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
-    layout->beginLayout();
-
     cursor->fragmentIterator = block.begin();
 
     m_listIndent = 0;
@@ -560,6 +558,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     m_indent = 0;
     if (cursor->line.isValid() == false) {
+        layout->beginLayout();
         m_indent = textIndent(block);
         cursor->line = layout->createLine();
         cursor->fragmentIterator = block.begin();
@@ -648,6 +647,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     m_bottomSpacing = format.bottomMargin();
 
+    layout->endLayout();
     return true;
 }
 

@@ -101,12 +101,18 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
     Q_UNUSED(posInDocument);
     if (d->modified == false)
         return;
+    d->modified = true;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
-    object.setWidth(fm.width(d->value));
-    object.setAscent(fm.ascent());
-    object.setDescent(fm.descent());
-    d->modified = true;
+    if (object.width() != fm.width(d->value)) {
+        object.setWidth(fm.width(d->value));
+    }
+    if (object.ascent() != fm.ascent()) {
+        object.setAscent(fm.ascent());
+    }
+    if (object.descent() != fm.descent()) {
+        object.setDescent(fm.descent());
+    }
 }
 
 void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document, const QRectF &rect, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)

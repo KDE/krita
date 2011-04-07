@@ -27,6 +27,7 @@
 #include <QRectF>
 
 class KoShape;
+class KoTextPage;
 
 /**
  * When laying out text it happens in areas that can occupy space of various size.
@@ -48,6 +49,12 @@ public:
 
     /// Retruns the shape set with setAssociatedShape()
     KoShape *associatedShape();
+
+    /// Set the \p page this root area is on.
+    void setPage(KoTextPage *textpage);
+
+    /// Returns the page this root area is on.
+    KoTextPage *page() const;
 
     void setDirty();
 

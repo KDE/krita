@@ -19,8 +19,8 @@
 
 #include "KoTextLayoutRootArea.h"
 
-#include <KoShape.h>
 
+#include <KoTextPage.h>
 
 class KoTextLayoutRootArea::Private
 {
@@ -28,10 +28,12 @@ public:
     Private()
         : shape(0)
         , dirty(true)
+        , textpage(0)
     {
     }
     KoShape *shape;
     bool dirty;
+    KoTextPage *textpage;
 };
 
 KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
@@ -60,6 +62,18 @@ KoShape *KoTextLayoutRootArea::associatedShape()
 {
     return d->shape;
 }
+
+void KoTextLayoutRootArea::setPage(KoTextPage *textpage)
+{
+    delete d->textpage;
+    d->textpage = textpage;
+}
+
+KoTextPage* KoTextLayoutRootArea::page() const
+{
+    return d->textpage;
+}
+
 
 void KoTextLayoutRootArea::setDirty()
 {

@@ -103,7 +103,7 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
     d->styleManager = KoTextDocument(document()).styleManager();
     d->changeTracker = KoTextDocument(document()).changeTracker();
     d->inlineTextObjectManager = KoTextDocument(document()).inlineTextObjectManager();
-    
+
     setTabSpacing(MM_TO_POINT(23)); // use same default as open office
 
     d->layoutPosition = new FrameIterator(doc->rootFrame());
@@ -181,7 +181,10 @@ void KoTextDocumentLayout::draw(QPainter *painter, const KoTextDocumentLayout::P
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
-    Q_ASSERT(false); //we should no longer cal this method
+    Q_ASSERT(false); //we should no longer call this method.
+    // There is no need and is just slower than needed
+    // call rootArea->hitTest() directly
+    // root area is available through KoTextShapeData
     return -1;
 }
 
@@ -221,6 +224,15 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         rootArea->setDirty();
     }
+}
+
+KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
+{
+    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (rootArea->containsPosition(position))
+            return rootArea;
+    }
+    return 0;
 }
 
 void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format)
@@ -433,12 +445,6 @@ void KoTextDocumentLayout::refreshCurrentPageObstructions()
         }
     }
 */
-}
-
-KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
-{
-    Q_UNUSED(position);
-    return 0;
 }
 
 void KoTextDocumentLayout::setResizeMethod(KoTextDocumentLayout::ResizeMethod method)

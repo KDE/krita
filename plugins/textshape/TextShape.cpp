@@ -126,21 +126,14 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
         background()->paint(painter, p);
     }
 
+    // this enables to use the same shapes on different pages showing different page numbers
     if (m_pageProvider) {
         KoTextPage *page = m_pageProvider->page(this);
         if (page) {
             // this is used to not trigger repaints if layout during the painting is done
-            // this enables to use the same shapes on different pages showing different page numbers
             m_paintRegion = painter.clipRegion();
-            if (!m_textShapeData->page() || page->pageNumber() != m_textShapeData->page()->pageNumber()) {
-                m_textShapeData->setPage(page);
-                //m_textShapeData->setDirty();
-            }
-
-            if (lay) {
-                while (m_textShapeData->isDirty()){
-                    lay->layout();
-                }
+            if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
+                m_textShapeData->rootArea()->setPage(page);
             }
         }
     }

@@ -66,7 +66,7 @@ public:
      * return the amount of points into the document (y) this shape will display.
      */
     qreal documentOffset() const;
-    
+
     /// mark shape as dirty triggering a re-layout of its text.
     void setDirty();
 
@@ -75,11 +75,6 @@ public:
 
     /// returns true if the selection of the cursor is visible in this shape
     bool isCursorVisible(QTextCursor *cursor) const;
-
-    /// Set the provider that provides us the number of the \p page this shape is on.
-    void setPage(KoTextPage* textpage);
-    /// Returns the provider that provides us the number of the page this shape is on.
-    KoTextPage* page() const;
 
     /// Set the rootArea that is associated to the textshape
     void setRootArea(KoTextLayoutRootArea *rootArea);

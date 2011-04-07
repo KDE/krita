@@ -105,7 +105,11 @@ public:
     int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
     /// Calc a bounding box rect of the selection
+    /// or invalid if not
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
+
+    /// Returns true if the area contains the position
+    bool containsPosition(int position) const;
 
 protected:
     void setBottom(qreal bottom);

@@ -224,6 +224,12 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     return retval;
 }
 
+bool KoTextLayoutArea::containsPosition(int position) const
+{
+    return true;
+//    return false;
+}
+
 bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor)
 {
     if (m_startOfArea) {

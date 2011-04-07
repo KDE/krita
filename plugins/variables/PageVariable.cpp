@@ -29,6 +29,8 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoTextLayoutRootArea.h>
+#include <KoTextDocumentLayout.h>
 
 #include <QFontMetricsF>
 #include <QTextDocument>
@@ -82,34 +84,36 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
 {
     Q_UNUSED(document);
     Q_UNUSED(posInDocument);
+
+    KoTextPage *page = 0;
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+    if (lay) {
+        KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
+        if (rootArea) {
+            page = rootArea->page();
+        }
+    }
+    int pagenumber = 0;
+
     switch (m_type) {
     case PageCount:
         break;
     case PageNumber:
         if (value().isEmpty() || ! m_fixed) {
-            setValue("0");
-            KoVariable::resize(document, object, posInDocument, format, pd);
-            /*if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-                KoTextPage* page = shapeData->page();
-                int pagenumber = 0;
-                if (page) {
-                    pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
-                }
-                setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
-            }*/
+            if (page) {
+                pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
+            }
+            setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
         }
         break;
-    case PageContinuation:/*
-        if (KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape ? shape->userData() : 0)) {
-            KoTextPage* page = shapeData->page();
-            int pagenumber = 0;
-            if (page) {
-                pagenumber = page->pageNumber(m_pageselect);
-            }
-            setValue(pagenumber >= 0 ? m_continuation : QString());
-        }*/
+    case PageContinuation:
+        if (page) {
+            pagenumber = page->pageNumber(m_pageselect);
+        }
+        setValue(pagenumber >= 0 ? m_continuation : QString());
         break;
     }
+    KoVariable::resize(document, object, posInDocument, format, pd);
 }
 
 void PageVariable::saveOdf(KoShapeSavingContext & context)

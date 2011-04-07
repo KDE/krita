@@ -154,19 +154,6 @@ KoText::Direction KoTextShapeData::pageDirection() const
     return d->direction;
 }
 
-void KoTextShapeData::setPage(KoTextPage *textpage)
-{
-    Q_D(KoTextShapeData);
-    delete d->textpage;
-    d->textpage = textpage;
-}
-
-KoTextPage* KoTextShapeData::page() const
-{
-    Q_D(const KoTextShapeData);
-    return d->textpage;
-}
-
 bool KoTextShapeData::isCursorVisible(QTextCursor *cursor) const
 {
     return true;

@@ -284,7 +284,7 @@ public:
             }
             // kDebug() << " + section" << buttonCount;
             int rows = (int) ceilf(buttonCount / (float) maxColumns);
-            
+
             int length = 0;
             if (firstSection) {
                 firstSection = false;
@@ -309,7 +309,7 @@ public:
                     section->setSeperator(Section::SeperatorTop | Section::SeperatorLeft);
                 }
             }
-            
+
             if (actuallyPlace) {
                 if (m_orientation == Qt::Vertical) {
                     section->setGeometry(QRect(x, y, maxColumns * iconSize.width() - length,
@@ -319,7 +319,7 @@ public:
                                                maxColumns * iconSize.height() - length));
                 }
             }
-            
+
             unusedButtons -= buttonCount;
 
             if (m_orientation == Qt::Vertical) {
@@ -528,41 +528,3 @@ void KoToolBox::setFloating(bool v)
     d->floating = v;
 }
 
-
-KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
-    : m_toolBox(toolBox)
-{
-    setFeatures(QDockWidget::DockWidgetMovable | QDockWidget::DockWidgetFloatable);
-    setWidget(toolBox);
-
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
-    connect(this, SIGNAL(topLevelChanged(bool)),
-            this, SLOT(updateFloating(bool)));
-    KoDockWidgetTitleBar* titleBar = new KoDockWidgetTitleBar(this);
-    titleBar->setIgnoreTextSize(false);
-    setTitleBarWidget(titleBar);
-}
-
-void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
-{
-    m_toolBox->setCanvas(canvas);
-}
-
-void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
-{
-    if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {
-        m_toolBox->setOrientation(Qt::Horizontal);
-    } else {
-        m_toolBox->setOrientation(Qt::Vertical);
-    }
-    m_toolBox->setFloating(area == Qt::NoDockWidgetArea);
-}
-
-void KoToolBoxDocker::updateFloating(bool v)
-{
-    m_toolBox->setFloating(v);
-}
-
-
-#include <KoToolBox_p.moc>

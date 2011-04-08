@@ -94,7 +94,7 @@ public slots:
 
     /// Set the orientation of the layout to @p orientation
     void setOrientation(Qt::Orientation orientation);
-    
+
     void setFloating(bool v);
 
 private slots:
@@ -108,23 +108,6 @@ protected:
 private:
     class Private;
     Private * const d;
-};
-
-class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
-{
-    Q_OBJECT
-public:
-    KoToolBoxDocker(KoToolBox *toolBox);
-
-    /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-
-protected slots:
-    void updateToolBoxOrientation(Qt::DockWidgetArea area);
-    void updateFloating(bool);
-
-private:
-    KoToolBox *m_toolBox;
 };
 
 #endif // _KO_TOOLBOX_H_

@@ -39,6 +39,7 @@ class KoShape;
 class QToolButton;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
+class ToolHelper;
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -255,9 +256,9 @@ signals:
     void changedStatusText(const QString &statusText);
 
     /**
-     * emitted whenever a new tool is dynamically added
+     * emitted whenever a new tool is dynamically added for the given canvas
      */
-    void addedTool(int id);
+    void addedTool(const Button &button, KoCanvasController *canvas);
 
 private:
     KoToolManager();
@@ -273,6 +274,8 @@ private:
     Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
     Q_PRIVATE_SLOT(d, void switchToolTemporaryRequested(const QString &id))
+
+    QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
 
     Private *const d;
 };

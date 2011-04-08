@@ -48,13 +48,26 @@ void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
 {
-    rootArea->setBottom(rootArea->top()
-            + rootArea->associatedShape()->size().height());
-
+    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        rootArea->associatedShape()->setSize(QSize(
+                        rootArea->associatedShape()->size().width(),
+                        qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
+    } else {
+        rootArea->setBottom(rootArea->top()
+                + rootArea->associatedShape()->size().height());
+    }
     rootArea->associatedShape()->update();
 }
 
 QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
-    return m_textShape->size();
+    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        QSizeF size = m_textShape->size();
+        size.setHeight(1E6);
+        return size;
+    } else {
+        return m_textShape->size();
+    }
 }

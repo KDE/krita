@@ -48,7 +48,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoReso
     QSet<KoShape*> delegates;
     delegates << childShape;
     setToolDelegates(delegates);
-    
+
     KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(childShape->userData());
     Q_ASSERT(data);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
@@ -90,8 +90,7 @@ ShrinkToFitShapeContainer* ShrinkToFitShapeContainer::wrapShape(KoShape *shape, 
 void ShrinkToFitShapeContainer::tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(shape->userData());
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data ? data->document()->documentLayout() : 0);
-    if (!lay || lay->resizeMethod() != KoTextDocumentLayout::ShrinkToFitResize)
+    if (!data || data->resizeMethod() != KoTextShapeData::ShrinkToFitResize)
         return;
 
     KoShapeContainer *oldParent = shape->parent();

@@ -1368,20 +1368,18 @@ void TextTool::updateActions()
     m_actionFormatFontSize->setFontSize(cf.fontPointSize());
     m_actionFormatFontFamily->setFont(cf.font().family());
 
-    KoTextDocumentLayout::ResizeMethod resizemethod = KoTextDocumentLayout::AutoResize;
+    KoTextShapeData::ResizeMethod resizemethod = KoTextShapeData::AutoResize;
     if(m_textShapeData) {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if(lay)
-            resizemethod = lay->resizeMethod();
+        resizemethod = m_textShapeData->resizeMethod();
     }
-    m_shrinkToFitAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
-    m_shrinkToFitAction->setChecked(resizemethod == KoTextDocumentLayout::ShrinkToFitResize);
+    m_shrinkToFitAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_shrinkToFitAction->setChecked(resizemethod == KoTextShapeData::ShrinkToFitResize);
 
-    m_growWidthAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
-    m_growWidthAction->setChecked(resizemethod == KoTextDocumentLayout::AutoGrowWidth || resizemethod == KoTextDocumentLayout::AutoGrowWidthAndHeight);
+    m_growWidthAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growWidthAction->setChecked(resizemethod == KoTextShapeData::AutoGrowWidth || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
-    m_growHeightAction->setEnabled(resizemethod != KoTextDocumentLayout::AutoResize);
-    m_growHeightAction->setChecked(resizemethod == KoTextDocumentLayout::AutoGrowHeight || resizemethod == KoTextDocumentLayout::AutoGrowWidthAndHeight);
+    m_growHeightAction->setEnabled(resizemethod != KoTextShapeData::AutoResize);
+    m_growHeightAction->setChecked(resizemethod == KoTextShapeData::AutoGrowHeight || resizemethod == KoTextShapeData::AutoGrowWidthAndHeight);
 
     QTextBlockFormat bf = textEditor->blockFormat();
     if (bf.alignment() == Qt::AlignLeading || bf.alignment() == Qt::AlignTrailing) {
@@ -2139,8 +2137,6 @@ void TextTool::shapeDataRemoved()
         const QTextDocument *doc = m_textEditor.data()->document();
         Q_ASSERT(doc);
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
-        #if 0
-        TODO
         if (!lay || lay->shapes().isEmpty()) {
             emit done();
             return;
@@ -2148,7 +2144,6 @@ void TextTool::shapeDataRemoved()
         m_textShape = static_cast<TextShape*>(lay->shapes().first());
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-        #endif
     }
 }
 
@@ -2208,25 +2203,19 @@ void TextTool::setBackgroundColor(const KoColor &color)
 
 void TextTool::setGrowWidthToFit(bool enabled)
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::AutoGrowWidth, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::AutoGrowWidth, enabled));
     updateActions();
 }
 
 void TextTool::setGrowHeightToFit(bool enabled)
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::AutoGrowHeight, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::AutoGrowHeight, enabled));
     updateActions();
 }
 
 void TextTool::setShrinkToFit(bool enabled)
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    m_textEditor.data()->addCommand(new AutoResizeCommand(lay, KoTextDocumentLayout::ShrinkToFitResize, enabled));
+    m_textEditor.data()->addCommand(new AutoResizeCommand(m_textShapeData, KoTextShapeData::ShrinkToFitResize, enabled));
     updateActions();
 }
 

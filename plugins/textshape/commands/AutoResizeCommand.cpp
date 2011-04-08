@@ -25,24 +25,24 @@
 #include <klocale.h>
 //#include <KAction>
 
-AutoResizeCommand::AutoResizeCommand(KoTextDocumentLayout *layout, KoTextDocumentLayout::ResizeMethod resizeMethod, bool enabled)
+AutoResizeCommand::AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enabled)
     : QUndoCommand()
-    , m_layout(layout)
+    , m_shapeData(shapeData)
     , m_resizeMethod(resizeMethod)
     , m_enabled(enabled)
     , m_first(true)
-    , m_prevResizeMethod(KoTextDocumentLayout::NoResize)
+    , m_prevResizeMethod(KoTextShapeData::NoResize)
 {
-    Q_ASSERT(m_layout);
+    Q_ASSERT(m_shapeData);
     const QString s = m_enabled ? i18nc("Enable Shrink To Fit", "Enable") : i18nc("Disable Shrink To Fit", "Disable");
     switch (m_resizeMethod) {
-        case KoTextDocumentLayout::AutoGrowWidth:
+        case KoTextShapeData::AutoGrowWidth:
             setText(i18nc("Enable/Disable Grow To Fit Width", "%1 Grow To Fit Width", s));
             break;
-        case KoTextDocumentLayout::AutoGrowHeight:
+        case KoTextShapeData::AutoGrowHeight:
             setText(i18nc("Enable/Disable Grow To Fit Height", "%1 Grow To Fit Height", s));
             break;
-        case KoTextDocumentLayout::ShrinkToFitResize:
+        case KoTextShapeData::ShrinkToFitResize:
             setText(i18nc("Enable/Disable Shrink To Fit", "%1 Shrink To Fit", s));
             break;
         default:
@@ -53,24 +53,24 @@ AutoResizeCommand::AutoResizeCommand(KoTextDocumentLayout *layout, KoTextDocumen
 
 void AutoResizeCommand::undo()
 {
-    m_layout->setResizeMethod(m_prevResizeMethod);
+    m_shapeData->setResizeMethod(m_prevResizeMethod);
 }
 
 void AutoResizeCommand::redo()
 {
     if (m_first) {
         m_first = false;
-        m_prevResizeMethod = m_layout->resizeMethod();
+        m_prevResizeMethod = m_shapeData->resizeMethod();
     }
-    KoTextDocumentLayout::ResizeMethod resize = m_enabled ? m_resizeMethod : KoTextDocumentLayout::NoResize;
-    if (m_resizeMethod == KoTextDocumentLayout::AutoGrowWidth || m_resizeMethod == KoTextDocumentLayout::AutoGrowHeight) {
+    KoTextShapeData::ResizeMethod resize = m_enabled ? m_resizeMethod : KoTextShapeData::NoResize;
+    if (m_resizeMethod == KoTextShapeData::AutoGrowWidth || m_resizeMethod == KoTextShapeData::AutoGrowHeight) {
         if (m_enabled) {
-            if ((m_layout->resizeMethod() == KoTextDocumentLayout::AutoGrowWidth || m_layout->resizeMethod() == KoTextDocumentLayout::AutoGrowHeight) && m_resizeMethod != m_layout->resizeMethod())
-                resize = KoTextDocumentLayout::AutoGrowWidthAndHeight;
+            if ((m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth || m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) && m_resizeMethod != m_shapeData->resizeMethod())
+                resize = KoTextShapeData::AutoGrowWidthAndHeight;
         } else {
-            if (m_layout->resizeMethod() == KoTextDocumentLayout::AutoGrowWidthAndHeight)
-                resize = m_resizeMethod == KoTextDocumentLayout::AutoGrowWidth ? KoTextDocumentLayout::AutoGrowHeight : KoTextDocumentLayout::AutoGrowWidth;
+            if (m_shapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight)
+                resize = m_resizeMethod == KoTextShapeData::AutoGrowWidth ? KoTextShapeData::AutoGrowHeight : KoTextShapeData::AutoGrowWidth;
         }
     }
-    m_layout->setResizeMethod(resize);
+    m_shapeData->setResizeMethod(resize);
 }

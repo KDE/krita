@@ -31,17 +31,17 @@ class TextShape;
 class AutoResizeCommand : public QUndoCommand
 {
 public:
-    AutoResizeCommand(KoTextDocumentLayout *layout, KoTextDocumentLayout::ResizeMethod resizeMethod, bool enable);
+    AutoResizeCommand(KoTextShapeData *shapeData, KoTextShapeData::ResizeMethod resizeMethod, bool enable);
 
     virtual void undo();
     virtual void redo();
 
 private:
-    KoTextDocumentLayout *m_layout;
-    KoTextDocumentLayout::ResizeMethod m_resizeMethod;
+    KoTextShapeData *m_shapeData;
+    KoTextShapeData::ResizeMethod m_resizeMethod;
     bool m_enabled;
     bool m_first;
-    KoTextDocumentLayout::ResizeMethod m_prevResizeMethod;
+    KoTextShapeData::ResizeMethod m_prevResizeMethod;
 };
 
 #endif // TEXTCUTCOMMAND_H

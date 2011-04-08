@@ -264,14 +264,12 @@ QString TextShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) c
     }
     style.addProperty("draw:textarea-vertical-align", verticalAlign);
 
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    KoTextDocumentLayout::ResizeMethod resize = lay->resizeMethod();
-    if (resize == KoTextDocumentLayout::AutoGrowWidth || resize == KoTextDocumentLayout::AutoGrowWidthAndHeight)
+    KoTextShapeData::ResizeMethod resize = m_textShapeData->resizeMethod();
+    if (resize == KoTextShapeData::AutoGrowWidth || resize == KoTextShapeData::AutoGrowWidthAndHeight)
         style.addProperty("draw:auto-grow-width", "true");
-    if (resize != KoTextDocumentLayout::AutoGrowHeight && resize != KoTextDocumentLayout::AutoGrowWidthAndHeight)
+    if (resize != KoTextShapeData::AutoGrowHeight && resize != KoTextShapeData::AutoGrowWidthAndHeight)
         style.addProperty("draw:auto-grow-height", "false");
-    if (resize == KoTextDocumentLayout::ShrinkToFitResize)
+    if (resize == KoTextShapeData::ShrinkToFitResize)
         style.addProperty("draw:fit-to-size", "true");
 
     return KoShape::saveStyle(style, context);
@@ -300,19 +298,17 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     const QString autoGrowWidth = styleStack.property(KoXmlNS::draw, "auto-grow-width");
     const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
     const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
-    KoTextDocumentLayout::ResizeMethod resize = KoTextDocumentLayout::NoResize;
+    KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
     if (fitToSize == "true") {
-        resize = KoTextDocumentLayout::ShrinkToFitResize;
+        resize = KoTextShapeData::ShrinkToFitResize;
     }
     else if (autoGrowWidth == "true") {
-        resize = autoGrowHeight != "false" ? KoTextDocumentLayout::AutoGrowWidthAndHeight : KoTextDocumentLayout::AutoGrowWidth;
+        resize = autoGrowHeight != "false" ? KoTextShapeData::AutoGrowWidthAndHeight : KoTextShapeData::AutoGrowWidth;
     }
     else if (autoGrowHeight != "false") {
-        resize = KoTextDocumentLayout::AutoGrowHeight;
+        resize = KoTextShapeData::AutoGrowHeight;
     }
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-    lay->setResizeMethod(resize);
+    m_textShapeData->setResizeMethod(resize);
 }
 
 bool TextShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
@@ -370,12 +366,11 @@ bool TextShape::loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext 
     return true;
 }
 
-//tryWrapShape(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
 bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     bool ok = m_textShapeData->loadOdf(element, context, 0, this);
-//FIXME    if (ok)
-//        ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
+    if (ok)
+        ShrinkToFitShapeContainer::tryWrapShape(this, element, context);
     return ok;
 }
 

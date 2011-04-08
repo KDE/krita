@@ -71,4 +71,18 @@ Qt::Alignment KoTextShapeDataBase::verticalAlignment() const
     return d->textAlignment & Qt::AlignVertical_Mask;
 }
 
+void KoTextShapeDataBase::setResizeMethod(KoTextShapeDataBase::ResizeMethod method)
+{
+    Q_D(KoTextShapeDataBase);
+    if (d->resizeMethod == method)
+        return;
+    d->resizeMethod = method;
+}
+
+KoTextShapeDataBase::ResizeMethod KoTextShapeDataBase::resizeMethod() const
+{
+    Q_D(const KoTextShapeDataBase);
+    return d->resizeMethod;
+}
+
 #include <KoTextShapeDataBase.moc>

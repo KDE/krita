@@ -86,8 +86,6 @@ struct KoTextDocumentLayout::Private
 
     qreal defaultTabSizing;
     qreal y;
-
-    KoTextDocumentLayout::ResizeMethod resizeMethod;
 };
 
 
@@ -445,22 +443,6 @@ void KoTextDocumentLayout::refreshCurrentPageObstructions()
         }
     }
 */
-}
-
-void KoTextDocumentLayout::setResizeMethod(KoTextDocumentLayout::ResizeMethod method)
-{
-    if (d->resizeMethod == method)
-        return;
-    d->resizeMethod = method;
-
-    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        rootArea->setDirty();
-    }
-}
-
-KoTextDocumentLayout::ResizeMethod KoTextDocumentLayout::resizeMethod() const
-{
-    return d->resizeMethod;
 }
 
 QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const

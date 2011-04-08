@@ -708,15 +708,15 @@ KoToolManager::~KoToolManager()
     delete d;
 }
 
-QList<KoToolManager::Button> KoToolManager::createToolList(KoCanvasBase *canvas) const
+QList<KoToolButton> KoToolManager::createToolList(KoCanvasBase *canvas) const
 {
-    QList<KoToolManager::Button> answer;
+    QList<KoToolButton> answer;
     foreach(ToolHelper *tool, d->tools) {
         if (tool->id() == KoCreateShapesTool_ID)
             continue; // don't show this one.
         if (!tool->canCreateTool(canvas))
             continue;
-        Button button;
+        KoToolButton button;
         button.button = tool->createButton();
         button.section = tool->toolType();
         button.priority = tool->priority();
@@ -906,8 +906,6 @@ void KoToolManager::injectDeviceEvent(KoInputDeviceHandlerEvent * event)
 
 void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
 {
-    qDebug() << "we got a new tool factory" << toolFactory->id();
-
     ToolHelper *tool = new ToolHelper(toolFactory);
     d->tools.append(tool);
 
@@ -935,7 +933,7 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
             continue;
         }
 
-        Button button;
+        KoToolButton button;
         button.button = tool->createButton();
         button.section = tool->toolType();
         button.priority = tool->priority();

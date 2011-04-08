@@ -29,6 +29,8 @@
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
 
+#include <KoToolManager.h>
+
 class QToolButton;
 class KoCanvasController;
 class KoCanvasBase;
@@ -101,7 +103,7 @@ private slots:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
     /// add a tool post-initialization. The tool will also be activated.
-    void toolAdded(int id);
+    void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
 
 protected:
     void paintEvent(QPaintEvent *event);

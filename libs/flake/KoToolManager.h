@@ -254,6 +254,11 @@ signals:
      */
     void changedStatusText(const QString &statusText);
 
+    /**
+     * emitted whenever a new tool is dynamically added
+     */
+    void addedTool(int id);
+
 private:
     KoToolManager();
     KoToolManager(const KoToolManager&);

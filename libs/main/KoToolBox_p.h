@@ -100,6 +100,9 @@ public slots:
 private slots:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
 
+    /// add a tool post-initialization. The tool will also be activated.
+    void toolAdded(int id);
+
 protected:
     void paintEvent(QPaintEvent *event);
 protected:

@@ -79,6 +79,7 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocum
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
+    Q_PROPERTY(int pageCount READ pageCount)
 
 public:
 

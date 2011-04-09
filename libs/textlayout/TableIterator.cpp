@@ -69,7 +69,7 @@ TableIterator::TableIterator(TableIterator *other)
 
 TableIterator::~TableIterator()
 {
-    for (int col = 0; col < table->columns(); ++col) {
+    for (int col = 0; col < frameIterators.size(); ++col) {
         delete frameIterators[col];
     }
 }

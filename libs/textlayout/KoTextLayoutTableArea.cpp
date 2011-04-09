@@ -78,8 +78,8 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
 
 KoTextLayoutTableArea::~KoTextLayoutTableArea()
 {
-    for (int row = d->startOfArea->row; row < d->table->rows(); ++row) {
-        for (int col = 0; col < d->table->columns(); ++col) {
+    for (int row = d->startOfArea->row; row < d->cellAreas.size(); ++row) {
+        for (int col = 0; col < d->cellAreas[row].size(); ++col) {
             delete d->cellAreas[row][col];
         }
     }
@@ -167,6 +167,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
+        qDebug() << this << startTableCell.row() <<startTableCell.column();
         return d->cellAreas[startTableCell.row()][startTableCell.column()]->selectionBoundingBox(cursor);
     } else {
         int selectionRow;

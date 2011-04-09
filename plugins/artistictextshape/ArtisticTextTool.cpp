@@ -200,10 +200,8 @@ QTransform ArtisticTextTool::cursorTransform() const
     if (!m_currentShape)
         return QTransform();
 
-    QPointF pos;
-    m_currentShape->getCharPositionAt( m_textCursor, pos );
-    qreal angle;
-    m_currentShape->getCharAngleAt( m_textCursor, angle );
+    const QPointF pos = m_currentShape->charPositionAt(m_textCursor);
+    const qreal angle = m_currentShape->charAngleAt(m_textCursor);
     QFontMetrics metrics(m_currentShape->fontAt(m_textCursor));
 
     QTransform transform;
@@ -278,9 +276,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         int hit = len;
         qreal mindist = DBL_MAX;
         for ( int i = 0; i < len;++i ) {
-            QPointF center;
-            m_currentShape->getCharPositionAt( i, center );
-            center = pos - center;
+            QPointF center = pos - m_currentShape->charPositionAt(i);
             if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
                 hit = i;
                 mindist = fabs(center.x()) + fabs(center.y());
@@ -595,9 +591,8 @@ void ArtisticTextTool::createTextCursorShape()
 {
     if ( m_textCursor < 0 || ! m_currentShape ) 
         return;
+    const QRectF extents = m_currentShape->charExtentsAt(m_textCursor);
     m_textCursorShape = QPainterPath();
-    QRectF extents;
-    m_currentShape->getCharExtentsAt( m_textCursor, extents );
     m_textCursorShape.addRect( 0, 0, 1, -extents.height() );
     m_textCursorShape.closeSubpath();
 }

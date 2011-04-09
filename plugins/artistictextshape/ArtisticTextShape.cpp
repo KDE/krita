@@ -295,9 +295,9 @@ void ArtisticTextShape::setFont(const QFont &newFont)
     notifyChanged();
 }
 
-QFont ArtisticTextShape::fontAt(int charNum) const
+QFont ArtisticTextShape::fontAt(int charIndex) const
 {
-    const int rangeIndex = charIndex(charNum).first;
+    const int rangeIndex = indexOfChar(charIndex).first;
     if (rangeIndex < 0)
         return defaultFont();
 
@@ -454,36 +454,34 @@ KoPathShape * ArtisticTextShape::baselineShape() const
     return m_path;
 }
 
-QList<ArtisticTextRange> ArtisticTextShape::removeText(int from, int count)
+QList<ArtisticTextRange> ArtisticTextShape::removeText(int charIndex, int charCount)
 {
     QList<ArtisticTextRange> extractedRanges;
 
-    if (!count)
+    if (!charCount)
         return extractedRanges;
 
-    const CharIndex charPos = charIndex(from);
+    CharIndex charPos = indexOfChar(charIndex);
     if (charPos.first < 0)
         return extractedRanges;
 
     update();
 
-    int rangeIndex = charPos.first;
-    int charIndex = charPos.second;
     int extractedTextLength = 0;
-    while(extractedTextLength < count) {
-        ArtisticTextRange r = m_ranges[rangeIndex].extract(charIndex, count-extractedTextLength);
+    while(extractedTextLength < charCount) {
+        ArtisticTextRange r = m_ranges[charPos.first].extract(charPos.second, charCount-extractedTextLength);
         extractedTextLength += r.text().length();
         extractedRanges.append(r);
-        if (extractedTextLength == count)
+        if (extractedTextLength == charCount)
             break;
-        rangeIndex++;
-        if(rangeIndex >= m_ranges.count())
+        charPos.first++;
+        if(charPos.first >= m_ranges.count())
             break;
-        charIndex = 0;
+        charPos.second = 0;
     }
 
     // now remove all empty ranges
-    for (int i = rangeIndex; i < m_ranges.count(); ++i) {
+    for (int i = charPos.first; i < m_ranges.count(); ++i) {
         if (m_ranges[i].text().isEmpty()) {
             m_ranges.removeAt(i);
             i--;
@@ -498,13 +496,13 @@ QList<ArtisticTextRange> ArtisticTextShape::removeText(int from, int count)
     return extractedRanges;
 }
 
-void ArtisticTextShape::insertText(int index, const QString &str)
+void ArtisticTextShape::insertText(int charIndex, const QString &str)
 {
-    CharIndex charPos = charIndex(index);
-    if (index < 0 || isEmpty()) {
+    CharIndex charPos = indexOfChar(charIndex);
+    if (charIndex < 0 || isEmpty()) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (index >= text().length()) {
+    } else if (charIndex >= text().length()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length());
     }
@@ -523,13 +521,13 @@ void ArtisticTextShape::insertText(int index, const QString &str)
     notifyChanged();
 }
 
-void ArtisticTextShape::insertText(int index, const QList<ArtisticTextRange> &textRanges)
+void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange> &textRanges)
 {
-    CharIndex charPos = charIndex(index);
-    if (index < 0 || isEmpty()) {
+    CharIndex charPos = indexOfChar(charIndex);
+    if (charIndex < 0 || isEmpty()) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (index >= text().length()) {
+    } else if (charIndex >= text().length()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length());
     }
@@ -563,25 +561,25 @@ void ArtisticTextShape::insertText(int index, const QList<ArtisticTextRange> &te
     // TODO: merge ranges with same style
 }
 
-void ArtisticTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
+qreal ArtisticTextShape::charAngleAt(int charIndex) const
 {
     if( isOnPath() ) {
-        qreal t = m_charOffsets[ qMin( int( charNum ), m_charOffsets.size() ) ];
-        angle = m_baseline.angleAtPercent( t );
-    } else {
-        angle = 0.0;
+        qreal t = m_charOffsets[qMin(charIndex, m_charOffsets.size())];
+        return m_baseline.angleAtPercent( t );
     }
+
+    return 0.0;
 }
 
-void ArtisticTextShape::getCharPositionAt(int charNum, QPointF &pos) const
+QPointF ArtisticTextShape::charPositionAt(int charIndex) const
 {
-    pos = m_charPositions.value(qMin(charNum, m_charPositions.size()));
+    return m_charPositions.value(qMin(charIndex, m_charPositions.size()));
 }
 
-void ArtisticTextShape::getCharExtentsAt(int charNum, QRectF &extents) const
+QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
 {
-    CharIndex charPos = charIndex(charNum);
-    if (charNum < 0 || isEmpty())
+    CharIndex charPos = indexOfChar(charIndex);
+    if (charIndex < 0 || isEmpty())
         charPos = CharIndex(0,0);
     else if(charPos.first < 0)
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length()-1);
@@ -589,7 +587,7 @@ void ArtisticTextShape::getCharExtentsAt(int charNum, QRectF &extents) const
     const ArtisticTextRange &range = m_ranges.at(charPos.first);
     QFontMetrics metrics(range.font());
     int w = metrics.charWidth(range.text(), charPos.second);
-    extents = QRectF( 0, 0, w, metrics.height() );
+    return QRectF( 0, 0, w, metrics.height() );
 }
 
 void ArtisticTextShape::updateSizeAndPosition( bool global )
@@ -663,7 +661,7 @@ void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-ArtisticTextShape::CharIndex ArtisticTextShape::charIndex(int charNum) const
+ArtisticTextShape::CharIndex ArtisticTextShape::indexOfChar(int charIndex) const
 {
     if (isEmpty())
         return CharIndex(-1,-1);
@@ -672,8 +670,8 @@ ArtisticTextShape::CharIndex ArtisticTextShape::charIndex(int charNum) const
     int textLength = 0;
     foreach(const ArtisticTextRange &range, m_ranges) {
         const int rangeTextLength = range.text().length();
-        if (static_cast<int>(charNum) < textLength+rangeTextLength) {
-            return CharIndex(rangeIndex, charNum-textLength);
+        if (static_cast<int>(charIndex) < textLength+rangeTextLength) {
+            return CharIndex(rangeIndex, charIndex-textLength);
         }
         textLength += rangeTextLength;
         rangeIndex++;

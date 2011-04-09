@@ -78,7 +78,7 @@ public:
     void setFont(const QFont &font);
 
     /// Returns the font at the specified character position
-    QFont fontAt(int charNum) const;
+    QFont fontAt(int charIndex) const;
 
     /// Attaches this text shape to the given path shape
     bool putOnPath(KoPathShape *path);
@@ -106,7 +106,7 @@ public:
     qreal baselineOffset() const;
 
     /// Sets the text anchor
-    void setTextAnchor( TextAnchor anchor );
+    void setTextAnchor(TextAnchor anchor);
 
     /// Returns the actual text anchor
     TextAnchor textAnchor() const;
@@ -121,22 +121,22 @@ public:
     KoPathShape * baselineShape() const;
 
     /// Removes a range of text from the given index
-    QList<ArtisticTextRange> removeText(int index, int count);
+    QList<ArtisticTextRange> removeText(int charIndex, int charCount);
 
     /// Adds a range of text at the given index
-    void insertText(int index, const QString &text);
+    void insertText(int charIndex, const QString &text);
 
     /// Adds ranges of text at the given index
-    void insertText(int index, const QList<ArtisticTextRange> &textRanges);
+    void insertText(int charIndex, const QList<ArtisticTextRange> &textRanges);
 
     /// Gets the angle of the char with the given index
-    void getCharAngleAt( unsigned int charNum, qreal &angle ) const;
+    qreal charAngleAt(int charIndex) const;
 
     /// Gets the position of the char with the given index
-    void getCharPositionAt(int charNum, QPointF &pos) const;
+    QPointF charPositionAt(int charIndex) const;
 
     /// Gets the extents of the char with the given index
-    void getCharExtentsAt(int charNum, QRectF &extents) const;
+    QRectF charExtentsAt(int charIndex) const;
 
     /// reimplemented from KoShape
     virtual void shapeChanged(ChangeType type, KoShape * shape);
@@ -150,7 +150,7 @@ private:
     typedef QPair<int, int> CharIndex;
 
     /// Returns index of range and index within range of specified character
-    CharIndex charIndex(int charNum) const;
+    CharIndex indexOfChar(int charIndex) const;
 
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;

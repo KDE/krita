@@ -55,8 +55,9 @@ InlineObjectExtend::InlineObjectExtend(qreal ascent, qreal descent)
 {
 }
 
-struct KoTextDocumentLayout::Private
+class KoTextDocumentLayout::Private
 {
+public:
     Private(KoTextDocumentLayout *)
        : styleManager(0)
        , changeTracker(0)

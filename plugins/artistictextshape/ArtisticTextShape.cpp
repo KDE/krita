@@ -118,7 +118,7 @@ void ArtisticTextShape::createOutline()
     m_charPositions.clear();
     m_charOffsets.clear();
 
-    const int totalTextLength = text().length();
+    const int totalTextLength = plainText().length();
 
     // one more than the number of characters for position after the last character
     m_charPositions.resize(totalTextLength+1);
@@ -217,7 +217,7 @@ void ArtisticTextShape::createOutline()
 
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
-                m_outline.addPath(m.map(m_charOutlines[localCharIndex]));
+                m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
                 // save character positon of current character
                 m_charPositions[globalCharIndex] = charPos;
                 // advance character position
@@ -228,9 +228,9 @@ void ArtisticTextShape::createOutline()
     }
 }
 
-void ArtisticTextShape::setText(const QString &newText)
+void ArtisticTextShape::setPlainText(const QString &newText)
 {
-    if( text() == newText )
+    if( plainText() == newText )
         return;
 
     update();
@@ -252,7 +252,7 @@ void ArtisticTextShape::setText(const QString &newText)
     update();
 }
 
-QString ArtisticTextShape::text() const
+QString ArtisticTextShape::plainText() const
 {
     QString allText;
     foreach(const ArtisticTextRange &range, m_ranges) {
@@ -262,9 +262,19 @@ QString ArtisticTextShape::text() const
     return allText;
 }
 
+QList<ArtisticTextRange> ArtisticTextShape::text() const
+{
+    return m_ranges;
+}
+
 bool ArtisticTextShape::isEmpty() const
 {
     return m_ranges.isEmpty();
+}
+
+void ArtisticTextShape::clear()
+{
+    m_ranges.clear();
 }
 
 void ArtisticTextShape::setFont(const QFont &newFont)
@@ -502,7 +512,7 @@ void ArtisticTextShape::insertText(int charIndex, const QString &str)
     if (charIndex < 0 || isEmpty()) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (charIndex >= text().length()) {
+    } else if (charIndex >= plainText().length()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length());
     }
@@ -527,7 +537,7 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
     if (charIndex < 0 || isEmpty()) {
         // insert before first character
         charPos = CharIndex(0, 0);
-    } else if (charIndex >= text().length()) {
+    } else if (charIndex >= plainText().length()) {
         // insert after last character
         charPos = CharIndex(m_ranges.count()-1, m_ranges.last().text().length());
     }
@@ -535,6 +545,8 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
     // check range index, just in case
     if (charPos.first < 0)
         return;
+
+    update();
 
     ArtisticTextRange &hitRange = m_ranges[charPos.first];
     if (charPos.second == 0) {
@@ -558,7 +570,47 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
             charPos.first++;
         }
     }
+
     // TODO: merge ranges with same style
+
+    cacheGlyphOutlines();
+    updateSizeAndPosition();
+    update();
+    notifyChanged();
+}
+
+void ArtisticTextShape::appendText(const QString &text)
+{
+    update();
+
+    if (isEmpty()) {
+        m_ranges.append(ArtisticTextRange(text, defaultFont()));
+    } else {
+        m_ranges.last().appendText(text);
+    }
+
+    qDebug() << "appending text " << text;
+
+    cacheGlyphOutlines();
+    updateSizeAndPosition();
+    update();
+    notifyChanged();
+}
+
+void ArtisticTextShape::appendText(const ArtisticTextRange &text)
+{
+    update();
+
+    m_ranges.append(text);
+    qDebug() << "appending text " << text.text();
+
+    // TODO: merge ranges with same style
+
+    cacheGlyphOutlines();
+    updateSizeAndPosition();
+    update();
+    notifyChanged();
+
 }
 
 qreal ArtisticTextShape::charAngleAt(int charIndex) const

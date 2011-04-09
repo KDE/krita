@@ -61,14 +61,20 @@ public:
     /// reimplemented
     virtual QPainterPath outline() const;
 
-    /// Sets the text to display
-    void setText(const QString &newText);
+    /// Sets the plain text to display
+    void setPlainText(const QString &newText);
 
-    /// Returns the text content
-    QString text() const;
+    /// Returns the plain text content
+    QString plainText() const;
+
+    /// Returns formatted text
+    QList<ArtisticTextRange> text() const;
 
     /// Returns if text shape is empty, i.e. no text
     bool isEmpty() const;
+
+    /// Clears the text shape
+    void clear();
 
     /**
      * Sets the font used for drawing
@@ -124,10 +130,16 @@ public:
     QList<ArtisticTextRange> removeText(int charIndex, int charCount);
 
     /// Adds a range of text at the given index
-    void insertText(int charIndex, const QString &text);
+    void insertText(int charIndex, const QString &plainText);
 
     /// Adds ranges of text at the given index
     void insertText(int charIndex, const QList<ArtisticTextRange> &textRanges);
+
+    /// Appends plain text to the last text range
+    void appendText(const QString &plainText);
+
+    /// Appends a single range of text
+    void appendText(const ArtisticTextRange &plainText);
 
     /// Gets the angle of the char with the given index
     qreal charAngleAt(int charIndex) const;

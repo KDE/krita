@@ -272,7 +272,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         // change the text cursor position
         QPointF pos = event->point;
         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-        const int len = m_currentShape->text().length();
+        const int len = m_currentShape->plainText().length();
         int hit = len;
         qreal mindist = DBL_MAX;
         for ( int i = 0; i < len;++i ) {
@@ -393,7 +393,7 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         switch(event->key())
         {
         case Qt::Key_Delete:
-            if( textCursor() >= 0 && textCursor() < m_currentShape->text().length())
+            if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length())
                 removeFromTextCursor( textCursor(), 1 );
             break;    
         case Qt::Key_Backspace:
@@ -409,7 +409,7 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             setTextCursor( 0 );
             break;
         case Qt::Key_End:
-            setTextCursor( m_currentShape->text().length() );
+            setTextCursor( m_currentShape->plainText().length() );
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
@@ -457,7 +457,7 @@ void ArtisticTextTool::blinkCursor()
 void ArtisticTextTool::deactivate()
 {
     if ( m_currentShape ) {
-        if( m_currentShape->text().isEmpty() ) {
+        if( m_currentShape->plainText().isEmpty() ) {
             canvas()->addCommand( canvas()->shapeController()->removeShape( m_currentShape ) );
         }
         enableTextCursor( false );
@@ -551,7 +551,7 @@ void ArtisticTextTool::enableTextCursor( bool enable )
 {
     if ( enable ) {
         if( m_currentShape )
-            setTextCursorInternal( m_currentShape->text().length() );
+            setTextCursorInternal( m_currentShape->plainText().length() );
         connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         m_blinkingCursor.start( BlinkInterval );
     } else {
@@ -565,7 +565,7 @@ void ArtisticTextTool::enableTextCursor( bool enable )
 void ArtisticTextTool::setTextCursor( int textCursor )
 {
     if ( m_textCursor == textCursor || textCursor < 0 
-    || ! m_currentShape || textCursor > m_currentShape->text().length() )
+    || ! m_currentShape || textCursor > m_currentShape->plainText().length() )
         return;
 
     setTextCursorInternal( textCursor );
@@ -626,9 +626,9 @@ void ArtisticTextTool::textChanged()
     if ( !m_currentShape/* || m_currentShape->text() == m_currentText*/ )
         return;
 
-    kDebug() << "shape text =" << m_currentShape->text();
+    kDebug() << "shape text =" << m_currentShape->plainText();
     
-    setTextCursorInternal( m_currentShape->text().length() );
+    setTextCursorInternal( m_currentShape->plainText().length() );
 }
 
 void ArtisticTextTool::shapeSelectionChanged()

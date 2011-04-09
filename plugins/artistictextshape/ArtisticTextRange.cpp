@@ -45,6 +45,11 @@ void ArtisticTextRange::insertText(int index, const QString &text)
     m_text.insert(index, text);
 }
 
+void ArtisticTextRange::appendText(const QString &text)
+{
+    m_text += text;
+}
+
 void ArtisticTextRange::setFont( const QFont & font )
 {
     if( m_font == font )

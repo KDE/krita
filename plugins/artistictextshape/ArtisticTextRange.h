@@ -40,6 +40,9 @@ public:
     /// Inserts new text at the given position
     void insertText(int index, const QString &text);
 
+    /// Appends text to the text range
+    void appendText(const QString &text);
+
     /**
      * Sets the font used for drawing
      * Note that it is expected that the font has its point size set

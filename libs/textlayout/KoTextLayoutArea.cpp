@@ -74,6 +74,11 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_endOfArea()
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
+ , m_left(0.0)
+ , m_right(0.0)
+ , m_top(0.0)
+ , m_bottom(0.0)
+ , m_maximalAllowedBottom(0.0)
 {
 }
 
@@ -846,6 +851,11 @@ void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qrea
     m_top = top;
     m_boundingRect.setTop(top);
     m_maximalAllowedBottom = maximumAllowedBottom;
+}
+
+QRectF KoTextLayoutArea::referenceRect() const
+{
+    return QRectF(m_left, m_top, m_right - m_left, m_bottom - m_top);
 }
 
 qreal KoTextLayoutArea::left() const

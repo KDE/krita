@@ -74,6 +74,9 @@ public:
     /// The content may be smaller or bigger than that depending on our margins
     void setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom);
 
+    /// Returns the left,right,top and bottom coordinate of the reference rect.
+    QRectF referenceRect() const;
+
     /// The left coordinate of the reference rect we place ourselves within
     /// The content may be smaller or bigger than that depending on our margins
     qreal left() const;

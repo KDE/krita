@@ -584,6 +584,7 @@ void ArtisticTextTool::setTextCursorInternal( int textCursor )
 {
     updateTextCursorArea();
     m_textCursor = textCursor;
+    createTextCursorShape();
     updateTextCursorArea();
 }
 

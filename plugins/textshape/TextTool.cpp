@@ -605,7 +605,7 @@ void TextTool::blinkCaret()
         m_caretTimerState = false; // not visible.
     }
     else {
-        m_caretTimerState = true;
+        m_caretTimerState = !m_caretTimerState;
         m_caretColorState = 1 - m_caretColorState;
     }
     repaintCaret();
@@ -699,7 +699,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                 QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
                 if (tl.isValid()) {
                     const int posInParag = m_textEditor.data()->position() - block.position();
-                    QPen caretPen = QPen(m_caretColorState == 1 ? QColor(0,0,0,200) : QColor(255,255,255,200), 0);
+                    QPen caretPen = QPen(QColor(0,0,0),0);
                     painter.setPen(caretPen);
                     painter.setRenderHint(QPainter::Antialiasing,false);
                     if (tl.ascent() > 0) {
@@ -711,6 +711,13 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                                caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
                                caretBasePos.x(),
                                caretBasePos.y() + qMin(tl.descent(), fm.descent()));
+                        caretPen.setColor(QColor(255,255,255));
+                        caretPen.setStyle(Qt::DotLine);
+                        painter.setPen(caretPen);
+                        painter.drawLine(caretBasePos.x(),
+                                         caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
+                                         caretBasePos.x(),
+                                         caretBasePos.y() + qMin(tl.descent(), fm.descent()));
                     } else {
                         //line only filled with characters-without-size (eg anchors)
                         // layout will make sure line has height of block font

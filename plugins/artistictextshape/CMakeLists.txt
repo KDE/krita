@@ -5,6 +5,7 @@ include_directories( ${FLAKE_INCLUDES} )
 SET ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp
     ArtisticTextShape.cpp
+    ArtisticTextRange.cpp
     ArtisticTextShapeFactory.cpp
     ArtisticTextTool.cpp
     ArtisticTextToolFactory.cpp

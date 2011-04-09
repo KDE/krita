@@ -103,7 +103,6 @@ private:
     int m_textCursor;
     QTimer m_blinkingCursor;
     bool m_showCursor;
-    QString m_currentText;
 
     KoInteractionStrategy *m_currentStrategy;
 };

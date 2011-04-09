@@ -81,7 +81,7 @@ void ArtisticTextShapeConfigWidget::initializeFromShape(ArtisticTextShape *shape
 
     blockChildSignals( true );
 
-    QFont font = m_shape->font();
+    QFont font = m_shape->fontAt(0);
 
     widget.fontSize->setValue( font.pointSize() );
     font.setPointSize( 8 );
@@ -106,7 +106,7 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     if( ! m_shape || ! m_canvas )
         return;
 
-    QFont font = m_shape->font();
+    QFont font = m_shape->fontAt(0);
     font.setFamily( widget.fontFamily->currentFont().family() );
     font.setBold( widget.bold->isChecked() );
     font.setItalic( widget.italic->isChecked() );
@@ -129,7 +129,7 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     else if( newOffset != m_shape->startOffset() ) {
         cmd = new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset);
     }
-    else if( font.key() != m_shape->font().key() ) {
+    else if( font.key() != m_shape->fontAt(0).key() ) {
         cmd = new ChangeTextFontCommand(m_shape, font);
     }
 

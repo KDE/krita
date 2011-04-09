@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 #ifndef ARTISTICTEXTSHAPE_H
 #define ARTISTICTEXTSHAPE_H
 
+#include "ArtisticTextRange.h"
 #include <KoShape.h>
 #include <KoPostscriptPaintDevice.h>
 
@@ -61,26 +62,29 @@ public:
     virtual QPainterPath outline() const;
 
     /// Sets the text to display
-    void setText( const QString & text );
+    void setText(const QString &newText);
 
     /// Returns the text content
     QString text() const;
+
+    /// Returns if text shape is empty, i.e. no text
+    bool isEmpty() const;
 
     /**
      * Sets the font used for drawing
      * Note that it is expected that the font has its point size set
      * in postscript points.
      */
-    void setFont( const QFont & font );
+    void setFont(const QFont &font);
 
-    /// Returns the font
-    QFont font() const;
+    /// Returns the font at the specified character position
+    QFont fontAt(int charNum) const;
 
     /// Attaches this text shape to the given path shape
-    bool putOnPath( KoPathShape * path );
+    bool putOnPath(KoPathShape *path);
 
     /// Puts the text on the given path, the path is expected to be in document coordinates
-    bool putOnPath( const QPainterPath &path );
+    bool putOnPath(const QPainterPath &path);
 
     /// Detaches this text shape from an already attached path shape
     void removeFromPath();
@@ -89,7 +93,7 @@ public:
     bool isOnPath() const;
 
     /// Sets the offset for for text on path
-    void setStartOffset( qreal offset );
+    void setStartOffset(qreal offset);
 
     /// Returns the start offset for text on path
     qreal startOffset() const;
@@ -117,19 +121,22 @@ public:
     KoPathShape * baselineShape() const;
 
     /// Removes a range of text from the given index
-    QString removeRange( unsigned int index, unsigned int nr );
-    
+    QList<ArtisticTextRange> removeText(int index, int count);
+
     /// Adds a range of text at the given index
-    void addRange( unsigned int index, const QString &text );
+    void insertText(int index, const QString &text);
+
+    /// Adds ranges of text at the given index
+    void insertText(int index, const QList<ArtisticTextRange> &textRanges);
 
     /// Gets the angle of the char with the given index
     void getCharAngleAt( unsigned int charNum, qreal &angle ) const;
 
     /// Gets the position of the char with the given index
-    void getCharPositionAt( unsigned int charNum, QPointF &pos ) const;
+    void getCharPositionAt(int charNum, QPointF &pos) const;
 
     /// Gets the extents of the char with the given index
-    void getCharExtentsAt( unsigned int charNum, QRectF &extents ) const;
+    void getCharExtentsAt(int charNum, QRectF &extents) const;
 
     /// reimplemented from KoShape
     virtual void shapeChanged(ChangeType type, KoShape * shape);
@@ -139,11 +146,20 @@ private:
     void cacheGlyphOutlines();
     bool pathHasChanged() const;
     void createOutline();
+
+    typedef QPair<int, int> CharIndex;
+
+    /// Returns index of range and index within range of specified character
+    CharIndex charIndex(int charNum) const;
+
+    /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;
 
+    /// Returns the default font
+    QFont defaultFont() const;
+
+    QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
-    QString m_text; ///< the text content
-    QFont m_font; ///< the font to use for drawing
     KoPathShape * m_path; ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
@@ -153,6 +169,7 @@ private:
     QPainterPath m_baseline; ///< the baseline path the text is put on
     TextAnchor m_textAnchor; ///< the actual text anchor
     QVector<qreal> m_charOffsets; ///< char positions [0..1] on baseline path
+    QVector<QPointF> m_charPositions; ///< char positions in shape coordinates
 };
 
 #endif // ARTISTICTEXTSHAPE_H

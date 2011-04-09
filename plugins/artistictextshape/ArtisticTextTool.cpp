@@ -75,10 +75,9 @@ class ArtisticTextTool::AddTextRangeCommand : public QUndoCommand
                     m_tool->enableTextCursor( true );
                 }
                 m_tool->setTextCursorInternal( m_from );
-                m_tool->m_currentText.remove( m_from, m_text.length() );
             }
             
-            m_shape->removeRange( m_from, m_text.length() );
+            m_shape->removeText( m_from, m_text.length() );
         }
         
         virtual void redo()
@@ -94,7 +93,7 @@ class ArtisticTextTool::AddTextRangeCommand : public QUndoCommand
                 m_tool->enableTextCursor( true );
             }
             
-            m_shape->addRange( m_from, m_text );
+            m_shape->insertText( m_from, m_text );
             
             if (m_tool) {
                 m_tool->setTextCursorInternal( m_from + m_text.length() );
@@ -134,10 +133,9 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
                     m_tool->enableTextCursor( true );
                 }
                 m_tool->m_currentShape = m_shape;
-                m_tool->m_currentText.insert( m_from, m_text );
             }
             
-            m_shape->addRange( m_from, m_text );
+            m_shape->insertText( m_from, m_text );
             
             if (m_tool) {
                 m_tool->setTextCursorInternal( m_cursor );
@@ -160,7 +158,7 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
                 if( m_cursor > m_from )
                     m_tool->setTextCursorInternal( m_from );
             }
-            m_text = m_shape->removeRange( m_from, m_count );
+            m_text = m_shape->removeText( m_from, m_count );
         }
         
     private:
@@ -168,7 +166,7 @@ class ArtisticTextTool::RemoveTextRangeCommand : public QUndoCommand
         ArtisticTextShape *m_shape;
         int m_from;
         unsigned int m_count;
-        QString m_text;
+        QList<ArtisticTextRange> m_text;
         int m_cursor;
 };
 
@@ -202,20 +200,18 @@ QTransform ArtisticTextTool::cursorTransform() const
     if (!m_currentShape)
         return QTransform();
 
-    QTransform transform( m_currentShape->absoluteTransformation(0) );
     QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
-    transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
-    transform.rotate( 360. - angle );
-    if ( m_currentShape->isOnPath() ) {
-        QFont f = m_currentShape->font();
-        QFontMetrics metrics(f);
-        transform.translate( 0, metrics.descent() );
-    }
+    QFontMetrics metrics(m_currentShape->fontAt(m_textCursor));
 
-    return transform;
+    QTransform transform;
+    transform.translate( pos.x() - 1, pos.y() );
+    transform.rotate( 360. - angle );
+    transform.translate( 0, metrics.descent() );
+
+    return transform * m_currentShape->absoluteTransformation(0);
 }
 
 void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converter)
@@ -271,7 +267,6 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             selection->deselectAll();
             enableTextCursor( false );
             m_currentShape = m_hoverText;
-            m_currentText = m_currentShape->text();
             emit shapeSelected(m_currentShape, canvas());
             enableTextCursor( true );
             selection->select( m_currentShape );
@@ -445,7 +440,6 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
         emit done();
         return;
     } else {
-        m_currentText = m_currentShape->text();
         emit shapeSelected(m_currentShape, canvas());
     }
 
@@ -611,7 +605,6 @@ void ArtisticTextTool::createTextCursorShape()
 void ArtisticTextTool::removeFromTextCursor( int from, unsigned int count )
 {
     if ( from >= 0 ) {
-        m_currentText.remove( from, count );
         QUndoCommand *cmd = new RemoveTextRangeCommand( this, from, count );
         canvas()->addCommand( cmd );
     }
@@ -627,7 +620,6 @@ void ArtisticTextTool::addToTextCursor( const QString &str )
         }
         unsigned int len = printable.length();
         if ( len ) {
-            m_currentText.insert( m_textCursor, printable );
             QUndoCommand *cmd = new AddTextRangeCommand( this, printable, m_textCursor );
             canvas()->addCommand( cmd );
         }
@@ -636,11 +628,10 @@ void ArtisticTextTool::addToTextCursor( const QString &str )
 
 void ArtisticTextTool::textChanged()
 {
-    if ( !m_currentShape || m_currentShape->text() == m_currentText )
+    if ( !m_currentShape/* || m_currentShape->text() == m_currentText*/ )
         return;
 
     kDebug() << "shape text =" << m_currentShape->text();
-    kDebug() << "current text =" << m_currentText;
     
     setTextCursorInternal( m_currentShape->text().length() );
 }

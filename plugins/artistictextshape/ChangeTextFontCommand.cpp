@@ -38,7 +38,7 @@ void ChangeTextFontCommand::undo()
 void ChangeTextFontCommand::redo()
 {
     if ( m_shape ) {
-        m_oldFont = m_shape->font();
+        m_oldFont = m_shape->fontAt(0);
         m_shape->setFont( m_font );
     }
 }

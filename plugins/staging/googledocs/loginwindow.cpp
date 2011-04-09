@@ -57,7 +57,7 @@ void LoginWindow::loginService()
         gdoc->clientLogin(m_authDialog->userEdit->text(), m_authDialog->passwordEdit->text());
         connect(gdoc, SIGNAL(userAuthenticated(bool, QString)), this, SLOT(authenticated(bool, QString)));
         connect(gdoc, SIGNAL(progressUpdate(QString)), this, SLOT(updateProgress(QString)));
-        connect(gdoc, SIGNAL(showingDocumentList()), this, SLOT(close()));
+        connect(gdoc, SIGNAL(showingDocumentList()), this, SLOT(accept()));
     }
 }
 

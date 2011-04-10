@@ -3,6 +3,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -58,7 +59,8 @@ public:
         RowHeight,      ///< a qreal specifying the exact row height in pt
         BreakBefore,    ///< If true, insert a frame break before this table row
         BreakAfter,     ///< If true, insert a frame break after this table row
-        MasterPageName         ///< Optional name of the master-page
+        MasterPageName,         ///< Optional name of the master-page
+        UseOptimalHeight        ///< If true, the row height should fit the content
     };
 
     /// Constructor
@@ -77,10 +79,13 @@ public:
     /// See similar named method on QTextBlockFormat
     void clearBackground();
 
-    void setBreakBefore(bool on);
-    bool breakBefore() const;
-    void setBreakAfter(bool on);
-    bool breakAfter() const;
+    void setBreakBefore(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakBefore() const;
+    void setBreakAfter(KoText::KoTextBreakProperty state);
+    KoText::KoTextBreakProperty breakAfter() const;
+    
+    void setUseOptimalHeight(bool on);
+    bool useOptimalHeight() const;
 
     /// Set minimum height of row
     void setMinimumRowHeight(const qreal height);

@@ -358,7 +358,18 @@ QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 
 bool KoTableStyle::mayBreakBetweenRows() const
 {
-    return propertyBoolean(KoTableStyle::MayBreakBetweenRows);
+    return propertyBoolean(MayBreakBetweenRows);
+}
+
+void KoTableStyle::setPageNumber(int page)
+{
+    if (page >= 0)
+        setProperty(PageNumber, page);
+}
+
+int KoTableStyle::pageNumber() const
+{
+    return propertyInt(PageNumber);
 }
 
 bool KoTableStyle::visible()
@@ -453,6 +464,9 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setMayBreakBetweenRows(styleStack.property(KoXmlNS::style, "may-break-between-rows") == "true");
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "page-number")) {
+        setPageNumber(styleStack.property(KoXmlNS::style, "page-number").toInt());
+    }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
@@ -573,6 +587,11 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:keep-with-next", "auto", KoGenStyle::TableType);
         } else if (key == KoTableStyle::Visible) {
             style.addProperty("table:display", visible(), KoGenStyle::TableType);
+        } else if (key == KoTableStyle::PageNumber) {
+            if (pageNumber() > 0)
+                style.addProperty("style:page-number", pageNumber(), KoGenStyle::TableType);
+            else
+                style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         }
     }
 

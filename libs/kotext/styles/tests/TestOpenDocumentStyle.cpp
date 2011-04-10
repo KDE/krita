@@ -97,6 +97,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
+            result << "37" << "42";
+        } else if (reference == "nonNegativeInteger") {
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
@@ -314,6 +316,26 @@ void TestOpenDocumentStyle::testTableRowStyle()
     QFETCH(QString, value);
     
     QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableCellStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableCellStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

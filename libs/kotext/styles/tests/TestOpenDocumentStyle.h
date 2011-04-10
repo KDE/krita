@@ -70,6 +70,8 @@ class TestOpenDocumentStyle : public QObject
         void testTableStyle_data();
         void testTableRowStyle();
         void testTableRowStyle_data();
+        void testTableCellStyle();
+        void testTableCellStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

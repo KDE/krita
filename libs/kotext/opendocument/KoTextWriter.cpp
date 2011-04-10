@@ -57,12 +57,9 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-<<<<<<< HEAD
 #include <KoXmlNS.h>
-=======
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
->>>>>>> master
 
 #include <opendocument/KoTextSharedSavingData.h>
 #include <changetracker/KoChangeTracker.h>
@@ -1281,63 +1278,51 @@ int KoTextWriter::Private::checkForTableColumnChange(int position)
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
-<<<<<<< HEAD
-    TagInformation tableTagInformation;
-    tableTagInformation.setTagName("table:table");
-    int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
-    
-    for (int c = 0 ; c < table->columns() ; c++) {
-        TagInformation tableColumnInformation;
-        tableColumnInformation.setTagName("table:table-column");
-        int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn, tableColumnInformation);
-        closeTagRegion(changeId);
-=======
     KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
-    writer->startElement("table:table");
-    QString tableStyleName = saveTableStyle(*table);
-    writer->addAttribute("table:style-name", tableStyleName);
     int numberHeadingRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
+    TagInformation tableTagInformation;
+    QString tableStyleName = saveTableStyle(*table);
+    tableTagInformation.setTagName("table:table");
+    tableTagInformation.addAttribute("table:style-name", tableStyleName);
+    int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
     
     for (int c = 0 ; c < table->columns() ; c++) {
         KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
         int repetition = 0;
+
         for (; repetition < (table->columns() - c) ; repetition++)
         {
             if (columnStyle != tcarManager.columnStyle(c + repetition + 1))
                 break;
         }
-        writer->startElement("table:table-column");
+
+        TagInformation tableColumnInformation;
+        tableColumnInformation.setTagName("table:table-column");
         QString columnStyleName = saveTableColumnStyle(columnStyle, c, tableStyleName);
-        writer->addAttribute("table:style-name", columnStyleName);
+        tableColumnInformation.addAttribute("table:style-name", columnStyleName);
+
         if (repetition > 0)
-        {
-            writer->addAttribute("table:number-columns-repeated", repetition + 1);
-        }
-        writer->endElement(); // table:table-column
+            tableColumnInformation.addAttribute("table:number-columns-repeated", repetition + 1);
+
+        int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn, tableColumnInformation);
+        closeTagRegion(changeId);
         c += repetition;
->>>>>>> master
     }
     
     if (numberHeadingRows)
         writer->startElement("table:table-header-rows");
     
     for (int r = 0 ; r < table->rows() ; r++) {
-<<<<<<< HEAD
         TagInformation tableRowInformation;
         tableRowInformation.setTagName("table:table-row");
-        int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow, tableRowInformation);
-
-=======
-        writer->startElement("table:table-row");
-        
         KoTableRowStyle rowStyle = tcarManager.rowStyle(r);
         if (!rowStyle.isEmpty())
         {
             QString rowStyleName = saveTableRowStyle(rowStyle, r, tableStyleName);
-            writer->addAttribute("table:style-name", rowStyleName);
+            tableRowInformation.addAttribute("table:style-name", rowStyleName);
         }
-        
->>>>>>> master
+        int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow, tableRowInformation);
+
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
             int changeId = 0;
@@ -1347,7 +1332,6 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 tableCellInformation.setTagName("table:table-cell");
                 tableCellInformation.addAttribute("rowSpan", cell.rowSpan());
                 tableCellInformation.addAttribute("columnSpan", cell.columnSpan());
-                changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
         
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
@@ -1357,34 +1341,28 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 }
                 
                 QString cellStyleName = saveTableCellStyle(cellFormat, c, tableStyleName);
-                writer->addAttribute("table:style-name", cellStyleName);
+                tableCellInformation.addAttribute("table:style-name", cellStyleName);
+                changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
                 TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }
-<<<<<<< HEAD
-
             closeTagRegion(changeId);
         }
         closeTagRegion(changeId);
-    }
-    closeTagRegion(changeId);
-=======
-            writer->endElement(); // table:table-cell OR table:covered-table-cell
-        }
-        writer->endElement(); // table:table-row
-        
+
         if (r + 1 == numberHeadingRows) {
             writer->endElement();   // table:table-header-rows
             writer->startElement("table:table-rows");
         }
     }
+
     if (numberHeadingRows)
         writer->endElement();   // table:table-rows
-    writer->endElement(); // table:table
->>>>>>> master
+    closeTagRegion(changeId);
+
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)

@@ -2003,7 +2003,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         if (! tblTag.isNull()) {
             const QString tblLocalName = tblTag.localName();
             if (tblTag.namespaceURI() == KoXmlNS::table) {
-<<<<<<< HEAD
                 if (tblLocalName == "table-column") {
                     loadTableColumn(tblTag, tbl, columns);
                 } else if (tblLocalName == "table-row") {
@@ -2012,6 +2011,16 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     loadTableRow(tblTag, tbl, spanStore, cursor, rows);
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->closeChangeRegion(tblTag);
+                } else if (tblLocalName == "table-header-rows") {
+                    KoXmlElement subTag;
+                    forEachElement(subTag, tblTag) {
+                        if (!subTag.isNull()) {
+                            if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
+                                headingRowCounter++;
+                                loadTableRow(subTag, tbl, spanStore, cursor, rows);
+                            }
+                        }
+                    }
                 }
             } else if(tblTag.namespaceURI() == KoXmlNS::delta) {
                 if (tblLocalName == "removed-content")
@@ -2026,132 +2035,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                         } else if (deltaTblLocalName == "table-row") {
                             loadTableRow(deltaTblTag, tbl, spanStore, cursor, rows);
                         }
-=======
-                if (tblLocalName == "table-header-rows") {
-                    KoXmlElement subTag;
-                    forEachElement(subTag, tblTag) {
-                        if (!subTag.isNull()) {
-                            if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
-                                rowTags << subTag;
-                                headingRowCounter++;
-                            }
-                        }
-                    }
-                    
-                } if (tblLocalName == "table-rows") {
-                    KoXmlElement subTag;
-                    forEachElement(subTag, tblTag) {
-                        if (!subTag.isNull()) {
-                            if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
-                                rowTags << subTag;
-                            }
-                        }
-                    }
-                } else if (tblLocalName == "table-column") {
-                    // Do some parsing with the column, see §8.2.1, ODF 1.1 spec
-                    int repeatColumn = tblTag.attributeNS(KoXmlNS::table, "number-columns-repeated", "1").toInt();
-                    QString columnStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
-                    if (!columnStyleName.isEmpty()) {
-                        KoTableColumnStyle *columnStyle = d->textSharedData->tableColumnStyle(columnStyleName, d->stylesDotXml);
-#ifdef KOOPENDOCUMENTLOADER_DEBUG
-                        kDebug() << columnStyleName << "gave" <<  columnStyle << d->stylesDotXml;
-#endif
-                        if (columnStyle) {
-                            for (int c = columns; c < columns + repeatColumn; c++) {
-                                tcarManager.setColumnStyle(c, *columnStyle);
-                            }
-                        }
-                    }
-
-                    QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
-                    if (!defaultCellStyleName.isEmpty()) {
-                        KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
-                        for (int c = columns; c < columns + repeatColumn; c++) {
-                            tcarManager.setDefaultColumnCellStyle(c, cellStyle);
-                        }
-                    }
-
-                    columns = columns + repeatColumn;
-                    tbl->resize(qMax(1, rows), columns);
-                } else if (tblLocalName == "table-row") {
-                    rowTags << tblTag;
-                }
-            }
-        }
-    }
-    
-    foreach (tblTag, rowTags) {
-        QString rowStyleName = tblTag.attributeNS(KoXmlNS::table, "style-name", "");
-        if (!rowStyleName.isEmpty()) {
-            KoTableRowStyle *rowStyle = d->textSharedData->tableRowStyle(rowStyleName, d->stylesDotXml);
-            if (rowStyle) {
-                tcarManager.setRowStyle(rows, *rowStyle);
-            }
-        }
-
-        QString defaultCellStyleName = tblTag.attributeNS(KoXmlNS::table, "default-cell-style-name", "");
-        if (!defaultCellStyleName.isEmpty()) {
-            KoTableCellStyle *cellStyle = d->textSharedData->tableCellStyle(defaultCellStyleName, d->stylesDotXml);
-            tcarManager.setDefaultRowCellStyle(rows, cellStyle);
-        }
-
-        rows++;
-        tbl->resize(rows, qMax(1, columns));
-        // Added a row
-        int currentCell = 0;
-        KoXmlElement rowTag;
-        forEachElement(rowTag, tblTag) {
-            if (!rowTag.isNull()) {
-                const QString rowLocalName = rowTag.localName();
-                if (rowTag.namespaceURI() == KoXmlNS::table) {
-                    if (rowLocalName == "table-cell") {
-                        // Ok, it's a cell...
-                        const int currentRow = tbl->rows() - 1;
-                        QTextTableCell cell = tbl->cellAt(currentRow, currentCell);
-
-                        // store spans until entire table have been loaded
-                        int rowsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-rows-spanned", "1").toInt();
-                        int columnsSpanned = rowTag.attributeNS(KoXmlNS::table, "number-columns-spanned", "1").toInt();
-                        spanStore.append(QRect(currentCell, currentRow, columnsSpanned, rowsSpanned));
-
-                        if (cell.isValid()) {
-                            QString cellStyleName = rowTag.attributeNS(KoXmlNS::table, "style-name", "");
-                            KoTableCellStyle *cellStyle = 0;
-                            if (!cellStyleName.isEmpty()) {
-                                cellStyle = d->textSharedData->tableCellStyle(cellStyleName, d->stylesDotXml);
-                            } else if (tcarManager.defaultRowCellStyle(currentRow)) {
-                                cellStyle = tcarManager.defaultRowCellStyle(currentRow);
-                            } else if (tcarManager.defaultColumnCellStyle(currentCell)) {
-                                cellStyle = tcarManager.defaultColumnCellStyle(currentCell);
-                            }
-
-                            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                            if (cellStyle)
-                                cellStyle->applyStyle(cellFormat);
-                            cell.setFormat(cellFormat);
-
-                            // handle inline Rdf
-                            // rowTag is the current table cell.
-                            if (rowTag.hasAttributeNS(KoXmlNS::xhtml, "property")
-                                    || rowTag.hasAttribute("id")) {
-                                KoTextInlineRdf* inlineRdf =
-                                    new KoTextInlineRdf((QTextDocument*)cursor.block().document(),
-                                            cell);
-                                inlineRdf->loadOdf(rowTag);
-                                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                                cellFormat.setProperty(KoTableCellStyle::InlineRdf,
-                                        QVariant::fromValue(inlineRdf));
-                                cell.setFormat(cellFormat);
-                            }
-
-                            cursor = cell.firstCursorPosition();
-                            loadBody(rowTag, cursor);
-                        } else
-                            kDebug(32500) << "Invalid table-cell row=" << currentRow << " column=" << currentCell;
-                        currentCell++;
-                    } else if (rowLocalName == "covered-table-cell") {
-                        currentCell++;
->>>>>>> master
                     }
                 }
 

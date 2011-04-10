@@ -10,125 +10,138 @@
     <height>331</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="textLabel1">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="textLabel1">
+       <property name="text">
+        <string>Cursor shape:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="m_cmbCursorShape">
+       <item>
+        <property name="text">
+         <string>Tool Icon</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Crosshair</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Arrow</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Brush Outline</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>No Cursor</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_showOutlinePainting">
      <property name="text">
-      <string>Cursor shape:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <string>Show outline while painting</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="m_cmbCursorShape">
-     <item>
-      <property name="text">
-       <string>Tool Icon</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Crosshair</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Arrow</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Brush Outline</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>No Cursor</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="3">
-    <spacer name="spacer1">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>41</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="2" column="0" colspan="2">
+   <item>
     <widget class="QCheckBox" name="chkShowRootLayer">
      <property name="text">
       <string>Show root layer</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2">
-    <widget class="QCheckBox" name="m_autosaveCheckBox">
+   <item>
+    <layout class="QFormLayout" name="formLayout_2">
+     <item row="0" column="0">
+      <widget class="QCheckBox" name="m_autosaveCheckBox">
+       <property name="text">
+        <string>Autosave every:</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSpinBox" name="m_autosaveSpinBox">
+       <property name="suffix">
+        <string notr="true">min</string>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1440</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>15</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Undo stack size:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QSpinBox" name="m_undoStackSize">
+       <property name="minimum">
+        <number>0</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>30</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="m_backupFileCheckBox">
      <property name="text">
-      <string>Autosave every:</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
+      <string>Create backup file </string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QSpinBox" name="m_autosaveSpinBox">
-     <property name="suffix">
-      <string notr="true">min</string>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="maximum">
-      <number>1440</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="value">
-      <number>15</number>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="2">
-    <widget class="QLabel" name="label">
+   <item>
+    <widget class="QCheckBox" name="chkZoomWithWheel">
      <property name="text">
-      <string>Undo stack size:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <string>Zoom with mouse wheel</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="2">
-    <widget class="QSpinBox" name="m_undoStackSize">
-     <property name="minimum">
-      <number>0</number>
-     </property>
-     <property name="maximum">
-      <number>1000</number>
-     </property>
-     <property name="singleStep">
-      <number>5</number>
-     </property>
-     <property name="value">
-      <number>30</number>
-     </property>
-    </widget>
-   </item>
-   <item row="7" column="1">
+   <item>
     <spacer name="spacer2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -143,27 +156,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item row="5" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_backupFileCheckBox">
-     <property name="text">
-      <string>Create backup file </string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="3">
-    <widget class="QCheckBox" name="m_showOutlinePainting">
-     <property name="text">
-      <string>Show outline while painting</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0" colspan="3">
-    <widget class="QCheckBox" name="chkZoomWithWheel">
-     <property name="text">
-      <string>Zoom with mouse wheel</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

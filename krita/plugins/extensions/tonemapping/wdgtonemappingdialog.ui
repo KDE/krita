@@ -1,54 +1,62 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>WdgToneMappingDialog</class>
- <widget class="QWidget" name="WdgToneMappingDialog" >
-  <property name="geometry" >
+ <widget class="QWidget" name="WdgToneMappingDialog">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>326</height>
+    <width>343</width>
+    <height>324</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QGridLayout" >
-     <item row="0" column="0" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Operator:</string>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QFormLayout" name="formLayout">
+       <property name="rowWrapPolicy">
+        <enum>QFormLayout::WrapLongRows</enum>
        </property>
-      </widget>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Operator:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxOperators">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Preset:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboBoxPresets">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
-     <item row="0" column="1" >
-      <widget class="QComboBox" name="comboBoxOperators" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Preset:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" >
-      <widget class="QComboBox" name="comboBoxPresets" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2" >
-      <widget class="QPushButton" name="pushButtonEditPressets" >
-       <property name="text" >
+     <item>
+      <widget class="QPushButton" name="pushButtonEditPressets">
+       <property name="text">
         <string>edit presets</string>
        </property>
       </widget>
@@ -56,16 +64,16 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" native="1" name="centralWidgetHolder" />
+    <widget class="QWidget" name="centralWidgetHolder" native="true"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>91</width>
          <height>30</height>
@@ -74,22 +82,22 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonOk" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonOk">
+       <property name="text">
         <string>Ok</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonApply" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonApply">
+       <property name="text">
         <string>Apply</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonCancel" >
-       <property name="text" >
+      <widget class="QPushButton" name="pushButtonCancel">
+       <property name="text">
         <string>Cancel</string>
        </property>
       </widget>

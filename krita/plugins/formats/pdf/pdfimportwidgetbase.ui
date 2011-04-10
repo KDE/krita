@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>240</height>
+    <width>476</width>
+    <height>238</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,13 +68,7 @@
      <property name="title">
       <string>Dimensions</string>
      </property>
-     <layout class="QGridLayout">
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <property name="spacing">
-       <number>0</number>
-      </property>
+     <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QLabel" name="textLabel1">
         <property name="text">
@@ -83,13 +77,7 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <spacer>
           <property name="orientation">
@@ -107,49 +95,7 @@
          </spacer>
         </item>
         <item>
-         <layout class="QGridLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QLabel" name="intVerticalqsdf">
-            <property name="text">
-             <string comment="vertical resolution">Vertical:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="KComboBox" name="kComboBox1"/>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSpinBox" name="intHorizontal">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>999999</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intVertical">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>999999</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-           </widget>
-          </item>
+         <layout class="QFormLayout" name="formLayout">
           <item row="0" column="0">
            <widget class="QLabel" name="textLabel5">
             <property name="text">
@@ -157,8 +103,52 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="KComboBox" name="kComboBox2"/>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QSpinBox" name="intHorizontal">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KComboBox" name="kComboBox1"/>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="intVerticalqsdf">
+            <property name="text">
+             <string comment="vertical resolution">Vertical:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QSpinBox" name="intVertical">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>999999</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="KComboBox" name="kComboBox2"/>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -188,13 +178,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <layout class="QHBoxLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="margin">
-         <number>0</number>
-        </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
          <spacer>
           <property name="orientation">
@@ -212,20 +196,7 @@
          </spacer>
         </item>
         <item>
-         <layout class="QGridLayout">
-          <property name="margin">
-           <number>0</number>
-          </property>
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <item row="1" column="1">
-           <widget class="QSpinBox" name="intHeight">
-            <property name="maximum">
-             <number>99999</number>
-            </property>
-           </widget>
-          </item>
+         <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
            <widget class="QLabel" name="intWidthzqffs">
             <property name="text">
@@ -244,6 +215,13 @@
            <widget class="QLabel" name="intHeightqsdfq">
             <property name="text">
              <string>Height:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSpinBox" name="intHeight">
+            <property name="maximum">
+             <number>99999</number>
             </property>
            </widget>
           </item>
@@ -274,8 +252,8 @@
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>17</width>
+          <height>26</height>
          </size>
         </property>
        </spacer>

@@ -6,88 +6,92 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>99</height>
+    <width>336</width>
+    <height>97</height>
    </rect>
   </property>
-  <layout class="QGridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="lblColorSpaces">
-     <property name="minimumSize">
-      <size>
-       <width>80</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Model:</string>
-     </property>
-     <property name="buddy">
-      <cstring>cmbColorModels</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="KisCmbIDList" name="cmbColorModels" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="lblColorModels">
-     <property name="minimumSize">
-      <size>
-       <width>80</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Depth:</string>
-     </property>
-     <property name="buddy">
-      <cstring>cmbColorModels</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="KisCmbIDList" name="cmbColorDepth" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="lblProfiles">
-     <property name="minimumSize">
-      <size>
-       <width>80</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="text">
-      <string>Profile:</string>
-     </property>
-     <property name="buddy">
-      <cstring>cmbProfile</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1">
-    <widget class="SqueezedComboBox" name="cmbProfile">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="lblColorSpaces">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Model:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbColorModels</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisCmbIDList" name="cmbColorModels" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lblColorModels">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>10</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Depth:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbColorModels</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="KisCmbIDList" name="cmbColorDepth" native="true">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="lblProfiles">
+       <property name="minimumSize">
+        <size>
+         <width>80</width>
+         <height>14</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Profile:</string>
+       </property>
+       <property name="buddy">
+        <cstring>cmbProfile</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="SqueezedComboBox" name="cmbProfile">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

@@ -54,6 +54,8 @@ public:
 ChartLayout::ChartLayout()
     : m_doingLayout( false )
     , m_relayoutScheduled( false )
+    , m_hMargin( 5 )
+    , m_vMargin( 5 )
 {
 }
 
@@ -254,14 +256,14 @@ void ChartLayout::layout()
 
 qreal ChartLayout::layoutTop( const QMap<int, KoShape*>& shapes )
 {
-    qreal top = 0.0;
+    qreal top = m_vMargin;
     qreal pX = m_containerSize.width() / 2.0;
     foreach( KoShape *shape, shapes ) {
         QSizeF size = itemSize( shape );
         setItemPosition( shape, QPointF( pX - size.width() / 2.0, top ) );
-        top += size.height();
+        top += size.height() + m_vMargin;
     }
-    return top;
+    return top + m_vMargin;
 }
 
 qreal ChartLayout::layoutBottom( const QMap<int, KoShape*>& shapes )
@@ -270,22 +272,22 @@ qreal ChartLayout::layoutBottom( const QMap<int, KoShape*>& shapes )
     qreal pX = m_containerSize.width() / 2.0;
     foreach( KoShape *shape, shapes ) {
         QSizeF size = itemSize( shape );
-        bottom -= size.height();
+        bottom -= size.height() + m_vMargin;
         setItemPosition( shape, QPointF( pX - size.width() / 2.0, bottom ) );
     }
-    return bottom;
+    return bottom - m_vMargin;
 }
 
 qreal ChartLayout::layoutStart( const QMap<int, KoShape*>& shapes )
 {
-    qreal start = 0.0;
+    qreal start = m_hMargin;
     qreal pY = m_containerSize.height() / 2.0;
     foreach( KoShape *shape, shapes ) {
         QSizeF size = itemSize( shape );
         setItemPosition( shape, QPointF( start, pY - size.height() / 2.0 ) );
-        start += size.width();
+        start += size.width() + m_hMargin;
     }
-    return start;
+    return start + m_hMargin;
 }
 
 qreal ChartLayout::layoutEnd( const QMap<int, KoShape*>& shapes )
@@ -294,10 +296,10 @@ qreal ChartLayout::layoutEnd( const QMap<int, KoShape*>& shapes )
     qreal pY = m_containerSize.height() / 2.0;
     foreach( KoShape *shape, shapes ) {
         QSizeF size = itemSize( shape );
-        end -= size.width();
+        end -= size.width() + m_hMargin;
         setItemPosition( shape, QPointF( end, pY - size.height() / 2.0 ) );
     }
-    return end;
+    return end - m_hMargin;
 }
 
 void ChartLayout::layoutTopStart( KoShape *shape )
@@ -330,6 +332,12 @@ void ChartLayout::layoutBottomEnd( KoShape *shape )
                                      m_containerSize.height() - size.height() ) );
 }
 
+void ChartLayout::setMargins( qreal hMargin, qreal vMargin )
+{
+    m_vMargin = vMargin;
+    m_hMargin = hMargin;
+    scheduleRelayout();
+}
 
 /// Static Helper Methods
 

@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2010 Mani Chandrasekar <maninc@gmail.com>
+ *  Copyright (c) 2011 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -16,27 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef ONLINEDOCUMENT_H
-#define ONLINEDOCUMENT_H
+#include "kis_tool_proxy.h"
+#include "kis_canvas2.h"
 
-#include <kparts/plugin.h>
-
-class GoogleDocumentService;
-class LoginWindow;
-
-class OnlineDocument : public KParts::Plugin
+KisToolProxy::KisToolProxy(KoCanvasBase *canvas, QObject *parent)
+    : KoToolProxy(canvas, parent)
 {
-    Q_OBJECT
-public:
-    OnlineDocument(QObject *parent, const QVariantList &);
-    virtual ~OnlineDocument();
+}
 
-private slots:
-    void slotOnlineDocument();
-    void receivedOnlineDocument(QString path);
+QPointF KisToolProxy::widgetToDocument(const QPointF &widgetPoint) const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
 
-private:
-    LoginWindow *m_login;
-};
+    return kritaCanvas->coordinatesConverter()->widgetToDocument(widgetPoint);
+}
 
-#endif

@@ -129,7 +129,7 @@ void KoShapeGroupCommand::redo()
         KoShape * shape = d->shapes[i];
         shape->setZIndex(zIndex++);
 
-        if(d->container->inheritsTransform(shape)) {
+        if(d->inheritTransform[i]) {
             shape->applyAbsoluteTransformation(groupTransform);
         }
         else {
@@ -154,13 +154,14 @@ void KoShapeGroupCommand::undo()
     QTransform ungroupTransform = d->container->absoluteTransformation(0);
     for (int i = 0; i < d->shapes.count(); i++) {
         KoShape * shape = d->shapes[i];
+        const bool inheritedTransform = d->container->inheritsTransform(shape);
         d->container->removeShape(shape);
         if (d->oldParents.at(i)) {
             d->oldParents.at(i)->addShape(shape);
             d->oldParents.at(i)->setClipped(shape, d->oldClipped.at(i));
             d->oldParents.at(i)->setInheritsTransform(shape, d->oldInheritTransform.at(i));
         }
-        if(d->container->inheritsTransform(shape)) {
+        if(inheritedTransform) {
             shape->applyAbsoluteTransformation(ungroupTransform);
         }
         else {

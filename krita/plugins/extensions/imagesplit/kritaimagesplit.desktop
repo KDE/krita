@@ -3,6 +3,7 @@ Name=Image Splitter
 Name[et]=Pildipoolitaja
 Name[pt]=Divisão da Imagem
 Name[pt_BR]=Divisão da imagem
+Name[sv]=Bilddelning
 Name[uk]=Поділ зображень
 Name[x-test]=xxImage Splitterxx
 X-KDE-ServiceTypes=Krita/ViewPlugin

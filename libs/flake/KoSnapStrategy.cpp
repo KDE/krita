@@ -33,6 +33,10 @@
 #include <math.h>
 #include <iostream>
 
+#ifdef _WIN32
+#define isfinite(x) _finite((double)(x))
+#endif
+
 KoSnapStrategy::KoSnapStrategy(KoSnapGuide::Strategy type)
         : m_snapType(type)
 {

@@ -89,7 +89,6 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_undo_adapter.h"
 #include "flake/kis_shape_controller.h"
-#include "kis_node_model.h"
 #include "kra/kis_kra_loader.h"
 #include "kra/kis_kra_saver.h"
 #include "kis_statusbar.h"
@@ -123,7 +122,7 @@ public:
     }
 
     ~KisDocPrivate() {
-        // Don't delete m_d->shapeController or m_d->nodeModel because it's in a QObject hierarchy.
+        // Don't delete m_d->shapeController because it's in a QObject hierarchy.
         delete undoAdapter;
         delete nserver;
     }
@@ -136,7 +135,6 @@ public:
 
     KisImageSP image;
     KisShapeController* shapeController;
-    KisNodeModel* nodeModel;
 
     KisKraLoader* kraLoader;
     KisKraSaver* kraSaver;
@@ -164,7 +162,6 @@ KisDoc2::~KisDoc2()
 {
     // Despite being QObject they needs to be deleted before the image
     delete m_d->shapeController;
-    delete m_d->nodeModel;
 
     if (m_d->image) {
         m_d->image->notifyAboutToBeDeleted();
@@ -219,7 +216,6 @@ bool KisDoc2::init()
     Q_CHECK_PTR(m_d->nserver);
 
     m_d->shapeController = new KisShapeController(this, m_d->nserver);
-    m_d->nodeModel = new KisNodeModel(this);
 
     m_d->kraSaver = 0;
     m_d->kraLoader = 0;
@@ -261,7 +257,6 @@ bool KisDoc2::loadXML(const KoXmlDocument& doc, KoStore *)
 {
     if (m_d->image) {
         m_d->shapeController->setImage(0);
-        m_d->nodeModel->setImage(0);
         m_d->image = 0;
     }
 
@@ -334,7 +329,6 @@ bool KisDoc2::completeLoading(KoStore *store)
     setModified(false);
     m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(m_d->image);
-    m_d->nodeModel->setImage(m_d->image);
 
     connect(m_d->image.data(), SIGNAL(sigImageModified()), this, SLOT(setModified()));
 
@@ -525,11 +519,6 @@ KoShape * KisDoc2::addShape(const KisNodeSP node)
     return m_d->shapeController->shapeForNode(node);
 }
 
-KisNodeModel * KisDoc2::nodeModel() const
-{
-    return m_d->nodeModel;
-}
-
 void KisDoc2::prepareForImport()
 {
     if (m_d->nserver == 0)
@@ -551,7 +540,6 @@ void KisDoc2::setCurrentImage(KisImageWSP image)
     m_d->image = image;
     m_d->image->setUndoAdapter(m_d->undoAdapter);
     m_d->shapeController->setImage(image);
-    m_d->nodeModel->setImage(image);
 
     setModified(false);
 

@@ -70,15 +70,6 @@
 
 #include <limits>
 
-// KoShapeCache
-
-/// Empty all cached images from the image cache
-void KoShapeCache::purge()
-{
-    qDeleteAll(deviceData);
-    deviceData.clear();
-}
-
 // KoShapePrivate
 
 KoShapePrivate::KoShapePrivate(KoShape *shape)
@@ -102,8 +93,6 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       selectable(true),
       detectCollision(false),
       protectContent(false),
-      cacheMode(KoShape::NoCache),
-      cache(0),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistance(1.0)
 {
@@ -176,34 +165,6 @@ void KoShapePrivate::addShapeManager(KoShapeManager *manager)
 void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
 {
     shapeManagers.remove(manager);
-    if (cacheMode == KoShape::ScaledCache) {
-        if (KoShapeCache *cache = maybeShapeCache()) {
-            KoShapeCache::DeviceData *deviceData = cache->deviceData.take(manager);
-            delete deviceData;
-        }
-    }
-}
-
-KoShapeCache *KoShapePrivate::maybeShapeCache() const
-{
-    return cache;
-}
-
-KoShapeCache *KoShapePrivate::shapeCache() const
-{
-    if (!cache) {
-        const_cast<KoShapePrivate *>(this)->cache = new KoShapeCache;
-    }
-    return cache;
-}
-
-void KoShapePrivate::removeShapeCache()
-{
-    if (cache) {
-        cache->purge();
-        delete cache;
-        cache = 0;
-    }
 }
 
 void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
@@ -311,7 +272,6 @@ KoShape::~KoShape()
 {
     Q_D(KoShape);
     d->shapeChanged(Deleted);
-    d->removeShapeCache();
     delete d_ptr;
 }
 
@@ -383,10 +343,12 @@ void KoShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoShape);
     QSizeF oldSize(size());
+
+    // always set size, as d->size and size() may vary
+    d->size = newSize;
+
     if (oldSize == newSize)
         return;
-
-    d->size = newSize;
 
     notifyChanged();
     d->shapeChanged(SizeChanged);
@@ -586,15 +548,6 @@ void KoShape::update() const
 {
     Q_D(const KoShape);
 
-    if (d->cacheMode != NoCache) {
-        KoShapeCache *cache = d->shapeCache();
-        foreach(KoShapeCache::DeviceData *data, cache->deviceData.values()) {
-            data->allExposed = true;
-            data->exposed.clear();
-        }
-
-    }
-
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
         foreach(KoShapeManager * manager, d->shapeManagers) {
@@ -611,21 +564,6 @@ void KoShape::update(const QRectF &rect) const
     }
 
     Q_D(const KoShape);
-
-    if (d->cacheMode != NoCache) {
-        KoShapeCache *cache = d->shapeCache();
-        foreach(KoShapeCache::DeviceData *data, cache->deviceData.values()) {
-            if (!data->allExposed) {
-                if (rect.isNull()) {
-                    data->allExposed = true;
-                    data->exposed.clear();
-                }
-                else {
-                    data->exposed.append(rect);
-                }
-            }
-        }
-    }
 
     if (!d->shapeManagers.empty() && isVisible()) {
         QRectF rc(absoluteTransformation(0).mapRect(rect));
@@ -644,8 +582,8 @@ QPainterPath KoShape::outline() const
 
 QRectF KoShape::outlineRect() const
 {
-    Q_D(const KoShape);
-    return QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001))));
+    const QSizeF s = size();
+    return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(), qreal(0.0001)), qMax(s.height(), qreal(0.0001))));
 }
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
@@ -701,10 +639,6 @@ void KoShape::notifyChanged()
     Q_D(KoShape);
     foreach(KoShapeManager * manager, d->shapeManagers) {
         manager->notifyShapeChanged(this);
-    }
-    KoShapeCache *cache = d->maybeShapeCache();
-    if (cache) {
-        cache->purge();
     }
 }
 
@@ -996,12 +930,6 @@ void KoShape::setVisible(bool on)
     Q_D(KoShape);
     if (d->visible == on) return;
     d->visible = on;
-    if (d->visible) {
-        KoShapeCache *cache = d->maybeShapeCache();
-        if (cache) {
-            cache->purge();
-        }
-    }
 }
 
 bool KoShape::isVisible(bool recursive) const
@@ -2096,23 +2024,4 @@ KoShapePrivate *KoShape::priv()
 {
     Q_D(KoShape);
     return d;
-}
-
-KoShape::CacheMode KoShape::cacheMode() const
-{
-    Q_D(const KoShape);
-    return d->cacheMode;
-}
-
-void KoShape::setCacheMode(CacheMode mode)
-{
-    Q_D(KoShape);
-    d->cacheMode = mode;
-    if (mode == NoCache) {
-        d->removeShapeCache();
-    } else {
-        KoShapeCache *cache = d->shapeCache();
-        // Reset old cache
-        cache->purge();
-    }
 }

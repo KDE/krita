@@ -107,6 +107,19 @@ enum KoTextFrameProperty {
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
 KOTEXT_EXPORT Direction directionFromString(const QString &direction);
+
+/// There are several possible text breaks
+enum KoTextBreakProperty {
+    NoBreak,         ///< No text break
+    ColumnBreak,     ///< Column break
+    PageBreak        ///< Page break
+};
+
+/// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
+KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
+/// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
+KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
+
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

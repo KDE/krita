@@ -209,21 +209,33 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
 KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr value)
 {
     QMap<QString, KisMetaData::Value> deviceSettingStructure;
+    QByteArray array;
+    
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    Q_ASSERT(dvalue);
-    QByteArray array(dvalue->count(), 0);
-    dvalue->copy((Exiv2::byte*)array.data());
+    if(dvalue)
+    {
+        array.resize(dvalue->count());
+        dvalue->copy((Exiv2::byte*)array.data());
+    } else {
+        Q_ASSERT(value->typeId() == Exiv2::unsignedShort);
+        array.resize(2 * value->count());
+        value->copy((Exiv2::byte*)array.data(), Exiv2::littleEndian);
+    }
     int columns = (reinterpret_cast<quint16*>(array.data()))[0];
     int rows = (reinterpret_cast<quint16*>(array.data()))[1];
+    qDebug() << columns << rows;
     deviceSettingStructure["Columns"] = KisMetaData::Value(columns);
     deviceSettingStructure["Rows"] = KisMetaData::Value(rows);
     QList<KisMetaData::Value> settings;
-    int index = 4;
-    for (int i = 0; i < columns * rows; i++) {
-        int lastIndex = array.indexOf((char)0, index);
-        QString setting = array.mid(index, lastIndex - index);
+    QByteArray null(2);
+    null.fill(0);
+    
+    for (int index = 4; index < array.size(); )
+    {
+        int lastIndex = array.indexOf(null, index);
+        QString setting = QString::fromUtf16((ushort*)( array.data() + index), lastIndex - index + 2);
         index = lastIndex + 2;
-        dbgFile << "Setting [" << i << "] =" << setting;
+        dbgFile << "Setting << " << setting;
         settings.append(KisMetaData::Value(setting));
     }
     deviceSettingStructure["Settings"] = KisMetaData::Value(settings, KisMetaData::Value::OrderedArray);
@@ -236,15 +248,15 @@ Exiv2::Value* deviceSettingDescriptionKMDToExif(const KisMetaData::Value& value)
     quint16 columns = deviceSettingStructure["Columns"].asVariant().toInt(0);
     quint16 rows = deviceSettingStructure["Rows"].asVariant().toInt(0);
 
+    QTextCodec* codec = QTextCodec::codecForName("UTF-16");
+    
     QList<KisMetaData::Value> settings = deviceSettingStructure["Settings"].asArray();
-    Q_ASSERT(columns*rows == settings.size());
     QByteArray array(4, 0);
     (reinterpret_cast<quint16*>(array.data()))[0] = columns;
     (reinterpret_cast<quint16*>(array.data()))[1] = rows;
-    for (int i = 0; i < columns * rows; i++) {
-        QByteArray setting = settings[i].asVariant().toString().toAscii();
-        setting.append((char)0);
-        setting.append((char)0);
+    for (int i = 0; i < settings.count(); i++) {
+        QString str = settings[i].asVariant().toString();
+        QByteArray setting = codec->fromUnicode(str);
         array.append(setting);
     }
     return new Exiv2::DataValue((const Exiv2::byte*)array.data(), array.size());

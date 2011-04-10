@@ -67,8 +67,7 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
     int precision = -1;
     int leadingZ  = 1;
 
-    // Long-standing todo: thousandsSep
-    //bool thousandsSep = false;
+    bool thousandsSep = false;
     //todo negred
     //bool negRed = false;
     bool ok = false;
@@ -135,7 +134,9 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
             // number:language="de" number:country="DE">€</number:currency-symbol>
             // Stefan: localization of the symbol?
         } else if (localName == "number") {
-            // TODO: number:grouping="true"
+            if (e.hasAttributeNS(KoXmlNS::number, "grouping")) {
+                thousandsSep = e.attributeNS(KoXmlNS::number, "grouping", QString()).toLower() == "true";
+            }
             if (e.hasAttributeNS(KoXmlNS::number, "decimal-places")) {
                 int d = e.attributeNS(KoXmlNS::number, "decimal-places", QString()).toInt(&ok);
                 if (ok)
@@ -146,15 +147,15 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
                 if (ok)
                     leadingZ = d;
             }
-//            if (thousandsSep && leadingZ <= 3) {
-//                format += "#,";
-//                for (i = leadingZ; i <= 3; ++i)
-//                    format += '#';
-//            }
+            if (thousandsSep && leadingZ <= 3) {
+                format += "#,";
+                for (i = leadingZ; i <= 3; ++i)
+                    format += '#';
+            }
             for (i = 1; i <= leadingZ; ++i) {
                 format +=  '0';
-//                if ((i % 3 == 0) && thousandsSep)
-//                    format = + ',' ;
+                if ((i % 3 == 0) && thousandsSep)
+                    format = + ',' ;
             }
             if (precision > -1) {
                 format += '.';
@@ -186,16 +187,20 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
                     exp = 1;
             }
 
-//            if (thousandsSep && leadingZ <= 3) {
-//                format += "#,";
-//                for (i = leadingZ; i <= 3; ++i)
-//                    format += '#';
-//            }
+            if (e.hasAttributeNS(KoXmlNS::number, "grouping")) {
+                thousandsSep = e.attributeNS(KoXmlNS::number, "grouping", QString()).toLower() == "true";
+            }
+
+            if (thousandsSep && leadingZ <= 3) {
+                format += "#,";
+                for (i = leadingZ; i <= 3; ++i)
+                    format += '#';
+            }
 
             for (i = 1; i <= leadingZ; ++i) {
                 format += '0';
-//                if ((i % 3 == 0) && thousandsSep)
-//                    format += ',';
+                if ((i % 3 == 0) && thousandsSep)
+                    format += ',';
             }
 
             if (precision > -1) {
@@ -233,6 +238,9 @@ QPair<QString, NumericStyleFormat> loadOdfNumberStyle(const KoXmlElement &parent
                 int d = e.attributeNS(KoXmlNS::number, "denominator-value", QString()).toInt(&ok);
                 if (ok)
                     denominatorValue = d;
+            }
+            if (e.hasAttributeNS(KoXmlNS::number, "grouping")) {
+                thousandsSep = e.attributeNS(KoXmlNS::number, "grouping", QString()).toLower() == "true";
             }
 
             for (i = 0; i < integer; ++i)
@@ -300,6 +308,7 @@ kDebug()<<"99 ******************************************************************
     dataStyle.prefix = prefix;
     dataStyle.suffix = suffix;
     dataStyle.precision = precision;
+    dataStyle.thousandsSep = thousandsSep;
     kDebug(30003) << " finish insert format :" << format << " prefix :" << prefix << " suffix :" << suffix;
     return QPair<QString, NumericStyleFormat>(styleName, dataStyle);
 }
@@ -772,7 +781,7 @@ QString saveOdfFractionStyle(KoGenStyles &mainStyles, const QString &_format,
 
 
 QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix)
+        const QString &_prefix, const QString &_suffix, bool thousandsSep)
 {
     //kDebug(30003) << "QString saveOdfNumberStyle( KoGenStyles &mainStyles, const QString & _format ) :" << _format;
     QString format(_format);
@@ -803,6 +812,8 @@ QString saveOdfNumberStyle(KoGenStyles &mainStyles, const QString &_format,
     if (!beforeSeparator)
         elementWriter.addAttribute("number:decimal-places", decimalplaces);
     elementWriter.addAttribute("number:min-integer-digits", integerdigits);
+    if (thousandsSep)
+        elementWriter.addAttribute("number:grouping", true);
     elementWriter.endElement();
 
     text = _suffix ;
@@ -865,7 +876,7 @@ QString saveOdfPercentageStyle(KoGenStyles &mainStyles, const QString &_format,
 }
 
 QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
-        const QString &_prefix, const QString &_suffix)
+        const QString &_prefix, const QString &_suffix, bool thousandsSep)
 {
     //<number:number-style style:name="N60">
     //<number:scientific-number number:decimal-places="2" number:min-integer-digits="1" number:min-exponent-digits="3"/>
@@ -923,6 +934,8 @@ QString saveOdfScientificStyle(KoGenStyles &mainStyles, const QString &_format,
         elementWriter.addAttribute("number:decimal-places", decimalplace);
     elementWriter.addAttribute("number:min-integer-digits", integerdigits);
     elementWriter.addAttribute("number:min-exponent-digits", exponentdigits);
+    if (thousandsSep)
+        elementWriter.addAttribute("number:grouping", true);
     elementWriter.endElement();
 
     text = _suffix;

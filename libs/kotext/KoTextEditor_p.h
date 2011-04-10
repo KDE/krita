@@ -26,6 +26,7 @@
 #include "KoTextDocument.h"
 #include "styles/KoParagraphStyle.h"
 #include "styles/KoStyleManager.h"
+#include "changetracker/KoChangeTracker.h"
 
 #include <KLocale>
 #include <kdebug.h>

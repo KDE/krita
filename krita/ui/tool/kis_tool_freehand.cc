@@ -272,7 +272,7 @@ void KisToolFreehand::mouseReleaseEvent(KoPointerEvent* e)
 
         if (!m_hasPaintAtLeastOnce) {
             paintAt(m_previousPaintInformation);
-        } else if (m_smooth) {
+        } else if (m_smooth && !m_previousTangent.isNull()) {
             finishStroke();
         }
         m_strokeTimer.stop();

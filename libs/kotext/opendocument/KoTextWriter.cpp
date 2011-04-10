@@ -44,6 +44,7 @@
 #include "styles/KoListStyle.h"
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableCellStyle.h"
+#include "styles/KoTableStyle.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
@@ -56,7 +57,12 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
+<<<<<<< HEAD
 #include <KoXmlNS.h>
+=======
+#include <KoTableColumnAndRowStyleManager.h>
+#include <KoTableColumnStyle.h>
+>>>>>>> master
 
 #include <opendocument/KoTextSharedSavingData.h>
 #include <changetracker/KoChangeTracker.h>
@@ -71,6 +77,7 @@
 #ifdef SHOULD_BUILD_RDF
 #include <Soprano/Soprano>
 #endif
+#include <KoTableRowStyle.h>
 
 class KoTextWriter::TagInformation
 {
@@ -161,6 +168,11 @@ public:
     QString saveParagraphStyle(const QTextBlock &block);
     QString saveParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &charFormat);
     QString saveCharacterStyle(const QTextCharFormat &charFormat, const QTextCharFormat &blockCharFormat);
+    QString saveTableStyle(const QTextTable &table);
+    QString saveTableColumnStyle(const KoTableColumnStyle &columnStyle, int columnNumber, const QString &tableStyleName);
+    QString saveTableRowStyle(const KoTableRowStyle &rowStyle, int rowNumber, const QString &tableStyleName);
+    QString saveTableCellStyle(const QTextTableCellFormat &cellFormat, int columnNumber, const QString &tableStyleName);
+    
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
@@ -653,7 +665,87 @@ QString KoTextWriter::Private::saveCharacterStyle(const QTextCharFormat &charFor
     return generatedName;
 }
 
-// A convinience function to get a listId from a list-format
+QString KoTextWriter::Private::saveTableStyle(const QTextTable& table)
+{
+    KoTableStyle *originalTableStyle = styleManager->tableStyle(table.format().intProperty(KoTableStyle::StyleId));
+    QString generatedName;
+    QString internalName = "";
+    if (originalTableStyle)
+    {
+        internalName = QString(QUrl::toPercentEncoding(originalTableStyle->name(), "", " ")).replace('%', '_');
+    }
+    KoTableStyle tableStyle(table.format());
+    if ((originalTableStyle) && (*originalTableStyle == tableStyle)) { // This is the real unmodified table style
+        KoGenStyle style(KoGenStyle::TableStyle, "table");
+        originalTableStyle->saveOdf(style);
+        generatedName = context.mainStyles().insert(style, internalName, KoGenStyles::DontAddNumberToName);
+    } else { // There are manual changes... We'll have to store them then
+        KoGenStyle style(KoGenStyle::TableAutoStyle, "table", internalName);
+        if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+            style.setAutoStyleInStylesDotXml(true);
+        if (originalTableStyle)
+            tableStyle.removeDuplicates(*originalTableStyle);
+        if (!tableStyle.isEmpty()) {
+            tableStyle.saveOdf(style);
+            generatedName = context.mainStyles().insert(style, "Table");
+        }
+    }
+    return generatedName;
+}
+
+QString KoTextWriter::Private::saveTableColumnStyle(const KoTableColumnStyle& tableColumnStyle, int columnNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enough for everyone
+    QString columnName = QChar('A' + int(columnNumber % 26));
+    if (columnNumber > 25)
+        columnName.prepend(QChar('A' + int(columnNumber/26)));
+    QString generatedName = tableStyleName + "." + columnName;
+    
+    KoGenStyle style(KoGenStyle::TableColumnAutoStyle, "table-column");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    tableColumnStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName, KoGenStyles::DontAddNumberToName);
+    return generatedName;
+}
+
+QString KoTextWriter::Private::saveTableRowStyle(const KoTableRowStyle& tableRowStyle, int rowNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enough for everyone
+    QString generatedName = tableStyleName + "." + QString::number(rowNumber + 1);
+    
+    KoGenStyle style(KoGenStyle::TableRowAutoStyle, "table-row");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    tableRowStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName, KoGenStyles::DontAddNumberToName);
+    return generatedName;
+}
+
+QString KoTextWriter::Private::saveTableCellStyle(const QTextTableCellFormat& cellFormat, int columnNumber, const QString& tableStyleName)
+{
+    // 26*26 columns should be enough for everyone
+    QString columnName = QChar('A' + int(columnNumber % 26));
+    if (columnNumber > 25)
+        columnName.prepend(QChar('A' + int(columnNumber/26)));
+    QString generatedName = tableStyleName + "." + columnName;
+    
+    KoGenStyle style(KoGenStyle::TableCellAutoStyle, "table-cell");
+    
+    if (context.isSet(KoShapeSavingContext::AutoStyleInStyleXml))
+        style.setAutoStyleInStylesDotXml(true);
+    
+    KoTableCellStyle cellStyle(cellFormat);
+    cellStyle.saveOdf(style);
+    generatedName = context.mainStyles().insert(style, generatedName);
+    return generatedName;
+}
+
+// A convenience function to get a listId from a list-format
 static KoListStyle::ListIdType ListId(const QTextListFormat &format)
 {
     KoListStyle::ListIdType listId;
@@ -1189,6 +1281,7 @@ int KoTextWriter::Private::checkForTableColumnChange(int position)
 
 void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles)
 {
+<<<<<<< HEAD
     TagInformation tableTagInformation;
     tableTagInformation.setTagName("table:table");
     int changeId = openTagRegion(table->firstCursorPosition().position(), KoTextWriter::Private::Table, tableTagInformation);
@@ -1198,12 +1291,53 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
         tableColumnInformation.setTagName("table:table-column");
         int changeId = openTagRegion(table->cellAt(0,c).firstCursorPosition().position(), KoTextWriter::Private::TableColumn, tableColumnInformation);
         closeTagRegion(changeId);
+=======
+    KoTableColumnAndRowStyleManager tcarManager = KoTableColumnAndRowStyleManager::getManager(table);
+    writer->startElement("table:table");
+    QString tableStyleName = saveTableStyle(*table);
+    writer->addAttribute("table:style-name", tableStyleName);
+    int numberHeadingRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
+    
+    for (int c = 0 ; c < table->columns() ; c++) {
+        KoTableColumnStyle columnStyle = tcarManager.columnStyle(c);
+        int repetition = 0;
+        for (; repetition < (table->columns() - c) ; repetition++)
+        {
+            if (columnStyle != tcarManager.columnStyle(c + repetition + 1))
+                break;
+        }
+        writer->startElement("table:table-column");
+        QString columnStyleName = saveTableColumnStyle(columnStyle, c, tableStyleName);
+        writer->addAttribute("table:style-name", columnStyleName);
+        if (repetition > 0)
+        {
+            writer->addAttribute("table:number-columns-repeated", repetition + 1);
+        }
+        writer->endElement(); // table:table-column
+        c += repetition;
+>>>>>>> master
     }
+    
+    if (numberHeadingRows)
+        writer->startElement("table:table-header-rows");
+    
     for (int r = 0 ; r < table->rows() ; r++) {
+<<<<<<< HEAD
         TagInformation tableRowInformation;
         tableRowInformation.setTagName("table:table-row");
         int changeId = openTagRegion(table->cellAt(r,0).firstCursorPosition().position(), KoTextWriter::Private::TableRow, tableRowInformation);
 
+=======
+        writer->startElement("table:table-row");
+        
+        KoTableRowStyle rowStyle = tcarManager.rowStyle(r);
+        if (!rowStyle.isEmpty())
+        {
+            QString rowStyleName = saveTableRowStyle(rowStyle, r, tableStyleName);
+            writer->addAttribute("table:style-name", rowStyleName);
+        }
+        
+>>>>>>> master
         for (int c = 0 ; c < table->columns() ; c++) {
             QTextTableCell cell = table->cellAt(r, c);
             int changeId = 0;
@@ -1221,18 +1355,36 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
                 if (KoTextInlineRdf* inlineRdf = v.value<KoTextInlineRdf*>()) {
                     inlineRdf->saveOdf(context, writer);
                 }
+                
+                QString cellStyleName = saveTableCellStyle(cellFormat, c, tableStyleName);
+                writer->addAttribute("table:style-name", cellStyleName);
                 writeBlocks(table->document(), cell.firstPosition(), cell.lastPosition(), listStyles, table);
             } else {
                 TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:covered-table-cell");
                 changeId = openTagRegion(table->cellAt(r,c).firstCursorPosition().position(), KoTextWriter::Private::TableCell, tableCellInformation);
             }
+<<<<<<< HEAD
 
             closeTagRegion(changeId);
         }
         closeTagRegion(changeId);
     }
     closeTagRegion(changeId);
+=======
+            writer->endElement(); // table:table-cell OR table:covered-table-cell
+        }
+        writer->endElement(); // table:table-row
+        
+        if (r + 1 == numberHeadingRows) {
+            writer->endElement();   // table:table-header-rows
+            writer->startElement("table:table-rows");
+        }
+    }
+    if (numberHeadingRows)
+        writer->endElement();   // table:table-rows
+    writer->endElement(); // table:table
+>>>>>>> master
 }
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)

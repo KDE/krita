@@ -83,6 +83,8 @@ public:
     virtual bool useColorAsMask() const;
     virtual void setUseColorAsMask(bool useColorAsMask);
     virtual bool hasColor() const;
+    
+    virtual quint32 brushIndex(const KisPaintInformation& info) const;
 
     virtual enumBrushType brushType() const;
 

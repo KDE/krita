@@ -1602,6 +1602,7 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         canvas()->updateCanvas(ts->boundingRect().intersected(rect));
     }
 }
+
 QRectF TextTool::caretRect(int position) const
 {
     if (!m_textShapeData)
@@ -2344,8 +2345,6 @@ void TextTool::runUrl(KoPointerEvent *event, QString &url)
 
     event->accept();
     new KRun(url, 0);
-    m_textEditor.data()->setPosition(0);
-    ensureCursorVisible();
 }
 
 void TextTool::debugTextDocument()

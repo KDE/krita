@@ -25,8 +25,9 @@
 #include <KoShapeControllerBase.h>
 #include <KoShapeContainerModel.h>
 #include <QPainter>
-
+#include "KoShapeManager.h"
 #include "kdebug.h"
+#include "KoSnapData.h"
 
 class MockShape : public KoShape
 {
@@ -77,17 +78,28 @@ class KoToolProxy;
 class MockCanvas : public KoCanvasBase
 {
 public:
-    MockCanvas()
-            : KoCanvasBase(0) {}
+    MockCanvas(KoShapeControllerBase *aKoShapeControllerBase =0)//made for TestSnapStrategy.cpp
+            : KoCanvasBase(aKoShapeControllerBase), m_shapeManager(new KoShapeManager(this)), m_guideData(0) {}
     ~MockCanvas() {}
-
-    void gridSize(qreal *, qreal *) const {}
+    void setHorz(qreal pHorz){
+        m_horz = pHorz;
+    }
+    void setVert(qreal pVert){
+        m_vert = pVert;
+    }
+    void setGuidesData(KoGuidesData* pGuideData){
+        m_guideData = pGuideData;
+    }
+    void gridSize(qreal *horizontal, qreal *vertical) const {
+        *horizontal = m_horz;
+        *vertical = m_vert;
+    }
     bool snapToGrid() const  {
-        return false;
+        return true;
     }
     void addCommand(QUndoCommand*) { }
     KoShapeManager *shapeManager() const  {
-        return 0;
+        return m_shapeManager;
     }
     void updateCanvas(const QRectF&)  {}
     KoToolProxy * toolProxy() const {
@@ -105,8 +117,16 @@ public:
     KoUnit unit() const {
         return KoUnit(KoUnit::Millimeter);
     }
+    KoGuidesData *guidesData(){
+        return m_guideData;
+    }
     void updateInputMethodInfo() {}
     void setCursor(const QCursor &) {}
+    private:
+        KoShapeManager *m_shapeManager;
+        qreal m_horz;
+        qreal m_vert;
+        KoGuidesData *m_guideData;
 };
 
 class MockShapeController : public KoShapeControllerBase

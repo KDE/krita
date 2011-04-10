@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -33,6 +34,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
+class KoShapeControllerBase;
 
 class KAction;
 class QAction;
@@ -66,6 +68,13 @@ public:
      */
     explicit KoToolBase(KoCanvasBase *canvas);
     virtual ~KoToolBase();
+
+    /**
+     * connect the tool to the new shapecontroller. Old connections are removed.
+     *
+     * @param shapeController the new shape controller
+     */
+    void updateShapeController(KoShapeControllerBase *shapeController);
 
     /**
      * request a repaint of the decorations to be made. This triggers
@@ -399,6 +408,12 @@ protected:
      * @see popupActionList
      */
     void setPopupActionList(const QList<QAction*> &list);
+
+    /// Convenience function to get the current handle radius
+    uint handleRadius() const;
+
+    /// Convencience function to get the current grab sensitivity
+    uint grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

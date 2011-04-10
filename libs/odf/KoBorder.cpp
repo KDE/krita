@@ -40,6 +40,8 @@ public:
     KoBorder::BorderData topBorder;
     KoBorder::BorderData rightBorder;
     KoBorder::BorderData bottomBorder;
+    KoBorder::BorderData tlbrBorder;
+    KoBorder::BorderData trblBorder;
 };
 
 KoBorderPrivate::KoBorderPrivate()
@@ -483,6 +485,105 @@ qreal KoBorder::bottomBorderSpacing() const
     return d->bottomBorder.spacing;
 }
 
+void KoBorder::setTlbrBorderStyle(BorderStyle style)
+{
+    d->tlbrBorder.style = style;
+}
+
+KoBorder::BorderStyle KoBorder::tlbrBorderStyle() const
+{
+    return d->tlbrBorder.style;
+}
+
+void KoBorder::setTlbrBorderColor(const QColor &color)
+{
+    d->tlbrBorder.color = color;
+}
+
+QColor KoBorder::tlbrBorderColor() const
+{
+    return d->tlbrBorder.color;
+}
+
+void KoBorder::setTlbrBorderWidth(qreal width)
+{
+    d->tlbrBorder.width = width;
+}
+
+qreal KoBorder::tlbrBorderWidth() const
+{
+    return d->tlbrBorder.width;
+}
+
+void KoBorder::setTlbrInnerBorderWidth(qreal width)
+{
+    d->tlbrBorder.innerWidth = width;
+}
+
+qreal KoBorder::tlbrInnerBorderWidth() const
+{
+    return d->tlbrBorder.innerWidth;
+}
+
+void KoBorder::setTlbrBorderSpacing(qreal width)
+{
+    d->tlbrBorder.spacing = width;
+}
+
+qreal KoBorder::tlbrBorderSpacing() const
+{
+    return d->tlbrBorder.spacing;
+}
+
+void KoBorder::setTrblBorderStyle(BorderStyle style)
+{
+    d->trblBorder.style = style;
+}
+
+KoBorder::BorderStyle KoBorder::trblBorderStyle() const
+{
+    return d->trblBorder.style;
+}
+
+void KoBorder::setTrblBorderColor(const QColor &color)
+{
+    d->trblBorder.color = color;
+}
+
+QColor KoBorder::trblBorderColor() const
+{
+    return d->trblBorder.color;
+}
+
+void KoBorder::setTrblBorderWidth(qreal width)
+{
+    d->trblBorder.width = width;
+}
+
+qreal KoBorder::trblBorderWidth() const
+{
+    return d->trblBorder.width;
+}
+
+void KoBorder::setTrblInnerBorderWidth(qreal width)
+{
+    d->trblBorder.innerWidth = width;
+}
+
+qreal KoBorder::trblInnerBorderWidth() const
+{
+    return d->trblBorder.innerWidth;
+}
+
+void KoBorder::setTrblBorderSpacing(qreal width)
+{
+    d->trblBorder.spacing = width;
+}
+
+qreal KoBorder::trblBorderSpacing() const
+{
+    return d->trblBorder.spacing;
+}
 
 KoBorder::BorderData KoBorder::leftBorderData() const
 {
@@ -504,7 +605,15 @@ KoBorder::BorderData KoBorder::bottomBorderData() const
     return d->bottomBorder;
 }
 
+KoBorder::BorderData KoBorder::trblBorderData() const
+{
+    return d->trblBorder;
+}
 
+KoBorder::BorderData KoBorder::tlbrBorderData() const
+{
+    return d->tlbrBorder;
+}
 // ----------------------------------------------------------------
 //                         load and save
 
@@ -597,6 +706,33 @@ void KoBorder::loadOdf(const KoXmlElement &style)
         }
     }
 
+    if (style.hasAttributeNS(KoXmlNS::style, "diagonal-tl-br")) {
+        QString border = style.attributeNS(KoXmlNS::style, "diagonal-tl-br");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
+            QStringList borderData = border.split(' ', QString::SkipEmptyParts);
+            setTlbrBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
+            setTlbrBorderStyle(odfBorderStyle(borderData[1]));
+            QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-bottom");
+            if (!specialBorderStyle.isEmpty()) {
+                setTlbrBorderStyle(odfBorderStyle(specialBorderStyle));
+            }
+            setTlbrBorderColor(QColor(borderData[2]));
+        }
+    }
+    if (style.hasAttributeNS(KoXmlNS::style, "diagonal-bl-tr")) {
+        QString border = style.attributeNS(KoXmlNS::style, "diagonal-bl-tr");
+        if (!border.isEmpty() && border != "none" && border != "hidden") {
+            QStringList borderData = border.split(' ', QString::SkipEmptyParts);
+            setTrblBorderWidth(KoUnit::parseValue(borderData[0], 1.0));
+            setTrblBorderStyle(odfBorderStyle(borderData[1]));
+            QString specialBorderStyle = style.attributeNS(KoXmlNS::koffice, "specialborder-bottom");
+            if (!specialBorderStyle.isEmpty()) {
+                setTrblBorderStyle(odfBorderStyle(specialBorderStyle));
+            }
+            setTrblBorderColor(QColor(borderData[2]));
+        }
+    }
+
     // Handle double borders.
     if (style.hasAttributeNS(KoXmlNS::style, "border-line-width")) {
         QString borderLineWidth = style.attributeNS(KoXmlNS::style, "border-line-width");
@@ -657,6 +793,25 @@ void KoBorder::loadOdf(const KoXmlElement &style)
             }
         }
     }
+
+    if (style.hasAttributeNS(KoXmlNS::style, "diagonal-tl-br-widths")) {
+        QString borderLineWidth = style.attributeNS(KoXmlNS::style, "diagonal-tl-br-widths");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setTlbrInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setTlbrBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setTlbrBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+        }
+    }
+    if (style.hasAttributeNS(KoXmlNS::style, "diagonal-bl-tr-widths")) {
+        QString borderLineWidth = style.attributeNS(KoXmlNS::style, "diagonal-bl-tr-widths");
+        if (!borderLineWidth.isEmpty() && borderLineWidth != "none" && borderLineWidth != "hidden") {
+            QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
+            setTrblInnerBorderWidth(KoUnit::parseValue(blw[0], 0.1));
+            setTrblBorderSpacing(KoUnit::parseValue(blw[1], 1.0));
+            setTrblBorderWidth(KoUnit::parseValue(blw[2], 0.1));
+        }
+    }
 }
 
 void KoBorder::saveOdf(KoGenStyle &style) const
@@ -679,6 +834,15 @@ void KoBorder::saveOdf(KoGenStyle &style) const
                                         odfBorderStyleString(bottomBorderStyle()),
                                         bottomBorderColor().name());
 
+    QString tlbrBorderString = QString("%1pt %2 %3")
+                                .arg(QString::number(tlbrBorderWidth()),
+                                     odfBorderStyleString(tlbrBorderStyle()),
+                                     tlbrBorderColor().name());
+    QString trblBorderString = QString("%1pt %2 %3")
+                                   .arg(QString::number(trblBorderWidth()),
+                                        odfBorderStyleString(trblBorderStyle()),
+                                        trblBorderColor().name());
+
     // Check if we can save all borders in one fo:border attribute, or
     // if we have to use several different ones like fo:border-left, etc.
     if (leftBorderString == rightBorderString
@@ -700,6 +864,13 @@ void KoBorder::saveOdf(KoGenStyle &style) const
             style.addProperty("fo:border-bottom", bottomBorderString);
     }
 
+    if (tlbrBorderStyle() != BorderNone) {
+        style.addProperty("style:diagonal-tl-br", tlbrBorderString);
+    }
+    if (trblBorderStyle() != BorderNone) {
+        style.addProperty("style:diagonal-bl-tr", trblBorderString);
+    }
+
     // Handle double borders
     QString leftBorderLineWidth = QString("%1pt %2pt %3pt")
                                     .arg(QString::number(leftInnerBorderWidth()),
@@ -718,6 +889,15 @@ void KoBorder::saveOdf(KoGenStyle &style) const
                                            QString::number(bottomBorderSpacing()),
                                            QString::number(bottomBorderWidth()));
 
+    QString tlbrBorderLineWidth = QString("%1pt %2pt %3pt")
+                                   .arg(QString::number(tlbrInnerBorderWidth()),
+                                        QString::number(tlbrBorderSpacing()),
+                                        QString::number(tlbrBorderWidth()));
+    QString trblBorderLineWidth = QString("%1pt %2pt %3pt")
+                                      .arg(QString::number(trblInnerBorderWidth()),
+                                           QString::number(trblBorderSpacing()),
+                                           QString::number(trblBorderWidth()));
+
     if (leftBorderLineWidth == rightBorderLineWidth
         && leftBorderLineWidth == topBorderLineWidth
         && leftBorderLineWidth == bottomBorderLineWidth
@@ -735,5 +915,12 @@ void KoBorder::saveOdf(KoGenStyle &style) const
             style.addProperty("style:border-line-width-top", topBorderLineWidth);
         if (bottomBorderStyle() == BorderDouble)
             style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth);
+    }
+
+    if (tlbrBorderStyle() == BorderDouble) {
+        style.addProperty("style:diagonal-tl-br-widths", tlbrBorderLineWidth);
+    }
+    if (trblBorderStyle() == BorderDouble) {
+        style.addProperty("style:diagonal-bl-tr-widths", trblBorderLineWidth);
     }
 }

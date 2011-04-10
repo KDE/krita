@@ -36,12 +36,26 @@ GoogleDocumentService::GoogleDocumentService()
         : newInformation(true)
           , waitingForDoc(false)
           , loggedin(false)
+          , documentList(0)
 {
     connect(&networkManager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(handleNetworkData(QNetworkReply*)));
 
     gHandler = new GoogleContentHandler();
     xmlReader.setContentHandler(gHandler);
+}
+
+GoogleDocumentService::~GoogleDocumentService()
+{
+    if (documentList) {
+        delete documentList;
+        documentList = 0;
+    }
+
+    if (gHandler) {
+        delete gHandler;
+        gHandler = 0;
+    }
 }
 
 void GoogleDocumentService::clientLogin(const QString & username, const QString & password)
@@ -180,6 +194,4 @@ void GoogleDocumentService::downloadDocument(const QString & _url, const QString
 void GoogleDocumentService::hideDocumentListWindow()
 {
     documentList->hide();
-    delete documentList;
-    documentList = 0;
 }

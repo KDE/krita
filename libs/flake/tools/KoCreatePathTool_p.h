@@ -248,7 +248,7 @@ public:
 
         KoPathPoint * nearestPoint = 0;
         qreal minDistance = HUGE_VAL;
-        uint grabSensitivity = q->canvas()->resourceManager()->grabSensitivity();
+        uint grabSensitivity = q->grabSensitivity();
         qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
 
         foreach(KoShape *shape, shapes) {

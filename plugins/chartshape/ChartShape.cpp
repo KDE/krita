@@ -370,7 +370,6 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
 {
     d->resourceManager = resourceManager;
     setShapeId( ChartShapeId );
-    setCacheMode(KoShape::ScaledCache);
 
     // Instantiated all children first
     d->proxyModel = new ChartProxyModel( &d->tableSource );
@@ -1017,6 +1016,8 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     if ( !plotareaElem.isNull() ) {
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;
+        d->plotArea->setChartType( chartType );
+        d->plotArea->setChartSubType( chartSubType() );
     }
 
     // 4. Load the title.

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,6 +20,9 @@
 
 #include "KoInteractionStrategy.h"
 #include "KoInteractionStrategy_p.h"
+#include "KoCanvasBase.h"
+#include "KoShapeController.h"
+#include "KoResourceManager.h"
 
 #include <QUndoCommand>
 
@@ -60,4 +64,14 @@ KoToolBase *KoInteractionStrategy::tool() const
 {
     Q_D(const KoInteractionStrategy);
     return d->tool;
+}
+
+uint KoInteractionStrategy::handleRadius() const
+{
+    return tool()->canvas()->shapeController()->resourceManager()->handleRadius();
+}
+
+uint KoInteractionStrategy::grabSensitivity() const
+{
+    return tool()->canvas()->shapeController()->resourceManager()->grabSensitivity();
 }

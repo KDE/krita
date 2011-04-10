@@ -89,7 +89,7 @@ public:
                 }
                 
                 // blend the alpha channel if there exists one
-                if(alpha_pos != -1)
+                if(alpha_pos != -1 && flags.testBit(alpha_pos))
                     dst[alpha_pos] = lerp(dstAlpha, srcAlpha, blendAlpha);
                 
                 src += srcInc;

@@ -330,6 +330,19 @@ public:
                                     const KisFixedPaintDeviceSP srcDev,
                                     const KisFixedPaintDeviceSP selection,
                                     quint32 srcWidth, quint32 srcHeight);
+    
+    /**
+     * fills a region of width @param width and height @param height of the current
+     * paint device with the color @param color. @param x and @param y set the x and y positions of the
+     * origin top-left corner.
+     *
+     * @param x the destination x-coordinate
+     * @param y the destination y-coordinate
+     * @param width the width of the region to be manipulated
+     * @param height the height of the region to be manipulated
+     * @param color the color the area is filled with
+     */
+    void fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoColor& color);
 
     /**
      * First you need to setup the painter with setMirrorInformation,

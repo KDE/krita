@@ -67,18 +67,6 @@ VectorShape::~VectorShape()
 {
 }
 
-// Methods specific to the vector shape.
-QByteArray  VectorShape::contents() const
-{
-    return m_contents;
-}
-
-void VectorShape::setContents( const QByteArray &newContents )
-{
-    m_contents = newContents;
-    determineType();
-}
-
 VectorShape::VectorType VectorShape::vectorType() const
 {
     return m_type;

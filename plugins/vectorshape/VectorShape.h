@@ -69,7 +69,7 @@ public:
 
 private:
 
-    void draw(QPainter &painter) const;
+    void draw(QPainter &painter);
     void drawNull(QPainter &painter) const;
     void drawWmf(QPainter &painter) const;
     void drawEmf(QPainter &painter) const;

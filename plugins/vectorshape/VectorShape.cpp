@@ -87,7 +87,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.drawImage(0, 0, m_cache);
 }
 
-void VectorShape::draw(QPainter &painter) const
+void VectorShape::draw(QPainter &painter)
 {
     // If the data is uninitialized, e.g. because loading failed, draw the null shape
     if (m_contents.count() == 0) {
@@ -96,6 +96,7 @@ void VectorShape::draw(QPainter &painter) const
     }
 
     // Actually draw the contents
+    m_contents = qUncompress(m_contents);
     switch (m_type) {
     case VectorTypeNone:
         drawNull(painter);
@@ -109,6 +110,7 @@ void VectorShape::draw(QPainter &painter) const
     default:
         drawNull(painter);
     }
+    m_contents = qCompress(m_contents);
 }
 
 void VectorShape::drawNull(QPainter &painter) const
@@ -256,6 +258,8 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     else
         m_type = VectorTypeNone;
 
+    // compress for biiiig memory savings
+    m_contents = qCompress(m_contents);
 
     // Return true if we managed to identify the type.
     return m_type != VectorTypeNone;

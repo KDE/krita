@@ -264,6 +264,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNotesHeight = 0;
     m_preregisteredFootNotesHeight = 0;
     m_prevBorder = 0;
+    m_prevBorderPadding = 0;
 
     while (true) {
         QTextBlock block = cursor->it.currentBlock();
@@ -565,6 +566,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
+    qreal preBorderX = x();
     handleBordersAndSpacing(blockData, &block);
 
     if (textList) {
@@ -573,7 +575,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData->setCounterPosition(QPointF(right() -
             blockData->counterWidth() - format.leftMargin(), m_y));
         else {
-            blockData->setCounterPosition(QPointF(left(), m_y));
+            blockData->setCounterPosition(QPointF(left() + x() - preBorderX, m_y));
         }
     }
 
@@ -1001,7 +1003,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
             blockData->setBorder(newBorder);
             if (m_prevBorder) {
-                //FIXME should be prev format m_y += format.doubleProperty(KoParagraphStyle::BottomPadding);
+                m_y += m_prevBorderPadding;
                 m_y += m_prevBorder->inset(KoTextBlockBorderData::Bottom);
             }
             if (!m_blockRects.isEmpty()) {
@@ -1014,7 +1016,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
         }
     } else { // this parag has no border.
         if (m_prevBorder) {
-            //FIXME should be prev format m_y += format.doubleProperty(KoParagraphStyle::BottomPadding);
+            m_y += m_prevBorderPadding;
             m_y += m_prevBorder->inset(KoTextBlockBorderData::Bottom);
         }
         if (blockData)
@@ -1031,4 +1033,5 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
     m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
 
     m_prevBorder = blockData->border();
+    m_prevBorderPadding = format.doubleProperty(KoParagraphStyle::BottomPadding);
 }

@@ -56,11 +56,11 @@
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_type(VectorTypeNone)
-    , m_currentZoomLevel(-1)
 {
     setShapeId(VectorShape_SHAPEID);
    // Default size of the shape.
     KoShape::setSize( QSizeF( CM_TO_POINT( 8 ), CM_TO_POINT( 5 ) ) );
+    m_cache.setMaxCost(3);
 }
 
 VectorShape::~VectorShape()
@@ -75,16 +75,17 @@ VectorShape::VectorType VectorShape::vectorType() const
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if (m_cache.isNull() || !qFuzzyCompare(m_currentZoomLevel, converter.zoom())) {
+    QRectF rc = converter.documentToView(boundingRect());
+    QImage *cache = m_cache.take(rc.size().toSize().height());
+    if (!cache || cache->isNull()) {
         // create the cache image
-        QRectF rc = converter.documentToView(boundingRect());
-        m_cache = QImage(rc.size().toSize(), QImage::Format_ARGB32);
-        QPainter gc(&m_cache);
+        cache = new QImage(rc.size().toSize(), QImage::Format_ARGB32);
+        QPainter gc(cache);
         applyConversion(gc, converter);
         draw(gc);
-        m_currentZoomLevel = converter.zoom();
     }
-    painter.drawImage(0, 0, m_cache);
+    painter.drawImage(0, 0, *cache);
+    m_cache.insert(rc.size().toSize().height(), cache);
 }
 
 void VectorShape::draw(QPainter &painter)

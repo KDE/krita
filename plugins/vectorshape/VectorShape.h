@@ -25,6 +25,8 @@
 
 // Qt
 #include <QByteArray>
+#include <QCache>
+#include <QSize>
 
 // KOffice
 #include <KoShape.h>
@@ -82,8 +84,7 @@ private:
     VectorType  m_type;
     QByteArray  m_contents;
 
-    qreal m_currentZoomLevel;
-    QImage m_cache;
+    QCache<int, QImage> m_cache;
 };
 
 #endif

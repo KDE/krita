@@ -358,7 +358,18 @@ QString KoTableStyle::alignmentToString(Qt::Alignment alignment)
 
 bool KoTableStyle::mayBreakBetweenRows() const
 {
-    return propertyBoolean(KoTableStyle::MayBreakBetweenRows);
+    return propertyBoolean(MayBreakBetweenRows);
+}
+
+void KoTableStyle::setPageNumber(int page)
+{
+    if (page >= 0)
+        setProperty(PageNumber, page);
+}
+
+int KoTableStyle::pageNumber() const
+{
+    return propertyInt(PageNumber);
 }
 
 bool KoTableStyle::visible()
@@ -453,6 +464,9 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setMayBreakBetweenRows(styleStack.property(KoXmlNS::style, "may-break-between-rows") == "true");
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "page-number")) {
+        setPageNumber(styleStack.property(KoXmlNS::style, "page-number").toInt());
+    }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     if (styleStack.hasProperty(KoXmlNS::fo, "background-color")) {
@@ -471,7 +485,7 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
     // border-model 
     if (styleStack.hasProperty(KoXmlNS::table, "border-model")) {
         QString val = styleStack.property(KoXmlNS::table, "border-model");
-        setCollapsingBorderModel(val =="collapsing");
+        setCollapsingBorderModel(val == "collapsing");
     }
 }
 
@@ -509,6 +523,16 @@ bool KoTableStyle::isEmpty() const
 void KoTableStyle::saveOdf(KoGenStyle &style)
 {
     QList<int> keys = d->stylesPrivate.keys();
+    bool didMargins = false;
+    if ((hasProperty(QTextFormat::FrameLeftMargin)) && 
+        (hasProperty(QTextFormat::FrameRightMargin)) && 
+        (hasProperty(QTextFormat::FrameTopMargin)) && 
+        (hasProperty(QTextFormat::FrameBottomMargin)) && 
+        (rightMargin() == leftMargin()) && (leftMargin() == topMargin()) && (topMargin() == bottomMargin()))
+    {
+        style.addPropertyPt("fo:margin", topMargin(), KoGenStyle::TableType);
+        didMargins = true;
+    }
     foreach(int key, keys) {
         if (key == QTextFormat::FrameWidth) {
             QVariant variantWidth = value(QTextFormat::FrameWidth);
@@ -519,9 +543,9 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
             }
             QTextLength width = variantWidth.value<QTextLength>();
             if (width.type() == QTextLength::PercentageLength) {
-                style.addProperty("fo:rel-width", QString("%1%%").arg(width.rawValue()), KoGenStyle::TableType);
+                style.addProperty("style:rel-width", QString("%1%").arg(width.rawValue()), KoGenStyle::TableType);
             } else if (width.type() == QTextLength::FixedLength) {
-                style.addProperty("fo:width", QString("%1 pt").arg(width.rawValue()), KoGenStyle::TableType);
+                style.addProperty("style:width", QString("%1 pt").arg(width.rawValue()), KoGenStyle::TableType);
             }
         } else if (key == QTextFormat::BlockAlignment) {
             bool ok = false;
@@ -543,13 +567,13 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
-        } else if (key == QTextFormat::FrameLeftMargin) {
+        } else if ((key == QTextFormat::FrameLeftMargin) && !didMargins) {
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::FrameRightMargin) {
+        } else if ((key == QTextFormat::FrameRightMargin) && !didMargins) {
             style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::FrameTopMargin) {
+        } else if ((key == QTextFormat::FrameTopMargin) && !didMargins) {
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::TableType);
-        } else if (key == QTextFormat::FrameBottomMargin) {
+        } else if ((key == QTextFormat::FrameBottomMargin) && !didMargins) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::TableType);
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())
@@ -563,6 +587,11 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:keep-with-next", "auto", KoGenStyle::TableType);
         } else if (key == KoTableStyle::Visible) {
             style.addProperty("table:display", visible(), KoGenStyle::TableType);
+        } else if (key == KoTableStyle::PageNumber) {
+            if (pageNumber() > 0)
+                style.addProperty("style:page-number", pageNumber(), KoGenStyle::TableType);
+            else
+                style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         }
     }
 

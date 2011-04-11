@@ -97,6 +97,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
+            result << "37" << "42";
+        } else if (reference == "nonNegativeInteger") {
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
@@ -115,7 +117,7 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return true;
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
-            if (KoUnit::parseValue(initialValue) == KoUnit::parseValue(outputValue))
+            if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
                 return true;
         } else if (reference == "color") {
             if (initialValue.toLower() == outputValue.toLower())
@@ -294,6 +296,46 @@ void TestOpenDocumentStyle::testTableStyle()
     QFETCH(QString, value);
     
     QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableRowStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-row-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableRowStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableCellStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableCellStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

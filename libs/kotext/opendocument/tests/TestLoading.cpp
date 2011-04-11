@@ -1046,7 +1046,7 @@ QTextDocument *TestLoading::documentFromOdt(const QString &odt)
     KoTextDocument(document).setChangeTracker(changeTracker);
     KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager);
 
-    KoTextLoader loader(shapeLoadingContext, 0, 0);
+    KoTextLoader loader(shapeLoadingContext);
     QTextCursor cursor(document);
     loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 

@@ -64,6 +64,7 @@ public:
         MasterPageName,         ///< Optional name of the master-page
         NumberHeadingRows,      ///< Count the number of heading rows
         Visible,                ///< If true, the table is visible
+        PageNumber              ///< The page number that is applied after the page break
     };
 
     /// Constructor
@@ -97,6 +98,9 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    int pageNumber() const;
+    void setPageNumber (int page);
 
     void setBreakBefore(KoText::KoTextBreakProperty state);
     KoText::KoTextBreakProperty breakBefore();

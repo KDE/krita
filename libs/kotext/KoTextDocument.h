@@ -2,8 +2,6 @@
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
- * Copyright (C) 2011 Ko GmbH <cbo@kogmbh.com>
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -96,6 +94,12 @@ public:
     ///Returns the global undo stack
     KUndoStack *undoStack() const;
 
+    ///Sets the global heading list
+    void setHeadingList(KoList *list);
+
+    ///Returns the global heading list
+    KoList *headingList() const;
+
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
 
@@ -123,11 +127,9 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
-    /// Returns the QTextFrame where we store foot notes
-    QTextFrame *footNotesFrame();
+    QTextFrame* footNotesFrame();
 
-    /// Returns the QTextFrame where we store end notes
-    QTextFrame *endNotesFrame();
+    QTextFrame* endNotesFrame();
 
     /**
      * Specifies if tabs are relative to paragraph indent.
@@ -162,9 +164,10 @@ public:
         FootNotesConfiguration,
         EndNotesConfiguration,
         LineNumberingConfiguration,
-        FootNotesFrame,
         EndNotesFrame,
-        RelativeTabs
+        FootNotesFrame,
+        RelativeTabs,
+        HeadingList
     };
 
     static const QUrl StyleManagerURL;
@@ -176,9 +179,10 @@ public:
     static const QUrl FootNotesConfigurationURL;
     static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
-    static const QUrl FootNotesFrameURL;
     static const QUrl EndNotesFrameURL;
+    static const QUrl FootNotesFrameURL;
     static const QUrl RelativeTabsURL;
+    static const QUrl HeadingListURL;
 
 private:
     QTextDocument *m_document;

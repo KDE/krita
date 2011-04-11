@@ -48,12 +48,14 @@ void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 }
 
 
-void SpecificColorSelectorDock::layerChanged(const KisNodeSP l)
+void SpecificColorSelectorDock::layerChanged(const KisNodeSP node)
 {
-    if (l->inherits("KisMask") && l->parent())
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(l->parent().data())->colorSpace());
+    if(!node) return;
+
+    if (node->inherits("KisMask") && node->parent())
+        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node->parent().data())->colorSpace());
     else
-        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(l.data())->colorSpace());
+        m_colorSelector->setColorSpace(static_cast<const KisLayer*>(node.data())->colorSpace());
 }
 
 

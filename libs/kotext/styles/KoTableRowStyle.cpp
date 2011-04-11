@@ -4,6 +4,7 @@
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2009 KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -164,24 +165,34 @@ QBrush KoTableRowStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
-void KoTableRowStyle::setBreakBefore(bool on)
+void KoTableRowStyle::setBreakBefore(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakBefore, on);
+    setProperty(BreakBefore, state);
 }
 
-bool KoTableRowStyle::breakBefore() const
+KoText::KoTextBreakProperty KoTableRowStyle::breakBefore() const
 {
-    return propertyBoolean(BreakBefore);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakBefore);
 }
 
-void KoTableRowStyle::setBreakAfter(bool on)
+void KoTableRowStyle::setBreakAfter(KoText::KoTextBreakProperty state)
 {
-    setProperty(BreakAfter, on);
+    setProperty(BreakAfter, state);
 }
 
-bool KoTableRowStyle::breakAfter() const
+KoText::KoTextBreakProperty KoTableRowStyle::breakAfter() const
 {
-    return propertyBoolean(BreakAfter);
+    return (KoText::KoTextBreakProperty) propertyInt(BreakAfter);
+}
+
+void KoTableRowStyle::setUseOptimalHeight(bool on)
+{
+    setProperty(UseOptimalHeight, on);
+}
+
+bool KoTableRowStyle::useOptimalHeight() const
+{
+    return propertyBoolean(UseOptimalHeight);
 }
 
 void KoTableRowStyle::setMinimumRowHeight(const qreal height)
@@ -281,7 +292,7 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
-           clearBackground();
+           setBackground(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -295,6 +306,11 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
         setMinimumRowHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "min-row-height")));
     }
 
+    // optimal row height
+    if (styleStack.hasProperty(KoXmlNS::style, "use-optimal-row-height")) {
+        setUseOptimalHeight(styleStack.property(KoXmlNS::style, "use-optimal-row-height") == "true");
+    }
+
     // row height
     if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
         setRowHeight(KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height")));
@@ -302,18 +318,15 @@ void KoTableRowStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // The fo:keep-together specifies if a row is allowed to break in the middle of the row.
     if (styleStack.hasProperty(KoXmlNS::fo, "keep-together")) {
-        if (styleStack.property(KoXmlNS::fo, "keep-together") != "auto")
-            setKeepTogether(true);
+        setKeepTogether(styleStack.property(KoXmlNS::fo, "keep-together") != "auto");
     }
 
-    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a table.
+    // The fo:break-before and fo:break-after attributes insert a page or column break before or after a column.
     if (styleStack.hasProperty(KoXmlNS::fo, "break-before")) {
-        if (styleStack.property(KoXmlNS::fo, "break-before") != "auto")
-            setBreakBefore(true);
+        setBreakBefore(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-before")));
     }
     if (styleStack.hasProperty(KoXmlNS::fo, "break-after")) {
-        if (styleStack.property(KoXmlNS::fo, "break-after") != "auto")
-            setBreakAfter(true);
+        setBreakAfter(KoText::textBreakFromString(styleStack.property(KoXmlNS::fo, "break-after")));
     }
 }
 
@@ -348,15 +361,17 @@ void KoTableRowStyle::saveOdf(KoGenStyle &style) const
             style.addPropertyPt("style:row-height", rowHeight(), KoGenStyle::TableRowType);
         } else if (key == MinimumRowHeight) {
             style.addPropertyPt("style:min-row-height", minimumRowHeight(), KoGenStyle::TableRowType);
+        } else if (key == UseOptimalHeight) {
+            style.addProperty("style:use-optimal-row-height", useOptimalHeight(), KoGenStyle::TableRowType);
         } else if (key == BreakBefore) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::TableRowType);
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::TableRowType);
         } else if (key == BreakAfter) {
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::TableRowType);
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::TableRowType);
         } else if (key == KeepTogether) {
             if (keepTogether())
                 style.addProperty("fo:keep-together", "always", KoGenStyle::TableRowType);
+            else
+                style.addProperty("fo:keep-together", "auto", KoGenStyle::TableRowType);
         }
     }
 }

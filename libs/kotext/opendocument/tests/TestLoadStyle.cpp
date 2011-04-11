@@ -102,7 +102,7 @@ QTextDocument *TestLoadStyle::documentFromOdt(const QString &odt)
     KoTextDocument(document).setStyleManager(styleManager);
     KoTextDocument(document).setChangeTracker(changeTracker);
 
-    KoTextLoader loader(shapeLoadingContext, 0, 0);
+    KoTextLoader loader(shapeLoadingContext);
     QTextCursor cursor(document);
     loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 

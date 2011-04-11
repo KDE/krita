@@ -168,19 +168,12 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
     d->layout = mainLayout;
 
-#if 0
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(styleChanged()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(widthChanged()));
-    connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(slotCapChanged(int)));
-    connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(slotJoinChanged(int)));
-    connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(miterLimitChanged()));
-#else
+    // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentIndexChanged()));
     connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(widthChanged()));
     connect(d->capGroup,   SIGNAL(buttonClicked(int)),       this, SIGNAL(capChanged(int)));
     connect(d->joinGroup,  SIGNAL(buttonClicked(int)),       this, SIGNAL(joinChanged(int)));
     connect(d->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SIGNAL(miterLimitChanged()));
-#endif
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()

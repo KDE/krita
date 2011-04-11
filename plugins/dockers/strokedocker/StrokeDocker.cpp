@@ -58,19 +58,11 @@ class StrokeDocker::Private
 {
 public:
     Private() {}
-#if 0
-    QButtonGroup * capGroup;
-    QButtonGroup * joinGroup;
-    KoUnitDoubleSpinBox * setLineWidth;
-    KoUnitDoubleSpinBox * miterLimit;
-    KoLineStyleSelector * lineStyle;
-    QSpacerItem *spacer;
-    QGridLayout *layout;
-#else
+
     KoStrokeConfigWidget *mainWidget;
-#endif
     KoLineBorder border;
 };
+
 
 StrokeDocker::StrokeDocker()
     : d( new Private() )
@@ -112,8 +104,8 @@ void StrokeDocker::applyChanges()
     if (!selection || !selection->count())
         return;
 
-    KoLineBorder * newBorder = new KoLineBorder(d->border);
-    KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
+    KoLineBorder *newBorder = new KoLineBorder(d->border);
+    KoLineBorder *oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
     if (oldBorder) {
         newBorder->setColor(oldBorder->color());
         newBorder->setLineBrush(oldBorder->lineBrush());
@@ -123,23 +115,16 @@ void StrokeDocker::applyChanges()
     canvasController->canvas()->addCommand(cmd);
 }
 
+
 void StrokeDocker::styleChanged()
 {
-#if 0
-    d->border.setLineStyle( d->lineStyle->lineStyle(), d->lineStyle->lineDashes() );
-#else
     d->border.setLineStyle( d->mainWidget->lineStyle(), d->mainWidget->lineDashes() );
-#endif
     applyChanges();
 }
 
 void StrokeDocker::widthChanged()
 {
-#if 0
-    d->border.setLineWidth( d->setLineWidth->value() );
-#else
     d->border.setLineWidth( d->mainWidget->lineWidth() );
-#endif
     applyChanges();
 }
 
@@ -157,30 +142,12 @@ void StrokeDocker::slotJoinChanged( int ID )
 
 void StrokeDocker::miterLimitChanged()
 {
-#if 0
-    d->border.setMiterLimit( d->miterLimit->value() );
-#else
     d->border.setMiterLimit( d->mainWidget->miterLimit() );
-#endif
     applyChanges();
 }
 
 // ----------------------------------------------------------------
 
-#if 0
-void StrokeDocker::updateControls()
-{
-    blockChildSignals( true );
-
-    d->capGroup->button( d->border.capStyle() )->setChecked( true );
-    d->joinGroup->button( d->border.joinStyle() )->setChecked( true );
-    d->setLineWidth->changeValue( d->border.lineWidth() );
-    d->miterLimit->changeValue( d->border.miterLimit() );
-    d->lineStyle->setLineStyle( d->border.lineStyle(), d->border.lineDashes() );
-
-    blockChildSignals( false );
-}
-#endif
 
 void StrokeDocker::setStroke( const KoShapeBorderModel *border )
 {
@@ -205,27 +172,9 @@ void StrokeDocker::setStroke( const KoShapeBorderModel *border )
 
 void StrokeDocker::setUnit(KoUnit unit)
 {
-#if 0
-    // TODO this has to be connect to a unit changed signal
-    blockChildSignals( true );
-    d->setLineWidth->setUnit( unit );
-    d->miterLimit->setUnit( unit );
-    blockChildSignals( false );
-#else
     d->mainWidget->setUnit(unit);
-#endif
 }
 
-#if 0
-void StrokeDocker::blockChildSignals( bool block )
-{
-    d->setLineWidth->blockSignals( block );
-    d->capGroup->blockSignals( block );
-    d->joinGroup->blockSignals( block );
-    d->miterLimit->blockSignals( block );
-    d->lineStyle->blockSignals( block );
-}
-#endif
 
 void StrokeDocker::selectionChanged()
 {
@@ -258,25 +207,9 @@ void StrokeDocker::resourceChanged(int key, const QVariant &value)
 
 void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
 {
-#if 0
-    switch(area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            break;
-        default:
-            break;
-    }
-    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->layout->invalidate();
-#else
     d->mainWidget->locationChanged(area);
-#endif
 }
+
 
 #include <StrokeDocker.moc>
 

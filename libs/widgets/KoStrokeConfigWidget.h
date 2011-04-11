@@ -57,35 +57,24 @@ public slots:
     void setUnit( const KoUnit &unit );
 
 signals:
+    /// Emitted when the line style changes.
     void currentIndexChanged();
+
+    /// Emitted when the line width changes.
     void widthChanged();
+
+    /// Emitted when the line cap changes.
     void capChanged(int button);
+
+    /// Emitted when the line join changes.
     void joinChanged(int button);
+
+    /// Emitted when the line miter limit changes.
     void miterLimitChanged();
-#if 0
-    /// Is emitted whenever the shadow color has changed
-    void shadowColorChanged( const KoColor &color );
-
-    /// Is emitted whenever the shadow offset has changed
-    void shadowOffsetChanged( const QPointF &offset );
-
-    /// Is emitted whenever the shadow blur radius has changed
-    void shadowBlurChanged( const qreal &blur );
-
-    /// Is emitted whenever the shadow visibility has changed
-    void shadowVisibilityChanged( bool visible );
-#endif
 
 private:
     void blockChildSignals(bool block);
 
-
-private slots:
-#if 0
-    void visibilityChanged();
-    void offsetChanged();
-    void blurChanged();
-#endif
 private:
     class Private;
     Private * const d;

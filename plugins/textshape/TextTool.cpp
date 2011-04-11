@@ -1588,8 +1588,10 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         if (textShape == 0) // when the shape is being deleted its no longer a TextShape but a KoShape
             continue;
 
-        if (textShape->textShapeData()->isCursorVisible(&cursor))
+        if (textShape->textShapeData()->isCursorVisible(&cursor)) {
+            Q_ASSERT(!shapes.contains(textShape));
             shapes.append(textShape);
+        }
     }
 
     // loop over all shapes that contain the text and update per shape.
@@ -1598,7 +1600,8 @@ void TextTool::repaintSelection(QTextCursor &cursor)
         QRectF rect = repaintRect;
         rect.moveTop(rect.y() - ts->textShapeData()->documentOffset());
         rect = ts->absoluteTransformation(0).mapRect(rect);
-        canvas()->updateCanvas(ts->boundingRect().intersected(rect));
+        QRectF r = ts->boundingRect().intersected(rect);
+        canvas()->updateCanvas(r);
     }
 }
 

@@ -73,11 +73,17 @@ void ArtisticTextRange::append(const ArtisticTextRange &range)
 
 ArtisticTextRange ArtisticTextRange::extract(int from, int count)
 {
+    // copy text and font
     ArtisticTextRange extracted(m_text.mid(from, count), m_font);
-    extracted.setXOffsets(m_xOffsets.mid(from, count), m_xOffsetType);
-    extracted.setYOffsets(m_yOffsets.mid(from, count), m_yOffsetType);
+    // copy corresponding character offsets
+    if (from < m_xOffsets.count())
+        extracted.setXOffsets(m_xOffsets.mid(from, count), m_xOffsetType);
+    if (from < m_yOffsets.count())
+        extracted.setYOffsets(m_yOffsets.mid(from, count), m_yOffsetType);
 
+    // remove text
     m_text.remove(from, count);
+    // remove character offsets
     m_xOffsets = m_xOffsets.mid(0, from);
     m_yOffsets = m_yOffsets.mid(0, from);
 

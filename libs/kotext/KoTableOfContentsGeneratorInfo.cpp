@@ -235,7 +235,6 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(QString styleName)
         return style->styleId();
     }
 
-    qDebug() << "Style " << styleName << " has not been found.";
     return 0;
 }
 

@@ -724,7 +724,6 @@ KoPathPoint * KoPathShape::pointByIndex(const KoPathPointIndex &pointIndex) cons
     if (subpath == 0 || pointIndex.second < 0 || pointIndex.second >= subpath->size())
         return 0;
 
-qDebug() << "subpath is correctly returned by KoPathShape::pointByIndex()";
     return subpath->at(pointIndex.second);
 }
 

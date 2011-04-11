@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  *
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (c) 2010 Arjen Hiemstra <ahiemstra@heimr.nl>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,29 +19,20 @@
  */
 
 
-// Own
-#include "VectorShapePlugin.h"
 
-// KDE
-#include <kpluginfactory.h>
+#ifndef TESTFINDMATCH_H
+#define TESTFINDMATCH_H
 
-// KOffice libs
-#include <KoShapeRegistry.h>
-#include <KoToolRegistry.h>
+#include <QtCore/QObject>
 
-// VectorShape
-#include "VectorToolFactory.h"
-#include "VectorShapeFactory.h"
-
-
-K_PLUGIN_FACTORY(VectorShapePluginFactory, registerPlugin<VectorShapePlugin>();)
-K_EXPORT_PLUGIN(VectorShapePluginFactory("VectorShape"))
-
-VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
-    : QObject(parent)
+class TestFindMatch : public QObject
 {
-    KoToolRegistry::instance()->add(new VectorToolFactory());
-    KoShapeRegistry::instance()->add(new VectorShapeFactory());
-}
+    Q_OBJECT
+public:
+    
+private slots:
+    void testBasic();
+    void testCopyAssign();
+};
 
-#include <VectorShapePlugin.moc>
+#endif // TESTFINDMATCH_H

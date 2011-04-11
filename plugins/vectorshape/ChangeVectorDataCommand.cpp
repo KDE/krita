@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-
+   Copyright 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright 2011 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,31 +17,39 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include "ChangeVectorDataCommand.h"
 
+#include <math.h>
 #include <klocale.h>
+#include <KoImageData.h>
+#include <KDebug>
 
 #include "VectorShape.h"
-#include "VectorTool.h"
 
-#include "VectorToolFactory.h"
-
-
-VectorToolFactory::VectorToolFactory()
-    : KoToolFactoryBase("VectorToolFactoryId")
+ChangeVectorDataCommand::ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_shape(shape)
 {
-    setToolTip( i18n( "EMF/WMF Vector Shape tool" ) );
-    setIcon( "vectorshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( VectorShape_SHAPEID );
+    Q_ASSERT( shape );
+    m_oldImageData = m_shape->compressedContents();
+    m_newImageData = newImageData;
+    setText(i18n("Change Vector Data"));
 }
 
-VectorToolFactory::~VectorToolFactory()
+ChangeVectorDataCommand::~ChangeVectorDataCommand()
 {
 }
 
-KoToolBase* VectorToolFactory::createTool( KoCanvasBase* canvas )
+void ChangeVectorDataCommand::redo()
 {
-    return new VectorTool( canvas );
+    m_shape->update();
+    m_shape->setCompressedContents(m_newImageData);
+    m_shape->update();
 }
 
+void ChangeVectorDataCommand::undo()
+{
+    m_shape->update();
+    m_shape->setCompressedContents(m_oldImageData);
+    m_shape->update();
+}

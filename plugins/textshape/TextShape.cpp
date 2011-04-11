@@ -148,6 +148,7 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     selection.format.setForeground(palette.brush(QPalette::HighlightedText));
 
     pc.textContext.selections.append(selection);
+    pc.textContext.selections += KoTextDocument(doc).selections();
     pc.viewConverter = &converter;
     pc.imageCollection = m_imageCollection;
 

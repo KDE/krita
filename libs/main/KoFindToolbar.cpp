@@ -147,11 +147,11 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
 
     ac->addAction(KStandardAction::Find, "edit_find", this, SLOT(activate()));
 
-    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->finder, SLOT(findNext()));
+    KAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
     connect(findNextAction, SIGNAL(triggered(bool)), this, SLOT(activate()));
     findNextAction->setEnabled(false);
-    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->finder, SLOT(findPrevious()));
+    KAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
     connect(finder, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
     connect(findPrevAction, SIGNAL(triggered(bool)), this, SLOT(activate()));
     findPrevAction->setEnabled(false);
@@ -168,7 +168,10 @@ void KoFindToolbar::activate()
         show();
     }
     d->searchLine->setFocus();
-    d->find(d->searchLine->currentText());
+
+    if(d->finder->matches().size() == 0) {
+        d->find(d->searchLine->currentText());
+    }
 }
 
 void KoFindToolbar::Private::matchFound()

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-
+   Copyright 2009 Thorsten Zachmann <zachmann@kde.org>
    Copyright 2011 Boudewijn Rempt <boud@valdyas.org>
 
    This library is free software; you can redistribute it and/or
@@ -17,31 +17,29 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#ifndef CHANGEIMAGECOMMAND_H
+#define CHANGEIMAGECOMMAND_H
 
-#include <klocale.h>
+#include <QUndoCommand>
+#include <QByteArray>
 
 #include "VectorShape.h"
-#include "VectorTool.h"
 
-#include "VectorToolFactory.h"
-
-
-VectorToolFactory::VectorToolFactory()
-    : KoToolFactoryBase("VectorToolFactoryId")
+class ChangeVectorDataCommand : public QUndoCommand
 {
-    setToolTip( i18n( "EMF/WMF Vector Shape tool" ) );
-    setIcon( "vectorshape" );
-    setToolType( dynamicToolType() );
-    setPriority( 1 );
-    setActivationShapeId( VectorShape_SHAPEID );
-}
+public:
+    ChangeVectorDataCommand(VectorShape *shape, QByteArray &newImageData, QUndoCommand *parent = 0);
+    virtual ~ChangeVectorDataCommand();
 
-VectorToolFactory::~VectorToolFactory()
-{
-}
+    /// redo the command
+    virtual void redo();
+    /// revert the actions done in redo
+    virtual void undo();
 
-KoToolBase* VectorToolFactory::createTool( KoCanvasBase* canvas )
-{
-    return new VectorTool( canvas );
-}
+private:
+    VectorShape *m_shape;
+    QByteArray m_oldImageData;
+    QByteArray m_newImageData;
+};
 
+#endif /* CHANGEIMAGECOMMAND_H */

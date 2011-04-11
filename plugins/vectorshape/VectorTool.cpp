@@ -1,112 +1,118 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+   Copyright 2007 Montel Laurent <montel@kde.org>
+   Copyright 2011 Boudewijn Rempt <boud@valdyas.org>
 
-// Own
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
 #include "VectorTool.h"
+#include "VectorShape.h"
+#include "ChangeVectorDataCommand.h"
 
-// Qt
-#include <QAction>
-#include <QGridLayout>
 #include <QToolButton>
-#include <QCheckBox>
-#include <QPainter>
-
-// KDE
+#include <QGridLayout>
 #include <KLocale>
-#include <KIcon>
+#include <KIconLoader>
+#include <KUrl>
+#include <KFileDialog>
+#include <KIO/Job>
 
-// Koffice
 #include <KoCanvasBase.h>
+#include <KoImageCollection.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 
-
-VectorTool::VectorTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas)
-    , m_currentShape(0)
+VectorTool::VectorTool( KoCanvasBase* canvas )
+    : KoToolBase( canvas ),
+      m_shape(0)
 {
 }
 
-VectorTool::~VectorTool()
+void VectorTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-}
+    Q_UNUSED(toolActivation);
 
-void VectorTool::paint( QPainter &painter, const KoViewConverter &converter)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    // nothing to do here
-}
-
-void VectorTool::mousePressEvent( KoPointerEvent *event )
-{
-    event->ignore();
-}
-
-void VectorTool::mouseMoveEvent( KoPointerEvent *event )
-{
-    event->ignore();
-}
-
-void VectorTool::mouseReleaseEvent( KoPointerEvent *event )
-{
-    event->ignore();
-}
-
-void VectorTool::activate (bool)
-{
-    KoSelection *selection = canvas()->shapeManager()->selection();
-    foreach (KoShape *shape, selection->selectedShapes()) {
-        m_currentShape = dynamic_cast<VectorShape*> (shape);
-        if (m_currentShape)
+    foreach (KoShape *shape, shapes) {
+        m_shape = dynamic_cast<VectorShape*>( shape );
+        if ( m_shape )
             break;
     }
-    if (m_currentShape == 0) { // none found
+    if ( !m_shape )
+    {
         emit done();
         return;
     }
-
-    // updateActions();
+    useCursor(Qt::ArrowCursor);
 }
 
 void VectorTool::deactivate()
 {
-    m_currentShape = 0;
+  m_shape = 0;
 }
 
-void VectorTool::updateActions()
+QWidget * VectorTool::createOptionWidget()
 {
+    QWidget *optionWidget = new QWidget();
+    QGridLayout *layout = new QGridLayout(optionWidget);
+
+    QToolButton *button = 0;
+
+    button = new QToolButton(optionWidget);
+    button->setIcon(SmallIcon("open"));
+    button->setToolTip(i18n( "Open EMF/WMF Shape"));
+    layout->addWidget(button, 0, 0);
+    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+
+    return optionWidget;
 }
 
-void VectorTool::setPrintable(bool on)
+void VectorTool::changeUrlPressed()
 {
-    if (m_currentShape)
-        m_currentShape->setPrintable(on);
+    if (m_shape == 0)
+        return;
+    KUrl url = KFileDialog::getOpenUrl();
+    if (!url.isEmpty()) {
+        // TODO move this to an action in the libs, with a nice dialog or something.
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+    }
+
 }
 
-QWidget *VectorTool::createOptionWidget()
+void VectorTool::mouseDoubleClickEvent( KoPointerEvent *event )
 {
-    QWidget *widget = new QWidget();
+    if(canvas()->shapeManager()->shapeAt(event->point) != m_shape) {
+        event->ignore(); // allow the event to be used by another
+        return;
+    }
+    changeUrlPressed();
+}
 
-    return widget;
+void VectorTool::setImageData(KJob *job)
+{
+    if (m_shape == 0) {
+        return;
+    }
+    KIO::StoredTransferJob *transferJob = qobject_cast<KIO::StoredTransferJob*>(job);
+    Q_ASSERT(transferJob);
+
+    QByteArray newData = qCompress(transferJob->data());
+    ChangeVectorDataCommand *cmd = new ChangeVectorDataCommand(m_shape, newData);
+    canvas()->addCommand(cmd);
 }
 
 #include <VectorTool.moc>

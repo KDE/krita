@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2009 - 2011 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -55,7 +56,7 @@
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
-    , m_type(VectorTypeNone)
+    , m_type(VectorTypeUndetermined)
 {
     setShapeId(VectorShape_SHAPEID);
    // Default size of the shape.
@@ -68,22 +69,17 @@ VectorShape::~VectorShape()
 }
 
 // Methods specific to the vector shape.
-QByteArray  VectorShape::contents() const
+QByteArray  VectorShape::compressedContents() const
 {
     return m_contents;
 }
 
-void VectorShape::setContents( const QByteArray &newContents )
+void VectorShape::setCompressedContents( const QByteArray &newContents )
 {
     m_contents = newContents;
-    determineType();
+    m_type = VectorTypeUndetermined;
+    m_cache.clear();
 }
-
-VectorShape::VectorType VectorShape::vectorType() const
-{
-    return m_type;
-}
-
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
@@ -110,6 +106,16 @@ void VectorShape::draw(QPainter &painter)
 
     // Actually draw the contents
     m_contents = qUncompress(m_contents);
+
+    if (m_type == VectorTypeUndetermined) {
+        if (isWmf(m_contents)) {
+            m_type = VectorTypeWmf;
+        }
+        else if (isEmf(m_contents)) {
+            m_type = VectorTypeEmf;
+        }
+    }
+
     switch (m_type) {
     case VectorTypeNone:
         drawNull(painter);
@@ -264,12 +270,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
-    if (isWmf(m_contents))
-        m_type = VectorTypeWmf;
-    else if (isEmf(m_contents))
-        m_type = VectorTypeEmf;
-    else
-        m_type = VectorTypeNone;
+    m_type = VectorTypeUndetermined;
 
     // compress for biiiig memory savings
     m_contents = qCompress(m_contents);
@@ -279,7 +280,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
 }
 
 
-bool VectorShape::isWmf(const QByteArray &bytes) const
+bool VectorShape::isWmf(const QByteArray &bytes)
 {
     kDebug(31000) << "Check for WMF";
 
@@ -312,7 +313,7 @@ bool VectorShape::isWmf(const QByteArray &bytes) const
     return false;
 }
 
-bool VectorShape::isEmf(const QByteArray &bytes) const
+bool VectorShape::isEmf(const QByteArray &bytes)
 {
     kDebug(31000) << "Check for EMF";
 

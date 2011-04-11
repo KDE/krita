@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (C) 2009-2011 Inge Wallin <inge@lysator.liu.se>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -45,6 +46,7 @@ class VectorShape : public KoShape, public KoFrameShape {
 public:
     // Type of vector file. Add here when we get support for more.
     enum VectorType {
+        VectorTypeUndetermined,    // not yet checked
         VectorTypeNone,             // Uninitialized
         VectorTypeWmf,              // Windows MetaFile
         VectorTypeEmf               // Extended MetaFile
@@ -67,9 +69,8 @@ public:
                                      KoShapeLoadingContext& context);
 
     // Methods specific to the vector shape.
-    QByteArray  contents() const;
-    void  setContents( const QByteArray &newContents );
-    VectorType  vectorType() const;
+    QByteArray  compressedContents() const;
+    void  setCompressedContents( const QByteArray &newContents );
 
 private:
 
@@ -78,14 +79,13 @@ private:
     void drawWmf(QPainter &painter) const;
     void drawEmf(QPainter &painter) const;
 
-    bool isWmf(const QByteArray &bytes) const;
-    bool isEmf(const QByteArray &bytes) const;
+    static bool isWmf(const QByteArray &bytes);
+    static bool isEmf(const QByteArray &bytes);
 
     // Member variables
 
     VectorType  m_type;
     QByteArray  m_contents;
-
     QCache<int, QImage> m_cache;
 };
 

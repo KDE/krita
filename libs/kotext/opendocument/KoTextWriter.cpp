@@ -377,6 +377,11 @@ QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *mar
 int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, KoTextWriter::TagInformation& tagInformation)
 {
     int changeId = 0, returnChangeId = 0;
+
+    if (!changeTracker) {
+        return changeId;
+    }
+
     QTextCursor cursor(document);
     QTextBlock block = document->findBlock(position);
 
@@ -526,6 +531,8 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
 void KoTextWriter::Private::closeTagRegion(int changeId)
 {
+    if (!changeTracker) return;
+
     const char *tagName = openedTagStack.pop();
     if (tagName) {
         writer->endElement(); // close the tag
@@ -809,7 +816,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
     int changeId = openTagRegion(block.position(), KoTextWriter::Private::ParagraphOrHeader, blockTagInformation);
 
-    if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         if (!deleteMergeRegionOpened && !splitRegionOpened && !cursor.currentTable() && (!cursor.currentList() || outlineLevel)) {
             splitEndBlockNumber = checkForSplit(block);
             if (splitEndBlockNumber != -1) {
@@ -839,7 +846,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         writer->addAttribute("text:id", context.subId(blockData));
     }
 
-    if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         QTextBlock previousBlock = block.previous();
         if (previousBlock.isValid()) {
             QTextBlockFormat blockFormat = block.blockFormat();
@@ -881,7 +888,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
             previousCharFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
             compFormat.clearProperty(KoCharacterStyle::ChangeTrackerId);
 
-            if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+            if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
                 saveODF12Change(charFormat);
             }
 
@@ -931,7 +938,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (saveInlineObject) {
                         int changeId = charFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
                         KoTextAnchor *textAnchor = dynamic_cast<KoTextAnchor *>(inlineObject);
-                        if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+                        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
                             if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                                 textAnchor->shape()->setAdditionalAttribute("delta:insertion-change-idref", changeTransTable.value(changeId));
                                 textAnchor->shape()->setAdditionalAttribute("delta:insertion-type", "insert-with-content");
@@ -943,7 +950,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 
                         inlineObject->saveOdf(context);
 
-                        if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+                        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
                             if (textAnchor && changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::InsertChange) {
                                 textAnchor->shape()->removeAdditionalAttribute("delta:insertion-change-idref");
                                 textAnchor->shape()->removeAdditionalAttribute("delta:insertion-type");
@@ -1023,7 +1030,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         QTextBlock nextBlock = block.next();
         if (nextBlock.isValid() && deleteMergeRegionOpened) {
             QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
@@ -1043,7 +1050,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
         while (int change = changeStack.top()) {
             writer->startElement("text:change-end", false);
             writer->addAttribute("text:change-id", changeTransTable.value(change));
@@ -1060,6 +1067,9 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
 int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
 {
     int changeId = 0;
+    if (!changeTracker) {
+        return changeId;
+    }
     QTextBlock::iterator it = block.begin();
 
     if (it.atEnd()) {
@@ -1638,7 +1648,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 continue;
         }
 
-        if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
             if (!deleteMergeRegionOpened && !cursor.currentTable() && (!cursor.currentList() || blockOutlineLevel)) {
                 deleteMergeEndBlockNumber = checkForDeleteMerge(block);
                 if (deleteMergeEndBlockNumber != -1) {
@@ -1650,7 +1660,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         saveParagraph(block, from, to);
 
-        if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+        if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
             if (deleteMergeRegionOpened && (block.blockNumber() == deleteMergeEndBlockNumber) && (!cursor.currentList() || blockOutlineLevel)) {
                 closeSplitMergeRegion();
                 deleteMergeRegionOpened = false;

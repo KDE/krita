@@ -74,8 +74,8 @@ private:
     void drawWmf(QPainter &painter) const;
     void drawEmf(QPainter &painter) const;
 
-    bool isWmf() const;
-    bool isEmf() const;
+    bool isWmf(const QByteArray &bytes) const;
+    bool isEmf(const QByteArray &bytes) const;
 
     // Member variables
 

@@ -249,9 +249,9 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
-    if (isWmf())
+    if (isWmf(m_contents))
         m_type = VectorTypeWmf;
-    else if (isEmf())
+    else if (isEmf(m_contents))
         m_type = VectorTypeEmf;
     else
         m_type = VectorTypeNone;
@@ -262,12 +262,12 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
 }
 
 
-bool VectorShape::isWmf() const
+bool VectorShape::isWmf(const QByteArray &bytes) const
 {
     kDebug(31000) << "Check for WMF";
 
-    const char *data = m_contents.data();
-    const int   size = m_contents.count();
+    const char *data = bytes.constData();
+    const int   size = bytes.count();
 
     if (size < 10)
         return false;
@@ -295,12 +295,12 @@ bool VectorShape::isWmf() const
     return false;
 }
 
-bool VectorShape::isEmf() const
+bool VectorShape::isEmf(const QByteArray &bytes) const
 {
     kDebug(31000) << "Check for EMF";
 
-    const char *data = m_contents.data();
-    const int   size = m_contents.count();
+    const char *data = bytes.constData();
+    const int   size = bytes.count();
 
     // This is how the 'file' command identifies an EMF.
     // 1. Check type

@@ -43,6 +43,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoViewConverter.h>
+
 #include "kowmfpaint.h"
 
 // Vector shape
@@ -54,6 +56,7 @@
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_type(VectorTypeNone)
+    , m_currentZoomLevel(-1)
 {
     setShapeId(VectorShape_SHAPEID);
    // Default size of the shape.
@@ -69,7 +72,7 @@ QByteArray  VectorShape::contents() const
 {
     return m_contents;
 }
- 
+
 void VectorShape::setContents( const QByteArray &newContents )
 {
     m_contents = newContents;
@@ -84,8 +87,16 @@ VectorShape::VectorType VectorShape::vectorType() const
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    applyConversion(painter, converter);
-    draw(painter);
+    if (m_cache.isNull() || !qFuzzyCompare(m_currentZoomLevel, converter.zoom())) {
+        // create the cache image
+        QRectF rc = converter.documentToView(boundingRect());
+        m_cache = QImage(rc.size().toSize(), QImage::Format_ARGB32);
+        QPainter gc(&m_cache);
+        applyConversion(gc, converter);
+        draw(gc);
+        m_currentZoomLevel = converter.zoom();
+    }
+    painter.drawImage(0, 0, m_cache);
 }
 
 void VectorShape::draw(QPainter &painter) const
@@ -242,7 +253,7 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         store->close();
         return false;
     }
-    
+
     m_contents = store->read(size);
     store->close();
     if (m_contents.count() < size) {
@@ -316,7 +327,7 @@ bool VectorShape::isEmf() const
     }
 
     // 2. An EMF has the string " EMF" at the start + offset 40.
-    if (size > 44 
+    if (size > 44
         && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
         kDebug(31000) << "EMF identified";

@@ -249,22 +249,18 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
-    determineType();
-
-    // Return true if we managed to identify the type.
-    return m_type != VectorTypeNone;
-}
-
-
-void VectorShape::determineType()
-{
     if (isWmf())
         m_type = VectorTypeWmf;
     else if (isEmf())
         m_type = VectorTypeEmf;
     else
         m_type = VectorTypeNone;
+
+
+    // Return true if we managed to identify the type.
+    return m_type != VectorTypeNone;
 }
+
 
 bool VectorShape::isWmf() const
 {

@@ -68,7 +68,6 @@ public:
     VectorType  vectorType() const;
 
 private:
-    void determineType();
 
     void draw(QPainter &painter) const;
     void drawNull(QPainter &painter) const;

@@ -145,7 +145,7 @@ public:
     void appendText(const ArtisticTextRange &plainText);
 
     /// Replaces a range of text with the specified text range
-    bool replaceText(int charIndex, int charCount, ArtisticTextRange &textRange);
+    bool replaceText(int charIndex, int charCount, const ArtisticTextRange &textRange);
 
     /// Gets the angle of the char with the given index
     qreal charAngleAt(int charIndex) const;
@@ -164,6 +164,9 @@ private:
     void cacheGlyphOutlines();
     bool pathHasChanged() const;
     void createOutline();
+
+    void beginTextUpdate();
+    void finishTextUpdate();
 
     typedef QPair<int, int> CharIndex;
 
@@ -188,6 +191,7 @@ private:
     TextAnchor m_textAnchor; ///< the actual text anchor
     QVector<qreal> m_charOffsets; ///< char positions [0..1] on baseline path
     QVector<QPointF> m_charPositions; ///< char positions in shape coordinates
+    int m_textUpdateCounter;
 };
 
 #endif // ARTISTICTEXTSHAPE_H

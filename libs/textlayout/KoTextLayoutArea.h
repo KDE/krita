@@ -146,7 +146,7 @@ private:
 
     int decorateTabs(QPainter *painter, const QVariantList& tabList, const QTextLine &line, const QTextFragment& currentFragment, int startOfBlock, int currentTabStop);
 
-    void updateBorders(KoTextBlockData *blockData, QTextBlock *block);
+    void handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block);
 
     KoTextLayoutArea *m_parent; //  A pointer to the parent
 
@@ -173,6 +173,8 @@ private:
     QList<KoTextLayoutTableArea *> m_tableAreas;
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
+
+    QList<QRectF> m_blockRects;
 
     qreal m_preregisteredFootNotesHeight;
     qreal m_footNotesHeight;

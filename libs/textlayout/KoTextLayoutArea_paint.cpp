@@ -80,6 +80,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         ++stop;
     }
     int tableAreaIndex = 0;
+    int blockIndex = 0;
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -99,10 +100,12 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         QTextLayout *layout = block.layout();
+        KoTextBlockBorderData *border = 0;
+        QRectF br = m_blockRects[blockIndex];
+        ++blockIndex;
 
         if (!painter->hasClipping() || clipRegion.intersects(layout->boundingRect().toRect())) {
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-            KoTextBlockBorderData *border = 0;
             KoTextBlockPaintStrategyBase *paintStrategy = 0;
             if (blockData) {
                 border = blockData->border();
@@ -117,12 +120,14 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             painter->save();
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush) {
-                    painter->fillRect(layout->boundingRect(), bg);
-                    QRectF br = layout->boundingRect();
-                    if (block.next().isValid())
-                            br.setHeight(br.height());
                     painter->fillRect(br, bg);
             }
+    if (it == m_startOfArea->it) {
+        painter->fillRect(br, QColor(Qt::red));
+    } else
+        painter->fillRect(br, QColor(Qt::yellow));
+
+
             paintStrategy->applyStrategy(painter);
             painter->save();
             drawListItem(painter, block, context.imageCollection);
@@ -181,8 +186,8 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     }
                 }
             }
-
-            layout->draw(painter, QPointF(0, 0), selections);
+qDebug()<<"drawing" <<br;
+            layout->draw(painter, QPointF(0, 0), selections, br);
 
             decorateParagraph(painter, block);
 

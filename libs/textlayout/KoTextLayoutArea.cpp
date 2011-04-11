@@ -69,16 +69,16 @@ extern int qt_defaultDpiY();
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : m_parent(p)
  , m_documentLayout(documentLayout)
- , m_dropCapsWidth(0)
- , m_startOfArea(0)
- , m_endOfArea()
- , m_preregisteredFootNotesHeight(0)
- , m_footNotesHeight(0)
  , m_left(0.0)
  , m_right(0.0)
  , m_top(0.0)
  , m_bottom(0.0)
  , m_maximalAllowedBottom(0.0)
+ , m_dropCapsWidth(0)
+ , m_startOfArea(0)
+ , m_endOfArea()
+ , m_preregisteredFootNotesHeight(0)
+ , m_footNotesHeight(0)
 {
 }
 
@@ -252,6 +252,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
+    m_blockRects.clear();
     delete m_startOfArea;
     delete m_endOfArea;
     m_dropCapsWidth = 0;
@@ -273,6 +274,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
             m_tableAreas.append(tableArea);
             m_y += m_bottomSpacing;
+            if (!m_blockRects.isEmpty()) {
+                m_blockRects.last().setBottom(m_y);
+            }
             tableArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
@@ -290,6 +294,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             if (layoutBlock(cursor) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y);
+                m_blockRects.last().setBottom(m_y);
                 return false;
             }
         }
@@ -300,6 +305,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             m_endOfArea = new FrameIterator(cursor);
             m_y += m_bottomSpacing;
             setBottom(m_y);
+            if (!m_blockRects.isEmpty()) {
+                m_blockRects.last().setBottom(m_y);
+            }
             return true; // we have layouted till the end of the frame
         }
     }
@@ -373,10 +381,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         blockData = new KoTextBlockData();
         block.setUserData(blockData);
     }
-
-    m_y += qMax(m_bottomSpacing, format.topMargin());
-
-    blockData->setEffectiveTop(m_y);
 
     QTextLayout *layout = block.layout();
 
@@ -534,18 +538,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
-    cursor->fragmentIterator = block.begin();
-
     m_listIndent = 0;
     if (textList) {
         m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
-        // if list set list-indent. Do this after borders init to we can account for them.
-        // Also after we account for indents etc so the y() pos is correct.
-        if (m_isRtl)
-            blockData->setCounterPosition(QPointF(right() -
-                        blockData->counterWidth() - format.leftMargin(), m_y));
-        else {
-            blockData->setCounterPosition(QPointF(left(), m_y));
+        if (!m_isRtl) {
             m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
         }
     }
@@ -560,7 +556,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_x = left() + format.leftMargin() + m_listIndent;
     }
 
-
     m_indent = 0;
     if (cursor->line.isValid() == false) {
         layout->beginLayout();
@@ -570,7 +565,18 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
-    updateBorders(blockData, &block);
+    handleBordersAndSpacing(blockData, &block);
+
+    if (textList) {
+        // if list set list-indent. Do this after borders so we can account for them.
+        if (m_isRtl)
+            blockData->setCounterPosition(QPointF(right() -
+            blockData->counterWidth() - format.leftMargin(), m_y));
+        else {
+            blockData->setCounterPosition(QPointF(left(), m_y));
+        }
+    }
+
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
@@ -946,10 +952,12 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
     }
 }
 
-void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData, QTextBlock *block)
+void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block)
 {
-    KoInsets borderThickness = KoInsets(0,0,0,0);
+
     QTextBlockFormat format = block->blockFormat();
+    qreal spacing = qMax(m_bottomSpacing, format.topMargin());
+
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
                    KoParagraphStyle::LeftBorderWidth, KoParagraphStyle::LeftBorderColor,
@@ -970,32 +978,57 @@ void KoTextLayoutArea::updateBorders(KoTextBlockData *blockData, QTextBlock *blo
             block->setUserData(blockData);
         }
 
+        // first let's get horizontal out of the way
+        m_x += border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Right);
+
         // then check if we can merge with the previous parags border.
-        if (m_prevBorder && m_prevBorder->equals(border))
+        if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
-        else {
+            // Merged mean we don't have inserts inbetween the blocks
+            qreal divider = m_y;
+            if (spacing) {
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + format.topMargin());
+            }
+            if (!m_blockRects.isEmpty()) {
+                m_blockRects.last().setBottom(divider);
+            }
+            m_y += spacing;
+            m_blockRects.append(QRectF(m_left, divider, m_width, 1.0));
+        } else {
             // can't merge; then these are our new borders.
             KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
             blockData->setBorder(newBorder);
-            if (m_prevBorder)
+            if (m_prevBorder) {
+                //FIXME should be prev format m_y += format.doubleProperty(KoParagraphStyle::BottomPadding);
                 m_y += m_prevBorder->inset(KoTextBlockBorderData::Bottom);
+            }
+            if (!m_blockRects.isEmpty()) {
+                m_blockRects.last().setBottom(m_y);
+            }
+            m_y += spacing;
+            m_blockRects.append(QRectF(m_left, m_y, m_width, 1.0));
+            m_y += newBorder->inset(KoTextBlockBorderData::Top);
+            m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
-        blockData->border()->applyInsets(borderThickness, m_y + borderThickness.top, false);
     } else { // this parag has no border.
-        if (m_prevBorder)
+        if (m_prevBorder) {
+            //FIXME should be prev format m_y += format.doubleProperty(KoParagraphStyle::BottomPadding);
             m_y += m_prevBorder->inset(KoTextBlockBorderData::Bottom);
+        }
         if (blockData)
             blockData->setBorder(0); // remove an old one, if there was one.
+        if (!m_blockRects.isEmpty()) {
+            m_blockRects.last().setBottom(m_y);
+        }
+        m_y += spacing;
+        m_blockRects.append(QRectF(m_left, m_y, m_width, 1.0));
     }
     // add padding inside the border
-    borderThickness.top += format.doubleProperty(KoParagraphStyle::TopPadding);
-    borderThickness.left += format.doubleProperty(KoParagraphStyle::LeftPadding);
-    borderThickness.bottom += format.doubleProperty(KoParagraphStyle::BottomPadding);
-    borderThickness.right += format.doubleProperty(KoParagraphStyle::RightPadding);
-
-    m_x += borderThickness.left;
-    m_width -= borderThickness.left + borderThickness.right;
-    m_y += borderThickness.top;
+    m_x += format.doubleProperty(KoParagraphStyle::LeftPadding);
+    m_width -= format.doubleProperty(KoParagraphStyle::LeftPadding);
+    m_width -= format.doubleProperty(KoParagraphStyle::RightPadding);
 
     m_prevBorder = blockData->border();
 }

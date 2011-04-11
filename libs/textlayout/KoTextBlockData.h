@@ -120,18 +120,6 @@ public:
     KoTextBlockBorderData *border() const;
 
     /**
-     * This is to set the effective top of block. Then follows margin and then the text
-     * @param margin the effective top of the block.
-     */
-    void setEffectiveTop(qreal y);
-
-    /**
-     * Return the effective top of the block. Useful when drawing paragraph background,
-     * or placing anchored shapes relative to this.
-     */
-    qreal effectiveTop() const;
-
-    /**
      * sets a paintStrategy of this paragraph
      * @param paintStrategy the paintStrategy to be used for this paragraph
      */

@@ -118,15 +118,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 continue; // this paragraph shouldn't be shown so just skip it
 
             painter->save();
+
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush) {
                     painter->fillRect(br, bg);
             }
-    if (it == m_startOfArea->it) {
-        painter->fillRect(br, QColor(Qt::red));
-    } else
-        painter->fillRect(br, QColor(Qt::yellow));
-
 
             paintStrategy->applyStrategy(painter);
             painter->save();
@@ -186,7 +182,11 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                     }
                 }
             }
-qDebug()<<"drawing" <<br;
+
+            //We set clip because layout-draw doesn't clip text to it correctly after all
+            //and adjust to make sure we don't clip edges of glyphs
+            painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
+
             layout->draw(painter, QPointF(0, 0), selections, br);
 
             decorateParagraph(painter, block);

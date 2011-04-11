@@ -22,12 +22,18 @@
 #define ARTISITICTEXTRANGE_H
 
 #include <QtCore/QString>
+#include <QtCore/QPointF>
 #include <QtGui/QFont>
 
 /// Represents a range of characters with the same text properties
 class ArtisticTextRange
 {
 public:
+    enum OffsetType {
+        AbsoluteOffset,
+        RelativeOffset
+    };
+
     ArtisticTextRange(const QString &text, const QFont &font);
     ~ArtisticTextRange();
 
@@ -38,7 +44,7 @@ public:
     void setText(const QString &text);
 
     /// Inserts new text at the given position
-    void insertText(int index, const QString &text);
+    void insertText(int charIndex, const QString &text);
 
     /// Appends text to the text range
     void appendText(const QString &text);
@@ -62,9 +68,40 @@ public:
     /// Checks if specified text range has the same style as this text range
     bool hasEqualStyle(const ArtisticTextRange &other) const;
 
+    /// Sets indivdual character x-offsets
+    void setXOffsets(const QList<qreal> &offsets, OffsetType type);
+
+    /// Sets indivdual character y-offsets
+    void setYOffsets(const QList<qreal> &offsets, OffsetType type);
+
+    /// Returns the character x-offset for the specified character
+    qreal xOffset(int charIndex) const;
+
+    /// Returns the character y-offset for the specified character
+    qreal yOffset(int charIndex) const;
+
+    /// Checks if specified character has an x-offset value
+    bool hasXOffset(int charIndex) const;
+
+    /// Checks if specified character has an y-offset value
+    bool hasYOffset(int charIndex) const;
+
+    /// Returns the type of the x-offsets
+    OffsetType xOffsetType() const;
+
+    /// Returns the type of the y-offsets
+    OffsetType yOffsetType() const;
+
+    /// Prints debug output
+    void printDebug() const;
+
 private:
     QString m_text; ///< the text of the text range
     QFont m_font; ///< the font of the text range
+    QList<qreal> m_xOffsets; ///< character x-offsets
+    QList<qreal> m_yOffsets; ///< character y-offsets
+    OffsetType m_xOffsetType;
+    OffsetType m_yOffsetType;
 };
 
 #endif // ARTISITICTEXTRANGE_H

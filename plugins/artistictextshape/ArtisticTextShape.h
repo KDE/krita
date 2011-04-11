@@ -132,6 +132,9 @@ public:
     /// Adds a range of text at the given index
     void insertText(int charIndex, const QString &plainText);
 
+    /// Adds range of text at the given index
+    void insertText(int charIndex, const ArtisticTextRange &textRange);
+
     /// Adds ranges of text at the given index
     void insertText(int charIndex, const QList<ArtisticTextRange> &textRanges);
 
@@ -140,6 +143,9 @@ public:
 
     /// Appends a single range of text
     void appendText(const ArtisticTextRange &plainText);
+
+    /// Replaces a range of text with the specified text range
+    bool replaceText(int charIndex, int charCount, ArtisticTextRange &textRange);
 
     /// Gets the angle of the char with the given index
     qreal charAngleAt(int charIndex) const;

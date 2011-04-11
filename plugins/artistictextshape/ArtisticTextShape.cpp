@@ -31,6 +31,7 @@
 #include <KoShapeBackground.h>
 
 #include <KLocale>
+#include <KDebug>
 
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
@@ -131,7 +132,7 @@ void ArtisticTextShape::createOutline()
         m_charOffsets.resize(totalTextLength + 1);
 
         // the current character position
-        qreal charOffset = m_startOffset * m_baseline.length();
+        QPointF charOffset(m_startOffset * m_baseline.length(), 0.0);
         // adjust starting character position to anchor point
         qreal totalTextWidth = 0.0;
         foreach (const ArtisticTextRange &range, m_ranges) {
@@ -144,19 +145,42 @@ void ArtisticTextShape::createOutline()
         else if( m_textAnchor == AnchorEnd )
             anchorPosition = totalTextWidth;
 
-        charOffset -= anchorPosition;
+        charOffset -= QPointF(anchorPosition, 0.0);
 
         QPointF pathPoint;
+        QPointF offset;
 
         foreach (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString textRange = range.text();
             const int localTextLength = textRange.length();
 
+            const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
+            const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
+
             for (int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 QString actChar( textRange[localCharIndex] );
+
+                // apply offset to character
+                if (range.hasXOffset(localCharIndex)) {
+                    if (absoluteXOffset)
+                        charOffset.rx() = range.xOffset(localCharIndex);
+                    else
+                        charOffset.rx() += range.xOffset(localCharIndex);
+                } else {
+                    charOffset.rx() += offset.x();
+                }
+                if (range.hasYOffset(localCharIndex)) {
+                    if (absoluteYOffset)
+                        charOffset.ry() = range.yOffset(localCharIndex);
+                    else
+                        charOffset.ry() += range.yOffset(localCharIndex);
+                } else {
+                    charOffset.ry() += offset.y();
+                }
+
                 // get the percent value of the actual char position
-                qreal t = m_baseline.percentAtLength( charOffset );
+                qreal t = m_baseline.percentAtLength( charOffset.x() );
                 // first intialize with invalid position
                 m_charOffsets[globalCharIndex] = -1;
                 // are we beyond the baseline end?
@@ -170,16 +194,16 @@ void ArtisticTextShape::createOutline()
                     // get the path point of the given path position
                     pathPoint = m_baseline.pointAtPercent( t );
                     // get the normalized position of the middle of the character
-                    t = m_baseline.percentAtLength( charOffset + 0.5 * metrics.width( actChar ) );
+                    t = m_baseline.percentAtLength( charOffset.x() + 0.5 * metrics.width( actChar ) );
                 }
 
                 // save character offset as fraction of baseline length
-                m_charOffsets[globalCharIndex] = m_baseline.percentAtLength( charOffset );
+                m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x());
                 // save character position as point
                 m_charPositions[globalCharIndex] = pathPoint;
 
                 // add the advance of the current character to the character position
-                charOffset += metrics.width( actChar );
+                offset = QPointF(metrics.width( actChar ), 0.0);
 
                 if (t <= 0.0) {
                     // if this is not the first character but our position is still
@@ -199,21 +223,44 @@ void ArtisticTextShape::createOutline()
                 QTransform m;
                 m.translate( pathPoint.x(), pathPoint.y() );
                 m.rotate( 360. - angle );
+                m.translate(0.0, charOffset.y());
                 m_outline.addPath( m.map( m_charOutlines[globalCharIndex] ) );
             }
         }
         // save offset and position after last character
-        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset);
+        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x());
         m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(m_charOffsets[globalCharIndex]);
     } else {
         QPointF charPos(0, 0);
+        QPointF offset(0, 0);
         foreach(const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString textRange = range.text();
 
+            const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
+            const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
+
             const int localTextLength = textRange.length();
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 QString actChar(textRange[localCharIndex]);
+
+                // apply offset to character
+                if (range.hasXOffset(localCharIndex)) {
+                    if (absoluteXOffset)
+                        charPos.rx() = range.xOffset(localCharIndex);
+                    else
+                        charPos.rx() += range.xOffset(localCharIndex);
+                } else {
+                    charPos.rx() += offset.x();
+                }
+                if (range.hasYOffset(localCharIndex)) {
+                    if (absoluteYOffset)
+                        charPos.ry() = range.yOffset(localCharIndex);
+                    else
+                        charPos.ry() += range.yOffset(localCharIndex);
+                } else {
+                    charPos.ry() += offset.y();
+                }
 
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
@@ -221,10 +268,10 @@ void ArtisticTextShape::createOutline()
                 // save character positon of current character
                 m_charPositions[globalCharIndex] = charPos;
                 // advance character position
-                charPos += QPointF(metrics.width(actChar), 0.0);
+                offset = QPointF(metrics.width(actChar), 0.0);
             }
         }
-        m_charPositions[globalCharIndex] = charPos;
+        m_charPositions[globalCharIndex] = charPos + offset;
     }
 }
 
@@ -531,8 +578,17 @@ void ArtisticTextShape::insertText(int charIndex, const QString &str)
     notifyChanged();
 }
 
+void ArtisticTextShape::insertText(int charIndex, const ArtisticTextRange &textRange)
+{
+    QList<ArtisticTextRange> ranges;
+    ranges.append(textRange);
+    insertText(charIndex, ranges);
+}
+
 void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange> &textRanges)
 {
+    kDebug() << "1";
+
     CharIndex charPos = indexOfChar(charIndex);
     if (charIndex < 0 || isEmpty()) {
         // insert before first character
@@ -563,7 +619,8 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
         }
     } else {
         // insert ranges inside hit range
-        m_ranges.insert(charPos.first+1, hitRange.extract(charPos.second, hitRange.text().length()));
+        ArtisticTextRange right = hitRange.extract(charPos.second, hitRange.text().length());
+        m_ranges.insert(charPos.first+1, right);
         // now insert after the left part of hit range
         foreach(const ArtisticTextRange &range, textRanges) {
             m_ranges.insert(charPos.first+1, range);
@@ -573,9 +630,13 @@ void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange>
 
     // TODO: merge ranges with same style
 
+    kDebug() << "2";
     cacheGlyphOutlines();
+    kDebug() << "3";
     updateSizeAndPosition();
+    kDebug() << "4";
     update();
+    kDebug() << "5";
     notifyChanged();
 }
 
@@ -589,8 +650,6 @@ void ArtisticTextShape::appendText(const QString &text)
         m_ranges.last().appendText(text);
     }
 
-    qDebug() << "appending text " << text;
-
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
@@ -602,7 +661,6 @@ void ArtisticTextShape::appendText(const ArtisticTextRange &text)
     update();
 
     m_ranges.append(text);
-    qDebug() << "appending text " << text.text();
 
     // TODO: merge ranges with same style
 
@@ -611,6 +669,25 @@ void ArtisticTextShape::appendText(const ArtisticTextRange &text)
     update();
     notifyChanged();
 
+}
+
+bool ArtisticTextShape::replaceText(int charIndex, int charCount, ArtisticTextRange &textRange)
+{
+    CharIndex charPos = indexOfChar(charIndex);
+    if (charPos.first < 0 || !charCount)
+        return false;
+
+    qDebug() << "before insert:" << plainText();
+
+    insertText(charIndex, textRange);
+
+    qDebug() << "before remove:" << plainText();
+
+    removeText(charIndex+textRange.text().length(), charCount);
+
+    qDebug() << "after replace" << plainText();
+
+    return true;
 }
 
 qreal ArtisticTextShape::charAngleAt(int charIndex) const

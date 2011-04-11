@@ -67,6 +67,8 @@ public:
                                      KoShapeLoadingContext& context);
 
     // Methods specific to the vector shape.
+    QByteArray  contents() const;
+    void  setContents( const QByteArray &newContents );
     VectorType  vectorType() const;
 
 private:

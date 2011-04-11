@@ -63,20 +63,15 @@ public:
      */
     virtual void findPrevious();
 
-
-Q_SIGNALS:
-    //void findDocumentSetNext(QTextDocument* document);
-    //void findDocumentSetPrevious(QTextDocument* document);
-    
 protected:
     /**
      * The actual implementation of the searching, overridden from KoFindBase.
      */
-    virtual void findImpl(const QString& pattern, QList< KoFindMatch >& matchList);
+    virtual void findImplementation(const QString &pattern, KoFindMatchList &matchList);
     /**
      * The actual implementation of replacing, overridden from KoFindBase.
      */
-    virtual void replaceImpl(const KoFindMatch& match, const QVariant& value);
+    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
     /**
      * Clear the list of matches properly. Overridden from KoFindBase.
      */
@@ -86,10 +81,10 @@ private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant&))
+    Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant &))
 };
 
-Q_DECLARE_METATYPE(QTextDocument*);
+Q_DECLARE_METATYPE(QTextDocument *);
 Q_DECLARE_METATYPE(QTextCursor);
 
 #endif // KOFINDTEXT_H

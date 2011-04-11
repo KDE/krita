@@ -44,7 +44,7 @@ public:
      *
      * Constructs an instance without any options.
      */
-    explicit KoFindOptionSet(QObject* parent = 0);
+    explicit KoFindOptionSet(QObject *parent = 0);
     /**
      * Destructor.
      */
@@ -57,13 +57,13 @@ public:
      *
      * \return The option corresponding to the id, or 0 if it was not found.
      */
-    KoFindOption * option(const QString& name) const;
+    KoFindOption *option(const QString &name) const;
     /**
      * Retrieve a list of all properties.
      *
      * \return A list of options.
      */
-    QList< KoFindOption* > options() const;
+    QList<KoFindOption *> options() const;
 
     /**
      * Add an empty option.
@@ -75,7 +75,7 @@ public:
      *
      * \return The new option.
      */
-    KoFindOption * addOption(const QString &name);
+    KoFindOption *addOption(const QString &name);
     /**
      * Add a new option.
      *
@@ -87,7 +87,7 @@ public:
      *
      * \return The option just created.
      */
-    KoFindOption * addOption(const QString &name, const QString &title, const QString &description, const QVariant &value);
+    KoFindOption *addOption(const QString &name, const QString &title, const QString &description, const QVariant &value);
 
     /**
      * Remove an option from the set.
@@ -114,7 +114,7 @@ public Q_SLOTS:
 
 private:
     class Private;
-    Private * const d;
+    Private *const d;
 };
 
 #endif // KOFINDOPTIONSET_H

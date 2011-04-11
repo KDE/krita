@@ -29,10 +29,10 @@ class KoFindMatch::Private : public QSharedData
 public:
     Private() { }
     ~Private() { }
-    Private(const Private& other)
-        : QSharedData(other),
-        container(other.container),
-        location(other.location)
+    Private(const Private &other)
+            : QSharedData(other),
+            container(other.container),
+            location(other.location)
     { }
 
     QVariant container;
@@ -40,35 +40,33 @@ public:
 };
 
 KoFindMatch::KoFindMatch()
+    : d(new Private)
 {
-    d = new Private;
 }
 
-KoFindMatch::KoFindMatch(const QVariant& container, const QVariant& location)
+KoFindMatch::KoFindMatch(const QVariant &container, const QVariant &location)
+    : d(new Private)
 {
-    d = new Private;
     d->container = container;
     d->location = location;
 }
 
-KoFindMatch::KoFindMatch(const KoFindMatch& other)
+KoFindMatch::KoFindMatch(const KoFindMatch &other)
     : d(other.d)
 {
-
 }
 
 KoFindMatch::~KoFindMatch()
 {
-
 }
 
-KoFindMatch& KoFindMatch::operator=(const KoFindMatch& other)
+KoFindMatch &KoFindMatch::operator=(const KoFindMatch &other)
 {
     d = other.d;
     return *this;
 }
 
-bool KoFindMatch::operator==(const KoFindMatch& other) const
+bool KoFindMatch::operator==(const KoFindMatch &other) const
 {
     return d->container == other.d->container && d->location == other.d->location;
 }
@@ -83,7 +81,7 @@ QVariant KoFindMatch::container() const
     return d->container;
 }
 
-void KoFindMatch::setContainer(const QVariant& container)
+void KoFindMatch::setContainer(const QVariant &container)
 {
     d->container = container;
 }
@@ -93,7 +91,7 @@ QVariant KoFindMatch::location() const
     return d->location;
 }
 
-void KoFindMatch::setLocation(const QVariant& location)
+void KoFindMatch::setLocation(const QVariant &location)
 {
     d->location = location;
 }

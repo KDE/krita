@@ -216,7 +216,7 @@ public:
         EndNotesConfiguration,
         LineNumberingConfiguration,
         RelativeTabs,
-        HeadingList
+        HeadingList,
         Selections
     };
 

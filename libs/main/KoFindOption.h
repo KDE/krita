@@ -63,7 +63,7 @@ public:
      * \param name The name of this option.
      * \param parent The parent object.
      */
-    explicit KoFindOption(const QString &name, QObject* parent = 0);
+    explicit KoFindOption(const QString &name, QObject *parent = 0);
     /**
      * Destructor.
      */
@@ -75,7 +75,7 @@ public:
      * \return The name of this option.
      */
     QString name() const;
-    
+
     /**
      * Retrieve the title of this option.
      *

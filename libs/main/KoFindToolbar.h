@@ -45,7 +45,7 @@ public:
      * \param find The KoFindBase instance this toolbar operates on.
      * \param ac An action collection that will get several find-related actions added to it.
      */
-    explicit KoFindToolbar(KoFindBase* find, KActionCollection* ac, QWidget* parent = 0, Qt::WindowFlags f = 0);
+    explicit KoFindToolbar(KoFindBase *find, KActionCollection *ac, QWidget *parent = 0, Qt::WindowFlags f = 0);
     virtual ~KoFindToolbar();
 
 public Q_SLOTS:

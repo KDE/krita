@@ -67,23 +67,23 @@ public:
      *
      * \param other The match to copy.
      */
-    KoFindMatch(const KoFindMatch& other);
+    KoFindMatch(const KoFindMatch &other);
     /**
      * Destructor.
      */
     ~KoFindMatch();
 
-    KoFindMatch& operator=(const KoFindMatch& other);
+    KoFindMatch &operator=(const KoFindMatch &other);
 
     /**
      * Equals operator.
      *
      * \param other The other match to compare to.
-     * 
+     *
      * \return True if this.container == other.container
      * and this.location == other.location.
      */
-    bool operator==(const KoFindMatch& other) const;
+    bool operator==(const KoFindMatch &other) const;
 
     /**
      * Check whether this is a valid match.
@@ -92,7 +92,7 @@ public:
      * this.location is valid.
      */
     bool isValid() const;
-    
+
     /**
      * Retrieve the container of this match.
      *
@@ -105,13 +105,13 @@ public:
      * \return The container of this match.
      */
     QVariant container() const;
-    
+
     /**
      * Set the container of this match.
      *
      * \param container The new container to set.
      */
-    void setContainer(const QVariant& container);
+    void setContainer(const QVariant &container);
 
     /**
      * Retrieve the location of this match.
@@ -119,14 +119,14 @@ public:
      * \return The location of this match.
      */
     QVariant location() const;
-    
+
     /**
      * Set the location of this match.
      *
      * \param location The new location to set.
      */
-    void setLocation(const QVariant& location);
-    
+    void setLocation(const QVariant &location);
+
 private:
     class Private;
     QSharedDataPointer<Private> d;

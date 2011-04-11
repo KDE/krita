@@ -32,18 +32,17 @@ public:
     int nextID;
 };
 
-KoFindOptionSet::KoFindOptionSet(QObject* parent)
+KoFindOptionSet::KoFindOptionSet(QObject *parent)
     : QObject(parent), d(new Private)
 {
-
 }
 
 KoFindOptionSet::~KoFindOptionSet()
 {
-
+    delete d;
 }
 
-KoFindOption * KoFindOptionSet::option(const QString &name) const
+KoFindOption *KoFindOptionSet::option(const QString &name) const
 {
     if(d->options.contains(name)) {
         return d->options.value(name);
@@ -51,19 +50,19 @@ KoFindOption * KoFindOptionSet::option(const QString &name) const
     return 0;
 }
 
-QList< KoFindOption * > KoFindOptionSet::options() const
+QList<KoFindOption *> KoFindOptionSet::options() const
 {
     return d->options.values();
 }
 
-KoFindOption * KoFindOptionSet::addOption(const QString &name)
+KoFindOption *KoFindOptionSet::addOption(const QString &name)
 {
     KoFindOption *newOption = new KoFindOption(name);
     d->options.insert(name, newOption);
     return newOption;
 }
 
-KoFindOption * KoFindOptionSet::addOption(const QString &name, const QString& title, const QString& description, const QVariant& value)
+KoFindOption *KoFindOptionSet::addOption(const QString &name, const QString &title, const QString &description, const QVariant &value)
 {
     KoFindOption *newOption = new KoFindOption(name);
     newOption->setTitle(title);
@@ -80,7 +79,7 @@ void KoFindOptionSet::removeOption(const QString &name)
     }
 }
 
-void KoFindOptionSet::setOptionValue(const QString &name, const QVariant& value)
+void KoFindOptionSet::setOptionValue(const QString &name, const QVariant &value)
 {
     if(d->options.contains(name)) {
         d->options.value(name)->setValue(value);

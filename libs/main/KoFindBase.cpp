@@ -26,22 +26,23 @@ class KoFindBase::Private
 {
 public:
     Private() : currentMatch(0) { }
+
     KoFindMatchList matches;
     int currentMatch;
-
     KoFindOptionSet *options;
 };
 
-KoFindBase::KoFindBase(QObject* parent)
-    : QObject(parent), d(new Private)
+KoFindBase::KoFindBase(QObject *parent)
+        : QObject(parent), d(new Private)
 {
 }
 
 KoFindBase::~KoFindBase()
 {
+    delete d;
 }
 
-const KoFindBase::KoFindMatchList& KoFindBase::matches() const
+const KoFindBase::KoFindMatchList &KoFindBase::matches() const
 {
     return d->matches;
 }
@@ -53,19 +54,18 @@ bool KoFindBase::hasMatches() const
 
 KoFindMatch KoFindBase::currentMatch() const
 {
-    if(d->matches.count() > 0 && d->currentMatch < d->matches.count())
-    {
+    if (d->matches.count() > 0 && d->currentMatch < d->matches.count()) {
         return d->matches.at(d->currentMatch);
     }
     return KoFindMatch();
 }
 
-KoFindOptionSet * KoFindBase::options() const
+KoFindOptionSet *KoFindBase::options() const
 {
     return d->options;
 }
 
-void KoFindBase::setMatches(const KoFindBase::KoFindMatchList& matches)
+void KoFindBase::setMatches(const KoFindBase::KoFindMatchList &matches)
 {
     d->matches = matches;
 }
@@ -80,15 +80,15 @@ int KoFindBase::currentMatchIndex()
     return d->currentMatch;
 }
 
-void KoFindBase::find(const QString& pattern)
+void KoFindBase::find(const QString &pattern)
 {
     clearMatches();
     d->matches.clear();
-    findImpl(pattern, d->matches);
+    findImplementation(pattern, d->matches);
 
     emit hasMatchesChanged(d->matches.count() > 0);
-    if(d->matches.size() > 0) {
-        if(d->currentMatch >= d->matches.size()) {
+    if (d->matches.size() > 0) {
+        if (d->currentMatch >= d->matches.size()) {
             d->currentMatch = 0;
         }
         emit matchFound(d->matches.at(d->currentMatch));
@@ -101,20 +101,14 @@ void KoFindBase::find(const QString& pattern)
 
 void KoFindBase::findNext()
 {
-    if(d->matches.count() == 0) {
+    if (d->matches.count() == 0) {
         return;
     }
 
-    bool wrap = false;
-    d->currentMatch++;
-    if(d->currentMatch >= d->matches.count()) {
-        d->currentMatch = 0;
-        wrap = true;
-    }
-
+    d->currentMatch = (d->currentMatch + 1) % d->matches.count();
     emit matchFound(d->matches.at(d->currentMatch));
 
-    if(wrap) {
+    if (d->currentMatch == 0) {
         emit wrapAround(true);
     }
 
@@ -123,19 +117,14 @@ void KoFindBase::findNext()
 
 void KoFindBase::findPrevious()
 {
-    if(d->matches.count() == 0) {
+    if (d->matches.count() == 0) {
         return;
     }
 
-    bool wrap = false;
-    d->currentMatch--;
-    if(d->currentMatch < 0) {
-        d->currentMatch = d->matches.count() - 1;
-        wrap = true;
-    }
+    d->currentMatch = (--d->currentMatch) >= 0 ? d->currentMatch : d->matches.count() - 1;
     emit matchFound(d->matches.at(d->currentMatch));
 
-    if(wrap) {
+    if (d->currentMatch == d->matches.count() - 1) {
         emit wrapAround(false);
     }
 
@@ -149,23 +138,24 @@ void KoFindBase::finished()
     emit updateCanvas();
 }
 
-void KoFindBase::replaceCurrent(const QVariant& value)
+void KoFindBase::replaceCurrent(const QVariant &value)
 {
-    if(d->currentMatch < d->matches.size()) {
-        replaceImpl(d->matches.at(d->currentMatch), value);
+    if (d->currentMatch < d->matches.size()) {
+        replaceImplementation(d->matches.at(d->currentMatch), value);
     }
 }
 
-void KoFindBase::replaceAll(const QVariant& value)
+void KoFindBase::replaceAll(const QVariant &value)
 {
     foreach(const KoFindMatch &match, d->matches) {
-        replaceImpl(match, value);
+        replaceImplementation(match, value);
     }
 }
 
 void KoFindBase::clearMatches()
 {
-
+    //Intentionally does nothing, only needs to be reimplemented when
+    //something needs to be done before clearing the list of matches.
 }
 
 void KoFindBase::setOptions(KoFindOptionSet *newOptions)

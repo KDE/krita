@@ -43,8 +43,8 @@ class KOMAIN_EXPORT KoFindBase : public QObject
     Q_OBJECT
 public:
     typedef QList<KoFindMatch> KoFindMatchList;
-    
-    explicit KoFindBase(QObject* parent = 0);
+
+    explicit KoFindBase(QObject *parent = 0);
     virtual ~KoFindBase();
 
     /**
@@ -53,7 +53,7 @@ public:
      *
      * \return A list of all matches that were found.
      */
-    const KoFindMatchList& matches() const;
+    const KoFindMatchList &matches() const;
 
     /**
      * Check whether any matches were found since the last call to
@@ -76,7 +76,7 @@ public:
     /**
      * Retrieve the current set of options.
      */
-    KoFindOptionSet * options() const;
+    KoFindOptionSet *options() const;
 
 public Q_SLOTS:
     /**
@@ -85,7 +85,7 @@ public Q_SLOTS:
      *
      * \param pattern The string to search for.
      */
-    virtual void find(const QString& pattern);
+    virtual void find(const QString &pattern);
     /**
      * Find the next match, if there is more than one match.
      * This function will wrap around if the end of the document
@@ -151,8 +151,8 @@ protected:
      *
      * \param matches The new list of matches to set.
      */
-    void setMatches(const KoFindMatchList& matches);
-    
+    void setMatches(const KoFindMatchList &matches);
+
     /**
      * Set the current index.
      *
@@ -172,7 +172,7 @@ protected:
      *
      * \param pattern The pattern to search for.
      */
-    virtual void findImpl(const QString &pattern, KoFindMatchList &matchList) = 0;
+    virtual void findImplementation(const QString &pattern, KoFindMatchList &matchList) = 0;
 
     /**
      * This method should be implemented to do the actual replacing.
@@ -180,7 +180,7 @@ protected:
      * \param match The match that should be replaced.
      * \param value The new value to replace the match with.
      */
-    virtual void replaceImpl(const KoFindMatch &match, const QVariant &value) = 0;
+    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value) = 0;
 
     /**
      * Clean up the current matches.

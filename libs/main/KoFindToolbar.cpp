@@ -45,7 +45,7 @@ class KoFindToolbar::Private
 {
 public:
     Private(KoFindToolbar *qq) : q(qq) { }
-    
+
     void matchFound();
     void noMatchFound();
     void searchWrapped(bool direction);
@@ -62,14 +62,14 @@ public:
     QToolButton *previousButton;
     QToolButton *nextButton;
     QToolButton *optionsButton;
-    KSqueezedTextLabel* information;
+    KSqueezedTextLabel *information;
 
     static QStringList completionItems;
 };
 
-QStringList KoFindToolbar::Private::completionItems = QStringList(); 
+QStringList KoFindToolbar::Private::completionItems = QStringList();
 
-KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget* parent, Qt::WindowFlags f)
+KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget *parent, Qt::WindowFlags f)
     : QWidget(parent, f), d(new Private(this))
 {
     QHBoxLayout *layout = new QHBoxLayout();
@@ -99,7 +99,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
     layout->addWidget(d->searchLine);
 
     d->nextButton = new QToolButton(this);
-    d->nextButton->setIcon(KIcon ("go-down-search"));
+    d->nextButton->setIcon(KIcon("go-down-search"));
     d->nextButton->setText(i18nc("Next search result", "Next"));
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
@@ -120,11 +120,11 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
 
     d->optionsButton = new QToolButton(this);
     d->optionsButton->setText(i18nc("Search options", "Options"));
-    
-    QMenu* menu = new QMenu(d->optionsButton);
-    
-    QList<KoFindOption*> options = finder->options()->options();
-    foreach(KoFindOption* option, options) {
+
+    QMenu *menu = new QMenu(d->optionsButton);
+
+    QList<KoFindOption *> options = finder->options()->options();
+    foreach(KoFindOption * option, options) {
         KAction *action = new KAction(option->title(), menu);
         action->setHelpText(option->description());
         action->setObjectName(option->name());
@@ -135,7 +135,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase* finder, KActionCollection *ac, QWidget*
         }
         menu->addAction(action);
     }
-    
+
     d->optionsButton->setMenu(menu);
     d->optionsButton->setPopupMode(QToolButton::InstantPopup);
     layout->addWidget(d->optionsButton);
@@ -202,7 +202,7 @@ void KoFindToolbar::Private::addToHistory()
     searchLine->addToHistory(searchLine->currentText());
 }
 
-void KoFindToolbar::Private::find(const QString& pattern)
+void KoFindToolbar::Private::find(const QString &pattern)
 {
     if(pattern.length() > 0) {
         finder->find(pattern);
@@ -215,7 +215,7 @@ void KoFindToolbar::Private::find(const QString& pattern)
 
 void KoFindToolbar::Private::optionChanged()
 {
-    QAction *action = qobject_cast<QAction*>(q->sender());
+    QAction *action = qobject_cast<QAction *>(q->sender());
     if(action) {
         finder->options()->setOptionValue(action->objectName(), action->isChecked());
         find(searchLine->currentText());

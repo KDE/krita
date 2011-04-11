@@ -43,36 +43,36 @@
 
 class KoFindText::Private
 {
-    public:
-        Private() : document(0), selectionStart(-1), selectionEnd(-1) { }
+public:
+    Private() : document(0), selectionStart(-1), selectionEnd(-1) { }
 
-        void resourceChanged(int key, const QVariant& variant);
-        void updateSelections();
+    void resourceChanged(int key, const QVariant &variant);
+    void updateSelections();
 
-        QTextDocument *document;
+    QTextDocument *document;
 
-        KoResourceManager *resourceManager;
+    KoResourceManager *resourceManager;
 
-        QTextCursor selection;
-        QVector<QAbstractTextDocumentLayout::Selection> selections;
+    QTextCursor selection;
+    QVector<QAbstractTextDocumentLayout::Selection> selections;
 
-        int selectionStart;
-        int selectionEnd;
+    int selectionStart;
+    int selectionEnd;
 
-        static QTextCharFormat *highlightFormat;
-        static QTextCharFormat *currentMatchFormat;
-        static QTextCharFormat *currentSelectionFormat;
+    static QTextCharFormat *highlightFormat;
+    static QTextCharFormat *currentMatchFormat;
+    static QTextCharFormat *currentSelectionFormat;
 };
 
-QTextCharFormat * KoFindText::Private::currentSelectionFormat = 0;
-QTextCharFormat * KoFindText::Private::highlightFormat = 0;
-QTextCharFormat * KoFindText::Private::currentMatchFormat = 0;
+QTextCharFormat *KoFindText::Private::currentSelectionFormat = 0;
+QTextCharFormat *KoFindText::Private::highlightFormat = 0;
+QTextCharFormat *KoFindText::Private::currentMatchFormat = 0;
 
-KoFindText::KoFindText(KoResourceManager* provider, QObject* parent)
+KoFindText::KoFindText(KoResourceManager *provider, QObject *parent)
     : KoFindBase(parent), d(new Private)
 {
     d->resourceManager = provider;
-    connect(provider, SIGNAL(resourceChanged(int, const QVariant&)), this, SLOT(resourceChanged(int, const QVariant&)));
+    connect(provider, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(resourceChanged(int, const QVariant &)));
 
     if(!d->highlightFormat) {
         d->highlightFormat = new QTextCharFormat();
@@ -98,10 +98,10 @@ KoFindText::KoFindText(KoResourceManager* provider, QObject* parent)
 
 KoFindText::~KoFindText()
 {
-
+    delete d;
 }
 
-void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList)
+void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> & matchList)
 {
     KoFindOptionSet *opts = options();
     QTextDocument::FindFlags flags = 0;
@@ -123,7 +123,7 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
 //         selection.cursor = cursor;
 //         selection.format = *(d->currentSelectionFormat);
 //         d->selections.append(selection);
-// 
+//
 //         findInSelection = true;
 //         start = d->selectionStart;
 //     }
@@ -131,7 +131,7 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
     if(!d->document) {
         QVariant doc = d->resourceManager->resource(KoText::CurrentTextDocument);
         if(doc.isValid()) {
-            d->document = static_cast<QTextDocument*>(doc.value<void*>());
+            d->document = static_cast<QTextDocument *>(doc.value<void *>());
         }
     }
 
@@ -186,7 +186,7 @@ void KoFindText::findImpl(const QString& pattern, QList<KoFindMatch> & matchList
     d->updateSelections();
 }
 
-void KoFindText::replaceImpl(const KoFindMatch& match, const QVariant& value)
+void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant &value)
 {
     //Does nothing at the moment...
 }
@@ -204,8 +204,9 @@ void KoFindText::clearMatches()
 
 void KoFindText::findNext()
 {
-    if(d->selections.size() == 0)
+    if(d->selections.size() == 0) {
         return;
+    }
 
     d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findNext();
@@ -215,8 +216,9 @@ void KoFindText::findNext()
 
 void KoFindText::findPrevious()
 {
-    if(d->selections.size() == 0)
+    if(d->selections.size() == 0) {
         return;
+    }
 
     d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findPrevious();
@@ -224,10 +226,10 @@ void KoFindText::findPrevious()
     d->updateSelections();
 }
 
-void KoFindText::Private::resourceChanged(int key, const QVariant& variant)
+void KoFindText::Private::resourceChanged(int key, const QVariant &variant)
 {
-    if (key == KoText::CurrentTextDocument) {
-        document = static_cast<QTextDocument*>(variant.value<void*>());
+    if(key == KoText::CurrentTextDocument) {
+        document = static_cast<QTextDocument *>(variant.value<void *>());
     } else if(key == KoText::SelectedTextPosition) {
         selectionStart = variant.toInt();
     } else if(key == KoText::SelectedTextAnchor) {

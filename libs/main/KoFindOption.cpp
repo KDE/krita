@@ -34,8 +34,8 @@ public:
     QVariant value;
 };
 
-KoFindOption::KoFindOption(const QString &name, QObject* parent)
-    : QObject(parent), d(new Private)
+KoFindOption::KoFindOption(const QString &name, QObject *parent)
+        : QObject(parent), d(new Private)
 {
     d->name = name;
 }
@@ -65,17 +65,17 @@ QVariant KoFindOption::value() const
     return d->value;
 }
 
-void KoFindOption::setTitle(const QString& newTitle)
+void KoFindOption::setTitle(const QString &newTitle)
 {
     d->title = newTitle;
 }
 
-void KoFindOption::setDescription(const QString& newDescription)
+void KoFindOption::setDescription(const QString &newDescription)
 {
     d->description = newDescription;
 }
 
-void KoFindOption::setValue(const QVariant& newValue)
+void KoFindOption::setValue(const QVariant &newValue)
 {
     d->value = newValue;
 }

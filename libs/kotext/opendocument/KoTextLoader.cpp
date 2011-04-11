@@ -2044,7 +2044,6 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
         }
     }
     
-    qDebug() << "Ok got it, " << headingRowCounter;
     if (headingRowCounter > 0) {
         QTextTableFormat fmt = tbl->format();
         fmt.setProperty(KoTableStyle::NumberHeadingRows, headingRowCounter);
@@ -2310,7 +2309,6 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
         // We'll just try to find displayable elements and add them as paragraphs
         } else if (e.localName() == "index-body") {
-            //qDebug() << e.localName();
             QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
             bool firstTime = true;

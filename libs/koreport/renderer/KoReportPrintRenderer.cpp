@@ -236,9 +236,7 @@ bool KoReportPrintRenderer::render(const KoReportRendererContext &context, ORODo
 
                     context.painter->restore();
 
-                } else {
-                    qDebug("unrecognized primitive type");
-                }
+                } 
             }
         }
     }

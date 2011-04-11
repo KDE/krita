@@ -150,9 +150,11 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         KNS3::DownloadDialog dialog(this);
         dialog.exec();
+/*
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
             qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
         }
+*/
     }
     else if (button == Button_GhnsUpload) {
 

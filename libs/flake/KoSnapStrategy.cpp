@@ -348,43 +348,41 @@ QPointF ExtensionSnapStrategy::extensionDirection(KoPathPoint * point, const QTr
     KoPathShape * path = point->parent(); 
     KoPathPointIndex index = path->pathPointIndex(point); //NOTE: if path is initiated but empty - i.e. point is its first point, then index == -1, -1
       
-qDebug() << point->properties() << " is the points properties";   
-qDebug() << index << " is the returned pathPointIndex on the point";    
-    
     /// check if it is a start point
     if (point->properties() & KoPathPoint::StartSubpath) { //if this point starts a sub path
 //qDebug() << "point parameter to ExtensionSnapStrategy::extensionDirection() is of type KoPathPoint::StartSubpath";        
         if (point->activeControlPoint2()) { //has an active control point 2
-qDebug() << "return 1: this point is the start of a sub path and has an activeControlPoint2";
+//qDebug() << "return 1: this point is the start of a sub path and has an activeControlPoint2";
             return matrix.map(point->point()) - matrix.map(point->controlPoint2());
         } else { //means it has been initiated as empty
             KoPathPoint * next = path->pointByIndex(KoPathPointIndex(index.first, index.second + 1)); //if this point has a next point
             if (! next){ //This point does not have a next point
-qDebug() << "return 2: this point is the start of a sub path, has no activeControlPoint2, and has no next point";                 
+//qDebug() << "return 2: this point is the start of a sub path, has no activeControlPoint2, and has no next point";                 
                 return QPointF(); 
-            }else if (next->activeControlPoint1()){
-qDebug() << "return 3: this point is the start of a sub path, has no activeControlPoint2, and has a next point with an activeControlPoint1";                
+            } else if (next->activeControlPoint1()){
+//qDebug() << "return 3: this point is the start of a sub path, has no activeControlPoint2, and has a next point with an activeControlPoint1";                
                 return matrix.map(point->point()) - matrix.map(next->controlPoint1()); //return diff between this point and the next's controlpoint1
-            }else{
-qDebug() << "return 4: this point is the start of a sub path, has no activeControlPoint2, has a next point but no activeControlPoint1";                
+            } 
+            else {
+//qDebug() << "return 4: this point is the start of a sub path, has no activeControlPoint2, has a next point but no activeControlPoint1";                
                 return matrix.map(point->point()) - matrix.map(next->point());//return diff between this point and the next point
             }
         }
     } else { //if this point does _not_ start a sub path
 //qDebug() << "point parameter to ExtensionSnapStrategy::extensionDirection() is NOT of type KoPathPoint::StartSubpath";             
         if (point->activeControlPoint1()) { // has an a
-qDebug() << "return 5: this point is not the start of a sub path and has an activeControlPoint1";            
+//qDebug() << "return 5: this point is not the start of a sub path and has an activeControlPoint1";            
             return matrix.map(point->point()) - matrix.map(point->controlPoint1());
         } else { //means it has been initiated as empty
             KoPathPoint * prev = path->pointByIndex(KoPathPointIndex(index.first, index.second - 1)); //if this point has a prev point
             if (! prev){ //This point does not have a previous point
-qDebug() << "return 6: this point has no previous point - returning an empty QPointF";                
+//qDebug() << "return 6: this point has no previous point - returning an empty QPointF";                
                 return QPointF();
             }else if (prev->activeControlPoint2()){
-qDebug() << "return 7: this point has a previous point with an activeControlPoint2";                  
+//qDebug() << "return 7: this point has a previous point with an activeControlPoint2";                  
                 return matrix.map(point->point()) - matrix.map(prev->controlPoint2()); //return diff between this point and the prev's controlpoint2
             }else{
-qDebug() << "return 8: this point has a previous point but no activeControlPoint2";                           
+//qDebug() << "return 8: this point has a previous point but no activeControlPoint2";                           
                 return matrix.map(point->point()) - matrix.map(prev->point()); //return diff between this point and the prev point
             }
         }

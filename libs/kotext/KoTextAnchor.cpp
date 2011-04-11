@@ -326,7 +326,7 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     KoChangeTracker *changeTracker = KoTextDocument(document).changeTracker();
     if (!changeTracker)
         return;
-
+    
     KoChangeTrackerElement *changeElement = changeTracker->elementById(changeId);
     if (changeElement && changeElement->getChangeType() == KoGenChange::DeleteChange) {
         changePen.setColor(changeTracker->getDeletionBgColor());
@@ -334,6 +334,8 @@ void KoTextAnchor::paint(QPainter &painter, QPaintDevice *, const QTextDocument 
     } else if (changeElement && changeElement->getChangeType() == KoGenChange::InsertChange) {
         changePen.setColor(changeTracker->getInsertionBgColor());
         drawChangeRect = true;
+    } else if (changeElement && changeElement->getChangeType() == KoGenChange::FormatChange) {
+        changePen.setColor(changeTracker->getFormatChangeBgColor());
     }
 
     painter.setPen(changePen);

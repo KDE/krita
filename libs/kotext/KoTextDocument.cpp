@@ -48,6 +48,7 @@ const QUrl KoTextDocument::EndNotesConfigurationURL = QUrl("kotext://endnotescon
 const QUrl KoTextDocument::FootNotesConfigurationURL = QUrl("kotext://footnotesconfiguration");
 const QUrl KoTextDocument::LineNumberingConfigurationURL = QUrl("kotext://linenumberingconfiguration");
 const QUrl KoTextDocument::RelativeTabsURL = QUrl("kotext://relativetabs");
+const QUrl KoTextDocument::HeadingListURL = QUrl("kotext://headingList");
 
 KoTextDocument::KoTextDocument(QTextDocument *document)
     : m_document(document)
@@ -122,7 +123,6 @@ KoChangeTracker *KoTextDocument::changeTracker() const
     return resource.value<KoChangeTracker *>();
 }
 
-
 void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)
 {
     notesConfiguration->setParent(m_document);
@@ -160,6 +160,19 @@ KoOdfLineNumberingConfiguration *KoTextDocument::lineNumberingConfiguration() co
 {
     return m_document->resource(KoTextDocument::LineNumberingConfiguration, LineNumberingConfigurationURL)
             .value<KoOdfLineNumberingConfiguration*>();
+}
+
+void KoTextDocument::setHeadingList(KoList *headingList)
+{
+    QVariant v;
+    v.setValue(headingList);
+    m_document->addResource(KoTextDocument::HeadingList, HeadingListURL, v);
+}
+
+KoList *KoTextDocument::headingList() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::HeadingList, HeadingListURL);
+    return resource.value<KoList *>();
 }
 
 void KoTextDocument::setUndoStack(KUndoStack *undoStack)

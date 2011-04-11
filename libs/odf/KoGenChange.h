@@ -53,12 +53,17 @@ public:
         DeleteChange
     };
 
+    enum ChangeFormat {
+        ODF_1_2,
+        DELTAXML
+    };
+
     /**
      * Start the definition of a new change. Its name will be set later by KoGenChanges::insert(),
      * but first you must define its properties and attributes.
      *
      */
-    explicit KoGenChange();
+    explicit KoGenChange(KoGenChange::ChangeFormat changeFormat = KoGenChange::ODF_1_2);
     ~KoGenChange();
 
     /// Set the type of this change
@@ -66,9 +71,19 @@ public:
         m_type = type;
     }
 
+    /// set the format to be used to save changes
+    void setChangeFormat(KoGenChange::ChangeFormat changeFormat) {
+        m_changeFormat = changeFormat;
+    }
+
     /// Return the type of this style
     Type type() const {
         return m_type;
+    }
+
+    /// Return the format to be used to save changes
+    KoGenChange::ChangeFormat changeFormat() const {
+        return m_changeFormat;
     }
 
     /// Add a property to the style
@@ -141,10 +156,15 @@ private:
 
     void writeChangeMetaData(KoXmlWriter *writer) const;
 
+    void writeODF12Change(KoXmlWriter *writer, const QString &name) const;
+
+    void writeDeltaXmlChange(KoXmlWriter *writer, const QString &name) const;
+
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
     Type m_type;
+    ChangeFormat m_changeFormat;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_changeMetaData;
     QMap<QString, QString> m_literalData;

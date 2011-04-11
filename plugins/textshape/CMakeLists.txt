@@ -77,8 +77,11 @@ SET ( textshape_SRCS
     dialogs/QuickTableButton.cpp
     dialogs/FormattingButton.cpp
     dialogs/ChangeConfigureDialog.cpp
+    dialogs/AcceptRejectChangeDialog.cpp
     dialogs/TrackedChangeModel.cpp
     dialogs/TrackedChangeManager.cpp
+    dialogs/ChangeTrackingOptionsWidget.cpp
+    dialogs/SimpleTableWidget.cpp
 
     commands/ChangeListCommand.cpp
     commands/ChangeListLevelCommand.cpp
@@ -119,7 +122,10 @@ kde4_add_ui_files(textshape_SRCS
     dialogs/FontLayoutTab.ui
     dialogs/LanguageTab.ui
     dialogs/ChangeConfigureDialog.ui
+    dialogs/AcceptRejectChangeDialog.ui
     dialogs/TrackedChangeManager.ui
+    dialogs/ChangeTrackingOptionsWidget.ui
+    dialogs/SimpleTableWidget.ui
 )
 
 kde4_add_plugin(textshape ${textshape_SRCS})

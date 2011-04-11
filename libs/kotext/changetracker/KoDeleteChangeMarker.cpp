@@ -98,11 +98,6 @@ int KoDeleteChangeMarker::position() const
     return d->position;
 }
 
-void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
-{
-    d->deleteChangeXml = deleteChangeXml;
-}
-
 bool KoDeleteChangeMarker::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
     Q_UNUSED(element)
@@ -151,6 +146,12 @@ QTextDocument* KoDeleteChangeMarker::document() const
 void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
 {
     KoGenChange change;
+    if (d->changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+        change.setChangeFormat(KoGenChange::ODF_1_2);
+    } else {
+        change.setChangeFormat(KoGenChange::DELTAXML);
+    }
+    
     QString changeName;
     KoTextSharedSavingData *sharedData = 0;
     if (context.sharedData(KOTEXT_SHARED_SAVING_ID)) {
@@ -158,8 +159,8 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
         if (!sharedData) {
             kWarning(32500) << "There is no KoTextSharedSavingData in the context. This should not be the case";
             return;
-        }
-    }
+        }   
+    }   
     d->changeTracker->saveInlineChange(d->id, change);
     change.addChildElement("deleteChangeXml", d->deleteChangeXml);
     changeName = sharedData->genChanges().insert(change);
@@ -167,6 +168,11 @@ void KoDeleteChangeMarker::saveOdf(KoShapeSavingContext &context)
     context.xmlWriter().startElement("text:change", false);
     context.xmlWriter().addAttribute("text:change-id", changeName);
     context.xmlWriter().endElement();
+}
+
+void KoDeleteChangeMarker::setDeleteChangeXml(QString &deleteChangeXml)
+{
+    d->deleteChangeXml = deleteChangeXml;
 }
 
 void KoDeleteChangeMarker::setDeletedListStyle(KoListStyle::ListIdType id, KoListStyle *style)

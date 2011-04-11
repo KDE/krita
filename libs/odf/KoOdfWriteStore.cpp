@@ -108,6 +108,9 @@ KoXmlWriter* KoOdfWriteStore::createOasisXmlWriter(QIODevice* dev, const char* r
         writer->addAttribute("xmlns:smil", KoXmlNS::smil);
         writer->addAttribute("xmlns:koffice", KoXmlNS::koffice);
         writer->addAttribute("xmlns:officeooo", KoXmlNS::officeooo);
+        writer->addAttribute("xmlns:delta", KoXmlNS::delta);
+        writer->addAttribute("xmlns:split", KoXmlNS::split);
+        writer->addAttribute("xmlns:ac", KoXmlNS::ac);
     }
 
     if (qstrcmp(rootElementName, "office:document-settings") == 0) {

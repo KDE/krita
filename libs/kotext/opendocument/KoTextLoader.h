@@ -39,8 +39,9 @@
 class KoShapeLoadingContext;
 class KoShape;
 class QTextCursor;
+class QTextTable;
+class QRect;
 class KoBookmarkManager;
-class KoDocumentRdfBase;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
@@ -73,7 +74,7 @@ public:
     *
     * @param context The context the KoTextLoader is called in
     */
-    explicit KoTextLoader(KoShapeLoadingContext &context, KoDocumentRdfBase *rdfData = 0, KoShape *shape = 0);
+    explicit KoTextLoader(KoShapeLoadingContext &context, KoShape *shape = 0);
 
     /**
     * Destructor.
@@ -86,7 +87,7 @@ public:
     * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
     * instance likes to load an ODF element.
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor);
 
 signals:
 
@@ -109,9 +110,20 @@ private:
     void loadHeading(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
+    * Load delete changes that result in a merge into the cursor
+    * Returns the next Node to be processed
+    */
+    KoXmlNode loadDeleteMerges(const KoXmlElement &element, QString *generatedXmlString);
+
+    /**
     * Load the list from the \p element into the \p cursor .
     */
-    void loadList(const KoXmlElement &element, QTextCursor &cursor, bool isDeleteChange = false);
+    void loadList(const KoXmlElement &element, QTextCursor &cursor);
+
+    /**
+    * Load a list-item into the cursor
+    */
+    void loadListItem(KoXmlElement &e, QTextCursor &cursor, int level);
 
     /**
     * Load the section from the \p element into the \p cursor .
@@ -134,6 +146,11 @@ private:
     * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
     */
     void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
+    
+    /**
+    * Load the contents of delta:merge. Called from loadSpan
+    */
+    void loadMerge(const KoXmlElement &element, QTextCursor &cursor);
 
     /**
     * Load the deleted change outside of a \p or a \h and store it in the Delete Change Marker
@@ -146,6 +163,21 @@ private:
      * The table and its contents are placed in a new shape.
      */
     void loadTable(const KoXmlElement &element, QTextCursor& cursor);
+    
+    /**
+     * Loads a table column
+     */
+    void loadTableColumn(KoXmlElement &element, QTextTable *table, int &columns);
+
+    /**
+     * Loads a table-row into the cursor
+     */
+    void loadTableRow(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &rows);
+
+    /**
+     * Loads a table-cell into the cursor
+     */
+    void loadTableCell(KoXmlElement &element, QTextTable *table, QList<QRect> &spanStore, QTextCursor &cursor, int &currentCell);
 
     /**
      * Load a note \p element into the \p cursor.
@@ -183,29 +215,16 @@ private:
     void endBody();
 
     /**
-    * Store the delete changes in the deleteChangeTable. Will be processed with "change" is encountered
+    * Store the delete changes in the deleteChangeTable. Will be processed when "change" is encountered
     */
     void storeDeleteChanges(KoXmlElement &tag);
 
     /**
-    * Checks whether a list should be treated as a valid list. A Delete change might have a list but should not be treated as such.
-    * This Information is obtained from the ODF Metadata
-    * **This is a work-around for a bug in the spec**
+    * This is called in case of a paragraph or a header split.
+    * Mark the blocks from the start of the split till the end as an insertion type
+    * and set the corresponding changeId in the charFormat
     */
-    bool isValidList(const QString& xmlId) const;
-
-    /**
-    * Checks whether a list-item should be treated as a valid list-item. A Delete change might have a list-item but should not be treated as such.
-    * This Information is obtained from the ODF Metadata
-    * **This is a work-around for a bug in the spec**
-    */
-    bool isValidListItem(const QString& xmlId) const;
-
-    /**
-    * Find the level of a list from the Metadata.
-    * **This is a work-around for a bug in the spec**
-    */
-    int listLevel(const QString& xmlId) const;
+    void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
 
     /**
      * This is called in loadSpan to allow Cut and Paste of bookmarks. This

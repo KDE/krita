@@ -94,6 +94,12 @@ public:
     ///Returns the global undo stack
     KUndoStack *undoStack() const;
 
+    ///Sets the global heading list
+    void setHeadingList(KoList *list);
+
+    ///Returns the global heading list
+    KoList *headingList() const;
+
     /// Sets the lists of the document
     void setLists(const QList<KoList *> &lists);
 
@@ -196,7 +202,8 @@ public:
         FootNotesConfiguration,
         EndNotesConfiguration,
         LineNumberingConfiguration,
-        RelativeTabs
+        RelativeTabs,
+        HeadingList
     };
 
     static const QUrl StyleManagerURL;
@@ -209,6 +216,7 @@ public:
     static const QUrl EndNotesConfigurationURL;
     static const QUrl LineNumberingConfigurationURL;
     static const QUrl RelativeTabsURL;
+    static const QUrl HeadingListURL;
 
 private:
     QTextDocument *m_document;

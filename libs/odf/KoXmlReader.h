@@ -45,6 +45,7 @@ typedef QDomDocument KoXmlDocument;
 
 class QString;
 class QXmlStreamReader;
+template<class T1, class T2> class QPair;
 
 class KoXmlNode;
 class KoXmlText;

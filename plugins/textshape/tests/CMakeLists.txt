@@ -82,6 +82,9 @@ set(TestChangeListCommand_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
+    ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../TextShapeLayout.cpp
@@ -186,6 +189,7 @@ set(TestTextTool_test_SRCS
     ../commands/TextPasteCommand.cpp
     ../commands/AutoResizeCommand.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
     ../dialogs/CharacterGeneral.cpp
     ../dialogs/CharacterHighlighting.cpp
     ../dialogs/FontDecorations.cpp
@@ -218,6 +222,7 @@ set(TestTextTool_test_SRCS
     ../dialogs/TableDialog.cpp
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
     ../TextShapeLayout.cpp
     ../TextLine.cpp
     ../Outline.cpp
@@ -288,6 +293,9 @@ set(TestChangeTrackedDelete_test_SRCS
     ../dialogs/TrackedChangeManager.cpp
     ../dialogs/TrackedChangeModel.cpp
     ../dialogs/ChangeConfigureDialog.cpp
+    ../dialogs/AcceptRejectChangeDialog.cpp
+    ../dialogs/ChangeTrackingOptionsWidget.cpp
+    ../dialogs/SimpleTableWidget.cpp
     ../ListItemsHelper.cpp
     ../TextShape.cpp
     ../TextShapeLayout.cpp

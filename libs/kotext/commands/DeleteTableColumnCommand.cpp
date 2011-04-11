@@ -29,21 +29,24 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t,
+DeleteTableColumnCommand::DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId,
                                              QUndoCommand *parent) :
     QUndoCommand (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
+    ,m_changeId(changeId)
 {
     setText(i18n("Delete Column"));
 }
 
 void DeleteTableColumnCommand::undo()
 {
-    KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
-    for (int i = 0; i < m_selectionColumnSpan; ++i) {
-        carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
+    if (!m_changeId) {
+        KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+        for (int i = 0; i < m_selectionColumnSpan; ++i) {
+            carsManager.insertColumns(m_selectionColumn + i, 1, m_deletedStyles.at(i));
+        }
     }
 
     QUndoCommand::undo();
@@ -53,7 +56,9 @@ void DeleteTableColumnCommand::redo()
 {
     KoTableColumnAndRowStyleManager carsManager = KoTableColumnAndRowStyleManager::getManager(m_table);
     if (!m_first) {
-        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        if (!m_changeId) {
+            carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        }
         QUndoCommand::redo();
     } else {
         m_first = false;
@@ -66,11 +71,20 @@ void DeleteTableColumnCommand::redo()
             m_selectionColumn = cell.column();
             m_selectionColumnSpan = 1;
         }
-        m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        
+        if (!m_changeId) {
+            m_table->removeColumns(m_selectionColumn, m_selectionColumnSpan);
 
-        for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
-            m_deletedStyles.append(carsManager.columnStyle(i));
+            for (int i = m_selectionColumn; i < m_selectionColumn + m_selectionColumnSpan; ++i) {
+                m_deletedStyles.append(carsManager.columnStyle(i));
+            }
+            carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
+        } else {
+            for (int i=0; i < m_table->rows(); i++) {
+                QTextTableCellFormat cellFormat = m_table->cellAt(i, m_selectionColumn).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, m_changeId);
+                m_table->cellAt(i, m_selectionColumn).setFormat(cellFormat);
+            }    
         }
-        carsManager.removeColumns(m_selectionColumn, m_selectionColumnSpan);
     }
 }

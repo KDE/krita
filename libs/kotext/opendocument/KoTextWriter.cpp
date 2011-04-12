@@ -347,7 +347,8 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 
 QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
 {
-    if (!changeTracker) return
+    if (!changeTracker) return QString::null;
+
     //Create a QTextDocument from the Delete Fragment
     QTextDocument doc;
     QTextCursor cursor(&doc);
@@ -1706,7 +1707,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
             nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
         }
 
-        if (changetracker && changeTracker->isDuplicateChangeId(nextBlockChangeId)) {
+        if (changeTracker && changeTracker->isDuplicateChangeId(nextBlockChangeId)) {
             nextBlockChangeId = changeTracker->originalChangeId(nextBlockChangeId);
         }
 
@@ -1731,7 +1732,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-        if (changeTracker && gchangeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
+        if (changeTracker && changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
             lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
         }
 

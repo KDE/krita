@@ -1364,9 +1364,9 @@ void TextTool::ensureCursorVisible()
         }
     }
 #else
-    QTextCursor *cursor = textEditor->cursor();
-    Q_ASSERT(cursor);
-    if (!m_textShapeData->isCursorVisible(cursor)) {
+    const int position = textEditor->position();
+
+    if (!m_textShapeData->rootArea()->containsPosition(position)) {
         // If the current TextShape doesn't have the cursor any longer we need to switch to the TextShape that has the cursor now.
         bool foundShape = false;
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
@@ -1376,7 +1376,7 @@ void TextTool::ensureCursorVisible()
             Q_ASSERT(textShape);
             KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
             Q_ASSERT(d);
-            if (d->isCursorVisible(cursor)) {
+            if (d->rootArea()->containsPosition(position)) {
                 disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
                 m_textShapeData = d;
                 connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
@@ -1385,11 +1385,11 @@ void TextTool::ensureCursorVisible()
                 break;
             }
         }
-        Q_ASSERT_X(foundShape, __FUNCTION__, QString("Seems there is no TextShape which has the cursor now").toLocal8Bit());
+        Q_ASSERT_X(foundShape, __FUNCTION__, QString("Seems there is no TextShape which has the cursor with position=%1 now").arg(position).toLocal8Bit());
     }
 #endif
 
-    QRectF cursorPos = caretRect(textEditor->position());
+    QRectF cursorPos = caretRect(position);
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // So take bottom of last paragraph.

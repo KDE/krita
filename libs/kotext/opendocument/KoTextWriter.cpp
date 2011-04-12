@@ -282,6 +282,8 @@ void KoTextWriter::Private::saveChange(QTextCharFormat format)
 
 void KoTextWriter::Private::saveChange(int changeId)
 {
+    if (!changeTracker) return;
+
     if(changeTransTable.value(changeId).length())
         return;
 
@@ -345,6 +347,7 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
 
 QString KoTextWriter::Private::generateDeleteChangeXml(KoDeleteChangeMarker *marker)
 {
+    if (!changeTracker) return
     //Create a QTextDocument from the Delete Fragment
     QTextDocument doc;
     QTextCursor cursor(&doc);
@@ -1703,13 +1706,13 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
             nextBlockChangeId = endBlock.next().blockFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
         }
 
-        if (changeTracker->isDuplicateChangeId(nextBlockChangeId)) {
+        if (changetracker && changeTracker->isDuplicateChangeId(nextBlockChangeId)) {
             nextBlockChangeId = changeTracker->originalChangeId(nextBlockChangeId);
         }
 
         if (!changeId) {
             splitMergeChangeId = changeId = nextBlockChangeId;
-            if ((changeId) && (changeTracker->elementById(nextBlockChangeId)->getChangeType() == changeType)) {
+            if ((changeId) && (changeTracker && changeTracker->elementById(nextBlockChangeId)->getChangeType() == changeType)) {
                 endBlock = endBlock.next();
             } else {
                 changeId = 0;
@@ -1728,7 +1731,7 @@ int KoTextWriter::Private::checkForMergeOrSplit(const QTextBlock &block, KoGenCh
         QTextFragment lastFragment = (--(endBlock.end())).fragment();
         QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
         int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-        if (changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
+        if (changeTracker && gchangeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
             lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
         }
 

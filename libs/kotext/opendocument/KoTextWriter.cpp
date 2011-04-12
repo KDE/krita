@@ -1421,7 +1421,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     KoList *list = textDocument.list(block);
     int topListLevel = KoList::level(block);
 
-    if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         if ((level == 1) && (!deleteMergeRegionOpened) && !headingLevel) {
             QTextBlock listBlock = block;
             do {
@@ -1438,7 +1438,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
     }
 
     bool closeDelMergeRegion = false;
-    if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
         if ((level == 1) && (deleteMergeRegionOpened) && !headingLevel) {
             QTextBlock listBlock = block;
             do {
@@ -1479,7 +1479,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList);
                 closeTagRegion(changeId);
             } else {
-                if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+                if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
                     int endBlockNumber = checkForSplit(block);
                     if (!deleteMergeRegionOpened && !splitRegionOpened && (endBlockNumber != -1)) {
                         openSplitMergeRegion();
@@ -1531,7 +1531,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
 
                 closeTagRegion(listItemChangeId);
 
-                if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+                if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
                     if (splitRegionOpened && (block.blockNumber() == splitEndBlockNumber)) {
                         splitRegionOpened = false;
                         splitEndBlockNumber = -1;
@@ -1552,7 +1552,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
         closeTagRegion(listChangeId);
     }
 
-    if (closeDelMergeRegion && (changeTracker->saveFormat() == KoChangeTracker::DELTAXML)) {
+    if (closeDelMergeRegion && (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML)) {
         closeSplitMergeRegion();
         deleteMergeRegionOpened = false;
         deleteMergeEndBlockNumber = -1;

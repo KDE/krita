@@ -79,6 +79,7 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
     m_contents = newContents;
     m_type = VectorTypeUndetermined;
     m_cache.clear();
+    update();
 }
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
@@ -88,9 +89,11 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
     if (!cache || cache->isNull()) {
         // create the cache image
         cache = new QImage(rc.size().toSize(), QImage::Format_ARGB32);
+        cache->fill(0);
         QPainter gc(cache);
         applyConversion(gc, converter);
         draw(gc);
+        gc.end();
     }
     painter.drawImage(0, 0, *cache);
     m_cache.insert(rc.size().toSize().height(), cache);

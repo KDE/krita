@@ -1368,7 +1368,6 @@ void TextTool::ensureCursorVisible()
 
     if (!m_textShapeData->rootArea()->containsPosition(position)) {
         // If the current TextShape doesn't have the cursor any longer we need to switch to the TextShape that has the cursor now.
-        bool foundShape = false;
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
         foreach (KoShape* shape, lay->shapes()) {
@@ -1385,7 +1384,8 @@ void TextTool::ensureCursorVisible()
                 break;
             }
         }
-        Q_ASSERT_X(foundShape, __FUNCTION__, QString("Seems there is no TextShape which has the cursor with position=%1 now").arg(position).toLocal8Bit());
+        // If the m_textShape wasn't set above to another shape then we go on with the previous shape.
+        //FIXME this is inefficient cause we run through that loop way to often.
     }
 #endif
 

@@ -1380,7 +1380,6 @@ void TextTool::ensureCursorVisible()
                 m_textShapeData = d;
                 connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
                 m_textShape = textShape;
-                foundShape = true;
                 break;
             }
         }

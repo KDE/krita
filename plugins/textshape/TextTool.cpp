@@ -1343,8 +1343,8 @@ void TextTool::ensureCursorVisible()
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
+
 #if 0
-TODO
     if (m_textShapeData->endPosition() < textEditor->position() || m_textShapeData->position() > textEditor->position()) {
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);
@@ -1364,10 +1364,31 @@ TODO
         }
     }
 #else
-    #ifdef __GNUC__
-        #warning FIXME: port to textlayout-rework
-    #endif
+    QTextCursor *cursor = textEditor->cursor();
+    Q_ASSERT(cursor);
+    if (!m_textShapeData->isCursorVisible(cursor)) {
+        // If the current TextShape doesn't have the cursor any longer we need to switch to the TextShape that has the cursor now.
+        bool foundShape = false;
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+        Q_ASSERT(lay);
+        foreach (KoShape* shape, lay->shapes()) {
+            TextShape *textShape = dynamic_cast<TextShape*>(shape);
+            Q_ASSERT(textShape);
+            KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
+            Q_ASSERT(d);
+            if (d->isCursorVisible(cursor)) {
+                disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+                m_textShapeData = d;
+                connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+                m_textShape = textShape;
+                foundShape = true;
+                break;
+            }
+        }
+        Q_ASSERT_X(foundShape, __FUNCTION__, QString("Seems there is no TextShape which has the cursor now").toLocal8Bit());
+    }
 #endif
+
     QRectF cursorPos = caretRect(textEditor->position());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.

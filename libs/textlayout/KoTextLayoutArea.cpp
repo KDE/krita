@@ -77,6 +77,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
  , m_endOfArea()
+ , m_acceptsPageBreak(false)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
 {
@@ -292,7 +293,27 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         } else if (subFrame) {
             // Right now we'll just skip it, as we know of no subframes
         } else if (block.isValid()) {
+            if (acceptsPageBreak()
+                   && cursor->it != m_startOfArea->it
+                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+                m_endOfArea = new FrameIterator(cursor);
+                setBottom(m_y);
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                return false;
+            }
+
             if (layoutBlock(cursor) == false) {
+                m_endOfArea = new FrameIterator(cursor);
+                setBottom(m_y);
+                m_blockRects.last().setBottom(m_y);
+                return false;
+            }
+
+            if (acceptsPageBreak()
+                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                ++(cursor->it);
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y);
                 m_blockRects.last().setBottom(m_y);
@@ -692,6 +713,16 @@ qreal KoTextLayoutArea::width() const
         return m_dropCapsWidth + 10;
     }
     return m_width - m_indent - m_dropCapsWidth;
+}
+
+void KoTextLayoutArea::setAcceptsPageBreak(bool accept)
+{
+    m_acceptsPageBreak = accept;
+}
+
+bool KoTextLayoutArea::acceptsPageBreak() const
+{
+    return m_acceptsPageBreak;
 }
 
 qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockData)

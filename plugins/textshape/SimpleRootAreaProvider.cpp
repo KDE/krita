@@ -30,8 +30,10 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 {
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, QString mastePageName)
 {
+    Q_UNUSED(mastePageName);
+
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
         m_area->setAssociatedShape(m_textShape);
@@ -46,8 +48,10 @@ void SimpleRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 {
 }
 
-void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea)
+void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea)
 {
+    Q_UNUSED(isNewRootArea);
+
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
         rootArea->associatedShape()->setSize(QSize(

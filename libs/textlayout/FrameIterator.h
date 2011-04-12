@@ -38,6 +38,8 @@ public:
     bool operator ==(const FrameIterator &other);
 
     TableIterator *tableIterator(QTextTable *);
+    QString wantedMasterPage(const QString defaultName) const;
+
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks
     QTextLine line;   //useful if it is pointing to a table. invalid if about to start a new bloco

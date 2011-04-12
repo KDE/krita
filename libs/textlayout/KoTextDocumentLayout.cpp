@@ -87,6 +87,7 @@ public:
 
     qreal defaultTabSizing;
     qreal y;
+    QString wantedMasterPage;
 };
 
 
@@ -305,6 +306,8 @@ void KoTextDocumentLayout::layout()
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
 
+    KoTextLayoutRootArea *previousRootArea = 0;
+
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         bool shouldLayout = false;
 
@@ -318,29 +321,38 @@ void KoTextDocumentLayout::layout()
             shouldLayout = true;
         }
 
+        if (d->wantedMasterPage != d->layoutPosition->wantedMasterPage(d->wantedMasterPage)) {
+            d->provider->releaseAllAfter(previousRootArea);
+            break;
+        }
+
         if (shouldLayout) {
             QSizeF size = d->provider->suggestSize(rootArea);
             rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
 
             // Layout all that can fit into that root area
             if (rootArea->layout(d->layoutPosition)) {
-                d->provider->doPostLayout(rootArea);
+                d->provider->doPostLayout(rootArea, false);
                 d->provider->releaseAllAfter(rootArea);
                 emit finishedLayout();
                 return;
             }
-            d->provider->doPostLayout(rootArea);
+            d->provider->doPostLayout(rootArea, false);
 
             if (!continuousLayout()) {
                 return; // Let's take a break
             }
         }
         d->y = rootArea->bottom(); // (post)Layout method(s) just set this
+        previousRootArea = rootArea;
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
+        //figure out the wantedMasterPage
+        d->wantedMasterPage = d->layoutPosition->wantedMasterPage(d->wantedMasterPage);
+
         // Request a Root Area
-        KoTextLayoutRootArea *rootArea = d->provider->provide(this);
+        KoTextLayoutRootArea *rootArea = d->provider->provide(this, d->wantedMasterPage);
 
         if (rootArea) {
             d->rootAreaList.append(rootArea);
@@ -348,7 +360,7 @@ void KoTextDocumentLayout::layout()
             rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
             // Layout all that can fit into that root area
             rootArea->layout(d->layoutPosition);
-            d->provider->doPostLayout(rootArea);
+            d->provider->doPostLayout(rootArea, true);
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 emit finishedLayout();

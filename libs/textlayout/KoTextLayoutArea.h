@@ -103,6 +103,12 @@ public:
     qreal x() const;
     qreal width() const;
 
+    /// Set if Area accepts page breaks, default is false;
+    void setAcceptsPageBreak(bool accept);
+
+    /// Areas that accept page breaks return true, default is false;
+    bool acceptsPageBreak() const;
+
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
     int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
@@ -175,6 +181,7 @@ private:
     FrameIterator *m_startOfArea;
     FrameIterator *m_endOfArea;
 
+    bool m_acceptsPageBreak;
     QList<QRectF> m_blockRects;
 
     qreal m_preregisteredFootNotesHeight;

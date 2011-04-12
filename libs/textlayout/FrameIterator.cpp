@@ -20,6 +20,8 @@
 
 #include "TableIterator.h"
 
+#include <KoParagraphStyle.h>
+
 #include <QTextFrame>
 #include <QTextTableCell>
 #include <QTextLine>
@@ -75,4 +77,16 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
         currentTableIterator = new TableIterator(table);
     }
     return currentTableIterator;
+}
+
+QString FrameIterator::wantedMasterPage(const QString defaultName) const
+{
+    if (it.currentBlock().isValid()) {
+        QVariant name = it.currentBlock().blockFormat().property(KoParagraphStyle::MasterPageName);
+        if (name.isValid()) {
+            return name.toString();
+        }
+    }
+
+    return defaultName;
 }

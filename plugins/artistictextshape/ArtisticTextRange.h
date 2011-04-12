@@ -92,6 +92,15 @@ public:
     /// Returns the type of the y-offsets
     OffsetType yOffsetType() const;
 
+    /// Sets individual character rotations
+    void setRotations(const QList<qreal> &rotations);
+
+    /// Checks if specified character has a rotation
+    bool hasRotation(int charIndex) const;
+
+    /// Returns the character rotation for the specified character
+    qreal rotation(int charIndex) const;
+
     /// Prints debug output
     void printDebug() const;
 
@@ -100,8 +109,9 @@ private:
     QFont m_font; ///< the font of the text range
     QList<qreal> m_xOffsets; ///< character x-offsets
     QList<qreal> m_yOffsets; ///< character y-offsets
-    OffsetType m_xOffsetType;
-    OffsetType m_yOffsetType;
+    OffsetType m_xOffsetType; ///< character x-offset type
+    OffsetType m_yOffsetType; ///< character y-offset type
+    QList<qreal> m_rotations; ///< character rotations
 };
 
 #endif // ARTISITICTEXTRANGE_H

@@ -69,23 +69,27 @@ void ArtisticTextRange::append(const ArtisticTextRange &range)
     m_text += range.text();
     m_xOffsets += range.m_xOffsets;
     m_yOffsets += range.m_yOffsets;
+    m_rotations += range.m_rotations;
 }
 
 ArtisticTextRange ArtisticTextRange::extract(int from, int count)
 {
     // copy text and font
     ArtisticTextRange extracted(m_text.mid(from, count), m_font);
-    // copy corresponding character offsets
+    // copy corresponding character transformations
     if (from < m_xOffsets.count())
         extracted.setXOffsets(m_xOffsets.mid(from, count), m_xOffsetType);
     if (from < m_yOffsets.count())
         extracted.setYOffsets(m_yOffsets.mid(from, count), m_yOffsetType);
+    if (from < m_rotations.count())
+        extracted.setRotations(m_rotations.mid(from, count));
 
     // remove text
     m_text.remove(from, count);
-    // remove character offsets
+    // remove character transformations
     m_xOffsets = m_xOffsets.mid(0, from);
     m_yOffsets = m_yOffsets.mid(0, from);
+    m_rotations = m_rotations.mid(0, from);
 
     return extracted;
 }
@@ -137,6 +141,21 @@ ArtisticTextRange::OffsetType ArtisticTextRange::yOffsetType() const
     return m_yOffsetType;
 }
 
+void ArtisticTextRange::setRotations(const QList<qreal> &rotations)
+{
+    m_rotations = rotations;
+}
+
+bool ArtisticTextRange::hasRotation(int charIndex) const
+{
+    return charIndex >= 0 && charIndex < m_rotations.count();
+}
+
+qreal ArtisticTextRange::rotation(int charIndex) const
+{
+    return m_rotations.value(charIndex);
+}
+
 void ArtisticTextRange::printDebug() const
 {
     kDebug() << "text:" << m_text;
@@ -157,4 +176,5 @@ void ArtisticTextRange::printDebug() const
         kDebug() << "dy:" << m_yOffsets;
         break;
     }
+    kDebug() << "rotate:" << m_rotations;
 }

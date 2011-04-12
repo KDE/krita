@@ -1366,7 +1366,7 @@ void TextTool::ensureCursorVisible()
 #else
     const int position = textEditor->position();
 
-    if (!m_textShapeData->rootArea()->containsPosition(position)) {
+    if (m_textShapeData->rootArea() && !m_textShapeData->rootArea()->containsPosition(position)) {
         // If the current TextShape doesn't have the cursor any longer we need to switch to the TextShape that has the cursor now.
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         Q_ASSERT(lay);

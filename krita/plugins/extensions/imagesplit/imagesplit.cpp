@@ -101,8 +101,8 @@ void Imagesplit::slotImagesplit()
     QStringList listMimeFilter = KoFilterManager::mimeFilter("application/x-krita", KoFilterManager::Export);
     QStringList listFileType;
     foreach(const QString tempStr, listMimeFilter) {
-        QStringList tempStrList= tempStr.split("/");
-        listFileType.append((tempStrList.at(1)).toUpper()+ " IMAGE ");
+        KMimeType::Ptr type = KMimeType::mimeType( tempStr );
+        listFileType.append(type->comment());
     }
 
 
@@ -125,8 +125,9 @@ void Imagesplit::slotImagesplit()
             for(int i=0,k=1;i<(numVerticalLines+1);i++) {
                 for(int j=0;j<(numHorizontalLines+1);j++,k++)
                 {
+                    KMimeType::Ptr mimeTypeSelected = KMimeType::mimeType( listMimeFilter.at(dlgImagesplit->cmbIndex));
                     KUrl url( QDir::homePath());
-                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k);
+                    QString fileName = dlgImagesplit->suffix()+"_"+ QString::number(k)+mimeTypeSelected->mainExtension();
                     url.addPath( fileName );
                     KUrl kurl=url.url();
                     saveAsImage(QRect((i*img_width),(j*img_height),img_width,img_height),listMimeFilter.at(dlgImagesplit->cmbIndex),kurl);

@@ -50,6 +50,7 @@ DlgImagesplit::DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeF
     m_page->cmbFileType->clear();
     m_page->cmbFileType->addItems(listMimeFilter);
     m_page->cmbFileType->setCurrentIndex(0);
+    cmbIndex=0;
 
     connect(m_page->chkAutoSave,SIGNAL(stateChanged(int)),SLOT(lineEditEnable()));
     connect(m_page->cmbFileType, SIGNAL(activated(int)), this, SLOT(setMimeType(int)));

@@ -198,6 +198,51 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     }
 }
 
+bool KoTextLayoutTableArea::containsPosition(int position) const
+{
+    int lastRow = d->endOfArea->row;
+    if (d->endOfArea->frameIterators[0] == 0) {
+        --lastRow;
+    }
+    if (lastRow <  d->startOfArea->row) {
+        return -1; // empty
+    }
+
+    int firstRow = qMax(d->startOfArea->row, d->headerRows);
+
+    // Test header row cells.
+    for (int row = 0; row < d->headerRows; ++row) {
+        for (int column = 1; column < d->table->columns(); ++column) {
+            QTextTableCell tableCell = d->table->cellAt(row, column);
+            if (position <= tableCell.firstCursorPosition().position()) {
+                return false;
+            }
+            if (position >= tableCell.lastCursorPosition().position()) {
+                return false;
+            }
+
+            return d->cellAreas[tableCell.row()][tableCell.column()]->containsPosition(position);
+        }
+    }
+
+    // Test normal cells.
+    for (int row = firstRow; row <= lastRow; ++row) {
+        for (int column = 1; column < d->table->columns(); ++column) {
+            QTextTableCell tableCell = d->table->cellAt(row, column);
+            if (position <= tableCell.firstCursorPosition().position()) {
+                return false;
+            }
+            if (position >= tableCell.lastCursorPosition().position()) {
+                return false;
+            }
+
+            return d->cellAreas[tableCell.row()][tableCell.column()]->containsPosition(position);
+        }
+    }
+
+    return false;
+}
+
 bool KoTextLayoutTableArea::layout(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);

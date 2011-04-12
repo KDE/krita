@@ -358,6 +358,11 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_compositeOp);
             indirect->setTemporaryOpacity(m_opacity);
+            
+            KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
+            
+            if(paintLayer)
+                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
         }
         else {
             m_paintIncremental = true;

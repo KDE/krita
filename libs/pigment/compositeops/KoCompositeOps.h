@@ -32,7 +32,6 @@
 #include "compositeops/KoCompositeOpAlphaDarken.h"
 #include "compositeops/KoCompositeOpErase.h"
 #include "compositeops/KoCompositeOpCopy2.h"
-#include "compositeops/KoCompositeOpAtop.h"
 #include "compositeops/KoCompositeOpDissolve.h"
 
 namespace _Private {
@@ -59,7 +58,6 @@ struct AddGeneralOps<Traits, true>
         cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
         cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
-        cs->addCompositeOp(new KoCompositeOpAtop<Traits>(cs, KoCompositeOp::categoryMix()));
         
         add<&cfOverlay>      (cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());
         add<&cfGrainMerge>   (cs, COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")   , KoCompositeOp::categoryMix());

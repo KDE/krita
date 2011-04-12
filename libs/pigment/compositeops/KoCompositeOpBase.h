@@ -48,10 +48,34 @@ class KoCompositeOpBase : public KoCompositeOp
     static const qint32 alpha_pos   = _CSTraits::alpha_pos;
     
 public:
-    
     KoCompositeOpBase(const KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible)
         : KoCompositeOp(cs, id, description, category, userVisible) { }
+
+    using KoCompositeOp::composite;
     
+    virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
+                           const quint8* srcRowStart , qint32 srcRowStride ,
+                           const quint8* maskRowStart, qint32 maskRowStride,
+                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
+        
+        const QBitArray& flags           = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
+        bool             allChannelFlags = channelFlags.isEmpty() || channelFlags == QBitArray(channels_nb,true);
+        bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
+        
+        if(alphaLocked) {
+            if(allChannelFlags)
+                genericComposite<true,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+            else
+                genericComposite<true,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+        }
+        else {
+            if(allChannelFlags)
+                genericComposite<false,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+            else
+                genericComposite<false,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
+        }
+    }
+
 private:
     template<bool alphaLocked, bool allChannelFlags>
     void genericComposite(quint8*       dstRowStart , qint32 dstRowStride ,
@@ -91,32 +115,6 @@ private:
             srcRowStart  += srcRowStride;
             dstRowStart  += dstRowStride;
             maskRowStart += maskRowStride;
-        }
-    }
-
-public:
-    using KoCompositeOp::composite;
-    
-    virtual void composite(quint8*       dstRowStart , qint32 dstRowStride ,
-                           const quint8* srcRowStart , qint32 srcRowStride ,
-                           const quint8* maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 cols, quint8 U8_opacity, const QBitArray& channelFlags) const {
-        
-        const QBitArray& flags           = channelFlags.isEmpty() ? QBitArray(channels_nb,true) : channelFlags;
-        bool             allChannelFlags = channelFlags.isEmpty();
-        bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
-        
-        if(alphaLocked) {
-            if(allChannelFlags)
-                genericComposite<true,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
-            else
-                genericComposite<true,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
-        }
-        else {
-            if(allChannelFlags)
-                genericComposite<false,true>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
-            else
-                genericComposite<false,false>(dstRowStart, dstRowStride, srcRowStart, srcRowStride, maskRowStart, maskRowStride, rows, cols, U8_opacity, flags);
         }
     }
 };

@@ -20,6 +20,9 @@
 #ifndef KOCOLORSPACEMATHS_H_
 #define KOCOLORSPACEMATHS_H_
 
+#include <cmath>
+#include <limits>
+
 #include "pigment_export.h"
 #include <KoIntegerMaths.h>
 #include "KoChannelInfo.h"
@@ -56,6 +59,7 @@ public:
     typedef qint32 compositetype;
     static const quint8 zeroValue = 0;
     static const quint8 unitValue = 0x00FF;
+    static const quint8 halfValue = 0x00FF / 2;
     static const quint8 max = 0x00FF;
     static const quint8 min = 0;
     static const quint8 epsilon = 1;
@@ -70,6 +74,7 @@ public:
     typedef qint64 compositetype;
     static const quint16 zeroValue = 0;
     static const quint16 unitValue = 0xFFFF;
+    static const quint16 halfValue = 0xFFFF / 2;
     static const quint16 max = 0xFFFF;
     static const quint16 min = 0;
     static const quint16 epsilon = 1;
@@ -84,6 +89,7 @@ public:
     typedef qint64 compositetype;
     static const qint16 zeroValue = 0;
     static const qint16 unitValue = 32767;
+    static const qint16 halfValue = 32767 / 2;
     static const qint16 max = 32767;
     static const qint16 min = -32768;
     static const qint16 epsilon = 1;
@@ -98,6 +104,7 @@ public:
     typedef qint64 compositetype;
     static const quint32 zeroValue = 0;
     static const quint32 unitValue = 0xFFFFFFFF;
+    static const quint32 halfValue = 0xFFFFFFFF / 2;
     static const quint32 max = 0xFFFFFFFF;
     static const quint32 min = 0;
     static const quint32 epsilon = 1;
@@ -116,6 +123,7 @@ public:
     typedef double compositetype;
     static const half zeroValue;
     static const half unitValue;
+    static const half halfValue;
     static const half max;
     static const half min;
     static const half epsilon;
@@ -131,6 +139,7 @@ public:
     typedef double compositetype;
     static const float zeroValue;
     static const float unitValue;
+    static const float halfValue;
     static const float max;
     static const float min;
     static const float epsilon;
@@ -145,6 +154,7 @@ public:
     typedef double compositetype;
     static const double zeroValue;
     static const double unitValue;
+    static const double halfValue;
     static const double max;
     static const double min;
     static const double epsilon;
@@ -221,17 +231,16 @@ template < typename _T, typename _Tdst = _T >
 class KoColorSpaceMaths
 {
     typedef KoColorSpaceMathsTraits<_T> traits;
-    typedef typename traits::compositetype traits_compositetype;
+    typedef typename traits::compositetype src_compositetype;
+    typedef typename KoColorSpaceMathsTraits<_Tdst>::compositetype dst_compositetype;
+    
 public:
-    inline static traits_compositetype multiply(traits_compositetype a,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b) {
-        return ((traits_compositetype)a * b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
+    inline static _Tdst multiply(_T a, _Tdst b) {
+        return (dst_compositetype(a)*b) /  KoColorSpaceMathsTraits<_Tdst>::unitValue;
     }
     
-    inline static traits_compositetype multiply(traits_compositetype a,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype b,
-            typename  KoColorSpaceMathsTraits<_Tdst>::compositetype c) {
-        return ((traits_compositetype)a * b * c) / (KoColorSpaceMathsTraits<_Tdst>::unitValue * KoColorSpaceMathsTraits<_Tdst>::unitValue);
+    inline static _Tdst multiply(_T a, _Tdst b, _Tdst c) {
+        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_Tdst>::unitValue);
     }
 
     /**
@@ -239,8 +248,16 @@ public:
      * @param a
      * @param b
      */
-    inline static _T divide(_T a, _Tdst b) {
-        return ((traits_compositetype)a *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
+    inline static dst_compositetype divide(_T a, _Tdst b) {
+        return (dst_compositetype(a) *  KoColorSpaceMathsTraits<_Tdst>::unitValue) / b;
+    }
+    
+    /**
+     * Inversion : unitValue - a
+     * @param a
+     */
+    inline static _T invert(_T a) {
+        return traits::unitValue - a;
     }
 
     /**
@@ -250,7 +267,7 @@ public:
      * @param alpha
      */
     inline static _T blend(_T a, _T b, _T alpha) {
-        traits_compositetype c = (((traits_compositetype)a - (traits_compositetype)b) * alpha) / traits::unitValue;
+        src_compositetype c = ((src_compositetype(a) - b) * alpha) / traits::unitValue;
         return c + b;
     }
 
@@ -258,13 +275,11 @@ public:
      * This function will scale a value of type _T to fit into a _Tdst.
      */
     inline static _Tdst scaleToA(_T a) {
-        return (traits_compositetype)a >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
+        return src_compositetype(a) >> (traits::bits - KoColorSpaceMathsTraits<_Tdst>::bits);
     }
 
-    inline static typename  KoColorSpaceMathsTraits<_Tdst>::compositetype clamp(typename  KoColorSpaceMathsTraits<_Tdst>::compositetype val) {
-        return qBound((typename  KoColorSpaceMathsTraits<_Tdst>::compositetype) KoColorSpaceMathsTraits<_Tdst>::min,
-                      val,
-                      (typename  KoColorSpaceMathsTraits<_Tdst>::compositetype)KoColorSpaceMathsTraits<_Tdst>::max);
+    inline static dst_compositetype clamp(dst_compositetype val) {
+        return qBound<dst_compositetype>(KoColorSpaceMathsTraits<_Tdst>::min, val, KoColorSpaceMathsTraits<_Tdst>::max);
     }
 };
 
@@ -430,22 +445,29 @@ inline double KoColorSpaceMaths<half>::clamp(double a)
 //------------------------------ quint8 specialization ------------------------------//
 
 template<>
-inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b)
+inline quint8 KoColorSpaceMaths<quint8>::multiply(quint8 a, quint8 b)
 {
-    return UINT8_MULT(a, b);
+    return (quint8)UINT8_MULT(a, b);
 }
 
 
 template<>
-inline qint32 KoColorSpaceMaths<quint8>::multiply(qint32 a, qint32 b, qint32 c)
+inline quint8 KoColorSpaceMaths<quint8>::multiply(quint8 a, quint8 b, quint8 c)
 {
-    return UINT8_MULT3(a, b, c);
+    return (quint8)UINT8_MULT3(a, b, c);
 }
 
 template<>
-inline quint8 KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
+inline KoColorSpaceMathsTraits<quint8>::compositetype
+KoColorSpaceMaths<quint8>::divide(quint8 a, quint8 b)
 {
     return UINT8_DIVIDE(a, b);
+}
+
+template<>
+inline quint8 KoColorSpaceMaths<quint8>::invert(quint8 a)
+{
+    return ~a;
 }
 
 template<>
@@ -457,15 +479,22 @@ inline quint8 KoColorSpaceMaths<quint8>::blend(quint8 a, quint8 b, quint8 c)
 //------------------------------ quint16 specialization ------------------------------//
 
 template<>
-inline qint64 KoColorSpaceMaths<quint16>::multiply(qint64 a, qint64 b)
+inline quint16 KoColorSpaceMaths<quint16>::multiply(quint16 a, quint16 b)
 {
-    return UINT16_MULT(a, b);
+    return (quint16)UINT16_MULT(a, b);
 }
 
 template<>
-inline quint16 KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
+inline KoColorSpaceMathsTraits<quint16>::compositetype
+KoColorSpaceMaths<quint16>::divide(quint16 a, quint16 b)
 {
     return UINT16_DIVIDE(a, b);
+}
+
+template<>
+inline quint16 KoColorSpaceMaths<quint16>::invert(quint16 a)
+{
+    return ~a;
 }
 
 //------------------------------ various specialization ------------------------------//
@@ -505,6 +534,252 @@ template<>
 inline float KoColorSpaceMaths<float, float>::scaleToA(float a)
 {
     return a;
+}
+
+namespace Arithmetic
+{
+    const static qreal pi = 3.14159265358979323846;
+    
+    template<class T>
+    inline T mul(T a, T b) { return KoColorSpaceMaths<T>::multiply(a, b); }
+    
+    template<class T>
+    inline T mul(T a, T b, T c) { return KoColorSpaceMaths<T>::multiply(a, b, c); }
+    
+//     template<class T>
+//     inline T mul(T a, T b) {
+//         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+//         return T(composite_type(a) * b / KoColorSpaceMathsTraits<T>::unitValue);
+//     }
+//     
+//     template<class T>
+//     inline T mul(T a, T b, T c) {
+//         typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+//         return T((composite_type(a) * b * c) / (composite_type(KoColorSpaceMathsTraits<T>::unitValue) * KoColorSpaceMathsTraits<T>::unitValue));
+//     }
+    
+    template<class T>
+    inline T inv(T a) { return KoColorSpaceMaths<T>::invert(a); }
+    
+    template<class T>
+    inline T lerp(T a, T b, T alpha) { return KoColorSpaceMaths<T>::blend(b, a, alpha); }
+    
+    template<class TRet, class T>
+    inline TRet scale(T a) { return KoColorSpaceMaths<T,TRet>::scaleToA(a); }
+    
+    template<class T>
+    inline typename KoColorSpaceMathsTraits<T>::compositetype
+    div(T a, T b) { return KoColorSpaceMaths<T>::divide(a, b); }
+    
+    template<class T>
+    inline T clamp(typename KoColorSpaceMathsTraits<T>::compositetype a) {
+        return KoColorSpaceMaths<T>::clamp(a);
+    }
+    
+    template<class T>
+    inline T min(T a, T b, T c) {
+        b = (a < b) ? a : b;
+        return (b < c) ? b : c;
+    }
+    
+    template<class T>
+    inline T max(T a, T b, T c) {
+        b = (a > b) ? a : b;
+        return (b > c) ? b : c;
+    }
+    
+    template<class T>
+    inline T zeroValue() { return KoColorSpaceMathsTraits<T>::zeroValue; }
+    
+    template<class T>
+    inline T halfValue() { return KoColorSpaceMathsTraits<T>::halfValue; }
+    
+    template<class T>
+    inline T unitValue() { return KoColorSpaceMathsTraits<T>::unitValue; }
+    
+    template<class T>
+    inline T unionShapeOpacity(T a, T b) {
+        typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+        return T(composite_type(a) + b - mul(a,b));
+    }
+    
+    template<class T>
+    inline T blend(T src, T srcAlpha, T dst, T dstAlpha, T cfValue) {
+        return mul(inv(srcAlpha), dstAlpha, dst) + mul(inv(dstAlpha), srcAlpha, src) + mul(dstAlpha, srcAlpha, cfValue);
+    }
+}
+
+struct HSYType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        return TReal(0.299)*r + TReal(0.587)*g + TReal(0.114)*b;
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        return Arithmetic::max(r,g,b) - Arithmetic::min(r,g,b);
+    }
+};
+
+struct HSIType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        return (r + g + b) * TReal(0.33333333333333333333); // (r + g + b) / 3.0
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max    = Arithmetic::max(r, g, b);
+        TReal min    = Arithmetic::min(r, g, b);
+        TReal chroma = max - min;
+        
+        return (chroma > std::numeric_limits<TReal>::epsilon()) ?
+            (TReal(1.0) - min / getLightness(r, g, b)) : TReal(0.0);
+    }
+};
+
+struct HSLType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        TReal max = Arithmetic::max(r, g, b);
+        TReal min = Arithmetic::min(r, g, b);
+        return (max + min) * TReal(0.5);
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max    = Arithmetic::max(r, g, b);
+        TReal min    = Arithmetic::min(r, g, b);
+        TReal chroma = max - min;
+        TReal light  = (max + min) * TReal(0.5);
+        TReal div    = TReal(1.0) - std::abs(TReal(2.0)*light - TReal(1.0));
+        
+        if(div > std::numeric_limits<TReal>::epsilon())
+            return chroma / div;
+        
+        return TReal(1.0);
+    }
+};
+
+struct HSVType
+{
+    template<class TReal>
+    inline static TReal getLightness(TReal r, TReal g, TReal b) {
+        return Arithmetic::max(r,g,b);
+    }
+    
+    template<class TReal>
+    inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+        TReal max = Arithmetic::max(r, g, b);
+        TReal min = Arithmetic::min(r, g, b);
+        return (max == TReal(0.0)) ? TReal(0.0) : (max - min) / max;
+    }
+};
+
+template<class TReal>
+TReal getHue(TReal r, TReal g, TReal b) {
+    TReal min    = Arithmetic::min(r, g, b);
+    TReal max    = Arithmetic::max(r, g, b);
+    TReal chroma = max - min;
+    
+    TReal hue = TReal(0.0);
+    
+    if(chroma > std::numeric_limits<TReal>::epsilon()) {
+        if(max == r) // between yellow and magenta
+            hue = (g - b) / chroma;
+        else if(max == g) // between cyan and yellow
+            hue = TReal(2.0) + (b - r) / chroma;
+        else if(max == b) // between magenta and cyan
+            hue = TReal(4.0) + (r - g) / chroma;
+    }
+    
+    return hue;
+}
+
+template<class HSXType, class TReal>
+inline static TReal getLightness(TReal r, TReal g, TReal b) {
+    return HSXType::getLightness(r, g, b);
+}
+
+template<class HSXType, class TReal>
+inline void addLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    using namespace Arithmetic;
+    
+    r += light;
+    g += light;
+    b += light;
+    
+    TReal l = HSXType::getLightness(r, g, b);
+    TReal n = min(r, g, b);
+    TReal x = max(r, g, b);
+    
+    if(n < TReal(0.0)) {
+        TReal iln = TReal(1.0) / (l-n);
+        r = l + ((r-l) * l) * iln;
+        g = l + ((g-l) * l) * iln;
+        b = l + ((b-l) * l) * iln;
+    }
+    
+    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon()) {
+        TReal il  = TReal(1.0) - l;
+        TReal ixl = TReal(1.0) / (x - l);
+        r = l + ((r-l) * il) * ixl;
+        g = l + ((g-l) * il) * ixl;
+        b = l + ((b-l) * il) * ixl;
+    }
+}
+
+template<class HSXType, class TReal>
+inline void setLightness(TReal& r, TReal& g, TReal& b, TReal light)
+{
+    addLightness<HSXType>(r,g,b, light - HSXType::getLightness(r,g,b));
+}
+
+template<class HSXType, class TReal>
+inline static TReal getSaturation(TReal r, TReal g, TReal b) {
+    return HSXType::getSaturation(r, g, b);
+}
+
+template<class HSXType, class TReal>
+inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
+{
+    int   min    = 0;
+    int   mid    = 1;
+    int   max    = 2;
+    TReal rgb[3] = {r, g, b};
+    
+    if(rgb[mid] < rgb[min]) {
+        int tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if(rgb[max] < rgb[mid]) {
+        int tmp = mid;
+        mid = max;
+        max = tmp;
+    }
+    
+    if(rgb[mid] < rgb[min]) {
+        int tmp = min;
+        min = mid;
+        mid = tmp;
+    }
+    
+    if((rgb[max] - rgb[min]) > TReal(0.0)) {
+        rgb[mid] = ((rgb[mid]-rgb[min]) * sat) / (rgb[max]-rgb[min]);
+        rgb[max] = sat;
+        rgb[min] = TReal(0.0);
+        
+        r = rgb[0];
+        g = rgb[1];
+        b = rgb[2];
+    }
+    else r = g = b = TReal(0.0);
 }
 
 #endif

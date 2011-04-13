@@ -113,6 +113,9 @@ public:
     
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();
+    
+    KoText::Direction textDirection() const;
+    void setTextDirection(KoText::Direction direction);
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat

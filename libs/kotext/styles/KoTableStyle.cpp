@@ -408,7 +408,7 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
-        // KoText::directionFromString()
+        setProperty(TextProgressionDirection, KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::table, "display")) {
@@ -592,6 +592,9 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:page-number", pageNumber(), KoGenStyle::TableType);
             else
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
+        } else if (key == TextProgressionDirection) {
+            KoText::Direction direction = (KoText::Direction) propertyInt(TextProgressionDirection);
+            style.addProperty("style:writing-mode", KoText::directionToString(direction), KoGenStyle::TableType);
         }
     }
 

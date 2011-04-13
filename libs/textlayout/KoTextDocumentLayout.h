@@ -182,6 +182,12 @@ public slots:
      */
     virtual void layout();
 
+    /**
+     * Schedules a \a layout call for later using a QTimer::singleShot. Multiple calls
+     * to this slot will be compressed into one layout-call to prevent calling layouting
+     * to much.
+     */
+    virtual void scheduleLayout();
 
     void emitLayoutIsDirty();
 

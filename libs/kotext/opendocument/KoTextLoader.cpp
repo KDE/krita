@@ -195,7 +195,7 @@ public:
 
 class AttributeChangeRecord {
 public:
-    AttributeChangeRecord():isValid(false){};
+    AttributeChangeRecord():isValid(false){}
 
     void setChangeRecord(const QString& changeRecord)
     {
@@ -205,7 +205,7 @@ public:
         this->attributeName = strList.value(2);
         this->attributeValue = strList.value(3);
         this->isValid = true;
-    };
+    }
 
     bool isValid;
     QString changeId;
@@ -1423,16 +1423,16 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
-        } else {
+        }
+        else {
             note = new KoInlineNote(KoInlineNote::Endnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {
-            cursor.setPosition(position); // restore the position
+            cursor.setPosition(position); // restore the position before inserting the note
             textObjectManager->insertInlineObject(cursor, note);
         } else {
             cursor.setPosition(position); // restore the position
-            kWarning(32500) << "Error while loading the text note element!";
             delete note;
         }
     }

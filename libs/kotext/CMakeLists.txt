@@ -34,6 +34,7 @@ set(kotext_LIB_SRCS
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
@@ -150,6 +151,7 @@ install(
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoSection.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

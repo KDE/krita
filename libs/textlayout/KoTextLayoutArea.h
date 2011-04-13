@@ -109,6 +109,10 @@ public:
     /// Areas that accept page breaks return true, default is false;
     bool acceptsPageBreak() const;
 
+    /// Sets the amound the contenst should be vertically offset due to any outside induced
+    /// vertical alignment
+    void setVerticalAlignOffset(qreal offset);
+
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
     int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
@@ -182,6 +186,7 @@ private:
     FrameIterator *m_endOfArea;
 
     bool m_acceptsPageBreak;
+    qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
 
     qreal m_preregisteredFootNotesHeight;

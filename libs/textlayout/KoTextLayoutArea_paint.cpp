@@ -74,6 +74,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
 
+    painter->save();
+    painter->translate(0, m_verticalAlignOffset);
+
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {
@@ -201,7 +204,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     if (lastBorder)
         lastBorder->paint(*painter);
 
-    painter->save();
+    painter->translate(0, -m_verticalAlignOffset);
     painter->translate(0, bottom() - top() - m_footNotesHeight);
     foreach(KoTextLayoutArea *footerArea, m_footNoteAreas) {
         footerArea->paint(painter, context);

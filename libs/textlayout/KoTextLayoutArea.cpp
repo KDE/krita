@@ -78,6 +78,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_startOfArea(0)
  , m_endOfArea()
  , m_acceptsPageBreak(false)
+ , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
 {
@@ -92,8 +93,10 @@ KoTextLayoutArea::~KoTextLayoutArea()
     delete m_endOfArea;
 }
 
-int KoTextLayoutArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
 {
+    QPointF point = p - QPointF(0, m_verticalAlignOffset);
+
     if (m_startOfArea == 0) // We have not been layouted yet
         return -1;
 
@@ -168,7 +171,7 @@ int KoTextLayoutArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy
 
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 {
-    QRectF retval(-5E6,0,105E6,1);
+    QRectF retval(-5E6, top(), 105E6, 0);
 
     if (m_startOfArea == 0) // We have not been layouted yet
         return QRectF();
@@ -187,14 +190,14 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 
         if (table) {
             if (cursor.selectionEnd() < table->firstPosition()) {
-                return retval;
+                return retval.translated(0, m_verticalAlignOffset);
             }
             if (cursor.selectionStart() > table->lastPosition()) {
                 ++tableAreaIndex;
                 continue;
             }
             if (cursor.selectionStart() >= table->firstPosition() && cursor.selectionEnd() <= table->lastPosition()) {
-                return m_tableAreas[tableAreaIndex]->selectionBoundingBox(cursor);
+                return m_tableAreas[tableAreaIndex]->selectionBoundingBox(cursor).translated(0, m_verticalAlignOffset);
             }
             if (cursor.selectionStart() >= table->firstPosition()) {
                 retval = m_tableAreas[tableAreaIndex]->boundingRect();
@@ -211,13 +214,15 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         }
 
         if(cursor.selectionEnd() < block.position()) {
-            return retval;
+            return retval.translated(0, m_verticalAlignOffset);
         }
         if(cursor.selectionStart() >= block.position()
             && cursor.selectionStart() < block.position() + block.length()) {
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionStart() - block.position());
-            if (line.isValid())
+            if (line.isValid()) {
                 retval.setTop(line.y());
+                retval.setBottom(line.y());
+            }
         }
         if(cursor.selectionEnd() >= block.position()
             && cursor.selectionEnd() < block.position() + block.length()) {
@@ -227,7 +232,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
                 (line.y() + line.height());
         }
     }
-    return retval;
+    return retval.translated(0, m_verticalAlignOffset);
 }
 
 bool KoTextLayoutArea::containsPosition(int position) const
@@ -768,6 +773,11 @@ void KoTextLayoutArea::setAcceptsPageBreak(bool accept)
 bool KoTextLayoutArea::acceptsPageBreak() const
 {
     return m_acceptsPageBreak;
+}
+
+void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)
+{
+    m_verticalAlignOffset = offset;
 }
 
 qreal KoTextLayoutArea::addLine(FrameIterator *cursor, KoTextBlockData *blockData)

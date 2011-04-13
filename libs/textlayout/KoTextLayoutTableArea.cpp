@@ -501,7 +501,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor)
         // that don't end in this row.
         col = 0;
         while (col < d->table->columns()) {
-            // Get the cell format.
             QTextTableCell cell = d->table->cellAt(row, col);
 
             if (row != cell.row() + cell.rowSpan() - 1) {
@@ -519,6 +518,31 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor)
 
                 FrameIterator *cellCursor =  cursor->frameIterator(col);
                 allCellsTrue &= cellArea->layout(cellCursor);
+            }
+            col += cell.columnSpan(); // Skip across column spans.
+        }
+    } else {
+        // Cells all ended naturally, so we can now do vertical alignment
+        col = 0;
+        while (col < d->table->columns()) {
+            QTextTableCell cell = d->table->cellAt(row, col);
+
+            if (row == cell.row() + cell.rowSpan() - 1) {
+                // cell ended in this row
+                KoTextLayoutArea *cellArea = d->cellAreas[cell.row()][cell.column()];
+                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+                KoTableCellStyle cellStyle(cellFormat);
+
+                if (cellStyle.alignment() & Qt::AlignBottom) {
+                    if (true /*FIXME test no page based shapes interfering*/) {
+                        cellArea->setVerticalAlignOffset(rowBottom - cellArea->bottom());
+                    }
+                }
+                if (cellStyle.alignment() & Qt::AlignVCenter) {
+                    if (true /*FIXME test no page based shapes interfering*/) {
+                        cellArea->setVerticalAlignOffset((rowBottom - cellArea->bottom()) / 2);
+                    }
+                }
             }
             col += cell.columnSpan(); // Skip across column spans.
         }

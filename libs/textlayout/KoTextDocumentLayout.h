@@ -185,12 +185,20 @@ public slots:
     /**
      * Schedules a \a layout call for later using a QTimer::singleShot. Multiple calls
      * to this slot will be compressed into one layout-call to prevent calling layouting
-     * to much.
+     * to much. Also if meanwhile \a layout was called then the scheduled layout wan't
+     * be executed.
      */
     virtual void scheduleLayout();
 
+    /**
+     * Emits the \a layoutIsDirty signal.
+     */
     void emitLayoutIsDirty();
 
+private slots:
+    /// Called by \a scheduleLayout to start a \a layout run if not done already meanwhile.
+    void executeScheduledLayout();
+    
 protected:
     /// reimplemented
     virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);

@@ -385,7 +385,15 @@ void KoTextDocumentLayout::scheduleLayout()
     if (d->layoutScheduled)
         return;
     d->layoutScheduled = true;
-    QTimer::singleShot(0, this, SLOT(layout()));
+    QTimer::singleShot(0, this, SLOT(executeScheduledLayout()));
+}
+
+void KoTextDocumentLayout::executeScheduledLayout()
+{
+    // Only do the actual layout if it wasn't done meanwhile by someone else.
+    if (d->layoutScheduled) {
+        layout();
+    }
 }
 
 bool KoTextDocumentLayout::continuousLayout()

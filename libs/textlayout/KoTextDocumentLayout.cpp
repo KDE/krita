@@ -66,6 +66,7 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
+       , layoutScheduled(false)
     {
     }
     KoStyleManager *styleManager;
@@ -88,6 +89,7 @@ public:
     qreal defaultTabSizing;
     qreal y;
     QString wantedMasterPage;
+    bool layoutScheduled;
 };
 
 
@@ -305,6 +307,7 @@ void KoTextDocumentLayout::layout()
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
+    d->layoutScheduled = false;
 
     KoTextLayoutRootArea *previousRootArea = 0;
 
@@ -374,6 +377,22 @@ void KoTextDocumentLayout::layout()
             return; // with no more space there is nothing else we can do
         }
         d->y = rootArea->bottom(); // (post)Layout method(s) just set this
+    }
+}
+
+void KoTextDocumentLayout::scheduleLayout()
+{
+    if (d->layoutScheduled)
+        return;
+    d->layoutScheduled = true;
+    QTimer::singleShot(0, this, SLOT(executeScheduledLayout()));
+}
+
+void KoTextDocumentLayout::executeScheduledLayout()
+{
+    // Only do the actual layout if it wasn't done meanwhile by someone else.
+    if (d->layoutScheduled) {
+        layout();
     }
 }
 

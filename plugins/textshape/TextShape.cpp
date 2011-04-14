@@ -100,7 +100,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager)
 
     setCollisionDetection(true);
 
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(layout()), Qt::QueuedConnection);
+    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
 }
 
 TextShape::~TextShape()

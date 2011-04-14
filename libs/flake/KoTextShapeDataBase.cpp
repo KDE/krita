@@ -21,8 +21,9 @@
 #include "KoTextShapeDataBase_p.h"
 
 KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
-        : document(0),
-        textAlignment(Qt::AlignLeft | Qt::AlignTop)
+        : document(0)
+        , textAlignment(Qt::AlignLeft | Qt::AlignTop)
+        , resizeMethod(KoTextShapeDataBase::NoResize)
 {
 }
 

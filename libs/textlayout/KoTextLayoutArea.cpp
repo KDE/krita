@@ -658,7 +658,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
-    qreal preBorderX = x();
+    qreal preBorderLeft = left();
     handleBordersAndSpacing(blockData, &block);
 
     if (textList) {
@@ -667,7 +667,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             blockData->setCounterPosition(QPointF(right() -
             blockData->counterWidth() - format.leftMargin(), m_y));
         else {
-            blockData->setCounterPosition(QPointF(left() + x() - preBorderX, m_y));
+            blockData->setCounterPosition(QPointF(x() + left() - preBorderLeft, m_y));
         }
     }
 

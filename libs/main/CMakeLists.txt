@@ -224,6 +224,7 @@ if( Soprano_FOUND )
         rdf/KoRdfFoaFTreeWidgetItem.h
         rdf/KoRdfCalendarEventTreeWidgetItem.h
         rdf/KoRdfLocationTreeWidgetItem.h
+        rdf/KoChangeTrackerDisabledRAII.h
         rdf/RdfForward.h
         rdf/KoDocumentRdf.h
         rdf/KoSopranoTableModelDelegate.h

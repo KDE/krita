@@ -38,6 +38,7 @@ class KoImageCollection;
 class KoInlineNote;
 class QTextList;
 class KoTextBlockBorderData;
+class KoTextLayoutEndNotesArea;
 
 /**
  * When layout'ing text it is chopped into physical area of space.
@@ -193,6 +194,7 @@ private:
     qreal m_footNotesHeight;
     QList<KoTextLayoutArea *> m_preregisteredFootNoteAreas;
     QList<KoTextLayoutArea *> m_footNoteAreas;
+    KoTextLayoutEndNotesArea *m_endNotesArea;
 };
 
 #endif

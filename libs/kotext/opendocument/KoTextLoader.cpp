@@ -1419,6 +1419,7 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     if (textObjectManager) {
         QString className = noteElem.attributeNS(KoXmlNS::text, "note-class");
         KoInlineNote *note = 0;
+        int position = cursor.position(); // need to store this as the following might move is
         if (className == "footnote") {
             note = new KoInlineNote(KoInlineNote::Footnote);
             note->setMotherFrame(KoTextDocument(cursor.block().document()).footNotesFrame());
@@ -1427,8 +1428,10 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
             note->setMotherFrame(KoTextDocument(cursor.block().document()).endNotesFrame());
         }
         if (note->loadOdf(noteElem, d->context)) {
+            cursor.setPosition(position); // restore the position
             textObjectManager->insertInlineObject(cursor, note);
         } else {
+            cursor.setPosition(position); // restore the position
             kWarning(32500) << "Error while loading the text note element!";
             delete note;
         }

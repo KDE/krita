@@ -29,6 +29,7 @@
 
 #include "KoTextLayoutArea.h"
 
+#include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
@@ -95,7 +96,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            // we know of no frames at this point so just skip it
+            m_endNotesArea->paint(painter, context);
             continue;
         } else {
             if (!block.isValid())

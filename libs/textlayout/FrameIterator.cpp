@@ -30,12 +30,14 @@ FrameIterator::FrameIterator(QTextFrame *frame)
 {
     it = frame->begin();
     currentTableIterator = 0;
+    currentSubFrameIterator = 0;
 }
 
 FrameIterator::FrameIterator(QTextTableCell cell)
 {
     it = cell.begin();
     currentTableIterator = 0;
+    currentSubFrameIterator = 0;
 }
 
 FrameIterator::FrameIterator(FrameIterator *other)
@@ -47,6 +49,11 @@ FrameIterator::FrameIterator(FrameIterator *other)
         currentTableIterator = new TableIterator(other->currentTableIterator);
     else
         currentTableIterator = 0;
+
+    if (other->currentSubFrameIterator)
+        currentSubFrameIterator = new FrameIterator(other->currentSubFrameIterator);
+    else
+        currentSubFrameIterator = 0;
 }
 
 bool FrameIterator::operator ==(const FrameIterator &other)
@@ -77,6 +84,17 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
         currentTableIterator = new TableIterator(table);
     }
     return currentTableIterator;
+}
+
+FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
+{
+    if(subFrame == 0) {
+        delete currentSubFrameIterator;
+        currentSubFrameIterator = 0;
+    } else if(currentSubFrameIterator == 0) {
+        currentSubFrameIterator = new FrameIterator(subFrame);
+    }
+    return currentSubFrameIterator;
 }
 
 QString FrameIterator::wantedMasterPage(const QString defaultName) const

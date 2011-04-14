@@ -29,6 +29,7 @@
 
 #include "KoTextLayoutArea.h"
 
+#include "KoTextLayoutEndNotesArea.h"
 #include "KoTextLayoutTableArea.h"
 #include "TableIterator.h"
 #include "ListItemsHelper.h"
@@ -81,6 +82,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
+ , m_endNotesArea(0)
 {
 }
 
@@ -341,7 +343,25 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            // Right now we'll just skip it, as we know of no subframes
+            if (true/* right now only end notes sub frame is the one we know of*/) {
+                Q_ASSERT(m_endNotesArea == 0);
+                m_endNotesArea = new KoTextLayoutEndNotesArea(this, m_documentLayout);
+                m_y += m_bottomSpacing;
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                m_endNotesArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
+                if (m_endNotesArea->layout(cursor->subFrameIterator(subFrame)) == false) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    m_y = m_endNotesArea->bottom();
+                    setBottom(m_y);
+                    return false;
+                }
+                m_bottomSpacing = 0;
+                m_y = m_endNotesArea->bottom();
+                delete cursor->currentSubFrameIterator;
+                cursor->currentSubFrameIterator = 0;
+            }
         } else if (block.isValid()) {
             if (acceptsPageBreak()
                    && cursor->it != m_startOfArea->it

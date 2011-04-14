@@ -46,10 +46,10 @@ class VectorShape : public KoShape, public KoFrameShape {
 public:
     // Type of vector file. Add here when we get support for more.
     enum VectorType {
-        VectorTypeUndetermined,    // not yet checked
-        VectorTypeNone,             // Uninitialized
-        VectorTypeWmf,              // Windows MetaFile
-        VectorTypeEmf               // Extended MetaFile
+        VectorTypeUndetermined, // not yet checked
+        VectorTypeNone,         // Uninitialized
+        VectorTypeWmf,          // Windows MetaFile
+        VectorTypeEmf           // Extended MetaFile
         // ... more here later
     };
 

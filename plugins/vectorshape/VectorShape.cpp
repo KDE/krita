@@ -57,7 +57,7 @@
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
-    , m_type(VectorTypeUndetermined)
+    , m_type(VectorTypeNone)
 {
     setShapeId(VectorShape_SHAPEID);
    // Default size of the shape.
@@ -111,18 +111,26 @@ void VectorShape::draw(QPainter &painter)
         return;
     }
 
-    // Actually draw the contents
     m_contents = qUncompress(m_contents);
-
+    
+    // Check if the type is undetermined.  It could be that if we got
+    // the contents via setCompressedContents().
+    //
+    // FIXME: make setCompressedContents() return a bool and check the
+    //        contents there already.
     if (m_type == VectorTypeUndetermined) {
+        // FIXME: Break out into its own function.
         if (isWmf(m_contents)) {
             m_type = VectorTypeWmf;
         }
         else if (isEmf(m_contents)) {
             m_type = VectorTypeEmf;
         }
+        else
+            m_type = VectorTypeNone;
     }
 
+    // Actually draw the contents
     switch (m_type) {
     case VectorTypeNone:
         drawNull(painter);
@@ -208,7 +216,8 @@ void VectorShape::drawEmf(QPainter &painter) const
 
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
-#if 1
+
+#if 1  // Set to 0 to get debug output
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
     Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );
@@ -299,13 +308,26 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
         return false;
     }
 
+    // Try to recognize the type.  We should do this before the
+    // compression below, because that's a semi-expensive operation.
     m_type = VectorTypeUndetermined;
+    if (isWmf(m_contents)) {
+        m_type = VectorTypeWmf;
+    }
+    else if (isEmf(m_contents)) {
+        m_type = VectorTypeEmf;
+    }
+    else
+        m_type = VectorTypeNone;
 
-    // compress for biiiig memory savings
+    // Return false if we didn't manage to identify the type.
+    if (m_type == VectorTypeNone)
+        return false;
+
+    // Compress for biiiig memory savings.
     m_contents = qCompress(m_contents);
 
-    // Return true if we managed to identify the type.
-    return m_type != VectorTypeNone;
+    return true;
 }
 
 

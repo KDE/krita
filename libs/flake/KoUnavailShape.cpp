@@ -42,7 +42,7 @@
 #include "KoXmlReader.h"
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoOdfManifest.h>
+#include <KoOdfManifestEntry.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>

@@ -19,7 +19,7 @@
 
 
 // Own
-#include "KoOdfManifest.h"
+#include "KoOdfManifestEntry.h"
 
 
 class KoOdfManifestEntry::Private

@@ -233,6 +233,7 @@ void ArtisticTextShape::createOutline()
     } else {
         QPointF charPos(0, 0);
         QPointF offset(0, 0);
+        qreal rotation = 0.0;
         foreach(const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString textRange = range.text();
@@ -260,8 +261,11 @@ void ArtisticTextShape::createOutline()
                     charPos.ry() += offset.y();
                 }
 
+                if (range.hasRotation(localCharIndex))
+                    rotation = range.rotation(localCharIndex);
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
+                m.rotate(rotation);
                 m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
                 // save character positon of current character
                 m_charPositions[globalCharIndex] = charPos;

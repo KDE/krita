@@ -36,6 +36,10 @@ KoInlineTextObjectManager::KoInlineTextObjectManager(QObject *parent)
 {
 }
 
+KoInlineTextObjectManager::~KoInlineTextObjectManager()
+{
+}
+
 KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharFormat &format) const
 {
     int id = format.intProperty(InlineInstanceId);

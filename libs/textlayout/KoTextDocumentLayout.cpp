@@ -260,11 +260,14 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     if (obj)
         obj->updatePosition(document(), item, position, cf);
 
-#if 0
-    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(f.toCharFormat()));
+    // obsolete code for testing
+#if 1
+    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(format.toCharFormat()));
     if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
-        KoShape *parent = anchor->shape()->parent();
+        KoShapeContainer *parent = anchor->shape()->parent();
         if (parent) {
+            Q_ASSERT(false);
+/*
             KWPage page = m_frameSet->pageManager()->page(parent);
             QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
             QRectF pageContentRect = parent->boundingRect();
@@ -281,6 +284,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 anchor->shape()->setPosition(QPointF(0,100000000));
                 m_state->insertInlineObject(anchor);
             }
+            */
         }
     }
 #endif

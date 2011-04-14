@@ -46,6 +46,7 @@ class KOTEXT_EXPORT KoInlineTextObjectManager : public QObject
 public:
     /// Constructor
     explicit KoInlineTextObjectManager(QObject *parent = 0);
+    virtual ~KoInlineTextObjectManager();
 
     /**
      * Retrieve a formerly added inline object based on the format.

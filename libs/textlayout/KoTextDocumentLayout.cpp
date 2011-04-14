@@ -343,6 +343,11 @@ void KoTextDocumentLayout::layout()
             if (rootArea->layout(d->layoutPosition)) {
                 d->provider->doPostLayout(rootArea, false);
                 d->provider->releaseAllAfter(rootArea);
+                // We must also delete them from our own list too
+                int newsize = d->rootAreaList.indexOf(rootArea) + 1;
+                while (d->rootAreaList.size() > newsize) {
+                    d->rootAreaList.removeLast();
+                }
                 emit finishedLayout();
                 return;
             }

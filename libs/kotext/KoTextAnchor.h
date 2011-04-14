@@ -200,7 +200,7 @@ public:
     bool behavesAsCharacter() const;
 
     /**
-     * Set if the anchor shuld behave as a character
+     * Set if the anchor should behave as a character
      */
     void setBehavesAsCharacter(bool);
 

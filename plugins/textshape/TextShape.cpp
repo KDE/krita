@@ -172,7 +172,7 @@ QRectF TextShape::outlineRect() const
 {
     if (m_textShapeData->rootArea()) {
         QRectF rect = m_textShapeData->rootArea()->boundingRect();
-        rect.moveTop(-m_textShapeData->documentOffset());
+        rect.moveTop(0.0);
         return rect | QRectF(QPointF(0, 0), size());
     }
     return QRectF(QPointF(0,0), size());

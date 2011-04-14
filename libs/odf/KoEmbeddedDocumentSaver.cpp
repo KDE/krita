@@ -37,9 +37,9 @@
 #define INTERNAL_PROTOCOL "intern"
 
 struct FileEntry {
-    QString     path;
-    QByteArray  mimeType;       // QBA because this is what addManifestEntry wants
-    QByteArray  contents;
+    QString path;
+    QByteArray mimeType;       // QBA because this is what addManifestEntry wants
+    QByteArray contents;
 };
 
 
@@ -51,9 +51,9 @@ public:
     {
     }
 
-    QHash<QString, int>  prefixes; // Used in getFilename();
+    QHash<QString, int> prefixes; // Used in getFilename();
     QList<KoOdfDocument*> documents;
-    QList<FileEntry*>    files;    // These will be saved when saveEmbeddedFiles() is called.
+    QList<FileEntry*> files;    // These will be saved when saveEmbeddedFiles() is called.
     QList<KoOdfManifestEntry*> manifestEntries;
     int objectId;// FIXME: Should be removed since prefixes will cover this too.
 };
@@ -130,7 +130,7 @@ void KoEmbeddedDocumentSaver::embedFile(KoXmlWriter &writer, const char *element
     // Put the file in the list of files to be written to the store later.
     FileEntry  *entry = new FileEntry;
     entry->mimeType = mimeType;
-    entry->path     = path;
+    entry->path = path;
     entry->contents = contents;
     d->files.append(entry);
 

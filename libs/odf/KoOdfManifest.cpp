@@ -25,16 +25,12 @@
 class KoOdfManifestEntry::Private
 {
 public:
-    Private();
+    Private() {};
 
     QString  fullPath;          // manifest:full-path
     QString  mediaType;         // manifest:media-type
     QString  version;           // manifest:version  (isNull==true if not present)
 };
-
-KoOdfManifestEntry::Private::Private()
-{
-}
 
 
 // ----------------------------------------------------------------

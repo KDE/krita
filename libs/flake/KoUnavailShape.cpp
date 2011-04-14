@@ -94,19 +94,19 @@
 // An ObjectEntry is used to store information about objects in the
 // frame, as defined above.
 struct ObjectEntry {
-    QByteArray   frameContents; // the XML trees in the frame, each of them one object
-    QString      objectName;    // objects names in the frame without "./"
-                                // This is extracted from frameContents
-    bool         isDir;
+    QByteArray frameContents; // the XML trees in the frame, each of them one object
+    QString objectName;       // objects names in the frame without "./"
+                              // This is extracted from frameContents
+    bool isDir;
     KoOdfManifestEntry *manifestEntry; // A list of manifest entries for the above.
 };
 
 // A FileEntry is used to store information about embedded files
 // inside (i.e. referred to by) an object.
 struct FileEntry {
-    QString     path;           // Normalized filename, i.e. without "./".
-    QString     mimeType;
-    QByteArray  contents;
+    QString path;           // Normalized filename, i.e. without "./".
+    QString mimeType;
+    QByteArray contents;
 };
 
 
@@ -126,17 +126,10 @@ public:
     //  - Any embedded files (names, contents) that are referenced by xlink:href
     //  - Whether they are directories, i.e. if they contain a file tree and not just one file.
     //  - The manifest entries
-#if 0
-    QList<QByteArray>    frameContents; // A list of the XML trees in the frame, each of them one object
-    QStringList          objectNames;   // A list of objects names in the frame without "./"
-                                        // These are extracted from frameContents
-    QList<bool>          isDirs;
-    QList<KoOdfManifestEntry*> manifestEntries; // A list of manifest entries for the above.
-#else
-    QList<ObjectEntry*>  objectEntries;
-#endif
+    QList<ObjectEntry*> objectEntries;
+
     // Embedded files
-    QList<FileEntry*>    embeddedFiles; // List of embedded files.
+    QList<FileEntry*> embeddedFiles; // List of embedded files.
 };
 
 KoUnavailShape::Private::Private()
@@ -145,8 +138,6 @@ KoUnavailShape::Private::Private()
 
 KoUnavailShape::Private::~Private()
 {
-    //qDeleteAll(manifestEntries);
-    //qDeleteAll(embeddedFiles);
     qDeleteAll(objectEntries);
 }
 
@@ -175,17 +166,6 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
     draw(painter);
-}
-
-void KoUnavailShape::paintDecorations(QPainter &painter, const KoViewConverter &converter,
-                                      const KoCanvasBase *canvas)
-{
-    // There are no decorations for the Unavail Shape
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-    Q_UNUSED(canvas);
-
-    return;
 }
 
 void KoUnavailShape::draw(QPainter &painter) const
@@ -241,7 +221,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
     kDebug(30006) << "START SAVING ##################################################";
 
     KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
-    KoXmlWriter &writer    = context.xmlWriter();
+    KoXmlWriter &writer = context.xmlWriter();
 
     writer.startElement("draw:frame");
 
@@ -266,8 +246,8 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
     // Write the stored XML to the file, but don't reuse object names.
     foreach (const ObjectEntry *object, d->objectEntries) {
-        QByteArray          xmlArray(object->frameContents);
-        QString             objectName(object->objectName); // Possibly empty.
+        QByteArray xmlArray(object->frameContents);
+        QString objectName(object->objectName); // Possibly empty.
         KoOdfManifestEntry *manifestEntry(object->manifestEntry);
 
         QString newName = objectName;
@@ -353,7 +333,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
     // and the files within are saved as well.
     for (int i = 0; i < d->objectEntries.size(); ++i) {
         ObjectEntry *object = d->objectEntries.at(i);
-        QString      objectName = object->objectName;
+        QString objectName = object->objectName;
 
         if (objectName.isEmpty())
             continue;
@@ -383,7 +363,7 @@ bool KoUnavailShape::loadOdf(const KoXmlElement & frameElement, KoShapeLoadingCo
 
         // Get the manifest entry for this object.
         KoOdfManifestEntry *entry = 0;
-        QString             entryName = isDir ? dirName : objectName;
+        QString entryName = isDir ? dirName : objectName;
         for (int j = 0; j < manifest.size(); ++j) {
             KoOdfManifestEntry *temp = manifest.value(j);
 
@@ -431,8 +411,8 @@ void KoUnavailShape::Private::saveObjects(const KoXmlElement & element)
     for (; !n.isNull(); n = n.nextSibling()) {
         ObjectEntry  *object = new ObjectEntry;
 
-        QByteArray  contentsTmp;
-        QBuffer     buffer(&contentsTmp); // the member
+        QByteArray contentsTmp;
+        QBuffer buffer(&contentsTmp); // the member
         KoXmlWriter writer(&buffer);
 
         if (n.isElement())

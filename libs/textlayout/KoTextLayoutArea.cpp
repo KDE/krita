@@ -362,6 +362,25 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
+            } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
+                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
+                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
+                m_tableOfContentsAreas.append(tocArea);
+                m_y += m_bottomSpacing;
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
+                if (tocArea->layout(cursor->subFrameIterator(subFrame)) == false) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    m_y = tocArea->bottom();
+                    setBottom(m_y);
+                    return false;
+                }
+                m_bottomSpacing = 0;
+                m_y = tocArea->bottom();
+                delete cursor->currentSubFrameIterator;
+                cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
             if (acceptsPageBreak()

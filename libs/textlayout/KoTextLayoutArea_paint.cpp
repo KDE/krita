@@ -85,6 +85,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     }
     int tableAreaIndex = 0;
     int blockIndex = 0;
+    int tocIndex = 0;
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -98,6 +99,10 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
                 m_endNotesArea->paint(painter, context);
+            } if (subFrame->format().intProperty(KoText::SubFrameType) ==
+                                                    KoText::TableOfContentsFrameType) {
+                m_tableOfContentsAreas[tocIndex]->paint(painter, context);
+                ++tocIndex;
             }
             continue;
         } else {

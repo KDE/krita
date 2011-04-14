@@ -95,7 +95,10 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         draw(gc);
         gc.end();
     }
-    painter.drawImage(0, 0, *cache);
+    QVector<QRect> clipRects = painter.clipRegion().rects();
+    foreach(const QRect rc, clipRects) {
+        painter.drawImage(rc.topLeft(), *cache, rc);
+    }
     m_cache.insert(rc.size().toSize().height(), cache);
 }
 

@@ -306,10 +306,10 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Paragraph Add Then Merge")  << "ChangeTracking/multiple-changes/para-add-then-merge/para-add-merge-tracked.odt" << "DeltaXML";
     
     //ODF 1.2 Change Tracking tests     
-    QTest::newRow("Simple Text Insertion")  << "ChangeTracking/odf12/simple-text-addition/simple-text-addition-tracked.odt" << "ODF12";
-    QTest::newRow("Simple Text Deletion")  << "ChangeTracking/odf12/simple-text-deletion/simple-text-deletion-tracked.odt" << "ODF12";
-    QTest::newRow("Text Format Changes")  << "ChangeTracking/odf12/text-format-changes/text-format-changes-tracked.odt" << "ODF12";
-    QTest::newRow("Paragraph Merge")  << "ChangeTracking/odf12/paragraph-merge/paragraph-merge-tracked.odt" << "ODF12";
+    QTest::newRow("ODF12 Simple Text Insertion")  << "ChangeTracking/odf12/simple-text-addition/simple-text-addition-tracked.odt" << "ODF12";
+    QTest::newRow("ODF12 Simple Text Deletion")  << "ChangeTracking/odf12/simple-text-deletion/simple-text-deletion-tracked.odt" << "ODF12";
+    QTest::newRow("ODF12 Text Format Changes")  << "ChangeTracking/odf12/text-format-changes/text-format-changes-tracked.odt" << "ODF12";
+    QTest::newRow("ODF12 Paragraph Merge")  << "ChangeTracking/odf12/paragraph-merge/paragraph-merge-tracked.odt" << "ODF12";
 }
 
 bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &roundTripFileName)

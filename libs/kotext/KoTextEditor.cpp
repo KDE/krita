@@ -357,12 +357,17 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
 
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position());
-                QTextCharFormat fm = cursor.charFormat();
-                fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
-                int to = qMin(end, fragment.position() + fragment.length());
-                cursor.setPosition(to, QTextCursor::KeepAnchor);
-                cursor.setCharFormat(fm);
-                ++iter;
+                QTextCharFormat fm = fragment.charFormat();
+                
+                if (fm.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
+                    fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
+                    int to = qMin(end, fragment.position() + fragment.length());
+                    cursor.setPosition(to, QTextCursor::KeepAnchor);
+                    cursor.setCharFormat(fm);
+                    iter = block.begin();
+                } else {
+                    iter++;
+                }
             }
             block = block.next();
         }

@@ -384,6 +384,16 @@ void KoTableStyle::setVisible(bool on)
     setProperty(Visible, on);
 }
 
+KoText::Direction KoTableStyle::textDirection() const
+{
+    return (KoText::Direction) propertyInt(TextProgressionDirection);
+}
+
+void KoTableStyle::setTextDirection(KoText::Direction direction)
+{
+    setProperty(TextProgressionDirection, direction);
+}
+
 void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
 {
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
@@ -408,7 +418,7 @@ void KoTableStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &con
 void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
 {
     if (styleStack.hasProperty(KoXmlNS::style, "writing-mode")) {     // http://www.w3.org/TR/2004/WD-xsl11-20041216/#writing-mode
-        // KoText::directionFromString()
+        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
     }
 
     if (styleStack.hasProperty(KoXmlNS::table, "display")) {
@@ -592,24 +602,20 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:page-number", pageNumber(), KoGenStyle::TableType);
             else
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
+        } else if (key == TextProgressionDirection) {
+            KoText::Direction direction = textDirection();
+            if (direction == KoText::LeftRightTopBottom)
+                style.addProperty("style:writing-mode", "lr", KoGenStyle::TableType);
+            else if (direction == KoText::RightLeftTopBottom)
+                style.addProperty("style:writing-mode", "rl", KoGenStyle::TableType);
+            else if (direction == KoText::TopBottomRightLeft)
+                style.addProperty("style:writing-mode", "tb", KoGenStyle::TableType);
+            else if (direction == KoText::InheritDirection)
+                style.addProperty("style:writing-mode", "page", KoGenStyle::TableType);
+            else
+                style.addProperty("style:writing-mode", "auto", KoGenStyle::TableType);
         }
     }
-
-        /*if (key == KoTableStyle::TextProgressionDirection) {
-            int directionValue = 0;
-            bool ok = false;
-            directionValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                QString direction = "";
-                if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr";
-                else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl";
-                else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb";
-                if (!direction.isEmpty())
-                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
-            }*/
 }
 
 #include <KoTableStyle.moc>

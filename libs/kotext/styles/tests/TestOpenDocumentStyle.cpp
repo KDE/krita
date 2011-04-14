@@ -71,6 +71,45 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                     result << valueChild.text();
                 } else if (valueChild.tagName() == "ref") {
                     m_references << valueChild.attribute("name");
+                } else if (valueChild.tagName() == "list") {
+                    // Parse that sublist
+                    if (valueChild.childNodes().length() != 1) {
+                        kFatal() << "Unrecognized list element in " << m_name;
+                    }
+                    QDomElement subElement = valueChild.firstChildElement();
+                    if (subElement.nodeName() == "oneOrMore") {
+                        // Build a list of each sub item
+                        QStringList allowedValues;
+                        QDomElement subChoices = subElement.firstChildElement();
+                        if (subChoices.nodeName() != "choice") {
+                            kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                        }
+                        QDomElement subValueChild = subChoices.firstChildElement();
+                        do {
+                            if (subValueChild.nodeName() == "value") {
+                                allowedValues << subValueChild.text();
+                            } else {
+                                kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                            }
+                            subValueChild = subValueChild.nextSiblingElement();
+                        } while (!subValueChild.isNull());
+                        QStringList mergedAllowedValues;
+                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                            foreach (QString baseValue, allowedValues) {
+                                if (!mergedAllowedValues.contains(baseValue))
+                                    mergedAllowedValues << baseValue;
+                                foreach (QString knownValue, mergedAllowedValues) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                        continue;
+                                    }
+                                    QString builtValue = knownValue + " " + baseValue;
+                                    if (!mergedAllowedValues.contains(builtValue))
+                                        mergedAllowedValues << builtValue;
+                                }
+                            }
+                        }
+                        result << mergedAllowedValues;
+                    }
                 } else {
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
@@ -102,8 +141,14 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
+        } else if (reference == "borderWidths") {
+            result << "42px 42pt 12cm" << "0px 0pt 0cm";
+        } else if (reference == "string") {
+            // Now, that sucks !
+            kWarning() << "Found a string reference in " << m_name;
+            result << "";
         } else {
-            kFatal() << "Unhandled reference " << reference;
+            kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
         }
     }
     return result;

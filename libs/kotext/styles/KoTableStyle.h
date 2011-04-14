@@ -64,7 +64,8 @@ public:
         MasterPageName,         ///< Optional name of the master-page
         NumberHeadingRows,      ///< Count the number of heading rows
         Visible,                ///< If true, the table is visible
-        PageNumber              ///< The page number that is applied after the page break
+        PageNumber,             ///< The page number that is applied after the page break
+        TextProgressionDirection,   ///< The direction of the text in the table
     };
 
     /// Constructor
@@ -112,6 +113,9 @@ public:
     
     void setCollapsingBorderModel(bool on);
     bool collapsingBorderModel();
+    
+    KoText::Direction textDirection() const;
+    void setTextDirection(KoText::Direction direction);
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat

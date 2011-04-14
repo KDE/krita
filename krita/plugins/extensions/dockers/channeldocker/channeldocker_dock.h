@@ -22,7 +22,7 @@
 #include <KoCanvasObserverBase.h>
 
 class ChannelModel;
-class QListView;
+class QTableView;
 
 class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
@@ -31,7 +31,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
 private:
     KoCanvasBase* m_canvas;
-    QListView* m_channelList;
+    QTableView* m_channelTable;
     ChannelModel* m_model;
 };
 

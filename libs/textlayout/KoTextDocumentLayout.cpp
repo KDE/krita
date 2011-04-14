@@ -66,6 +66,7 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
+       , layoutStrategy(KoTextDocumentLayout::ScheduleLayouts)
        , layoutScheduled(false)
     {
     }
@@ -89,6 +90,7 @@ public:
     qreal defaultTabSizing;
     qreal y;
     QString wantedMasterPage;
+    KoTextDocumentLayout::LayoutStrategy layoutStrategy;
     bool layoutScheduled;
 };
 
@@ -380,10 +382,25 @@ void KoTextDocumentLayout::layout()
     }
 }
 
+KoTextDocumentLayout::LayoutStrategy KoTextDocumentLayout::layoutStrategy() const
+{
+    return d->layoutStrategy;
+}
+
+void KoTextDocumentLayout::setLayoutStrategy(KoTextDocumentLayout::LayoutStrategy strategy)
+{
+    d->layoutStrategy = strategy;
+}
+
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutScheduled)
+    if (d->layoutStrategy == LayoutDirect) {
+        layout();
         return;
+    }
+    if (d->layoutScheduled) {
+        return;
+    }
     d->layoutScheduled = true;
     QTimer::singleShot(0, this, SLOT(executeScheduledLayout()));
 }
@@ -392,6 +409,7 @@ void KoTextDocumentLayout::executeScheduledLayout()
 {
     // Only do the actual layout if it wasn't done meanwhile by someone else.
     if (d->layoutScheduled) {
+        d->layoutScheduled = false;
         layout();
     }
 }

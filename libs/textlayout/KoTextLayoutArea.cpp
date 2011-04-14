@@ -958,6 +958,11 @@ KoTextLayoutArea *KoTextLayoutArea::parent() const
     return m_parent;
 }
 
+KoTextDocumentLayout *KoTextLayoutArea::documentLayout() const
+{
+    return m_documentLayout;
+}
+
 void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qreal maximumAllowedBottom)
 {
     m_left = left;

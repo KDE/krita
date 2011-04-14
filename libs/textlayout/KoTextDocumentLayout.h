@@ -140,6 +140,14 @@ public:
     /// Clear all registrations of shapest for run around
     void unregisterAllObstructions();
 
+    /// Defines how layouting is done.
+    enum LayoutStrategy {
+        LayoutDirect, ///< Layout's are directly executed and there is no wait-time.
+        ScheduleLayouts ///< Layout''s are scheduled, multiple calls are compressed and executed at a later time.
+    };
+
+    LayoutStrategy layoutStrategy() const;
+    void setLayoutStrategy(LayoutStrategy strategy);
 
     /**
      * We allow a text document to be distributed onto a sequence of KoTextLayoutRootArea;

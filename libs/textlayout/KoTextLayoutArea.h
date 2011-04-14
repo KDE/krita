@@ -70,6 +70,7 @@ public:
     virtual KoText::Direction parentTextDirection() const;
 
     KoTextLayoutArea *parent() const;
+    KoTextDocumentLayout *documentLayout() const;
 
     /// Sets the left,right and top coordinate of the reference rect we place ourselves within
     /// The content may be smaller or bigger than that depending on our margins
@@ -127,7 +128,6 @@ public:
 
 protected:
     void setBottom(qreal bottom);
-    KoTextDocumentLayout *documentLayout() {return m_documentLayout;}
 
     /// If this area has the responsibility to show footnotes then store
     /// it so it can later bein the m_pregisteredFootnotes

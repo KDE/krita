@@ -200,6 +200,7 @@ install( FILES
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h
     KoVersionDialog.h
@@ -217,6 +218,12 @@ DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 if( Soprano_FOUND )
     install( FILES
+        rdf/KoRdfFoaF.h
+        rdf/KoRdfCalendarEvent.h
+        rdf/KoRdfLocation.h
+        rdf/KoRdfFoaFTreeWidgetItem.h
+        rdf/KoRdfCalendarEventTreeWidgetItem.h
+        rdf/KoRdfLocationTreeWidgetItem.h
         rdf/RdfForward.h
         rdf/KoDocumentRdf.h
         rdf/KoSopranoTableModelDelegate.h

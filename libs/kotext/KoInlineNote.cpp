@@ -60,7 +60,8 @@ public:
 };
 
 KoInlineNote::KoInlineNote(Type type)
-    : d(new Private(type))
+    : KoInlineObject(true)
+    , d(new Private(type))
 {
 }
 

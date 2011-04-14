@@ -298,6 +298,7 @@ QTextFrame *KoTextDocument::footNotesFrame()
     if (frame == 0) {
         QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
+        format.setProperty(KoText::SubFrameType, KoText::FootNotesFrameType);
 
         frame = cursor.insertFrame(format);
 
@@ -317,6 +318,7 @@ QTextFrame *KoTextDocument::endNotesFrame()
     if (frame == 0) {
         QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
+        format.setProperty(KoText::SubFrameType, KoText::EndNotesFrameType);
 
         // FIXME place cursor before any foot notes frame
 

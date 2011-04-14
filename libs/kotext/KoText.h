@@ -90,8 +90,15 @@ enum DocumentResource {
 };
 
 enum KoTextFrameProperty {
-    TableOfContents = QTextFormat::UserProperty + 1,
-    TableOfContentsData = QTextFormat::UserProperty + 2
+    TableOfContentsData = QTextFormat::UserProperty + 1,
+    SubFrameType = QTextFormat::UserProperty + 2
+};
+
+enum KoSubFrameType {
+    EndNotesFrameType,
+    FootNotesFrameType,
+    NoteFrameType,
+    TableOfContentsFrameType
 };
 
 /// Text in the objects will be positioned according to the direction.

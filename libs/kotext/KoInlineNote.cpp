@@ -26,6 +26,7 @@
 #include <KoTextLoader.h>
 #include <KoTextWriter.h>
 #include <KoTextDocument.h>
+#include <KoText.h>
 
 #include <KDebug>
 
@@ -74,6 +75,7 @@ void KoInlineNote::setMotherFrame(QTextFrame *motherFrame)
 
     QTextCursor cursor(motherFrame->lastCursorPosition());
     QTextFrameFormat format;
+    format.setProperty(KoText::SubFrameType, KoText::NoteFrameType);
 
     d->textFrame = cursor.insertFrame(format);
 }

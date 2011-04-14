@@ -55,6 +55,7 @@
 
 #include <KDebug>
 
+#include <QTextFrame>
 #include <QTextTable>
 #include <QTextList>
 #include <QStyle>
@@ -343,7 +344,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             delete cursor->currentTableIterator;
             cursor->currentTableIterator = 0;
         } else if (subFrame) {
-            if (true/* right now only end notes sub frame is the one we know of*/) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
                 Q_ASSERT(m_endNotesArea == 0);
                 m_endNotesArea = new KoTextLayoutEndNotesArea(this, m_documentLayout);
                 m_y += m_bottomSpacing;

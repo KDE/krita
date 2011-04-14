@@ -1629,7 +1629,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         QTextFrame *cursorFrame = cursor.currentFrame();
         int blockOutlineLevel = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
 
-        if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(KoText::TableOfContents)) {
+        if (cursorFrame != currentFrame
+                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
             int frameBegin = cursorFrame->firstPosition();
             int frameEnd = cursorFrame->lastPosition();
             saveTableOfContents(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());

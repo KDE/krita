@@ -96,7 +96,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            m_endNotesArea->paint(painter, context);
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
+                m_endNotesArea->paint(painter, context);
+            }
             continue;
         } else {
             if (!block.isValid())

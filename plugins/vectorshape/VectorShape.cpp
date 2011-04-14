@@ -112,7 +112,7 @@ void VectorShape::draw(QPainter &painter)
     }
 
     m_contents = qUncompress(m_contents);
-    
+
     // Check if the type is undetermined.  It could be that if we got
     // the contents via setCompressedContents().
     //
@@ -236,7 +236,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
     KoXmlWriter             &xmlWriter = context.xmlWriter();
 
     QString fileName = fileSaver.getFilename("VectorImages/Image");
-    char *mimeType;
+    QByteArray mimeType;
 
     switch (m_type) {
     case VectorTypeWmf:
@@ -253,7 +253,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     xmlWriter.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType, m_contents);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(), m_contents);
     xmlWriter.endElement(); // draw:frame
 }
 

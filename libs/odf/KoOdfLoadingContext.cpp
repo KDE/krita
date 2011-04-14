@@ -30,7 +30,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoStore.h>
 #include <KoXmlNS.h>
-#include <KoOdfManifest.h>
+#include <KoOdfManifestEntry.h>
 
 
 

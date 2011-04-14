@@ -31,7 +31,7 @@
 #include <KoOdfWriteStore.h>
 
 #include "KoOdfDocument.h"
-#include <KoOdfManifest.h>
+#include <KoOdfManifestEntry.h>
 
 
 #define INTERNAL_PROTOCOL "intern"

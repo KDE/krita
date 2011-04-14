@@ -305,7 +305,7 @@ void TestChangeTracking::testChangeTracking_data()
     QTest::newRow("Header with Paragraph")  << "ChangeTracking/complex-delete-merges/header-merge-with-paragrah-simple/header-merge-with-paragrah-simple-tracked.odt" << "DeltaXML";
     
     //Other tests
-    //QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt";
+    //QTest::newRow("Others-1")  << "ChangeTracking/other/michiels-deletion-sample/delete-text-across-siblings-tracked.odt" << "DeltaXML";
     QTest::newRow("Others-2")  << "ChangeTracking/other/list-id-sample/list-sample-tracked.odt" << "DeltaXML";
     QTest::newRow("Others-3")  << "ChangeTracking/other/list-table-list-1/list-table-list-tracked.odt" << "DeltaXML";
 
@@ -346,6 +346,15 @@ bool TestChangeTracking::verifyContentXml(QString &originalFileName, QString &ro
     roundTripReadStore->close();
 
     bool returnValue = (originalDocumentString == roundTripDocumentString);
+    if (!returnValue) {
+        qDebug() << "***********************ORIGINAL DOCUMENT************************";
+        qDebug() << originalDocumentString;
+        qDebug() << "****************************************************************";
+        qDebug() << "***********************AFTER ROUND-TRIP************************";
+        qDebug() << roundTripDocumentString;
+        qDebug() << "****************************************************************";
+        
+    }
     return returnValue;
 }
 

@@ -61,6 +61,7 @@
 #include <QTextFragment>
 #include <QTextLayout>
 #include <QTextCursor>
+#include <QTime>
 
 extern int qt_defaultDpiY();
 
@@ -74,6 +75,15 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
+
+    /*
+    struct Timer {
+        QTime m_time;
+        Timer() { m_time.start(); }
+        ~Timer() { kDebug() << "elapsed=" << m_time.elapsed(); }
+    };
+    Timer timer;
+    */
 
     painter->save();
     painter->translate(0, m_verticalAlignOffset);

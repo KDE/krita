@@ -307,6 +307,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         }
         if (d->headerRows) {
             // Also set the position of the border below headers
+            Q_ASSERT(d->headerRows < d->rowPositions.count());
             cursor->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
         }
         cursor->headerPositionX = d->columnPositions[0];

@@ -709,6 +709,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
 
+        bool softBreak = false;
+        if (acceptsPageBreak()) {
+            int softBreakPos = block.text().indexOf(QChar(0x000c), cursor->line.textStart());
+            if (softBreakPos > 0 && softBreakPos < cursor->line.textStart() + cursor->line.textLength()) {
+                cursor->line.setNumColumns(softBreakPos - cursor->line.textStart() + 1);
+                softBreak = true;
+            }
+        }
         findFootNotes(block, cursor->line);
 
         if (bottomOfText > maximumAllowedBottom()) {
@@ -766,6 +774,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, cursor->line);
         //FIXME refreshCurrentPageObstructions();
         //FIXME runAroundHelper.setObstructions(m_currentLineObstructions);
+
+        if (softBreak) {
+            return false;
+        }
     }
     cursor->line = QTextLine(); //set an invalid line to indicate we are done with block
 

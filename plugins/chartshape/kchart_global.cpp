@@ -73,7 +73,7 @@ int numDimensions( ChartType type )
     case LastChartType:
         dimensions = 1;
     }
-
+    
     return dimensions;
 }
 

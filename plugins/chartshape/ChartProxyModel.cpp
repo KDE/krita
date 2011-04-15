@@ -283,6 +283,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // It is at least one, but if there's more than one data dimension, the x
     // data is shared among all data sets, thus - 1.
     int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
+    qDebug() << regionsPerDataSet;
 
     // Fill dataRegions and set categoryRegion.
     // Note that here, we don't exactly know yet what region will be used for
@@ -296,7 +297,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
                         // for bubble charts, (the only case of regionsPerDataSet == 2), so
                         // skipping x data will allow the last data set to also be assigned
                         // a bubble width region. This is exactly what OOo does.
-                        (dataRegions.size() - 1) % regionsPerDataSet == 0;
+                        (dataDirection == Qt::Horizontal ? rows - 1 - rowOffset : cols - 1 -colOffset ) % regionsPerDataSet == 0;
 
     // When x data is present, it occupies the first non-header row/column
     if ( extractXData && dataDirection == Qt::Horizontal )

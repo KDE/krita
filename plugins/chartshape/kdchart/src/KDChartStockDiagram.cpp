@@ -55,6 +55,7 @@ void StockDiagram::init()
     d->downTrendCandlestickPen = QPen( Qt::black );
 
     d->lowHighLinePen = QPen( Qt::black );
+    setDatasetDimensionInternal( 3 );
 
     setPen( QPen( Qt::black ) );
 }
@@ -291,7 +292,7 @@ void StockDiagram::paint( PaintContext *context )
 
     PainterSaver painterSaver( context->painter() );
     int rowCount = attributesModel()->rowCount( attributesModelRootIndex() );
-    for ( int row = 0; row < rowCount; row++ ) {
+    for ( int row = 0; row < rowCount; ++row ) {
         CartesianDiagramDataCompressor::DataPoint low;
         CartesianDiagramDataCompressor::DataPoint high;
         CartesianDiagramDataCompressor::DataPoint open;

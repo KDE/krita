@@ -1013,6 +1013,10 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     // 3. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
+    int dimensions = numDimensions( chartType );
+    qDebug() << "DIMENSIONS" << dimensions;
+    d->proxyModel->setDataDimensions( dimensions );
+    qDebug() << d->proxyModel->dataSets().count();
     if ( !plotareaElem.isNull() ) {
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;

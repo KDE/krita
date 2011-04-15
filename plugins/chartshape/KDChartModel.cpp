@@ -398,7 +398,7 @@ QVariant KDChartModel::headerData( int section,
 
     if ( orientation != d->dataDirection ) {
         int dataSetNumber = section / d->dataDimensions;
-        if ( d->dataSets.count() <= dataSetNumber ) {
+        if ( d->dataSets.count() <= dataSetNumber || dataSetNumber < 0 ) {
             qWarning() << "KDChartModel::headerData(): trying to get more datasets than we have.";
             return QVariant();
         }
@@ -468,6 +468,7 @@ int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) co
     else
         rows = d->dataSets.size() * d->dataDimensions;
 
+    qDebug() << "ROWCOUNT" << rows;
     return rows;
 }
 
@@ -477,7 +478,10 @@ int KDChartModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ )
 
     int columns;
     if ( d->dataDirection == Qt::Vertical )
+    {
+        qDebug() << d->dataSets.size() << " HJHJHJH " << d->dataDimensions;
         columns = d->dataSets.size() * d->dataDimensions;
+    }
     else
         columns = d->maxDataSetSize();
 
@@ -500,7 +504,7 @@ void KDChartModel::addDataSet( DataSet *dataSet )
         qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
     }
-
+qDebug() << "HITTTTTTTTT";
     dataSet->setKdChartModel( this );
 
     int dataSetIndex = d->dataSetIndex( dataSet );
@@ -551,6 +555,7 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     const int dataSetIndex = d->dataSets.indexOf( dataSet );
     if ( dataSetIndex < 0 )
         return;
+    qDebug() << "HIT22222222222222222";
 
     if ( silent ) {
         d->dataSets.removeAt( dataSetIndex );

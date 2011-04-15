@@ -415,8 +415,9 @@ int CartesianDiagramDataCompressor::modelDataColumns() const
 {
     Q_ASSERT( m_datasetDimension != 0 );
     // only operational if there is a model and a resolution
+    const int columnDivisor = m_datasetDimension == 2 ? m_datasetDimension : 1;
     if ( m_model ) {
-        const int columns = m_model->columnCount( m_rootIndex ) / m_datasetDimension;
+        const int columns = m_model->columnCount( m_rootIndex ) / columnDivisor;
 
         if( columns != m_data.size() )
         {
@@ -549,7 +550,8 @@ void CartesianDiagramDataCompressor::rebuildCache() const
     Q_ASSERT( m_datasetDimension != 0 );
 
     m_data.clear();
-    const int columnCount = m_model ? m_model->columnCount( m_rootIndex ) / m_datasetDimension : 0;
+    const int columnDivisor = m_datasetDimension != 2 ? 1: m_datasetDimension;
+    const int columnCount = m_model ? m_model->columnCount( m_rootIndex ) / columnDivisor : 0;
     const int rowCount = qMin( m_model ? m_model->rowCount( m_rootIndex ) : 0, m_xResolution );
     m_data.resize( columnCount );
     for ( int i = 0; i < columnCount; ++i ) {
@@ -607,8 +609,8 @@ QPair< QPointF, QPointF > CartesianDiagramDataCompressor::dataBoundaries() const
     // NOTE: calculateDataBoundaries must return the *real* data boundaries!
     //       i.e. we may NOT fake yMin to be qMin( 0.0, yMin )
     //       (khz, 2008-01-24)
-    const QPointF bottomLeft( QPointF( xMin, yMin ) );
-    const QPointF topRight( QPointF( xMax, yMax ) );
+    const QPointF bottomLeft( xMin, yMin );
+    const QPointF topRight( xMax, yMax );
     return QPair< QPointF, QPointF >( bottomLeft, topRight );
 }
         
@@ -623,7 +625,7 @@ void CartesianDiagramDataCompressor::retrieveModelData( const CachePosition& pos
         bool forceHidden = false;
         result.hidden = true;
         const QModelIndexList indexes = mapToModel( position );
-        if( m_datasetDimension != 1 )
+        if( m_datasetDimension == 2 )
         {
             Q_ASSERT( indexes.count() == 2 );
             

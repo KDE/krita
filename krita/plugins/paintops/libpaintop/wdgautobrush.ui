@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>300</height>
+    <width>423</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -171,14 +171,7 @@
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
+               <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
               </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_7">
@@ -191,14 +184,7 @@
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
+               <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
               </item>
              </layout>
             </item>
@@ -233,12 +219,6 @@
        </item>
        <item row="0" column="1">
         <widget class="KisSliderSpinBox" name="inputAngle" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -258,14 +238,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="KisSliderSpinBox" name="inputSpikes" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_randomness">
@@ -278,14 +251,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_8">
@@ -298,14 +264,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="density" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_2">
@@ -318,14 +277,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
        </item>
       </layout>
      </item>

@@ -1167,14 +1167,14 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             QPointF point = caretRect(textEditor->position()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() - moveDistance);
-            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
         }
         else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
             QPointF point = caretRect(textEditor->position()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() + moveDistance);
-            destinationPosition = m_textEditor.data()->document()->documentLayout()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
         }
         else if (hit(item, KStandardShortcut::BeginningOfLine))
             // Goto beginning of current line. Default: Home

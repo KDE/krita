@@ -696,16 +696,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
-    qreal preBorderLeft = left();
     handleBordersAndSpacing(blockData, &block);
 
     if (textList) {
-        // if list set list-indent. Do this after borders so we can account for them.
+        // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl)
             blockData->setCounterPosition(QPointF(right() -
             blockData->counterWidth() - format.leftMargin(), m_y));
         else {
-            blockData->setCounterPosition(QPointF(x() + left() - preBorderLeft, m_y));
+            blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
         }
     }
 
@@ -784,7 +783,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(cursor->line.x());
-        expandBoundingRight(cursor->line.x()+cursor->line.width());
+        expandBoundingRight(cursor->line.x() + cursor->line.width());
 
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
@@ -1167,7 +1166,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
                 m_blockRects.last().setBottom(divider);
             }
             m_y += spacing;
-            m_blockRects.append(QRectF(m_left, divider, m_width, 1.0));
+            m_blockRects.append(QRectF(m_x, divider, m_width, 1.0));
         } else {
             // can't merge; then these are our new borders.
             KoTextBlockBorderData *newBorder = new KoTextBlockBorderData(border);
@@ -1180,7 +1179,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
                 m_blockRects.last().setBottom(m_y);
             }
             m_y += spacing;
-            m_blockRects.append(QRectF(m_left, m_y, m_width, 1.0));
+            m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
@@ -1195,7 +1194,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             m_blockRects.last().setBottom(m_y);
         }
         m_y += spacing;
-        m_blockRects.append(QRectF(m_left, m_y, m_width, 1.0));
+        m_blockRects.append(QRectF(m_x, m_y, m_width, 1.0));
     }
     // add padding inside the border
     m_x += format.doubleProperty(KoParagraphStyle::LeftPadding);

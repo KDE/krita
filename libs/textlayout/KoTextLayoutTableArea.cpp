@@ -403,6 +403,8 @@ void KoTextLayoutTableArea::layoutColumns()
         // Increment by this column's width.
         columnPosition += d->columnWidths[col];
     }
+    expandBoundingLeft(d->columnPositions[0]);
+    expandBoundingRight(d->columnPositions[d->table->columns()]);
 }
 
 bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor)

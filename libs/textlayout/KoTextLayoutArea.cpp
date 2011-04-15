@@ -337,8 +337,15 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_endOfArea = new FrameIterator(cursor);
                 m_y = tableArea->bottom();
                 setBottom(m_y);
+                // Expand bounding rect so if we have content outside we show it
+                expandBoundingLeft(tableArea->boundingRect().left());
+                expandBoundingRight(tableArea->boundingRect().right());
+
                 return false;
             }
+            // Expand bounding rect so if we have content outside we show it
+            expandBoundingLeft(tableArea->boundingRect().left());
+            expandBoundingRight(tableArea->boundingRect().right());
             m_bottomSpacing = 0;
             m_y = tableArea->bottom();
             delete cursor->currentTableIterator;
@@ -356,8 +363,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = m_endNotesArea->bottom();
                     setBottom(m_y);
+                    // Expand bounding rect so if we have content outside we show it
+                    expandBoundingLeft(m_endNotesArea->boundingRect().left());
+                    expandBoundingRight(m_endNotesArea->boundingRect().right());
                     return false;
                 }
+                // Expand bounding rect so if we have content outside we show it
+                expandBoundingLeft(m_endNotesArea->boundingRect().left());
+                expandBoundingRight(m_endNotesArea->boundingRect().right());
                 m_bottomSpacing = 0;
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
@@ -375,8 +388,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();
                     setBottom(m_y);
+                    // Expand bounding rect so if we have content outside we show it
+                    expandBoundingLeft(tocArea->boundingRect().left());
+                    expandBoundingRight(tocArea->boundingRect().right());
                     return false;
                 }
+                // Expand bounding rect so if we have content outside we show it
+                expandBoundingLeft(tocArea->boundingRect().left());
+                expandBoundingRight(tocArea->boundingRect().right());
                 m_bottomSpacing = 0;
                 m_y = tocArea->bottom();
                 delete cursor->currentSubFrameIterator;
@@ -763,11 +782,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
-
-        // Store bounding rect so if we have 
-        m_boundingRect.setLeft(qMin(cursor->line.x(), m_boundingRect.x()));
-        m_boundingRect.setRight(qMax(cursor->line.x()+cursor->line.width(),
-                                     m_boundingRect.right()));
+        // Expand bounding rect so if we have content outside we show it
+        expandBoundingLeft(cursor->line.x());
+        expandBoundingRight(cursor->line.x()+cursor->line.width());
 
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
@@ -1086,6 +1103,16 @@ void KoTextLayoutArea::confirmFootNotes()
     if (m_parent) {
         m_parent->confirmFootNotes();
     }
+}
+
+void KoTextLayoutArea::expandBoundingLeft(qreal x)
+{
+    m_boundingRect.setLeft(qMin(x, m_boundingRect.x()));
+}
+
+void KoTextLayoutArea::expandBoundingRight(qreal x)
+{
+    m_boundingRect.setRight(qMax(x, m_boundingRect.right()));
 }
 
 void KoTextLayoutArea::clearPreregisteredFootNotes()

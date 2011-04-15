@@ -136,6 +136,12 @@ protected:
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();
 
+    /// Set the Left of the boundingRect to the min of what it was and x
+    void expandBoundingLeft(qreal x);
+
+    /// Set the Right of the boundingRect to the max of what it was and x
+    void expandBoundingRight(qreal x);
+
 private:
     bool layoutBlock(FrameIterator *cursor);
 

@@ -294,10 +294,10 @@ void TestChangeTracking::testChangeTracking_data()
 
     //Complex Delete Merges
     QTest::newRow("Paragraph with list-item - 1")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item/paragraph-merge-with-list-item-tracked.odt" << "DeltaXML";
-    QTest::newRow("Paragraph with list-item - 2")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-from-a-list-at-a-higher-level/paragraph-merge-with-list-item-from-a-list-at-a-higher-level-tracked.odt" << "DeltaXML";
+    QTest::newRow("Paragraph with list-item - 2")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-2/paragraph-merge-with-list-item-2.odt" << "DeltaXML";
     QTest::newRow("Paragraph with list-item - 3")  << "ChangeTracking/complex-delete-merges/paragraph-merge-with-list-item-simple/paragraph-merge-with-list-item-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Item with a Paragraph - 1")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph/list-item-merge-with-a-succeeding-paragraph-tracked.odt" << "DeltaXML";
-    QTest::newRow("List Item with a Paragraph - 2")  << "ChangeTracking/complex-delete-merges/list-item-from-a-higher-level-list-merge-with-a-succeeding-paragraph/list-item-from-a-higher-level-list-merge-with-a-succeeding-paragraph-tracked.odt" << "DeltaXML";
+    QTest::newRow("List Item with a Paragraph - 2")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph-2/list-item-merge-with-a-succeeding-paragraph-2.odt" << "DeltaXML";
     QTest::newRow("List Item with a Paragraph - 3")  << "ChangeTracking/complex-delete-merges/list-item-merge-with-a-succeeding-paragraph-simple/list-item-merge-with-a-succeeding-paragraph-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Item Merges")  << "ChangeTracking/complex-delete-merges/list-item-merge-simple/list-item-merge-simple-tracked.odt" << "DeltaXML";
     QTest::newRow("List Merges")  << "ChangeTracking/complex-delete-merges/list-merges/list-merges-tracked.odt" << "DeltaXML";

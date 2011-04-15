@@ -67,6 +67,7 @@ KoTextLayoutTableArea::KoTextLayoutTableArea(QTextTable *table, KoTextLayoutArea
     Q_ASSERT(parent);
 
     d->table = table;
+    d->carsManager = KoTableColumnAndRowStyleManager::getManager(table);
 
     // Resize geometry vectors for the table.
     d->rowPositions.resize(table->rows() + 1);
@@ -167,7 +168,6 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
-        qDebug() << this << startTableCell.row() <<startTableCell.column();
         return d->cellAreas[startTableCell.row()][startTableCell.column()]->selectionBoundingBox(cursor);
     } else {
         int selectionRow;
@@ -353,6 +353,7 @@ void KoTextLayoutTableArea::layoutColumns()
     int numNonStyleColumns = 0;
     for (int col = 0; col < d->table->columns(); ++col) {
         KoTableColumnStyle columnStyle = d->carsManager.columnStyle(col);
+
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
             relativeWidthColumns.append(col);

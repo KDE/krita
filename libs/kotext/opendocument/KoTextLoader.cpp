@@ -1156,7 +1156,6 @@ void KoTextLoader::loadList(const KoXmlElement &element, QTextCursor &cursor)
             reader.setNamespaceProcessing(true);
 
             bool ok = doc.setContent(&reader, &errorMsg, &errorLine, &errorColumn);
-            QDomDocument dom;
             if (ok) {
                 KoXmlElement childElement;
                 forEachElement (childElement, doc.documentElement()) {

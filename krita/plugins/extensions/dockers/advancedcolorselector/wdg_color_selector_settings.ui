@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>502</width>
-    <height>333</height>
+    <width>550</width>
+    <height>331</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,8 +67,8 @@
            <property name="title">
             <string>Zoom selectors</string>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
              <widget class="QRadioButton" name="popupOnMouseClick">
               <property name="text">
                <string notr="true">when pressing mid mousebutton</string>
@@ -78,30 +78,30 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="1" column="0">
              <widget class="QRadioButton" name="popupOnMouseOver">
               <property name="text">
                <string>on mouse over.</string>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="2" column="0">
              <widget class="QRadioButton" name="neverZoom">
               <property name="text">
                <string>never</string>
               </property>
              </widget>
             </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
+            <item row="3" column="0">
+             <layout class="QFormLayout" name="formLayout_4">
+              <item row="0" column="0">
                <widget class="QLabel" name="label_11">
                 <property name="text">
                  <string>zoom to size</string>
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="0" column="1">
                <widget class="QSpinBox" name="popupSize">
                 <property name="suffix">
                  <string>px</string>
@@ -403,8 +403,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>71</width>
-               <height>24</height>
+               <width>304</width>
+               <height>137</height>
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_4">
@@ -452,59 +452,67 @@
           </item>
           <item>
            <widget class="QWidget" name="widget" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_2">
+            <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_11">
-               <item>
+              <layout class="QFormLayout" name="formLayout_8">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_14">
                  <property name="text">
                   <string>Size:</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsWidth">
-                 <property name="suffix">
-                  <string>px</string>
-                 </property>
-                 <property name="prefix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsHeight">
-                 <property name="suffix">
-                  <string>px</string>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_9">
+                 <item>
+                  <widget class="QSpinBox" name="lastUsedColorsWidth">
+                   <property name="suffix">
+                    <string>px</string>
+                   </property>
+                   <property name="prefix">
+                    <string/>
+                   </property>
+                   <property name="minimum">
+                    <number>16</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="lastUsedColorsHeight">
+                   <property name="suffix">
+                    <string>px</string>
+                   </property>
+                   <property name="minimum">
+                    <number>16</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_3">
                <item>
-                <widget class="QLabel" name="label_10">
-                 <property name="text">
-                  <string>Patch count:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="lastUsedColorsPatchCount">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="value">
-                  <number>30</number>
-                 </property>
-                </widget>
+                <layout class="QFormLayout" name="formLayout_7">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_10">
+                   <property name="text">
+                    <string>Patch count:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="lastUsedColorsPatchCount">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="value">
+                    <number>30</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item>
                 <spacer name="horizontalSpacer_3">
@@ -522,8 +530,8 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
+              <layout class="QFormLayout" name="formLayout_6">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_8">
                  <property name="text">
                   <string>Direction:</string>
@@ -533,22 +541,26 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
-                 <property name="text">
-                  <string>Vertical</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
-                 <property name="text">
-                  <string>Horizontal</string>
-                 </property>
-                </widget>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QRadioButton" name="lastUsedColorsAlignVertical">
+                   <property name="text">
+                    <string>Vertical</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="lastUsedColorsAlignHorizontal">
+                   <property name="text">
+                    <string>Horizontal</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
@@ -566,50 +578,57 @@
               <widget class="QWidget" name="widget_3" native="true">
                <layout class="QGridLayout" name="gridLayout">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="lbl_lastUsedNumCols">
-                  <property name="text">
-                   <string>Number of columns</string>
+                 <layout class="QFormLayout" name="formLayout_5">
+                  <property name="rowWrapPolicy">
+                   <enum>QFormLayout::WrapLongRows</enum>
                   </property>
-                  <property name="buddy">
-                   <cstring>lastUsedColorsNumCols</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="lastUsedColorsNumCols">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="lbl_lastUsedNumRows">
-                  <property name="text">
-                   <string>Number of rows</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>lastUsedColorsNumRows</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="lastUsedColorsNumRows">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>3</number>
-                  </property>
-                 </widget>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="lbl_lastUsedNumCols">
+                    <property name="text">
+                     <string>Number of columns</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>lastUsedColorsNumCols</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="lastUsedColorsNumCols">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="value">
+                     <number>2</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="lbl_lastUsedNumRows">
+                    <property name="text">
+                     <string>Number of rows</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>lastUsedColorsNumRows</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QSpinBox" name="lastUsedColorsNumRows">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="value">
+                     <number>3</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </widget>
@@ -654,59 +673,67 @@
           </item>
           <item>
            <widget class="QWidget" name="widget_2" native="true">
-            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_10">
-               <item>
+              <layout class="QFormLayout" name="formLayout_9">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_12">
                  <property name="text">
                   <string>Size:</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsWidth">
-                 <property name="suffix">
-                  <string>px</string>
-                 </property>
-                 <property name="prefix">
-                  <string/>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsHeight">
-                 <property name="suffix">
-                  <string>px</string>
-                 </property>
-                 <property name="minimum">
-                  <number>16</number>
-                 </property>
-                </widget>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_10">
+                 <item>
+                  <widget class="QSpinBox" name="commonColorsWidth">
+                   <property name="suffix">
+                    <string>px</string>
+                   </property>
+                   <property name="prefix">
+                    <string/>
+                   </property>
+                   <property name="minimum">
+                    <number>16</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="commonColorsHeight">
+                   <property name="suffix">
+                    <string>px</string>
+                   </property>
+                   <property name="minimum">
+                    <number>16</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
-                <widget class="QLabel" name="label_9">
-                 <property name="text">
-                  <string>Patch count:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSpinBox" name="commonColorsPatchCount">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="value">
-                  <number>30</number>
-                 </property>
-                </widget>
+                <layout class="QFormLayout" name="formLayout_10">
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_9">
+                   <property name="text">
+                    <string>Patch count:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QSpinBox" name="commonColorsPatchCount">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="value">
+                    <number>30</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
                <item>
                 <spacer name="horizontalSpacer_2">
@@ -715,8 +742,8 @@
                  </property>
                  <property name="sizeHint" stdset="0">
                   <size>
-                   <width>0</width>
-                   <height>10</height>
+                   <width>13</width>
+                   <height>13</height>
                   </size>
                  </property>
                 </spacer>
@@ -724,8 +751,8 @@
               </layout>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <item>
+              <layout class="QFormLayout" name="formLayout_11">
+               <item row="0" column="0">
                 <widget class="QLabel" name="label_13">
                  <property name="text">
                   <string>Direction:</string>
@@ -735,22 +762,26 @@
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QRadioButton" name="commonColorsAlignVertical">
-                 <property name="text">
-                  <string>Vertical</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QRadioButton" name="commonColorsAlignHorizontal">
-                 <property name="text">
-                  <string>Horizontal</string>
-                 </property>
-                 <property name="checked">
-                  <bool>true</bool>
-                 </property>
-                </widget>
+               <item row="0" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QRadioButton" name="commonColorsAlignVertical">
+                   <property name="text">
+                    <string>Vertical</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="commonColorsAlignHorizontal">
+                   <property name="text">
+                    <string>Horizontal</string>
+                   </property>
+                   <property name="checked">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
                </item>
               </layout>
              </item>
@@ -768,50 +799,54 @@
                </property>
                <layout class="QGridLayout" name="gridLayout_2">
                 <item row="0" column="0">
-                 <widget class="QLabel" name="lbl_commonColorsNumCols">
-                  <property name="text">
-                   <string>Number of columns</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>commonColorsNumCols</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="commonColorsNumCols">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>2</number>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="lbl_commonColorsNumRows">
-                  <property name="text">
-                   <string>Number of rows</string>
-                  </property>
-                  <property name="buddy">
-                   <cstring>commonColorsNumRows</cstring>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="commonColorsNumRows">
-                  <property name="minimum">
-                   <number>1</number>
-                  </property>
-                  <property name="maximum">
-                   <number>20</number>
-                  </property>
-                  <property name="value">
-                   <number>3</number>
-                  </property>
-                 </widget>
+                 <layout class="QFormLayout" name="formLayout_12">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="lbl_commonColorsNumCols">
+                    <property name="text">
+                     <string>Number of columns</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>commonColorsNumCols</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="commonColorsNumCols">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="value">
+                     <number>2</number>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="lbl_commonColorsNumRows">
+                    <property name="text">
+                     <string>Number of rows</string>
+                    </property>
+                    <property name="buddy">
+                     <cstring>commonColorsNumRows</cstring>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QSpinBox" name="commonColorsNumRows">
+                    <property name="minimum">
+                     <number>1</number>
+                    </property>
+                    <property name="maximum">
+                     <number>20</number>
+                    </property>
+                    <property name="value">
+                     <number>3</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                </layout>
               </widget>

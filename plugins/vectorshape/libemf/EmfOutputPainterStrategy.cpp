@@ -959,6 +959,9 @@ void OutputPainterStrategy::setBkColor( const quint8 red, const quint8 green, co
 
 void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject &textObject )
 {
+    const QPoint  &referencePoint = textObject.referencePoint();
+    const QString &text = textObject.textString();
+
 #if DEBUG_EMFPAINT
     kDebug(31000) << "Ref point: " << textObject.referencePoint()
                   << "options: " << hex << textObject.options() << dec
@@ -966,7 +969,6 @@ void OutputPainterStrategy::extTextOut( const QRect &bounds, const EmrTextObject
                   << "text: " << textObject.textString();
 #endif
 
-    const QString &text = textObject.textString();
     int  x = textObject.referencePoint().x();
     int  y = textObject.referencePoint().y();
 

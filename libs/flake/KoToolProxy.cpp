@@ -48,20 +48,27 @@ KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
 void KoToolProxyPrivate::timeout() // Auto scroll the canvas
 {
     Q_ASSERT(controller);
-    int offsetX = controller->canvasOffsetX();
-    int offsetY = controller->canvasOffsetY();
-    QRectF mouseArea(scrollEdgePoint, QSizeF(10, 10));
+
+    QPoint offset = QPoint(controller->canvasOffsetX(), controller->canvasOffsetY());
+    QPoint origin = controller->canvas()->documentOrigin();
+    QPoint viewPoint = widgetScrollPoint + origin - offset;
+
+    QRectF mouseArea(viewPoint, QSizeF(10, 10));
     mouseArea.setTopLeft(mouseArea.center());
 
     controller->ensureVisible(mouseArea, true);
 
-    QPoint moved(offsetX - controller->canvasOffsetX(), offsetY - controller->canvasOffsetY());
-    if (moved.x() == 0 && moved.y() == 0)
-        return;
-    scrollEdgePoint += moved;
+    QPoint newOffset = QPoint(controller->canvasOffsetX(), controller->canvasOffsetY());
 
-    QMouseEvent event(QEvent::MouseMove, scrollEdgePoint, Qt::LeftButton, Qt::LeftButton, 0);
-    KoPointerEvent ev(&event, controller->canvas()->viewConverter()->viewToDocument(scrollEdgePoint));
+    QPoint moved = offset - newOffset;
+    if (moved.isNull())
+        return;
+
+    widgetScrollPoint += moved;
+
+    QPointF documentPoint = parent->widgetToDocument(widgetScrollPoint);
+    QMouseEvent event(QEvent::MouseMove, widgetScrollPoint, Qt::LeftButton, Qt::LeftButton, 0);
+    KoPointerEvent ev(&event, documentPoint);
     activeTool->mouseMoveEvent(&ev);
 }
 
@@ -72,7 +79,9 @@ void KoToolProxyPrivate::checkAutoScroll(const KoPointerEvent &event)
     if (!activeTool->wantsAutoScroll()) return;
     if (!event.isAccepted()) return;
     if (event.buttons() != Qt::LeftButton) return;
-    scrollEdgePoint = controller->canvas()->viewConverter()->documentToView(event.point).toPoint();
+
+    widgetScrollPoint = event.pos();
+
     if (! scrollTimer.isActive())
         scrollTimer.start();
 }
@@ -119,6 +128,20 @@ void KoToolProxy::paint(QPainter &painter, const KoViewConverter &converter)
 void KoToolProxy::repaintDecorations()
 {
     if (d->activeTool) d->activeTool->repaintDecorations();
+}
+
+QPointF KoToolProxy::widgetToDocument(const QPointF &widgetPoint) const
+{
+    QPoint offset = QPoint(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
+    QPoint origin = d->controller->canvas()->documentOrigin();
+    QPoint viewPoint = widgetPoint.toPoint() + origin - offset;
+
+    return d->controller->canvas()->viewConverter()->viewToDocument(viewPoint);
+}
+
+KoCanvasBase* KoToolProxy::canvas() const
+{
+    return d->controller->canvas();
 }
 
 #include <KDebug>

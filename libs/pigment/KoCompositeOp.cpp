@@ -22,26 +22,21 @@
 #include "KoCompositeOp.h"
 #include "KoColorSpace.h"
 
-QString KoCompositeOp::categoryMix()
-{
-    return i18n("Mix");
-}
-QString KoCompositeOp::categoryLight()
-{
-    return i18n("Light");
-}
-QString KoCompositeOp::categoryArithmetic()
-{
-    return i18n("Arithmetic");
-}
 QString KoCompositeOp::categoryColor()
 {
     return i18n("Color");
 }
-QString KoCompositeOp::categoryMisc()
-{
-    return i18n("Misc");
-}
+
+QString KoCompositeOp::categoryArithmetic() { return i18n("Arithmetic"); }
+QString KoCompositeOp::categoryNegative()   { return i18n("Negative");   }
+QString KoCompositeOp::categoryLight()      { return i18n("Lighten");    }
+QString KoCompositeOp::categoryDark()       { return i18n("Darken");     }
+QString KoCompositeOp::categoryHSY()        { return i18n("HSY");        }
+QString KoCompositeOp::categoryHSI()        { return i18n("HSI");        }
+QString KoCompositeOp::categoryHSL()        { return i18n("HSL");        }
+QString KoCompositeOp::categoryHSV()        { return i18n("HSV");        }
+QString KoCompositeOp::categoryMix()        { return i18n("Mix");        }
+QString KoCompositeOp::categoryMisc()       { return i18n("Misc");       }
 
 struct KoCompositeOp::Private {
     const KoColorSpace * colorSpace;

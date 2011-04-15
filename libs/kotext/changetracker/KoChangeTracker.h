@@ -23,6 +23,7 @@
 #include "kotext_export.h"
 //#include "KoChangeTrackerElement.h"
 class KoChangeTrackerElement;
+class KoFormatChangeInformation;
 
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
@@ -49,6 +50,13 @@ class KOTEXT_EXPORT KoChangeTracker : public QObject
 {
     Q_OBJECT
 public:
+    
+    typedef enum
+    {
+        ODF_1_2 = 0,
+        DELTAXML
+    }ChangeSaveFormat;
+
     KoChangeTracker(QObject *parent = 0);
 
     ~KoChangeTracker();
@@ -66,11 +74,16 @@ public:
     int getInsertChangeId(QString title, int existingChangeId);
     int getDeleteChangeId(QString title, QTextDocumentFragment selection, int existingChangeId);
 
+    void setFormatChangeInformation(int formatChangeId, KoFormatChangeInformation *formatInformation);
+    KoFormatChangeInformation *formatChangeInformation(int formatChangeId);
+    
     KoChangeTrackerElement* elementById(int id);
     bool removeById(int id, bool freeMemory = true);
 
     //Returns all the deleted changes
     int getDeletedChanges(QVector<KoChangeTrackerElement *>& deleteVector);
+
+    int allChangeIds(QVector<int>& changesVector);
 
     bool containsInlineChanges(const QTextFormat &format);
     int mergeableId(KoGenChange::Type type, QString &title, int existingId);
@@ -90,6 +103,10 @@ public:
     void setParent(int child, int parent);
     int parent(int changeId);
 
+    int createDuplicateChangeId(int existingChangeId);
+    bool isDuplicateChangeId(int duplicateChangeId);
+    int originalChangeId(int duplicateChangeId);
+
     void acceptRejectChange(int changeId, bool set);
 
     /// Load/save methods
@@ -99,6 +116,14 @@ public:
     int getLoadedChangeId(QString odfId);
 
     static QTextDocumentFragment generateDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    static void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
+    static int fragmentLength(QTextDocumentFragment fragment);
+
+    const QString& authorName();
+    void setAuthorName(const QString &authorName);
+
+    ChangeSaveFormat saveFormat();
+    void setSaveFormat(ChangeSaveFormat saveFormat); 
 private:
     static bool checkListDeletion(QTextList *list, QTextCursor &cursor);
     class Private;

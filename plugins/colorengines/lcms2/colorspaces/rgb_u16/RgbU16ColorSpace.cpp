@@ -31,26 +31,26 @@
 RgbU16ColorSpace::RgbU16ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<KoRgbU16Traits>(colorSpaceId(), i18n("RGB (16-bit integer/channel)"),  TYPE_BGRA_16, cmsSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red"),   2*sizeof(quint16), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Blue") , 2*sizeof(quint16), 2, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1*sizeof(quint16), 1, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue"),  0*sizeof(quint16), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0, 0, 255)));
+    addChannel(new KoChannelInfo(i18n("Red")  , 0*sizeof(quint16), 0, KoChannelInfo::COLOR, KoChannelInfo::UINT16, 2, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3*sizeof(quint16), 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT16, 2));
     init();
 
     addStandardCompositeOps<KoRgbU16Traits>(this);
 
-    addCompositeOp(new RgbCompositeOpDarken<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpLighten<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpHue<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpSaturation<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpValue<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpColor<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDarken<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpLighten<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpHue<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpSaturation<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpValue<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpColor<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpIn<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpDiff<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDiff<KoRgbU16Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU16Traits>(this));
 //     addCompositeOp(new RgbCompositeOpClear<KoRgbU16Traits>(this));
-    addCompositeOp(new RgbCompositeOpDissolve<KoRgbU16Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDissolve<KoRgbU16Traits>(this));
 }
 
 bool RgbU16ColorSpace::willDegrade(ColorSpaceIndependence independence) const

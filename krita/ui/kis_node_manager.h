@@ -79,6 +79,16 @@ public:
      */
     void setNodeCompositeOp(KisNodeSP node, const KoCompositeOp* compositeOp);
 
+    /**
+     * Explicitly activates \p node
+     * The UI will be noticed that active node has been changed.
+     *
+     * Both sigNodeActivated and sigUiNeedChangeActiveNode are emitted.
+     *
+     * \see slotUiActivatedNode for comparison
+     */
+    void activateNode(KisNodeSP node);
+
     /// Get the class that manages the layer user interface
     KisLayerManager * layerManager();
 
@@ -87,16 +97,25 @@ public:
 
 signals:
 
-    void sigNodeActivated(KisNodeSP layer);
+    void sigNodeActivated(KisNodeSP node);
+    void sigUiNeedChangeActiveNode(KisNodeSP node);
 
 public slots:
+
+    /**
+     * Activates \p node.
+     * All non-ui listeners are notified with sigNodeActivated,
+     * sigUiNeedChangeActiveNode is *not* emitted.
+     *
+     * \see activateNode
+     */
+    void slotUiActivatedNode(KisNodeSP node);
 
     void addNode(KisNodeSP node, KisNodeSP activeNode);
     void insertNode(KisNodeSP node, KisNodeSP parent, int index);
     void moveNode(KisNodeSP node, KisNodeSP activeNode);
     void moveNodeAt(KisNodeSP node, KisNodeSP parent, int index);
     void createNode(const QString & node);
-    void activateNode(KisNodeSP layer);
     void nodesUpdated();
     void nodeProperties(KisNodeSP node);
     void nodeOpacityChanged(qreal opacity, bool finalChange);

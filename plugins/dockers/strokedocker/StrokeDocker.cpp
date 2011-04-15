@@ -28,22 +28,8 @@
 */
 
 #include "StrokeDocker.h"
-#include <KoLineStyleSelector.h>
 
-#include <KoToolManager.h>
-#include <KoCanvasBase.h>
-#include <KoCanvasController.h>
-#include <KoResourceManager.h>
-#include <KoDockFactoryBase.h>
-#include <KoUnitDoubleSpinBox.h>
-#include <KoShapeManager.h>
-#include <KoShapeBorderCommand.h>
-#include <KoShapeBorderModel.h>
-#include <KoSelection.h>
-#include <KoLineBorder.h>
-
-#include <kiconloader.h>
-#include <klocale.h>
+#include <KoStrokeConfigWidget.h>
 
 #include <QLabel>
 #include <QRadioButton>
@@ -51,135 +37,62 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 
+#include <klocale.h>
+#include <kiconloader.h>
+
+#include <KoToolManager.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoResourceManager.h>
+#include <KoDockFactoryBase.h>
+//#include <KoUnitDoubleSpinBox.h>
+//#include <KoLineStyleSelector.h>
+#include <KoShapeManager.h>
+#include <KoShapeBorderCommand.h>
+#include <KoShapeBorderModel.h>
+#include <KoSelection.h>
+#include <KoLineBorder.h>
+
+
 class StrokeDocker::Private
 {
 public:
     Private() {}
-    QButtonGroup * capGroup;
-    QButtonGroup * joinGroup;
-    KoUnitDoubleSpinBox * setLineWidth;
-    KoUnitDoubleSpinBox * miterLimit;
-    KoLineStyleSelector * lineStyle;
+
+    KoStrokeConfigWidget *mainWidget;
     KoLineBorder border;
-    QSpacerItem *spacer;
-    QGridLayout *layout;
 };
+
 
 StrokeDocker::StrokeDocker()
     : d( new Private() )
 {
     setWindowTitle( i18n( "Stroke Properties" ) );
 
-    QWidget *mainWidget = new QWidget( this );
-    QGridLayout *mainLayout = new QGridLayout( mainWidget );
+    d->mainWidget = new KoStrokeConfigWidget( this );
+    setWidget( d->mainWidget );
 
-    QLabel * styleLabel = new QLabel( i18n( "Style:" ), mainWidget );
-    mainLayout->addWidget( styleLabel, 0, 0 );
-    d->lineStyle = new KoLineStyleSelector( mainWidget );
-    mainLayout->addWidget( d->lineStyle, 0, 1, 1, 3 );
+    connect( d->mainWidget, SIGNAL(currentIndexChanged()), this, SLOT(styleChanged()));
+    connect( d->mainWidget, SIGNAL(widthChanged()),        this, SLOT(widthChanged()));
+    connect( d->mainWidget, SIGNAL(capChanged(int)),       this, SLOT(slotCapChanged(int)));
+    connect( d->mainWidget, SIGNAL(joinChanged(int)),      this, SLOT(slotJoinChanged(int)));
+    connect( d->mainWidget, SIGNAL(miterLimitChanged()),   this, SLOT(miterLimitChanged()));
 
-    connect( d->lineStyle, SIGNAL(currentIndexChanged( int ) ), this, SLOT( styleChanged() ) );
+    d->mainWidget->updateControls(d->border);
 
-    QLabel* widthLabel = new QLabel( i18n ( "Width:" ), mainWidget );
-    mainLayout->addWidget( widthLabel, 1, 0 );
-    // set min/max/step and value in points, then set actual unit
-    d->setLineWidth = new KoUnitDoubleSpinBox( mainWidget );
-    d->setLineWidth->setMinMaxStep( 0.0, 1000.0, 0.5 );
-    d->setLineWidth->setDecimals( 2 );
-    d->setLineWidth->setUnit( KoUnit(KoUnit::Point) );
-    d->setLineWidth->setToolTip( i18n( "Set line width of actual selection" ) );
-    mainLayout->addWidget( d->setLineWidth, 1, 1, 1, 3 );
-    connect( d->setLineWidth, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( widthChanged() ) );
-
-    QLabel* capLabel = new QLabel( i18n ( "Cap:" ), mainWidget );
-    mainLayout->addWidget( capLabel, 2, 0 );
-    d->capGroup = new QButtonGroup( mainWidget );
-    d->capGroup->setExclusive( true );
-    d->capGroup->setExclusive( true );
-
-    QRadioButton *button = 0;
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "cap_butt" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Butt cap" ) );
-    d->capGroup->addButton( button, Qt::FlatCap );
-    mainLayout->addWidget( button, 2, 1 );
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "cap_round" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Round cap" ) );
-    d->capGroup->addButton( button, Qt::RoundCap );
-    mainLayout->addWidget( button, 2, 2 );
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "cap_square" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Square cap" ) );
-    d->capGroup->addButton( button, Qt::SquareCap );
-    mainLayout->addWidget( button, 2, 3 );
-
-    connect( d->capGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotCapChanged( int ) ) );
-
-    QLabel* joinLabel = new QLabel( i18n ( "Join:" ), mainWidget );
-    mainLayout->addWidget( joinLabel, 3, 0 );
-
-    d->joinGroup = new QButtonGroup( mainWidget );
-    d->joinGroup->setExclusive( true );
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "join_miter" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Miter join" ) );
-    d->joinGroup->addButton( button, Qt::MiterJoin );
-    mainLayout->addWidget( button, 3, 1 );
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "join_round" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Round join" ) );
-    d->joinGroup->addButton( button, Qt::RoundJoin );
-    mainLayout->addWidget( button, 3, 2 );
-
-    button = new QRadioButton( mainWidget );
-    button->setIcon( SmallIcon( "join_bevel" ) );
-    button->setCheckable( true );
-    button->setToolTip( i18n( "Bevel join" ) );
-    d->joinGroup->addButton( button, Qt::BevelJoin );
-    mainLayout->addWidget( button, 3, 3 );
-
-    connect( d->joinGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotJoinChanged( int ) ) );
-
-    QLabel* miterLabel = new QLabel( i18n ( "Miter limit:" ), mainWidget );
-    mainLayout->addWidget( miterLabel, 4, 0 );
-    // set min/max/step and value in points, then set actual unit
-    d->miterLimit = new KoUnitDoubleSpinBox( mainWidget );
-    d->miterLimit->setMinMaxStep( 0.0, 1000.0, 0.5 );
-    d->miterLimit->setDecimals( 2 );
-    d->miterLimit->setUnit( KoUnit(KoUnit::Point) );
-    d->miterLimit->setToolTip( i18n( "Set miter limit" ) );
-    mainLayout->addWidget( d->miterLimit, 4, 1, 1, 3 );
-    connect( d->miterLimit, SIGNAL( valueChangedPt( qreal ) ), this, SLOT( miterLimitChanged() ) );
-
-    d->spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    mainLayout->addItem(d->spacer, 5, 4);
-
-    mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->layout = mainLayout;
-
-    setWidget( mainWidget );
-
-    updateControls();
-
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea )),
-             this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
+            this, SLOT(locationChanged(Qt::DockWidgetArea)));
 }
 
 StrokeDocker::~StrokeDocker()
 {
     delete d;
 }
+
+
+// ----------------------------------------------------------------
+//             Apply changes initiated from the UI
+
 
 void StrokeDocker::applyChanges()
 {
@@ -188,24 +101,36 @@ void StrokeDocker::applyChanges()
 
     canvasController->canvas()->resourceManager()->setActiveBorder( d->border );
 
-    if( ! selection || ! selection->count() )
+    if (!selection || !selection->count())
         return;
 
-    KoLineBorder * newBorder = new KoLineBorder(d->border);
-    KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
-    if( oldBorder )
-    {
-        newBorder->setColor( oldBorder->color() );
-        newBorder->setLineBrush( oldBorder->lineBrush() );
+    KoLineBorder *newBorder = new KoLineBorder(d->border);
+    KoLineBorder *oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
+    if (oldBorder) {
+        newBorder->setColor(oldBorder->color());
+        newBorder->setLineBrush(oldBorder->lineBrush());
     }
 
-    KoShapeBorderCommand *cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
-    canvasController->canvas()->addCommand( cmd );
+    KoShapeBorderCommand *cmd = new KoShapeBorderCommand(selection->selectedShapes(), newBorder);
+    canvasController->canvas()->addCommand(cmd);
 }
 
-void StrokeDocker::slotCapChanged( int ID )
+
+void StrokeDocker::styleChanged()
 {
-    d->border.setCapStyle( static_cast<Qt::PenCapStyle>( ID ) );
+    d->border.setLineStyle( d->mainWidget->lineStyle(), d->mainWidget->lineDashes() );
+    applyChanges();
+}
+
+void StrokeDocker::widthChanged()
+{
+    d->border.setLineWidth( d->mainWidget->lineWidth() );
+    applyChanges();
+}
+
+void StrokeDocker::slotCapChanged(int ID)
+{
+    d->border.setCapStyle(static_cast<Qt::PenCapStyle>(ID));
     applyChanges();
 }
 
@@ -215,101 +140,65 @@ void StrokeDocker::slotJoinChanged( int ID )
     applyChanges();
 }
 
-void StrokeDocker::updateControls()
-{
-    blockChildSignals( true );
-
-    d->capGroup->button( d->border.capStyle() )->setChecked( true );
-    d->joinGroup->button( d->border.joinStyle() )->setChecked( true );
-    d->setLineWidth->changeValue( d->border.lineWidth() );
-    d->miterLimit->changeValue( d->border.miterLimit() );
-    d->lineStyle->setLineStyle( d->border.lineStyle(), d->border.lineDashes() );
-
-    blockChildSignals( false );
-}
-
-void StrokeDocker::widthChanged()
-{
-    d->border.setLineWidth( d->setLineWidth->value() );
-    applyChanges();
-}
-
 void StrokeDocker::miterLimitChanged()
 {
-    d->border.setMiterLimit( d->miterLimit->value() );
+    d->border.setMiterLimit( d->mainWidget->miterLimit() );
     applyChanges();
 }
 
-void StrokeDocker::styleChanged()
-{
-    d->border.setLineStyle( d->lineStyle->lineStyle(), d->lineStyle->lineDashes() );
-    applyChanges();
-}
+// ----------------------------------------------------------------
+
 
 void StrokeDocker::setStroke( const KoShapeBorderModel *border )
 {
     const KoLineBorder *lineBorder = dynamic_cast<const KoLineBorder*>( border );
-    if( lineBorder )
-    {
+    if (lineBorder) {
         d->border.setLineWidth( lineBorder->lineWidth() );
         d->border.setCapStyle( lineBorder->capStyle() );
         d->border.setJoinStyle( lineBorder->joinStyle() );
         d->border.setMiterLimit( lineBorder->miterLimit() );
         d->border.setLineStyle( lineBorder->lineStyle(), lineBorder->lineDashes() );
     }
-    else
-    {
+    else {
         d->border.setLineWidth( 0.0 );
         d->border.setCapStyle( Qt::FlatCap );
         d->border.setJoinStyle( Qt::MiterJoin );
         d->border.setMiterLimit( 0.0 );
         d->border.setLineStyle( Qt::NoPen, QVector<qreal>() );
     }
-    updateControls();
+
+    d->mainWidget->updateControls(d->border);
 }
 
-void StrokeDocker::setUnit( KoUnit unit )
+void StrokeDocker::setUnit(KoUnit unit)
 {
-    // TODO this has to be connect to a unit changed signal
-    blockChildSignals( true );
-    d->setLineWidth->setUnit( unit );
-    d->miterLimit->setUnit( unit );
-    blockChildSignals( false );
+    d->mainWidget->setUnit(unit);
 }
 
-void StrokeDocker::blockChildSignals( bool block )
-{
-    d->setLineWidth->blockSignals( block );
-    d->capGroup->blockSignals( block );
-    d->joinGroup->blockSignals( block );
-    d->miterLimit->blockSignals( block );
-    d->lineStyle->blockSignals( block );
-}
 
 void StrokeDocker::selectionChanged()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     KoShape * shape = selection->firstSelectedShape();
-    if( shape )
-        setStroke( shape->border() );
+    if (shape)
+        setStroke(shape->border());
 }
 
 void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 {
-    if( canvas )
-    {
-        connect( canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), 
-                 this, SLOT( selectionChanged() ) );
-        connect( canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
-                 this, SLOT(resourceChanged(int, const QVariant&)) );
-        setUnit( canvas->unit() );
+    if (canvas) {
+        connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), 
+                this, SLOT(selectionChanged()));
+        connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
+                this, SLOT(resourceChanged(int, const QVariant&)));
+        setUnit(canvas->unit());
     }
 }
 
-void StrokeDocker::resourceChanged(int key, const QVariant & value )
+void StrokeDocker::resourceChanged(int key, const QVariant &value)
 {
-    switch(key) {
+    switch (key) {
     case KoCanvasResource::Unit:
         setUnit(value.value<KoUnit>());
         break;
@@ -318,21 +207,9 @@ void StrokeDocker::resourceChanged(int key, const QVariant & value )
 
 void StrokeDocker::locationChanged(Qt::DockWidgetArea area)
 {
-    switch(area) {
-        case Qt::TopDockWidgetArea:
-        case Qt::BottomDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::MinimumExpanding);
-            break;
-        case Qt::LeftDockWidgetArea:
-        case Qt::RightDockWidgetArea:
-            d->spacer->changeSize(0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            break;
-        default:
-            break;
-    }
-    d->layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    d->layout->invalidate();
+    d->mainWidget->locationChanged(area);
 }
+
 
 #include <StrokeDocker.moc>
 

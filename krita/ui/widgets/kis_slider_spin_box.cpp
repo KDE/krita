@@ -125,12 +125,14 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
 
     //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
     //borders being drawn
+    painter.save();
     painter.setClipping(true);
     QRect eraseRect(QPoint(rect().x(), rect().y()),
                     QPoint(progressRect(spinOpts).right(), rect().bottom()));
     painter.setClipRegion(QRegion(rect()).subtracted(eraseRect));
     style()->drawComplexControl(QStyle::CC_SpinBox, &spinOpts, &painter, d->dummySpinBox);
     painter.setClipping(false);
+    painter.restore();
 
 
     //Create options to draw progress bar parts

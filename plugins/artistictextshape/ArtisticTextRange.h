@@ -101,6 +101,18 @@ public:
     /// Returns the character rotation for the specified character
     qreal rotation(int charIndex) const;
 
+    /// Sets additional spacing between characters
+    void setLetterSpacing(qreal letterSpacing);
+
+    /// Returns the letter spacing
+    qreal letterSpacing() const;
+
+    /// Sets additional spacing between words
+    void setWordSpacing(qreal wordSpacing);
+
+    /// Returns the word spacing
+    qreal wordSpacing() const;
+
     /// Prints debug output
     void printDebug() const;
 
@@ -112,6 +124,8 @@ private:
     OffsetType m_xOffsetType; ///< character x-offset type
     OffsetType m_yOffsetType; ///< character y-offset type
     QList<qreal> m_rotations; ///< character rotations
+    qreal m_letterSpacing; ///< additional inter character spacing
+    qreal m_wordSpacing; ///< additional inter word spacing
 };
 
 #endif // ARTISITICTEXTRANGE_H

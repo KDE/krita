@@ -22,9 +22,8 @@
 #include <KDebug>
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
-    : m_text(text), m_font(font)
+    : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)
 {
-
 }
 
 ArtisticTextRange::~ArtisticTextRange()
@@ -154,6 +153,26 @@ bool ArtisticTextRange::hasRotation(int charIndex) const
 qreal ArtisticTextRange::rotation(int charIndex) const
 {
     return m_rotations.value(charIndex);
+}
+
+void ArtisticTextRange::setLetterSpacing(qreal letterSpacing)
+{
+    m_letterSpacing = letterSpacing;
+}
+
+qreal ArtisticTextRange::letterSpacing() const
+{
+    return m_letterSpacing;
+}
+
+void ArtisticTextRange::setWordSpacing(qreal wordSpacing)
+{
+    m_wordSpacing = wordSpacing;
+}
+
+qreal ArtisticTextRange::wordSpacing() const
+{
+    return m_wordSpacing;
 }
 
 void ArtisticTextRange::printDebug() const

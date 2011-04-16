@@ -159,6 +159,8 @@ void ArtisticTextShape::createOutline()
             const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
             const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
 
+            const qreal letterSpacing = range.letterSpacing();
+
             for (int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 // apply offset to character
                 if (range.hasXOffset(localCharIndex)) {
@@ -204,7 +206,7 @@ void ArtisticTextShape::createOutline()
                 m_charPositions[globalCharIndex] = pathPoint;
 
                 // add the advance of the current character to the character position
-                offset = QPointF(currentCharWidth, 0.0);
+                offset = QPointF(currentCharWidth+letterSpacing, 0.0);
 
                 if (t <= 0.0) {
                     // if this is not the first character but our position is still
@@ -244,6 +246,8 @@ void ArtisticTextShape::createOutline()
             const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
             const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
 
+            const qreal letterSpacing = range.letterSpacing();
+
             const int localTextLength = textRange.length();
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 // apply offset to character
@@ -273,7 +277,7 @@ void ArtisticTextShape::createOutline()
                 // save character positon of current character
                 m_charPositions[globalCharIndex] = charPos;
                 // advance character position
-                offset = QPointF(metrics.width(textRange[localCharIndex]), 0.0);
+                offset = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);
             }
         }
         m_charPositions[globalCharIndex] = charPos + offset;

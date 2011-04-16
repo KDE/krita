@@ -57,10 +57,22 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
         rootArea->associatedShape()->setSize(QSize(
                         rootArea->associatedShape()->size().width(),
                         qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
-    } else {
-        rootArea->setBottom(rootArea->top()
-                + rootArea->associatedShape()->size().height());
     }
+
+    qreal newBottom = rootArea->top() + rootArea->associatedShape()->size().height();
+
+    if (m_textShapeData->verticalAlignment() & Qt::AlignBottom) {
+        if (true /*FIXME test no page based shapes interfering*/) {
+            rootArea->setVerticalAlignOffset(newBottom - rootArea->bottom());
+        }
+    }
+    if (m_textShapeData->verticalAlignment() & Qt::AlignVCenter) {
+        if (true /*FIXME test no page based shapes interfering*/) {
+            rootArea->setVerticalAlignOffset((newBottom - rootArea->bottom()) / 2);
+        }
+    }
+    rootArea->setBottom(newBottom);
+
     rootArea->associatedShape()->update();
 }
 

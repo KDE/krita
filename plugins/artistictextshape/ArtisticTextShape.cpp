@@ -149,6 +149,7 @@ void ArtisticTextShape::createOutline()
 
         QPointF pathPoint;
         QPointF offset;
+        qreal rotation = 0.0;
 
         foreach (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
@@ -219,10 +220,12 @@ void ArtisticTextShape::createOutline()
 
                 // get the angle at the given path position
                 const qreal angle = m_baseline.angleAtPercent( t );
+                if (range.hasRotation(localCharIndex))
+                    rotation = range.rotation(localCharIndex);
 
                 QTransform m;
                 m.translate( pathPoint.x(), pathPoint.y() );
-                m.rotate( 360. - angle );
+                m.rotate( 360. - angle + rotation);
                 m.translate(0.0, charOffset.y());
                 m_outline.addPath( m.map( m_charOutlines[globalCharIndex] ) );
             }

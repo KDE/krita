@@ -123,7 +123,7 @@ void KisAbstractSliderSpinBox::paintEvent(QPaintEvent* e)
     //Create options to draw spin box parts
     QStyleOptionSpinBox spinOpts = spinBoxOptions();
 
-    //Draw "SpinBox".Clip off the area of the lineEdit to avoid qreal
+    //Draw "SpinBox".Clip off the area of the lineEdit to avoid double
     //borders being drawn
     painter.setClipping(true);
     QRect eraseRect(QPoint(rect().x(), rect().y()),

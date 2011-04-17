@@ -21,6 +21,7 @@
 #include "ShrinkToFitShapeContainer.h"
 
 #include <KoShapeSavingContext.h>
+#include <KoTextLayoutRootArea.h>
 
 ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoResourceManager *documentResources)
     : KoShapeContainer(*(new ShrinkToFitShapeContainerPrivate(this, childShape)))
@@ -121,18 +122,18 @@ void ShrinkToFitShapeContainer::unwrapShape(KoShape *shape)
 ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeContainer *q, ShrinkToFitShapeContainerPrivate *d)
     : q(q)
     , d(d)
-    , m_scaleX(1.0)
-    , m_scaleY(1.0)
-    , m_dirty(10)
-    , m_maybeUpdate(false)
+    , m_scale(1.0)
+    , m_dueToLayout(false)
+    , m_changeCount(0)
 {
 }
 
 void ShrinkToFitShapeContainerModel::finishedLayout()
 {
-    m_maybeUpdate = true;
+    qDebug()<<"container got a finishedlayout";
+    m_dueToLayout = true;
     containerChanged(q, KoShape::SizeChanged);
-    m_maybeUpdate = false;
+    m_dueToLayout = false;
 }
 
 void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
@@ -141,50 +142,36 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
     if (type == KoShape::SizeChanged) {
         KoTextShapeData* data = dynamic_cast<KoTextShapeData*>(d->childShape->userData());
         Q_ASSERT(data);
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
-        Q_ASSERT(lay);
+        KoTextLayoutRootArea *rootArea = data->rootArea();
+        Q_ASSERT(rootArea);
 
         QSizeF shapeSize = q->size();
-        QSizeF documentSize = lay->documentSize();
+        QSizeF documentSize = rootArea->boundingRect().size();
 
-        if (m_maybeUpdate && shapeSize == m_shapeSize && documentSize == m_documentSize) {
-            m_dirty = 0;
+        if (shapeSize == m_shapeSize && documentSize == m_documentSize) {
+            m_changeCount = 0;
             return; // nothing to update
         }
 
         m_shapeSize = shapeSize;
         m_documentSize = documentSize;
 
-        if (documentSize.width() > 0.0 && documentSize.height() > 0.0) {
-            if (m_dirty || !m_maybeUpdate) {
-                m_scaleX = qMin<qreal>(1.0, shapeSize.width() / documentSize.width());
-                m_scaleY = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
-                m_scaleX = m_scaleY = (m_scaleX+m_scaleY)/2.0 * 0.95;
-
-                //FIXME WARNING TODO HACK: m_dirty is an int that starts with 10 cause we need to get the initial init done
-                //but the textshape doesn't provide us a nice way to do so. So, what we got are a bunch of finishedLayout
-                //calls and one of them (usually the last one in a row of such calls) is the correct one where the
-                //layouting was REALLY done and not pseudo-done. We are interested in exactly that first initial call what
-                //is the reason we are just handling all of the first 10 finishedLayout calls cause in all tested cases
-                //we always got the expected final finishedLayout call during the first 10 of such calls.
-                //The correct way would be to fix the textshape to not fire up a bunch of finishedLayout calls but to only
-                //do so once everything is done.
-                //Another problem this is working around is that calling d->childShape->setSize can in fact result in
-                //another delayed finishedLayout call even if nothing changed (neither the size not the content nor...). In
-                //some cases this was then leading to an infinite loop which was not 100% reprodcuable. So, by introducing
-                //such a counter we try to guard us from that too.
-                if (m_maybeUpdate && m_dirty)
-                    --m_dirty;
-            }
-        } else { // seems layouting wasn't done yet or there is nothing we can shrink
-            m_scaleX = m_scaleY = 1.0;
-            m_dirty = 1; // nothing to do yet means that we still need to do something later if e.g. layouting was done
+        if (m_dueToLayout && m_changeCount>0 && documentSize.height()*m_scale <= shapeSize.height()) {
+            m_changeCount = 0;
+            return;
         }
 
-        d->childShape->setSize(QSizeF(shapeSize.width() / m_scaleX, shapeSize.height() / m_scaleY));
+        m_scale = 1.0;
+        if ( documentSize.height() > 0.0) {
+            m_scale = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
+        }
+
+        m_changeCount++;
+
+        d->childShape->setSize(QSizeF(shapeSize.width() / m_scale, shapeSize.height() / m_scale));
 
         QTransform m;
-        m.scale(m_scaleX, m_scaleY);
+        m.scale(m_scale, m_scale);
         d->childShape->setTransformation(m);
     }
 }

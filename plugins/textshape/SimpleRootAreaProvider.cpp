@@ -71,7 +71,10 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
             rootArea->setVerticalAlignOffset((newBottom - rootArea->bottom()) / 2);
         }
     }
-    rootArea->setBottom(newBottom);
+
+    if (m_textShapeData->resizeMethod() != KoTextShapeData::ShrinkToFitResize) {
+        rootArea->setBottom(newBottom);
+    }
 
     rootArea->associatedShape()->update();
 }
@@ -79,7 +82,8 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::ShrinkToFitResize) {
         QSizeF size = m_textShape->size();
         size.setHeight(1E6);
         return size;

@@ -300,7 +300,7 @@ void TextShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &co
     const QString autoGrowHeight = styleStack.property(KoXmlNS::draw, "auto-grow-height");
     const QString fitToSize = styleStack.property(KoXmlNS::draw, "fit-to-size");
     KoTextShapeData::ResizeMethod resize = KoTextShapeData::NoResize;
-    if (fitToSize == "true") {
+    if (fitToSize == "true" || fitToSize == "shrink-to-fit") { // second is buggy value from impress
         resize = KoTextShapeData::ShrinkToFitResize;
     }
     else if (autoGrowWidth == "true") {

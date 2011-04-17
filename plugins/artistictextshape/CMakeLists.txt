@@ -16,6 +16,8 @@ SET ( ArtisticTextShape_SRCS
     ChangeTextOffsetCommand.cpp
     ChangeTextFontCommand.cpp
     ChangeTextAnchorCommand.cpp
+    AddTextRangeCommand.cpp
+    RemoveTextRangeCommand.cpp
     MoveStartOffsetStrategy.cpp
 )
 

@@ -21,6 +21,8 @@
 #include "ArtisticTextTool.h"
 #include "AttachTextToPathCommand.h"
 #include "DetachTextFromPathCommand.h"
+#include "AddTextRangeCommand.h"
+#include "RemoveTextRangeCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
 #include "MoveStartOffsetStrategy.h"
 
@@ -45,103 +47,10 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPainterPath>
 #include <QtGui/QUndoCommand>
-#include <QtCore/QPointer>
 
 #include <float.h>
 
 const int BlinkInterval = 500;
-
-class AddTextRangeCommand : public QUndoCommand
-{
-public:
-    AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
-    : m_tool(tool), m_shape(shape), m_text(text), m_from(from)
-    {
-        setText( i18n("Add text range") );
-    }
-
-    virtual void redo()
-    {
-        QUndoCommand::redo();
-
-        if ( !m_shape )
-            return;
-
-        m_shape->insertText(m_from, m_text);
-
-        if (m_tool) {
-            m_tool->setTextCursor(m_shape, m_from + m_text.length());
-        }
-    }
-
-    virtual void undo()
-    {
-        QUndoCommand::undo();
-
-        if ( ! m_shape )
-            return;
-
-        if (m_tool) {
-            m_tool->setTextCursor(m_shape, m_from);
-        }
-
-        m_shape->removeText(m_from, m_text.length());
-    }
-
-private:
-    QPointer<ArtisticTextTool> m_tool;
-    ArtisticTextShape *m_shape;
-    QString m_text;
-    int m_from;
-};
-
-class RemoveTextRangeCommand : public QUndoCommand
-{
-public:
-    RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count)
-    : m_tool(tool), m_shape(shape), m_from(from), m_count(count)
-    {
-        m_cursor = tool->textCursor();
-        setText( i18n("Remove text range") );
-    }
-
-    virtual void redo()
-    {
-        QUndoCommand::redo();
-
-        if (!m_shape)
-            return;
-
-        if (m_tool) {
-            if(m_cursor > m_from)
-                m_tool->setTextCursor(m_shape, m_from);
-        }
-        m_text = m_shape->removeText(m_from, m_count);
-    }
-
-    virtual void undo()
-    {
-        QUndoCommand::undo();
-
-        if ( !m_shape )
-            return;
-
-        m_shape->insertText( m_from, m_text );
-
-        if (m_tool) {
-            m_tool->setTextCursor(m_shape, m_cursor);
-        }
-    }
-
-private:
-    QPointer<ArtisticTextTool> m_tool;
-    ArtisticTextShape *m_shape;
-    int m_from;
-    int m_count;
-    QList<ArtisticTextRange> m_text;
-    int m_cursor;
-};
-
 
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)

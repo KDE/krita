@@ -58,10 +58,14 @@ public:
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
 
+    /// Sets cursor for specified text shape it is the current text shape
+    void setTextCursor(ArtisticTextShape *textShape, int textCursor);
+
+    /// Returns the current text cursor position
+    int textCursor() const;
+
 protected:
     void enableTextCursor( bool enable );
-    int textCursor() const { return m_textCursor; }
-    void setTextCursor( int textCursor );
     void removeFromTextCursor( int from, unsigned int count );
     void addToTextCursor( const QString &str );
 
@@ -74,10 +78,6 @@ private slots:
 
 signals:
     void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
-
-private:
-    class AddTextRangeCommand;
-    class RemoveTextRangeCommand;
 
 private:
     void updateActions();

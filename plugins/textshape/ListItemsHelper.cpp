@@ -182,11 +182,11 @@ QList<ListStyleItem> Lists::genericListStyleItems()
     answer.append(ListStyleItem(i18n("Upper Alphabetical"), KoListStyle::UpperAlphaItem));
     answer.append(ListStyleItem(i18n("Lower Roman"), KoListStyle::RomanLowerItem));
     answer.append(ListStyleItem(i18n("Upper Roman"), KoListStyle::UpperRomanItem));
-    answer.append(ListStyleItem(i18n("Disc Bullet"), KoListStyle::DiscItem));
-    answer.append(ListStyleItem(i18n("Square Bullet"), KoListStyle::SquareItem));
-    answer.append(ListStyleItem(i18n("Box Bullet"), KoListStyle::BoxItem));
-    answer.append(ListStyleItem(i18n("Rhombus Bullet"), KoListStyle::RhombusItem));
+    answer.append(ListStyleItem(i18n("Small Bullet"), KoListStyle::Bullet));
+    answer.append(ListStyleItem(i18n("Large Bullet"), KoListStyle::BlackCircle));
     answer.append(ListStyleItem(i18n("Circle Bullet"), KoListStyle::CircleItem));
+    answer.append(ListStyleItem(i18n("Square Bullet"), KoListStyle::SquareItem));
+    answer.append(ListStyleItem(i18n("Rhombus Bullet"), KoListStyle::RhombusItem));
     answer.append(ListStyleItem(i18n("Check Mark Bullet"), KoListStyle::HeavyCheckMarkItem));
     answer.append(ListStyleItem(i18n("Ballot X Bullet"), KoListStyle::BallotXItem));
     answer.append(ListStyleItem(i18n("Rightwards Arrow Bullet"), KoListStyle::RightArrowItem));
@@ -399,7 +399,8 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         partialCounterText = intToRoman(index).toUpper();
         break;
     case KoListStyle::SquareItem:
-    case KoListStyle::DiscItem:
+    case KoListStyle::Bullet:
+    case KoListStyle::BlackCircle:
     case KoListStyle::CircleItem:
     case KoListStyle::HeavyCheckMarkItem:
     case KoListStyle::BallotXItem:
@@ -408,9 +409,10 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     case KoListStyle::RhombusItem:
     case KoListStyle::BoxItem: {
         calcWidth = false;
-        item = ' ';
-        width = m_displayFont.pointSizeF();
-        int percent = format.intProperty(KoListStyle::BulletSize);
+        if (format.intProperty(KoListStyle::BulletCharacter))
+            item = QString(QChar(format.intProperty(KoListStyle::BulletCharacter)));
+        width = m_fm.width(item);
+        int percent = format.intProperty(KoListStyle::RelativeBulletSize);
         if (percent > 0)
             width = width * (percent / 100.0);
         break;
@@ -459,7 +461,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
     data->setCounterText(prefix + item + suffix);
     index++;
 
-    width += m_fm.width(prefix + suffix); // same for all
+    int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);
+    if (widthPercent > 0)
+        width +=(m_fm.width(prefix + suffix)*widthPercent)/100.0;
+    else
+        width +=m_fm.width(prefix + suffix);
+
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
         counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));

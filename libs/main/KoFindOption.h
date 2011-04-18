@@ -23,6 +23,7 @@
 
 #include "komain_export.h"
 #include <QtCore/QObject>
+#include <QtCore/QVariant>
 #include <QtCore/QSharedDataPointer>
 
 /**

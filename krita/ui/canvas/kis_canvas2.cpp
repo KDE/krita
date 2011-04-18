@@ -34,9 +34,9 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoDocument.h>
+#include <KoToolProxy.h>
 #include <KoSelection.h>
 
-#include "kis_tool_proxy.h"
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
@@ -78,7 +78,7 @@ public:
         , monitorProfile(0)
         , currentCanvasIsOpenGL(false)
         , currentCanvasUsesOpenGLShaders(false)
-        , toolProxy(new KisToolProxy(parent))
+        , toolProxy(new KoToolProxy(parent))
         , favoriteResourceManager(0)
         , vastScrolling(true) {
     }

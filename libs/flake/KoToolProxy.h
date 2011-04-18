@@ -61,7 +61,7 @@ public:
      * @param parent a parent QObject for memory management purposes.
      */
     explicit KoToolProxy(KoCanvasBase *canvas, QObject *parent = 0);
-    virtual ~KoToolProxy();
+    ~KoToolProxy();
 
     /// Forwarded to the current KoToolBase
     void paint(QPainter &painter, const KoViewConverter &converter);
@@ -139,10 +139,6 @@ signals:
      * @see KoToolBase::toolId()
      */
     void toolChanged(const QString &toolId);
-
-protected:
-    virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
-    KoCanvasBase* canvas() const;
 
 private:
     Q_PRIVATE_SLOT(d, void timeout())

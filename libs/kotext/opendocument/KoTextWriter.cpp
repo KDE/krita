@@ -381,6 +381,14 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     int changeId = 0, returnChangeId = 0;
 
     if (!changeTracker) {
+        if (tagInformation.name()) {
+            writer->startElement(tagInformation.name());
+            QPair<QString, QString> attribute;
+            foreach (attribute, tagInformation.attributes()) {
+                writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
+            }
+            openedTagStack.push(tagInformation.name());
+        }
         return changeId;
     }
 
@@ -1019,7 +1027,10 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addTextSpan(text);
                 }
 
-                closeTagRegion(changeId);
+                if (changeTracker)
+                    closeTagRegion(changeId);
+                else if (fragmentTagInformation.name())
+                    writer->endElement();
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
@@ -1033,36 +1044,40 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
-        QTextBlock nextBlock = block.next();
-        if (nextBlock.isValid() && deleteMergeRegionOpened) {
-            QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
-            int changeId = nextBlockFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-            if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
-                QTextFragment lastFragment = (--block.end()).fragment();
-                QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
-                int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
-                if (changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
-                    lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
+    if (changeTracker) {
+        if (changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
+            QTextBlock nextBlock = block.next();
+            if (nextBlock.isValid() && deleteMergeRegionOpened) {
+                QTextBlockFormat nextBlockFormat = nextBlock.blockFormat();
+                int changeId = nextBlockFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+                if (changeId && changeTracker->elementById(changeId)->getChangeType() == KoGenChange::DeleteChange) {
+                    QTextFragment lastFragment = (--block.end()).fragment();
+                    QTextCharFormat lastFragmentFormat = lastFragment.charFormat();
+                    int lastFragmentChangeId = lastFragmentFormat.intProperty(KoCharacterStyle::ChangeTrackerId);
+                    if (changeTracker->isDuplicateChangeId(lastFragmentChangeId)) {
+                        lastFragmentChangeId = changeTracker->originalChangeId(lastFragmentChangeId);
+                    }
+                    if (lastFragmentChangeId != changeId) {
+                        QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
+                        writer->addCompleteElement(outputXml.toUtf8());
+                    }
                 }
-                if (lastFragmentChangeId != changeId) {
-                    QString outputXml("<delta:removed-content delta:removal-change-idref=\"" + changeTransTable.value(changeId) + "\"/>");
-                    writer->addCompleteElement(outputXml.toUtf8());
-                }
+            }
+        }
+        if (changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
+            while (int change = changeStack.top()) {
+                writer->startElement("text:change-end", false);
+                writer->addAttribute("text:change-id", changeTransTable.value(change));
+                writer->endElement();
+                changeStack.pop();
             }
         }
     }
 
-    if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::ODF_1_2) {
-        while (int change = changeStack.top()) {
-            writer->startElement("text:change-end", false);
-            writer->addAttribute("text:change-id", changeTransTable.value(change));
-            writer->endElement();
-            changeStack.pop();
-        }
-    }
-
-    closeTagRegion(changeId);
+    if (changeTracker)
+        closeTagRegion(changeId);
+    else if (blockTagInformation.name())
+        writer->endElement();
 }
 
 //Check if the whole Block is a part of a single change

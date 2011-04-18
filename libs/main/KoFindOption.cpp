@@ -20,8 +20,6 @@
 
 #include "KoFindOption.h"
 
-#include <QtCore/QVariant>
-
 class KoFindOption::Private
 {
 public:

@@ -58,6 +58,12 @@ class KOTEXT_EXPORT KoTableCellStyle : public KoTableBorderStyle
 {
     Q_OBJECT
 public:
+    enum Property {
+        StyleId = QTextTableFormat::UserProperty + 1,
+        ShrinkToFit,        ///< Shrink the cell content to fit the size
+        
+    };
+    
     /// Constructor
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
@@ -106,6 +112,9 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    bool shrinkToFit() const;
+    void setShrinkToFit(bool state);
 
     void setLeftPadding(qreal padding);
     void setTopPadding(qreal padding);

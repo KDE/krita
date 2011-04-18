@@ -204,6 +204,16 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
+bool KoTableCellStyle::shrinkToFit() const
+{
+    return propertyBoolean(ShrinkToFit);
+}
+
+void KoTableCellStyle::setShrinkToFit(bool state)
+{
+    setProperty(ShrinkToFit, state);
+}
+
 void KoTableCellStyle::setProperty(int key, const QVariant &value)
 {
     Q_D(KoTableCellStyle);
@@ -333,7 +343,7 @@ QBrush KoTableCellStyle::background() const
 
 void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 {
-    setProperty(QTextFormat::BlockAlignment, (int) alignment);
+    setProperty(VerticalAlignment, (int) alignment);
 }
 
 Qt::Alignment KoTableCellStyle::alignment() const
@@ -532,7 +542,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
-           clearBackground();
+            setBackground(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -541,6 +551,10 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {
+        setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
+    }
+    
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
@@ -603,6 +617,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::TableCellType);
         } else if (key == QTextFormat::TableCellBottomPadding) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::TableCellType);
+        } else if (key == ShrinkToFit) {
+            style.addProperty("style:shrink-to-fit", shrinkToFit(), KoGenStyle::TableCellType);
         }
     }
 /*

@@ -170,11 +170,9 @@ void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 
 void KoUnavailShape::draw(QPainter &painter) const
 {
-#if 0
-    // Draw a frame and a cross.
-    drawNull(painter);
-#else
-    // Draw a nice question mark.
+    // Draw a nice question mark with a frame around it.
+
+    painter.save();
 
     // Get the question mark "icon".
     QPixmap questionMark;
@@ -194,7 +192,12 @@ void KoUnavailShape::draw(QPainter &painter) const
 
     painter.drawPixmap((width - picSize) / qreal(2.0), (height - picSize) / qreal(2.0),
                        picSize, picSize, questionMark);
-#endif
+
+    painter.restore();
+
+    // Draw a gray rectangle around the shape.
+    painter.setPen(QPen(QColor(172, 196, 206)));
+    painter.drawRect(QRectF(QPointF(0,0), size()));
 }
 
 void KoUnavailShape::drawNull(QPainter &painter) const

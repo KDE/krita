@@ -18,6 +18,7 @@
 */
 
 #include "TestOpenDocumentStyle.h"
+#include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
@@ -380,7 +381,7 @@ void TestOpenDocumentStyle::testTableCellStyle()
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
     
-    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
+    QVERIFY(basicTestFunction<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

@@ -45,60 +45,61 @@ struct AddGeneralOps
 template<class Traits>
 struct AddGeneralOps<Traits, true>
 {
-    typedef typename Traits::channels_type Arg;
-    static const qint32 alpha_pos = Traits::alpha_pos;
-    
-    template<Arg compositeFunc(Arg, Arg)>
-    static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
-        cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, compositeFunc>(cs, id, description, category, userVisible));
-    }
-    
-    static void add(KoColorSpace* cs) {
-        cs->addCompositeOp(new KoCompositeOpOver<Traits>(cs));
-        cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
-        cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
-        cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
-        
-        add<&cfOverlay>      (cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());
-        add<&cfGrainMerge>   (cs, COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")   , KoCompositeOp::categoryMix());
-        add<&cfGrainExtract> (cs, COMPOSITE_GRAIN_EXTRACT , i18n("Grain Extract") , KoCompositeOp::categoryMix());
-        add<&cfHardMix>      (cs, COMPOSITE_HARD_MIX      , i18n("Hard Mix")      , KoCompositeOp::categoryMix());
-        add<&cfGeometricMean>(cs, COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"), KoCompositeOp::categoryMix());
-        add<&cfParallel>     (cs, COMPOSITE_PARALLEL      , i18n("Parallel")      , KoCompositeOp::categoryMix());
-        add<&cfAllanon>      (cs, COMPOSITE_ALLANON       , i18n("Allanon")       , KoCompositeOp::categoryMix());
-        
-        add<&cfScreen>     (cs, COMPOSITE_SCREEN      , i18n("Screen")      , KoCompositeOp::categoryLight());
-        add<&cfColorDodge> (cs, COMPOSITE_DODGE       , i18n("Color Dodge") , KoCompositeOp::categoryLight());
-        add<&cfAddition>   (cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight());
-        add<&cfLightenOnly>(cs, COMPOSITE_LIGHTEN     , i18n("Lighten")     , KoCompositeOp::categoryLight());
-        add<&cfHardLight>  (cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light")  , KoCompositeOp::categoryLight());
-        add<&cfSoftLight>  (cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")  , KoCompositeOp::categoryLight());
-        add<&cfGammaLight> (cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light") , KoCompositeOp::categoryLight());
-        add<&cfVividLight> (cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light") , KoCompositeOp::categoryLight());
-        add<&cfPinLight>   (cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light")   , KoCompositeOp::categoryLight());
-        add<&cfLinearLight>(cs, COMPOSITE_LINEAR_LIGHT, i18n("Linear Light"), KoCompositeOp::categoryLight());
-        
-        add<&cfColorBurn> (cs, COMPOSITE_BURN        , i18n("Color Burn") , KoCompositeOp::categoryDark());
-        add<&cfLinearBurn>(cs, COMPOSITE_LINEAR_BURN , i18n("Linear Burn"), KoCompositeOp::categoryDark());
-        add<&cfDarkenOnly>(cs, COMPOSITE_DARKEN      , i18n("Darken")     , KoCompositeOp::categoryDark());
-        add<&cfGammaDark> (cs, COMPOSITE_GAMMA_DARK  , i18n("Gamma Dark") , KoCompositeOp::categoryDark());
-        
-        add<&cfAddition>  (cs, COMPOSITE_ADD      , i18n("Addition")  , KoCompositeOp::categoryArithmetic());
-        add<&cfSubtract>  (cs, COMPOSITE_SUBTRACT , i18n("Subtract")  , KoCompositeOp::categoryArithmetic());
-        add<&cfMultiply>  (cs, COMPOSITE_MULT     , i18n("Multiply")  , KoCompositeOp::categoryArithmetic());
-        add<&cfDivide>    (cs, COMPOSITE_DIVIDE   , i18n("Divide")    , KoCompositeOp::categoryArithmetic());
-        
-        add<&cfArcTangent>          (cs, COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")        , KoCompositeOp::categoryNegative());
-        add<&cfDifference>          (cs, COMPOSITE_DIFF                 , i18n("Difference")           , KoCompositeOp::categoryNegative());
-        add<&cfExclusion>           (cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
-        add<&cfEquivalence>         (cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
-        add<&cfAdditiveSubstractive>(cs, COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive-Substractive"), KoCompositeOp::categoryNegative());
-        
-        cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
-        
-        if(alpha_pos != -1)
-            cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,alpha_pos>(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Alpha") , KoCompositeOp::categoryMisc()));
-    }
+     typedef typename Traits::channels_type Arg;
+     typedef Arg (*CompositeFunc)(Arg, Arg);
+     static const qint32 alpha_pos = Traits::alpha_pos;
+
+     template<CompositeFunc func>
+     static void add(KoColorSpace* cs, const QString& id, const QString& description, const QString& category, bool userVisible=true) {
+         cs->addCompositeOp(new KoCompositeOpGenericSC<Traits, func>(cs, id, description, category, userVisible));
+     }
+
+     static void add(KoColorSpace* cs) {
+         cs->addCompositeOp(new KoCompositeOpOver<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpAlphaDarken<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpCopy2<Traits>(cs));
+         cs->addCompositeOp(new KoCompositeOpErase<Traits>(cs));
+
+         add<&cfOverlay<Arg> >(cs, COMPOSITE_OVERLAY       , i18n("Overlay")       , KoCompositeOp::categoryMix());
+         add<&cfGrainMerge<Arg> >(cs, COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")   , KoCompositeOp::categoryMix());
+         add<&cfGrainExtract<Arg> >(cs, COMPOSITE_GRAIN_EXTRACT , i18n("Grain Extract") , KoCompositeOp::categoryMix());
+         add<&cfHardMix<Arg> >(cs, COMPOSITE_HARD_MIX      , i18n("Hard Mix")      , KoCompositeOp::categoryMix());
+         add<&cfGeometricMean<Arg> >(cs, COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"), KoCompositeOp::categoryMix());
+         add<&cfParallel<Arg> >(cs, COMPOSITE_PARALLEL      , i18n("Parallel")      , KoCompositeOp::categoryMix());
+         add<&cfAllanon<Arg> >(cs, COMPOSITE_ALLANON       , i18n("Allanon")       , KoCompositeOp::categoryMix());
+
+         add<&cfScreen<Arg> >(cs, COMPOSITE_SCREEN      , i18n("Screen")      , KoCompositeOp::categoryLight());
+         add<&cfColorDodge<Arg> >(cs, COMPOSITE_DODGE       , i18n("Color Dodge") , KoCompositeOp::categoryLight());
+         add<&cfAddition<Arg> >(cs, COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"), KoCompositeOp::categoryLight());
+         add<&cfLightenOnly<Arg> >(cs, COMPOSITE_LIGHTEN     , i18n("Lighten")     , KoCompositeOp::categoryLight());
+         add<&cfHardLight<Arg> >(cs, COMPOSITE_HARD_LIGHT  , i18n("Hard Light")  , KoCompositeOp::categoryLight());
+         add<&cfSoftLight<Arg> >(cs, COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")  , KoCompositeOp::categoryLight());
+         add<&cfGammaLight<Arg> >(cs, COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light") , KoCompositeOp::categoryLight());
+         add<&cfVividLight<Arg> >(cs, COMPOSITE_VIVID_LIGHT , i18n("Vivid Light") , KoCompositeOp::categoryLight());
+         add<&cfPinLight<Arg> >(cs, COMPOSITE_PIN_LIGHT   , i18n("Pin Light")   , KoCompositeOp::categoryLight());
+         add<&cfLinearLight<Arg> >(cs, COMPOSITE_LINEAR_LIGHT, i18n("Linear Light"), KoCompositeOp::categoryLight());
+
+         add<&cfColorBurn<Arg> >(cs, COMPOSITE_BURN        , i18n("Color Burn") , KoCompositeOp::categoryDark());
+         add<&cfLinearBurn<Arg> >(cs, COMPOSITE_LINEAR_BURN , i18n("Linear Burn"), KoCompositeOp::categoryDark());
+         add<&cfDarkenOnly<Arg> >(cs, COMPOSITE_DARKEN      , i18n("Darken")     , KoCompositeOp::categoryDark());
+         add<&cfGammaDark<Arg> >(cs, COMPOSITE_GAMMA_DARK  , i18n("Gamma Dark") , KoCompositeOp::categoryDark());
+
+         add<&cfAddition<Arg> >(cs, COMPOSITE_ADD     , i18n("Addition"), KoCompositeOp::categoryArithmetic());
+         add<&cfSubtract<Arg> >(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic());
+         add<&cfMultiply<Arg> >(cs, COMPOSITE_MULT    , i18n("Multiply"), KoCompositeOp::categoryArithmetic());
+         add<&cfDivide<Arg> >(cs, COMPOSITE_DIVIDE  , i18n("Divide")  , KoCompositeOp::categoryArithmetic());
+
+         add<&cfArcTangent<Arg> >(cs, COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")        , KoCompositeOp::categoryNegative());
+         add<&cfDifference<Arg> >(cs, COMPOSITE_DIFF                 , i18n("Difference")           , KoCompositeOp::categoryNegative());
+         add<&cfExclusion<Arg> >(cs, COMPOSITE_EXCLUSION            , i18n("Exclusion")            , KoCompositeOp::categoryNegative());
+         add<&cfEquivalence<Arg> >(cs, COMPOSITE_EQUIVALENCE          , i18n("Equivalence")          , KoCompositeOp::categoryNegative());
+         add<&cfAdditiveSubstractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive-Substractive"), KoCompositeOp::categoryNegative());
+
+         cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
+
+         if(alpha_pos != -1)
+             cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,alpha_pos>(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Alpha") , KoCompositeOp::categoryMisc()));
+     }
 };
 
 template<class Traits, bool flag>

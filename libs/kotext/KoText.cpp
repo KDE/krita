@@ -107,7 +107,7 @@ Qt::Alignment KoText::valignmentFromString(const QString &align)
     Qt::Alignment alignment = Qt::AlignTop;
     if (align == "top")
         alignment = Qt::AlignTop;
-    else if (align == "center")
+    else if (align == "middle")
         alignment = Qt::AlignVCenter;
     else if (align == "bottom")
         alignment = Qt::AlignBottom;
@@ -120,7 +120,7 @@ QString KoText::valignmentToString(Qt::Alignment alignment)
     if (alignment == (Qt::AlignTop))
         align = "top";
     else if (alignment == Qt::AlignVCenter)
-        align = "center";
+        align = "middle";
     else if (alignment == Qt::AlignBottom)
         align = "bottom";
     return align;

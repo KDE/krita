@@ -168,6 +168,11 @@ void SimpleParagraphWidget::fillListButtons()
             }
             listStyle.setLevelProperties(llp);
             cursor.select(QTextCursor::Document);
+            QTextCharFormat textCharFormat=cursor.blockCharFormat();
+            textCharFormat.setFontPointSize(11);
+            textCharFormat.setFontWeight(QFont::Normal);
+            cursor.setCharFormat(textCharFormat);
+
             cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
             cursor.insertText("\n----");

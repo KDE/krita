@@ -36,8 +36,9 @@ class KoImageData;
 /**
  * Properties per list level.
  */
-class KOTEXT_EXPORT KoListLevelProperties
+class KOTEXT_EXPORT KoListLevelProperties : public QObject
 {
+    Q_OBJECT
 public:
     /// Constructor
     explicit KoListLevelProperties();
@@ -165,6 +166,12 @@ public:
      * Save the properties of the style using the OpenDocument format
      */
     void saveOdf(KoXmlWriter *writer) const;
+
+public slots:
+    void onStyleChanged(int key);
+
+signals:
+    void styleChanged(int key);
 
 private:
     void setProperty(int key, const QVariant &value);

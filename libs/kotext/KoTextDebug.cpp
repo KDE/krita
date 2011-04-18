@@ -543,7 +543,7 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "alignment";
             value = QString::number(properties[id].toInt());
             break;
-        case KoListStyle::BulletSize:
+        case KoListStyle::RelativeBulletSize:
             key = "bullet-size";
             value = QString::number(properties[id].toInt());
             break;

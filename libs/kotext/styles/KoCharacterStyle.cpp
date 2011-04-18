@@ -1000,6 +1000,16 @@ int KoCharacterStyle::textScale() const
     return d->propertyInt(TextScale);
 }
 
+void KoCharacterStyle::setPercentageFontSize(qreal percent)
+{
+    d->setProperty(KoCharacterStyle::PercentageFontSize,percent);
+}
+
+qreal KoCharacterStyle::percentageFontSize()
+{
+    return d->propertyDouble(KoCharacterStyle::PercentageFontSize);
+}
+
 //in 1.6 this was defined in KoTextFormat::load(KoOasisContext &context)
 void KoCharacterStyle::loadOdf(KoShapeLoadingContext &scontext)
 {
@@ -1096,16 +1106,21 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // Specify the size of a font. The value of these attribute is either an absolute length or a percentage
     if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
-        qreal pointSize = styleStack.fontSize();
+        QPair<qreal,qreal> fontSize = styleStack.fontSize();
+        qreal pointSize = fontSize.first;
+        qreal percentage = fontSize.second;
         if (pointSize > 0) {
             setFontPointSize(pointSize);
+        }
+        if (percentage > 0) {
+            setPercentageFontSize(percentage);
         }
     }
     else {
         const QString fontSizeRel(styleStack.property(KoXmlNS::style, "font-size-rel"));
         if (!fontSizeRel.isEmpty()) {
         // These attributes specify a relative font size change as a length such as +1pt, -3pt. It changes the font size based on the font size of the parent style.
-            qreal pointSize = styleStack.fontSize() + KoUnit::parseValue(fontSizeRel);
+            qreal pointSize = styleStack.fontSize().first + KoUnit::parseValue(fontSizeRel);
             if (pointSize > 0) {
                 setFontPointSize(pointSize);
             }
@@ -1523,7 +1538,13 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
             else if (verticalAlignment() == QTextCharFormat::AlignSubScript)
                 style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
         } else if (key == QTextFormat::FontPointSize) {
-            style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
+            // when there is percentageFontSize!=100% property ignore the fontSize property and store the percentage property
+            if ( (!hasProperty(KoCharacterStyle::PercentageFontSize)) || (percentageFontSize()==100))
+                style.addPropertyPt("fo:font-size", fontPointSize(), KoGenStyle::TextType);
+        } else if (key == KoCharacterStyle::PercentageFontSize) {
+            if(percentageFontSize()!=100) {
+                style.addProperty("fo:font-size", QString::number(percentageFontSize()) + '%', KoGenStyle::TextType);
+            }
         } else if (key == KoCharacterStyle::Country) {
             style.addProperty("fo:country", d->stylesPrivate.value(KoCharacterStyle::Country).toString(), KoGenStyle::TextType);
         } else if (key == KoCharacterStyle::Language) {

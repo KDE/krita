@@ -92,6 +92,9 @@ public:
 
     virtual QRectF frameBoundingRect(QTextFrame*) const;
 
+    /// the default tab size for this document
+    qreal defaultTabSpacing();
+
     /// set default tab size for this document
     void setTabSpacing(qreal spacing);
 

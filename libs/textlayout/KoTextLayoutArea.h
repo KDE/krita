@@ -185,7 +185,6 @@ private:
     qreal m_indent;
     qreal m_dropCapsWidth;
     int m_dropCapsNChars;
-    qreal m_defaultTabSizing;
     bool m_isRtl;
     qreal m_bottomSpacing;
     QList<KoTextLayoutTableArea *> m_tableAreas;

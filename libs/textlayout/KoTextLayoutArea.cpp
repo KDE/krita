@@ -525,8 +525,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabStopDistance *= qt_defaultDpiY() / 72.;
         option.setTabStop(tabStopDistance);
     } else {
-        option.setTabStop(m_defaultTabSizing);
-        tabStopDistance = m_defaultTabSizing;
+        option.setTabStop(m_documentLayout->defaultTabSpacing());
+        tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
 
     // tabs

@@ -202,6 +202,11 @@ void KoTextDocumentLayout::setTabSpacing(qreal spacing)
     d->defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
 }
 
+qreal KoTextDocumentLayout::defaultTabSpacing()
+{
+    return d->defaultTabSizing;
+}
+
 
 void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {

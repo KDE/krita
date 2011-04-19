@@ -255,7 +255,7 @@ void KoUnavailShape::saveOdf(KoShapeSavingContext & context) const
 
         QString newName = objectName;
         if (!objectName.isEmpty()) {
-            newName = fileSaver.getFilename("UObject");
+            newName = fileSaver.getFilename("Object ");
             // FIXME: We must make a copy of the byte array here because
             //        otherwise we won't be able to save > 1 time.
             xmlArray.replace(objectName.toLatin1(), newName.toLatin1());

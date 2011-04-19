@@ -45,6 +45,7 @@ class KoImageCollection;
 class KoTextAnchor;
 class KoTextLayoutRootArea;
 class KoTextLayoutRootAreaProvider;
+class KoTextLayoutObstruction;
 
 /**
  * KWords text layouter that allows text to flow in multiple frames and around
@@ -164,7 +165,8 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
-
+    /// Return a list of obstructions relevant for current root area
+    QList<KoTextLayoutObstruction *> relevantObstructions();
 
     QList<KoTextLayoutRootArea *> rootAreas() const;
     QList<KoShape*> shapes() const;
@@ -209,7 +211,7 @@ public slots:
 private slots:
     /// Called by \a scheduleLayout to start a \a layout run if not done already meanwhile.
     void executeScheduledLayout();
-    
+
 protected:
     /// reimplemented
     virtual void drawInlineObject(QPainter *painter, const QRectF &rect, QTextInlineObject object, int position, const QTextFormat &format);
@@ -225,9 +227,6 @@ protected:
     bool continuousLayout();
 
     void registerInlineObject(const QTextInlineObject &inlineObject);
-    
-    // Fill m_currentLineObstructions list with actual obstructions for current page
-    void refreshCurrentPageObstructions();
 
 private:
     class Private;

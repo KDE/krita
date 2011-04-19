@@ -717,17 +717,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     RunAroundHelper runAroundHelper;
     runAroundHelper.setLine(this, cursor->line);
 
-    //FIXME refreshCurrentPageObstructions();
-    //FIXME runAroundHelper.setObstructions(m_currentLineObstructions);
+    runAroundHelper.setObstructions(documentLayout()->relevantObstructions());
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
 
     while (cursor->line.isValid()) {
-        //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x, m_y));
-        //FIXME When above runaround is no longer commented out we should not set width and pos
-        cursor->line.setLineWidth(width());
-        cursor->line.setPosition(QPointF(x(), m_y));
+        runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
 
@@ -746,7 +742,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
             // in case we resume layout on next page the line is reused later
             // but if not then we need to make sure the line becomes invisible
-            // we use m_maximalAllowedBottom because we don't want to be below
+            // we use m_maximalAllowedBottom because we want to be below
             // footnotes too
             cursor->line.setPosition(QPointF(x(), m_maximalAllowedBottom));
 
@@ -761,9 +757,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         confirmFootNotes();
 
         maxLineHeight = qMax(maxLineHeight, addLine(cursor, blockData));
-        //FIXME runAroundHelper.fit( /* resetHorizontalPosition */ true, QPointF(x, m_y));
+        runAroundHelper.fit( /* resetHorizontalPosition */ true, QPointF(x(), m_y));
 
-        if (true /*FIXME !runAroundHelper.stayOnBaseline()*/) {
+        if (!runAroundHelper.stayOnBaseline()) {
             m_y += maxLineHeight;
             maxLineHeight = 0;
             m_indent = 0;
@@ -792,8 +788,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
         runAroundHelper.setLine(this, cursor->line);
-        //FIXME refreshCurrentPageObstructions();
-        //FIXME runAroundHelper.setObstructions(m_currentLineObstructions);
+        runAroundHelper.setObstructions(documentLayout()->relevantObstructions());
 
         if (softBreak) {
             return false;
@@ -834,7 +829,12 @@ qreal KoTextLayoutArea::width() const
     if (m_dropCapsNChars > 0) {
         return m_dropCapsWidth + 10;
     }
-    return m_width - m_indent - m_dropCapsWidth;
+    qreal width = m_width;
+    if (m_maximumAllowedWidth > 0) {
+        // lets use that instead but remember all the indent stuff we have calculated
+        width = m_width - (m_right - m_left) + m_maximumAllowedWidth;
+    }
+    return width - m_indent - m_dropCapsWidth;
 }
 
 void KoTextLayoutArea::setAcceptsPageBreak(bool accept)

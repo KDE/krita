@@ -179,7 +179,7 @@ private:
     qreal m_top; // reference area top
     qreal m_bottom; // reference area top
     qreal m_maximalAllowedBottom;
-    qreal m_maximalAllowedWidth; // 0 indicates wrapping is allowed
+    qreal m_maximumAllowedWidth; // 0 indicates wrapping is allowed
     QRectF m_boundingRect;
     KoTextBlockBorderData *m_prevBorder;
     qreal m_prevBorderPadding;

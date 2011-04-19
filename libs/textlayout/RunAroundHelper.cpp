@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2007, 2010 Thomas Zander <zander@kde.org>
- * Copyright (C) 2010 Ko Gmbh <casper.boemann@kogmbh.com>
+ * Copyright (C) 2010-2011 KO Gmbh <casper.boemann@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -192,7 +192,7 @@ QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
     QRectF lineRectBase = lineRect;
     // Get width of one char or shape (as-char).
     m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
-    // Make sure width is not wider than state allows.
+    // Make sure width is not wider than the area allows.
     if (m_textWidth > m_area->width()) {
         m_textWidth = m_area->width();
     }
@@ -214,7 +214,6 @@ void RunAroundHelper::updateLineParts(const QRectF &lineRect)
 
 QRectF RunAroundHelper::getLineRectPart()
 {
-    //TODO korinpa: use binary search tree ?
     QRectF retVal;
     foreach (QRectF lineRectPart, m_lineParts) {
         if (m_horizontalPosition <= lineRectPart.left() && m_textWidth <= lineRectPart.width()) {
@@ -231,7 +230,7 @@ void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal
     qreal height;
     qreal maxHeight = minLineRectPart.height();
     qreal widthDiff = maxWidth - width;
-    //TODO korinpa: use binary shift ?
+
     widthDiff /= 2;
     while (width <= maxWidth && width <= maxNaturalTextWidth && widthDiff > MIN_WIDTH) {
         line.setLineWidth(width + widthDiff);

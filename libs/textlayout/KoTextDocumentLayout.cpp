@@ -85,7 +85,6 @@ public:
     int textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 
     QHash<KoShape*,KoTextLayoutObstruction*> obstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
-    QList<KoTextLayoutObstruction*> currentLineObstructions; // obstructions for current page
 
     qreal defaultTabSizing;
     qreal y;
@@ -471,8 +470,6 @@ void KoTextDocumentLayout::resetInlineObject(int resetPosition)
             if (d->obstructions.contains((*iter)->shape())) {
                 KoTextLayoutObstruction *obstruction = d->obstructions.value((*iter)->shape());
                 d->obstructions.remove((*iter)->shape());
-                //TODO m_textLine.updateObstruction(obstruction);
-                refreshCurrentPageObstructions();
                 delete obstruction;
             }
             (*iter)->setAnchorStrategy(0);
@@ -491,22 +488,17 @@ void KoTextDocumentLayout::resetInlineObject(int resetPosition)
     }
 }
 
-void KoTextDocumentLayout::refreshCurrentPageObstructions()
+QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions()
 {
-/*    m_currentLineObstructions.clear();
+    QList<KoTextLayoutObstruction*> currentObstructions; // obstructions for current page
 
-    TextShape *textShape = dynamic_cast<TextShape*>(shape);
-    if (textShape == 0) {
-        return;
-    }
-
-    // add current page children obstructions to m_currentLineObstructions
-    foreach(KoShape *childShape, textShape->shapes()) {
-        if (m_obstructions.contains(childShape)) {
-            m_currentLineObstructions.append(m_obstructions.value(childShape));
+    // add current page children obstructions to currentObstructions
+    foreach(KoShape *childShape, shapes()) {
+        if (d->obstructions.contains(childShape)) {
+            currentObstructions.append(d->obstructions.value(childShape));
         }
     }
-*/
+    return currentObstructions;
 }
 
 QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const

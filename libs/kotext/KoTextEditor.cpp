@@ -358,7 +358,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position());
                 QTextCharFormat fm = fragment.charFormat();
-                
+
                 if (fm.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
                     fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
                     int to = qMin(end, fragment.position() + fragment.length());
@@ -421,7 +421,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                     //this should never be the case
                 break;
             }
-    
+
             if (applyToWholeBlock) {
                 selection.movePosition(QTextCursor::StartOfBlock);
                 selection.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -716,7 +716,8 @@ void KoTextEditor::setDefaultFormat()
 void KoTextEditor::addBookmark(const QString &name)
 {//TODO changeTracking
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Bookmark"));
-    KoBookmark *bookmark = new KoBookmark(name, d->document);
+    KoBookmark *bookmark = new KoBookmark(d->document);
+    bookmark->setName(name);
     int startPos = -1, endPos = -1, caretPos = -1;
 
     if (d->caret.hasSelection()) {
@@ -725,7 +726,8 @@ void KoTextEditor::addBookmark(const QString &name)
         caretPos = d->caret.position();
 
         d->caret.setPosition(endPos);
-        KoBookmark *endBookmark = new KoBookmark(name, d->document);
+        KoBookmark *endBookmark = new KoBookmark(d->document);
+        endBookmark->setName(name);
         bookmark->setType(KoBookmark::StartBookmark);
         endBookmark->setType(KoBookmark::EndBookmark);
         KoTextDocument(d->document).inlineTextObjectManager()->insertInlineObject(d->caret, endBookmark);
@@ -955,7 +957,7 @@ void KoTextEditor::insertTable(int rows, int columns)
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
         else
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
-        
+
         if (!changeId)
             changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
 
@@ -978,8 +980,8 @@ void KoTextEditor::insertTable(int rows, int columns)
 
             cellStyle.applyStyle(format);
             cell.setFormat(format);
-        }    
-    }    
+        }
+    }
 
     d->updateState(KoTextEditor::Private::NoOp);
 }

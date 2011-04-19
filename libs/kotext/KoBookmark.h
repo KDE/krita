@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@ class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
+class KoBookmarkManager;
 
 /**
  * A document can store a set of cursor positions/selected cursor locations which can be
@@ -56,7 +58,7 @@ public:
      * @param name the name for this bookmark
      * @param document the text document where this bookmark is located
      */
-    KoBookmark(const QString &name, const QTextDocument *document);
+    KoBookmark(const QTextDocument *document);
 
     virtual ~KoBookmark();
 
@@ -110,6 +112,15 @@ public:
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
 
 private:
+
+    /**
+     * This is called to allow Cut and Paste of bookmarks. This
+     * method gives a correct, unique, name, respecting the fact that an
+     * endMarker should be the foo_lastID instead of foo_lastID+1
+     */
+    QString createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker);
+
+
     class Private;
     Private *const d;
 };

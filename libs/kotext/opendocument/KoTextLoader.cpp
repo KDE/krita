@@ -1438,28 +1438,6 @@ void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)
     }
 }
 
-QString KoTextLoader::createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
-{
-    QString ret = bookmarkName;
-    int uniqID = 0;
-
-    while (true) {
-        if (bmm->retrieveBookmark(ret)) {
-            ret = QString("%1_%2").arg(bookmarkName).arg(++uniqID);
-        } else {
-            if (isEndMarker) {
-                --uniqID;
-                if (!uniqID)
-                    ret = bookmarkName;
-                else
-                    ret = QString("%1_%2").arg(bookmarkName).arg(uniqID);
-            }
-            break;
-        }
-    }
-    return ret;
-}
-
 void KoTextLoader::loadText(const QString &fulltext, QTextCursor &cursor,
                             bool *stripLeadingSpace, bool isLastNode)
 {
@@ -1680,42 +1658,18 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
         }
         // text:bookmark, text:bookmark-start and text:bookmark-end
         else if (isTextNS && (localName == "bookmark" || localName == "bookmark-start" || localName == "bookmark-end")) {
-            QString bookmarkName = ts.attribute("name");
 
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
-            if (textObjectManager) {
-                const QTextDocument *document = cursor.block().document();
 
-                // For cut and paste, make sure that the name is unique.
-                QString uniqBookmarkName = createUniqueBookmarkName(textObjectManager->bookmarkManager(),
-                                                                    bookmarkName,
-                                                                    (localName == "bookmark-end"));
-                KoBookmark *bookmark = new KoBookmark(uniqBookmarkName, document);
-
-                if (localName == "bookmark")
-                    bookmark->setType(KoBookmark::SinglePosition);
-                else if (localName == "bookmark-start") {
-                    bookmark->setType(KoBookmark::StartBookmark);
-
-                    // Add inline Rdf to the bookmark.
-                    if (ts.hasAttributeNS(KoXmlNS::xhtml, "property")
-                            || ts.hasAttribute("id")) {
-                        KoTextInlineRdf* inlineRdf =
-                                new KoTextInlineRdf((QTextDocument*)document, bookmark);
-                        inlineRdf->loadOdf(ts);
-                        bookmark->setInlineRdf(inlineRdf);
-                    }
-                } else if (localName == "bookmark-end") {
-                    bookmark->setType(KoBookmark::EndBookmark);
-                    KoBookmark *startBookmark = textObjectManager->bookmarkManager()->retrieveBookmark(uniqBookmarkName);
-                    if (startBookmark) {        // set end bookmark only if we got start bookmark (we might not have in case of broken document)
-                        startBookmark->setEndBookmark(bookmark);
-                    } else {
-                        kWarning(32500) << "bookmark-end of non-existing bookmark - broken document?";
-                    }
-                }
+            KoBookmark *bookmark = new KoBookmark(cursor.block().document());
+            if (textObjectManager && bookmark->loadOdf(ts, d->context)) {
                 textObjectManager->insertInlineObject(cursor, bookmark);
             }
+            else {
+                kWarning(32500) << "Could not load bookmark";
+                delete bookmark;
+            }
+
         } else if (isTextNS && localName == "bookmark-ref") {
             QString bookmarkName = ts.attribute("ref-name");
             QTextCharFormat cf = cursor.charFormat(); // store the current cursor char format

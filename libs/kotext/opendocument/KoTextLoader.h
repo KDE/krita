@@ -146,7 +146,7 @@ private:
     * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
     */
     void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
-    
+
     /**
     * Load the contents of delta:merge. Called from loadSpan
     */
@@ -163,7 +163,7 @@ private:
      * The table and its contents are placed in a new shape.
      */
     void loadTable(const KoXmlElement &element, QTextCursor& cursor);
-    
+
     /**
      * Loads a table column
      */
@@ -226,12 +226,6 @@ private:
     */
     void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
 
-    /**
-     * This is called in loadSpan to allow Cut and Paste of bookmarks. This
-     * method gives a correct, unique, name, respecting the fact that an
-     * endMarker should be the foo_lastID instead of foo_lastID+1
-     */
-    QString createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker);
 
 
     /// \internal d-pointer class.

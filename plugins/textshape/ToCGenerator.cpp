@@ -212,7 +212,8 @@ void ToCGenerator::generate()
                                     blockId++;
 
                                     // insert new KoBookmark
-                                    KoBookmark *bookmark = new KoBookmark(target,block.document());
+                                    KoBookmark *bookmark = new KoBookmark(block.document());
+                                    bookmark->setName(target);
                                     bookmark->setType(KoBookmark::SinglePosition);
                                     QTextCursor blockCursor(block);
                                     layout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);

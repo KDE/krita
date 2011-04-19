@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,6 +25,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <KoTextInlineRdf.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoXmlNS.h>
 
 #include <QTextDocument>
 #include <QTextInlineObject>
@@ -47,37 +50,17 @@ public:
     BookmarkType type;
 };
 
-KoBookmark::KoBookmark(const QString &name, const QTextDocument *document)
+KoBookmark::KoBookmark(const QTextDocument *document)
         : KoInlineObject(false),
         d(new Private(document))
 {
     d->selection = false;
     d->endBookmark = 0;
-    d->name = name;
 }
 
 KoBookmark::~KoBookmark()
 {
     delete d;
-}
-
-void KoBookmark::saveOdf(KoShapeSavingContext &context)
-{
-    KoXmlWriter *writer = &context.xmlWriter();
-    QString nodeName;
-    if (d->type == SinglePosition)
-        nodeName = "text:bookmark";
-    else if (d->type == StartBookmark)
-        nodeName = "text:bookmark-start";
-    else if (d->type == EndBookmark)
-        nodeName = "text:bookmark-end";
-    writer->startElement(nodeName.toLatin1(), false);
-    writer->addAttribute("text:name", d->name.toLatin1());
-
-    if (d->type == StartBookmark && inlineRdf()) {
-        inlineRdf()->saveOdf(context, writer);
-    }
-    writer->endElement();
 }
 
 void KoBookmark::updatePosition(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format)
@@ -151,9 +134,90 @@ bool KoBookmark::hasSelection()
 
 bool KoBookmark::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    Q_UNUSED(element);
     Q_UNUSED(context);
-    // TODO
+
+    QString bookmarkName = element.attribute("name");
+    const QString localName(element.localName());
+
+    if (manager()) {
+        // For cut and paste, make sure that the name is unique.
+        QString uniqBookmarkName = createUniqueBookmarkName(manager()->bookmarkManager(),
+                                                            bookmarkName,
+                                                            (localName == "bookmark-end"));
+
+
+        d->name = uniqBookmarkName;
+
+        if (localName == "bookmark") {
+            setType(KoBookmark::SinglePosition);
+        }
+        else if (localName == "bookmark-start") {
+            setType(KoBookmark::StartBookmark);
+
+            // Add inline Rdf to the bookmark.
+            if (element.hasAttributeNS(KoXmlNS::xhtml, "property") || element.hasAttribute("id")) {
+                KoTextInlineRdf* inlineRdf = new KoTextInlineRdf(const_cast<QTextDocument*>(d->document), this);
+                if (inlineRdf->loadOdf(element)) {
+                    setInlineRdf(inlineRdf);
+                }
+            }
+        }
+        else if (localName == "bookmark-end") {
+            setType(KoBookmark::EndBookmark);
+            KoBookmark *startBookmark = manager()->bookmarkManager()->retrieveBookmark(uniqBookmarkName);
+            if (startBookmark) {        // set end bookmark only if we got start bookmark (we might not have in case of broken document)
+                startBookmark->setEndBookmark(this);
+            } else {
+                kWarning(32500) << "bookmark-end of non-existing bookmark - broken document?";
+            }
+        }
+        else {
+            // something pretty weird going on...
+            return false;
+        }
+        return true;
+    }
     return false;
+}
+
+void KoBookmark::saveOdf(KoShapeSavingContext &context)
+{
+    KoXmlWriter *writer = &context.xmlWriter();
+    QString nodeName;
+    if (d->type == SinglePosition)
+        nodeName = "text:bookmark";
+    else if (d->type == StartBookmark)
+        nodeName = "text:bookmark-start";
+    else if (d->type == EndBookmark)
+        nodeName = "text:bookmark-end";
+    writer->startElement(nodeName.toLatin1(), false);
+    writer->addAttribute("text:name", d->name.toLatin1());
+
+    if (d->type == StartBookmark && inlineRdf()) {
+        inlineRdf()->saveOdf(context, writer);
+    }
+    writer->endElement();
+}
+
+QString KoBookmark::createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker)
+{
+    QString ret = bookmarkName;
+    int uniqID = 0;
+
+    while (true) {
+        if (bmm->retrieveBookmark(ret)) {
+            ret = QString("%1_%2").arg(bookmarkName).arg(++uniqID);
+        } else {
+            if (isEndMarker) {
+                --uniqID;
+                if (!uniqID)
+                    ret = bookmarkName;
+                else
+                    ret = QString("%1_%2").arg(bookmarkName).arg(uniqID);
+            }
+            break;
+        }
+    }
+    return ret;
 }
 

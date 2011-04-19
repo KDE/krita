@@ -445,6 +445,17 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, K
     cursor.beginEditBlock();
     const QTextDocument *document = cursor.block().document();
 
+    if (section) {
+        QTextBlock block = cursor.block();
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        if (!data) {
+            data = new KoTextBlockData();
+            block.setUserData(data);
+        }
+        data->setSection(section);
+        section = 0;
+    }
+
     KoOdfNotesConfiguration *notesConfiguration =
             new KoOdfNotesConfiguration(d->context.odfLoadingContext()
                                         .stylesReader()

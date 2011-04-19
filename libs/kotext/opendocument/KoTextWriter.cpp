@@ -5,6 +5,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -49,6 +50,7 @@
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 #include "KoTextInlineRdf.h"
+#include "KoSection.h"
 
 #include "KoTextMeta.h"
 #include "KoBookmark.h"
@@ -1667,9 +1669,21 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
     QTextBlock block = document->findBlock(from);
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+
+        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
+        if (data) {
+            KoSection *section = data->section();
+            if (section) {
+                section->saveOdf(context);
+            }
+        }
+
+
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();
         int blockOutlineLevel = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
+
+
 
         if (cursorFrame != currentFrame
                     && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {

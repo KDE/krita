@@ -129,6 +129,11 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     llp.setListItemPrefix(widget.prefix->text());
     llp.setListItemSuffix(widget.suffix->text());
     llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
+
+    if (!KoListStyle::isNumberingStyle(style)) {
+        llp.setRelativeBulletSize(45); //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
+    }
+
     if (style == KoListStyle::CustomCharItem)
         llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
 
@@ -153,7 +158,8 @@ void ParagraphBulletsNumbers::styleChanged(int index)
     bool showLetterSynchronization = false;
     switch (style) {
     case KoListStyle::SquareItem:
-    case KoListStyle::DiscItem:
+    case KoListStyle::Bullet:
+    case KoListStyle::BlackCircle:
     case KoListStyle::CircleItem:
     case KoListStyle::BoxItem:
     case KoListStyle::CustomCharItem:

@@ -58,6 +58,22 @@ class KOTEXT_EXPORT KoTableCellStyle : public KoTableBorderStyle
 {
     Q_OBJECT
 public:
+    enum CellProtectionFlag {
+        NoProtection,
+        HiddenAndProtected,
+        Protected,
+        FormulaHidden,
+        ProtectedAndFormulaHidden
+    };
+    
+    enum Property {
+        StyleId = QTextTableFormat::UserProperty + 1,
+        ShrinkToFit,        ///< Shrink the cell content to fit the size
+        Wrap,               ///< Wrap the text within the cell
+        CellProtection,     ///< The cell protection when the table is protected
+        PrintContent,       ///< Should the content of this cell be printed
+    };
+    
     /// Constructor
     KoTableCellStyle(QObject *parent = 0);
     /// Creates a KoTableCellStyle with the given table cell format, and \a parent
@@ -106,6 +122,9 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    bool shrinkToFit() const;
+    void setShrinkToFit(bool state);
 
     void setLeftPadding(qreal padding);
     void setTopPadding(qreal padding);
@@ -120,7 +139,16 @@ public:
 
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
+    
+    void setWrap(bool state);
+    bool wrap() const;
 
+    CellProtectionFlag cellProtection() const;
+    void setCellProtection (CellProtectionFlag protection);
+    
+    void setPrintContent(bool state);
+    bool printContent() const;
+    
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);
 

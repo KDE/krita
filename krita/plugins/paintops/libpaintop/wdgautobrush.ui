@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>300</height>
+    <width>421</width>
+    <height>248</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -156,54 +156,54 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <layout class="QFormLayout" name="formLayout_3">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::ExpandingFieldsGrow</enum>
-              </property>
+             <layout class="QGridLayout" name="gridLayout">
               <item row="0" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Horizontal:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
+               <layout class="QFormLayout" name="formLayout_3">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>Horizontal:</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>Vertical:</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true"/>
+                </item>
+               </layout>
               </item>
               <item row="0" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputHFade" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
+               <widget class="KoAspectButton" name="aspectButton" native="true"/>
               </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>Vertical:</string>
+              <item row="0" column="2">
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
                 </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="KisDoubleSliderSpinBox" name="inputVFade" native="true">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-               </widget>
+               </spacer>
               </item>
              </layout>
-            </item>
-            <item>
-             <widget class="KoAspectButton" name="aspectButton" native="true"/>
             </item>
            </layout>
           </widget>
@@ -233,12 +233,6 @@
        </item>
        <item row="0" column="1">
         <widget class="KisSliderSpinBox" name="inputAngle" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
          <property name="minimumSize">
           <size>
            <width>200</width>
@@ -258,14 +252,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="KisSliderSpinBox" name="inputSpikes" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisSliderSpinBox" name="inputSpikes" native="true"/>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_randomness">
@@ -278,14 +265,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="inputRandomness" native="true"/>
        </item>
        <item row="3" column="0">
         <widget class="QLabel" name="label_8">
@@ -298,14 +278,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="density" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="density" native="true"/>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="label_2">
@@ -318,14 +291,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-        </widget>
+        <widget class="KisDoubleSliderSpinBox" name="inputSpacing" native="true"/>
        </item>
       </layout>
      </item>
@@ -352,18 +318,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisCurveWidget</class>
-   <extends></extends>
-   <header>widgets/kis_curve_widget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
@@ -373,6 +327,18 @@
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QWidget</extends>
+   <header>KoAspectButton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisCurveWidget</class>
+   <extends></extends>
+   <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

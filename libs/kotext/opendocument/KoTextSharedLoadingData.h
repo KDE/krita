@@ -75,7 +75,7 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The paragraph style for the given name or 0 if not found
      */
     KoParagraphStyle *paragraphStyle(const QString &name, bool stylesDotXml) const;
@@ -86,7 +86,7 @@ public:
      * The name is the style:name given in the file
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The character style for the given name or 0 if not found
      */
     KoCharacterStyle *characterStyle(const QString &name, bool stylesDotXml) const;
@@ -94,7 +94,7 @@ public:
     /**
      * Return all character styles.
      *
-     * @param stylesDotXml If set the styles from styles.xml are used if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return All character styles from the givin file
      */
     QList<KoCharacterStyle*> characterStyles(bool stylesDotXml) const;
@@ -103,7 +103,7 @@ public:
      * Get the list style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The list style for the given name or 0 if not found
      */
     KoListStyle *listStyle(const QString &name, bool stylesDotXml) const;
@@ -112,7 +112,7 @@ public:
      * Get the table style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table style for the given name or 0 if not found
      */
     KoTableStyle *tableStyle(const QString &name, bool stylesDotXml) const;
@@ -121,7 +121,7 @@ public:
      * Get the table column style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table column style for the given name or 0 if not found
      */
     KoTableColumnStyle *tableColumnStyle(const QString &name, bool stylesDotXml) const;
@@ -130,7 +130,7 @@ public:
      * Get the table row style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table row style for the given name or 0 if not found
      */
     KoTableRowStyle *tableRowStyle(const QString &name, bool stylesDotXml) const;
@@ -139,7 +139,7 @@ public:
      * Get the table cell style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The table cell style for the given name or 0 if not found
      */
     KoTableCellStyle *tableCellStyle(const QString &name, bool stylesDotXml) const;
@@ -148,7 +148,7 @@ public:
      * Get the section style for the given name
      *
      * @param name The name of the style to get
-     * @param stylesDotXml If set the styles from styles.xml are use if unset styles from content.xml are used.
+     * @param stylesDotXml If set the styles from styles.xml are used, if unset styles from content.xml are used.
      * @return The section style for the given name or 0 if not found
      */
     KoSectionStyle *sectionStyle(const QString &name, bool stylesDotXml) const;

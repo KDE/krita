@@ -1343,7 +1343,7 @@ KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QSt
     QString endId = elem.attributeNS(KoXmlNS::delta, "end-element-idref");
     QString changeId = elem.attributeNS(KoXmlNS::delta, "removal-change-idref");
 
-    while(true) {
+    while (true) {
         KoXmlElement element;
         lastProcessedNode = lastProcessedNode.nextSibling();
         bool isElementNode = lastProcessedNode.isElement();

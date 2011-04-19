@@ -22,13 +22,16 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
+#include <KoTextSharedLoadingData.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoSectionStyle.h>
 
 class KoSection::Private
 {
 public:
     Private()
+        : sectionStyle(0)
     {
     }
 
@@ -39,6 +42,7 @@ public:
     QString protection_key;
     QString protection_key_digest_algorithm;
     QString style_name;
+    KoSectionStyle sectionStyle;
 };
 
 KoSection::KoSection()
@@ -51,9 +55,8 @@ KoSection::~KoSection()
     delete d;
 }
 
-bool KoSection::loadOdf(const KoXmlElement &element, KoShapeLoadingContext *context)
+bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
 {
-    Q_UNUSED(context);
     // check whether we really are a section
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
         // get all the attributes
@@ -63,7 +66,12 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoShapeLoadingContext *cont
         d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
         d->protection_key = element.attributeNS(KoXmlNS::text, "protection-key");
         d->protection_key_digest_algorithm = element.attributeNS(KoXmlNS::text, "protection-key-algorithm");
-        d->style_name = element.attributeNS(KoXmlNS::text, "style-name");
+        d->style_name = element.attributeNS(KoXmlNS::text, "style-name", "");
+
+        if (!d->style_name.isEmpty()) {
+            d->sectionStyle = sharedData->sectionStyle(d->style_name, stylesDotXml);
+        }
+
         return true;
     }
     return false;

@@ -20,9 +20,8 @@
 #define KOSECTION_H
 
 class KoXmlElement;
-class KoShapeLoadingContext;
 class KoShapeSavingContext;
-
+class KoTextSharedLoadingData;
 /**
  * Contains the information about the current text:section.
  *
@@ -47,7 +46,7 @@ public:
     KoSection();
     ~KoSection();
 
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext *context);
+    bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
     void saveOdf(KoShapeSavingContext &context);
 private:
     class Private;

@@ -42,7 +42,7 @@ public:
     QString protection_key;
     QString protection_key_digest_algorithm;
     QString style_name;
-    KoSectionStyle sectionStyle;
+    KoSectionStyle *sectionStyle;
 };
 
 KoSection::KoSection()

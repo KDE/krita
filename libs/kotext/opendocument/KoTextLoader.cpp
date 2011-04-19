@@ -1395,22 +1395,16 @@ KoXmlNode KoTextLoader::Private::loadListItemSplit(const KoXmlElement &elem, QSt
 
 void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cursor)
 {
-    // Add a frame to the current layout
-    QTextFrameFormat sectionFormat;
-    QString sectionStyleName = sectionElem.attributeNS(KoXmlNS::text, "style-name", "");
-    if (!sectionStyleName.isEmpty()) {
-        KoSectionStyle *secStyle = d->textSharedData->sectionStyle(sectionStyleName, d->stylesDotXml);
-        if (secStyle)
-            secStyle->applyStyle(sectionFormat);
+    KoSection *section = new KoSection();
+    if (!section->loadOdf(sectionElem, d->textSharedData, d->stylesDotXml)) {
+        delete section;
+        kWarning(32500) << "Could not load section";
+        return;
     }
-    cursor.insertFrame(sectionFormat);
-    // Get the cursor of the frame
-    QTextCursor cursorFrame = cursor.currentFrame()->lastCursorPosition();
 
-    loadBody(sectionElem, cursorFrame);
 
-    // Get out of the frame
-    cursor.movePosition(QTextCursor::End);
+    loadBody(sectionElem, cursor);
+
 }
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)

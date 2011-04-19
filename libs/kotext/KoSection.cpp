@@ -19,6 +19,8 @@
 
 #include "KoSection.h"
 
+#include "kdebug.h"
+
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
@@ -62,6 +64,9 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         // get all the attributes
         d->condition = element.attributeNS(KoXmlNS::text, "condition");
         d->display = element.attributeNS(KoXmlNS::text, "display");
+        if (d->display == "condition" && d->condition.isEmpty()) {
+            kWarning(32500) << "Section display is set to \"condition\", but condition is empty.";
+        }
         d->name = element.attributeNS(KoXmlNS::text, "name");
         d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
         d->protection_key = element.attributeNS(KoXmlNS::text, "protection-key");

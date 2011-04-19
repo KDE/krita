@@ -23,6 +23,7 @@
 #include <KoXmlReader.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
 
 class KoSection::Private
 {
@@ -38,22 +39,21 @@ public:
     QString protection_key;
     QString protection_key_digest_algorithm;
     QString style_name;
-    QString id;
-
 };
 
-KoSection::KoOdfSection()
+KoSection::KoSection()
     : d(new Private())
 {
 }
 
-KoSection::~KoOdfSection()
+KoSection::~KoSection()
 {
     delete d;
 }
 
 bool KoSection::loadOdf(const KoXmlElement &element, KoShapeLoadingContext *context)
 {
+    Q_UNUSED(context);
     // check whether we really are a section
     if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
         // get all the attributes
@@ -64,13 +64,24 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoShapeLoadingContext *cont
         d->protection_key = element.attributeNS(KoXmlNS::text, "protection-key");
         d->protection_key_digest_algorithm = element.attributeNS(KoXmlNS::text, "protection-key-algorithm");
         d->style_name = element.attributeNS(KoXmlNS::text, "style-name");
-        d->id = element.attributeNS(KoXmlNS::text, "id");
         return true;
     }
     return false;
 }
 
-void KoSection::saveOdf(KoShapeShavingContext &context)
+void KoSection::saveOdf(KoShapeSavingContext &context)
 {
+    KoXmlWriter *writer = &context.xmlWriter();
+    Q_ASSERT(writer);
+    writer->startElement("text:section", false);
 
+    if (!d->condition.isEmpty()) writer->addAttribute("text:condition", d->condition);
+    if (!d->display.isEmpty()) writer->addAttribute("text:display", d->condition);
+    if (!d->name.isEmpty()) writer->addAttribute("text:name", d->name);
+    if (!d->text_protected.isEmpty()) writer->addAttribute("text:text-protected", d->text_protected);
+    if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
+    if (!d->protection_key_digest_algorithm.isEmpty()) writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
+    if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
+
+    writer->endElement();
 }

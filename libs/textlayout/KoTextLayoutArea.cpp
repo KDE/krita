@@ -430,9 +430,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             }
         }
 
-        ++(cursor->it);
-
-        if (cursor->it.atEnd()) {
+        bool atEnd = cursor->it.atEnd();
+        if (!atEnd) {
+            ++(cursor->it);
+            atEnd = cursor->it.atEnd();
+        }
+        if (atEnd) {
             m_endOfArea = new FrameIterator(cursor);
             m_y += m_bottomSpacing;
             setBottom(m_y);
@@ -748,8 +751,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
             if (format.nonBreakableLines()) {
                 //set an invalid line so we start this block from beginning next time
-                // TODO clear layout?
                 cursor->line = QTextLine();
+                layout->endLayout();
             }
             clearPreregisteredFootNotes();
             return false; //to indicate block was not done!

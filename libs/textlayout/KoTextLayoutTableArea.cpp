@@ -168,7 +168,10 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
-        return d->cellAreas[startTableCell.row()][startTableCell.column()]->selectionBoundingBox(cursor);
+        Q_ASSERT_X(startTableCell.row() < d->cellAreas.count() && startTableCell.column() < d->cellAreas[startTableCell.row()].count(), __FUNCTION__, QString("Out of bounds. We expected %1 < %2 and %3 < %4").arg(startTableCell.row()).arg(d->cellAreas.count()).arg(startTableCell.column()).arg(d->cellAreas.at(startTableCell.row()).count()).toLocal8Bit());
+        KoTextLayoutArea *area = d->cellAreas[startTableCell.row()][startTableCell.column()];
+        Q_ASSERT(area);
+        return area->selectionBoundingBox(cursor);
     } else {
         int selectionRow;
         int selectionColumn;
@@ -307,7 +310,8 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         }
         if (d->headerRows) {
             // Also set the position of the border below headers
-            Q_ASSERT(d->headerRows < d->rowPositions.count());
+            Q_ASSERT_X(d->headerRows >= 0 && d->headerRows < d->rowPositions.count(), __FUNCTION__, QString("Index out of range, 0 <= %1 < %2").arg(d->headerRows).arg(d->rowPositions.count()).toLocal8Bit());
+            Q_ASSERT_X(d->headerRows >= 0 && d->headerRows < cursor->headerRowPositions.size(), __FUNCTION__, QString("Index out of range, 0 <= %1 < %2").arg(d->headerRows).arg(cursor->headerRowPositions.size()).toLocal8Bit());
             cursor->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
         }
         cursor->headerPositionX = d->columnPositions[0];

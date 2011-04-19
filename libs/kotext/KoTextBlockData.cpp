@@ -27,12 +27,13 @@ class KoTextBlockData::Private
 public:
     Private()
         : counterWidth(0),
-        counterSpacing(0),
-        counterIsImage(false),
-        counterIndex(1),
-        border(0),
-        paintStrategy(0),
-        top(0)
+          counterSpacing(0),
+          counterIsImage(false),
+          counterIndex(1),
+          border(0),
+          paintStrategy(0),
+          top(0),
+          section(0)
     {
     }
 
@@ -52,10 +53,11 @@ public:
     KoTextBlockPaintStrategyBase *paintStrategy;
     qreal top;
     qreal bottom;
+    KoSection *section;
 };
 
 KoTextBlockData::KoTextBlockData()
-        : d(new Private())
+    : d(new Private())
 {
     d->counterWidth = -1.0;
 }
@@ -173,4 +175,14 @@ void KoTextBlockData::setEffectiveTop(qreal y)
 qreal KoTextBlockData::effectiveTop() const
 {
     return d->top;
+}
+
+void KoTextBlockData::setSection(KoSection *section)
+{
+    d->section = section;
+}
+
+KoSection *KoTextBlockData::section() const
+{
+    return d->section;
 }

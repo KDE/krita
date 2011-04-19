@@ -310,7 +310,8 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         }
         if (d->headerRows) {
             // Also set the position of the border below headers
-            Q_ASSERT(d->headerRows < d->rowPositions.count());
+            Q_ASSERT_X(d->headerRows >= 0 && d->headerRows < d->rowPositions.count(), __FUNCTION__, QString("Index out of range, 0 <= %1 < %2").arg(d->headerRows).arg(d->rowPositions.count()).toLocal8Bit());
+            Q_ASSERT_X(d->headerRows >= 0 && d->headerRows < cursor->headerRowPositions.size(), __FUNCTION__, QString("Index out of range, 0 <= %1 < %2").arg(d->headerRows).arg(cursor->headerRowPositions.size()).toLocal8Bit());
             cursor->headerRowPositions[d->headerRows] = d->rowPositions[d->headerRows];
         }
         cursor->headerPositionX = d->columnPositions[0];

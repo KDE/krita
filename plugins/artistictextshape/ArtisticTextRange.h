@@ -86,6 +86,12 @@ public:
     /// Checks if specified character has an y-offset value
     bool hasYOffset(int charIndex) const;
 
+    /// Checks if range has x-offsets
+    bool hasXOffsets() const;
+
+    /// Checks if range has y-offsets
+    bool hasYOffsets() const;
+
     /// Returns the type of the x-offsets
     OffsetType xOffsetType() const;
 
@@ -97,6 +103,9 @@ public:
 
     /// Checks if specified character has a rotation
     bool hasRotation(int charIndex) const;
+
+    /// Checks if range has character rotations
+    bool hasRotations() const;
 
     /// Returns the character rotation for the specified character
     qreal rotation(int charIndex) const;

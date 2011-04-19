@@ -130,6 +130,16 @@ bool ArtisticTextRange::hasYOffset(int charIndex) const
     return charIndex >= 0 && charIndex < m_yOffsets.count();
 }
 
+bool ArtisticTextRange::hasXOffsets() const
+{
+    return !m_xOffsets.isEmpty();
+}
+
+bool ArtisticTextRange::hasYOffsets() const
+{
+    return !m_yOffsets.isEmpty();
+}
+
 ArtisticTextRange::OffsetType ArtisticTextRange::xOffsetType() const
 {
     return m_xOffsetType;
@@ -148,6 +158,11 @@ void ArtisticTextRange::setRotations(const QList<qreal> &rotations)
 bool ArtisticTextRange::hasRotation(int charIndex) const
 {
     return charIndex >= 0 && charIndex < m_rotations.count();
+}
+
+bool ArtisticTextRange::hasRotations() const
+{
+    return !m_rotations.isEmpty();
 }
 
 qreal ArtisticTextRange::rotation(int charIndex) const

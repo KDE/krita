@@ -163,6 +163,7 @@ void ArtisticTextShape::createOutline()
 
             for (int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 // apply offset to character
+                // TODO: handle absolute x and y offsets correctly see svg spec 10.13.3 Text on a path layout rules
                 if (range.hasXOffset(localCharIndex)) {
                     if (absoluteXOffset)
                         charOffset.rx() = range.xOffset(localCharIndex);

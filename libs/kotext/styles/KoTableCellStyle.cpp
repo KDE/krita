@@ -341,6 +341,16 @@ QBrush KoTableCellStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
+void KoTableCellStyle::setWrap(bool state)
+{
+    setProperty(Wrap, state);
+}
+
+bool KoTableCellStyle::wrap() const
+{
+    return propertyBoolean(Wrap);
+}
+
 void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 {
     setProperty(VerticalAlignment, (int) alignment);
@@ -391,6 +401,28 @@ QString KoTableCellStyle::masterPageName() const
 void KoTableCellStyle::setMasterPageName(const QString &name)
 {
     setProperty(MasterPageName, name);
+}
+
+void KoTableCellStyle::setCellProtection(KoTableCellStyle::CellProtectionFlag protection)
+{
+    setProperty(CellProtection, protection);
+}
+
+KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
+{
+    return (CellProtectionFlag) propertyInt(CellProtection);
+}
+
+bool KoTableCellStyle::printContent() const
+{
+    if (hasProperty(PrintContent))
+        return propertyBoolean(PrintContent);
+    return true;
+}
+
+void KoTableCellStyle::setPrintContent(bool state)
+{
+    setProperty(PrintContent, state);
 }
 
 void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
@@ -555,6 +587,27 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "print-content")) {
+        setPrintContent(styleStack.property(KoXmlNS::style, "print-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "wrap-option")) {
+        setWrap(styleStack.property(KoXmlNS::fo, "wrap-option") == "wrap");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
+        QString protection = styleStack.property(KoXmlNS::style, "cell-protect");
+        if (protection == "none")
+            setCellProtection(NoProtection);
+        else if (protection == "hidden-and-protected")
+            setCellProtection(HiddenAndProtected);
+        else if (protection == "protected")
+            setCellProtection(Protected);
+        else if (protection == "formula-hidden")
+            setCellProtection(FormulaHidden);
+        else if ((protection == "protected formula-hidden") || (protection == "formula-hidden protected"))
+            setCellProtection(ProtectedAndFormulaHidden);
+    }
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
@@ -609,7 +662,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
         } else if (key == VerticalAlignment) {
             style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
-            
         } else if (key == QTextFormat::TableCellLeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
         } else if (key == QTextFormat::TableCellRightPadding) {
@@ -620,6 +672,24 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::TableCellType);
         } else if (key == ShrinkToFit) {
             style.addProperty("style:shrink-to-fit", shrinkToFit(), KoGenStyle::TableCellType);
+        } else if (key == PrintContent) {
+            style.addProperty("style:print-content", printContent(), KoGenStyle::TableCellType);
+        } else if (key == Wrap) {
+            if (wrap())
+                style.addProperty("fo:wrap-option", "wrap", KoGenStyle::TableCellType);
+            else
+                style.addProperty("fo:wrap-option", "no-wrap", KoGenStyle::TableCellType);
+        } else if (key == CellProtection) {
+            if (cellProtection() == NoProtection)
+                style.addProperty("style:cell-protect", "none", KoGenStyle::TableCellType);
+            else if (cellProtection() == HiddenAndProtected)
+                style.addProperty("style:cell-protect", "hidden-and-protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == Protected)
+                style.addProperty("style:cell-protect", "protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == FormulaHidden)
+                style.addProperty("style:cell-protect", "formula-hidden", KoGenStyle::TableCellType);
+            else if (cellProtection() == ProtectedAndFormulaHidden)
+                style.addProperty("style:cell-protect", "protected formula-hidden", KoGenStyle::TableCellType);
         }
     }
 /*

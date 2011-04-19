@@ -429,7 +429,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, KoSection *section)
 {
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
@@ -472,26 +472,36 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());
 #endif
     bool usedParagraph = false; // set to true if we found a tag that used the paragraph, indicating that the next round needs to start a new one.
+
     if (bodyElem.namespaceURI() == KoXmlNS::table && bodyElem.localName() == "table") {
-        if (bodyElem.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+        if (bodyElem.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
             d->openChangeRegion(bodyElem);
+        }
+
         loadTable(bodyElem, cursor);
-        if(bodyElem.attributeNS(KoXmlNS::delta, "insertion-type") != "")
+
+        if (bodyElem.attributeNS(KoXmlNS::delta, "insertion-type") != "") {
             d->closeChangeRegion(bodyElem);
+        }
     }
     else {
         startBody(KoXml::childNodesCount(bodyElem));
 
         KoXmlElement tag;
-        for ( KoXmlNode _node = bodyElem.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+        for (KoXmlNode _node = bodyElem.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
             if ( ( tag = _node.toElement() ).isNull() ) {
                 //Don't do anything
-            } else {
-                if (! tag.isNull()) {
+            }
+            else {
+                if (!tag.isNull()) {
+
                     const QString localName = tag.localName();
+
                     if (tag.namespaceURI() == KoXmlNS::delta) {
-                        if (d->changeTracker && localName == "tracked-changes")
+
+                        if (d->changeTracker && localName == "tracked-changes") {
                             d->changeTracker->loadOdfChanges(tag);
+                        }
                         else if (d->changeTracker && localName == "removed-content") {
                             QString changeId = tag.attributeNS(KoXmlNS::delta, "removal-change-idref");
                             int deleteStartPosition = cursor.position();
@@ -502,7 +512,7 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
                             loadBody(tag, cursor);
                             d->closeChangeRegion(tag);
 
-                            if(!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
+                            if (!d->checkForDeleteMerge(cursor, changeId, deleteStartPosition)) {
                                 QTextCursor tempCursor(cursor);
                                 tempCursor.setPosition(deleteStartPosition);
                                 KoDeleteChangeMarker *marker = d->insertDeleteChangeMarker(tempCursor, changeId);

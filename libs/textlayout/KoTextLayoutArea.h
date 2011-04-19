@@ -100,6 +100,11 @@ public:
     /// The real bottom will be determined during layout
     qreal maximumAllowedBottom() const;
 
+    /// Sets the maximum allowed width before wrapping text.
+    /// Setting this also indicates that we don't want wrapping.
+    /// 0 means wrapping is allowed
+    void setNoWrap(qreal maximumAllowedWidth);
+
     qreal listIndent() const;
     qreal textIndent(QTextBlock block) const;
     qreal x() const;
@@ -174,6 +179,7 @@ private:
     qreal m_top; // reference area top
     qreal m_bottom; // reference area top
     qreal m_maximalAllowedBottom;
+    qreal m_maximalAllowedWidth; // 0 indicates wrapping is allowed
     QRectF m_boundingRect;
     KoTextBlockBorderData *m_prevBorder;
     qreal m_prevBorderPadding;

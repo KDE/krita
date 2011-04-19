@@ -76,6 +76,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_top(0.0)
  , m_bottom(0.0)
  , m_maximalAllowedBottom(0.0)
+ , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
  , m_endOfArea()
@@ -996,6 +997,11 @@ qreal KoTextLayoutArea::maximumAllowedBottom() const
 {
     return m_maximalAllowedBottom - m_footNotesHeight
                     - m_preregisteredFootNotesHeight;
+}
+
+void KoTextLayoutArea::setNoWrap(qreal maximumAllowedWidth)
+{
+    m_maximumAllowedWidth = maximumAllowedWidth;
 }
 
 KoText::Direction KoTextLayoutArea::parentTextDirection() const

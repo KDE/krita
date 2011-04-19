@@ -55,6 +55,7 @@
 #include <KoXmlReader.h>
 #include "KoTextInlineRdf.h"
 #include "KoTableOfContentsGeneratorInfo.h"
+#include "KoSection.h"
 
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
@@ -106,7 +107,7 @@ public:
     int bodyProgressTotal;
     int bodyProgressValue;
     int nextProgressReportMs;
-    QTime dt;
+    QTime progressTime;
 
     KoList *currentList;
     KoListStyle *currentListStyle;
@@ -179,11 +180,11 @@ public:
           deleteMergeStarted(false),
           inTable(false)
     {
-        dt.start();
+        progressTime.start();
     }
 
     ~Private() {
-        kDebug(32500) << "Loading took" << (float)(dt.elapsed()) / 1000 << " seconds";
+        kDebug(32500) << "Loading took" << (float)(progressTime.elapsed()) / 1000 << " seconds";
     }
 
     KoList *list(const QTextDocument *document, KoListStyle *listStyle);
@@ -2304,8 +2305,8 @@ void KoTextLoader::startBody(int total)
 void KoTextLoader::processBody()
 {
     d->bodyProgressValue++;
-    if (d->dt.elapsed() >= d->nextProgressReportMs) {  // update based on elapsed time, don't saturate the queue
-        d->nextProgressReportMs = d->dt.elapsed() + 333; // report 3 times per second
+    if (d->progressTime.elapsed() >= d->nextProgressReportMs) {  // update based on elapsed time, don't saturate the queue
+        d->nextProgressReportMs = d->progressTime.elapsed() + 333; // report 3 times per second
         Q_ASSERT(d->bodyProgressTotal > 0);
         const int percent = d->bodyProgressValue * 100 / d->bodyProgressTotal;
         emit sigProgress(percent);

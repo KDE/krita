@@ -1670,6 +1670,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
+        // If the block contains a section marker, save the section to ODF
         KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
         if (data) {
             KoSection *section = data->section();
@@ -1677,7 +1678,6 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 section->saveOdf(context);
             }
         }
-
 
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();

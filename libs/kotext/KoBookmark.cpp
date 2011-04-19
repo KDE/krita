@@ -40,8 +40,8 @@ class KoBookmark::Private
 {
 public:
     Private(const QTextDocument *doc)
-            : document(doc),
-            posInDocument(0) { }
+        : document(doc),
+          posInDocument(0) { }
     const QTextDocument *document;
     int posInDocument;
     KoBookmark *endBookmark;
@@ -51,8 +51,8 @@ public:
 };
 
 KoBookmark::KoBookmark(const QTextDocument *document)
-        : KoInlineObject(false),
-        d(new Private(document))
+    : KoInlineObject(false),
+      d(new Private(document))
 {
     d->selection = false;
     d->endBookmark = 0;

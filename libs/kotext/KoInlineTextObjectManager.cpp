@@ -45,6 +45,8 @@ KoInlineObject *KoInlineTextObjectManager::inlineTextObject(const QTextCharForma
     int id = format.intProperty(InlineInstanceId);
     if (id <= 0)
         return 0;
+    if (!m_objects.contains(id))
+        return 0;
     return m_objects.value(id);
 }
 

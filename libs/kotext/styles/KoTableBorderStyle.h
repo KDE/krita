@@ -116,7 +116,7 @@ public:
     void setEdge(Side side, BorderStyle style, qreal totalWidth, QColor color);
 
     /**
-     * Set the properties of an double border.
+     * Set the properties of a double border.
      * Note: you need to set the edge first or that would overwrite these values.
      *
      * The values will not be set if the border doesn't have a double style

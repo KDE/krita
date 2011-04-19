@@ -16,17 +16,43 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef KOSECTION_H
+#define KOSECTION_H
 
-#ifndef KOODFSECTION_H
-#define KOODFSECTION_H
+class KoXmlElement;
+class KoShapeLoadingContext;
+class KoShapeSavingContext;
 
 /**
- * Contains the information about the current text:section
+ * Contains the information about the current text:section.
+ *
+ * The <text:section> element has the following attributes:
+ *
+ * <ul>
+ * <li>text:condition
+ * <li>text:display
+ * <li>text:name
+ * <li>text:protected
+ * <li>text:protection-key
+ * <li>text:protection-key-digest-algorithm
+ * <li>text:style-name
+ * <li>xml:id
+ * </ul>
+ * (odf spec v.12)
  */
-class KoOdfSection
+class KoSection
 {
 public:
-    KoOdfSection();
+
+    KoSection();
+    ~KoSection();
+
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext *context);
+    void saveOdf(KoShapeSavingContext &context);
+private:
+    class Private;
+    Private * const d;
+
 };
 
-#endif // KOODFSECTION_H
+#endif // KOSECTION_H

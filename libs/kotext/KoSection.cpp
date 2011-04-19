@@ -17,8 +17,60 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KoOdfSection.h"
+#include "KoSection.h"
 
-KoOdfSection::KoOdfSection()
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
+
+class KoSection::Private
 {
+public:
+    Private()
+    {
+    }
+
+    QString condition;
+    QString display;
+    QString name;
+    QString text_protected;
+    QString protection_key;
+    QString protection_key_digest_algorithm;
+    QString style_name;
+    QString id;
+
+};
+
+KoSection::KoOdfSection()
+    : d(new Private())
+{
+}
+
+KoSection::~KoOdfSection()
+{
+    delete d;
+}
+
+bool KoSection::loadOdf(const KoXmlElement &element, KoShapeLoadingContext *context)
+{
+    // check whether we really are a section
+    if (element.namespaceURI() == KoXmlNS::text && element.localName() == "section") {
+        // get all the attributes
+        d->condition = element.attributeNS(KoXmlNS::text, "condition");
+        d->display = element.attributeNS(KoXmlNS::text, "display");
+        d->name = element.attributeNS(KoXmlNS::text, "name");
+        d->text_protected = element.attributeNS(KoXmlNS::text, "text-protected");
+        d->protection_key = element.attributeNS(KoXmlNS::text, "protection-key");
+        d->protection_key_digest_algorithm = element.attributeNS(KoXmlNS::text, "protection-key-algorithm");
+        d->style_name = element.attributeNS(KoXmlNS::text, "style-name");
+        d->id = element.attributeNS(KoXmlNS::text, "id");
+        return true;
+    }
+    return false;
+}
+
+void KoSection::saveOdf(KoShapeShavingContext &context)
+{
+
 }

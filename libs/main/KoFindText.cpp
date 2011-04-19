@@ -187,7 +187,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     d->updateSelections();
 }
 
-void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant &value)
+void KoFindText::replaceImplementation(const KoFindMatch &/*match*/, const QVariant &/*value*/)
 {
     //Does nothing at the moment...
 }

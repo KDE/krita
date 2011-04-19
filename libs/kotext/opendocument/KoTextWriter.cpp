@@ -1664,7 +1664,6 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
-    KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {

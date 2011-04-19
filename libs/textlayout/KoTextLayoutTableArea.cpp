@@ -168,7 +168,10 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     QTextTableCell endTableCell = d->table->cellAt(cursor.selectionEnd());
 
     if (startTableCell == endTableCell) {
-        return d->cellAreas[startTableCell.row()][startTableCell.column()]->selectionBoundingBox(cursor);
+        Q_ASSERT_X(startTableCell.row() < d->cellAreas.count() && startTableCell.column() < d->cellAreas[startTableCell.row()].count(), __FUNCTION__, QString("Out of bounds. We expected %1 < %2 and %3 < %4").arg(startTableCell.row()).arg(d->cellAreas.count()).arg(startTableCell.column()).arg(d->cellAreas.at(startTableCell.row()).count()).toLocal8Bit());
+        KoTextLayoutArea *area = d->cellAreas[startTableCell.row()][startTableCell.column()];
+        Q_ASSERT(area);
+        return area->selectionBoundingBox(cursor);
     } else {
         int selectionRow;
         int selectionColumn;

@@ -23,6 +23,7 @@
 #include <KoProperties.h>
 #include <KoXmlNS.h>
 #include <kdebug.h>
+#include <klocale.h>
 
 #include <QStringList>
 
@@ -31,6 +32,30 @@
 InfoVariableFactory::InfoVariableFactory()
         : KoInlineObjectFactoryBase("info", TextVariable)
 {
+    KoInlineObjectTemplate var1;
+    var1.id = "author";
+    var1.name = i18n("Author Name");
+    KoProperties *props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::AuthorName);
+    var1.properties = props;
+    addTemplate(var1);
+
+    KoInlineObjectTemplate var2;
+    var2.id = "title";
+    var2.name = i18n("Title");
+    props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::Title);
+    var2.properties = props;
+    addTemplate(var2);
+
+    KoInlineObjectTemplate var3;
+    var3.id = "subject";
+    var3.name = i18n("Subject");
+    props = new KoProperties();
+    props->setProperty("vartype", KoInlineObject::Subject);
+    var3.properties = props;
+    addTemplate(var3);
+
     QStringList elementNames(InfoVariable::tags());
     setOdfElementNames(KoXmlNS::text, elementNames);
 }

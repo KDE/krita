@@ -81,7 +81,7 @@ void ShadowDocker::selectionChanged()
         return;
 
     KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
+    KoShape * shape = selection->firstSelectedShape(KoFlake::TopLevelSelection);
     d->widget->setEnabled( shape != 0 );
 
     if( ! shape )

@@ -359,21 +359,7 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
         painter.setOpacity(1.0-transparency);
     }
 
-    if (shape->shadow()) {
-        painter.save();
-        shape->shadow()->paint(shape, painter, converter);
-        painter.restore();
-    }
-    if (!shape->filterEffectStack() || shape->filterEffectStack()->isEmpty()) {
-        painter.save();
-        shape->paint(painter, converter);
-        painter.restore();
-        if (shape->border()) {
-            painter.save();
-            shape->border()->paint(shape, painter, converter);
-            painter.restore();
-        }
-    } else {
+    if (shape->filterEffectStack()) {
         // There are filter effects, then we need to prerender the shape on an image, to filter it
         QRectF shapeBound(QPointF(), shape->size());
         // First step, compute the rectangle used for the image
@@ -478,11 +464,31 @@ void KoShapeManager::paintShape(KoShape *shape, QPainter &painter, const KoViewC
 
         KoFilterEffect *lastEffect = filterEffects.last();
 
+        if (shape->shadow()) {
+            shape->shadow()->paintBuffer(clippingOffset, imageBuffers.value(lastEffect->output()), painter, converter);
+        }
+
         // Paint the result
         painter.save();
         painter.drawImage(clippingOffset, imageBuffers.value(lastEffect->output()));
         painter.restore();
+    } else {
+        if (shape->shadow()) {
+            painter.save();
+            shape->shadow()->paint(shape, painter, converter);
+            painter.restore();
+        }
+
+        painter.save();
+        shape->paint(painter, converter);
+        painter.restore();
+        if (shape->border()) {
+            painter.save();
+            shape->border()->paint(shape, painter, converter);
+            painter.restore();
+        }
     }
+
     if (!forPrint) {
         painter.setRenderHint(QPainter::Antialiasing, false);
         shape->paintDecorations(painter, converter, d->canvas);
@@ -648,4 +654,4 @@ KoCanvasBase *KoShapeManager::canvas()
     return d->canvas;
 }
 
-#include <KoShapeManager.moc>
+#include "KoShapeManager.moc"

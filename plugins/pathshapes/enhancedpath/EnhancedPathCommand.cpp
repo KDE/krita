@@ -250,6 +250,9 @@ qreal EnhancedPathCommand::angleFromPoint(const QPointF &point) const
 qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
+    if (fabs(sweepAngle) < 0.1) {
+        return 2*M_PI;
+    }
     if (clockwise) {
         // we are moving clockwise to the end angle
         if (stop > start)
@@ -266,6 +269,9 @@ qreal EnhancedPathCommand::radSweepAngle(qreal start, qreal stop, bool clockwise
 qreal EnhancedPathCommand::degSweepAngle(qreal start, qreal stop, bool clockwise) const
 {
     qreal sweepAngle = stop - start;
+    if (fabs(sweepAngle) < 0.1) {
+        return 360.0;
+    }
     if (clockwise) {
         // we are moving clockwise to the end angle
         if (stop > start)

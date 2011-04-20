@@ -687,6 +687,10 @@ void Axis::Private::createStockDiagram()
     kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
     registerDiagram( kdStockDiagram );
 
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdStockDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDimensions( 3 );
+
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdStockDiagram->setType( KDChart::StockDiagram::Stacked );
@@ -1521,6 +1525,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         d->plotAreaChartType = newChartType;
         return;
     }
+
+    qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 

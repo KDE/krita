@@ -25,7 +25,6 @@
 
 #include "kotext_export.h"
 
-class KoSection;
 class KoTextBlockBorderData;
 class KoTextBlockPaintStrategyBase;
 
@@ -143,19 +142,6 @@ public:
      * Return the paintStrategy of this paragraph
      */
     KoTextBlockPaintStrategyBase *paintStrategy() const;
-
-
-    /**
-     * Set the section on this block. Sections are stored in the userdata block of the first
-     * text block in the section.
-     * @param section the section object
-     */
-    void setSection(KoSection *section);
-
-    /**
-     * @return the section object associatated with this block, or 0 if there is no section object.
-     */
-    KoSection *section() const;
 
 private:
     class Private;

@@ -64,6 +64,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
 
 void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
 {
+    Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_stayOnBaseline = false;
@@ -189,6 +190,7 @@ void RunAroundHelper::createLineParts()
 
 QRectF RunAroundHelper::minimizeHeightToLeastNeeded(const QRectF &lineRect)
 {
+    Q_ASSERT(line.isValid());
     QRectF lineRectBase = lineRect;
     // Get width of one char or shape (as-char).
     m_textWidth = line.cursorToX(line.textStart() + 1) - line.cursorToX(line.textStart());
@@ -224,7 +226,9 @@ QRectF RunAroundHelper::getLineRectPart()
     return retVal;
 }
 
-void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth) {
+void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal leftIndent, const qreal maxNaturalTextWidth)
+{
+    Q_ASSERT(line.isValid());
     qreal width = m_textWidth;
     qreal maxWidth = minLineRectPart.width() - leftIndent;
     qreal height;
@@ -243,7 +247,10 @@ void RunAroundHelper::setMaxTextWidth(const QRectF &minLineRectPart, const qreal
     }
 }
 
-QRectF RunAroundHelper::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth) {
+QRectF RunAroundHelper::getLineRect(const QRectF &lineRect, const qreal maxNaturalTextWidth)
+{
+    Q_ASSERT(line.isValid());
+
     const qreal leftIndent = lineRect.left();
     QRectF minLineRect = minimizeHeightToLeastNeeded(lineRect);
     updateLineParts(minLineRect);
@@ -274,7 +281,8 @@ QRectF RunAroundHelper::getLineRect(const QRectF &lineRect, const qreal maxNatur
     return lineRectPart;
 }
 
-void RunAroundHelper::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth) {
+void RunAroundHelper::checkEndOfLine(const QRectF &lineRectPart, const qreal maxNaturalTextWidth)
+{
     if (lineRectPart == m_lineParts.last() || maxNaturalTextWidth <= lineRectPart.width()) {
         m_horizontalPosition = RIDICULOUSLY_LARGE_NEGATIVE_INDENT;
         m_stayOnBaseline = false;

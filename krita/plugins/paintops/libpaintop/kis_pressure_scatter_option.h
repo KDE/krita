@@ -56,7 +56,6 @@ public:
 private:
     bool m_axisX;
     bool m_axisY;
-    qreal m_scatterAmount;
 };
 
 #endif

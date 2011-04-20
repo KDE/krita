@@ -38,12 +38,10 @@ public:
 private slots:
     void xAxisEnabled(bool enable);
     void yAxisEnabled(bool enable);
-    void scatterAmountChanged(qreal value);
     
 private:
     QCheckBox* m_axisX;
     QCheckBox* m_axisY;
-    KisDoubleSliderSpinBox* m_scatterAmount; 
 };
 
 #endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H

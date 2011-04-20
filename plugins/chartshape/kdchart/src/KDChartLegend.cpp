@@ -907,7 +907,6 @@ void Legend::buildLegend()
     }
 
     Q_ASSERT( d->modelLabels.count() == d->modelBrushes.count() );
-    qDebug() << "THE FUN IS ALL MINE" << d->modelLabels.count();
 
     // legend caption
     if( !titleText().isEmpty() && titleTextAttributes().isVisible() ) {

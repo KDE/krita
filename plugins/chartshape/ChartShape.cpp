@@ -1003,6 +1003,10 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
 
 
     // 2. Load the data
+//     int dimensions = numDimensions( chartType );
+//     qDebug() << "DIMENSIONS" << dimensions;
+//     d->proxyModel->setDataDimensions( dimensions );
+//     qDebug() << d->proxyModel->dataSets().count();
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
@@ -1013,15 +1017,14 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     // 3. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
-    int dimensions = numDimensions( chartType );
-    qDebug() << "DIMENSIONS" << dimensions;
-    d->proxyModel->setDataDimensions( dimensions );
-    qDebug() << d->proxyModel->dataSets().count();
+
     if ( !plotareaElem.isNull() ) {
-        if ( !d->plotArea->loadOdf( plotareaElem, context ) )
-            return false;
         d->plotArea->setChartType( chartType );
         d->plotArea->setChartSubType( chartSubType() );
+        if ( !d->plotArea->loadOdf( plotareaElem, context ) )
+            return false;
+//         d->plotArea->setChartType( chartType );
+//         d->plotArea->setChartSubType( chartSubType() );
     }
 
     // 4. Load the title.

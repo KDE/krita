@@ -222,6 +222,8 @@ public:
 
     bool loadOdf( const KoXmlElement &n,
                   KoShapeLoadingContext &context );
+    bool loadSeriesIntoDataset( const KoXmlElement &n,
+                  KoShapeLoadingContext &context );
     /**
      * Saves a series to ODF. Creates a new chart:series element.
      */

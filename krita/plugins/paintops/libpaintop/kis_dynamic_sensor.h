@@ -48,6 +48,7 @@ const KoID YTiltId("ytilt", ki18n("Y-Tilt")); ///< number depending on Y-tilt
 const KoID AscensionId("ascension", ki18n("Ascension")); /// < number depending on the X and Y tilt, ascension is 0 when stylus nib points to you and changes clockwise from -180 to +180.
 const KoID DeclinationId("declination", ki18n("Declination")); /// < declination is 90 when stylus is perpendicular to tablet and 0 when it's parallel to tablet
 const KoID PerspectiveId("perspective", ki18n("Perspective")); ///< number depending on the distance on the perspective grid
+const KoID TangentialPressureId("tangentialpressure", ki18n("Tangential pressure")); ///< the wheel on an airbrush device
 const KoID SensorsListId("sensorslist", "SHOULD NOT APPEAR IN THE UI !"); ///< this a non user-visible sensor that can store a list of other sensors, and multiply their output
 
 /**

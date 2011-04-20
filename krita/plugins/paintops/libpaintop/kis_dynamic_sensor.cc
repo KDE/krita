@@ -76,6 +76,8 @@ KisDynamicSensor* KisDynamicSensor::id2Sensor(const KoID& id)
         return new KisDynamicSensorFade();
     } else if (id.id() == PerspectiveId.id()) {
         return new KisDynamicSensorPerspective();
+    } else if (id.id() == TangentialPressureId.id()) {
+        return new KisDynamicSensorTangentialPressure();
     } else if (id.id() == SensorsListId.id()) {
         return new KisDynamicSensorList();
     }
@@ -106,7 +108,22 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    ids << PressureId << XTiltId << YTiltId << AscensionId << DeclinationId << SpeedId << DrawingAngleId << RotationId << DistanceId << TimeId << FuzzyId << FadeId << PerspectiveId;
+    
+    ids << PressureId
+        << XTiltId
+        << YTiltId
+        << AscensionId
+        << DeclinationId
+        << SpeedId
+        << DrawingAngleId
+        << RotationId
+        << DistanceId
+        << TimeId
+        << FuzzyId
+        << FadeId
+        << PerspectiveId
+        << TangentialPressureId;
+        
     return ids;
 }
 

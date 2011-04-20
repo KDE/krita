@@ -144,6 +144,7 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
         }
         break;
     }
+    /*
     case KoShape::ShadowChanged:
     {
         KoShapeShadow *shade = shadow();
@@ -153,7 +154,7 @@ void KoShapeGroup::shapeChanged(ChangeType type, KoShape *shape)
             setShadow(0);
         }
         break;
-    }
+    }*/
     default:
         break;
     }

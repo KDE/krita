@@ -52,11 +52,22 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
 {
     Q_UNUSED(isNewRootArea);
 
+    QRectF updateRect = rootArea->associatedShape()->outlineRect();
+    rootArea->associatedShape()->update(updateRect);
+
+    QSizeF newSize = rootArea->associatedShape()->size();
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
         ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight) {
-        rootArea->associatedShape()->setSize(QSize(
-                        rootArea->associatedShape()->size().width(),
-                        qMax(rootArea->associatedShape()->size().height(), rootArea->bottom() - rootArea->top())));
+        newSize.setHeight(rootArea->bottom() - rootArea->top());
+    }
+    if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        newSize.setWidth(rootArea->right() - rootArea->left());
+    }
+    if (newSize != rootArea->associatedShape()->size()) {
+        QPointF centerpos = rootArea->associatedShape()->absolutePosition();
+        rootArea->associatedShape()->setSize(newSize);
+        rootArea->associatedShape()->setAbsolutePosition(centerpos);
     }
 
     qreal newBottom = rootArea->top() + rootArea->associatedShape()->size().height();
@@ -72,22 +83,20 @@ void SimpleRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool i
         }
     }
 
-    if (m_textShapeData->resizeMethod() != KoTextShapeData::ShrinkToFitResize) {
-        rootArea->setBottom(newBottom);
-    }
-
-    rootArea->associatedShape()->update();
+    updateRect |= rootArea->associatedShape()->outlineRect();
+    rootArea->associatedShape()->update(rootArea->associatedShape()->outlineRect());
 }
 
 QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
+    QSizeF size = m_textShape->size();
+    // In simple cases we always set height way too high so that we have no breaking
+    // If the shape grows afterwards or not is handled in doPostLayout()
+    size.setHeight(1E6);
+
     if (m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidthAndHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowHeight
-        ||m_textShapeData->resizeMethod() == KoTextShapeData::ShrinkToFitResize) {
-        QSizeF size = m_textShape->size();
-        size.setHeight(1E6);
-        return size;
-    } else {
-        return m_textShape->size();
+        ||m_textShapeData->resizeMethod() == KoTextShapeData::AutoGrowWidth) {
+        rootArea->setNoWrap(1E6);
     }
+    return size;
 }

@@ -443,6 +443,13 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(m_y);
             }
+            if (m_maximumAllowedWidth>0) {
+                m_left = m_boundingRect.left();
+                m_right = m_boundingRect.right();
+                m_maximumAllowedWidth = 0;
+
+                layout(new FrameIterator(m_startOfArea));
+            }
             return true; // we have layouted till the end of the frame
         }
     }
@@ -783,7 +790,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(cursor->line.x());
-        expandBoundingRight(cursor->line.x() + cursor->line.width());
+        expandBoundingRight(cursor->line.x() + cursor->line.naturalTextWidth());
 
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
@@ -849,6 +856,8 @@ bool KoTextLayoutArea::acceptsPageBreak() const
 
 void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)
 {
+    m_boundingRect.setTop(m_top + qMin(qreal(0.0), offset));
+    m_boundingRect.setBottom(m_bottom + qMax(qreal(0.0), offset));
     m_verticalAlignOffset = offset;
 }
 
@@ -1025,7 +1034,7 @@ void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qrea
     m_left = left;
     m_right = right;
     m_top = top;
-    m_boundingRect.setTop(top);
+    m_boundingRect = QRectF(0.0, top, 0.0, 0.0);
     m_maximalAllowedBottom = maximumAllowedBottom;
 }
 
@@ -1056,7 +1065,7 @@ qreal KoTextLayoutArea::bottom() const
 
 void KoTextLayoutArea::setBottom(qreal bottom)
 {
-    m_boundingRect.setBottom(bottom);
+    m_boundingRect.setBottom(m_bottom + qMax(qreal(0.0), m_verticalAlignOffset));
     m_bottom = bottom;
 }
 

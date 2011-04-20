@@ -9,6 +9,7 @@ SET ( ArtisticTextShape_SRCS
     ArtisticTextShapeFactory.cpp
     ArtisticTextTool.cpp
     ArtisticTextToolFactory.cpp
+    ArtisticTextToolSelection.cpp
     ArtisticTextShapeConfigWidget.cpp
     ArtisticTextShapeLoadingUpdater.cpp
     AttachTextToPathCommand.cpp

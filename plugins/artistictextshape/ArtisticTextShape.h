@@ -150,7 +150,7 @@ public:
     /// Gets the angle of the char with the given index
     qreal charAngleAt(int charIndex) const;
 
-    /// Gets the position of the char with the given index
+    /// Gets the position of the char with the given index in shape coordinates
     QPointF charPositionAt(int charIndex) const;
 
     /// Gets the extents of the char with the given index

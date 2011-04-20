@@ -19,6 +19,7 @@
  */
 
 #include "ArtisticTextTool.h"
+#include "ArtisticTextToolSelection.h"
 #include "AttachTextToPathCommand.h"
 #include "DetachTextFromPathCommand.h"
 #include "AddTextRangeCommand.h"
@@ -53,7 +54,7 @@
 const int BlinkInterval = 500;
 
 ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
-    : KoToolBase(canvas), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
+    : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
     m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
@@ -122,6 +123,11 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
         painter.drawPath(offsetHandleShape());
         painter.restore();
     }
+    if (m_selection.hasSelection()) {
+        painter.save();
+        m_selection.paint(painter, converter);
+        painter.restore();
+    }
 }
 
 void ArtisticTextTool::repaintDecorations()
@@ -144,15 +150,11 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
         if(m_hoverText != m_currentShape) {
             // if we hit another text shape, select that shape
             selection->deselectAll();
-            enableTextCursor( false );
-            m_currentShape = m_hoverText;
-            emit shapeSelected(m_currentShape, canvas());
-            enableTextCursor( true );
+            setCurrentShape(m_hoverText);
             selection->select( m_currentShape );
         }
         // change the text cursor position
-        QPointF pos = event->point;
-        pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+        QPointF pos = m_currentShape->documentToShape(event->point);
         const int len = m_currentShape->plainText().length();
         int hit = len;
         qreal mindist = DBL_MAX;
@@ -164,6 +166,7 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             }
         }
         setTextCursorInternal( hit );
+        m_selection.clear();
     }
     event->ignore();
 }
@@ -274,16 +277,32 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         switch(event->key())
         {
         case Qt::Key_Delete:
-            if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length())
+            if (m_selection.hasSelection()) {
+                removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
+                m_selection.clear();
+            } else if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length()) {
                 removeFromTextCursor( textCursor(), 1 );
-            break;    
+            }
+            break;
         case Qt::Key_Backspace:
             removeFromTextCursor( textCursor()-1, 1 );
             break;
         case Qt::Key_Right:
+            if (event->modifiers() & Qt::ShiftModifier) {
+                int selectionStart = m_selection.hasSelection() ? m_selection.selectionStart() : textCursor();
+                m_selection.selectText(selectionStart, textCursor()+1);
+            } else {
+                m_selection.clear();
+            }
             setTextCursor(m_currentShape, textCursor() + 1);
             break;
         case Qt::Key_Left:
+            if (event->modifiers() & Qt::ShiftModifier) {
+                int selectionStart = m_selection.hasSelection() ? m_selection.selectionStart() : textCursor();
+                m_selection.selectText(selectionStart, textCursor()-1);
+            } else {
+                m_selection.clear();
+            }
             setTextCursor(m_currentShape, textCursor() - 1);
             break;
         case Qt::Key_Home:
@@ -308,23 +327,21 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
 {
     Q_UNUSED(toolActivation);
     foreach (KoShape *shape, shapes) {
-        m_currentShape = dynamic_cast<ArtisticTextShape*>( shape );
-        if(m_currentShape)
+        ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>( shape );
+        if(text) {
+            setCurrentShape(text);
             break;
+        }
     }
-    if( m_currentShape == 0 )  {
+    if(!m_currentShape) {
         // none found
         emit done();
         return;
-    } else {
-        emit shapeSelected(m_currentShape, canvas());
     }
 
     m_hoverText = 0;
     m_hoverPath = 0;
 
-    createTextCursorShape();
-    enableTextCursor( true );
     updateActions();
     emit statusTextChanged( i18n("Press return to finish editing.") );
     repaintDecorations();
@@ -341,8 +358,7 @@ void ArtisticTextTool::deactivate()
         if( m_currentShape->plainText().isEmpty() ) {
             canvas()->addCommand( canvas()->shapeController()->removeShape( m_currentShape ) );
         }
-        enableTextCursor( false );
-        m_currentShape = 0;
+        setCurrentShape(0);
     }
     m_hoverPath = 0;
     m_hoverText = 0;
@@ -428,6 +444,11 @@ QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
     return widgets;
 }
 
+KoToolSelection *ArtisticTextTool::selection()
+{
+    return &m_selection;
+}
+
 void ArtisticTextTool::enableTextCursor( bool enable )
 {
     if ( enable ) {
@@ -465,6 +486,18 @@ void ArtisticTextTool::updateTextCursorArea() const
 
     QRectF bbox = cursorTransform().mapRect( m_textCursorShape.boundingRect() );
     canvas()->updateCanvas( bbox );
+}
+
+void ArtisticTextTool::setCurrentShape(ArtisticTextShape *currentShape)
+{
+    if (m_currentShape == currentShape)
+        return;
+    enableTextCursor( false );
+    m_currentShape = currentShape;
+    m_selection.setSelectedShape(m_currentShape);
+    if (m_currentShape)
+        enableTextCursor( true );
+    emit shapeSelected(m_currentShape, canvas());
 }
 
 void ArtisticTextTool::setTextCursorInternal( int textCursor )
@@ -528,10 +561,7 @@ void ArtisticTextTool::shapeSelectionChanged()
     foreach (KoShape *shape, selection->selectedShapes()) {
         ArtisticTextShape *text = dynamic_cast<ArtisticTextShape*>(shape);
         if(text) {
-            enableTextCursor( false );
-            m_currentShape = text;
-            emit shapeSelected(m_currentShape, canvas());
-            enableTextCursor( true );
+            setCurrentShape(text);
             break;
         }
     }

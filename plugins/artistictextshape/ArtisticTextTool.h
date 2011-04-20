@@ -22,6 +22,7 @@
 #define ARTISTICTEXTTOOL_H
 
 #include "ArtisticTextShape.h"
+#include "ArtisticTextToolSelection.h"
 
 #include <KoToolBase.h>
 #include <QtCore/QTimer>
@@ -57,6 +58,8 @@ public:
     virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual KoToolSelection *selection();
 
     /// Sets cursor for specified text shape it is the current text shape
     void setTextCursor(ArtisticTextShape *textShape, int textCursor);
@@ -84,6 +87,7 @@ private:
     void setTextCursorInternal( int textCursor );
     void createTextCursorShape();
     void updateTextCursorArea() const;
+    void setCurrentShape(ArtisticTextShape *currentShape);
 
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
@@ -91,6 +95,7 @@ private:
     /// Returns the offset handle shape for the current text shape
     QPainterPath offsetHandleShape();
 
+    ArtisticTextToolSelection m_selection; ///< the tools selection
     ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
     ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
     KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over

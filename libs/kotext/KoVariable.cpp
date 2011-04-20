@@ -101,6 +101,8 @@ void KoVariable::resize(const QTextDocument *document, QTextInlineObject object,
     Q_UNUSED(posInDocument);
     if (d->modified == false)
         return;
+    if (object.isValid() == false)
+        return;
     d->modified = true;
     Q_ASSERT(format.isCharFormat());
     QFontMetricsF fm(format.font(), pd);
@@ -119,7 +121,6 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
 {
     Q_D(KoVariable);
     Q_UNUSED(document);
-    Q_UNUSED(object);
     Q_UNUSED(posInDocument);
 
     // TODO set all the font properties from the format (color etc)
@@ -135,7 +136,9 @@ void KoVariable::paint(QPainter &painter, QPaintDevice *pd, const QTextDocument 
     layout.setAdditionalFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
-    option.setTextDirection(object.textDirection());
+    if (object.isValid()) {
+        option.setTextDirection(object.textDirection());
+    }
     layout.setTextOption(option);
     layout.beginLayout();
     layout.createLine();

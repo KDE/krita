@@ -232,6 +232,7 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         rootArea->setDirty();
     }
+    emitLayoutIsDirty();
 }
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
@@ -318,7 +319,6 @@ void KoTextDocumentLayout::layout()
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
     d->layoutScheduled = false;
-
     KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
@@ -348,12 +348,12 @@ void KoTextDocumentLayout::layout()
                 d->provider->doPostLayout(rootArea, false);
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
-                int newsize = d->rootAreaList.indexOf(rootArea) + 1;
+/*                int newsize = d->rootAreaList.indexOf(rootArea) + 1;
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
                 emit finishedLayout();
-                return;
+*/                return;
             }
             d->provider->doPostLayout(rootArea, false);
 

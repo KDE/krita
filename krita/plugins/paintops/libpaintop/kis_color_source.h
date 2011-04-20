@@ -53,7 +53,7 @@ public:
     /**
      * Apply the color on a paint device
      */
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) = 0;
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const = 0;
     /**
      * @return true if the color is an uniform color
      */
@@ -73,13 +73,13 @@ public:
     virtual void resize(double , double);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const;
     virtual bool isUniformColor() const;
     virtual const KoColor& uniformColor() const;
 protected:
     KoColor* m_color;
 private:
-    KoColor* m_cachedColor;
+    mutable KoColor* m_cachedColor;
 };
 
 class PAINTOP_EXPORT KisPlainColorSource : public KisUniformColorSource
@@ -121,7 +121,7 @@ public:
     virtual void selectColor(double mix);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;
@@ -138,7 +138,7 @@ public:
     virtual void selectColor(double mix);
     virtual void applyColorTransformation(const KoColorTransformation* transfo);
     virtual const KoColorSpace* colorSpace() const;
-    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset);
+    virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
     virtual bool isUniformColor() const;

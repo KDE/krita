@@ -266,8 +266,20 @@ It contains a uint16 that is never used.
 
 2.3.2 Object Action Types
 - - - - - - - - - - - - - - 
-FIXME
 
+2.3.2.1 META_MAPMODE_ACTION (137)
+
+This action loads a new MapMode object.
+It therefore contains only a MapMode object.
+
+2.3.2.2 META_TEXTLANGUAGE_ACTION (150)
+
+This action sets the current text language.
+It contains the following part :
+uint16          languageType
+
+languageType    It is a decimal code that specifies the language.
+It is described in i18npool/inc/i18npool/lang.h
 
 2.3.3 Drawing Action Types
 - - - - - - - - - - - - - - 
@@ -276,7 +288,7 @@ FIXME
 
 A line color sets the pen color in the current context.
 It contains the following parts
-quint32         colorData
+uint32          colorData
 bool            isSet
 
 colorData       The color of the pen, in RGB format         (... QColor::fromRgb format)
@@ -286,7 +298,7 @@ isSet           Should the color be applied (true), or should the pen be hidden 
 
 A fill color sets the brush color in the current context.
 It contains the following parts
-quint32         colorData
+uint32          colorData
 bool            isSet
 
 colorData       The color of the brush, in RGB format         (... QColor::fromRgb format)
@@ -332,7 +344,6 @@ These action types have so far not being sorted into any other type.
  META_TEXTCOLOR_ACTION
  META_TEXTFILLCOLOR_ACTION
  META_TEXTALIGN_ACTION
- META_MAPMODE_ACTION
  META_FONT_ACTION
  META_PUSH_ACTION
  META_POP_ACTION
@@ -345,5 +356,4 @@ These action types have so far not being sorted into any other type.
  META_FLOATTRANSPARENT_ACTION
  META_GRADIENTEX_ACTION
  META_LAYOUTMODE_ACTION
- META_TEXTLANGUAGE_ACTION
  META_OVERLINECOLOR_ACTION

@@ -285,7 +285,12 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             }
             break;
         case Qt::Key_Backspace:
-            removeFromTextCursor( textCursor()-1, 1 );
+            if (m_selection.hasSelection()) {
+                removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
+                m_selection.clear();
+            } else {
+                removeFromTextCursor( textCursor()-1, 1 );
+            }
             break;
         case Qt::Key_Right:
             if (event->modifiers() & Qt::ShiftModifier) {
@@ -306,9 +311,11 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             setTextCursor(m_currentShape, textCursor() - 1);
             break;
         case Qt::Key_Home:
+            m_selection.clear();
             setTextCursor(m_currentShape, 0);
             break;
         case Qt::Key_End:
+            m_selection.clear();
             setTextCursor(m_currentShape, m_currentShape->plainText().length());
             break;
         case Qt::Key_Return:
@@ -316,6 +323,10 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             emit done();
             break;
         default:
+            if (m_selection.hasSelection()) {
+                removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
+                m_selection.clear();
+            }
             addToTextCursor( event->text() );
         }
     } else {

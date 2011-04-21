@@ -106,7 +106,8 @@ QPolygonF ArtisticTextToolSelection::outline()
     outline.reserve(m_selectionCount*4);
 
     const QString plainText = m_currentShape->plainText();
-    for (int charIndex = m_selectionStart; charIndex < m_selectionStart+m_selectionCount; ++charIndex) {
+    const int selectionEnd = m_selectionStart+m_selectionCount;
+    for (int charIndex = m_selectionStart; charIndex <= selectionEnd; ++charIndex) {
         const QPointF pos = m_currentShape->charPositionAt(charIndex);
         const qreal angle = m_currentShape->charAngleAt(charIndex);
         QFontMetrics metrics(m_currentShape->fontAt(charIndex));
@@ -115,14 +116,11 @@ QPolygonF ArtisticTextToolSelection::outline()
         charTransform.translate( pos.x() - 1, pos.y() );
         charTransform.rotate( 360. - angle );
 
-        const qreal w = metrics.charWidth(plainText, charIndex);
         const qreal a = metrics.ascent();
         const qreal d = metrics.descent();
 
         outline.prepend(charTransform.map(QPointF(0.0, -a)));
-        outline.prepend(charTransform.map(QPointF(w, -a)));
         outline.append(charTransform.map(QPointF(0.0, d)));
-        outline.append(charTransform.map(QPointF(w, d)));
     }
 
     return m_currentShape->absoluteTransformation(0).map(outline);
@@ -130,5 +128,6 @@ QPolygonF ArtisticTextToolSelection::outline()
 
 void ArtisticTextToolSelection::repaintDecoration()
 {
-    m_canvas->updateCanvas(outline().boundingRect());
+    if (hasSelection())
+        m_canvas->updateCanvas(outline().boundingRect());
 }

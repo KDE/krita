@@ -361,9 +361,13 @@ void ArtisticTextShape::setFont(const QFont &newFont)
 
 QFont ArtisticTextShape::fontAt(int charIndex) const
 {
+    if (isEmpty())
+        return defaultFont();
+    if (charIndex < 0)
+        return m_ranges.first().font();
     const int rangeIndex = indexOfChar(charIndex).first;
     if (rangeIndex < 0)
-        return defaultFont();
+        return m_ranges.last().font();
 
     return m_ranges[rangeIndex].font();
 }

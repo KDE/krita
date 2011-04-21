@@ -83,7 +83,13 @@ public:
      */
     void setFont(const QFont &font);
 
-    /// Returns the font at the specified character position
+    /**
+     * Returns the font at the specified character position
+     * If the text shape is empty it will return the default font.
+     * If the character index is smaller than zero it will return the font
+     * of the first character. If the character index is greater than the
+     * last character index it will return the font of the last character.
+     */
     QFont fontAt(int charIndex) const;
 
     /// Attaches this text shape to the given path shape

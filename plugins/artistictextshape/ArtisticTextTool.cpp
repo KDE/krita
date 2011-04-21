@@ -345,6 +345,10 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             emit done();
             break;
         default:
+            if (event->text().isEmpty()) {
+                event->ignore();
+                return;
+            }
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
                 m_selection.clear();

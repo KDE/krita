@@ -67,7 +67,7 @@ void ArtisticTextToolSelection::selectText(int from, int to)
 
     const int textCount = m_currentShape->plainText().count();
     m_selectionStart = qBound(0, from, textCount-1);
-    m_selectionCount = qBound(from+1, to, textCount) - m_selectionStart;
+    m_selectionCount = qBound(from, to, textCount) - m_selectionStart;
 
     repaintDecoration();
 }

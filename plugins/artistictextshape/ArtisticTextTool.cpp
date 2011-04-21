@@ -294,8 +294,19 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Right:
             if (event->modifiers() & Qt::ShiftModifier) {
-                int selectionStart = m_selection.hasSelection() ? m_selection.selectionStart() : textCursor();
-                m_selection.selectText(selectionStart, textCursor()+1);
+                int selectionStart, selectionEnd;
+                if (m_selection.hasSelection()) {
+                    selectionStart = m_selection.selectionStart();
+                    selectionEnd = selectionStart + m_selection.selectionCount();
+                    if (textCursor() == selectionStart)
+                        selectionStart = textCursor()+1;
+                    else if(textCursor() == selectionEnd)
+                        selectionEnd = textCursor()+1;
+                } else {
+                    selectionStart = textCursor();
+                    selectionEnd = textCursor()+1;
+                }
+                m_selection.selectText(selectionStart, selectionEnd);
             } else {
                 m_selection.clear();
             }
@@ -303,8 +314,19 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Left:
             if (event->modifiers() & Qt::ShiftModifier) {
-                int selectionStart = m_selection.hasSelection() ? m_selection.selectionStart() : textCursor();
-                m_selection.selectText(selectionStart, textCursor()-1);
+                int selectionStart, selectionEnd;
+                if (m_selection.hasSelection()) {
+                    selectionStart = m_selection.selectionStart();
+                    selectionEnd = selectionStart + m_selection.selectionCount();
+                    if (textCursor() == selectionStart)
+                        selectionStart = textCursor()-1;
+                    else if(textCursor() == selectionEnd)
+                        selectionEnd = textCursor()-1;
+                } else {
+                    selectionEnd = textCursor();
+                    selectionStart = textCursor()-1;
+                }
+                m_selection.selectText(selectionStart, selectionEnd);
             } else {
                 m_selection.clear();
             }

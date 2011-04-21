@@ -105,22 +105,19 @@ QPolygonF ArtisticTextToolSelection::outline()
     QPolygonF outline;
     outline.reserve(m_selectionCount*4);
 
-    const QString plainText = m_currentShape->plainText();
     const int selectionEnd = m_selectionStart+m_selectionCount;
     for (int charIndex = m_selectionStart; charIndex <= selectionEnd; ++charIndex) {
         const QPointF pos = m_currentShape->charPositionAt(charIndex);
         const qreal angle = m_currentShape->charAngleAt(charIndex);
-        QFontMetrics metrics(m_currentShape->fontAt(charIndex));
 
         QTransform charTransform;
         charTransform.translate( pos.x() - 1, pos.y() );
         charTransform.rotate( 360. - angle );
 
-        const qreal a = metrics.ascent();
-        const qreal d = metrics.descent();
+        QFontMetrics metrics(m_currentShape->fontAt(charIndex));
 
-        outline.prepend(charTransform.map(QPointF(0.0, -a)));
-        outline.append(charTransform.map(QPointF(0.0, d)));
+        outline.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
+        outline.append(charTransform.map(QPointF(0.0, metrics.descent())));
     }
 
     return m_currentShape->absoluteTransformation(0).map(outline);

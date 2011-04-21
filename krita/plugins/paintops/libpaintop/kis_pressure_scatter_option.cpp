@@ -81,8 +81,8 @@ void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguratio
     
     // backward compatibility: test for a "scatter amount" property
     //                         and use this value if it does exist
-//     if(setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
-//         KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
+    if(setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
+        KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
 }
 
 QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal diameter) const

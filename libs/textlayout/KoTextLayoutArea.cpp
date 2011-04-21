@@ -455,6 +455,41 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     }
 }
 
+
+//local type for temporary use in restartLayout
+struct LineKeeper
+{
+    int columns;
+    qreal lineWidth;
+    QPointF position;
+};
+
+QTextLine restartLayout(QTextLayout *layout)
+{
+
+    // and redo all previous lines
+    QList<LineKeeper> lineKeeps;
+    QTextLine line;
+    for(int i = 0; i < layout->lineCount()-1; i++) {
+        QTextLine l = layout->lineAt(i);
+        LineKeeper lk;
+        lk.lineWidth = l.width();
+        lk.columns = l.textLength();
+        lk.position = l.position();
+        lineKeeps.append(lk);
+    }
+    layout->clearLayout();
+    layout->beginLayout();
+    foreach(const LineKeeper &lk, lineKeeps) {
+        line = layout->createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lk.lineWidth);
+        line.setPosition(lk.position);
+    }
+    return line;
+}
+
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -704,6 +739,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_indent = textIndent(block);
         cursor->line = layout->createLine();
         cursor->fragmentIterator = block.begin();
+    } else {
+        cursor->line = restartLayout(layout);
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
@@ -719,17 +756,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
-
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
-    runAroundHelper.setLine(this, cursor->line);
-
-    runAroundHelper.setObstructions(documentLayout()->relevantObstructions(referenceRect()));
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
 
     while (cursor->line.isValid()) {
+        runAroundHelper.setLine(this, cursor->line);
+        runAroundHelper.setObstructions(documentLayout()->relevantObstructions(referenceRect()));
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
@@ -794,9 +829,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
-        runAroundHelper.setLine(this, cursor->line);
-        runAroundHelper.setObstructions(documentLayout()->relevantObstructions(referenceRect()));
-
         if (softBreak) {
             return false;
         }

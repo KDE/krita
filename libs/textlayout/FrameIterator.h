@@ -43,8 +43,10 @@ public:
 
     QTextFrame::iterator it;
     // the following can be seen as the "sub cursor" of text blocks
-    QTextLine line;   //useful if it is pointing to a table. invalid if about to start a new bloco
-    QTextBlock::Iterator fragmentIterator;   //useful if it is pointing to a table
+    QTextLine line;   // useful if it is pointing to a block. invalid if about to start a new block
+                      // should not be used outside layout for anything but validity
+    QTextBlock::Iterator fragmentIterator;   //useful if it is pointing to a block
+
     TableIterator *currentTableIterator;  //useful if it is pointing to a table
     FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
 };

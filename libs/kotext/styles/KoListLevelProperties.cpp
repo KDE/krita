@@ -52,7 +52,8 @@ public:
 };
 
 KoListLevelProperties::KoListLevelProperties()
-        : d(new Private())
+        : QObject()
+        , d(new Private())
 {
     QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
     setMarkCharacterStyle(charStyle);
@@ -62,7 +63,8 @@ KoListLevelProperties::KoListLevelProperties()
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)
-        : d(new Private())
+        : QObject()
+        , d(new Private())
 {
     d->copy(other.d);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));

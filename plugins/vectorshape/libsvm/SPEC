@@ -149,10 +149,38 @@ FIXME
 2.2.1 Graphics Objects
 - - - - - - - - - - - - - - 
 FIXME
+2.2.1.1 Point
+
+struct Point {
+	uint32 x;
+	uint32 y;
+}
 
 
 2.2.2 Structure Objects
 - - - - - - - - - - - - - - 
+
+2.2.2.1 VersionCompat
+
+struct VersionCompat {
+	uint16 version;
+	uint32 length;
+}
+
+A VersionCompat object is the header of most SVM Actions and Objects.
+I defines the version of the object, thus changing the parser behaviour, and 
+the length of the object, excluding the VersionCompat object.
+
+2.2.2.2 String
+
+struct String {
+	uint16 size;
+	char data[size];
+}
+
+A string object is built in a Pascal style, not a C style.
+There is no trailing \0 at the end of the string.
+
 FIXME
 
 

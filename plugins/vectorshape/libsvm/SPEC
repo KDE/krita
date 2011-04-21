@@ -28,9 +28,19 @@ Windows MetaFile ([MS-WMF].pdf) and the Extended MetaFile
 ------------
 FIXME
 
+
 1.2 Structure Overview
 ----------------------
-FIXME
+
+An SVM file always starts with a signature of 6 bytes that identifies
+the file as an SVM.  This signature is always the string "VCLMTF"
+(excluding the quotes).
+
+After that there is a header object describing the rest of the file
+followed by a number of actions as specified in the header.  Each
+action or object, including the header, starts with a VersionCompat
+object that specifies the version and size of the action or object in
+question.
 
 
 2. Structures
@@ -139,6 +149,7 @@ MTF_MIRROR_VERT    0x00000002
 
 
 2.1.2.2 ... Flags
+FIXME
 
 
 2.2 SVM Objects
@@ -146,40 +157,81 @@ MTF_MIRROR_VERT    0x00000002
 FIXME
 
 
-2.2.1 Graphics Objects
-- - - - - - - - - - - - - - 
-FIXME
-2.2.1.1 Point
+2.2.1 Basic Objects
+- - - - - - - - - -
 
-struct Point {
-	uint32 x;
-	uint32 y;
-}
+These object types are mostly used as primitives in the larger and
+more complex object types and actions.
 
 
-2.2.2 Structure Objects
-- - - - - - - - - - - - - - 
+2.2.1.1 VersionCompat Object
 
-2.2.2.1 VersionCompat
+The VersionCompat object is always the first object of any bigger
+object and any action. This object describes which version the object
+or action has.
 
 struct VersionCompat {
-	uint16 version;
-	uint32 length;
+    uint16 version;
+    uint32 length;
 }
 
 A VersionCompat object is the header of most SVM Actions and Objects.
-I defines the version of the object, thus changing the parser behaviour, and 
-the length of the object, excluding the VersionCompat object.
+I defines the version of the object, thus changing the parser
+behaviour, and the length of the object, excluding the VersionCompat
+object.
+
 
 2.2.2.2 String
 
 struct String {
-	uint16 size;
-	char data[size];
+    uint16 size;
+    char   data[size];
 }
 
-A string object is built in a Pascal style, not a C style.
-There is no trailing \0 at the end of the string.
+A string object is built in a Pascal style, not a C style.  There is
+no trailing \0 at the end of the string.
+
+
+2.2.1.2 Header Object
+
+The header object is always the first object in a SVM file. It has the
+following parts.
+
+VersionCompat 	versionCompat
+uint32          compressionMode 
+MapMode         mapMode
+uint32          width
+uint32          height
+uint32          actionCount 
+
+versionCompat   Version and size of the header record.
+
+compressionMode ... FIXME
+
+mapMode         MapMode for the ... FIXME
+
+width           Width of the picture in logical coordinates.
+
+height          Height of the picture in logical coordinates.
+
+actionCount     Number of Actions in the file.
+
+
+2.2.1.3 Point
+
+struct Point {
+    uint32 x;
+    uint32 y;
+}
+
+
+2.2.2 Graphics Objects
+- - - - - - - - - - - -
+FIXME
+
+
+2.2.3 Structure Objects
+- - - - - - - - - - - -
 
 FIXME
 

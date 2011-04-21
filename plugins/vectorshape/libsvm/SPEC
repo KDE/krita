@@ -175,13 +175,12 @@ struct VersionCompat {
     uint32 length;
 }
 
-A VersionCompat object is the header of most SVM Actions and Objects.
-I defines the version of the object, thus changing the parser
+It defines the version of the object, thus changing the parser
 behaviour, and the length of the object, excluding the VersionCompat
 object.
 
 
-2.2.2.2 String
+2.2.1.3 String
 
 struct String {
     uint16 size;
@@ -192,7 +191,7 @@ A string object is built in a Pascal style, not a C style.  There is
 no trailing \0 at the end of the string.
 
 
-2.2.1.2 Header Object
+2.2.1.4 Header Object
 
 The header object is always the first object in a SVM file. It has the
 following parts.
@@ -216,7 +215,6 @@ height          Height of the picture in logical coordinates.
 
 actionCount     Number of Actions in the file.
 
-
 2.2.1.3 Point
 
 struct Point {
@@ -238,12 +236,28 @@ FIXME
 2.3 SVM Actions
 ---------------
 
-
+The action type is specified using a unit16 at the beginning of each action 
+following the file header.
+Every action except the special META_NULL_ACTION begins with a VersionCompat 
+object.
 
 2.3.1 Control Action Types
 - - - - - - - - - - - - - - 
-FIXME
 
+2.3.1.1 META_COMMENT_ACTION (512)
+
+A comment action has no effect on the rendering.
+It contains the following parts :
+string          comment
+uint32          value
+string          comment2
+
+
+comment         The comment text
+
+value           ... FIXME
+
+comment2        ... FIXME
 
 2.3.2 Object Action Types
 - - - - - - - - - - - - - - 

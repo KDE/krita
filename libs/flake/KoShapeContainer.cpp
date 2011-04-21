@@ -39,11 +39,6 @@ KoShapeContainerPrivate::~KoShapeContainerPrivate()
     delete model;
 }
 
-KoShapeContainer::KoShapeContainer()
-    : KoShape(*(new KoShapeContainerPrivate(this)))
-{
-}
-
 KoShapeContainer::KoShapeContainer(KoShapeContainerModel *model)
         : KoShape(*(new KoShapeContainerPrivate(this)))
 {
@@ -89,6 +84,24 @@ void KoShapeContainer::removeShape(KoShape *shape)
         return;
     d->model->remove(shape);
     shape->setParent(0);
+    shapeCountChanged();
+
+    KoShapeContainer * grandparent = parent();
+    if (grandparent) {
+        grandparent->model()->childChanged(this, KoShape::ChildChanged);
+    }
+}
+
+void KoShapeContainer::removeAllShapes()
+{
+    Q_D(KoShapeContainer);
+    if (d->model == 0)
+        return;
+    for(int i = d->model->shapes().count() - 1; i >= 0; --i) {
+        KoShape *shape = d->model->shapes()[i];
+        d->model->remove(shape);
+        shape->setParent(0);
+    }
     shapeCountChanged();
 
     KoShapeContainer * grandparent = parent();

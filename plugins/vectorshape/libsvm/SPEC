@@ -259,6 +259,11 @@ value           ... FIXME
 
 comment2        ... FIXME
 
+2.3.1.2 META_NULL_ACTION (0)
+
+This action should never occur, ever.
+It contains a uint16 that is never used.
+
 2.3.2 Object Action Types
 - - - - - - - - - - - - - - 
 FIXME
@@ -266,15 +271,32 @@ FIXME
 
 2.3.3 Drawing Action Types
 - - - - - - - - - - - - - - 
-FIXME
 
+2.3.3.1 META_LINECOLOR_ACTION (132)
+
+A line color sets the pen color in the current context.
+It contains the following parts
+quint32         colorData
+bool            isSet
+
+colorData       The color of the pen, in RGB format         (... QColor::fromRgb format)
+isSet           Should the color be applied (true), or should the pen be hidden (false)
+
+2.3.3.2 META_FILLCOLOR_ACTION (133)
+
+A fill color sets the brush color in the current context.
+It contains the following parts
+quint32         colorData
+bool            isSet
+
+colorData       The color of the brush, in RGB format         (... QColor::fromRgb format)
+isSet           Should the color be applied (true), or should the brush be hidden (false)
 
 2.3.4 Unsorted Action Types
 - - - - - - - - - - - - - -
 
 These action types have so far not being sorted into any other type. 
 
- META_NULL_ACTION
  META_PIXEL_ACTION
  META_POINT_ACTION
  META_LINE_ACTION
@@ -307,8 +329,6 @@ These action types have so far not being sorted into any other type.
  META_ISECTRECTCLIPREGION_ACTION
  META_ISECTREGIONCLIPREGION_ACTION
  META_MOVECLIPREGION_ACTION
- META_LINECOLOR_ACTION
- META_FILLCOLOR_ACTION
  META_TEXTCOLOR_ACTION
  META_TEXTFILLCOLOR_ACTION
  META_TEXTALIGN_ACTION
@@ -327,4 +347,3 @@ These action types have so far not being sorted into any other type.
  META_LAYOUTMODE_ACTION
  META_TEXTLANGUAGE_ACTION
  META_OVERLINECOLOR_ACTION
- META_COMMENT_ACTION

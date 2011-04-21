@@ -234,7 +234,7 @@ void ArtisticTextShape::createOutline()
             }
         }
         // save offset and position after last character
-        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x());
+        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x()+offset.x());
         m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(m_charOffsets[globalCharIndex]);
     } else {
         QPointF charPos(0, 0);
@@ -674,7 +674,7 @@ bool ArtisticTextShape::replaceText(int charIndex, int charCount, const Artistic
 qreal ArtisticTextShape::charAngleAt(int charIndex) const
 {
     if( isOnPath() ) {
-        qreal t = m_charOffsets[qMin(charIndex, m_charOffsets.size())];
+        qreal t = m_charOffsets.value(qBound(0, charIndex, m_charOffsets.size()-1));
         return m_baseline.angleAtPercent( t );
     }
 
@@ -683,7 +683,7 @@ qreal ArtisticTextShape::charAngleAt(int charIndex) const
 
 QPointF ArtisticTextShape::charPositionAt(int charIndex) const
 {
-    return m_charPositions.value(qMin(charIndex, m_charPositions.size()));
+    return m_charPositions.value(qBound(0, charIndex, m_charPositions.size()-1));
 }
 
 QRectF ArtisticTextShape::charExtentsAt(int charIndex) const

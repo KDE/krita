@@ -32,6 +32,7 @@ public:
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) {}
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese);
 
     KoTextLayoutRootArea *m_area;
 };

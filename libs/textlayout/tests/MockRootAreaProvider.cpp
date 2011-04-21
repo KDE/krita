@@ -45,3 +45,11 @@ QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
     return QSizeF(200,1000);
 }
+
+QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+{
+    QList<KoTextLayoutObstruction*> obstructions;
+
+    return obstructions;
+}
+

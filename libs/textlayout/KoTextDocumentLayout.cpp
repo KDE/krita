@@ -488,16 +488,18 @@ void KoTextDocumentLayout::resetInlineObject(int resetPosition)
     }
 }
 
-QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions()
+QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions(const QRectF &rect)
 {
-    QList<KoTextLayoutObstruction*> currentObstructions; // obstructions for current page
+    QList<KoTextLayoutObstruction*> currentObstructions;
 
+    currentObstructions = d->provider->relevantObstructions(rect, currentObstructions);
+    /*
     // add current page children obstructions to currentObstructions
     foreach(KoShape *childShape, shapes()) {
         if (d->obstructions.contains(childShape)) {
             currentObstructions.append(d->obstructions.value(childShape));
         }
-    }
+    }*/
     return currentObstructions;
 }
 

@@ -19,8 +19,10 @@
 
 #include "SimpleRootAreaProvider.h"
 
-#include "KoTextLayoutRootArea.h"
 #include "TextShape.h"
+
+#include <KoTextLayoutRootArea.h>
+#include <KoTextLayoutObstruction.h>
 
 SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape)
     : m_textShape(textshape)
@@ -99,4 +101,17 @@ QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
         rootArea->setNoWrap(1E6);
     }
     return size;
+}
+
+QList<KoTextLayoutObstruction *> SimpleRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+{
+    QList<KoTextLayoutObstruction*> obstructions;
+    QRectF canvasRect = rect;
+    canvasRect.moveTop(rect.top() - m_area->top());
+    QTransform transform = m_textShape->absoluteTransformation(0);
+    canvasRect = transform.mapRect(canvasRect);
+
+    QList<KoShape *> shapes;
+    //shapes = manager->shapesAt(canvasRect):
+    return obstructions;
 }

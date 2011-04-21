@@ -165,8 +165,8 @@ public:
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
-    /// Return a list of obstructions relevant for current root area
-    QList<KoTextLayoutObstruction *> relevantObstructions();
+    /// Return a list of obstructions intersecting rect
+    QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect);
 
     QList<KoTextLayoutRootArea *> rootAreas() const;
     QList<KoShape*> shapes() const;

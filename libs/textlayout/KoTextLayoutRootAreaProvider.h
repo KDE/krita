@@ -23,9 +23,12 @@
 #include "kotext_export.h"
 
 #include <QSizeF>
+#include <QRectF>
+#include <QList>
 
 class KoTextLayoutRootArea;
 class KoTextDocumentLayout;
+class KoTextLayoutObstruction;
 
 /**
  * When laying out text we need an area where upon the text will be placed.
@@ -53,6 +56,11 @@ public:
 
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
+
+    /// Return a list of obstructions intersecting rect
+    /// Obstructions present in the excludingThese list will not be returned
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese) = 0;
+
 };
 
 #endif

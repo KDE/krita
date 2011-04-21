@@ -724,7 +724,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     RunAroundHelper runAroundHelper;
     runAroundHelper.setLine(this, cursor->line);
 
-    runAroundHelper.setObstructions(documentLayout()->relevantObstructions());
+    runAroundHelper.setObstructions(documentLayout()->relevantObstructions(referenceRect()));
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
@@ -795,7 +795,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // line fitted so try and do the next one
         cursor->line = layout->createLine();
         runAroundHelper.setLine(this, cursor->line);
-        runAroundHelper.setObstructions(documentLayout()->relevantObstructions());
+        runAroundHelper.setObstructions(documentLayout()->relevantObstructions(referenceRect()));
 
         if (softBreak) {
             return false;

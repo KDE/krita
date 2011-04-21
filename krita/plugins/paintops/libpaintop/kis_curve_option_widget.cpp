@@ -45,12 +45,13 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
 {
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
+    
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor*)), SLOT(updateSensorCurveLabels(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor*)), SLOT(updateCurve(KisDynamicSensor*)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(clicked(bool)), SLOT(transferCurve()));
+    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
     
     setLabel(m_curveOptionWidget->label_ymin, curveOption->minimumLabel());
     setLabel(m_curveOptionWidget->label_ymax, curveOption->maximumLabel());

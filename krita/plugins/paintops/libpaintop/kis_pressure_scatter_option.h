@@ -43,8 +43,8 @@ public:
     */
     QPointF apply(const KisPaintInformation& info, qreal diameter) const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
     void enableAxisY(bool enable);
     void enableAxisX(bool enable);

@@ -49,6 +49,7 @@ public:
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+    const QString& name() const;
     const QString& label() const;
     const QString& category() const;
     qreal minValue() const;

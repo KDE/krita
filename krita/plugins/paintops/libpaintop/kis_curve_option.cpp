@@ -42,6 +42,11 @@ KisCurveOption::~KisCurveOption()
     delete m_sensor;
 }
 
+const QString& KisCurveOption::name() const
+{
+    return m_name;
+}
+
 const QString & KisCurveOption::label() const
 {
     return m_label;
@@ -100,10 +105,13 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     if(customCurve)
         m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
     
+    if(setting->hasProperty(m_name + "MinValue") && setting->hasProperty(m_name + "MaxValue")) {
+        m_minValue = setting->getDouble(m_name + "MinValue");
+        m_maxValue = setting->getDouble(m_name + "MaxValue");
+    }
+    
+    m_value    = setting->getDouble(m_name + "Value"   , m_maxValue);
     m_useCurve = setting->getBool  (m_name + "UseCurve", true);
-    m_minValue = setting->getDouble(m_name + "MinValue", 0.0);
-    m_maxValue = setting->getDouble(m_name + "MaxValue", 1.0);
-    m_value    = setting->getDouble(m_name + "Value"   , 1.0);
 }
 
 void KisCurveOption::setSensor(KisDynamicSensor* sensor)
@@ -171,7 +179,5 @@ void KisCurveOption::setValueRange(qreal min, qreal max)
 
 void KisCurveOption::setValue(qreal value)
 {
-    if(value < m_minValue)      { m_value = m_minValue; }
-    else if(value > m_maxValue) { m_value = m_maxValue; }
-    else                        { m_value = value;      }
+    m_value = qBound(m_minValue, value, m_maxValue);
 }

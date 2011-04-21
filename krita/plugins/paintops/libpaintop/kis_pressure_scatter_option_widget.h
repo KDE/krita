@@ -33,7 +33,7 @@ class PAINTOP_EXPORT KisPressureScatterOptionWidget : public KisCurveOptionWidge
 public:
     KisPressureScatterOptionWidget();
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 private slots:
     void xAxisEnabled(bool enable);

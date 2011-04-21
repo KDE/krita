@@ -81,6 +81,7 @@ public:
     FrameIterator *layoutPosition;
 
     QHash<int, InlineObjectExtend> inlineObjectExtends; // maps text-position to whole-line-height of an inline object
+    int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     int textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
 
@@ -437,10 +438,16 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const
     return QRectF();
 }
 
+void KoTextDocumentLayout::clearInlineObjectRegistry(QTextBlock block)
+{
+    d->inlineObjectExtends.clear();
+    d->inlineObjectOffset = block.position();
+}
+
 void KoTextDocumentLayout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
     InlineObjectExtend pos(inlineObject.ascent(),inlineObject.descent());
-   //TODO d->inlineObjectExtends.insert(m_block.position() + inlineObject.textPosition(), pos);
+    d->inlineObjectExtends.insert(d->inlineObjectOffset + inlineObject.textPosition(), pos);
 }
 
 void KoTextDocumentLayout::unregisterAllObstructions()

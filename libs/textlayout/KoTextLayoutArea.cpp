@@ -733,6 +733,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_x = left() + format.leftMargin() + m_listIndent;
     }
 
+    m_documentLayout->clearInlineObjectRegistry(block);
+
     m_indent = 0;
     if (cursor->line.isValid() == false) {
         layout->beginLayout();

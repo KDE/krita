@@ -21,6 +21,8 @@
 #ifndef KOTEXTLAYOUTOBSTRUCTION_H
 #define KOTEXTLAYOUTOBSTRUCTION_H
 
+#include "kotext_export.h"
+
 #include <QTransform>
 #include <QMultiMap>
 #include <QPainterPath>
@@ -28,7 +30,7 @@
 class KoShape;
 
 ///  Class that allows us with the runaround of QPainterPaths
-class KoTextLayoutObstruction
+class KOTEXT_EXPORT KoTextLayoutObstruction
 {
 public:
     KoTextLayoutObstruction(KoShape *shape, const QTransform &matrix);

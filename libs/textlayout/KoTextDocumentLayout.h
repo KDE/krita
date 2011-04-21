@@ -48,8 +48,8 @@ class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
 
 /**
- * KWords text layouter that allows text to flow in multiple frames and around
- * other KWord objects.
+ * Text layouter that allows text to flow in multiple root area and around
+ * obstructions.
  */
 class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
 {
@@ -133,6 +133,7 @@ public:
     // remove inline object
     void removeInlineObject(KoTextAnchor * textAnchor);
 
+    void clearInlineObjectRegistry(QTextBlock block);
     InlineObjectExtend inlineObjectExtend(const QTextFragment&);
 
     /// Registers the shape as being relevant for run around at this moment in time

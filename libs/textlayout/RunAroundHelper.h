@@ -37,11 +37,11 @@ public:
     void setObstructions(const QList<KoTextLayoutObstruction *> &obstructions);
     bool stayOnBaseline();
     void updateObstruction(KoTextLayoutObstruction *obstruction);
-    void fit(const bool resetHorizontalPosition, QPointF position);
+    void fit(bool resetHorizontalPosition, QPointF position);
     QTextLine line;
 private:
     KoTextLayoutArea *m_area;
-    const QList<KoTextLayoutObstruction*> *m_obstructions;
+    QList<KoTextLayoutObstruction*> m_obstructions;
     QList<KoTextLayoutObstruction*> m_validObstructions;
     QList<QRectF> m_lineParts;
     QRectF m_lineRect;

@@ -46,7 +46,7 @@ void RunAroundHelper::setRestartOnNextShape(bool restartOnNextShape)
 
 void RunAroundHelper::setObstructions(const QList<KoTextLayoutObstruction*> &obstructions)
 {
-    m_obstructions = &obstructions;
+    m_obstructions = obstructions;
 }
 
 bool RunAroundHelper::stayOnBaseline()
@@ -125,7 +125,7 @@ void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
 void RunAroundHelper::validateObstructions()
 {
     m_validObstructions.clear();
-    foreach (KoTextLayoutObstruction *obstruction, *m_obstructions) {
+    foreach (KoTextLayoutObstruction *obstruction, m_obstructions) {
         validateObstruction(obstruction);
     }
 }

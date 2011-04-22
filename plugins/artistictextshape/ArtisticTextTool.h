@@ -67,6 +67,13 @@ public:
     /// Returns the current text cursor position
     int textCursor() const;
 
+    /**
+     * Determines cursor position from specified mouse position.
+     * @param mousePosition mouse position in document coordinates
+     * @return cursor position, -1 means invalid cursor
+     */
+    int cursorFromMousePosition(const QPointF &mousePosition);
+
 protected:
     void enableTextCursor( bool enable );
     void removeFromTextCursor( int from, unsigned int count );

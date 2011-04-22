@@ -26,6 +26,7 @@
 #include "RemoveTextRangeCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
 #include "MoveStartOffsetStrategy.h"
+#include "SelectTextStrategy.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -99,7 +100,7 @@ void ArtisticTextTool::paint( QPainter &painter, const KoViewConverter &converte
     if (! m_currentShape)
         return;
 
-    if (m_showCursor && m_blinkingCursor.isActive()) {
+    if (m_showCursor && m_blinkingCursor.isActive() && !m_currentStrategy) {
         painter.save();
         m_currentShape->applyConversion( painter, converter );
         painter.setBrush( Qt::black );
@@ -140,10 +141,28 @@ void ArtisticTextTool::repaintDecorations()
     m_selection.repaintDecoration();
 }
 
+int ArtisticTextTool::cursorFromMousePosition(const QPointF &mousePosition)
+{
+    if (!m_currentShape)
+        return -1;
+
+    const QPointF pos = m_currentShape->documentToShape(mousePosition);
+    const int len = m_currentShape->plainText().length();
+    int hit = -1;
+    qreal mindist = DBL_MAX;
+    for ( int i = 0; i <= len;++i ) {
+        QPointF center = pos - m_currentShape->charPositionAt(i);
+        if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
+            hit = i;
+            mindist = fabs(center.x()) + fabs(center.y());
+        }
+    }
+    return hit;
+}
+
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
 {
     if (m_hoverHandle) {
-        enableTextCursor(false);
         m_currentStrategy = new MoveStartOffsetStrategy(this, m_currentShape);
     }
     if (m_hoverText) {
@@ -155,19 +174,12 @@ void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )
             selection->select( m_currentShape );
         }
         // change the text cursor position
-        QPointF pos = m_currentShape->documentToShape(event->point);
-        const int len = m_currentShape->plainText().length();
-        int hit = len;
-        qreal mindist = DBL_MAX;
-        for ( int i = 0; i < len;++i ) {
-            QPointF center = pos - m_currentShape->charPositionAt(i);
-            if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
-                hit = i;
-                mindist = fabs(center.x()) + fabs(center.y());
-            }
+        int hitCursorPos = cursorFromMousePosition(event->point);
+        if (hitCursorPos >= 0) {
+            setTextCursorInternal(hitCursorPos);
+            m_selection.clear();
         }
-        setTextCursorInternal( hit );
-        m_selection.clear();
+        m_currentStrategy = new SelectTextStrategy(this, m_textCursor);
     }
     event->ignore();
 }
@@ -250,7 +262,6 @@ void ArtisticTextTool::mouseReleaseEvent( KoPointerEvent *event )
             canvas()->addCommand(cmd);
         delete m_currentStrategy;
         m_currentStrategy = 0;
-        enableTextCursor(true);
     }
     updateActions();
 }

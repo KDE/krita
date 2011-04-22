@@ -59,9 +59,6 @@ public:
     /// Returns the font
     QFont font() const;
 
-    /// Appends another text range to this range
-    void append(const ArtisticTextRange &range);
-
     /// Extracts specified part of the text range
     ArtisticTextRange extract(int from, int count);
 

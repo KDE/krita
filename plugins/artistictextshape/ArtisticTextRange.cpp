@@ -63,14 +63,6 @@ QFont ArtisticTextRange::font() const
     return m_font;
 }
 
-void ArtisticTextRange::append(const ArtisticTextRange &range)
-{
-    m_text += range.text();
-    m_xOffsets += range.m_xOffsets;
-    m_yOffsets += range.m_yOffsets;
-    m_rotations += range.m_rotations;
-}
-
 ArtisticTextRange ArtisticTextRange::extract(int from, int count)
 {
     // copy text and font

@@ -347,13 +347,9 @@ void ArtisticTextShape::setFont(const QFont &newFont)
 
     beginTextUpdate();
 
-    ArtisticTextRange &firstRange = m_ranges.first();
-    // set font to first range
-    firstRange.setFont(newFont);
-    // append all ranges to the first range
-    for (int i = 1; i < rangeCount; ++i) {
-        firstRange.append(m_ranges[1]);
-        m_ranges.removeAt(1);
+    // set font on ranges
+    for (int i = 0; i < rangeCount; ++i) {
+        m_ranges[i].setFont(newFont);
     }
 
     finishTextUpdate();

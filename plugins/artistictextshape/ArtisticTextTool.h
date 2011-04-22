@@ -87,7 +87,7 @@ private slots:
     void shapeSelectionChanged();
 
 signals:
-    void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
+    void shapeSelected();
 
 private:
     void updateActions();

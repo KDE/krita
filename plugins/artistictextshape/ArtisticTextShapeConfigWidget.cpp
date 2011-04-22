@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,6 +19,8 @@
  */
 
 #include "ArtisticTextShapeConfigWidget.h"
+#include "ArtisticTextTool.h"
+#include "ArtisticTextToolSelection.h"
 #include "ArtisticTextShape.h"
 #include "ChangeTextOffsetCommand.h"
 #include "ChangeTextAnchorCommand.h"
@@ -31,9 +33,11 @@
 #include <KoShapeManager.h>
 #include <KoCanvasBase.h>
 
-ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget()
-    : m_shape(0), m_canvas(0), m_anchorGroup(0)
+ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool)
+    : m_textTool(textTool), m_anchorGroup(0)
 {
+    Q_ASSERT(m_textTool);
+
     widget.setupUi( this );
 
     widget.bold->setCheckable( true );
@@ -71,42 +75,17 @@ void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
     m_anchorGroup->blockSignals( block );
 }
 
-void ArtisticTextShapeConfigWidget::initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas)
-{
-    m_shape = shape;
-    m_canvas = canvas;
-
-    if( ! m_shape || ! m_canvas )
-        return;
-
-    blockChildSignals( true );
-
-    QFont font = m_shape->fontAt(0);
-
-    widget.fontSize->setValue( font.pointSize() );
-    font.setPointSize( 8 );
-
-    widget.fontFamily->setCurrentFont( font );
-    widget.bold->setChecked( font.bold() );
-    widget.italic->setChecked( font.italic() );
-    if( m_shape->textAnchor() == ArtisticTextShape::AnchorStart )
-        widget.anchorStart->setChecked( true );
-    else if( m_shape->textAnchor() == ArtisticTextShape::AnchorMiddle )
-        widget.anchorMiddle->setChecked( true );
-    else
-        widget.anchorEnd->setChecked( true );
-    widget.startOffset->setValue( static_cast<int>( m_shape->startOffset() * 100.0 ) );
-    widget.startOffset->setEnabled( m_shape->isOnPath() );
-
-    blockChildSignals( false );
-}
-
 void ArtisticTextShapeConfigWidget::propertyChanged()
 {
-    if( ! m_shape || ! m_canvas )
+    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
+    if (!selection)
         return;
 
-    QFont font = m_shape->fontAt(0);
+    ArtisticTextShape *currentText = selection->selectedShape();
+    if (!currentText)
+        return;
+
+    QFont font = currentText->fontAt(m_textTool->textCursor());
     font.setFamily( widget.fontFamily->currentFont().family() );
     font.setBold( widget.bold->isChecked() );
     font.setItalic( widget.italic->isChecked() );
@@ -123,23 +102,48 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     qreal newOffset = static_cast<qreal>(widget.startOffset->value()) / 100.0;
 
     QUndoCommand * cmd = 0;
-    if ( newAnchor != m_shape->textAnchor() ) {
-        cmd = new ChangeTextAnchorCommand( m_shape, newAnchor );
+    if ( newAnchor != currentText->textAnchor() ) {
+        cmd = new ChangeTextAnchorCommand(currentText, newAnchor);
     }
-    else if( newOffset != m_shape->startOffset() ) {
-        cmd = new ChangeTextOffsetCommand(m_shape, m_shape->startOffset(), newOffset);
+    else if( newOffset != currentText->startOffset() ) {
+        cmd = new ChangeTextOffsetCommand(currentText, currentText->startOffset(), newOffset);
     }
-    else if( font.key() != m_shape->fontAt(0).key() ) {
-        cmd = new ChangeTextFontCommand(m_shape, font);
+    else if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
+        cmd = new ChangeTextFontCommand(currentText, font);
     }
 
     if( cmd )
-        m_canvas->addCommand(cmd);
+        m_textTool->canvas()->addCommand(cmd);
 }
 
 void ArtisticTextShapeConfigWidget::updateWidget()
 {
-    if (m_shape && m_canvas) {
-        initializeFromShape(m_shape, m_canvas);
-    }
+    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
+    if (!selection)
+        return;
+
+    ArtisticTextShape *currentText = selection->selectedShape();
+    if (!currentText)
+        return;
+
+    blockChildSignals( true );
+
+    QFont font = currentText->fontAt(m_textTool->textCursor());
+
+    widget.fontSize->setValue( font.pointSize() );
+    font.setPointSize( 8 );
+
+    widget.fontFamily->setCurrentFont( font );
+    widget.bold->setChecked( font.bold() );
+    widget.italic->setChecked( font.italic() );
+    if( currentText->textAnchor() == ArtisticTextShape::AnchorStart )
+        widget.anchorStart->setChecked( true );
+    else if( currentText->textAnchor() == ArtisticTextShape::AnchorMiddle )
+        widget.anchorMiddle->setChecked( true );
+    else
+        widget.anchorEnd->setChecked( true );
+    widget.startOffset->setValue( static_cast<int>( currentText->startOffset() * 100.0 ) );
+    widget.startOffset->setEnabled( currentText->isOnPath() );
+
+    blockChildSignals( false );
 }

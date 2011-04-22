@@ -478,13 +478,12 @@ QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
     
     widgets.insert(i18n("Text On Path"), pathWidget);
     
-    ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget();
+    ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
     if (m_currentShape) {
-        configWidget->initializeFromShape(m_currentShape, canvas());
+        configWidget->updateWidget();
     }
-    connect(this, SIGNAL(shapeSelected(ArtisticTextShape *, KoCanvasBase *)), 
-            configWidget, SLOT(initializeFromShape(ArtisticTextShape *, KoCanvasBase *)));
+    connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
             
@@ -546,7 +545,7 @@ void ArtisticTextTool::setCurrentShape(ArtisticTextShape *currentShape)
     m_selection.setSelectedShape(m_currentShape);
     if (m_currentShape)
         enableTextCursor( true );
-    emit shapeSelected(m_currentShape, canvas());
+    emit shapeSelected();
 }
 
 void ArtisticTextTool::setTextCursorInternal( int textCursor )
@@ -555,6 +554,7 @@ void ArtisticTextTool::setTextCursorInternal( int textCursor )
     m_textCursor = textCursor;
     createTextCursorShape();
     updateTextCursorArea();
+    emit shapeSelected();
 }
 
 void ArtisticTextTool::createTextCursorShape()

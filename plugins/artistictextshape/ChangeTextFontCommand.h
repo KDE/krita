@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 #ifndef CHANGETEXTFONTCOMMAND_H
 #define CHANGETEXTFONTCOMMAND_H
 
+#include "ArtisticTextRange.h"
 #include <QtGui/QUndoCommand>
 #include <QtGui/QFont>
 
@@ -29,14 +30,18 @@ class ArtisticTextShape;
 class ChangeTextFontCommand : public QUndoCommand
 {
 public:
-    ChangeTextFontCommand( ArtisticTextShape * shape, const QFont &font );
+    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font);
+    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font);
     virtual void undo();
     virtual void redo();
 
 private:
     ArtisticTextShape *m_shape;
-    QFont m_font;
-    QFont m_oldFont;
+    QFont m_newFont;
+    QList<ArtisticTextRange> m_oldText;
+    QList<ArtisticTextRange> m_newText;
+    int m_rangeStart;
+    int m_rangeCount;
 };
 
 #endif // CHANGETEXTFONTCOMMAND_H

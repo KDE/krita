@@ -109,7 +109,9 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
         cmd = new ChangeTextOffsetCommand(currentText, currentText->startOffset(), newOffset);
     }
     else if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
-        cmd = new ChangeTextFontCommand(currentText, font);
+        if (selection->hasSelection()) {
+            cmd = new ChangeTextFontCommand(currentText, selection->selectionStart(), selection->selectionCount(), font);
+        }
     }
 
     if( cmd )

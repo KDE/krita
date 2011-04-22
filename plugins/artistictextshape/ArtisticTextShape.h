@@ -84,6 +84,14 @@ public:
     void setFont(const QFont &font);
 
     /**
+     * Sets the font for the specified range of characters
+     * @param charIndex the index of the first character of the range
+     * @param charCount the number of characters of the range
+     * @param font the new font to set
+     */
+    void setFont(int charIndex, int charCount, const QFont &font);
+
+    /**
      * Returns the font at the specified character position
      * If the text shape is empty it will return the default font.
      * If the character index is smaller than zero it will return the font
@@ -147,8 +155,8 @@ public:
     /// Appends plain text to the last text range
     void appendText(const QString &plainText);
 
-    /// Appends a single range of text
-    void appendText(const ArtisticTextRange &plainText);
+    /// Appends a single formatted range of text
+    void appendText(const ArtisticTextRange &text);
 
     /// Replaces a range of text with the specified text range
     bool replaceText(int charIndex, int charCount, const ArtisticTextRange &textRange);

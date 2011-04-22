@@ -355,6 +355,46 @@ void ArtisticTextShape::setFont(const QFont &newFont)
     finishTextUpdate();
 }
 
+void ArtisticTextShape::setFont(int charIndex, int charCount, const QFont &font)
+{
+    if (isEmpty() || charCount <= 0)
+        return;
+
+    CharIndex charPos = indexOfChar(charIndex);
+    if (charPos.first < 0 || charPos.first >= m_ranges.count())
+        return;
+
+    beginTextUpdate();
+
+    int remainingCharCount = charCount;
+    while(remainingCharCount > 0) {
+        ArtisticTextRange &currRange = m_ranges[charPos.first];
+        // does this range have a different font ?
+        if (currRange.font() != font) {
+            if (charPos.second == 0 && currRange.text().length() < remainingCharCount) {
+                // set font on all characters of this range
+                currRange.setFont(font);
+                remainingCharCount -= currRange.text().length();
+            } else {
+                ArtisticTextRange r = currRange.extract(charPos.second, remainingCharCount);
+                r.setFont(font);
+                if (charPos.second == 0)
+                    m_ranges.insert(charPos.first, r);
+                else
+                    m_ranges.insert(charPos.first+1, r);
+                charPos.first++;
+                remainingCharCount -= r.text().length();
+            }
+        }
+        charPos.first++;
+        if(charPos.first >= m_ranges.count())
+            break;
+        charPos.second = 0;
+    }
+
+    finishTextUpdate();
+}
+
 QFont ArtisticTextShape::fontAt(int charIndex) const
 {
     if (isEmpty())

@@ -760,6 +760,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
+    qDebug() <<QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top());
     runAroundHelper.setObstructions(documentLayout()->relevantObstructions(QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top())));
 
     qreal maxLineHeight = 0;
@@ -801,7 +802,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         confirmFootNotes();
 
         maxLineHeight = qMax(maxLineHeight, addLine(cursor, blockData));
-        runAroundHelper.fit( /* resetHorizontalPosition */ true, QPointF(x(), m_y));
 
         if (!runAroundHelper.stayOnBaseline()) {
             m_y += maxLineHeight;
@@ -1068,7 +1068,7 @@ void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qrea
     m_left = left;
     m_right = right;
     m_top = top;
-    m_boundingRect = QRectF(0.0, top, 0.0, 0.0);
+    m_boundingRect = QRectF(left, top, right - left, 0.0);
     m_maximalAllowedBottom = maximumAllowedBottom;
 }
 

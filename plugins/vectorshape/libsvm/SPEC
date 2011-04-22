@@ -2,6 +2,9 @@
 
                             Specification
 
+                             Inge Wallin
+                           Pierre Ducroquet
+
 
 1. Introduction
 ===============
@@ -166,6 +169,20 @@ FIXME
 FIXME
 
 
+2.2.1 Primitive Data Types
+- - - - - - - - - - - - - -
+
+Here follows a list of primitive data types that are used in the
+objects or actions.
+
+uint8	an unsigned 8 bit integer, taking up 1 byte in the file.
+int8	a signed 8 bit integer, taking up 1 byte in the file.
+uint16	an unsigned 16 bit integer, taking up 2 bytes in the file.
+int16	a signed 16 bit integer, taking up 2 bytes in the file.
+uint32	an unsigned 32 bit integer, taking up 4 bytes in the file.
+int32	a signed 32 bit integer, taking up 4 bytes in the file.
+
+
 2.2.1 Basic Objects
 - - - - - - - - - -
 
@@ -184,9 +201,12 @@ struct VersionCompat {
     uint32 length;
 }
 
-It defines the version of the object, thus changing the parser
-behaviour, and the length of the object, excluding the VersionCompat
-object.
+version		defines the version of the object. Depending on the
+                version, the object will have a different number of
+                components, thus changing the parser behaviour.
+
+length          defines the length of the object, excluding the
+                VersionCompat object.
 
 
 2.2.1.3 String
@@ -224,6 +244,7 @@ height          Height of the picture in logical coordinates.
 
 actionCount     Number of Actions in the file.
 
+
 2.2.1.3 Point
 
 struct Point {
@@ -231,12 +252,14 @@ struct Point {
     uint32 y;
 }
 
+
 2.2.1.4 Polygon
 
 struct Polygon {
     uint16  nPoints;
     Point   points[nPoints];
 }
+
 
 2.2.1.5 Fraction
 
@@ -247,34 +270,40 @@ struct Fraction {
 
 The value of a Fraction is numerator/denominator.
 
+
 2.2.2 Graphics Objects
 - - - - - - - - - - - -
 
 2.2.2.1 PenInformations
 
-This object contents depends on its version.
-It describes pen properties.
-It contains the following parts:
+This object describes the pen properties.  Its contents depends on its
+version.
+
+    For all values of version:
 VersionCompat   version
 uint16          lineStyle
 uint32          lineWidth
-    If version is greater than 1
+    If version is greater than 1:
 uint16          dashCount
 uint32          dashLength
 uint16          dotCount
 uint32          dotLength
 uint32          distance
-    If version is greater than 2
+    If version is greater than 2:
 uint16          lineJoin
 
-lineStyle is a value of the LineStyle enumeration
-lineWidth       width of the pen
+lineStyle       describes the line style of the pen. It can take any
+                value of the LineStyle enumeration.
+
+lineWidth       width of the pen in <unit> (FIXME)
+
 ....FIXME: how to interpret the next fields values ?
+
 
 2.2.2.2 MapMode
 
 This object describes some properties of the current drawing.
-It contains the following parts:
+
 VersionCompat   version
 uint16          unit
 Point           origin
@@ -322,6 +351,7 @@ comment2        ... FIXME
 
 This action should never occur, ever.
 It contains a uint16 that is never used.
+
 
 2.3.2 Object Action Types
 - - - - - - - - - - - - - - 

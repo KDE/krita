@@ -487,7 +487,8 @@ QTextLine restartLayout(QTextLayout *layout)
         line.setLineWidth(lk.lineWidth);
         line.setPosition(lk.position);
     }
-    return line;
+    return layout->createLine();
+
 }
 
 // layoutBlock() method is structured like this:

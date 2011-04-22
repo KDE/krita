@@ -132,7 +132,16 @@ enum MtfType {
 };
 
 
-2.1.1.3 ... Enumeration
+2.1.1.3 LineStyle Enumeration
+
+enum LineStyle
+{
+    LINE_NONE = 0,
+    LINE_SOLID = 1,
+    LINE_DASH = 2,
+};
+
+2.1.1.4 ... Enumeration
 FIXME
 
 
@@ -222,10 +231,60 @@ struct Point {
     uint32 y;
 }
 
+2.2.1.4 Polygon
+
+struct Polygon {
+    uint16  nPoints;
+    Point   points[nPoints];
+}
+
+2.2.1.5 Fraction
+
+struct Fraction {
+    uint32  numerator;
+    unit32  denominator;
+}
+
+The value of a Fraction is numerator/denominator.
 
 2.2.2 Graphics Objects
 - - - - - - - - - - - -
-FIXME
+
+2.2.2.1 PenInformations
+
+This object contents depends on its version.
+It describes pen properties.
+It contains the following parts:
+VersionCompat   version
+uint16          lineStyle
+uint32          lineWidth
+    If version is greater than 1
+uint16          dashCount
+uint32          dashLength
+uint16          dotCount
+uint32          dotLength
+uint32          distance
+    If version is greater than 2
+uint16          lineJoin
+
+lineStyle is a value of the LineStyle enumeration
+lineWidth       width of the pen
+....FIXME: how to interpret the next fields values ?
+
+2.2.2.2 MapMode
+
+This object describes some properties of the current drawing.
+It contains the following parts:
+VersionCompat   version
+uint16          unit
+Point           origin
+Fraction        scaleX
+Fraction        scaleY
+bool            isSimple
+
+....FIXME: how do they alter the rendering context ?
+.... Can the scale, the origin change ?
+.... Find the values for the unit...
 
 
 2.2.3 Structure Objects
@@ -304,6 +363,29 @@ bool            isSet
 colorData       The color of the brush, in RGB format         (... QColor::fromRgb format)
 isSet           Should the color be applied (true), or should the brush be hidden (false)
 
+2.3.3.3 META_POLYLINE_ACTION (109)
+
+A polyline action draws a polygon (it does not fill it).
+
+It contains the following parts
+Polygon         polygon
+    If the version of the action is greater than 1
+PenInformations penInfos
+    If the version of the action is greater than 2
+bool            polygonFlags
+    If polygonFlags is true
+VersionCompat   flagsVersionCompat
+Polygon         polygon (replaces the previous polygon)
+bool            polygonFlagsEnabled
+    If polygonFlagsEnabled
+....... FIXME!
+
+polygon         The polygon to draw
+penInfos        The pen style to apply
+polygonFlags    Indicate the presence of extra polygon informations
+....... FIXME: next part is complicated...
+
+
 2.3.4 Unsorted Action Types
 - - - - - - - - - - - - - -
 
@@ -318,7 +400,6 @@ These action types have so far not being sorted into any other type.
  META_ARC_ACTION
  META_PIE_ACTION
  META_CHORD_ACTION
- META_POLYLINE_ACTION
  META_POLYGON_ACTION
  META_POLYPOLYGON_ACTION
  META_TEXT_ACTION

@@ -80,8 +80,6 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) con
     
     setting->setProperty(m_name + "Sensor"  , sensor()->toXML());
     setting->setProperty(m_name + "UseCurve", m_useCurve);
-    setting->setProperty(m_name + "MinValue", m_minValue);
-    setting->setProperty(m_name + "MaxValue", m_maxValue);
     setting->setProperty(m_name + "Value"   , m_value);
 }
 
@@ -104,11 +102,6 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
     
     if(customCurve)
         m_sensor->setCurve(setting->getCubicCurve("Curve" + prefix));
-    
-    if(setting->hasProperty(m_name + "MinValue") && setting->hasProperty(m_name + "MaxValue")) {
-        m_minValue = setting->getDouble(m_name + "MinValue");
-        m_maxValue = setting->getDouble(m_name + "MaxValue");
-    }
     
     m_value    = setting->getDouble(m_name + "Value"   , m_maxValue);
     m_useCurve = setting->getBool  (m_name + "UseCurve", true);

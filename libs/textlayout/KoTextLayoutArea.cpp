@@ -466,11 +466,9 @@ struct LineKeeper
 
 QTextLine restartLayout(QTextLayout *layout)
 {
-
-    // and redo all previous lines
     QList<LineKeeper> lineKeeps;
     QTextLine line;
-    for(int i = 0; i < layout->lineCount()-1; i++) {
+    for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
         LineKeeper lk;
         lk.lineWidth = l.width();
@@ -484,10 +482,10 @@ QTextLine restartLayout(QTextLayout *layout)
         line = layout->createLine();
         if (!line.isValid())
             break;
-        line.setLineWidth(lk.lineWidth);
+        line.setNumColumns(lk.columns, lk.lineWidth);
         line.setPosition(lk.position);
     }
-    return layout->createLine();
+    return line;
 
 }
 
@@ -761,7 +759,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
-    qDebug() <<QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top());
     runAroundHelper.setObstructions(documentLayout()->relevantObstructions(QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top())));
 
     qreal maxLineHeight = 0;
@@ -774,10 +771,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qreal bottomOfText = cursor->line.y() + cursor->line.height();
 
         bool softBreak = false;
-        if (acceptsPageBreak()) {
+        if (acceptsPageBreak() && bottomOfText > maximumAllowedBottom() - 150) {
             int softBreakPos = block.text().indexOf(QChar(0x000c), cursor->line.textStart());
             if (softBreakPos > 0 && softBreakPos < cursor->line.textStart() + cursor->line.textLength()) {
-                cursor->line.setNumColumns(softBreakPos - cursor->line.textStart() + 1);
+                cursor->line.setNumColumns(softBreakPos - cursor->line.textStart() + 1, cursor->line.width());
                 softBreak = true;
             }
         }

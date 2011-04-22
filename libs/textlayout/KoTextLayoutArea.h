@@ -154,7 +154,7 @@ private:
     bool layoutBlock(FrameIterator *cursor);
 
     /// Returns vertical height of line
-    qreal addLine(FrameIterator *cursor, KoTextBlockData *blockData);
+    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData);
 
     /// looks for footnotes and preregisters them
     void findFootNotes(QTextBlock block, const QTextLine &line);

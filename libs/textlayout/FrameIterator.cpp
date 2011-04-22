@@ -31,6 +31,7 @@ FrameIterator::FrameIterator(QTextFrame *frame)
     it = frame->begin();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
+    lineTextStart = -1;
 }
 
 FrameIterator::FrameIterator(QTextTableCell cell)
@@ -38,12 +39,13 @@ FrameIterator::FrameIterator(QTextTableCell cell)
     it = cell.begin();
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
+    lineTextStart = -1;
 }
 
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
-    line = other->line;
+    lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
     if (other->currentTableIterator)
         currentTableIterator = new TableIterator(other->currentTableIterator);
@@ -61,17 +63,16 @@ bool FrameIterator::operator ==(const FrameIterator &other)
     if (it != other.it)
         return false;
 
-    if (currentTableIterator) {
+    if (currentTableIterator || other.currentTableIterator) {
         if (currentTableIterator != other.currentTableIterator)
             return false;
         return *currentTableIterator == *(other.currentTableIterator);
-    } else {
-        if (line.isValid() != other.line.isValid())
+    } else if (currentSubFrameIterator || other.currentSubFrameIterator) {
+        if (currentSubFrameIterator != other.currentSubFrameIterator)
             return false;
-        if (line.isValid() == false)
-            return true; // both lines were invalid ie the same
-
-        return line.textStart() == other.line.textStart();
+        return *currentSubFrameIterator == *(other.currentSubFrameIterator);
+    } else {
+        return lineTextStart != other.lineTextStart;
     }
 }
 

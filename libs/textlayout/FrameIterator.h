@@ -42,12 +42,13 @@ public:
     QString wantedMasterPage(const QString defaultName) const;
 
     QTextFrame::iterator it;
-    // the following can be seen as the "sub cursor" of text blocks
-    QTextLine line;   // useful if it is pointing to a block. invalid if about to start a new block
-                      // should not be used outside layout for anything but validity
-    QTextBlock::Iterator fragmentIterator;   //useful if it is pointing to a block
+
+    // lineTextStart and fragmentIterator can be seen as the "sub cursor" of text blocks
+    int lineTextStart; // a value of -1 indicate block not processed yet
+    QTextBlock::Iterator fragmentIterator;
 
     TableIterator *currentTableIterator;  //useful if it is pointing to a table
+
     FrameIterator *currentSubFrameIterator;  //useful if it is pointing to a subFrame
 };
 

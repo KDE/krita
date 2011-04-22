@@ -90,7 +90,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
-    if(!stop.currentBlock().isValid() || m_endOfArea->line.isValid()) {
+    if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
     }
     int tableAreaIndex = 0;

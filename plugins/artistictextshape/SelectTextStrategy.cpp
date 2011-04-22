@@ -33,7 +33,7 @@ SelectTextStrategy::~SelectTextStrategy()
 
 }
 
-void SelectTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
+void SelectTextStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers /*modifiers*/)
 {
     ArtisticTextTool *textTool = dynamic_cast<ArtisticTextTool*>(tool());
     if (!textTool)
@@ -49,7 +49,7 @@ QUndoCommand *SelectTextStrategy::createCommand()
     return 0;
 }
 
-void SelectTextStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+void SelectTextStrategy::finishInteraction(Qt::KeyboardModifiers /*modifiers*/)
 {
     ArtisticTextTool *textTool = dynamic_cast<ArtisticTextTool*>(tool());
     if (!textTool)

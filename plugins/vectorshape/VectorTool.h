@@ -1,70 +1,62 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2009 Inge Wallin <inge@lysator.liu.se>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- */
+   Copyright 2011 Boudewijn Rempt <boud@valdyas.org>
 
-#ifndef VECTORTOOL_H
-#define VECTORTOOL_H
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
 
-// KDE
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.
+*/
+
+#ifndef PICTURE_TOOL
+#define PICTURE_TOOL
+
 #include <KoToolBase.h>
+#include <KJob>
 
-// VectorShape
-#include "VectorShape.h"
+class VectorShape;
 
-
-class QAction;
-
-/**
- * This is the tool for the Vector shape (which is a flake-based plugin).
- *
- * The vector shape is a read-only shape that shows a vector image
- * like WMF or EMF.
- */
-class VectorTool : public KoToolBase {
+class VectorTool : public KoToolBase
+{
     Q_OBJECT
 public:
-    explicit VectorTool(KoCanvasBase *canvas);
-    ~VectorTool();
+    explicit VectorTool(KoCanvasBase* canvas);
 
+    /// reimplemented from KoToolBase
+    virtual void paint(QPainter&, const KoViewConverter&) {}
+    /// reimplemented from KoToolBase
+    virtual void mousePressEvent(KoPointerEvent*) {}
     /// reimplemented from superclass
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    /// reimplemented from KoToolBase
+    virtual void mouseMoveEvent(KoPointerEvent*) {}
+    /// reimplemented from KoToolBase
+    virtual void mouseReleaseEvent(KoPointerEvent*) {}
 
-    /// reimplemented from superclass
-    virtual void mousePressEvent( KoPointerEvent *event ) ;
-    /// reimplemented from superclass
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    /// reimplemented from superclass
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    /// reimplemented from superclass
-    virtual void activate (bool temporary=false);
-    /// reimplemented from superclass
+    /// reimplemented from KoToolBase
+    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    /// reimplemented from KoToolBase
     virtual void deactivate();
-    /// reimplemented from superclass
+
+protected:
+    /// reimplemented from KoToolBase
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setPrintable(bool on);
+    void changeUrlPressed();
+    void setImageData(KJob *job);
 
 private:
-    void updateActions();
-
-    VectorShape *m_currentShape;
+    VectorShape *m_shape;
 };
 
 #endif

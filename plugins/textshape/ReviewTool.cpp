@@ -37,6 +37,7 @@
 #include "commands/ShowChangesCommand.h"
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
+#include "dialogs/AcceptRejectChangeDialog.h"
 
 #include <KLocale>
 #include <KAction>
@@ -49,6 +50,7 @@
 #include <QTextBlock>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QVector>
 #include <QLabel>
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
@@ -81,22 +83,39 @@ void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
 
 void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 {
-    event->ignore();
-}
-
-void ReviewTool::mousePressEvent(KoPointerEvent* event)
-{
-    if (event->button() != Qt::RightButton)
-        updateSelectedShape(event->point);
-
+    updateSelectedShape(event->point);
     int position = pointToPosition(event->point);
     QTextCursor cursor(m_textShapeData->document());
     cursor.setPosition(position);
 
-    //KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
     int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-    QModelIndex index = m_model->indexForChangeId(changeId);
-    m_changesTreeView->setCurrentIndex(index);
+    if (changeId) {
+        m_canvas->setCursor(QCursor(Qt::PointingHandCursor));
+        QModelIndex index = m_model->indexForChangeId(changeId);
+        m_changesTreeView->setCurrentIndex(index);
+    } else {
+        m_canvas->setCursor(QCursor(Qt::ArrowCursor));
+        m_changesTreeView->setCurrentIndex(QModelIndex());
+    }
+}
+
+void ReviewTool::mousePressEvent(KoPointerEvent* event)
+{
+    int position = pointToPosition(event->point);
+    QTextCursor cursor(m_textShapeData->document());
+    cursor.setPosition(position);
+
+    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) {
+        AcceptRejectChangeDialog acceptDialog(KoTextDocument(m_textShapeData->document()).changeTracker(), changeId);
+        if (int result = acceptDialog.exec()) {
+            if (result == (int)(AcceptRejectChangeDialog::eChangeAccepted)) {
+                acceptChange();
+            } else if (result == (int)(AcceptRejectChangeDialog::eChangeRejected)) {
+                rejectChange();
+            }
+        }
+    }
 }
 
 void ReviewTool::updateSelectedShape(const QPointF &point)
@@ -191,15 +210,15 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
             painter.translate(0, -data->documentOffset());
             if ((data->endPosition() >= start && data->position() <= end)
                 || (data->position() <= start && data->endPosition() >= end)) {
-                QRectF clip = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
-            painter.save();
-            QPen pen;
-            pen.setColor(QColor(Qt::black));
-            pen.setWidth(3);
-            painter.setPen(pen);
-            painter.setClipRect(clip, Qt::IntersectClip);
-            painter.drawRect(clip);
-            painter.restore();
+                QVector<QRectF> *clipVec = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
+                QRectF clip;
+                foreach(clip, *clipVec) {
+                    painter.save();
+                    painter.setClipRect(clip, Qt::IntersectClip);
+                    painter.fillRect(clip, QBrush(QColor(0,0,0,90)));
+                    painter.restore();
+                }
+                delete clipVec;
             }
 
             painter.restore();
@@ -207,33 +226,61 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
     }
 }
 
-QRectF ReviewTool::textRect ( int startPosition, int endPosition )
+QVector<QRectF> *ReviewTool::textRect ( int startPosition, int endPosition )
 {
+    QVector<QRectF> *retVec = new QVector<QRectF>();
     Q_ASSERT(startPosition >= 0);
     Q_ASSERT(endPosition >= 0);
     if (startPosition > endPosition)
         qSwap(startPosition, endPosition);
     QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
     if (!block.isValid())
-        return QRectF();
+        return retVec;
     QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
     if (! line1.isValid())
-        return QRectF();
+        return retVec;
     qreal startX = line1.cursorToX(startPosition - block.position());
-    if (startPosition == endPosition)
-        return QRectF(startX, line1.y(), 1, line1.height());
+    if (startPosition == endPosition) {
+        retVec->push_back(QRectF(startX, line1.y(), 1, line1.height()));
+        return retVec;
+    }
 
     QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
     if (!block2.isValid())
-        return QRectF();
+        return retVec;
     QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
     if (! line2.isValid())
-        return QRectF();
+        return retVec;
     qreal endX = line2.cursorToX(endPosition - block2.position());
 
-    if (line1.textStart() + block.position() == line2.textStart() + block2.position())
-        return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
-    return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
+    if (line1.textStart() + block.position() == line2.textStart() + block2.position()) {
+        retVec->push_back(QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height()));
+        return retVec;
+    } else {
+        QTextBlock startBlock = block;
+        int numberOfLines = block.layout()->lineCount();
+
+        while (1) {
+            for (int i=0; i < numberOfLines; i++) {
+                QTextLine currentLine = block.layout()->lineAt(i);
+                if ((block == startBlock) && (i < line1.lineNumber())) {
+                    continue;
+                } else if ((block == startBlock) && (i == line1.lineNumber())) {
+                    retVec->push_back(QRectF(startX, currentLine.y(), line1.width(), currentLine.height()));
+                } else if ((block == block2) && (i == line2.lineNumber())) {
+                    retVec->push_back(QRectF(0, currentLine.y(), endX, currentLine.height()));
+                    break;
+                } else {
+                    retVec->push_back(QRectF(0, currentLine.y(),10E6, currentLine.height()));
+                }
+            }
+            
+            if (block == block2)
+                break;
+            block = block.next();
+        }
+        return retVec;
+    }
 }
 
 void ReviewTool::keyPressEvent(QKeyEvent* event)

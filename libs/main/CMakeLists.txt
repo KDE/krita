@@ -85,6 +85,13 @@ set(komain_LIB_SRCS
     KoAction.cpp
     KoExecutePolicy.cpp
     KoJobsListPolicy.cpp
+
+    KoFindBase.cpp
+    KoFindMatch.cpp
+    KoFindText.cpp
+    KoFindToolbar.cpp
+    KoFindOption.cpp
+    KoFindOptionSet.cpp
 )
 if( Soprano_FOUND )
     set(komain_LIB_SRCS ${komain_LIB_SRCS}
@@ -184,9 +191,16 @@ install( FILES
     KoFilterChain.h
     KoFilterChainLinkList.h
     KoFilterManager.h
+    KoFindBase.h
+    KoFindText.h
+    KoFindToolbar.h
+    KoFindMatch.h
+    KoFindOption.h
+    KoFindOptionSet.h
     KoGlobal.h
     KoGridData.h
     KoMainWindow.h
+    KoPrintJob.h
     KoProgressUpdater.h
     KoProgressProxy.h
     KoVersionDialog.h
@@ -204,6 +218,13 @@ DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
 
 if( Soprano_FOUND )
     install( FILES
+        rdf/KoRdfFoaF.h
+        rdf/KoRdfCalendarEvent.h
+        rdf/KoRdfLocation.h
+        rdf/KoRdfFoaFTreeWidgetItem.h
+        rdf/KoRdfCalendarEventTreeWidgetItem.h
+        rdf/KoRdfLocationTreeWidgetItem.h
+        rdf/KoChangeTrackerDisabledRAII.h
         rdf/RdfForward.h
         rdf/KoDocumentRdf.h
         rdf/KoSopranoTableModelDelegate.h

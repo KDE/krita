@@ -180,6 +180,7 @@ public:
     const QString defaultLabel;
     bool symbolsActivated;
     int symbolID;
+    int loadedDimensions;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -205,7 +206,8 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     size( 0 ),
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
     symbolsActivated( true ),
-    symbolID( 0 )
+    symbolID( 0 ),
+    loadedDimensions( 0 )
 {
 }
 
@@ -556,7 +558,6 @@ void DataSet::Private::setAttributesAccordingToType()
     negativePosition.setVerticalPadding( 100.0 );
     attr.setNegativePosition( negativePosition );
     dataValueAttributes = attr;
-    qDebug() << chartType << " glob: " << chartSubType;
     for ( int i = 0; i < sectionsDataValueAttributes.count(); ++i )
     {
         KDChart::DataValueAttributes attr = sectionsDataValueAttributes[ i ];
@@ -1049,6 +1050,7 @@ void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &re
 {
     if ( !kdChartModel )
         return;
+    Q_UNUSED( rect );
 
     // Stubbornly pretend like everything changed. This as well should be
     // refactored to be done in ChartProxyModel, then we can also fine-tune
@@ -1253,6 +1255,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     bool bubbleChart = false;
     if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
+//         bubbleChart =  bubbleChart || n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:stock";
     }
     
     // FIXME: Maybe it's easier to understand this if we simply have a counter
@@ -1288,9 +1291,18 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
         if ( bubbleChart )
-            setCustomDataRegion( region );
+        {
+            setCustomDataRegion( region );            
+        }
         else
+        {
             setYDataRegion( region );
+        }
+        if ( !bubbleChart && d->loadedDimensions == 0 )
+        {
+            setYDataRegion( region );
+            ++d->loadedDimensions;
+        }
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
@@ -1368,6 +1380,102 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
 
         ++loadedDataPointCount;
+    }
+    return true;
+}
+
+bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
+                       KoShapeLoadingContext &context )
+{
+    d->symbolsActivated = false;
+    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.clear();
+    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // OOo assumes that if we use an internal model only, the columns are
+    // interpreted as consecutive data series. Thus we can (and must) ignore
+    // any chart:cell-range-address attribute associated with a series or
+    // data point. Instead the regions are used that are automatically
+    // assigned by SingleModelHelper whenever the structure of the internal
+    // model changes.
+    bool ignoreCellRanges = false;
+    styleStack.setTypeProperties("chart");
+
+    if ( n.hasChildNodes() ){
+        KoXmlNode cn = n.firstChild();
+        while ( !cn.isNull() ){
+            KoXmlElement elem = cn.toElement();
+            const QString name = elem.tagName();
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
+                Q_ASSERT( false );
+                if ( d->loadedDimensions == 0 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+                else if ( d->loadedDimensions == 1 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+                else if ( d->loadedDimensions == 2 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setCustomDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+
+            }
+            cn = cn.nextSibling();
+        }
+    }
+
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
+        const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        const CellRegion region( helper->tableSource, regionString );
+        if ( d->loadedDimensions == 0 )
+                {
+                    setYDataRegion( CellRegion( region ) );
+                    ++d->loadedDimensions;
+                    qDebug() << "YDATA SET";
+                }
+                else if ( d->loadedDimensions == 1 )
+                {
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setXDataRegion( CellRegion( region ) );
+                    ++d->loadedDimensions;
+                    qDebug() << "XDATA SET";
+                }
+                else if ( d->loadedDimensions == 2 )
+                {
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setCustomDataRegion( CellRegion( region ) );
+                    qDebug() << region.toString();
+                    ++d->loadedDimensions;
+                    qDebug() << "CUSTOMDATA SET";
+                }
+    }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
+        const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
+        setLabelDataRegion( CellRegion( helper->tableSource, region ) );
+    }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
+        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
+        setShowLabels( enable == "true" );
+    }
+    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
+        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
+        setValueLabelType( valueLabelTypeFromString( format ) );
     }
     return true;
 }

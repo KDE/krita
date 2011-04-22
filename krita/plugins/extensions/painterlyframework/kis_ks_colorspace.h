@@ -149,11 +149,11 @@ KisKSColorSpace<_TYPE_, _N_>::KisKSColorSpace(KoColorProfile *p)
                                          channelSize,
                                          QColor(0, 255, 0)));
 
-    addCompositeOp(new KoCompositeOpOver< CSTrait >(this));
-    addCompositeOp(new KoCompositeOpErase< CSTrait >(this));
-    addCompositeOp(new KoCompositeOpMultiply< CSTrait >(this));
-    addCompositeOp(new KoCompositeOpDivide< CSTrait >(this));
-    addCompositeOp(new KoCompositeOpBurn< CSTrait >(this));
+    KoColorSpace::addCompositeOp(new KoCompositeOpOver< CSTrait >(this));
+    KoColorSpace::addCompositeOp(new KoCompositeOpErase< CSTrait >(this));
+    KoColorSpace::addCompositeOp(new KoCompositeOpMultiply< CSTrait >(this));
+    KoColorSpace::addCompositeOp(new KoCompositeOpDivide< CSTrait >(this));
+    KoColorSpace::addCompositeOp(new KoCompositeOpBurn< CSTrait >(this));
 }
 
 template< typename _TYPE_, int _N_ >

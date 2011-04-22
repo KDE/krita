@@ -6,11 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>330</width>
-    <height>263</height>
+    <width>328</width>
+    <height>261</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -22,52 +22,56 @@
      <property name="title">
       <string>Iris</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Shape:</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="irisShapeCombo">
+          <item>
+           <property name="text">
+            <string>Triangle</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Quadrilateral (4)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Pentagon (5)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Hexagon (6)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Heptagon (7)</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Octagon (8)</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Shape:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QComboBox" name="irisShapeCombo">
-        <item>
-         <property name="text">
-          <string>Triangle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Quadrilateral (4)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pentagon (5)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Hexagon (6)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Heptagon (7)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Octagon (8)</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="2" column="0" colspan="3">
        <widget class="KIntNumInput" name="irisRadiusSlider">
         <property name="label">
          <string>Radius</string>
@@ -83,7 +87,7 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0" colspan="3">
+      <item row="2" column="0">
        <widget class="KIntNumInput" name="irisRotationSlider">
         <property name="label">
          <string>Rotation</string>
@@ -126,6 +130,7 @@
    <class>KIntNumInput</class>
    <extends>QWidget</extends>
    <header>knuminput.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

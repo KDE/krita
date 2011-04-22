@@ -51,30 +51,29 @@ public slots:
     virtual void setUnit( KoUnit unit );
 
 private slots:
+    /// line style has changed
+    void styleChanged();
+    /// line width has changed
+    void widthChanged();
     /// line cap has changed
     void slotCapChanged( int ID );
     /// line join has changed
     void slotJoinChanged( int ID );
-    /// apply line changes to the selected shape
-    void applyChanges();
-    /// update the controls setting the values from the border
-    void updateControls();
-    /// line width has changed
-    void widthChanged();
     /// miter limit has changed
     void miterLimitChanged();
-    /// line style has changed
-    void styleChanged();
-    /// blocks/unblocks child control signals
-    void blockChildSignals( bool block );
-    /// selection has changed
-    void selectionChanged();
-
-    /// reimplemented
-    virtual void setCanvas( KoCanvasBase *canvas );
 
     void resourceChanged(int key, const QVariant & value);
     void locationChanged(Qt::DockWidgetArea area);
+
+    /// selection has changed
+    void selectionChanged();
+
+private:
+    /// apply line changes to the selected shape
+    void applyChanges();
+
+    /// reimplemented
+    virtual void setCanvas( KoCanvasBase *canvas );
 
 private:
     class Private;

@@ -61,11 +61,63 @@ struct KisNodeManager::Private {
     KisNodeSP activeNodeBeforeMove;
     
     void slotLayersChanged(KisGroupLayerSP);
+    bool activateNodeImpl(KisNodeSP node);
 };
 
 void KisNodeManager::Private::slotLayersChanged(KisGroupLayerSP layer)
 {
     self->activateNode(layer->at(0));
+}
+
+bool KisNodeManager::Private::activateNodeImpl(KisNodeSP node)
+{
+    Q_ASSERT(view);
+    Q_ASSERT(view->canvasBase());
+    Q_ASSERT(view->canvasBase()->globalShapeManager());
+
+    if (node && node == activeNode) {
+        return false;
+    }
+
+    // Set the selection on the shape manager to the active layer
+    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
+    // with the parent of the active layer.
+    KoSelection * selection = view->canvasBase()->globalShapeManager()->selection();
+    Q_ASSERT(selection);
+    selection->deselectAll();
+
+    if (!node) {
+        selection->setActiveLayer(0);
+        activeNode = 0;
+        maskManager->activateMask(0);
+        layerManager->activateLayer(0);
+    } else {
+        KoShape * shape = view->document()->shapeForNode(node);
+        if (!shape) {
+            shape = view->document()->addShape(node);
+        }
+
+        selection->select(shape);
+        KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
+
+        Q_ASSERT(shapeLayer);
+        shapeLayer->setGeometryProtected(node->userLocked());
+        shapeLayer->setVisible(node->visible());
+        selection->setActiveLayer(shapeLayer);
+
+
+        activeNode = node;
+        if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
+            maskManager->activateMask(0);
+            layerManager->activateLayer(layer);
+        } else if (KisMaskSP mask = dynamic_cast<KisMask*>(node.data())) {
+            maskManager->activateMask(mask);
+            // XXX_NODE: for now, masks cannot be nested.
+            layerManager->activateLayer(static_cast<KisLayer*>(node->parent().data()));
+        }
+
+    }
+    return true;
 }
 
 KisNodeManager::KisNodeManager(KisView2 * view, KisDoc2 * doc)
@@ -232,7 +284,6 @@ void KisNodeManager::moveNodeAt(KisNodeSP node, KisNodeSP parent, int index)
     }
 }
 
-
 void KisNodeManager::createNode(const QString & nodeType)
 {
 
@@ -270,63 +321,19 @@ void KisNodeManager::createNode(const QString & nodeType)
 
 void KisNodeManager::activateNode(KisNodeSP node)
 {
-    Q_ASSERT(m_d->view);
-    Q_ASSERT(m_d->view->canvasBase());
-    Q_ASSERT(m_d->view->canvasBase()->globalShapeManager());
-
-    if (node && m_d->activeNode) {
-        if (node == m_d->activeNode) {
-            return;
-        }
-    }
-
-    // Set the selection on the shape manager to the active layer
-    // and set call KoSelection::setActiveLayer( KoShapeLayer* layer )
-    // with the parent of the active layer.
-    KoSelection * selection = m_d->view->canvasBase()->globalShapeManager()->selection();
-    Q_ASSERT(selection);
-    selection->deselectAll();
-
-    if (! node) {
-        selection->setActiveLayer(0);
-        emit sigNodeActivated(0);
-        m_d->activeNode = 0;
-        m_d->maskManager->activateMask(0);
-        m_d->layerManager->activateLayer(0);
-    } else {
-        KoShape * shape = m_d->view->document()->shapeForNode(node);
-        if (!shape) {
-            shape = m_d->view->document()->addShape(node);
-        }
-#if 0
-        KoShape * parentShape = shape->parent();
-        if (!parentShape) {
-            parentShape = m_d->view->document()->addShape(node->parent());
-        }
-#endif
-
-        selection->select(shape);
-        KoShapeLayer * shapeLayer = dynamic_cast<KoShapeLayer*>(shape);
-        Q_ASSERT(shapeLayer);
-        if (shapeLayer) {
-            shapeLayer->setGeometryProtected(node->userLocked());
-            shapeLayer->setVisible(node->visible());
-            selection->setActiveLayer(shapeLayer);
-        }
-
-        m_d->activeNode = node;
-        if (KisLayerSP layer = dynamic_cast<KisLayer*>(node.data())) {
-            m_d->maskManager->activateMask(0);
-            m_d->layerManager->activateLayer(layer);
-        } else if (KisMaskSP mask = dynamic_cast<KisMask*>(node.data())) {
-            m_d->maskManager->activateMask(mask);
-            // XXX_NODE: for now, masks cannot be nested.
-            m_d->layerManager->activateLayer(static_cast<KisLayer*>(node->parent().data()));
-        }
+    if(m_d->activateNodeImpl(node)) {
+        emit sigUiNeedChangeActiveNode(node);
         emit sigNodeActivated(node);
-
+        nodesUpdated();
     }
-    nodesUpdated();
+}
+
+void KisNodeManager::slotUiActivatedNode(KisNodeSP node)
+{
+    if(m_d->activateNodeImpl(node)) {
+        emit sigNodeActivated(node);
+        nodesUpdated();
+    }
 }
 
 void KisNodeManager::nodesUpdated()

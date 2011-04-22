@@ -169,6 +169,8 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
     }
 
     QAbstractTextDocumentLayout::PaintContext pc;
+    KoTextDocument koDoc(doc);
+    pc.selections = koDoc.selections();
     KoTextDocumentLayout::PaintContext context;
     context.textContext = pc;
     context.viewConverter = &converter;

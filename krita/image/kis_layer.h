@@ -115,6 +115,18 @@ public:
 
     virtual KoDocumentSectionModel::PropertyList sectionModelProperties() const;
     virtual void setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties);
+    
+    /**
+     * set/unset the channel flag for the alpha channel of this layer
+     */
+    void disableAlphaChannel(bool disable);
+    
+    /**
+     * returns true if the channel flag for the alpha channel
+     * of this layer is not set.
+     * returns false otherwise.
+     */
+    bool alphaChannelDisabled() const;
 
     /**
      * set the channelflags for this layer to the specified bit array.

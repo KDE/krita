@@ -20,12 +20,12 @@ void TestDocumentLayout::testBasicList()
 
     KoListStyle listStyle;
     KoListLevelProperties level1;
-    level1.setStyle(KoListStyle::DiscItem);
+    level1.setStyle(KoListStyle::Bullet);
     listStyle.setLevelProperties(level1);
     style.setListStyle(&listStyle);
     style.applyStyle(block); // make this a listStyle
     QVERIFY(block.textList());
-    QCOMPARE(block.textList()->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::DiscItem);
+    QCOMPARE(block.textList()->format().intProperty(QTextListFormat::ListStyle), (int) KoListStyle::Bullet);
     block = block.next();
     QVERIFY(block.isValid());
     style.applyStyle(block); // make this a listStyle

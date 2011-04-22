@@ -76,6 +76,7 @@ public:
         TextRotationScale,
         TextScale,
         InlineRdf,  ///< KoTextInlineRdf pointer
+        PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
         ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
         FontStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
@@ -290,6 +291,9 @@ public:
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
+
+    void setPercentageFontSize(qreal percent);
+    qreal percentageFontSize();
 
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);

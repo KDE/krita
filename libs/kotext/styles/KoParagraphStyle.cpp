@@ -225,7 +225,6 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
         if (d->listStyle) {
             if (!d->list)
                 d->list = new KoList(block.document(), d->listStyle);
-            qDebug()<<"paragraph has"<<d->listStyle<<d->list;
             d->list->add(block, listLevel());
         } else {
             if (block.textList())

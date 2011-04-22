@@ -2,6 +2,7 @@
    Copyright (C) 2004-2006 David Faure <faure@kde.org>
    Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2007-2008,2010 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -571,6 +572,20 @@ QBrush KoOdfGraphicStyles::loadOdfFillStyle(const KoStyleStack &styleStack, cons
     return tmpBrush;
 }
 
+static qreal parseDashEntrySize(QString& attr, qreal penWidth, qreal defaultValue = 0.0){
+    qreal result = defaultValue;
+    if (attr.endsWith('%')) {
+        bool ok;
+        const int percent = attr.remove('%').toInt(&ok);
+        if (ok && percent >= 0) {
+            result = percent / 100.0;
+        }
+    } else {
+        result = KoUnit::parseValue(attr) / penWidth;
+    }
+    return result;
+}
+
 QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, const QString & stroke, const KoOdfStylesReader & stylesReader)
 {
     QPen tmpPen(Qt::NoPen); // default pen for "none" is a Qt::NoPen
@@ -612,7 +627,7 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
             QString dashStyleName = styleStack.property(KoXmlNS::draw, "stroke-dash");
 
             // set width to 1 in case it is 0 as dividing by 0 gives infinity
-            qreal width = tmpPen.width();
+            qreal width = tmpPen.widthF();
             if ( width == 0 ) {
                 width = 1;
             }
@@ -621,14 +636,36 @@ QPen KoOdfGraphicStyles::loadOdfStrokeStyle(const KoStyleStack &styleStack, cons
             if (dashElement) {
                 QVector<qreal> dashes;
                 if (dashElement->hasAttributeNS(KoXmlNS::draw, "dots1")) {
-                    qreal dotLength = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "dots1-length", QString()));
-                    dashes.append(dotLength / width);
-                    qreal dotDistance = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "distance", QString()));
-                    dashes.append(dotDistance / width);
+                    QString distance( dashElement->attributeNS(KoXmlNS::draw, "distance", QString()) );
+                    qreal space = parseDashEntrySize(distance, width, 0.0);
+
+                    QString dots1Length(dashElement->attributeNS(KoXmlNS::draw, "dots1-length", QString()));
+                    qreal dot1Length = parseDashEntrySize(dots1Length,width,1.0);
+
+                    bool ok;
+                    int dots1 = dashElement->attributeNS(KoXmlNS::draw, "dots1").toInt(&ok);
+                    if (!ok) {
+                        dots1 = 1;
+                    }
+
+                    for (int i = 0; i < dots1; i++) {
+                        dashes.append(dot1Length);
+                        dashes.append(space);
+                    }
+
                     if (dashElement->hasAttributeNS(KoXmlNS::draw, "dots2")) {
-                        dotLength = KoUnit::parseValue(dashElement->attributeNS(KoXmlNS::draw, "dots2-length", QString()));
-                        dashes.append(dotLength / width);
-                        dashes.append(dotDistance / width);
+                        QString dots2Length(dashElement->attributeNS(KoXmlNS::draw, "dots2-length", QString()));
+                        qreal dot2Length = parseDashEntrySize(dots2Length,width,1.0);
+
+                        int dots2 = dashElement->attributeNS(KoXmlNS::draw, "dots2").toInt(&ok);
+                        if (!ok) {
+                            dots2 = 1;
+                        }
+
+                        for (int i = 0; i < dots2; i++) {
+                            dashes.append(dot2Length);
+                            dashes.append(space);
+                        }
                     }
                     tmpPen.setDashPattern(dashes);
                 }

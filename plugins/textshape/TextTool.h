@@ -135,7 +135,12 @@ public slots:
     void addCommand(QUndoCommand *command);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-
+    //When enabled, display changes
+    void toggleShowChanges(bool);
+    /// When enabled, make the change tracker record changes made while typing
+    void toggleRecordChanges(bool);
+    /// Configure Change Tracking
+    void configureChangeTracking();
     /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
 
@@ -216,12 +221,6 @@ private slots:
     void splitTableCells();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
@@ -315,6 +314,7 @@ private:
 
     QTimer m_caretTimer;
     bool m_caretTimerState;
+    int m_caretColorState;
     KAction *m_actionFormatBold;
     KAction *m_actionFormatItalic;
     KAction *m_actionFormatUnderline;

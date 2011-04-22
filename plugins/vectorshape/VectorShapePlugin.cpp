@@ -40,7 +40,7 @@ K_EXPORT_PLUGIN(VectorShapePluginFactory("VectorShape"))
 VectorShapePlugin::VectorShapePlugin(QObject * parent, const QVariantList &)
     : QObject(parent)
 {
-    //KoToolRegistry::instance()->add(new VectorToolFactory());
+    KoToolRegistry::instance()->add(new VectorToolFactory());
     KoShapeRegistry::instance()->add(new VectorShapeFactory());
 }
 

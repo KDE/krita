@@ -204,6 +204,16 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
+bool KoTableCellStyle::shrinkToFit() const
+{
+    return propertyBoolean(ShrinkToFit);
+}
+
+void KoTableCellStyle::setShrinkToFit(bool state)
+{
+    setProperty(ShrinkToFit, state);
+}
+
 void KoTableCellStyle::setProperty(int key, const QVariant &value)
 {
     Q_D(KoTableCellStyle);
@@ -331,9 +341,19 @@ QBrush KoTableCellStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
+void KoTableCellStyle::setWrap(bool state)
+{
+    setProperty(Wrap, state);
+}
+
+bool KoTableCellStyle::wrap() const
+{
+    return propertyBoolean(Wrap);
+}
+
 void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 {
-    setProperty(QTextFormat::BlockAlignment, (int) alignment);
+    setProperty(VerticalAlignment, (int) alignment);
 }
 
 Qt::Alignment KoTableCellStyle::alignment() const
@@ -381,6 +401,79 @@ QString KoTableCellStyle::masterPageName() const
 void KoTableCellStyle::setMasterPageName(const QString &name)
 {
     setProperty(MasterPageName, name);
+}
+
+void KoTableCellStyle::setCellProtection(KoTableCellStyle::CellProtectionFlag protection)
+{
+    setProperty(CellProtection, protection);
+}
+
+KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
+{
+    return (CellProtectionFlag) propertyInt(CellProtection);
+}
+
+bool KoTableCellStyle::printContent() const
+{
+    return (hasProperty(PrintContent) && propertyBoolean(PrintContent));
+}
+
+void KoTableCellStyle::setPrintContent(bool state)
+{
+    setProperty(PrintContent, state);
+}
+
+bool KoTableCellStyle::repeatContent() const
+{
+    return (hasProperty(RepeatContent) && propertyBoolean(RepeatContent));
+}
+
+void KoTableCellStyle::setRepeatContent(bool state)
+{
+    setProperty(RepeatContent, state);
+}
+
+int KoTableCellStyle::decimalPlaces() const
+{
+    return propertyInt(DecimalPlaces);
+}
+
+void KoTableCellStyle::setDecimalPlaces(int places)
+{
+    setProperty(DecimalPlaces, places);
+}
+
+bool KoTableCellStyle::alignFromType() const
+{
+    return (hasProperty(AlignFromType) and propertyBoolean(AlignFromType));
+}
+
+void KoTableCellStyle::setAlignFromType(bool state)
+{
+    setProperty(AlignFromType, state);
+}
+
+int KoTableCellStyle::rotationAngle() const
+{
+    return propertyInt(RotationAngle);
+}
+
+void KoTableCellStyle::setRotationAngle(int value)
+{
+    if (value >= 0)
+        setProperty(RotationAngle, value);
+}
+
+void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection direction)
+{
+    setProperty(Direction, direction);
+}
+
+KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
+{
+    if (hasProperty(Direction))
+        return (KoTableCellStyle::CellTextDirection) propertyInt(Direction);
+    return KoTableCellStyle::Default;
 }
 
 void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
@@ -532,7 +625,7 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         const QString bgcolor = styleStack.property(KoXmlNS::fo, "background-color");
         QBrush brush = background();
         if (bgcolor == "transparent")
-           clearBackground();
+            setBackground(Qt::NoBrush);
         else {
             if (brush.style() == Qt::NoBrush)
                 brush.setStyle(Qt::SolidPattern);
@@ -541,6 +634,64 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
+    if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {
+        setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "print-content")) {
+        setPrintContent(styleStack.property(KoXmlNS::style, "print-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
+        setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "repeat-content")) {
+        setRepeatContent(styleStack.property(KoXmlNS::style, "repeat-content") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "decimal-places")) {
+        bool ok;
+        int value = styleStack.property(KoXmlNS::style, "decimal-places").toInt(&ok);
+        if (ok)
+            setDecimalPlaces(value);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "rotation-angle")) {
+        bool ok;
+        int value = styleStack.property(KoXmlNS::style, "rotation-angle").toInt(&ok);
+        if (ok)
+            setRotationAngle(value);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "direction")) {
+        if (styleStack.property(KoXmlNS::style, "direction") == "ltr")
+            setDirection(KoTableCellStyle::LeftToRight);
+        else
+            setDirection(KoTableCellStyle::TopToBottom);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-align-source")) {
+        setAlignFromType(styleStack.property(KoXmlNS::style, "text-align-source") == "value-type");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "wrap-option")) {
+        setWrap(styleStack.property(KoXmlNS::fo, "wrap-option") == "wrap");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "cell-protect")) {
+        QString protection = styleStack.property(KoXmlNS::style, "cell-protect");
+        if (protection == "none")
+            setCellProtection(NoProtection);
+        else if (protection == "hidden-and-protected")
+            setCellProtection(HiddenAndProtected);
+        else if (protection == "protected")
+            setCellProtection(Protected);
+        else if (protection == "formula-hidden")
+            setCellProtection(FormulaHidden);
+        else if ((protection == "protected formula-hidden") || (protection == "formula-hidden protected"))
+            setCellProtection(ProtectedAndFormulaHidden);
+    }
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
@@ -585,6 +736,17 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
 {
     Q_D(KoTableCellStyle);
     QList<int> keys = d->stylesPrivate.keys();
+    bool donePadding = false;
+    if (hasProperty(QTextFormat::TableCellLeftPadding) && 
+            hasProperty(QTextFormat::TableCellRightPadding) && 
+            hasProperty(QTextFormat::TableCellTopPadding) && 
+            hasProperty(QTextFormat::TableCellBottomPadding) && 
+            leftPadding() == rightPadding() &&
+            topPadding() == bottomPadding() &&
+            topPadding() == leftPadding()) {
+        donePadding = true;
+        style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::TableCellType);
+    }
     foreach(int key, keys) {
         if (key == CellBackgroundBrush) {
             QBrush backBrush = background();
@@ -594,15 +756,50 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
         } else if (key == VerticalAlignment) {
             style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
-            
-        } else if (key == QTextFormat::TableCellLeftPadding) {
+        } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellRightPadding) {
+        } else if ((key == QTextFormat::TableCellRightPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-right", rightPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellTopPadding) {
+        } else if ((key == QTextFormat::TableCellTopPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::TableCellType);
-        } else if (key == QTextFormat::TableCellBottomPadding) {
+        } else if ((key == QTextFormat::TableCellBottomPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::TableCellType);
+        } else if (key == ShrinkToFit) {
+            style.addProperty("style:shrink-to-fit", shrinkToFit(), KoGenStyle::TableCellType);
+        } else if (key == PrintContent) {
+            style.addProperty("style:print-content", printContent(), KoGenStyle::TableCellType);
+        } else if (key == RepeatContent) {
+            style.addProperty("style:repeat-content", repeatContent(), KoGenStyle::TableCellType);
+        } else if (key == DecimalPlaces) {
+            style.addProperty("style:decimal-places", decimalPlaces(), KoGenStyle::TableCellType);
+        } else if (key == RotationAngle) {
+            style.addProperty("style:rotation-angle", rotationAngle(), KoGenStyle::TableCellType);
+        } else if (key == Wrap) {
+            if (wrap())
+                style.addProperty("fo:wrap-option", "wrap", KoGenStyle::TableCellType);
+            else
+                style.addProperty("fo:wrap-option", "no-wrap", KoGenStyle::TableCellType);
+        } else if (key == Direction) {
+            if (direction() == LeftToRight)
+                style.addProperty("style:direction", "ltr", KoGenStyle::TableCellType);
+            else if (direction() == TopToBottom)
+                style.addProperty("style:direction", "ttb", KoGenStyle::TableCellType);
+        } else if (key == CellProtection) {
+            if (cellProtection() == NoProtection)
+                style.addProperty("style:cell-protect", "none", KoGenStyle::TableCellType);
+            else if (cellProtection() == HiddenAndProtected)
+                style.addProperty("style:cell-protect", "hidden-and-protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == Protected)
+                style.addProperty("style:cell-protect", "protected", KoGenStyle::TableCellType);
+            else if (cellProtection() == FormulaHidden)
+                style.addProperty("style:cell-protect", "formula-hidden", KoGenStyle::TableCellType);
+            else if (cellProtection() == ProtectedAndFormulaHidden)
+                style.addProperty("style:cell-protect", "protected formula-hidden", KoGenStyle::TableCellType);
+        } else if (key == AlignFromType) {
+            if (alignFromType())
+                style.addProperty("style:text-align-source", "value-type", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
         }
     }
 /*

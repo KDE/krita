@@ -51,6 +51,7 @@ KoChangeTrackerElement::KoChangeTrackerElement(const QString& title, KoGenChange
     d->type = type;
     d->acceptedRejected = false;
     d->valid = true;
+    d->marker = NULL;
 }
 
 KoChangeTrackerElement::KoChangeTrackerElement()

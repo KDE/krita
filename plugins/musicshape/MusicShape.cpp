@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+ * Copyright 2011 Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,13 +18,21 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "MusicShape.h"
+
 #include <limits.h>
+
 #include <QPainter>
+#include <QBuffer>
+#include <QByteArray>
+#include <QSvgGenerator>
+
 #include <kdebug.h>
+
 #include <KoViewConverter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 #include "core/Sheet.h"
 #include "core/Part.h"
@@ -121,6 +130,10 @@ void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter
 
 void MusicShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    // The name of this object in the ODF file.
+    KoEmbeddedDocumentSaver &fileSaver = context.embeddedSaver();
+    QString objectName = fileSaver.getFilename("Object");
+
     KoXmlWriter& writer = context.xmlWriter();
     writer.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
@@ -130,27 +143,67 @@ void MusicShape::saveOdf( KoShapeSavingContext & context ) const
     MusicXmlWriter().writeSheet(writer, m_sheet, false);
     writer.endElement(); // music:shape
 
-    // Save a preview image
     const qreal previewZoom = 150 / 72.; // 150 DPI
     QSizeF imgSize = size(); // in points
     imgSize *= previewZoom;
-    QImage img(imgSize.toSize(), QImage::Format_ARGB32);
-    QPainter painter(&img);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::TextAntialiasing);
     KoViewConverter converter;
-    converter.setZoom(previewZoom);
-    constPaint(painter, converter);
+    
+    // Save a preview SVG image.
+    // -------------------------
+
+    // 1. Set up the svg renderer.
+    QByteArray svgContents;           // The contents
+    QBuffer svgBuffer(&svgContents);  // The corresponding QIODevice
+    QSvgGenerator svg;
+    svg.setOutputDevice(&svgBuffer);  // Write to the buffer
+    svg.setSize(imgSize.toSize());
+    svg.setViewBox(QRect(0, 0, boundingRect().width(), boundingRect().height()));
+        
+    // 2. Paint the svg preview image.
+    //
+    // We need to create all text as paths, because otherwise it
+    // will be difficult for most people to preview the SVG
+    // image. Not many people have music fonts installed.
+    QPainter svgPainter;
+    svgPainter.begin(&svg);
+    svgPainter.setRenderHint(QPainter::Antialiasing);
+    svgPainter.setRenderHint(QPainter::TextAntialiasing);
+    m_style->setTextAsPath(true);
+    constPaint(svgPainter, converter);
+    m_style->setTextAsPath(false);
+    svgPainter.end();
+
+    // 3. Create the xml to embed the svg image and the contents to the file.
     writer.startElement("draw:image");
-    // In the spec, only the xlink:href attribute is marked as mandatory, cool :)
-    QString name = context.imageHref(img);
+    QString name = QString("ObjectReplacements/") + objectName + ".svg";
     writer.addAttribute("xlink:type", "simple" );
     writer.addAttribute("xlink:show", "embed" );
     writer.addAttribute("xlink:actuate", "onLoad");
     writer.addAttribute("xlink:href", name);
     writer.endElement(); // draw:image
+    fileSaver.saveFile(name, "image/svg+xml", svgContents);
 
-    // TODO: Save a preview svg
+    // Save a preview bitmap image.
+    // ----------------------------
+
+    // 1. Create the image.
+    QImage img(imgSize.toSize(), QImage::Format_ARGB32);
+    QPainter painter(&img);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+    converter.setZoom(previewZoom);
+    constPaint(painter, converter);
+
+    // 2. Create the xml to embed the svg image and the contents to the file.
+    writer.startElement("draw:image");
+    name = context.imageHref(img);
+    // FIXME: Find out how to save a picture using the embeddedSaver and saveFile()
+    //name = QString("ObjectReplacements/") + objectName + ".png";
+    writer.addAttribute("xlink:type", "simple" );
+    writer.addAttribute("xlink:show", "embed" );
+    writer.addAttribute("xlink:actuate", "onLoad");
+    writer.addAttribute("xlink:href", name);
+    writer.endElement(); // draw:image
 
     saveOdfCommonChildElements(context);
     writer.endElement(); // draw:frame

@@ -18,6 +18,7 @@
 */
 
 #include "TestOpenDocumentStyle.h"
+#include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
@@ -71,6 +72,45 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                     result << valueChild.text();
                 } else if (valueChild.tagName() == "ref") {
                     m_references << valueChild.attribute("name");
+                } else if (valueChild.tagName() == "list") {
+                    // Parse that sublist
+                    if (valueChild.childNodes().length() != 1) {
+                        kFatal() << "Unrecognized list element in " << m_name;
+                    }
+                    QDomElement subElement = valueChild.firstChildElement();
+                    if (subElement.nodeName() == "oneOrMore") {
+                        // Build a list of each sub item
+                        QStringList allowedValues;
+                        QDomElement subChoices = subElement.firstChildElement();
+                        if (subChoices.nodeName() != "choice") {
+                            kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                        }
+                        QDomElement subValueChild = subChoices.firstChildElement();
+                        do {
+                            if (subValueChild.nodeName() == "value") {
+                                allowedValues << subValueChild.text();
+                            } else {
+                                kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                            }
+                            subValueChild = subValueChild.nextSiblingElement();
+                        } while (!subValueChild.isNull());
+                        QStringList mergedAllowedValues;
+                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                            foreach (QString baseValue, allowedValues) {
+                                if (!mergedAllowedValues.contains(baseValue))
+                                    mergedAllowedValues << baseValue;
+                                foreach (QString knownValue, mergedAllowedValues) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                        continue;
+                                    }
+                                    QString builtValue = knownValue + " " + baseValue;
+                                    if (!mergedAllowedValues.contains(builtValue))
+                                        mergedAllowedValues << builtValue;
+                                }
+                            }
+                        }
+                        result << mergedAllowedValues;
+                    }
                 } else {
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
@@ -97,11 +137,19 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
+            result << "37" << "42";
+        } else if (reference == "nonNegativeInteger") {
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
+        } else if (reference == "borderWidths") {
+            result << "42px 42pt 12cm" << "0px 0pt 0cm";
+        } else if (reference == "string") {
+            // Now, that sucks !
+            kWarning() << "Found a string reference in " << m_name;
+            result << "";
         } else {
-            kFatal() << "Unhandled reference " << reference;
+            kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
         }
     }
     return result;
@@ -115,7 +163,7 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return true;
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
-            if (KoUnit::parseValue(initialValue) == KoUnit::parseValue(outputValue))
+            if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
                 return true;
         } else if (reference == "color") {
             if (initialValue.toLower() == outputValue.toLower())
@@ -294,6 +342,46 @@ void TestOpenDocumentStyle::testTableStyle()
     QFETCH(QString, value);
     
     QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableRowStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-row-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableRowStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableCellStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableCellStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+    
+    QVERIFY(basicTestFunction<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

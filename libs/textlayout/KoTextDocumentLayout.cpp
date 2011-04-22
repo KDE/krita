@@ -160,7 +160,10 @@ QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 {
     QRectF retval;
     foreach(const KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        retval |= rootArea->selectionBoundingBox(cursor);
+        QRectF areaBB  = rootArea->selectionBoundingBox(cursor);
+        if (areaBB.isValid()) {
+            retval |= areaBB;
+        }
     }
     return retval;
 }

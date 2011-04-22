@@ -137,6 +137,7 @@ void ArtisticTextTool::repaintDecorations()
         if (!m_currentShape->baselineShape())
             canvas()->updateCanvas(m_currentShape->baseline().boundingRect());
     }
+    m_selection.repaintDecoration();
 }
 
 void ArtisticTextTool::mousePressEvent( KoPointerEvent *event )

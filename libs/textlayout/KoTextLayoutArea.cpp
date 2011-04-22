@@ -438,7 +438,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         }
         if (atEnd) {
             m_endOfArea = new FrameIterator(cursor);
-            m_y += m_bottomSpacing;
+            m_y = qMin(maximumAllowedBottom(), m_y + m_bottomSpacing);
             setBottom(m_y);
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(m_y);

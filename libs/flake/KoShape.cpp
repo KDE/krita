@@ -1215,7 +1215,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         case RightRunAroundSide:
             wrap = "right";
             break;
-        case AutoRunAroundSide:
+        case EnoughRunAroundSide:
             wrap = "dynamic";
             break;
         case BothRunAroundSide:
@@ -1296,7 +1296,7 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
         else if (wrap == "right")
             setTextRunAroundSide(KoShape::RightRunAroundSide);
         else if (wrap == "dynamic")
-            setTextRunAroundSide(KoShape::AutoRunAroundSide);
+            setTextRunAroundSide(KoShape::EnoughRunAroundSide);
         else if (wrap == "parallel")
             setTextRunAroundSide(KoShape::BothRunAroundSide);
     }

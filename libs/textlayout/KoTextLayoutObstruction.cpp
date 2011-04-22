@@ -49,6 +49,8 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
         m_side = Both;
     } else if (shape->textRunAroundSide() == KoShape::BiggestRunAroundSide) {
         m_side = Bigger;
+    } else if (shape->textRunAroundSide() == KoShape::EnoughRunAroundSide) {
+        m_side = Enough;
     }
 }
 
@@ -190,6 +192,11 @@ bool KoTextLayoutObstruction::textOnRight() const
 bool KoTextLayoutObstruction::textOnBiggerSide() const
 {
     return m_side == Bigger;
+}
+
+bool KoTextLayoutObstruction::textOnEnoughSides() const
+{
+    return m_side == Enough;
 }
 
 bool KoTextLayoutObstruction::noTextAround() const

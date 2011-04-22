@@ -59,11 +59,13 @@ public:
 
     bool textOnBiggerSide() const;
 
+    bool textOnEnoughSides() const;
+
     bool noTextAround() const;
 
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
-    enum Side { None, Left, Right, Empty, Both, Bigger }; // TODO support Auto
+    enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
     Side m_side;
     QRectF m_bounds;
     QPolygonF m_polygon;

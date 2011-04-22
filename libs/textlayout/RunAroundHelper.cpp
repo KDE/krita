@@ -169,10 +169,19 @@ void RunAroundHelper::createLineParts()
                 lineParts.replace(i + 1, QRect());
             } else if (obstruction->textOnRight()) {
                 lineParts.replace(i, QRectF());
-            } else if (obstruction->textOnBiggerSide()) {
-                QRectF leftReft = obstruction->getLeftLinePart(m_lineRect);
+            } else if (obstruction->textOnEnoughSides()) {
+                QRectF leftRect = obstruction->getLeftLinePart(m_lineRect);
                 QRectF rightRect = obstruction->getRightLinePart(m_lineRect);
-                if (leftReft.width() < rightRect.width()) {
+                if (leftRect.width() < 100) { // TODO support actual treshold
+                    lineParts.replace(i, QRectF());
+                }
+                if (rightRect.width() < 100) { // TODO support actual treshold
+                    lineParts.replace(i + 1, QRectF());
+                }
+            } else if (obstruction->textOnBiggerSide()) {
+                QRectF leftRect = obstruction->getLeftLinePart(m_lineRect);
+                QRectF rightRect = obstruction->getRightLinePart(m_lineRect);
+                if (leftRect.width() < rightRect.width()) {
                     lineParts.replace(i, QRectF());
                 } else {
                     lineParts.replace(i + 1, QRectF());

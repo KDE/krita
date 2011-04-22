@@ -55,10 +55,11 @@ public:
 
 private:
     void layoutColumns();
-    bool layoutRow(TableIterator *cursor);
+    void collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth);
+    bool layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
     void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell);
-    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, bool collapsing, QTextTableCell tableCell, QVector<QLineF> *accuBlankBorders);
+    void paintCellBorders(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell, bool topRow, QVector<QLineF> *accuBlankBorders);
 
     class Private;
     Private * const d;

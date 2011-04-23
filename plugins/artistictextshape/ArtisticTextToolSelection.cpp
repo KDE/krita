@@ -129,6 +129,9 @@ QPainterPath ArtisticTextToolSelection::outline()
         polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
         polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
 
+        if (charIndex == selectionEnd)
+            break;
+
         const qreal w = metrics.charWidth(ranges[charPos.first].text(), charPos.second);
 
         // advance character index within current range
@@ -139,8 +142,6 @@ QPainterPath ArtisticTextToolSelection::outline()
             charPos.first++;
             charPos.second = 0;
         }
-        if (charIndex == selectionEnd)
-            break;
         // check if next character has an y-offset
         if (charPos.first < ranges.size() && ranges[charPos.first].hasYOffset(charPos.second)) {
             // end selection sub range and start a new subrange

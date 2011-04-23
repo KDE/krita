@@ -151,9 +151,9 @@ enum MtfType {
 
 enum LineStyle
 {
-    LINE_NONE = 0,
+    LINE_NONE  = 0,
     LINE_SOLID = 1,
-    LINE_DASH = 2,
+    LINE_DASH  = 2,
 };
 
 
@@ -176,9 +176,19 @@ MTF_MIRROR_NONE    0x00000000
 MTF_MIRROR_HORZ    0x00000001
 MTF_MIRROR_VERT    0x00000002
 
+FIXME: Check the details here.
+MTF_MIRROR_NONE    The picture is not mirrored in any direction. 
 
-2.1.2.2 ... Flags
-FIXME
+MTF_MIRROR_HORZ    The picture should be drawn mirrored horizontally,
+                   i.e. mirrored in the center line of the picture
+                   parallel to the Y axis.
+
+MTF_MIRROR_VERT    The picture should be drawn mirrored vertically,
+                   i.e. mirrored in the center line of the picture
+                   parallel to the X axis.
+
+In all of the cases above, the space occupied by the picture is the
+same. 
 
 
 2.2 SVM Objects
@@ -228,7 +238,23 @@ length          defines the length of the object, excluding the
                 VersionCompat object.
 
 
-2.2.1.3 String
+2.2.1.2 Point
+
+struct Point {
+    uint32 x;
+    uint32 y;
+}
+
+
+2.2.1.3 Polygon
+
+struct Polygon {
+    uint16  nPoints;
+    Point   points[nPoints];
+}
+
+
+2.2.1.4 String
 
 struct String {
     uint16 size;
@@ -237,22 +263,6 @@ struct String {
 
 A string object is built in a Pascal style, not a C style.  There is
 no trailing \0 at the end of the string.
-
-
-2.2.1.3 Point
-
-struct Point {
-    uint32 x;
-    uint32 y;
-}
-
-
-2.2.1.4 Polygon
-
-struct Polygon {
-    uint16  nPoints;
-    Point   points[nPoints];
-}
 
 
 2.2.1.5 Fraction
@@ -268,8 +278,9 @@ The value of a Fraction is numerator/denominator.
 2.2.2 Header Object
 - - - - - - - - - -
 
-The header object is always the first object in a SVM file. There is
-only one header object in the entire file. 
+The header object is a special object in an SVM. It is always the
+first object in a SVM file. There is only one header object in the
+entire file.
 
 VersionCompat 	versionCompat
 uint32          compressionMode 
@@ -294,10 +305,46 @@ actionCount     Number of Actions in the file.
 2.2.3 Graphics Objects
 - - - - - - - - - - - -
 
-2.2.3.1 PenInformations
+The SVM Graphics Objects specify parameters for graphics output. A
+particular graphics object becomes part of the drawing context when it
+is selected by an appropriate object record, and it is reused in
+subsequent graphics operations until a different object is selected.
 
-This object describes the pen properties.  Its contents depends on its
-version.
+
+2.2.3.1 MapMode
+
+This object describes some properties of the current drawing.
+
+VersionCompat   version
+uint16          unit
+Point           origin
+Fraction        scaleX
+Fraction        scaleY
+bool            isSimple
+
+....FIXME: how do they alter the rendering context ?
+.... Can the scale, the origin change ?
+.... Find the values for the unit...
+
+
+2.2.4 Structure Objects
+- - - - - - - - - - - -
+
+The SVM Structure Objects specify data structures that are embedded in
+SVM objects and actions.  Structure objects, unlike graphics objects,
+are not explicitly created or deleted; they are components of more
+complex structures.
+
+
+2.2.4.1 Color
+
+FIXME
+
+
+2.2.4.2 PenInformations
+
+This object describes the pen properties for drawing lines.  Its
+contents depends on its version.
 
     For all values of version:
 VersionCompat   version
@@ -320,34 +367,13 @@ lineWidth       width of the pen in <unit> (FIXME)
 ....FIXME: how to interpret the next fields values ?
 
 
-2.2.3.2 MapMode
-
-This object describes some properties of the current drawing.
-
-VersionCompat   version
-uint16          unit
-Point           origin
-Fraction        scaleX
-Fraction        scaleY
-bool            isSimple
-
-....FIXME: how do they alter the rendering context ?
-.... Can the scale, the origin change ?
-.... Find the values for the unit...
-
-
-2.2.4 Structure Objects
-- - - - - - - - - - - -
-FIXME
-
-
 2.3 SVM Actions
 ---------------
 
-The action type is specified using a unit16 at the beginning of each action 
-following the file header.
-Every action except the special META_NULL_ACTION begins with a VersionCompat 
-object.
+The action type is specified using a unit16 at the beginning of each
+action following the file header.  Every action except the special
+META_NULL_ACTION begins with a VersionCompat object.
+
 
 2.3.1 Control Action Types
 - - - - - - - - - - - - - - 
@@ -377,19 +403,21 @@ comment2        ... FIXME
 2.3.2 State Action Types
 - - - - - - - - - - - - -
 
-These actions change the state of the rendering engine.  Examples of
-such state is the mapmode, the pen color or background brush.
+These actions change the state of the drawing context.  
 
 
 2.3.2.1 META_LINECOLOR_ACTION (132)
 
-A line color sets the pen color in the current context.
-It contains the following parts
+A line color sets the pen color in the drawing context.
+
 uint32          colorData
 bool            isSet
 
-colorData       The color of the pen, in RGB format         (... QColor::fromRgb format)
-isSet           Should the color be applied (true), or should the pen be hidden (false)
+colorData       The color of the pen, in RGB format
+                (... QColor::fromRgb format)
+
+isSet           Should the color be applied (true), or should the pen
+                be hidden (false) 
 
 
 2.3.2.2 META_FILLCOLOR_ACTION (133)
@@ -420,7 +448,8 @@ This action sets the current text language.
 uint16          languageType
 
 languageType    It is a decimal code that specifies the language. 
-                It is described in i18npool/inc/i18npool/lang.h (FIXME)
+                It is described in i18npool/inc/i18npool/lang.h
+                FIXME: Add these language codes to the enums in 2.1.1
 
 
 2.3.3 Drawing Action Types
@@ -436,11 +465,11 @@ A polyline action draws a polygon without filling it.
 
 It contains the following parts
 Polygon         polygon
-    If the version of the action is greater than 1
+    If the version of the action is greater than 1:
 PenInformations penInfos
-    If the version of the action is greater than 2
+    If the version of the action is greater than 2:
 bool            polygonFlags
-    If polygonFlags is true
+    If polygonFlags is true:
 VersionCompat   flagsVersionCompat
 Polygon         polygon (replaces the previous polygon)
 bool            polygonFlagsEnabled

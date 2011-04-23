@@ -1,4 +1,4 @@
-                          StarView Metafile
+<                          StarView Metafile
 
                             Specification
 
@@ -48,17 +48,29 @@ question.
 
 2. Structures
 =============
-FIXME
+
+This section specifies the structures used in a StarView
+Metafile. This includes:
+
+ * enumerations of SVM constants: enums and flags
+
+ * definitions of SVM objects, i.e. primitive data types and
+   composite structs and objects
+
+ * specifications of SVM actions.
 
 
 2.1 SVM Constants
 -----------------
-FIXME
+
+Constants come in two different forms: enumerations and flags.
 
 
 2.1.1 SVM Enumerations
 - - - - - - - - - - - -
-FIXME
+
+The following enumerations should be used in programs that handle SVM
+files. 
 
 
 2.1.1.1 ActionType Enumeration
@@ -144,6 +156,7 @@ enum LineStyle
     LINE_DASH = 2,
 };
 
+
 2.1.1.4 ... Enumeration
 FIXME
 
@@ -151,13 +164,17 @@ FIXME
 2.1.2 SVM Flags
 - - - - - - - -
 
-2.1.2.1 Mirror Flags
+A variable can only containing one value from an SVM enumeration at
+the same time.  In contrast, a variable containing SVN flags can
+combine as many values from the respective definition of flags as the
+enumeration of the flag itself.
 
+
+2.1.2.1 Mirror Flags
 
 MTF_MIRROR_NONE    0x00000000
 MTF_MIRROR_HORZ    0x00000001
 MTF_MIRROR_VERT    0x00000002
-
 
 
 2.1.2.2 ... Flags
@@ -166,14 +183,14 @@ FIXME
 
 2.2 SVM Objects
 ---------------
-FIXME
+
+This section specifies the objects used in SVM files. 
 
 
 2.2.1 Primitive Data Types
 - - - - - - - - - - - - - -
 
-Here follows a list of primitive data types that are used in the
-objects or actions.
+The following primitive data types are used in the objects or actions.
 
 uint8	an unsigned 8 bit integer, taking up 1 byte in the file.
 int8	a signed 8 bit integer, taking up 1 byte in the file.
@@ -181,6 +198,8 @@ uint16	an unsigned 16 bit integer, taking up 2 bytes in the file.
 int16	a signed 16 bit integer, taking up 2 bytes in the file.
 uint32	an unsigned 32 bit integer, taking up 4 bytes in the file.
 int32	a signed 32 bit integer, taking up 4 bytes in the file.
+
+Floating point values are not used in SVM files.
 
 
 2.2.1 Basic Objects
@@ -220,31 +239,6 @@ A string object is built in a Pascal style, not a C style.  There is
 no trailing \0 at the end of the string.
 
 
-2.2.1.4 Header Object
-
-The header object is always the first object in a SVM file. It has the
-following parts.
-
-VersionCompat 	versionCompat
-uint32          compressionMode 
-MapMode         mapMode
-uint32          width
-uint32          height
-uint32          actionCount 
-
-versionCompat   Version and size of the header record.
-
-compressionMode ... FIXME
-
-mapMode         MapMode for the ... FIXME
-
-width           Width of the picture in logical coordinates.
-
-height          Height of the picture in logical coordinates.
-
-actionCount     Number of Actions in the file.
-
-
 2.2.1.3 Point
 
 struct Point {
@@ -271,10 +265,36 @@ struct Fraction {
 The value of a Fraction is numerator/denominator.
 
 
-2.2.2 Graphics Objects
+2.2.2 Header Object
+- - - - - - - - - -
+
+The header object is always the first object in a SVM file. There is
+only one header object in the entire file. 
+
+VersionCompat 	versionCompat
+uint32          compressionMode 
+MapMode         mapMode
+uint32          width
+uint32          height
+uint32          actionCount 
+
+versionCompat   Version and size of the header record.
+
+compressionMode ... FIXME
+
+mapMode         MapMode for the ... FIXME
+
+width           Width of the picture in logical coordinates.
+
+height          Height of the picture in logical coordinates.
+
+actionCount     Number of Actions in the file.
+
+
+2.2.3 Graphics Objects
 - - - - - - - - - - - -
 
-2.2.2.1 PenInformations
+2.2.3.1 PenInformations
 
 This object describes the pen properties.  Its contents depends on its
 version.
@@ -300,7 +320,7 @@ lineWidth       width of the pen in <unit> (FIXME)
 ....FIXME: how to interpret the next fields values ?
 
 
-2.2.2.2 MapMode
+2.2.3.2 MapMode
 
 This object describes some properties of the current drawing.
 
@@ -316,7 +336,7 @@ bool            isSimple
 .... Find the values for the unit...
 
 
-2.2.3 Structure Objects
+2.2.4 Structure Objects
 - - - - - - - - - - - -
 FIXME
 
@@ -332,7 +352,13 @@ object.
 2.3.1 Control Action Types
 - - - - - - - - - - - - - - 
 
-2.3.1.1 META_COMMENT_ACTION (512)
+2.3.1.1 META_NULL_ACTION (0)
+
+This action should never occur, ever.
+It contains a uint16 that is never used.
+
+
+2.3.1.2 META_COMMENT_ACTION (512)
 
 A comment action has no effect on the rendering.
 It contains the following parts :
@@ -347,33 +373,15 @@ value           ... FIXME
 
 comment2        ... FIXME
 
-2.3.1.2 META_NULL_ACTION (0)
 
-This action should never occur, ever.
-It contains a uint16 that is never used.
+2.3.2 State Action Types
+- - - - - - - - - - - - -
+
+These actions change the state of the rendering engine.  Examples of
+such state is the mapmode, the pen color or background brush.
 
 
-2.3.2 Object Action Types
-- - - - - - - - - - - - - - 
-
-2.3.2.1 META_MAPMODE_ACTION (137)
-
-This action loads a new MapMode object.
-It therefore contains only a MapMode object.
-
-2.3.2.2 META_TEXTLANGUAGE_ACTION (150)
-
-This action sets the current text language.
-It contains the following part :
-uint16          languageType
-
-languageType    It is a decimal code that specifies the language.
-It is described in i18npool/inc/i18npool/lang.h
-
-2.3.3 Drawing Action Types
-- - - - - - - - - - - - - - 
-
-2.3.3.1 META_LINECOLOR_ACTION (132)
+2.3.2.1 META_LINECOLOR_ACTION (132)
 
 A line color sets the pen color in the current context.
 It contains the following parts
@@ -383,19 +391,48 @@ bool            isSet
 colorData       The color of the pen, in RGB format         (... QColor::fromRgb format)
 isSet           Should the color be applied (true), or should the pen be hidden (false)
 
-2.3.3.2 META_FILLCOLOR_ACTION (133)
+
+2.3.2.2 META_FILLCOLOR_ACTION (133)
 
 A fill color sets the brush color in the current context.
 It contains the following parts
 uint32          colorData
 bool            isSet
 
-colorData       The color of the brush, in RGB format         (... QColor::fromRgb format)
-isSet           Should the color be applied (true), or should the brush be hidden (false)
+colorData       The color of the brush, in RGB format
+                (... QColor::fromRgb format) 
 
-2.3.3.3 META_POLYLINE_ACTION (109)
+isSet           Specifies wether the color should be be applied
+                (true), or if the brush should be hidden (false) 
 
-A polyline action draws a polygon (it does not fill it).
+
+2.3.2.3 META_MAPMODE_ACTION (137)
+
+This action loads a new MapMode object into the drawing context.
+
+MapMode		mapMode
+
+
+2.3.2.4 META_TEXTLANGUAGE_ACTION (150)
+
+This action sets the current text language.
+
+uint16          languageType
+
+languageType    It is a decimal code that specifies the language. 
+                It is described in i18npool/inc/i18npool/lang.h (FIXME)
+
+
+2.3.3 Drawing Action Types
+- - - - - - - - - - - - - - 
+
+These actions all cause some form of output to the picture.  The
+operations described by these actions are influenced by the current
+drawing context.
+
+2.3.3.1 META_POLYLINE_ACTION (109)
+
+A polyline action draws a polygon without filling it.
 
 It contains the following parts
 Polygon         polygon
@@ -436,6 +473,7 @@ These action types have so far not being sorted into any other type.
  META_TEXTARRAY_ACTION
  META_STRETCHTEXT_ACTION
  META_TEXTRECT_ACTION
+
  META_BMP_ACTION
  META_BMPSCALE_ACTION
  META_BMPSCALEPART_ACTION

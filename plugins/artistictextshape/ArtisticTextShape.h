@@ -32,6 +32,9 @@ class KoPathShape;
 
 #define ArtisticTextShapeID "ArtisticText"
 
+/// Character position within text shape (range index, range character index)
+typedef QPair<int, int> CharIndex;
+
 class ArtisticTextShape : public KoShape
 {
 public:
@@ -170,6 +173,9 @@ public:
     /// Gets the extents of the char with the given index
     QRectF charExtentsAt(int charIndex) const;
 
+    /// Returns index of range and index within range of specified character
+    CharIndex indexOfChar(int charIndex) const;
+
     /// reimplemented from KoShape
     virtual void shapeChanged(ChangeType type, KoShape * shape);
 
@@ -181,11 +187,6 @@ private:
 
     void beginTextUpdate();
     void finishTextUpdate();
-
-    typedef QPair<int, int> CharIndex;
-
-    /// Returns index of range and index within range of specified character
-    CharIndex indexOfChar(int charIndex) const;
 
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;

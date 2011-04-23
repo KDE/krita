@@ -21,7 +21,7 @@
 #define ARTISTICTEXTTOOLSELECTION_H
 
 #include <KoToolSelection.h>
-#include <QtGui/QPolygonF>
+#include <QtGui/QPainterPath>
 
 class ArtisticTextShape;
 class KoCanvasBase;
@@ -63,7 +63,7 @@ public:
 
 private:
     /// Returns the outline of the selection in document coordinates
-    QPolygonF outline();
+    QPainterPath outline();
 
     KoCanvasBase *m_canvas;
     ArtisticTextShape *m_currentShape; ///< the currently selected text shape

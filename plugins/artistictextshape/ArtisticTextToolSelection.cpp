@@ -49,8 +49,8 @@ void ArtisticTextToolSelection::setSelectedShape(ArtisticTextShape *textShape)
 {
     if (textShape == m_currentShape)
         return;
-    m_currentShape = textShape;
     clear();
+    m_currentShape = textShape;
 }
 
 ArtisticTextShape *ArtisticTextToolSelection::selectedShape() const
@@ -97,14 +97,24 @@ void ArtisticTextToolSelection::paint(QPainter &painter, const KoViewConverter &
     m_currentShape->applyConversion( painter, converter );
     painter.setPen(Qt::NoPen);
     painter.setBrush(QColor(0, 0, 255, 127));
-    painter.drawPolygon(outline());
+    painter.drawPath(outline());
 }
 
-QPolygonF ArtisticTextToolSelection::outline()
+QPainterPath ArtisticTextToolSelection::outline()
 {
-    QPolygonF outline;
-    outline.reserve(m_selectionCount*4);
+    if (!hasSelection())
+        return QPainterPath();
 
+    CharIndex charPos = m_currentShape->indexOfChar(m_selectionStart);
+    if (charPos.first < 0)
+        return QPainterPath();
+
+    QPainterPath outline;
+
+    QPolygonF polygon;
+    polygon.reserve(m_selectionCount*4);
+
+    QList<ArtisticTextRange> ranges = m_currentShape->text();
     const int selectionEnd = m_selectionStart+m_selectionCount;
     for (int charIndex = m_selectionStart; charIndex <= selectionEnd; ++charIndex) {
         const QPointF pos = m_currentShape->charPositionAt(charIndex);
@@ -116,10 +126,37 @@ QPolygonF ArtisticTextToolSelection::outline()
 
         QFontMetrics metrics(m_currentShape->fontAt(charIndex));
 
-        outline.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
-        outline.append(charTransform.map(QPointF(0.0, metrics.descent())));
+        polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
+        polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
+
+        const qreal w = metrics.charWidth(ranges[charPos.first].text(), charPos.second);
+
+        // advance character index within current range
+        charPos.second++;
+        // are we at the end of the current range ?
+        if (charPos.second >= ranges[charPos.first].text().length()) {
+            // go to start of next range
+            charPos.first++;
+            charPos.second = 0;
+        }
+        if (charIndex == selectionEnd)
+            break;
+        // check if next character has an y-offset
+        if (charPos.first < ranges.size() && ranges[charPos.first].hasYOffset(charPos.second)) {
+            // end selection sub range and start a new subrange
+            polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
+            polygon.append(charTransform.map(QPointF(w, metrics.descent())));
+            outline.addPolygon(polygon);
+            polygon.clear();
+        }
     }
 
+    // if we have some points left, add them to the outline as well
+    if (!polygon.isEmpty()) {
+        outline.addPolygon(polygon);
+    }
+
+    // transform to document coordinates
     return m_currentShape->absoluteTransformation(0).map(outline);
 }
 

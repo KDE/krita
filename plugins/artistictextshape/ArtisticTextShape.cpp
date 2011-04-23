@@ -812,7 +812,7 @@ void ArtisticTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-ArtisticTextShape::CharIndex ArtisticTextShape::indexOfChar(int charIndex) const
+CharIndex ArtisticTextShape::indexOfChar(int charIndex) const
 {
     if (isEmpty())
         return CharIndex(-1,-1);

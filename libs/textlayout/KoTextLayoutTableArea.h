@@ -56,6 +56,7 @@ public:
 private:
     void layoutColumns();
     void collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth);
+    void nukeRow(TableIterator *cursor);
     bool layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth);
     QRectF cellBoundingRect(const QTextTableCell &cell) const;
     void paintCell(QPainter *painter, const KoTextDocumentLayout::PaintContext &context, QTextTableCell tableCell);

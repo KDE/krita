@@ -455,6 +455,16 @@ void KoTextLayoutTableArea::collectBorderThicknesss(int row, qreal &topBorderWid
     }
 }
 
+void KoTextLayoutTableArea::nukeRow(TableIterator *cursor)
+{
+    for (int column = 0; column < d->table->columns(); column++) {
+        delete d->cellAreas[cursor->row][column];
+        d->cellAreas[cursor->row][column] = 0;
+        delete cursor->frameIterators[column];
+        cursor->frameIterators[column] = 0;
+    }
+}
+
 bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth)
 {
     int row = cursor->row;
@@ -462,7 +472,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     Q_ASSERT(row >= 0);
     Q_ASSERT(row < d->table->rows());
 
-    bool allCellsFullyDone = true;
     QTextTableFormat tableFormat = d->table->format();
 
     /*
@@ -499,11 +508,13 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         rowBottom = d->rowPositions[row] + rowStyle.minimumRowHeight();
     }
 
-    if (rowBottom >= maximumAllowedBottom()) {
+    if (rowBottom > maximumAllowedBottom()) {
         d->rowPositions[row+1] = d->rowPositions[row];
         return false; // we can't honour minimum or fixed height so don't even try
     }
 
+    bool allCellsFullyDone = true;
+    bool allCellsVoid = true;
     int col = 0;
     while (col < d->table->columns()) {
         // Get the cell format.
@@ -534,8 +545,8 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
             if (maxBottom < areaTop) {
                 d->rowPositions[row+1] = d->rowPositions[row];
-                //TODO need to restore the cursors of the previous columns which we have already done
-                return false; // we can't honour the borders so don't give up doing row
+                nukeRow(cursor);
+                return false; // we can't honour the borders so give up doing row
             }
 
             KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
@@ -550,7 +561,10 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     maxBottom);
 
             FrameIterator *cellCursor = cursor->frameIterator(col);
-            allCellsFullyDone &= cellArea->layout(cellCursor);
+
+            allCellsFullyDone = allCellsFullyDone && cellArea->layout(cellCursor);
+
+            allCellsVoid = allCellsVoid && (cellArea->top() >= cellArea->bottom());
 
             if (!rowHasExactHeight) {
                 /*
@@ -565,6 +579,12 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             }
         }
         col += cell.columnSpan(); // Skip across column spans.
+    }
+
+    if (allCellsVoid) {
+        d->rowPositions[row+1] = d->rowPositions[row];
+        nukeRow(cursor);
+        return false; // we can't honour the borders so give up doing row
     }
 
     // TODO We should also do the following, if this row fitted but next row doesn't fit at all

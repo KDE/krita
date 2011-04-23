@@ -727,6 +727,9 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
             }
         }
     }
+    for (int i = 0; i < accuBlankBorders.size(); ++i) {
+        accuBlankBorders[i].translate(d->headerOffsetX, d->headerOffsetY);
+    }
 
     painter->translate(-d->headerOffsetX, -d->headerOffsetY);
 
@@ -883,23 +886,24 @@ QRectF KoTextLayoutTableArea::cellBoundingRect(const QTextTableCell &cell) const
     const int column = cell.column();
     const int columnSpan = cell.columnSpan();
 
-    int lastRow = d->endOfArea->row;
-    if (d->endOfArea->frameIterators[0] == 0) {
-        --lastRow;
-    }
-    if (lastRow <  d->startOfArea->row) {
-        return QRectF(); // empty
-    }
+    if (row >= d->headerRows) {
+        int lastRow = d->endOfArea->row;
+        if (d->endOfArea->frameIterators[0] == 0) {
+            --lastRow;
+        }
+        if (lastRow <  d->startOfArea->row) {
+            return QRectF(); // empty
+        }
 
-    // Limit cell to within the area
-    if (row < d->startOfArea->row) {
-        rowSpan -= d->startOfArea->row - row;
-        row += d->startOfArea->row - row;
+        // Limit cell to within the area
+        if (row < d->startOfArea->row) {
+            rowSpan -= d->startOfArea->row - row;
+            row += d->startOfArea->row - row;
+        }
+        if (row + rowSpan - 1 > lastRow) {
+            rowSpan = lastRow - row + 1;
+        }
     }
-    if (row + rowSpan - 1 > lastRow) {
-        rowSpan = lastRow - row + 1;
-    }
-
     const qreal width = d->columnPositions[column + columnSpan] - d->columnPositions[column];
     const qreal height = d->rowPositions[row + rowSpan] - d->rowPositions[row];
 

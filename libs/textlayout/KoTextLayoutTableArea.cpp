@@ -839,7 +839,8 @@ void KoTextLayoutTableArea::paintCellBorders(QPainter *painter, const KoTextDocu
         } else {
             int c = column;
             while (c < column + tableCell.columnSpan()) {
-                QTextTableCell tableCellBelow = d->table->cellAt(row + tableCell.rowSpan(), c);
+                QTextTableCell tableCellBelow = d->table->cellAt(row == d->headerRows - 1 ?
+                            d->startOfArea->row : row + tableCell.rowSpan(), c);
                 QTextTableCellFormat belowTfm(tableCellBelow.format().toTableCellFormat());
                 QRectF belowBRect = cellBoundingRect(tableCellBelow);
                 qreal x = qMax(bRect.x(), belowBRect.x());

@@ -528,7 +528,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (!charStyle && m_documentLayout->styleManager()) { // try the one from paragraph style
             KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
                                        format.intProperty(KoParagraphStyle::StyleId));
-            if (ps)
+            if (ps && !ps->hasDefaults())
                 charStyle = ps->characterStyle();
         }
 

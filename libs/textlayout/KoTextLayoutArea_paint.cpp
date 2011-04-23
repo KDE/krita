@@ -240,7 +240,6 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
     QTextList *list = block.textList();
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
-        QTextCharFormat chFormatMaxFontSize;
 
         KoCharacterStyle *cs = 0;
         if (m_documentLayout->styleManager()) {
@@ -255,26 +254,15 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             }
         }
 
+        // use format from the actual block of the list item
+        QTextCharFormat chFormatBlock;
         if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
-                cs->applyStyle(chFormatMaxFontSize);
+                cs->applyStyle(chFormatBlock);
         } else {
-            // use format from the actual block of the list item
-            QTextCharFormat chFormatBlock;
             if (block.text().size() == 0) {
                 chFormatBlock = block.charFormat();
             } else {
                 chFormatBlock = block.begin().fragment().charFormat();
-            }
-
-            chFormatMaxFontSize = chFormatBlock;
-
-            QTextBlock::iterator it;
-            QTextFragment currentFragment;
-            for (it = block.begin(); !it.atEnd(); ++it) {
-                currentFragment = it.fragment();
-                if ( currentFragment.isValid() && (chFormatMaxFontSize.fontPointSize() < currentFragment.charFormat().fontPointSize()) ) {
-                    chFormatMaxFontSize = currentFragment.charFormat();
-                }
             }
         }
 
@@ -283,24 +271,23 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
             QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!textPropertiesCharStyle.isNull()) {
-                textPropertiesCharStyle->applyStyle( chFormatMaxFontSize );
+                //calculate the correct font point size taking into account the current block format and the relative font size percent
+                qreal percent=100;
+                if (listFormat.hasProperty(KoListStyle::RelativeBulletSize))
+                    percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
+                else
+                    listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
+
+                textPropertiesCharStyle->setFontPointSize((percent*chFormatBlock.fontPointSize())/100.00);
+                textPropertiesCharStyle->applyStyle(chFormatBlock);
             }
         }
 
         if (! data->counterText().isEmpty()) {
-            QFont font(chFormatMaxFontSize.font(), m_documentLayout->paintDevice());
+            QFont font(chFormatBlock.font(), m_documentLayout->paintDevice());
 
-            QString result = data->counterText();
             KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
-            if (listStyle == KoListStyle::SquareItem            || listStyle == KoListStyle::DiscItem       ||
-                listStyle == KoListStyle::CircleItem            || listStyle == KoListStyle::BoxItem        ||
-                listStyle == KoListStyle::RhombusItem           || listStyle == KoListStyle::CustomCharItem ||
-                listStyle == KoListStyle::HeavyCheckMarkItem    || listStyle == KoListStyle::BallotXItem    ||
-                listStyle == KoListStyle::RightArrowItem        || listStyle == KoListStyle::RightArrowHeadItem)
-            {
-                QChar bulletChar(listFormat.intProperty(KoListStyle::BulletCharacter));
-                result = bulletChar;
-            }
+            QString result = data->counterText();
 
             QTextLayout layout(result , font, m_documentLayout->paintDevice());
 
@@ -308,7 +295,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             QTextLayout::FormatRange format;
             format.start = 0;
             format.length = data->counterText().length();
-            format.format = chFormatMaxFontSize;
+            format.format = chFormatBlock;
 
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
@@ -340,7 +327,11 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
             if (block.layout()->lineCount() > 0) {
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
-                counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
+                if (KoListStyle::isNumberingStyle(listStyle)) {
+                    counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent()); //if numbered list baseline align
+                } else {
+                    counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0); //for unnumbered list center align
+                }
             }
 
             layout.draw(painter, counterPosition);
@@ -348,7 +339,7 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
         if (listStyle == KoListStyle::ImageItem && imageCollection) {
-            QFontMetricsF fm(chFormatMaxFontSize.font(), m_documentLayout->paintDevice());
+            QFontMetricsF fm(chFormatBlock.font(), m_documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);

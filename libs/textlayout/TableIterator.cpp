@@ -33,7 +33,7 @@ TableIterator::TableIterator(QTextTable *t)
     }
     row = 0;
     headerRows = table->format().property(KoTableStyle::NumberHeadingRows).toInt();
-    headerRowPositions.resize(headerRows);
+    headerRowPositions.resize(headerRows + 1);
     headerCellAreas.resize(headerRows);
     for (int row = 0; row < headerRows; ++row) {
         headerCellAreas[row].resize(table->columns());

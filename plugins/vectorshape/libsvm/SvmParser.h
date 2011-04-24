@@ -31,9 +31,10 @@ namespace Libsvm
 
 class SVM_EXPORT SvmParser
 {
+ public:
     SvmParser();
 
-    bool Parse(QByteArray &data);
+    bool parse(const QByteArray &data);
 };
 
 

@@ -36,7 +36,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_SVMPARSER 0
+#define DEBUG_SVMPARSER 1
 
 namespace Libsvm
 {
@@ -56,7 +56,7 @@ SvmParser::SvmParser()
 }
 
 
-struct ActionNames {
+static const struct ActionNames {
     int     actionNumber;
     QString actionName;
 } actionNames[] = {
@@ -117,13 +117,13 @@ struct ActionNames {
 };
 
 
-bool SvmParser::Parse(QByteArray &data)
+bool SvmParser::parse(const QByteArray &data)
 {
     // Check the signature "VCLMTF"
     if (!data.startsWith("VCLMTF"))
         return false;
 
-    QBuffer buffer(&data);
+    QBuffer buffer((QByteArray *) &data);
     buffer.open(QIODevice::ReadOnly);
 
     QDataStream stream(&buffer);
@@ -132,6 +132,15 @@ bool SvmParser::Parse(QByteArray &data)
     // Start reading from the stream: read past the signature and get the header.
     soakBytes(stream, 6);
     SvmHeader  header(stream);
+#if DEBUG_SVMPARSER
+    kDebug(31000) << "================ SVM HEADER ================";
+    kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
+    kDebug(31000) << "compressionMode:" << header.compressionMode;
+    kDebug(31000) << "mapMode:" << "...";
+    kDebug(31000) << "size:" << header.width << header.height;
+    kDebug(31000) << "actionCount:" << header.actionCount;
+    kDebug(31000) << "================ SVM HEADER ================";
+#endif    
 
     for (uint action = 0; action < header.actionCount; ++action) {
         quint16  version;
@@ -145,6 +154,8 @@ bool SvmParser::Parse(QByteArray &data)
         // Here starts the action. The first two bytes is the action type. 
         stream >> actionType;
 
+        // Debug
+#if DEBUG_SVMPARSER
         {
             QString name;
             if (actionType == 0)
@@ -156,14 +167,71 @@ bool SvmParser::Parse(QByteArray &data)
             else
                 name = "(out of bounds)";
 
-#if DEBUG_SVMPARSER
             kDebug(31000) << "Action length" << length << "version" << version
-                          << "type " << hex << actionType << dec << "(" << type << ")" << name;
-#endif
+                          << "type " << hex << actionType << dec << "(" << actionType << ")"
+                          << name;
         }
+#endif
 
-        // Parse all actions
+        // Parse all actions.
         switch (actionType) {
+        case META_NULL_ACTION:
+        case META_PIXEL_ACTION:
+        case META_POINT_ACTION:
+        case META_LINE_ACTION:
+        case META_RECT_ACTION:
+        case META_ROUNDRECT_ACTION:
+        case META_ELLIPSE_ACTION:
+        case META_ARC_ACTION:
+        case META_PIE_ACTION:
+        case META_CHORD_ACTION:
+        case META_POLYLINE_ACTION:
+        case META_POLYGON_ACTION:
+        case META_POLYPOLYGON_ACTION:
+        case META_TEXT_ACTION:
+        case META_TEXTARRAY_ACTION:
+        case META_STRETCHTEXT_ACTION:
+        case META_TEXTRECT_ACTION:
+        case META_BMP_ACTION:
+        case META_BMPSCALE_ACTION:
+        case META_BMPSCALEPART_ACTION:
+        case META_BMPEX_ACTION:
+        case META_BMPEXSCALE_ACTION:
+        case META_BMPEXSCALEPART_ACTION:
+        case META_MASK_ACTION:
+        case META_MASKSCALE_ACTION:
+        case META_MASKSCALEPART_ACTION:
+        case META_GRADIENT_ACTION:
+        case META_HATCH_ACTION:
+        case META_WALLPAPER_ACTION:
+        case META_CLIPREGION_ACTION:
+        case META_ISECTRECTCLIPREGION_ACTION:
+        case META_ISECTREGIONCLIPREGION_ACTION:
+        case META_MOVECLIPREGION_ACTION:
+        case META_LINECOLOR_ACTION:
+        case META_FILLCOLOR_ACTION:
+        case META_TEXTCOLOR_ACTION:
+        case META_TEXTFILLCOLOR_ACTION:
+        case META_TEXTALIGN_ACTION:
+        case META_MAPMODE_ACTION:
+        case META_FONT_ACTION:
+        case META_PUSH_ACTION:
+        case META_POP_ACTION:
+        case META_RASTEROP_ACTION:
+        case META_TRANSPARENT_ACTION:
+        case META_EPS_ACTION:
+        case META_REFPOINT_ACTION:
+        case META_TEXTLINECOLOR_ACTION:
+        case META_TEXTLINE_ACTION:
+        case META_FLOATTRANSPARENT_ACTION:
+        case META_GRADIENTEX_ACTION:
+        case META_LAYOUTMODE_ACTION:
+        case META_TEXTLANGUAGE_ACTION:
+        case META_OVERLINECOLOR_ACTION:
+        case META_COMMENT_ACTION:
+            soakBytes(stream, length - 2); // Use this for unhandled actions:
+            break;
+
         default:
 #if DEBUG_SVMPARSER
             kDebug(31000) << "unknown action type:" << actionType;

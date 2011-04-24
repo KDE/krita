@@ -20,6 +20,9 @@
  */
 
 
+// Temporary until SVM works well:
+#define HANDLE_SVM  0   // Change to 1 to get rudimentary SVM support
+
 // Own
 #include "VectorShape.h"
 
@@ -53,7 +56,7 @@
 #include "libemf/EmfParser.h"
 #include "libemf/EmfOutputPainterStrategy.h"
 #include "libemf/EmfOutputDebugStrategy.h"
-
+#include "libsvm/SvmParser.h"
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
@@ -86,9 +89,11 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     QRectF rc = converter.documentToView(boundingRect());
+
+    // If necessary, recreate the cached image.
     QImage *cache = m_cache.take(rc.size().toSize().height());
     if (!cache || cache->isNull()) {
-        // create the cache image
+        // Create the cache image.
         cache = new QImage(rc.size().toSize(), QImage::Format_ARGB32);
         cache->fill(0);
         QPainter gc(cache);
@@ -97,7 +102,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         gc.end();
     }
     QVector<QRect> clipRects = painter.clipRegion().rects();
-    foreach(const QRect rc, clipRects) {
+    foreach (const QRect rc, clipRects) {
         painter.drawImage(rc.topLeft(), *cache, rc);
     }
     m_cache.insert(rc.size().toSize().height(), cache);
@@ -105,7 +110,7 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 
 void VectorShape::draw(QPainter &painter)
 {
-    // If the data is uninitialized, e.g. because loading failed, draw the null shape
+    // If the data is uninitialized, e.g. because loading failed, draw the null shape.
     if (m_contents.count() == 0) {
         drawNull(painter);
         return;
@@ -126,6 +131,11 @@ void VectorShape::draw(QPainter &painter)
         else if (isEmf(m_contents)) {
             m_type = VectorTypeEmf;
         }
+#if HANDLE_SVM
+        else if (isSvm(m_contents)) {
+            m_type = VectorTypeSvm;
+        }
+#endif
         else
             m_type = VectorTypeNone;
     }
@@ -140,6 +150,9 @@ void VectorShape::draw(QPainter &painter)
         break;
     case VectorTypeEmf:
         drawEmf(painter);
+        break;
+    case VectorTypeSvm:
+        drawSvm(painter);
         break;
     default:
         drawNull(painter);
@@ -206,7 +219,7 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "-------------------------------------------";
 
     // Create a QBuffer to read from...
-    QBuffer     emfBuffer((QByteArray  *)&m_contents, 0);
+    QBuffer     emfBuffer((QByteArray *)&m_contents, 0);
     emfBuffer.open(QIODevice::ReadOnly);
 
     // ...but what we really want is a stream.
@@ -226,8 +239,19 @@ void VectorShape::drawEmf(QPainter &painter) const
     emfParser.setOutput( &emfDebugOutput );
 #endif
     emfParser.loadFromStream(emfStream);
+}
 
-    return;
+void VectorShape::drawSvm(QPainter &painter) const
+{
+    // FIXME: Make it static to save time?
+    Libsvm::SvmParser  svmParser;
+
+    // Create a new painter output strategy.  Last param = true means keep aspect ratio.
+#if 0
+    Libemf::OutputPainterStrategy  svmPaintOutput( painter );
+    svmParser.setOutput( &emfPaintOutput );
+#endif
+    svmParser.parse(m_contents);
 }
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
@@ -244,6 +268,9 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
         break;
     case VectorTypeEmf:
         mimeType = "application/x-emf";
+        break;
+    case VectorTypeSvm:
+        mimeType = "application/x-svm";// FIXME: Check if this is true
         break;
     default:
         // FIXME: What here?
@@ -317,6 +344,11 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     else if (isEmf(m_contents)) {
         m_type = VectorTypeEmf;
     }
+#if HANDLE_SVM
+    else if (isSvm(m_contents)) {
+        m_type = VectorTypeSvm;
+    }
+#endif
     else
         m_type = VectorTypeNone;
 
@@ -384,6 +416,19 @@ bool VectorShape::isEmf(const QByteArray &bytes)
         && data[40] == ' ' && data[41] == 'E' && data[42] == 'M' && data[43] == 'F')
     {
         kDebug(31000) << "EMF identified";
+        return true;
+    }
+
+    return false;
+}
+
+bool VectorShape::isSvm(const QByteArray &bytes)
+{
+    kDebug(31000) << "Check for SVM";
+
+    // Check the SVM signature.
+    if (bytes.startsWith("VCLMTF")) {
+        kDebug(31000) << "SVM identified";
         return true;
     }
 

@@ -31,6 +31,7 @@ SET ( VectorShape_SRCS
     libemf/EmfOutputPainterStrategy.cpp
 
     libsvm/SvmStructs.cpp
+    libsvm/SvmGraphicsContext.cpp
     libsvm/SvmParser.cpp
 )
 

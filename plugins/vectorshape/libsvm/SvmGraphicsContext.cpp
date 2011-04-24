@@ -16,31 +16,18 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SVMPARSER_H
-#define SVMPARSER_H
-
-
 #include "SvmGraphicsContext.h"
-#include "svm_export.h"
-
-class QByteArray;
 
 
 namespace Libsvm
 {
 
-
-class SVM_EXPORT SvmParser
+SvmGraphicsContext::SvmGraphicsContext()
+    : mapMode()
+      //... more here
+    , changedItems(0)
 {
- public:
-    SvmParser();
-
-    bool parse(const QByteArray &data);
-
-    SvmGraphicsContext  mContext;
-};
-
+    
+}
 
 };
-
-#endif

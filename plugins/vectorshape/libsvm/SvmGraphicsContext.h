@@ -16,31 +16,43 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SVMPARSER_H
-#define SVMPARSER_H
+#ifndef SVMGRAPHICSCONTEXT_H
+#define SVMGRAPHICSCONTEXT_H
 
 
-#include "SvmGraphicsContext.h"
-#include "svm_export.h"
-
-class QByteArray;
+#include "SvmEnums.h"
+#include "SvmStructs.h"
 
 
+/**
+ * @file
+ *
+ * Graphics Context that is used in the backends of the SVM parser.
+ */
+
+/**
+   Namespace for StarView Metafile (SVM) classes
+*/
 namespace Libsvm
 {
 
 
-class SVM_EXPORT SvmParser
-{
- public:
-    SvmParser();
-
-    bool parse(const QByteArray &data);
-
-    SvmGraphicsContext  mContext;
+enum GraphicsContextMembers {
+    GCMapMode = 0x0001
+    // ...more here
 };
 
 
+struct SvmGraphicsContext {
+    SvmGraphicsContext();
+
+    MapMode  mapMode;
+    // ... much more here;
+
+    quint32  changedItems;      // bitmap
 };
+
+
+}
 
 #endif

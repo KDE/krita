@@ -52,6 +52,7 @@ static void soakBytes( QDataStream &stream, int numBytes )
 
 
 SvmParser::SvmParser()
+    : mContext()
 {
 }
 
@@ -221,7 +222,8 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_MAPMODE_ACTION:
             {
-                MapMode  newMapmode(stream);
+                stream >> mContext.mapMode;
+                mContext.changedItems |= GCMapMode;
             }
             break;
         case META_FONT_ACTION:

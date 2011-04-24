@@ -23,6 +23,7 @@
 
 #include <QtGui/QUndoCommand>
 #include "ArtisticTextTool.h"
+#include "ArtisticTextRange.h"
 #include <QtCore/QPointer>
 
 class ArtisticTextShape;
@@ -32,6 +33,7 @@ class AddTextRangeCommand : public QUndoCommand
 {
 public:
     AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from);
+    AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from);
 
     virtual void redo();
     virtual void undo();
@@ -39,7 +41,9 @@ public:
 private:
     QPointer<ArtisticTextTool> m_tool;
     ArtisticTextShape *m_shape;
-    QString m_text;
+    QString m_plainText;
+    ArtisticTextRange m_formattedText;
+    QList<ArtisticTextRange> m_oldFormattedText;
     int m_from;
 };
 

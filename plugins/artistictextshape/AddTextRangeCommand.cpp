@@ -23,9 +23,17 @@
 #include <KLocale>
 
 AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from)
-: m_tool(tool), m_shape(shape), m_text(text), m_from(from)
+    : m_tool(tool), m_shape(shape), m_plainText(text), m_formattedText(QString(), QFont()), m_from(from)
 {
     setText( i18n("Add text range") );
+    m_oldFormattedText = shape->text();
+}
+
+AddTextRangeCommand::AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from)
+    : m_tool(tool), m_shape(shape), m_formattedText(text), m_from(from)
+{
+    setText( i18n("Add text range") );
+    m_oldFormattedText = shape->text();
 }
 
 void AddTextRangeCommand::redo()
@@ -35,10 +43,16 @@ void AddTextRangeCommand::redo()
     if ( !m_shape )
         return;
 
-    m_shape->insertText(m_from, m_text);
+    if (m_plainText.isEmpty())
+        m_shape->insertText(m_from, m_formattedText);
+    else
+        m_shape->insertText(m_from, m_plainText);
 
     if (m_tool) {
-        m_tool->setTextCursor(m_shape, m_from + m_text.length());
+        if (m_plainText.isEmpty())
+            m_tool->setTextCursor(m_shape, m_from + m_formattedText.text().length());
+        else
+            m_tool->setTextCursor(m_shape, m_from + m_plainText.length());
     }
 }
 
@@ -49,9 +63,11 @@ void AddTextRangeCommand::undo()
     if ( ! m_shape )
         return;
 
+    m_shape->clear();
+    foreach(const ArtisticTextRange &range, m_oldFormattedText) {
+        m_shape->appendText(range);
+    }
     if (m_tool) {
         m_tool->setTextCursor(m_shape, m_from);
     }
-
-    m_shape->removeText(m_from, m_text.length());
 }

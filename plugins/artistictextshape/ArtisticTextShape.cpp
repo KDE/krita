@@ -331,7 +331,9 @@ bool ArtisticTextShape::isEmpty() const
 
 void ArtisticTextShape::clear()
 {
+    beginTextUpdate();
     m_ranges.clear();
+    finishTextUpdate();
 }
 
 void ArtisticTextShape::setFont(const QFont &newFont)

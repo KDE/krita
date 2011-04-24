@@ -83,14 +83,23 @@ QTransform ArtisticTextTool::cursorTransform() const
     if (!m_currentShape)
         return QTransform();
 
-    const QPointF pos = m_currentShape->charPositionAt(m_textCursor);
-    const qreal angle = m_currentShape->charAngleAt(m_textCursor);
-    QFontMetrics metrics(m_currentShape->fontAt(m_textCursor));
-
     QTransform transform;
-    transform.translate( pos.x() - 1, pos.y() );
-    transform.rotate( 360. - angle );
-    transform.translate( 0, metrics.descent() );
+
+    const int textLength = m_currentShape->plainText().length();
+    if (m_textCursor <= textLength) {
+        const QPointF pos = m_currentShape->charPositionAt(m_textCursor);
+        const qreal angle = m_currentShape->charAngleAt(m_textCursor);
+        QFontMetrics metrics(m_currentShape->fontAt(m_textCursor));
+
+        transform.translate( pos.x() - 1, pos.y() );
+        transform.rotate( 360. - angle );
+        transform.translate( 0, metrics.descent() );
+    } else if (m_textCursor <= textLength + m_linefeedPositions.size()) {
+        const QPointF pos = m_linefeedPositions.value(m_textCursor-textLength-1);
+        QFontMetrics metrics(m_currentShape->fontAt(textLength-1));
+        transform.translate(pos.x(), pos.y());
+        transform.translate(0, metrics.descent());
+    }
 
     return transform * m_currentShape->absoluteTransformation(0);
 }
@@ -247,7 +256,7 @@ void ArtisticTextTool::mouseMoveEvent( KoPointerEvent *event )
     } else {
         useCursor( QCursor( Qt::ArrowCursor ) );
         if (m_currentShape)
-            emit statusTextChanged( i18n("Press return to finish editing.") );
+            emit statusTextChanged( i18n("Press escape to finish editing.") );
         else
             emit statusTextChanged("");
     }
@@ -277,6 +286,7 @@ void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
             m_blinkingCursor.start( BlinkInterval );
             updateActions();
             m_hoverPath = 0;
+            m_linefeedPositions.clear();
             return;
         }
     }
@@ -284,6 +294,11 @@ void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
 
 void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
 {
+    if (event->key() == Qt::Key_Escape) {
+        event->ignore();
+        return;
+    }
+
     event->accept();
     if ( m_currentShape && textCursor() > -1 ) {
         switch(event->key())
@@ -354,8 +369,17 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             break;
         case Qt::Key_Return:
         case Qt::Key_Enter:
-            emit done();
+        {
+            const int textLength = m_currentShape->plainText().length();
+            if (m_textCursor >= textLength) {
+                // get font metrics for last character
+                QFontMetrics metrics(m_currentShape->fontAt(textLength-1));
+                const qreal offset = m_currentShape->size().height() + (m_linefeedPositions.size() + 1) * metrics.height();
+                m_linefeedPositions.append(QPointF(0, offset));
+                setTextCursor(m_currentShape, textCursor()+1);
+            }
             break;
+        }
         default:
             if (event->text().isEmpty()) {
                 event->ignore();
@@ -516,9 +540,11 @@ void ArtisticTextTool::setTextCursor(ArtisticTextShape *textShape, int textCurso
 {
     if (!m_currentShape || textShape != m_currentShape)
         return;
-    if (m_textCursor == textCursor || textCursor < 0 || textCursor > m_currentShape->plainText().length())
+    if (m_textCursor == textCursor || textCursor < 0)
         return;
-
+    const int textLength = m_currentShape->plainText().length() + m_linefeedPositions.size();
+    if (textCursor > textLength)
+        return;
     setTextCursorInternal(textCursor);
 }
 
@@ -585,8 +611,19 @@ void ArtisticTextTool::addToTextCursor( const QString &str )
         }
         unsigned int len = printable.length();
         if ( len ) {
-            QUndoCommand *cmd = new AddTextRangeCommand(this, m_currentShape, printable, m_textCursor);
-            canvas()->addCommand( cmd );
+            const int textLength = m_currentShape->plainText().length();
+            if (m_textCursor <= textLength) {
+                QUndoCommand *cmd = new AddTextRangeCommand(this, m_currentShape, printable, m_textCursor);
+                canvas()->addCommand( cmd );
+            } else if (m_textCursor > textLength && m_textCursor <= textLength + m_linefeedPositions.size()) {
+                const QPointF pos = m_linefeedPositions.value(m_textCursor-textLength-1);
+                ArtisticTextRange newLine(printable, m_currentShape->fontAt(textLength-1));
+                newLine.setXOffsets(QList<qreal>() << pos.x(), ArtisticTextRange::AbsoluteOffset);
+                newLine.setYOffsets(QList<qreal>() << pos.y()-m_currentShape->baselineOffset(), ArtisticTextRange::AbsoluteOffset);
+                QUndoCommand *cmd = new AddTextRangeCommand(this, m_currentShape, newLine, m_textCursor);
+                canvas()->addCommand( cmd );
+                m_linefeedPositions.clear();
+            }
         }
     }
 }

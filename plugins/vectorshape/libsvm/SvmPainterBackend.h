@@ -46,7 +46,7 @@ namespace Libsvm
 class SVM_EXPORT SvmPainterBackend
 {
 public:
-    SvmPainterBackend();
+    SvmPainterBackend(QPainter *painter);
     virtual ~SvmPainterBackend();
 
     /**

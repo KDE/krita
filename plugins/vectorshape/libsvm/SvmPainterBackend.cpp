@@ -37,8 +37,8 @@
 namespace Libsvm
 {
 
-SvmPainterBackend::SvmPainterBackend()
-    : mPainter(0)
+SvmPainterBackend::SvmPainterBackend(QPainter *painter)
+    : mPainter(painter)
 {
 }
 

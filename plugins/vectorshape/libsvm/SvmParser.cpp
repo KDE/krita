@@ -212,7 +212,14 @@ bool SvmParser::parse(const QByteArray &data)
                     polygon << point;
                 }
 
-                mBackend->polyLine(mContext, polygon);
+                if (mBackend)
+                    mBackend->polyLine(mContext, polygon);
+                else {
+#if DEBUG_SVMPARSER
+                    kDebug(31000) << polygon;
+#endif
+                }
+
             }
             break;
         case META_POLYGON_ACTION:
@@ -237,7 +244,25 @@ bool SvmParser::parse(const QByteArray &data)
         case META_ISECTRECTCLIPREGION_ACTION:
         case META_ISECTREGIONCLIPREGION_ACTION:
         case META_MOVECLIPREGION_ACTION:
+            SOAK_UNPARSED_ACTION();
+            break;
         case META_LINECOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+
+                if (doSet) {
+                    mContext.lineColor = QColor::fromRgb(colorData);
+                }
+                else {
+                    mContext.lineColor = Qt::NoPen;
+                }
+                mContext.changedItems |= GCLineColor;
+            }
+            break;
         case META_FILLCOLOR_ACTION:
         case META_TEXTCOLOR_ACTION:
         case META_TEXTFILLCOLOR_ACTION:

@@ -21,7 +21,7 @@
 
 
 // Temporary until SVM works well:
-#define HANDLE_SVM  0   // Change to 1 to get rudimentary SVM support
+#define HANDLE_SVM  1   // Change to 1 to get rudimentary SVM support
 
 // Own
 #include "VectorShape.h"

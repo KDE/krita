@@ -20,6 +20,8 @@
 #define SVMGRAPHICSCONTEXT_H
 
 
+#include <QColor>
+
 #include "SvmEnums.h"
 #include "SvmStructs.h"
 
@@ -38,7 +40,8 @@ namespace Libsvm
 
 
 enum GraphicsContextMembers {
-    GCMapMode = 0x0001
+    GCLineColor = 0x0001,
+    GCMapMode   = 0x0002
     // ...more here
 };
 
@@ -46,6 +49,7 @@ enum GraphicsContextMembers {
 struct SvmGraphicsContext {
     SvmGraphicsContext();
 
+    QColor   lineColor;
     MapMode  mapMode;
     // ... much more here;
 

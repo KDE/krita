@@ -23,7 +23,8 @@ namespace Libsvm
 {
 
 SvmGraphicsContext::SvmGraphicsContext()
-    : mapMode()
+    : lineColor()
+    , mapMode()
       //... more here
     , changedItems(0)
 {

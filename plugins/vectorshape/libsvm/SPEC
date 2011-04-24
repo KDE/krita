@@ -370,7 +370,7 @@ lineWidth       width of the pen in <unit> (FIXME)
 2.3 SVM Actions
 ---------------
 
-The action type is specified using a unit16 at the beginning of each
+The action type is specified using a uint16 at the beginning of each
 action following the file header.  Every action except the special
 META_NULL_ACTION begins with a VersionCompat object.
 

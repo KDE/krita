@@ -19,6 +19,7 @@
 #ifndef SVMSTRUCT_H
 #define SVMSTRUCT_H
 
+
 #include <qglobal.h>
 #include <QPoint>
 

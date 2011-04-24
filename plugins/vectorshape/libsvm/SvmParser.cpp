@@ -146,15 +146,15 @@ bool SvmParser::parse(const QByteArray &data)
     for (uint action = 0; action < header.actionCount; ++action) {
         quint16  actionType;
         quint16  version;
-        quint32  length;
+        quint32  totalSize;
 
         // Here starts the Action itself. The first two bytes is the action type. 
         stream >> actionType;
-        actionType = (actionType >> 8) & 0xff;
+        //actionType = (actionType >> 8) & 0xff;
 
         // The VersionCompat object;
         stream >> version;
-        stream >> length;
+        stream >> totalSize;
 
         // Debug
 #if DEBUG_SVMPARSER
@@ -169,11 +169,13 @@ bool SvmParser::parse(const QByteArray &data)
             else
                 name = "(out of bounds)";
 
-            kDebug(31000) << "Action type " << hex << actionType << dec << "(" << actionType << ")"
-                          << "length" << length << "version" << version
-                          << name;
+            kDebug(31000) << "Action type " << actionType << "version" << version
+                          << "totalSize" << totalSize << name;
         }
 #endif
+
+#define SOAK_UNPARSED_ACTION() \
+        soakBytes(stream, totalSize)
 
         // Parse all actions.
         switch (actionType) {
@@ -215,7 +217,13 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTCOLOR_ACTION:
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
+            SOAK_UNPARSED_ACTION();
+            break;
         case META_MAPMODE_ACTION:
+            {
+                MapMode  newMapmode(stream);
+            }
+            break;
         case META_FONT_ACTION:
         case META_PUSH_ACTION:
         case META_POP_ACTION:
@@ -234,7 +242,7 @@ bool SvmParser::parse(const QByteArray &data)
             // Use this for unhandled actions: 6 is the number of
             // bytes in the stream for the VersionCompat object,
             // i.e. the version + length fields.
-            soakBytes(stream, length - 6);
+            SOAK_UNPARSED_ACTION();
             break;
 
         default:
@@ -242,7 +250,7 @@ bool SvmParser::parse(const QByteArray &data)
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
             // We couldn't recognize the type so let's just read past it.
-            soakBytes(stream, length - 6);
+            SOAK_UNPARSED_ACTION();
         }
 
         // Security measure

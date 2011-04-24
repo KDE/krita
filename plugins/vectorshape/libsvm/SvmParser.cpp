@@ -113,6 +113,7 @@ static const struct ActionNames {
     { META_LAYOUTMODE_ACTION,            "META_LAYOUTMODE_ACTION" },
     { META_TEXTLANGUAGE_ACTION,          "META_TEXTLANGUAGE_ACTION" },
     { META_OVERLINECOLOR_ACTION,         "META_OVERLINECOLOR_ACTION" },
+    { META_SVG_SOMETHING_ACTION,         "META_SVG_SOMETHING_ACTION" },
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
 
@@ -143,16 +144,17 @@ bool SvmParser::parse(const QByteArray &data)
 #endif    
 
     for (uint action = 0; action < header.actionCount; ++action) {
+        quint16  actionType;
         quint16  version;
         quint32  length;
-        quint16  actionType;
+
+        // Here starts the Action itself. The first two bytes is the action type. 
+        stream >> actionType;
+        actionType = (actionType >> 8) & 0xff;
 
         // The VersionCompat object;
         stream >> version;
         stream >> length;
-
-        // Here starts the action. The first two bytes is the action type. 
-        stream >> actionType;
 
         // Debug
 #if DEBUG_SVMPARSER
@@ -160,15 +162,15 @@ bool SvmParser::parse(const QByteArray &data)
             QString name;
             if (actionType == 0)
                 name = actionNames[0].actionName;
-            else if (100 <= actionType && actionType <= META_OVERLINECOLOR_ACTION)
+            else if (100 <= actionType && actionType <= META_LAST_ACTION)
                 name = actionNames[actionType - 99].actionName;
             else if (actionType == 512)
-                name = actionNames[52].actionName;
+                name = "META_COMMENT_ACTION";
             else
                 name = "(out of bounds)";
 
-            kDebug(31000) << "Action length" << length << "version" << version
-                          << "type " << hex << actionType << dec << "(" << actionType << ")"
+            kDebug(31000) << "Action type " << hex << actionType << dec << "(" << actionType << ")"
+                          << "length" << length << "version" << version
                           << name;
         }
 #endif

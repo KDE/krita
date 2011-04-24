@@ -43,7 +43,7 @@ namespace Libsvm
         META_LINE_ACTION                  = 102,
         META_RECT_ACTION                  = 103,
         META_ROUNDRECT_ACTION             = 104,
-        META_ELLIPSE_ACTION               = 105
+        META_ELLIPSE_ACTION               = 105,
         META_ARC_ACTION                   = 106,
         META_PIE_ACTION                   = 107,
         META_CHORD_ACTION                 = 108,

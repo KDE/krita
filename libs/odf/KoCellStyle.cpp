@@ -140,6 +140,21 @@ void KoCellStyle::setGlyphOrientation(bool orientation)
     m_glyphOrientation = orientation;
 }
 
+KoGenStyle KoCellStyle::styleProperties() const
+{
+    return m_styleProperties;
+}
+
+void KoCellStyle::setTextStyle(const KoGenStyle& style)
+{
+    KoGenStyle::copyPropertiesFromStyle(style, m_styleProperties, KoGenStyle::TextType);
+}
+
+void KoCellStyle::setParagraphStyle(const KoGenStyle& style)
+{
+    KoGenStyle::copyPropertiesFromStyle(style, m_styleProperties, KoGenStyle::ParagraphType);
+}
+
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
     m_borders->saveOdf(style);
@@ -165,4 +180,6 @@ void KoCellStyle::prepareStyle( KoGenStyle& style ) const
     if (!m_glyphOrientation) {
         style.addProperty("style:glyph-orientation-vertical", "0");
     }
+    KoGenStyle::copyPropertiesFromStyle(m_styleProperties, style, KoGenStyle::ParagraphType);
+    KoGenStyle::copyPropertiesFromStyle(m_styleProperties, style, KoGenStyle::TextType);
 }

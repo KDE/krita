@@ -39,11 +39,13 @@ An SVM file always starts with a signature of 6 bytes that identifies
 the file as an SVM.  This signature is always the string "VCLMTF"
 (excluding the quotes).
 
-After that there is a header object describing the rest of the file
-followed by a number of actions as specified in the header.  Each
-action or object, including the header, starts with a VersionCompat
-object that specifies the version and size of the action or object in
-question.
+Second, there is a header object describing the rest of the file.
+
+Third, the header is followed by a number of actions as specified in
+the header.  Each action or object, including the header, starts with
+a VersionCompat object that specifies the version and size of the
+action or object in question.  The size in the VersionCompat object is
+*excluding* the VersionCompat itself.
 
 
 2. Structures
@@ -208,8 +210,9 @@ uint16	an unsigned 16 bit integer, taking up 2 bytes in the file.
 int16	a signed 16 bit integer, taking up 2 bytes in the file.
 uint32	an unsigned 32 bit integer, taking up 4 bytes in the file.
 int32	a signed 32 bit integer, taking up 4 bytes in the file.
+bool    an unsigned 8 bit value, taking up 1 byte in the file
 
-Floating point values are not used in SVM files.
+Floating point values are not used in SVM.
 
 
 2.2.1 Basic Objects
@@ -279,8 +282,7 @@ The value of a Fraction is numerator/denominator.
 - - - - - - - - - -
 
 The header object is a special object in an SVM. It is always the
-first object in a SVM file. There is only one header object in the
-entire file.
+first object in the file. There is only one header object.
 
 VersionCompat 	versionCompat
 uint32          compressionMode 
@@ -289,11 +291,12 @@ uint32          width
 uint32          height
 uint32          actionCount 
 
-versionCompat   Version and size of the header record.
+versionCompat   Version and size of the header record, excluding the
+                VersionCompat object. 
 
 compressionMode ... FIXME
 
-mapMode         MapMode for the ... FIXME
+mapMode         Default MapMode for the file.  FIXME: Check if true
 
 width           Width of the picture in logical coordinates.
 

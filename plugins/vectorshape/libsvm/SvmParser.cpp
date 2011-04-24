@@ -231,7 +231,10 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
         case META_COMMENT_ACTION:
-            soakBytes(stream, length - 2); // Use this for unhandled actions:
+            // Use this for unhandled actions: 6 is the number of
+            // bytes in the stream for the VersionCompat object,
+            // i.e. the version + length fields.
+            soakBytes(stream, length - 6);
             break;
 
         default:
@@ -239,7 +242,7 @@ bool SvmParser::parse(const QByteArray &data)
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
             // We couldn't recognize the type so let's just read past it.
-            soakBytes(stream, length - 2);
+            soakBytes(stream, length - 6);
         }
 
         // Security measure

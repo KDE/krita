@@ -280,7 +280,9 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     xmlWriter.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(), m_contents);
+    QByteArray  uncompressedContents = qUncompress(m_contents);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(),
+                        uncompressedContents);
     xmlWriter.endElement(); // draw:frame
 }
 

@@ -25,6 +25,7 @@
 #include <QBuffer>
 #include <QDataStream>
 #include <QString>
+#include <QPolygon>
 
 // KDE
 #include <KDebug>
@@ -53,6 +54,7 @@ static void soakBytes( QDataStream &stream, int numBytes )
 
 SvmParser::SvmParser()
     : mContext()
+    , mBackend(0)
 {
 }
 
@@ -117,6 +119,12 @@ static const struct ActionNames {
     { META_SVG_SOMETHING_ACTION,         "META_SVG_SOMETHING_ACTION" },
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
+
+
+void SvmParser::setBackend(SvmAbstractBackend *backend)
+{
+    mBackend = backend;
+}
 
 
 bool SvmParser::parse(const QByteArray &data)
@@ -190,7 +198,23 @@ bool SvmParser::parse(const QByteArray &data)
         case META_ARC_ACTION:
         case META_PIE_ACTION:
         case META_CHORD_ACTION:
+            SOAK_UNPARSED_ACTION();
+            break;
         case META_POLYLINE_ACTION:
+            {
+                QPolygon  polygon;
+                quint16   numPoints;
+                QPoint    point;
+
+                stream >> numPoints;
+                for (uint i = 0; i < numPoints; ++i) {
+                    stream >> point;
+                    polygon << point;
+                }
+
+                mBackend->polyLine(mContext, polygon);
+            }
+            break;
         case META_POLYGON_ACTION:
         case META_POLYPOLYGON_ACTION:
         case META_TEXT_ACTION:

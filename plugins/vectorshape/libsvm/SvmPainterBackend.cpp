@@ -1,6 +1,5 @@
-/* This file is part of the Calligra project
-
-  Copyright 2011 Inge Wallin <inge@lysator.liu.se>
+/*
+  Copyright 2009 Inge Wallin <inge@lysator.liu.se>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,36 +15,54 @@
   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SVMPARSER_H
-#define SVMPARSER_H
 
+// Own
+#include "SvmPainterBackend.h"
 
+// Qt
+#include <QPolygon>
+
+// KDE
+#include <KDebug>
+
+// Libsvm
+#include "SvmEnums.h"
+#include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
-#include "SvmAbstractBackend.h"
-#include "svm_export.h"
-
-class QByteArray;
 
 
+/**
+   Namespace for StarView Metafile (SVM) classes
+*/
 namespace Libsvm
 {
 
-
-class SVM_EXPORT SvmParser
+SvmPainterBackend::SvmPainterBackend()
+    : mPainter(0)
 {
- public:
-    SvmParser();
+}
 
-    void setBackend(SvmAbstractBackend *backend);
-
-    bool parse(const QByteArray &data);
-
- private:
-    SvmGraphicsContext   mContext;
-    SvmAbstractBackend  *mBackend;
-};
+SvmPainterBackend::~SvmPainterBackend()
+{
+}
 
 
-};
+void SvmPainterBackend::init( /*const Header *header*/ )
+{
+}
 
-#endif
+void SvmPainterBackend::cleanup( /*const Header *header*/ )
+{
+}
+
+void SvmPainterBackend::eof()
+{
+}
+
+void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &polygon )
+{
+    kDebug(31000) << polygon;
+}
+
+
+}

@@ -321,7 +321,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_prevBorder = 0;
     m_prevBorderPadding = 0;
 
-    while (true) {
+    while (!cursor->it.atEnd()) {
         QTextBlock block = cursor->it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
@@ -436,23 +436,21 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             ++(cursor->it);
             atEnd = cursor->it.atEnd();
         }
-        if (atEnd) {
-            m_endOfArea = new FrameIterator(cursor);
-            m_y = qMin(maximumAllowedBottom(), m_y + m_bottomSpacing);
-            setBottom(m_y);
-            if (!m_blockRects.isEmpty()) {
-                m_blockRects.last().setBottom(m_y);
-            }
-            if (m_maximumAllowedWidth>0) {
-                m_left = m_boundingRect.left();
-                m_right = m_boundingRect.right();
-                m_maximumAllowedWidth = 0;
-
-                layout(new FrameIterator(m_startOfArea));
-            }
-            return true; // we have layouted till the end of the frame
-        }
     }
+    m_endOfArea = new FrameIterator(cursor);
+    m_y = qMin(maximumAllowedBottom(), m_y + m_bottomSpacing);
+    setBottom(m_y);
+    if (!m_blockRects.isEmpty()) {
+        m_blockRects.last().setBottom(m_y);
+    }
+    if (m_maximumAllowedWidth>0) {
+        m_left = m_boundingRect.left();
+        m_right = m_boundingRect.right();
+        m_maximumAllowedWidth = 0;
+
+        layout(new FrameIterator(m_startOfArea));
+    }
+    return true; // we have layouted till the end of the frame
 }
 
 
@@ -790,7 +788,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             line.setPosition(QPointF(x(), m_maximalAllowedBottom));
 
             if (format.nonBreakableLines()) {
-                //set lineTextStart to 0
+                //set lineTextStart to -1
                 cursor->lineTextStart = -1;
                 layout->endLayout();
             }

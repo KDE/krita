@@ -212,6 +212,10 @@ bool SvmParser::parse(const QByteArray &data)
                     polygon << point;
                 }
 
+                // FIXME: Version 2: Lineinfo, Version 3: polyflags
+                if (version > 1)
+                    soakBytes(stream, totalSize - 2 - 4 * 2 * numPoints);
+
                 if (mBackend)
                     mBackend->polyLine(mContext, polygon);
                 else {
@@ -219,7 +223,6 @@ bool SvmParser::parse(const QByteArray &data)
                     kDebug(31000) << polygon;
 #endif
                 }
-
             }
             break;
         case META_POLYGON_ACTION:

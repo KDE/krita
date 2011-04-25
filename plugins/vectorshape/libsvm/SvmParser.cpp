@@ -142,7 +142,7 @@ bool SvmParser::parse(const QByteArray &data)
 
     // Start reading from the stream: read past the signature and get the header.
     soakBytes(mainStream, 6);
-    SvmHeader  header(mainStream);
+    SvmHeader header(mainStream);
 #if DEBUG_SVMPARSER
     kDebug(31000) << "================ SVM HEADER ================";
     kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
@@ -237,6 +237,34 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_POLYPOLYGON_ACTION:
+            {
+                quint16 polygonCount;
+                stream >> polygonCount;
+                
+                QList<QPolygon> polygons;
+                for (quint16 i = 0 ; i < polygonCount ; i++) {
+                    QPolygon polygon;
+                    parsePolygon(stream, polygon);
+                    polygons << polygon;
+                }
+                
+                if (version > 1) {
+                    quint16 complexPolygonCount;
+                    stream >> complexPolygonCount;
+                    for (quint16 i = 0 ; i < complexPolygonCount ; i++) {
+                        quint16 complexPolygonIndex;
+                        stream >> complexPolygonIndex;
+                        QPolygon polygon;
+                        parsePolygon(stream, polygon);
+                        polygons[complexPolygonIndex] = polygon;
+                    }
+                }
+                
+                foreach (QPolygon polygon, polygons) {
+                    mBackend->polygon(mContext, polygon);
+                }
+            }
+            break;
         case META_TEXT_ACTION:
         case META_TEXTARRAY_ACTION:
         case META_STRETCHTEXT_ACTION:
@@ -277,6 +305,8 @@ bool SvmParser::parse(const QByteArray &data)
 
                 stream >> colorData;
                 stream >> doSet;
+                
+                kDebug(31000) << "Fill color :" << colorData << '(' << doSet << ')';
 
                 mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
                 mContext.changedItems |= GCFillBrush;
@@ -293,8 +323,23 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_FONT_ACTION:
+            break;
         case META_PUSH_ACTION:
+            {
+                kDebug(31000) << "Push action : " << totalSize;
+                quint16 pushValue;
+                stream >> pushValue;
+                kDebug(31000) << "Push value : " << pushValue;
+            }
+            break;
         case META_POP_ACTION:
+            {
+                kDebug(31000) << "Pop action : " << totalSize;
+                /*quint16 pushValue;
+                stream >> pushValue;
+                kDebug(31000) << "Push value : " << pushValue;*/
+            }
+            break;
         case META_RASTEROP_ACTION:
         case META_TRANSPARENT_ACTION:
         case META_EPS_ACTION:

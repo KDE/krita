@@ -360,11 +360,23 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             setTextCursor(m_currentShape, textCursor() - 1);
             break;
         case Qt::Key_Home:
-            m_selection.clear();
+            if (event->modifiers() & Qt::ShiftModifier) {
+                const int selectionStart = 0;
+                const int selectionEnd = m_selection.hasSelection() ? m_selection.selectionStart()+m_selection.selectionCount() : m_textCursor;
+                m_selection.selectText(selectionStart, selectionEnd);
+            } else {
+                m_selection.clear();
+            }
             setTextCursor(m_currentShape, 0);
             break;
         case Qt::Key_End:
-            m_selection.clear();
+            if (event->modifiers() & Qt::ShiftModifier) {
+                const int selectionStart = m_selection.hasSelection() ? m_selection.selectionStart() : m_textCursor;
+                const int selectionEnd = m_currentShape->plainText().length();
+                m_selection.selectText(selectionStart, selectionEnd);
+            } else {
+                m_selection.clear();
+            }
             setTextCursor(m_currentShape, m_currentShape->plainText().length());
             break;
         case Qt::Key_Return:

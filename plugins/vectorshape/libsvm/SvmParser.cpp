@@ -1,6 +1,7 @@
 /* This file is part of the Calligra project
 
   Copyright 2011 Inge Wallin <inge@lysator.liu.se>
+  Copyright 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -136,12 +137,12 @@ bool SvmParser::parse(const QByteArray &data)
     QBuffer buffer((QByteArray *) &data);
     buffer.open(QIODevice::ReadOnly);
 
-    QDataStream stream(&buffer);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QDataStream mainStream(&buffer);
+    mainStream.setByteOrder(QDataStream::LittleEndian);
 
     // Start reading from the stream: read past the signature and get the header.
-    soakBytes(stream, 6);
-    SvmHeader  header(stream);
+    soakBytes(mainStream, 6);
+    SvmHeader  header(mainStream);
 #if DEBUG_SVMPARSER
     kDebug(31000) << "================ SVM HEADER ================";
     kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
@@ -160,11 +161,17 @@ bool SvmParser::parse(const QByteArray &data)
         quint32  totalSize;
 
         // Here starts the Action itself. The first two bytes is the action type. 
-        stream >> actionType;
+        mainStream >> actionType;
 
         // The VersionCompat object
-        stream >> version;
-        stream >> totalSize;
+        mainStream >> version;
+        mainStream >> totalSize;
+        
+        char *rawData = new char[totalSize];
+        mainStream.readRawData(rawData, totalSize);
+        QByteArray dataArray(rawData, totalSize);
+        QDataStream stream(&dataArray, QIODevice::ReadOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
 
         // Debug
 #if DEBUG_SVMPARSER
@@ -184,17 +191,12 @@ bool SvmParser::parse(const QByteArray &data)
         }
 #endif
 
-        // Use this for unparsed actions.
-#define SOAK_UNPARSED_ACTION() \
-        soakBytes(stream, totalSize)
-
         // Parse all actions.
         switch (actionType) {
         case META_NULL_ACTION:
         case META_PIXEL_ACTION:
         case META_POINT_ACTION:
         case META_LINE_ACTION:
-            SOAK_UNPARSED_ACTION();
             break;
         case META_RECT_ACTION:
             {
@@ -203,18 +205,12 @@ bool SvmParser::parse(const QByteArray &data)
                 parseRect(stream, rect);
                 mBackend->rect(mContext, rect);
             }
-
-            // Make it work for future versions as well.
-            if (version > 1)
-                soakBytes(stream, totalSize - 16);
-
             break;
         case META_ROUNDRECT_ACTION:
         case META_ELLIPSE_ACTION:
         case META_ARC_ACTION:
         case META_PIE_ACTION:
         case META_CHORD_ACTION:
-            SOAK_UNPARSED_ACTION();
             break;
         case META_POLYLINE_ACTION:
             {
@@ -261,7 +257,6 @@ bool SvmParser::parse(const QByteArray &data)
         case META_ISECTRECTCLIPREGION_ACTION:
         case META_ISECTREGIONCLIPREGION_ACTION:
         case META_MOVECLIPREGION_ACTION:
-            SOAK_UNPARSED_ACTION();
             break;
         case META_LINECOLOR_ACTION:
             {
@@ -274,11 +269,6 @@ bool SvmParser::parse(const QByteArray &data)
                 mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
                 mContext.changedItems |= GCLineColor;
             }
-
-            // Make it work for future versions as well.
-            if (version > 1)
-                soakBytes(stream, totalSize - 5);
-
             break;
         case META_FILLCOLOR_ACTION:
             {
@@ -288,27 +278,19 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> doSet;
 
-                //kDebug(31000) << "color" << hex << colorData << dec << "doSet" << doSet;
                 mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
                 mContext.changedItems |= GCFillBrush;
             }
-
-            // Make it work for future versions as well.
-            if (version > 1)
-                soakBytes(stream, totalSize - 5);
-
             break;
         case META_TEXTCOLOR_ACTION:
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
-            SOAK_UNPARSED_ACTION();
             break;
         case META_MAPMODE_ACTION:
             {
                 stream >> mContext.mapMode;
                 mContext.changedItems |= GCMapMode;
             }
-            // FIXME: Check how many bytes a MapMode takes and soak all extra bytes if version > 1.
             break;
         case META_FONT_ACTION:
         case META_PUSH_ACTION:
@@ -325,19 +307,18 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
         case META_COMMENT_ACTION:
-            SOAK_UNPARSED_ACTION();
             break;
 
         default:
 #if DEBUG_SVMPARSER
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
-            // We couldn't recognize the type so let's just read past it.
-            SOAK_UNPARSED_ACTION();
         }
 
+        delete rawData;
+        
         // Security measure
-        if (stream.atEnd())
+        if (mainStream.atEnd())
             break;
     }
 

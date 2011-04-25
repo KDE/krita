@@ -81,7 +81,7 @@ void KoTextLayoutRootArea::setDirty()
     documentLayout()->emitLayoutIsDirty();
 }
 
-bool KoTextLayoutRootArea::isDirty()
+bool KoTextLayoutRootArea::isDirty() const
 {
     return d->dirty;
 }

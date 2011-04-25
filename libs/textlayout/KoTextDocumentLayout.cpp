@@ -336,10 +336,10 @@ void KoTextDocumentLayout::layout()
         if (rootArea->top() != d->y) {
             shouldLayout = true;
         }
-        if (rootArea->isDirty()) {
+        else if (rootArea->isDirty()) {
             shouldLayout = true;
         }
-        if (rootArea->isStartingAt(d->layoutPosition)) {
+        else if (rootArea->isStartingAt(d->layoutPosition)) {
             shouldLayout = true;
         }
 

@@ -58,7 +58,7 @@ public:
 
     void setDirty();
 
-    bool isDirty();
+    bool isDirty() const;
 
     virtual KoText::Direction parentTextDirection() const;
 

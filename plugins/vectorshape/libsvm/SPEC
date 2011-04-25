@@ -1,4 +1,4 @@
-<                          StarView Metafile
+                          StarView Metafile
 
                             Specification
 
@@ -257,7 +257,15 @@ struct Polygon {
 }
 
 
-2.2.1.4 String
+2.2.1.4 PolyPolygon
+
+struct PolyPolygon {
+    uint16  nPolygons;
+    Polygon polygons[nPolygons];
+}
+
+
+2.2.1.5 String
 
 struct String {
     uint16 size;
@@ -268,7 +276,7 @@ A string object is built in a Pascal style, not a C style.  There is
 no trailing \0 at the end of the string.
 
 
-2.2.1.5 Fraction
+2.2.1.6 Fraction
 
 struct Fraction {
     uint32  numerator;
@@ -484,6 +492,20 @@ penInfos        The pen style to apply
 polygonFlags    Indicate the presence of extra polygon informations
 ....... FIXME: next part is complicated...
 
+2.3.3.1 META_POLYPOLYGON_ACTION (109)
+
+A polypolygon action draws a group of polygons.
+
+It contains the following parts
+PolyPolygon     polygons
+    If the version of the action is greater than 1:
+uint16          numberOfComplexPolygons
+For each complexPolygon :
+uint16          complexPolygonIndex
+Polygon         complexPolygon
+
+The complexPolygonIndex is used to replace a polygon from the polygons list.
+
 
 2.3.4 Unsorted Action Types
 - - - - - - - - - - - - - -
@@ -500,12 +522,10 @@ These action types have so far not being sorted into any other type.
  META_PIE_ACTION
  META_CHORD_ACTION
  META_POLYGON_ACTION
- META_POLYPOLYGON_ACTION
  META_TEXT_ACTION
  META_TEXTARRAY_ACTION
  META_STRETCHTEXT_ACTION
  META_TEXTRECT_ACTION
-
  META_BMP_ACTION
  META_BMPSCALE_ACTION
  META_BMPSCALEPART_ACTION

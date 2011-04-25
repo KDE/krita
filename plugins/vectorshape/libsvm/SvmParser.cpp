@@ -152,6 +152,8 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "================ SVM HEADER ================";
 #endif    
 
+    mBackend->init(header);
+
     for (uint action = 0; action < header.actionCount; ++action) {
         quint16  actionType;
         quint16  version;
@@ -257,12 +259,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> doSet;
 
-                if (doSet) {
-                    mContext.lineColor = QColor::fromRgb(colorData);
-                }
-                else {
-                    mContext.lineColor = Qt::NoPen;
-                }
+                mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
                 mContext.changedItems |= GCLineColor;
             }
             break;

@@ -20,6 +20,7 @@
 #include "SvmPainterBackend.h"
 
 // Qt
+#include <QPainter>
 #include <QPolygon>
 
 // KDE
@@ -37,8 +38,9 @@
 namespace Libsvm
 {
 
-SvmPainterBackend::SvmPainterBackend(QPainter *painter)
-    : mPainter(painter)
+SvmPainterBackend::SvmPainterBackend(QPainter *painter, const QSize &outputSize)
+    : m_painter(painter)
+    , m_outputSize(outputSize)
 {
 }
 
@@ -47,22 +49,63 @@ SvmPainterBackend::~SvmPainterBackend()
 }
 
 
-void SvmPainterBackend::init( /*const Header *header*/ )
+void SvmPainterBackend::init(const SvmHeader &header)
 {
+    // This is restored in cleanup().
+    m_painter->save();
+
+    qreal  scaleX = qreal( m_outputSize.width() )  / header.width;
+    qreal  scaleY = qreal( m_outputSize.height() ) / header.height;
+
+    // Keep aspect ration.  Use the smaller value so that we don't get
+    // an overflow in any direction.
+    if ( scaleX > scaleY )
+        scaleX = scaleY;
+    else
+        scaleY = scaleX;
+#if DEBUG_SVMPAINT
+    kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
+#endif
+
+    // Transform the SVM object so that it fits in the shape as much
+    // as possible.  The topleft will be the top left of the shape.
+    m_painter->scale( scaleX, scaleY );
+    //m_painter->translate(-header->bounds().left(), -header->bounds().top());
+
+    m_outputTransform = m_painter->transform();
+    //m_worldTransform = QTransform();
 }
 
-void SvmPainterBackend::cleanup( /*const Header *header*/ )
+void SvmPainterBackend::cleanup()
 {
+    // Restore the painter to what it was before init() was called.
+    m_painter->restore();
 }
 
 void SvmPainterBackend::eof()
 {
 }
 
-void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &polygon )
+
+// ----------------------------------------------------------------
+//                         Graphics output
+
+
+void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &polyline )
 {
-    kDebug(31000) << polygon;
+    updateFromGraphicscontext(context);
+    m_painter->drawPolyline(polyline);
 }
+
+
+// ----------------------------------------------------------------
+//                         Private functions
+
+void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
+{
+    // FIXME
+}
+
 
 
 }

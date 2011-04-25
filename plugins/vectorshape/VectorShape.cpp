@@ -57,6 +57,7 @@
 #include "libemf/EmfOutputPainterStrategy.h"
 #include "libemf/EmfOutputDebugStrategy.h"
 #include "libsvm/SvmParser.h"
+#include "libsvm/SvmPainterBackend.h"
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
@@ -85,6 +86,11 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
     m_cache.clear();
     update();
 }
+
+
+// ----------------------------------------------------------------
+//                             Painting
+
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
@@ -243,16 +249,21 @@ void VectorShape::drawEmf(QPainter &painter) const
 
 void VectorShape::drawSvm(QPainter &painter) const
 {
+    QSize  shapeSizeInt( size().width(), size().height() );
+
     // FIXME: Make it static to save time?
     Libsvm::SvmParser  svmParser;
 
-    // Create a new painter output strategy.  Last param = true means keep aspect ratio.
-#if 0
-    Libemf::OutputPainterStrategy  svmPaintOutput( painter );
-    svmParser.setOutput( &emfPaintOutput );
-#endif
+    // Create a new painter backend.
+    Libsvm::SvmPainterBackend  svmPaintOutput(&painter, shapeSizeInt);
+    svmParser.setBackend(&svmPaintOutput);
     svmParser.parse(m_contents);
 }
+
+
+// ----------------------------------------------------------------
+//                         Loading and Saving
+
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {

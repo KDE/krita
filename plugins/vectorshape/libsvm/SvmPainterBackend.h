@@ -18,7 +18,11 @@
 #ifndef SVMPAINTERBACKEND_H
 #define SVMPAINTERBACKEND_H
 
+#include "SvmAbstractBackend.h"
 #include "svm_export.h"
+
+#include <QSize>
+#include <QTransform>
 
 #include "SvmEnums.h"
 #include "SvmStructs.h"
@@ -43,10 +47,10 @@ namespace Libsvm
 /**
     Painter output strategy for SVM Parser
 */
-class SVM_EXPORT SvmPainterBackend
+class SVM_EXPORT SvmPainterBackend : public SvmAbstractBackend
 {
 public:
-    SvmPainterBackend(QPainter *painter);
+    SvmPainterBackend(QPainter *painter, const QSize &outputSize);
     virtual ~SvmPainterBackend();
 
     /**
@@ -54,7 +58,7 @@ public:
 
        \param header the SVM Header record
     */
-    virtual void init( /*const Header *header*/ );
+    virtual void init(const SvmHeader &header);
 
     /**
        Cleanup routine
@@ -62,10 +66,8 @@ public:
        This function is called when the painting is done.  Any
        initializations that are done in init() can be undone here if
        necessary.
-
-       \param header the SVM Header record
     */
-    virtual void cleanup( /*const Header *header*/ );
+    virtual void cleanup();
 
     /**
        Close-out routine
@@ -78,16 +80,22 @@ public:
        This action type specifies how to output a multi-segment line
        (unfilled polyline).
 
-       \param bounds the bounding rectangle for the line segments
-       \param points the sequence of points that describe the line
+       \param context the graphics context to be used when drawing the polyline
+       \param polygon the sequence of points that describe the line
 
        \note the line is not meant to be closed (i.e. do not connect
        the last point to the first point) or filled.
     */
-    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polygon );
+    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline );
 
  private:
-    QPainter *mPainter;
+    void updateFromGraphicscontext(SvmGraphicsContext &context);
+
+ private:
+    QPainter *m_painter;
+    QSize     m_outputSize;
+
+    QTransform m_outputTransform;
 };
 
 

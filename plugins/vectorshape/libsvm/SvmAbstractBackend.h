@@ -22,6 +22,8 @@
 
 #include "SvmEnums.h"
 #include "SvmStructs.h"
+#include "SvmGraphicsContext.h"
+
 
 class QPolygon;
 
@@ -51,7 +53,7 @@ public:
 
        \param header the SVM Header record
     */
-    virtual void init( /*const Header *header*/ ) = 0;
+    virtual void init(const SvmHeader &header) = 0;
 
     /**
        Cleanup routine
@@ -75,13 +77,13 @@ public:
        This action type specifies how to output a multi-segment line
        (unfilled polyline).
 
-       \param bounds the bounding rectangle for the line segments
-       \param points the sequence of points that describe the line
+       \param context the graphics context to be used when drawing the polyline
+       \param polygon the sequence of points that describe the line
 
        \note the line is not meant to be closed (i.e. do not connect
        the last point to the first point) or filled.
     */
-    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polygon ) = 0;
+    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline ) = 0;
 };
 
 

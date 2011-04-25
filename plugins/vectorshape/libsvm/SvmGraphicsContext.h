@@ -41,7 +41,8 @@ namespace Libsvm
 
 enum GraphicsContextMembers {
     GCLineColor = 0x0001,
-    GCMapMode   = 0x0002
+    GCFillColor = 0x0002,
+    GCMapMode   = 0x0004
     // ...more here
 };
 
@@ -50,6 +51,7 @@ struct SvmGraphicsContext {
     SvmGraphicsContext();
 
     QColor   lineColor;
+    QColor   fillColor;
     MapMode  mapMode;
     // ... much more here;
 

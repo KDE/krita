@@ -262,8 +262,29 @@ bool SvmParser::parse(const QByteArray &data)
                 mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
                 mContext.changedItems |= GCLineColor;
             }
+
+            // Make it work for future versions as well.
+            if (version > 1)
+                soakBytes(stream, totalSize - 5);
+
             break;
         case META_FILLCOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+
+                mContext.fillColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                mContext.changedItems |= GCFillColor;
+            }
+
+            // Make it work for future versions as well.
+            if (version > 1)
+                soakBytes(stream, totalSize - 5);
+
+            break;
         case META_TEXTCOLOR_ACTION:
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
@@ -274,6 +295,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.mapMode;
                 mContext.changedItems |= GCMapMode;
             }
+            // FIXME: Check how many bytes a MapMode takes and soak all extra bytes if version > 1.
             break;
         case META_FONT_ACTION:
         case META_PUSH_ACTION:
@@ -308,6 +330,8 @@ bool SvmParser::parse(const QByteArray &data)
         if (stream.atEnd())
             break;
     }
+
+    mBackend->cleanup();
 
     return true;
 }

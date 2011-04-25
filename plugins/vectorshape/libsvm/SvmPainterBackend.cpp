@@ -106,6 +106,10 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
     if (context.changedItems & GCLineColor) {
         m_painter->setPen(context.lineColor);
     }
+    if (context.changedItems & GCFillColor) {
+        QBrush brush(context.fillColor);
+        m_painter->setBrush(brush);
+    }
     if (context.changedItems & GCMapMode) {
         // FIXME
     }

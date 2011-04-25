@@ -18,12 +18,15 @@
 
 #include "SvmGraphicsContext.h"
 
+#include <qglobal.h>
+
 
 namespace Libsvm
 {
 
 SvmGraphicsContext::SvmGraphicsContext()
-    : lineColor()
+    : lineColor(Qt::black)
+    , fillColor(Qt::transparent)
     , mapMode()
       //... more here
     , changedItems(0)

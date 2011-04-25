@@ -161,9 +161,8 @@ bool SvmParser::parse(const QByteArray &data)
 
         // Here starts the Action itself. The first two bytes is the action type. 
         stream >> actionType;
-        //actionType = (actionType >> 8) & 0xff;
 
-        // The VersionCompat object;
+        // The VersionCompat object
         stream >> version;
         stream >> totalSize;
 
@@ -180,11 +179,12 @@ bool SvmParser::parse(const QByteArray &data)
             else
                 name = "(out of bounds)";
 
-            kDebug(31000) << "Action type " << actionType << "version" << version
-                          << "totalSize" << totalSize << name;
+            kDebug(31000) << name << "(" << actionType << ")" << "version" << version
+                          << "totalSize" << totalSize;
         }
 #endif
 
+        // Use this for unparsed actions.
 #define SOAK_UNPARSED_ACTION() \
         soakBytes(stream, totalSize)
 
@@ -194,7 +194,27 @@ bool SvmParser::parse(const QByteArray &data)
         case META_PIXEL_ACTION:
         case META_POINT_ACTION:
         case META_LINE_ACTION:
+            SOAK_UNPARSED_ACTION();
+            break;
         case META_RECT_ACTION:
+            {
+                quint32 int1, int2, int3, int4;
+
+                stream >> int1;
+                stream >> int2;
+                stream >> int3;
+                stream >> int4;
+                kDebug(31000) << int1 << int2 << int3 << int4;
+
+                QRect rect(int1, int2, int3 - int1, int4 - int2);
+                mBackend->rect(mContext, rect);
+            }
+
+            // Make it work for future versions as well.
+            if (version > 1)
+                soakBytes(stream, totalSize - 16);
+
+            break;
         case META_ROUNDRECT_ACTION:
         case META_ELLIPSE_ACTION:
         case META_ARC_ACTION:
@@ -276,8 +296,9 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> colorData;
                 stream >> doSet;
 
-                mContext.fillColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
-                mContext.changedItems |= GCFillColor;
+                //kDebug(31000) << "color" << hex << colorData << dec << "doSet" << doSet;
+                mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
+                mContext.changedItems |= GCFillBrush;
             }
 
             // Make it work for future versions as well.
@@ -312,9 +333,6 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
         case META_COMMENT_ACTION:
-            // Use this for unhandled actions: 6 is the number of
-            // bytes in the stream for the VersionCompat object,
-            // i.e. the version + length fields.
             SOAK_UNPARSED_ACTION();
             break;
 

@@ -28,6 +28,7 @@
 #include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
 
+class QRect;
 class QPolygon;
 class QPainter;
 
@@ -73,6 +74,8 @@ public:
        Close-out routine
     */
     virtual void eof();
+
+    virtual void rect( SvmGraphicsContext &context, const QRect &rect );
 
     /**
        Handler META_POLYLINE_ACTION

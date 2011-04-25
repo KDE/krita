@@ -91,6 +91,8 @@ public:
     */
     virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline );
 
+    virtual void polygon( SvmGraphicsContext &context, const QPolygon &polygon );
+
  private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);
 

@@ -104,6 +104,12 @@ void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &p
     m_painter->drawPolyline(polyline);
 }
 
+void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &polygon )
+{
+    updateFromGraphicscontext(context);
+    m_painter->drawPolygon(polygon);
+}
+
 
 // ----------------------------------------------------------------
 //                         Private functions

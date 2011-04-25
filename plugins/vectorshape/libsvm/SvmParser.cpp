@@ -229,6 +229,17 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_POLYGON_ACTION:
+            {
+                QPolygon  polygon;
+
+                parsePolygon(stream, polygon);
+                mBackend->polygon(mContext, polygon);
+
+                // FIXME: Version 2: Lineinfo, Version 3: polyflags
+                if (version > 1)
+                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+            }
+            break;
         case META_POLYPOLYGON_ACTION:
         case META_TEXT_ACTION:
         case META_TEXTARRAY_ACTION:

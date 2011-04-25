@@ -198,15 +198,9 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_RECT_ACTION:
             {
-                quint32 int1, int2, int3, int4;
+                QRect  rect;
 
-                stream >> int1;
-                stream >> int2;
-                stream >> int3;
-                stream >> int4;
-                kDebug(31000) << int1 << int2 << int3 << int4;
-
-                QRect rect(int1, int2, int3 - int1, int4 - int2);
+                parseRect(stream, rect);
                 mBackend->rect(mContext, rect);
             }
 
@@ -225,26 +219,13 @@ bool SvmParser::parse(const QByteArray &data)
         case META_POLYLINE_ACTION:
             {
                 QPolygon  polygon;
-                quint16   numPoints;
-                QPoint    point;
 
-                stream >> numPoints;
-                for (uint i = 0; i < numPoints; ++i) {
-                    stream >> point;
-                    polygon << point;
-                }
+                parsePolygon(stream, polygon);
+                mBackend->polyLine(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
                 if (version > 1)
-                    soakBytes(stream, totalSize - 2 - 4 * 2 * numPoints);
-
-                if (mBackend)
-                    mBackend->polyLine(mContext, polygon);
-                else {
-#if DEBUG_SVMPARSER
-                    kDebug(31000) << polygon;
-#endif
-                }
+                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
             }
             break;
         case META_POLYGON_ACTION:
@@ -354,5 +335,39 @@ bool SvmParser::parse(const QByteArray &data)
     return true;
 }
 
+
+// ----------------------------------------------------------------
+//                         Private methods
+
+
+void SvmParser::parseRect( QDataStream &stream, QRect &rect)
+{
+    qint32 left;
+    qint32 top;
+    qint32 right;
+    qint32 bottom;
+
+    stream >> left;
+    stream >> top;
+    stream >> right;
+    stream >> bottom;
+
+    rect.setLeft(left);
+    rect.setTop(top);
+    rect.setRight(right);
+    rect.setBottom(bottom);
+}
+
+void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
+{
+    quint16   numPoints;
+    QPoint    point;
+
+    stream >> numPoints;
+    for (uint i = 0; i < numPoints; ++i) {
+        stream >> point;
+        polygon << point;
+    }
+}
 
 } // namespace Libsvm

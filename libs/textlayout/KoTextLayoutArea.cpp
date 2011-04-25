@@ -681,15 +681,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
-    m_width = right() - left() - listIndent();
+    m_width = right() - left();
     m_width -= format.leftMargin() + format.rightMargin();
-
-    if (m_isRtl) {
-        m_x = left() + format.rightMargin();
-        m_width -= blockData->counterWidth() + blockData->counterSpacing();
-    } else {
-        m_x = left() + format.leftMargin() + m_listIndent;
-    }
+    m_x = left() + (m_isRtl ? format.rightMargin() : format.leftMargin());
 
     m_documentLayout->clearInlineObjectRegistry(block);
 
@@ -706,6 +700,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);
+    m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
+
+    if (m_isRtl) {
+        m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
+    } else {
+        m_x += m_listIndent;
+        m_width -= m_listIndent;
+    }
 
     if (textList) {
         // if list set counterposition. Do this after borders so we can account for them.

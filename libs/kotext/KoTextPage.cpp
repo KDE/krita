@@ -19,6 +19,20 @@
 
 #include "KoTextPage.h"
 
+KoTextPage::KoTextPage()
+{
+}
+
 KoTextPage::~KoTextPage()
 {
+}
+
+QString KoTextPage::masterPageName() const
+{
+    return QString();
+}
+
+QString KoTextPage::nextMasterPageName() const
+{
+    return QString();
 }

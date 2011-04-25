@@ -43,7 +43,7 @@ namespace Libsvm
         META_LINE_ACTION                  = 102,
         META_RECT_ACTION                  = 103,
         META_ROUNDRECT_ACTION             = 104,
-        META_ELLIPSE_ACTION               = 105
+        META_ELLIPSE_ACTION               = 105,
         META_ARC_ACTION                   = 106,
         META_PIE_ACTION                   = 107,
         META_CHORD_ACTION                 = 108,
@@ -90,9 +90,11 @@ namespace Libsvm
         META_LAYOUTMODE_ACTION            = 149,
         META_TEXTLANGUAGE_ACTION          = 150,
         META_OVERLINECOLOR_ACTION         = 151,
+        META_SVG_SOMETHING_ACTION         = 152,
         META_COMMENT_ACTION               = 512
     };
 
+#define META_LAST_ACTION  META_SVG_SOMETHING_ACTION
 
     /**
        Mtf (FIXME)

@@ -439,6 +439,13 @@ public:
         return QString();
     }
 
+    /**
+     * Copies properties of defined type from a style to another style.
+     * This is needed in rare cases where two styles have properties of different types
+     * and we want to merge them to one style.
+     */
+    static void copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenStyle &targetStyle, PropertyType type = DefaultType);
+
 private:
 #ifndef NDEBUG
     void printDebug() const;

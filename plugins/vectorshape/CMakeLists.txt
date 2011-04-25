@@ -29,6 +29,11 @@ SET ( VectorShape_SRCS
     libemf/EmfOutput.cpp
     libemf/EmfOutputDebugStrategy.cpp
     libemf/EmfOutputPainterStrategy.cpp
+
+    libsvm/SvmStructs.cpp
+    libsvm/SvmGraphicsContext.cpp
+    libsvm/SvmParser.cpp
+    libsvm/SvmPainterBackend.cpp
 )
 
 #kde4_add_ui_files(VectorShape_SRCS

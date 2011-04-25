@@ -22,6 +22,8 @@
 
 #include "kotext_export.h"
 
+#include <QString>
+
 /**
  * Interface for a single OpenDocumentText page.
  *
@@ -32,7 +34,8 @@
 class KOTEXT_EXPORT KoTextPage
 {
 public:
-
+    /// Constructor.
+    explicit KoTextPage();
     /// Destructor.
     virtual ~KoTextPage();
 
@@ -63,6 +66,25 @@ public:
      * exist.
      */
     virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
+
+    /**
+     * Returns the name of the master-page that should be used for this page or a null
+     * QString if this page does not explicit define a master-page in which case the
+     * default master-page will be used.
+     *
+     * Per default a null QString is returned.
+     */
+    virtual QString masterPageName() const;
+
+    /**
+     * Returns the name of the master-page which should be used for the KoTextPage's
+     * following this KoTextPage. This will only be used if the following KoTextPage
+     * does not define a masterPageName itself.
+     *
+     * Per default a null QString is returned.
+     */
+    virtual QString nextMasterPageName() const;
+
 };
 
 #endif

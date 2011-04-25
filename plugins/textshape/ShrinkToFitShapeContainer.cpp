@@ -161,18 +161,23 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
             return;
         }
 
-        m_scale = 1.0;
+        qreal newScale = 1.0;
         if ( documentSize.height() > 0.0) {
-            m_scale = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
+            newScale = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
         }
+
+        QSizeF newSize(shapeSize.width() / m_scale, shapeSize.height() / m_scale);
 
         m_changeCount++;
 
-        d->childShape->setSize(QSizeF(shapeSize.width() / m_scale, shapeSize.height() / m_scale));
+        if (m_scale != newScale || d->childShape->size() != newSize) {
+            m_scale = newScale;
+            d->childShape->setSize(newSize);
 
-        QTransform m;
-        m.scale(m_scale, m_scale);
-        d->childShape->setTransformation(m);
+            QTransform m;
+            m.scale(m_scale, m_scale);
+            d->childShape->setTransformation(m);
+        }
     }
 }
 

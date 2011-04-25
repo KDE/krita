@@ -855,6 +855,11 @@ void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)
     m_verticalAlignOffset = offset;
 }
 
+qreal KoTextLayoutArea::verticalAlignOffset() const
+{
+    return m_verticalAlignOffset;
+}
+
 qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData *blockData)
 {
     QTextBlock block = cursor->it.currentBlock();

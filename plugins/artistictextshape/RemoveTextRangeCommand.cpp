@@ -18,30 +18,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETEXTFONTCOMMAND_H
-#define CHANGETEXTFONTCOMMAND_H
+#include "RemoveTextRangeCommand.h"
+#include "ArtisticTextShape.h"
+#include <KLocale>
 
-#include "ArtisticTextRange.h"
-#include <QtGui/QUndoCommand>
-#include <QtGui/QFont>
-
-class ArtisticTextShape;
-
-class ChangeTextFontCommand : public QUndoCommand
+RemoveTextRangeCommand::RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count)
+: m_tool(tool), m_shape(shape), m_from(from), m_count(count)
 {
-public:
-    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font);
-    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font);
-    virtual void undo();
-    virtual void redo();
+    m_cursor = tool->textCursor();
+    setText( i18n("Remove text range") );
+}
 
-private:
-    ArtisticTextShape *m_shape;
-    QFont m_newFont;
-    QList<ArtisticTextRange> m_oldText;
-    QList<ArtisticTextRange> m_newText;
-    int m_rangeStart;
-    int m_rangeCount;
-};
+void RemoveTextRangeCommand::redo()
+{
+    QUndoCommand::redo();
 
-#endif // CHANGETEXTFONTCOMMAND_H
+    if (!m_shape)
+        return;
+
+    if (m_tool) {
+        if(m_cursor > m_from)
+            m_tool->setTextCursor(m_shape, m_from);
+    }
+    m_text = m_shape->removeText(m_from, m_count);
+}
+
+void RemoveTextRangeCommand::undo()
+{
+    QUndoCommand::undo();
+
+    if ( !m_shape )
+        return;
+
+    m_shape->insertText( m_from, m_text );
+
+    if (m_tool) {
+        m_tool->setTextCursor(m_shape, m_cursor);
+    }
+}

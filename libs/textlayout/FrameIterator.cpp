@@ -16,11 +16,13 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "FrameIterator.h"
 
+#include "FrameIterator.h"
 #include "TableIterator.h"
+#include "KoTextLayoutRootArea.h"
 
 #include <KoParagraphStyle.h>
+#include <KoTextPage.h>
 
 #include <QTextFrame>
 #include <QTextTableCell>
@@ -98,14 +100,24 @@ FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
     return currentSubFrameIterator;
 }
 
-QString FrameIterator::wantedMasterPage(const QString defaultName) const
+QString FrameIterator::wantedMasterPage(KoTextLayoutRootArea *previousRootArea) const
 {
     if (it.currentBlock().isValid()) {
         QVariant name = it.currentBlock().blockFormat().property(KoParagraphStyle::MasterPageName);
         if (name.isValid()) {
-            return name.toString();
+            QString n = name.toString();
+            if (!n.isEmpty())
+                return n;
         }
     }
-
-    return defaultName;
+    KoTextPage *page = previousRootArea ? previousRootArea->page() : 0;
+    if (page) {
+        QString n = page->nextMasterPageName();
+        if (!n.isEmpty())
+            return n;
+        n = page->masterPageName();
+        if (!n.isEmpty())
+            return n;
+    }
+    return QString();
 }

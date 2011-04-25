@@ -122,6 +122,7 @@ public:
     /// Sets the amound the contenst should be vertically offset due to any outside induced
     /// vertical alignment
     void setVerticalAlignOffset(qreal offset);
+    qreal verticalAlignOffset() const;
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 

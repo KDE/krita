@@ -1,6 +1,7 @@
 /* This file is part of the Calligra project
 
   Copyright 2011 Inge Wallin <inge@lysator.liu.se>
+  Copyright 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -25,6 +26,7 @@
 #include <QBuffer>
 #include <QDataStream>
 #include <QString>
+#include <QPolygon>
 
 // KDE
 #include <KDebug>
@@ -52,6 +54,8 @@ static void soakBytes( QDataStream &stream, int numBytes )
 
 
 SvmParser::SvmParser()
+    : mContext()
+    , mBackend(0)
 {
 }
 
@@ -113,8 +117,15 @@ static const struct ActionNames {
     { META_LAYOUTMODE_ACTION,            "META_LAYOUTMODE_ACTION" },
     { META_TEXTLANGUAGE_ACTION,          "META_TEXTLANGUAGE_ACTION" },
     { META_OVERLINECOLOR_ACTION,         "META_OVERLINECOLOR_ACTION" },
+    { META_SVG_SOMETHING_ACTION,         "META_SVG_SOMETHING_ACTION" },
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
+
+
+void SvmParser::setBackend(SvmAbstractBackend *backend)
+{
+    mBackend = backend;
+}
 
 
 bool SvmParser::parse(const QByteArray &data)
@@ -126,12 +137,12 @@ bool SvmParser::parse(const QByteArray &data)
     QBuffer buffer((QByteArray *) &data);
     buffer.open(QIODevice::ReadOnly);
 
-    QDataStream stream(&buffer);
-    stream.setByteOrder(QDataStream::LittleEndian);
+    QDataStream mainStream(&buffer);
+    mainStream.setByteOrder(QDataStream::LittleEndian);
 
     // Start reading from the stream: read past the signature and get the header.
-    soakBytes(stream, 6);
-    SvmHeader  header(stream);
+    soakBytes(mainStream, 6);
+    SvmHeader  header(mainStream);
 #if DEBUG_SVMPARSER
     kDebug(31000) << "================ SVM HEADER ================";
     kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
@@ -142,17 +153,25 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "================ SVM HEADER ================";
 #endif    
 
+    mBackend->init(header);
+
     for (uint action = 0; action < header.actionCount; ++action) {
-        quint16  version;
-        quint32  length;
         quint16  actionType;
+        quint16  version;
+        quint32  totalSize;
 
-        // The VersionCompat object;
-        stream >> version;
-        stream >> length;
+        // Here starts the Action itself. The first two bytes is the action type. 
+        mainStream >> actionType;
 
-        // Here starts the action. The first two bytes is the action type. 
-        stream >> actionType;
+        // The VersionCompat object
+        mainStream >> version;
+        mainStream >> totalSize;
+        
+        char *rawData = new char[totalSize];
+        mainStream.readRawData(rawData, totalSize);
+        QByteArray dataArray(rawData, totalSize);
+        QDataStream stream(&dataArray, QIODevice::ReadOnly);
+        stream.setByteOrder(QDataStream::LittleEndian);
 
         // Debug
 #if DEBUG_SVMPARSER
@@ -160,16 +179,15 @@ bool SvmParser::parse(const QByteArray &data)
             QString name;
             if (actionType == 0)
                 name = actionNames[0].actionName;
-            else if (100 <= actionType && actionType <= META_OVERLINECOLOR_ACTION)
+            else if (100 <= actionType && actionType <= META_LAST_ACTION)
                 name = actionNames[actionType - 99].actionName;
             else if (actionType == 512)
-                name = actionNames[52].actionName;
+                name = "META_COMMENT_ACTION";
             else
                 name = "(out of bounds)";
 
-            kDebug(31000) << "Action length" << length << "version" << version
-                          << "type " << hex << actionType << dec << "(" << actionType << ")"
-                          << name;
+            kDebug(31000) << name << "(" << actionType << ")" << "version" << version
+                          << "totalSize" << totalSize;
         }
 #endif
 
@@ -179,14 +197,45 @@ bool SvmParser::parse(const QByteArray &data)
         case META_PIXEL_ACTION:
         case META_POINT_ACTION:
         case META_LINE_ACTION:
+            break;
         case META_RECT_ACTION:
+            {
+                QRect  rect;
+
+                parseRect(stream, rect);
+                mBackend->rect(mContext, rect);
+            }
+            break;
         case META_ROUNDRECT_ACTION:
         case META_ELLIPSE_ACTION:
         case META_ARC_ACTION:
         case META_PIE_ACTION:
         case META_CHORD_ACTION:
+            break;
         case META_POLYLINE_ACTION:
+            {
+                QPolygon  polygon;
+
+                parsePolygon(stream, polygon);
+                mBackend->polyLine(mContext, polygon);
+
+                // FIXME: Version 2: Lineinfo, Version 3: polyflags
+                if (version > 1)
+                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+            }
+            break;
         case META_POLYGON_ACTION:
+            {
+                QPolygon  polygon;
+
+                parsePolygon(stream, polygon);
+                mBackend->polygon(mContext, polygon);
+
+                // FIXME: Version 2: Lineinfo, Version 3: polyflags
+                if (version > 1)
+                    soakBytes(stream, totalSize - 2 - 4 * 2 * polygon.size());
+            }
+            break;
         case META_POLYPOLYGON_ACTION:
         case META_TEXT_ACTION:
         case META_TEXTARRAY_ACTION:
@@ -208,12 +257,41 @@ bool SvmParser::parse(const QByteArray &data)
         case META_ISECTRECTCLIPREGION_ACTION:
         case META_ISECTREGIONCLIPREGION_ACTION:
         case META_MOVECLIPREGION_ACTION:
+            break;
         case META_LINECOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+
+                mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                mContext.changedItems |= GCLineColor;
+            }
+            break;
         case META_FILLCOLOR_ACTION:
+            {
+                quint32  colorData;
+                bool     doSet;
+
+                stream >> colorData;
+                stream >> doSet;
+
+                mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
+                mContext.changedItems |= GCFillBrush;
+            }
+            break;
         case META_TEXTCOLOR_ACTION:
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
+            break;
         case META_MAPMODE_ACTION:
+            {
+                stream >> mContext.mapMode;
+                mContext.changedItems |= GCMapMode;
+            }
+            break;
         case META_FONT_ACTION:
         case META_PUSH_ACTION:
         case META_POP_ACTION:
@@ -229,24 +307,59 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
         case META_COMMENT_ACTION:
-            soakBytes(stream, length - 2); // Use this for unhandled actions:
             break;
 
         default:
 #if DEBUG_SVMPARSER
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
-            // We couldn't recognize the type so let's just read past it.
-            soakBytes(stream, length - 2);
         }
 
+        delete rawData;
+        
         // Security measure
-        if (stream.atEnd())
+        if (mainStream.atEnd())
             break;
     }
+
+    mBackend->cleanup();
 
     return true;
 }
 
+
+// ----------------------------------------------------------------
+//                         Private methods
+
+
+void SvmParser::parseRect( QDataStream &stream, QRect &rect)
+{
+    qint32 left;
+    qint32 top;
+    qint32 right;
+    qint32 bottom;
+
+    stream >> left;
+    stream >> top;
+    stream >> right;
+    stream >> bottom;
+
+    rect.setLeft(left);
+    rect.setTop(top);
+    rect.setRight(right);
+    rect.setBottom(bottom);
+}
+
+void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
+{
+    quint16   numPoints;
+    QPoint    point;
+
+    stream >> numPoints;
+    for (uint i = 0; i < numPoints; ++i) {
+        stream >> point;
+        polygon << point;
+    }
+}
 
 } // namespace Libsvm

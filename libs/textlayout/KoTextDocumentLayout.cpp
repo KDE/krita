@@ -66,7 +66,6 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
-       , layoutStrategy(KoTextDocumentLayout::ScheduleLayouts)
        , layoutScheduled(false)
     {
     }
@@ -90,7 +89,6 @@ public:
     qreal defaultTabSizing;
     qreal y;
     QString wantedMasterPage;
-    KoTextDocumentLayout::LayoutStrategy layoutStrategy;
     bool layoutScheduled;
 };
 
@@ -345,7 +343,7 @@ void KoTextDocumentLayout::layout()
             shouldLayout = true;
         }
 
-        if (d->wantedMasterPage != d->layoutPosition->wantedMasterPage(d->wantedMasterPage)) {
+        if (d->wantedMasterPage != d->layoutPosition->wantedMasterPage(previousRootArea)) {
             d->provider->releaseAllAfter(previousRootArea);
             break;
         }
@@ -378,7 +376,7 @@ void KoTextDocumentLayout::layout()
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
         //figure out the wantedMasterPage
-        d->wantedMasterPage = d->layoutPosition->wantedMasterPage(d->wantedMasterPage);
+        d->wantedMasterPage = d->layoutPosition->wantedMasterPage(previousRootArea);
 
         // Request a Root Area
         KoTextLayoutRootArea *rootArea = d->provider->provide(this, d->wantedMasterPage);
@@ -406,22 +404,8 @@ void KoTextDocumentLayout::layout()
     }
 }
 
-KoTextDocumentLayout::LayoutStrategy KoTextDocumentLayout::layoutStrategy() const
-{
-    return d->layoutStrategy;
-}
-
-void KoTextDocumentLayout::setLayoutStrategy(KoTextDocumentLayout::LayoutStrategy strategy)
-{
-    d->layoutStrategy = strategy;
-}
-
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutStrategy == LayoutDirect) {
-        layout();
-        return;
-    }
     if (d->layoutScheduled) {
         return;
     }

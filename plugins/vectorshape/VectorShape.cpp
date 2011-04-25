@@ -20,9 +20,6 @@
  */
 
 
-// Temporary until SVM works well:
-#define HANDLE_SVM  1   // Change to 1 to get rudimentary SVM support
-
 // Own
 #include "VectorShape.h"
 
@@ -50,6 +47,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 
+// Wmf support
 #include "kowmfpaint.h"
 
 // Vector shape
@@ -137,11 +135,9 @@ void VectorShape::draw(QPainter &painter)
         else if (isEmf(m_contents)) {
             m_type = VectorTypeEmf;
         }
-#if HANDLE_SVM
         else if (isSvm(m_contents)) {
             m_type = VectorTypeSvm;
         }
-#endif
         else
             m_type = VectorTypeNone;
     }
@@ -357,11 +353,9 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     else if (isEmf(m_contents)) {
         m_type = VectorTypeEmf;
     }
-#if HANDLE_SVM
     else if (isSvm(m_contents)) {
         m_type = VectorTypeSvm;
     }
-#endif
     else
         m_type = VectorTypeNone;
 

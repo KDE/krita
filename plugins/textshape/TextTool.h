@@ -301,8 +301,8 @@ private:
     friend class ShowChangesCommand;
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
-    TextShape *m_textShape;
-    KoTextShapeData *m_textShapeData;
+    TextShape *m_textShape; // where caret of m_textEditor currently is
+    KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;

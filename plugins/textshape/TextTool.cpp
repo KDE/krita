@@ -649,96 +649,60 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
             && !m_caretTimer.isActive()) { // make sure we blink
         m_caretTimer.start();
     }
-    QTextBlock block = m_textEditor.data()->block();
-    if (! block.layout()) // not layouted yet.  The Shape paint method will trigger a layout
-        return;
+
     if (!m_textShapeData)
         return;
-
-    QList<TextShape *> shapesToPaint;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    if (lay) {
-        foreach (KoShape *shape, lay->shapes()) {
-            TextShape *ts = dynamic_cast<TextShape*>(shape);
-            if (! ts)
-                continue;
-            KoTextShapeData *data = ts->textShapeData();
-            // check if shape contains some of the selection, if not, skip
-            if (!data->isCursorVisible(m_textEditor.data()->cursor()))
-                continue;
-            if (painter.hasClipping()) {
-                QRect rect = converter.documentToView(ts->boundingRect()).toRect();
-                if (painter.clipRegion().intersect(QRegion(rect)).isEmpty())
-                    continue;
-            }
-            shapesToPaint << ts;
-        }
-    }
-    if (shapesToPaint.isEmpty()) // quite unlikely, though ;)
+    if (m_textShapeData->isDirty())
         return;
+
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
 
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
 
-    foreach (TextShape *ts, shapesToPaint) {
-        KoTextShapeData *data = ts->textShapeData();
-        Q_ASSERT(data);
-        if (data->isDirty())
-            continue;
+    painter.save();
+    QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
+    shapeMatrix.scale(zoomX, zoomY);
+    painter.setTransform(shapeMatrix * painter.transform());
+    painter.setClipRect(m_textShape->outlineRect(), Qt::IntersectClip);
+    painter.translate(0, -m_textShapeData->documentOffset());
 
-        painter.save();
-        QTransform shapeMatrix = ts->absoluteTransformation(&converter);
-        shapeMatrix.scale(zoomX, zoomY);
-        painter.setTransform(shapeMatrix * painter.transform());
-        painter.setClipRect(ts->outlineRect(), Qt::IntersectClip);
-        painter.translate(0, -data->documentOffset());
-
-        if ((data == m_textShapeData) && m_caretTimerState) {
-            // paint caret
+    if (m_caretTimerState) {
+        // Lets draw the caret ourselves, as the Qt method doesn't take cursor
+        // charFormat into consideration.
+        QTextBlock block = m_textEditor.data()->block();
+        if (block.isValid()) {
             int posInParag = m_textEditor.data()->position() - block.position();
             if (posInParag <= block.layout()->preeditAreaPosition())
                 posInParag += block.layout()->preeditAreaText().length();
-            m_textEditor.data()->position();
 
-            // Lets draw the caret ourselves, as the Qt method doesn't take cursor
-            // charFormat into consideration.
-            QTextBlock block = m_textEditor.data()->block();
-            if (block.isValid()) {
-                QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
-                if (tl.isValid()) {
-                    const int posInParag = m_textEditor.data()->position() - block.position();
-                    QPen caretPen = QPen(QColor(0,0,0),0);
-                    painter.setPen(caretPen);
-                    painter.setRenderHint(QPainter::Antialiasing,false);
-                    if (tl.ascent() > 0) {
-                        QPointF caretBasePos;
-                        QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
-                        caretBasePos.setX(tl.cursorToX(posInParag));
-                        caretBasePos.setY(tl.y() + tl.ascent());
-                        painter.drawLine(caretBasePos.x(),
-                               caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
-                               caretBasePos.x(),
-                               caretBasePos.y() + qMin(tl.descent(), fm.descent()));
-                        caretPen.setColor(QColor(255,255,255));
-                        caretPen.setStyle(Qt::DotLine);
-                        painter.setPen(caretPen);
-                        painter.drawLine(caretBasePos.x(),
-                                         caretBasePos.y() - qMin(tl.ascent(), fm.ascent()),
-                                         caretBasePos.x(),
-                                         caretBasePos.y() + qMin(tl.descent(), fm.descent()));
-                    } else {
-                        //line only filled with characters-without-size (eg anchors)
-                        // layout will make sure line has height of block font
-                        QFontMetricsF fm(block.charFormat().font(), painter.device());
-                        painter.drawLine(tl.x(), tl.y(),
-                                         tl.x(), tl.y() + fm.ascent() + fm.descent());
-                    }
+            QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
+            if (tl.isValid()) {
+                const int posInParag = m_textEditor.data()->position() - block.position();
+                QPen caretPen = QPen(QColor(0,0,0),0);
+                painter.setPen(caretPen);
+                painter.setRenderHint(QPainter::Antialiasing,false);
+                QRectF rect = caretRect(m_textEditor.data()->cursor());
+                if (tl.ascent() > 0) {
+                    QFontMetricsF fm(m_textEditor.data()->charFormat().font(), painter.device());
+                    rect.setY(rect.y() + tl.ascent() - qMin(tl.ascent(), fm.ascent()));
+                    rect.setHeight(qMin(tl.ascent(), fm.ascent()) + qMin(tl.descent(), fm.descent()));
+                } else {
+                    //line only filled with characters-without-size (eg anchors)
+                    // layout will make sure line has height of block font
+                    QFontMetricsF fm(block.charFormat().font(), painter.device());
+                    rect.setHeight(fm.ascent() + fm.descent());
                 }
+                painter.drawLine(rect.topLeft(), rect.bottomLeft());
+                caretPen.setColor(QColor(255,255,255));
+                caretPen.setStyle(Qt::DotLine);
+                painter.setPen(caretPen);
+                painter.drawLine(rect.topLeft(), rect.bottomLeft());
             }
         }
-
-        painter.restore();
     }
+
+    painter.restore();
 }
 
 void TextTool::updateSelectedShape(const QPointF &point)

@@ -68,6 +68,7 @@
 #include <changetracker/KoFormatChangeInformation.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
+#include <KoXmlWriter.h>
 #include <rdf/KoDocumentRdfBase.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
@@ -175,11 +176,13 @@ public:
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
+    void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
     int checkForBlockChange(const QTextBlock &block);
     int checkForListItemChange(const QTextBlock &block);
     int checkForListChange(const QTextBlock &block);
     int checkForTableRowChange(int position);
     int checkForTableColumnChange(int position);
+    
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -810,6 +813,29 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
     return listStyles;
 }
 
+void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, KoTextWriter::TagInformation* tagInfos)
+{
+    QBuffer rdfXmlData;
+    KoXmlWriter *rdfXmlWriter = new KoXmlWriter(&rdfXmlData);
+    rdfXmlWriter->startDocument("rdf");
+    rdfXmlWriter->startElement("rdf");
+    rdf->saveOdf(context, rdfXmlWriter);
+    rdfXmlWriter->endElement();
+    rdfXmlWriter->endDocument();
+    KoXmlDocument *xmlReader = new KoXmlDocument;
+    xmlReader->setContent(rdfXmlData.data(), true);
+    KoXmlElement mainElement = xmlReader->documentElement();
+    QPair<QString, QString> attributeNameNS;
+    foreach (attributeNameNS, mainElement.attributeFullNames()) {
+        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
+                                                .arg(attributeNameNS.second);
+        if (attributeName.startsWith(':'))
+            attributeName.prepend("xml");
+        tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
+    }
+    delete(rdfXmlWriter);
+}
+
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
     QTextCursor cursor(block);
@@ -1004,7 +1030,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                         // Write xml:id here for Rdf
                         kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        inlineRdf->saveOdf(context, writer);
+                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
+                        //inlineRdf->saveOdf(context, writer);
                     }
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
@@ -1012,7 +1039,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                         // Write xml:id here for Rdf
                         kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        inlineRdf->saveOdf(context, writer);
+                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
+                        //inlineRdf->saveOdf(context, writer);
                     }
                 }
 

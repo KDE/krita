@@ -40,7 +40,7 @@ KoShape *ArtisticTextShapeFactory::createDefaultShape(KoResourceManager *) const
 {
     ArtisticTextShape * text = new ArtisticTextShape();
     text->setBackground( new KoColorBackground( QColor( Qt::black) ) );
-    text->setText(i18n("Artistic Text"));
+    text->setPlainText(i18n("Artistic Text"));
     return text;
 }
 

@@ -18,30 +18,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETEXTFONTCOMMAND_H
-#define CHANGETEXTFONTCOMMAND_H
+#ifndef ADDTEXTRANGECOMMAND_H 
+#define ADDTEXTRANGECOMMAND_H
 
-#include "ArtisticTextRange.h"
 #include <QtGui/QUndoCommand>
-#include <QtGui/QFont>
+#include "ArtisticTextTool.h"
+#include "ArtisticTextRange.h"
+#include <QtCore/QPointer>
 
 class ArtisticTextShape;
 
-class ChangeTextFontCommand : public QUndoCommand
+/// Undo command to add a range of text to a artistic text shape
+class AddTextRangeCommand : public QUndoCommand
 {
 public:
-    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font);
-    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font);
-    virtual void undo();
+    AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const QString &text, int from);
+    AddTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, const ArtisticTextRange &text, int from);
+
     virtual void redo();
+    virtual void undo();
 
 private:
+    QPointer<ArtisticTextTool> m_tool;
     ArtisticTextShape *m_shape;
-    QFont m_newFont;
-    QList<ArtisticTextRange> m_oldText;
-    QList<ArtisticTextRange> m_newText;
-    int m_rangeStart;
-    int m_rangeCount;
+    QString m_plainText;
+    ArtisticTextRange m_formattedText;
+    QList<ArtisticTextRange> m_oldFormattedText;
+    int m_from;
 };
 
-#endif // CHANGETEXTFONTCOMMAND_H
+#endif // ADDTEXTRANGECOMMAND_H

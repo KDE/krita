@@ -18,30 +18,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CHANGETEXTFONTCOMMAND_H
-#define CHANGETEXTFONTCOMMAND_H
+#ifndef REMOVETEXTRANGECOMMAND_H
+#define REMOVETEXTRANGECOMMAND_H
 
-#include "ArtisticTextRange.h"
 #include <QtGui/QUndoCommand>
-#include <QtGui/QFont>
+#include <QtCore/QPointer>
+#include "ArtisticTextTool.h"
 
 class ArtisticTextShape;
 
-class ChangeTextFontCommand : public QUndoCommand
+/// Undo command to remove a range of text from an artistic text shape
+class RemoveTextRangeCommand : public QUndoCommand
 {
 public:
-    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font);
-    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font);
-    virtual void undo();
+    RemoveTextRangeCommand(ArtisticTextTool *tool, ArtisticTextShape *shape, int from, unsigned int count);
+
     virtual void redo();
+    virtual void undo();
 
 private:
+    QPointer<ArtisticTextTool> m_tool;
     ArtisticTextShape *m_shape;
-    QFont m_newFont;
-    QList<ArtisticTextRange> m_oldText;
-    QList<ArtisticTextRange> m_newText;
-    int m_rangeStart;
-    int m_rangeCount;
+    int m_from;
+    int m_count;
+    QList<ArtisticTextRange> m_text;
+    int m_cursor;
 };
 
-#endif // CHANGETEXTFONTCOMMAND_H
+#endif // REMOVETEXTRANGECOMMAND_H
+

@@ -61,6 +61,10 @@ public:
     bool glyphOrientation() const;
     void setGlyphOrientation(bool orientation);
 
+    void setTextStyle(const KoGenStyle& style);
+    void setParagraphStyle(const KoGenStyle& style);
+    KoGenStyle styleProperties() const;
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -79,6 +83,8 @@ private:
 
     QString m_verticalAlign;
     bool m_glyphOrientation;
+
+    KoGenStyle m_styleProperties;
 };
 
 #endif

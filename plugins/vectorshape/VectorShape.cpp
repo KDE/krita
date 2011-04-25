@@ -20,9 +20,6 @@
  */
 
 
-// Temporary until SVM works well:
-#define HANDLE_SVM  0   // Change to 1 to get rudimentary SVM support
-
 // Own
 #include "VectorShape.h"
 
@@ -50,6 +47,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 
+// Wmf support
 #include "kowmfpaint.h"
 
 // Vector shape
@@ -57,6 +55,7 @@
 #include "libemf/EmfOutputPainterStrategy.h"
 #include "libemf/EmfOutputDebugStrategy.h"
 #include "libsvm/SvmParser.h"
+#include "libsvm/SvmPainterBackend.h"
 
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
@@ -85,6 +84,11 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
     m_cache.clear();
     update();
 }
+
+
+// ----------------------------------------------------------------
+//                             Painting
+
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
@@ -131,11 +135,9 @@ void VectorShape::draw(QPainter &painter)
         else if (isEmf(m_contents)) {
             m_type = VectorTypeEmf;
         }
-#if HANDLE_SVM
         else if (isSvm(m_contents)) {
             m_type = VectorTypeSvm;
         }
-#endif
         else
             m_type = VectorTypeNone;
     }
@@ -243,16 +245,21 @@ void VectorShape::drawEmf(QPainter &painter) const
 
 void VectorShape::drawSvm(QPainter &painter) const
 {
+    QSize  shapeSizeInt( size().width(), size().height() );
+
     // FIXME: Make it static to save time?
     Libsvm::SvmParser  svmParser;
 
-    // Create a new painter output strategy.  Last param = true means keep aspect ratio.
-#if 0
-    Libemf::OutputPainterStrategy  svmPaintOutput( painter );
-    svmParser.setOutput( &emfPaintOutput );
-#endif
+    // Create a new painter backend.
+    Libsvm::SvmPainterBackend  svmPaintOutput(&painter, shapeSizeInt);
+    svmParser.setBackend(&svmPaintOutput);
     svmParser.parse(m_contents);
 }
+
+
+// ----------------------------------------------------------------
+//                         Loading and Saving
+
 
 void VectorShape::saveOdf(KoShapeSavingContext & context) const
 {
@@ -280,7 +287,9 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
 
     xmlWriter.startElement("draw:frame");
     saveOdfAttributes(context, OdfAllAttributes);
-    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(), m_contents);
+    QByteArray  uncompressedContents = qUncompress(m_contents);
+    fileSaver.embedFile(xmlWriter, "draw:image", fileName, mimeType.constData(),
+                        uncompressedContents);
     xmlWriter.endElement(); // draw:frame
 }
 
@@ -344,11 +353,9 @@ bool VectorShape::loadOdfFrameElement(const KoXmlElement & element,
     else if (isEmf(m_contents)) {
         m_type = VectorTypeEmf;
     }
-#if HANDLE_SVM
     else if (isSvm(m_contents)) {
         m_type = VectorTypeSvm;
     }
-#endif
     else
         m_type = VectorTypeNone;
 

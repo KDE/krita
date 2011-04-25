@@ -110,7 +110,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_prevCursorPosition(-1),
         m_caretTimer(this),
         m_caretTimerState(true)
-        , m_caretColorState(0)
         , m_currentCommand(0),
         m_currentCommandHasChildren(false),
         m_specialCharacterDocker(0),
@@ -118,6 +117,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
         m_textDeleting(false),
         m_changeTipTimer(this),
         m_changeTipCursorPos(0)
+        , m_delayedEnsureVisible(false)
 {
     setTextMode(true);
 
@@ -552,6 +552,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
     m_textEditingPlugins(0),
     m_changeTipTimer(this),
     m_changeTipCursorPos(0)
+    , m_delayedEnsureVisible(false)
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
@@ -625,7 +626,6 @@ void TextTool::blinkCaret()
     }
     else {
         m_caretTimerState = !m_caretTimerState;
-        m_caretColorState = 1 - m_caretColorState;
     }
     repaintCaret();
 }
@@ -655,8 +655,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     if (m_textShapeData->isDirty())
         return;
 
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-
     qreal zoomX, zoomY;
     converter.zoom(&zoomX, &zoomY);
 
@@ -678,7 +676,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
             if (tl.isValid()) {
-                const int posInParag = m_textEditor.data()->position() - block.position();
                 QPen caretPen = QPen(QColor(0,0,0),0);
                 painter.setPen(caretPen);
                 painter.setRenderHint(QPainter::Antialiasing,false);
@@ -1171,11 +1168,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             textEditor->newLine();
             updateActions();
             editingPluginEvents();
-            ensureCursorVisible();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
             textEditor->insertText(event->text());
-            ensureCursorVisible();
             editingPluginEvents();
         }
     }
@@ -1222,16 +1217,17 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             repaintCaret();
         updateActions();
         editingPluginEvents();
-        ensureCursorVisible();
     }
     if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.
         m_caretTimer.stop();
         m_caretTimer.start();
         m_caretTimerState = moveOperation != QTextCursor::NoMove; // turn caret off while typing
         if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
-                || event->key() == Qt::Key_Backspace) // except the enter/backspace key
+                || event->key() == Qt::Key_Backspace) {// except the enter/backspace key
             m_caretTimerState = true;
+        }
     }
+    ensureCursorVisible();
 
     updateSelectionHandler();
 }
@@ -1327,12 +1323,8 @@ void TextTool::ensureCursorVisible()
     QRectF cursorPos = caretRect(textEditor->cursor());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
-        // So take bottom of last paragraph.
-        QTextBlock block = textEditor->block().previous();
-        if (block.isValid()) {
-            qreal y = block.layout()->boundingRect().bottom();
-            cursorPos = QRectF(0, y, 1, 10);
-        }
+        // try to do it on next caret blink
+        m_delayedEnsureVisible = true;
     }
     cursorPos.moveTop(cursorPos.top() - m_textShapeData->documentOffset());
     canvas()->ensureVisible(m_textShape->absoluteTransformation(0).mapRect(cursorPos));
@@ -1526,6 +1518,12 @@ void TextTool::repaintCaret()
 
     if (rootArea) {
         // If we have changed root area we need to update m_textShape and m_textShapeData
+        if (m_delayedEnsureVisible) {
+            m_delayedEnsureVisible = false;
+            ensureCursorVisible();
+            return;
+        }
+
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
         Q_ASSERT(textShape);
 

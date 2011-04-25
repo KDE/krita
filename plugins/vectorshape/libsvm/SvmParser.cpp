@@ -147,7 +147,13 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "================ SVM HEADER ================";
     kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
     kDebug(31000) << "compressionMode:" << header.compressionMode;
-    kDebug(31000) << "mapMode:" << "...";
+    kDebug(31000) << "mapMode:" << "Origin" << header.mapMode.origin
+                  << "scaleX"
+                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.numerator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator)
+                  << "scaleY"
+                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.numerator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator);
     kDebug(31000) << "size:" << header.width << header.height;
     kDebug(31000) << "actionCount:" << header.actionCount;
     kDebug(31000) << "================ SVM HEADER ================";

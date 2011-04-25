@@ -1608,22 +1608,10 @@ void TextTool::repaintSelection()
 
 QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
-    int position = cursor->position();
-    if (!m_textShapeData)
-        return QRectF();
-    QTextBlock block = m_textShapeData->document()->findBlock(position);
-    if (!block.isValid())
-        return QRectF();
-    QTextLine line1 = block.layout()->lineForTextPosition(position - block.position());
-    if (!line1.isValid())
-        return QRectF();
-    qreal startX = line1.cursorToX(position - block.position());
-    if (line1.ascent()==0) {
-        // Block is empty from any visible content and has as such no height
-        // but in that case the block font defines line height
-        return QRectF(startX, line1.y(), 1, 24);
-    }
-    return QRectF(startX, line1.y(), 1, line1.height());
+    QTextCursor tmpCursor(*cursor);
+    tmpCursor.setPosition(cursor->position()); // looses the anchor
+
+    return textRect(tmpCursor);
 }
 
 QRectF TextTool::textRect(QTextCursor &cursor) const

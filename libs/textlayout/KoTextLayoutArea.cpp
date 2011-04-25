@@ -231,9 +231,20 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         if(cursor.selectionEnd() >= block.position()
             && cursor.selectionEnd() < block.position() + block.length()) {
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
-            if (line.isValid())
-                retval.setBottom
-                (line.y() + line.height());
+            if (line.isValid()) {
+                retval.setBottom(line.y() + line.height());
+                if (line.ascent()==0) { //FIXME not entirely correct
+                    // Block is empty from any visible content and has as such no height
+                    // but in that case the block font defines line height
+                    retval.setBottom(line.y() + 24);
+                }
+
+                if (cursor.selectionStart() == cursor.selectionEnd()) {
+                    // We only have a caret so let's set the rect a bit more narrow
+                    retval.setX(line.cursorToX(cursor.position() - block.position()));
+                    retval.setWidth(1);
+                }
+            }
         }
     }
     return retval.translated(0, m_verticalAlignOffset);

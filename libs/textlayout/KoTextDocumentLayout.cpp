@@ -241,8 +241,15 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
 KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) const
 {
+    QTextBlock block = document()->findBlock(position);
+    if (!block.isValid())
+        return 0;
+    QTextLine line = block.layout()->lineForTextPosition(position - block.position());
+    if (!line.isValid())
+        return 0;
+
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (rootArea->containsPosition(position))
+        if (rootArea->boundingRect().contains(line.position()))
             return rootArea;
     }
     return 0;

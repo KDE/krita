@@ -239,55 +239,6 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     return retval.translated(0, m_verticalAlignOffset);
 }
 
-bool KoTextLayoutArea::containsPosition(int position) const
-{
-    if (m_startOfArea == 0 || m_endOfArea == 0) // We have not been layouted yet
-        return false;
-
-    QTextFrame::iterator it = m_startOfArea->it;
-    QTextFrame::iterator stop = m_endOfArea->it;
-    if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
-        ++stop;
-    }
-    int tableAreaIndex = 0;
-    for (; it != stop; ++it) {
-        QTextBlock block = it.currentBlock();
-        QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
-        QTextFrame *subFrame = it.currentFrame();
-        QTextBlockFormat format = block.blockFormat();
-
-        if (table) {
-            if (position < table->firstPosition()) {
-                return false;
-            }
-            if (position > table->lastPosition()) {
-                ++tableAreaIndex;
-                continue;
-            }
-            if (m_tableAreas[tableAreaIndex]->containsPosition(position)) {
-                return true;
-            }
-            ++tableAreaIndex;
-            continue;
-        } else if (subFrame) {
-            continue;
-        } else {
-            if (!block.isValid())
-                continue;
-        }
-
-        if(position < block.position()) {
-            return false;
-        }
-        if(position >= block.position()
-            && position < block.position() + block.length()) {
-            QTextLine line = block.layout()->lineForTextPosition(position - block.position());
-            if (line.isValid())
-                return line.y() >= top() && line.y() < bottom();
-        }
-    }
-    return false;
-}
 
 bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor)
 {
@@ -1096,7 +1047,7 @@ qreal KoTextLayoutArea::bottom() const
 
 void KoTextLayoutArea::setBottom(qreal bottom)
 {
-    m_boundingRect.setBottom(m_bottom + qMax(qreal(0.0), m_verticalAlignOffset));
+    m_boundingRect.setBottom(bottom + qMax(qreal(0.0), m_verticalAlignOffset));
     m_bottom = bottom;
 }
 

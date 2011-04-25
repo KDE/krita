@@ -50,9 +50,6 @@ public:
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;
 
-    /// Returns true if the area contains the position
-    bool containsPosition(int position) const;
-
 private:
     void layoutColumns();
     void collectBorderThicknesss(int row, qreal &topBorderWidth, qreal &bottomBorderWidth);

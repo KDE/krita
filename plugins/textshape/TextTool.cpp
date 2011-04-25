@@ -1164,14 +1164,14 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             }
         } else if (hit(item, KStandardShortcut::Prior)) { // page up
             // Scroll up one page. Default: Prior
-            QPointF point = caretRect(textEditor->position()).topLeft();
+            QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() - moveDistance);
             destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
         }
         else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
-            QPointF point = caretRect(textEditor->position()).topLeft();
+            QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() + moveDistance);
             destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
@@ -1281,7 +1281,7 @@ QVariant TextTool::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConv
     switch (query) {
     case Qt::ImMicroFocus: {
         // The rectangle covering the area of the input cursor in widget coordinates.
-        QRectF rect = caretRect(textEditor->position());
+        QRectF rect = caretRect(textEditor->cursor());
         rect.moveTop(rect.top() - m_textShapeData->documentOffset());
         QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
         qreal zoomX, zoomY;
@@ -1344,51 +1344,23 @@ void TextTool::ensureCursorVisible()
     if (!textEditor || !m_textShapeData)
         return;
 
-#if 0
-    if (m_textShapeData->endPosition() < textEditor->position() || m_textShapeData->position() > textEditor->position()) {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        Q_ASSERT(lay);
-        foreach (KoShape* shape, lay->shapes()) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            Q_ASSERT(textShape);
-            KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
-            if (textEditor->position() >= d->position() && textEditor->position() <= d->endPosition()) {
-                if (m_textShapeData)
-                    disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShapeData = d;
-                if (m_textShapeData)
-                    connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShape = textShape;
-                break;
-            }
-        }
-    }
-#else
     const int position = textEditor->position();
 
-    if (m_textShapeData->rootArea() && !m_textShapeData->rootArea()->containsPosition(position)) {
-        // If the current TextShape doesn't have the cursor any longer we need to switch to the TextShape that has the cursor now.
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        Q_ASSERT(lay);
-        foreach (KoShape* shape, lay->shapes()) {
-            TextShape *textShape = dynamic_cast<TextShape*>(shape);
-            Q_ASSERT(textShape);
-            KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
-            Q_ASSERT(d);
-            if (d->rootArea()->containsPosition(position)) {
-                disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShapeData = d;
-                connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-                m_textShape = textShape;
-                break;
-            }
-        }
-        // If the m_textShape wasn't set above to another shape then we go on with the previous shape.
-        //FIXME this is inefficient cause we run through that loop way to often.
-    }
-#endif
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(position);
 
-    QRectF cursorPos = caretRect(position);
+    if (rootArea && m_textShapeData->rootArea() != rootArea) {
+        // If we have changed root area we need to update m_textShape and m_textShapeData
+        m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
+        Q_ASSERT(m_textShape);
+        disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+        m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
+        Q_ASSERT(m_textShapeData);
+        connect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
+    }
+
+    QRectF cursorPos = caretRect(textEditor->cursor());
     if (! cursorPos.isValid()) { // paragraph is not yet layouted.
         // The number one usecase for this is when the user pressed enter.
         // So take bottom of last paragraph.
@@ -1582,11 +1554,23 @@ void TextTool::repaintCaret()
     KoTextEditor *textEditor = m_textEditor.data();
     if (!textEditor || !m_textShapeData)
         return;
-    QRectF repaintRect = caretRect(textEditor->position());
-    repaintRect.moveTop(repaintRect.top() - m_textShapeData->documentOffset());
-    if (repaintRect.isValid()) {
-        repaintRect = m_textShape->absoluteTransformation(0).mapRect(repaintRect);
-        canvas()->updateCanvas(repaintRect);
+
+
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    Q_ASSERT(lay);
+    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(textEditor->position());
+
+    if (rootArea) {
+        // If we have changed root area we need to update m_textShape and m_textShapeData
+        TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
+        Q_ASSERT(textShape);
+
+        QRectF repaintRect = caretRect(textEditor->cursor());
+        repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
+        if (repaintRect.isValid()) {
+            repaintRect = textShape->absoluteTransformation(0).mapRect(repaintRect);
+            canvas()->updateCanvas(repaintRect);
+        }
     }
 }
 
@@ -1595,11 +1579,8 @@ void TextTool::repaintSelection()
     KoTextEditor *textEditor = m_textEditor.data();
     if (textEditor == 0)
         return;
-    repaintSelection(*textEditor->cursor());
-}
+    QTextCursor cursor = *textEditor->cursor();
 
-void TextTool::repaintSelection(QTextCursor &cursor)
-{
     QList<TextShape *> shapes;
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
@@ -1625,8 +1606,9 @@ void TextTool::repaintSelection(QTextCursor &cursor)
     }
 }
 
-QRectF TextTool::caretRect(int position) const
+QRectF TextTool::caretRect(QTextCursor *cursor) const
 {
+    int position = cursor->position();
     if (!m_textShapeData)
         return QRectF();
     QTextBlock block = m_textShapeData->document()->findBlock(position);

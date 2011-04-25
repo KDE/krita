@@ -124,7 +124,7 @@ public:
 
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
-    QRectF caretRect(int position) const;
+    QRectF caretRect(QTextCursor *cursor) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
@@ -280,7 +280,6 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    void repaintSelection(QTextCursor &cursor);
     int pointToPosition(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();

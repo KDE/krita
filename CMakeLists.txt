@@ -28,6 +28,8 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
 #
 #eg:
 #option(BUILD_kexi "Build directory kexi" OFF) # kexi isn't buildable at the moment
+option(BUILD_koabstraction "Build directory koabstraction" OFF) # koabstraction isn't buildable at the moment
+option(BUILD_mobile "Build directory mobile" OFF) # mobile depends on koabstraction it builds but does not run
 
 option(GHNS "support Get Hot New Stuff" ON)
 
@@ -536,7 +538,7 @@ add_subdirectory(pics)
 add_subdirectory(plugins)
 add_subdirectory(servicetypes)
 add_subdirectory(templates)
-#add_subdirectory(tools)
+add_subdirectory(tools)
 add_subdirectory(filters)
 
 macro_display_feature_log()

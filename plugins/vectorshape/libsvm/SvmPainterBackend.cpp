@@ -103,7 +103,15 @@ void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &p
 
 void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
-    // FIXME
+    if (context.changedItems & GCLineColor) {
+        m_painter->setPen(context.lineColor);
+    }
+    if (context.changedItems & GCMapMode) {
+        // FIXME
+    }
+
+    // Reset all changes until next time.
+    context.changedItems = 0;
 }
 
 

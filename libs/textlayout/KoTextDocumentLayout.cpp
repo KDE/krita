@@ -66,7 +66,6 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
-       , layoutStrategy(KoTextDocumentLayout::ScheduleLayouts)
        , layoutScheduled(false)
     {
     }
@@ -90,7 +89,6 @@ public:
     qreal defaultTabSizing;
     qreal y;
     QString wantedMasterPage;
-    KoTextDocumentLayout::LayoutStrategy layoutStrategy;
     bool layoutScheduled;
 };
 
@@ -399,22 +397,8 @@ void KoTextDocumentLayout::layout()
     }
 }
 
-KoTextDocumentLayout::LayoutStrategy KoTextDocumentLayout::layoutStrategy() const
-{
-    return d->layoutStrategy;
-}
-
-void KoTextDocumentLayout::setLayoutStrategy(KoTextDocumentLayout::LayoutStrategy strategy)
-{
-    d->layoutStrategy = strategy;
-}
-
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutStrategy == LayoutDirect) {
-        layout();
-        return;
-    }
     if (d->layoutScheduled) {
         return;
     }

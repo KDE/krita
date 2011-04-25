@@ -75,6 +75,9 @@ void SvmPainterBackend::init(const SvmHeader &header)
 
     m_outputTransform = m_painter->transform();
     //m_worldTransform = QTransform();
+    
+    m_painter->setRenderHint(QPainter::Antialiasing);
+    m_painter->setRenderHint(QPainter::TextAntialiasing);
 }
 
 void SvmPainterBackend::cleanup()

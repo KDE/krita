@@ -370,7 +370,8 @@ void KoTextDocumentLayout::layout()
                 return; // Let's take a break
             }
         }
-        d->y = rootArea->bottom(); // (post)Layout method(s) just set this
+        d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
+                                               // 50 just to seperate pages
         previousRootArea = rootArea;
     }
 
@@ -400,7 +401,8 @@ void KoTextDocumentLayout::layout()
             emit finishedLayout();
             return; // with no more space there is nothing else we can do
         }
-        d->y = rootArea->bottom(); // (post)Layout method(s) just set this
+        d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
+                                               // 50 just to seperate pages
     }
 }
 

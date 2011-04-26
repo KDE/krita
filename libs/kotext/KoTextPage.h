@@ -76,15 +76,6 @@ public:
      */
     virtual QString masterPageName() const;
 
-    /**
-     * Returns the name of the master-page which should be used for the KoTextPage's
-     * following this KoTextPage. This will only be used if the following KoTextPage
-     * does not define a masterPageName itself.
-     *
-     * Per default a null QString is returned.
-     */
-    virtual QString nextMasterPageName() const;
-
 };
 
 #endif

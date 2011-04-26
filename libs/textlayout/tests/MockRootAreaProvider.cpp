@@ -26,10 +26,8 @@ MockRootAreaProvider::MockRootAreaProvider()
 {
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, QString mastePageName)
+KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
-    Q_UNUSED(mastePageName);
-
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
         return m_area;

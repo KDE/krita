@@ -99,25 +99,3 @@ FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
     }
     return currentSubFrameIterator;
 }
-
-QString FrameIterator::wantedMasterPage(KoTextLayoutRootArea *previousRootArea) const
-{
-    if (it.currentBlock().isValid()) {
-        QVariant name = it.currentBlock().blockFormat().property(KoParagraphStyle::MasterPageName);
-        if (name.isValid()) {
-            QString n = name.toString();
-            if (!n.isEmpty())
-                return n;
-        }
-    }
-    KoTextPage *page = previousRootArea ? previousRootArea->page() : 0;
-    if (page) {
-        QString n = page->nextMasterPageName();
-        if (!n.isEmpty())
-            return n;
-        n = page->masterPageName();
-        if (!n.isEmpty())
-            return n;
-    }
-    return QString();
-}

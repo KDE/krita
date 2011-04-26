@@ -88,7 +88,6 @@ public:
 
     qreal defaultTabSizing;
     qreal y;
-    QString wantedMasterPage;
     bool layoutScheduled;
 };
 
@@ -331,6 +330,11 @@ void KoTextDocumentLayout::layout()
     KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (d->provider->suggestPageBreak(rootArea)) {
+            d->provider->releaseAllAfter(previousRootArea);
+            break;
+        }
+
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -341,11 +345,6 @@ void KoTextDocumentLayout::layout()
         }
         else if (rootArea->isStartingAt(d->layoutPosition)) {
             shouldLayout = true;
-        }
-
-        if (d->wantedMasterPage != d->layoutPosition->wantedMasterPage(previousRootArea)) {
-            d->provider->releaseAllAfter(previousRootArea);
-            break;
         }
 
         if (shouldLayout) {
@@ -376,11 +375,9 @@ void KoTextDocumentLayout::layout()
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
-        //figure out the wantedMasterPage
-        d->wantedMasterPage = d->layoutPosition->wantedMasterPage(previousRootArea);
 
         // Request a Root Area
-        KoTextLayoutRootArea *rootArea = d->provider->provide(this, d->wantedMasterPage);
+        KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
             d->rootAreaList.append(rootArea);

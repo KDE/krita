@@ -31,8 +31,3 @@ QString KoTextPage::masterPageName() const
 {
     return QString();
 }
-
-QString KoTextPage::nextMasterPageName() const
-{
-    return QString();
-}

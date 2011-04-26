@@ -40,7 +40,6 @@ public:
 
     TableIterator *tableIterator(QTextTable *);
     FrameIterator *subFrameIterator(QTextFrame *);
-    QString wantedMasterPage(KoTextLayoutRootArea *previousRootArea) const;
 
     QTextFrame::iterator it;
 

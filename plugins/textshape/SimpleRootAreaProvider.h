@@ -31,7 +31,7 @@ public:
     SimpleRootAreaProvider(KoTextShapeData *data, TextShape *textshape);
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, QString mastePageName);
+    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout);
 
     virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
 

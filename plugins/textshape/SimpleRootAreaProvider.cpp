@@ -32,10 +32,8 @@ SimpleRootAreaProvider::SimpleRootAreaProvider(KoTextShapeData *data, TextShape 
 {
 }
 
-KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout, QString mastePageName)
+KoTextLayoutRootArea *SimpleRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
 {
-    Q_UNUSED(mastePageName);
-
     if(m_area == 0) {
         m_area = new KoTextLayoutRootArea(documentLayout);
         m_area->setAssociatedShape(m_textShape);

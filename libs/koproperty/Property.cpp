@@ -597,22 +597,14 @@ Property::operator= (const Property & property)
     if (&property == this)
         return *this;
 
-    if (d->listData) {
-        delete d->listData;
-        d->listData = 0;
-    }
-    if (d->children) {
-        delete d->children;
-        d->children = 0;
-    }
-    if (d->relatedProperties) {
-        delete d->relatedProperties;
-        d->relatedProperties = 0;
-    }
-    if (d->composed) {
-        delete d->composed;
-        d->composed = 0;
-    }
+    delete d->listData;
+    d->listData = 0;
+    delete d->children;
+    d->children = 0;
+    delete d->relatedProperties;
+    d->relatedProperties = 0;
+    delete d->composed;
+    d->composed = 0;
 
     d->name = property.d->name;
     d->setCaptionForDisplaying(property.captionForDisplaying());

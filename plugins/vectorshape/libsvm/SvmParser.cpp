@@ -360,7 +360,7 @@ bool SvmParser::parse(const QByteArray &data)
 #endif
         }
 
-        delete rawData;
+        delete [] rawData;
         
         // Security measure
         if (mainStream.atEnd())

@@ -100,23 +100,9 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
     QString text("text");
-    //if (params->contains(text)) {
+    if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-        KoInlineTextObjectManager *textObjectManager = KoTextDocument(shapeData->document()).inlineTextObjectManager();
-        KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
-        note->setMotherFrame(KoTextDocument(shapeData->document()).footNotesFrame());
-        note->setLabel("1");
-        QTextCursor footnoteCursor(note->textFrame());
-        footnoteCursor.insertText("This is a footnote");
-        QTextCursor cursor(shapeData->document());
-        //cursor.insertText(params->stringProperty(text));
-        cursor.insertText("Hello new Text layout engine f f fd fs sdf dsf sdf fd fds gfd gfd sgfds gfds sfd fd fds sfd sdf");
-        //if(textObjectManager)
-            textObjectManager->insertInlineObject(cursor, note);
-        cursor.insertTable(3,3);
-        cursor.insertText("Cell 1 Line one");
-        cursor.insertTable(3,3);
-    //}
+    }
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());
     }

@@ -210,6 +210,7 @@ bool PSDLayerRecord::read(QIODevice* io)
 
         if (!psdread(io, &info->channelId)) {
             error = "could not read channel id";
+	    delete info;
             return false;
         }
         bool r;
@@ -223,6 +224,7 @@ bool PSDLayerRecord::read(QIODevice* io)
         }
         if (!r) {
             error = "Could not read length for channel data";
+	    delete info;
             return false;
         }
 

@@ -71,7 +71,7 @@ static unsigned char needle_move_bits[] = {
 };
 
 // helper function to calculate the squared distance between two points
-qreal squaredDistance(const QPointF p1, const QPointF &p2)
+qreal squaredDistance(const QPointF& p1, const QPointF &p2)
 {
     qreal dx = p1.x()-p2.x();
     qreal dy = p1.y()-p2.y();

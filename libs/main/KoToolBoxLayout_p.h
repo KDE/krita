@@ -186,16 +186,16 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Section::Seperators)
 
-class ToolBoxLayout : public QLayout
+class KoToolBoxLayout : public QLayout
 {
 public:
-    ToolBoxLayout(QWidget *parent)
+    KoToolBoxLayout(QWidget *parent)
         : QLayout(parent), m_orientation(Qt::Vertical), m_currentHeight(0), m_currentWidth(0)
     {
         setSpacing(6);
     }
 
-    ~ToolBoxLayout()
+    ~KoToolBoxLayout()
     {
         qDeleteAll( m_sections );
         m_sections.clear();

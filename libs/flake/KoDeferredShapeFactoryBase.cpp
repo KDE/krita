@@ -33,3 +33,5 @@ KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoResourc
 {
     return createDefaultShape(documentResources);
 }
+
+#include "KoDeferredShapeFactoryBase.moc"

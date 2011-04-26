@@ -85,7 +85,6 @@ KoToolRegistry* KoToolRegistry::instance()
 
 void KoToolRegistry::addDeferred(KoToolFactoryBase *toolFactory)
 {
-    qDebug() << ">>>>>>>>>>>> adding deferred tool" << toolFactory->id();
     add(toolFactory);
     KoToolManager::instance()->addDeferredToolFactory(toolFactory);
 }

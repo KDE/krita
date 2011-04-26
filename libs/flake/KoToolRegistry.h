@@ -34,7 +34,6 @@
  */
 class FLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryBase*>
 {
-
 public:
     ~KoToolRegistry();
 

@@ -36,10 +36,11 @@
 class KoShapeFactoryBase::Private
 {
 public:
-    Private(const QString &i, const QString &n)
+    Private(const QString &_id, const QString &_name, const QString &_deferredPluginName)
         : deferredFactory(0),
-          id(i),
-          name(n),
+          deferredPluginName(_deferredPluginName),
+          id(_id),
+          name(_name),
           loadingPriority(0),
           hidden(false)
     {
@@ -53,6 +54,7 @@ public:
 
     KoDeferredShapeFactoryBase *deferredFactory;
     QMutex pluginLoadingMutex;
+    QString deferredPluginName;
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactoryBase*> configPanels;
     const QString id;
@@ -63,15 +65,13 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
     bool hidden;
-    QString deferredPluginName;
     QList<KoResourceManager *> resourceManagers;
 };
 
 
 KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName)
-    : d(new Private(id, name))
+    : d(new Private(id, name, deferredPluginName))
 {
-    d->deferredPluginName = deferredPluginName;
 }
 
 KoShapeFactoryBase::~KoShapeFactoryBase()
@@ -193,7 +193,9 @@ KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResou
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
-        return d->deferredFactory->createDefaultShape(documentResources);
+        if (d->deferredFactory) {
+            return d->deferredFactory->createDefaultShape(documentResources);
+        }
     }
     return 0;
 }
@@ -204,11 +206,11 @@ KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
     if (!d->deferredPluginName.isEmpty()) {
         const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
         Q_ASSERT(d->deferredFactory);
-        return d->deferredFactory->createShape(properties, documentResources);
+        if (d->deferredFactory) {
+            return d->deferredFactory->createShape(properties, documentResources);
+        }
     }
-    else {
-        return createDefaultShape(documentResources);
-    }
+    return createDefaultShape(documentResources);
 }
 
 

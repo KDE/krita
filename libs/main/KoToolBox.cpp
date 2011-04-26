@@ -55,7 +55,7 @@ public:
     void addSection(Section *section, const QString &name);
 
     QMap<QString, Section*> sections;
-    ToolBoxLayout *layout;
+    KoToolBoxLayout *layout;
     QButtonGroup *buttonGroup;
     KoCanvasBase *canvas;
     QHash<QToolButton*, QString> visibilityCodes;
@@ -72,7 +72,7 @@ void KoToolBox::Private::addSection(Section *section, const QString &name)
 KoToolBox::KoToolBox(KoCanvasController *canvas)
     : d( new Private(canvas))
 {
-    d->layout = new ToolBoxLayout(this);
+    d->layout = new KoToolBoxLayout(this);
     // add defaults
     d->addSection(new Section(this), "main");
     d->addSection(new Section(this), "dynamic");

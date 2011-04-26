@@ -21,6 +21,7 @@
 
 
 #include <QColor>
+#include <QBrush>
 
 #include "SvmEnums.h"
 #include "SvmStructs.h"
@@ -41,7 +42,7 @@ namespace Libsvm
 
 enum GraphicsContextMembers {
     GCLineColor = 0x0001,
-    GCFillColor = 0x0002,
+    GCFillBrush = 0x0002,
     GCMapMode   = 0x0004
     // ...more here
 };
@@ -51,7 +52,7 @@ struct SvmGraphicsContext {
     SvmGraphicsContext();
 
     QColor   lineColor;
-    QColor   fillColor;
+    QBrush   fillBrush;
     MapMode  mapMode;
     // ... much more here;
 

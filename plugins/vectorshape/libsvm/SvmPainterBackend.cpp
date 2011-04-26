@@ -21,6 +21,7 @@
 
 // Qt
 #include <QPainter>
+#include <QRect>
 #include <QPolygon>
 
 // KDE
@@ -74,6 +75,9 @@ void SvmPainterBackend::init(const SvmHeader &header)
 
     m_outputTransform = m_painter->transform();
     //m_worldTransform = QTransform();
+    
+    m_painter->setRenderHint(QPainter::Antialiasing);
+    m_painter->setRenderHint(QPainter::TextAntialiasing);
 }
 
 void SvmPainterBackend::cleanup()
@@ -91,10 +95,22 @@ void SvmPainterBackend::eof()
 //                         Graphics output
 
 
+void SvmPainterBackend::rect( SvmGraphicsContext &context, const QRect &rect )
+{
+    updateFromGraphicscontext(context);
+    m_painter->drawRect(rect);
+}
+
 void SvmPainterBackend::polyLine( SvmGraphicsContext &context, const QPolygon &polyline )
 {
     updateFromGraphicscontext(context);
     m_painter->drawPolyline(polyline);
+}
+
+void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &polygon )
+{
+    updateFromGraphicscontext(context);
+    m_painter->drawPolygon(polygon);
 }
 
 
@@ -105,10 +121,11 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
         m_painter->setPen(context.lineColor);
+        //kDebug(31000) << "*** Setting line color to" << context.lineColor;
     }
-    if (context.changedItems & GCFillColor) {
-        QBrush brush(context.fillColor);
-        m_painter->setBrush(brush);
+    if (context.changedItems & GCFillBrush) {
+        m_painter->setBrush(context.fillBrush);
+        //kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
     }
     if (context.changedItems & GCMapMode) {
         // FIXME

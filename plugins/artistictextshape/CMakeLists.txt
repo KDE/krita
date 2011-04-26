@@ -5,9 +5,11 @@ include_directories( ${FLAKE_INCLUDES} )
 SET ( ArtisticTextShape_SRCS
     ArtisticTextShapePlugin.cpp
     ArtisticTextShape.cpp
+    ArtisticTextRange.cpp
     ArtisticTextShapeFactory.cpp
     ArtisticTextTool.cpp
     ArtisticTextToolFactory.cpp
+    ArtisticTextToolSelection.cpp
     ArtisticTextShapeConfigWidget.cpp
     ArtisticTextShapeLoadingUpdater.cpp
     AttachTextToPathCommand.cpp
@@ -15,7 +17,10 @@ SET ( ArtisticTextShape_SRCS
     ChangeTextOffsetCommand.cpp
     ChangeTextFontCommand.cpp
     ChangeTextAnchorCommand.cpp
+    AddTextRangeCommand.cpp
+    RemoveTextRangeCommand.cpp
     MoveStartOffsetStrategy.cpp
+    SelectTextStrategy.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS

@@ -26,7 +26,7 @@ namespace Libsvm
 
 SvmGraphicsContext::SvmGraphicsContext()
     : lineColor(Qt::black)
-    , fillColor(Qt::transparent)
+    , fillBrush(Qt::NoBrush)
     , mapMode()
       //... more here
     , changedItems(0)

@@ -28,6 +28,7 @@
 #include "SvmStructs.h"
 #include "SvmGraphicsContext.h"
 
+class QRect;
 class QPolygon;
 class QPainter;
 
@@ -74,6 +75,8 @@ public:
     */
     virtual void eof();
 
+    virtual void rect( SvmGraphicsContext &context, const QRect &rect );
+
     /**
        Handler META_POLYLINE_ACTION
 
@@ -87,6 +90,8 @@ public:
        the last point to the first point) or filled.
     */
     virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline );
+
+    virtual void polygon( SvmGraphicsContext &context, const QPolygon &polygon );
 
  private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
- * Copyright (C) 2008 Rob Buis <buis@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,35 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef ARTISTICTEXTSHAPECONFIGWIDGET_H
-#define ARTISTICTEXTSHAPECONFIGWIDGET_H
+#ifndef SELECTTEXTSTRATEGY_H
+#define SELECTTEXTSTRATEGY_H
 
-#include <ui_ArtisticTextShapeConfigWidget.h>
-
-#include "ArtisticTextShape.h"
-
-#include <KoShapeConfigWidgetBase.h>
+#include <KoInteractionStrategy.h>
 
 class ArtisticTextTool;
+class ArtisticTextToolSelection;
 
-class ArtisticTextShapeConfigWidget : public QWidget
+/// A strategy to select text on a artistic text shape
+class SelectTextStrategy : public KoInteractionStrategy
 {
-    Q_OBJECT
 public:
-    ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool);
+    SelectTextStrategy(ArtisticTextTool *textTool, int cursor);
+    ~SelectTextStrategy();
 
-public slots:
-    /// updates the widget form the current artistic text shape
-    void updateWidget();
-
-private slots:
-    void propertyChanged();
+    // reimplemnted from KoInteractionStrategy
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    // reimplemnted from KoInteractionStrategy
+    virtual QUndoCommand *createCommand();
+    // reimplemnted from KoInteractionStrategy
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
 
 private:
-    void blockChildSignals( bool block );
-    Ui::ArtisticTextShapeConfigWidget widget;
-    ArtisticTextTool *m_textTool;
-    QButtonGroup * m_anchorGroup;
+    ArtisticTextToolSelection *m_selection;
+    int m_oldCursor;
+    int m_newCursor;
 };
 
-#endif // ARTISTICTEXTSHAPECONFIGWIDGET_H
+
+#endif // SELECTTEXTSTRATEGY_H

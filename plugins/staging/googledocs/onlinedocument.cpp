@@ -46,9 +46,7 @@ OnlineDocument::OnlineDocument(QObject *parent, const QVariantList &)
 
 OnlineDocument::~OnlineDocument()
 {
-    if (m_login) {
-        delete m_login;
-    }
+    delete m_login;
 }
 
 void OnlineDocument::slotOnlineDocument()

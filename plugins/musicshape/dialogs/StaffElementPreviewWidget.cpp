@@ -38,13 +38,13 @@ StaffElementPreviewWidget::StaffElementPreviewWidget(QWidget* parent)
 
 StaffElementPreviewWidget::~StaffElementPreviewWidget()
 {
-    if (m_renderer) delete m_renderer;
+    delete m_renderer;
 }
 
 void StaffElementPreviewWidget::setMusicStyle(MusicStyle* style)
 {
     m_style = style;
-    if (m_renderer) delete m_renderer;
+    delete m_renderer;
     m_renderer = new MusicRenderer(m_style);
 }
 

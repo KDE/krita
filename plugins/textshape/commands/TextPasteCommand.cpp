@@ -85,9 +85,7 @@ void TextPasteCommand::redo()
 #ifdef SHOULD_BUILD_RDF
             rdfModel = Soprano::createModel();
             if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                if (rdfModel) {
-                    delete rdfModel;
-                }
+                delete rdfModel;
                 rdfModel = rdf->model();
                 weOwnRdfModel = false;
             }

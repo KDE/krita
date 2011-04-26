@@ -35,7 +35,7 @@ macro_optional_add_subdirectory( pathshapes )
 macro_optional_add_subdirectory( chartshape )
 macro_optional_add_subdirectory( pictureshape )
 macro_optional_add_subdirectory( videoshape )
-#macro_optional_add_subdirectory( textshape )
+macro_optional_add_subdirectory( textshape )
 macro_optional_add_subdirectory( pluginshape )
 macro_optional_add_subdirectory( treeshape )
 

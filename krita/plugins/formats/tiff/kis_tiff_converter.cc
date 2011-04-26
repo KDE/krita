@@ -405,6 +405,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory(TIFF* image)
         if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0) {
             dbgFile << "Indexed image does not define a palette";
             TIFFClose(image);
+	    delete [] lineSizeCoeffs;
             return KisImageBuilder_RESULT_INVALID_ARG;
         }
 

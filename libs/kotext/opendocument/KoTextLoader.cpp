@@ -27,8 +27,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-
 #include "KoTextLoader.h"
+
 #include <KoTextMeta.h>
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
@@ -431,6 +431,12 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
+
+void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
+{
+    loadBody(bodyElem, cursor, 0);
+}
+
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, KoSection *section)
 {
     static int rootCallChecker = 0;
@@ -448,13 +454,11 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, K
 
     if (section) {
         QTextBlock block = cursor.block();
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-        if (!data) {
-            data = new KoTextBlockData();
-            block.setUserData(data);
-        }
-        data->setSection(section);
-        section = 0;
+        QTextBlockFormat format = block.blockFormat();
+        QVariant v;
+        v.setValue<void*>(section);
+        format.setProperty(KoParagraphStyle::SectionStart, v);
+        cursor.setBlockFormat(format);
     }
 
     KoOdfNotesConfiguration *notesConfiguration =
@@ -509,7 +513,6 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, K
                 if (!tag.isNull()) {
 
                     const QString localName = tag.localName();
-
                     if (tag.namespaceURI() == KoXmlNS::delta) {
 
                         if (d->changeTracker && localName == "tracked-changes") {
@@ -1425,8 +1428,18 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
         return;
     }
 
+    loadBody(sectionElem, cursor, section);
 
-    loadBody(sectionElem, cursor);
+    // Close the section on the last block of text we have loaded just now.
+    KoSectionEnd *sectionEnd = new KoSectionEnd();
+    sectionEnd->name = section->name();
+
+    QTextBlock block = cursor.block();
+    QTextBlockFormat format = block.blockFormat();
+    QVariant v;
+    v.setValue<void*>(sectionEnd);
+    format.setProperty(KoParagraphStyle::SectionEnd, v);
+    cursor.setBlockFormat(format);
 
 }
 

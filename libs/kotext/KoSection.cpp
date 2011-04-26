@@ -57,6 +57,24 @@ KoSection::~KoSection()
     delete d;
 }
 
+KoSection::KoSection(const KoSection& other)
+    : d(new Private())
+{
+    d->condition = other.d->condition;
+    d->display = other.d->display;
+    d->name = other.d->name;
+    d->text_protected = other.d->text_protected;
+    d->protection_key = other.d->protection_key;
+    d->protection_key_digest_algorithm = other.d->protection_key_digest_algorithm;
+    d->style_name = other.d->style_name;
+    d->sectionStyle = other.d->sectionStyle;
+}
+
+QString KoSection::name() const
+{
+    return d->name;
+}
+
 bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml)
 {
     // check whether we really are a section
@@ -76,7 +94,6 @@ bool KoSection::loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sh
         if (!d->style_name.isEmpty()) {
             d->sectionStyle = sharedData->sectionStyle(d->style_name, stylesDotXml);
         }
-
         return true;
     }
     return false;
@@ -95,6 +112,11 @@ void KoSection::saveOdf(KoShapeSavingContext &context)
     if (!d->protection_key.isEmpty()) writer->addAttribute("text:protection-key", d->protection_key);
     if (!d->protection_key_digest_algorithm.isEmpty()) writer->addAttribute("text:protection-key-digest-algorihtm", d->protection_key_digest_algorithm);
     if (!d->style_name.isEmpty()) writer->addAttribute("text:style-name", d->style_name);
+}
 
+void KoSectionEnd::saveOdf(KoShapeSavingContext &context)
+{
+    KoXmlWriter *writer = &context.xmlWriter();
+    Q_ASSERT(writer);
     writer->endElement();
 }

@@ -19,9 +19,12 @@
 #ifndef KOSECTION_H
 #define KOSECTION_H
 
+#include <qmetatype.h>
+
 class KoXmlElement;
 class KoShapeSavingContext;
 class KoTextSharedLoadingData;
+
 /**
  * Contains the information about the current text:section.
  *
@@ -45,6 +48,9 @@ public:
 
     KoSection();
     ~KoSection();
+    KoSection(const KoSection& other);
+
+    QString name() const;
 
     bool loadOdf(const KoXmlElement &element, KoTextSharedLoadingData *sharedData, bool stylesDotXml);
     void saveOdf(KoShapeSavingContext &context);
@@ -53,5 +59,16 @@ private:
     Private * const d;
 
 };
+
+/**
+ * Marks the end of the given section
+ */
+struct KoSectionEnd {
+    QString name; //< the name of the section we are closing
+
+    void saveOdf(KoShapeSavingContext &context);
+};
+
+Q_DECLARE_METATYPE(KoSection)
 
 #endif // KOSECTION_H

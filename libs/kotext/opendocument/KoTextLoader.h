@@ -94,7 +94,8 @@ public:
     *                section is added to the first block of the body.
     *
     */
-    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section = 0);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section);
 
 signals:
 

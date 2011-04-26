@@ -184,7 +184,7 @@ public:
     int checkForListChange(const QTextBlock &block);
     int checkForTableRowChange(int position);
     int checkForTableColumnChange(int position);
-    
+
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -1670,20 +1670,18 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
-        // If the block contains a section marker, save the section to ODF
-        KoTextBlockData *data = dynamic_cast<KoTextBlockData*>(block.userData());
-        if (data) {
-            KoSection *section = data->section();
+        QTextCursor cursor(block);
+        QTextFrame *cursorFrame = cursor.currentFrame();
+
+        QTextBlockFormat format = block.blockFormat();
+        if (format.hasProperty(KoParagraphStyle::SectionStart)) {
+            QVariant v = format.property(KoParagraphStyle::SectionStart);
+            KoSection* section = (KoSection*)(v.value<void*>());
             if (section) {
                 section->saveOdf(context);
             }
         }
-
-        QTextCursor cursor(block);
-        QTextFrame *cursorFrame = cursor.currentFrame();
-        int blockOutlineLevel = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
-
-
+        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
 
         if (cursorFrame != currentFrame
                     && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
@@ -1731,6 +1729,15 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 postProcessDeleteMergeXml();
             }
         }
+
+        if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
+            QVariant v = format.property(KoParagraphStyle::SectionEnd);
+            KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
+            if (section) {
+                section->saveOdf(context);
+            }
+        }
+
 
         block = block.next();
     } // while

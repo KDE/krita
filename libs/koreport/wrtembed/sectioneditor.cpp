@@ -324,7 +324,7 @@ void SectionEditor::btnEdit_clicked()
             }
         }
 
-        if (dgsd) delete dgsd;
+        delete dgsd;
     }
 }
 
@@ -359,9 +359,7 @@ void SectionEditor::btnRemove_clicked()
         int idx = lbGroups->currentRow();
         if (idx != -1) {
             QListWidgetItem *itm = lbGroups->takeItem(idx);
-	    if (itm) {
-		delete itm;
-	    }
+	    delete itm;
             m_reportSectionDetail->removeSection(idx, true);
         }
     }

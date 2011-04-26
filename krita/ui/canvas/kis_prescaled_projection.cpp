@@ -118,8 +118,7 @@ KisPrescaledProjection::KisPrescaledProjection()
 
 KisPrescaledProjection::~KisPrescaledProjection()
 {
-    if (m_d->projectionBackend)
-        delete m_d->projectionBackend;
+    delete m_d->projectionBackend;
 
     delete m_d;
 }
@@ -148,9 +147,7 @@ void KisPrescaledProjection::setCoordinatesConverter(KisCoordinatesConverter *co
 void KisPrescaledProjection::initBackend(bool cacheKisImageAsQImage)
 {
     Q_UNUSED(cacheKisImageAsQImage);
-    if (m_d->projectionBackend) {
-        delete m_d->projectionBackend;
-    }
+    delete m_d->projectionBackend;
 
     // we disable building the pyramid with setting its height to 1
     m_d->projectionBackend = new KisImagePyramid(1);

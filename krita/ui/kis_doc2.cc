@@ -198,15 +198,10 @@ void KisDoc2::openTemplate(const KUrl& url)
 
 bool KisDoc2::init()
 {
-    if (m_d->undoAdapter) {
-        delete m_d->undoAdapter;
-        m_d->undoAdapter = 0;
-    }
-
-    if (m_d->nserver) {
-        delete m_d->nserver;
-        m_d->nserver = 0;
-    }
+    delete m_d->undoAdapter;
+    m_d->undoAdapter = 0;
+    delete m_d->nserver;
+    m_d->nserver = 0;
 
     m_d->undoAdapter = new KisUndoAdapter(this);
     connect(undoStack(), SIGNAL(indexChanged(int)), SLOT(undoIndexChanged(int)));

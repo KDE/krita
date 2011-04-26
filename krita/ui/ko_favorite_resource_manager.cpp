@@ -307,8 +307,7 @@ void KoFavoriteResourceManager::addRecentColor(const KoColor& color)
 
 KoFavoriteResourceManager::~KoFavoriteResourceManager()
 {
-    if (m_favoriteBrushManager)
-        delete m_favoriteBrushManager;
+    delete m_favoriteBrushManager;
 
     delete m_colorList;
 }

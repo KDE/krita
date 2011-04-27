@@ -65,7 +65,6 @@ KoShape *KoTextLayoutRootArea::associatedShape()
 
 void KoTextLayoutRootArea::setPage(KoTextPage *textpage)
 {
-    delete d->textpage;
     d->textpage = textpage;
 }
 

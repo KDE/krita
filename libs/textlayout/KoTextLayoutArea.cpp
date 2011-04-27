@@ -410,7 +410,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         m_right = m_boundingRect.right();
         m_maximumAllowedWidth = 0;
 
-        layout(new FrameIterator(m_startOfArea));
+        KoTextLayoutArea::layout(new FrameIterator(m_startOfArea));
     }
     return true; // we have layouted till the end of the frame
 }

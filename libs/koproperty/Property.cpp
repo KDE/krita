@@ -30,6 +30,8 @@
 #include <QPointer>
 #include <QByteArray>
 #include <QStringList>
+#include <QSizePolicy>
+
 namespace KoProperty
 {
 
@@ -398,6 +400,8 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
+    } else if (t == QVariant::SizePolicy) {
+        ch = (currentValue.value<QSizePolicy>() != value.value<QSizePolicy>());
     }
     else {
         ch = (currentValue != value);

@@ -18,10 +18,12 @@
  */
 
 #include "InlineAnchorStrategy.h"
-#include "TextShapeLayout.h"
 
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
+
+#include <QTextLayout>
+#include <QTextBlock>
 
 InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor)
         : KoAnchorStrategy(),
@@ -36,16 +38,16 @@ InlineAnchorStrategy::~InlineAnchorStrategy()
 {
 }
 
-bool InlineAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *state)
+bool InlineAnchorStrategy::positionShape()
 {
     if (m_finished) { // shape is in right position no second pass needed
         return false;
     }
-
+/*FIXME
     if (state->cursorPosition() <= m_anchor->positionInDocument()) {
         return false;
     }
-
+*/
     if (!m_anchor->shape()->parent()) {
         return false;
     }
@@ -60,7 +62,7 @@ bool InlineAnchorStrategy::positionShape(KoTextDocumentLayout::LayoutState *stat
     QTextLayout *layout = block.layout();
 
     // set anchor bounding rectangle horizontal position and size
-    if (!countHorizontalPos(newPosition, state, block, layout)) {
+    if (!countHorizontalPos(newPosition, block, layout)) {
         return false;
     }
 
@@ -100,9 +102,8 @@ QPointF InlineAnchorStrategy::relayoutPosition()
     return m_relayoutPosition;
 }
 
-bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout)
+bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)
 {
-    Q_UNUSED(state)
     if (layout->lineCount() != 0) {
         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
         if (tl.isValid()) {

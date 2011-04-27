@@ -23,6 +23,8 @@
 #include "KoTextAnchor.h"
 
 class KoTextShapeData;
+class QTextBlock;
+class QTextLayout;
 
 class InlineAnchorStrategy  : public KoAnchorStrategy
 {
@@ -35,7 +37,7 @@ public:
      *
      * @return true if new position for shape was wound
      */
-    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state);
+    virtual bool positionShape();
 
     /**
      *
@@ -60,7 +62,7 @@ public:
 
 private:
 
-    bool countHorizontalPos(QPointF &newPosition, KoTextDocumentLayout::LayoutState *state, QTextBlock &block, QTextLayout *layout);
+    bool countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout);
     bool countVerticalPos(QPointF &newPosition, KoTextShapeData *data, QTextBlock &block, QTextLayout *layout);
     KoTextAnchor *const m_anchor;
 

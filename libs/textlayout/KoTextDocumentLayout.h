@@ -126,10 +126,8 @@ public:
     /// Add a shape to the list of shapes that the text can occupy.
     void addShape(KoShape *shape);
 
-    // add inline object
-    void insertInlineObject(KoTextAnchor * textAnchor);
     // remove all inline objects which document position is bigger or equal to resetPosition
-    void resetInlineObject(int resetPosition);
+    void resetAnchor(int resetPosition);
     // remove inline object
     void removeInlineObject(KoTextAnchor * textAnchor);
 

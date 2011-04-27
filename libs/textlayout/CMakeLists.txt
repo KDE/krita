@@ -19,6 +19,8 @@ set(textlayout_LIB_SRCS
     FrameIterator.cpp
     TableIterator.cpp
     KoTextShapeData.cpp
+    FloatingAnchorStrategy.cpp
+    InlineAnchorStrategy.cpp
 )
 
 

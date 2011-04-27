@@ -24,6 +24,8 @@
 #include "KoTextAnchor.h"
 
 class KoTextShapeData;
+class QTextBlock;
+class QTextLayout;
 
 class FloatingAnchorStrategy  : public KoAnchorStrategy
 {
@@ -34,9 +36,9 @@ public:
     /**
      * This function calculates position for linked shape.
      *
-     * @return true if new position for shape was wound
+     * @return true if new position for shape was found
      */
-    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state);
+    virtual bool positionShape();
 
     /**
      *
@@ -63,7 +65,7 @@ private:
 
     void calculateKnowledgePoint(); //calculate minimal text position from which enough information is ready to position the shape
 
-    inline bool countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, KoTextDocumentLayout::LayoutState *state,
+    inline bool countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
                                    QTextBlock &block, QTextLayout *layout);
     inline void countHorizontalPos(QPointF &newPosition, QRectF anchorBoundingRect, QRectF containerBoundingRect);
     inline bool countVerticalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect,
@@ -74,7 +76,7 @@ private:
     inline void checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect);
 
     // true if shape is inside layouted text area
-    inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextDocumentLayout::LayoutState *state,
+    inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
                                      KoTextShapeData *data);
 
     KoTextAnchor *const m_anchor;

@@ -32,6 +32,8 @@
 #include "InlineObjectExtend.h"
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
+#include "InlineAnchorStrategy.h"
+#include "FloatingAnchorStrategy.h"
 
 #include <KoTextAnchor.h>
 #include <KoInsets.h>
@@ -265,6 +267,7 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
 
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
+    //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
@@ -273,14 +276,14 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     if (obj)
         obj->updatePosition(document(), item, position, cf);
 
-    // obsolete code for testing
-#if 1
-    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(inlineTextObjectManager()->inlineTextObject(format.toCharFormat()));
-    if (anchor) { // special case anchors as positionInlineObject is called before layout; which is no good.
+    // We need some special treatment for anchors as they need to position their object during
+    // layout and not this early
+    KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
+    if (anchor) {
         KoShapeContainer *parent = anchor->shape()->parent();
         if (parent) {
             Q_ASSERT(false);
-/*
+            /*
             KWPage page = m_frameSet->pageManager()->page(parent);
             QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
             QRectF pageContentRect = parent->boundingRect();
@@ -290,17 +293,53 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             //TODO get the right position for headers and footers
             anchor->setPageContentRect(pageContentRect);
             anchor->setPageNumber(pageNumber);
-
-            // if there is no anchor strategy set send the textAnchor into the layout to create anchor strategy and position it
+*/
+            // if there is no anchor strategy set then create one
             if (!anchor->anchorStrategy()) {
-                //place anchored object outside the page view, and let the layout position it right. It is better than make it invisible.
-                anchor->shape()->setPosition(QPointF(0,100000000));
-                m_state->insertInlineObject(anchor);
+                //place anchored object far away, and let the layout position it later
+                anchor->shape()->setPosition(QPointF(-10000,0));
+
+                if (anchor->behavesAsCharacter()) {
+                    anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor));
+                } else {
+                    anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor));
+                }
+                d->textAnchors.append(anchor);
             }
-            */
         }
     }
-#endif
+}
+
+void KoTextDocumentLayout::resetAnchor(int resetPosition)
+{
+    QList<KoTextAnchor *>::iterator iterBeginErase = d->textAnchors.end();
+    QList<KoTextAnchor *>::iterator iter;
+    for (iter = d->textAnchors.begin(); iter != d->textAnchors.end(); iter++) {
+
+        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
+        if ((*iter)->positionInDocument() >= resetPosition) {
+            (*iter)->anchorStrategy()->reset();
+
+            // delete obstruction
+            if (d->obstructions.contains((*iter)->shape())) {
+                KoTextLayoutObstruction *obstruction = d->obstructions.value((*iter)->shape());
+                d->obstructions.remove((*iter)->shape());
+                delete obstruction;
+            }
+            (*iter)->setAnchorStrategy(0);
+
+            if (iterBeginErase == d->textAnchors.end()) {
+                iterBeginErase = iter;
+            }
+        }
+    }
+
+    d->textAnchors.erase(iterBeginErase,d->textAnchors.end());
+
+    // update m_textAnchorIndex if necesary
+    if (d->textAnchorIndex > d->textAnchors.size()) {
+        d->textAnchorIndex = d->textAnchors.size();
+    }
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
@@ -454,38 +493,6 @@ InlineObjectExtend KoTextDocumentLayout::inlineObjectExtend(const QTextFragment 
     if (d->inlineObjectExtends.contains(fragment.position()))
         return d->inlineObjectExtends[fragment.position()];
     return InlineObjectExtend();
-}
-
-void KoTextDocumentLayout::resetInlineObject(int resetPosition)
-{
-    QList<KoTextAnchor *>::iterator iterBeginErase = d->textAnchors.end();
-    QList<KoTextAnchor *>::iterator iter;
-    for (iter = d->textAnchors.begin(); iter != d->textAnchors.end(); iter++) {
-
-        // if the position of anchor is bigger than resetPosition than remove the anchor from layout
-        if ((*iter)->positionInDocument() >= resetPosition) {
-            (*iter)->anchorStrategy()->reset();
-
-            // delete obstruction
-            if (d->obstructions.contains((*iter)->shape())) {
-                KoTextLayoutObstruction *obstruction = d->obstructions.value((*iter)->shape());
-                d->obstructions.remove((*iter)->shape());
-                delete obstruction;
-            }
-            (*iter)->setAnchorStrategy(0);
-
-            if (iterBeginErase == d->textAnchors.end()) {
-                iterBeginErase = iter;
-            }
-        }
-    }
-
-    d->textAnchors.erase(iterBeginErase,d->textAnchors.end());
-
-    // update m_textAnchorIndex if necesary
-    if (d->textAnchorIndex > d->textAnchors.size()) {
-        d->textAnchorIndex = d->textAnchors.size();
-    }
 }
 
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions(const QRectF &rect)

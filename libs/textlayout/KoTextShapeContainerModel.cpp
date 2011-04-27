@@ -237,7 +237,7 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
         if (d->children.contains(child)) {
             Relation relation = d->children.value(child);
             if (relation.anchor) {
-                lay->resetInlineObject(relation.anchor->positionInDocument());
+                lay->resetAnchor(relation.anchor->positionInDocument());
             }
         }
     }

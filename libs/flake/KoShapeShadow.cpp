@@ -38,7 +38,7 @@ class KoShapeShadow::Private
 {
 public:
     Private()
-            : offset(0, 0), color(Qt::black), blur(8), visible(true), refCount(0) {
+            : offset(2, 2), color(Qt::black), blur(8), visible(true), refCount(0) {
     }
     QPointF offset;
     QColor color;
@@ -236,10 +236,10 @@ void KoShapeShadow::insets(KoInsets &insets) const
         return;
     }
 
-    insets.left = (d->offset.x() < 0.0) ? qAbs(d->offset.x()) : 0.0;
-    insets.top = (d->offset.y() < 0.0) ? qAbs(d->offset.y()) : 0.0;
-    insets.right = (d->offset.x() > 0.0) ? d->offset.x() : 0.0;
-    insets.bottom = (d->offset.y() > 0.0) ? d->offset.y() : 0.0;
+    insets.left = (d->offset.x() - d->blur()*3 < 0.0) ? qAbs(d->offset.x() - d->blur()*3) : 0.0;
+    insets.top = (d->offset.y() - d->blur()*3 < 0.0) ? qAbs(d->offset.y() - d->blur()*3) : 0.0;
+    insets.right = (d->offset.x() + d->blur()*3 > 0.0) ? d->offset.x() + d->blur()*3 : 0.0;
+    insets.bottom = (d->offset.y() + d->blur()*3 > 0.0) ? d->offset.y() + d->blur()*3 : 0.0;
 }
 
 bool KoShapeShadow::ref()

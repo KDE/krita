@@ -1,41 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgBumpmap</class>
- <widget class="QWidget" name="WdgBumpmap">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgBumpmap" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>472</width>
-    <height>267</height>
+    <width>474</width>
+    <height>269</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <property name="sizeConstraint">
+  <layout class="QGridLayout" name="gridLayout" >
+   <property name="sizeConstraint" >
     <enum>QLayout::SetMinimumSize</enum>
    </property>
-   <property name="margin">
+   <property name="margin" >
     <number>0</number>
    </property>
-   <item row="0" column="0" rowspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
+   <item rowspan="2" row="0" column="0" >
+    <layout class="QVBoxLayout" name="verticalLayout" >
      <item>
-      <widget class="QLabel" name="lblLayer">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <widget class="QLabel" name="lblLayer" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text">
+       <property name="text" >
         <string>&amp;Bumpmap source layer:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="KoDocumentSectionView" name="listLayers" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+      <widget class="KoDocumentSectionView" native="1" name="listLayers" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -44,32 +43,32 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="1">
-    <widget class="QGroupBox" name="grpType">
-     <property name="title">
+   <item row="0" column="1" >
+    <widget class="QGroupBox" name="grpType" >
+     <property name="title" >
       <string>&amp;Type</string>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" >
       <item>
-       <widget class="QRadioButton" name="radioLinear">
-        <property name="text">
+       <widget class="QRadioButton" name="radioLinear" >
+        <property name="text" >
          <string>&amp;Linear</string>
         </property>
-        <property name="checked">
+        <property name="checked" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioSpherical">
-        <property name="text">
+       <widget class="QRadioButton" name="radioSpherical" >
+        <property name="text" >
          <string>&amp;Spherical</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="radioSinusoidal">
-        <property name="text">
+       <widget class="QRadioButton" name="radioSinusoidal" >
+        <property name="text" >
          <string>S&amp;inusoidal</string>
         </property>
        </widget>
@@ -77,32 +76,32 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QGroupBox" name="grpOptions">
-     <property name="title">
+   <item row="0" column="2" >
+    <widget class="QGroupBox" name="grpOptions" >
+     <property name="title" >
       <string>Options</string>
      </property>
-     <layout class="QVBoxLayout">
+     <layout class="QVBoxLayout" >
       <item>
-       <widget class="QCheckBox" name="chkCompensate">
-        <property name="text">
+       <widget class="QCheckBox" name="chkCompensate" >
+        <property name="text" >
          <string>&amp;Compensate for darkening</string>
         </property>
-        <property name="checked">
+        <property name="checked" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkInvert">
-        <property name="text">
+       <widget class="QCheckBox" name="chkInvert" >
+        <property name="text" >
          <string>I&amp;nvert bumpmap</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chkTiled">
-        <property name="text">
+       <widget class="QCheckBox" name="chkTiled" >
+        <property name="text" >
          <string>&amp;Tile bumpmap</string>
         </property>
        </widget>
@@ -110,161 +109,147 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QGroupBox" name="grpSettings">
-     <property name="title">
+   <item row="1" column="1" colspan="2" >
+    <widget class="QGroupBox" name="grpSettings" >
+     <property name="title" >
       <string>Settings</string>
      </property>
-     <property name="alignment">
+     <property name="alignment" >
       <set>Qt::AlignLeading</set>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <layout class="QFormLayout" name="formLayout_2">
-        <property name="rowWrapPolicy">
-         <enum>QFormLayout::WrapLongRows</enum>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="textLabel3" >
+        <property name="text" >
+         <string>&amp;Azimuth:</string>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel3">
-          <property name="text">
-           <string>&amp;Azimuth:</string>
-          </property>
-          <property name="buddy">
-           <cstring>dblAzimuth</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="dblAzimuth">
-          <property name="maximum">
-           <double>360.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>135.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel4">
-          <property name="text">
-           <string>&amp;Elevation:</string>
-          </property>
-          <property name="buddy">
-           <cstring>dblElevation</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="dblElevation">
-          <property name="minimum">
-           <double>0.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>90.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>45.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="textLabel5">
-          <property name="text">
-           <string>&amp;Depth:</string>
-          </property>
-          <property name="buddy">
-           <cstring>dblDepth</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QDoubleSpinBox" name="dblDepth">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>65.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>3.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
+        <property name="buddy" >
+         <cstring>dblAzimuth</cstring>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="1">
-       <layout class="QFormLayout" name="formLayout">
-        <property name="rowWrapPolicy">
-         <enum>QFormLayout::WrapLongRows</enum>
+      <item row="0" column="1" >
+       <widget class="QDoubleSpinBox" name="dblAzimuth" >
+        <property name="maximum" >
+         <double>360.000000000000000</double>
         </property>
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel6">
-          <property name="text">
-           <string>&amp;X offset:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QSpinBox" name="intXOffset"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel7">
-          <property name="text">
-           <string>&amp;Y offset:</string>
-          </property>
-          <property name="buddy">
-           <cstring>intYOffset</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QSpinBox" name="intYOffset"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="textLabel8">
-          <property name="text">
-           <string>&amp;Water level:</string>
-          </property>
-          <property name="buddy">
-           <cstring>intWaterLevel</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QSpinBox" name="intWaterLevel"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="textLabel9">
-          <property name="text">
-           <string>&amp;Ambient light:</string>
-          </property>
-          <property name="buddy">
-           <cstring>intAmbient</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QSpinBox" name="intAmbient"/>
-        </item>
-       </layout>
+        <property name="value" >
+         <double>135.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="textLabel6" >
+        <property name="text" >
+         <string>&amp;X offset:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="QSpinBox" name="intXOffset" />
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="textLabel4" >
+        <property name="text" >
+         <string>&amp;Elevation:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>dblElevation</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QDoubleSpinBox" name="dblElevation" >
+        <property name="minimum" >
+         <double>0.000000000000000</double>
+        </property>
+        <property name="maximum" >
+         <double>90.000000000000000</double>
+        </property>
+        <property name="value" >
+         <double>45.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="textLabel7" >
+        <property name="text" >
+         <string>&amp;Y offset:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intYOffset</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QSpinBox" name="intYOffset" />
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="textLabel5" >
+        <property name="text" >
+         <string>&amp;Depth:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>dblDepth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QDoubleSpinBox" name="dblDepth" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimum" >
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum" >
+         <double>65.000000000000000</double>
+        </property>
+        <property name="value" >
+         <double>3.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2" >
+       <widget class="QLabel" name="textLabel8" >
+        <property name="text" >
+         <string>&amp;Water level:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intWaterLevel</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QSpinBox" name="intWaterLevel" />
+      </item>
+      <item row="3" column="2" >
+       <widget class="QLabel" name="textLabel9" >
+        <property name="text" >
+         <string>&amp;Ambient light:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intAmbient</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3" >
+       <widget class="QSpinBox" name="intAmbient" />
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
    <class>KoDocumentSectionView</class>
    <extends></extends>
-   <header location="global">KoDocumentSectionView.h</header>
+   <header location="global" >KoDocumentSectionView.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

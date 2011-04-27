@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>442</width>
-    <height>436</height>
+    <width>444</width>
+    <height>362</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -23,8 +23,11 @@
    </size>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
-    <layout class="QFormLayout" name="formLayout_3">
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,1">
      <item row="0" column="0">
       <widget class="QLabel" name="diameterLabel">
        <property name="sizePolicy">
@@ -36,7 +39,7 @@
        <property name="minimumSize">
         <size>
          <width>56</width>
-         <height>16</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -83,7 +86,7 @@
        <property name="minimumSize">
         <size>
          <width>56</width>
-         <height>16</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -130,7 +133,7 @@
        <property name="minimumSize">
         <size>
          <width>56</width>
-         <height>16</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -180,7 +183,7 @@
        <property name="minimumSize">
         <size>
          <width>48</width>
-         <height>16</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -266,98 +269,98 @@
        </property>
       </widget>
      </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Particles</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="countRadioButton">
+          <property name="text">
+           <string>Count</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="KDoubleNumInput" name="particlesSpinBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="value">
+           <double>12.000000000000000</double>
+          </property>
+          <property name="minimum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>1000.000000000000000</double>
+          </property>
+          <property name="decimals">
+           <number>0</number>
+          </property>
+          <property name="sliderEnabled">
+           <bool>true</bool>
+          </property>
+          <property name="exponentRatio">
+           <double>1.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QRadioButton" name="densityRadioButton">
+          <property name="text">
+           <string>Density</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="KDoubleNumInput" name="coverageSpin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="value">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="suffix">
+           <string>%</string>
+          </property>
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="sliderEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Particles</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QRadioButton" name="countRadioButton">
-        <property name="text">
-         <string>Count</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KDoubleNumInput" name="particlesSpinBox">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="value">
-         <double>12.000000000000000</double>
-        </property>
-        <property name="minimum">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>1000.000000000000000</double>
-        </property>
-        <property name="decimals">
-         <number>0</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-        <property name="exponentRatio">
-         <double>1.500000000000000</double>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="densityRadioButton">
-        <property name="text">
-         <string>Density</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="KDoubleNumInput" name="coverageSpin">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="value">
-         <double>0.100000000000000</double>
-        </property>
-        <property name="maximum">
-         <double>100.000000000000000</double>
-        </property>
-        <property name="singleStep">
-         <double>1.000000000000000</double>
-        </property>
-        <property name="suffix">
-         <string>%</string>
-        </property>
-        <property name="decimals">
-         <number>1</number>
-        </property>
-        <property name="sliderEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <layout class="QFormLayout" name="formLayout_2">
+    <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0" columnstretch="0,1">
      <item row="0" column="0">
       <widget class="QCheckBox" name="jitterMoveBox">
        <property name="sizePolicy">
@@ -399,14 +402,14 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QCheckBox" name="gaussianBox">
+       <property name="text">
+        <string>Gaussian distribution</string>
+       </property>
+      </widget>
+     </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="gaussianBox">
-     <property name="text">
-      <string>Gaussian distribution</string>
-     </property>
-    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer_4">
@@ -414,7 +417,7 @@
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Expanding</enum>
+      <enum>QSizePolicy::Fixed</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>

@@ -30,6 +30,8 @@
 #include <QPointer>
 #include <QByteArray>
 #include <QStringList>
+#include <QSizePolicy>
+
 namespace KoProperty
 {
 
@@ -398,6 +400,8 @@ void Property::setValue(const QVariant &value, bool rememberOldValue, bool useCo
         ch = static_cast<qlonglong>(currentValue.toDouble() * factor) != static_cast<qlonglong>(value.toDouble() * factor);
     } else if (t == QVariant::Invalid && newt == QVariant::Invalid) {
         ch = false;
+    } else if (t == QVariant::SizePolicy) {
+        ch = (currentValue.value<QSizePolicy>() != value.value<QSizePolicy>());
     }
     else {
         ch = (currentValue != value);
@@ -597,22 +601,14 @@ Property::operator= (const Property & property)
     if (&property == this)
         return *this;
 
-    if (d->listData) {
-        delete d->listData;
-        d->listData = 0;
-    }
-    if (d->children) {
-        delete d->children;
-        d->children = 0;
-    }
-    if (d->relatedProperties) {
-        delete d->relatedProperties;
-        d->relatedProperties = 0;
-    }
-    if (d->composed) {
-        delete d->composed;
-        d->composed = 0;
-    }
+    delete d->listData;
+    d->listData = 0;
+    delete d->children;
+    d->children = 0;
+    delete d->relatedProperties;
+    d->relatedProperties = 0;
+    delete d->composed;
+    d->composed = 0;
 
     d->name = property.d->name;
     d->setCaptionForDisplaying(property.captionForDisplaying());

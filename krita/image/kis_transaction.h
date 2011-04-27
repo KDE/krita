@@ -39,8 +39,7 @@ public:
     }
 
     virtual ~KisTransaction() {
-        if(m_transactionData)
-            delete m_transactionData;
+        delete m_transactionData;
     }
 
     QUndoCommand* undoCommand() {

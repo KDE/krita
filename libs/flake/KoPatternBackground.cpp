@@ -158,17 +158,14 @@ QTransform KoPatternBackground::transform() const
 void KoPatternBackground::setPattern(const QImage &pattern)
 {
     Q_D(KoPatternBackground);
-    if (d->imageData)
-        delete d->imageData;
-
+    delete d->imageData;
     d->imageData = d->imageCollection->createImageData(pattern);
 }
 
 void KoPatternBackground::setPattern(KoImageData *imageData)
 {
     Q_D(KoPatternBackground);
-    if (d->imageData)
-        delete d->imageData;
+    delete d->imageData;
 
     d->imageData = imageData;
 }

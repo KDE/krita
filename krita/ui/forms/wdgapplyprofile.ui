@@ -1,56 +1,78 @@
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgApplyProfile</class>
- <widget class="QWidget" name="WdgApplyProfile">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgApplyProfile" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>481</width>
-    <height>420</height>
+    <width>495</width>
+    <height>362</height>
    </rect>
   </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>3</hsizetype>
+    <vsizetype>3</vsizetype>
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <item>
-    <widget class="QGroupBox" name="groupBox1">
-     <property name="title">
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox1" >
+     <property name="title" >
       <string>Apply Profile</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
       <item>
-       <widget class="QLabel" name="textLabel1">
-        <property name="text">
+       <widget class="QLabel" name="textLabel1" >
+        <property name="text" >
          <string>The image data you want to paste does not have an ICM profile associated with it. If you do not select a profile, Krita will assume that the image data is encoded in the import profile defined in the Settings dialog.</string>
         </property>
-        <property name="alignment">
+        <property name="alignment" >
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
-        <property name="wordWrap">
+        <property name="wordWrap" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="lblProfile">
-          <property name="text">
+       <layout class="QHBoxLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblProfile" >
+          <property name="text" >
            <string>&amp;Profiles:</string>
           </property>
-          <property name="buddy">
+          <property name="buddy" >
            <cstring>cmbProfile</cstring>
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
-         <widget class="SqueezedComboBox" name="cmbProfile" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <item>
+         <widget class="SqueezedComboBox" native="1" name="cmbProfile" >
+          <property name="sizePolicy" >
+           <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>0</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -60,59 +82,59 @@
        </layout>
       </item>
       <item>
-       <widget class="QGroupBox" name="grpRenderIntent">
-        <property name="toolTip">
+       <widget class="QGroupBox" name="grpRenderIntent" >
+        <property name="toolTip" >
          <string/>
         </property>
-        <property name="whatsThis">
+        <property name="whatsThis" >
          <string>Rendering intent determines the bias in the color conversion.</string>
         </property>
-        <property name="title">
+        <property name="title" >
          <string>Rendering Intent</string>
         </property>
-        <layout class="QVBoxLayout">
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <property name="margin">
+        <layout class="QVBoxLayout" >
+         <property name="margin" >
           <number>9</number>
          </property>
+         <property name="spacing" >
+          <number>6</number>
+         </property>
          <item>
-          <widget class="QRadioButton" name="radioPerceptual">
-           <property name="whatsThis">
+          <widget class="QRadioButton" name="radioPerceptual" >
+           <property name="whatsThis" >
             <string>Hue hopefully maintained (but not required), lightness and saturation sacrificed to maintain the perceived color. White point changed to result in neutral grays. Intended for images.</string>
            </property>
-           <property name="text">
+           <property name="text" >
             <string>Perceptual</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioRelativeColorimetric">
-           <property name="whatsThis">
+          <widget class="QRadioButton" name="radioRelativeColorimetric" >
+           <property name="whatsThis" >
             <string>Within and outside gamut; same as Absolute Colorimetric. White point changed to result in neutral grays.</string>
            </property>
-           <property name="text">
+           <property name="text" >
             <string>Relative colorimetric</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioSaturation">
-           <property name="whatsThis">
+          <widget class="QRadioButton" name="radioSaturation" >
+           <property name="whatsThis" >
             <string>Hue and saturation maintained with lightness sacrificed to maintain saturation. White point changed to result in neutral grays. Intended for business graphics (make it colorful charts, graphs, overheads, ...)</string>
            </property>
-           <property name="text">
+           <property name="text" >
             <string>Saturation</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioAbsoluteColorimetric">
-           <property name="whatsThis">
+          <widget class="QRadioButton" name="radioAbsoluteColorimetric" >
+           <property name="whatsThis" >
             <string>Within the destination device gamut; hue, lightness and saturation are maintained. Outside the gamut; hue and lightness are maintained, saturation is sacrificed. White point for source and destination; unchanged. Intended for spot colors (Pantone, TruMatch, logo colors, ...)</string>
            </property>
-           <property name="text">
+           <property name="text" >
             <string>Absolute colorimetric</string>
            </property>
           </widget>
@@ -123,22 +145,9 @@
      </layout>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>161</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
    <class>SqueezedComboBox</class>

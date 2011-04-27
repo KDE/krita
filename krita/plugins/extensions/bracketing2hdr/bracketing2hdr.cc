@@ -159,7 +159,7 @@ void Bracketing2HDRPlugin::slotAddImages()
 
 void Bracketing2HDRPlugin::slotNewHDRLayerFromBracketing()
 {
-    if (m_wdgBracketing2HDR) delete m_wdgBracketing2HDR;
+    delete m_wdgBracketing2HDR;
     m_wdgBracketing2HDR = new Ui_WdgBracketing2HDR();
     QDialog* dialog = new QDialog(m_view);
     dialog->setModal(true);

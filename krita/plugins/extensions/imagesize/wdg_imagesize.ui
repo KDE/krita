@@ -1,44 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgImageSize</class>
- <widget class="QWidget" name="WdgImageSize">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgImageSize" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>395</width>
-    <height>380</height>
+    <width>397</width>
+    <height>382</height>
    </rect>
   </property>
-  <property name="windowTitle">
+  <property name="windowTitle" >
    <string>Image Size</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QGroupBox" name="grpResizeScale">
-     <property name="title">
+  <layout class="QGridLayout" >
+   <item row="0" column="0" colspan="2" >
+    <widget class="QGroupBox" name="grpResizeScale" >
+     <property name="title" >
       <string/>
      </property>
-     <layout class="QGridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="pixmapLabel1_2">
-        <property name="pixmap">
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
+       <widget class="QLabel" name="pixmapLabel1_2" >
+        <property name="pixmap" >
          <pixmap>image0</pixmap>
         </property>
-        <property name="scaledContents">
+        <property name="scaledContents" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
-       <spacer name="spacer2_2">
-        <property name="orientation">
+      <item row="1" column="1" colspan="2" >
+       <spacer name="spacer2_2" >
+        <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
+        <property name="sizeType" >
          <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>65</width>
           <height>20</height>
@@ -46,15 +45,15 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1" colspan="2">
-       <spacer name="spacer1_2">
-        <property name="orientation">
+      <item row="0" column="1" colspan="2" >
+       <spacer name="spacer1_2" >
+        <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
+        <property name="sizeType" >
          <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>65</width>
           <height>20</height>
@@ -62,48 +61,48 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="3">
-       <widget class="QLabel" name="pixmapLabel2_2">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <item row="0" column="3" >
+       <widget class="QLabel" name="pixmapLabel2_2" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="pixmap">
+        <property name="pixmap" >
          <pixmap>image1</pixmap>
         </property>
-        <property name="scaledContents">
+        <property name="scaledContents" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QRadioButton" name="radioResize">
-        <property name="text">
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="radioResize" >
+        <property name="text" >
          <string>&amp;Resize</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="chkCrop">
-        <property name="text">
+      <item row="2" column="0" colspan="2" >
+       <widget class="QCheckBox" name="chkCrop" >
+        <property name="text" >
          <string>&amp;Crop layers on image resize</string>
         </property>
-        <property name="checked">
+        <property name="checked" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" colspan="2">
-       <spacer name="spacer3">
-        <property name="orientation">
+      <item row="2" column="2" colspan="2" >
+       <spacer name="spacer3" >
+        <property name="orientation" >
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="sizeType">
+        <property name="sizeType" >
          <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="sizeHint" stdset="0">
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>121</width>
           <height>20</height>
@@ -111,12 +110,12 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="3">
-       <widget class="QRadioButton" name="radioScale">
-        <property name="text">
+      <item row="1" column="3" >
+       <widget class="QRadioButton" name="radioScale" >
+        <property name="text" >
          <string>&amp;Scale</string>
         </property>
-        <property name="checked">
+        <property name="checked" >
          <bool>true</bool>
         </property>
        </widget>
@@ -124,164 +123,140 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="grpPixelDimensions">
-     <property name="title">
+   <item row="1" column="0" colspan="2" >
+    <widget class="QGroupBox" name="grpPixelDimensions" >
+     <property name="title" >
       <string>&amp;Pixel Dimensions</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="lblOrignal">
-          <property name="text">
-           <string>Original:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLabel" name="lblWidth">
-              <property name="text">
-               <string>&amp;Width:</string>
-              </property>
-              <property name="buddy">
-               <cstring>intWidth</cstring>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="textLabel2">
-              <property name="text">
-               <string>&amp;Height:</string>
-              </property>
-              <property name="buddy">
-               <cstring>intHeight</cstring>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <widget class="QLabel" name="lblWidthOriginal">
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="lblHeightOriginal">
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="lblNew">
-          <property name="text">
-           <string>&amp;New:</string>
-          </property>
-          <property name="buddy">
-           <cstring>intWidth</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="KIntNumInput" name="intWidth">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="KIntNumInput" name="intHeight">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="lblPercent">
-          <property name="text">
-           <string>&amp;Percent:</string>
-          </property>
-          <property name="buddy">
-           <cstring>intWidthPercent</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <item>
-           <widget class="KIntNumInput" name="intWidthPercent">
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="referencePoint">
-             <number>100</number>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="KIntNumInput" name="intHeightPercent">
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="minimum">
-             <number>0</number>
-            </property>
-            <property name="suffix">
-             <string>%</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
+     <layout class="QGridLayout" >
+      <item row="0" column="1" >
+       <widget class="QLabel" name="lblWidth" >
+        <property name="text" >
+         <string>&amp;Width:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intWidth</cstring>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="chkConstrain">
-        <property name="text">
+      <item row="2" column="2" >
+       <widget class="KIntNumInput" name="intHeight" >
+        <property name="minimum" >
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="textLabel2" >
+        <property name="text" >
+         <string>&amp;Height:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLabel" name="lblWidthOriginal" >
+        <property name="frameShape" >
+         <enum>QFrame::WinPanel</enum>
+        </property>
+        <property name="frameShadow" >
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="lblHeightOriginal" >
+        <property name="frameShape" >
+         <enum>QFrame::WinPanel</enum>
+        </property>
+        <property name="frameShadow" >
+         <enum>QFrame::Sunken</enum>
+        </property>
+        <property name="text" >
+         <string/>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="lblOrignal" >
+        <property name="text" >
+         <string>Original:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="lblNew" >
+        <property name="text" >
+         <string>&amp;New:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="KIntNumInput" name="intWidth" >
+        <property name="minimum" >
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1" >
+       <widget class="KIntNumInput" name="intWidthPercent" >
+        <property name="value" >
+         <number>100</number>
+        </property>
+        <property name="minimum" >
+         <number>0</number>
+        </property>
+        <property name="referencePoint" >
+         <number>100</number>
+        </property>
+        <property name="suffix" >
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" >
+       <widget class="KIntNumInput" name="intHeightPercent" >
+        <property name="value" >
+         <number>100</number>
+        </property>
+        <property name="minimum" >
+         <number>0</number>
+        </property>
+        <property name="suffix" >
+         <string>%</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="lblPercent" >
+        <property name="text" >
+         <string>&amp;Percent:</string>
+        </property>
+        <property name="buddy" >
+         <cstring>intWidthPercent</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="3" >
+       <widget class="QCheckBox" name="chkConstrain" >
+        <property name="text" >
          <string>&amp;Constrain proportions</string>
         </property>
-        <property name="checked">
+        <property name="checked" >
          <bool>true</bool>
         </property>
        </widget>
@@ -289,29 +264,25 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lblFilterType">
-       <property name="text">
-        <string>Filter:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>cmbFilterType</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="KisCmbIDList" name="cmbFilterType" native="true"/>
-     </item>
-    </layout>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="lblFilterType" >
+     <property name="text" >
+      <string>Filter:</string>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy" >
+      <cstring>cmbFilterType</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="KisCmbIDList" native="1" name="cmbFilterType" />
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
    <class>KIntNumInput</class>

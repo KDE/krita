@@ -1,42 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgColorOptions</class>
- <widget class="QWidget" name="WdgColorOptions">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgColorOptions" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>156</width>
-    <height>76</height>
+    <width>158</width>
+    <height>78</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lblColor">
-       <property name="text">
-        <string>&amp;Color:</string>
-       </property>
-       <property name="buddy">
-        <cstring>bnColor</cstring>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="KColorButton" name="bnColor"/>
-     </item>
-    </layout>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <widget class="QLabel" name="lblColor" >
+     <property name="text" >
+      <string>&amp;Color:</string>
+     </property>
+     <property name="buddy" >
+      <cstring>bnColor</cstring>
+     </property>
+    </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="2" >
+    <widget class="KColorButton" name="bnColor" />
+   </item>
+   <item row="0" column="3" >
     <spacer>
-     <property name="orientation">
+     <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeType">
+     <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0">
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>21</width>
        <height>20</height>
@@ -44,15 +39,15 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item row="1" column="1" >
     <spacer>
-     <property name="orientation">
+     <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
+     <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0">
+     <property name="sizeHint" stdset="0" >
       <size>
        <width>20</width>
        <height>21</height>
@@ -62,8 +57,8 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
+ <layoutdefault spacing="6" margin="11" />
+  <customwidgets>
   <customwidget>
    <class>KColorButton</class>
    <extends>QPushButton</extends>

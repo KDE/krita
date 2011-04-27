@@ -186,9 +186,7 @@ KisImage::~KisImage()
 {
     dbgImage << "deleting kisimage" << objectName();
 
-    if (m_d->projection) {
-        delete m_d->projection;
-    }
+    delete m_d->projection;
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;

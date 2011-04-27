@@ -60,7 +60,7 @@ protected slots:
 
 private:
 
-    Ui_WdgGeneratorLayer dlgWidget;
+    Ui_WdgDlgGeneratorLayer dlgWidget;
     bool m_customName;
     bool m_freezeName;
 };

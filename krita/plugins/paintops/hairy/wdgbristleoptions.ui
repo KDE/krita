@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>355</height>
+    <height>357</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,15 +22,15 @@
     <height>285</height>
    </size>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0" colspan="2">
+    <layout class="QGridLayout" name="gridLayout" columnstretch="0,1">
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="minimumSize">
         <size>
          <width>90</width>
-         <height>10</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -41,15 +41,12 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="scaleBox" native="true"/>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="minimumSize">
         <size>
          <width>90</width>
-         <height>10</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -57,15 +54,12 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="rndBox" native="true"/>
-     </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
         <size>
          <width>90</width>
-         <height>10</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -76,15 +70,12 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="KisDoubleSliderSpinBox" name="shearBox" native="true"/>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="density">
        <property name="minimumSize">
         <size>
          <width>90</width>
-         <height>10</height>
+         <height>0</height>
         </size>
        </property>
        <property name="text">
@@ -95,12 +86,21 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="rndBox" native="true"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="shearBox" native="true"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="KisDoubleSliderSpinBox" name="scaleBox" native="true"/>
+     </item>
      <item row="3" column="1">
       <widget class="KisDoubleSliderSpinBox" name="densityBox" native="true"/>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QCheckBox" name="mousePressureCBox">
      <property name="text">
       <string>Mouse pressure</string>
@@ -110,7 +110,7 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QCheckBox" name="thresholdCBox">
      <property name="text">
       <string>Threshold</string>
@@ -120,28 +120,28 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="3" column="0">
     <widget class="QCheckBox" name="connectedCBox">
      <property name="text">
       <string>Connect hairs</string>
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="QCheckBox" name="compositingCBox">
-     <property name="text">
-      <string>Composite bristles</string>
-     </property>
-    </widget>
-   </item>
-   <item>
+   <item row="4" column="0">
     <widget class="QCheckBox" name="antialiasCBox">
      <property name="text">
       <string>Anti-aliasing</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="4" column="1">
+    <widget class="QCheckBox" name="compositingCBox">
+     <property name="text">
+      <string>Composite bristles</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

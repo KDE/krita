@@ -440,8 +440,10 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
     }
 
+    bool hasBulletRelativeSize=false;
     if (style.localName() == "list-level-style-bullet") {   // list with bullets
 
+        setRelativeBulletSize(45); //arbitary value for bulleted list
         // special case bullets:
         //qDebug() << QChar(0x2202) << QChar(0x25CF) << QChar(0xF0B7) << QChar(0xE00C)
         //<< QChar(0xE00A) << QChar(0x27A2)<< QChar(0x2794) << QChar(0x2714) << QChar(0x2d) << QChar(0x2717);
@@ -512,10 +514,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
         }
         QString size = style.attributeNS(KoXmlNS::text, "bullet-relative-size", QString());
         if (!size.isEmpty()) {
+            hasBulletRelativeSize=true;
             setRelativeBulletSize(size.replace("%", "").toInt());
         }
 
     } else if (style.localName() == "list-level-style-number" || style.localName() == "outline-level-style") { // it's a numbered list
+
+        setRelativeBulletSize(100); //arbitary value for numbered list
 
         KoOdfNumberDefinition numberDefinition;
         numberDefinition.loadOdf(style);
@@ -647,7 +652,7 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             charStyle->loadOdf(scontext);
             context.styleStack().restore();
             setMarkCharacterStyle(charStyle);
-            if (relativeBulletSize() ==100)        //if not set in bullet-relative-size or any where before then set it now
+            if (hasBulletRelativeSize==false && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize))        //if not set in bullet-relative-size or any where before then set it now
                 setRelativeBulletSize((int)charStyle->percentageFontSize());
         }
     }

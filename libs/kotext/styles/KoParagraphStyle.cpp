@@ -1412,6 +1412,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         }
         setBackground(brush);
     }
+    
+    // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
+    if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
+        setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
+    }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // AlignLastLine,

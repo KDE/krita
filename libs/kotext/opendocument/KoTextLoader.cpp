@@ -1245,48 +1245,56 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     } else {
         loadBody(e, cursor);
     }
-
-    if (!current.textList()) {
-        if (!d->currentList->style()->hasLevelProperties(level)) {
-            KoListLevelProperties llp;
-            // Look if one of the lower levels are defined to we can copy over that level.
-            for(int i = level - 1; i >= 0; --i) {
-                if(d->currentList->style()->hasLevelProperties(i)) {
-                    llp = d->currentList->style()->levelProperties(i);
-                    break;
+    
+    if (!cursor.blockFormat().boolProperty(KoParagraphStyle::ForceDisablingList)) {
+        if (!current.textList()) {
+            if (!d->currentList->style()->hasLevelProperties(level)) {
+                KoListLevelProperties llp;
+                // Look if one of the lower levels are defined to we can copy over that level.
+                for(int i = level - 1; i >= 0; --i) {
+                    if(d->currentList->style()->hasLevelProperties(i)) {
+                        llp = d->currentList->style()->levelProperties(i);
+                        break;
+                    }
                 }
+                llp.setLevel(level);
+            // TODO make the 10 configurable
+                llp.setIndent(level * 10.0);
+                d->currentList->style()->setLevelProperties(llp);
             }
-            llp.setLevel(level);
-           // TODO make the 10 configurable
-            llp.setIndent(level * 10.0);
-            d->currentList->style()->setLevelProperties(llp);
+
+            d->currentList->add(current, level);
         }
 
-        d->currentList->add(current, level);
+        if (listHeader)
+            blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
+
+        if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
+            int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
+            blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
+        }
+
+
+        // mark intermediate paragraphs as unnumbered items
+        QTextCursor c(current);
+        c.mergeBlockFormat(blockFormat);
+        while (c.block() != cursor.block()) {
+            c.movePosition(QTextCursor::NextBlock);
+            if (c.block().textList()) // a sublist
+                break;
+            blockFormat = c.blockFormat();
+            blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
+            c.setBlockFormat(blockFormat);
+            d->currentList->add(c.block(), level);
+        }
     }
-
-    if (listHeader)
-        blockFormat.setProperty(KoParagraphStyle::IsListHeader, true);
-
-    if (e.hasAttributeNS(KoXmlNS::text, "start-value")) {
-        int startValue = e.attributeNS(KoXmlNS::text, "start-value", QString()).toInt();
-        blockFormat.setProperty(KoParagraphStyle::ListStartValue, startValue);
+    else
+    {
+        QTextBlockFormat fmt = cursor.blockFormat();
+        fmt.clearProperty(KoParagraphStyle::ForceDisablingList);
+        cursor.setBlockFormat(fmt);
     }
-
-
-    // mark intermediate paragraphs as unnumbered items
-    QTextCursor c(current);
-    c.mergeBlockFormat(blockFormat);
-    while (c.block() != cursor.block()) {
-        c.movePosition(QTextCursor::NextBlock);
-        if (c.block().textList()) // a sublist
-            break;
-        blockFormat = c.blockFormat();
-        blockFormat.setProperty(listHeader ? KoParagraphStyle::IsListHeader : KoParagraphStyle::UnnumberedListItem, true);
-        c.setBlockFormat(blockFormat);
-        d->currentList->add(c.block(), level);
-    }
-        
+    
     if (e.attributeNS(KoXmlNS::delta, "insertion-type") != "")
         d->closeChangeRegion(e);
     kDebug(32500) << "text-style:" << KoTextDebug::textAttributes(cursor.blockCharFormat());

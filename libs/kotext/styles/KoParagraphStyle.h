@@ -128,10 +128,11 @@ public:
 
         // numbering
         LineNumbering,           ///< bool, specifies whether lines should be numbered in this paragraph
-        LineNumberStartValue     ///< integer value that specifies the number for the first line in the paragraph
+        LineNumberStartValue,    ///< integer value that specifies the number for the first line in the paragraph
 
 // do 15.5.24
 // continue at 15.5.28
+        ForceDisablingList       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
     };
 
     /// Constructor

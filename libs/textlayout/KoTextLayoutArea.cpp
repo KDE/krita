@@ -385,6 +385,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
             if (acceptsPageBreak()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                Q_ASSERT(!cursor->it.atEnd());
                 ++(cursor->it);
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y);

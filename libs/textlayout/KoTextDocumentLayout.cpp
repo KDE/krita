@@ -68,6 +68,7 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
+       , isLayouting(false)
        , layoutScheduled(false)
        , continuousLayout(true)
        , layoutBlocked(false)
@@ -92,6 +93,7 @@ public:
 
     qreal defaultTabSizing;
     qreal y;
+    bool isLayouting;
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
@@ -378,6 +380,21 @@ void KoTextDocumentLayout::layout()
         return;
     }
 
+    class LayoutState {
+        public:
+            LayoutState(KoTextDocumentLayout::Private *_d) : d(_d) {
+                Q_ASSERT(!d->isLayouting);
+                d->isLayouting = true;
+            }
+            ~LayoutState() {
+                Q_ASSERT(d->isLayouting);
+                d->isLayouting = false;
+            }
+        private:
+            KoTextDocumentLayout::Private *d;
+    };
+    LayoutState layoutstate(d);
+
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
@@ -460,7 +477,7 @@ void KoTextDocumentLayout::layout()
 
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutScheduled) {
+    if (d->layoutScheduled || d->isLayouting) {
         return;
     }
     d->layoutScheduled = true;
@@ -472,7 +489,8 @@ void KoTextDocumentLayout::executeScheduledLayout()
     // Only do the actual layout if it wasn't done meanwhile by someone else.
     if (d->layoutScheduled) {
         d->layoutScheduled = false;
-        layout();
+        if (!d->isLayouting)
+            layout();
     }
 }
 

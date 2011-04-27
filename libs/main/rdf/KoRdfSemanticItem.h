@@ -126,7 +126,7 @@ protected:
      * shown to the user.
      *
      */
-    virtual void importFromDataComplete(const QByteArray &ba, KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
+    virtual void importFromDataComplete(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0);
 
     friend class KoSemanticStylesheetsEditor;
     friend class KoSemanticStylesheet;
@@ -142,7 +142,7 @@ public:
     /**
      * The document Rdf object that this semantic item is associated with.
      */
-    KoDocumentRdf *documentRdf() const;
+    const KoDocumentRdf *documentRdf() const;
 
     /**
      * A Semantic Item can appear multiple times in a document. For
@@ -252,7 +252,7 @@ public:
      * classNames(). Useful for menus and other places that want to
      * allow the user to create new SemanticItem Objects.
      */
-    static KoRdfSemanticItem* createSemanticItem(QObject *parent, KoDocumentRdf *rdf, const QString &klass);
+    static KoRdfSemanticItem* createSemanticItem(QObject *parent, const KoDocumentRdf *rdf, const QString &semanticClass);
 
     /**
      * Get the system semantic stylesheets that are supported for this

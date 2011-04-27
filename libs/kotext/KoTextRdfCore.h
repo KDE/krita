@@ -53,8 +53,8 @@ bool saveRdf(Soprano::Model *model, Soprano::StatementIterator triples,
  * to maintain xml:id links from the model so they will be valid with
  * the content.xml that generated the idmap.
  */
-bool createAndSaveManifest(Soprano::Model *model,
-        const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
+bool createAndSaveManifest(const Soprano::Model *model,
+                           const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter);
 
 /**
  * Load the manifest.rdf file from the ODF container store

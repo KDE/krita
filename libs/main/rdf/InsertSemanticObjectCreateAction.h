@@ -33,7 +33,7 @@ private slots:
     virtual void activated();
 
 private:
-    QString m_klass;
+    QString m_semanticClass;
 };
 
 #endif

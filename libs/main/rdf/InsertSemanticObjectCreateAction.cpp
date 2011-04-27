@@ -35,7 +35,7 @@ InsertSemanticObjectCreateAction::InsertSemanticObjectCreateAction(
     KoDocumentRdf *rdf,
     const QString &name)
         : InsertSemanticObjectActionBase(canvas, rdf, name),
-        m_klass(name)
+        m_semanticClass(name)
 {
 }
 
@@ -50,9 +50,9 @@ void InsertSemanticObjectCreateAction::activated()
     QVBoxLayout *lay = new QVBoxLayout(widget);
     widget->setLayout(lay);
     lay->setMargin(0);
-    kDebug(30015) << "klass:" << m_klass;
+    kDebug(30015) << "semanticClass:" << m_semanticClass;
     KoRdfSemanticItem *semItem = KoRdfSemanticItem::createSemanticItem(
-                                   m_rdf, m_rdf, m_klass);
+                                   m_rdf, m_rdf, m_semanticClass);
     QWidget *w = semItem->createEditor(widget);
     lay->addWidget(w);
     KPageDialog dialog(m_canvas->canvasWidget());

@@ -33,7 +33,7 @@ KoDocumentRdfBase::KoDocumentRdfBase(KoDocument *parent)
 {
 }
 
-Soprano::Model *KoDocumentRdfBase::model() const
+const Soprano::Model *KoDocumentRdfBase::model() const
 {
     return 0;
 }

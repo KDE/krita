@@ -230,7 +230,7 @@ public:
      * Get the Soprano::Model that contains all the Rdf
      * You do not own the model, do not delete it.
      */
-    virtual Soprano::Model *model() const;
+    virtual const Soprano::Model *model() const;
 
     /**
      * Convert an inlineRdf object into a Soprano::Statement
@@ -242,7 +242,7 @@ public:
      * start and end position for that semitem. If there is no semitem
      * with the \p xmlId then 0,0 is returned.
      */
-    QPair<int, int> findExtent(const QString &xmlId);
+    QPair<int, int> findExtent(const QString &xmlId) const;
 
     /**
      * Look for the semitem that is at or surrounding the cursor given. Note that if there
@@ -251,16 +251,16 @@ public:
      *
      * <start-a> ... <start-b> ... cursor ... <end-b> ... <end-a>
      */
-    QPair<int, int> findExtent(QTextCursor &cursor);
-    QPair<int, int> findExtent(KoTextEditor *handler);
+    QPair<int, int> findExtent(QTextCursor &cursor) const;
+    QPair<int, int> findExtent(KoTextEditor *handler) const;
 
     /**
      * find the xmlid of the semitem that is at or surrounding the cursor given. As with
      * findExtent() this will be only the most nested semitem.
      * @see findExtent()
      */
-    QString findXmlId(QTextCursor &cursor);
-    QString findXmlId(KoTextEditor *cursor);
+    QString findXmlId(QTextCursor &cursor) const;
+    QString findXmlId(KoTextEditor *cursor) const;
 
 
     /**
@@ -296,7 +296,7 @@ public:
      * Find an inline Rdf object from the xml:id which
      * it has in the content.xml file
      */
-    KoTextInlineRdf* findInlineRdfByID(const QString &xmlid);
+    KoTextInlineRdf* findInlineRdfByID(const QString &xmlid) const;
 
     /**
      * Obtain a list of Contact/FOAF semantic objects, if any, for the Rdf
@@ -348,18 +348,18 @@ public:
      * look for and add
      * ?s2 ?p2 ?s
      */
-    void expandStatementsReferencingSubject(Soprano::Model *model);
+    void expandStatementsReferencingSubject(Soprano::Model *model) const;
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?o ?p2 ?o2
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model);
+    void expandStatementsSubjectPointsTo(Soprano::Model *model) const;
 
     /**
      * Add n ?p ?o from m_model to model
      */
-    void expandStatementsSubjectPointsTo(Soprano::Model *model, const Soprano::Node &n);
+    void expandStatementsSubjectPointsTo(Soprano::Model *model, const Soprano::Node &n) const;
 
     /**
      * Rdf allows for linked lists to be serialized as a graph. This method will
@@ -375,19 +375,19 @@ public:
      * ?nextN rdf:first  ?valueN
      * ?nextN rdf:rest   rdf:nil
      */
-    void expandStatementsToIncludeRdfLists(Soprano::Model *model);
+    void expandStatementsToIncludeRdfLists(Soprano::Model *model) const;
 
     /**
      * If model contains ?s ?p ?o
      * look for and add
      * ?s ?p3 ?o3
      */
-    void expandStatementsToIncludeOtherPredicates(Soprano::Model *model);
+    void expandStatementsToIncludeOtherPredicates(Soprano::Model *model) const;
 
     /**
      * One round of all expandStatements methods
      */
-    void expandStatements(Soprano::Model *model);
+    void expandStatements(Soprano::Model *model) const;
 
     KAction* createInsertSemanticObjectReferenceAction(KoCanvasBase *host);
     QList<KAction*> createInsertSemanticObjectNewActions(KoCanvasBase *host);
@@ -468,7 +468,7 @@ private:
      */
     void expandStatementsToIncludeRdfListsRecurse(Soprano::Model *model,
             QList<Soprano::Statement> &addList,
-            const Soprano::Node &n);
+            const Soprano::Node &n) const;
 
 
     /**
@@ -497,7 +497,7 @@ private:
      * content.xml, those Rdf statements must be saved as the
      * content.xml file is generated.
      */
-    bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, Soprano::Node &context);
+    bool saveRdf(KoStore *store, KoXmlWriter *manifestWriter, const Soprano::Node &context) const;
 
 
     /**
@@ -517,21 +517,21 @@ signals:
      * semanticObjectViewSiteUpdated is emitted the view will take care
      * of reflowing the semanitc item using it's stylesheet.
      */
-    void semanticObjectAdded(KoRdfSemanticItem *item);
-    void semanticObjectUpdated(KoRdfSemanticItem *item);
-    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
+    void semanticObjectAdded(KoRdfSemanticItem *item) const;
+    void semanticObjectUpdated(KoRdfSemanticItem *item) const;
+    void semanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid) const;
 
 public:
-    void emitSemanticObjectAdded(KoRdfSemanticItem *item);
+    void emitSemanticObjectAdded(KoRdfSemanticItem *item) const;
     void emitSemanticObjectUpdated(KoRdfSemanticItem *item);
     void emitSemanticObjectViewSiteUpdated(KoRdfSemanticItem *item, const QString &xmlid);
-    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item);
+    void emitSemanticObjectAddedConst(KoRdfSemanticItem *const item) const;
 
     /**
      * You should use the KoRdfSemanticItem::userStylesheets() method instead of this one.
      * This is mainly an internal method to allow user stylesheets to be managed per document.
      */
-    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className);
+    QList<KoSemanticStylesheet*> userStyleSheetList(const QString& className) const;
     void setUserStyleSheetList(const QString& className,const QList<KoSemanticStylesheet*>& l);
 
 private:

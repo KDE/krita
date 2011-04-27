@@ -39,7 +39,7 @@ RdfSemanticTreeWidgetSelectAction::~RdfSemanticTreeWidgetSelectAction()
 
 void RdfSemanticTreeWidgetSelectAction::activated()
 {
-    KoDocumentRdf *rdf = si->documentRdf();
+    const KoDocumentRdf *rdf = si->documentRdf();
     QString xmlid = rdf->findXmlId(editor());
     kDebug(30015) << "selecting xmlid:" << xmlid;
     KoRdfSemanticItemViewSite vs(si, xmlid);

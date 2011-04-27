@@ -855,7 +855,7 @@ void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)
 {
     m_boundingRect.setTop(m_top + qMin(qreal(0.0), offset));
     m_boundingRect.setBottom(m_bottom + qMax(qreal(0.0), offset));
-    Q_ASSERT_X(m_boundingRect.top() <= m_boundingRect.bottom() && m_boundingRect.left() <= m_boundingRect.bottom(), __FUNCTION__, "Bounding-rect is not normalized");
+    Q_ASSERT_X(m_boundingRect.top() <= m_boundingRect.bottom(), __FUNCTION__, "Bounding-rect is not normalized");
     m_verticalAlignOffset = offset;
 }
 
@@ -1037,6 +1037,7 @@ void KoTextLayoutArea::setReferenceRect(qreal left, qreal right, qreal top, qrea
     m_right = right;
     m_top = top;
     m_boundingRect = QRectF(left, top, right - left, 0.0);
+    Q_ASSERT_X(m_boundingRect.top() <= m_boundingRect.bottom() && m_boundingRect.left() <= m_boundingRect.right(), __FUNCTION__, "Bounding-rect is not normalized");
     m_maximalAllowedBottom = maximumAllowedBottom;
 }
 
@@ -1068,6 +1069,7 @@ qreal KoTextLayoutArea::bottom() const
 void KoTextLayoutArea::setBottom(qreal bottom)
 {
     m_boundingRect.setBottom(bottom + qMax(qreal(0.0), m_verticalAlignOffset));
+    Q_ASSERT_X(m_boundingRect.top() <= m_boundingRect.bottom(), __FUNCTION__, "Bounding-rect is not normalized");
     m_bottom = bottom;
 }
 

@@ -86,11 +86,18 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(posInDocument);
 
     KoTextPage *page = 0;
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    if (lay) {
-        KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
-        if (rootArea) {
-            page = rootArea->page();
+    if (m_type != PageCount) {
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+        if (lay) {
+            KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
+            if (rootArea) {
+                page = rootArea->page();
+            }
+            else {
+                // the text is not yet layouted therefore we don't get the rootArea
+                // if we don't do that we get an endless change of the variable.
+                return;
+            }
         }
     }
     int pagenumber = 0;
@@ -99,13 +106,19 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
     case PageCount:
         break;
     case PageNumber:
-        if (value().isEmpty() || ! m_fixed) {
+    {
+        QString currentValue = value();
+        if (currentValue.isEmpty() || ! m_fixed) {
             if (page) {
                 pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
             }
-            setValue(pagenumber >= 0 ? QString::number(pagenumber) : QString());
+            QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
+            // only update value when changed
+            if (currentValue != newValue) {
+                setValue(newValue);
+            }
         }
-        break;
+    }   break;
     case PageContinuation:
         if (page) {
             pagenumber = page->pageNumber(m_pageselect);

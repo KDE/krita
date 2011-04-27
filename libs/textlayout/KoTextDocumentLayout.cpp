@@ -253,7 +253,9 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         return 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        QRectF rect = rootArea->boundingRect();
+        QRectF rect = rootArea->boundingRect(); // should already be normalized()
+        if (!rect.isValid()) // ignore the rootArea if it has a size of QSizeF(0,0)
+            continue;
         QPointF pos = line.position();
         qreal x = pos.x();
         qreal y = pos.y();

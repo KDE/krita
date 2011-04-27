@@ -855,6 +855,7 @@ void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)
 {
     m_boundingRect.setTop(m_top + qMin(qreal(0.0), offset));
     m_boundingRect.setBottom(m_bottom + qMax(qreal(0.0), offset));
+    Q_ASSERT_X(m_boundingRect.top() <= m_boundingRect.bottom() && m_boundingRect.left() <= m_boundingRect.bottom(), __FUNCTION__, "Bounding-rect is not normalized");
     m_verticalAlignOffset = offset;
 }
 

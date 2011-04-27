@@ -253,8 +253,13 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         return 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (rootArea->boundingRect().contains(line.position()))
+        QRectF rect = rootArea->boundingRect();
+        QPointF pos = line.position();
+        qreal x = pos.x();
+        qreal y = pos.y();
+        if (x >= rect.x() && x<= rect.right() && y >= rect.y() && y <= rect.bottom()) {
             return rootArea;
+        }
     }
     return 0;
 }

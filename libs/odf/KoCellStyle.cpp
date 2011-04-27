@@ -31,6 +31,7 @@ KoCellStyle::KoCellStyle()
 : KoStyle()
 , m_borders(new KoBorder)
 , m_backgroundColor()
+, m_backgroundOpacity(0.0)
 , m_leftPadding(0.0)
 , m_topPadding(0.0)
 , m_rightPadding(0.0)
@@ -78,6 +79,16 @@ QColor KoCellStyle::backgroundColor() const
 void KoCellStyle::setBackgroundColor(const QColor& color)
 {
     m_backgroundColor = color;
+}
+
+void KoCellStyle::setBackgroundOpacity(qreal opacity)
+{
+    m_backgroundOpacity = opacity;
+}
+
+qreal KoCellStyle::backgroundOpacity() const
+{
+    return m_backgroundOpacity;
 }
 
 qreal KoCellStyle::topPadding() const
@@ -158,10 +169,12 @@ void KoCellStyle::setParagraphStyle(const KoGenStyle& style)
 void KoCellStyle::prepareStyle( KoGenStyle& style ) const
 {
     m_borders->saveOdf(style);
-    if(m_backgroundColor.isValid()) {
+    if (m_backgroundColor.isValid()) {
         style.addProperty("fo:background-color", m_backgroundColor.name());
     }
-
+    if (m_backgroundOpacity != 0.0) {
+        style.addProperty("draw:opacity", QString("%1%").arg(m_backgroundOpacity), KoGenStyle::GraphicType);
+    }
     if(m_leftPadding != 0) {
         style.addPropertyPt("fo:padding-left", m_leftPadding);
     }

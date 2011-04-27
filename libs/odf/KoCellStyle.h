@@ -43,6 +43,9 @@ public:
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
+    void setBackgroundOpacity(qreal opacity);
+    qreal backgroundOpacity() const;
+
     qreal leftPadding() const;
     void setLeftPadding(qreal padding);
 
@@ -75,6 +78,7 @@ protected:
 private:
     KoBorder* m_borders;
     QColor m_backgroundColor;
+    qreal m_backgroundOpacity;
 
     qreal m_leftPadding;
     qreal m_topPadding;

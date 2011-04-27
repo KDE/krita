@@ -25,8 +25,10 @@
 #include "SvmGraphicsContext.h"
 
 
+class QPoint;
 class QRect;
 class QPolygon;
+class QString;
 
 
 /**
@@ -87,9 +89,12 @@ public:
        \note the line is not meant to be closed (i.e. do not connect
        the last point to the first point) or filled.
     */
-    virtual void polyLine( SvmGraphicsContext &context, const QPolygon &polyline ) = 0;
+    virtual void polyLine(SvmGraphicsContext &context, const QPolygon &polyline) = 0;
 
-    virtual void polygon( SvmGraphicsContext &context, const QPolygon &polygon ) = 0;
+    virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon) = 0;
+
+    virtual void textArray(SvmGraphicsContext &context,
+                           const QPoint &point, const QString &string) = 0;
 };
 
 

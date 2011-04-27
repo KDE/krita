@@ -273,6 +273,24 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_TEXT_ACTION:
         case META_TEXTARRAY_ACTION:
+            {
+                QPoint   startPoint;
+                quint16  strLength;
+                QString  string;
+
+                stream >> startPoint;
+                stream >> strLength;
+                for (uint i = 0; i < strLength; ++i) {
+                    quint8  ch;
+                    stream >> ch;
+                    string += char(ch);
+                }
+
+                // FIXME: Much more here
+                kDebug(31000) << "Text: " << startPoint << string;
+                mBackend->textArray(mContext, startPoint, string);
+            }
+            break;
         case META_STRETCHTEXT_ACTION:
         case META_TEXTRECT_ACTION:
         case META_BMP_ACTION:

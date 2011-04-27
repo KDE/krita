@@ -383,7 +383,7 @@ bool SvmParser::parse(const QByteArray &data)
 //                         Private methods
 
 
-void SvmParser::parseRect( QDataStream &stream, QRect &rect)
+void SvmParser::parseRect(QDataStream &stream, QRect &rect)
 {
     qint32 left;
     qint32 top;
@@ -401,7 +401,7 @@ void SvmParser::parseRect( QDataStream &stream, QRect &rect)
     rect.setBottom(bottom);
 }
 
-void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
+void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
 {
     quint16   numPoints;
     QPoint    point;
@@ -410,6 +410,16 @@ void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
     for (uint i = 0; i < numPoints; ++i) {
         stream >> point;
         polygon << point;
+    }
+}
+
+void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
+{
+    qDebug() << "Version: " << version;
+    for (uint i = 0; i < totalSize; ++i) {
+        quint8  temp;
+        stream >> temp;
+        qDebug() << hex << i << temp << dec;
     }
 }
 

@@ -42,8 +42,10 @@ class SVM_EXPORT SvmParser
     bool parse(const QByteArray &data);
 
  private:
-    void parseRect( QDataStream &stream, QRect &rect);
-    void parsePolygon( QDataStream &stream, QPolygon &polygon);
+    void parseRect(QDataStream &stream, QRect &rect);
+    void parsePolygon(QDataStream &stream, QPolygon &polygon);
+
+    void dumpAction(QDataStream &stream, quint16 version, quint32 totalSize);
 
  private:
     SvmGraphicsContext   mContext;

@@ -62,7 +62,7 @@ public:
     bool isStartingAt(FrameIterator *cursor) const;
 
     /// Layouts as much as we can
-    bool layout(FrameIterator *cursor);
+    virtual bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
     QRectF boundingRect() const;

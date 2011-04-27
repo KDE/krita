@@ -69,6 +69,8 @@ public:
        , defaultTabSizing(0)
        , y(0)
        , layoutScheduled(false)
+       , continuousLayout(true)
+       , layoutBlocked(false)
     {
     }
     KoStyleManager *styleManager;
@@ -91,6 +93,8 @@ public:
     qreal defaultTabSizing;
     qreal y;
     bool layoutScheduled;
+    bool continuousLayout;
+    bool layoutBlocked;
 };
 
 
@@ -233,7 +237,8 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 //TODO FIXME make corresponding root area as dirty and then do layout
 // right now we are just marking all as dirty
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        rootArea->setDirty();
+        if (!rootArea->isDirty())
+            rootArea->setDirty();
     }
     emitLayoutIsDirty();
 }
@@ -362,6 +367,10 @@ void KoTextDocumentLayout::emitLayoutIsDirty()
 
 void KoTextDocumentLayout::layout()
 {
+    if (d->layoutBlocked) {
+        return;
+    }
+
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
@@ -462,7 +471,22 @@ void KoTextDocumentLayout::executeScheduledLayout()
 
 bool KoTextDocumentLayout::continuousLayout()
 {
-    return true;
+    return d->continuousLayout;
+}
+
+void KoTextDocumentLayout::setContinuousLayout(bool continuous)
+{
+    d->continuousLayout = continuous;
+}
+
+void KoTextDocumentLayout::setBlockLayout(bool block)
+{
+    d->layoutBlocked = block;
+}
+
+bool KoTextDocumentLayout::layoutBlocked() const
+{
+    return d->layoutBlocked;
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const

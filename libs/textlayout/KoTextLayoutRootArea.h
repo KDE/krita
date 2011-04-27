@@ -41,7 +41,7 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
-    bool layout(FrameIterator *cursor);
+    virtual bool layout(FrameIterator *cursor);
 
     /// Sets an associated shape which can be retrieved with associatedShape()
     /// KoTextLayoutRootArea doesn't use it for anything.

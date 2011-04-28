@@ -124,18 +124,18 @@ class KoTextWriter::Private
 {
 public:
     explicit Private(KoShapeSavingContext &context)
-    : context(context),
-    sharedData(0),
-    writer(0),
-    layout(0),
-    styleManager(0),
-    changeTracker(0),
-    rdfData(0),
-    splitEndBlockNumber(-1),
-    splitRegionOpened(false),
-    splitIdCounter(1),
-    deleteMergeRegionOpened(false),
-    deleteMergeEndBlockNumber(-1)
+        : context(context),
+          sharedData(0),
+          writer(0),
+          layout(0),
+          styleManager(0),
+          changeTracker(0),
+          rdfData(0),
+          splitEndBlockNumber(-1),
+          splitRegionOpened(false),
+          splitIdCounter(1),
+          deleteMergeRegionOpened(false),
+          deleteMergeEndBlockNumber(-1)
     {
         writer = &context.xmlWriter();
         changeStack.push(0);
@@ -183,7 +183,7 @@ public:
     int checkForListChange(const QTextBlock &block);
     int checkForTableRowChange(int position);
     int checkForTableColumnChange(int position);
-    
+
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
@@ -1662,7 +1662,6 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
-    KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {

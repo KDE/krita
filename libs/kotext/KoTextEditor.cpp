@@ -364,7 +364,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
                 QTextCursor cursor(block);
                 cursor.setPosition(fragment.position());
                 QTextCharFormat fm = fragment.charFormat();
-                
+
                 if (fm.hasProperty(KoCharacterStyle::ChangeTrackerId)) {
                     fm.clearProperty(KoCharacterStyle::ChangeTrackerId);
                     int to = qMin(end, fragment.position() + fragment.length());
@@ -415,19 +415,21 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
             changeId = (idBefore)?idBefore:idAfter;
 
             switch (changeType) {//TODO: this whole thing actually needs to be done like a visitor. If the selection contains several change regions, the parenting needs to be individualised.
-                case KoGenChange::InsertChange:
-                    if (!changeId)
-                        changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+            case KoGenChange::InsertChange:
+                if (!changeId)
+                    changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
                 break;
-                case KoGenChange::FormatChange:
-                    if (!changeId)
-                        changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
+            case KoGenChange::FormatChange:
+                if (!changeId)
+                    changeId = KoTextDocument(d->document).changeTracker()->getFormatChangeId(title, format, prevFormat, 0);
                 break;
-                case KoGenChange::DeleteChange:
-                    //this should never be the case
+            case KoGenChange::DeleteChange:
+                //this should never be the case
                 break;
+            default:
+                ;// do nothing
             }
-    
+
             if (applyToWholeBlock) {
                 selection.movePosition(QTextCursor::StartOfBlock);
                 selection.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -970,7 +972,7 @@ void KoTextEditor::insertTable(int rows, int columns)
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
         else
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
-        
+
         if (!changeId)
             changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
 
@@ -993,8 +995,8 @@ void KoTextEditor::insertTable(int rows, int columns)
 
             cellStyle.applyStyle(format);
             cell.setFormat(format);
-        }    
-    }    
+        }
+    }
 
     d->updateState(KoTextEditor::Private::NoOp);
 }

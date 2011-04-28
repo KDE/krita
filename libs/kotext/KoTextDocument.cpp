@@ -124,7 +124,12 @@ void KoTextDocument::setChangeTracker(KoChangeTracker *changeTracker)
 KoChangeTracker *KoTextDocument::changeTracker() const
 {
     QVariant resource = m_document->resource(KoTextDocument::ChangeTrackerResource, ChangeTrackerURL);
-    return resource.value<KoChangeTracker *>();
+    if (resource.isValid()) {
+        return resource.value<KoChangeTracker *>();
+    }
+    else {
+        return 0;
+    }
 }
 
 void KoTextDocument::setNotesConfiguration(KoOdfNotesConfiguration *notesConfiguration)

@@ -40,7 +40,7 @@ public:
      * valid for the lifetime of the object.
      */
     KoTextPaste(QTextCursor &cursor,
-                KoCanvasBase *canvas, Soprano::Model *rdfModel);
+                KoCanvasBase *canvas, const Soprano::Model *rdfModel);
     virtual ~KoTextPaste();
 
 protected:

@@ -53,11 +53,12 @@ class KoSopranoTableModel : public QAbstractTableModel
 public:
 
     KoSopranoTableModel(KoDocumentRdf* rdf);
+
     /**
      * Get the RDF model we this class is showing.
      * You should not delete the return value.
      */
-    Soprano::Model *model() const;
+    const Soprano::Model *model() const;
 
     enum {
         ColIsValid = 0,  // Is this triple valid

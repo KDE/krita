@@ -25,11 +25,11 @@
 class KOMAIN_EXPORT KoRdfSemanticItemPrivate
 {
 public:
-    KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
+    const KoDocumentRdf *m_rdf;    //< For access to the Rdf model during CRUD operations
     Soprano::Node m_context; //< This determines the Rdf/XML file the Rdf is stored in (see context())
 
-    KoRdfSemanticItemPrivate (KoDocumentRdf *rdf);
-    KoRdfSemanticItemPrivate (KoDocumentRdf *rdf,Soprano::QueryResultIterator &it);
+    KoRdfSemanticItemPrivate (const KoDocumentRdf *rdf);
+    KoRdfSemanticItemPrivate (const KoDocumentRdf *rdf,Soprano::QueryResultIterator &it);
 };
 
 #endif

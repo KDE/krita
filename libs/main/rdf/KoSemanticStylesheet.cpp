@@ -109,7 +109,7 @@ void KoSemanticStylesheet::format(KoRdfSemanticItem *obj, KoTextEditor *editor, 
 {
     kDebug(30015) << "formating obj:" << obj << " name:" << obj->name();
     kDebug(30015) << "xmlid:" << xmlid << " editor:" << editor << " sheet-name:" << name();
-    KoDocumentRdf *rdf = obj->documentRdf();
+    const KoDocumentRdf *rdf = obj->documentRdf();
     Q_ASSERT(rdf);
     Q_ASSERT(editor);
     Q_ASSERT(rdf->document());

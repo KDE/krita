@@ -147,7 +147,13 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "================ SVM HEADER ================";
     kDebug(31000) << "version, length:" << header.versionCompat.version << header.versionCompat.length;
     kDebug(31000) << "compressionMode:" << header.compressionMode;
-    kDebug(31000) << "mapMode:" << "...";
+    kDebug(31000) << "mapMode:" << "Origin" << header.mapMode.origin
+                  << "scaleX"
+                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.numerator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator)
+                  << "scaleY"
+                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.numerator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator);
     kDebug(31000) << "size:" << header.width << header.height;
     kDebug(31000) << "actionCount:" << header.actionCount;
     kDebug(31000) << "================ SVM HEADER ================";
@@ -267,6 +273,24 @@ bool SvmParser::parse(const QByteArray &data)
             break;
         case META_TEXT_ACTION:
         case META_TEXTARRAY_ACTION:
+            {
+                QPoint   startPoint;
+                quint16  strLength;
+                QString  string;
+
+                stream >> startPoint;
+                stream >> strLength;
+                for (uint i = 0; i < strLength; ++i) {
+                    quint8  ch;
+                    stream >> ch;
+                    string += char(ch);
+                }
+
+                // FIXME: Much more here
+                kDebug(31000) << "Text: " << startPoint << string;
+                mBackend->textArray(mContext, startPoint, string);
+            }
+            break;
         case META_STRETCHTEXT_ACTION:
         case META_TEXTRECT_ACTION:
         case META_BMP_ACTION:
@@ -377,7 +401,7 @@ bool SvmParser::parse(const QByteArray &data)
 //                         Private methods
 
 
-void SvmParser::parseRect( QDataStream &stream, QRect &rect)
+void SvmParser::parseRect(QDataStream &stream, QRect &rect)
 {
     qint32 left;
     qint32 top;
@@ -395,7 +419,7 @@ void SvmParser::parseRect( QDataStream &stream, QRect &rect)
     rect.setBottom(bottom);
 }
 
-void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
+void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
 {
     quint16   numPoints;
     QPoint    point;
@@ -404,6 +428,16 @@ void SvmParser::parsePolygon( QDataStream &stream, QPolygon &polygon)
     for (uint i = 0; i < numPoints; ++i) {
         stream >> point;
         polygon << point;
+    }
+}
+
+void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
+{
+    qDebug() << "Version: " << version;
+    for (uint i = 0; i < totalSize; ++i) {
+        quint8  temp;
+        stream >> temp;
+        qDebug() << hex << i << temp << dec;
     }
 }
 

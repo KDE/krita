@@ -222,7 +222,7 @@ static bool isPositionLessThan(KoChangeTrackerElement *element1, KoChangeTracker
 }
 
 void InsertDeleteChangesCommand::insertDeleteChanges()
-{   
+{
     int numAddedChars = 0;
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_document).changeTracker()->getDeletedChanges(elementVector);
@@ -289,7 +289,7 @@ void KoTextShapeData::saveOdf(KoShapeSavingContext &context, KoDocumentRdfBase *
     RemoveDeleteChangesCommand *removeCommand = new RemoveDeleteChangesCommand(document());
 
     KoChangeTracker *changeTracker = KoTextDocument(document()).changeTracker();
-    KoChangeTracker::ChangeSaveFormat changeSaveFormat;
+    KoChangeTracker::ChangeSaveFormat changeSaveFormat = KoChangeTracker::UNKNOWN;
     if (changeTracker) {
         changeSaveFormat = changeTracker->saveFormat();
         if (!changeTracker->displayChanges() && (changeSaveFormat == KoChangeTracker::DELTAXML)) {

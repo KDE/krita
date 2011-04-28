@@ -37,18 +37,18 @@ class KoTextPaste::Private
 {
 public:
     Private(QTextCursor &cursor,
-            KoCanvasBase *canvas, Soprano::Model *rdfModel)
+            KoCanvasBase *canvas, const Soprano::Model *_rdfModel)
             : cursor(cursor)
             , canvas(canvas)
-            , rdfModel(rdfModel) {}
+            , rdfModel(_rdfModel) {}
 
     QTextCursor &cursor;
     KoCanvasBase *canvas;
-    Soprano::Model *rdfModel;
+    const Soprano::Model *rdfModel;
 };
 
 KoTextPaste::KoTextPaste(QTextCursor &cursor,
-                         KoCanvasBase *canvas, Soprano::Model *rdfModel)
+                         KoCanvasBase *canvas, const Soprano::Model *rdfModel)
         : d(new Private(cursor, canvas, rdfModel))
 {
 }
@@ -78,7 +78,7 @@ bool KoTextPaste::process(const KoXmlElement &body, KoOdfReadStore &odfStore)
 #ifndef NDEBUG
         KoTextRdfCore::dumpModel("RDF from C+P", tmpmodel);
 #endif
-        d->rdfModel->addStatements(tmpmodel->listStatements().allElements());
+        const_cast<Soprano::Model*>(d->rdfModel)->addStatements(tmpmodel->listStatements().allElements());
         delete tmpmodel;
     }
 #endif

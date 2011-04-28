@@ -81,7 +81,7 @@ void TextPasteCommand::redo()
                 odfType = KoOdf::OpenOfficeClipboard;
             }
             bool weOwnRdfModel = true;
-            Soprano::Model *rdfModel = 0;
+            const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
             rdfModel = Soprano::createModel();
             if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {

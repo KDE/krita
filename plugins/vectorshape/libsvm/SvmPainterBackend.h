@@ -93,6 +93,9 @@ public:
 
     virtual void polygon( SvmGraphicsContext &context, const QPolygon &polygon );
 
+    virtual void textArray(SvmGraphicsContext &context,
+                           const QPoint &point, const QString &string);
+
  private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);
 

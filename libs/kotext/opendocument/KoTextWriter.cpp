@@ -126,17 +126,17 @@ class KoTextWriter::Private
 {
 public:
     explicit Private(KoShapeSavingContext &context)
-    : context(context),
-    sharedData(0),
-    writer(0),
-    styleManager(0),
-    changeTracker(0),
-    rdfData(0),
-    splitEndBlockNumber(-1),
-    splitRegionOpened(false),
-    splitIdCounter(1),
-    deleteMergeRegionOpened(false),
-    deleteMergeEndBlockNumber(-1)
+        : context(context)
+        , sharedData(0)
+        ,  writer(0)
+        ,  styleManager(0)
+        ,  changeTracker(0)
+        ,  rdfData(0)
+        ,  splitEndBlockNumber(-1)
+        ,  splitRegionOpened(false)
+        ,  splitIdCounter(1)
+        ,  deleteMergeRegionOpened(false)
+        ,  deleteMergeEndBlockNumber(-1)
     {
         writer = &context.xmlWriter();
         changeStack.push(0);

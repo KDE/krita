@@ -344,7 +344,7 @@ void KoDocumentRdfEditWidget::addTriple()
     // is set to a bnode value. Because the user most likely doesn't
     // want to create a bnode, we change it to a URI first.
     //
-    Soprano::Node obj(QUrl(m_rdf->model()->createBlankNode().toString()));
+    Soprano::Node obj(QUrl(const_cast<Soprano::Model*>(m_rdf->model())->createBlankNode().toString()));
     Soprano::Statement st(Soprano::Node(QUrl("http://koffice.org/new-node")),
                           Soprano::Node(QUrl("http://koffice.org/new-node")),
                           obj,
@@ -409,7 +409,7 @@ void KoDocumentRdfEditWidget::sparqlExecute()
 {
     d->m_ui->m_sparqlResultView->selectionModel()->clear();
     QString sparql = d->m_ui->m_sparqlQuery->toPlainText();
-    Soprano::Model *m = d->m_rdf->model();
+    const Soprano::Model *m = d->m_rdf->model();
     kDebug(30015) << "running SPARQL query:" << sparql;
     Soprano::QueryResultIterator qrIter =
         m->executeQuery(sparql, Soprano::Query::QueryLanguageSparql);

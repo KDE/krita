@@ -20,9 +20,11 @@
 #include "SvmPainterBackend.h"
 
 // Qt
-#include <QPainter>
+#include <QPoint>
 #include <QRect>
 #include <QPolygon>
+#include <QString>
+#include <QPainter>
 
 // KDE
 #include <KDebug>
@@ -113,6 +115,13 @@ void SvmPainterBackend::polygon( SvmGraphicsContext &context, const QPolygon &po
     m_painter->drawPolygon(polygon);
 }
 
+void SvmPainterBackend::textArray(SvmGraphicsContext &context,
+                                  const QPoint &point, const QString &string)
+{
+    updateFromGraphicscontext(context);
+    m_painter->drawText(point, string);
+}
+
 
 // ----------------------------------------------------------------
 //                         Private functions
@@ -121,14 +130,18 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
         m_painter->setPen(context.lineColor);
-        //kDebug(31000) << "*** Setting line color to" << context.lineColor;
+        kDebug(31000) << "*** Setting line color to" << context.lineColor;
     }
     if (context.changedItems & GCFillBrush) {
         m_painter->setBrush(context.fillBrush);
-        //kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
+        kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
     }
     if (context.changedItems & GCMapMode) {
         // FIXME
+    }
+    if (context.changedItems & GCFont) {
+        m_painter->setFont(context.font);
+        kDebug(31000) << "*** Setting font to" << context.font;
     }
 
     // Reset all changes until next time.

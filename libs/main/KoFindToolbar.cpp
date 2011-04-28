@@ -63,6 +63,7 @@ public:
     QToolButton *nextButton;
     QToolButton *optionsButton;
     KSqueezedTextLabel *information;
+    QLabel *matchCounter;
 
     static QStringList completionItems;
 };
@@ -97,6 +98,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
     connect(d->searchLine, SIGNAL(cleared()), finder, SLOT(finished()));
     layout->addWidget(d->searchLine);
+
+    d->matchCounter = new QLabel(this);
+    layout->addWidget(d->matchCounter);
 
     d->nextButton = new QToolButton(this);
     d->nextButton->setIcon(KIcon("go-down-search"));
@@ -180,6 +184,7 @@ void KoFindToolbar::Private::matchFound()
     KColorScheme::adjustBackground(current, KColorScheme::PositiveBackground);
     searchLine->setPalette(current);
     information->setText(QString());
+    matchCounter->setText(i18ncp("Total number of matches", "1 match found", "%1 matches found", finder->matches().count()));
 }
 
 void KoFindToolbar::Private::noMatchFound()
@@ -188,7 +193,8 @@ void KoFindToolbar::Private::noMatchFound()
     KColorScheme::adjustBackground(current, KColorScheme::NegativeBackground);
     searchLine->setPalette(current);
 
-    information->setText(i18n("No matches found"));
+    information->setText(QString());
+    matchCounter->setText("No matches found");
 }
 
 void KoFindToolbar::Private::searchWrapped(bool direction)
@@ -213,6 +219,7 @@ void KoFindToolbar::Private::find(const QString &pattern)
         finder->finished();
         information->setText(QString());
         searchLine->setPalette(qApp->palette());
+        matchCounter->setText(QString());
     }
 }
 

@@ -53,24 +53,24 @@ public:
     Ui::KoRdfLocationEditWidget editWidget;
     Ui::KoRdfLocationViewWidget viewWidget;
 
-    KoRdfLocationPrivate(KoDocumentRdf *rdf)
+    KoRdfLocationPrivate(const KoDocumentRdf *rdf)
         : KoRdfSemanticItemPrivate(rdf)
         {}
 
-    KoRdfLocationPrivate(KoDocumentRdf *rdf,Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItemPrivate(rdf,it)
+    KoRdfLocationPrivate(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+        : KoRdfSemanticItemPrivate(rdf, it)
         {}
 };
 
-KoRdfLocation::KoRdfLocation(QObject *parent, KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(*new KoRdfLocationPrivate (m_rdf),parent)
+KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf)
+    : KoRdfSemanticItem(*new KoRdfLocationPrivate(m_rdf), parent)
 {
     Q_D (KoRdfLocation);
     d->m_isGeo84 = true;
 }
 
-KoRdfLocation::KoRdfLocation(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84)
-    : KoRdfSemanticItem(*new KoRdfLocationPrivate (m_rdf,it),parent)
+KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84)
+    : KoRdfSemanticItem(*new KoRdfLocationPrivate(m_rdf, it), parent)
 {
     Q_D (KoRdfLocation);
     d->m_linkSubject = it.binding("geo");

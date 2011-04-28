@@ -21,6 +21,7 @@ set(textlayout_LIB_SRCS
     KoTextShapeData.cpp
     FloatingAnchorStrategy.cpp
     InlineAnchorStrategy.cpp
+    AnchorStrategy.cpp
 )
 
 

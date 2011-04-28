@@ -21,13 +21,13 @@
 #ifndef FLOATINGANCHORSTRATEGY_H
 #define FLOATINGANCHORSTRATEGY_H
 
-#include "KoTextAnchor.h"
+#include "AnchorStrategy.h"
 
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
 
-class FloatingAnchorStrategy  : public KoAnchorStrategy
+class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
     FloatingAnchorStrategy(KoTextAnchor *anchor);

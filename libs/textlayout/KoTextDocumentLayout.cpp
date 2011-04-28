@@ -295,6 +295,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         qDebug() << "positionInlineObject called";
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
+    Q_ASSERT(false);
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
@@ -309,7 +310,6 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         qDebug() << "anchor detected";
         KoShapeContainer *parent = anchor->shape()->parent();
         if (parent) {
-            Q_ASSERT(false);
             /*
             KWPage page = m_frameSet->pageManager()->page(parent);
             QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());

@@ -30,12 +30,12 @@
 #include <QTextBlock>
 
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor)
-        : KoAnchorStrategy(),
-          m_anchor(anchor),
-          m_knowledgePoint(-1),
-          m_finished(false),
-          m_relayoutNeeded(false),
-          m_relayoutPosition(0,0)
+        : AnchorStrategy(anchor)
+        , m_anchor(anchor)
+        , m_knowledgePoint(-1)
+        , m_finished(false)
+        , m_relayoutNeeded(false)
+        , m_relayoutPosition(0,0)
 {
     calculateKnowledgePoint();
 }

@@ -30,6 +30,7 @@ class KoShape;
 class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+class KoShapeContainer;
 
 /**
  * This class is an interface that positions the shape linked to text anchor
@@ -48,6 +49,10 @@ public:
     virtual bool isRelayoutNeeded() = 0;
 
     virtual QPointF relayoutPosition() = 0;
+
+    virtual void detachFromModel() = 0;
+
+    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;
 };
 
 /**

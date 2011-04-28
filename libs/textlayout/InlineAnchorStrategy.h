@@ -20,17 +20,17 @@
 #ifndef INLINEANCHORSTRATEGY_H_
 #define INLINEANCHORSTRATEGY_H_
 
-#include "KoTextAnchor.h"
+#include "AnchorStrategy.h"
 
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
 
-class InlineAnchorStrategy  : public KoAnchorStrategy
+class InlineAnchorStrategy  : public AnchorStrategy
 {
 public:
     InlineAnchorStrategy(KoTextAnchor *anchor);
-    ~InlineAnchorStrategy();
+    virtual ~InlineAnchorStrategy();
 
     /**
      * This function calculates position for linked shape.

@@ -1504,7 +1504,6 @@ void TextTool::repaintCaret()
     if (!textEditor || !m_textShapeData)
         return;
 
-
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(textEditor->position());

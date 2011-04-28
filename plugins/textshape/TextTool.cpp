@@ -792,9 +792,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
     bool docChanged = !data || !m_textShapeData || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
         disconnect(m_textShapeData, SIGNAL(destroyed (QObject*)), this, SLOT(shapeDataRemoved()));
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay)
-            disconnect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
     }
     m_textShapeData = data;
     if (!m_textShapeData)
@@ -806,11 +803,6 @@ void TextTool::setShapeData(KoTextShapeData *data)
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
         connect(m_textEditor.data(), SIGNAL(isBidiUpdated()), this, SLOT(isBidiUpdated()));
-
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay) {
-            connect(lay, SIGNAL(shapeAdded(KoShape*)), this, SLOT(shapeAddedToDoc(KoShape*)));
-        }
     }
     m_textEditor.data()->updateDefaultTextDirection(m_textShapeData->pageDirection());
 }

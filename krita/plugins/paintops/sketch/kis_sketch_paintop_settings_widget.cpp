@@ -32,36 +32,38 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <kis_pressure_rotation_option.h>
+#include "kis_density_option.h"
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
 {
     m_sketchOption =  new KisSketchOpOption();
-        
+
     addPaintOpOption(m_sketchOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption()));
     addPaintOpOption(new KisAirbrushOption(false));
-    
+
     m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfiguration defaultSetting;
     defaultSetting.setProperty("PaintOpAction",BUILDUP);
     m_paintActionType->readOptionSetting(&defaultSetting);
 
     addPaintOpOption(m_paintActionType);
-    
+
     KisPropertiesConfiguration* reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer("");
     xMLAnalyzer.setContent(reconfigurationCourier->getString("brush_definition") );
-    
+
     QDomElement firstTag = xMLAnalyzer.documentElement();
     QDomElement firstTagsChild = firstTag.elementsByTagName("MaskGenerator").item(0).toElement();
-    
+
     firstTagsChild.attributeNode("diameter").setValue("128");
-    
+
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString() );
-    setConfiguration(reconfigurationCourier);  
+    setConfiguration(reconfigurationCourier);
     delete reconfigurationCourier;
 }
 

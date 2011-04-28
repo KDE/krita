@@ -22,6 +22,7 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
+#include "kis_density_option.h"
 #include "kis_sketchop_option.h"
 #include "kis_sketch_paintop_settings.h"
 
@@ -43,7 +44,7 @@ public:
 private:
     // pixel buffer
     KisPaintDeviceSP m_dab;
-    
+
     // mask detection area
     KisFixedPaintDeviceSP m_maskDab;
     QRectF m_brushBoundingBox;
@@ -51,14 +52,15 @@ private:
 
     // simple mode
     qreal m_radius;
-    
+
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
-    
+    KisDensityOption m_densityOption;
+
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
-    
+
     QVector<QPointF> m_points;
     int m_count;
     KisPainter * m_painter;

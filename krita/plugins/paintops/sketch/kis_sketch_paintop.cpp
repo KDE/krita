@@ -65,6 +65,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_rotationOption.readOptionSetting(settings);
     m_sketchProperties.readOptionSetting(settings);
     m_brushOption.readOptionSetting(settings);
+    m_densityOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
 
@@ -132,6 +133,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
     double scale = m_sizeOption.apply(pi2);
     double rotation = m_rotationOption.apply(pi2);
+    double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
@@ -158,11 +160,11 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     }
 
     // determine density
-    qreal density = thresholdDistance * m_sketchProperties.probability;
+    qreal density = thresholdDistance * currentProbability;
 
     // probability behaviour
     // TODO: make this option
-    qreal probability = 1.0 - m_sketchProperties.probability;
+    qreal probability = 1.0 - currentProbability;
 
     QColor painterColor = painter()->paintColor().toQColor();
     QColor randomColor;

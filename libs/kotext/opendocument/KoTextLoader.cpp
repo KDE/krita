@@ -1991,6 +1991,15 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
                     loadTableRow(tblTag, tbl, spanStore, cursor, rows);
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->closeChangeRegion(tblTag);
+                } else if (tblLocalName == "table-rows") {
+                    KoXmlElement subTag;
+                    forEachElement(subTag, tblTag) {
+                        if (!subTag.isNull()) {
+                            if ((subTag.namespaceURI() == KoXmlNS::table) && (subTag.localName() == "table-row")) {
+                                loadTableRow(subTag, tbl, spanStore, cursor, rows);
+                            }
+                        }
+                    }
                 } else if (tblLocalName == "table-header-rows") {
                     KoXmlElement subTag;
                     forEachElement(subTag, tblTag) {

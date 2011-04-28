@@ -53,8 +53,8 @@ public:
     /**
      * Set the \p page this root area is on.
      *
-     * The root-area does NOT take over ownership of the KoTextPage and the user
-     * of the root-area is responsible to delete it if not needed any longer.
+     * The root-area takes over the ownership of the KoTextPage and will take
+     * care to delete the KoTextPage if not needed any longer.
      */
     void setPage(KoTextPage *textpage);
 

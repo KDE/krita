@@ -44,6 +44,8 @@ KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
 
 KoTextLayoutRootArea::~KoTextLayoutRootArea()
 {
+    delete d->textpage;
+    delete d;
 }
 
 bool KoTextLayoutRootArea::layout(FrameIterator *cursor)
@@ -65,6 +67,7 @@ KoShape *KoTextLayoutRootArea::associatedShape()
 
 void KoTextLayoutRootArea::setPage(KoTextPage *textpage)
 {
+    delete d->textpage;
     d->textpage = textpage;
 }
 

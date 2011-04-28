@@ -140,7 +140,8 @@ protected:
 
     /// If this area has the responsibility to show footnotes then store
     /// it so it can later bein the m_pregisteredFootnotes
-    virtual void preregisterFootNote(KoInlineNote *note);
+    /// returns the height of the foot note
+    virtual qreal preregisterFootNote(KoInlineNote *note);
 
     /// Takes all preregistered footnotes and create Areas out of them
     void confirmFootNotes();

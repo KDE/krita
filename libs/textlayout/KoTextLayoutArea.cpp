@@ -299,7 +299,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 m_y = tableArea->bottom();
-                setBottom(m_y);
+                setBottom(m_y + m_footNotesHeight);
                 // Expand bounding rect so if we have content outside we show it
                 expandBoundingLeft(tableArea->boundingRect().left());
                 expandBoundingRight(tableArea->boundingRect().right());
@@ -325,7 +325,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (m_endNotesArea->layout(cursor->subFrameIterator(subFrame)) == false) {
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = m_endNotesArea->bottom();
-                    setBottom(m_y);
+                    setBottom(m_y + m_footNotesHeight);
                     // Expand bounding rect so if we have content outside we show it
                     expandBoundingLeft(m_endNotesArea->boundingRect().left());
                     expandBoundingRight(m_endNotesArea->boundingRect().right());
@@ -350,7 +350,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (tocArea->layout(cursor->subFrameIterator(subFrame)) == false) {
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();
-                    setBottom(m_y);
+                    setBottom(m_y + m_footNotesHeight);
                     // Expand bounding rect so if we have content outside we show it
                     expandBoundingLeft(tocArea->boundingRect().left());
                     expandBoundingRight(tocArea->boundingRect().right());
@@ -369,7 +369,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                    && cursor->it != m_startOfArea->it
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
                 m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y);
+                setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {
                     m_blockRects.last().setBottom(m_y);
                 }
@@ -378,7 +378,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
             if (layoutBlock(cursor) == false) {
                 m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y);
+                setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;
             }
@@ -388,7 +388,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 Q_ASSERT(!cursor->it.atEnd());
                 ++(cursor->it);
                 m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y);
+                setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;
             }
@@ -402,7 +402,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     }
     m_endOfArea = new FrameIterator(cursor);
     m_y = qMin(maximumAllowedBottom(), m_y + m_bottomSpacing);
-    setBottom(m_y);
+    setBottom(m_y + m_footNotesHeight);
     if (!m_blockRects.isEmpty()) {
         m_blockRects.last().setBottom(m_y);
     }
@@ -1087,7 +1087,7 @@ void KoTextLayoutArea::findFootNotes(QTextBlock block, const QTextLine &line)
     }
 }
 
-void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
+qreal KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
 {
     if (m_parent == 0) {
         // TODO to support footnotes at end of document this is
@@ -1101,9 +1101,11 @@ void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
 
         m_preregisteredFootNotesHeight += footNoteArea->bottom();
         m_preregisteredFootNoteAreas.append(footNoteArea);
-        return;
+        return footNoteArea->bottom();
     }
-    m_parent->preregisterFootNote(note);
+    qreal h = m_parent->preregisterFootNote(note);
+    m_preregisteredFootNotesHeight += h;
+    return h;
 }
 
 void KoTextLayoutArea::confirmFootNotes()

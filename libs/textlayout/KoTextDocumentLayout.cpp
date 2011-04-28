@@ -436,7 +436,6 @@ void KoTextDocumentLayout::layout()
         if (shouldLayout) {
             QSizeF size = d->provider->suggestSize(rootArea);
             rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
-            QTextFrame::iterator endIt = rootArea->endFrameIterator()->it;
 
             // Layout all that can fit into that root area
             bool finished = rootArea->layout(d->layoutPosition);

@@ -154,6 +154,13 @@ public:
     QList<KoTextLayoutRootArea *> rootAreas() const;
     QList<KoShape*> shapes() const;
 
+    /// Set should layout be continued when done with current root area
+    void setContinuousLayout(bool continuous);
+
+    /// Set \a layout() to be blocked (no layouting will happen)
+    void setBlockLayout(bool block);
+    bool layoutBlocked() const;
+
 signals:
     /**
      * Signal is emitted every time a layout run has completely finished (all text is positioned).

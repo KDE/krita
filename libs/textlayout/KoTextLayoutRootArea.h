@@ -41,7 +41,7 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
-    bool layout(FrameIterator *cursor);
+    virtual bool layout(FrameIterator *cursor);
 
     /// Sets an associated shape which can be retrieved with associatedShape()
     /// KoTextLayoutRootArea doesn't use it for anything.
@@ -50,7 +50,12 @@ public:
     /// Retruns the shape set with setAssociatedShape()
     KoShape *associatedShape();
 
-    /// Set the \p page this root area is on.
+    /**
+     * Set the \p page this root area is on.
+     *
+     * The root-area does NOT take over ownership of the KoTextPage and the user
+     * of the root-area is responsible to delete it if not needed any longer.
+     */
     void setPage(KoTextPage *textpage);
 
     /// Returns the page this root area is on.

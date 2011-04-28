@@ -68,7 +68,10 @@ public:
        , textAnchorIndex(0)
        , defaultTabSizing(0)
        , y(0)
+       , isLayouting(false)
        , layoutScheduled(false)
+       , continuousLayout(true)
+       , layoutBlocked(false)
     {
     }
     KoStyleManager *styleManager;
@@ -90,7 +93,10 @@ public:
 
     qreal defaultTabSizing;
     qreal y;
+    bool isLayouting;
     bool layoutScheduled;
+    bool continuousLayout;
+    bool layoutBlocked;
 };
 
 
@@ -226,7 +232,8 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 //TODO FIXME make corresponding root area as dirty and then do layout
 // right now we are just marking all as dirty
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        rootArea->setDirty();
+        if (!rootArea->isDirty())
+            rootArea->setDirty();
     }
     emitLayoutIsDirty();
 }
@@ -241,8 +248,15 @@ KoTextLayoutRootArea *KoTextDocumentLayout::rootAreaForPosition(int position) co
         return 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (rootArea->boundingRect().contains(line.position()))
+        QRectF rect = rootArea->boundingRect(); // should already be normalized()
+        if (rect.width() <= 0.0 && rect.height() <= 0.0) // ignore the rootArea if it has a size of QSizeF(0,0)
+            continue;
+        QPointF pos = line.position();
+        qreal x = pos.x();
+        qreal y = pos.y();
+        if (x >= rect.x() && x<= rect.right() && y >= rect.y() && y <= rect.bottom()) {
             return rootArea;
+        }
     }
     return 0;
 }
@@ -374,6 +388,25 @@ void KoTextDocumentLayout::emitLayoutIsDirty()
 
 void KoTextDocumentLayout::layout()
 {
+    if (d->layoutBlocked) {
+        return;
+    }
+
+    class LayoutState {
+        public:
+            LayoutState(KoTextDocumentLayout::Private *_d) : d(_d) {
+                Q_ASSERT(!d->isLayouting);
+                d->isLayouting = true;
+            }
+            ~LayoutState() {
+                Q_ASSERT(d->isLayouting);
+                d->isLayouting = false;
+            }
+        private:
+            KoTextDocumentLayout::Private *d;
+    };
+    LayoutState layoutstate(d);
+
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
@@ -456,7 +489,7 @@ void KoTextDocumentLayout::layout()
 
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutScheduled) {
+    if (d->layoutScheduled || d->isLayouting) {
         return;
     }
     d->layoutScheduled = true;
@@ -468,13 +501,29 @@ void KoTextDocumentLayout::executeScheduledLayout()
     // Only do the actual layout if it wasn't done meanwhile by someone else.
     if (d->layoutScheduled) {
         d->layoutScheduled = false;
-        layout();
+        if (!d->isLayouting)
+            layout();
     }
 }
 
 bool KoTextDocumentLayout::continuousLayout()
 {
-    return true;
+    return d->continuousLayout;
+}
+
+void KoTextDocumentLayout::setContinuousLayout(bool continuous)
+{
+    d->continuousLayout = continuous;
+}
+
+void KoTextDocumentLayout::setBlockLayout(bool block)
+{
+    d->layoutBlocked = block;
+}
+
+bool KoTextDocumentLayout::layoutBlocked() const
+{
+    return d->layoutBlocked;
 }
 
 QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const

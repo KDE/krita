@@ -634,8 +634,10 @@ void TextTool::relayoutContent()
 {
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    if (lay)
-        lay->layout();
+    foreach (KoTextLayoutRootArea *rootArea, lay->rootAreas()) {
+        rootArea->setDirty();
+    }
+    lay->emitLayoutIsDirty();
 }
 
 void TextTool::paint(QPainter &painter, const KoViewConverter &converter)

@@ -704,7 +704,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void TextTool::updateSelectedShape(const QPointF &point)
 {
-    kDebug() << point;
     if (m_textShape && !m_textShape->boundingRect().contains(point)) {
         QRectF area(point, QSizeF(1, 1));
         if (m_textEditor.data()->hasSelection())

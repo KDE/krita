@@ -108,28 +108,21 @@ public:
     /// Draws the layout on the given painter with the given context.
     virtual void draw(QPainter * painter, const QAbstractTextDocumentLayout::PaintContext & context);
 
-    /// Draws the layout on the given painter with the given context, and pass the zoom.
-    void draw(QPainter * painter, const KoTextDocumentLayout::PaintContext & context);
-
-    /**
-     * Returns the cursor postion for the given point with the accuracy
-     * specified. Returns -1 to indicate failure if no valid cursor position
-     * was found.
-     * @param point the point in the document
-     * @param accuracy if Qt::ExactHit this method will return -1 when not actaully hitting any text
-     */
+    /// reimplemented DO NOT CALL - USE HITTEST IN THE ROOTAREAS INSTEAD
     virtual int hitTest(const QPointF & point, Qt::HitTestAccuracy accuracy) const;
 
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    /// Add a shape to the list of shapes that the text can occupy.
-    void addShape(KoShape *shape);
-
-    // remove all inline objects which document position is bigger or equal to resetPosition
+    /** Anchors are special InlineObjects that we detect in positionInlineObject().
+     * We save those for later so we can position them during layout instead.
+     * During layout positionAnchoredShapes() is called to do just that.
+     */
+    void positionAnchoredShapes();
+    // remove all anchors which document position is bigger or equal to resetPosition
     void resetAnchor(int resetPosition);
     // remove inline object
-    void removeInlineObject(KoTextAnchor * textAnchor);
+    void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
     InlineObjectExtend inlineObjectExtend(const QTextFragment&);
@@ -177,7 +170,7 @@ signals:
 public slots:
     /**
      * Does the layout of the text.
-     * This method will layout the text into sections,tables and textlines,
+     * This method will layout the text into sections, tables and textlines,
      * chunk by chunk.
      * It may interrupt itself, @see contiuousLayout
      * calling this method when the layout is not dirty, doesn't take that much
@@ -188,7 +181,7 @@ public slots:
     /**
      * Schedules a \a layout call for later using a QTimer::singleShot. Multiple calls
      * to this slot will be compressed into one layout-call to prevent calling layouting
-     * to much. Also if meanwhile \a layout was called then the scheduled layout wan't
+     * to much. Also if meanwhile \a layout was called then the scheduled layout won't
      * be executed.
      */
     virtual void scheduleLayout();
@@ -209,9 +202,6 @@ protected:
     virtual void positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
     /// reimplemented
     virtual void resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format);
-
-    /// same as hitTest but for a range specified by an iterator
-    int hitTestIterated(QTextFrame::iterator begin, QTextFrame::iterator end, const QPointF & point, Qt::HitTestAccuracy accuracy) const;
 
     /// should we continue layout when done with current root area
     bool continuousLayout();

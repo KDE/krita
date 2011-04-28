@@ -37,7 +37,7 @@ public:
      *
      * @return true if new position for shape was wound
      */
-    virtual bool positionShape();
+    virtual bool positionShape(int layoutCursorPosition);
 
     /**
      *

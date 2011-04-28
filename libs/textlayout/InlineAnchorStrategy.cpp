@@ -38,16 +38,16 @@ InlineAnchorStrategy::~InlineAnchorStrategy()
 {
 }
 
-bool InlineAnchorStrategy::positionShape()
+bool InlineAnchorStrategy::positionShape(int layoutCursorPosition)
 {
     if (m_finished) { // shape is in right position no second pass needed
         return false;
     }
-/*FIXME
-    if (state->cursorPosition() <= m_anchor->positionInDocument()) {
+
+    if (layoutCursorPosition <= m_anchor->positionInDocument()) {
         return false;
     }
-*/
+
     if (!m_anchor->shape()->parent()) {
         return false;
     }

@@ -84,7 +84,7 @@ public:
     QHash<int, InlineObjectExtend> inlineObjectExtends; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
-    int textAnchorIndex; // index of last not positioned inline object inside m_textAnchors
+    int textAnchorIndex; // index of last not positioned inline object inside textAnchors
 
     QHash<KoShape*,KoTextLayoutObstruction*> obstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
 
@@ -169,13 +169,6 @@ QRectF KoTextDocumentLayout::selectionBoundingBox(QTextCursor &cursor) const
 
 
 void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLayout::PaintContext &context)
-{
-    PaintContext pc;
-    pc.textContext = context;
-    draw(painter, pc);
-}
-
-void KoTextDocumentLayout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
 {
     // WARNING Text shapes ask their root area directly to paint.
     // It saves a lot of extra traversal, that is quite costly for big
@@ -265,8 +258,24 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
+
+void KoTextDocumentLayout::positionAnchoredShapes()
+{
+    // position anchored objects
+/*    while (positionInlineObjects()) {
+        if (d->textAnchors[d->textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
+
+            if (moveLayoutPosition(d->textAnchors[d->textAnchorIndex - 1]) == true) {
+                return false;
+            }
+        }
+    }
+*/
+}
+
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
+        qDebug() << "positionInlineObject called";
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
@@ -280,6 +289,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
     if (anchor) {
+        qDebug() << "anchor detected";
         KoShapeContainer *parent = anchor->shape()->parent();
         if (parent) {
             Q_ASSERT(false);
@@ -295,11 +305,13 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->setPageNumber(pageNumber);
 */
             // if there is no anchor strategy set then create one
+        qDebug() << "anchor detected 2";
             if (!anchor->anchorStrategy()) {
                 //place anchored object far away, and let the layout position it later
                 anchor->shape()->setPosition(QPointF(-10000,0));
 
                 if (anchor->behavesAsCharacter()) {
+        qDebug() << "anchor is inline";
                     anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor));
                 } else {
                     anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor));

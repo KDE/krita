@@ -233,7 +233,7 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
             QTextLine line = block.layout()->lineForTextPosition(cursor.selectionEnd() - block.position());
             if (line.isValid()) {
                 retval.setBottom(line.y() + line.height());
-                if (line.ascent()==0) { //FIXME not entirely correct
+                if (line.ascent()==0) {
                     // Block is empty from any visible content and has as such no height
                     // but in that case the block font defines line height
                     retval.setBottom(line.y() + 24);
@@ -785,6 +785,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
+        documentLayout()->positionAnchoredShapes();
+
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
@@ -981,17 +983,6 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         m_y = line.y();
     }
 
-/*FIXME
-    // position inline objects
-    while (positionInlineObjects()) {
-        if (m_textAnchors[m_textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
-
-            if (moveLayoutPosition(m_textAnchors[m_textAnchorIndex - 1]) == true) {
-                return 0;
-            }
-        }
-    }
-*/
     return height; // line successfully added
 }
 
@@ -1099,7 +1090,7 @@ void KoTextLayoutArea::preregisterFootNote(KoInlineNote *note)
         // where we need to add some extra condition
 
         FrameIterator iter(note->textFrame());
-        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(0, m_documentLayout);
+        KoTextLayoutArea *footNoteArea = new KoTextLayoutArea(this, m_documentLayout);
 
         footNoteArea->setReferenceRect(left(), right(), 0, maximumAllowedBottom() - bottom());
         footNoteArea->layout(&iter);

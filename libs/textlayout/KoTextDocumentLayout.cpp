@@ -415,6 +415,11 @@ void KoTextDocumentLayout::layout()
     d->layoutScheduled = false;
     KoTextLayoutRootArea *previousRootArea = 0;
 
+    /*TODO make this more inteligent
+     * - each rootArea needs to remember it's startign and ending d->layoutPosition->it
+     * - if they are different do releaseAllAfter() and start from the matching d->layoutPosition->it
+     */
+#if 0
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->provider->suggestPageBreak(rootArea)) {
             d->provider->releaseAllAfter(previousRootArea);
@@ -439,6 +444,7 @@ void KoTextDocumentLayout::layout()
 
             // Layout all that can fit into that root area
             if (rootArea->layout(d->layoutPosition)) {
+                // document has ended and we are done
                 d->provider->doPostLayout(rootArea, false);
                 d->provider->releaseAllAfter(rootArea);
                 // We must also delete them from our own list too
@@ -459,6 +465,9 @@ void KoTextDocumentLayout::layout()
                                                // 50 just to seperate pages
         previousRootArea = rootArea;
     }
+#else
+    d->provider->releaseAllAfter(NULL);
+#endif
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
 

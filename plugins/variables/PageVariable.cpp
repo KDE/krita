@@ -93,11 +93,6 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
             if (rootArea) {
                 page = rootArea->page();
             }
-            else {
-                // the text is not yet layouted therefore we don't get the rootArea
-                // if we don't do that we get an endless change of the variable.
-                return;
-            }
         }
     }
     int pagenumber = 0;
@@ -106,24 +101,27 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
     case PageCount:
         break;
     case PageNumber:
-    {
-        QString currentValue = value();
-        if (currentValue.isEmpty() || ! m_fixed) {
-            if (page) {
+        if (page) {
+            // the text is not yet layouted therefore we don't get the rootArea
+            // if we don't do that we get an endless change of the variable.
+            QString currentValue = value();
+            if (currentValue.isEmpty() || ! m_fixed) {
                 pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
-            }
-            QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
-            // only update value when changed
-            if (currentValue != newValue) {
-                setValue(newValue);
+                QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
+                // only update value when changed
+                if (currentValue != newValue) {
+                    setValue(newValue);
+                }
             }
         }
-    }   break;
+        break;
     case PageContinuation:
         if (page) {
+            // the text is not yet layouted therefore we don't get the rootArea
+            // if we don't do that we get an endless change of the variable.
             pagenumber = page->pageNumber(m_pageselect);
+            setValue(pagenumber >= 0 ? m_continuation : QString());
         }
-        setValue(pagenumber >= 0 ? m_continuation : QString());
         break;
     }
     KoVariable::resize(document, object, posInDocument, format, pd);

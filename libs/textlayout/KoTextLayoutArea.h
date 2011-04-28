@@ -60,6 +60,8 @@ public:
 
     /// Returns true if the area starts at the cursor position
     bool isStartingAt(FrameIterator *cursor) const;
+    /// Returns the last cursor position this frame has
+    FrameIterator *endFrameIterator() const;
 
     /// Layouts as much as we can
     virtual bool layout(FrameIterator *cursor);

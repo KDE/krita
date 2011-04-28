@@ -260,6 +260,11 @@ bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor) const
     return false;
 }
 
+FrameIterator *KoTextLayoutArea::endFrameIterator() const
+{
+    return m_endOfArea;
+}
+
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(m_tableAreas);

@@ -462,7 +462,6 @@ void KoTextDocumentLayout::layout()
                 Q_ASSERT(d->rootAreaList.last() == rootArea);
                 break;
             }
-            ++d->layoutPosition->it;
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
                                                // 50 just to seperate pages

@@ -695,7 +695,6 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
-qDebug() << "LOADING ALIGN" << verticalAlign;
         setAlignment(KoText::valignmentFromString(verticalAlign));
     }
 }

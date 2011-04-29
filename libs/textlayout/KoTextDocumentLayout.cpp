@@ -290,12 +290,12 @@ void KoTextDocumentLayout::positionAnchoredShapes()
 */
 }
 
+// This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
         qDebug() << "positionInlineObject called";
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
-    Q_ASSERT(false);
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();

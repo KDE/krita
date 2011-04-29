@@ -87,8 +87,7 @@ private:
         
         qint32        srcInc    = (srcRowStride == 0) ? 0 : channels_nb;
         bool          useMask   = maskRowStart != 0;
-        channels_type unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
-        channels_type opacity   = KoColorSpaceMaths<quint8,channels_type>::scaleToA(U8_opacity);
+        channels_type opacity   = scale<channels_type>(U8_opacity);
         
         for(; rows>0; --rows) {
             const channels_type* src  = reinterpret_cast<const channels_type*>(srcRowStart);
@@ -96,8 +95,8 @@ private:
             const quint8*        mask = maskRowStart;
             
             for(qint32 c=cols; c>0; --c) {
-                channels_type srcAlpha = (alpha_pos == -1) ? unitValue : src[alpha_pos];
-                channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
+                channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
+                channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
                 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(

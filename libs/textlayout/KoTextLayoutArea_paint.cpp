@@ -374,13 +374,13 @@ static void drawDecorationLine(QPainter *painter, const QColor &color, KoCharact
         pen.setStyle(Qt::SolidLine);
         painter->setPen(pen);
         qreal x = x1;
-        const qreal halfWaveWidth = 2 * width;
-        const qreal halfWaveLength = 6 * width;
+        const qreal halfWaveWidth = 0.5 * width;
+        const qreal halfWaveLength = 2 * width;
         const int startAngle = 0 * 16;
         const int middleAngle = 180 * 16;
         const int endAngle = 180 * 16;
         while (x < x2) {
-            QRectF rectangle1(x, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+            QRectF rectangle1(x, y, halfWaveLength, 2*halfWaveWidth);
             if (type == KoCharacterStyle::DoubleLine) {
                 painter->translate(0, -pen.width());
                 painter->drawArc(rectangle1, startAngle, middleAngle);
@@ -392,7 +392,7 @@ static void drawDecorationLine(QPainter *painter, const QColor &color, KoCharact
             }
             if (x + halfWaveLength > x2)
                 break;
-            QRectF rectangle2(x + halfWaveLength, y - halfWaveWidth, halfWaveLength, 2*halfWaveWidth);
+            QRectF rectangle2(x + halfWaveLength, y, halfWaveLength, 2*halfWaveWidth);
             if (type == KoCharacterStyle::DoubleLine) {
                 painter->translate(0, -pen.width());
                 painter->drawArc(rectangle2, middleAngle, endAngle);
@@ -475,9 +475,9 @@ static qreal computeWidth(KoCharacterStyle::LineWeight weight, qreal width, cons
         return QFontMetricsF(font).lineWidth();
     case KoCharacterStyle::BoldLineWeight:
     case KoCharacterStyle::ThickLineWeight:
-        return QFontMetricsF(font).lineWidth() * 2;
+        return QFontMetricsF(font).lineWidth() * 1.5;
     case KoCharacterStyle::ThinLineWeight:
-        return QFontMetricsF(font).lineWidth() / 2;
+        return QFontMetricsF(font).lineWidth() * 0.7;
     case KoCharacterStyle::PercentLineWeight:
         return QFontInfo(font).pointSizeF() * width / 100;
     case KoCharacterStyle::LengthLineWeight:

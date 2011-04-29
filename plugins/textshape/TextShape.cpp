@@ -133,7 +133,9 @@ void TextShape::paintComponent(QPainter &painter, const KoViewConverter &convert
             // this is used to not trigger repaints if layout during the painting is done
             m_paintRegion = painter.clipRegion();
             if (!m_textShapeData->rootArea()->page() || page->pageNumber() != m_textShapeData->rootArea()->page()->pageNumber()) {
-                m_textShapeData->rootArea()->setPage(page);
+                m_textShapeData->rootArea()->setPage(page); // takes over ownership of the page
+            } else {
+                delete page;
             }
         }
     }

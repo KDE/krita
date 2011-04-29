@@ -33,6 +33,7 @@
 #include <QDomElement>
 #include <kis_pressure_rotation_option.h>
 #include "kis_density_option.h"
+#include "kis_linewidth_option.h"
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -44,6 +45,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption()));
+    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()));
     addPaintOpOption(new KisAirbrushOption(false));
 
     m_paintActionType = new KisPaintActionTypeOption();

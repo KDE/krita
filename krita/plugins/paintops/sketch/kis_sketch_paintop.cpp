@@ -66,6 +66,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_sketchProperties.readOptionSetting(settings);
     m_brushOption.readOptionSetting(settings);
     m_densityOption.readOptionSetting(settings);
+    m_lineWidthOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
 
@@ -82,14 +83,13 @@ KisSketchPaintOp::~KisSketchPaintOp()
     delete m_painter;
 }
 
-void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end)
+void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
 {
-    if (m_sketchProperties.lineWidth == 1){
-        m_painter->drawThickLine(start, end, m_sketchProperties.lineWidth,m_sketchProperties.lineWidth);
+    if (lineWidth == 1.0){
+        m_painter->drawThickLine(start, end, lineWidth,lineWidth);
     }else{
-        m_painter->drawLine(start, end, m_sketchProperties.lineWidth, true);
+        m_painter->drawLine(start, end, lineWidth, true);
     }
-
 }
 
 void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation){
@@ -125,20 +125,20 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPointF mousePosition = pi2.pos();
     m_points.append(mousePosition);
 
-
-    // shaded: does not draw this line, chrome does, fur does
-    if (m_sketchProperties.makeConnection){
-        drawConnection(prevMouse,mousePosition);
-    }
-
     double scale = m_sizeOption.apply(pi2);
     double rotation = m_rotationOption.apply(pi2);
     double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
+    double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
+
+    // shaded: does not draw this line, chrome does, fur does
+    if (m_sketchProperties.makeConnection){
+        drawConnection(prevMouse, mousePosition, currentLineWidth);
+    }
 
     setCurrentScale(scale);
     setCurrentRotation(rotation);
 
-    qreal thresholdDistance;
+    qreal thresholdDistance = 0.0;
 
     // update the mask for simple mode only once
     // determine the radius
@@ -240,9 +240,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
             m_painter->setOpacity(opacity);
 
             if (m_sketchProperties.magnetify) {
-                drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt);
+                drawConnection(mousePosition + offsetPt, m_points.at(i) - offsetPt, currentLineWidth);
             }else{
-                drawConnection(mousePosition + offsetPt, mousePosition - offsetPt);
+                drawConnection(mousePosition + offsetPt, mousePosition - offsetPt, currentLineWidth);
             }
 
 

@@ -30,6 +30,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
+#include "kis_linewidth_option.h"
 
 class KisSketchPaintOp : public KisPaintOp
 {
@@ -57,6 +58,7 @@ private:
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
     KisDensityOption m_densityOption;
+    KisLineWidthOption m_lineWidthOption;
 
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
@@ -67,7 +69,7 @@ private:
     KisBrushSP m_brush;
 
 private:
-    void drawConnection(const QPointF &start, const QPointF &end);
+    void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);
     void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
 
 };

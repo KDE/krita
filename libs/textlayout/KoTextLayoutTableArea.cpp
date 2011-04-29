@@ -121,7 +121,8 @@ int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy acc
     for (int row = firstRow; row <= lastRow; ++row) {
         if (point.y() > d->rowPositions[row] && point.y() < d->rowPositions[row+1]) {
             if (point.x() < d->columnPositions[1]) {
-                return d->cellAreas[row][0]->hitTest(point, accuracy);
+                QTextTableCell tableCell = d->table->cellAt(row, 0);
+                return d->cellAreas[tableCell.row()][0]->hitTest(point, accuracy);
             }
             if (point.x() > d->columnPositions[d->table->columns() - 1]) {
                 QTextTableCell tableCell = d->table->cellAt(row, d->table->columns() - 1);
@@ -262,6 +263,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         collectBorderThicknesss(cursor->row+1, bottomBorderWidth, nextTopBorderWidth);
 
         complete = layoutRow(cursor, topBorderWidth, bottomBorderWidth);
+
         bottomBorderWidth = topBorderWidth;
         topBorderWidth = nextTopBorderWidth;
 
@@ -465,6 +467,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
     if (rowBottom > maximumAllowedBottom()) {
         d->rowPositions[row+1] = d->rowPositions[row];
+        cursor->row--;
+        layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+        cursor->row++;
         return false; // we can't honour minimum or fixed height so don't even try
     }
 
@@ -501,6 +506,9 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             if (maxBottom < areaTop) {
                 d->rowPositions[row+1] = d->rowPositions[row];
                 nukeRow(cursor);
+                cursor->row--;
+                layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+                cursor->row++;
                 return false; // we can't honour the borders so give up doing row
             }
 
@@ -540,35 +548,14 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     if (allCellsVoid) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
+        cursor->row--;
+        layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+        cursor->row++;
         return false; // we can't honour the borders so give up doing row
     }
 
-    // TODO We should also do the following, if this row fitted but next row doesn't fit at all
     if (!allCellsFullyDone) {
-        // We have to go back and layout all merged cells in this row,
-        // that don't end in this row.
-        col = 0;
-        while (col < d->table->columns()) {
-            QTextTableCell cell = d->table->cellAt(row, col);
-
-            if (row != cell.row() + cell.rowSpan() - 1) {
-                QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
-                KoTableCellStyle cellStyle(cellFormat);
-                KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
-
-                d->cellAreas[cell.row()][cell.column()] = cellArea;
-
-                cellArea->setReferenceRect(
-                        d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth(),
-                        d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth(),
-                        d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
-                        rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
-
-                FrameIterator *cellCursor =  cursor->frameIterator(col);
-                cellArea->layout(cellCursor);
-            }
-            col += cell.columnSpan(); // Skip across column spans.
-        }
+        layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
     } else {
         // Cells all ended naturally, so we can now do vertical alignment
         // Stop! Other odf implementors also only do it if all cells are fully done
@@ -603,6 +590,34 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     d->rowPositions[row+1] = rowBottom;
 
     return allCellsFullyDone;
+}
+
+bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qreal topBorderWidth, qreal bottomBorderWidth, qreal rowBottom)
+{
+    // Let's make sure all merged cells in this row, that don't end in this row get's a layout
+    int row = cursor->row;
+    int col = 0;
+    while (col < d->table->columns()) {
+        QTextTableCell cell = d->table->cellAt(row, col);
+        if (row != cell.row() + cell.rowSpan() - 1) {
+        // TODO do all of the following like in layoutRow()
+            QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
+            KoTableCellStyle cellStyle(cellFormat);
+            KoTextLayoutArea *cellArea = new KoTextLayoutArea(this, documentLayout());
+
+            d->cellAreas[cell.row()][cell.column()] = cellArea;
+
+            cellArea->setReferenceRect(
+                    d->columnPositions[col] + cellStyle.leftPadding() + cellStyle.leftBorderWidth(),
+                    d->columnPositions[col+cell.columnSpan()] - cellStyle.rightPadding() - cellStyle.rightBorderWidth(),
+                    d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
+                    rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
+
+            FrameIterator *cellCursor =  cursor->frameIterator(col);
+            cellArea->layout(cellCursor);
+        }
+        col += cell.columnSpan(); // Skip across column spans.
+    }
 }
 
 void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)
@@ -652,12 +667,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
-            /*
-             * The following check relies on the fact that QTextTable::cellAt()
-             * will return the cell that has the span when a covered cell is
-             * requested.
-             */
-            if (row == tableCell.row() && column == tableCell.column()) {
+
+            if (d->cellAreas[row][column]) {
                 paintCell(painter, context, tableCell);
             }
         }
@@ -671,12 +682,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     for (int row = 0; row < d->headerRows; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
-            /*
-             * The following check relies on the fact that QTextTable::cellAt()
-             * will return the cell that has the span when a covered cell is
-             * requested.
-             */
-            if (row == tableCell.row() && column == tableCell.column()) {
+
+            if (d->cellAreas[row][column]) {
                 paintCell(painter, context, tableCell);
 
                 paintCellBorders(painter, context, tableCell, false, &accuBlankBorders);
@@ -696,12 +703,8 @@ void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout:
     for (int row = firstRow; row <= lastRow; ++row) {
         for (int column = 0; column < d->table->columns(); ++column) {
             QTextTableCell tableCell = d->table->cellAt(row, column);
-            /*
-            * The following check relies on the fact that QTextTable::cellAt()
-            * will return the cell that has the span when a covered cell is
-            * requested.
-            */
-            if (row == tableCell.row() && column == tableCell.column()) {
+
+            if (d->cellAreas[row][column]) {
                 paintCellBorders(painter, context, tableCell, topRow, &accuBlankBorders);
             }
         }

@@ -476,7 +476,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     }
 
     bool allCellsFullyDone = true;
-    bool allCellsVoid = true;
+    bool noCellsFitted = true;
     int col = 0;
     while (col < d->table->columns()) {
         // Get the cell format.
@@ -532,7 +532,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             bool cellFully = cellArea->layout(cellCursor);
             allCellsFullyDone = allCellsFullyDone && cellFully;
 
-            allCellsVoid = allCellsVoid && (cellArea->top() >= cellArea->bottom());
+            noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom());
 
             if (!rowHasExactHeight) {
                 /*
@@ -549,7 +549,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         col += cell.columnSpan(); // Skip across column spans.
     }
 
-    if (allCellsVoid) {
+    if (noCellsFitted && !rowHasExactHeight) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
         if (cursor->row > d->startOfArea->row) {
@@ -557,7 +557,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
             cursor->row++;
         }
-        return false; // we can't honour the borders so give up doing row
+        return false; // we can't honour the anything inside so give up doing row
     }
 
     if (!allCellsFullyDone) {

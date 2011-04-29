@@ -29,7 +29,6 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoTextLayoutRootArea.h"
 #include "KoTextLayoutRootAreaProvider.h"
-#include "KoInlineObjectExtent.h"
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 #include "InlineAnchorStrategy.h"
@@ -562,7 +561,7 @@ void KoTextDocumentLayout::unregisterAllObstructions()
     d->obstructions.clear();
 }
 
-KoInlineObjectExtent KoTextDocumentLayout::KoInlineObjectExtent(const QTextFragment &fragment)
+KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragment &fragment)
 {
     if (d->inlineObjectExtents.contains(fragment.position()))
         return d->inlineObjectExtents[fragment.position()];

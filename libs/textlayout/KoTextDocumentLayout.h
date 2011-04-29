@@ -25,8 +25,6 @@
 #include "kotext_export.h"
 
 #include "KoTextDocument.h"
-#include "InlineObjectExtend.h"
-
 #include <QAbstractTextDocumentLayout>
 #include <QRectF>
 #include <QSizeF>
@@ -135,7 +133,7 @@ public:
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
-    KoInlineObjectExtent inlineObjectExtend(const QTextFragment&);
+    KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
 
     /// Registers the shape as being relevant for run around at this moment in time
     void registerObstruction(KoShape *shape);

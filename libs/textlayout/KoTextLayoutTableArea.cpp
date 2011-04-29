@@ -624,6 +624,7 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
         }
         col += cell.columnSpan(); // Skip across column spans.
     }
+    return true;
 }
 
 void KoTextLayoutTableArea::paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context)

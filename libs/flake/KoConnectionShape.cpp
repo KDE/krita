@@ -452,24 +452,29 @@ bool KoConnectionShape::loadOdf(const KoXmlElement & element, KoShapeLoadingCont
     if (d->hasCustomPath) {
         KoPathShapeLoader loader(this);
         loader.parseSvg(element.attributeNS(KoXmlNS::svg, "d"), true);
-        QRectF viewBox = loadOdfViewbox(element);
-        if (viewBox.isEmpty()) {
-            // there should be a viewBox to transform the path data
-            // if there is none, use the bounding rectangle of the parsed path
-            viewBox = outline().boundingRect();
-        }
-        // convert path to viewbox coordinates to have a bounding rect of (0,0 1x1)
-        // which can later be fitted back into the target rect once we have all
-        // the required information
-        QTransform viewMatrix;
-        viewMatrix.scale(viewBox.width() ? static_cast<qreal>(1.0) / viewBox.width() : 1.0,
-                         viewBox.height() ? static_cast<qreal>(1.0) / viewBox.height() : 1.0);
-        viewMatrix.translate(-viewBox.left(), -viewBox.top());
-        d->map(viewMatrix);
+        if (m_subpaths.size() > 0) {
+            QRectF viewBox = loadOdfViewbox(element);
+            if (viewBox.isEmpty()) {
+                // there should be a viewBox to transform the path data
+                // if there is none, use the bounding rectangle of the parsed path
+                viewBox = outline().boundingRect();
+            }
+            // convert path to viewbox coordinates to have a bounding rect of (0,0 1x1)
+            // which can later be fitted back into the target rect once we have all
+            // the required information
+            QTransform viewMatrix;
+            viewMatrix.scale(viewBox.width() ? static_cast<qreal>(1.0) / viewBox.width() : 1.0,
+                             viewBox.height() ? static_cast<qreal>(1.0) / viewBox.height() : 1.0);
+            viewMatrix.translate(-viewBox.left(), -viewBox.top());
+            d->map(viewMatrix);
 
-        // trigger finishing the connections in case we have all data
-        // otherwise it gets called again once the shapes we are
-        // connected to are loaded
+            // trigger finishing the connections in case we have all data
+            // otherwise it gets called again once the shapes we are
+            // connected to are loaded
+        }
+        else {
+            d->hasCustomPath = false;
+        }
         finishLoadingConnection();
     } else {
         d->forceUpdate = true;

@@ -467,9 +467,11 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
 
     if (rowBottom > maximumAllowedBottom()) {
         d->rowPositions[row+1] = d->rowPositions[row];
-        cursor->row--;
-        layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
-        cursor->row++;
+        if (cursor->row > d->startOfArea->row) {
+            cursor->row--;
+            layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+            cursor->row++;
+        }
         return false; // we can't honour minimum or fixed height so don't even try
     }
 
@@ -506,9 +508,11 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             if (maxBottom < areaTop) {
                 d->rowPositions[row+1] = d->rowPositions[row];
                 nukeRow(cursor);
-                cursor->row--;
-                layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
-                cursor->row++;
+                if (cursor->row > d->startOfArea->row) {
+                    cursor->row--;
+                    layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+                    cursor->row++;
+                }
                 return false; // we can't honour the borders so give up doing row
             }
 
@@ -548,9 +552,11 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     if (allCellsVoid) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
-        cursor->row--;
-        layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
-        cursor->row++;
+        if (cursor->row > d->startOfArea->row) {
+            cursor->row--;
+            layoutMergedCellsNotEnding(cursor, topBorderWidth, bottomBorderWidth, rowBottom);
+            cursor->row++;
+        }
         return false; // we can't honour the borders so give up doing row
     }
 

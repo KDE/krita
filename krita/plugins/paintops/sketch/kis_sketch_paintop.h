@@ -31,6 +31,7 @@
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
 #include "kis_linewidth_option.h"
+#include "kis_offset_scale_option.h"
 
 class KisSketchPaintOp : public KisPaintOp
 {
@@ -59,6 +60,7 @@ private:
     KisPressureRotationOption m_rotationOption;
     KisDensityOption m_densityOption;
     KisLineWidthOption m_lineWidthOption;
+    KisOffsetScaleOption m_offsetScaleOption;
 
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;

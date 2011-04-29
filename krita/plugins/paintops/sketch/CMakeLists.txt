@@ -4,6 +4,7 @@ set(kritasketchpaintop_PART_SRCS
     kis_sketchop_option.cpp
     kis_density_option.cpp
     kis_linewidth_option.cpp
+    kis_offset_scale_option.cpp
     kis_sketch_paintop_settings.cpp
     kis_sketch_paintop_settings_widget.cpp
     )

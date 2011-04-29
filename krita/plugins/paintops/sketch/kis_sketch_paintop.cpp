@@ -67,6 +67,7 @@ KisSketchPaintOp::KisSketchPaintOp(const KisSketchPaintOpSettings *settings, Kis
     m_brushOption.readOptionSetting(settings);
     m_densityOption.readOptionSetting(settings);
     m_lineWidthOption.readOptionSetting(settings);
+    m_offsetScaleOption.readOptionSetting(settings);
 
     m_brush = m_brushOption.brush();
 
@@ -125,10 +126,11 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     QPointF mousePosition = pi2.pos();
     m_points.append(mousePosition);
 
-    double scale = m_sizeOption.apply(pi2);
-    double rotation = m_rotationOption.apply(pi2);
-    double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
-    double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
+    const double scale = m_sizeOption.apply(pi2);
+    const double rotation = m_rotationOption.apply(pi2);
+    const double currentProbability = m_densityOption.apply(pi2, m_sketchProperties.probability);
+    const double currentLineWidth = m_lineWidthOption.apply(pi2, m_sketchProperties.lineWidth);
+    const double currentOffsetScale = m_offsetScaleOption.apply(pi2, m_sketchProperties.offset);
 
     // shaded: does not draw this line, chrome does, fur does
     if (m_sketchProperties.makeConnection){
@@ -160,10 +162,9 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
     }
 
     // determine density
-    qreal density = thresholdDistance * currentProbability;
+    const qreal density = thresholdDistance * currentProbability;
 
     // probability behaviour
-    // TODO: make this option
     qreal probability = 1.0 - currentProbability;
 
     QColor painterColor = painter()->paintColor().toQColor();
@@ -215,7 +216,7 @@ KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi
 
         // density check
         if (drand48() >= probability) {
-            QPointF offsetPt = diff * m_sketchProperties.offset;
+            QPointF offsetPt = diff * currentOffsetScale;
 
             if (m_sketchProperties.randomRGB){
                 // some color transformation per line goes here

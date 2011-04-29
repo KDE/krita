@@ -47,6 +47,16 @@ class KoTextLayoutRootArea;
 class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
 
+
+class KOTEXT_EXPORT KoInlineObjectExtent
+{
+public:
+    KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
+    qreal m_ascent;
+    qreal m_descent;
+};
+
+
 /**
  * Text layouter that allows text to flow in multiple root area and around
  * obstructions.
@@ -125,7 +135,7 @@ public:
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
-    InlineObjectExtend inlineObjectExtend(const QTextFragment&);
+    KoInlineObjectExtent inlineObjectExtend(const QTextFragment&);
 
     /// Registers the shape as being relevant for run around at this moment in time
     void registerObstruction(KoShape *shape);

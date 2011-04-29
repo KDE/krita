@@ -29,7 +29,7 @@
 #include "KoInlineTextObjectManager.h"
 #include "KoTextLayoutRootArea.h"
 #include "KoTextLayoutRootAreaProvider.h"
-#include "InlineObjectExtend.h"
+#include "KoInlineObjectExtent.h"
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 #include "InlineAnchorStrategy.h"
@@ -51,9 +51,9 @@
 extern int qt_defaultDpiY();
 
 
-InlineObjectExtend::InlineObjectExtend(qreal ascent, qreal descent)
-        : m_ascent(ascent),
-        m_descent(descent)
+KoInlineObjectExtent::KoInlineObjectExtent(qreal ascent, qreal descent)
+    : m_ascent(ascent),
+      m_descent(descent)
 {
 }
 
@@ -84,7 +84,7 @@ public:
     QList<KoTextLayoutRootArea *> rootAreaList;
     FrameIterator *layoutPosition;
 
-    QHash<int, InlineObjectExtend> inlineObjectExtends; // maps text-position to whole-line-height of an inline object
+    QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     int textAnchorIndex; // index of last not positioned inline object inside textAnchors
@@ -546,14 +546,14 @@ QRectF KoTextDocumentLayout::frameBoundingRect(QTextFrame*) const
 
 void KoTextDocumentLayout::clearInlineObjectRegistry(QTextBlock block)
 {
-    d->inlineObjectExtends.clear();
+    d->inlineObjectExtents.clear();
     d->inlineObjectOffset = block.position();
 }
 
 void KoTextDocumentLayout::registerInlineObject(const QTextInlineObject &inlineObject)
 {
-    InlineObjectExtend pos(inlineObject.ascent(),inlineObject.descent());
-    d->inlineObjectExtends.insert(d->inlineObjectOffset + inlineObject.textPosition(), pos);
+    KoInlineObjectExtent pos(inlineObject.ascent(),inlineObject.descent());
+    d->inlineObjectExtents.insert(d->inlineObjectOffset + inlineObject.textPosition(), pos);
 }
 
 void KoTextDocumentLayout::unregisterAllObstructions()
@@ -562,11 +562,11 @@ void KoTextDocumentLayout::unregisterAllObstructions()
     d->obstructions.clear();
 }
 
-InlineObjectExtend KoTextDocumentLayout::inlineObjectExtend(const QTextFragment &fragment)
+KoInlineObjectExtent KoTextDocumentLayout::KoInlineObjectExtent(const QTextFragment &fragment)
 {
-    if (d->inlineObjectExtends.contains(fragment.position()))
-        return d->inlineObjectExtends[fragment.position()];
-    return InlineObjectExtend();
+    if (d->inlineObjectExtents.contains(fragment.position()))
+        return d->inlineObjectExtents[fragment.position()];
+    return KoInlineObjectExtent();
 }
 
 QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions(const QRectF &rect)

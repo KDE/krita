@@ -54,7 +54,7 @@ void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *documen
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(lay);
     KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
-
+    Q_ASSERT(rootArea);
     KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(rootArea->associatedShape());
     if (container == 0) {
         if (m_model)

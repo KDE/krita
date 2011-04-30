@@ -338,6 +338,69 @@ bool            isSimple
 .... Find the values for the unit...
 
 
+2.2.3.2 Font
+
+This object describes the properties of a font face to be used when rendering text.
+
+VersionCompat	version
+String          family
+String          style
+uint32          FIXME
+uint32          FIXME
+uint16          charset
+uint16          family
+uint16          pitch
+uint16          weight
+uint16          underline
+uint16          strikeout
+uint16          italic
+uint16          language
+uint16          width
+uint16          orientation
+bool            wordline
+bool            outline
+bool            shadow
+int8            kerning
+    If version is greater than 1:
+int8            relief
+uint16          language
+bool            vertical
+uint16          emphasis
+    If version is greater than 2:
+uint16          overline
+
+version         Version and size of the font record, excluding the
+                VersionCompat object. 
+
+FIXME: Describe the following parts in detail
+family
+style
+FIXME ← check out what this really is
+FIXME ← check out what this really is
+charset
+family
+pitch
+weight
+underline
+strikeout
+italic
+language
+width
+orientation
+wordline
+outline
+shadow
+kerning
+    If version is greater than 1:
+relief
+language
+vertical
+emphasis
+    If version is greater than 2:
+overline
+
+
+
 2.2.4 Structure Objects
 - - - - - - - - - - - -
 
@@ -452,9 +515,18 @@ This action loads a new MapMode object into the drawing context.
 MapMode		mapMode
 
 
-2.3.2.4 META_TEXTLANGUAGE_ACTION (150)
+2.3.2.4 META_FONT_ACTION (138)
 
-This action sets the current text language.
+This action sets the current font in the graphics context.
+
+Font 		font
+
+font            The new font that will be used when writing text.
+
+
+2.3.2.5 META_TEXTLANGUAGE_ACTION (150)
+
+This action sets the current text language in the graphics context.
 
 uint16          languageType
 

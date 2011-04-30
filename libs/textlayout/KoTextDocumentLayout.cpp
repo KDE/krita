@@ -295,13 +295,11 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         qDebug() << "positionInlineObject called";
     //We are called before layout so that we can position objects
     Q_ASSERT(format.isCharFormat());
-    Q_ASSERT(false);
+//     Q_ASSERT(false);
     if (d->inlineTextObjectManager == 0)
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-    if (obj)
-        obj->updatePosition(document(), item, position, cf);
 
     // We need some special treatment for anchors as they need to position their object during
     // layout and not this early
@@ -335,7 +333,11 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
                 }
                 d->textAnchors.append(anchor);
             }
+            anchor->updatePosition(document(), item, position, cf);
         }
+    }
+    else if (obj) {
+        obj->updatePosition(document(), item, position, cf);
     }
 }
 

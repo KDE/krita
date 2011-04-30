@@ -22,6 +22,7 @@
 #ifndef KOSHAPEFACTORYBASE_H
 #define KOSHAPEFACTORYBASE_H
 
+#include <QObject>
 #include <QStringList>
 #include <QString>
 #include <QWidget>
@@ -86,8 +87,9 @@ public:
  * After you created the factory you should create a plugin that can announce the factory to the
  * KoShapeRegistry.  See the KoPluginLoader as well.
  */
-class FLAKE_EXPORT KoShapeFactoryBase
+class FLAKE_EXPORT KoShapeFactoryBase : public QObject
 {
+    Q_OBJECT
 public:
 
     /**
@@ -96,7 +98,7 @@ public:
      *   example for use by the KoToolBase::activateTemporary.
      * @param name the user visible name of the shape this factory creates.
      */
-    KoShapeFactoryBase(const QString &id, const QString &name);
+    KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName = QString::null);
     virtual ~KoShapeFactoryBase();
 
     /**
@@ -185,15 +187,23 @@ public:
     bool hidden() const;
 
     /**
-     * This slot is called whenever there is a new document resource
+     * This method is called whenever there is a new document resource
      * manager that is created. The factory may reimplement this in
      * order to get existing resources or put factory specific resources in.
      * In case the factory creates new resources it is adviced to parent
      * them to the manager (which is a QObject) for memory management
      * purposes.
+     *
+     * FIXME: this method is only used by Tables. We should refactor so
+     * it is no longer necessary.
+     *
+     * NOTE: we store the documentmanagers in a list, and remove them
+     * from the list on delete.
+     *
      * @param manager the new manager
      */
     virtual void newDocumentResourceManager(KoResourceManager *manager);
+    QList<KoResourceManager *> documentResourceManagers() const;
 
     /**
      * This method should be implemented by factories to create a shape that the user
@@ -206,7 +216,7 @@ public:
      * @return a new shape
      * @see createShape() newDocumentResourceManager()
      */
-    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const = 0;
+    virtual KoShape *createDefaultShape(KoResourceManager *documentResources = 0) const;
 
     /**
      * This method should be implemented by factories to create a shape based on a set of
@@ -291,6 +301,16 @@ protected:
     void setHidden(bool hidden);
 
 private:
+
+    void getDeferredPlugin();
+
+private slots:
+
+    /// called whenever a document KoResourceManager is deleted
+    void pruneDocumentResourceManager(QObject *);
+
+private:
+
     class Private;
     Private * const d;
 };

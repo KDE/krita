@@ -18,10 +18,12 @@
 #ifndef _KIS_CURVE_LABEL_H_
 #define _KIS_CURVE_LABEL_H_
 
+#include <krita_export.h>
+
 class QString;
 class QImage;
 
-class KisCurveLabel
+class PAINTOP_EXPORT KisCurveLabel
 {
 public:
     KisCurveLabel();
@@ -30,7 +32,7 @@ public:
     KisCurveLabel(const KisCurveLabel& );
     KisCurveLabel& operator=(const KisCurveLabel& );
     ~KisCurveLabel();
-    
+
     QString name() const;
     QImage icon() const;
 private:

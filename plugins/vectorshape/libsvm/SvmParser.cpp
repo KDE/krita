@@ -279,12 +279,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QString  string;
 
                 stream >> startPoint;
-                stream >> strLength;
-                for (uint i = 0; i < strLength; ++i) {
-                    quint8  ch;
-                    stream >> ch;
-                    string += char(ch);
-                }
+                parseString(stream, string);
 
                 // FIXME: Much more here
                 kDebug(31000) << "Text: " << startPoint << string;
@@ -347,6 +342,10 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_FONT_ACTION:
+            {
+                parseFont(stream, mContext.font);
+                mContext.changedItems |= GCFont;
+            }
             break;
         case META_PUSH_ACTION:
             {
@@ -430,6 +429,76 @@ void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
         polygon << point;
     }
 }
+
+void SvmParser::parseString(QDataStream &stream, QString &string)
+{
+    quint16  length;
+
+    stream >> length;
+    for (uint i = 0; i < length; ++i) {
+        quint8  ch;
+        stream >> ch;
+        string += char(ch);
+    }
+}
+
+void SvmParser::parseFont(QDataStream &stream, QFont &font)
+{
+    quint16  version;
+    quint32  totalSize;
+
+    // the VersionCompat struct
+    stream >> version;
+    stream >> totalSize;
+
+    // Name and style
+    QString  family;
+    QString  style;
+    parseString(stream, family);
+    parseString(stream, style);
+    font.setFamily(family);
+
+    // Font size
+    quint32  width;
+    quint32  height;
+    stream >> width;
+    stream >> height;
+    font.setPointSize(height);
+
+    qint8   temp8;
+    bool    tempbool;
+    quint16 tempu16;
+    stream >> tempu16;          // charset
+    stream >> tempu16;          // family
+    stream >> tempu16;          // pitch
+    stream >> tempu16;          // weight
+    stream >> tempu16;          // underline
+    stream >> tempu16;          // strikeout
+    stream >> tempu16;          // italic
+    stream >> tempu16;          // language
+    stream >> tempu16;          // width
+
+    stream >> tempu16;          // orientation
+
+    stream >> tempbool;         // wordline
+    stream >> tempbool;         // outline
+    stream >> tempbool;         // shadow
+    stream >> temp8;            // kerning
+
+    if (version > 1) {
+        stream >> temp8;        // relief
+        stream >> tempu16;      // language
+        stream >> tempbool;     // vertical
+        stream >> tempu16;      // emphasis
+    }
+
+    if (version > 2) {
+        stream >> tempu16;      // overline
+    }
+
+    // FIXME: Read away the rest of font here to allow for higher versions than 3.
+}
+
 
 void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
 {

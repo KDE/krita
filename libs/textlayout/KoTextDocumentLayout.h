@@ -153,6 +153,12 @@ public:
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
 
+    /**
+     * Remove the root-areas \p rootArea from the list of \a rootAreas() .
+     * \param rootArea root-area to remove. If NULL then all root-areas are removed.
+     */
+    void removeRootArea(KoTextLayoutRootArea *rootArea = 0);
+
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 

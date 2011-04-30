@@ -584,6 +584,13 @@ QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const
     return d->rootAreaList;
 }
 
+void KoTextDocumentLayout::removeRootArea(KoTextLayoutRootArea *rootArea)
+{
+    int indexOf = rootArea ? qMax(0, d->rootAreaList.indexOf(rootArea)) : 0;
+    for(int i = d->rootAreaList.count() - 1; i >= indexOf; --i)
+        d->rootAreaList.removeAt(i);
+}
+
 QList<KoShape*> KoTextDocumentLayout::shapes() const
 {
     QList<KoShape*> listOfShapes;

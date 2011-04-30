@@ -35,6 +35,9 @@
 #include "SvmGraphicsContext.h"
 
 
+#define DEBUG_SVMPAINT 0
+
+
 /**
    Namespace for StarView Metafile (SVM) classes
 */
@@ -60,14 +63,21 @@ void SvmPainterBackend::init(const SvmHeader &header)
     qreal  scaleX = qreal( m_outputSize.width() )  / header.width;
     qreal  scaleY = qreal( m_outputSize.height() ) / header.height;
 
-    // Keep aspect ration.  Use the smaller value so that we don't get
+#if DEBUG_SVMPAINT
+    kDebug(31000) << "scale before:" << scaleX << ", " << scaleY;
+#endif
+
+    // Keep aspect ratio.  Use the smaller value so that we don't get
     // an overflow in any direction.
+#if 0   // Set this to 1 to keep aspect ratio.
     if ( scaleX > scaleY )
         scaleX = scaleY;
     else
         scaleY = scaleX;
+#endif
 #if DEBUG_SVMPAINT
-    kDebug(31000) << "scale = " << scaleX << ", " << scaleY;
+    kDebug(31000) << "shape size:" << m_outputSize;
+    kDebug(31000) << "scale after:" << scaleX << ", " << scaleY;
 #endif
 
     // Transform the SVM object so that it fits in the shape as much
@@ -119,7 +129,11 @@ void SvmPainterBackend::textArray(SvmGraphicsContext &context,
                                   const QPoint &point, const QString &string)
 {
     updateFromGraphicscontext(context);
+
+    m_painter->save();
+    m_painter->setPen(context.textColor);
     m_painter->drawText(point, string);
+    m_painter->restore();
 }
 
 
@@ -130,18 +144,30 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
         m_painter->setPen(context.lineColor);
+#if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting line color to" << context.lineColor;
+#endif
     }
     if (context.changedItems & GCFillBrush) {
         m_painter->setBrush(context.fillBrush);
+#if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
+#endif
+    }
+    if (context.changedItems & GCTextColor) {
+        m_painter->setPen(context.textColor);
+#if DEBUG_SVMPAINT
+        kDebug(31000) << "*** Setting text color to" << context.textColor;
+#endif
     }
     if (context.changedItems & GCMapMode) {
         // FIXME
     }
     if (context.changedItems & GCFont) {
         m_painter->setFont(context.font);
+#if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting font to" << context.font;
+#endif
     }
 
     // Reset all changes until next time.

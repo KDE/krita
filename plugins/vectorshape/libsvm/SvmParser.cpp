@@ -38,7 +38,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_SVMPARSER 1
+#define DEBUG_SVMPARSER 0
 
 namespace Libsvm
 {
@@ -161,6 +161,18 @@ bool SvmParser::parse(const QByteArray &data)
 
     mBackend->init(header);
 
+#if DEBUG_SVMPARSER
+    {
+        QPolygon polygon;
+        polygon << QPoint(0, 0);
+        polygon << QPoint(header.width, header.height);
+        mBackend->polyLine(mContext, polygon);
+    }
+#endif
+
+    // Parse all actions and call the appropriate backend callback for
+    // the graphics drawing actions.  The context actions will
+    // manipulate the graphics context, which is maintained here.
     for (uint action = 0; action < header.actionCount; ++action) {
         quint16  actionType;
         quint16  version;
@@ -209,6 +221,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QRect  rect;
 
                 parseRect(stream, rect);
+                kDebug(31000) << "Rect:"  << rect;
                 mBackend->rect(mContext, rect);
             }
             break;
@@ -223,6 +236,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
+                kDebug(31000) << "Polyline:"  << polygon;
                 mBackend->polyLine(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -235,6 +249,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
+                kDebug(31000) << "Polygon:"  << polygon;
                 mBackend->polygon(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -267,6 +282,7 @@ bool SvmParser::parse(const QByteArray &data)
                 }
                 
                 foreach (QPolygon polygon, polygons) {
+                    kDebug(31000) << "Polygon:"  << polygon;
                     mBackend->polygon(mContext, polygon);
                 }
             }
@@ -275,13 +291,13 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTARRAY_ACTION:
             {
                 QPoint   startPoint;
-                quint16  strLength;
                 QString  string;
 
                 stream >> startPoint;
                 parseString(stream, string);
 
                 // FIXME: Much more here
+
                 kDebug(31000) << "Text: " << startPoint << string;
                 mBackend->textArray(mContext, startPoint, string);
             }
@@ -314,6 +330,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> doSet;
 
                 mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                kDebug(31000) << "Color:"  << mContext.lineColor;
                 mContext.changedItems |= GCLineColor;
             }
             break;
@@ -328,22 +345,39 @@ bool SvmParser::parse(const QByteArray &data)
                 kDebug(31000) << "Fill color :" << colorData << '(' << doSet << ')';
 
                 mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
+                kDebug(31000) << "Brush:"  << mContext.fillBrush;
                 mContext.changedItems |= GCFillBrush;
             }
             break;
         case META_TEXTCOLOR_ACTION:
+            {
+                quint32  colorData;
+                stream >> colorData;
+
+                mContext.textColor = QColor::fromRgb(colorData);
+                kDebug(31000) << "Color:"  << mContext.textColor;
+                mContext.changedItems |= GCTextColor;
+            }
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
             break;
         case META_MAPMODE_ACTION:
             {
                 stream >> mContext.mapMode;
+                kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
+                              << "scaleX"
+                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.numerator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator)
+                              << "scaleY"
+                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.numerator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator);
                 mContext.changedItems |= GCMapMode;
             }
             break;
         case META_FONT_ACTION:
             {
                 parseFont(stream, mContext.font);
+                kDebug(31000) << "Font:"  << mContext.font;
                 mContext.changedItems |= GCFont;
             }
             break;
@@ -381,6 +415,7 @@ bool SvmParser::parse(const QByteArray &data)
 #if DEBUG_SVMPARSER
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
+            break;
         }
 
         delete [] rawData;

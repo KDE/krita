@@ -727,7 +727,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
-    runAroundHelper.setObstructions(documentLayout()->relevantObstructions(QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top())));
+    runAroundHelper.setObstructions(documentLayout()->currentObstructions());
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;

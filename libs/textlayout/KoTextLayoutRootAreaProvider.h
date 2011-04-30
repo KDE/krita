@@ -60,9 +60,8 @@ public:
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
 
-    /// Return a list of obstructions intersecting rect
-    /// Obstructions present in the excludingThese list will not be returned
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese) = 0;
+    /// Return a list of obstructions intersecting root area
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) = 0;
 
 };
 

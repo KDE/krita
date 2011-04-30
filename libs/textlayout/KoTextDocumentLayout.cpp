@@ -88,7 +88,8 @@ public:
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     int textAnchorIndex; // index of last not positioned inline object inside textAnchors
 
-    QHash<KoShape*,KoTextLayoutObstruction*> obstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
+    QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
+    QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
 
     qreal defaultTabSizing;
     qreal y;
@@ -350,9 +351,9 @@ void KoTextDocumentLayout::resetAnchor(int resetPosition)
             (*iter)->anchorStrategy()->reset();
 
             // delete obstruction
-            if (d->obstructions.contains((*iter)->shape())) {
-                KoTextLayoutObstruction *obstruction = d->obstructions.value((*iter)->shape());
-                d->obstructions.remove((*iter)->shape());
+            if (d->anchoredObstructions.contains((*iter)->shape())) {
+                KoTextLayoutObstruction *obstruction = d->anchoredObstructions.value((*iter)->shape());
+                d->anchoredObstructions.remove((*iter)->shape());
                 delete obstruction;
             }
             (*iter)->setAnchorStrategy(0);
@@ -436,6 +437,8 @@ void KoTextDocumentLayout::layout()
 
         if (shouldLayout) {
             QSizeF size = d->provider->suggestSize(rootArea);
+            d->freeObstructions = d->provider->relevantObstructions(rootArea);
+
             rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
 
             // Layout all that can fit into that root area
@@ -478,6 +481,7 @@ void KoTextDocumentLayout::layout()
         if (rootArea) {
             d->rootAreaList.append(rootArea);
             QSizeF size = d->provider->suggestSize(rootArea);
+            d->freeObstructions = d->provider->relevantObstructions(rootArea);
             rootArea->setReferenceRect(0, size.width(), d->y, d->y + size.height());
             // Layout all that can fit into that root area
             rootArea->layout(d->layoutPosition);
@@ -557,8 +561,8 @@ void KoTextDocumentLayout::registerInlineObject(const QTextInlineObject &inlineO
 
 void KoTextDocumentLayout::unregisterAllObstructions()
 {
-    qDeleteAll(d->obstructions);
-    d->obstructions.clear();
+    qDeleteAll(d->anchoredObstructions);
+    d->anchoredObstructions.clear();
 }
 
 KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragment &fragment)
@@ -568,19 +572,11 @@ KoInlineObjectExtent KoTextDocumentLayout::inlineObjectExtent(const QTextFragmen
     return KoInlineObjectExtent();
 }
 
-QList<KoTextLayoutObstruction *> KoTextDocumentLayout::relevantObstructions(const QRectF &rect)
+QList<KoTextLayoutObstruction *> KoTextDocumentLayout::currentObstructions()
 {
-    QList<KoTextLayoutObstruction*> currentObstructions;
+//    QList<KoTextLayoutObstruction*> currentObstructions;
 
-    currentObstructions = d->provider->relevantObstructions(rect, currentObstructions);
-    /*
-    // add current page children obstructions to currentObstructions
-    foreach(KoShape *childShape, shapes()) {
-        if (d->obstructions.contains(childShape)) {
-            currentObstructions.append(d->obstructions.value(childShape));
-        }
-    }*/
-    return currentObstructions;
+    return d->freeObstructions;
 }
 
 QList<KoTextLayoutRootArea *> KoTextDocumentLayout::rootAreas() const

@@ -39,7 +39,7 @@ public:
 
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
 
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese);
+    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 
     TextShape *m_textShape;
 

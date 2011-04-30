@@ -134,15 +134,19 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter, const KoViewConvert
     QTransform tr = shape->absoluteTransformation(&converter);
     QTransform offsetMatrix = tr * tm * tr.inverted();
 
+    //The shadowRect includes the region that both the shape, shadow, and blur expansion needed
     QRectF shadowRect(0, 0, 0, 0);
     qreal shapeWidth;
     KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
 
     if (group) {
-        shadowRect.setSize(group->size());
-        shapeWidth = group->size().width();
+        foreach(child, group)
+        {
+            shadowRect.united(child->boundingRect());
+            shapeWidth = group->size().width();
+        }
     } else {
-        shadowRect.setSize(shape->boundingRect().size());
+        shadowRect = shape->boundingRect();
         shapeWidth = shape->boundingRect().width();
     }
 

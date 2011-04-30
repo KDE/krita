@@ -345,8 +345,8 @@ This object describes the properties of a font face to be used when rendering te
 VersionCompat	version
 String          family
 String          style
-uint32          FIXME
-uint32          FIXME
+uint32          fontWidth
+uint32          fontHeight
 uint16          charset
 uint16          family
 uint16          pitch
@@ -375,8 +375,8 @@ version         Version and size of the font record, excluding the
 FIXME: Describe the following parts in detail
 family
 style
-FIXME ← check out what this really is
-FIXME ← check out what this really is
+fontWidth
+fontHeight
 charset
 family
 pitch

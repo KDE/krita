@@ -3,6 +3,7 @@
    Copyright (C) 2006-2008 Thorsten Zachmann <zachmann@kde.org>
    Copyright (C) 2006-2010 Thomas Zander <zander@kde.org>
    Copyright (C) 2009-2010 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2011 Yue Liu <opuspace@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

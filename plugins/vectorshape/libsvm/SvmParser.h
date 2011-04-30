@@ -44,6 +44,8 @@ class SVM_EXPORT SvmParser
  private:
     void parseRect(QDataStream &stream, QRect &rect);
     void parsePolygon(QDataStream &stream, QPolygon &polygon);
+    void parseString(QDataStream &stream, QString &string);
+    void parseFont(QDataStream &stream, QFont &font);
 
     void dumpAction(QDataStream &stream, quint16 version, quint32 totalSize);
 

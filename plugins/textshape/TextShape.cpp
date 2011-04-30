@@ -199,16 +199,10 @@ void TextShape::paintDecorations(QPainter &painter, const KoViewConverter &conve
             painter.setRenderHint(QPainter::Antialiasing);
 
         QPen pen(QColor(210, 210, 210)); // use cosmetic pen
-
-        QPointF tl(0.0, 0.0);
-        QRectF rect(tl, size());
+        QPointF onePixel = converter.viewToDocument(QPointF(1.0, 1.0));
+        QRectF rect(QPointF(0.0, 0.0), size() - QSizeF(onePixel.x(), onePixel.y()));
         painter.setPen(pen);
-        painter.drawLine(rect.topLeft(), rect.topRight());
-        painter.drawLine(rect.bottomLeft(), rect.bottomRight());
-
-        painter.setPen(pen);
-        painter.drawLine(rect.topRight(), rect.bottomRight());
-        painter.drawLine(rect.topLeft(), rect.bottomLeft());
+        painter.drawRect(rect);
         painter.restore();
     }
 }

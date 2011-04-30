@@ -1391,8 +1391,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             if ((cell.row() == r) && (cell.column() == c)) {
                 TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:table-cell");
-                tableCellInformation.addAttribute("rowSpan", cell.rowSpan());
-                tableCellInformation.addAttribute("columnSpan", cell.columnSpan());
+                if (cell.rowSpan() > 1)
+                    tableCellInformation.addAttribute("table:number-rows-spanned", cell.rowSpan());
+                if (cell.columnSpan() > 1)
+                    tableCellInformation.addAttribute("table:number-columns-spanned", cell.columnSpan());
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();

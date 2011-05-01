@@ -23,6 +23,7 @@
 
 #include "AnchorStrategy.h"
 
+class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
@@ -30,7 +31,7 @@ class QTextLayout;
 class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
-    FloatingAnchorStrategy(KoTextAnchor *anchor);
+    FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     ~FloatingAnchorStrategy();
 
     /**

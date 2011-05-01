@@ -29,8 +29,8 @@
 #include <QTextLayout>
 #include <QTextBlock>
 
-FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor)
-        : AnchorStrategy(anchor)
+FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
+        : AnchorStrategy(anchor, rootArea)
         , m_anchor(anchor)
         , m_knowledgePoint(-1)
         , m_finished(false)

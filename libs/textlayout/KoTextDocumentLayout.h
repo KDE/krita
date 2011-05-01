@@ -122,27 +122,37 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    /** Anchors are special InlineObjects that we detect in positionInlineObject().
-     * We save those for later so we can position them during layout instead.
-     * During layout positionAnchoredShapes() is called to do just that.
+    /**
+     * We have the concept of Obstructions which text has to run around in various ways.
+     * We maintain two collections of obstructions. The free which are tied to just a position
+     * (tied to pages), and the anchored obstructions which are each anchored to a KoTextAnchor
+     *
+     * The free obstructions are collected from the KoTextLayoutRootAreaProvider during layout
+     *
+     * The anchored obstructions are collected during layout of individual QTextLines in the
+     * KoTextLayoutArea::layoutBlock() method.
      */
-    void positionAnchoredShapes();
-    // remove all anchors which document position is bigger or equal to resetPosition
-    void resetAnchor(int resetPosition);
-    // remove inline object
+ 
+    /// Updates the registration of the shape for run around
+    void updateObstruction(KoShape *shape);
+
+
+    /**
+     * Anchors are special InlineObjects that we detect in positionInlineObject()
+     * We save those for later so we can position them during layout instead.
+     * During KoTextLayoutArea::layout() we call positionAnchoredObstructions()
+     */
+    /// remove all anchors and associated obstructions and set up for collecting new ones
+    void beginAnchorCollecting(KoTextLayoutRootArea *rootArea);
+
+    /// Positions all anchored obstructions
+    void positionAnchoredObstructions();
+
+    /// remove inline object
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
-
-    /// Registers the shape as being relevant for run around at this moment in time
-    void registerObstruction(KoShape *shape);
-
-    /// Updates the registration of the shape for run around
-    void updateObstruction(KoShape *shape);
-
-    /// Clear all registrations of shapest for run around
-    void unregisterAllObstructions();
 
     /**
      * We allow a text document to be distributed onto a sequence of KoTextLayoutRootArea;

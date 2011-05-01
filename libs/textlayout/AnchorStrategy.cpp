@@ -31,9 +31,10 @@
 
 
 
-AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor)
+AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : m_model(0)
         , m_anchor(anchor)
+        , m_rootArea(rootArea)
 {
 }
 
@@ -51,11 +52,7 @@ void AnchorStrategy::detachFromModel()
 /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
 void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *document, int posInDocument)
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    Q_ASSERT(lay);
-    KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
-    Q_ASSERT(rootArea);
-    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(rootArea->associatedShape());
+    KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(m_rootArea->associatedShape());
     if (container == 0) {
         if (m_model)
             m_model->removeAnchor(m_anchor);

@@ -734,6 +734,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
+
+        documentLayout()->positionAnchoredObstructions();
+
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
         qreal bottomOfText = line.y() + line.height();
@@ -790,8 +793,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 m_dropCapsWidth = 0;
             }
         }
-
-        documentLayout()->positionAnchoredShapes();
 
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(line.x());

@@ -25,8 +25,8 @@
 #include <QTextLayout>
 #include <QTextBlock>
 
-InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor)
-        : AnchorStrategy(anchor)
+InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
+        : AnchorStrategy(anchor, rootArea)
         , m_anchor(anchor)
         , m_finished(false)
         , m_relayoutNeeded(false)

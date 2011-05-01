@@ -24,14 +24,16 @@
 
 class KoTextShapeContainerModel;
 class KoTextShapeData;
+class KoTextLayoutRootArea;
 class KoShape;
 class QTextBlock;
 class QTextLayout;
 
+
 class AnchorStrategy  : public KoAnchorStrategy
 {
 public:
-    AnchorStrategy(KoTextAnchor *anchor);
+    AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~AnchorStrategy();
 
     virtual void detachFromModel();
@@ -41,6 +43,7 @@ public:
 private:
     KoTextShapeContainerModel *m_model;
     KoTextAnchor * const m_anchor;
+    KoTextLayoutRootArea *m_rootArea;
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

@@ -90,7 +90,7 @@ namespace Libsvm
         META_LAYOUTMODE_ACTION            = 149,
         META_TEXTLANGUAGE_ACTION          = 150,
         META_OVERLINECOLOR_ACTION         = 151,
-        META_SVG_SOMETHING_ACTION         = 152,
+        META_RENDERGRAPHIC_ACTION         = 152,
         META_COMMENT_ACTION               = 512
     };
 

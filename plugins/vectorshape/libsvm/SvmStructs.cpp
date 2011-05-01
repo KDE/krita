@@ -21,6 +21,15 @@
 #include <QDataStream>
 
 
+static void soakBytes( QDataStream &stream, int numBytes )
+{
+    quint8 scratch;
+    for ( int i = 0; i < numBytes; ++i ) {
+        stream >> scratch;
+    }
+}
+
+
 namespace Libsvm
 {
 
@@ -116,6 +125,9 @@ QDataStream &operator>>(QDataStream &stream, SvmHeader &header)
     stream >> header.width;
     stream >> header.height;
     stream >> header.actionCount;
+
+    if (header.versionCompat.version > 1)
+        soakBytes(stream, 1);
 
     return stream;
 }

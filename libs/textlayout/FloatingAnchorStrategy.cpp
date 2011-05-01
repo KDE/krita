@@ -38,12 +38,23 @@ FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayou
         , m_relayoutPosition(0,0)
 {
     calculateKnowledgePoint();
+    //TODO registerAnchoredObstruction(m_obstruction);
 }
 
 FloatingAnchorStrategy::~FloatingAnchorStrategy()
 {
 }
 
+/*
+void KoTextDocumentLayout::updateObstruction()
+{
+    QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
+    matrix = matrix * textshape->absoluteTransformation(0).inverted();
+    matrix.translate(0, documentOffsetInShape());
+    m_obstruction->changeMatrix(matrix);
+    m_textLine.updateOutline(outline);
+}
+*/
 bool FloatingAnchorStrategy::positionShape()
 {
     if (m_finished) { // shape is in right position no second pass needed
@@ -113,6 +124,12 @@ bool FloatingAnchorStrategy::positionShape()
     QRectF shapeRect(newPosition.x(),newPosition.y(), m_anchor->shape()->size().width(),m_anchor->shape()->size().height());
     m_relayoutPosition.setX(containerBoundingRect.y() + containerBoundingRect.height());
 
+/* moved here  from textshapelayout.cpp - needs to find it's right place
+        // create outline if the shape is positioned inside text
+        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+            updateObstruction(textAnchor->shape());
+        }
+*/
     if (checkTextIntersecion(m_relayoutPosition, shapeRect, containerBoundingRect, data) == false) {
         m_relayoutNeeded = false;
         m_finished = true;

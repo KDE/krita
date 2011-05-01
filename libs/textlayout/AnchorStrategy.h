@@ -36,6 +36,13 @@ public:
     AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~AnchorStrategy();
 
+    /**
+     * Moves the obstruction to it's right position.
+     *
+     * @return true if new position for shape was found
+     */
+    virtual bool moveObstruction() = 0;
+
     virtual void detachFromModel();
 
     virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position);

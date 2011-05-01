@@ -123,18 +123,18 @@ public:
     virtual int pageCount() const;
 
     /**
+     * Register the anchored obstruction  for run around
+     *
      * We have the concept of Obstructions which text has to run around in various ways.
      * We maintain two collections of obstructions. The free which are tied to just a position
      * (tied to pages), and the anchored obstructions which are each anchored to a KoTextAnchor
      *
      * The free obstructions are collected from the KoTextLayoutRootAreaProvider during layout
      *
-     * The anchored obstructions are collected during layout of individual QTextLines in the
-     * KoTextLayoutArea::layoutBlock() method.
+     * The anchored obstructions are created in the FloatingAnchorStrategy and registered using
+     * this method.
      */
- 
-    /// Updates the registration of the shape for run around
-    void updateObstruction(KoShape *shape);
+    void registerAnchoredObstruction(KoTextLayoutObstruction *obstruction);
 
 
     /**

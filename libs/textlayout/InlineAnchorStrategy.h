@@ -33,12 +33,7 @@ public:
     InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~InlineAnchorStrategy();
 
-    /**
-     * This function calculates position for linked shape.
-     *
-     * @return true if new position for shape was wound
-     */
-    virtual bool positionShape(int layoutCursorPosition);
+    virtual bool moveObstruction();
 
     /**
      *
@@ -68,8 +63,6 @@ private:
     KoTextAnchor *const m_anchor;
 
     bool m_finished; // true if shape position was found
-    bool m_relayoutNeeded; // true if shape intersected text when positioned
-    QPointF m_relayoutPosition; // top most position of text and shape intersection
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

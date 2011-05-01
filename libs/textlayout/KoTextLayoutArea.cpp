@@ -735,6 +735,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
 
+        runAroundHelper.setObstructions(documentLayout()->currentObstructions());
         documentLayout()->positionAnchoredObstructions();
 
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));

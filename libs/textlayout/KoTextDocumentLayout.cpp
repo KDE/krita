@@ -33,6 +33,7 @@
 #include "FrameIterator.h"
 #include "InlineAnchorStrategy.h"
 #include "FloatingAnchorStrategy.h"
+#include "AnchorStrategy.h"
 
 #include <KoTextAnchor.h>
 #include <KoInsets.h>
@@ -278,19 +279,27 @@ void KoTextDocumentLayout::drawInlineObject(QPainter *painter, const QRectF &rec
         obj->paint(*painter, paintDevice(), document(), rect, object, position, cf);
 }
 
+void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *obstruction)
+{
+    d->anchoredObstructions.insert(obstruction->shape(), obstruction);
+}
 
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
-    // position anchored objects
-/*    while (positionInlineObjects()) {
-        if (d->textAnchors[d->textAnchorIndex - 1]->anchorStrategy()->isRelayoutNeeded()) {
-
-            if (moveLayoutPosition(d->textAnchors[d->textAnchorIndex - 1]) == true) {
-                return false;
-            }
+    // we use d->textAnchorIndex to make sure we don't try and position an anchor more than
+    // once. This corresponds to sequential_once mode defined in odf
+    while (d->textAnchorIndex < d->textAnchors.size()) {
+        KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
+        AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+        if (strategy->moveObstruction() == false) {
+            return;
         }
+        if (strategy->isRelayoutNeeded()) {
+           continue;
+        }
+        // move the index to next not positioned shape
+        d->textAnchorIndex++;
     }
-*/
 }
 
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
@@ -307,8 +316,6 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
     if (anchor) {
-        qDebug() << "anchor detected";
-
         /*
         KWPage page = m_frameSet->pageManager()->page(parent);
         QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
@@ -326,10 +333,10 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             anchor->shape()->setPosition(QPointF(-10000,0));
 
             if (anchor->behavesAsCharacter()) {
-    qDebug() << "anchor is inline";
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {
-                anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
+    qDebug() << "floating anchor not yet implemented";
+                //anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
             }
             d->textAnchors.append(anchor);
             anchor->updatePosition(document(), item, position, cf);
@@ -350,6 +357,8 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     qDeleteAll(d->anchoredObstructions);
     d->anchoredObstructions.clear();
     d->textAnchors.clear();
+
+    d->textAnchorIndex = 0;
 
     d->anchoringRootArea = rootArea;
 }

@@ -334,12 +334,12 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 
             if (anchor->behavesAsCharacter()) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
+            d->textAnchors.append(anchor);
+            anchor->updatePosition(document(), item, position, cf);
             } else {
     qDebug() << "floating anchor not yet implemented";
                 //anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
             }
-            d->textAnchors.append(anchor);
-            anchor->updatePosition(document(), item, position, cf);
         }
     }
     else if (obj) {

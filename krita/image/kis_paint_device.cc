@@ -981,29 +981,6 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
     }
 }
 
-void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
-{
-    QRect r = mask->selectedExactRect();
-    crop(r);
-
-    KisHLineIterator pixelIt = createHLineIterator(r.x(), r.top(), r.width());
-    KisHLineConstIterator maskIt = mask->createHLineIterator(r.x(), r.top(), r.width());
-
-    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-
-        while (!pixelIt.isDone()) {
-            // XXX: Optimize by using stretches
-
-            m_d->colorSpace->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
-
-            ++pixelIt;
-            ++maskIt;
-        }
-        pixelIt.nextRow();
-        maskIt.nextRow();
-    }
-}
-
 bool KisPaintDevice::pixel(qint32 x, qint32 y, QColor *c) const
 {
     KisHLineConstIteratorPixel iter = createHLineConstIterator(x, y, 1);

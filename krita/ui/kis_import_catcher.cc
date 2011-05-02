@@ -62,7 +62,7 @@ KisImportCatcher::KisImportCatcher(const KUrl & url, KisView2 * view)
     KoFilterManager manager(m_d->doc);
     QByteArray nativeFormat = m_d->doc->nativeFormatMimeType();
     KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(url.pathOrUrl(), status);
+    QString s = manager.importDocument(url.pathOrUrl(), QString(), status);
     KisImageWSP importedImage = m_d->doc->image();
 
     if (importedImage) {

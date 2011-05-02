@@ -112,7 +112,7 @@ void KisFilterFastColorTransfer::process(KisPaintDeviceSP device,
     KoFilterManager manager(&d);
     QByteArray nativeFormat = d.nativeFormatMimeType();
     KoFilter::ConversionStatus status;
-    QString s = manager.importDocument(fileName, status);
+    QString s = manager.importDocument(fileName, QString(), status);
     KisImageWSP importedImage = d.image();
 
     if (importedImage) {

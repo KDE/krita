@@ -667,7 +667,6 @@ public:
 
 signals:
 
-    void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
 

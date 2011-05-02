@@ -540,18 +540,13 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 
 bool KisPaintDevice::write(KoStore *store)
 {
-    bool retval = m_datamanager->write(store);
-    emit ioProgress(100);
-
-    return retval;
+    return m_datamanager->write(store);
 }
 
 bool KisPaintDevice::read(KoStore *store)
 {
     bool retval = m_datamanager->read(store);
     m_d->cache.invalidate();
-
-    emit ioProgress(100);
     return retval;
 }
 

@@ -72,9 +72,9 @@ KisClipboard* KisClipboard::instance()
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 {
-    if (!selection)
+    if (!dev)
         return;
 
     m_hasClip = true;
@@ -88,8 +88,8 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
 
     // Layer data
     if (store->open("layerdata")) {
-        if (!selection->write(store)) {
-            selection->disconnect();
+        if (!dev->write(store)) {
+            dev->disconnect();
             store->close();
             delete store;
             return;
@@ -104,18 +104,18 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
     }
     // ColorSpace id of layer data
     if (store->open("colormodel")) {
-        QString csName = selection->colorSpace()->colorModelId().id();
+        QString csName = dev->colorSpace()->colorModelId().id();
         store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }
     if (store->open("colordepth")) {
-        QString csName = selection->colorSpace()->colorDepthId().id();
+        QString csName = dev->colorSpace()->colorDepthId().id();
         store->write(csName.toAscii(), strlen(csName.toAscii()));
         store->close();
     }
 
-    if (selection->colorSpace()->profile()) {
-        const KoColorProfile *profile = selection->colorSpace()->profile();
+    if (dev->colorSpace()->profile()) {
+        const KoColorProfile *profile = dev->colorSpace()->profile();
         KisAnnotationSP annotation;
 
         if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
@@ -142,7 +142,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
         mimeData->setData(mimeType, buffer.buffer());
     }
 
-    QRect rc = selection->exactBounds();
+    QRect rc = dev->exactBounds();
     // warn if the clip is over ten megapixels
     bool makeExchangeClip = false;
     if (rc.width() * rc.height() > 10 * 1024 * 1024) {
@@ -163,7 +163,7 @@ void KisClipboard::setClip(KisPaintDeviceSP selection, const QPoint& topLeft)
         KisConfig cfg;
         QString monitorProfileName = cfg.monitorProfile();
         const KoColorProfile *  monitorProfile = KoColorSpaceRegistry::instance()->profileByName(monitorProfileName);
-        qimage = selection->convertToQImage(monitorProfile);
+        qimage = dev->convertToQImage(monitorProfile);
         if (!qimage.isNull() && mimeData) {
             mimeData->setImageData(qimage);
         }

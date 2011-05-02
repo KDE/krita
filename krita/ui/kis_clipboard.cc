@@ -144,7 +144,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     QRect rc = dev->exactBounds();
     // warn if the clip is over ten megapixels
-    bool makeExchangeClip = false;
+    bool makeExchangeClip = true;
     if (rc.width() * rc.height() > 10 * 1024 * 1024) {
         makeExchangeClip =
                 (KMessageBox::Continue ==

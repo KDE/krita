@@ -291,6 +291,19 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     while (d->textAnchorIndex < d->textAnchors.size()) {
         KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+
+/*
+        KWPage page = m_frameSet->pageManager()->page(parent);
+        QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
+        QRectF pageContentRect = parent->boundingRect();
+        int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
+
+        anchor->setPageRect(pageRect);
+        //TODO get the right position for headers and footers
+        anchor->setPageContentRect(pageContentRect);
+        anchor->setPageNumber(pageNumber);
+*/
+
         if (strategy->moveSubject() == false) {
             return;
         }
@@ -316,30 +329,16 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
     if (anchor) {
-        /*
-        KWPage page = m_frameSet->pageManager()->page(parent);
-        QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
-        QRectF pageContentRect = parent->boundingRect();
-        int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
-
-        anchor->setPageRect(pageRect);
-        //TODO get the right position for headers and footers
-        anchor->setPageContentRect(pageContentRect);
-        anchor->setPageNumber(pageNumber);
-*/
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
             //place anchored object far away, and let the layout position it later
-//            anchor->shape()->setPosition(QPointF(-10000,0));
-
             if (anchor->behavesAsCharacter()) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
+            } else {
+                anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
+            }
             d->textAnchors.append(anchor);
             anchor->updatePosition(document(), item, position, cf);
-            } else {
-    qDebug() << "floating anchor not yet implemented";
-                //anchor->setAnchorStrategy(new FloatingAnchorStrategy(anchor, d->anchoringRootArea));
-            }
         }
     }
     else if (obj) {

@@ -20,6 +20,9 @@
 
 #include "FloatingAnchorStrategy.h"
 
+#include "KoTextDocumentLayout.h"
+#include "KoTextLayoutObstruction.h"
+
 #include <KoShapeContainer.h>
 #include <KoTextShapeData.h>
 #include <KoTextBlockData.h>
@@ -36,27 +39,32 @@ FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayou
         , m_finished(false)
         , m_relayoutNeeded(false)
         , m_relayoutPosition(0,0)
+        , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
     calculateKnowledgePoint();
-    //TODO registerAnchoredObstruction(m_obstruction);
+
 }
 
 FloatingAnchorStrategy::~FloatingAnchorStrategy()
 {
 }
 
-/*
-void KoTextDocumentLayout::updateObstruction()
+
+void FloatingAnchorStrategy::updateObstruction()
 {
+    KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchor->document()->documentLayout());
+
     QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
-    matrix = matrix * textshape->absoluteTransformation(0).inverted();
-    matrix.translate(0, documentOffsetInShape());
+    matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(0).inverted();
+//    matrix.translate(0, documentOffsetInShape());
     m_obstruction->changeMatrix(matrix);
-    m_textLine.updateOutline(outline);
+
+    layout->registerAnchoredObstruction(m_obstruction);
 }
-*/
+
 bool FloatingAnchorStrategy::moveSubject()
 {
+    qDebug() << "MOVE SUBJECT CALLED"<< m_finished;
     if (m_finished) { // shape is in right position no second pass needed
         return false;
     }
@@ -113,7 +121,9 @@ bool FloatingAnchorStrategy::moveSubject()
     newPosition = newPosition + m_anchor->offset();
 
     //check the border of page an move the shape back to have it visible
-    checkPageBorder(newPosition, containerBoundingRect);
+    //FIXME checkPageBorder(newPosition, containerBoundingRect);
+
+        qDebug() << "MOVE SUBJECT to"<< newPosition;
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
@@ -124,18 +134,16 @@ bool FloatingAnchorStrategy::moveSubject()
     QRectF shapeRect(newPosition.x(),newPosition.y(), m_anchor->shape()->size().width(),m_anchor->shape()->size().height());
     m_relayoutPosition.setX(containerBoundingRect.y() + containerBoundingRect.height());
 
-/* moved here  from textshapelayout.cpp - needs to find it's right place
-        // create outline if the shape is positioned inside text
-        if (textAnchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
-            updateObstruction(textAnchor->shape());
-        }
-*/
+    if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+        updateObstruction();
+    }
+/*
     if (checkTextIntersecion(m_relayoutPosition, shapeRect, containerBoundingRect, data) == false) {
         m_relayoutNeeded = false;
         m_finished = true;
         return true;
     }
-
+*/
     m_relayoutNeeded = true;
     m_finished = true;
     return true;
@@ -194,17 +202,19 @@ void FloatingAnchorStrategy::calculateKnowledgePoint()
        Q_ASSERT(data);
 //FIXME       m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
        break;
-   }
-   case KoTextAnchor::VParagraphContent:
-   case KoTextAnchor::VParagraph:
-   case KoTextAnchor::VLine: {
-       QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
-       m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length()-2);
+    }
+    case KoTextAnchor::VParagraphContent:
+    case KoTextAnchor::VParagraph:
+    case KoTextAnchor::VLine: {
+        if (m_anchor->positionInDocument() >= 0) {
+            QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
+            m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length()-2);
+        }
        break;
-   }
-   default :
-       kDebug(32002) << "vertical-rel not handled";
-   }
+    }
+    default :
+        kDebug(32002) << "vertical-rel not handled";
+    }
 }
 
 bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)

@@ -27,6 +27,7 @@ class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
+class KoTextLayoutObstruction;
 
 class FloatingAnchorStrategy  : public AnchorStrategy
 {
@@ -80,6 +81,8 @@ private:
     inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
                                      KoTextShapeData *data);
 
+    void updateObstruction();
+
     KoTextAnchor *const m_anchor;
 
     int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
@@ -87,6 +90,7 @@ private:
     bool m_finished; // true if shape position was found
     bool m_relayoutNeeded; // true if shape intersected text when positioned
     QPointF m_relayoutPosition; // top most position of text and shape intersection
+    KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
 };
 
 #endif // FLOATINGANCHORSTRATEGY_H

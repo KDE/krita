@@ -296,7 +296,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
         KoTextPage *page = d->anchoringRootArea->page();
-/*
+/*FIXME
         QRectF pageContentRect = textAnchor->shape()->parent()->boundingRect();
         textAnchor->setPageContentRect(pageContentRect);
 */
@@ -430,7 +430,15 @@ void KoTextDocumentLayout::layout()
             beginAnchorCollecting(rootArea);
 
             // Layout all that can fit into that root area
-            bool finished = rootArea->layout(d->layoutPosition);
+            bool finished;
+            FrameIterator *tmpPosition = 0;
+            do {
+                delete tmpPosition;
+                tmpPosition = new FrameIterator(d->layoutPosition);
+                finished = rootArea->layout(tmpPosition);
+            } while (rootArea->isDirty());
+            delete d->layoutPosition;
+            d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, false);
 
@@ -476,7 +484,15 @@ void KoTextDocumentLayout::layout()
             beginAnchorCollecting(rootArea);
 
             // Layout all that can fit into that root area
-            rootArea->layout(d->layoutPosition);
+            FrameIterator *tmpPosition = 0;
+            do {
+                delete tmpPosition;
+                tmpPosition = new FrameIterator(d->layoutPosition);
+                rootArea->layout(tmpPosition);
+            } while (rootArea->isDirty());
+            delete d->layoutPosition;
+            d->layoutPosition = tmpPosition;
+
             d->provider->doPostLayout(rootArea, true);
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {

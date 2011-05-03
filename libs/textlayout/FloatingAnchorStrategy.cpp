@@ -35,14 +35,9 @@
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : AnchorStrategy(anchor, rootArea)
         , m_anchor(anchor)
-        , m_knowledgePoint(-1)
         , m_finished(false)
-        , m_relayoutNeeded(false)
-        , m_relayoutPosition(0,0)
         , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
-    calculateKnowledgePoint();
-
 }
 
 FloatingAnchorStrategy::~FloatingAnchorStrategy()
@@ -79,15 +74,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return false;
     }
 
-    if (m_knowledgePoint < 0 ) {
-        calculateKnowledgePoint();
-        return false;
-    }
-/*FIXME
-    if (m_knowledgePoint > state->cursorPosition()) {
-        return false;
-    }
-*/
 
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
     QTextLayout *layout = block.layout();
@@ -130,21 +116,10 @@ bool FloatingAnchorStrategy::moveSubject()
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    // check if the shape is intersecting the text if no than no relayout is needed
-    QRectF shapeRect(newPosition.x(),newPosition.y(), m_anchor->shape()->size().width(),m_anchor->shape()->size().height());
-    m_relayoutPosition.setX(containerBoundingRect.y() + containerBoundingRect.height());
-
     if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
         updateObstruction();
     }
-/*
-    if (checkTextIntersecion(m_relayoutPosition, shapeRect, containerBoundingRect, data) == false) {
-        m_relayoutNeeded = false;
-        m_finished = true;
-        return true;
-    }
-*/
-    m_relayoutNeeded = true;
+
     m_finished = true;
     return true;
 }
@@ -156,65 +131,8 @@ bool FloatingAnchorStrategy::isPositioned()
 
 void FloatingAnchorStrategy::reset()
 {
-    calculateKnowledgePoint();
     m_finished = false;
-    m_relayoutNeeded = false;
     return;
-}
-
-bool FloatingAnchorStrategy::isRelayoutNeeded()
-{
-    return m_relayoutNeeded;
-}
-
-QPointF FloatingAnchorStrategy::relayoutPosition()
-{
-    return m_relayoutPosition;
-}
-
-void FloatingAnchorStrategy::calculateKnowledgePoint()
-{
-    m_knowledgePoint = -1;
-
-   // figure out until what cursor position we need to layout to get all the info we need
-   switch (m_anchor->horizontalRel()) {
-   case KoTextAnchor::HPage:
-   case KoTextAnchor::HPageContent:
-   case KoTextAnchor::HParagraph:
-   case KoTextAnchor::HParagraphContent:
-   case KoTextAnchor::HChar:
-   case KoTextAnchor::HPageEndMargin:
-   case KoTextAnchor::HPageStartMargin:
-   case KoTextAnchor::HParagraphEndMargin:
-   case KoTextAnchor::HParagraphStartMargin:
-       m_knowledgePoint = m_anchor->positionInDocument();
-       break;
-   default :
-       kDebug(32002) << "horizontal-rel not handled";
-   }
-
-   switch (m_anchor->verticalRel()) {
-   case KoTextAnchor::VPage:
-   case KoTextAnchor::VPageContent: {
-       if (m_anchor->shape()->parent() == 0) // not enough info yet.
-           return;
-       KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
-       Q_ASSERT(data);
-//FIXME       m_knowledgePoint = qMax(m_knowledgePoint, data->position() + 1);
-       break;
-    }
-    case KoTextAnchor::VParagraphContent:
-    case KoTextAnchor::VParagraph:
-    case KoTextAnchor::VLine: {
-        if (m_anchor->positionInDocument() >= 0) {
-            QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
-            m_knowledgePoint = qMax(m_knowledgePoint, block.position() + block.length()-2);
-        }
-       break;
-    }
-    default :
-        kDebug(32002) << "vertical-rel not handled";
-    }
 }
 
 bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)
@@ -482,49 +400,4 @@ void FloatingAnchorStrategy::checkPageBorder(QPointF &newPosition, QRectF contai
     if ((newPosition.y() + m_anchor->shape()->size().height()) > (m_anchor->pageRect().y() + m_anchor->pageRect().height() - containerBoundingRect.y())) {
         newPosition.setY(m_anchor->pageRect().y() + m_anchor->pageRect().height() - m_anchor->shape()->size().height() - containerBoundingRect.y());
     }
-}
-
-bool FloatingAnchorStrategy::checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect, KoTextShapeData *data)
-{
-    bool intersectionX = false;
-    bool intersectionY = false;
-
-    //check text area
-    QTextLayout *layout ;//FIXME= state->layout;
-    QTextLine tl = layout->lineAt(layout->lineCount() - 1);
-
-    qreal shpRight = shpRect.left() + shpRect.width();
-    qreal contRight = contRect.width();
-    qreal shpBottom = shpRect.top() + shpRect.height();
-    qreal contBottom = tl.y() + tl.height() - data->documentOffset();
-
-    //horizontal
-    if (((shpRect.left() > 0) && (shpRight > 0) && (shpRect.left() < contRight)) ||
-        ((shpRight > 0) && (shpRect.left() < contRight) && (shpRight < contRight)) ||
-        ((shpRect.left() < 0) && (shpRect.right() > contRight))) {
-        if (shpRect.left() < 0) {
-            relayoutPos.setX(0);
-        } else {
-            relayoutPos.setX(shpRect.left());
-        }
-        intersectionX = true;
-    }
-
-    //vertical
-    if (((shpRect.top() > 0) && (shpBottom > 0) && (shpRect.top() < contBottom)) ||
-        ((shpBottom > 0) && (shpRect.top() < contBottom) && (shpBottom < contBottom)) ||
-        ((shpRect.top() < 0) && (shpBottom > contBottom))) {
-        if (shpRect.top() < 0) {
-            relayoutPos.setY(0);
-        } else {
-            relayoutPos.setY(shpRect.top());
-        }
-        intersectionY = true;
-    }
-
-    if (intersectionX && intersectionY) {
-        return true;
-    }
-
-    return false;
 }

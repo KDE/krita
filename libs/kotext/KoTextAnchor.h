@@ -46,10 +46,6 @@ public:
 
     virtual void reset() = 0;
 
-    virtual bool isRelayoutNeeded() = 0;
-
-    virtual QPointF relayoutPosition() = 0;
-
     virtual void detachFromModel() = 0;
 
     virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;

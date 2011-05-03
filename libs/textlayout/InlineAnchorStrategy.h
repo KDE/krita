@@ -35,26 +35,10 @@ public:
 
     virtual bool moveSubject();
 
-    /**
-     *
-     * @return true if position for shape was wound
-     */
     virtual bool isPositioned();
 
     //reset the state of this class
     virtual void reset();
-
-    /**
-     *
-     * @return true if linked shape intersects with text
-     */
-    virtual bool isRelayoutNeeded();
-
-    /**
-     *
-     * @return top most position of linked shape and text intersection
-     */
-    virtual QPointF relayoutPosition();
 
 private:
 

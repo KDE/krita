@@ -51,18 +51,6 @@ public:
     //reset the state of this class
     virtual void reset();
 
-    /**
-     *
-     * @return true if linked shape intersects with text
-     */
-    virtual bool isRelayoutNeeded();
-
-    /**
-     *
-     * @return top most position of linked shape and text intersection
-     */
-    virtual QPointF relayoutPosition();
-
 private:
 
     void calculateKnowledgePoint(); //calculate minimal text position from which enough information is ready to position the shape
@@ -85,11 +73,7 @@ private:
 
     KoTextAnchor *const m_anchor;
 
-    int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
-
     bool m_finished; // true if shape position was found
-    bool m_relayoutNeeded; // true if shape intersected text when positioned
-    QPointF m_relayoutPosition; // top most position of text and shape intersection
     KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
 };
 

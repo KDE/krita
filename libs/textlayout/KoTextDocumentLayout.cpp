@@ -306,9 +306,6 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         if (strategy->moveSubject() == false) {
             return;
         }
-        if (strategy->isRelayoutNeeded()) {
-           continue;
-        }
         // move the index to next not positioned shape
         d->textAnchorIndex++;
     }

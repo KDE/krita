@@ -85,16 +85,6 @@ void InlineAnchorStrategy::reset()
     return;
 }
 
-bool InlineAnchorStrategy::isRelayoutNeeded()
-{
-    return false;
-}
-
-QPointF InlineAnchorStrategy::relayoutPosition()
-{
-    return QPointF(0, 0);
-}
-
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)
 {
     if (layout->lineCount() != 0) {

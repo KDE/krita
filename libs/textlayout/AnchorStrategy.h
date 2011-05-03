@@ -41,7 +41,7 @@ public:
      *
      * @return true if new position for shape was found
      */
-    virtual bool moveObstruction() = 0;
+    virtual bool moveSubject() = 0;
 
     virtual void detachFromModel();
 

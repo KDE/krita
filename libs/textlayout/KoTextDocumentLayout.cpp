@@ -291,7 +291,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     while (d->textAnchorIndex < d->textAnchors.size()) {
         KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
-        if (strategy->moveObstruction() == false) {
+        if (strategy->moveSubject() == false) {
             return;
         }
         if (strategy->isRelayoutNeeded()) {

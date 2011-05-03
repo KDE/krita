@@ -55,7 +55,7 @@ void KoTextDocumentLayout::updateObstruction()
     m_textLine.updateOutline(outline);
 }
 */
-bool FloatingAnchorStrategy::positionShape()
+bool FloatingAnchorStrategy::moveSubject()
 {
     if (m_finished) { // shape is in right position no second pass needed
         return false;

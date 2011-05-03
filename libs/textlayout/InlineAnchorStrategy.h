@@ -33,7 +33,7 @@ public:
     InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     virtual ~InlineAnchorStrategy();
 
-    virtual bool moveObstruction();
+    virtual bool moveSubject();
 
     /**
      *

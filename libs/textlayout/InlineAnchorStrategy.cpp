@@ -36,7 +36,7 @@ InlineAnchorStrategy::~InlineAnchorStrategy()
 {
 }
 
-bool InlineAnchorStrategy::moveObstruction()
+bool InlineAnchorStrategy::moveSubject()
 {
     if (m_finished) { // shape is in right position no second pass needed
         return false;

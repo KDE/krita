@@ -35,11 +35,11 @@ public:
     ~FloatingAnchorStrategy();
 
     /**
-     * This function calculates position for linked shape.
+     * This moves the subject (i.e. shape when used with flake) of the anchor.
      *
-     * @return true if new position for shape was found
+     * @return true if subject was moved
      */
-    virtual bool positionShape();
+    virtual bool moveSubject();
 
     /**
      *

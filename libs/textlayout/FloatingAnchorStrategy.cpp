@@ -121,9 +121,9 @@ bool FloatingAnchorStrategy::moveSubject()
     newPosition = newPosition + m_anchor->offset();
 
     //check the border of page an move the shape back to have it visible
-    //FIXME checkPageBorder(newPosition, containerBoundingRect);
+    checkPageBorder(newPosition, containerBoundingRect);
 
-        qDebug() << "MOVE SUBJECT to"<< newPosition;
+        qDebug() << "MOVE SUBJECT to"<< newPosition<<m_anchor->pageRect();
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();

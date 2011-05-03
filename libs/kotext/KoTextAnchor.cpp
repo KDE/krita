@@ -696,7 +696,7 @@ QRectF KoTextAnchor::pageRect()
     return d->pageRect;
 }
 
-void KoTextAnchor::setPageRect(QRectF &pageRect)
+void KoTextAnchor::setPageRect(const QRectF &pageRect)
 {
     Q_D(KoTextAnchor);
     d->pageRect = pageRect;

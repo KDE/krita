@@ -215,7 +215,7 @@ public:
     QRectF pageRect();
 
     // set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    void setPageRect(QRectF &pageRect);
+    void setPageRect(const QRectF &pageRect);
 
     // get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
     QRectF pageContentRect();

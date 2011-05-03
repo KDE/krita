@@ -36,6 +36,7 @@
 #include "AnchorStrategy.h"
 
 #include <KoTextAnchor.h>
+#include <KoTextPage.h>
 #include <KoInsets.h>
 #include <KoPostscriptPaintDevice.h>
 #include <KoShape.h>
@@ -292,17 +293,15 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
-/*
-        KWPage page = m_frameSet->pageManager()->page(parent);
-        QRectF pageRect(0,page.offsetInDocument(),page.width(),page.height());
-        QRectF pageContentRect = parent->boundingRect();
-        int pageNumber = m_frameSet->pageManager()->pageNumber(parent);
+        KoTextPage *page = d->anchoringRootArea->page();
 
-        anchor->setPageRect(pageRect);
+/*        QRectF pageContentRect = textAnchor->shapparent->boundingRect();
+
         //TODO get the right position for headers and footers
-        anchor->setPageContentRect(pageContentRect);
-        anchor->setPageNumber(pageNumber);
+        textAnchor->setPageContentRect(pageContentRect);
 */
+        textAnchor->setPageRect(page->rect());
+        textAnchor->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject() == false) {
             return;

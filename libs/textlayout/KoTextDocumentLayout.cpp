@@ -294,14 +294,12 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
         KoTextPage *page = d->anchoringRootArea->page();
-
-/*        QRectF pageContentRect = textAnchor->shapparent->boundingRect();
-
-        //TODO get the right position for headers and footers
+/*
+        QRectF pageContentRect = textAnchor->shape()->parent()->boundingRect();
         textAnchor->setPageContentRect(pageContentRect);
 */
-        textAnchor->setPageRect(page->rect());
-        textAnchor->setPageNumber(page->pageNumber());
+        strategy->setPageRect(page->rect());
+        strategy->setPageNumber(page->pageNumber());
 
         if (strategy->moveSubject() == false) {
             return;

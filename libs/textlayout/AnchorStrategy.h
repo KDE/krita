@@ -22,6 +22,8 @@
 
 #include "KoTextAnchor.h"
 
+#include <QRectF>
+
 class KoTextShapeContainerModel;
 class KoTextShapeData;
 class KoTextLayoutRootArea;
@@ -47,10 +49,31 @@ public:
 
     virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position);
 
+    /// get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
+    QRectF pageRect();
+
+    /// set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
+    void setPageRect(const QRectF &pageRect);
+
+    /// get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    QRectF pageContentRect();
+
+    /// set content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    void setPageContentRect(QRectF &marginRect);
+
+    /// get number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    int pageNumber();
+
+    /// set number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    void setPageNumber(int pageNumber);
+
 private:
     KoTextShapeContainerModel *m_model;
     KoTextAnchor * const m_anchor;
     KoTextLayoutRootArea *m_rootArea;
+    QRectF m_pageRect;
+    QRectF m_pageContentRect;
+    int m_pageNumber;
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

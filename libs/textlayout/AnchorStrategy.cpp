@@ -35,6 +35,9 @@ AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootA
         : m_model(0)
         , m_anchor(anchor)
         , m_rootArea(rootArea)
+        , m_pageRect(0,0,10,10)
+        , m_pageContentRect(0,0,10,10)
+        , m_pageNumber(0)
 {
 }
 
@@ -48,6 +51,37 @@ void AnchorStrategy::detachFromModel()
 {
     m_model = 0;
 }
+
+QRectF AnchorStrategy::pageRect()
+{
+    return m_pageRect;
+}
+
+void AnchorStrategy::setPageRect(const QRectF &pageRect)
+{
+    m_pageRect = pageRect;
+}
+
+QRectF AnchorStrategy::pageContentRect()
+{
+    return m_pageContentRect;
+}
+
+void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
+{
+    m_pageContentRect = pageContentRect;
+}
+
+int AnchorStrategy::pageNumber()
+{
+    return m_pageNumber;
+}
+
+void AnchorStrategy::setPageNumber(int pageNumber)
+{
+    m_pageNumber = pageNumber;
+}
+
 
 /// as multiple shapes can hold 1 text flow; the anchored shape can be moved between containers and thus models
 void AnchorStrategy::updatePosition(KoShape *shape, const QTextDocument *document, int posInDocument)

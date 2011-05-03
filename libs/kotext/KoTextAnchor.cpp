@@ -60,9 +60,6 @@ public:
             horizontalPos(KoTextAnchor::HLeft),
             horizontalRel(KoTextAnchor::HChar),
             anchorType("char"),
-            pageRect(0,0,10,10),
-            pageContentRect(0,0,10,10),
-            pageNumber(0),
             anchorStrategy(0),
             inlineObjectAscent(0),
             inlineObjectDescent(0)
@@ -94,9 +91,6 @@ public:
     KoTextAnchor::HorizontalRel horizontalRel;
     QString anchorType;
     bool fakeAsChar;
-    QRectF pageRect;
-    QRectF pageContentRect;
-    int pageNumber;
     KoAnchorStrategy *anchorStrategy;
     qreal inlineObjectAscent;
     qreal inlineObjectDescent;
@@ -688,42 +682,6 @@ void KoTextAnchor::detachFromModel()
 {
     Q_D(KoTextAnchor);
     d->anchorStrategy->detachFromModel();
-}
-
-QRectF KoTextAnchor::pageRect()
-{
-    Q_D(KoTextAnchor);
-    return d->pageRect;
-}
-
-void KoTextAnchor::setPageRect(const QRectF &pageRect)
-{
-    Q_D(KoTextAnchor);
-    d->pageRect = pageRect;
-}
-
-QRectF KoTextAnchor::pageContentRect()
-{
-    Q_D(KoTextAnchor);
-    return d->pageContentRect;
-}
-
-void KoTextAnchor::setPageContentRect(QRectF &pageContentRect)
-{
-    Q_D(KoTextAnchor);
-    d->pageContentRect = pageContentRect;
-}
-
-int KoTextAnchor::pageNumber()
-{
-    Q_D(KoTextAnchor);
-    return d->pageNumber;
-}
-
-void KoTextAnchor::setPageNumber(int pageNumber)
-{
-    Q_D(KoTextAnchor);
-    d->pageNumber = pageNumber;
 }
 
 KoAnchorStrategy * KoTextAnchor::anchorStrategy()

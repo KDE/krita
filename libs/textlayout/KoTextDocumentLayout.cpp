@@ -192,6 +192,8 @@ void KoTextDocumentLayout::draw(QPainter *painter, const QAbstractTextDocumentLa
 
 int KoTextDocumentLayout::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
+    Q_UNUSED(point);
+    Q_UNUSED(accuracy);
     Q_ASSERT(false); //we should no longer call this method.
     // There is no need and is just slower than needed
     // call rootArea->hitTest() directly

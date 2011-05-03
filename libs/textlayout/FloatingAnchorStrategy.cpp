@@ -204,7 +204,7 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
          // if verticalRel is HFromInside or HInside or HOutside and the page number is even,
          // than set anchorBoundingRect to HParagraphEndMargin area
          if ((m_anchor->pageNumber()%2 == 0) && (horizontalPos == KoTextAnchor::HFromInside ||
-                 horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
+                horizontalPos == KoTextAnchor::HInside || horizontalPos == KoTextAnchor::HOutside)) {
 //FIXME             anchorBoundingRect.setX(state->x() + containerBoundingRect.x() + state->width());
              anchorBoundingRect.setWidth(containerBoundingRect.x() + containerBoundingRect.width() - anchorBoundingRect.x());
          } else {
@@ -298,7 +298,9 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
          anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
          anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
          KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-/*FIXME         if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
+/*FIXME  effectiveTop will not work with paragraphs split across pages
+ We need to have the layout supply all these rects
+if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
              anchorBoundingRect.setY(blockData->effectiveTop() + containerBoundingRect.y()  - data->documentOffset());
          }*/
      } else {

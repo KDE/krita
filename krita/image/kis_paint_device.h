@@ -665,15 +665,8 @@ public:
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
-    /**
-     * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
-     * selectedness in the mask.
-     */
-    void applySelectionMask(KisSelectionSP mask);
-
 signals:
 
-    void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
 

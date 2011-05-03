@@ -114,8 +114,6 @@ public:
             : undoAdapter(0)
             , nserver(0)
             , macroNestDepth(0)
-            , ioProgressTotalSteps(0)
-            , ioProgressBase(0)
             , kraLoader(0)
             , dieOnError(false)
     {
@@ -130,8 +128,6 @@ public:
     KisUndoAdapter *undoAdapter;
     KisNameServer *nserver;
     qint32 macroNestDepth;
-    int ioProgressTotalSteps;
-    int ioProgressBase;
 
     KisImageSP image;
     KisShapeController* shapeController;

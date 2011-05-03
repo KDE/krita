@@ -117,7 +117,7 @@ static const struct ActionNames {
     { META_LAYOUTMODE_ACTION,            "META_LAYOUTMODE_ACTION" },
     { META_TEXTLANGUAGE_ACTION,          "META_TEXTLANGUAGE_ACTION" },
     { META_OVERLINECOLOR_ACTION,         "META_OVERLINECOLOR_ACTION" },
-    { META_SVG_SOMETHING_ACTION,         "META_SVG_SOMETHING_ACTION" },
+    { META_RENDERGRAPHIC_ACTION,         "META_RENDERGRAPHIC_ACTION" },
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
 
@@ -408,6 +408,10 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LAYOUTMODE_ACTION:
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
+            break;
+        case META_RENDERGRAPHIC_ACTION:
+            //dumpAction(stream, version, totalSize);
+            break;
         case META_COMMENT_ACTION:
             break;
 

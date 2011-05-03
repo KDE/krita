@@ -42,6 +42,8 @@ install(
     FILES
     KoTextDocumentLayout.h
     KoStyleThumbnailer.h
+    KoTextLayoutArea.h
+    KoTextLayoutRootArea.h
 
     KoTextShapeData.h
     DESTINATION

@@ -22,8 +22,6 @@
 
 #include "kotext_export.h"
 
-#include "FrameIterator.h"
-
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInsets.h>
@@ -39,6 +37,8 @@ class KoInlineNote;
 class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
+class KoTextLayoutTableArea;
+class FrameIterator;
 
 /**
  * When layout'ing text it is chopped into physical area of space.

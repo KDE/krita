@@ -92,6 +92,7 @@ void VectorShape::setCompressedContents( const QByteArray &newContents )
 
 void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
+#if 1  // Set to 0 to get uncached painting, which is good for debugging
     QRectF rc = converter.documentToView(boundingRect());
 
     // If necessary, recreate the cached image.
@@ -110,6 +111,10 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter)
         painter.drawImage(rc.topLeft(), *cache, rc);
     }
     m_cache.insert(rc.size().toSize().height(), cache);
+#else
+    applyConversion(painter, converter);
+    draw(painter);
+#endif
 }
 
 void VectorShape::draw(QPainter &painter)

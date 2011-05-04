@@ -445,7 +445,7 @@ void KoTableCellStyle::setDecimalPlaces(int places)
 
 bool KoTableCellStyle::alignFromType() const
 {
-    return (hasProperty(AlignFromType) and propertyBoolean(AlignFromType));
+    return (hasProperty(AlignFromType) && propertyBoolean(AlignFromType));
 }
 
 void KoTableCellStyle::setAlignFromType(bool state)

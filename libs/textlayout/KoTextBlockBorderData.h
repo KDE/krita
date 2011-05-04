@@ -25,7 +25,7 @@
 #include <QPen>
 #include <QRectF>
 #include <QPainter>
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 /**
  * This class holds data for paragraph-borders.
@@ -35,7 +35,7 @@
  * to allow multiple paragraphs to share one border.
  *
  */
-class KOTEXT_EXPORT KoTextBlockBorderData
+class TEXTLAYOUT_EXPORT KoTextBlockBorderData
 {
 public:
     /// Enum used to differentiate between the 4 types of borders this class maintains

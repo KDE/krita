@@ -755,20 +755,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
-
             // in case we resume layout on next page the line is reused later
             // but if not then we need to make sure the line becomes invisible
             // we use m_maximalAllowedBottom because we want to be below
-            // footnotes too
-            line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+            // footnotes too.
+            if (cursor->lastBlockPosition != block.position()) { // guard against infinite loops
+                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
 
-            if (format.nonBreakableLines()) {
-                //set lineTextStart to -1
-                cursor->lineTextStart = -1;
-                layout->endLayout();
+                if (format.nonBreakableLines()) {
+                    //set lineTextStart to -1
+                    cursor->lineTextStart = -1;
+                    layout->endLayout();
+                }
+                cursor->lastBlockPosition = block.position();
+                clearPreregisteredFootNotes();
+                return false; //to indicate block was not done!
             }
-            clearPreregisteredFootNotes();
-            return false; //to indicate block was not done!
         }
         confirmFootNotes();
 
@@ -804,6 +806,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
         if (softBreak) {
+            cursor->lastBlockPosition = -1;
             return false;
         }
     }
@@ -813,6 +816,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     layout->endLayout();
 
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
+    cursor->lastBlockPosition = -1;
     return true;
 }
 

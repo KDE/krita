@@ -289,25 +289,56 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
-    // we use d->textAnchorIndex to make sure we don't try and position an anchor more than
-    // once. This corresponds to sequential_once mode defined in odf
-    while (d->textAnchorIndex < d->textAnchors.size()) {
-        KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
-        AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+    KoTextPage *page = d->anchoringRootArea->page();
 
-        KoTextPage *page = d->anchoringRootArea->page();
-/*FIXME
-        QRectF pageContentRect = textAnchor->shape()->parent()->boundingRect();
-        textAnchor->setPageContentRect(pageContentRect);
-*/
-        strategy->setPageRect(page->rect());
-        strategy->setPageNumber(page->pageNumber());
+    if (d->anchoringState == AnchoringFinalState) {
+        // In the final Layout run we do not try to move subjects
+        return;
+    }
 
-        if (strategy->moveSubject() == false) {
+    switch (0) {
+    case 0:
+        // For once-concurrently (20.172) we only layout once to place all subjects
+        // and then again to flow text around.
+        if (d->anchoringState == AnchoringPreState) {
             return;
         }
-        // move the index to next not positioned shape
-        d->textAnchorIndex++;
+
+        foreach (KoTextAnchor *textAnchor, d->textAnchors) {
+            AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+
+            strategy->setPageRect(page->rect());
+            strategy->setPageNumber(page->pageNumber());
+
+            strategy->moveSubject();
+        }
+        d->anchoringState == AnchoringFinalState
+        d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+        break;
+    case 1:
+        // For once-successive (20.172) we layout once per anchor (and do not repeat an
+        // anchor we have already done) to place subjects, and then again to flow text around
+        // the last subject.
+        break;
+    case 2:
+        while (d->textAnchorIndex < d->textAnchors.size()) {
+            KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
+            AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+
+    /*FIXME
+            QRectF pageContentRect = textAnchor->shape()->parent()->boundingRect();
+            textAnchor->setPageContentRect(pageContentRect);
+    */
+            strategy->setPageRect(page->rect());
+            strategy->setPageNumber(page->pageNumber());
+
+            if (strategy->moveSubject() == false) {
+                return;
+            }
+            // move the index to next not positioned shape
+            d->textAnchorIndex++;
+        }
+        break;
     }
 }
 
@@ -356,6 +387,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->textAnchorIndex = 0;
 
     d->anchoringRootArea = rootArea;
+    d->anchoringState = AnchoringPreState;
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)

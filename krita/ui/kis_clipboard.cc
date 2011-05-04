@@ -144,7 +144,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
     QRect rc = dev->exactBounds();
     // warn if the clip is over ten megapixels
-    bool makeExchangeClip = false;
+    bool makeExchangeClip = true;
     if (rc.width() * rc.height() > 10 * 1024 * 1024) {
         makeExchangeClip =
                 (KMessageBox::Continue ==
@@ -180,7 +180,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
 KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
 {
-    bool customTopLeft = false;
+    bool customTopLeft = false; // will be true if pasting from a krita clip
     QPoint topLeft = topLeftHint;
     QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
@@ -242,7 +242,8 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
             store->close();
         }
         delete store;
-    } else {
+    }
+    else {
         dbgUI << "Use clip as QImage";
         QImage qimage = cb->image();
 
@@ -273,8 +274,7 @@ KisPaintDeviceSP KisClipboard::clip(const QPoint& topLeftHint)
         Q_CHECK_PTR(clip);
         clip->convertFromQImage(qimage, profileName);
     }
-    if (!customTopLeft)
-    {
+    if (!customTopLeft) {
         QRect exactBounds = clip->exactBounds();
         topLeft -= exactBounds.topLeft() / 2;
     }

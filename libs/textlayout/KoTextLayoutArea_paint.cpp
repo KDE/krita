@@ -35,6 +35,7 @@
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
+#include "FrameIterator.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>

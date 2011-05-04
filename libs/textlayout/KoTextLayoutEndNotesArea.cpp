@@ -18,7 +18,7 @@
  */
 
 #include "KoTextLayoutEndNotesArea.h"
-
+#include "FrameIterator.h"
 
 #include <KoTextPage.h>
 

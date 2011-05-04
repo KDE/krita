@@ -502,7 +502,7 @@ void KoTextDocumentLayout::layout()
 
 void KoTextDocumentLayout::scheduleLayout()
 {
-    if (d->layoutScheduled || d->isLayouting) {
+    if (d->layoutScheduled) {
         return;
     }
     d->layoutScheduled = true;

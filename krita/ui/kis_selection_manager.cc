@@ -139,7 +139,7 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_pasteAt = new KAction(i18n("Paste at cursor"), this);
     collection->addAction("paste_at", m_pasteAt);
     connect(m_pasteAt, SIGNAL(triggered()), this, SLOT(pasteAt()));
-    
+
     m_copyMerged = new KAction(i18n("Copy merged"), this);
     collection->addAction("copy_merged", m_copyMerged);
     m_copyMerged->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
@@ -260,13 +260,16 @@ void KisSelectionManager::updateGUI()
         enable = l && !l->userLocked() && l->visible();
 #if 0 // XXX_SELECTION (how are we going to handle deselect and
         // reselect now?
-        if (l->inherits("KisAdjustmentLayer")
-                if (dev && !adjLayer)
+        if (l->inherits("KisAdjustmentLayer")) {
+                if (dev && !adjLayer) {
                     m_reselect->setEnabled(dev->selectionDeselected());
-                    if (adjLayer) // There's no reselect for adjustment layers
+                    if (adjLayer) { // There's no reselect for adjustment layers
                         m_reselect->setEnabled(false);
-#endif
                     }
+                }
+        }
+#endif
+    }
 
     m_clear->setEnabled(enable);
     m_cut->setEnabled(enable);
@@ -342,7 +345,7 @@ void KisSelectionManager::updateGUI()
     m_toNewLayer->setEnabled(enable);
 
     //Handle the clear action disponibility
-    
+
     if (m_view->canvasBase()->shapeManager()->selection()->count() > 0) {
         m_clear->setEnabled(true);
     }
@@ -352,7 +355,7 @@ void KisSelectionManager::updateGUI()
     else {
         m_clear->setEnabled(true);
     }
-        
+
     updateStatusBar();
 
 }
@@ -401,7 +404,7 @@ void KisSelectionManager::copy()
     KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer.data());
     if (shapeLayer) {
         m_view->canvasBase()->toolProxy()->copy();
-    } 
+    }
     else {
 
         KisImageWSP image = m_view->image();
@@ -409,7 +412,7 @@ void KisSelectionManager::copy()
 
         KisPaintDeviceSP dev = m_view->activeDevice();
         if (!dev) return;
-        
+
         copyFromDevice(dev);
     }
 
@@ -423,7 +426,7 @@ void KisSelectionManager::copyMerged()
 
     KisPaintDeviceSP dev = image->rootLayer()->projection();
     if (!dev) return;
-        
+
     copyFromDevice(dev);
 
     selectionChanged();
@@ -563,7 +566,7 @@ void KisSelectionManager::clear()
     if(m_view->canvasBase()->shapeManager()->selection()->count()){
         deleteSelection();
     }else if(dev){
-        
+
         KisSelectionSP sel = m_view->selection();
 
         KisTransaction transaction(i18n("Clear"), dev);
@@ -585,7 +588,7 @@ void KisSelectionManager::clear()
 void KisSelectionManager::deleteSelection()
 {
     if (m_view->canvasBase()->shapeManager()->selection()){
-        m_view->canvasBase()->toolProxy()->deleteSelection();  
+        m_view->canvasBase()->toolProxy()->deleteSelection();
     }
     updateGUI();
 }
@@ -1561,7 +1564,7 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 {
     KisImageWSP image = m_view->image();
     if (!image) return;
-    
+
     KisSelectionSP selection = m_view->selection();
 
     QRect r = (selection) ? selection->selectedExactRect() : image->bounds();
@@ -1573,12 +1576,7 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     // TODO if the source is linked... copy from all linked layers?!?
 
-    // Copy image data
-    KisPainter gc;
-    gc.begin(clip);
-    gc.setCompositeOp(COMPOSITE_COPY);
-    gc.bitBlt(0, 0, device, r.x(), r.y(), r.width(), r.height());
-    gc.end();
+
 
     if (selection) {
         // Apply selection mask.

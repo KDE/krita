@@ -32,6 +32,7 @@ class QTextDocument;
 class QTextCursor;
 class KoResourceManager;
 class KoCanvasBase;
+class KoShape;
 /**
  * \brief KoFindBase implementation for searching within text shapes.
  *
@@ -51,7 +52,7 @@ public:
      * \param provider The current document's resource manager, used for retrieving
      * the actual text to search through.
      */
-    KoFindText(KoResourceManager *provider, QObject *parent = 0);
+    KoFindText(const QList<QTextDocument*> &documents, QObject *parent = 0);
     virtual ~KoFindText();
 
     /**
@@ -62,6 +63,26 @@ public:
      * Overridden from KoFindBase
      */
     virtual void findPrevious();
+
+    /**
+     * Helper function to retrieve all QTextDocument objects from a list of shapes.
+     *
+     * This method will search the list of shapes passed to it recursively for any
+     * text shapes. If it encounters any text shapes it will add the QTextDocument
+     * object used by that shape to the list passed.
+     * 
+     * \param shapes The shapes to search for text.
+     * \param append A list to append the found QTextDocument objects to.
+     */
+    static void findTextInShapes(const QList<KoShape*> &shapes, QList<QTextDocument*> &append);
+
+public Q_SLOTS:
+    /**
+     * Append a list of documents to the documents that can be searched.
+     *
+     * \param documents The list of documents to append.
+     */
+    void addDocuments(const QList<QTextDocument*> &documents);
 
 protected:
     /**
@@ -81,7 +102,7 @@ private:
     class Private;
     Private * const d;
 
-    Q_PRIVATE_SLOT(d, void resourceChanged(int, const QVariant &))
+    Q_PRIVATE_SLOT(d, void documentDestroyed(QObject* object));
 };
 
 Q_DECLARE_METATYPE(QTextDocument *);

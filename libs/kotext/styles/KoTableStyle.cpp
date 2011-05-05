@@ -430,7 +430,7 @@ void KoTableStyle::loadOdfProperties(KoStyleStack &styleStack)
         setWidth(QTextLength(QTextLength::FixedLength, KoUnit::parseValue(styleStack.property(KoXmlNS::style, "width"))));
     }
     if (styleStack.hasProperty(KoXmlNS::style, "rel-width")) {
-        setWidth(QTextLength(QTextLength::PercentageLength, styleStack.property(KoXmlNS::style, "rel-width").remove('%').toDouble()));
+        setWidth(QTextLength(QTextLength::PercentageLength, styleStack.property(KoXmlNS::style, "rel-width").remove('%').remove('*').toDouble()));
     }
 
     // Alignment

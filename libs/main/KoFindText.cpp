@@ -32,12 +32,12 @@
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 
-#include "KoResourceManager.h"
-#include "KoText.h"
-#include "KoTextDocument.h"
-#include "KoShape.h"`
-#include "KoShapeContainer.h"
-#include "KoTextShapeData.h"
+#include <KoResourceManager.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+#include <KoTextShapeData.h>
 
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"

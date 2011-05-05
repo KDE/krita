@@ -49,9 +49,14 @@ private slots:
     /// make sure our private method setupTest() does what we think it does
     void testSetupTest();
 
-    /// Test width and column layout within reference rect.
-    void testColumnLayout();
-
+    /// If not column-width is defined then the available width should be distributed among the available columns.
+    void testColumnWidthUndefined();
+    /// If the column-width is explicit defined then we expect that those widths are used.
+    void testColumnWidthFixed();
+    /// Test fixed column-width of zero.
+    void testColumnWidthFixedZero();
+    /// Test relative column-width.
+    void testColumnWidthRelative();
 
 private:
     void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText);
@@ -60,12 +65,12 @@ private:
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
     QTextBlock m_block;
-    QTextBlock m_mergedCellBlock;
-    QTextBlock m_topRightCellBlock;
-    QTextBlock m_midRightCellBlock;
-    QTextBlock m_bottomLeftCellBlock;
-    QTextBlock m_bottomMidCellBlock;
-    QTextBlock m_bottomRightCellBlock;
+    QTextBlock mergedCellBlock() const;
+    QTextBlock topRightCellBlock() const;
+    QTextBlock midRightCellBlock() const;
+    QTextBlock bottomLeftCellBlock() const;
+    QTextBlock bottomMidCellBlock() const;
+    QTextBlock bottomRightCellBlock() const;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
     KoTextLayoutRootArea *m_area;

@@ -51,17 +51,20 @@ class TestOpenDocumentStyle : public QObject
     Q_OBJECT
     public:
         TestOpenDocumentStyle();
-        
+
     private:
         QByteArray generateStyleNodeWithAttribute(const QString &styleFamily, const QString &attributeName, const QString &attributeValue);
         QByteArray generateStyleProperties(const KoGenStyle &genStyle, const QString &styleFamily);
         QList<Attribute*> listAttributesFromRNGName(const QString &name);
-        
+
         QMultiHash<QString, QDomElement> m_rngRules;
-        
+
         template<class T>
         bool basicTestFunction(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value);
-        
+
+        template<class T>
+        bool basicTestFunctionWithShapeContext(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value);
+
     private slots:
         void initTestCase();
         void testTableColumnStyle();

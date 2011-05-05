@@ -45,8 +45,8 @@ install(
     KoStyleThumbnailer.h
     KoTextLayoutArea.h
     KoTextLayoutRootArea.h
-
     KoTextShapeData.h
+    textlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

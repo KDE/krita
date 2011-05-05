@@ -303,10 +303,12 @@ void KoTextLayoutTableArea::layoutColumns()
 {
     QTextTableFormat tableFormat = d->table->format();
 
+    d->columnPositions.resize(d->table->columns() + 1);
+    d->columnWidths.resize(d->table->columns() + 1);
+
     // Table width.
     d->tableWidth = 0;
     qreal parentWidth = right() - left();
-
     if (tableFormat.width().rawValue() == 0 || tableFormat.alignment() == Qt::AlignJustify) {
         // We got a zero width value or alignment is justify, so use 100% of parent.
         d->tableWidth = parentWidth - tableFormat.leftMargin() - tableFormat.rightMargin();
@@ -324,11 +326,9 @@ void KoTextLayoutTableArea::layoutColumns()
         }
     }
 
-    d->columnPositions.resize(d->table->columns() + 1);
-    d->columnWidths.resize(d->table->columns() + 1);
-
     // Column widths.
     qreal availableWidth = d->tableWidth; // Width available for columns.
+    QList<int> fixedWidthColumns; // List of fixed width columns.
     QList<int> relativeWidthColumns; // List of relative width columns.
     qreal relativeWidthSum = 0; // Sum of relative column width values.
     int numNonStyleColumns = 0;
@@ -337,11 +337,13 @@ void KoTextLayoutTableArea::layoutColumns()
 
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth)) {
             // Relative width specified. Will be handled in the next loop.
+            d->columnWidths[col] = 0.0;
             relativeWidthColumns.append(col);
             relativeWidthSum += columnStyle.relativeColumnWidth();
         } else if (columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
             // Only width specified, so use it.
             d->columnWidths[col] = columnStyle.columnWidth();
+            fixedWidthColumns.append(col);
             availableWidth -= columnStyle.columnWidth();
         } else {
             // Neither width nor relative width specified.
@@ -351,18 +353,31 @@ void KoTextLayoutTableArea::layoutColumns()
         }
     }
 
+    // Handle the case that the fixed size columns are larger then the defined table width
+    if (availableWidth < 0.0) {
+        if (tableFormat.width().rawValue() == 0 && fixedWidthColumns.count() > 0) {
+            // If not table width was defined then we need to scale down the fixed size columns so they match
+            // into the width of the table.
+            qreal diff = (-availableWidth) / qreal(fixedWidthColumns.count());
+            foreach(int col, fixedWidthColumns) {
+                d->columnWidths[col] = qMax(0.0, d->columnWidths[col] - diff);
+            }
+        }
+        availableWidth = 0.0;
+    }
+
     // Calculate width to those columns that don't actually request it
     qreal widthForNonWidthColumn = ((1.0 - qMin<qreal>(relativeWidthSum, 1.0)) * availableWidth);
     availableWidth -= widthForNonWidthColumn; // might as well do this calc before dividing by numNonStyleColumns
-    if (numNonStyleColumns)
+    if (numNonStyleColumns > 0 && widthForNonWidthColumn > 0.0) {
         widthForNonWidthColumn /= numNonStyleColumns;
+    }
 
     // Relative column widths have now been summed up and can be distributed.
     foreach (int col, relativeWidthColumns) {
         KoTableColumnStyle columnStyle = d->carsManager.columnStyle(col);
         if (columnStyle.hasProperty(KoTableColumnStyle::RelativeColumnWidth) || columnStyle.hasProperty(KoTableColumnStyle::ColumnWidth)) {
-            d->columnWidths[col] =
-                qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
+            d->columnWidths[col] = qMax<qreal>(columnStyle.relativeColumnWidth() * availableWidth / relativeWidthSum, 0.0);
         } else {
             d->columnWidths[col] = widthForNonWidthColumn;
         }

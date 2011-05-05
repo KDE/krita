@@ -31,6 +31,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
+#include <KoTableStyle.h>
 
 #include <QtGui>
 #include <QTextCursor>
@@ -54,7 +55,7 @@ void TestTableLayout::cleanupTestCase()
     delete m_doc;
 }
 
-void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText)
+void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle)
 {
     delete m_doc;
     m_doc = new QTextDocument;
@@ -77,10 +78,16 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
 
     m_block = m_doc->begin();
     QTextCursor cursor(m_doc);
+
+    QTextTableFormat tableFormat;
+    if (tableStyle)
+        tableStyle->applyStyle(tableFormat);
+
     KoParagraphStyle style;
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
     style.applyStyle(m_block);
-    m_table = cursor.insertTable(3,3);
+
+    m_table = cursor.insertTable(3,3,tableFormat);
     m_table->mergeCells(0,0,2,2);
     if (mergedText.length() > 0) {
         m_table->cellAt(0,0).firstCursorPosition().insertText(mergedText);
@@ -178,6 +185,10 @@ void TestTableLayout::testColumnWidthUndefined()
 {
     setupTest("","","","","","");
     m_layout->layout();
+
+    QCOMPARE(m_table->columns(), 3);
+    QCOMPARE(m_table->rows(), 3);
+    QVERIFY(qAbs(m_block.layout()->lineAt(0).width() - 200.0) < ROUNDING);
     QTextLayout *lay = bottomLeftCellBlock().layout();
     QVERIFY(lay);
     QCOMPARE(lay->lineCount(), 1);
@@ -194,7 +205,10 @@ void TestTableLayout::testColumnWidthUndefined()
 
 void TestTableLayout::testColumnWidthFixed()
 {
-    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text");
+    KoTableStyle *tableStyle = new KoTableStyle;
+    tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 150.0));
+
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
     KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
 
     KoTableColumnStyle column1style;
@@ -206,16 +220,17 @@ void TestTableLayout::testColumnWidthFixed()
     styleManager.setColumnStyle(1, column2style);
 
     KoTableColumnStyle column3style;
-    column3style.setColumnWidth(69.9);
+    column3style.setColumnWidth(362.9);
     styleManager.setColumnStyle(2, column3style);
 
     m_layout->layout();
 
+    QVERIFY(qAbs(QTextCursor(m_table->parentFrame()).block().layout()->lineAt(0).width() - 200.0) < ROUNDING); // table should grow to 200
     QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 124.8) < ROUNDING);
-    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 69.9) < ROUNDING);
+    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 362.9) < ROUNDING);
     QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 2.3) < ROUNDING);
     QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 122.5) < ROUNDING);
-    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 69.9) < ROUNDING);
+    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 362.9) < ROUNDING);
 }
 
 void TestTableLayout::testColumnWidthFixedZero()
@@ -242,6 +257,35 @@ void TestTableLayout::testColumnWidthFixedZero()
     //FIXME QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
     QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 120.5) < ROUNDING);
     //FIXME QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 0.0) < ROUNDING);
+}
+
+void TestTableLayout::testColumnWidthFixedShrink()
+{
+    KoTableStyle *tableStyle = new KoTableStyle;
+    //tableStyle->setWidth(QTextLength(QTextLength::FixedLength, 200.0)); // no table-width defined
+
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+
+    KoTableColumnStyle column1style;
+    column1style.setColumnWidth(2.3);
+    styleManager.setColumnStyle(0, column1style);
+
+    KoTableColumnStyle column2style;
+    column2style.setColumnWidth(122.5);
+    styleManager.setColumnStyle(1, column2style);
+
+    KoTableColumnStyle column3style;
+    column3style.setColumnWidth(362.9);
+    styleManager.setColumnStyle(2, column3style);
+
+    m_layout->layout();
+
+    QVERIFY(qAbs(QTextCursor(m_table->parentFrame()).block().layout()->lineAt(0).width() - 200.0) < ROUNDING); // table should grow to 200
+    QVERIFY(qAbs(mergedCellBlock().layout()->lineAt(0).width() - 26.5938) < ROUNDING);
+    QVERIFY(qAbs(topRightCellBlock().layout()->lineAt(0).width() - 267) < ROUNDING);
+    QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 26.5938) < ROUNDING);
+    QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 267) < ROUNDING);
 }
 
 void TestTableLayout::testColumnWidthRelative()

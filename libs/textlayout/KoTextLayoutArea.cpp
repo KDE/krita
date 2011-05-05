@@ -10,7 +10,8 @@
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
-  *
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -1176,12 +1177,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             block->setUserData(blockData);
         }
 
-        // first let's get horizontal out of the way
-        m_x += border.inset(KoTextBlockBorderData::Left);
-        m_width -= border.inset(KoTextBlockBorderData::Left);
-        m_width -= border.inset(KoTextBlockBorderData::Right);
-
-        // then check if we can merge with the previous parags border.
+        // check if we can merge with the previous parags border.
         if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
@@ -1210,6 +1206,11 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
+      
+	// finally, horizontal components of the borders
+	m_x += border.inset(KoTextBlockBorderData::Left);
+	m_width -= border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Right);
     } else { // this parag has no border.
         if (m_prevBorder) {
             m_y += m_prevBorderPadding;

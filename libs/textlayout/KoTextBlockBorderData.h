@@ -112,11 +112,6 @@ public:
     void setParagraphBottom(qreal bottom);
 
     /**
-     * Return the rectangle in which the border is drawn.  The border is drawn on the insides of the rect
-     */
-    QRectF rect() const;
-
-    /**
      * Find the inset that a border causes for a specific side.
      * @see applyInsets()
      */
@@ -129,7 +124,7 @@ public:
     /**
      * Paint the borders.
      */
-    void paint(QPainter &painter) const;
+    void paint(QPainter &painter, const QRectF &clip) const;
 
 private:
     class Private;

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantastic.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -34,14 +35,13 @@ public:
     Private() : refCount(0) {}
     Edge edges[4];
 
-    QRectF bounds;
     QAtomicInt refCount;
 };
 
 KoTextBlockBorderData::KoTextBlockBorderData(const QRectF &paragRect)
         : d(new Private())
 {
-    d->bounds = paragRect;
+    ///TODO Remove parameter paragRect and update references to this constructor.
 }
 
 KoTextBlockBorderData::~KoTextBlockBorderData()
@@ -54,7 +54,6 @@ KoTextBlockBorderData::KoTextBlockBorderData(const KoTextBlockBorderData &other)
 {
     for (int i = Top; i <= Right; i++)
         d->edges[i] = other.d->edges[i];
-    d->bounds = other.d->bounds;
 }
 
 bool KoTextBlockBorderData::hasBorders() const
@@ -89,47 +88,47 @@ void KoTextBlockBorderData::applyInsets(KoInsets &insets, qreal paragStart, bool
 
     // only apply top when the parag is the top parag in the border-set
     qreal insetTop = startUnderBorder ? inset(Top) : 0;
-    if (qAbs(d->bounds.top() + insetTop - paragStart) < 1E-10)
+    
+    if (qAbs(insetTop - paragStart) < 1E-10)
         insets.top += startUnderBorder ? insetTop : inset(Top);
 }
 
+
 void KoTextBlockBorderData::setParagraphBottom(qreal bottom)
 {
-    d->bounds.setBottom(bottom + inset(Bottom));
+  ///TODO Remove this function and references to it
 }
 
-void KoTextBlockBorderData::paint(QPainter &painter) const
+void KoTextBlockBorderData::paint(QPainter &painter, const QRectF &bounds) const
 {
-    QRectF bounds = d->bounds;
-    QRectF innerBounds = d->bounds;
+    QRectF innerBounds = bounds;
     if (d->edges[Top].outerPen.widthF() > 0) {
         QPen pen = d->edges[Top].outerPen;
-
         painter.setPen(pen);
-        const qreal t = d->bounds.top() + pen.widthF() / 2.0;
-        painter.drawLine(QLineF(d->bounds.left(), t, d->bounds.right(), t));
-        innerBounds.setTop(d->bounds.top() + d->edges[Top].distance + pen.widthF());
+        const qreal t = bounds.top() + pen.widthF() / 2.0;
+        painter.drawLine(QLineF(bounds.left(), t, bounds.right(), t));
+        innerBounds.setTop(bounds.top() + d->edges[Top].distance + pen.widthF());
     }
     if (d->edges[Bottom].outerPen.widthF() > 0) {
         QPen pen = d->edges[Bottom].outerPen;
         painter.setPen(pen);
-        const qreal b = d->bounds.bottom() - pen.widthF() / 2.0;
-        innerBounds.setBottom(d->bounds.bottom() - d->edges[Bottom].distance - pen.widthF());
-        painter.drawLine(QLineF(d->bounds.left(), b, d->bounds.right(), b));
+        const qreal b = bounds.bottom() - pen.widthF() / 2.0;
+        innerBounds.setBottom(bounds.bottom() - d->edges[Bottom].distance - pen.widthF());
+        painter.drawLine(QLineF(bounds.left(), b, bounds.right(), b));
     }
     if (d->edges[Left].outerPen.widthF() > 0) {
         QPen pen = d->edges[Left].outerPen;
         painter.setPen(pen);
-        const qreal l = d->bounds.left() + pen.widthF() / 2.0;
-        innerBounds.setLeft(d->bounds.left() + d->edges[Left].distance + pen.widthF());
-        painter.drawLine(QLineF(l, d->bounds.top(), l, d->bounds.bottom()));
+        const qreal l = bounds.left() + pen.widthF() / 2.0;
+        innerBounds.setLeft(bounds.left() + d->edges[Left].distance + pen.widthF());
+        painter.drawLine(QLineF(l, bounds.top(), l, bounds.bottom()));
     }
     if (d->edges[Right].outerPen.widthF() > 0) {
         QPen pen = d->edges[Right].outerPen;
         painter.setPen(pen);
-        const qreal r = d->bounds.right() - pen.widthF() / 2.0;
-        innerBounds.setRight(d->bounds.right() - d->edges[Right].distance - pen.widthF());
-        painter.drawLine(QLineF(r, d->bounds.top(), r, d->bounds.bottom()));
+        const qreal r = bounds.right() - pen.widthF() / 2.0;
+        innerBounds.setRight(bounds.right() - d->edges[Right].distance - pen.widthF());
+        painter.drawLine(QLineF(r, bounds.top(), r, bounds.bottom()));
     }
     // inner lines
     if (d->edges[Top].innerPen.widthF() > 0) {
@@ -210,9 +209,3 @@ int KoTextBlockBorderData::useCount() const
 {
     return d->refCount;
 }
-
-QRectF KoTextBlockBorderData::rect() const
-{
-    return d->bounds;
-}
-

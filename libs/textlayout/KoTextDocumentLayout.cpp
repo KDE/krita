@@ -297,7 +297,6 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     KoTextPage *page = d->anchoringRootArea->page();
-qDebug()<<"placing called"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchoredObstructions.size();
 
     if (d->anchoringState == AnchoringFinalState) {
         // In the final Layout run we do not try to move subjects
@@ -352,7 +351,7 @@ qDebug()<<"placing called"<<int(d->anchoringState)<<d->textAnchors.size()<<d->an
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
-qDebug()<<"working on "<<textAnchor;
+
             if (strategy->moveSubject()) {
                 d->anchoringState = Private::AnchoringMovingState;
                 d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
@@ -489,7 +488,6 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-qDebug()<<"pre layout"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchoredObstructions.size();
                 finished = rootArea->layout(tmpPosition);
                 if (3) { //FIXME
                     d->anchoringIndex = 0;

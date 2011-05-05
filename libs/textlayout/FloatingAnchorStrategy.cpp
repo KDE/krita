@@ -115,7 +115,6 @@ bool FloatingAnchorStrategy::moveSubject()
     if (newPosition == m_anchor->shape()->position()) {
         return false;
     }
-qDebug() << "MOVE SUBJECT to"<< newPosition<<pageRect();
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();

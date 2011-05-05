@@ -95,23 +95,6 @@ public:
     bool hasBorders() const;
 
     /**
-     * Alter the param insets object to add the insets needed by the borders.
-     * @param insets the object to alter
-     * @param paragraphStart the y-offset in the document of the paragraph for which the insets apply.
-     *     This parameter is used to find out if this is the top paragraph and thus the top insets should apply.
-     * @param startUnderBorder if true the paragraphStart is calculated from the top of the text, and thus under
-            the border.  If false; its above the border.
-     * @see inset()
-     */
-    void applyInsets(KoInsets &insets, qreal paragraphStart, bool startUnderBorder) const;
-
-    /**
-     * Alter the bounding rect of the borders to move the bottom to the parameter position.
-     * @param bottom the new y position of the bottom. The border will be drawn directly below that point.
-     */
-    void setParagraphBottom(qreal bottom);
-
-    /**
      * Find the inset that a border causes for a specific side.
      * @see applyInsets()
      */

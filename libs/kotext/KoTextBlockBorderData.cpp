@@ -81,24 +81,6 @@ bool KoTextBlockBorderData::equals(const KoTextBlockBorderData &border)
     return true;
 }
 
-void KoTextBlockBorderData::applyInsets(KoInsets &insets, qreal paragStart, bool startUnderBorder) const
-{
-    insets.left += inset(Left);
-    insets.right += inset(Right);
-
-    // only apply top when the parag is the top parag in the border-set
-    qreal insetTop = startUnderBorder ? inset(Top) : 0;
-    
-    if (qAbs(insetTop - paragStart) < 1E-10)
-        insets.top += startUnderBorder ? insetTop : inset(Top);
-}
-
-
-void KoTextBlockBorderData::setParagraphBottom(qreal bottom)
-{
-  ///TODO Remove this function and references to it
-}
-
 void KoTextBlockBorderData::paint(QPainter &painter, const QRectF &bounds) const
 {
     QRectF innerBounds = bounds;

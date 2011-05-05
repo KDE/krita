@@ -496,6 +496,8 @@ qDebug()<<"pre layout"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchor
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
+                    } else {
+                        d->anchoringState = Private::AnchoringPreState;
                     }
                 }
             } while (rootArea->isDirty());
@@ -556,6 +558,8 @@ qDebug()<<"pre layout"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchor
                     d->anchoringCycle++;
                     if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
                         d->anchoringState = Private::AnchoringFinalState;
+                    } else {
+                        d->anchoringState = Private::AnchoringPreState;
                     }
                 }
             } while (rootArea->isDirty());

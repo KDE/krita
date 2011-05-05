@@ -44,6 +44,7 @@ public:
 
 private slots:
     void initTestCase();
+    void cleanupTestCase();
 
     /// make sure our private method setupTest() does what we think it does
     void testSetupTest();

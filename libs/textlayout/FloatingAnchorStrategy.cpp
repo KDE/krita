@@ -59,7 +59,6 @@ void FloatingAnchorStrategy::updateObstruction()
 
 bool FloatingAnchorStrategy::moveSubject()
 {
-    qDebug() << "MOVE SUBJECT CALLED"<< m_finished;
     if (m_finished) { // shape is in right position no second pass needed
         return false;
     }
@@ -67,6 +66,9 @@ bool FloatingAnchorStrategy::moveSubject()
     if (!m_anchor->shape()->parent()) {
         return false;
     }
+
+    QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
+    setPageContentRect(pageContentRect);
 
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
@@ -109,7 +111,11 @@ bool FloatingAnchorStrategy::moveSubject()
     //check the border of page an move the shape back to have it visible
     checkPageBorder(newPosition, containerBoundingRect);
 
-        qDebug() << "MOVE SUBJECT to"<< newPosition<<pageRect();
+
+    if (newPosition == m_anchor->shape()->position()) {
+        return false;
+    }
+qDebug() << "MOVE SUBJECT to"<< newPosition<<pageRect();
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();

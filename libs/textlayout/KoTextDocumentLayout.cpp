@@ -66,7 +66,7 @@ public:
        , changeTracker(0)
        , inlineTextObjectManager(0)
        , provider(0)
-       , textAnchorIndex(0)
+       , anchoringIndex(0)
        , defaultTabSizing(0)
        , y(0)
        , isLayouting(false)
@@ -88,7 +88,8 @@ public:
     QHash<int, KoInlineObjectExtent> inlineObjectExtents; // maps text-position to whole-line-height of an inline object
     int inlineObjectOffset;
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
-    int textAnchorIndex; // index of last not positioned inline object inside textAnchors
+    int anchoringIndex; // index of last not positioned inline object inside textAnchors
+    int anchoringCycle; // how many times have we cycled in iterative mode;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
@@ -100,6 +101,12 @@ public:
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
+    enum AnchoringState {
+        AnchoringPreState
+        ,AnchoringMovingState
+        ,AnchoringFinalState
+    };
+    AnchoringState anchoringState;
 };
 
 
@@ -290,13 +297,14 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     KoTextPage *page = d->anchoringRootArea->page();
+qDebug()<<"placing called"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchoredObstructions.size();
 
     if (d->anchoringState == AnchoringFinalState) {
         // In the final Layout run we do not try to move subjects
         return;
     }
 
-    switch (0) {
+    switch (3) {
     case 0:
         // For once-concurrently (20.172) we only layout once to place all subjects
         // and then again to flow text around.
@@ -312,7 +320,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             strategy->moveSubject();
         }
-        d->anchoringState == AnchoringFinalState
+        d->anchoringState = Private::AnchoringFinalState;
         d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
         break;
     case 1:
@@ -321,22 +329,36 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
         // the last subject.
         break;
     case 2:
-        while (d->textAnchorIndex < d->textAnchors.size()) {
-            KoTextAnchor *textAnchor = d->textAnchors[d->textAnchorIndex];
+        // For iterative (20.172) we layout until no more movement is happening
+        while (d->anchoringIndex < d->textAnchors.size()) {
+            KoTextAnchor *textAnchor = d->textAnchors[d->anchoringIndex];
             AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
 
-    /*FIXME
-            QRectF pageContentRect = textAnchor->shape()->parent()->boundingRect();
-            textAnchor->setPageContentRect(pageContentRect);
-    */
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
 
-            if (strategy->moveSubject() == false) {
+            if (strategy->moveSubject() == true) {
                 return;
             }
             // move the index to next not positioned shape
-            d->textAnchorIndex++;
+            d->anchoringIndex++;
+        }
+        break;
+    case 3: //experimental iterative mode
+        // For iterative (20.172) we layout until no more movement is happening
+        while (d->anchoringIndex < d->textAnchors.size()) {
+            KoTextAnchor *textAnchor = d->textAnchors[d->anchoringIndex];
+            AnchorStrategy *strategy = static_cast<AnchorStrategy *>(textAnchor->anchorStrategy());
+
+            strategy->setPageRect(page->rect());
+            strategy->setPageNumber(page->pageNumber());
+qDebug()<<"working on "<<textAnchor;
+            if (strategy->moveSubject()) {
+                d->anchoringState = Private::AnchoringMovingState;
+                d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+            }
+            // move the index to next not positioned shape
+            d->anchoringIndex++;
         }
         break;
     }
@@ -384,8 +406,8 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->anchoredObstructions.clear();
     d->textAnchors.clear();
 
-    d->textAnchorIndex = 0;
-
+    d->anchoringIndex = 0;
+    d->anchoringCycle = 0;
     d->anchoringRootArea = rootArea;
     d->anchoringState = AnchoringPreState;
 }
@@ -467,7 +489,15 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
+qDebug()<<"pre layout"<<int(d->anchoringState)<<d->textAnchors.size()<<d->anchoredObstructions.size();
                 finished = rootArea->layout(tmpPosition);
+                if (3) { //FIXME
+                    d->anchoringIndex = 0;
+                    d->anchoringCycle++;
+                    if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
+                        d->anchoringState = Private::AnchoringFinalState;
+                    }
+                }
             } while (rootArea->isDirty());
             delete d->layoutPosition;
             d->layoutPosition = tmpPosition;
@@ -521,6 +551,13 @@ void KoTextDocumentLayout::layout()
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
                 rootArea->layout(tmpPosition);
+                if (3) { //FIXME
+                    d->anchoringIndex = 0;
+                    d->anchoringCycle++;
+                    if (d->anchoringState == Private::AnchoringPreState || d->anchoringCycle > 10) {
+                        d->anchoringState = Private::AnchoringFinalState;
+                    }
+                }
             } while (rootArea->isDirty());
             delete d->layoutPosition;
             d->layoutPosition = tmpPosition;

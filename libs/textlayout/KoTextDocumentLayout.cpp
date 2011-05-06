@@ -90,6 +90,7 @@ public:
     QList<KoTextAnchor *> textAnchors; // list of all inserted inline objects
     int anchoringIndex; // index of last not positioned inline object inside textAnchors
     int anchoringCycle; // how many times have we cycled in iterative mode;
+    QRectF anchoringParagraphRect;
 
     QHash<KoShape*,KoTextLayoutObstruction*> anchoredObstructions; // all obstructions created in positionInlineObjects because KoTextAnchor from m_textAnchors is in text
     QList<KoTextLayoutObstruction*> freeObstructions; // obstructions affecting the current rootArea, and not anchored
@@ -294,7 +295,7 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
 }
 
-void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphRect)
+void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     KoTextPage *page = d->anchoringRootArea->page();
 
@@ -316,7 +317,6 @@ void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphR
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
-            strategy->setParagraphRect(paragraphRect);
 
             strategy->moveSubject();
         }
@@ -336,7 +336,6 @@ void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphR
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
-            strategy->setParagraphRect(paragraphRect);
 
             if (strategy->moveSubject() == true) {
                 return;
@@ -353,7 +352,6 @@ void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphR
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
-            strategy->setParagraphRect(paragraphRect);
 
             if (strategy->moveSubject()) {
                 d->anchoringState = Private::AnchoringMovingState;
@@ -366,6 +364,12 @@ void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphR
     }
 }
 
+void KoTextDocumentLayout::setAnchoringParagraphRect(const QRectF &paragraphRect)
+{
+    d->anchoringParagraphRect = paragraphRect;
+}
+
+
 // This method is called by qt every time  QTextLine.setWidth()/setNumColums() is called
 void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int position, const QTextFormat &format)
 {
@@ -375,7 +379,6 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
         return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
-
     // We need some special treatment for anchors as they need to position their object during
     // layout and not this early
     KoTextAnchor *anchor = dynamic_cast<KoTextAnchor*>(obj);
@@ -391,6 +394,7 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
             d->textAnchors.append(anchor);
             anchor->updatePosition(document(), item, position, cf);
         }
+        static_cast<AnchorStrategy *>(anchor->anchorStrategy())->setParagraphRect(d->anchoringParagraphRect);
     }
     else if (obj) {
         obj->updatePosition(document(), item, position, cf);

@@ -105,12 +105,13 @@ bool FloatingAnchorStrategy::moveSubject()
     newPosition = newPosition + m_anchor->offset();
 
     //check the border of page an move the shape back to have it visible
-    checkPageBorder(newPosition, containerBoundingRect);
+    //checkPageBorder(newPosition, containerBoundingRect);
 
-
+qDebug() <<"position"<<newPosition<<m_anchor->shape()->parent();
     if (newPosition == m_anchor->shape()->position()) {
         return false;
     }
+qDebug() <<"is new";
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
@@ -281,32 +282,30 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
 
     case KoTextAnchor::VParagraph:
     case KoTextAnchor::VParagraphContent:
-     if (layout->lineCount() != 0) {
-         qreal top = layout->lineAt(0).y();
-         QTextLine tl = layout->lineAt(layout->lineCount() - 1);
-         anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
-         anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
-         KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-/*FIXME  effectiveTop will not work with paragraphs split across pages
- We need to have the layout supply all these rects
-if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
-             anchorBoundingRect.setY(blockData->effectiveTop() + containerBoundingRect.y()  - data->documentOffset());
-         }*/
-     } else {
-         return false; // lets go for a second round.
-     }
-     break;
+        if (layout->lineCount() != 0) {
+            qreal top = layout->lineAt(0).y();
+            QTextLine tl = layout->lineAt(layout->lineCount() - 1);
+            anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
+            anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
+            KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
+                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
+            }
+        } else {
+            return false; // lets go for a second round.
+        }
+        break;
 
     case KoTextAnchor::VLine:
-     if (layout->lineCount()) {
-         QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-         Q_ASSERT(tl.isValid());
-         anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
+        if (layout->lineCount()) {
+                QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            Q_ASSERT(tl.isValid());
+            anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
                          + containerBoundingRect.y() - data->documentOffset());
-         anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
-     } else {
-         return false; // lets go for a second round.
-     }
+            anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
+        } else {
+            return false; // lets go for a second round.
+        }
      break;
 
     case KoTextAnchor::VText: // same as char apparently only used when as-char

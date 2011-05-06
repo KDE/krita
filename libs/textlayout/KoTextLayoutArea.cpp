@@ -739,9 +739,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         runAroundHelper.setLine(this, line);
 
         runAroundHelper.setObstructions(documentLayout()->currentObstructions());
-        documentLayout()->positionAnchoredObstructions(m_blockRects.last());
+
+        documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
 
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        documentLayout()->positionAnchoredObstructions();
 
         qreal bottomOfText = line.y() + line.height();
 

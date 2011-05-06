@@ -56,10 +56,11 @@ void FloatingAnchorStrategy::updateObstruction()
     layout->registerAnchoredObstruction(m_obstruction);
 }
 
+//should return true while we are still moving around
 bool FloatingAnchorStrategy::moveSubject()
 {
     if (!m_anchor->shape()->parent()) {
-        return false;
+        return true; // let's fake we moved to force another relayout
     }
 
     QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
@@ -68,7 +69,7 @@ bool FloatingAnchorStrategy::moveSubject()
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {
-        return false;
+        return true; // let's fake we moved to force another relayout
     }
 
 
@@ -77,7 +78,7 @@ bool FloatingAnchorStrategy::moveSubject()
 
     // there should be always at least one line
     if (layout->lineCount() == 0) {
-        return false;
+        return true; // let's fake we moved to force another relayout
     }
 
     QRectF boundingRect = m_anchor->shape()->boundingRect();
@@ -87,12 +88,12 @@ bool FloatingAnchorStrategy::moveSubject()
 
     // set anchor bounding rectangle horizontal position and size
     if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, block, layout)) {
-        return false;
+        return true; // let's fake we moved to force another relayout
     }
 
     // set anchor bounding rectangle vertical position
     if (!countVerticalRel(anchorBoundingRect, containerBoundingRect, data, block, layout)) {
-        return false;
+        return true; // let's fake we moved to force another relayout
     }
 
     // Set shape horizontal alignment inside anchor bounding rectangle

@@ -39,9 +39,9 @@ public:
     virtual ~AnchorStrategy();
 
     /**
-     * Moves the obstruction to it's right position.
+     * Moves the subject to it's right position.
      *
-     * @return true if new position for shape was found
+     * @return true if subject was moved to a new position (or it it couldn't be calculated yet)
      */
     virtual bool moveSubject() = 0;
 

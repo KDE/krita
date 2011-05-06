@@ -35,7 +35,6 @@
 FloatingAnchorStrategy::FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : AnchorStrategy(anchor, rootArea)
         , m_anchor(anchor)
-        , m_finished(false)
         , m_obstruction(new KoTextLayoutObstruction(anchor->shape(), QTransform()))
 {
 }
@@ -59,10 +58,6 @@ void FloatingAnchorStrategy::updateObstruction()
 
 bool FloatingAnchorStrategy::moveSubject()
 {
-    if (m_finished) { // shape is in right position no second pass needed
-        return false;
-    }
-
     if (!m_anchor->shape()->parent()) {
         return false;
     }
@@ -125,19 +120,7 @@ bool FloatingAnchorStrategy::moveSubject()
         updateObstruction();
     }
 
-    m_finished = true;
     return true;
-}
-
-bool FloatingAnchorStrategy::isPositioned()
-{
-    return m_finished;
-}
-
-void FloatingAnchorStrategy::reset()
-{
-    m_finished = false;
-    return;
 }
 
 bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRectF containerBoundingRect, QTextBlock &block, QTextLayout *layout)

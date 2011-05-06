@@ -42,15 +42,6 @@ public:
      */
     virtual bool moveSubject();
 
-    /**
-     *
-     * @return true if position for shape was wound
-     */
-    virtual bool isPositioned();
-
-    //reset the state of this class
-    virtual void reset();
-
 private:
 
     void calculateKnowledgePoint(); //calculate minimal text position from which enough information is ready to position the shape

@@ -397,7 +397,6 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
 void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
 {
     foreach(KoTextAnchor *anchor, d->textAnchors) {
-        anchor->anchorStrategy()->reset();
         anchor->setAnchorStrategy(0);
     }
 

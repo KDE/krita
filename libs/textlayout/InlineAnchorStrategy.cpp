@@ -28,7 +28,6 @@
 InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
         : AnchorStrategy(anchor, rootArea)
         , m_anchor(anchor)
-        , m_finished(false)
 {
 }
 
@@ -38,10 +37,6 @@ InlineAnchorStrategy::~InlineAnchorStrategy()
 
 bool InlineAnchorStrategy::moveSubject()
 {
-    if (m_finished) { // shape is in right position no second pass needed
-        return false;
-    }
-
     if (!m_anchor->shape()->parent()) {
         return false;
     }
@@ -70,19 +65,7 @@ bool InlineAnchorStrategy::moveSubject()
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    m_finished = true;
     return true;
-}
-
-bool InlineAnchorStrategy::isPositioned()
-{
-    return m_finished;
-}
-
-void InlineAnchorStrategy::reset()
-{
-    m_finished = false;
-    return;
 }
 
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)

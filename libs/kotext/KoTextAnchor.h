@@ -40,12 +40,6 @@ public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
 
-    //virtual bool positionShape(KoTextDocumentLayout *layout) = 0;
-
-    virtual bool isPositioned() = 0;
-
-    virtual void reset() = 0;
-
     virtual void detachFromModel() = 0;
 
     virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;

@@ -35,11 +35,6 @@ public:
 
     virtual bool moveSubject();
 
-    virtual bool isPositioned();
-
-    //reset the state of this class
-    virtual void reset();
-
 private:
 
     bool countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout);

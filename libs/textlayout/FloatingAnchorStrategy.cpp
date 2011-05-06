@@ -72,7 +72,6 @@ bool FloatingAnchorStrategy::moveSubject()
         return true; // let's fake we moved to force another relayout
     }
 
-
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
     QTextLayout *layout = block.layout();
 
@@ -107,11 +106,9 @@ bool FloatingAnchorStrategy::moveSubject()
     //check the border of page an move the shape back to have it visible
     //checkPageBorder(newPosition, containerBoundingRect);
 
-qDebug() <<"position"<<newPosition<<m_anchor->shape()->parent();
     if (newPosition == m_anchor->shape()->position()) {
         return false;
     }
-qDebug() <<"is new";
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();

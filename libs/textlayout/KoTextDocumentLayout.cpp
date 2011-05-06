@@ -299,7 +299,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     KoTextPage *page = d->anchoringRootArea->page();
 
-    if (d->anchoringState == AnchoringFinalState) {
+    if (d->anchoringState == Private::AnchoringFinalState) {
         // In the final Layout run we do not try to move subjects
         return;
     }
@@ -308,7 +308,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
     case 0:
         // For once-concurrently (20.172) we only layout once to place all subjects
         // and then again to flow text around.
-        if (d->anchoringState == AnchoringPreState) {
+        if (d->anchoringState == Private::AnchoringPreState) {
             return;
         }
 
@@ -414,7 +414,7 @@ void KoTextDocumentLayout::beginAnchorCollecting(KoTextLayoutRootArea *rootArea)
     d->anchoringIndex = 0;
     d->anchoringCycle = 0;
     d->anchoringRootArea = rootArea;
-    d->anchoringState = AnchoringPreState;
+    d->anchoringState = Private::AnchoringPreState;
 }
 
 void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int position, const QTextFormat &format)

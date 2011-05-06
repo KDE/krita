@@ -44,13 +44,13 @@ FloatingAnchorStrategy::~FloatingAnchorStrategy()
 }
 
 
-void FloatingAnchorStrategy::updateObstruction()
+void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 {
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchor->document()->documentLayout());
 
     QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
     matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(0).inverted();
-//    matrix.translate(0, documentOffsetInShape());
+    matrix.translate(0, documentOffset);
     m_obstruction->changeMatrix(matrix);
 
     layout->registerAnchoredObstruction(m_obstruction);
@@ -116,7 +116,7 @@ bool FloatingAnchorStrategy::moveSubject()
     m_anchor->shape()->update();
 
     if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
-        updateObstruction();
+        updateObstruction(data->documentOffset());
     }
 
     return true;

@@ -1216,10 +1216,10 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
-      
-	// finally, horizontal components of the borders
-	m_x += border.inset(KoTextBlockBorderData::Left);
-	m_width -= border.inset(KoTextBlockBorderData::Left);
+
+        // finally, horizontal components of the borders
+        m_x += border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Left);
         m_width -= border.inset(KoTextBlockBorderData::Right);
     } else { // this parag has no border.
         if (m_prevBorder) {

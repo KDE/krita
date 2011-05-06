@@ -37,6 +37,7 @@ AnchorStrategy::AnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootA
         , m_rootArea(rootArea)
         , m_pageRect(0,0,10,10)
         , m_pageContentRect(0,0,10,10)
+        , m_paragraphRect(0,0,0,0)
         , m_pageNumber(0)
 {
 }
@@ -70,6 +71,16 @@ QRectF AnchorStrategy::pageContentRect()
 void AnchorStrategy::setPageContentRect(QRectF &pageContentRect)
 {
     m_pageContentRect = pageContentRect;
+}
+
+QRectF AnchorStrategy::paragraphRect()
+{
+    return m_paragraphRect;
+}
+
+void AnchorStrategy::setParagraphRect(const QRectF &paragraphRect)
+{
+    m_paragraphRect = paragraphRect;
 }
 
 int AnchorStrategy::pageNumber()

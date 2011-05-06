@@ -55,16 +55,28 @@ public:
     /// set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
     void setPageRect(const QRectF &pageRect);
 
-    /// get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    /// get content rectangle coordinates to which this text anchor is anchored (needed for
+    /// HPageContent)
     QRectF pageContentRect();
 
-    /// set content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
+    /// set content rectangle coordinates to which this text anchor is anchored (needed for
+    /// HPageContent)
     void setPageContentRect(QRectF &marginRect);
 
-    /// get number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    /// get paragraph rectangle coordinates to which this text anchor is anchored (needed for
+    /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin, VParagraph)
+    QRectF paragraphRect();
+
+    /// set number of page to which this text anchor is anchored (needed for HParagraphContent,
+    /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
+    void setParagraphRect(const QRectF &paragraphRect);
+
+    /// get number of page to which this text anchor is anchored (needed for HOutside, HInside,
+    /// HFromInside)
     int pageNumber();
 
-    /// set number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
+    /// set number of page to which this text anchor is anchored (needed for HOutside, HInside,
+    /// HFromInside)
     void setPageNumber(int pageNumber);
 
 private:
@@ -73,6 +85,7 @@ private:
     KoTextLayoutRootArea *m_rootArea;
     QRectF m_pageRect;
     QRectF m_pageContentRect;
+    QRectF m_paragraphRect;
     int m_pageNumber;
 };
 

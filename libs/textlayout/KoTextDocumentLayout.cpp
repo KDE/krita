@@ -294,7 +294,7 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
     d->anchoredObstructions.insert(obstruction->shape(), obstruction);
 }
 
-void KoTextDocumentLayout::positionAnchoredObstructions()
+void KoTextDocumentLayout::positionAnchoredObstructions(const QRectF &paragraphRect)
 {
     KoTextPage *page = d->anchoringRootArea->page();
 
@@ -316,6 +316,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
+            strategy->setParagraphRect(paragraphRect);
 
             strategy->moveSubject();
         }
@@ -335,6 +336,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
+            strategy->setParagraphRect(paragraphRect);
 
             if (strategy->moveSubject() == true) {
                 return;
@@ -351,6 +353,7 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             strategy->setPageRect(page->rect());
             strategy->setPageNumber(page->pageNumber());
+            strategy->setParagraphRect(paragraphRect);
 
             if (strategy->moveSubject()) {
                 d->anchoringState = Private::AnchoringMovingState;

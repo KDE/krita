@@ -44,13 +44,13 @@ FloatingAnchorStrategy::~FloatingAnchorStrategy()
 }
 
 
-void FloatingAnchorStrategy::updateObstruction()
+void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 {
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout *>(m_anchor->document()->documentLayout());
 
     QTransform matrix = m_anchor->shape()->absoluteTransformation(0);
     matrix = matrix * m_anchor->shape()->parent()->absoluteTransformation(0).inverted();
-//    matrix.translate(0, documentOffsetInShape());
+    matrix.translate(0, documentOffset);
     m_obstruction->changeMatrix(matrix);
 
     layout->registerAnchoredObstruction(m_obstruction);
@@ -71,7 +71,6 @@ bool FloatingAnchorStrategy::moveSubject()
     if (!data) {
         return true; // let's fake we moved to force another relayout
     }
-
 
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
     QTextLayout *layout = block.layout();
@@ -107,11 +106,9 @@ bool FloatingAnchorStrategy::moveSubject()
     //check the border of page an move the shape back to have it visible
     //checkPageBorder(newPosition, containerBoundingRect);
 
-qDebug() <<"position"<<newPosition<<m_anchor->shape()->parent();
     if (newPosition == m_anchor->shape()->position()) {
         return false;
     }
-qDebug() <<"is new";
 
     // set the shape to the proper position based on the data
     m_anchor->shape()->update();
@@ -119,7 +116,7 @@ qDebug() <<"is new";
     m_anchor->shape()->update();
 
     if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
-        updateObstruction();
+        updateObstruction(data->documentOffset());
     }
 
     return true;

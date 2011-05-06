@@ -60,7 +60,7 @@ private:
     inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
                                      KoTextShapeData *data);
 
-    void updateObstruction();
+    void updateObstruction(qreal documentOffset);
 
     KoTextAnchor *const m_anchor;
 

@@ -925,18 +925,22 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
 
         if (cursor->fragmentIterator.atEnd()) {// no text in parag.
-            //stretch line height to powerpoint size
-            qreal fontStretch = PresenterFontStretch;
-            // stretch line height to ms-word size
-            if (!useFontProperties && block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            qreal fontStretch = 1;
+            if (useFontProperties) {
+                //stretch line height to powerpoint size
+                fontStretch = PresenterFontStretch;
+            } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                // stretch line height to ms-word size
+                fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
             }
             height = block.charFormat().fontPointSize() * fontStretch;
         } else {
-            //stretch line height to powerpoint size
-            qreal fontStretch = PresenterFontStretch;
-            // stretch line height to ms-word size
-            if (!useFontProperties && cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+            qreal fontStretch = 1;
+            if (useFontProperties) {
+                //stretch line height to powerpoint size
+                fontStretch = PresenterFontStretch;
+            } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                // stretch line height to ms-word size
                 fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
             }
             // read max font height
@@ -958,10 +962,12 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
                     || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
                     || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
                     || m_documentLayout->changeTracker()->displayChanges()) {
-                    //stretch line height to powerpoint size
-                    qreal fontStretch = PresenterFontStretch;
-                    // stretch line height to ms-word size
-                    if (!useFontProperties && cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                    qreal fontStretch = 1;
+                    if (useFontProperties) {
+                        //stretch line height to powerpoint size
+                        fontStretch = PresenterFontStretch;
+                    } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                        // stretch line height to ms-word size
                         fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
                     }
                     // read max font height

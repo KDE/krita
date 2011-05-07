@@ -428,7 +428,11 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj) {
-        obj->resize(document(), item, position, cf, paintDevice());
+        QTextDocument *doc = document();
+        QVariant v;
+        v.setValue(d->anchoringRootArea->page());
+        doc->addResource(KoTextDocument::LayoutTextPage, QUrl("kotext://layoutTextPage"), v);
+        obj->resize(doc, item, position, cf, paintDevice());
         registerInlineObject(item);
     }
 }

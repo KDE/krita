@@ -84,13 +84,19 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
 {
     KoTextPage *page = 0;
     if (m_type != PageCount) {
+#if 0 // the code is left here to do some testing
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
+        KoTextLayoutRootArea *rootArea = 0;
+        KoTextPage *page2 = 0;
         if (lay) {
-            KoTextLayoutRootArea *rootArea = lay->rootAreaForPosition(posInDocument);
+            rootArea = lay->rootAreaForPosition(posInDocument);
             if (rootArea) {
-                page = rootArea->page();
+                page2 = rootArea->page();
             }
         }
+#endif
+        page = document->resource(KoTextDocument::LayoutTextPage, KoTextDocument::LayoutTextPageUrl).value<KoTextPage*>();
+        //qDebug() << __PRETTY_FUNCTION__ << lay << rootArea << page << page2;
     }
     int pagenumber = 0;
 

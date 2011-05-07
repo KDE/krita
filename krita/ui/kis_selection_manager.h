@@ -95,6 +95,11 @@ signals:
     void currentSelectionChanged();
 
 public:
+    bool havePixelsSelected();
+    bool havePixelsInClipboard();
+    bool haveShapesSelected();
+    bool haveShapesInClipboard();
+
     void grow(qint32 xradius, qint32 yradius);
     void shrink(qint32 xradius, qint32 yradius, bool edge_lock);
     void border(qint32 xradius, qint32 yradius);
@@ -130,10 +135,9 @@ private:
     KAction *m_selectAll;
     KAction *m_deselect;
     KAction *m_clear;
-    KAction *m_delete;
     KAction *m_reselect;
     KAction *m_invert;
-    KAction *m_toNewLayer;
+    KAction *m_copyToNewLayer;
     KAction *m_smooth;
     KAction *m_load;
     KAction *m_save;

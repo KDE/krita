@@ -69,8 +69,6 @@ public:
     KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisToolPaint();
 
-    void deleteSelection();
-
 protected:
 
     void setMode(ToolMode mode);

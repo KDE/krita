@@ -100,7 +100,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
         m_clear(0),
         m_reselect(0),
         m_invert(0),
-        m_toNewLayer(0),
+        m_copyToNewLayer(0),
         m_smooth(0),
         m_load(0),
         m_save(0),
@@ -164,10 +164,10 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_invert->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(m_invert, SIGNAL(triggered()), this, SLOT(invert()));
 
-    m_toNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
-    collection->addAction("copy_selection_to_new_layer", m_toNewLayer);
-    m_toNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
-    connect(m_toNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
+    m_copyToNewLayer  = new KAction(i18n("Copy Selection to New Layer"), this);
+    collection->addAction("copy_selection_to_new_layer", m_copyToNewLayer);
+    m_copyToNewLayer->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_J));
+    connect(m_copyToNewLayer, SIGNAL(triggered()), this, SLOT(copySelectionToNewLayer()));
 
     m_cutToNewLayer  = new KAction(i18n("Cut Selection to New Layer"), this);
     collection->addAction("cut_selection_to_new_layer", m_cutToNewLayer);
@@ -235,131 +235,106 @@ void KisSelectionManager::addSelectionAction(QAction * action)
 }
 
 
-void KisSelectionManager::updateGUI()
+bool KisSelectionManager::havePixelsSelected()
 {
-    Q_ASSERT(m_view);
-    Q_ASSERT(m_clipboard);
+    KisLayerSP activeLayer = m_view->activeLayer();
+    KisSelectionSP activeSelection;
+    if(activeLayer && !activeLayer->userLocked()
+       && activeLayer->visible()) {
 
-    if (m_view == 0) {
-        // "Eek, no parent!
-        return;
+        activeSelection = activeLayer->selection();
+        return activeSelection &&
+            !activeSelection->isDeselected() &&
+            !activeSelection->selectedRect().isEmpty();
     }
+    return false;
+}
 
-    if (m_clipboard == 0) {
-        // Eek, no clipboard!
-        return;
-    }
+bool KisSelectionManager::havePixelsInClipboard()
+{
+    return m_clipboard->hasClip();
+}
 
-    KisImageWSP image = m_view->image();
-    KisLayerSP l;
-    KisPaintDeviceSP dev;
+bool KisSelectionManager::haveShapesSelected()
+{
+    return m_view->canvasBase()->shapeManager()->selection()->count() > 0;
+}
 
-    bool enable = false;
+bool KisSelectionManager::haveShapesInClipboard()
+{
+    KisShapeLayer *shapeLayer =
+        dynamic_cast<KisShapeLayer*>(m_view->activeLayer().data());
 
-    if (image && m_view->activeDevice() && m_view->activeLayer()) {
-        l = m_view->activeLayer();
-
-        enable = l && !l->userLocked() && l->visible();
-#if 0 // XXX_SELECTION (how are we going to handle deselect and
-        // reselect now?
-        if (l->inherits("KisAdjustmentLayer")) {
-                if (dev && !adjLayer) {
-                    m_reselect->setEnabled(dev->selectionDeselected());
-                    if (adjLayer) { // There's no reselect for adjustment layers
-                        m_reselect->setEnabled(false);
-                    }
-                }
-        }
-#endif
-    }
-
-    m_clear->setEnabled(enable);
-    m_cut->setEnabled(enable);
-    m_fillForegroundColor->setEnabled(enable);
-    m_fillBackgroundColor->setEnabled(enable);
-    m_fillPattern->setEnabled(enable);
-
-    m_cutToNewLayer->setEnabled(enable && l->selection());
-    m_selectAll->setEnabled(!image.isNull());
-
-    bool hasPixelSelection = enable && l->selection() && l->selection()->hasPixelSelection()
-                             && !m_view->selection()->isDeselected();
-    m_invert->setEnabled(hasPixelSelection);
-
-    m_smooth->setEnabled(enable);
-//    m_load->setEnabled(enable);
-//    m_save->setEnabled(enable);
-
-
-    if (m_view->selection() && !m_view->selection()->isDeselected())
-        m_deselect->setEnabled(true);
-    else
-        m_deselect->setEnabled(false);
-
-    if (m_view->selection() && m_view->selection()->isDeselected())
-        m_reselect->setEnabled(true);
-    else
-        m_reselect->setEnabled(false);
-
-    m_imageResizeToSelection->setEnabled(m_view->selection() && !m_view->selection()->isDeselected());
-    if (!m_pluginActions.isEmpty()) {
-        QListIterator<QAction *> i(m_pluginActions);
-
-        while (i.hasNext()) {
-            i.next()->setEnabled(!image.isNull());
-        }
-    }
-
-    // You can copy from locked layers and paste the clip into a new layer, even when
-    // the current layer is locked.
-
-    enable = false;
-    if (image && l) {
-        enable = l->selection() && l->visible();
-
-
-    }
-
-    l = m_view->activeLayer();
-    KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(l.data());
-    bool shapePasteEnable = false;
-    bool shapeCopyEnable = false;
     if (shapeLayer) {
-
-        shapeCopyEnable = true;
-
         const QMimeData* data = QApplication::clipboard()->mimeData();
         if (data) {
             QStringList mimeTypes = m_view->canvasBase()->toolProxy()->supportedPasteMimeTypes();
             foreach(const QString & mimeType, mimeTypes) {
                 if (data->hasFormat(mimeType)) {
-                    shapePasteEnable = true;
-                    break;
+                    return true;
                 }
             }
         }
     }
+    return false;
+}
 
-    m_copy->setEnabled(enable || shapeCopyEnable);
-    m_copyMerged->setEnabled(image->rootLayer()->childCount() > 0);
-    m_paste->setEnabled(!image.isNull() && (m_clipboard->hasClip() || shapePasteEnable));
-    m_pasteNew->setEnabled(!image.isNull() && m_clipboard->hasClip());
-    m_toNewLayer->setEnabled(enable);
+void KisSelectionManager::updateGUI()
+{
+    Q_ASSERT(m_view);
+    Q_ASSERT(m_clipboard);
+    if (!m_view || !m_clipboard) return;
 
-    //Handle the clear action disponibility
+    bool havePixelsSelected = this->havePixelsSelected();
+    bool havePixelsInClipboard = this->havePixelsInClipboard();
+    bool haveShapesSelected = this->haveShapesSelected();
+    bool haveShapesInClipboard = this->haveShapesInClipboard();
+    bool haveDevice = m_view->activeDevice();
 
-    if (m_view->canvasBase()->shapeManager()->selection()->count() > 0) {
-        m_clear->setEnabled(true);
+    KisLayerSP activeLayer = m_view->activeLayer();
+    KisSelectionSP activeSelection;
+    bool canReselect = activeLayer && !activeLayer->userLocked() &&
+        activeLayer->visible() &&
+        (activeSelection = activeLayer->selection()) &&
+        activeSelection->isDeselected() &&
+        !activeSelection->selectedRect().isEmpty();
+
+
+    m_clear->setEnabled(haveDevice || havePixelsSelected || haveShapesSelected);
+    m_cut->setEnabled(havePixelsSelected || haveShapesSelected);
+    m_copy->setEnabled(havePixelsSelected || haveShapesSelected);
+    m_paste->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
+    m_pasteAt->setEnabled(havePixelsInClipboard || haveShapesInClipboard);
+    // FIXME: how about pasting shapes?
+    m_pasteNew->setEnabled(havePixelsInClipboard);
+
+    m_copyMerged->setEnabled(havePixelsSelected);
+    m_cutToNewLayer->setEnabled(havePixelsSelected);
+    m_copyToNewLayer->setEnabled(havePixelsSelected);
+    m_invert->setEnabled(havePixelsSelected);
+    m_smooth->setEnabled(havePixelsSelected);
+    m_imageResizeToSelection->setEnabled(havePixelsSelected);
+
+    m_fillForegroundColor->setEnabled(haveDevice);
+    m_fillBackgroundColor->setEnabled(haveDevice);
+    m_fillPattern->setEnabled(haveDevice);
+
+    m_selectAll->setEnabled(true);
+    m_deselect->setEnabled(havePixelsSelected);
+    m_reselect->setEnabled(canReselect);
+
+
+    if (!m_pluginActions.isEmpty()) {
+        QListIterator<QAction *> i(m_pluginActions);
+        while (i.hasNext()) {
+            i.next()->setEnabled(true);
+        }
     }
-    else if (shapeLayer && m_view->canvasBase()->shapeManager()->shapes().empty()){
-        m_clear->setEnabled(false);
-    }
-    else {
-        m_clear->setEnabled(true);
-    }
+
+//    m_load->setEnabled(true);
+//    m_save->setEnabled(havePixelsSelected);
 
     updateStatusBar();
-
 }
 
 void KisSelectionManager::updateStatusBar()
@@ -377,25 +352,27 @@ void KisSelectionManager::selectionChanged()
 
 void KisSelectionManager::cut()
 {
-    KisImageWSP image = m_view->image();
-    if (!image) return;
-
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    if (!m_view->selection()) return;
+    if(haveShapesSelected()) {
+        m_view->canvasBase()->toolProxy()->cut();
+    }
+    else {
+        if (!m_view->selection()) return;
 
-    copy();
+        copy();
 
-    KisSelectedTransaction transaction(i18n("Cut"), layer);
+        KisSelectedTransaction transaction(i18n("Cut"), layer);
 
-    layer->paintDevice()->clearSelection(m_view->selection());
-    QRect rect = m_view->selection()->selectedRect();
-    deselect();
+        layer->paintDevice()->clearSelection(m_view->selection());
+        QRect rect = m_view->selection()->selectedRect();
+        deselect();
 
-    transaction.commit(m_view->image()->undoAdapter());
+        transaction.commit(m_view->image()->undoAdapter());
 
-    layer->setDirty(rect);
+        layer->setDirty(rect);
+    }
 }
 
 void KisSelectionManager::copy()
@@ -403,22 +380,15 @@ void KisSelectionManager::copy()
     KisLayerSP layer = m_view->activeLayer();
     if (!layer) return;
 
-    KisShapeLayer * shapeLayer = dynamic_cast<KisShapeLayer*>(layer.data());
-    if (shapeLayer) {
+    if(haveShapesSelected()) {
         m_view->canvasBase()->toolProxy()->copy();
     }
     else {
-
-        KisImageWSP image = m_view->image();
-        if (!image) return;
-
         KisPaintDeviceSP dev = m_view->activeDevice();
         if (!dev) return;
 
         copyFromDevice(dev);
     }
-
-    selectionChanged();
 }
 
 void KisSelectionManager::copyMerged()
@@ -547,6 +517,7 @@ void KisSelectionManager::deselect()
     if (image->globalSelection()) {
         QUndoCommand *cmd = new KisDeselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
+        selectionChanged();
     }
 }
 
@@ -558,6 +529,7 @@ void KisSelectionManager::reselect()
     if (image->globalSelection()) {
         QUndoCommand *cmd = new KisReselectGlobalSelectionCommand(image);
         image->undoAdapter()->addCommand(cmd);
+        selectionChanged();
     }
 }
 
@@ -574,7 +546,8 @@ void KisSelectionManager::fill(const KoColor& color, bool fillWithPattern, const
     if (!device) return;
 
     KisSelectionSP selection = m_view->selection();
-    QRect selectedRect = selection->selectedRect();
+    QRect selectedRect = selection ?
+        selection->selectedRect() : m_view->image()->bounds();
     KisPaintDeviceSP filled = new KisPaintDevice(device->colorSpace());
 
     if (fillWithPattern) {

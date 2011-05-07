@@ -53,8 +53,6 @@
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_paint_device.h>
-#include <kis_transaction.h>
-#include <kis_selection.h>
 #include <kis_layer.h>
 #include <kis_view2.h>
 #include <kis_canvas2.h>
@@ -238,31 +236,6 @@ void KisToolPaint::pickColor(const QPointF &documentPixel,
 
     canvas()->resourceManager()->
         setResource(resource, KisToolUtils::pick(device, imagePoint));
-}
-
-void KisToolPaint::deleteSelection()
-{
-    KisSelectionSP selection = currentSelection();
-    KisNodeSP node = currentNode();
-
-    if(node) {
-        KisPaintDeviceSP device = node->paintDevice();
-
-        KisTransaction transaction(i18n("Clear"), device);
-
-        QRect dirtyRect;
-        if (selection) {
-            dirtyRect = selection->selectedRect();
-            device->clearSelection(selection);
-        }
-        else {
-            dirtyRect = device->extent();
-            device->clear();
-        }
-
-        transaction.commit(image()->undoAdapter());
-        device->setDirty(dirtyRect);
-    }
 }
 
 QWidget * KisToolPaint::createOptionWidget()

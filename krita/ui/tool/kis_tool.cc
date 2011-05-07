@@ -60,6 +60,8 @@
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_pattern.h>
+#include <kis_transaction.h>
+#include <kis_selection.h>
 
 #include "kis_canvas_resource_provider.h"
 #include "canvas/kis_canvas2.h"
@@ -555,6 +557,31 @@ void KisTool::gesture(const QPointF &offsetInDocPixels, const QPointF &initialDo
 {
     Q_UNUSED(offsetInDocPixels);
     Q_UNUSED(initialDocPoint);
+}
+
+void KisTool::deleteSelection()
+{
+    KisSelectionSP selection = currentSelection();
+    KisNodeSP node = currentNode();
+
+    if(node) {
+        KisPaintDeviceSP device = node->paintDevice();
+
+        KisTransaction transaction(i18n("Clear"), device);
+
+        QRect dirtyRect;
+        if (selection) {
+            dirtyRect = selection->selectedRect();
+            device->clearSelection(selection);
+        }
+        else {
+            dirtyRect = device->extent();
+            device->clear();
+        }
+
+        transaction.commit(image()->undoAdapter());
+        device->setDirty(dirtyRect);
+    }
 }
 
 void KisTool::setupPainter(KisPainter* painter)

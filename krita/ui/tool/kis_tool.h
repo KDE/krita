@@ -86,6 +86,7 @@ public:
     KisTool(KoCanvasBase * canvas, const QCursor & cursor);
     virtual ~KisTool();
 
+    void deleteSelection();
 // KoToolBase Implementation.
 
 public slots:

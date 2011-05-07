@@ -181,7 +181,7 @@ void KisPixelSelectionTest::testUpdateProjection()
     KisSelectionSP sel = new KisSelection();
     KisPixelSelectionSP psel = new KisPixelSelection();
     psel->select(QRect(0, 0, 100, 100));
-    psel->renderToProjection(sel.data());
+    psel->renderToProjection(sel->projection().data());
     QCOMPARE(sel->selectedExactRect(), QRect(0, 0, 100, 100));
 }
 

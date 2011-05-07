@@ -66,8 +66,8 @@ public:
      *
      * @param projection the target selection
      */
-    virtual void renderToProjection(KisSelection* projection);
-    virtual void renderToProjection(KisSelection* projection, const QRect& r);
+    virtual void renderToProjection(KisPixelSelection* projection);
+    virtual void renderToProjection(KisPixelSelection* projection, const QRect& r);
 
     virtual void setDirty();
 
@@ -87,7 +87,7 @@ protected:
 
 private:
 
-    void renderSelection(KisSelection* projection, const QRect& r);
+    void renderSelection(KisPixelSelection* projection, const QRect& r);
 
     KisImageWSP m_image;
     QPainterPath m_outline;

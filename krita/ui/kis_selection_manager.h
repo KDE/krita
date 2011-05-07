@@ -37,6 +37,8 @@ class KisDoc;
 class KisClipboard;
 class KisNodeCommandsAdapter;
 
+class KisSelectionFilter;
+
 /**
  * The selection manager is responsible selections
  * and the clipboard.
@@ -77,7 +79,6 @@ public slots:
     void selectAll();
     void deselect();
     void clear();
-    void deleteSelection();
     void fillForegroundColor();
     void fillBackgroundColor();
     void fillPattern();
@@ -109,13 +110,9 @@ private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);
     void updateStatusBar();
 
-
-    void computeBorder(qint32  *circ, qint32  xradius, qint32  yradius);
-    inline void rotatePointers(quint8  **p, quint32 n);
-    void computeTransition(quint8* transition, quint8** buf, qint32 width);
-
     void copyFromDevice(KisPaintDeviceSP device);
-    
+    void applySelectionFilter(KisSelectionFilter *filter);
+
     KisView2 * m_view;
     KisDoc2 * m_doc;
 

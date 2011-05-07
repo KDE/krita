@@ -222,7 +222,7 @@ void ImageSize::slotSelectionScale()
     if (dlgSize->exec() == QDialog::Accepted) {
         qint32 w = dlgSize->width();
         qint32 h = dlgSize->height();
-        KisTransformWorker worker(selection.data(),
+        KisTransformWorker worker(selection->mergedPixelSelection(),
                                   (double)w / ((double)(rc.width())),
                                   (double)h / ((double)(rc.height())),
                                   0, 0, 0.0, 0.0, 0.0, 0, 0, u,

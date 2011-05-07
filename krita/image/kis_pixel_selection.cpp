@@ -257,13 +257,14 @@ QVector<QPolygon> KisPixelSelection::outline()
     return paths;
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection)
+void KisPixelSelection::renderToProjection(KisPixelSelection* projection)
 {
     renderToProjection(projection, selectedExactRect());
 }
 
-void KisPixelSelection::renderToProjection(KisSelection* projection, const QRect& rc)
+void KisPixelSelection::renderToProjection(KisPixelSelection* projection, const QRect& rc)
 {
+    // FIXME: use selectedRect() instead
     QRect updateRect = rc & selectedExactRect();
 
     if (updateRect.isValid()) {

@@ -354,7 +354,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         to merge in the next block*/
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
         quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
-        d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
+        d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
         // Merge selections here by multiplying them - compositeOP(COMPOSITE_MULT)
         KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)
@@ -459,8 +459,8 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-
-        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dstX, dstY);
+        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
 
@@ -469,7 +469,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
             qint32 columnsRemaining = srcWidth;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
             qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
-            qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -479,7 +479,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
 
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
                 qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
-                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
@@ -491,7 +491,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
                 qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
                 dstIt.moveTo(dstX_, dstY_);
 
-                qint32 maskRowStride = d->selection->rowStride(dstX_, dstY_);
+                qint32 maskRowStride = selectionProjection->rowStride(dstX_, dstY_);
                 maskIt.moveTo(dstX_, dstY_);
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
@@ -623,8 +623,8 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
     the other bit blit operations. This one is longer than the rest in an effort to
     optimize speed and memory use */
     if (d->selection) {
-
-        KisRandomConstAccessorPixel maskIt = d->selection->createRandomConstAccessor(dstX, dstY);
+        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisRandomConstAccessorPixel maskIt = selectionProjection->createRandomConstAccessor(dstX, dstY);
 
         while (rowsRemaining > 0) {
 
@@ -633,7 +633,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
             qint32 columnsRemaining = srcWidth;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY_, dstX_, dstX_ + srcWidth - 1);
             qint32 numContiguousSrcRows = srcDev->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
-            qint32 numContiguousSelRows = d->selection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
+            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(srcY_, srcX_, srcX_ + srcWidth - 1);
 
             qint32 rows = qMin(numContiguousDstRows, numContiguousSrcRows);
             rows = qMin(rows, numContiguousSelRows);
@@ -643,7 +643,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
 
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX_, dstY_, dstY_ + rows - 1);
                 qint32 numContiguousSrcColumns = srcDev->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
-                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
+                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(srcX_, srcY_, srcY_ + rows - 1);
 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSrcColumns);
                 columns = qMin(columns, numContiguousSelColumns);
@@ -655,7 +655,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
                 qint32 dstRowStride = d->device->rowStride(dstX_, dstY_);
                 dstIt.moveTo(dstX_, dstY_);
 
-                qint32 maskRowStride = d->selection->rowStride(dstX_, dstY_);
+                qint32 maskRowStride = selectionProjection->rowStride(dstX_, dstY_);
                 maskIt.moveTo(dstX_, dstY_);
 
                 d->colorSpace->bitBlt(dstIt.rawData(),
@@ -755,15 +755,15 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
     
     if(d->selection) {
-        
-        KisRandomConstAccessorSP maskIt = d->selection->createRandomConstAccessorNG(x, y);
+        KisPixelSelectionSP selectionProjection = d->selection->projection();
+        KisRandomConstAccessorSP maskIt = selectionProjection->createRandomConstAccessorNG(x, y);
         
         while(rowsRemaining > 0) {
             
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
-            qint32 numContiguousSelRows = d->selection->numContiguousRows(dstY, dstX, dstX+width-1);
+            qint32 numContiguousSelRows = selectionProjection->numContiguousRows(dstY, dstX, dstX+width-1);
             
             qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
             rows = qMin(rows, rowsRemaining);
@@ -771,7 +771,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
             while (columnsRemaining > 0) {
                 
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
-                qint32 numContiguousSelColumns = d->selection->numContiguousColumns(dstX, dstY, dstY+rows-1);
+                qint32 numContiguousSelColumns = selectionProjection->numContiguousColumns(dstX, dstY, dstY+rows-1);
                 
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
@@ -779,7 +779,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 qint32 dstRowStride = d->device->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
                 
-                qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
+                qint32 maskRowStride = selectionProjection->rowStride(dstX, dstY);
                 maskIt->moveTo(dstX, dstY);
                 
                 d->colorSpace->bitBlt(
@@ -879,18 +879,18 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
 
     // TODO: use the d->selection && !isDeselected() combo
     if (d->selection) {
-        /* d->selection is a KisPaintDevice, so first a readBytes is performed to
-        get the area of interest... */
-        quint8* selBytes = new quint8[srcWidth * srcHeight * d->selection->pixelSize()];
-        d->selection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
-        // ...and then blit.
+        KisPixelSelectionSP selectionProjection = d->selection->projection();
+
+        quint8* selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];
+        selectionProjection->readBytes(selBytes, dstX, dstY, srcWidth, srcHeight);
+
         d->colorSpace->bitBlt(dstBytes,
                               srcWidth * d->device->pixelSize(),
                               srcCs,
                               srcDev->data() + srcX,
                               srcDev->bounds().width() * srcDev->pixelSize(),
                               selBytes,
-                              srcWidth * d->selection->pixelSize(),
+                              srcWidth * selectionProjection->pixelSize(),
                               d->opacity,
                               srcHeight,
                               srcWidth,
@@ -983,7 +983,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         to merge in the next block*/
         quint32 totalBytes = srcWidth * srcHeight * selection->pixelSize();
         quint8 * mergedSelectionBytes = new quint8[ totalBytes ];
-        d->selection->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
+        d->selection->projection()->readBytes(mergedSelectionBytes, dstX, dstY, srcWidth, srcHeight);
 
         // Merge selections here by multiplying them - compositeOp(COMPOSITE_MULT)
         KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_MULT)

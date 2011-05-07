@@ -93,6 +93,7 @@ public slots:
 
 signals:
     void currentSelectionChanged();
+    void signalUpdateGUI();
 
 public:
     bool havePixelsSelected();

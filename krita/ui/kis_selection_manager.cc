@@ -335,6 +335,7 @@ void KisSelectionManager::updateGUI()
 //    m_save->setEnabled(havePixelsSelected);
 
     updateStatusBar();
+    emit signalUpdateGUI();
 }
 
 void KisSelectionManager::updateStatusBar()

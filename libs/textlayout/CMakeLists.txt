@@ -21,6 +21,7 @@ set(textlayout_LIB_SRCS
     KoTextShapeData.cpp
     FloatingAnchorStrategy.cpp
     InlineAnchorStrategy.cpp
+    AnchorStrategy.cpp
 )
 
 
@@ -42,8 +43,10 @@ install(
     FILES
     KoTextDocumentLayout.h
     KoStyleThumbnailer.h
-
+    KoTextLayoutArea.h
+    KoTextLayoutRootArea.h
     KoTextShapeData.h
+    textlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
 )

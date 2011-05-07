@@ -338,6 +338,69 @@ bool            isSimple
 .... Find the values for the unit...
 
 
+2.2.3.2 Font
+
+This object describes the properties of a font face to be used when rendering text.
+
+VersionCompat	version
+String          family
+String          style
+uint32          fontWidth
+uint32          fontHeight
+uint16          charset
+uint16          family
+uint16          pitch
+uint16          weight
+uint16          underline
+uint16          strikeout
+uint16          italic
+uint16          language
+uint16          width
+uint16          orientation
+bool            wordline
+bool            outline
+bool            shadow
+int8            kerning
+    If version is greater than 1:
+int8            relief
+uint16          language
+bool            vertical
+uint16          emphasis
+    If version is greater than 2:
+uint16          overline
+
+version         Version and size of the font record, excluding the
+                VersionCompat object. 
+
+FIXME: Describe the following parts in detail
+family
+style
+fontWidth
+fontHeight
+charset
+family
+pitch
+weight
+underline
+strikeout
+italic
+language
+width
+orientation
+wordline
+outline
+shadow
+kerning
+    If version is greater than 1:
+relief
+language
+vertical
+emphasis
+    If version is greater than 2:
+overline
+
+
+
 2.2.4 Structure Objects
 - - - - - - - - - - - -
 
@@ -398,7 +461,7 @@ It contains a uint16 that is never used.
 2.3.1.2 META_COMMENT_ACTION (512)
 
 A comment action has no effect on the rendering.
-It contains the following parts :
+
 string          comment
 uint32          value
 string          comment2
@@ -422,12 +485,12 @@ These actions change the state of the drawing context.
 A line color sets the pen color in the drawing context.
 
 uint32          colorData
-bool            isSet
+bool            doSet
 
 colorData       The color of the pen, in RGB format
                 (... QColor::fromRgb format)
 
-isSet           Should the color be applied (true), or should the pen
+doSet           Should the color be applied (true), or should the pen
                 be hidden (false) 
 
 
@@ -452,9 +515,18 @@ This action loads a new MapMode object into the drawing context.
 MapMode		mapMode
 
 
-2.3.2.4 META_TEXTLANGUAGE_ACTION (150)
+2.3.2.4 META_FONT_ACTION (138)
 
-This action sets the current text language.
+This action sets the current font in the graphics context.
+
+Font 		font
+
+font            The new font that will be used when writing text.
+
+
+2.3.2.5 META_TEXTLANGUAGE_ACTION (150)
+
+This action sets the current text language in the graphics context.
 
 uint16          languageType
 
@@ -469,6 +541,7 @@ languageType    It is a decimal code that specifies the language.
 These actions all cause some form of output to the picture.  The
 operations described by these actions are influenced by the current
 drawing context.
+
 
 2.3.3.1 META_POLYLINE_ACTION (109)
 
@@ -488,11 +561,40 @@ bool            polygonFlagsEnabled
 ....... FIXME!
 
 polygon         The polygon to draw
+
 penInfos        The pen style to apply
+
 polygonFlags    Indicate the presence of extra polygon informations
 ....... FIXME: next part is complicated...
 
-2.3.3.1 META_POLYPOLYGON_ACTION (109)
+
+2.3.3.2 META_POLYGON_ACTION (110)
+
+A polygon action draws a polygon and filling it.
+
+// FIXME: Check if the following is true.  Right now it is just copied
+// from META_POLYLINE_ACTION
+Polygon         polygon
+    If the version of the action is greater than 1:
+PenInformations penInfos
+    If the version of the action is greater than 2:
+bool            polygonFlags
+    If polygonFlags is true:
+VersionCompat   flagsVersionCompat
+Polygon         polygon (replaces the previous polygon)
+bool            polygonFlagsEnabled
+    If polygonFlagsEnabled
+....... FIXME!
+
+polygon         The polygon to draw
+
+penInfos        The pen style to apply
+
+polygonFlags    Indicate the presence of extra polygon informations
+....... FIXME: next part is complicated...
+
+
+2.3.3.3 META_POLYPOLYGON_ACTION (111)
 
 A polypolygon action draws a group of polygons.
 

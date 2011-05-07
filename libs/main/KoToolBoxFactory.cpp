@@ -21,6 +21,7 @@
 #include <klocale.h>
 #include <KoToolManager.h>
 #include "KoToolBox_p.h"
+#include "KoToolBoxDocker_p.h"
 
 class KoToolBoxFactory::Private {
 public:

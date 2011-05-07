@@ -28,6 +28,8 @@
 #include "Styles_p.h"
 #include "KoTextDocument.h"
 #include "KoTableCellStyle_p.h"
+#include <KoShapeLoadingContext.h>
+#include "KoCharacterStyle.h"
 
 #include <KDebug>
 
@@ -41,7 +43,8 @@
 #include <KoXmlWriter.h>
 
 KoTableCellStylePrivate::KoTableCellStylePrivate()
-    : parentStyle(0)
+    : charStyle(0)
+    , parentStyle(0)
     , next(0)
 {
 }
@@ -58,6 +61,8 @@ void KoTableCellStylePrivate::setProperty(int key, const QVariant &value)
 KoTableCellStyle::KoTableCellStyle(QObject *parent)
     : KoTableBorderStyle(*new KoTableCellStylePrivate(), parent)
 {
+    Q_D(KoTableCellStyle);
+    d->charStyle = new KoCharacterStyle(this);
 }
 
 KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *parent)
@@ -65,6 +70,7 @@ KoTableCellStyle::KoTableCellStyle(const QTextTableCellFormat &format, QObject *
 {
     Q_D(KoTableCellStyle);
     d->stylesPrivate = format.properties();
+    d->charStyle = new KoCharacterStyle(this);
 }
 
 KoTableCellStyle::~KoTableCellStyle()
@@ -204,6 +210,24 @@ void KoTableCellStyle::setPadding(qreal padding)
     setLeftPadding(padding);
 }
 
+KoCharacterStyle *KoTableCellStyle::characterStyle()
+{
+    Q_D(KoTableCellStyle);
+    return d->charStyle;
+}
+
+void KoTableCellStyle::setCharacterStyle(KoCharacterStyle *style)
+{
+    Q_D(KoTableCellStyle);
+    if (d->charStyle == style) {
+        return;
+    }
+    if (d->charStyle && d->charStyle->parent() == this) {
+        delete d->charStyle;
+    }
+    d->charStyle = style;
+}
+
 bool KoTableCellStyle::shrinkToFit() const
 {
     return propertyBoolean(ShrinkToFit);
@@ -286,6 +310,9 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
     Q_D(const KoTableCellStyle);
     if (d->parentStyle) {
         d->parentStyle->applyStyle(format);
+    }
+    if (d->charStyle) {
+        d->charStyle->applyStyle(format);
     }
     QList<int> keys = d->stylesPrivate.keys();
     for (int i = 0; i < keys.count(); i++) {
@@ -445,7 +472,7 @@ void KoTableCellStyle::setDecimalPlaces(int places)
 
 bool KoTableCellStyle::alignFromType() const
 {
-    return (hasProperty(AlignFromType) and propertyBoolean(AlignFromType));
+    return (hasProperty(AlignFromType) && propertyBoolean(AlignFromType));
 }
 
 void KoTableCellStyle::setAlignFromType(bool state)
@@ -476,8 +503,9 @@ KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
     return KoTableCellStyle::Default;
 }
 
-void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext &context)
+void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
+    KoOdfLoadingContext &context = scontext.odfLoadingContext();
     Q_D(KoTableCellStyle);
     if (element->hasAttributeNS(KoXmlNS::style, "display-name"))
         d->name = element->attributeNS(KoXmlNS::style, "display-name", QString());
@@ -495,6 +523,10 @@ void KoTableCellStyle::loadOdf(const KoXmlElement *element, KoOdfLoadingContext 
 
     context.styleStack().setTypeProperties("table-cell");
     loadOdfProperties(context.styleStack());
+
+    KoCharacterStyle *charstyle = characterStyle();
+    context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
+    charstyle->loadOdf(scontext);   // load the KoCharacterStyle from the stylestack
 
     context.styleStack().setTypeProperties("graphic");
     loadOdfProperties(context.styleStack());
@@ -634,6 +666,18 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         }
     }
 
+    if (styleStack.hasProperty(KoXmlNS::draw, "opacity")) {
+        const QString opacity = styleStack.property(KoXmlNS::draw, "opacity");
+        if (!opacity.isEmpty() && opacity.right(1) == "%") {
+            float percent = opacity.left(opacity.length() - 1).toFloat();
+            QBrush brush = background();
+            QColor color = brush.color();
+            color.setAlphaF(percent / 100.0);
+            brush.setColor(color);
+            setBackground(brush);
+        }
+    }
+
     if (styleStack.hasProperty(KoXmlNS::style, "shrink-to-fit")) {
         setShrinkToFit(styleStack.property(KoXmlNS::style, "shrink-to-fit") == "true");
     }
@@ -754,6 +798,9 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableCellType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableCellType);
+            if (!backBrush.isOpaque()) {
+                style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
+            }
         } else if (key == VerticalAlignment) {
             style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
@@ -802,6 +849,10 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
         }
     }
+    if (d->charStyle) {
+        d->charStyle->saveOdf(style);
+    }
+
 /*
 
     // Borders

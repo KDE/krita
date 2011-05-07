@@ -20,9 +20,7 @@
 #ifndef KOTEXTLAYOUTAREA_H
 #define KOTEXTLAYOUTAREA_H
 
-#include "kotext_export.h"
-
-#include "FrameIterator.h"
+#include "textlayout_export.h"
 
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
@@ -39,6 +37,8 @@ class KoInlineNote;
 class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
+class KoTextLayoutTableArea;
+class FrameIterator;
 
 /**
  * When layout'ing text it is chopped into physical area of space.
@@ -51,7 +51,7 @@ class KoTextLayoutEndNotesArea;
  * Layout happens until maximalAllowedY() is reached. That maximum may be set by
  * the RootArea, but it may also be set by for example a row in a table with fixed height.
  */
-class KOTEXT_EXPORT KoTextLayoutArea
+class TEXTLAYOUT_EXPORT KoTextLayoutArea
 {
 public:
     /// constructor

@@ -23,6 +23,8 @@
 #include "kotext_export.h"
 
 #include <QString>
+#include <QRectF>
+#include <QMetaType>
 
 /**
  * Interface for a single OpenDocumentText page.
@@ -76,6 +78,13 @@ public:
      */
     virtual QString masterPageName() const;
 
+    /**
+     * Returns the rect of the page in document coords
+     */
+    virtual QRectF rect() const = 0;
+
 };
+
+Q_DECLARE_METATYPE(KoTextPage*)
 
 #endif

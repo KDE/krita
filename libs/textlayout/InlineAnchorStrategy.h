@@ -20,45 +20,20 @@
 #ifndef INLINEANCHORSTRATEGY_H_
 #define INLINEANCHORSTRATEGY_H_
 
-#include "KoTextAnchor.h"
+#include "AnchorStrategy.h"
 
+class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
 
-class InlineAnchorStrategy  : public KoAnchorStrategy
+class InlineAnchorStrategy  : public AnchorStrategy
 {
 public:
-    InlineAnchorStrategy(KoTextAnchor *anchor);
-    ~InlineAnchorStrategy();
+    InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
+    virtual ~InlineAnchorStrategy();
 
-    /**
-     * This function calculates position for linked shape.
-     *
-     * @return true if new position for shape was wound
-     */
-    virtual bool positionShape(int layoutCursorPosition);
-
-    /**
-     *
-     * @return true if position for shape was wound
-     */
-    virtual bool isPositioned();
-
-    //reset the state of this class
-    virtual void reset();
-
-    /**
-     *
-     * @return true if linked shape intersects with text
-     */
-    virtual bool isRelayoutNeeded();
-
-    /**
-     *
-     * @return top most position of linked shape and text intersection
-     */
-    virtual QPointF relayoutPosition();
+    virtual bool moveSubject();
 
 private:
 
@@ -67,8 +42,6 @@ private:
     KoTextAnchor *const m_anchor;
 
     bool m_finished; // true if shape position was found
-    bool m_relayoutNeeded; // true if shape intersected text when positioned
-    QPointF m_relayoutPosition; // top most position of text and shape intersection
 };
 
 #endif /* INLINEANCHORSTRATEGY_H_ */

@@ -10,7 +10,8 @@
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
-  *
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -36,6 +37,7 @@
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutObstruction.h"
+#include "FrameIterator.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -67,6 +69,7 @@
 extern int qt_defaultDpiY();
 
 #define DropCapsAdditionalFormattingId 25602902
+#define PresenterFontStretch 1.2
 
 KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *documentLayout)
  : m_parent(p)
@@ -727,14 +730,23 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     // So now is the time to create the lines of this paragraph
     RunAroundHelper runAroundHelper;
-    runAroundHelper.setObstructions(documentLayout()->relevantObstructions(QRect(left(),top(),right() - left(), m_maximalAllowedBottom - top())));
+    runAroundHelper.setObstructions(documentLayout()->currentObstructions());
 
     qreal maxLineHeight = 0;
     qreal y_justBelowDropCaps = 0;
 
     while (line.isValid()) {
         runAroundHelper.setLine(this, line);
+
+        runAroundHelper.setObstructions(documentLayout()->currentObstructions());
+
+        documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
+
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        documentLayout()->positionAnchoredObstructions();
 
         qreal bottomOfText = line.y() + line.height();
 
@@ -750,20 +762,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         if (bottomOfText > maximumAllowedBottom()) {
             // We can not fit line within our allowed space
-
             // in case we resume layout on next page the line is reused later
             // but if not then we need to make sure the line becomes invisible
             // we use m_maximalAllowedBottom because we want to be below
-            // footnotes too
-            line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+            // footnotes too.
+            if (cursor->lastBlockPosition != block.position()) { // guard against infinite loops
+                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
 
-            if (format.nonBreakableLines()) {
-                //set lineTextStart to -1
-                cursor->lineTextStart = -1;
-                layout->endLayout();
+                if (format.nonBreakableLines()) {
+                    //set lineTextStart to -1
+                    cursor->lineTextStart = -1;
+                    layout->endLayout();
+                }
+                cursor->lastBlockPosition = block.position();
+                clearPreregisteredFootNotes();
+                return false; //to indicate block was not done!
             }
-            clearPreregisteredFootNotes();
-            return false; //to indicate block was not done!
         }
         confirmFootNotes();
 
@@ -791,8 +805,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
         }
 
-        documentLayout()->positionAnchoredShapes();
-
         // Expand bounding rect so if we have content outside we show it
         expandBoundingLeft(line.x());
         expandBoundingRight(line.x() + line.naturalTextWidth());
@@ -801,6 +813,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
         if (softBreak) {
+            cursor->lastBlockPosition = -1;
             return false;
         }
     }
@@ -810,6 +823,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     layout->endLayout();
 
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
+    cursor->lastBlockPosition = -1;
     return true;
 }
 
@@ -914,59 +928,60 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         }
     } else { // not fixed lineheight
         const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
-        if (useFontProperties) {
-            height = line.height();
+
+        if (cursor->fragmentIterator.atEnd()) {// no text in parag.
+            qreal fontStretch = 1;
+            if (useFontProperties) {
+                //stretch line height to powerpoint size
+                fontStretch = PresenterFontStretch;
+            }
+            height = block.charFormat().fontPointSize() * fontStretch;
         } else {
-            if (cursor->fragmentIterator.atEnd()) {// no text in parag.
-
-                qreal fontStretch = 1;
+            qreal fontStretch = 1;
+            if (useFontProperties) {
+                //stretch line height to powerpoint size
+                fontStretch = PresenterFontStretch;
+            } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
                 // stretch line height to ms-word size
-                if (block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                    fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+            }
+            // read max font height
+            height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+
+            KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+            objectAscent = qMax(objectAscent, pos.m_ascent);
+            objectDescent = qMax(objectDescent, pos.m_descent);
+
+            while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
+                         block.position() + line.textStart() + line.textLength() - 1))) {
+                cursor->fragmentIterator++;
+                if (cursor->fragmentIterator.atEnd()) {
+                 break;
                 }
-                height = block.charFormat().fontPointSize() * fontStretch;
-            } else {
-
-                qreal fontStretch = 1;
-                // stretch line height to ms-word size
-                if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
-                }
-                // read max font height
-                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
-
-                KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-                objectAscent = qMax(objectAscent, pos.m_ascent);
-                objectDescent = qMax(objectDescent, pos.m_descent);
-
-                while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
-                             block.position() + line.textStart() + line.textLength() - 1))) {
-                    cursor->fragmentIterator++;
-                    if (cursor->fragmentIterator.atEnd()) {
-                     break;
-                    }
-                    if (!m_documentLayout->changeTracker()
-                        || !m_documentLayout->changeTracker()->displayChanges()
-                        || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
-                        || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                        || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
-                        || m_documentLayout->changeTracker()->displayChanges()) {
-                        qreal fontStretch = 1;
+                if (!m_documentLayout->changeTracker()
+                    || !m_documentLayout->changeTracker()->displayChanges()
+                    || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                    || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                    || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                    || m_documentLayout->changeTracker()->displayChanges()) {
+                    qreal fontStretch = 1;
+                    if (useFontProperties) {
+                        //stretch line height to powerpoint size
+                        fontStretch = PresenterFontStretch;
+                    } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
                         // stretch line height to ms-word size
-                        if (cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
-                        }
-                        // read max font height
-                        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
-
-                        KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-                        objectAscent = qMax(objectAscent, pos.m_ascent);
-                        objectDescent = qMax(objectDescent, pos.m_descent);
+                        fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
                     }
+                    // read max font height
+                    height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+
+                    KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+                    objectAscent = qMax(objectAscent, pos.m_ascent);
+                    objectDescent = qMax(objectDescent, pos.m_descent);
                 }
             }
-            if (height < 0.01) height = 12; // default size for uninitialized styles.
         }
+        if (height < 0.01) height = 12; // default size for uninitialized styles.
     }
 
     // add linespacing
@@ -1169,12 +1184,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             block->setUserData(blockData);
         }
 
-        // first let's get horizontal out of the way
-        m_x += border.inset(KoTextBlockBorderData::Left);
-        m_width -= border.inset(KoTextBlockBorderData::Left);
-        m_width -= border.inset(KoTextBlockBorderData::Right);
-
-        // then check if we can merge with the previous parags border.
+        // check if we can merge with the previous parags border.
         if (m_prevBorder && m_prevBorder->equals(border)) {
             blockData->setBorder(m_prevBorder);
             // Merged mean we don't have inserts inbetween the blocks
@@ -1203,6 +1213,11 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             m_y += newBorder->inset(KoTextBlockBorderData::Top);
             m_y += format.doubleProperty(KoParagraphStyle::TopPadding);
         }
+
+        // finally, horizontal components of the borders
+        m_x += border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Left);
+        m_width -= border.inset(KoTextBlockBorderData::Right);
     } else { // this parag has no border.
         if (m_prevBorder) {
             m_y += m_prevBorderPadding;

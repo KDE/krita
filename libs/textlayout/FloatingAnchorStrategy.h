@@ -21,45 +21,26 @@
 #ifndef FLOATINGANCHORSTRATEGY_H
 #define FLOATINGANCHORSTRATEGY_H
 
-#include "KoTextAnchor.h"
+#include "AnchorStrategy.h"
 
+class KoTextLayoutRootArea;
 class KoTextShapeData;
 class QTextBlock;
 class QTextLayout;
+class KoTextLayoutObstruction;
 
-class FloatingAnchorStrategy  : public KoAnchorStrategy
+class FloatingAnchorStrategy  : public AnchorStrategy
 {
 public:
-    FloatingAnchorStrategy(KoTextAnchor *anchor);
+    FloatingAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea);
     ~FloatingAnchorStrategy();
 
     /**
-     * This function calculates position for linked shape.
+     * This moves the subject (i.e. shape when used with flake) of the anchor.
      *
-     * @return true if new position for shape was found
+     * @return true if subject was moved
      */
-    virtual bool positionShape();
-
-    /**
-     *
-     * @return true if position for shape was wound
-     */
-    virtual bool isPositioned();
-
-    //reset the state of this class
-    virtual void reset();
-
-    /**
-     *
-     * @return true if linked shape intersects with text
-     */
-    virtual bool isRelayoutNeeded();
-
-    /**
-     *
-     * @return top most position of linked shape and text intersection
-     */
-    virtual QPointF relayoutPosition();
+    virtual bool moveSubject();
 
 private:
 
@@ -79,13 +60,12 @@ private:
     inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
                                      KoTextShapeData *data);
 
+    void updateObstruction(qreal documentOffset);
+
     KoTextAnchor *const m_anchor;
 
-    int m_knowledgePoint; // the cursor position at which the layout process has gathered enough info to do our work
-
     bool m_finished; // true if shape position was found
-    bool m_relayoutNeeded; // true if shape intersected text when positioned
-    QPointF m_relayoutPosition; // top most position of text and shape intersection
+    KoTextLayoutObstruction *m_obstruction; // the obstruction representation of the subject
 };
 
 #endif // FLOATINGANCHORSTRATEGY_H

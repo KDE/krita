@@ -231,15 +231,5 @@ void KoTextShapeContainerModel::relayoutInlineObject(KoShape *child)
     KoTextShapeData *data  = qobject_cast<KoTextShapeData*>(child->parent()->userData());
     Q_ASSERT(data);
     data->setDirty();
-
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
-    if (lay) {
-        if (d->children.contains(child)) {
-            Relation relation = d->children.value(child);
-            if (relation.anchor) {
-                lay->resetAnchor(relation.anchor->positionInDocument());
-            }
-        }
-    }
 }
 

@@ -53,7 +53,7 @@ inline bool KisTileData::acquire() {
      * So just clean it up.
      */
     if(m_usersCount == 1) {
-        KisTileData *clone;
+        KisTileData *clone = 0;
         while(m_clonesStack.pop(clone)) {
             delete clone;
         }

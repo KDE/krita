@@ -181,7 +181,8 @@ public:
         FootNotesFrame,
         RelativeTabs,
         HeadingList,
-        Selections
+        Selections,
+        LayoutTextPage /// this is used for setting the correct page variable on the first resize and should not be used for other purposes
     };
 
     static const QUrl StyleManagerURL;
@@ -198,6 +199,7 @@ public:
     static const QUrl RelativeTabsURL;
     static const QUrl HeadingListURL;
     static const QUrl SelectionsURL;
+    static const QUrl LayoutTextPageUrl;
 
 private:
     QTextDocument *m_document;

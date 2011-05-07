@@ -55,10 +55,10 @@ KisCustomBrushWidget::KisCustomBrushWidget(QWidget *parent, const QString& capti
 
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     m_rServerAdapter = new KoResourceServerAdapter<KisBrush>(rServer);
-    
+
     m_brush = 0;
     m_brushCreated = false;
-    
+
     connect(addButton, SIGNAL(pressed()), this, SLOT(slotAddPredefined()));
     connect(brushButton, SIGNAL(pressed()), this, SLOT(slotUpdateCurrentBrush()));
     connect(brushStyle, SIGNAL(activated(int)), this, SLOT(slotUpdateCurrentBrush(int)));
@@ -148,7 +148,7 @@ void KisCustomBrushWidget::slotAddPredefined()
     if (m_rServerAdapter) {
         KisGbrBrush * resource = static_cast<KisGbrBrush*>( m_brush.data() )->clone();
         resource->setFilename(tempFileName);
-        
+
         if (nameLineEdit->text().isEmpty()){
             resource->setName(QDateTime::currentDateTime().toString("yyyy-MM-ddThh:mm"));
         }else{
@@ -158,7 +158,7 @@ void KisCustomBrushWidget::slotAddPredefined()
         if (colorAsMask->isChecked()){
             resource->makeMaskImage();
         }
-    
+
         m_rServerAdapter->addResource( resource );
     }
 }
@@ -175,22 +175,43 @@ void KisCustomBrushWidget::createBrush()
             kWarning() << "Brush was not removed correctly for the resource server";
         }
     }
-    
+
     if (brushStyle->currentIndex() == 0) {
         KisSelectionSP selection = m_image->globalSelection();
         // create copy of the data
         m_image->lock();
         KisPaintDeviceSP dev = new KisPaintDevice(*m_image->mergedImage());
         m_image->unlock();
-        
+
         if (!selection){
             m_brush = new KisGbrBrush(dev, 0, 0, m_image->width(), m_image->height());
-        }else{
-            dev->applySelectionMask(selection);
+        }
+        else {
+            // apply selection mask
+            QRect r = selection->selectedExactRect();
+            dev->crop(r);
+
+            KisHLineIterator pixelIt = dev->createHLineIterator(r.x(), r.top(), r.width());
+            KisHLineConstIterator maskIt = selection->projection()->createHLineIterator(r.x(), r.top(), r.width());
+
+            for (qint32 y = r.top(); y <= r.bottom(); ++y) {
+
+                while (!pixelIt.isDone()) {
+                    // XXX: Optimize by using stretches
+
+                    dev->colorSpace()->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
+
+                    ++pixelIt;
+                    ++maskIt;
+                }
+                pixelIt.nextRow();
+                maskIt.nextRow();
+            }
+
             QRect rc = dev->exactBounds();
             m_brush = new KisGbrBrush(dev, rc.x(), rc.y(), rc.width(), rc.height());
         }
-    
+
     } else {
         // For each layer in the current image, create a new image, and add it to the list
         QVector< QVector<KisPaintDevice*> > devices;
@@ -226,7 +247,7 @@ void KisCustomBrushWidget::createBrush()
     m_brush->setFilename(TEMPORARY_FILENAME);
     m_brush->setName(TEMPORARY_BRUSH_NAME);
     m_brush->setValid(true);
-    
+
     KisBrushServer::instance()->brushServer()->addResource( m_brush.data() , false);
 }
 

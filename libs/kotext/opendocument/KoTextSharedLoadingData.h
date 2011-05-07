@@ -232,9 +232,9 @@ private:
     QList<QPair<QString, KoTableRowStyle *> > loadTableRowStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of table cell styles
-    void addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
+    void addTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,
                        KoStyleManager *styleManager = 0);
-    QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements);
+    QList<QPair<QString, KoTableCellStyle *> > loadTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements);
 
     // helper functions for loading of section styles
     void addSectionStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements, int styleTypes,

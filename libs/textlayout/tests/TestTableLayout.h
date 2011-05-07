@@ -30,6 +30,7 @@
 class QPainter;
 class KoViewConverter;
 class KoStyleManager;
+class KoTableStyle;
 class QTextDocument;
 class QTextLayout;
 class QTextTable;
@@ -44,27 +45,54 @@ public:
 
 private slots:
     void initTestCase();
+    void cleanupTestCase();
 
     /// make sure our private method setupTest() does what we think it does
     void testSetupTest();
 
-    /// Test width and column layout within reference rect.
-    void testColumnLayout();
+    /**
+     * If no column-width is defined then the available width should be distributed among
+     * the available columns. Since the provided rootArea's have a width of 200 and we
+     * have 3 columns it is expected that every of the columns has a width of 200/3.
+     */
+    void testColumnWidthUndefined();
 
+    /**
+     * If the column-width is explicit defined then we expect that those widths are used.
+     */
+    void testColumnWidthFixed();
+
+    /**
+     * Test fixed column-width of zero.
+     */
+    void testColumnWidthFixedZero();
+
+    /**
+     * If the table-width is not defined then the table get's the width of it's parent
+     * what is the rootArea in our case. If now the defined fixed column-width's are
+     * in total larger then those table-width then they need to be shrink proportional
+     * to match into the available table-width.
+     */
+    void testColumnWidthFixedShrink();
+
+    /**
+     * Test relative column-width.
+     */
+    void testColumnWidthRelative();
 
 private:
-    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText);
+    void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
 
 private:
     QTextDocument *m_doc;
     KoTextDocumentLayout *m_layout;
     QTextBlock m_block;
-    QTextBlock m_mergedCellBlock;
-    QTextBlock m_topRightCellBlock;
-    QTextBlock m_midRightCellBlock;
-    QTextBlock m_bottomLeftCellBlock;
-    QTextBlock m_bottomMidCellBlock;
-    QTextBlock m_bottomRightCellBlock;
+    QTextBlock mergedCellBlock() const;
+    QTextBlock topRightCellBlock() const;
+    QTextBlock midRightCellBlock() const;
+    QTextBlock bottomLeftCellBlock() const;
+    QTextBlock bottomMidCellBlock() const;
+    QTextBlock bottomRightCellBlock() const;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
     KoTextLayoutRootArea *m_area;

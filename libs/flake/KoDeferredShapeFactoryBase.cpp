@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
+ * Copyright (c) 2010 Boudewijn Rempt (boud@valdyas.org)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,38 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "KoDeferredShapeFactoryBase.h"
 
-#include "MockRootAreaProvider.h"
-
-#include "KoTextLayoutRootArea.h"
-
-MockRootAreaProvider::MockRootAreaProvider()
-    : m_area(0)
+KoDeferredShapeFactoryBase::KoDeferredShapeFactoryBase(QObject *parent)
+    : QObject(parent)
 {
+
 }
 
-KoTextLayoutRootArea *MockRootAreaProvider::provide(KoTextDocumentLayout *documentLayout)
+KoDeferredShapeFactoryBase::~KoDeferredShapeFactoryBase()
 {
-    if(m_area == 0) {
-        m_area = new KoTextLayoutRootArea(documentLayout);
-        return m_area;
-    }
-    return 0;
+
 }
 
-void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
+KoShape *KoDeferredShapeFactoryBase::createShape(const KoProperties *, KoResourceManager *documentResources) const
 {
+    return createDefaultShape(documentResources);
 }
 
-QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
-{
-    return QSizeF(200,1000);
-}
-
-QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
-{
-    QList<KoTextLayoutObstruction*> obstructions;
-
-    return obstructions;
-}
-
+#include "KoDeferredShapeFactoryBase.moc"

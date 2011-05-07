@@ -22,7 +22,7 @@
 #ifndef KOTEXTDOCUMENTLAYOUT_H
 #define KOTEXTDOCUMENTLAYOUT_H
 
-#include "kotext_export.h"
+#include "textlayout_export.h"
 
 #include "KoTextDocument.h"
 #include <QAbstractTextDocumentLayout>
@@ -46,7 +46,7 @@ class KoTextLayoutRootAreaProvider;
 class KoTextLayoutObstruction;
 
 
-class KOTEXT_EXPORT KoInlineObjectExtent
+class TEXTLAYOUT_EXPORT KoInlineObjectExtent
 {
 public:
     KoInlineObjectExtent(qreal ascent = 0, qreal descent = 0);
@@ -59,7 +59,7 @@ public:
  * Text layouter that allows text to flow in multiple root area and around
  * obstructions.
  */
-class KOTEXT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
+class TEXTLAYOUT_EXPORT KoTextDocumentLayout : public QAbstractTextDocumentLayout
 {
     Q_OBJECT
 public:
@@ -122,27 +122,42 @@ public:
     /// reimplemented to always return 1
     virtual int pageCount() const;
 
-    /** Anchors are special InlineObjects that we detect in positionInlineObject().
-     * We save those for later so we can position them during layout instead.
-     * During layout positionAnchoredShapes() is called to do just that.
+    /**
+     * Register the anchored obstruction  for run around
+     *
+     * We have the concept of Obstructions which text has to run around in various ways.
+     * We maintain two collections of obstructions. The free which are tied to just a position
+     * (tied to pages), and the anchored obstructions which are each anchored to a KoTextAnchor
+     *
+     * The free obstructions are collected from the KoTextLayoutRootAreaProvider during layout
+     *
+     * The anchored obstructions are created in the FloatingAnchorStrategy and registered using
+     * this method.
      */
-    void positionAnchoredShapes();
-    // remove all anchors which document position is bigger or equal to resetPosition
-    void resetAnchor(int resetPosition);
-    // remove inline object
+    void registerAnchoredObstruction(KoTextLayoutObstruction *obstruction);
+
+
+    /**
+     * Anchors are special InlineObjects that we detect in positionInlineObject()
+     * We save those for later so we can position them during layout instead.
+     * During KoTextLayoutArea::layout() we call positionAnchoredObstructions()
+     */
+    /// remove all anchors and associated obstructions and set up for collecting new ones
+    void beginAnchorCollecting(KoTextLayoutRootArea *rootArea);
+
+    /// Sets the paragraph rect that will be applied to anchorStrategies being created in
+    /// positionInlineObject()
+    void setAnchoringParagraphRect(const QRectF &paragraphRect);
+
+    /// Positions all anchored obstructions
+    /// the paragraphRect should be in textDocument coords and not global/document coords
+    void positionAnchoredObstructions();
+
+    /// remove inline object
     void removeInlineObject(KoTextAnchor *textAnchor);
 
     void clearInlineObjectRegistry(QTextBlock block);
     KoInlineObjectExtent inlineObjectExtent(const QTextFragment&);
-
-    /// Registers the shape as being relevant for run around at this moment in time
-    void registerObstruction(KoShape *shape);
-
-    /// Updates the registration of the shape for run around
-    void updateObstruction(KoShape *shape);
-
-    /// Clear all registrations of shapest for run around
-    void unregisterAllObstructions();
 
     /**
      * We allow a text document to be distributed onto a sequence of KoTextLayoutRootArea;
@@ -153,11 +168,17 @@ public:
      */
     KoTextLayoutRootArea *rootAreaForPosition(int position) const;
 
+    /**
+     * Remove the root-areas \p rootArea from the list of \a rootAreas() .
+     * \param rootArea root-area to remove. If NULL then all root-areas are removed.
+     */
+    void removeRootArea(KoTextLayoutRootArea *rootArea = 0);
+
     /// reimplemented from QAbstractTextDocumentLayout
     virtual void documentChanged(int position, int charsRemoved, int charsAdded);
 
-    /// Return a list of obstructions intersecting rect
-    QList<KoTextLayoutObstruction *> relevantObstructions(const QRectF &rect);
+    /// Return a list of obstructions intersecting current root area (during layout)
+    QList<KoTextLayoutObstruction *> currentObstructions();
 
     QList<KoTextLayoutRootArea *> rootAreas() const;
     QList<KoShape*> shapes() const;

@@ -38,7 +38,7 @@
 // 0 - No debug
 // 1 - Print a lot of debug info
 // 2 - Just print all the records instead of parsing them
-#define DEBUG_SVMPARSER 1
+#define DEBUG_SVMPARSER 0
 
 namespace Libsvm
 {
@@ -117,7 +117,7 @@ static const struct ActionNames {
     { META_LAYOUTMODE_ACTION,            "META_LAYOUTMODE_ACTION" },
     { META_TEXTLANGUAGE_ACTION,          "META_TEXTLANGUAGE_ACTION" },
     { META_OVERLINECOLOR_ACTION,         "META_OVERLINECOLOR_ACTION" },
-    { META_SVG_SOMETHING_ACTION,         "META_SVG_SOMETHING_ACTION" },
+    { META_RENDERGRAPHIC_ACTION,         "META_RENDERGRAPHIC_ACTION" },
     { META_COMMENT_ACTION,               "META_COMMENT_ACTION" }
 };
 
@@ -161,6 +161,18 @@ bool SvmParser::parse(const QByteArray &data)
 
     mBackend->init(header);
 
+#if DEBUG_SVMPARSER
+    {
+        QPolygon polygon;
+        polygon << QPoint(0, 0);
+        polygon << QPoint(header.width, header.height);
+        mBackend->polyLine(mContext, polygon);
+    }
+#endif
+
+    // Parse all actions and call the appropriate backend callback for
+    // the graphics drawing actions.  The context actions will
+    // manipulate the graphics context, which is maintained here.
     for (uint action = 0; action < header.actionCount; ++action) {
         quint16  actionType;
         quint16  version;
@@ -209,6 +221,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QRect  rect;
 
                 parseRect(stream, rect);
+                kDebug(31000) << "Rect:"  << rect;
                 mBackend->rect(mContext, rect);
             }
             break;
@@ -223,6 +236,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
+                kDebug(31000) << "Polyline:"  << polygon;
                 mBackend->polyLine(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -235,6 +249,7 @@ bool SvmParser::parse(const QByteArray &data)
                 QPolygon  polygon;
 
                 parsePolygon(stream, polygon);
+                kDebug(31000) << "Polygon:"  << polygon;
                 mBackend->polygon(mContext, polygon);
 
                 // FIXME: Version 2: Lineinfo, Version 3: polyflags
@@ -267,6 +282,7 @@ bool SvmParser::parse(const QByteArray &data)
                 }
                 
                 foreach (QPolygon polygon, polygons) {
+                    kDebug(31000) << "Polygon:"  << polygon;
                     mBackend->polygon(mContext, polygon);
                 }
             }
@@ -275,18 +291,13 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTARRAY_ACTION:
             {
                 QPoint   startPoint;
-                quint16  strLength;
                 QString  string;
 
                 stream >> startPoint;
-                stream >> strLength;
-                for (uint i = 0; i < strLength; ++i) {
-                    quint8  ch;
-                    stream >> ch;
-                    string += char(ch);
-                }
+                parseString(stream, string);
 
                 // FIXME: Much more here
+
                 kDebug(31000) << "Text: " << startPoint << string;
                 mBackend->textArray(mContext, startPoint, string);
             }
@@ -319,6 +330,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> doSet;
 
                 mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
+                kDebug(31000) << "Color:"  << mContext.lineColor;
                 mContext.changedItems |= GCLineColor;
             }
             break;
@@ -333,20 +345,41 @@ bool SvmParser::parse(const QByteArray &data)
                 kDebug(31000) << "Fill color :" << colorData << '(' << doSet << ')';
 
                 mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
+                kDebug(31000) << "Brush:"  << mContext.fillBrush;
                 mContext.changedItems |= GCFillBrush;
             }
             break;
         case META_TEXTCOLOR_ACTION:
+            {
+                quint32  colorData;
+                stream >> colorData;
+
+                mContext.textColor = QColor::fromRgb(colorData);
+                kDebug(31000) << "Color:"  << mContext.textColor;
+                mContext.changedItems |= GCTextColor;
+            }
         case META_TEXTFILLCOLOR_ACTION:
         case META_TEXTALIGN_ACTION:
             break;
         case META_MAPMODE_ACTION:
             {
                 stream >> mContext.mapMode;
+                kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
+                              << "scaleX"
+                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.numerator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator)
+                              << "scaleY"
+                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.numerator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator);
                 mContext.changedItems |= GCMapMode;
             }
             break;
         case META_FONT_ACTION:
+            {
+                parseFont(stream, mContext.font);
+                kDebug(31000) << "Font:"  << mContext.font;
+                mContext.changedItems |= GCFont;
+            }
             break;
         case META_PUSH_ACTION:
             {
@@ -375,6 +408,10 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LAYOUTMODE_ACTION:
         case META_TEXTLANGUAGE_ACTION:
         case META_OVERLINECOLOR_ACTION:
+            break;
+        case META_RENDERGRAPHIC_ACTION:
+            //dumpAction(stream, version, totalSize);
+            break;
         case META_COMMENT_ACTION:
             break;
 
@@ -382,6 +419,7 @@ bool SvmParser::parse(const QByteArray &data)
 #if DEBUG_SVMPARSER
             kDebug(31000) << "unknown action type:" << actionType;
 #endif
+            break;
         }
 
         delete [] rawData;
@@ -430,6 +468,76 @@ void SvmParser::parsePolygon(QDataStream &stream, QPolygon &polygon)
         polygon << point;
     }
 }
+
+void SvmParser::parseString(QDataStream &stream, QString &string)
+{
+    quint16  length;
+
+    stream >> length;
+    for (uint i = 0; i < length; ++i) {
+        quint8  ch;
+        stream >> ch;
+        string += char(ch);
+    }
+}
+
+void SvmParser::parseFont(QDataStream &stream, QFont &font)
+{
+    quint16  version;
+    quint32  totalSize;
+
+    // the VersionCompat struct
+    stream >> version;
+    stream >> totalSize;
+
+    // Name and style
+    QString  family;
+    QString  style;
+    parseString(stream, family);
+    parseString(stream, style);
+    font.setFamily(family);
+
+    // Font size
+    quint32  width;
+    quint32  height;
+    stream >> width;
+    stream >> height;
+    font.setPointSize(height);
+
+    qint8   temp8;
+    bool    tempbool;
+    quint16 tempu16;
+    stream >> tempu16;          // charset
+    stream >> tempu16;          // family
+    stream >> tempu16;          // pitch
+    stream >> tempu16;          // weight
+    stream >> tempu16;          // underline
+    stream >> tempu16;          // strikeout
+    stream >> tempu16;          // italic
+    stream >> tempu16;          // language
+    stream >> tempu16;          // width
+
+    stream >> tempu16;          // orientation
+
+    stream >> tempbool;         // wordline
+    stream >> tempbool;         // outline
+    stream >> tempbool;         // shadow
+    stream >> temp8;            // kerning
+
+    if (version > 1) {
+        stream >> temp8;        // relief
+        stream >> tempu16;      // language
+        stream >> tempbool;     // vertical
+        stream >> tempu16;      // emphasis
+    }
+
+    if (version > 2) {
+        stream >> tempu16;      // overline
+    }
+
+    // FIXME: Read away the rest of font here to allow for higher versions than 3.
+}
+
 
 void SvmParser::dumpAction(QDataStream &stream, quint16 version, quint32 totalSize)
 {

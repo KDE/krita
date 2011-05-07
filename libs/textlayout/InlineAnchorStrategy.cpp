@@ -25,12 +25,9 @@
 #include <QTextLayout>
 #include <QTextBlock>
 
-InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor)
-        : KoAnchorStrategy(),
-          m_anchor(anchor),
-          m_finished(false),
-          m_relayoutNeeded(false),
-          m_relayoutPosition(0,0)
+InlineAnchorStrategy::InlineAnchorStrategy(KoTextAnchor *anchor, KoTextLayoutRootArea *rootArea)
+        : AnchorStrategy(anchor, rootArea)
+        , m_anchor(anchor)
 {
 }
 
@@ -38,16 +35,8 @@ InlineAnchorStrategy::~InlineAnchorStrategy()
 {
 }
 
-bool InlineAnchorStrategy::positionShape(int layoutCursorPosition)
+bool InlineAnchorStrategy::moveSubject()
 {
-    if (m_finished) { // shape is in right position no second pass needed
-        return false;
-    }
-
-    if (layoutCursorPosition <= m_anchor->positionInDocument()) {
-        return false;
-    }
-
     if (!m_anchor->shape()->parent()) {
         return false;
     }
@@ -76,30 +65,7 @@ bool InlineAnchorStrategy::positionShape(int layoutCursorPosition)
     m_anchor->shape()->setPosition(newPosition);
     m_anchor->shape()->update();
 
-    m_finished = true;
     return true;
-}
-
-bool InlineAnchorStrategy::isPositioned()
-{
-    return m_finished;
-}
-
-void InlineAnchorStrategy::reset()
-{
-    m_finished = false;
-    m_relayoutNeeded = false;
-    return;
-}
-
-bool InlineAnchorStrategy::isRelayoutNeeded()
-{
-    return m_relayoutNeeded;
-}
-
-QPointF InlineAnchorStrategy::relayoutPosition()
-{
-    return m_relayoutPosition;
 }
 
 bool InlineAnchorStrategy::countHorizontalPos(QPointF &newPosition, QTextBlock &block, QTextLayout *layout)

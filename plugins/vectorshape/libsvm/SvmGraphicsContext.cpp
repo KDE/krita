@@ -27,8 +27,9 @@ namespace Libsvm
 SvmGraphicsContext::SvmGraphicsContext()
     : lineColor(Qt::black)
     , fillBrush(Qt::NoBrush)
+    , textColor(Qt::black)
     , mapMode()
-    , font("Helvetica", 300)    // 200 is of course a completely bogus value
+    , font("Helvetica", 300)    // 300 is of course a completely bogus value
       //... more here
     , changedItems(0xffffffff)  // Everything changed the first time.
 {

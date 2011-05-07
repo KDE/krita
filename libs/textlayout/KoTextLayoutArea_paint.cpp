@@ -10,6 +10,7 @@
  * Copyright (C) 2010 Ajay Pundhir <ajay.pratap@iiitb.net>
  * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
  * Copyright (C) 2011 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
   *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,6 +36,7 @@
 #include "ListItemsHelper.h"
 #include "RunAroundHelper.h"
 #include "KoTextDocumentLayout.h"
+#include "FrameIterator.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -72,6 +74,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
     painter->setPen(context.textContext.palette.color(QPalette::Text)); // for text that has no color.
     const QRegion clipRegion = painter->clipRegion();
     KoTextBlockBorderData *lastBorder = 0;
+    QRectF lastBorderRect;
 
     if (m_startOfArea == 0) // We have not been layouted yet
         return;
@@ -102,6 +105,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
 
+	if (!block.isValid()) {
+            if (lastBorder) { // draw previous block's border
+                lastBorder->paint(*painter, lastBorderRect);
+                lastBorder = 0;
+            }
+	} 
+	
         if (table) {
             m_tableAreas[tableAreaIndex]->paint(painter, context);
             ++tableAreaIndex;
@@ -116,8 +126,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             }
             continue;
         } else {
-            if (!block.isValid())
+            if (!block.isValid()) {
                 continue;
+            }
         }
 
         QTextLayout *layout = block.layout();
@@ -132,17 +143,37 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 border = blockData->border();
                 paintStrategy = blockData->paintStrategy();
             }
+            
+            
+            
             KoTextBlockPaintStrategyBase dummyPaintStrategy;
-            if (paintStrategy == 0)
+            if (paintStrategy == 0) {
                 paintStrategy = &dummyPaintStrategy;
-            if (!paintStrategy->isVisible())
+            }
+            if (!paintStrategy->isVisible()) {
+                if (lastBorder) { // draw previous block's border
+                    lastBorder->paint(*painter, lastBorderRect);
+                    lastBorder = 0;
+                }
                 continue; // this paragraph shouldn't be shown so just skip it
+            }
+            
+            // Check and update border drawing code
+            if (lastBorder == 0) {
+                lastBorderRect = br;
+            } else if (lastBorder && lastBorder != border) {       
+                lastBorder->paint(*painter, lastBorderRect);
+                lastBorderRect = br;
+            } else if (lastBorder == border) {
+                lastBorderRect = lastBorderRect.united(br);
+            }
+            lastBorder = border;
 
             painter->save();
 
             QBrush bg = paintStrategy->background(block.blockFormat().background());
             if (bg != Qt::NoBrush) {
-                    painter->fillRect(br, bg);
+                painter->fillRect(br, bg);
             }
 
             paintStrategy->applyStrategy(painter);
@@ -212,15 +243,18 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             decorateParagraph(painter, block);
 
-            if (lastBorder && lastBorder != border) {
-                lastBorder->paint(*painter);
-            }
-            painter->restore();
-            lastBorder = border;
-        }
+	    painter->restore();
+        } else {
+	  if (lastBorder) {
+	    lastBorder->paint(*painter, lastBorderRect);
+	    lastBorder = 0;
+	  }
+	}
     }
-    if (lastBorder)
-        lastBorder->paint(*painter);
+    if (lastBorder) {
+        lastBorder->paint(*painter, lastBorderRect);
+    }
+        
 
     painter->translate(0, -m_verticalAlignOffset);
     painter->translate(0, bottom() - top() - m_footNotesHeight);

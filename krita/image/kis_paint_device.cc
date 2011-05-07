@@ -540,18 +540,13 @@ void KisPaintDevice::fill(qint32 x, qint32 y, qint32 w, qint32 h, const quint8 *
 
 bool KisPaintDevice::write(KoStore *store)
 {
-    bool retval = m_datamanager->write(store);
-    emit ioProgress(100);
-
-    return retval;
+    return m_datamanager->write(store);
 }
 
 bool KisPaintDevice::read(KoStore *store)
 {
     bool retval = m_datamanager->read(store);
     m_d->cache.invalidate();
-
-    emit ioProgress(100);
     return retval;
 }
 
@@ -978,29 +973,6 @@ void KisPaintDevice::clearSelection(KisSelectionSP selection)
         }
         m_datamanager->purge(r.translated(-m_d->x, -m_d->y));
         setDirty(r);
-    }
-}
-
-void KisPaintDevice::applySelectionMask(KisSelectionSP mask)
-{
-    QRect r = mask->selectedExactRect();
-    crop(r);
-
-    KisHLineIterator pixelIt = createHLineIterator(r.x(), r.top(), r.width());
-    KisHLineConstIterator maskIt = mask->projection()->createHLineIterator(r.x(), r.top(), r.width());
-
-    for (qint32 y = r.top(); y <= r.bottom(); ++y) {
-
-        while (!pixelIt.isDone()) {
-            // XXX: Optimize by using stretches
-
-            m_d->colorSpace->applyAlphaU8Mask(pixelIt.rawData(), maskIt.rawData(), 1);
-
-            ++pixelIt;
-            ++maskIt;
-        }
-        pixelIt.nextRow();
-        maskIt.nextRow();
     }
 }
 

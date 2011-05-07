@@ -2254,6 +2254,8 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
                 }
             }
 
+            textObjectManager->insertInlineObject(cursor, anchor);
+
             if(element.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                 d->closeChangeRegion(element);
         }

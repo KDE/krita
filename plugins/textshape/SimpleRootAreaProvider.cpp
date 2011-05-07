@@ -115,15 +115,13 @@ QSizeF SimpleRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
     return size;
 }
 
-QList<KoTextLayoutObstruction *> SimpleRootAreaProvider::relevantObstructions(const QRectF &rect, const QList<KoTextLayoutObstruction *> &excludingThese)
+QList<KoTextLayoutObstruction *> SimpleRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)
 {
     QList<KoTextLayoutObstruction*> obstructions;
-    QRectF canvasRect = rect;
-    canvasRect.moveTop(rect.top() - m_area->top());
-    QTransform transform = m_textShape->absoluteTransformation(0);
-    canvasRect = transform.mapRect(canvasRect);
-
+/*
+    m_textShape->boundingRect();
     QList<KoShape *> shapes;
-    //shapes = manager->shapesAt(canvasRect):
+    shapes = manager->shapesAt(canvasRect):
+*/
     return obstructions;
 }

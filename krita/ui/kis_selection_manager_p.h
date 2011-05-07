@@ -11,7 +11,7 @@ public:
                          const QRect &rect) = 0;
 
     virtual QString name() {return QString();}
-    virtual QRect changeRect(const QRect &rect) {return QRect();}
+    virtual QRect changeRect(const QRect &rect) {return rect;}
 
 protected:
     void computeBorder(qint32  *circ, qint32  xradius, qint32  yradius) {
@@ -821,6 +821,7 @@ class KisInvertSelectionFilter : public KisSelectionFilter
     QString name() {return i18n("Invert Selection");}
 
     QRect changeRect(const QRect &rect) {
+        Q_UNUSED(rect);
         return QRect();
     }
     void process(KisPixelSelectionSP pixelSelection, const QRect &rect) {

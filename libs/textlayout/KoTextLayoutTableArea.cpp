@@ -36,6 +36,7 @@
 #include <QRectF>
 #include <QVector>
 
+#include "FrameIterator.h"
 
 class KoTextLayoutTableArea::Private
 {

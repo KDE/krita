@@ -879,6 +879,9 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
 
     // TODO: use the d->selection && !isDeselected() combo
     if (d->selection) {
+        /* d->selection->projection() is a KisPaintDevice, so first a readBytes
+        is performed to get the area of interest... */
+
         KisPixelSelectionSP selectionProjection = d->selection->projection();
 
         quint8* selBytes = new quint8[srcWidth * srcHeight * selectionProjection->pixelSize()];

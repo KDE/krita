@@ -76,9 +76,12 @@ public:
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
+
+    void setKnsrcFile( QString *knsrcFileArg );
+
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected( KoResource * resource );
+    void resourceSelected( KoResource * resource );  
 
 private slots:
     void slotButtonClicked( int button );
@@ -87,7 +90,7 @@ private slots:
 private:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    void updateRemoveButtonState();
+    void updateButtonState();
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

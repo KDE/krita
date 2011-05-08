@@ -49,6 +49,7 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    QString knsrcFile;
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -108,7 +109,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->setSpacing( 0 );
     layout->setMargin( 0 );
 
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
@@ -148,7 +149,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 #ifdef GHNS
     else if (button == Button_GhnsDownload) {
 
-        KNS3::DownloadDialog dialog(this);
+        KNS3::DownloadDialog dialog( d->knsrcFile, this );
         dialog.exec();
 /*
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
@@ -164,7 +165,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
-                KNS3::UploadDialog dialog(this);
+                KNS3::UploadDialog dialog( d->knsrcFile, this );
                 dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
@@ -172,7 +173,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         }
     }
 #endif
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
 void KoResourceItemChooser::showButtons( bool show )
@@ -249,22 +250,28 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
     if( resource ) {
         emit resourceSelected( resource );
     }
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
-void KoResourceItemChooser::updateRemoveButtonState()
+void KoResourceItemChooser::updateButtonState()
 {
     QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
     if( ! removeButton )
         return;
 
+    QAbstractButton * uploadButton = d->buttonGroup->button( Button_GhnsUpload );
+    if( ! uploadButton )
+        return;
+
     KoResource * resource = currentResource();
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
+        uploadButton->setEnabled( resource->removable() );
         return;
     }
 
     removeButton->setEnabled( false );
+    uploadButton->setEnabled( false );
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
@@ -282,5 +289,9 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
     return static_cast<KoResource*>( index.internalPointer() );
 }
 
+void KoResourceItemChooser::setKnsrcFile(QString *knsrcFileArg)
+{
+    d->knsrcFile = *knsrcFileArg;
+}
 
 #include <KoResourceItemChooser.moc>

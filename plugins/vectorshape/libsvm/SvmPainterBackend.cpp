@@ -163,6 +163,9 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
     if (context.changedItems & GCTextFillColor) {
         // FIXME
     }
+    if (context.changedItems & GCTextAlign) {
+        // FIXME: Probably don't need to do anything here.
+    }
     if (context.changedItems & GCMapMode) {
         // FIXME
     }

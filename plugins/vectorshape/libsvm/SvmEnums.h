@@ -96,6 +96,19 @@ namespace Libsvm
 
 #define META_LAST_ACTION  META_RENDERGRAPHIC_ACTION
 
+    /** 
+        Text align
+
+
+        FIXME: Define this in the spec
+    */
+
+    enum TextAlign {
+        ALIGN_TOP,
+        ALIGN_BASELINE,
+        ALIGN_BOTTOM
+    };
+
     /**
        Mtf (FIXME)
 

@@ -288,6 +288,7 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_TEXT_ACTION:
+            break;
         case META_TEXTARRAY_ACTION:
             {
                 QPoint   startPoint;
@@ -374,6 +375,13 @@ bool SvmParser::parse(const QByteArray &data)
             }
             break;
         case META_TEXTALIGN_ACTION:
+            {
+                quint16  textAlign;
+                stream >> textAlign;
+
+                mContext.textAlign = (TextAlign)textAlign;
+                mContext.changedItems |= GCTextAlign;
+            }
             break;
         case META_MAPMODE_ACTION:
             {

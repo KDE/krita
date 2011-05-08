@@ -46,9 +46,10 @@ enum GraphicsContextMembers {
     GCFillBrush     = 0x0002,
     GCTextColor     = 0x0004,
     GCTextFillColor = 0x0008,
-    GCMapMode       = 0x0010,
-    GCFont          = 0x0020,
-    GCOverlineColor = 0x0040
+    GCTextAlign     = 0x0010,
+    GCMapMode       = 0x0020,
+    GCFont          = 0x0040,
+    GCOverlineColor = 0x0080
     // ...more here
 };
 
@@ -56,13 +57,14 @@ enum GraphicsContextMembers {
 struct SvmGraphicsContext {
     SvmGraphicsContext();
 
-    QColor   lineColor;
-    QBrush   fillBrush;
-    QColor   textColor;
-    QColor   textFillColor;
-    MapMode  mapMode;
-    QFont    font;
-    QColor   overlineColor;
+    QColor    lineColor;
+    QBrush    fillBrush;
+    QColor    textColor;
+    QColor    textFillColor;
+    TextAlign textAlign;
+    MapMode   mapMode;
+    QFont     font;
+    QColor    overlineColor;
     // ... much more here;
 
     quint32  changedItems;      // bitmap

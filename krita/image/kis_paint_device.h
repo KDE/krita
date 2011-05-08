@@ -169,6 +169,10 @@ public:
      * but may be larger if the underlying datamanager works that way.
      * For instance, the tiled datamanager keeps the extent to the nearest
      * multiple of 64.
+     *
+     * If default pixel is not transparent, then the actual extent
+     * rect is united with the defaultBounds()->bounds() value
+     * (the size of the image, usually).
      */
     virtual QRect extent() const;
 
@@ -184,12 +188,10 @@ public:
      * Exactbounds follows these rules:
      *
      * <ul>
-     * <li>if there is actual pixel data in the paint device, it is the exact bounds of this data,
-     *     no matter the value of the default pixel.
-     * <li>if there no pixel data in the paint device, and the default pixel is transparent,
-     *     exactBounds is empty
-     * <li>If there is no pixel data in the paint device, and the default pixel is not fully transparent,
-     *     exactBounds is the size of the image.
+     * <li>if default pixel is transparent, then exact bounds
+     *     of actual pixel data are returned
+     * <li>if default pixel is not transparent, then extent() of
+     *     the device is returned.
      * </ul>
      * \see calculateExactBounds()
      */

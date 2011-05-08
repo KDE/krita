@@ -160,6 +160,9 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         kDebug(31000) << "*** Setting text color to" << context.textColor;
 #endif
     }
+    if (context.changedItems & GCTextFillColor) {
+        // FIXME
+    }
     if (context.changedItems & GCMapMode) {
         // FIXME
     }
@@ -168,6 +171,9 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 #if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting font to" << context.font;
 #endif
+    }
+    if (context.changedItems & GCOverlineColor) {
+        // FIXME
     }
 
     // Reset all changes until next time.

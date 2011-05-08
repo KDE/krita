@@ -28,8 +28,10 @@ SvmGraphicsContext::SvmGraphicsContext()
     : lineColor(Qt::black)
     , fillBrush(Qt::NoBrush)
     , textColor(Qt::black)
+    , textFillColor(Qt::NoPen)  // FIXME: Black?
     , mapMode()
-    , font("Helvetica", 300)    // 300 is of course a completely bogus value
+    , font("Helvetica", 300)    // 300 is of course a completely arbitrary value
+    , overlineColor(Qt::NoPen)
       //... more here
     , changedItems(0xffffffff)  // Everything changed the first time.
 {

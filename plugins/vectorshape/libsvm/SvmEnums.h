@@ -94,7 +94,7 @@ namespace Libsvm
         META_COMMENT_ACTION               = 512
     };
 
-#define META_LAST_ACTION  META_SVG_SOMETHING_ACTION
+#define META_LAST_ACTION  META_RENDERGRAPHIC_ACTION
 
     /**
        Mtf (FIXME)

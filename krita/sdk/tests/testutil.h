@@ -149,6 +149,19 @@ bool comparePaintDevices(QPoint & pt, const KisPaintDeviceSP dev1, const KisPain
     return true;
 }
 
+quint8 alphaDevicePixel(KisPaintDeviceSP dev, qint32 x, qint32 y)
+{
+    KisHLineConstIteratorPixel iter = dev->createHLineConstIterator(x, y, 1);
+    const quint8 *pix = iter.rawData();
+    return *pix;
+}
+
+void alphaDeviceSetPixel(KisPaintDeviceSP dev, qint32 x, qint32 y, quint8 s)
+{
+    KisHLineIteratorPixel iter = dev->createHLineIterator(x, y, 1);
+    quint8 *pix = iter.rawData();
+    *pix = s;
+}
 
 
 QList<const KoColorSpace*> allColorSpaces()

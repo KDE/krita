@@ -64,10 +64,10 @@ public:
     KoCellValue* value() const;
 
     /**
-     * A \class KoCellChild represents all the items that can be 
+     * A \class KoCellChild represents all the items that can be
      * contained inside a KoCell.
      * \see ODF1.2 table:table-cell §9.1.4
-     * 
+     *
      * \note The cell takes ownership of the given KoCellChild.
      * \note The order in which the elements are written to ODF
      * is the same in which they were inserted.
@@ -118,6 +118,16 @@ public:
     int columnSpan() const;
 
     /**
+     * \brief Sets this cell to be <table:covered-table-cell>
+     */
+    void setCovered(bool covered);
+
+    /**
+     * Returns if the cell is covered or not.
+     */
+    bool isCovered() const;
+
+    /**
      * Sets if the cell is protected. Protected cells cannot be edited by the user.
      */
     void setProtected(bool protect);
@@ -138,6 +148,7 @@ private:
     int m_rowSpan;
     int m_columnSpan;
     bool m_protected;
+    bool m_covered;
 };
 
 #endif

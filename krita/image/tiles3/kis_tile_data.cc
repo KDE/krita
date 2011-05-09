@@ -86,10 +86,9 @@ void KisTileData::releaseMemory()
         m_data = 0;
     }
 
-    /* Free clones list */
-    KisTileData *td  = 0;
-    while(m_clonesStack.pop(td)) {
-        delete td;
+    KisTileData *clone;
+    while(m_clonesStack.pop(clone)) {
+        delete clone;
     }
 
     Q_ASSERT(m_clonesStack.isEmpty());

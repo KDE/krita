@@ -370,7 +370,6 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
 {
     d->resourceManager = resourceManager;
     setShapeId( ChartShapeId );
-    setCacheMode(KoShape::ScaledCache);
 
     // Instantiated all children first
     d->proxyModel = new ChartProxyModel( &d->tableSource );
@@ -500,7 +499,7 @@ ChartShape::ChartShape(KoResourceManager *resourceManager)
     foreach( KoShape *label, labels() ) {
         TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
         KoTextDocument doc( labelData->document() );
-        doc.setResizeMethod( KoTextDocument::AutoResize );
+//FIXME        doc.setResizeMethod( KoTextDocument::AutoResize );
     }
 
     KoColorBackground *background = new KoColorBackground( Qt::white );
@@ -730,7 +729,7 @@ void ChartShape::paintComponent( QPainter &painter,
 
         // Calculate the clipping rect
         QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-        painter.setClipRect( paintRect );
+        painter.setClipRect( paintRect, Qt::IntersectClip );
 
         QPainterPath p;
         p.addRect( paintRect );
@@ -1004,6 +1003,10 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
 
 
     // 2. Load the data
+//     int dimensions = numDimensions( chartType );
+//     qDebug() << "DIMENSIONS" << dimensions;
+//     d->proxyModel->setDataDimensions( dimensions );
+//     qDebug() << d->proxyModel->dataSets().count();
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                                                  KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
@@ -1014,9 +1017,14 @@ bool ChartShape::loadOdfChartElement( const KoXmlElement &chartElement,
     // 3. Load the plot area (this is where the meat is!).
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                                                      KoXmlNS::chart, "plot-area" );
+
     if ( !plotareaElem.isNull() ) {
+        d->plotArea->setChartType( chartType );
+        d->plotArea->setChartSubType( chartSubType() );
         if ( !d->plotArea->loadOdf( plotareaElem, context ) )
             return false;
+//         d->plotArea->setChartType( chartType );
+//         d->plotArea->setChartSubType( chartSubType() );
     }
 
     // 4. Load the title.

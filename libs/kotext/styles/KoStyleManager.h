@@ -62,24 +62,6 @@ public:
      */
     virtual ~KoStyleManager();
 
-    /**
-     * Set a text document that is capable of drawing the styles
-     * The method only has any effect first time, and the document is just to generate
-     ' preview pixmaps
-     */
-    void setPixmapHelperDocument(QTextDocument *pixmapHelperDocument);
-
-    /**
-     * Return a thumbnail representing the style
-     */
-    QPixmap thumbnail(KoParagraphStyle *style);
-
-    /**
-     * Return a thumbnail representing the style
-     */
-    QPixmap thumbnail(KoCharacterStyle *style);
-
-
     // load is not needed as it is done in KoTextSharedLoadingData
 
     /**

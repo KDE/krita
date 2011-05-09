@@ -475,6 +475,10 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
                 addAttribute("text:tab-ref", tabCache[i] + 1);
             endElement();
             break;
+        // gracefully handle \f form feed in text input.
+        // otherwise the xml will not be valid. 
+        // \f can be added e.g. in ascii import filter.
+        case '\f':
         case '\n':
             if (!str.isEmpty())
                 addTextNode(str);

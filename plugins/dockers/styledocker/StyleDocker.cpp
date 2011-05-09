@@ -65,10 +65,11 @@ StyleButtonBox::StyleButtons FillRuleButtons = StyleButtonBox::EvenOdd|StyleButt
 
 StyleDocker::StyleDocker(QWidget * parent)
     : QDockWidget(parent), m_canvas(0)
-    , m_lastFillCommand(0), m_lastStrokeCommand(0)
+    , m_lastFillCommand(0)
+    , m_lastStrokeCommand(0)
     , m_lastColorFill(0)
 {
-    setWindowTitle(i18n("Styles"));
+    setWindowTitle(i18n("Stroke and Fill"));
 
     QWidget *mainWidget = new QWidget(this);
     m_layout = new QGridLayout(mainWidget);

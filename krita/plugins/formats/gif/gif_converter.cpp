@@ -354,7 +354,7 @@ KisImageBuilder_Result GifConverter::buildFile(const KUrl& uri, KisImageWSP imag
         return KisImageBuilder_RESULT_NOT_LOCAL;
 
     // Open file for writing
-    QFile file(QFile::encodeName(uri.toLocalFile()));
+    QFile file(uri.toLocalFile());
     if (!file.open(QIODevice::WriteOnly)) {
         return (KisImageBuilder_RESULT_FAILURE);
     }

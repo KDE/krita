@@ -307,7 +307,7 @@ KisSelectionSP KisFillPainter::createFloodSelection(int startX, int startY, KisP
     if (hasSelection) {
         srcSel = this->selection();
         if (!srcSel->hasPixelSelection())
-            srcSel->setPixelSelection(new KisPixelSelection(sourceDevice));
+            srcSel->setPixelSelection(new KisPixelSelection(new KisSelectionDefaultBounds(sourceDevice)));
     }
 
     while (!stack.empty()) {

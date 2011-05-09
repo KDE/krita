@@ -46,5 +46,11 @@ set(TestAction_test_SRCS TestAction.cpp )
 kde4_add_unit_test(TestActionTest TESTNAME libs-komain-TestActionTest ${TestAction_test_SRCS})
 target_link_libraries(TestActionTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
 
+########### next target ###############
+
+set(findmatch_test_SRCS testfindmatch.cpp )
+kde4_add_unit_test(testfindmatch TESTNAME libs-komain-testfindmatch ${findmatch_test_SRCS})
+target_link_libraries(testfindmatch komain ${QT_QTTEST_LIBRARY})
+
 ########### end ###############
 

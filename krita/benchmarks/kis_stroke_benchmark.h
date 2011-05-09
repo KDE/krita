@@ -118,6 +118,9 @@ private slots:
 
     void experimental();
     void experimentalCircle();
+
+    void colorsmudge();
+    void colorsmudgeRL();
 /*
     void predefinedBrush();
     void predefinedBrushRL();

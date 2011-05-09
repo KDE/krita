@@ -55,11 +55,11 @@ KoRdfSemanticItemViewSite::~KoRdfSemanticItemViewSite()
 
 Soprano::Node KoRdfSemanticItemViewSite::linkingSubject() const
 {
-    KoDocumentRdf *rdf = d->m_semItem->documentRdf();
-    Soprano::Model *m = rdf->model();
+    const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
+    Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
     Node pred(QUrl("http://koffice.org/rdf/site/package/common#idref"));
     Node obj = Node::createLiteralNode(d->m_xmlid);
-    Node context = rdf->manifestRdfNode();
+    Node context = documentRdf->manifestRdfNode();
     // try to find it if it already exists
     StatementIterator it = m->listStatements(Node(), pred, obj, context);
     QList<Statement> allStatements = it.allElements();
@@ -75,8 +75,8 @@ QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QStrin
 {
     Soprano::Node ls = linkingSubject();
     QString fqprop = "http://koffice.org/rdf/site#" + prop;
-    KoDocumentRdf *rdf = d->m_semItem->documentRdf();
-    Soprano::Model *m = rdf->model();
+    const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
+    const Soprano::Model *m = rdf->model();
     StatementIterator it = m->listStatements(ls, Node::createResourceNode(QUrl(fqprop)),
                                Node(), rdf->manifestRdfNode());
     QList<Statement> allStatements = it.allElements();
@@ -89,12 +89,12 @@ QString KoRdfSemanticItemViewSite::getProperty(const QString &prop, const QStrin
 void KoRdfSemanticItemViewSite::setProperty(const QString &prop, const QString &v)
 {
     QString fqprop = "http://koffice.org/rdf/site#" + prop;
-    KoDocumentRdf *rdf = d->m_semItem->documentRdf();
-    Soprano::Model *m = rdf->model();
+    const KoDocumentRdf *documentRdf = d->m_semItem->documentRdf();
+    Soprano::Model *m = const_cast<Soprano::Model*>(documentRdf->model());
     Soprano::Node ls = linkingSubject();
     Soprano::Node pred = Node::createResourceNode(QUrl(fqprop));
     m->removeAllStatements(Statement(ls, pred, Node()));
-    m->addStatement(ls, pred,Node::createLiteralNode(v), rdf->manifestRdfNode());
+    m->addStatement(ls, pred,Node::createLiteralNode(v), documentRdf->manifestRdfNode());
 }
 
 KoSemanticStylesheet *KoRdfSemanticItemViewSite::stylesheet() const
@@ -170,7 +170,7 @@ void KoRdfSemanticItemViewSite::select(KoCanvasBase *host)
     Q_ASSERT(host);
     KoTextEditor *editor = KoDocumentRdf::ensureTextTool(host);
     KoResourceManager *provider = host->resourceManager();
-    KoDocumentRdf *rdf = d->m_semItem->documentRdf();
+    const KoDocumentRdf *rdf = d->m_semItem->documentRdf();
     QPair<int, int> p = p = rdf->findExtent(d->m_xmlid);
     int startpos = p.first;
     int endpos = p.second + 1;

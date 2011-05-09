@@ -48,6 +48,7 @@
 #include "PathToolOptionWidget.h"
 #include "KoConnectionShape.h"
 #include "KoSnapGuide.h"
+#include "KoShapeController.h"
 
 #include <KAction>
 #include <KIcon>
@@ -70,7 +71,7 @@ static unsigned char needle_move_bits[] = {
 };
 
 // helper function to calculate the squared distance between two points
-qreal squaredDistance(const QPointF p1, const QPointF &p2)
+qreal squaredDistance(const QPointF& p1, const QPointF &p2)
 {
     qreal dx = p1.x()-p2.x();
     qreal dy = p1.y()-p2.y();
@@ -660,12 +661,13 @@ void KoPathTool::keyPressEvent(QKeyEvent *event)
         switch (event->key()) {
 // TODO move these to the actions in the constructor.
         case Qt::Key_I: {
-            int handleRadius = d->canvas->resourceManager()->handleRadius();
+            KoResourceManager *rm = d->canvas->shapeController()->resourceManager();
+            int handleRadius = rm->handleRadius();
             if (event->modifiers() & Qt::ControlModifier)
                 handleRadius--;
             else
                 handleRadius++;
-            d->canvas->resourceManager()->setHandleRadius(handleRadius);
+            rm->setHandleRadius(handleRadius);
             break;
         }
 #ifndef NDEBUG
@@ -839,7 +841,7 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
     Q_D(KoToolBase);
     Q_UNUSED(toolActivation);
     // retrieve the actual global handle radius
-    m_handleRadius = d->canvas->resourceManager()->handleRadius();
+    m_handleRadius = handleRadius();
     d->canvas->snapGuide()->reset();
 
     repaintDecorations();
@@ -937,7 +939,7 @@ void KoPathTool::deactivate()
 
 void KoPathTool::resourceChanged(int key, const QVariant & res)
 {
-    if (key == KoCanvasResource::HandleRadius) {
+    if (key == KoDocumentResource::HandleRadius) {
         int oldHandleRadius = m_handleRadius;
 
         m_handleRadius = res.toUInt();

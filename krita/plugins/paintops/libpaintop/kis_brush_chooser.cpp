@@ -237,7 +237,7 @@ void KisBrushChooser::slotSetItemUseColorAsMask(bool useColorAsMask)
 void KisBrushChooser::update(KoResource * resource)
 {
     KisBrush* brush = static_cast<KisBrush*>(resource);
-    
+
     QString text = QString("%1 (%2 x %3)")
                    .arg(i18n(brush->name().toUtf8().data()))
                    .arg(brush->width())
@@ -247,14 +247,14 @@ void KisBrushChooser::update(KoResource * resource)
     m_slSpacing->setValue(brush->spacing());
     m_slRotation->setValue(brush->angle() * 180 / M_PI);
     m_slScale->setValue(brush->scale());
-    
-    
+
+
     // useColorAsMask support is only in gimp brush so far
     if (KisGbrBrush * gimpBrush = dynamic_cast<KisGbrBrush*>(resource)){
         m_chkColorMask->setChecked(gimpBrush->useColorAsMask());
     }
     m_chkColorMask->setEnabled(brush->hasColor());
-    
+
     emit sigBrushChanged();
 }
 
@@ -274,10 +274,17 @@ void KisBrushChooser::setBrushSize(qreal xPixels, qreal yPixels)
         if (newWidth <= 0.0) {
             return;
         }
-        
+
         qreal newScale = newWidth / m_brush->width();
         // signal valueChanged will care about call to slotSetItemScale
         m_slScale->setValue(newScale);
+}
+
+QSizeF KisBrushChooser::brushSize() const
+{
+    qreal width = m_brush->width() * m_brush->scale();
+    qreal height = m_brush->height() * m_brush->scale();
+    return QSizeF(width, height);
 }
 
 

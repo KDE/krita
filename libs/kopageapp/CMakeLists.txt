@@ -1,7 +1,5 @@
 include_directories( 
-    ${KOMAIN_INCLUDES}
-    ${CMAKE_SOURCE_DIR}/libs/widgets
-    ${PIGMENT_INCLUDES}
+    ${KOPAGEAPP_INCLUDES}
 )
 
 if(KDE4_BUILD_TESTS)
@@ -54,7 +52,7 @@ set( kopageapp_LIB_SRCS
 
 kde4_add_library(kopageapp SHARED ${kopageapp_LIB_SRCS})
 
-target_link_libraries(kopageapp komain)
+target_link_libraries(kopageapp komain textlayout)
 target_link_libraries(kopageapp LINK_INTERFACE_LIBRARIES komain)
 
 set_target_properties(kopageapp PROPERTIES
@@ -71,6 +69,7 @@ install(FILES
     KoPageApp.h
     KoPALoadingContext.h
     KoPAPage.h
+    KoPAMasterPage.h
     KoPAPageBase.h
     KoPAPageContainerModel.h
     KoPASavingContext.h

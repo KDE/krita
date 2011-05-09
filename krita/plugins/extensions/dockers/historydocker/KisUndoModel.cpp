@@ -235,7 +235,6 @@ void KisUndoModel::addImage(int idx) {
         QImage image = paintDevice->createThumbnail(32, 32);
         imageMap[currentCommand] = image;
     }
-    qDebug() << "value of stack count : " << m_stack->count() << " idx " << idx << "  ImageMap " << imageMap.contains(currentCommand);
     QList<const QUndoCommand*> list;
 
     for(int i = 0; i < m_stack->count(); ++i) {

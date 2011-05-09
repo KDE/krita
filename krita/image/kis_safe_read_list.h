@@ -40,7 +40,7 @@ template<class T> class KisSafeReadList : private QList<T> {
 public:
     KisSafeReadList() {}
 
-    using QList<T>::const_iterator;
+    using typename QList<T>::const_iterator;
 
     /**
      * All the methods of this class are splitted into two groups:

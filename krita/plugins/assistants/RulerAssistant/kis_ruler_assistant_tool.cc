@@ -72,6 +72,7 @@ void KisRulerAssistantTool::activate(ToolActivation toolActivation, const QSet<K
 void KisRulerAssistantTool::deactivate()
 {
     // Add code here to initialize your tool when it got deactivated
+    m_canvas->updateCanvas();
     KisTool::deactivate();
 }
 

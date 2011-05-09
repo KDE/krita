@@ -33,6 +33,7 @@ struct KisIndirectPaintingSupport::Private {
     KisPaintDeviceSP temporaryTarget;
     const KoCompositeOp* compositeOp;
     quint8 compositeOpacity;
+    QBitArray channelFlags;
     QReadWriteLock lock;
 };
 
@@ -61,6 +62,11 @@ void KisIndirectPaintingSupport::setTemporaryCompositeOp(const KoCompositeOp* c)
 void KisIndirectPaintingSupport::setTemporaryOpacity(quint8 o)
 {
     d->compositeOpacity = o;
+}
+
+void KisIndirectPaintingSupport::setTemporaryChannelFlags(const QBitArray& channelFlags)
+{
+    d->channelFlags = channelFlags;
 }
 
 void KisIndirectPaintingSupport::lockTemporaryTarget() const
@@ -93,6 +99,11 @@ quint8 KisIndirectPaintingSupport::temporaryOpacity() const
     return d->compositeOpacity;
 }
 
+const QBitArray& KisIndirectPaintingSupport::temporaryChannelFlags() const
+{
+    return d->channelFlags;
+}
+
 bool KisIndirectPaintingSupport::hasTemporaryTarget() const
 {
     return d->temporaryTarget;
@@ -107,13 +118,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisLayerSP layer, const QRegion &r
     KisPainter gc(layer->paintDevice());
     gc.setCompositeOp(d->compositeOp);
     gc.setOpacity(d->compositeOpacity);
-    gc.setChannelFlags(layer->channelFlags());
-
-    if (KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(layer.data())) {
-        if (paintLayer->alphaLocked()) {
-            gc.setLockAlpha(paintLayer->alphaLocked());
-        }
-    }
+    gc.setChannelFlags(d->channelFlags);
 
     d->lock.lockForWrite();
     if(layer->image()) {

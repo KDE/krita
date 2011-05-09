@@ -19,7 +19,7 @@
  */
 #include "SimpleParagraphWidget.h"
 #include "TextTool.h"
-#include "../ListItemsHelper.h"
+#include <ListItemsHelper.h>
 #include "../commands/ChangeListCommand.h"
 #include "FormattingButton.h"
 
@@ -101,6 +101,7 @@ void SimpleParagraphWidget::directionChangeRequested()
         // clearProperty won't have any effect on merge below.
         int start = qMin(cursor.position(), cursor.anchor());
         int end = qMax(cursor.position(), cursor.anchor());
+        Q_ASSERT(start >= 0);
         cursor.setPosition(start);
         while (cursor.position() <= end) {
             QTextBlockFormat bf = cursor.blockFormat();
@@ -167,11 +168,19 @@ void SimpleParagraphWidget::fillListButtons()
             }
             listStyle.setLevelProperties(llp);
             cursor.select(QTextCursor::Document);
+            QTextCharFormat textCharFormat=cursor.blockCharFormat();
+            textCharFormat.setFontPointSize(11);
+            textCharFormat.setFontWeight(QFont::Normal);
+            cursor.setCharFormat(textCharFormat);
+
             cursor.insertText("----");
             listStyle.applyStyle(cursor.block(),1);
             cursor.insertText("\n----");
             cursor.insertText("\n----");
-            dynamic_cast<KoTextDocumentLayout*> (textShape.textShapeData()->document()->documentLayout())->layout();
+
+            KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(textShape.textShapeData()->document()->documentLayout());
+            if(lay)
+                lay->layout();
 
             textShape.paintComponent(p, zoomHandler);
             if(listStyle.isNumberingStyle(item.style)) {

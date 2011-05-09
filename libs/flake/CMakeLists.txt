@@ -36,7 +36,6 @@ set(flake_SRCS
     KoShapeContainerDefaultModel.cpp
     KoShapeGroup.cpp
     KoShapeManagerPaintingStrategy.cpp
-    KoShapeManagerCachedPaintingStrategy.cpp
     KoShapeManager.cpp
     KoShapePainter.cpp
     KoFrameShape.cpp
@@ -49,6 +48,7 @@ set(flake_SRCS
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
+    KoDeferredShapeFactoryBase.cpp
     KoToolFactoryBase.cpp
     KoPathShapeFactory.cpp
     KoShapeFactoryBase.cpp
@@ -236,6 +236,7 @@ install(
     KoDataCenterBase.h
     KoDockFactoryBase.h
     KoDockRegistry.h
+    KoDeferredShapeFactoryBase.h
     KoDrag.h
     KoDragOdfSaveHelper.h
     KoFlake.h
@@ -266,7 +267,6 @@ install(
     KoShapeConfigWidgetBase.h
     KoShapeManager.h
     KoShapeManagerPaintingStrategy.h
-    KoShapeManagerCachedPaintingStrategy.h
     KoShapeRegistry.h
     KoShapeSavingContext.h
     KoShapeUserData.h

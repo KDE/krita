@@ -43,7 +43,9 @@ public:
 
     void setDiameter(int diameter) const;
     int diameter() const;
-    
+
+    qreal brushAspect() const;
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -66,7 +68,7 @@ public:
     bool jitterMovement;
     bool useDensity;
     bool gaussian;
-   
+
 public:
     void loadSettings(const KisPropertiesConfiguration* settings){
         diameter = settings->getInt(SPRAY_DIAMETER);

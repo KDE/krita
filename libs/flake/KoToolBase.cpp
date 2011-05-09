@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,6 +24,8 @@
 #include "KoPointerEvent.h"
 #include "KoResourceManager.h"
 #include "KoViewConverter.h"
+#include "KoShapeController.h"
+#include "KoShapeControllerBase.h"
 
 #include <klocale.h>
 #include <kactioncollection.h>
@@ -34,10 +37,17 @@ KoToolBase::KoToolBase(KoCanvasBase *canvas)
     Q_D(KoToolBase);
     if (d->canvas) { // in the case of KoToolManagers dummytool it can be zero :(
         KoResourceManager * crp = d->canvas->resourceManager();
-        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No KoResourceManager");
+        Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
         if (crp)
-            connect(d->canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant &)),
+            connect(crp, SIGNAL(resourceChanged(int, const QVariant &)),
                     this, SLOT(resourceChanged(int, const QVariant &)));
+
+        // can be 0 in the case of Tables
+        KoResourceManager *scrm = d->canvas->shapeController()->resourceManager();
+        if (scrm) {
+            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
+                    this, SLOT(resourceChanged(int, const QVariant &)));
+        }
     }
 }
 
@@ -49,6 +59,18 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 KoToolBase::~KoToolBase()
 {
     delete d_ptr;
+}
+
+/// Ultimately only called from Tables
+void KoToolBase::updateShapeController(KoShapeControllerBase *shapeController)
+{
+    if (shapeController) {
+        KoResourceManager *scrm = shapeController->resourceManager();
+        if (scrm) {
+            connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),
+                    this, SLOT(resourceChanged(int, const QVariant &)));
+        }
+    }
 }
 
 void KoToolBase::deactivate()
@@ -228,11 +250,23 @@ void KoToolBase::setStatusText(const QString &statusText)
     emit statusTextChanged(statusText);
 }
 
+uint KoToolBase::handleRadius() const
+{
+    Q_D(const KoToolBase);
+    return d->canvas->shapeController()->resourceManager()->handleRadius();
+}
+
+uint KoToolBase::grabSensitivity() const
+{
+    Q_D(const KoToolBase);
+    return d->canvas->shapeController()->resourceManager()->grabSensitivity();
+}
+
 QRectF KoToolBase::handleGrabRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceManager()->grabSensitivity();
+    uint handleSize = 2*grabSensitivity();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;
@@ -242,7 +276,7 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 {
     Q_D(const KoToolBase);
     const KoViewConverter * converter = d->canvas->viewConverter();
-    uint handleSize = 2*d->canvas->resourceManager()->handleRadius();
+    uint handleSize = 2*handleRadius();
     QRectF r = converter->viewToDocument(QRectF(0, 0, handleSize, handleSize));
     r.moveCenter(position);
     return r;

@@ -45,14 +45,6 @@ public:
     KisPixelSelection(KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
 
     /**
-     * Create a new KisPixelSelection. The selection will never be
-     * bigger than the parent paint device.
-     *
-     * @param dev the parent paint device.
-     */
-    KisPixelSelection(KisPaintDeviceSP dev, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds());
-
-    /**
      * Copy the selection
      */
     KisPixelSelection(const KisPixelSelection& rhs);
@@ -61,16 +53,7 @@ public:
 
     KisSelectionComponent* clone(KisSelection*);
 
-    // Returns selectedness, or 0 if invalid coordinates
-    quint8 selected(qint32 x, qint32 y) const;
-
-    void setSelected(qint32 x, qint32 y, quint8 s);
-
-    /**
-     * Return a grayscale QImage representing the selectedness as grayscale
-     * pixels of the specified rect of this pixel selection.
-     */
-    QImage maskImage(const QRect & rc) const;
+    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection * selection, QRect rect) const;
 
     /**
      * Fill the specified rect with the specified selectedness.
@@ -97,31 +80,16 @@ public:
 
     /**
      * Apply a selection to the selection using the specified selection mode
-     * Note: SELECTION_REPLACE will be treated as SELECTION_ADD
      */
     void applySelection(KisPixelSelectionSP selection, selectionAction action);
-
-    /** Add a selection */
-    void addSelection(KisPixelSelectionSP selection);
-
-    /**
-     * Subtracts a selection
-     */
-    void subtractSelection(KisPixelSelectionSP selection);
-
-    /**
-     * Intersects a selection. Only pixels that are MAX_SELECTED in both this pixel selection
-     * and the specified selection will remain selected. Pixels that are not completely
-     * selected in either pixel selection will be completely deselected.
-     */
-    void intersectSelection(KisPixelSelectionSP selection);
 
     /// Tests if the the rect is totally outside the selection
     bool isTotallyUnselected(const QRect & r) const;
 
     /**
-     * Tests if the the rect is totally outside the selection, but uses selectedRect
-     * instead of selectedRect, and this is faster (but might deliver false positives!)
+     * Tests if the the rect is totally outside the selection,
+     * but uses selectedRect instead of selectedExactRect, and
+     * this is faster (but might deliver false negatives!)
      */
     bool isProbablyTotallyUnselected(const QRect & r) const;
 
@@ -137,40 +105,32 @@ public:
      */
     QRect selectedExactRect() const;
 
-    /**
-     * If the parent layer is interested in keeping up to date with
-     * the dirtyness of this layer, set to true
-     */
-    void setInterestedInDirtyness(bool b);
-
-    /**
-     * returns true if the parent layer is interested in keeping up to
-     * date with the dirtyness of this layer.
-     */
-    bool interestedInDirtyness() const;
-
-    void setDirty(const QRect & rc);
-    void setDirty(const QRegion & region);
-    void setDirty();
-
     QVector<QPolygon> outline();
 
     virtual void renderToProjection(KisSelection* projection);
     virtual void renderToProjection(KisSelection* projection, const QRect& r);
 
+private:
+    /**
+     * Add a selection
+     */
+    void addSelection(KisPixelSelectionSP selection);
+
+    /**
+     * Subtracts a selection
+     */
+    void subtractSelection(KisPixelSelectionSP selection);
+
+    /**
+     * Intersects a selection using min-T-norm for this.
+     */
+    void intersectSelection(KisPixelSelectionSP selection);
 
 private:
-
     // We don't want these methods to be used on selections:
+    using KisPaintDevice::extent;
+    using KisPaintDevice::exactBounds;
 
-    QRect extent() const {
-        return KisPaintDevice::extent();
-    }
-
-    QRect exactBounds() const {
-        return KisPaintDevice::exactBounds();
-    }
-    
 private:
 
     struct Private;

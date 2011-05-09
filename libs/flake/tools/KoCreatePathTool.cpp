@@ -291,7 +291,7 @@ void KoCreatePathTool::activate(ToolActivation, const QSet<KoShape*> &)
     useCursor(Qt::ArrowCursor);
 
     // retrieve the actual global handle radius
-    d->handleRadius = canvas()->resourceManager()->handleRadius();
+    d->handleRadius = handleRadius();
 
     // reset snap guide
     canvas()->updateCanvas(canvas()->snapGuide()->boundingRect());
@@ -316,7 +316,7 @@ void KoCreatePathTool::resourceChanged(int key, const QVariant & res)
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoCanvasResource::HandleRadius: {
+    case KoDocumentResource::HandleRadius: {
         d->handleRadius = res.toUInt();
     }
     break;

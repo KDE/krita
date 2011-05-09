@@ -76,8 +76,10 @@ public:
         TextRotationScale,
         TextScale,
         InlineRdf,  ///< KoTextInlineRdf pointer
+        PercentageFontSize, //font-size can be in % and this stores that value
         InlineInstanceId = 577297549, // Internal: Reserved for KoInlineTextObjectManager
-        ChangeTrackerId = 577297550 // Internal: Reserved for ChangeTracker
+        ChangeTrackerId = 577297550, // Internal: Reserved for ChangeTracker
+        FontStretch = 577297551 // Internal: Ratio between Linux font pt size and Windows font height
     };
 
     /// list of possible line type : no line, single line, double line
@@ -186,6 +188,11 @@ public:
     void setFontCapitalization(QFont::Capitalization capitalization);
     /// Return how the text should be capitalized
     QFont::Capitalization fontCapitalization() const;
+    /// Set font stretch
+    void setFontStretch(qreal stretch);
+    /// Return font stretch
+    qreal fontStretch() const;
+
 
     /// See similar named method on QTextCharFormat
     void setFontStyleHint(QFont::StyleHint styleHint);
@@ -284,6 +291,9 @@ public:
 
     void setHasHyphenation(bool on);
     bool hasHyphenation() const;
+
+    void setPercentageFontSize(qreal percent);
+    qreal percentageFontSize();
 
     void copyProperties(const KoCharacterStyle *style);
     void copyProperties(const QTextCharFormat &format);

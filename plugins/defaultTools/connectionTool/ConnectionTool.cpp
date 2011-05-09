@@ -166,7 +166,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
         // on the shape the mouse is currently
         KoConnectionShape *connectionShape = dynamic_cast<KoConnectionShape*>(m_currentShape);
         if (connectionShape) {
-            int radius = canvas()->resourceManager()->handleRadius();
+            int radius = handleRadius();
             int handleCount = connectionShape->handleCount();
             for(int i = 0; i < handleCount; ++i) {
                 painter.save();
@@ -198,7 +198,7 @@ void ConnectionTool::paint(QPainter &painter, const KoViewConverter &converter)
 void ConnectionTool::repaintDecorations()
 {
     if (m_currentShape) {
-        const qreal radius = canvas()->resourceManager()->handleRadius();
+        const qreal radius = handleRadius();
 
         QRectF repaintRect = m_currentShape->boundingRect();
         canvas()->updateCanvas(repaintRect.adjusted(-radius, -radius, radius, radius));
@@ -353,9 +353,9 @@ void ConnectionTool::mouseReleaseEvent(KoPointerEvent *event)
             // get both handle positions in document coordinates
             QPointF p1 = connectionShape->shapeToDocument(connectionShape->handlePosition(0));
             QPointF p2 = connectionShape->shapeToDocument(connectionShape->handlePosition(1));
-            int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+            int grabDistance = grabSensitivity();
             // use grabbing sensitivity as minimal distance threshold
-            if (squareDistance(p1, p2) < grabSensitivity*grabSensitivity) {
+            if (squareDistance(p1, p2) < grabDistance*grabDistance) {
                 // minimal distance was not reached, so we have to undo the started work:
                 // - cleanup and delete the strategy
                 // - remove connection shape from shape manager and delete it
@@ -477,7 +477,7 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) con
         return connectionShape->handleIdAt(handleGrabRect(shapePoint));
     } else {
         // check connection points
-        int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+        int grabDistance = grabSensitivity();
         qreal minDistance = HUGE_VAL;
         int handleId = -1;
         KoConnectionPoints connectionPoints = shape->connectionPoints();
@@ -485,7 +485,7 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) con
         KoConnectionPoints::const_iterator lastCp = connectionPoints.constEnd();
         for(; cp != lastCp; ++cp) {
             qreal d = squareDistance(shapePoint, cp.value().position);
-            if (d <= grabSensitivity && d < minDistance) {
+            if (d <= grabDistance && d < minDistance) {
                 handleId = cp.key();
                 minDistance = d;
             }
@@ -496,11 +496,11 @@ int ConnectionTool::handleAtPoint(KoShape *shape, const QPointF &mousePoint) con
 
 KoConnectionShape * ConnectionTool::nearestConnectionShape(const QList<KoShape*> &shapes, const QPointF &mousePos) const
 {
-    int grabSensitivity = canvas()->resourceManager()->grabSensitivity();
+    int grabDistance = grabSensitivity();
 
     KoConnectionShape * nearestConnectionShape = 0;
     qreal minSquaredDistance = HUGE_VAL;
-    const qreal maxSquaredDistance = grabSensitivity*grabSensitivity;
+    const qreal maxSquaredDistance = grabDistance*grabDistance;
 
     foreach(KoShape *shape, shapes) {
         KoConnectionShape * connectionShape = dynamic_cast<KoConnectionShape*>(shape);

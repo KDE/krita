@@ -44,8 +44,6 @@ public:
 };
 
 
-
-// XXX: Moving is not nearly smooth enough!
 class KisToolMove : public KisTool
 {
 

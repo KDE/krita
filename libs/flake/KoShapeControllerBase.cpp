@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    Copyright (C) 2006, 2010 Thomas Zander <zander@kde.org>
+   Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,9 @@
 #include "KoShapeControllerBase.h"
 #include "KoResourceManager.h"
 #include "KoShapeRegistry.h"
+#include <KGlobal>
+#include <KConfig>
+#include <KConfigGroup>
 
 class KoShapeControllerBasePrivate
 {
@@ -32,6 +36,19 @@ public:
         foreach (const QString &id, registry->keys()) {
             KoShapeFactoryBase *shapeFactory = registry->value(id);
             shapeFactory->newDocumentResourceManager(resourceManager);
+        }
+        // read persistent application wide resources
+        KSharedConfigPtr config = KGlobal::config();
+        if (config->hasGroup("Misc")) {
+            KConfigGroup miscGroup = config->group("Misc");
+            const qreal pasteOffset = miscGroup.readEntry("CopyOffset", 10.0);
+            resourceManager->setPasteOffset(pasteOffset);
+            const bool pasteAtCursor = miscGroup.readEntry("PasteAtCursor", true);
+            resourceManager->enablePasteAtCursor(pasteAtCursor);
+            const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 3);
+            resourceManager->setGrabSensitivity(grabSensitivity);
+            const uint handleRadius = miscGroup.readEntry("HandleRadius", 3);
+            resourceManager->setHandleRadius(handleRadius);
         }
     }
 

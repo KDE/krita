@@ -71,18 +71,13 @@ class FLAKE_EXPORT KoShapeContainer : public KoShape
 public:
 
     /**
-     * Default constructor; this constructs a container a default model that does what you expect.
-     */
-    KoShapeContainer();
-
-    /**
      * Constructor with custom model to be used for maintaining the list of children.
      * For all the normal cases you don't need a custom model. Only when you want to respond
      * to moves of the container to do something special, or disable one of the features the
      * container normally has (like clipping).  Use the default constructor in those cases.
      * @param model the custom model to be used for maintaining the list of children.
      */
-    explicit KoShapeContainer(KoShapeContainerModel *model);
+    explicit KoShapeContainer(KoShapeContainerModel *model = 0);
 
     /**
      * Destructor for the shape container.
@@ -92,15 +87,29 @@ public:
 
     /**
      * Add a child to this container.
+     *
+     * This container will NOT take over ownership of the shape. The caller or those creating
+     * the shape is responsible to delete it if not needed any longer.
+     *
      * @param shape the child to be managed in the container.
      */
     void addShape(KoShape *shape);
 
     /**
      * Remove a child to be completely separated from the container.
+     *
+     * The shape will only be removed from this container but not be deleted.
+     *
      * @param shape the child to be removed.
      */
     void removeShape(KoShape *shape);
+
+    /**
+     * Remove all children to be completely separated from the container.
+     *
+     * All the shapes will only be removed from the container but not be deleted.
+     */
+    void removeAllShapes();
 
     /**
      * Return the current number of children registered.

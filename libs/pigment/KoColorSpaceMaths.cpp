@@ -26,6 +26,7 @@
 #ifdef HAVE_OPENEXR
 const half KoColorSpaceMathsTraits<half>::zeroValue = 0.0;
 const half KoColorSpaceMathsTraits<half>::unitValue = 1.0;
+const half KoColorSpaceMathsTraits<half>::halfValue = 0.5;
 const half KoColorSpaceMathsTraits<half>::max = HALF_MAX;
 const half KoColorSpaceMathsTraits<half>::min = -HALF_MAX;
 const half KoColorSpaceMathsTraits<half>::epsilon = HALF_EPSILON;
@@ -34,6 +35,7 @@ const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<half>::channel
 
 const float KoColorSpaceMathsTraits<float>::zeroValue = 0.0;
 const float KoColorSpaceMathsTraits<float>::unitValue = 1.0;
+const float KoColorSpaceMathsTraits<float>::halfValue = 0.5;
 const float KoColorSpaceMathsTraits<float>::max = FLT_MAX;
 const float KoColorSpaceMathsTraits<float>::min = -FLT_MAX;
 const float KoColorSpaceMathsTraits<float>::epsilon = FLT_EPSILON;
@@ -41,6 +43,7 @@ const KoChannelInfo::enumChannelValueType KoColorSpaceMathsTraits<float>::channe
 
 const double KoColorSpaceMathsTraits<double>::zeroValue = 0.0;
 const double KoColorSpaceMathsTraits<double>::unitValue = 1.0;
+const double KoColorSpaceMathsTraits<double>::halfValue = 0.5;
 const double KoColorSpaceMathsTraits<double>::max = DBL_MAX;
 const double KoColorSpaceMathsTraits<double>::min = -DBL_MAX;
 const double KoColorSpaceMathsTraits<double>::epsilon = DBL_EPSILON;

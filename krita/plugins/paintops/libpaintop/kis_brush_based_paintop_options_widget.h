@@ -31,12 +31,13 @@ class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpOptions
 public:
     KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
     virtual ~KisBrushBasedPaintopOptionWidget();
-    
+
     KisBrushSP brush();
-    
+
     void changePaintOpSize(qreal x, qreal y);
+    virtual QSizeF paintOpSize() const;
     virtual bool presetIsValid();
-    
+
 
 private:
     KisBrushOptionWidget * m_brushOption;

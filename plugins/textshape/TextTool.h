@@ -124,7 +124,7 @@ public:
 
     KoTextEditor *textEditor() { return m_textEditor.data(); }
 
-    QRectF caretRect(int position) const;
+    QRectF caretRect(QTextCursor *cursor) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
@@ -135,7 +135,12 @@ public slots:
     void addCommand(QUndoCommand *command);
     /// reimplemented from KoToolBase
     virtual void resourceChanged(int key, const QVariant &res);
-
+    //When enabled, display changes
+    void toggleShowChanges(bool);
+    /// When enabled, make the change tracker record changes made while typing
+    void toggleRecordChanges(bool);
+    /// Configure Change Tracking
+    void configureChangeTracking();
     /// call this when the 'is-bidi' boolean has been changed.
     void isBidiUpdated();
 
@@ -216,12 +221,6 @@ private slots:
     void splitTableCells();
     /// shows a dialog to alter the paragraph properties
     void formatParagraph();
-    //When enabled, display changes
-    void toggleShowChanges(bool);
-    /// When enabled, make the change tracker record changes made while typing
-    void toggleRecordChanges(bool);
-    /// Configure Change Tracking
-    void configureChangeTracking();
     /// select all text in the current document.
     void selectAll();
     /// show the style manager
@@ -261,6 +260,7 @@ private slots:
     void shapeAddedToCanvas();
 
     void blinkCaret();
+    void relayoutContent();
 
     // called when the m_textShapeData has been deleted.
     void shapeDataRemoved();
@@ -272,8 +272,7 @@ private slots:
     void debugTextDocument();
     /// print debug about the details of the styles on the current text document
     void debugTextStyles();
-    /// the document we are editing has received an extra shape
-    void shapeAddedToDoc(KoShape *shape);
+
     void ensureCursorVisible();
 
     void testSlot(bool);
@@ -281,7 +280,6 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    void repaintSelection(QTextCursor &cursor);
     int pointToPosition(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
@@ -303,8 +301,8 @@ private:
     friend class ShowChangesCommand;
     friend class ChangeTrackedDeleteCommand;
     friend class DeleteCommand;
-    TextShape *m_textShape;
-    KoTextShapeData *m_textShapeData;
+    TextShape *m_textShape; // where caret of m_textEditor currently is
+    KoTextShapeData *m_textShapeData; // where caret of m_textEditor currently is
     QWeakPointer<KoTextEditor> m_textEditor;
     KoChangeTracker *m_changeTracker;
     bool m_allowActions;
@@ -360,6 +358,7 @@ private:
     QTimer m_changeTipTimer;
     int m_changeTipCursorPos;
     QPoint m_changeTipPos;
+    bool m_delayedEnsureVisible;
 };
 
 #endif

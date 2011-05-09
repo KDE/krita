@@ -37,6 +37,8 @@ public:
 
     KoPAPageBase *page() const;
 
+    virtual QRectF rect() const;
+
 private:
     int m_pageNumber;
     KoPAPageBase * m_page;

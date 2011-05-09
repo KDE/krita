@@ -44,10 +44,12 @@ public:
 
     int diameter() const;
     void setDiameter(int diameter);
-    
+
     void setSpacing(qreal spacing);
     qreal spacing() const;
-    
+
+    qreal brushAspect() const;
+
     void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     void readOptionSetting(const KisPropertiesConfiguration* setting);
 
@@ -65,7 +67,7 @@ public:
     qreal rotation;
     qreal spacing;
     qreal density;
-    
+
     qreal jitterMovementAmount;
     bool jitterEnabled;
 
@@ -76,7 +78,7 @@ public:
         diameter = quint16(settings->getDouble(BRUSH_DIAMETER));
         aspect = settings->getDouble(BRUSH_ASPECT);
         rotation = settings->getDouble(BRUSH_ROTATION) * (M_PI/180.0);
-        scale = settings->getDouble(BRUSH_SCALE);    
+        scale = settings->getDouble(BRUSH_SCALE);
         density = settings->getDouble(BRUSH_DENSITY) * 0.01;
         spacing = settings->getDouble(BRUSH_SPACING);
         if ((jitterEnabled = settings->getBool(BRUSH_JITTER_MOVEMENT_ENABLED))){

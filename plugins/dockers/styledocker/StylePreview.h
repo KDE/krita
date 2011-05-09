@@ -60,17 +60,17 @@ public:
     /**
      * Returns whether the stroke (true) or the fill (false) is selected.
      */
-    bool strokeIsSelected() const { return m_strokeWidget; }
+    bool strokeIsSelected() const { return m_strokeSelected; }
 
 signals:
     /// Is emitted as soon as the stroke was changed
     void strokeChanged(const KoShapeBorderModel &);
     /// Is emitted as soon as the fill was changed
     void fillChanged(const QBrush&);
-    /// Is emitted as soon as the fill is selected
-    void fillSelected();
     /// Is emitted as soon as the stroke is selected
     void strokeSelected();
+    /// Is emitted as soon as the fill is selected
+    void fillSelected();
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
@@ -79,11 +79,11 @@ private:
     void drawFill(QPainter & painter, const KoShapeBackground * fill);
     void drawStroke(QPainter & painter, const KoShapeBorderModel*);
 
-    bool m_strokeWidget; ///< shows if stroke or fill is selected
-    KoShapeBackground * m_background; ///< the fill to preview
-    KoShapeBorderModel * m_stroke; ///< the stroke to preview
+    bool m_strokeSelected; ///< true if stroke is selected, false if fill is selected
     QRectF m_strokeRect;
     QRectF m_fillRect;
+    KoShapeBorderModel *m_stroke; ///< the stroke to preview
+    KoShapeBackground  *m_fill; ///< the fill to preview
     KoCheckerBoardPainter m_checkerPainter;
 };
 

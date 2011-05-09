@@ -789,10 +789,8 @@ void KoReportDesigner::setDetail(ReportSectionDetail *rsd)
 }
 void KoReportDesigner::deleteDetail()
 {
-    if (m_detail) {
-        delete m_detail;
-        m_detail = 0;
-    }
+    delete m_detail;
+    m_detail = 0;
 }
 
 KoUnit KoReportDesigner::pageUnit() const

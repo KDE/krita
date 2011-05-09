@@ -26,7 +26,6 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
@@ -225,7 +224,6 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
         if (d->listStyle) {
             if (!d->list)
                 d->list = new KoList(block.document(), d->listStyle);
-            qDebug()<<"paragraph has"<<d->listStyle<<d->list;
             d->list->add(block, listLevel());
         } else {
             if (block.textList())
@@ -1412,6 +1410,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             brush.setColor(bgcolor); // #rrggbb format
         }
         setBackground(brush);
+    }
+    
+    // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
+    if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
+        setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
     }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,

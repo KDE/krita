@@ -85,6 +85,12 @@ void KisBrushOptionWidget::setBrushSize(qreal dxPixels, qreal dyPixels)
 }
 
 
+QSizeF KisBrushOptionWidget::brushSize() const
+{
+    return m_brushSelectionWidget->brushSize();
+}
+
+
 void KisBrushOptionWidget::brushChanged()
 {
     m_brushOption.setBrush(brush());

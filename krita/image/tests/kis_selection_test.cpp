@@ -72,7 +72,7 @@ void KisSelectionTest::testSelectionActions()
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
     tmpSel->select(QRect(10, 0, 20, 20));
 
-    pixelSelection->addSelection(tmpSel);
+    pixelSelection->applySelection(tmpSel, SELECTION_ADD);
     QCOMPARE(pixelSelection->selectedExactRect(), QRect(0, 0, 30, 20));
     selection->updateProjection();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 30, 20));
@@ -80,7 +80,7 @@ void KisSelectionTest::testSelectionActions()
     pixelSelection->clear();
     pixelSelection->select(QRect(0, 0, 20, 20));
 
-    pixelSelection->subtractSelection(tmpSel);
+    pixelSelection->applySelection(tmpSel, SELECTION_SUBTRACT);
     selection->updateProjection();
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 10, 20));
 
@@ -88,7 +88,7 @@ void KisSelectionTest::testSelectionActions()
     selection->updateProjection();
     pixelSelection->select(QRect(0, 0, 20, 20));
 
-    pixelSelection->intersectSelection(tmpSel);
+    pixelSelection->applySelection(tmpSel, SELECTION_INTERSECT);
     selection->updateProjection();
     QCOMPARE(selection->selectedExactRect(), QRect(10, 0, 10, 20));
 }
@@ -98,17 +98,18 @@ void KisSelectionTest::testInvertSelection()
     KisSelectionSP selection = new KisSelection();
     KisPixelSelectionSP pixelSelection = selection->getOrCreatePixelSelection();
     pixelSelection->select(QRect(20, 20, 20, 20));
-    QCOMPARE(pixelSelection->selected(30, 30), MAX_SELECTED);
-    QCOMPARE(pixelSelection->selected(0, 0), MIN_SELECTED);
-    QCOMPARE(pixelSelection->selected(512, 512), MIN_SELECTED);
+
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 30, 30), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 512, 512), MIN_SELECTED);
 
     pixelSelection->invert();
 
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 100, 100), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 22, 22), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 0, 0), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 512, 512), MAX_SELECTED);
 
-    QCOMPARE(pixelSelection->selected(100, 100), MAX_SELECTED);
-    QCOMPARE(pixelSelection->selected(22, 22), MIN_SELECTED);
-    QCOMPARE(pixelSelection->selected(0, 0), MAX_SELECTED);
-    QCOMPARE(pixelSelection->selected(512, 512), MAX_SELECTED);
     pixelSelection->convertToQImage(0, 0, 0, 100, 100).save("yyy.png");
     // XXX: This should happen automatically
     selection->updateProjection();
@@ -117,12 +118,11 @@ void KisSelectionTest::testInvertSelection()
     QCOMPARE(selection->selectedExactRect(), QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX));
     QCOMPARE(selection->selectedRect(), QRect(qint32_MIN/2, qint32_MIN/2, qint32_MAX, qint32_MAX));
 
-    QCOMPARE(selection->selected(100, 100), MAX_SELECTED);
-    QCOMPARE(selection->selected(22, 22), MIN_SELECTED);
-    QCOMPARE(selection->selected(10, 10), MAX_SELECTED);
-    QCOMPARE(selection->selected(0, 0), MAX_SELECTED);
-    QCOMPARE(selection->selected(512, 512), MAX_SELECTED);
-
+    QCOMPARE(TestUtil::alphaDevicePixel(selection, 100, 100), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection, 22, 22), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection, 10, 10), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection, 0, 0), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(selection, 512, 512), MAX_SELECTED);
 }
 
 void KisSelectionTest::testUpdateSelectionProjection()

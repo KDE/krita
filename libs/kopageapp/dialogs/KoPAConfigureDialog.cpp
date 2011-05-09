@@ -23,6 +23,8 @@
 #include <KoConfigDocumentPage.h>
 #include <KoConfigGridPage.h>
 #include <KoConfigMiscPage.h>
+#include <KoPACanvasBase.h>
+#include <KoShapeController.h>
 
 #include <klocale.h>
 
@@ -34,7 +36,7 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     setButtons(KDialog::Ok | KDialog::Apply | KDialog::Cancel | KDialog::Default);
     setDefaultButton(KDialog::Ok);
 
-    m_miscPage = new KoConfigMiscPage( parent->koDocument() );
+    m_miscPage = new KoConfigMiscPage( parent->koDocument(), parent->kopaCanvas()->shapeController()->resourceManager() );
     KPageWidgetItem *item = addPage( m_miscPage, i18n( "Misc" ) );
     item->setHeader( i18n( "Misc" ) );
     item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
@@ -53,12 +55,14 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
+    connect( this, SIGNAL( applyClicked() ), this, SLOT( slotApply() ) );
 }
 
 void KoPAConfigureDialog::slotApply()
 {
     m_docPage->apply();
     m_gridPage->apply();
+    m_miscPage->apply();
 }
 
 void KoPAConfigureDialog::slotDefault()

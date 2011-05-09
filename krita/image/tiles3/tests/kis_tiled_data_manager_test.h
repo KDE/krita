@@ -40,6 +40,8 @@ private:
                              bool takeOldSrc, bool takeOldDst,
                              QRect tilesRect);
 
+    void benchmarkCOWImpl();
+
 private slots:
     void testUnversionedBitBlt();
     void testVersionedBitBlt();
@@ -48,6 +50,9 @@ private slots:
     void testPurgeHistory();
     void benchmarkReadOnlyTileLazy();
     void benchmarkSharedPointers();
+
+    void benchmarkCOWNoPooler();
+    void benchmarkCOWWithPooler();
 
     void stressTest();
 };

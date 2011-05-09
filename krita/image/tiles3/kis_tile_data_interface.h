@@ -84,7 +84,7 @@ public:
      * Increments usersCount of a TD and refs shared pointer counter
      * Used by KisTile for COW
      */
-    inline bool acquire() const;
+    inline bool acquire();
 
     /**
      * Decrements usersCount of a TD and derefs shared pointer counter
@@ -169,6 +169,7 @@ private:
     static void freeData(quint8 *ptr, const qint32 pixelSize);
 private:
     friend class KisTileDataPooler;
+    friend class KisTileDataPoolerTest;
     /**
      * A list of pre-duplicated tiledatas.
      * To make a COW faster, KisTileDataPooler thread duplicates

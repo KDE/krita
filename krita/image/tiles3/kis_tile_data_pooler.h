@@ -32,14 +32,13 @@ class KisTileDataPooler : public QThread
 
 public:
 
-    KisTileDataPooler(KisTileDataStore *store);
+    KisTileDataPooler(KisTileDataStore *store, qint32 memoryLimit = -1);
     virtual ~KisTileDataPooler();
 
     void kick();
     void terminatePooler();
 
 protected:
-
     static const qint32 MAX_NUM_CLONES;
     static const qint32 MAX_TIMEOUT;
     static const qint32 MIN_TIMEOUT;
@@ -49,8 +48,24 @@ protected:
     qint32 numClonesNeeded(KisTileData *td) const;
     void cloneTileData(KisTileData *td, qint32 numClones) const;
     void run();
+
+    inline int clonesMetric(KisTileData *td, int numClones);
+    inline int clonesMetric(KisTileData *td);
+
+    inline void tryFreeOrphanedClones(KisTileData *td);
+    inline qint32 needMemory(KisTileData *td);
+    inline qint32 canDonorMemory(KisTileData *td);
+    qint32 tryGetMemory(QList<KisTileData*> &donors, qint32 memoryMetric);
+
+    template<class Iter>
+        void getLists(Iter *iter, QList<KisTileData*> &beggers,
+                      QList<KisTileData*> &donors, qint32 &memoryOccupied);
+
+    bool processLists(QList<KisTileData*> &beggers,
+                      QList<KisTileData*> &donors,
+                      qint32 memoryOccupied);
+
 private:
-    bool interestingTileData(KisTileData* td);
     void debugTileStatistics();
 protected:
     QSemaphore m_semaphore;
@@ -58,6 +73,7 @@ protected:
     KisTileDataStore *m_store;
     qint32 m_timeout;
     bool m_lastCycleHadWork;
+    qint32 m_memoryLimit;
 };
 
 

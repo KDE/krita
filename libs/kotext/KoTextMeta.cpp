@@ -132,11 +132,6 @@ KoTextMeta *KoTextMeta::endBookmark() const
     return d->endBookmark;
 }
 
-KoShape *KoTextMeta::shape() const
-{
-    return shapeForPosition(d->document, d->posInDocument);
-}
-
 int KoTextMeta::position() const
 {
     return d->posInDocument;

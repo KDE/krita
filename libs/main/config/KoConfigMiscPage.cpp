@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Laurent Montel <lmontel@mandrakesoft.com>
-   Copyright (C) 2006-2007,2010 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2007,2010-2011 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2009 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@
 #include <KoUnit.h>
 #include <KoDocument.h>
 #include <KoUnitDoubleSpinBox.h>
+#include <KoResourceManager.h>
 
 #include <kcomponentdata.h>
 #include <kcombobox.h>
@@ -35,16 +36,18 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QGroupBox>
 #include <QtGui/QLabel>
+#include <QtGui/QCheckBox>
 
 class KoConfigMiscPage::Private
 {
 public:
-    Private(KoDocument* doc)
-    : doc(doc)
+    Private(KoDocument* doc, KoResourceManager *documentResources)
+            : doc(doc), docResources(documentResources)
     {}
 
     KoDocument* doc;
     KSharedConfigPtr config;
+    KoResourceManager *docResources;
 
     KoUnit oldUnit;
     QComboBox *unit;
@@ -52,28 +55,23 @@ public:
     uint oldHandleRadius;
     KIntNumInput * grabSensitivity;
     uint oldGrabSensitivity;
-    KoUnitDoubleSpinBox* copyOffset;
-    qreal oldCopyOffset;
+    KoUnitDoubleSpinBox* pasteOffset;
+    qreal oldPasteOffset;
+    QCheckBox *pasteAtCursor;
+    bool oldPasteAtCursor;
 };
 
-KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
-: d(new Private(doc))
+KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoResourceManager *documentResources, char* name)
+        : d(new Private(doc, documentResources))
 {
     setObjectName(name);
 
     d->config = d->doc->componentData().config();
 
-    d->oldGrabSensitivity = 3;
-    d->oldHandleRadius = 3;
-    d->oldCopyOffset = 10.0;
-
-    if (d->config->hasGroup("Misc")) {
-        KConfigGroup miscGroup = d->config->group("Misc");
-
-        d->oldGrabSensitivity = miscGroup.readEntry("GrabSensitivity", d->oldGrabSensitivity);
-        d->oldHandleRadius = miscGroup.readEntry("HandleRadius", d->oldHandleRadius);
-        d->oldCopyOffset = miscGroup.readEntry("CopyOffset", d->oldCopyOffset);
-    }
+    d->oldGrabSensitivity = d->docResources->grabSensitivity();
+    d->oldHandleRadius = d->docResources->handleRadius();
+    d->oldPasteOffset = d->docResources->pasteOffset();
+    d->oldPasteAtCursor = d->docResources->pasteAtCursor();
 
     KoUnit unit = d->doc->unit();
 
@@ -112,20 +110,27 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, char* name)
     d->grabSensitivity->setValue(d->oldGrabSensitivity);
     grid->addWidget(d->grabSensitivity, 2, 1);
 
-    grid->addWidget(new QLabel(i18n("Copy offset:"), tmpQGroupBox), 3, 0);
+    grid->addWidget(new QLabel(i18n("Paste offset:"), tmpQGroupBox), 3, 0);
 
-    d->copyOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
-    d->copyOffset->setMinMaxStep(-1000, 1000, 0.1);
-    d->copyOffset->setValue(d->oldCopyOffset);
-    d->copyOffset->setUnit(unit);
-    grid->addWidget(d->copyOffset, 3, 1);
+    d->pasteOffset = new KoUnitDoubleSpinBox(tmpQGroupBox);
+    d->pasteOffset->setMinMaxStep(-1000, 1000, 0.1);
+    d->pasteOffset->setValue(d->oldPasteOffset);
+    d->pasteOffset->setUnit(unit);
+    d->pasteOffset->setDisabled(d->oldPasteAtCursor);
+    grid->addWidget(d->pasteOffset, 3, 1);
 
-    grid->setRowStretch(4, 1);
+    grid->addWidget(new QLabel(i18n("Paste at Cursor"), tmpQGroupBox), 4, 0);
+    d->pasteAtCursor = new QCheckBox(tmpQGroupBox);
+    d->pasteAtCursor->setChecked(d->oldPasteAtCursor);
+    grid->addWidget(d->pasteAtCursor, 4, 1);
+
+    grid->setRowStretch(5, 1);
 
     tmpQGroupBox->setLayout(grid);
 
     connect(d->unit, SIGNAL(activated(int)), SIGNAL(unitChanged(int)));
     connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
+    connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->pasteOffset, SLOT(setDisabled(bool)));
 }
 
 KoConfigMiscPage::~KoConfigMiscPage()
@@ -147,19 +152,26 @@ void KoConfigMiscPage::apply()
     uint currentHandleRadius = d->handleRadius->value();
     if (currentHandleRadius != d->oldHandleRadius) {
         miscGroup.writeEntry( "HandleRadius", currentHandleRadius );
+        d->docResources->setHandleRadius(currentHandleRadius);
     }
 
     uint currentGrabSensitivity = d->grabSensitivity->value();
     if (currentGrabSensitivity != d->oldGrabSensitivity) {
         miscGroup.writeEntry("GrabSensitivity", currentGrabSensitivity);
+        d->docResources->setGrabSensitivity(currentGrabSensitivity);
     }
 
-    qreal currentCopyOffset = d->copyOffset->value();
-    if (currentCopyOffset != d->oldCopyOffset) {
+    qreal currentCopyOffset = d->pasteOffset->value();
+    if (currentCopyOffset != d->oldPasteOffset) {
         miscGroup.writeEntry("CopyOffset", currentCopyOffset);
+        d->docResources->setPasteOffset(currentCopyOffset);
     }
 
-    // FIXME how is the handle radius and grap sensitivitiy set?
+    const bool currentPasteAtCursor = d->pasteAtCursor->isChecked();
+    if (currentPasteAtCursor != d->oldPasteAtCursor) {
+        miscGroup.writeEntry("PasteAtCursor", currentPasteAtCursor);
+        d->docResources->enablePasteAtCursor(currentPasteAtCursor);
+    }
 }
 
 void KoConfigMiscPage::slotDefault()
@@ -170,9 +182,9 @@ void KoConfigMiscPage::slotDefault()
 void KoConfigMiscPage::slotUnitChanged(int u)
 {
     KoUnit unit = KoUnit((KoUnit::Unit) u);
-    d->copyOffset->blockSignals(true);
-    d->copyOffset->setUnit(unit);
-    d->copyOffset->blockSignals(false);
+    d->pasteOffset->blockSignals(true);
+    d->pasteOffset->setUnit(unit);
+    d->pasteOffset->blockSignals(false);
 }
 
 #include <KoConfigMiscPage.moc>

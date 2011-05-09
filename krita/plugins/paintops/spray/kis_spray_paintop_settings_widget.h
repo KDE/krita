@@ -35,8 +35,9 @@ public:
     KisSprayPaintOpSettingsWidget(QWidget* parent = 0);
     virtual ~KisSprayPaintOpSettingsWidget();
 
-    
+
     virtual void changePaintOpSize(qreal x, qreal y);
+    virtual QSizeF paintOpSize() const;
     KisPropertiesConfiguration* configuration() const;
 
 public:

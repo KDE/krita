@@ -38,7 +38,7 @@ class KisPaintLayer::Private
 {
 public:
     KisPaintDeviceSP paintDevice;
-    bool alphaLocked;
+    QBitArray        paintChannelFlags;
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
@@ -47,7 +47,6 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 {
 
     Q_ASSERT(dev);
-    m_d->alphaLocked = false;
     m_d->paintDevice = dev;
     m_d->paintDevice->setParentNode(this);
 
@@ -63,7 +62,6 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 {
     Q_ASSERT(image);
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
-    m_d->alphaLocked = false;
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -76,7 +74,6 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     }
     Q_ASSERT(colorSpace);
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
-    m_d->alphaLocked = false;
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -84,7 +81,7 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
         , KisIndirectPaintingSupport()
         , m_d(new Private)
 {
-    m_d->alphaLocked = rhs.m_d->alphaLocked;
+    m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
     m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data());
     m_d->paintDevice->setParentNode(this);
 }
@@ -127,9 +124,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
     if (hasTemporaryTarget()) {
         gc.setOpacity(temporaryOpacity());
         gc.setCompositeOp(temporaryCompositeOp());
-        if (alphaLocked()) {
-            gc.setLockAlpha(true);
-        }
+        gc.setChannelFlags(temporaryChannelFlags());
         gc.bitBlt(rect.topLeft(), temporaryTarget(), rect);
     }
 
@@ -150,18 +145,25 @@ void KisPaintLayer::setImage(KisImageWSP image)
 KoDocumentSectionModel::PropertyList KisPaintLayer::sectionModelProperties() const
 {
     KoDocumentSectionModel::PropertyList l = KisLayer::sectionModelProperties();
+    
     // XXX: get right icons
-    l << KoDocumentSectionModel::Property(i18n("Alpha Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Locked"), KIcon("transparency-locked"), KIcon("transparency-unlocked"), alphaLocked());
+    l << KoDocumentSectionModel::Property(i18n("Alpha Channel Disabled"), KIcon("transparency-disabled"), KIcon("transparency-enabled"), alphaChannelDisabled());
+    
     return l;
 }
 
 void KisPaintLayer::setSectionModelProperties(const KoDocumentSectionModel::PropertyList &properties)
 {
     foreach (KoDocumentSectionModel::Property property, properties) {
-        if (property.name == i18n("Alpha Locked")) {
+        if (property.name == i18n("Alpha Channel Locked")) {
             setAlphaLocked(property.state.toBool());
         }
+        else if (property.name == i18n("Alpha Channel Disabled")) {
+            disableAlphaChannel(property.state.toBool());
+        }
     }
+    
     KisLayer::setSectionModelProperties(properties);
 }
 
@@ -173,6 +175,17 @@ const KoColorSpace * KisPaintLayer::colorSpace() const
 bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);
+}
+
+void KisPaintLayer::setChannelLockFlags(const QBitArray& channelFlags)
+{
+    Q_ASSERT(((quint32)channelFlags.count() == colorSpace()->channelCount() || channelFlags.isEmpty()));
+    m_d->paintChannelFlags = channelFlags;
+}
+
+const QBitArray& KisPaintLayer::channelLockFlags() const
+{
+    return m_d->paintChannelFlags;
 }
 
 QRect KisPaintLayer::extent() const
@@ -189,12 +202,19 @@ QRect KisPaintLayer::exactBounds() const
 
 bool KisPaintLayer::alphaLocked() const
 {
-    return m_d->alphaLocked;
+    QBitArray flags = colorSpace()->channelFlags(false, true, false, false) & m_d->paintChannelFlags;
+    return flags.count(true) == 0 && !m_d->paintChannelFlags.isEmpty();
 }
 
-void KisPaintLayer::setAlphaLocked(bool l)
+void KisPaintLayer::setAlphaLocked(bool lock)
 {
-    m_d->alphaLocked = l;
+    if(m_d->paintChannelFlags.isEmpty())
+        m_d->paintChannelFlags = colorSpace()->channelFlags(true, true, true, true);
+    
+    if(lock)
+        m_d->paintChannelFlags &= colorSpace()->channelFlags(true, false, true, true);
+    else
+        m_d->paintChannelFlags |= colorSpace()->channelFlags(false, true, false, false);
 }
 
 

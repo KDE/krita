@@ -378,7 +378,64 @@ void KisTiledDataManagerTest::benchmarkSharedPointers()
     //CALLGRIND_STOP_INSTRUMENTATION;
 }
 
+void KisTiledDataManagerTest::benchmarkCOWImpl()
+{
+    const int pixelSize = 8;
+    quint8 defaultPixel[pixelSize];
+    memset(defaultPixel, 1, pixelSize);
 
+    KisTiledDataManager dm(pixelSize, defaultPixel);
+
+
+    KisMementoSP memento1 = dm.getMemento();
+
+    /**
+     * Imagine a regular image of 4096x2048 pixels
+     * (64x32 tiles)
+     */
+    for (int i = 0; i < 32; i++) {
+        for (int j = 0; j < 64; j++) {
+            KisTileSP tile = dm.getTile(j, i, true);
+            tile->lockForWrite();
+            tile->unlock();
+        }
+    }
+
+    dm.commit();
+
+    QTest::qSleep(500);
+
+    KisMementoSP memento2 = dm.getMemento();
+    QTest::qSleep(500);
+    QBENCHMARK {
+
+        for (int i = 0; i < 32; i++) {
+            for (int j = 0; j < 64; j++) {
+                KisTileSP tile = dm.getTile(j, i, true);
+                tile->lockForWrite();
+                tile->unlock();
+            }
+        }
+
+    }
+    dm.commit();
+}
+
+void KisTiledDataManagerTest::benchmarkCOWNoPooler()
+{
+    KisTileDataStore::instance()->testingSuspendPooler();
+    QTest::qSleep(500);
+
+    benchmarkCOWImpl();
+
+    KisTileDataStore::instance()->testingResumePooler();
+    QTest::qSleep(500);
+}
+
+void KisTiledDataManagerTest::benchmarkCOWWithPooler()
+{
+    benchmarkCOWImpl();
+}
 
 /******************* Stress job ***********************/
 

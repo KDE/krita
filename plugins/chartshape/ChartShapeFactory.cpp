@@ -147,7 +147,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
 
     Axis    *xAxis      = shape->plotArea()->xAxis();
     KoShape *xAxisTitle = xAxis->title();
-    if ( xAxis ) {
+    if ( xAxisTitle ) {
         xAxis->setTitleText( i18n( "Month" ) );
         xAxisTitle->setPosition( QPointF( shapeSize.width() / 2.0 - xAxisTitle->size().width() / 2.0,
                                           shapeSize.height() - xAxisTitle->size().height() ) );
@@ -156,7 +156,7 @@ KoShape *ChartShapeFactory::createDefaultShape(KoResourceManager *documentResour
 
     Axis    *yAxis      = shape->plotArea()->yAxis();
     KoShape *yAxisTitle = yAxis->title();
-    if ( yAxis ) {
+    if ( yAxisTitle ) {
         yAxis->setTitleText( i18n( "Growth in %") );
         yAxisTitle->setPosition( QPointF( -yAxisTitle->size().width() / 2.0 + yAxisTitle->size().height() / 2.0,
                                           shapeSize.height() / 2.0 - yAxisTitle->size().height() / 2.0 ) );

@@ -19,8 +19,15 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <QMutexLocker>
+#include <QMutex>
 
+#include <kservice.h>
+#include <kservicetypetrader.h>
+
+#include <KoResourceManager.h>
 #include "KoShapeFactoryBase.h"
+#include "KoDeferredShapeFactoryBase.h"
 #include "KoShape.h"
 #include <KoProperties.h>
 
@@ -29,11 +36,13 @@
 class KoShapeFactoryBase::Private
 {
 public:
-    Private(const QString &i, const QString &n)
-            : id(i),
-            name(n),
-            loadingPriority(0),
-            hidden(false)
+    Private(const QString &_id, const QString &_name, const QString &_deferredPluginName)
+        : deferredFactory(0),
+          deferredPluginName(_deferredPluginName),
+          id(_id),
+          name(_name),
+          loadingPriority(0),
+          hidden(false)
     {
     }
 
@@ -43,6 +52,9 @@ public:
         templates.clear();
     }
 
+    KoDeferredShapeFactoryBase *deferredFactory;
+    QMutex pluginLoadingMutex;
+    QString deferredPluginName;
     QList<KoShapeTemplate> templates;
     QList<KoShapeConfigFactoryBase*> configPanels;
     const QString id;
@@ -53,11 +65,12 @@ public:
     int loadingPriority;
     QList<QPair<QString, QStringList> > odfElements; // odf name space -> odf element names
     bool hidden;
+    QList<KoResourceManager *> resourceManagers;
 };
 
 
-KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name)
-        : d(new Private(id, name))
+KoShapeFactoryBase::KoShapeFactoryBase(const QString &id, const QString &name, const QString &deferredPluginName)
+    : d(new Private(id, name, deferredPluginName))
 {
 }
 
@@ -166,10 +179,66 @@ void KoShapeFactoryBase::setHidden(bool hidden)
 
 void KoShapeFactoryBase::newDocumentResourceManager(KoResourceManager *manager)
 {
-    Q_UNUSED(manager);
+    d->resourceManagers.append(manager);
+    connect(manager, SIGNAL(destroyed(QObject *)), this, SLOT(pruneDocumentResourceManager(QObject*)));
 }
 
-KoShape *KoShapeFactoryBase::createShape(const KoProperties*, KoResourceManager *documentResources) const
+QList<KoResourceManager *> KoShapeFactoryBase::documentResourceManagers() const
 {
+    return d->resourceManagers;
+}
+
+KoShape *KoShapeFactoryBase::createDefaultShape(KoResourceManager *documentResources) const
+{
+    if (!d->deferredPluginName.isEmpty()) {
+        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        Q_ASSERT(d->deferredFactory);
+        if (d->deferredFactory) {
+            return d->deferredFactory->createDefaultShape(documentResources);
+        }
+    }
+    return 0;
+}
+
+KoShape *KoShapeFactoryBase::createShape(const KoProperties* properties,
+                                         KoResourceManager *documentResources) const
+{
+    if (!d->deferredPluginName.isEmpty()) {
+        const_cast<KoShapeFactoryBase*>(this)->getDeferredPlugin();
+        Q_ASSERT(d->deferredFactory);
+        if (d->deferredFactory) {
+            return d->deferredFactory->createShape(properties, documentResources);
+        }
+    }
     return createDefaultShape(documentResources);
+}
+
+
+void KoShapeFactoryBase::getDeferredPlugin()
+{
+    QMutexLocker(&d->pluginLoadingMutex);
+    if (d->deferredFactory) return;
+
+    const QString serviceType = "Calligra/Deferred";
+    QString query = QString::fromLatin1("(Type == 'Service') and (Name == '%1')").arg(d->deferredPluginName);
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    Q_ASSERT(offers.size() > 0);
+
+    foreach(KSharedPtr<KService> service, offers) {
+        QString error = 0;
+        KoDeferredShapeFactoryBase *plugin = service->createInstance<KoDeferredShapeFactoryBase>(this);
+        if (plugin) {
+            d->deferredFactory = plugin;
+        }
+        else {
+            kWarning(30003) << "loading plugin" << service->name() << "failed, " << error;
+        }
+    }
+
+}
+
+void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *obj)
+{
+    KoResourceManager *r = qobject_cast<KoResourceManager*>(obj);
+    d->resourceManagers.removeAll(r);
 }

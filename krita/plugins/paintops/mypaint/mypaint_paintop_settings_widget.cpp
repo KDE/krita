@@ -81,7 +81,7 @@ MyPaintSettingsWidget:: MyPaintSettingsWidget(QWidget* parent)
 {
     m_options = new Ui::WdgMyPaintOptions();
     m_options->setupUi(this);
-    
+
     m_options->radiusSlider->setRange(-2.0, 5.0, 2);
     m_options->radiusSlider->setValue(2.0);
 }
@@ -94,12 +94,12 @@ MyPaintSettingsWidget::~ MyPaintSettingsWidget()
 void  MyPaintSettingsWidget::setConfiguration( const KisPropertiesConfiguration * config)
 {
     m_activeBrushFilename = config->getString("filename");
-    
+
     MyPaintBrushResource* brush;
     MyPaintFactory *factory = static_cast<MyPaintFactory*>(KisPaintOpRegistry::instance()->get("mypaintbrush"));
     brush = factory->brush(m_activeBrushFilename);
     m_options->radiusSlider->setValue(brush->setting_value_by_cname("radius_logarithmic"));
-    
+
     connect(m_options->radiusSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationUpdated()));
 }
 
@@ -131,4 +131,10 @@ void MyPaintSettingsWidget::changePaintOpSize(qreal x, qreal y)
 {
     float value = expf(m_options->radiusSlider->value()) + x;
     m_options->radiusSlider->setValue(log(value));
+}
+
+QSizeF MyPaintSettingsWidget::paintOpSize() const
+{
+    // TODO: return size of the brush
+    return KisPaintOpSettingsWidget::paintOpSize();
 }

@@ -354,10 +354,7 @@ void KisScratchPad::initPainting(QEvent* event) {
     if (!targetDevice)
         targetDevice = paintDevice;
 
-    if (m_painter) {
-        delete m_painter;
-    }
-
+    delete m_painter;
 
     m_painter = new KisPainter(targetDevice);
     m_painter->beginTransaction("scratchpad stroke");

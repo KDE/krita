@@ -90,8 +90,7 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WFlags f)
 
 KisCurveWidget::~KisCurveWidget()
 {
-    if (d->m_pixmapCache)
-        delete d->m_pixmapCache;
+    delete d->m_pixmapCache;
     delete d;
 }
 
@@ -250,8 +249,7 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
     //  draw background
     if (!d->m_pix.isNull()) {
         if (d->m_pixmapDirty || !d->m_pixmapCache) {
-            if (d->m_pixmapCache)
-                delete d->m_pixmapCache;
+            delete d->m_pixmapCache;
             d->m_pixmapCache = new QPixmap(width(), height());
             QPainter cachePainter(d->m_pixmapCache);
 

@@ -7,6 +7,7 @@ listFormat.setStyle(QTextListFormat.ListDecimal);
 setFormatProperty(listFormat, KoListStyle.ListItemSuffix, ".");
 setFormatProperty(listFormat, KoListStyle.StartValue, 1);
 setFormatProperty(listFormat, KoListStyle.DisplayLevel, 1);
+setFormatProperty(listFormat, KoListStyle.RelativeBulletSize,100);
 
 var level1Format = QTextBlockFormat.clone(defaultBlockFormat);
 setFormatProperty(level1Format, KoParagraphStyle.ListLevel, 1);

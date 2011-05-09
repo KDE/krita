@@ -50,13 +50,16 @@ public:
     int swapWindowSize() const;
     void setSwapWindowSize(int value);
 
-    int memoryHardLimit() const; // MiB
-    int memorySoftLimit() const; // MiB
+    int tilesHardLimit() const; // MiB
+    int tilesSoftLimit() const; // MiB
+    int poolLimit() const; // MiB
 
     qreal memoryHardLimitPercent() const; // % of total RAM
     qreal memorySoftLimitPercent() const; // % of total RAM
+    qreal memoryPoolLimitPercent() const; // % of total RAM
     void setMemoryHardLimitPercent(qreal value);
     void setMemorySoftLimitPercent(qreal value);
+    void setMemoryPoolLimitPercent(qreal value);
 
     static int totalRAM(); // MiB
 

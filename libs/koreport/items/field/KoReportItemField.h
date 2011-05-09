@@ -62,7 +62,9 @@ protected:
     KoProperty::Property* m_lineColor;
     KoProperty::Property* m_lineWeight;
     KoProperty::Property* m_lineStyle;
-
+    KoProperty::Property* m_wordWrap;
+    KoProperty::Property* m_canGrow;
+    
     //bool builtinFormat;
     //QString format;
 
@@ -74,7 +76,7 @@ protected:
     void setTrackTotal(bool);
     void setTrackTotalFormat(const QString &, bool = false);
     void setUseSubTotal(bool);
-    Qt::Alignment textFlags() const;
+    int textFlags() const;
 
     QFont font() const {
         return m_font->value().value<QFont>();

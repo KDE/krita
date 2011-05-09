@@ -319,6 +319,23 @@ qint32 KisBrush::maskHeight(double scale, double angle) const
     }
 }
 
+double KisBrush::maskAngle(double angle) const
+{
+    angle += d->angle;
+    
+    // Make sure the angle stay in [0;2*M_PI]
+    if(angle < 0)      { angle += 2*M_PI; }
+    if(angle > 2*M_PI) { angle -= 2*M_PI; }
+    
+    return angle;
+}
+
+quint32 KisBrush::brushIndex(const KisPaintInformation& info) const
+{
+    Q_UNUSED(info);
+    return 0;
+}
+
 double KisBrush::xSpacing(double scale) const
 {
     return width() * scale * d->spacing * d->scale;

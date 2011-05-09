@@ -26,14 +26,16 @@
 
 void KisStoreLimitsTest::testLimits()
 {
-    const int totalRAM = KisImageConfig::totalRAM();
-    const int halfRAMMetric = MiB_TO_METRIC(totalRAM / 2);
-    const int quarterRAMMetric = MiB_TO_METRIC(totalRAM / 4);
-
     KisImageConfig config;
     config.setMemoryHardLimitPercent(50);
     config.setMemorySoftLimitPercent(25);
+    config.setMemoryPoolLimitPercent(10);
 
+    const int totalRAM = KisImageConfig::totalRAM();
+
+    // values are shifted because of the pooler part
+    const int halfRAMMetric = MiB_TO_METRIC(int(totalRAM * 0.4));
+    const int quarterRAMMetric = MiB_TO_METRIC(int(totalRAM * 0.15));
 
     KisStoreLimits limits;
 

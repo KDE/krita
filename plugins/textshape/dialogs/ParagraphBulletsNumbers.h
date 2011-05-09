@@ -21,7 +21,7 @@
 #define PARAGRAPHBULLETSNUMBERS_H
 
 #include <ui_ParagraphBulletsNumbers.h>
-#include "../ListItemsHelper.h"
+#include <ListItemsHelper.h>
 
 #include <KoListStyle.h>
 

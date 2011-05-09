@@ -20,7 +20,7 @@
 #include "KoGenStyles.h"
 
 KoStyle::KoStyle()
-: m_autoStyle(false)
+: m_autoStyle(false), m_autoStyleInStylesDotXml(false)
 {
 }
 
@@ -36,6 +36,16 @@ void KoStyle::setName(QString name)
 QString KoStyle::name() const
 {
     return m_name;
+}
+
+void KoStyle::setAutoStyleInStylesDotXml(bool b)
+{
+    m_autoStyleInStylesDotXml = b;
+}
+
+bool KoStyle::autoStyleInStylesDotXml() const
+{
+    return m_autoStyleInStylesDotXml;
 }
 
 KoGenStyles::InsertionFlags KoStyle::insertionFlags() const
@@ -59,6 +69,7 @@ QString KoStyle::saveOdf(KoGenStyles& styles) const
     }
     KoGenStyle style(type, styleFamilyName());
     prepareStyle(style);
+    style.setAutoStyleInStylesDotXml(m_autoStyleInStylesDotXml);
 
     QString styleName = m_name;
     if(styleName.isEmpty()) {

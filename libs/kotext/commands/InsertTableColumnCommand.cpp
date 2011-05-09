@@ -29,13 +29,14 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right,
+InsertTableColumnCommand::InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId,
                                  QUndoCommand *parent) :
     QUndoCommand (parent)
     ,m_first(true)
     ,m_textEditor(te)
     ,m_table(t)
     ,m_right(right)
+    ,m_changeId(changeId)
 {
     if(right) {
         setText(i18n("Insert Column Right"));
@@ -73,6 +74,14 @@ void InsertTableColumnCommand::redo()
             QTextCharFormat format = cell.format();
             cell = m_table->cellAt(m_table->rows()-1, m_column);
             cell.setFormat(format);
+        }
+
+        if (m_changeId) {
+            for (int i=0; i < m_table->rows(); i++) {
+                QTextTableCellFormat cellFormat = m_table->cellAt(i, m_column).format().toTableCellFormat();
+                cellFormat.setProperty(KoCharacterStyle::ChangeTrackerId, m_changeId);
+                m_table->cellAt(i, m_column).setFormat(cellFormat);
+            }
         }
     }
 }

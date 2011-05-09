@@ -34,6 +34,7 @@ class KoListLevelProperties;
 class KoShapeLoadingContext;
 class KoGenStyle;
 
+
 /**
  * This class groups all styling-options for lists.
  * See KoParagraphStyle::setListStyle()
@@ -84,6 +85,10 @@ public:
         RomanLowerItem,
         /// use upper roman counting.  (I, II, III, IV, ...)
         UpperRomanItem,
+        /// bullet, a small circle Unicode char U+2022
+        Bullet,
+        /// black circle, a large circle Unicode char U+25CF
+        BlackCircle,
         /// draw a box
         BoxItem,
         /// rhombus, like a SquareItem but rotated by 45 degree
@@ -127,7 +132,7 @@ public:
         CharacterStyleId,///< CharacterStyle used for markup of the counter
         MarkCharacterStyleId, ///< This stores the character style used for the mark of the list item
         BulletCharacter,///< an int with the unicode value of the character (for CustomCharItem)
-        BulletSize,     ///< size in percent relative to the height of the text
+        RelativeBulletSize,     ///< size in percent relative to the height of the text
         Alignment,      ///< Alignment of the counter
         MinimumWidth,   ///< The minimum width, in pt, of the listItem including the prefix/suffix.
         ListId,         ///< A group of lists together are called 1 (user intended) list in ODF. Store the listId here
@@ -243,5 +248,6 @@ private:
     class Private;
     Private * const d;
 };
+
 
 #endif

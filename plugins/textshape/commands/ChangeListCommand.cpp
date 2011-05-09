@@ -48,7 +48,10 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
         llp.setStyle(style);
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
+            llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setListItemSuffix(".");
+        } else {
+            llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
         }
         if (lev > 1)
             llp.setIndent((lev-1) * 20); // make this configurable

@@ -31,6 +31,7 @@
 #include "flake/kis_shape_selection.h"
 #include "kis_image.h"
 #include "kis_undo_adapter.h"
+#include "testutil.h"
 
 void KisShapeSelectionTest::testAddChild()
 {
@@ -45,7 +46,8 @@ void KisShapeSelectionTest::testAddChild()
     pixelSelection->select(QRect(0, 0, 100, 100));
     // Selection is using the pixel selection as datamanager so no projection update
     // needed
-    QCOMPARE(pixelSelection->selected(25, 25), MAX_SELECTED);
+
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 100, 100));
 
     QRect rect(50, 50, 100, 100);
@@ -66,7 +68,7 @@ void KisShapeSelectionTest::testAddChild()
     selection->setShapeSelection(shapeSelection);
     shapeSelection->addShape(shape);
 
-    QCOMPARE(pixelSelection->selected(25, 25), MAX_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(pixelSelection, 25, 25), MAX_SELECTED);
     QCOMPARE(selection->selectedExactRect(), QRect(0, 0, 150, 150));
 
     selection->updateProjection();

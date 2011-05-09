@@ -60,7 +60,7 @@ struct MaskProcessor
     , m_invScaleY(invScaleY)
     , m_shape(shape)
     {
-        
+
         m_cosa = cos(angle);
         m_sina = sin(angle);
     }
@@ -69,15 +69,16 @@ struct MaskProcessor
     {
         process(rect);
     }
-    
+
     void process(QRect& rect){
 //         kDebug() << "rect " << rect;
         qreal random = 1.0;
         quint8* dabPointer = m_device->data() + rect.y() * rect.width() * m_pixelSize;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
+        // this offset is needed when brush size is smaller then fixed device size
+        int offset = (m_device->bounds().width() - rect.width()) * m_pixelSize;
         for (int y = rect.y(); y < rect.y() + rect.height(); y++) {
             for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
-
                 double x_ = (x - m_centerX) * m_invScaleX;
                 double y_ = (y - m_centerY) * m_invScaleY;
                 double maskX = m_cosa * x_ - m_sina * y_;
@@ -86,7 +87,7 @@ struct MaskProcessor
                 if (m_randomness!= 0.0){
                     random = (1.0 - m_randomness) + m_randomness * float(rand()) / RAND_MAX;
                 }
-                
+
                 alphaValue = quint8( (OPACITY_OPAQUE_U8 - m_shape->valueAt(maskX, maskY)) * random);
 
                 // avoid computation of random numbers if density is full
@@ -97,11 +98,12 @@ struct MaskProcessor
                             alphaValue = OPACITY_TRANSPARENT_U8;
                         }
                     }
-                }   
+                }
 
                 m_cs->setOpacity(dabPointer, alphaValue, 1);
                 dabPointer += m_pixelSize;
             }//endfor x
+            dabPointer += offset;
         }//endfor y
     }
 
@@ -164,13 +166,13 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // Generate the paint device from the mask
     const KoColorSpace* cs = dst->colorSpace();
     quint32 pixelSize = cs->pixelSize();
-    
+
     // mask dimension methods already includes KisBrush::angle()
-    int dstWidth = maskWidth(scaleX, angle); 
+    int dstWidth = maskWidth(scaleX, angle);
     int dstHeight = maskHeight(scaleY, angle);
-    
+
     angle += KisBrush::angle();
-    
+
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
@@ -221,18 +223,18 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // valueAt is costly similary to interpolation is some cases
     if (false && isBrushSymmetric(angle) && (dynamic_cast<PlainColoringInformation*>(coloringInformation))){
         // round eg. 14.3 to 15 so that we can interpolate
-        // we have to add one pixel because of subpixel precision (see the centerX, centerY computation) 
+        // we have to add one pixel because of subpixel precision (see the centerX, centerY computation)
         // and add one pixel because of interpolation
         int halfWidth = qRound((dstWidth - centerX) ) + 2;
         int halfHeight = qRound((dstHeight - centerY) ) + 2;
-        
+
         int size = halfWidth * halfHeight;
         if (d->precomputedQuarter.size() != size)
         {
             d->precomputedQuarter.resize(size);
         }
-        
-        // precompute the table for interpolation 
+
+        // precompute the table for interpolation
         int pos = 0;
         d->shape->setSoftness(softnessFactor);
         for (int y = 0; y < halfHeight; y++){
@@ -242,7 +244,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                 d->precomputedQuarter[pos] = d->shape->valueAt(maskX, maskY);
             }
         }
-        
+
         qreal random = 1.0;
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
         for (int y = 0; y < dstHeight; y++) {
@@ -262,7 +264,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                 if (d->randomness != 0.0){
                     random = (1.0 - d->randomness) + d->randomness * qreal(rand()) / RAND_MAX;
                 }
-                
+
                 alphaValue = quint8( ( OPACITY_OPAQUE_U8 - interpolatedValueAt(maskX, maskY,d->precomputedQuarter,halfWidth) ) * random);
                 if (d->density != 1.0){
                     // compute density only for visible pixels of the mask
@@ -271,7 +273,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                             alphaValue = OPACITY_TRANSPARENT_U8;
                         }
                     }
-                }   
+                }
 
                 cs->setOpacity(dabPointer, alphaValue, 1);
                 dabPointer += pixelSize;
@@ -282,17 +284,17 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             if (!color && coloringInformation) {
                 coloringInformation->nextRow();
             }
-            //TODO: this never happens probably? 
+            //TODO: this never happens probably?
             if (dstWidth < rowWidth) {
                 dabPointer += (pixelSize * (rowWidth - dstWidth));
             }
-            
+
         }//endfor y
-        
+
     } else
     {
         d->shape->setSoftness( softnessFactor );
-        
+
         for (int y = 0; y < dstHeight; y++) {
             for (int x = 0; x < dstWidth; x++) {
 
@@ -325,7 +327,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
             QRect rect(0, 0, dstWidth, dstHeight);
             s.process(rect);
         }
-    }//else 
+    }//else
 }
 
 
@@ -348,7 +350,7 @@ QImage KisAutoBrush::createBrushPreview()
     srand48(0);
     int width = maskWidth(1.0, 0.0);
     int height = maskHeight(1.0, 0.0);
-    
+
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, KisVector2D::Zero(), 0, 0);
 
     KisFixedPaintDeviceSP fdev = new KisFixedPaintDevice( KoColorSpaceRegistry::instance()->rgb8() );
@@ -377,34 +379,34 @@ qreal KisAutoBrush::randomness() const
 
 
 bool KisAutoBrush::isBrushSymmetric(double angle) const
-{       
-    // small brushes compute directly   
-    if (d->shape->height() < 3 ) return false;          
-    // even spikes are symmetric        
-    if ((d->shape->spikes() % 2) != 0) return false;    
-    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again          
-    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;     
-    // in other case return false       
+{
+    // small brushes compute directly
+    if (d->shape->height() < 3 ) return false;
+    // even spikes are symmetric
+    if ((d->shape->spikes() % 2) != 0) return false;
+    // main condition, if not rotated or use optimization for rotated circles - rotated circle is circle again
+    if ( angle == 0.0 || ( ( d->shape->type() == KisMaskGenerator::CIRCLE ) && ( d->shape->width() == d->shape->height() ) ) ) return true;
+    // in other case return false
     return false;
 }
 
 
-quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const 
+quint8 KisAutoBrush::interpolatedValueAt(double x, double y,const QVector<quint8> &precomputedQuarter,int width) const
 {
     x = qAbs(x);
     y = qAbs(y);
-    
-    double x_i = floor(x);         
-    double x_f = x - x_i;       
-    double x_f_r = 1.0 - x_f;   
 
-    double y_i = floor(y);      
-    double y_f = fabs(y - y_i);         
-    double y_f_r = 1.0 - y_f;   
-    
-    return (x_f_r * y_f_r * valueAt(x_i , y_i, precomputedQuarter, width) +        
-            x_f   * y_f_r * valueAt(x_i + 1, y_i, precomputedQuarter, width) +     
-            x_f_r * y_f   * valueAt(x_i,  y_i + 1, precomputedQuarter, width) +    
+    double x_i = floor(x);
+    double x_f = x - x_i;
+    double x_f_r = 1.0 - x_f;
+
+    double y_i = floor(y);
+    double y_f = fabs(y - y_i);
+    double y_f_r = 1.0 - y_f;
+
+    return (x_f_r * y_f_r * valueAt(x_i , y_i, precomputedQuarter, width) +
+            x_f   * y_f_r * valueAt(x_i + 1, y_i, precomputedQuarter, width) +
+            x_f_r * y_f   * valueAt(x_i,  y_i + 1, precomputedQuarter, width) +
             x_f   * y_f   * valueAt(x_i + 1,  y_i + 1, precomputedQuarter, width));
 }
 
@@ -427,9 +429,9 @@ QPainterPath KisAutoBrush::outline() const
         {
             path.addRect(brushBoundingbox);
         }
-        
+
         return path;
     }
-    
+
     return KisBrush::boundary()->path();
 }

@@ -77,8 +77,8 @@ KisToolLine::~KisToolLine()
 
 void KisToolLine::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
+
+    Q_UNUSED(converter);
     if (mode() == KisTool::PAINT_MODE) {
         paintLine(gc, QRect());
     }
@@ -158,10 +158,10 @@ void KisToolLine::mouseReleaseEvent(KoPointerEvent *event)
 #endif
         NodePaintAbility nodeAbility = nodePaintAbility();
         if (nodeAbility == NONE) {
-           return; 
+           return;
         }
 
-        if (nodeAbility == PAINT) {      
+        if (nodeAbility == PAINT) {
                 KisPaintDeviceSP device = currentNode()->paintDevice();
                 delete m_painter;
                 m_painter = new KisPainter(device, currentSelection());

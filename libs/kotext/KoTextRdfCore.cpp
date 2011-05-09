@@ -59,7 +59,7 @@ bool KoTextRdfCore::saveRdf(Soprano::Model *model, Soprano::StatementIterator tr
     return ok;
 }
 
-bool KoTextRdfCore::createAndSaveManifest(Soprano::Model *docmodel, const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter)
+bool KoTextRdfCore::createAndSaveManifest(const Soprano::Model *docmodel, const QMap<QString, QString> &idmap, KoStore *store, KoXmlWriter *manifestWriter)
 {
     Soprano::Model *tmpmodel(Soprano::createModel());
     QMap<QString, QString>::const_iterator iditer = idmap.constBegin();

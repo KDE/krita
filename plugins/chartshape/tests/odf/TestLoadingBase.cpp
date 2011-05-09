@@ -32,7 +32,7 @@
 // KOffice
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
-#include <KoTextShapeData.h>
+#include <KoTextShapeDataBase.h>
 
 // KChart
 #include "ChartShape.h"
@@ -143,7 +143,7 @@ void TestLoadingBase::testInternalTableSize( int rowCount, int colCount )
 void TestLoadingBase::testTitleText( const QString &text )
 {
     QVERIFY( m_chart->title() );
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( m_chart->title()->userData() );
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->title()->userData() );
     QVERIFY( data );
     QVERIFY( data->document() );
     QCOMPARE( data->document()->toPlainText(), text );
@@ -152,7 +152,7 @@ void TestLoadingBase::testTitleText( const QString &text )
 void TestLoadingBase::testSubTitleText( const QString &text )
 {
     QVERIFY( m_chart->subTitle() );
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( m_chart->subTitle()->userData() );
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->subTitle()->userData() );
     QVERIFY( data );
     QVERIFY( data->document() );
     QCOMPARE( data->document()->toPlainText(), text );
@@ -161,7 +161,7 @@ void TestLoadingBase::testSubTitleText( const QString &text )
 void TestLoadingBase::testFooterText( const QString &text )
 {
     QVERIFY( m_chart->footer() );
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( m_chart->footer()->userData() );
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( m_chart->footer()->userData() );
     QVERIFY( data );
     QVERIFY( data->document() );
     QCOMPARE( data->document()->toPlainText(), text );
@@ -171,7 +171,7 @@ void TestLoadingBase::testAxisTitle( Axis *axis, const QString &text )
 {
     QVERIFY( axis );
     QVERIFY( axis->title() );
-    KoTextShapeData *data = dynamic_cast<KoTextShapeData*>( axis->title()->userData() );
+    KoTextShapeDataBase *data = dynamic_cast<KoTextShapeDataBase*>( axis->title()->userData() );
     QVERIFY( data );
     QVERIFY( data->document() );
     QCOMPARE( data->document()->toPlainText(), text );

@@ -27,6 +27,7 @@
 #include <QTextBlock>
 
 #include <KoStyleManager.h>
+#include <KoStyleThumbnailer.h>
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
 
@@ -105,10 +106,10 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole: {
         KoParagraphStyle *paragStyle = m_styleManager->paragraphStyle(id);
         if (paragStyle)
-            return m_styleManager->thumbnail(paragStyle);
+            return m_styleThumbnailer->thumbnail(paragStyle);
         KoCharacterStyle *characterStyle =  m_styleManager->characterStyle(id);
         if (characterStyle)
-            return m_styleManager->thumbnail(characterStyle);
+            return m_styleThumbnailer->thumbnail(characterStyle);
         break;
     }
     default: break;
@@ -160,6 +161,8 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
+    m_styleThumbnailer = new KoStyleThumbnailer;
+
     if (m_styleManager == 0) {
         return;
     }
@@ -169,7 +172,7 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     KoInlineTextObjectManager *itom = new KoInlineTextObjectManager;
     m_tmpTextShape = new TextShape(itom);
     m_tmpTextShape->setSize(QSizeF(250, 300));
-    m_styleManager->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());
+    m_styleThumbnailer->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());
 
 
     if (m_paragraphMode) {

@@ -35,7 +35,7 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     m_deformOption = new KisDeformOption();
     m_brushSizeOption = new KisBrushSizeOption();
     m_brushSizeOption->setDiameter(200);
-    
+
     addPaintOpOption(m_brushSizeOption);
     addPaintOpOption(m_deformOption);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
@@ -61,6 +61,14 @@ void KisDeformPaintOpSettingsWidget::changePaintOpSize(qreal x, qreal y)
         // we can do something different, e.g. change deform mode or ...
     }
 }
+
+
+QSizeF KisDeformPaintOpSettingsWidget::paintOpSize() const
+{
+    qreal height = m_brushSizeOption->diameter() * m_brushSizeOption->brushAspect();
+    return QSizeF(m_brushSizeOption->diameter(), height);
+}
+
 
 KisPropertiesConfiguration* KisDeformPaintOpSettingsWidget::configuration() const
 {

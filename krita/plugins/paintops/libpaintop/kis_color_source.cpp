@@ -58,7 +58,7 @@ void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, co
 {
     Q_UNUSED(size);
     if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
-        if (m_cachedColor) delete m_cachedColor;
+        delete m_cachedColor;
         m_cachedColor = new KoColor(dev->colorSpace());
         m_cachedColor->fromKoColor(*m_color);
     }

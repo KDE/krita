@@ -44,7 +44,6 @@ KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list, co
         COMPOSITE_ALPHA_DARKEN <<
         COMPOSITE_IN <<
         COMPOSITE_OUT <<
-        COMPOSITE_ATOP <<
         COMPOSITE_XOR <<
         COMPOSITE_PLUS <<
         COMPOSITE_MINUS <<

@@ -764,6 +764,25 @@ void KisConfig::setFirstRun(const bool first) const
     m_cfg.writeEntry("firstRun", first);
 }
 
+int KisConfig::horizontalSplitLines() const
+{
+    return m_cfg.readEntry("horizontalSplitLines", 1);
+}
+void KisConfig::setHorizontalSplitLines(const int numberLines) const
+{
+    m_cfg.writeEntry("horizontalSplitLines", numberLines);
+}
+
+int KisConfig::verticalSplitLines() const
+{
+    return m_cfg.readEntry("verticalSplitLines", 1);
+}
+
+void KisConfig::setVerticalSplitLines(const int numberLines) const
+{
+    m_cfg.writeEntry("verticalSplitLines", numberLines);
+}
+
 bool KisConfig::clicklessSpacePan() const
 {
     return m_cfg.readEntry("clicklessSpacePan", true);

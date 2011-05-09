@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -22,11 +22,13 @@
 #define ARTISTICTEXTTOOL_H
 
 #include "ArtisticTextShape.h"
+#include "ArtisticTextToolSelection.h"
 
 #include <KoToolBase.h>
 #include <QtCore/QTimer>
 
 class QAction;
+class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
 class ArtisticTextTool : public KoToolBase 
@@ -38,13 +40,16 @@ public:
 
     /// reimplemented
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
-
+    /// reimplemented
+    virtual void repaintDecorations();
     /// reimplemented
     virtual void mousePressEvent( KoPointerEvent *event ) ;
     /// reimplemented
     virtual void mouseMoveEvent( KoPointerEvent *event );
     /// reimplemented
     virtual void mouseReleaseEvent( KoPointerEvent *event );
+    /// reimplemented
+    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
     /// reimplemented
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented
@@ -53,50 +58,65 @@ public:
     virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual KoToolSelection *selection();
+
+    /// Sets cursor for specified text shape it is the current text shape
+    void setTextCursor(ArtisticTextShape *textShape, int textCursor);
+
+    /// Returns the current text cursor position
+    int textCursor() const;
+
+    /**
+     * Determines cursor position from specified mouse position.
+     * @param mousePosition mouse position in document coordinates
+     * @return cursor position, -1 means invalid cursor
+     */
+    int cursorFromMousePosition(const QPointF &mousePosition);
 
 protected:
     void enableTextCursor( bool enable );
-    int textCursor() const { return m_textCursor; }
-    void setTextCursor( int textCursor );
     void removeFromTextCursor( int from, unsigned int count );
     void addToTextCursor( const QString &str );
 
 private slots:
-    void attachPath();
     void detachPath();
     void convertText();
     void blinkCursor();
     void textChanged();
-    
+    void shapeSelectionChanged();
+
 signals:
-    void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
-    
-private:
-    class AddTextRangeCommand;
-    class RemoveTextRangeCommand;
-    
+    void shapeSelected();
+
 private:
     void updateActions();
     void setTextCursorInternal( int textCursor );
     void createTextCursorShape();
     void updateTextCursorArea() const;
+    void setCurrentShape(ArtisticTextShape *currentShape);
 
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
 
-    ArtisticTextShape * m_currentShape;
-    KoPathShape * m_path;
-    KoPathShape * m_tmpPath;
-    QPainterPath m_textCursorShape;
+    /// Returns the offset handle shape for the current text shape
+    QPainterPath offsetHandleShape();
 
-    QAction * m_attachPath;
+    ArtisticTextToolSelection m_selection; ///< the tools selection
+    ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
+    ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
+    KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
+    QPainterPath m_textCursorShape;     ///< our visual text cursor representation
+    bool m_hoverHandle;
+
     QAction * m_detachPath;
     QAction * m_convertText;
 
     int m_textCursor;
     QTimer m_blinkingCursor;
     bool m_showCursor;
-    QString m_currentText;
+    QList<QPointF> m_linefeedPositions; ///< offset positions for temporary line feeds
+    KoInteractionStrategy *m_currentStrategy;
 };
 
 #endif // ARTISTICTEXTTOOL_H

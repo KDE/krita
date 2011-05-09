@@ -51,3 +51,8 @@ target_link_libraries(KisTileDataStoreTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_Q
 set(kis_store_limits_test_SRCS kis_store_limits_test.cpp ../kis_tile_data.cc )
 kde4_add_unit_test(KisStoreLimitsTest TESTNAME krita-image-KisStoreLimitsTest  ${kis_store_limits_test_SRCS})
 target_link_libraries(KisStoreLimitsTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+set(kis_tile_data_pooler_test_SRCS kis_tile_data_pooler_test.cpp ../kis_tile_data.cc ../kis_tile_data_pooler.cc )
+kde4_add_unit_test(KisTileDataPoolerTest TESTNAME krita-image-KisTileDataPoolerTest  ${kis_tile_data_pooler_test_SRCS})
+target_link_libraries(KisTileDataPoolerTest  ${KDE4_KDEUI_LIBS} kritaimage ${QT_QTTEST_LIBRARY})

@@ -271,6 +271,13 @@ public:
     bool clicklessSpacePan() const;
     void setClicklessSpacePan(const bool toggle) const;
 
+    int horizontalSplitLines() const;
+    void setHorizontalSplitLines(const int numberLines) const;
+
+    int verticalSplitLines() const;
+    void setVerticalSplitLines(const int numberLines) const;
+
+
 private:
     KisConfig(const KisConfig&);
     KisConfig& operator=(const KisConfig&);

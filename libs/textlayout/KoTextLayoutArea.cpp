@@ -277,6 +277,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
     m_blockRects.clear();
+    delete m_endNotesArea;
+    m_endNotesArea=0;
     delete m_startOfArea;
     delete m_endOfArea;
     m_dropCapsWidth = 0;

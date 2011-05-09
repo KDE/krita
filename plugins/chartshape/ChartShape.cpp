@@ -729,7 +729,7 @@ void ChartShape::paintComponent( QPainter &painter,
 
         // Calculate the clipping rect
         QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-        painter.setClipRect( paintRect );
+        painter.setClipRect( paintRect, Qt::IntersectClip );
 
         QPainterPath p;
         p.addRect( paintRect );

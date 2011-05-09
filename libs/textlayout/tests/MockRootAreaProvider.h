@@ -35,6 +35,7 @@ public:
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 
     KoTextLayoutRootArea *m_area;
+    bool m_askedForMoreThenOneArea;
 };
 
 #endif

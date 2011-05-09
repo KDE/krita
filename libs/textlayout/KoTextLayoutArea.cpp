@@ -533,6 +533,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     qreal tabStopDistance =  format.property(KoParagraphStyle::TabStopDistance).toDouble();
+
     if (tabStopDistance > 0) {
         tabStopDistance *= qt_defaultDpiY() / 72.;
         option.setTabStop(tabStopDistance);
@@ -684,16 +685,25 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
+
+    int margin;
+    margin=format.leftMargin() + format.rightMargin();
+
     m_listIndent = 0;
     if (textList) {
-        m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
-        if (!m_isRtl) {
-            m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
+        if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false){
+            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+            if (!m_isRtl) {
+                m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
+            }
+        } else {
+            margin=textList->format().doubleProperty(KoListStyle::Margin);
+            m_listIndent=margin;
         }
     }
 
     m_width = right() - left();
-    m_width -= format.leftMargin() + format.rightMargin();
+    m_width -= margin;
     m_x = left() + (m_isRtl ? format.rightMargin() : format.leftMargin());
 
     m_documentLayout->clearInlineObjectRegistry(block);
@@ -703,6 +713,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (cursor->lineTextStart == -1) {
         layout->beginLayout();
         m_indent = textIndent(block);
+
+        if(textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+            m_indent=textList->format().doubleProperty(KoListStyle::TextIndent)+blockData->counterSpacing();
+        }
+
         line = layout->createLine();
         cursor->fragmentIterator = block.begin();
     } else {
@@ -717,16 +732,27 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
     } else {
         m_x += m_listIndent;
-        m_width -= m_listIndent;
+        if(textList && (textList->format().boolProperty(KoListStyle::AlignmentMode)==false))
+            m_width -= m_listIndent;
     }
 
     if (textList) {
         // if list set counterposition. Do this after borders so we can account for them.
-        if (m_isRtl)
-            blockData->setCounterPosition(QPointF(right() -
-            blockData->counterWidth() - format.leftMargin(), m_y));
+        if (m_isRtl) {
+            if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false)
+                blockData->setCounterPosition(QPointF(right() -
+                                                      blockData->counterWidth() - format.leftMargin(), m_y));
+            else
+                blockData->setCounterPosition(QPointF(right() -
+                                                      textList->format().doubleProperty(KoListStyle::Margin), m_y));
+        }
         else {
-            blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
+            if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false)
+                blockData->setCounterPosition(QPointF(x() - m_listIndent + textList->format().doubleProperty(KoListStyle::Indent), m_y));
+            else
+                blockData->setCounterPosition(QPointF(textList->format().doubleProperty(KoListStyle::Margin) +
+                                                      textList->format().doubleProperty(KoListStyle::TextIndent)
+                                                      , m_y));  //margin+indent=labelposition
         }
     }
 

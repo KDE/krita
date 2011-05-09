@@ -48,6 +48,7 @@ private slots:
     void styleChanged(int);
     void customCharButtonPressed();
     void recalcPreview();
+    void labelFollowedByIndexChanged(int);
 
 private:
     Ui::ParagraphBulletsNumbers widget;
@@ -55,6 +56,7 @@ private:
     QHash<int, KoListStyle::Style> m_mapping;
     int m_previousLevel;
     int m_blankCharIndex;
+    bool m_alignmentMode;
 };
 
 #endif

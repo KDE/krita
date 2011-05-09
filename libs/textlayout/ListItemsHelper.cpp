@@ -469,8 +469,26 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
-        counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
-        width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+        if(format.boolProperty(KoListStyle::AlignmentMode)==false) {
+            counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
+            width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+        } else {
+            //here counter spacing contains the offset of the list text from the list label
+            if(format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::Nothing) {
+                counterSpacing=width;
+            } else if(format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::Space) {
+                counterSpacing=width + m_fm.width(' ');
+            }else if (format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::ListTab) {
+                if(format.doubleProperty(KoListStyle::TabStopPosition)<format.doubleProperty(KoListStyle::Margin) +
+                                                                       format.doubleProperty(KoListStyle::TextIndent)+width) {
+                    counterSpacing = width;
+                } else {
+                    counterSpacing = format.doubleProperty(KoListStyle::TabStopPosition)-
+                                     (format.doubleProperty(KoListStyle::Margin) + format.doubleProperty(KoListStyle::TextIndent)+width);
+                }
+
+            }
+        }
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

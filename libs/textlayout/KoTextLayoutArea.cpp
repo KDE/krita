@@ -685,26 +685,26 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
-
-    int margin;
-    margin=format.leftMargin() + format.rightMargin();
+    qreal leftMargin = format.leftMargin();
+    qreal rightMargin = format.rightMargin();
 
     m_listIndent = 0;
     if (textList) {
-        if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false){
+        if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
-            if (!m_isRtl) {
-                m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
-            }
         } else {
-            margin=textList->format().doubleProperty(KoListStyle::Margin);
-            m_listIndent=margin;
+            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+                leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+            }
+        }
+        if (!m_isRtl) {
+            m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
         }
     }
 
     m_width = right() - left();
-    m_width -= margin;
-    m_x = left() + (m_isRtl ? format.rightMargin() : format.leftMargin());
+    m_width -= leftMargin + rightMargin;
+    m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
 
@@ -712,11 +712,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextLine line;
     if (cursor->lineTextStart == -1) {
         layout->beginLayout();
-        m_indent = textIndent(block);
-
-        if(textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-            m_indent=textList->format().doubleProperty(KoListStyle::TextIndent)+blockData->counterSpacing();
-        }
+        m_indent = textIndent(block, textList);
 
         line = layout->createLine();
         cursor->fragmentIterator = block.begin();
@@ -732,27 +728,25 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
     } else {
         m_x += m_listIndent;
-        if(textList && (textList->format().boolProperty(KoListStyle::AlignmentMode)==false))
-            m_width -= m_listIndent;
+        m_width -= m_listIndent;
     }
 
     if (textList) {
         // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl) {
-            if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false)
+            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
                 blockData->setCounterPosition(QPointF(right() -
-                                                      blockData->counterWidth() - format.leftMargin(), m_y));
-            else
-                blockData->setCounterPosition(QPointF(right() -
-                                                      textList->format().doubleProperty(KoListStyle::Margin), m_y));
+                                                      blockData->counterWidth() - leftMargin, m_y));
+            } else {
+                blockData->setCounterPosition(QPointF(right() - leftMargin, m_y));
+            }
         }
         else {
-            if(textList->format().boolProperty(KoListStyle::AlignmentMode)==false)
-                blockData->setCounterPosition(QPointF(x() - m_listIndent + textList->format().doubleProperty(KoListStyle::Indent), m_y));
-            else
-                blockData->setCounterPosition(QPointF(textList->format().doubleProperty(KoListStyle::Margin) +
-                                                      textList->format().doubleProperty(KoListStyle::TextIndent)
-                                                      , m_y));  //margin+indent=labelposition
+            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+                blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
+            } else {
+                blockData->setCounterPosition(QPointF(left() + leftMargin + m_indent, m_y));
+            }
         }
     }
 
@@ -860,7 +854,7 @@ qreal KoTextLayoutArea::listIndent() const
     return m_listIndent;
 }
 
-qreal KoTextLayoutArea::textIndent(QTextBlock block) const
+qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
 {
     if ((block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool())) {
         // if auto-text-indent is set,
@@ -868,6 +862,11 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block) const
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
         return guessGlyphWidth * 3;
+    }
+    if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+            return textList->format().doubleProperty(KoListStyle::Indent);
+        }
     }
     return block.blockFormat().textIndent();
 }

@@ -498,7 +498,12 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         // Get the cell format.
         QTextTableCell cell = d->table->cellAt(row, col);
 
-        if (row == cell.row() + cell.rowSpan() - 1) {
+        /*
+         * If the current row is within the rowSpan ranging from cel.row() to cell.row()+cell.rowSpan()
+         * then we found a cell where we can add the content into. Else we move on to the next column
+         * to see if our row matches there.
+         */
+        if (row >= cell.row() && row <= cell.row() + cell.rowSpan() - 1) {
             /*
              * This cell ends vertically in this row, and hence should
              * contribute to the row height.

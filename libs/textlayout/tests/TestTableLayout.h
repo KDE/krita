@@ -47,8 +47,18 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
 
-    /// make sure our private method setupTest() does what we think it does
+    /**
+     * make sure our private method setupTest() does what we think it does
+     */
     void testSetupTest();
+
+    /**
+     * Test merged cells. In this testcase the table is modelled after a special case where we happened
+     * to end in an infinite layout-loop in the past. The loop was caused by us not being able to place
+     * content in a cell and therefore we keeped on to ask for new root-areas. This test should verify
+     * exactly this case.
+     */
+    void testMergedCells();
 
     /**
      * If no column-width is defined then the available width should be distributed among
@@ -81,6 +91,7 @@ private slots:
     void testColumnWidthRelative();
 
 private:
+    QTextCursor setupTest();
     void setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle = 0);
 
 private:
@@ -95,7 +106,6 @@ private:
     QTextBlock bottomRightCellBlock() const;
     QString m_loremIpsum;
     KoStyleManager *m_styleManager;
-    KoTextLayoutRootArea *m_area;
     QTextTable *m_table;
 };
 

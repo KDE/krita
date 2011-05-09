@@ -863,7 +863,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
         return guessGlyphWidth * 3;
     }
-    if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
             return textList->format().doubleProperty(KoListStyle::Indent);
         }

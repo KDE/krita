@@ -361,7 +361,7 @@ void KoTextLayoutTableArea::layoutColumns()
             // into the width of the table.
             qreal diff = (-availableWidth) / qreal(fixedWidthColumns.count());
             foreach(int col, fixedWidthColumns) {
-                d->columnWidths[col] = qMax(0.0, d->columnWidths[col] - diff);
+                d->columnWidths[col] = qMax(qreal(0.0), d->columnWidths[col] - diff);
             }
         }
         availableWidth = 0.0;

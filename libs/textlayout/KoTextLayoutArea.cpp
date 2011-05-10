@@ -737,8 +737,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            if (textList->format().doubleProperty(KoListStyle::TabStopPosition) > x()) {
-                m_listIndent = textList->format().doubleProperty(KoListStyle::TabStopPosition) - x();
+            foreach(QTextOption::Tab tab, tabs) {
+                qreal position = tab.position  * 72. / qt_defaultDpiY();
+                position = qMax(position, textList->format().doubleProperty(KoListStyle::TabStopPosition));
+                if (position > x() + m_listIndent - left()) {
+                    m_listIndent = left() + position - x();
+                    break;
+                }
             }
         }
     }

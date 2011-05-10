@@ -130,6 +130,21 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
+            // check if p is not over table of content
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
+                QListIterator<KoTextLayoutArea *> i(m_tableOfContentsAreas);
+                 while (i.hasNext()) {
+                     KoTextLayoutArea *layoutArea = i.next();
+                     if (!layoutArea->boundingRect().contains(p)) {
+                         continue;
+                     } else {
+                         int tocPosition = layoutArea->hitTest(p,accuracy);
+                         if (tocPosition != -1) {
+                             return tocPosition;
+                         }
+                     }
+                 }
+            }
             continue;
         } else {
             if (!block.isValid())

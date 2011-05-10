@@ -120,7 +120,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-    d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);
+    d->m_previewJob = KIO::filePreview(fileList, QSize(200, 200));
 
     connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
     connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),

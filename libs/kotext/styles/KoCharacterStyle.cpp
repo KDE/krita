@@ -25,7 +25,7 @@
 
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QFontMetrics>
+#include <QFontMetricsF>
 
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -1329,7 +1329,7 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     const QString letterSpacing(styleStack.property(KoXmlNS::fo, "letter-spacing"));
     if (!letterSpacing.isEmpty()) {
         qreal space = KoUnit::parseValue(letterSpacing);
-        QFontMetrics fm(font());
+        QFontMetricsF fm(font());
         setFontLetterSpacing(100+100*space/fm.averageCharWidth());
     }
 
@@ -1550,7 +1550,9 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == KoCharacterStyle::Language) {
             style.addProperty("fo:language", d->stylesPrivate.value(KoCharacterStyle::Language).toString(), KoGenStyle::TextType);
         } else if (key == QTextCharFormat::FontLetterSpacing) {
-            style.addProperty("fo:letter-spacing", (int) fontLetterSpacing(), KoGenStyle::TextType);
+            QFontMetricsF fm(font());
+            qreal space = (fontLetterSpacing() - 100) * fm.averageCharWidth() / 100;
+            style.addProperty("fo:letter-spacing", QString::number(space) + "pt", KoGenStyle::TextType);
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);

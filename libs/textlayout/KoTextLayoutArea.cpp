@@ -735,6 +735,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = restartLayout(layout);
     }
 
+    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            if (textList->format().doubleProperty(KoListStyle::TabStopPosition) > x()) {
+                m_listIndent = textList->format().doubleProperty(KoListStyle::TabStopPosition) - x();
+            }
+        }
+    }
+
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
@@ -880,7 +888,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
-            return textList->format().doubleProperty(KoListStyle::Indent);
+            return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
     return block.blockFormat().textIndent();

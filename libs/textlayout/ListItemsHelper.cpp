@@ -300,7 +300,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 continue; // we only look for lists
 
             QTextListFormat otherFormat = b.textList()->format();
-            
+
             if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
                 continue; // different liststyle what means it's another unrelated list
 
@@ -463,30 +463,20 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);
     if (widthPercent > 0)
-        width +=(m_fm.width(prefix + suffix)*widthPercent)/100.0;
+        width += (m_fm.width(prefix + suffix) * widthPercent) / 100.0;
     else
-        width +=m_fm.width(prefix + suffix);
+        width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
-        if(format.boolProperty(KoListStyle::AlignmentMode)==false) {
+        if (format.boolProperty(KoListStyle::AlignmentMode) == false) {
             counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
             width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
         } else {
             //here counter spacing contains the offset of the list text from the list label
-            if(format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::Nothing) {
-                counterSpacing=width;
-            } else if(format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::Space) {
-                counterSpacing=width + m_fm.width(' ');
-            }else if (format.intProperty(KoListStyle::LabelFollowedBy)==KoListStyle::ListTab) {
-                if(format.doubleProperty(KoListStyle::TabStopPosition)<format.doubleProperty(KoListStyle::Margin) +
-                                                                       format.doubleProperty(KoListStyle::TextIndent)+width) {
-                    counterSpacing = width;
-                } else {
-                    counterSpacing = format.doubleProperty(KoListStyle::TabStopPosition)-
-                                     (format.doubleProperty(KoListStyle::Margin) + format.doubleProperty(KoListStyle::TextIndent)+width);
-                }
-
+            counterSpacing = 0;
+            if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
+                counterSpacing = m_fm.width(' ');
             }
         }
     }

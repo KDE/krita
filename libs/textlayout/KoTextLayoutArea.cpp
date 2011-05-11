@@ -116,6 +116,7 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
         ++stop;
     }
     int tableAreaIndex = 0;
+    int tocIndex = 0;
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -130,20 +131,13 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            // check if p is not over table of content
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-                QListIterator<KoTextLayoutArea *> i(m_tableOfContentsAreas);
-                 while (i.hasNext()) {
-                     KoTextLayoutArea *layoutArea = i.next();
-                     if (!layoutArea->boundingRect().contains(p)) {
-                         continue;
-                     } else {
-                         int tocPosition = layoutArea->hitTest(p,accuracy);
-                         if (tocPosition != -1) {
-                             return tocPosition;
-                         }
-                     }
-                 }
+                // check if p is over table of content
+                if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
+                        && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
+                    return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+                }
+                ++tocIndex;
             }
             continue;
         } else {

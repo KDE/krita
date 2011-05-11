@@ -94,7 +94,7 @@ public:
     /**
     * Load series from ODF
     */
-    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context, int seriesPerDataset, ChartType type );
     void saveOdf( KoShapeSavingContext &context ) const;
 
     /**

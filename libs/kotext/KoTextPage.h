@@ -22,6 +22,10 @@
 
 #include "kotext_export.h"
 
+#include <QString>
+#include <QRectF>
+#include <QMetaType>
+
 /**
  * Interface for a single OpenDocumentText page.
  *
@@ -32,7 +36,8 @@
 class KOTEXT_EXPORT KoTextPage
 {
 public:
-
+    /// Constructor.
+    explicit KoTextPage();
     /// Destructor.
     virtual ~KoTextPage();
 
@@ -63,6 +68,23 @@ public:
      * exist.
      */
     virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
+
+    /**
+     * Returns the name of the master-page that should be used for this page or a null
+     * QString if this page does not explicit define a master-page in which case the
+     * default master-page will be used.
+     *
+     * Per default a null QString is returned.
+     */
+    virtual QString masterPageName() const;
+
+    /**
+     * Returns the rect of the page in document coords
+     */
+    virtual QRectF rect() const = 0;
+
 };
+
+Q_DECLARE_METATYPE(KoTextPage*)
 
 #endif

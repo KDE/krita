@@ -21,7 +21,6 @@
 #define KOTEXTANCHOR_H
 
 #include "KoInlineObject.h"
-#include "KoTextDocumentLayout.h"
 
 #include "kotext_export.h"
 
@@ -31,6 +30,7 @@ class KoShape;
 class KoTextAnchorPrivate;
 class KoXmlElement;
 class KoShapeLoadingContext;
+class KoShapeContainer;
 
 /**
  * This class is an interface that positions the shape linked to text anchor
@@ -40,15 +40,9 @@ public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
 
-    virtual bool positionShape(KoTextDocumentLayout::LayoutState *state) = 0;
+    virtual void detachFromModel() = 0;
 
-    virtual bool isPositioned() = 0;
-
-    virtual void reset() = 0;
-
-    virtual bool isRelayoutNeeded() = 0;
-
-    virtual QPointF relayoutPosition() = 0;
+    virtual void updatePosition(KoShape *shape, const QTextDocument *document, int position) = 0;
 };
 
 /**
@@ -207,30 +201,11 @@ public:
     /// \internal make sure that the anchor has no KoTextShapeContainerModel references anymore.
     void detachFromModel();
 
-    // get page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    QRectF pageRect();
-
-    // set page rectangle coordinates to which this text anchor is anchored (needed for HPage)
-    void setPageRect(QRectF &pageRect);
-
-    // get content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
-    QRectF pageContentRect();
-
-    // set content rectangle coordinates to which this text anchor is anchored (needed for HPageContent)
-    void setPageContentRect(QRectF &marginRect);
-
-    // get number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
-    int pageNumber();
-
-    // set number of page to which this text anchor is anchored (needed for HOutside,HInside,HFromInside)
-    void setPageNumber(int pageNumber);
-
     // get anchor strategy which is used to position shape linked to text anchor
     KoAnchorStrategy * anchorStrategy();
 
     // set anchor strategy which is used to position shape linked to text anchor
     void setAnchorStrategy(KoAnchorStrategy * anchorStrategy);
-
 
     qreal inlineObjectAscent();
 

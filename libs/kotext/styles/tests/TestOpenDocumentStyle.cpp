@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -188,7 +189,7 @@ void TestOpenDocumentStyle::initTestCase()
     specFile.open(QIODevice::ReadOnly);
     QDomDocument specDocument;
     specDocument.setContent(&specFile);
-    
+
     int count = 0;
     QDomElement mainElement = specDocument.documentElement();
     QDomNode n = mainElement.firstChild();
@@ -250,7 +251,7 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     xmlWriter->endElement();
     xmlWriter->endDocument();
     delete(xmlWriter);
-    
+
     return xmlOutputBuffer.data();
 }
 
@@ -262,9 +263,9 @@ QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle& genS
     xmlWriter->startDocument("style:style");
     KoGenStyles genStyles;
     genStyle.writeStyle(xmlWriter, genStyles, "style:style", "SavedTestStyle", ("style:" + styleFamily + "-properties").toLatin1());
-    
+
     xmlWriter->endDocument();
-    
+
     delete(xmlWriter);
     return xmlOutputBuffer.data();
 }
@@ -276,27 +277,64 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     T genStyle;
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext loadCtxt(stylesReader, 0);
-    
+
     QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(xmlOutputData, true);
     KoXmlElement mainElement = xmlReader->documentElement();
     genStyle.loadOdf(&mainElement, loadCtxt);
-    
+
     // THAT is often poorly implemented
     //QVERIFY(not(genStyle == basicStyle));
-    
+
     KoGenStyle styleWriter(family, familyName.toLatin1());
     genStyle.saveOdf(styleWriter);
-    
+
     QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
-    
+
     KoXmlDocument *generatedXmlReader = new KoXmlDocument;
     if (!generatedXmlReader->setContent(generatedXmlOutput)) {
         kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
         kFatal() << "Unable to set content";
     }
-    
+
+    KoXmlElement root = generatedXmlReader->documentElement();
+    KoXmlElement properties = root.firstChild().toElement();
+    QString outputPropertyValue = properties.attribute(attribute->name());
+    kDebug() << "Comparing " << outputPropertyValue << value;
+    return attribute->compare(outputPropertyValue, value);
+}
+
+template<class T>
+bool TestOpenDocumentStyle::basicTestFunctionWithShapeContext(KoGenStyle::Type family, const QString &familyName, Attribute *attribute,
+    const QString &value)
+{
+    T basicStyle;
+    T genStyle;
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext loadCtxt(stylesReader, 0);
+    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
+
+    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
+    KoXmlDocument *xmlReader = new KoXmlDocument;
+    xmlReader->setContent(xmlOutputData, true);
+    KoXmlElement mainElement = xmlReader->documentElement();
+    genStyle.loadOdf(&mainElement, shapeCtxt);
+
+    // THAT is often poorly implemented
+    //QVERIFY(not(genStyle == basicStyle));
+
+    KoGenStyle styleWriter(family, familyName.toLatin1());
+    genStyle.saveOdf(styleWriter);
+
+    QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
+
+    KoXmlDocument *generatedXmlReader = new KoXmlDocument;
+    if (!generatedXmlReader->setContent(generatedXmlOutput)) {
+        kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
+        kFatal() << "Unable to set content";
+    }
+
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
@@ -320,7 +358,7 @@ void TestOpenDocumentStyle::testTableColumnStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
+
     QVERIFY(basicTestFunction<KoTableColumnStyle>(KoGenStyle::TableColumnStyle, "table-column", attribute, value));
 }
 
@@ -340,7 +378,7 @@ void TestOpenDocumentStyle::testTableStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
+
     QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
 }
 
@@ -360,7 +398,7 @@ void TestOpenDocumentStyle::testTableRowStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
+
     QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
 }
 
@@ -380,8 +418,8 @@ void TestOpenDocumentStyle::testTableCellStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
-    QVERIFY(basicTestFunction<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
+
+    QVERIFY(basicTestFunctionWithShapeContext<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

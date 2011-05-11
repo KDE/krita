@@ -49,7 +49,8 @@ public:
         VectorTypeUndetermined, // not yet checked
         VectorTypeNone,         // Uninitialized
         VectorTypeWmf,          // Windows MetaFile
-        VectorTypeEmf           // Extended MetaFile
+        VectorTypeEmf,          // Extended MetaFile
+        VectorTypeSvm           // StarView Metafile
         // ... more here later
     };
 
@@ -78,9 +79,11 @@ private:
     void drawNull(QPainter &painter) const;
     void drawWmf(QPainter &painter) const;
     void drawEmf(QPainter &painter) const;
+    void drawSvm(QPainter &painter) const;
 
     static bool isWmf(const QByteArray &bytes);
     static bool isEmf(const QByteArray &bytes);
+    static bool isSvm(const QByteArray &bytes);
 
     // Member variables
 

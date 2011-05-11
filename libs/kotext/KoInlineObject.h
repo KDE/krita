@@ -30,7 +30,6 @@ class QPaintDevice;
 class QPainter;
 class QRectF;
 
-class KoShape;
 class KoInlineTextObjectManager;
 class KoInlineObjectPrivate;
 class KoShapeSavingContext;
@@ -223,15 +222,6 @@ public:
 
 protected:
     explicit KoInlineObject(KoInlineObjectPrivate &, bool propertyChangeListener = false);
-
-    /**
-     * We allow a text document to be shown in more than one shape; which brings up the need to figure out
-     * which shape is used for a certain text.
-     * @param document the document we are searching in.
-     * @param position the position of the character in the text document we want to locate.
-     * @return the shape the text is laid-out in.  Or 0 if there is no shape for that text character.
-     */
-    static KoShape *shapeForPosition(const QTextDocument *document, int position);
 
     KoInlineObjectPrivate *d_ptr;
 

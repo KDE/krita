@@ -161,4 +161,5 @@ void KoFindBase::clearMatches()
 void KoFindBase::setOptions(KoFindOptionSet *newOptions)
 {
     d->options = newOptions;
+    d->options->setParent(this);
 }

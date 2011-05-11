@@ -30,6 +30,7 @@
 
 class KoCanvasController;
 class KoShapeControllerBase;
+class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
 class KoCreateShapesTool;
@@ -38,6 +39,18 @@ class KoShape;
 class QToolButton;
 class KoInputDeviceHandlerEvent;
 class KoShapeLayer;
+class ToolHelper;
+
+
+/// Struct for the createToolList return type.
+struct KoToolButton {
+    QToolButton *button;///< a newly created button.
+    QString section;        ///< The section the button wants to be in.
+    int priority;           ///< Lower number (higher priority) means coming first in the section.
+    int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
+    QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
+};
+
 
 /**
  * This class manages the activation and deactivation of tools for
@@ -164,21 +177,12 @@ public:
      */
     QString preferredToolForSelection(const QList<KoShape*> &shapes);
 
-    /// Struct for the createToolList return type.
-    struct Button {
-        QToolButton *button;///< a newly created button.
-        QString section;        ///< The section the button wants to be in.
-        int priority;           ///< Lower number (higher priority) means coming first in the section.
-        int buttonGroupId;      ///< An unique ID for this button as passed by changedTool()
-        QString visibilityCode; ///< This button should become visible when we emit this string in toolCodesSelected()
-    };
-
     /**
      * Create a list of buttons to represent all the tools.
      * @returns a list of Buttons.
      * This is a factory method for buttons and meta information on the button to better display the button.
      */
-    QList<Button> createToolList(KoCanvasBase *canvas) const;
+    QList<KoToolButton> createToolList(KoCanvasBase *canvas) const;
 
     /// Request tool activation for the given canvas controller
     void requestToolActivation(KoCanvasController *controller);
@@ -204,6 +208,13 @@ public slots:
      * @param id the id of the tool
      */
     void switchToolRequested(const QString &id);
+
+
+    /**
+     * a new tool has become known to mankind
+     */
+    void addDeferredToolFactory(KoToolFactoryBase *toolFactory);
+
 
 signals:
     /**
@@ -246,6 +257,11 @@ signals:
      */
     void changedStatusText(const QString &statusText);
 
+    /**
+     * emitted whenever a new tool is dynamically added for the given canvas
+     */
+    void addedTool(const KoToolButton &button, KoCanvasController *canvas);
+
 private:
     KoToolManager();
     KoToolManager(const KoToolManager&);
@@ -260,6 +276,8 @@ private:
     Q_PRIVATE_SLOT(d, void selectionChanged(QList<KoShape*> shapes))
     Q_PRIVATE_SLOT(d, void currentLayerChanged(const KoShapeLayer *layer))
     Q_PRIVATE_SLOT(d, void switchToolTemporaryRequested(const QString &id))
+
+    QPair<QString, KoToolBase*> createTools(KoCanvasController *controller, ToolHelper *tool);
 
     Private *const d;
 };

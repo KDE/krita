@@ -46,16 +46,14 @@ struct FileEntry {
 class KoEmbeddedDocumentSaver::Private
 {
 public:
-    Private()
-        : objectId(0)
-    {
-    }
+    Private() {}
 
     QHash<QString, int> prefixes; // Used in getFilename();
-    QList<KoOdfDocument*> documents;
-    QList<FileEntry*> files;    // These will be saved when saveEmbeddedFiles() is called.
+
+    // These will be saved when saveEmbeddedDocuments() is called.
+    QList<KoOdfDocument*> documents; // Embedded documents
+    QList<FileEntry*> files;    // Embedded files.
     QList<KoOdfManifestEntry*> manifestEntries;
-    int objectId;// FIXME: Should be removed since prefixes will cover this too.
 };
 
 KoEmbeddedDocumentSaver::KoEmbeddedDocumentSaver()
@@ -81,7 +79,8 @@ QString KoEmbeddedDocumentSaver::getFilename(const QString &prefix)
     // This inserts prefix into the map if it's not there.
     d->prefixes[prefix] = index + 1;
 
-    return prefix + QString("%1").arg(index, 4, 10, QChar('0'));
+    //return prefix + QString("%1").arg(index, 4, 10, QChar('0'));
+    return prefix + QString("%1").arg(index);
 }
 
 void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument * doc)
@@ -91,7 +90,8 @@ void KoEmbeddedDocumentSaver::embedDocument(KoXmlWriter &writer, KoOdfDocument *
 
     QString ref;
     if (!doc->isStoredExtern()) {
-        const QString name = QString("Object_%1").arg(++d->objectId);
+        const QString name = getFilename("Object ");
+
         // set URL in document so that saveEmbeddedDocuments will save
         // the actual embedded object with the right name in the store.
         KUrl u;

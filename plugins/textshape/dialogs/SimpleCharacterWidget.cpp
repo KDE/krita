@@ -19,7 +19,6 @@
  */
 #include "SimpleCharacterWidget.h"
 #include "TextTool.h"
-#include "../ListItemsHelper.h"
 #include "../commands/ChangeListCommand.h"
 
 #include <KAction>

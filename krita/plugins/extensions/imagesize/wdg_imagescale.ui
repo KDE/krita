@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>339</height>
+    <width>389</width>
+    <height>341</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_4">
+     <layout class="QGridLayout" name="gridLayout_3">
       <item row="0" column="0">
        <spacer name="spacer_6">
         <property name="orientation">
@@ -41,6 +41,106 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelWidth">
+        <property name="text">
+         <string>Width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>intPixelWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="intPixelWidth">
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5" rowspan="2">
+       <widget class="KoAspectButton" name="aspectPixels">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="6" rowspan="2">
+       <spacer>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelHeight">
+        <property name="text">
+         <string>Height:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>intPixelHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="intPixelHeight">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>1000000</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="cmbWidthPixelUnit">
+        <item>
+         <property name="text">
+          <string>Pixels</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percent (%)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QComboBox" name="cmbHeightPixelUnit">
+        <item>
+         <property name="text">
+          <string>Pixels</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Percent (%)</string>
+         </property>
+        </item>
+       </widget>
       </item>
       <item row="1" column="1">
        <widget class="QDoubleSpinBox" name="doublePercentageWidth">
@@ -61,66 +161,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QComboBox" name="cmbWidthPixelUnit">
-        <item>
-         <property name="text">
-          <string>Pixels</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Percent (%)</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="1" column="3" rowspan="2">
-       <widget class="KoAspectButton" name="aspectPixels" native="true">
-        <property name="text" stdset="0">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="4">
-       <spacer>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="labelWidth">
-        <property name="text">
-         <string>Width:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>intPixelWidth</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="labelHeight">
-        <property name="text">
-         <string>Height:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>intPixelHeight</cstring>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <widget class="QDoubleSpinBox" name="doublePercentageHeight">
         <property name="minimumSize">
@@ -137,20 +177,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QComboBox" name="cmbHeightPixelUnit">
-        <item>
-         <property name="text">
-          <string>Pixels</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Percent (%)</string>
-         </property>
-        </item>
-       </widget>
-      </item>
       <item row="3" column="0">
        <widget class="QLabel" name="labelFilter">
         <property name="text">
@@ -164,48 +190,10 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1" colspan="2">
+      <item row="3" column="1" colspan="3">
        <widget class="KisCmbIDList" name="cmbFilterType" native="true"/>
       </item>
      </layout>
-     <widget class="QSpinBox" name="intPixelWidth">
-      <property name="geometry">
-       <rect>
-        <x>114</x>
-        <y>30</y>
-        <width>100</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>1000000</number>
-      </property>
-     </widget>
-     <widget class="QSpinBox" name="intPixelHeight">
-      <property name="geometry">
-       <rect>
-        <x>114</x>
-        <y>59</y>
-        <width>100</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>80</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>1000000</number>
-      </property>
-     </widget>
     </widget>
    </item>
    <item row="1" column="0">
@@ -219,7 +207,7 @@
      <property name="flat">
       <bool>true</bool>
      </property>
-     <layout class="QGridLayout" name="gridLayout_3">
+     <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <spacer name="spacer_5">
         <property name="orientation">
@@ -236,79 +224,33 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0">
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="labelPhysicalWidth">
-          <property name="text">
-           <string>Print Width:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="buddy">
-           <cstring>doublePhysicalWidth</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QDoubleSpinBox" name="doublePhysicalWidth">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="decimals">
-           <number>2</number>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>100000000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="labelPhysicalHeight">
-          <property name="text">
-           <string>Print Height:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-          <property name="buddy">
-           <cstring>doublePhysicalHeight</cstring>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="doublePhysicalHeight">
-          <property name="minimumSize">
-           <size>
-            <width>80</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="minimum">
-           <double>1.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>100000000.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doublePhysicalWidth">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="decimals">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" rowspan="2">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QComboBox" name="cmbWidthUnit"/>
         </item>
         <item row="0" column="1" rowspan="2">
-         <widget class="KoAspectButton" name="aspectPhysical" native="true">
-          <property name="text" stdset="0">
+         <widget class="KoAspectButton" name="aspectPhysical">
+          <property name="text">
            <string/>
           </property>
          </widget>
@@ -330,6 +272,48 @@
          <widget class="QComboBox" name="cmbHeightUnit"/>
         </item>
        </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelPhysicalWidth">
+        <property name="text">
+         <string>Print Width:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>doublePhysicalWidth</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelPhysicalHeight">
+        <property name="text">
+         <string>Print Height:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>doublePhysicalHeight</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QDoubleSpinBox" name="doublePhysicalHeight">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="minimum">
+         <double>1.000000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -362,45 +346,7 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0">
-       <layout class="QFormLayout" name="formLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="labelResolution">
-          <property name="text">
-           <string>Resolution:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QDoubleSpinBox" name="doubleResolution">
-            <property name="minimumSize">
-             <size>
-              <width>70</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximum">
-             <double>100000000.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelResolutionUnit">
-            <property name="text">
-             <string>pixels/inch</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="1">
+      <item row="1" column="3">
        <spacer name="spacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -412,6 +358,36 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelResolution">
+        <property name="text">
+         <string>Resolution:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="doubleResolution">
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximum">
+         <double>100000000.000000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="labelResolutionUnit">
+        <property name="text">
+         <string>pixels/inch</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -433,15 +409,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KoAspectButton</class>
-   <extends>QWidget</extends>
-   <header>KoAspectButton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisCmbIDList</class>
    <extends></extends>
    <header>widgets/kis_cmb_idlist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KoAspectButton</class>
+   <extends>QLabel</extends>
+   <header>KoAspectButton.h</header>
   </customwidget>
   <customwidget>
    <class>MultiLockButton</class>

@@ -39,3 +39,8 @@ KoPAPageBase *KoPATextPage::page() const
 {
     return m_page;
 }
+
+QRectF KoPATextPage::rect() const
+{
+    return QRectF();
+}

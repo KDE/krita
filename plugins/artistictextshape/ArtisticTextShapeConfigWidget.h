@@ -27,19 +27,16 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-class ArtisticTextShape;
+class ArtisticTextTool;
 
 class ArtisticTextShapeConfigWidget : public QWidget
 {
     Q_OBJECT
 public:
-    ArtisticTextShapeConfigWidget();
+    ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool);
 
 public slots:
-    /// initializes widget from given shape
-    void initializeFromShape(ArtisticTextShape *shape, KoCanvasBase *canvas);
-
-    /// updates the widget form the current one
+    /// updates the widget form the current artistic text shape
     void updateWidget();
 
 private slots:
@@ -48,8 +45,7 @@ private slots:
 private:
     void blockChildSignals( bool block );
     Ui::ArtisticTextShapeConfigWidget widget;
-    ArtisticTextShape * m_shape;
-    KoCanvasBase * m_canvas;
+    ArtisticTextTool *m_textTool;
     QButtonGroup * m_anchorGroup;
 };
 

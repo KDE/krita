@@ -29,13 +29,14 @@
 #include <KoStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoTextLoader.h>
+#include <KoTextWriter.h>
 #include <KoXmlReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KTemporaryFile>
 #include <KoStoreDevice.h>
 #include <KoXmlWriter.h>
-#include <KoTextShapeData.h>
+#include <KoTextShapeDataBase.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
@@ -46,7 +47,6 @@
 #include <KoListStyle.h>
 #include <KoTableStyle.h>
 #include <KoTableCellStyle.h>
-#include <KoTextDocumentLayout.h>
 #include <KoStyleManager.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
@@ -114,21 +114,16 @@ QTextDocument *TestChangeTracking::documentFromOdt(const QString &odt, const QSt
     textSharedLoadingData->loadOdfStyles(shapeLoadingContext, styleManager);
     shapeLoadingContext.addSharedData(KOTEXT_SHARED_LOADING_ID, textSharedLoadingData);
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
     QTextDocument *document = new QTextDocument;
-    textShapeData->setDocument(document, false /* ownership */);
-    KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-    layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
+    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
     KoTextDocument(document).setStyleManager(styleManager);
-    textShapeData->document()->setDocumentLayout(layout);
     KoTextDocument(document).setChangeTracker(changeTracker);
 
-    if (!textShapeData->loadOdf(body, shapeLoadingContext)) {
-        qDebug() << "KoTextShapeData failed to load ODT";
-    }
+    KoTextLoader loader(shapeLoadingContext);
+    QTextCursor cursor(document);
+    loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.
 
     delete readStore;
-    delete textShapeData;
     return document;
 }
 
@@ -184,18 +179,13 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
         }
     }
 
-    KoTextShapeData *textShapeData = new KoTextShapeData;
-    textShapeData->setDocument(document, false /* ownership */);
-    if (qobject_cast<KoTextDocumentLayout *>(document->documentLayout()) == 0) {
-        // Setup layout and managers just like kotext
-        KoTextDocumentLayout *layout = new KoTextDocumentLayout(textShapeData->document());
-        textShapeData->document()->setDocumentLayout(layout);
-        layout->setInlineTextObjectManager(new KoInlineTextObjectManager(layout)); // required while saving
-        KoStyleManager *styleManager = new KoStyleManager;
-        KoTextDocument(textShapeData->document()).setStyleManager(styleManager);
-    }
+    // Setup layout and managers just like kotext
+    KoTextDocument(document).setInlineTextObjectManager(new KoInlineTextObjectManager()); // required while saving
+    KoStyleManager *styleManager = new KoStyleManager;
+    KoTextDocument(document).setStyleManager(styleManager);
 
-    textShapeData->saveOdf(context);
+    KoTextWriter writer(context, 0);
+    writer.write(document, 0, -1);
 
     contentTmpFile.close();
 
@@ -225,7 +215,6 @@ QString TestChangeTracking::documentToOdt(QTextDocument *document)
 
 
     delete store;
-    delete textShapeData;
 
     return odt;
 }

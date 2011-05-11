@@ -33,6 +33,7 @@ set(komain_LIB_SRCS
     KoRulerController.cpp
     KoRuler.cpp
     KoToolBox.cpp
+    KoToolBoxDocker.cpp
     KoToolBoxFactory.cpp
     KoToolDocker.cpp
     KoVersionDialog.cpp
@@ -149,7 +150,7 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KCAL_LIBS}
     ${KDE4_THREADWEAVER_LIBRARIES}
     kowidgets
-    kotext
+    textlayout
 )
 if( Soprano_FOUND )
     target_link_libraries(komain ${SOPRANO_LIBRARIES})

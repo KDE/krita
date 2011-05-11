@@ -29,6 +29,10 @@
 
 class KoCanvasController;
 
+/**
+ * Factory class to create a new KoToolBox that contains the buttons
+ * to activate tools.
+ */
 class KOMAIN_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:

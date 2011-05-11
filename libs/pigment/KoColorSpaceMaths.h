@@ -240,7 +240,7 @@ public:
     }
     
     inline static _Tdst multiply(_T a, _Tdst b, _Tdst c) {
-        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_Tdst>::unitValue);
+        return (dst_compositetype(a)*b*c) / (dst_compositetype(KoColorSpaceMathsTraits<_Tdst>::unitValue) * KoColorSpaceMathsTraits<_T>::unitValue);
     }
 
     /**

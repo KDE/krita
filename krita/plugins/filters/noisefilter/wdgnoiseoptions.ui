@@ -1,58 +1,56 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgNoiseOptions</class>
- <widget class="QWidget" name="WdgNoiseOptions">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgNoiseOptions" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>172</width>
-    <height>61</height>
+    <width>174</width>
+    <height>63</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QFormLayout" name="formLayout">
-     <property name="rowWrapPolicy">
-      <enum>QFormLayout::WrapLongRows</enum>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="textLabel2" >
+     <property name="text" >
+      <string>Opacity:</string>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="textLabel1">
-       <property name="text">
-        <string>Level:</string>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="intLevel"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="textLabel2">
-       <property name="text">
-        <string>Opacity:</string>
-       </property>
-       <property name="wordWrap">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QSpinBox" name="intOpacity"/>
-     </item>
-    </layout>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
-   <item row="0" column="1">
+   <item row="0" column="0" >
+    <widget class="QLabel" name="textLabel1" >
+     <property name="text" >
+      <string>Level:</string>
+     </property>
+     <property name="wordWrap" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QSpinBox" native="1" name="intOpacity" />
+   </item>
+   <item row="0" column="1" >
+    <widget class="QSpinBox" native="1" name="intLevel" />
+   </item>
+   <item row="1" column="2" >
     <spacer>
-     <property name="orientation">
+     <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizeType">
+     <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0">
+     <property name="sizeHint" >
       <size>
        <width>21</width>
        <height>20</height>
@@ -60,15 +58,15 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="1" >
     <spacer>
-     <property name="orientation">
+     <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
-     <property name="sizeType">
+     <property name="sizeType" >
       <enum>QSizePolicy::Expanding</enum>
      </property>
-     <property name="sizeHint" stdset="0">
+     <property name="sizeHint" >
       <size>
        <width>20</width>
        <height>21</height>
@@ -78,7 +76,9 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="11" />
+  <customwidgets>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

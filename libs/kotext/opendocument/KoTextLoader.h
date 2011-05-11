@@ -32,16 +32,17 @@
 
 #include <QObject>
 
-
 #include "kotext_export.h"
 #include "KoXmlReaderForward.h"
 
-class KoShapeLoadingContext;
-class KoShape;
 class QTextCursor;
 class QTextTable;
 class QRect;
+
+class KoSection;
 class KoBookmarkManager;
+class KoShapeLoadingContext;
+class KoShape;
 
 /**
  * The KoTextLoader loads is use to load text for one and only one textdocument or shape
@@ -86,8 +87,15 @@ public:
     *
     * This method got called e.g. at the \a KoTextShapeData::loadOdf() method if a TextShape
     * instance likes to load an ODF element.
+    *
+    * @param element the element to start loadingat
+    * @param cursor the text cursor to insert the body after
+    * @param section If non-zero, all the following text belongs with this section. The
+    *                section is added to the first block of the body.
+    *
     */
     void loadBody(const KoXmlElement &element, QTextCursor &cursor);
+    void loadBody(const KoXmlElement &element, QTextCursor &cursor, KoSection *section);
 
 signals:
 
@@ -146,7 +154,7 @@ private:
     * Load the deleted change within a \p or a \h and store it in the Delete Change Marker
     */
     void loadDeleteChangeWithinPorH(QString id, QTextCursor &cursor);
-    
+
     /**
     * Load the contents of delta:merge. Called from loadSpan
     */
@@ -163,7 +171,7 @@ private:
      * The table and its contents are placed in a new shape.
      */
     void loadTable(const KoXmlElement &element, QTextCursor& cursor);
-    
+
     /**
      * Loads a table column
      */
@@ -226,12 +234,6 @@ private:
     */
     void markBlocksAsInserted(QTextCursor &cursor, int from, const QString& changeId);
 
-    /**
-     * This is called in loadSpan to allow Cut and Paste of bookmarks. This
-     * method gives a correct, unique, name, respecting the fact that an
-     * endMarker should be the foo_lastID instead of foo_lastID+1
-     */
-    QString createUniqueBookmarkName(KoBookmarkManager* bmm, QString bookmarkName, bool isEndMarker);
 
 
     /// \internal d-pointer class.

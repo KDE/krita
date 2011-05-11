@@ -1,82 +1,109 @@
-<ui version="4.0">
+<ui version="4.0" >
  <class>WdgResolution</class>
- <widget class="QWidget" name="WdgResolution">
-  <property name="geometry">
+ <widget class="QWidget" name="WdgResolution" >
+  <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
-    <height>180</height>
+    <width>465</width>
+    <height>182</height>
    </rect>
   </property>
-  <property name="windowTitle">
+  <property name="windowTitle" >
    <string>Image Resolution</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
    <item>
-    <widget class="QLabel" name="lblWidth">
-     <property name="text">
+    <widget class="QLabel" name="lblWidth" >
+     <property name="text" >
       <string>Width:</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="lblHeight">
-     <property name="text">
+    <widget class="QLabel" name="lblHeight" >
+     <property name="text" >
       <string>Height:</string>
      </property>
     </widget>
    </item>
    <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="lblImageXRes">
-       <property name="text">
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="lblImageXRes" >
+       <property name="text" >
         <string>X resolution:</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="doubleResolution"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lblYResolution">
-       <property name="text">
-        <string>Y resolution:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="doubleResolution_2"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lblYResolution_3">
-       <property name="text">
-        <string>Resolution:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QDoubleSpinBox" name="doubleResolution_5"/>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleResolution" />
      </item>
     </layout>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
+     <property name="spacing" >
+      <number>6</number>
      </property>
-    </spacer>
+     <item>
+      <widget class="QLabel" name="lblYResolution" >
+       <property name="text" >
+        <string>Y resolution:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleResolution_2" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="lblYResolution_3" >
+       <property name="text" >
+        <string>Resolution:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="doubleResolution_5" />
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
+ <layoutdefault spacing="6" margin="11" />
+ <customwidgets>
+  <customwidget>
+   <class>QDoubleSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>knuminput.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

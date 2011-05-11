@@ -6,13 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
-    <height>176</height>
+    <width>219</width>
+    <height>99</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="horizontalSpacing">
+      <number>2</number>
+     </property>
+     <property name="verticalSpacing">
+      <number>0</number>
+     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
@@ -70,22 +82,18 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QRadioButton" name="m_searchFromLeft">
-         <property name="text">
-          <string>Left</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="m_searchFromRight">
-         <property name="text">
-          <string>Right</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QRadioButton" name="m_searchFromLeft">
+       <property name="text">
+        <string>Left</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QRadioButton" name="m_searchFromRight">
+       <property name="text">
+        <string>Right</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_4">
@@ -118,24 +126,37 @@
        </item>
       </widget>
      </item>
+     <item row="4" column="0" colspan="3">
+      <widget class="QCheckBox" name="m_limitToCurrentLayer">
+       <property name="text">
+        <string>Limit to Current Layer</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item>
-    <widget class="QCheckBox" name="m_limitToCurrentLayer">
-     <property name="text">
-      <string>Limit to Current Layer</string>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>0</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
-   <item>
+   <item row="1" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>17</width>
-       <height>23</height>
+       <width>20</width>
+       <height>0</height>
       </size>
      </property>
     </spacer>

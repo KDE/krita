@@ -21,8 +21,9 @@
 #include "KoTextShapeDataBase_p.h"
 
 KoTextShapeDataBasePrivate::KoTextShapeDataBasePrivate()
-        : document(0),
-        textAlignment(Qt::AlignLeft | Qt::AlignTop)
+        : document(0)
+        , textAlignment(Qt::AlignLeft | Qt::AlignTop)
+        , resizeMethod(KoTextShapeDataBase::NoResize)
 {
 }
 
@@ -69,6 +70,20 @@ Qt::Alignment KoTextShapeDataBase::verticalAlignment() const
 {
     Q_D(const KoTextShapeDataBase);
     return d->textAlignment & Qt::AlignVertical_Mask;
+}
+
+void KoTextShapeDataBase::setResizeMethod(KoTextShapeDataBase::ResizeMethod method)
+{
+    Q_D(KoTextShapeDataBase);
+    if (d->resizeMethod == method)
+        return;
+    d->resizeMethod = method;
+}
+
+KoTextShapeDataBase::ResizeMethod KoTextShapeDataBase::resizeMethod() const
+{
+    Q_D(const KoTextShapeDataBase);
+    return d->resizeMethod;
 }
 
 #include <KoTextShapeDataBase.moc>

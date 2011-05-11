@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>591</width>
+    <width>570</width>
     <height>323</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>591</width>
+    <width>570</width>
     <height>323</height>
    </size>
   </property>
@@ -28,8 +28,11 @@
     <height>323</height>
    </size>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_10" rowstretch="0" columnstretch="0" rowminimumheight="0" columnminimumwidth="0">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <item row="0" column="0">
     <widget class="QTabWidget" name="settingsTabWidget">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -44,172 +47,190 @@
       <attribute name="title">
        <string>General settings</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="heightChannelLabel">
-         <property name="text">
-          <string>Channel to use as heightmap</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="heightChannelComboBox">
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="materialParametersGroupBox">
-         <property name="title">
-          <string>Material parameters</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <layout class="QFormLayout" name="formLayout">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::WrapLongRows</enum>
-            </property>
-            <item row="0" column="0">
-             <widget class="QLabel" name="ambientReflectivityLabel">
-              <property name="text">
-               <string>Ambient Reflectivity</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>1</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>23</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="diffuseReflectivityCheckBox">
-              <property name="toolTip">
-               <string>Uncheck to ignore diffuse reflectivity from computations and increase performance.</string>
-              </property>
-              <property name="text">
-               <string>Diffuse reflectivity</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>1</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>23</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QCheckBox" name="specularReflectivityCheckBox">
-              <property name="toolTip">
-               <string>Uncheck to ignore specular reflectivity during computations and increase performance.</string>
-              </property>
-              <property name="text">
-               <string>Specular reflectivity</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-              <property name="tristate">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>1</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>23</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="shinynessExponentLabel">
-              <property name="text">
-               <string>Shinyness exponent</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                <horstretch>1</horstretch>
-                <verstretch>1</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>23</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QGroupBox" name="materialParametersGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>311</width>
+         <height>161</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Material parameters</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <property name="leftMargin">
+         <number>13</number>
+        </property>
+        <property name="rightMargin">
+         <number>13</number>
+        </property>
+        <property name="spacing">
+         <number>5</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="ambientReflectivityLabel">
+          <property name="text">
+           <string>Ambient Reflectivity</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="diffuseReflectivityCheckBox">
+          <property name="toolTip">
+           <string>Uncheck to ignore diffuse reflectivity from computations and increase performance.</string>
+          </property>
+          <property name="text">
+           <string>Diffuse reflectivity</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="specularReflectivityCheckBox">
+          <property name="toolTip">
+           <string>Uncheck to ignore specular reflectivity during computations and increase performance.</string>
+          </property>
+          <property name="text">
+           <string>Specular reflectivity</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="shinynessExponentLabel">
+          <property name="text">
+           <string>Shinyness exponent</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="ambientReflectivityKisDoubleSliderSpinBox" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>23</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="diffuseReflectivityKisDoubleSliderSpinBox" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>23</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="KisDoubleSliderSpinBox" name="specularReflectivityKisDoubleSliderSpinBox" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>23</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+            <horstretch>1</horstretch>
+            <verstretch>1</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>23</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QComboBox" name="heightChannelComboBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>311</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+      </widget>
+      <widget class="QLabel" name="heightChannelLabel">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>201</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Channel to use as heightmap</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QWidget" name="lightSources">
       <attribute name="title">
@@ -290,10 +311,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QFormLayout" name="formLayout_2">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::WrapLongRows</enum>
-            </property>
+           <layout class="QGridLayout" name="gridLayout" columnstretch="0,0">
             <item row="0" column="0">
              <widget class="KColorCombo" name="lightKColorCombo1">
               <property name="sizePolicy">
@@ -321,6 +339,60 @@
              <widget class="QLabel" name="colorLabel1">
               <property name="text">
                <string>Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="azimuthLabel1">
+              <property name="toolTip">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
+              <property name="text">
+               <string>Azimuth</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="inclinationLabel1">
+              <property name="toolTip">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
+              <property name="text">
+               <string>Inclination</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QSpinBox" name="inclinationSpinBox1">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>75</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="whatsThis">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
+              <property name="suffix">
+               <string>°</string>
+              </property>
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>90</number>
+              </property>
+              <property name="singleStep">
+               <number>15</number>
+              </property>
+              <property name="value">
+               <number>45</number>
               </property>
              </widget>
             </item>
@@ -364,18 +436,88 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="azimuthLabel1">
-              <property name="toolTip">
-               <string>Direction of the light, the dial tip represents where the light comes from.</string>
-              </property>
-              <property name="text">
-               <string>Azimuth</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QSpinBox" name="inclinationSpinBox1">
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="lightSourceGroupBox2">
+         <property name="title">
+          <string>Light Source 2</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
+          <item>
+           <widget class="QDial" name="azimuthDial2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+              <horstretch>1</horstretch>
+              <verstretch>1</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="sizeIncrement">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="baseSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Azimuth</string>
+            </property>
+            <property name="maximum">
+             <number>359</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="pageStep">
+             <number>45</number>
+            </property>
+            <property name="value">
+             <number>33</number>
+            </property>
+            <property name="sliderPosition">
+             <number>33</number>
+            </property>
+            <property name="tracking">
+             <bool>true</bool>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="invertedAppearance">
+             <bool>false</bool>
+            </property>
+            <property name="invertedControls">
+             <bool>false</bool>
+            </property>
+            <property name="wrapping">
+             <bool>true</bool>
+            </property>
+            <property name="notchTarget">
+             <double>45.000000000000000</double>
+            </property>
+            <property name="notchesVisible">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0">
+            <item row="0" column="0">
+             <widget class="KColorCombo" name="lightKColorCombo2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -387,6 +529,105 @@
                 <width>75</width>
                 <height>0</height>
                </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>70</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="color">
+               <color>
+                <red>255</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="colorLabel2">
+              <property name="text">
+               <string>Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="azimuthLabel2">
+              <property name="toolTip">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
+              <property name="text">
+               <string>Azimuth</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="inclinationLabel2">
+              <property name="toolTip">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
+              <property name="text">
+               <string>Inclination</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QSpinBox" name="azimuthSpinBox2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>75</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string/>
+              </property>
+              <property name="whatsThis">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
+              <property name="wrapping">
+               <bool>true</bool>
+              </property>
+              <property name="suffix">
+               <string>°</string>
+              </property>
+              <property name="minimum">
+               <number>0</number>
+              </property>
+              <property name="maximum">
+               <number>359</number>
+              </property>
+              <property name="singleStep">
+               <number>15</number>
+              </property>
+              <property name="value">
+               <number>33</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QSpinBox" name="inclinationSpinBox2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>75</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="toolTip">
+               <string/>
               </property>
               <property name="whatsThis">
                <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
@@ -405,16 +646,6 @@
               </property>
               <property name="value">
                <number>45</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="inclinationLabel1">
-              <property name="toolTip">
-               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
-              </property>
-              <property name="text">
-               <string>Inclination</string>
               </property>
              </widget>
             </item>
@@ -500,10 +731,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QFormLayout" name="formLayout_3">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::WrapLongRows</enum>
-            </property>
+           <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0">
             <item row="0" column="0">
              <widget class="KColorCombo" name="lightKColorCombo3">
               <property name="sizePolicy">
@@ -531,6 +759,16 @@
              <widget class="QLabel" name="colorLabel3">
               <property name="text">
                <string>Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="inclinationLabel3">
+              <property name="toolTip">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
+              <property name="text">
+               <string>Inclination</string>
               </property>
              </widget>
             </item>
@@ -571,16 +809,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="azimuthLabel3">
-              <property name="toolTip">
-               <string>Direction of the light, the dial tip represents where the light comes from.</string>
-              </property>
-              <property name="text">
-               <string>Azimuth</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QSpinBox" name="inclinationSpinBox3">
               <property name="sizePolicy">
@@ -615,229 +843,13 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="inclinationLabel3">
-              <property name="toolTip">
-               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
-              </property>
-              <property name="text">
-               <string>Inclination</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QGroupBox" name="lightSourceGroupBox2">
-         <property name="title">
-          <string>Light Source 2</string>
-         </property>
-         <property name="flat">
-          <bool>false</bool>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
-          <item>
-           <widget class="QDial" name="azimuthDial2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-              <horstretch>1</horstretch>
-              <verstretch>1</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="sizeIncrement">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="baseSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="toolTip">
-             <string>Azimuth</string>
-            </property>
-            <property name="maximum">
-             <number>359</number>
-            </property>
-            <property name="singleStep">
-             <number>5</number>
-            </property>
-            <property name="pageStep">
-             <number>45</number>
-            </property>
-            <property name="value">
-             <number>33</number>
-            </property>
-            <property name="sliderPosition">
-             <number>33</number>
-            </property>
-            <property name="tracking">
-             <bool>true</bool>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="invertedControls">
-             <bool>false</bool>
-            </property>
-            <property name="wrapping">
-             <bool>true</bool>
-            </property>
-            <property name="notchTarget">
-             <double>45.000000000000000</double>
-            </property>
-            <property name="notchesVisible">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QFormLayout" name="formLayout_5">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::WrapLongRows</enum>
-            </property>
-            <item row="0" column="0">
-             <widget class="KColorCombo" name="lightKColorCombo2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>75</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="baseSize">
-               <size>
-                <width>70</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="color">
-               <color>
-                <red>255</red>
-                <green>0</green>
-                <blue>0</blue>
-               </color>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="colorLabel2">
-              <property name="text">
-               <string>Color</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QSpinBox" name="azimuthSpinBox2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>75</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string>Direction of the light, the dial tip represents where the light comes from.</string>
-              </property>
-              <property name="wrapping">
-               <bool>true</bool>
-              </property>
-              <property name="suffix">
-               <string>°</string>
-              </property>
-              <property name="minimum">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <number>359</number>
-              </property>
-              <property name="singleStep">
-               <number>15</number>
-              </property>
-              <property name="value">
-               <number>33</number>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="1">
-             <widget class="QLabel" name="azimuthLabel2">
+             <widget class="QLabel" name="azimuthLabel3">
               <property name="toolTip">
                <string>Direction of the light, the dial tip represents where the light comes from.</string>
               </property>
               <property name="text">
                <string>Azimuth</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QSpinBox" name="inclinationSpinBox2">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>75</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="toolTip">
-               <string/>
-              </property>
-              <property name="whatsThis">
-               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
-              </property>
-              <property name="suffix">
-               <string>°</string>
-              </property>
-              <property name="minimum">
-               <number>0</number>
-              </property>
-              <property name="maximum">
-               <number>90</number>
-              </property>
-              <property name="singleStep">
-               <number>15</number>
-              </property>
-              <property name="value">
-               <number>45</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="inclinationLabel2">
-              <property name="toolTip">
-               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
-              </property>
-              <property name="text">
-               <string>Inclination</string>
               </property>
              </widget>
             </item>
@@ -923,10 +935,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QFormLayout" name="formLayout_4">
-            <property name="rowWrapPolicy">
-             <enum>QFormLayout::WrapLongRows</enum>
-            </property>
+           <layout class="QGridLayout" name="gridLayout_8" columnstretch="0,0">
             <item row="0" column="0">
              <widget class="KColorCombo" name="lightKColorCombo4">
               <property name="sizePolicy">
@@ -960,6 +969,26 @@
              <widget class="QLabel" name="colorLabel4">
               <property name="text">
                <string>Color</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="azimuthLabel4">
+              <property name="toolTip">
+               <string>Direction of the light, the dial tip represents where the light comes from.</string>
+              </property>
+              <property name="text">
+               <string>Azimuth</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="inclinationLabel4">
+              <property name="toolTip">
+               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
+              </property>
+              <property name="text">
+               <string>Inclination</string>
               </property>
              </widget>
             </item>
@@ -1000,16 +1029,6 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="azimuthLabel4">
-              <property name="toolTip">
-               <string>Direction of the light, the dial tip represents where the light comes from.</string>
-              </property>
-              <property name="text">
-               <string>Azimuth</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="0">
              <widget class="QSpinBox" name="inclinationSpinBox4">
               <property name="sizePolicy">
@@ -1041,16 +1060,6 @@
               </property>
               <property name="value">
                <number>45</number>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QLabel" name="inclinationLabel4">
-              <property name="toolTip">
-               <string>Vertical tilt of the light. 90° is perpendicular to the canvas, 0° is parallel.</string>
-              </property>
-              <property name="text">
-               <string>Inclination</string>
               </property>
              </widget>
             </item>

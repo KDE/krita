@@ -57,18 +57,18 @@ public:
 
     Ui::KoRdfCalendarEventEditWidget editWidget;
 
-    KoRdfCalendarEventPrivate(KoDocumentRdf *rdf)
+    KoRdfCalendarEventPrivate(const KoDocumentRdf *rdf)
         : KoRdfSemanticItemPrivate(rdf)
         {}
 
-    KoRdfCalendarEventPrivate(KoDocumentRdf *rdf,Soprano::QueryResultIterator &it)
+    KoRdfCalendarEventPrivate(const KoDocumentRdf *rdf,Soprano::QueryResultIterator &it)
         : KoRdfSemanticItemPrivate(rdf,it)
         {}
 };
 
-KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf)
+KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf)
     :
-    KoRdfSemanticItem(*new KoRdfCalendarEventPrivate (m_rdf),parent)
+    KoRdfSemanticItem(*new KoRdfCalendarEventPrivate(m_rdf), parent)
 {
     Q_D (KoRdfCalendarEvent);
     d->m_startTimespec = KSystemTimeZones::local();
@@ -142,9 +142,9 @@ static KTimeZone toKTimeZone(Soprano::Node n)
     return kt;
 }
 
-KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
+KoRdfCalendarEvent::KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
     :
-    KoRdfSemanticItem(*new KoRdfCalendarEventPrivate (m_rdf,it),parent)
+    KoRdfSemanticItem(*new KoRdfCalendarEventPrivate(m_rdf,it), parent)
 {
     Q_D (KoRdfCalendarEvent);
     d->m_location = KoTextRdfCore::optionalBindingAsString(it, "location");
@@ -257,7 +257,7 @@ void KoRdfCalendarEvent::updateFromEditorData()
     updateTriple(d->m_dtstart,   dtstart,  predBase + "dtstart");
     updateTriple(d->m_dtend,     dtend,    predBase + "dtend");
     if (documentRdf()) {
-        documentRdf()->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
     }
 }
 

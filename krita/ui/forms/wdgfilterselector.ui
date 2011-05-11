@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>135</height>
+    <width>390</width>
+    <height>137</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Filter selection</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_3">
+  <layout class="QGridLayout">
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout">
        <item>
         <widget class="QLabel" name="label_2">
@@ -43,56 +43,45 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
-      <layout class="QGridLayout" name="gridLayout_2">
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QGridLayout">
        <item row="0" column="0">
-        <layout class="QFormLayout" name="formLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::ExpandingFieldsGrow</enum>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Presets:</string>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Presets:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QComboBox" name="comboBoxPresets">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>100</width>
-               <height>100</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButtonEditPressets">
-             <property name="text">
-              <string>Edit Presets</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        </widget>
        </item>
-       <item row="1" column="0">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxPresets">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>100</width>
+           <height>100</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="pushButtonEditPressets">
+         <property name="text">
+          <string>Edit Presets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="3">
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
           <widget class="QWidget" name="centralWidgetHolder" native="true">

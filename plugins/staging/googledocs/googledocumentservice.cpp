@@ -47,15 +47,11 @@ GoogleDocumentService::GoogleDocumentService()
 
 GoogleDocumentService::~GoogleDocumentService()
 {
-    if (documentList) {
-        delete documentList;
-        documentList = 0;
-    }
+    delete documentList;
+    documentList = 0;
 
-    if (gHandler) {
-        delete gHandler;
-        gHandler = 0;
-    }
+    delete gHandler;
+    gHandler = 0;
 }
 
 void GoogleDocumentService::clientLogin(const QString & username, const QString & password)

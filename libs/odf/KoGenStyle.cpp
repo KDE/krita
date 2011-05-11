@@ -439,3 +439,19 @@ bool KoGenStyle::isEmpty() const
             return false;
     return true;
 }
+
+void KoGenStyle::copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenStyle &targetStyle, PropertyType type)
+{
+    if (type == DefaultType) {
+        type = sourceStyle.m_propertyType;
+    }
+
+    const StyleMap& map = sourceStyle.m_properties[type];
+    if (!map.isEmpty()) {
+        QMap<QString, QString>::const_iterator it = map.constBegin();
+        const QMap<QString, QString>::const_iterator end = map.constEnd();
+        for (; it != end; ++it) {
+            targetStyle.addProperty(it.key(), it.value(), type);
+        }
+    }
+}

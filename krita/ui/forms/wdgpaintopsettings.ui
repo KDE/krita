@@ -6,11 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>611</width>
-    <height>333</height>
+    <width>500</width>
+    <height>335</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0,1">
    <item row="0" column="0" rowspan="3">
     <widget class="KisCmbPaintop" name="paintopList" native="true">
      <property name="sizePolicy">
@@ -36,22 +36,18 @@
    <item row="0" column="1" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Name:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="txtPreset">
-         <property name="toolTip">
-          <string>Current brush definition</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Name:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="txtPreset">
+       <property name="toolTip">
+        <string>Current brush definition</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="bnSave">
@@ -93,7 +89,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="1" column="1" colspan="2">
     <widget class="QFrame" name="frmOptionWidgetContainer">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -113,6 +109,7 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
+     <zorder>paintopList</zorder>
     </widget>
    </item>
    <item row="2" column="1">

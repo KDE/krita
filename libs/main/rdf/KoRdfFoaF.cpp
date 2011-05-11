@@ -60,24 +60,22 @@ public:
     void fromKABC(KABC::Addressee addr);
 #endif
 
-    KoRdfFoaFPrivate(KoDocumentRdf *rdf)
+    KoRdfFoaFPrivate(const KoDocumentRdf *rdf)
         : KoRdfSemanticItemPrivate(rdf)
         {}
 
-    KoRdfFoaFPrivate(KoDocumentRdf *rdf,Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItemPrivate(rdf,it)
+    KoRdfFoaFPrivate(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
+        : KoRdfSemanticItemPrivate(rdf, it)
         {}
 };
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, KoDocumentRdf *m_rdf)
-    :
-    KoRdfSemanticItem(*new KoRdfFoaFPrivate (m_rdf),parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf)
+    : KoRdfSemanticItem(*new KoRdfFoaFPrivate(m_rdf), parent)
 {
 }
 
-KoRdfFoaF::KoRdfFoaF(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
-    :
-    KoRdfSemanticItem(*new KoRdfFoaFPrivate (m_rdf,it),parent)
+KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
+    : KoRdfSemanticItem(*new KoRdfFoaFPrivate(m_rdf,it), parent)
 {
     Q_D (KoRdfFoaF);
     d->m_uri      = it.binding("person").toString();
@@ -129,7 +127,7 @@ void KoRdfFoaF::updateFromEditorData()
     updateTriple(d->m_homePage, d->editWidget.url->text(), predBase + "homepage");
     updateTriple(d->m_phone, d->editWidget.phone->text(), predBase + "phone");
     if (documentRdf()) {
-        documentRdf()->emitSemanticObjectUpdated(this);
+        const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
     }
 }
 

@@ -376,6 +376,9 @@ QBrush KoOdfGraphicStyles::loadOdfGradientStyleByName(const KoOdfStylesReader &s
             focalPoint.setY(percent(*e, KoXmlNS::svg, "fy", QString(), size.height()));
             gradient = new QRadialGradient(center, r, focalPoint );
         }
+        if (! gradient)
+	   return QBrush();
+
         gradient->setCoordinateMode(QGradient::ObjectBoundingMode);
 
         QString strSpread(e->attributeNS(KoXmlNS::svg, "spreadMethod", "pad"));

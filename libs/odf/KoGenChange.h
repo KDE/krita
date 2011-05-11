@@ -50,7 +50,8 @@ public:
     enum Type {
         InsertChange,
         FormatChange,
-        DeleteChange
+        DeleteChange,
+        UNKNOWN = 9999
     };
 
     enum ChangeFormat {
@@ -163,8 +164,8 @@ private:
 private:
     // Note that the copy constructor and assignment operator are allowed.
     // Better not use pointers below!
-    Type m_type;
     ChangeFormat m_changeFormat;
+    Type m_type;
     /// We use QMaps since they provide automatic sorting on the key (important for unicity!)
     QMap<QString, QString> m_changeMetaData;
     QMap<QString, QString> m_literalData;

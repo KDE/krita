@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+*  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -18,7 +18,9 @@
 
 #include "phong_pixel_processor.h"
 #include <cmath>
-
+#include "kis_math_toolbox.h"
+#include <KoColorSpaceRegistry.h>
+#include <iostream>
 
 PhongPixelProcessor::PhongPixelProcessor(const KisPropertiesConfiguration* config)
 {
@@ -84,6 +86,9 @@ void PhongPixelProcessor::initialize(const KisPropertiesConfiguration* config)
 
     diffuseLightIsEnabled = config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED);
     specularLightIsEnabled = config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED);
+    
+    //TODO BUG THIS IS HARDCODED FIX IT
+    realheightmap = QVector<double>(300000, 0);
 }
 
 
@@ -97,6 +102,106 @@ void PhongPixelProcessor::setLightVector(QVector3D lightVector)
 {
     lightVector.normalize();
     light_vector = lightVector;
+}
+
+void PhongPixelProcessor::prepareHeightmap(const quint32 pixelArea, const quint32 channelIndex, quint8* data, const KoColorSpace* colorSpace)
+{        
+    // fill in function
+    QVector<PtrToDouble> toDoubleFuncPtr(colorSpace->channels().count());
+    
+    //Testing if the ID really matters  TODO LOOK FOR BUG HERE
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(colorSpace->mathToolboxId().id());
+    if (!mathToolbox->getToDoubleChannelPtr(colorSpace->channels(), toDoubleFuncPtr))
+        return;
+    //toDoubleFunctionPointers has been filled
+
+    for (quint32 i = 0; i < pixelArea; ++i) {
+        realheightmap[i] = toDoubleFuncPtr[channelIndex](data, colorSpace->channels()[channelIndex]->pos());
+        std::clog << "Celda " << i << ": " << realheightmap[i] << ", ";
+    }
+}
+
+QVector<quint16> PhongPixelProcessor::testingHeightmapIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright)
+{
+    qreal temp;
+    quint8 channel = 0;
+    const quint8 totalChannels = 3; // The 4th is alpha and we'll fill it with a nice 0xFFFF
+    qreal computation[] = {0, 0, 0};
+    //QColor pixelColor(0, 0, 0);
+    QVector<quint16> finalPixel(4, 0xFFFF);
+
+    if (lightSources.size() == 0)
+        return finalPixel;
+
+    // Algorithm begins, Phong Illumination Model
+    normal_vector.setX(- realheightmap[posright] + realheightmap[posleft]);
+    normal_vector.setY(- realheightmap[posup] + realheightmap[posdown]);
+    normal_vector.setZ(8);
+    normal_vector.normalize();
+
+    /*
+    for (int i = 0; i < size; i++) {
+        temp = QVector3D::dotProduct(normal_vector, lightSources.at(i).lightVector);
+        for (int channel = 0; channel < totalChannels; channel++) {
+            // I = each RGB value
+            Id = fastLight.RGBvalue[channel] * temp;
+            if (Id < 0)     Id = 0;
+            if (Id > 1)     Id = 1;
+            computation[channel] += Id;
+        }
+    }
+    */
+    // PREPARE ALGORITHM HERE
+
+    for (int i = 0; i < size; i++) {
+        light_vector = lightSources.at(i).lightVector;
+
+        for (channel = 0; channel < totalChannels; channel++) {
+            Ia = lightSources.at(i).RGBvalue.at(channel) * Ka;
+            computation[channel] += Ia;
+        }
+        if (diffuseLightIsEnabled) {
+            temp = Kd * QVector3D::dotProduct(normal_vector, light_vector);
+            for (channel = 0; channel < totalChannels; channel++) {
+                Id = lightSources.at(i).RGBvalue.at(channel) * temp;
+                if (Id < 0)     Id = 0;
+                if (Id > 1)     Id = 1;
+                computation[channel] += Id;
+            }
+        }
+
+        if (specularLightIsEnabled) {
+            reflection_vector = (2 * pow(QVector3D::dotProduct(normal_vector, light_vector), shiny_exp)) * normal_vector - light_vector;
+            temp = Ks * QVector3D::dotProduct(vision_vector, reflection_vector);
+            for (channel = 0; channel < totalChannels; channel++) {
+                Is = lightSources.at(i).RGBvalue.at(channel) * temp;
+                if (Is < 0)     Is = 0;
+                if (Is > 1)     Is = 1;
+                computation[channel] += Is;
+            }
+        }
+    }
+
+    for (channel = 0; channel < totalChannels; channel++) {
+        if (computation[channel] > 1)
+            computation[channel] = 1;
+        if (computation[channel] < 0)
+            computation[channel] = 0;
+    }
+
+    //RGBA actually uses the BGRA order of channels, hence the disorder
+    finalPixel[2] = quint16(computation[0] * 0xFFFF);
+    finalPixel[1] = quint16(computation[1] * 0xFFFF);
+    finalPixel[0] = quint16(computation[2] * 0xFFFF);
+    
+    return finalPixel;
+    /*
+    pixelColor.setRedF(computation[0]);
+    pixelColor.setGreenF(computation[1]);
+    pixelColor.setBlueF(computation[2]);
+
+    return pixelColor.rgb();
+    */
 }
 
 

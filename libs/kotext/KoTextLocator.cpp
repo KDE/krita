@@ -19,7 +19,6 @@
 
 #include "KoTextLocator.h"
 #include "KoTextBlockData.h"
-#include "KoTextShapeData.h"
 #include "KoTextReference.h"
 #include "KoTextPage.h"
 #include "styles/KoListStyle.h"
@@ -62,7 +61,7 @@ public:
             }
             block = block.previous();
         }
-
+/*
         KoShape *shape = shapeForPosition(document, cursorPosition);
         if (shape == 0)
             pageNumber = -1;
@@ -71,9 +70,9 @@ public:
             KoTextPage* page = data->page();
             pageNumber = page->pageNumber();
         }
-        if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
+*/        if (pageTmp != pageNumber || chapterTmp != chapterPosition) {
             foreach(KoTextReference* reference, listeners)
-                reference->variableMoved(0, 0, 0);
+                reference->variableMoved(0, 0);
         }
     }
 

@@ -5,6 +5,7 @@
  * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
  * Copyright (C) 2010 Benjamin Port <port.benjamin@gmail.com>
  * Copyright (C) 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -27,6 +28,7 @@
 #include <QMap>
 #include <QTextDocument>
 #include <QTextTable>
+#include <QTextCursor>
 #include <QStack>
 #include <QTextTableCellFormat>
 #include <QBuffer>
@@ -45,10 +47,10 @@
 #include "styles/KoListLevelProperties.h"
 #include "styles/KoTableCellStyle.h"
 #include "styles/KoTableStyle.h"
-#include "KoTextDocumentLayout.h"
 #include "KoTextBlockData.h"
 #include "KoTextDocument.h"
 #include "KoTextInlineRdf.h"
+#include "KoSection.h"
 
 #include "KoTextMeta.h"
 #include "KoBookmark.h"
@@ -68,6 +70,7 @@
 #include <changetracker/KoFormatChangeInformation.h>
 #include <KoGenChange.h>
 #include <KoGenChanges.h>
+#include <KoXmlWriter.h>
 #include <rdf/KoDocumentRdfBase.h>
 #include <KoTableOfContentsGeneratorInfo.h>
 
@@ -123,18 +126,17 @@ class KoTextWriter::Private
 {
 public:
     explicit Private(KoShapeSavingContext &context)
-    : context(context),
-    sharedData(0),
-    writer(0),
-    layout(0),
-    styleManager(0),
-    changeTracker(0),
-    rdfData(0),
-    splitEndBlockNumber(-1),
-    splitRegionOpened(false),
-    splitIdCounter(1),
-    deleteMergeRegionOpened(false),
-    deleteMergeEndBlockNumber(-1)
+        : context(context)
+        , sharedData(0)
+        ,  writer(0)
+        ,  styleManager(0)
+        ,  changeTracker(0)
+        ,  rdfData(0)
+        ,  splitEndBlockNumber(-1)
+        ,  splitRegionOpened(false)
+        ,  splitIdCounter(1)
+        ,  deleteMergeRegionOpened(false)
+        ,  deleteMergeEndBlockNumber(-1)
     {
         writer = &context.xmlWriter();
         changeStack.push(0);
@@ -176,16 +178,17 @@ public:
     QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
+    void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
     int checkForBlockChange(const QTextBlock &block);
     int checkForListItemChange(const QTextBlock &block);
     int checkForListChange(const QTextBlock &block);
     int checkForTableRowChange(int position);
     int checkForTableColumnChange(int position);
+
     KoShapeSavingContext &context;
     KoTextSharedSavingData *sharedData;
     KoXmlWriter *writer;
 
-    KoTextDocumentLayout *layout;
     KoStyleManager *styleManager;
     KoChangeTracker *changeTracker;
     KoDocumentRdfBase *rdfData;
@@ -333,9 +336,9 @@ void KoTextWriter::Private::saveODF12Change(QTextCharFormat format)
             }
         }
     }
-
+    KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
     KoDeleteChangeMarker *changeMarker;
-    if (layout && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(layout->inlineTextObjectManager()->inlineTextObject(format)))) {
+    if (textObjectManager && (changeMarker = dynamic_cast<KoDeleteChangeMarker*>(textObjectManager->inlineTextObject(format)))) {
         if (!savedDeleteChanges.contains(changeMarker->changeId())) {
             QString deleteChangeXml = generateDeleteChangeXml(changeMarker);
             changeMarker->setDeleteChangeXml(deleteChangeXml);
@@ -812,6 +815,29 @@ QHash<QTextList *, QString> KoTextWriter::Private::saveListStyles(QTextBlock blo
     return listStyles;
 }
 
+void KoTextWriter::Private::saveInlineRdf(KoTextInlineRdf* rdf, KoTextWriter::TagInformation* tagInfos)
+{
+    QBuffer rdfXmlData;
+    KoXmlWriter *rdfXmlWriter = new KoXmlWriter(&rdfXmlData);
+    rdfXmlWriter->startDocument("rdf");
+    rdfXmlWriter->startElement("rdf");
+    rdf->saveOdf(context, rdfXmlWriter);
+    rdfXmlWriter->endElement();
+    rdfXmlWriter->endDocument();
+    KoXmlDocument *xmlReader = new KoXmlDocument;
+    xmlReader->setContent(rdfXmlData.data(), true);
+    KoXmlElement mainElement = xmlReader->documentElement();
+    QPair<QString, QString> attributeNameNS;
+    foreach (attributeNameNS, mainElement.attributeFullNames()) {
+        QString attributeName = QString("%1:%2").arg(KoXmlNS::nsURI2NS(attributeNameNS.first))
+                                                .arg(attributeNameNS.second);
+        if (attributeName.startsWith(':'))
+            attributeName.prepend("xml");
+        tagInfos->addAttribute(attributeName, mainElement.attribute(attributeNameNS.second));
+    }
+    delete(rdfXmlWriter);
+}
+
 void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int to)
 {
     QTextCursor cursor(block);
@@ -904,7 +930,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                 saveODF12Change(charFormat);
             }
 
-            KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(document).inlineTextObjectManager();
+            KoInlineObject *inlineObject = textObjectManager ? textObjectManager->inlineTextObject(charFormat) : 0;
             if (currentFragment.length() == 1 && inlineObject
                     && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
                 if (!dynamic_cast<KoDeleteChangeMarker*>(inlineObject)) {
@@ -1005,7 +1032,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                         // Write xml:id here for Rdf
                         kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        inlineRdf->saveOdf(context, writer);
+                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
+                        //inlineRdf->saveOdf(context, writer);
                     }
                 } else if (!styleName.isEmpty() /*&& !identical*/) {
                     fragmentTagInformation.setTagName("text:span");
@@ -1013,7 +1041,8 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     if (KoTextInlineRdf* inlineRdf = KoTextInlineRdf::tryToGetInlineRdf(charFormat)) {
                         // Write xml:id here for Rdf
                         kDebug(30015) << "have inline rdf xmlid:" << inlineRdf->xmlId();
-                        inlineRdf->saveOdf(context, writer);
+                        saveInlineRdf(inlineRdf, &fragmentTagInformation);
+                        //inlineRdf->saveOdf(context, writer);
                     }
                 }
 
@@ -1102,9 +1131,12 @@ int KoTextWriter::Private::checkForBlockChange(const QTextBlock &block)
             QTextCharFormat charFormat = currentFragment.charFormat();
             int currentChangeId = charFormat.property(KoCharacterStyle::ChangeTrackerId).toInt();
 
-            KoInlineObject *inlineObject = layout ? layout->inlineTextObjectManager()->inlineTextObject(charFormat) : 0;
-            if (currentFragment.length() == 1 && inlineObject && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
-                continue;
+            KoInlineTextObjectManager *textObjectManager = KoTextDocument(block.document()).inlineTextObjectManager();
+            if (textObjectManager) {
+                KoInlineObject *inlineObject = textObjectManager->inlineTextObject(charFormat);
+                if (currentFragment.length() == 1 && inlineObject && currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter) {
+                    continue;
+                }
             }
 
             if (!currentChangeId) {
@@ -1359,8 +1391,10 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
             if ((cell.row() == r) && (cell.column() == c)) {
                 TagInformation tableCellInformation;
                 tableCellInformation.setTagName("table:table-cell");
-                tableCellInformation.addAttribute("rowSpan", cell.rowSpan());
-                tableCellInformation.addAttribute("columnSpan", cell.columnSpan());
+                if (cell.rowSpan() > 1)
+                    tableCellInformation.addAttribute("table:number-rows-spanned", cell.rowSpan());
+                if (cell.columnSpan() > 1)
+                    tableCellInformation.addAttribute("table:number-columns-spanned", cell.columnSpan());
 
                 // Save the Rdf for the table cell
                 QTextTableCellFormat cellFormat = cell.format().toTableCellFormat();
@@ -1634,15 +1668,25 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
-    KoTextDocument textDocument(document);
     QTextBlock block = document->findBlock(from);
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
+
         QTextCursor cursor(block);
         QTextFrame *cursorFrame = cursor.currentFrame();
-        int blockOutlineLevel = block.blockFormat().property(KoParagraphStyle::OutlineLevel).toInt();
 
-        if (cursorFrame != currentFrame && cursorFrame->format().hasProperty(KoText::TableOfContents)) {
+        QTextBlockFormat format = block.blockFormat();
+        if (format.hasProperty(KoParagraphStyle::SectionStart)) {
+            QVariant v = format.property(KoParagraphStyle::SectionStart);
+            KoSection* section = (KoSection*)(v.value<void*>());
+            if (section) {
+                section->saveOdf(context);
+            }
+        }
+        int blockOutlineLevel = format.property(KoParagraphStyle::OutlineLevel).toInt();
+
+        if (cursorFrame != currentFrame
+                    && cursorFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
             int frameBegin = cursorFrame->firstPosition();
             int frameEnd = cursorFrame->lastPosition();
             saveTableOfContents(document, frameBegin, frameEnd, listStyles, currentTable, cursor.currentFrame());
@@ -1687,6 +1731,15 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
                 postProcessDeleteMergeXml();
             }
         }
+
+        if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
+            QVariant v = format.property(KoParagraphStyle::SectionEnd);
+            KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
+            if (section) {
+                section->saveOdf(context);
+            }
+        }
+
 
         block = block.next();
     } // while
@@ -2484,11 +2537,7 @@ void KoTextWriter::write(QTextDocument *document, int from, int to)
 {
     d->document = document;
     d->styleManager = KoTextDocument(document).styleManager();
-    d->layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-
     d->changeTracker = KoTextDocument(document).changeTracker();
-
-    if (d->layout) Q_ASSERT(d->layout->inlineTextObjectManager());
 
     QTextBlock block = document->findBlock(from);
 

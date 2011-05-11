@@ -19,7 +19,6 @@
 
 #include "KoInlineObject.h"
 #include "KoInlineObject_p.h"
-#include "KoTextDocumentLayout.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoInlineTextObjectManager.h"
@@ -97,15 +96,6 @@ bool KoInlineObject::propertyChangeListener() const
 {
     Q_D(const KoInlineObject);
     return d->propertyChangeListener;
-}
-
-//static
-KoShape * KoInlineObject::shapeForPosition(const QTextDocument *document, int position)
-{
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
-    if (lay == 0)
-        return 0;
-    return lay->shapeForPosition(position);
 }
 
 QDebug operator<<(QDebug dbg, const KoInlineObject *o)

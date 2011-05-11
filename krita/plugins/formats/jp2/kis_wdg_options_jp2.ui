@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>398</width>
-    <height>298</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <layout class="QGridLayout">
+     <item row="0" column="0" rowspan="2">
       <widget class="QLabel" name="textLabel1">
        <property name="text">
         <string>File size:</string>
@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="_2">
        <item>
         <widget class="QLabel" name="textLabel3">
          <property name="text">
@@ -59,19 +59,6 @@
         </widget>
        </item>
       </layout>
-     </item>
-     <item row="1" column="0">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>42</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="1" column="1">
       <layout class="QHBoxLayout" name="_3">
@@ -122,7 +109,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="_4">
        <item>
         <widget class="QLabel" name="textLabel4_2">
          <property name="text">
@@ -166,31 +153,27 @@
      </item>
     </layout>
    </item>
-   <item>
-    <layout class="QFormLayout" name="formLayout_2">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Number of resolutions:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="numberResolutions">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-       <property name="maximum">
-        <number>20</number>
-       </property>
-       <property name="value">
-        <number>6</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Number of resolutions:</string>
+     </property>
+    </widget>
    </item>
-   <item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="numberResolutions">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>20</number>
+     </property>
+     <property name="value">
+      <number>6</number>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

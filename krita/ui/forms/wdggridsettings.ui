@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>348</height>
+    <width>422</width>
+    <height>255</height>
    </rect>
   </property>
   <layout class="QGridLayout">
@@ -35,115 +35,48 @@
      <property name="title">
       <string>Placement</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <layout class="QFormLayout" name="formLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Horizontal spacing:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="KIntNumInput" name="intHSpacing">
-          <property name="value">
-           <number>10</number>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>Vertical spacing:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="KIntNumInput" name="intVSpacing">
-          <property name="value">
-           <number>10</number>
-          </property>
-          <property name="minimum">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1">
-       <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="3">
-       <layout class="QFormLayout" name="formLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel2_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>X offset:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="KIntNumInput" name="intXOffset">
-          <property name="minimum">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel2_2_2">
-          <property name="text">
-           <string>Y offset:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="KIntNumInput" name="intYOffset">
-          <property name="minimum">
-           <number>0</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
+     <layout class="QGridLayout">
       <item row="0" column="4">
-       <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
+       <widget class="QLabel" name="textLabel2_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>X offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="textLabel2_2_2">
+        <property name="text">
+         <string>Y offset:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="5">
+       <widget class="KIntNumInput" name="intYOffset">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+       </widget>
       </item>
       <item row="0" column="5">
+       <widget class="KIntNumInput" name="intXOffset">
+        <property name="minimum">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7">
        <spacer name="spacer11">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -159,7 +92,99 @@
         </property>
        </spacer>
       </item>
+      <item row="2" column="5" rowspan="2">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Horizontal spacing:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KIntNumInput" name="intHSpacing">
+        <property name="value">
+         <number>10</number>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KIntNumInput" name="intVSpacing">
+        <property name="value">
+         <number>10</number>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="KIntNumInput" name="intSubdivision">
+        <property name="value">
+         <number>2</number>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="textLabel1">
+        <property name="text">
+         <string>Subdivision:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" rowspan="2">
+       <widget class="KoAspectButton" name="spacingAspectButton" native="true"/>
+      </item>
       <item row="1" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Vertical spacing:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="6" rowspan="2">
+       <widget class="KoAspectButton" name="offsetAspectButton" native="true"/>
+      </item>
+      <item row="2" column="1">
        <spacer name="verticalSpacer_2">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -175,43 +200,6 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="3" rowspan="2">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="2" column="0">
-       <layout class="QFormLayout" name="formLayout_3">
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel1">
-          <property name="text">
-           <string>Subdivision:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="KIntNumInput" name="intSubdivision">
-          <property name="value">
-           <number>2</number>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
     </widget>
    </item>
@@ -220,121 +208,125 @@
      <property name="title">
       <string>Style</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QFormLayout" name="formLayout_4">
-        <item row="0" column="0">
-         <widget class="QLabel" name="textLabel4">
-          <property name="text">
-           <string>Main:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
+     <layout class="QGridLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="textLabel4">
+        <property name="text">
+         <string>Main:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="KComboBox" name="selectMainStyle">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <item>
+         <property name="text">
+          <string>Lines</string>
+         </property>
         </item>
-        <item row="0" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="KComboBox" name="selectMainStyle">
-            <property name="currentIndex">
-             <number>0</number>
-            </property>
-            <item>
-             <property name="text">
-              <string>Lines</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dashed Lines</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dots</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="KColorButton" name="colorMain">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="color">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="defaultColor">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-           </widget>
-          </item>
-         </layout>
+        <item>
+         <property name="text">
+          <string>Dashed Lines</string>
+         </property>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="textLabel5">
-          <property name="text">
-           <string>Subdivision:</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-          </property>
-         </widget>
+        <item>
+         <property name="text">
+          <string>Dots</string>
+         </property>
         </item>
-        <item row="1" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="KComboBox" name="selectSubdivisionStyle">
-            <item>
-             <property name="text">
-              <string>Lines</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dashed Lines</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Dots</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item>
-           <widget class="KColorButton" name="colorSubdivision">
-            <property name="text">
-             <string/>
-            </property>
-            <property name="color">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-            <property name="defaultColor">
-             <color>
-              <red>0</red>
-              <green>0</green>
-              <blue>0</blue>
-             </color>
-            </property>
-           </widget>
-          </item>
-         </layout>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="KComboBox" name="selectSubdivisionStyle">
+        <item>
+         <property name="text">
+          <string>Lines</string>
+         </property>
         </item>
-       </layout>
+        <item>
+         <property name="text">
+          <string>Dashed Lines</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Dots</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="textLabel5">
+        <property name="text">
+         <string>Subdivision:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <spacer name="spacer15">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>34</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="2">
+       <widget class="KColorButton" name="colorMain">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="color">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="defaultColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="KColorButton" name="colorSubdivision">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="color">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+        <property name="defaultColor">
+         <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>0</blue>
+         </color>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

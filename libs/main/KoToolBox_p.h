@@ -29,6 +29,8 @@
 #include <QtCore/QHash>
 #include <QtGui/QDockWidget>
 
+#include <KoToolManager.h>
+
 class QToolButton;
 class KoCanvasController;
 class KoCanvasBase;
@@ -94,11 +96,14 @@ public slots:
 
     /// Set the orientation of the layout to @p orientation
     void setOrientation(Qt::Orientation orientation);
-    
+
     void setFloating(bool v);
 
 private slots:
     void setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer* newLayer);
+
+    /// add a tool post-initialization. The tool will also be activated.
+    void toolAdded(const KoToolButton &button, KoCanvasController *canvas);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -108,23 +113,6 @@ protected:
 private:
     class Private;
     Private * const d;
-};
-
-class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
-{
-    Q_OBJECT
-public:
-    KoToolBoxDocker(KoToolBox *toolBox);
-
-    /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-
-protected slots:
-    void updateToolBoxOrientation(Qt::DockWidgetArea area);
-    void updateFloating(bool);
-
-private:
-    KoToolBox *m_toolBox;
 };
 
 #endif // _KO_TOOLBOX_H_

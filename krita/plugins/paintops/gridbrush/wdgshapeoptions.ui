@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>425</width>
-    <height>267</height>
+    <height>269</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,50 +22,41 @@
     <height>200</height>
    </size>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <widget class="QComboBox" name="shapeCBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>121</width>
+     <height>25</height>
+    </rect>
+   </property>
    <item>
-    <widget class="QComboBox" name="shapeCBox">
-     <item>
-      <property name="text">
-       <string>Ellipse</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Rectangle</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Line</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Pixel</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Anti-aliased pixel</string>
-      </property>
-     </item>
-    </widget>
+    <property name="text">
+     <string>Ellipse</string>
+    </property>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>223</height>
-      </size>
-     </property>
-    </spacer>
+    <property name="text">
+     <string>Rectangle</string>
+    </property>
    </item>
-  </layout>
+   <item>
+    <property name="text">
+     <string>Line</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Pixel</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Anti-aliased pixel</string>
+    </property>
+   </item>
+  </widget>
  </widget>
  <resources/>
  <connections/>

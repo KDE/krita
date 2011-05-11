@@ -262,7 +262,7 @@ QRectF StockDiagram::Private::projectCandlestick( PaintContext *context, const Q
                                           rightLowPoint.y() - leftHighPoint.y() ) );
 }
 
-void StockDiagram::Private::drawOHLCBar( const CartesianDiagramDataCompressor::DataPoint &open,
+void StockDiagram::Private::drawOHLCBar( int dataset, const CartesianDiagramDataCompressor::DataPoint &open,
         const CartesianDiagramDataCompressor::DataPoint &high,
         const CartesianDiagramDataCompressor::DataPoint &low,
         const CartesianDiagramDataCompressor::DataPoint &close,
@@ -296,18 +296,18 @@ void StockDiagram::Private::drawOHLCBar( const CartesianDiagramDataCompressor::D
 
     if ( reversedOrder ) {
         if ( !open.hidden )
-            drawLine( col, leftOpenPoint, rightOpenPoint, context ); // Open marker
+            drawLine( dataset, col, leftOpenPoint, rightOpenPoint, context ); // Open marker
         if ( !low.hidden && !high.hidden )
-            drawLine( col, lowPoint, highPoint, context ); // Low-High line
+            drawLine( dataset, col, lowPoint, highPoint, context ); // Low-High line
         if ( !close.hidden )
-            drawLine( col, leftClosePoint, rightClosePoint, context ); // Close marker
+            drawLine( dataset, col, leftClosePoint, rightClosePoint, context ); // Close marker
     } else {
         if ( !close.hidden )
-            drawLine( col, leftClosePoint, rightClosePoint, context ); // Close marker
+            drawLine( dataset, col, leftClosePoint, rightClosePoint, context ); // Close marker
         if ( !low.hidden && !high.hidden )
-            drawLine( col, lowPoint, highPoint, context ); // Low-High line
+            drawLine( dataset, col, lowPoint, highPoint, context ); // Low-High line
         if ( !open.hidden )
-            drawLine( col, leftOpenPoint, rightOpenPoint, context ); // Open marker
+            drawLine( dataset, col, leftOpenPoint, rightOpenPoint, context ); // Open marker
     }
 
     DataValueTextInfoList list;
@@ -333,7 +333,7 @@ void StockDiagram::Private::drawOHLCBar( const CartesianDiagramDataCompressor::D
   * @param high The high data point
   * @param context The context to draw the candlestick in
   */
-void StockDiagram::Private::drawCandlestick( const CartesianDiagramDataCompressor::DataPoint &open,
+void StockDiagram::Private::drawCandlestick( int /*dataset*/, const CartesianDiagramDataCompressor::DataPoint &open,
                                              const CartesianDiagramDataCompressor::DataPoint &high,
                                              const CartesianDiagramDataCompressor::DataPoint &low,
                                              const CartesianDiagramDataCompressor::DataPoint &close,
@@ -460,7 +460,7 @@ void StockDiagram::Private::drawCandlestick( const CartesianDiagramDataCompresso
   * @param point2 The second point
   * @param context The context to draw the low-high line in
   */
-void StockDiagram::Private::drawLine( int col, const QPointF &point1, const QPointF &point2, PaintContext *context )
+void StockDiagram::Private::drawLine( int dataset, int col, const QPointF &point1, const QPointF &point2, PaintContext *context )
 {
     PainterSaver painterSaver( context->painter() );
 
@@ -468,8 +468,8 @@ void StockDiagram::Private::drawLine( int col, const QPointF &point1, const QPoi
     const int modelRow = col;
     const int modelCol = 0;
 
-    const QPen pen = diagram->pen( col );
-    const QBrush brush = diagram->brush( col );
+    const QPen pen = diagram->pen( dataset );
+    const QBrush brush = diagram->brush( dataset );
     const ThreeDBarAttributes threeDBarAttr = diagram->threeDBarAttributes( col );
 
     QPointF transP1 = context->coordinatePlane()->translate( point1 );

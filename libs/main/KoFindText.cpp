@@ -27,34 +27,38 @@
 #include <QtGui/QPalette>
 #include <QtGui/QStyle>
 #include <QtGui/QApplication>
+#include <QtGui/QAbstractTextDocumentLayout>
 
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 
-#include "KoResourceManager.h"
-#include "KoText.h"
-#include "KoTextDocumentLayout.h"
-#include "KoShape.h"
-#include "KoTextShapeData.h"
-#include "KoCanvasBase.h"
-#include "KoShapeManager.h"
+#include <KoResourceManager.h>
+#include <KoText.h>
+#include <KoTextDocument.h>
+#include <KoShape.h>
+#include <KoShapeContainer.h>
+#include <KoTextShapeData.h>
+
 #include "KoFindOptionSet.h"
 #include "KoFindOption.h"
+#include "KoDocument.h"
 
 class KoFindText::Private
 {
 public:
-    Private() : document(0), selectionStart(-1), selectionEnd(-1) { }
+    Private(KoFindText* qq) : q(qq), selectionStart(-1), selectionEnd(-1) { }
 
-    void resourceChanged(int key, const QVariant &variant);
     void updateSelections();
+    void updateDocumentList();
+    void documentDestroyed(QObject *document);
+    void updateCurrentMatch(int position);
 
-    QTextDocument *document;
+    KoFindText *q;
 
-    KoResourceManager *resourceManager;
+    QList<QTextDocument*> documents;
 
     QTextCursor selection;
-    QVector<QAbstractTextDocumentLayout::Selection> selections;
+    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> > selections;
 
     int selectionStart;
     int selectionEnd;
@@ -62,17 +66,19 @@ public:
     static QTextCharFormat *highlightFormat;
     static QTextCharFormat *currentMatchFormat;
     static QTextCharFormat *currentSelectionFormat;
+
+    QPair<QTextDocument*, int> currentMatch;
 };
 
 QTextCharFormat *KoFindText::Private::currentSelectionFormat = 0;
 QTextCharFormat *KoFindText::Private::highlightFormat = 0;
 QTextCharFormat *KoFindText::Private::currentMatchFormat = 0;
 
-KoFindText::KoFindText(KoResourceManager *provider, QObject *parent)
-    : KoFindBase(parent), d(new Private)
+KoFindText::KoFindText(const QList< QTextDocument* >& documents, QObject* parent)
+    : KoFindBase(parent), d(new Private(this))
 {
-    d->resourceManager = provider;
-    connect(provider, SIGNAL(resourceChanged(int, const QVariant &)), this, SLOT(resourceChanged(int, const QVariant &)));
+    d->documents = documents;
+    d->updateDocumentList();
 
     if(!d->highlightFormat) {
         d->highlightFormat = new QTextCharFormat();
@@ -115,63 +121,45 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
 
     int start = 0;
     bool findInSelection = false;
-//     if(opts & FindWithinSelection && d->selectionStart != d->selectionEnd) {
-//         QAbstractTextDocumentLayout::Selection selection;
-//         QTextCursor cursor;
-//         cursor.setPosition(d->selectionStart);
-//         cursor.setPosition(d->selectionEnd, QTextCursor::KeepAnchor);
-//         selection.cursor = cursor;
-//         selection.format = *(d->currentSelectionFormat);
-//         d->selections.append(selection);
-//
-//         findInSelection = true;
-//         start = d->selectionStart;
-//     }
 
-    if(!d->document) {
-        QVariant doc = d->resourceManager->resource(KoText::CurrentTextDocument);
-        if(doc.isValid()) {
-            d->document = static_cast<QTextDocument *>(doc.value<void *>());
-        }
-    }
-
-    if(!d->document) {
+    if(d->documents.size() == 0) {
         kWarning() << "No document available for searching!";
         return;
     }
 
     int position = 0;
-//     if(opts & FindFromCursor) {
-//         position = d->resourceManager->intResource(KoText::CurrentTextPosition);
-//     }
-
     int currentMatch = 0;
     bool matchFound;
-    QTextCursor cursor = d->document->find(pattern, start, flags);
-    while(!cursor.isNull()) {
-        if(findInSelection && d->selectionEnd <= cursor.position()) {
-            break;
+
+    foreach(QTextDocument* document, d->documents) {
+        QTextCursor cursor = document->find(pattern, start, flags);
+        QVector<QAbstractTextDocumentLayout::Selection> selections;
+        while(!cursor.isNull()) {
+            if(findInSelection && d->selectionEnd <= cursor.position()) {
+                break;
+            }
+
+            QAbstractTextDocumentLayout::Selection selection;
+            selection.cursor = cursor;
+            selection.format = *(d->highlightFormat);
+            selections.append(selection);
+
+            KoFindMatch match;
+            match.setContainer(QVariant::fromValue(document));
+            match.setLocation(QVariant::fromValue(cursor));
+            matchList.append(match);
+
+            if(position <= qMin(cursor.anchor(), cursor.position())) {
+                matchFound = true;
+            }
+
+            if(!matchFound) {
+                currentMatch++;
+            }
+
+            cursor = document->find(pattern, cursor, flags);
         }
-
-        QAbstractTextDocumentLayout::Selection selection;
-        selection.cursor = cursor;
-        selection.format = *(d->highlightFormat);
-        d->selections.append(selection);
-
-        KoFindMatch match;
-        match.setContainer(QVariant::fromValue(d->document));
-        match.setLocation(QVariant::fromValue(cursor));
-        matchList.append(match);
-
-        if(position <= qMin(cursor.anchor(), cursor.position())) {
-            matchFound = true;
-        }
-
-        if(!matchFound) {
-            currentMatch++;
-        }
-
-        cursor = d->document->find(pattern, cursor, flags);
+        d->selections.insert(document, selections);
     }
 
     if(d->selections.size() > 0) {
@@ -180,13 +168,13 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
         }
 
         setCurrentMatch(position);
-        d->selections[position].format = *(d->currentMatchFormat);
+        d->updateCurrentMatch(position);
     }
 
     d->updateSelections();
 }
 
-void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant &value)
+void KoFindText::replaceImplementation(const KoFindMatch &/*match*/, const QVariant &/*value*/)
 {
     //Does nothing at the moment...
 }
@@ -194,6 +182,9 @@ void KoFindText::replaceImplementation(const KoFindMatch &match, const QVariant 
 void KoFindText::clearMatches()
 {
     d->selections.clear();
+    foreach(QTextDocument* doc, d->documents) {
+        d->selections.insert(doc, QVector<QAbstractTextDocumentLayout::Selection>());
+    }
     d->updateSelections();
 
     d->selectionStart = -1;
@@ -208,9 +199,8 @@ void KoFindText::findNext()
         return;
     }
 
-    d->selections[currentMatchIndex()].format = *(d->highlightFormat);
     KoFindBase::findNext();
-    d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
+    d->updateCurrentMatch(currentMatchIndex());
     d->updateSelections();
 }
 
@@ -219,28 +209,84 @@ void KoFindText::findPrevious()
     if(d->selections.size() == 0) {
         return;
     }
-
-    d->selections[currentMatchIndex()].format = *(d->highlightFormat);
+    
     KoFindBase::findPrevious();
-    d->selections[currentMatchIndex()].format = *(d->currentMatchFormat);
+    d->updateCurrentMatch(currentMatchIndex());
     d->updateSelections();
 }
 
-void KoFindText::Private::resourceChanged(int key, const QVariant &variant)
+void KoFindText::addDocuments(const QList<QTextDocument*> &documents)
 {
-    if(key == KoText::CurrentTextDocument) {
-        document = static_cast<QTextDocument *>(variant.value<void *>());
-    } else if(key == KoText::SelectedTextPosition) {
-        selectionStart = variant.toInt();
-    } else if(key == KoText::SelectedTextAnchor) {
-        selectionEnd = variant.toInt();
+    d->documents.append(documents);
+    d->updateDocumentList();
+}
+
+void KoFindText::findTextInShapes(const QList<KoShape*> &shapes, QList<QTextDocument*> &append)
+{
+    foreach(KoShape* shape, shapes) {
+        KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
+        if(container) {
+            findTextInShapes(container->shapes(), append);
+        }
+
+        KoTextShapeData *shapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+        if (!shapeData)
+            continue;
+
+        if(shapeData->document()) {
+            if(!append.contains(shapeData->document())) {
+                append.append(shapeData->document());
+            }
+        }
     }
 }
 
 void KoFindText::Private::updateSelections()
 {
-    KoTextDocument doc(document);
-    doc.setSelections(selections);
+    QHash< QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
+    for(itr = selections.begin(); itr != selections.end(); ++itr) {
+        KoTextDocument doc(itr.key());
+        doc.setSelections(itr.value());
+    }
+}
+
+void KoFindText::Private::updateDocumentList()
+{
+    foreach(QTextDocument *document, documents) {
+        connect(document, SIGNAL(destroyed(QObject*)), q, SLOT(documentDestroyed(QObject*)), Qt::UniqueConnection);
+    }
+}
+
+void KoFindText::Private::documentDestroyed(QObject *document)
+{
+    QTextDocument* doc = qobject_cast<QTextDocument*>(document);
+    if(doc) {
+        selections.remove(doc);
+        documents.removeOne(doc);
+    }
+}
+
+void KoFindText::Private::updateCurrentMatch(int position)
+{
+    if(currentMatch.first != 0) {
+        QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(currentMatch.first);
+        sel[currentMatch.second].format = *highlightFormat;
+        selections.insert(currentMatch.first, sel);
+    }
+    
+    int counter = 0;
+    QHash<QTextDocument*, QVector<QAbstractTextDocumentLayout::Selection> >::iterator itr;
+    for(itr = selections.begin(); itr != selections.end(); ++itr) {
+        if(counter + itr.value().size() > position) {
+            break;
+        }
+        counter += itr.value().size();
+    }
+    currentMatch.first = itr.key();
+    currentMatch.second = position - counter;
+    QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(itr.key());
+    sel[currentMatch.second].format = *currentMatchFormat;
+    selections.insert(itr.key(), sel);
 }
 
 #include "KoFindText.moc"

@@ -550,7 +550,6 @@ void KoTextDocumentLayout::layout()
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
-
         // Request a Root Area
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 

@@ -143,9 +143,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 border = blockData->border();
                 paintStrategy = blockData->paintStrategy();
             }
-            
-            
-            
+
             KoTextBlockPaintStrategyBase dummyPaintStrategy;
             if (paintStrategy == 0) {
                 paintStrategy = &dummyPaintStrategy;
@@ -157,7 +155,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                 }
                 continue; // this paragraph shouldn't be shown so just skip it
             }
-            
+
             // Check and update border drawing code
             if (lastBorder == 0) {
                 lastBorderRect = br;
@@ -243,18 +241,17 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             decorateParagraph(painter, block);
 
-	    painter->restore();
+            painter->restore();
         } else {
-	  if (lastBorder) {
-	    lastBorder->paint(*painter, lastBorderRect);
-	    lastBorder = 0;
-	  }
-	}
+            if (lastBorder) {
+                lastBorder->paint(*painter, lastBorderRect);
+                lastBorder = 0;
+            }
+        }
     }
     if (lastBorder) {
         lastBorder->paint(*painter, lastBorderRect);
     }
-        
 
     painter->translate(0, -m_verticalAlignOffset);
     painter->translate(0, bottom() - top() - m_footNotesHeight);

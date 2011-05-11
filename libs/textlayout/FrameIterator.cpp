@@ -77,7 +77,7 @@ bool FrameIterator::operator ==(const FrameIterator &other)
             return false;
         return *currentSubFrameIterator == *(other.currentSubFrameIterator);
     } else {
-        return lineTextStart != other.lineTextStart;
+        return lineTextStart == other.lineTextStart;
     }
 }
 

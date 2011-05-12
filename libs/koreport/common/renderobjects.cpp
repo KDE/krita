@@ -217,6 +217,11 @@ void OROPrimitive::setPosition(const QPointF & p)
     m_position = p;
 }
 
+void OROPrimitive::setSize(const QSizeF & s)
+{
+    m_size = s;
+}
+
 //
 // OROTextBox
 //
@@ -238,11 +243,6 @@ OROTextBox::OROTextBox()
 
 OROTextBox::~OROTextBox()
 {
-}
-
-void OROTextBox::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void OROTextBox::setText(const QString & s)

@@ -196,6 +196,9 @@ public:
         return m_position;
     };
     void setPosition(const QPointF &);
+    QSizeF size() const { return m_size; }
+    void setSize(const QSizeF &s);
+
     virtual OROPrimitive* clone() = 0;
     
 protected:
@@ -218,11 +221,6 @@ class KOREPORT_EXPORT OROTextBox : public OROPrimitive
 public:
     OROTextBox();
     virtual ~OROTextBox();
-
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
 
     QString text() const {
         return m_text;
@@ -260,7 +258,6 @@ public:
     void setCanGrow(bool cg){m_canGrow = cg;}
 
 protected:
-    QSizeF m_size;
     QString m_text;
     KRTextStyleData m_textStyle;
     KRLineStyleData m_lineStyle;

@@ -400,10 +400,8 @@ public:
         q->canvas()->snapGuide()->reset();
         angleSnapStrategy = 0;
 
-        if (shape!=0) {
-           delete shape;
-           shape=0;
-        }
+        delete shape;
+        shape=0;
 
         existingStartPoint = 0;
         existingEndPoint = 0;

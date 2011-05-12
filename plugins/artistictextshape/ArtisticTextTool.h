@@ -22,6 +22,7 @@
 #define ARTISTICTEXTTOOL_H
 
 #include "ArtisticTextShape.h"
+#include "ArtisticTextToolSelection.h"
 
 #include <KoToolBase.h>
 #include <QtCore/QTimer>
@@ -57,11 +58,24 @@ public:
     virtual QMap<QString, QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual KoToolSelection *selection();
+
+    /// Sets cursor for specified text shape it is the current text shape
+    void setTextCursor(ArtisticTextShape *textShape, int textCursor);
+
+    /// Returns the current text cursor position
+    int textCursor() const;
+
+    /**
+     * Determines cursor position from specified mouse position.
+     * @param mousePosition mouse position in document coordinates
+     * @return cursor position, -1 means invalid cursor
+     */
+    int cursorFromMousePosition(const QPointF &mousePosition);
 
 protected:
     void enableTextCursor( bool enable );
-    int textCursor() const { return m_textCursor; }
-    void setTextCursor( int textCursor );
     void removeFromTextCursor( int from, unsigned int count );
     void addToTextCursor( const QString &str );
 
@@ -73,17 +87,14 @@ private slots:
     void shapeSelectionChanged();
 
 signals:
-    void shapeSelected(ArtisticTextShape *shape, KoCanvasBase *canvas);
-
-private:
-    class AddTextRangeCommand;
-    class RemoveTextRangeCommand;
+    void shapeSelected();
 
 private:
     void updateActions();
     void setTextCursorInternal( int textCursor );
     void createTextCursorShape();
     void updateTextCursorArea() const;
+    void setCurrentShape(ArtisticTextShape *currentShape);
 
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
@@ -91,6 +102,7 @@ private:
     /// Returns the offset handle shape for the current text shape
     QPainterPath offsetHandleShape();
 
+    ArtisticTextToolSelection m_selection; ///< the tools selection
     ArtisticTextShape * m_currentShape; ///< the current text shape we are working on
     ArtisticTextShape * m_hoverText;    ///< the text shape the mouse cursor is hovering over
     KoPathShape * m_hoverPath;          ///< the path shape the mouse cursor is hovering over
@@ -103,8 +115,7 @@ private:
     int m_textCursor;
     QTimer m_blinkingCursor;
     bool m_showCursor;
-    QString m_currentText;
-
+    QList<QPointF> m_linefeedPositions; ///< offset positions for temporary line feeds
     KoInteractionStrategy *m_currentStrategy;
 };
 

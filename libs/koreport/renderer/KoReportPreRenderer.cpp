@@ -101,10 +101,8 @@ KoReportPreRendererPrivate::KoReportPreRendererPrivate()
 
 KoReportPreRendererPrivate::~KoReportPreRendererPrivate()
 {
-    if (m_reportData) {
-        delete m_reportData;
-        m_reportData = 0;
-    }
+    delete m_reportData;
+    m_reportData = 0;
 
     m_postProcText.clear();
 }
@@ -646,8 +644,7 @@ void KoReportPreRenderer::setSourceData(KoReportData *data)
 bool KoReportPreRenderer::setDom(const QDomElement &docReport)
 {
     if (d) {
-        if (d->m_reportData)
-            delete d->m_reportData;
+        delete d->m_reportData;
         d->m_valid = false;
 
 	if (docReport.tagName() != "report:content") {

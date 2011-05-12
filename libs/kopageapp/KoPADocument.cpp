@@ -43,6 +43,7 @@
 #include <KoXmlNS.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoDocumentInfo.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -74,8 +75,11 @@ KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleV
 : KoDocument( parentWidget, parent, singleViewMode ),
     d(new Private())
 {
-    d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
+    Q_ASSERT(d->inlineTextObjectManager);
     d->rulersVisible = false;
+    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
+            d->inlineTextObjectManager, SLOT(documentInformationUpdated(const QString &, const QString &)));
 
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
@@ -711,7 +715,8 @@ KoPAMasterPage * KoPADocument::newMasterPage()
 }
 
 /// return the inlineTextObjectManager for this document.
-KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const {
+KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const
+{
     return d->inlineTextObjectManager;
 }
 

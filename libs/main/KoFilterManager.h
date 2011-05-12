@@ -89,11 +89,14 @@ public:
     /**
      * Imports the passed URL and returns the resultant filename
      * (most likely some file in /tmp).
+     * @p documentMimeType gives importDocument a hint about what type
+     * the document may be. It can be left empty.
      * The @p status variable signals the success/error of the conversion
      * If the QString which is returned isEmpty() and the status is OK,
      * then we imported the file directly into the document.
      */
     QString importDocument(const QString& url,
+                           const QString& documentMimeType,
                            KoFilter::ConversionStatus& status);
 
     /**

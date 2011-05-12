@@ -32,7 +32,7 @@ class InsertTableColumnCommand : public QUndoCommand
 {
 public:
 
-    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, QUndoCommand *parent = 0);
+    InsertTableColumnCommand(KoTextEditor *te, QTextTable *t, bool right, int changeId = 0, QUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -43,6 +43,7 @@ private:
     QTextTable *m_table;
     int m_column;
     bool m_right;
+    int m_changeId;
     KoTableColumnStyle m_style;
 };
 

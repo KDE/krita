@@ -8,12 +8,10 @@ add_subdirectory( opendocument/tests )
 
 ########### next target ###############
 set(kotext_LIB_SRCS
-    KoTextShapeData.cpp
     KoText.cpp
     KoTextBlockData.cpp
     KoTextBlockBorderData.cpp
     KoTextBlockPaintStrategyBase.cpp
-    KoTextDocumentLayout.cpp
     KoTextOdfSaveHelper.cpp
     KoTextPaste.cpp
     KoTextDocument.cpp
@@ -36,10 +34,10 @@ set(kotext_LIB_SRCS
     KoVariable.cpp
     KoVariableManager.cpp
     KoNamedVariable.cpp
+    KoSection.cpp
     KoTextLocator.cpp
     KoTextReference.cpp
     KoTextAnchor.cpp
-    KoTextShapeContainerModel.cpp
     KoTextShapeSavingContext.cpp
     KoBookmark.cpp
     KoBookmarkManager.cpp
@@ -81,6 +79,11 @@ set(kotext_LIB_SRCS
     changetracker/KoChangeTracker.cpp
     changetracker/KoChangeTrackerElement.cpp
     changetracker/KoDeleteChangeMarker.cpp
+    changetracker/KoFormatChangeInformation.cpp
+    changetracker/KoDeletedRowColumnDataStore.cpp
+    changetracker/KoDeletedRowData.cpp
+    changetracker/KoDeletedColumnData.cpp
+    changetracker/KoDeletedCellData.cpp
     KoTextDrag.cpp
 
     commands/DeleteTableRowCommand.cpp
@@ -138,18 +141,17 @@ install(
     KoTextBlockBorderData.h
     KoTextBlockData.h
     KoTextDocument.h
-    KoTextDocumentLayout.h
     KoText.h
     KoList.h
     KoTextLocator.h
     KoTextPage.h
     KoTextPaste.h
-    KoTextShapeData.h
     KoVariable.h
     KoVariableManager.h
     KoTextRdfCore.h
     KoTextInlineRdf.h
     KoTextMeta.h
+    KoSection.h
 
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel
@@ -167,6 +169,7 @@ install(
     styles/KoTableFormat.h
     styles/KoSectionStyle.h
     styles/KoStyleManager.h
+    styles/KoTableBorderStyle.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/styles COMPONENT Devel
 )
@@ -176,6 +179,10 @@ install(
     changetracker/KoChangeTracker.h
     changetracker/KoChangeTrackerElement.h
     changetracker/KoDeleteChangeMarker.h
+    changetracker/KoDeletedRowColumnDataStore.h
+    changetracker/KoDeletedRowData.cpp
+    changetracker/KoDeletedColumnData.cpp
+    changetracker/KoDeletedCellData.cpp
     DESTINATION
     ${INCLUDE_INSTALL_DIR}/changetracker COMPONENT Devel
 )

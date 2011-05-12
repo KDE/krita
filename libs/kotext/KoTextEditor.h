@@ -78,7 +78,7 @@ public slots:
     ///This should be used only as read-only cursor or within a QUndoCommand sub-class which will be added to the textEditor with addCommand. For examples of proper implementation of such undoCommands, see the TextShape commands.
     QTextCursor* cursor();
 
-    void addCommand(QUndoCommand *command);
+    void addCommand(QUndoCommand *command, bool addCommandToStack = true);
 
     void registerTrackedChange(QTextCursor &selection, KoGenChange::Type changeType, QString title, QTextFormat &format, QTextFormat &prevFormat, bool applyToWholeBlock = false);
 

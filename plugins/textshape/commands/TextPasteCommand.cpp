@@ -81,21 +81,18 @@ void TextPasteCommand::redo()
                 odfType = KoOdf::OpenOfficeClipboard;
             }
             bool weOwnRdfModel = true;
-            Soprano::Model *rdfModel = 0;
+            const Soprano::Model *rdfModel = 0;
 #ifdef SHOULD_BUILD_RDF
             rdfModel = Soprano::createModel();
             if (KoDocumentRdf *rdf = KoDocumentRdf::fromResourceManager(m_tool->canvas())) {
-                if (rdfModel) {
-                    delete rdfModel;
-                }
+                delete rdfModel;
                 rdfModel = rdf->model();
                 weOwnRdfModel = false;
             }
 #endif
 
             //kDebug() << "pasting odf text";
-            KoTextPaste paste(m_tool->m_textShapeData, *editor->cursor(),
-                              m_tool->canvas(), rdfModel);
+            KoTextPaste paste(*editor->cursor(), m_tool->canvas(), rdfModel);
             paste.paste(odfType, data);
             //kDebug() << "done with pasting odf";
 

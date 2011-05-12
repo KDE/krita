@@ -157,10 +157,10 @@ inline bool KoStyleStack::hasProperty(const QString &nsURI, const QString &name,
 
 // Font size is a bit special. "115%" applies to "the fontsize of the parent style".
 // This can be generalized though (hasPropertyThatCanBePercentOfParent() ? :)
-qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
+QPair<qreal,qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) const
 {
     const QString name = "font-size";
-    qreal percent = 1;
+    qreal percent = 100;
     QList<KoXmlElement>::ConstIterator it = m_stack.end(); // reverse iterator
 
     while (it != m_stack.begin()) {
@@ -173,15 +173,15 @@ qreal KoStyleStack::fontSize(const qreal defaultFontPointSize) const
                 //just that we are looking for a valid parent fontsize. So, let's only take the
                 //first percent definition into account and keep on to seek for a valid parent,
                 //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
-                if (percent == 1)
-                    percent = value.left(value.length() - 1).toDouble() / 100.0;
+                if (percent == 100)
+                    percent = value.left(value.length() - 1).toDouble();
             } else
-                return percent * KoUnit::parseValue(value);   // e.g. 12pt
+                return QPair<qreal,qreal> ((percent * KoUnit::parseValue(value))/100.0, percent);   // e.g. 12pt
         }
     }
 
     //if there was no valid parent, we return the default fontsize together with an optional calculated percent-value.
-    return percent * defaultFontPointSize;
+    return QPair<qreal,qreal> ((percent * defaultFontPointSize)/100.0, percent);
 }
 
 bool KoStyleStack::hasChildNode(const QString &nsURI, const QString &localName) const

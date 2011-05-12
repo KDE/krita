@@ -42,8 +42,12 @@
 #define PANEL_SIZEY 50.0
 
 StylePreview::StylePreview(QWidget * parent)
-    : QFrame(parent), m_strokeWidget(false), m_background(0), m_stroke(0)
-    , m_strokeRect(5.0, 5.0, 30.0, 30.0), m_fillRect(15.0, 15.0, 30.0, 30.0)
+    : QFrame(parent)
+    , m_strokeSelected(false)
+    , m_strokeRect(5.0, 5.0, 30.0, 30.0)
+    , m_fillRect(15.0, 15.0, 30.0, 30.0)
+    , m_stroke(0)
+    , m_fill(0)
     , m_checkerPainter(10)
 {
     setFocusPolicy(Qt::NoFocus);
@@ -52,13 +56,13 @@ StylePreview::StylePreview(QWidget * parent)
     setMaximumHeight(int(PANEL_SIZEY));
 
     installEventFilter(this);
-    update(m_stroke, m_background);
+    QFrame::update();
 }
 
 StylePreview::~StylePreview()
 {
-    if (m_background && !m_background->deref())
-        delete m_background;
+    if (m_fill && !m_fill->deref())
+        delete m_fill;
     if (m_stroke && !m_stroke->deref())
         delete m_stroke;
 }
@@ -72,13 +76,13 @@ void StylePreview::paintEvent(QPaintEvent* event)
 
     painter.translate(QPoint(int((width() - PANEL_SIZEX) / 2), int((height() - PANEL_SIZEY) / 2)));
 
-    if (m_strokeWidget) {
-        drawFill(painter, m_background);
+    if (m_strokeSelected) {
+        drawFill(painter, m_fill);
         drawStroke(painter, m_stroke);
     }
     else {
         drawStroke(painter, m_stroke);
-        drawFill(painter, m_background);
+        drawFill(painter, m_fill);
     }
     painter.end();
 
@@ -108,27 +112,27 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
         int ex = e->x() - int((width() - PANEL_SIZEX) / 2);
         int ey = e->y() - int((height() - PANEL_SIZEY) / 2);
 
-        if (m_strokeWidget) {
+        if (m_strokeSelected) {
             if (m_strokeRect.contains(QPointF(ex, ey))) {
-                m_strokeWidget = true;
+                m_strokeSelected = true;
                 emit strokeSelected();
             }
             else if (m_fillRect.contains(QPointF(ex, ey))) {
-                m_strokeWidget = false;
+                m_strokeSelected = false;
                 emit fillSelected();
             }
         }
         else {
             if (m_fillRect.contains(QPointF(ex, ey))) {
-                m_strokeWidget = false;
+                m_strokeSelected = false;
                 emit fillSelected();
             }
             else if (m_strokeRect.contains(QPointF(ex, ey))) {
-                m_strokeWidget = true;
+                m_strokeSelected = true;
                 emit strokeSelected();
             }
         }
-        update(m_stroke, m_background);
+        QFrame::update();
     }
 
     return false;
@@ -137,14 +141,14 @@ bool StylePreview::eventFilter(QObject *, QEvent *event)
 void StylePreview::update(KoShapeBorderModel * stroke, KoShapeBackground * fill)
 {
     bool updateNeeded = false;
-    if (fill != m_background) {
-        if (m_background && !m_background->deref())
-            delete m_background;
+    if (fill != m_fill) {
+        if (m_fill && !m_fill->deref())
+            delete m_fill;
 
-        m_background = fill;
+        m_fill = fill;
 
-        if (m_background) {
-            m_background->ref();
+        if (m_fill) {
+            m_fill->ref();
         }
         updateNeeded = true;
     }

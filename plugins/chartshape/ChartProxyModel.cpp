@@ -283,6 +283,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
     // It is at least one, but if there's more than one data dimension, the x
     // data is shared among all data sets, thus - 1.
     int regionsPerDataSet = qMax( 1, dataDimensions - 1 );
+    qDebug() << regionsPerDataSet;
 
     // Fill dataRegions and set categoryRegion.
     // Note that here, we don't exactly know yet what region will be used for
@@ -296,7 +297,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion( QList<DataSe
                         // for bubble charts, (the only case of regionsPerDataSet == 2), so
                         // skipping x data will allow the last data set to also be assigned
                         // a bubble width region. This is exactly what OOo does.
-                        (dataRegions.size() - 1) % regionsPerDataSet == 0;
+                        (dataDirection == Qt::Horizontal ? rows - 1 - rowOffset : cols - 1 -colOffset ) % regionsPerDataSet == 0;
 
     // When x data is present, it occupies the first non-header row/column
     if ( extractXData && dataDirection == Qt::Horizontal )
@@ -385,9 +386,13 @@ void ChartProxyModel::saveOdf( KoShapeSavingContext &context ) const
 // This loads the properties of the datasets (chart:series).
 // FIXME: This is a strange place to load them (the proxy model)
 bool ChartProxyModel::loadOdf( const KoXmlElement &element,
-                               KoShapeLoadingContext &context )
+                               KoShapeLoadingContext &context, int seriesPerDataset, ChartType type )
 {
     Q_ASSERT( d->isLoading );
+
+//     PlotArea* plotArea = dynamic_cast< PlotArea* >( QObject::parent() );
+
+//     const bool stockChart = element.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:stock";
 
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
     bool ignoreCellRanges = helper->chartUsesInternalModelOnly;
@@ -493,31 +498,44 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
     QBrush brush;
     bool penLoaded = false;
     bool brushLoaded = false;
+    int stockSeriesCounter = 0;
     forEachElement ( n, element ) {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
 
         if ( n.localName() == "series" ) {
-            DataSet *dataSet;
-            if ( loadedDataSetCount < createdDataSets.size() ) {
-                dataSet = createdDataSets[loadedDataSetCount];
-            } else {
-                // the datasetnumber needs to be known at construction time, to ensure
-                // default colors are set correctly
-                dataSet = new DataSet( d->dataSets.size() );
-            }
-            d->dataSets.append( dataSet );
-            if ( d->categoryDataRegion.isValid() )
+            if ( stockSeriesCounter == 0 )
             {
-                dataSet->setCategoryDataRegion( d->categoryDataRegion );
+                DataSet *dataSet;
+                if ( loadedDataSetCount < createdDataSets.size() ) {
+                    dataSet = createdDataSets[loadedDataSetCount];
+                } else {
+                    // the datasetnumber needs to be known at construction time, to ensure
+                    // default colors are set correctly
+                    dataSet = new DataSet( d->dataSets.size() );
+                }
+                dataSet->setChartType( type );
+                d->dataSets.append( dataSet );
+                if ( d->categoryDataRegion.isValid() )
+                {
+                    dataSet->setCategoryDataRegion( d->categoryDataRegion );
+                }
+                dataSet->loadOdf( n, context );
+                if ( penLoaded )
+                    dataSet->setPen( p );
+                if ( brushLoaded )
+                    dataSet->setBrush( brush );
             }
-            dataSet->loadOdf( n, context );
-            if ( penLoaded )
-                dataSet->setPen( p );
-            if ( brushLoaded )
-                dataSet->setBrush( brush );
-
-            ++loadedDataSetCount;
+            else
+            {
+                DataSet *dataSet;
+                if ( loadedDataSetCount < createdDataSets.size() )
+                    dataSet = createdDataSets[loadedDataSetCount];
+                dataSet->loadSeriesIntoDataset( n, context );
+            }
+            stockSeriesCounter = ( stockSeriesCounter + 1 ) %  seriesPerDataset;
+            if ( stockSeriesCounter == 0 )
+                ++loadedDataSetCount;
         } else if ( n.localName() == "stock-range-line" ) {
             KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
             styleStack.clear();
@@ -537,6 +555,7 @@ bool ChartProxyModel::loadOdf( const KoXmlElement &element,
                     Q_FOREACH( DataSet* set, d->dataSets )
                     {
                         set->setPen( p );
+                        set->setBrush( p.color() );
                     }
                 }
 

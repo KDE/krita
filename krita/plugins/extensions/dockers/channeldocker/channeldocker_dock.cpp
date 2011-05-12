@@ -18,7 +18,8 @@
 #include "channeldocker_dock.h"
 
 #include <QGridLayout>
-#include <QListView>
+#include <QTableView>
+#include <QHeaderView>
 #include <klocale.h>
 
 #include <KoResourceManager.h>
@@ -31,10 +32,12 @@
 
 ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canvas(0)
 {
-    m_channelList = new QListView(this);
+    m_channelTable = new QTableView(this);
     m_model = new ChannelModel(this);
-    m_channelList->setModel(m_model);
-    setWidget(m_channelList);
+    m_channelTable->setModel(m_model);
+    m_channelTable->setShowGrid(false);
+    m_channelTable->verticalHeader()->setVisible(false);
+    setWidget(m_channelTable);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)

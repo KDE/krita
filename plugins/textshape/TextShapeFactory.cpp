@@ -32,6 +32,7 @@
 #include <changetracker/KoChangeTracker.h>
 #include <KoImageCollection.h>
 #include <KoShapeLoadingContext.h>
+#include <KoInlineNote.h>
 
 #include <klocale.h>
 #include <KUndoStack>
@@ -62,7 +63,12 @@ KoShape *TextShapeFactory::createDefaultShape(KoResourceManager *documentResourc
     KoInlineTextObjectManager *manager = 0;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
-        manager = variant.value<KoInlineTextObjectManager*>();
+        if (variant.isValid()) {
+            manager = variant.value<KoInlineTextObjectManager*>();
+        }
+    }
+    if (!manager) {
+        manager = new KoInlineTextObjectManager();
     }
     TextShape *text = new TextShape(manager);
     if (documentResources) {
@@ -93,12 +99,9 @@ KoShape *TextShapeFactory::createShape(const KoProperties *params, KoResourceMan
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));
-    shape->setDemoText(params->boolProperty("demo"));
     QString text("text");
     if (params->contains(text)) {
         KoTextShapeData *shapeData = qobject_cast<KoTextShapeData*>(shape->userData());
-        QTextCursor cursor(shapeData->document());
-        cursor.insertText(params->stringProperty(text));
     }
     if (documentResources) {
         shape->setImageCollection(documentResources->imageCollection());

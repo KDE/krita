@@ -151,11 +151,11 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     case GIMP_LIGHTEN_ONLY_MODE:
         return COMPOSITE_LIGHTEN;
     case GIMP_HUE_MODE:
-        return COMPOSITE_HUE;
+        return COMPOSITE_HUE_HSL;
     case GIMP_SATURATION_MODE:
-        return COMPOSITE_SATURATION;
+        return COMPOSITE_SATURATION_HSV;
     case GIMP_COLOR_MODE:
-        return COMPOSITE_COLOR;
+        return COMPOSITE_COLOR_HSL;
     case GIMP_VALUE_MODE:
         return COMPOSITE_VALUE;
     case GIMP_DIVIDE_MODE:
@@ -174,7 +174,9 @@ QString layerModeG2K(GimpLayerModeEffects mode)
     case GIMP_NORMAL_NOPARTIAL_MODE:
     case GIMP_ANTI_ERASE_MODE:
     case GIMP_GRAIN_EXTRACT_MODE:
+        return COMPOSITE_GRAIN_EXTRACT;
     case GIMP_GRAIN_MERGE_MODE:
+        return COMPOSITE_GRAIN_MERGE;
     case GIMP_BEHIND_MODE:
         break;
     }

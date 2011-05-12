@@ -687,6 +687,10 @@ void Axis::Private::createStockDiagram()
     kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
     registerDiagram( kdStockDiagram );
 
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdStockDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDimensions( 3 );
+
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdStockDiagram->setType( KDChart::StockDiagram::Stacked );
@@ -1318,6 +1322,29 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             else
                 d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
         }
+        styleStack.setTypeProperties( "text" );
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
+        {
+            QString fontSizeString =  styleStack.property( KoXmlNS::fo, "font-size" );
+            const QString unitString = fontSizeString.right( 2 );
+            fontSizeString.remove( unitString );
+            bool ok = false;
+            qreal fontSize = fontSizeString.toDouble( &ok );
+            if (unitString == "cm")
+                fontSize = CM_TO_POINT(fontSize);
+            else if (unitString == "pc")
+                fontSize = PI_TO_POINT(fontSize);
+            else if (unitString == "mm")
+                fontSize = MM_TO_POINT(fontSize);
+            else if (unitString == "in")
+                fontSize = INCH_TO_POINT(fontSize);
+            if ( ok )
+            {
+                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                tatt.setFontSize( KDChart::Measure( fontSize, KDChartEnums::MeasureCalculationModeAbsolute ) );
+                kdAxis()->setTextAttributes( tatt );
+            }
+        }
     } else {
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
     }
@@ -1521,6 +1548,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         d->plotAreaChartType = newChartType;
         return;
     }
+
+    qDebug() << "changed ChartType";
 
     ChartType oldChartType = d->plotAreaChartType;
 

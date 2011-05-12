@@ -115,11 +115,6 @@ public:
     }
 
     /**
-     * @return a sample stroke that fits in @param size.
-     */
-    QImage sampleStroke(const QSize& size);
-
-    /**
      * This enum defines the current mode for painting an outline.
      */
     enum OutlineMode {

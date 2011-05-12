@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+*  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
 *
 *  This program is free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@
 
 #include "constants.h"
 #include "kis_properties_configuration.h"
+#include <KoChannelInfo.h>
 
 struct Illuminant
 {
@@ -41,6 +42,8 @@ public:
     ~PhongPixelProcessor();
     
     void initialize(const KisPropertiesConfiguration* config);
+    void prepareHeightmap(const quint32 pixelArea, const quint32 channelIndex, quint8* data, const KoColorSpace* colorSpace);
+    void normalizeHeightmap();
     
     QVector3D reflection_vector;
     QVector3D normal_vector;
@@ -51,6 +54,7 @@ public:
     
     quint8** fastHeightmap;
     quint8* heightmap;
+    QVector<double> realheightmap;
     
     ///Ambient light coefficient
     qreal Ka;
@@ -73,6 +77,7 @@ public:
     ///Total specular light
     qreal Is;
     
+    QVector<quint16> testingHeightmapIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb testingSpeedIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb reallyFastIlluminatePixel(quint32 posup, quint32 posdown, quint32 posleft, quint32 posright);
     QRgb fastIlluminatePixel(QPoint posup, QPoint posdown, QPoint posleft, QPoint posright);

@@ -212,7 +212,8 @@ void ToCGenerator::generate()
                                     blockId++;
 
                                     // insert new KoBookmark
-                                    KoBookmark *bookmark = new KoBookmark(target,block.document());
+                                    KoBookmark *bookmark = new KoBookmark(block.document());
+                                    bookmark->setName(target);
                                     bookmark->setType(KoBookmark::SinglePosition);
                                     QTextCursor blockCursor(block);
                                     layout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
@@ -304,6 +305,8 @@ void ToCGenerator::update()
     foreach (const BlockPair &blockPair, m_originalBlocksInToc) {
         QTextBlock tocEntryBlock = blockPair.first;
         QTextBlock headingBlock = blockPair.second;
+        #if 0
+        TODO
         KoShape *shape = layout->shapeForPosition(headingBlock.position());
         if (shape) {
             KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
@@ -321,6 +324,7 @@ void ToCGenerator::update()
                 }
             }
         }
+        #endif
     }
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();

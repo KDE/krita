@@ -26,6 +26,7 @@ class KoShapeBackgroundPrivate
 {
 public:
     KoShapeBackgroundPrivate();
+    virtual ~KoShapeBackgroundPrivate();
     QAtomicInt refCount;
 };
 

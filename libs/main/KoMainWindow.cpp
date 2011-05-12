@@ -1327,10 +1327,23 @@ KoPrintJob* KoMainWindow::exportToPdf(QString pdfFileName)
     if (!rootView())
         return 0;
     if (pdfFileName.isEmpty()) {
-        KFileDialog dialog(KUrl("kfiledialog:///SaveDialog/"), QString::fromLatin1("*.pdf *.ps"), this);
+        KUrl startUrl = KUrl("kfiledialog:///SaveDialog/");
+        KoDocument* pDoc = rootDocument();
+        /** if document has a file name, take file name and replace extension with .pdf */
+        if (pDoc && pDoc->url().isValid()) {
+            startUrl = pDoc->url();
+            QString fileName = startUrl.fileName();
+            fileName = fileName.replace( QRegExp( "\\.\\w{2,5}$", Qt::CaseInsensitive ), ".pdf" );
+            startUrl.setFileName( fileName );
+        }
+
+        QStringList mimeTypes;
+        mimeTypes << "application/pdf" << "application/postscript";
+        KFileDialog dialog(startUrl, QString(), this);
+        dialog.setMimeFilter(mimeTypes);
         dialog.setObjectName("print file");
         dialog.setMode(KFile::File);
-        dialog.setCaption(i18n("Write PDF"));
+        dialog.setCaption(i18n("Export to PDF"));
         if (dialog.exec() != QDialog::Accepted)
             return 0;
         KUrl url(dialog.selectedUrl());

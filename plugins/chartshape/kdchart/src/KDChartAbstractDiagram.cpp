@@ -1037,7 +1037,7 @@ QList<QBrush> AbstractDiagram::datasetBrushes() const
         return ret;
 
     const int datasetCount = attributesModel()->columnCount(attributesModelRootIndex()) / datasetDimension();
-    for ( int dataset = 0; dataset < datasetCount; dataset++ )
+    for ( int dataset = 0; dataset < datasetCount; ++dataset )
         ret << brush( dataset );
 
     return ret;
@@ -1098,6 +1098,8 @@ void AbstractDiagram::setDatasetDimensionInternal( int dimension )
     
     if ( d->datasetDimension == dimension ) return;
     d->datasetDimension = dimension;
+    qDebug() << "SETDDIM TO " << dimension;
+    
     setDataBoundariesDirty();
     emit layoutChanged( this );
 }

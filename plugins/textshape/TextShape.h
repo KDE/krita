@@ -39,6 +39,7 @@
 class KoInlineTextObjectManager;
 class KoPageProvider;
 class KoImageCollection;
+class KoTextDocument;
 class TextShape;
 
 /**
@@ -69,18 +70,6 @@ public:
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
 
     /**
-     * Set the shape's text to be demo text or not.
-     * If true, replace the content with an lorem ipsum demo text and don't complain
-     *   when there is not enough space at the end
-     * If false; remove the demo text again.
-     */
-    void setDemoText(bool on);
-    /// return if the content of this shape is demo text.
-    bool demoText() const {
-        return m_demoText;
-    }
-
-    /**
      * From KoShape reimplemented method to load the TextShape from ODF.
      *
      * This method redirects the call to the KoTextShapeData::loadOdf() method which
@@ -104,11 +93,6 @@ public:
         return m_textShapeData;
     }
 
-    bool hasFootnoteDocument() {
-        return m_footnotes != 0 && !m_footnotes->isEmpty();
-    }
-    QTextDocument *footnoteDocument();
-
     void markLayoutDone();
 
     virtual void update() const;
@@ -120,9 +104,6 @@ public:
 
     /// reimplemented
     virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
-
-    KoTextDocument::ResizeMethod resizeMethod() const;
-    void setResizeMethod(KoTextDocument::ResizeMethod resizemethod);
 
 protected:
     virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
@@ -137,9 +118,6 @@ private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     KoTextShapeData *m_textShapeData;
-    QTextDocument *m_footnotes;
-
-    bool m_demoText;
     mutable QMutex m_mutex;
     mutable QWaitCondition m_waiter;
     KoPageProvider *m_pageProvider;

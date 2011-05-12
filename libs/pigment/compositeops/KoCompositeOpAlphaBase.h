@@ -80,7 +80,7 @@ public:
 
                 // apply the alphamask
                 if (mask != 0) {
-                    srcAlpha = KoColorSpaceMaths<channels_type, quint8>::multiply(srcAlpha, *mask, U8_opacity);
+                    srcAlpha = KoColorSpaceMaths<quint8, channels_type>::multiply(*mask, srcAlpha, opacity);
                     mask++;
                 } else if (opacity != NATIVE_OPACITY_OPAQUE) {
                     srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);

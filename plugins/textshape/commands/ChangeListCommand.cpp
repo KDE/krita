@@ -28,11 +28,14 @@
 #include <KLocale>
 #include <KDebug>
 
+#define MARGIN_DEFAULT 10 // we consider it the default value
+
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Style style, int level,
                                      ChangeFlags flags, QUndoCommand *parent)
-        : TextCommandBase(parent),
-        m_flags(flags),
-        m_first(true)
+                                         : TextCommandBase(parent),
+                                         m_flags(flags),
+                                         m_first(true),
+                                         m_alignmentMode(false)
 {
     const bool styleCompletelySetAlready = extractTextBlocks(cursor, level, style);
     QSet<int> levels = m_levels.values().toSet();
@@ -42,14 +45,29 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
     if (styleCompletelySetAlready)
         style = KoListStyle::None;
 
+    int margin=MARGIN_DEFAULT;
+
     foreach (int lev, levels) {
         KoListLevelProperties llp;
         llp.setLevel(lev);
-        llp.setStyle(style);
+        llp.setStyle(style);        
         if (KoListStyle::isNumberingStyle(style)) {
             llp.setStartValue(1);
+            llp.setRelativeBulletSize(100); //we take the default value for numbering bullets as 100
             llp.setListItemSuffix(".");
+        } else {
+            llp.setRelativeBulletSize(45);   //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
         }
+
+        if(m_alignmentMode) {
+            llp.setAlignmentMode(true); // when creating a new list we create it in this mode
+            llp.setLabelFollowedBy(KoListStyle::ListTab);
+
+            llp.setTabStopPosition(margin*(lev+2));
+            llp.setMargin(margin*(lev+1));
+            llp.setTextIndent(margin);
+        }
+
         if (lev > 1)
             llp.setIndent((lev-1) * 20); // make this configurable
 
@@ -63,9 +81,10 @@ ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle::Sty
 
 ChangeListCommand::ChangeListCommand(const QTextCursor &cursor, KoListStyle *style, int level,
                                      ChangeFlags flags, QUndoCommand *parent)
-        : TextCommandBase(parent),
-          m_flags(flags),
-          m_first(true)
+                                         : TextCommandBase(parent),
+                                         m_flags(flags),
+                                         m_first(true),
+                                         m_alignmentMode(false)
 {
     Q_ASSERT(style);
     extractTextBlocks(cursor, level); // don't care about return value
@@ -91,6 +110,7 @@ bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, 
         m_blocks.append(block);
         if (block.textList()) {
             KoListLevelProperties prop = KoListLevelProperties::fromTextList(block.textList());
+            m_alignmentMode=prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), detectLevel(block, level));
             if (prop.style() != newStyle)
@@ -99,6 +119,8 @@ bool ChangeListCommand::extractTextBlocks(const QTextCursor &cursor, int level, 
         else {
             KoListLevelProperties prop;
             prop.setStyle(KoListStyle::None);
+            prop.setAlignmentMode(true);
+            m_alignmentMode=prop.alignmentMode();
             m_formerProperties.insert((m_blocks.size() - 1), prop);
             m_levels.insert((m_blocks.size() - 1), level);
             styleCompletelySetAlready = false;
@@ -205,18 +227,18 @@ void ChangeListCommand::redo()
         for (int i = 0; i < m_blocks.size(); ++i) { // We invalidate the lists before calling redo on the QTextDocument
             if (m_actions.value(i) == ChangeListCommand::RemoveList)
                 for (int j = 0; j < m_blocks.at(i).textList()->count(); j++) {
-                    if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
-                        if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
-                            userData->setCounterWidth(-1.0);
-                        break;
-                    }
+                if (m_blocks.at(i).textList()->item(j) != m_blocks.at(i)) {
+                    if (KoTextBlockData *userData = dynamic_cast<KoTextBlockData*>(m_blocks.at(i).textList()->item(j).userData()))
+                        userData->setCounterWidth(-1.0);
+                    break;
                 }
+            }
         }
         TextCommandBase::redo();
         UndoRedoFinalizer finalizer(this);
         for (int i = 0; i < m_blocks.size(); ++i) {
             if ((m_actions.value(i) == ChangeListCommand::ModifyExisting) || (m_actions.value(i) == ChangeListCommand::CreateNew)
-                    || (m_actions.value(i) == ChangeListCommand::MergeList)) {
+                || (m_actions.value(i) == ChangeListCommand::MergeList)) {
                 m_list.value(i)->updateStoredList(m_blocks.at(i));
                 KoListStyle *listStyle = m_list.value(i)->style();
                 listStyle->refreshLevelProperties(m_newProperties.value(i));

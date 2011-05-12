@@ -55,8 +55,6 @@ private:
     void checkAndAddAnchoredShapes(int position, int length);
     void removeDeletedChanges();
     void checkAndRemoveAnchoredShapes(int position, int length);
-    void insertDeleteFragment(QTextCursor &cursor, KoDeleteChangeMarker *marker);
-    int fragmentLength(QTextDocumentFragment fragment);
 
     QTextDocument *m_document;
     KoChangeTracker *m_changeTracker;

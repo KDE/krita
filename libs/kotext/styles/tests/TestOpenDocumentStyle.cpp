@@ -18,12 +18,14 @@
 */
 
 #include "TestOpenDocumentStyle.h"
+#include <KoTableCellStyle.h>
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
@@ -71,6 +73,45 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                     result << valueChild.text();
                 } else if (valueChild.tagName() == "ref") {
                     m_references << valueChild.attribute("name");
+                } else if (valueChild.tagName() == "list") {
+                    // Parse that sublist
+                    if (valueChild.childNodes().length() != 1) {
+                        kFatal() << "Unrecognized list element in " << m_name;
+                    }
+                    QDomElement subElement = valueChild.firstChildElement();
+                    if (subElement.nodeName() == "oneOrMore") {
+                        // Build a list of each sub item
+                        QStringList allowedValues;
+                        QDomElement subChoices = subElement.firstChildElement();
+                        if (subChoices.nodeName() != "choice") {
+                            kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                        }
+                        QDomElement subValueChild = subChoices.firstChildElement();
+                        do {
+                            if (subValueChild.nodeName() == "value") {
+                                allowedValues << subValueChild.text();
+                            } else {
+                                kFatal() << "Unrecognized oneOrMore element in " << m_name;
+                            }
+                            subValueChild = subValueChild.nextSiblingElement();
+                        } while (!subValueChild.isNull());
+                        QStringList mergedAllowedValues;
+                        while (mergedAllowedValues.length() != (pow(allowedValues.length(), allowedValues.length()))) {
+                            foreach (QString baseValue, allowedValues) {
+                                if (!mergedAllowedValues.contains(baseValue))
+                                    mergedAllowedValues << baseValue;
+                                foreach (QString knownValue, mergedAllowedValues) {
+                                    if ((knownValue == baseValue) || (knownValue.contains(baseValue + " ")) || (knownValue.contains(" " + baseValue))) {
+                                        continue;
+                                    }
+                                    QString builtValue = knownValue + " " + baseValue;
+                                    if (!mergedAllowedValues.contains(builtValue))
+                                        mergedAllowedValues << builtValue;
+                                }
+                            }
+                        }
+                        result << mergedAllowedValues;
+                    }
                 } else {
                     kFatal() << "Unrecognized choice element in " << m_name << " : " << valueChild.tagName();
                 }
@@ -97,11 +138,19 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
         } else if (reference == "color") {
             result << "#ABCDEF" << "#0a1234";
         } else if (reference == "positiveInteger") {
+            result << "37" << "42";
+        } else if (reference == "nonNegativeInteger") {
             result << "0" << "42";
         } else if (reference == "percent") {
             result << "-50%" << "0%" << "100%" << "42%";
+        } else if (reference == "borderWidths") {
+            result << "42px 42pt 12cm" << "0px 0pt 0cm";
+        } else if (reference == "string") {
+            // Now, that sucks !
+            kWarning() << "Found a string reference in " << m_name;
+            result << "";
         } else {
-            kFatal() << "Unhandled reference " << reference;
+            kFatal() << "Unhandled reference " << reference << "( in " << m_name << ")";
         }
     }
     return result;
@@ -115,7 +164,7 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return true;
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
-            if (KoUnit::parseValue(initialValue) == KoUnit::parseValue(outputValue))
+            if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
                 return true;
         } else if (reference == "color") {
             if (initialValue.toLower() == outputValue.toLower())
@@ -140,7 +189,7 @@ void TestOpenDocumentStyle::initTestCase()
     specFile.open(QIODevice::ReadOnly);
     QDomDocument specDocument;
     specDocument.setContent(&specFile);
-    
+
     int count = 0;
     QDomElement mainElement = specDocument.documentElement();
     QDomNode n = mainElement.firstChild();
@@ -202,7 +251,7 @@ QByteArray TestOpenDocumentStyle::generateStyleNodeWithAttribute(const QString& 
     xmlWriter->endElement();
     xmlWriter->endDocument();
     delete(xmlWriter);
-    
+
     return xmlOutputBuffer.data();
 }
 
@@ -214,9 +263,9 @@ QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle& genS
     xmlWriter->startDocument("style:style");
     KoGenStyles genStyles;
     genStyle.writeStyle(xmlWriter, genStyles, "style:style", "SavedTestStyle", ("style:" + styleFamily + "-properties").toLatin1());
-    
+
     xmlWriter->endDocument();
-    
+
     delete(xmlWriter);
     return xmlOutputBuffer.data();
 }
@@ -228,27 +277,64 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     T genStyle;
     KoOdfStylesReader stylesReader;
     KoOdfLoadingContext loadCtxt(stylesReader, 0);
-    
+
     QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(xmlOutputData, true);
     KoXmlElement mainElement = xmlReader->documentElement();
     genStyle.loadOdf(&mainElement, loadCtxt);
-    
+
     // THAT is often poorly implemented
     //QVERIFY(not(genStyle == basicStyle));
-    
+
     KoGenStyle styleWriter(family, familyName.toLatin1());
     genStyle.saveOdf(styleWriter);
-    
+
     QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
-    
+
     KoXmlDocument *generatedXmlReader = new KoXmlDocument;
     if (!generatedXmlReader->setContent(generatedXmlOutput)) {
         kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
         kFatal() << "Unable to set content";
     }
-    
+
+    KoXmlElement root = generatedXmlReader->documentElement();
+    KoXmlElement properties = root.firstChild().toElement();
+    QString outputPropertyValue = properties.attribute(attribute->name());
+    kDebug() << "Comparing " << outputPropertyValue << value;
+    return attribute->compare(outputPropertyValue, value);
+}
+
+template<class T>
+bool TestOpenDocumentStyle::basicTestFunctionWithShapeContext(KoGenStyle::Type family, const QString &familyName, Attribute *attribute,
+    const QString &value)
+{
+    T basicStyle;
+    T genStyle;
+    KoOdfStylesReader stylesReader;
+    KoOdfLoadingContext loadCtxt(stylesReader, 0);
+    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
+
+    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
+    KoXmlDocument *xmlReader = new KoXmlDocument;
+    xmlReader->setContent(xmlOutputData, true);
+    KoXmlElement mainElement = xmlReader->documentElement();
+    genStyle.loadOdf(&mainElement, shapeCtxt);
+
+    // THAT is often poorly implemented
+    //QVERIFY(not(genStyle == basicStyle));
+
+    KoGenStyle styleWriter(family, familyName.toLatin1());
+    genStyle.saveOdf(styleWriter);
+
+    QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
+
+    KoXmlDocument *generatedXmlReader = new KoXmlDocument;
+    if (!generatedXmlReader->setContent(generatedXmlOutput)) {
+        kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
+        kFatal() << "Unable to set content";
+    }
+
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
@@ -272,7 +358,7 @@ void TestOpenDocumentStyle::testTableColumnStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
+
     QVERIFY(basicTestFunction<KoTableColumnStyle>(KoGenStyle::TableColumnStyle, "table-column", attribute, value));
 }
 
@@ -292,8 +378,48 @@ void TestOpenDocumentStyle::testTableStyle()
 {
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
-    
+
     QVERIFY(basicTestFunction<KoTableStyle>(KoGenStyle::TableStyle, "table", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableRowStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-row-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableRowStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+
+    QVERIFY(basicTestFunction<KoTableRowStyle>(KoGenStyle::TableRowStyle, "table-row", attribute, value));
+}
+
+void TestOpenDocumentStyle::testTableCellStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-table-cell-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testTableCellStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+
+    QVERIFY(basicTestFunctionWithShapeContext<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

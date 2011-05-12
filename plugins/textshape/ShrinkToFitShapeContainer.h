@@ -110,10 +110,10 @@ private Q_SLOTS:
 private:
     ShrinkToFitShapeContainer *q;
     ShrinkToFitShapeContainerPrivate *d;
-    qreal m_scaleX, m_scaleY;
+    qreal m_scale;
     QSizeF m_shapeSize, m_documentSize;
-    int m_dirty;
-    bool m_maybeUpdate;
+    bool m_dueToLayout;
+    int m_changeCount;
 };
 
 #endif

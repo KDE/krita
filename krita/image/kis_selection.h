@@ -105,7 +105,7 @@ public:
 
     /**
      * Returns selectedness of the specified pixel, or 0 if invalid
-     * coordinates. The projection is not updated before determinging selectedness.
+     * coordinates. The projection is not updated before determining selectedness.
      */
     quint8 selected(qint32 x, qint32 y) const;
 
@@ -180,7 +180,7 @@ public:
     bool isDeselected();
     void setVisible(bool visible);
     bool isVisible();
-    
+
     ///Reimplemented
     void setDefaultBounds(KisDefaultBoundsSP bounds);
 

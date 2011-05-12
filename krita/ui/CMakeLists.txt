@@ -1,5 +1,6 @@
 include_directories( ${KOTEXT_INCLUDES}	
-	${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
+    ${TEXTLAYOUT_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/libs/pigment/colorprofiles
 	${CMAKE_CURRENT_SOURCE_DIR}/flake 
 	${CMAKE_CURRENT_SOURCE_DIR}/pigment/resources
 	${CMAKE_CURRENT_SOURCE_DIR}/widgets/resources
@@ -20,6 +21,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp 
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp 
     canvas/kis_grid_manager.cpp 
@@ -99,6 +101,7 @@ set(kritaui_LIB_SRCS
     kisexiv2/kis_exiv2.cpp
     kisexiv2/kis_iptc_io.cpp
     kisexiv2/kis_xmp_io.cpp
+    kra/kis_kra_utils.cpp
     kra/kis_kra_load_visitor.cpp
     kra/kis_kra_loader.cpp 
     kra/kis_kra_save_visitor.cpp 

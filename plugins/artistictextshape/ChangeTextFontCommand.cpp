@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,22 +23,43 @@
 #include <KLocale>
 
 ChangeTextFontCommand::ChangeTextFontCommand( ArtisticTextShape * shape, const QFont &font )
-    : m_shape(shape), m_font( font )
+    : m_shape(shape), m_newFont( font ), m_rangeStart(-1), m_rangeCount(-1)
 {
+    Q_ASSERT(m_shape);
     setText( i18n("Change font") );
 }
 
-void ChangeTextFontCommand::undo()
+ChangeTextFontCommand::ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font)
+    : m_shape(shape), m_newFont( font ), m_rangeStart(from), m_rangeCount(count)
 {
-    if ( m_shape ) {
-        m_shape->setFont( m_oldFont );
-    }
+    Q_ASSERT(m_shape);
 }
 
 void ChangeTextFontCommand::redo()
 {
-    if ( m_shape ) {
-        m_oldFont = m_shape->font();
-        m_shape->setFont( m_font );
+    if (m_oldText.isEmpty()) {
+        m_oldText = m_shape->text();
+        if (m_rangeStart >= 0) {
+            m_shape->setFont(m_rangeStart, m_rangeCount, m_newFont);
+        } else {
+            m_shape->setFont(m_newFont);
+        }
+        if (m_newText.isEmpty()) {
+            m_newText = m_shape->text();
+        }
+    } else {
+        m_shape->clear();
+        foreach(const ArtisticTextRange &range, m_newText) {
+            m_shape->appendText(range);
+        }
     }
 }
+
+void ChangeTextFontCommand::undo()
+{
+    m_shape->clear();
+    foreach(const ArtisticTextRange &range, m_oldText) {
+        m_shape->appendText(range);
+    }
+}
+

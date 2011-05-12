@@ -27,8 +27,8 @@
 class QWidget;
 
 /**
-   The tool docker shows the tool option widget associated with the
-   current tool and the current canvas.
+ * The tool docker shows the tool option widget associated with the
+ * current tool and the current canvas.
  */
 class KoToolDocker : public QDockWidget
 {

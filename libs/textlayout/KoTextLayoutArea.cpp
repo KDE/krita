@@ -446,12 +446,15 @@ struct LineKeeper
     QPointF position;
 };
 
-QTextLine restartLayout(QTextLayout *layout)
+QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
 {
     QList<LineKeeper> lineKeeps;
     QTextLine line;
     for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
+        if (l.textStart() > lineTextStartOfLastKeep) {
+            break;
+        }
         LineKeeper lk;
         lk.lineWidth = l.width();
         lk.columns = l.textLength();
@@ -728,7 +731,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->fragmentIterator = block.begin();
     } else {
-        line = restartLayout(layout);
+        line = restartLayout(layout, cursor->lineTextStart);
     }
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {

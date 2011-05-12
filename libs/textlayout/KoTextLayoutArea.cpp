@@ -309,6 +309,16 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
+            if (acceptsPageBreak() && !virginPage()
+                   && (table->frameFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+                m_endOfArea = new FrameIterator(cursor);
+                setBottom(m_y + m_footNotesHeight);
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                return false;
+            }
+
             // Let's create KoTextLayoutTableArea and let that handle the table
             KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
             m_tableAreas.append(tableArea);

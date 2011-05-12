@@ -113,7 +113,8 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
-        ++stop;
+        if(!stop.atEnd())
+            ++stop;
     }
     int tableAreaIndex = 0;
     int tocIndex = 0;
@@ -149,6 +150,7 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
 
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
+        Q_ASSERT(!next.atEnd());
         next++;
         if (next != stop && point.y() > layout->boundingRect().bottom()) {
             // just skip this block.

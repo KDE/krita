@@ -271,6 +271,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         setBottom(d->rowPositions[cursor->row + 1] + bottomBorderWidth);
 
         if (complete) {
+            setVirginPage(false);
             cursor->row++;
             for (int col = 0; col < d->table->columns(); ++col) {
                 delete cursor->frameIterators[col];
@@ -546,6 +547,8 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     areaTop,
                     maxBottom);
 
+            cellArea->setVirginPage(virginPage());
+
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
@@ -640,6 +643,8 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     right,
                     d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
+
+            cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
             cellArea->layout(cellCursor);

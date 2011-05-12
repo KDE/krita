@@ -52,6 +52,8 @@ bool KoTextLayoutRootArea::layout(FrameIterator *cursor)
 {
     d->dirty = false;
 
+    setVirginPage(true);
+
     return KoTextLayoutArea::layout(cursor);
 }
 

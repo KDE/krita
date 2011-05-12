@@ -121,6 +121,13 @@ public:
     /// Areas that accept page breaks return true, default is false;
     bool acceptsPageBreak() const;
 
+    /// Should be set to true when first starting layouting page
+    /// Should be set to false when we add anything during layout
+    void setVirginPage(bool virgin);
+
+    /// returns true if we have not yet added anything to the page
+    bool virginPage() const;
+
     /// Sets the amound the contenst should be vertically offset due to any outside induced
     /// vertical alignment
     void setVerticalAlignOffset(qreal offset);
@@ -205,6 +212,7 @@ private:
     FrameIterator *m_endOfArea;
 
     bool m_acceptsPageBreak;
+    bool m_virginPage;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
 

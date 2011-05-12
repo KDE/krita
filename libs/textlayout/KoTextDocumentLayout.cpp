@@ -472,6 +472,11 @@ void KoTextDocumentLayout::layout()
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->provider->suggestPageBreak(rootArea)) {
             d->provider->releaseAllAfter(previousRootArea);
+            // We must also delete them from our own list too
+            int newsize = d->rootAreaList.indexOf(previousRootArea) + 1;
+            while (d->rootAreaList.size() > newsize) {
+                d->rootAreaList.removeLast();
+            }
             break;
         }
 
@@ -483,7 +488,7 @@ void KoTextDocumentLayout::layout()
         else if (rootArea->isDirty()) {
             shouldLayout = true;
         }
-        else if (rootArea->isStartingAt(d->layoutPosition)) {
+        else if (!rootArea->isStartingAt(d->layoutPosition)) {
             shouldLayout = true;
         }
 
@@ -536,7 +541,7 @@ void KoTextDocumentLayout::layout()
             d->layoutPosition = new FrameIterator(rootArea->endFrameIterator());
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 Q_ASSERT(d->rootAreaList.last() == rootArea);
-                break;
+                return;
             }
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
@@ -545,7 +550,6 @@ void KoTextDocumentLayout::layout()
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
-
         // Request a Root Area
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 

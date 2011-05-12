@@ -104,7 +104,7 @@ bool FloatingAnchorStrategy::moveSubject()
     newPosition = newPosition + m_anchor->offset();
 
     //check the border of page an move the shape back to have it visible
-    //checkPageBorder(newPosition, containerBoundingRect);
+    checkPageBorder(newPosition, containerBoundingRect);
 
     if (newPosition == m_anchor->shape()->position()) {
         return false;

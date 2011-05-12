@@ -22,6 +22,7 @@
 #include <QFile>
 #include <QStandardItemModel>
 
+#include <kdeversion.h>
 #include <kcomponentdata.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
@@ -120,7 +121,11 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
+#if KDE_IS_VERSION(4,6,40)
+    d->m_previewJob = KIO::filePreview(fileList, QSize(200, 200));
+#else
     d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);
+#endif
 
     connect(d->m_previewJob, SIGNAL(result(KJob*)), this, SLOT(previewResult(KJob*)));
     connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem&, const QPixmap&)),

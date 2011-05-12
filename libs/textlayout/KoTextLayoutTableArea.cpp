@@ -271,6 +271,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         setBottom(d->rowPositions[cursor->row + 1] + bottomBorderWidth);
 
         if (complete) {
+            setVirginPage(false);
             cursor->row++;
             for (int col = 0; col < d->table->columns(); ++col) {
                 delete cursor->frameIterators[col];
@@ -492,23 +493,20 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     }
 
     bool allCellsFullyDone = true;
+    bool anyCellTried = false;
     bool noCellsFitted = true;
     int col = 0;
     while (col < d->table->columns()) {
         // Get the cell format.
         QTextTableCell cell = d->table->cellAt(row, col);
 
-        /*
-         * If the current row is within the rowSpan ranging from cel.row() to cell.row()+cell.rowSpan()
-         * then we found a cell where we can add the content into. Else we move on to the next column
-         * to see if our row matches there.
-         */
-        if (row >= cell.row() && row <= cell.row() + cell.rowSpan() - 1) {
+        if (row == cell.row() + cell.rowSpan() - 1) {
             /*
              * This cell ends vertically in this row, and hence should
              * contribute to the row height.
              */
             KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+            anyCellTried = true;
 
             qreal maxBottom = maximumAllowedBottom();
             if (rowHasExactHeight) {
@@ -549,6 +547,8 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     areaTop,
                     maxBottom);
 
+            cellArea->setVirginPage(virginPage());
+
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
@@ -571,7 +571,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         col += cell.columnSpan(); // Skip across column spans.
     }
 
-    if (noCellsFitted && !rowHasExactHeight) {
+    if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
         if (cursor->row > d->startOfArea->row) {
@@ -643,6 +643,8 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     right,
                     d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
+
+            cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
             cellArea->layout(cellCursor);

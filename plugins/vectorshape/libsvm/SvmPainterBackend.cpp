@@ -167,7 +167,10 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         // FIXME: Probably don't need to do anything here.
     }
     if (context.changedItems & GCMapMode) {
-        // FIXME
+        // Reset the transform and then apply the new mapmode to it.
+        m_painter->setTransform(m_outputTransform);
+        m_painter->translate(context.mapMode.origin);
+        // FIXME: Do scaling here too. But we need a testfile for that.
     }
     if (context.changedItems & GCFont) {
         m_painter->setFont(context.font);

@@ -1396,6 +1396,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!breakAfter.isEmpty() && breakAfter != "auto") {
         setBreakAfter(true);
     }
+    const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
+    if (keepTogether == "always") {
+        setNonBreakableLines(true);
+    }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
     const QString bgcolor(styleStack.property(KoXmlNS::fo, "background-color"));
@@ -1562,6 +1566,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
             if (breakAfter())
                 style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == QTextFormat::BlockNonBreakableLines) {
+            if (nonBreakableLines()) {
+                style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+            }
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)

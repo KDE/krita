@@ -280,6 +280,16 @@ FrameIterator *KoTextLayoutArea::endFrameIterator() const
     return m_endOfArea;
 }
 
+QTextFrame::iterator KoTextLayoutArea::startTextFrameIterator() const
+{
+    return m_startOfArea->it;
+}
+
+QTextFrame::iterator KoTextLayoutArea::endTextFrameIterator() const
+{
+    return m_endOfArea->it;
+}
+
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(m_tableAreas);

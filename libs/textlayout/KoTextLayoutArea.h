@@ -63,6 +63,9 @@ public:
     /// Returns the last cursor position this frame has
     FrameIterator *endFrameIterator() const;
 
+    QTextFrame::iterator startTextFrameIterator() const;
+    QTextFrame::iterator endTextFrameIterator() const;
+
     /// Layouts as much as we can
     virtual bool layout(FrameIterator *cursor);
 

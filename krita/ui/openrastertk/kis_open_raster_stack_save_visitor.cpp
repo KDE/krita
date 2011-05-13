@@ -22,6 +22,7 @@
 #include <QImage>
 
 #include <KoStore.h>
+#include <KoCompositeOp.h>
 
 #include "kis_adjustment_layer.h"
 #include "filter/kis_filter.h"
@@ -30,6 +31,7 @@
 #include "kis_paint_layer.h"
 #include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
+
 
 struct KisOpenRasterStackSaveVisitor::Private {
     Private() : currentElement(0) {}
@@ -52,6 +54,16 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
 {
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", layer->opacity() / 255.0);
+
+    QString compop = layer->compositeOpId();
+    if (layer->compositeOpId() == COMPOSITE_OVER) compop = "src-over";
+    else if (layer->compositeOpId() == COMPOSITE_BURN) compop = "color-burn";
+    else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "color-dodge";
+    else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) compop = "hard-light";
+    else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT) compop = "soft-light";
+    else if (layer->compositeOpId() == COMPOSITE_DIFF) compop = "difference";
+
+    elt.setAttribute("composite-op", "svg:" + compop);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)

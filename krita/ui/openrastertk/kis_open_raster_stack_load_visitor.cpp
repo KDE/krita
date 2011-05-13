@@ -31,6 +31,7 @@
 #include <filter/kis_filter_registry.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
+#include <KoCompositeOp.h>
 
 #include <kis_paint_layer.h>
 #include <kis_png_converter.h>
@@ -104,6 +105,23 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     layer->setName(elem.attribute("name"));
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
+
+    if (compop == "svg:clear") layer->setCompositeOp(COMPOSITE_CLEAR);
+    if (compop == "svg:src-over") layer->setCompositeOp(COMPOSITE_OVER);
+    if (compop == "svg:add") layer->setCompositeOp(COMPOSITE_ADD);
+    if (compop == "svg:multiply") layer->setCompositeOp(COMPOSITE_MULT);
+    if (compop == "svg:screen") layer->setCompositeOp(COMPOSITE_SCREEN);
+    if (compop == "svg:overlay") layer->setCompositeOp(COMPOSITE_OVERLAY);
+    if (compop == "svg:darken") layer->setCompositeOp(COMPOSITE_DARKEN);
+    if (compop == "svg:lighten") layer->setCompositeOp(COMPOSITE_LIGHTEN);
+    if (compop == "svg:color-dodge") layer->setCompositeOp(COMPOSITE_DODGE);
+    if (compop == "svg:color-burn") layer->setCompositeOp(COMPOSITE_BURN);
+    if (compop == "svg:hard-light") layer->setCompositeOp(COMPOSITE_HARD_LIGHT);
+    if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT);
+    if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
+
+    qDebug() << ">>>>>" << compop << layer->compositeOpId();
+
 }
 
 void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)

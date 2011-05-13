@@ -77,11 +77,13 @@ KisToolMultihand::KisToolMultihand(KoCanvasBase * canvas, const QCursor & cursor
     , m_mirrorVertically(false)
     , m_mirrorHorizontally(true)
     , m_translateRadius(100)
+    , m_dragAxis(false)
 {
     m_explicitShowOutline = false;
 
     m_brushesCount = 6; // UI value
     m_currentTransformMode = SYMETRY;
+    m_axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
 
     m_transaction = 0;
     //m_painters;
@@ -149,11 +151,6 @@ KisToolMultihand::~KisToolMultihand()
 
 void KisToolMultihand::initTransformations()
 {
-    QPointF axisPoint = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
-    if (axisPoint.isNull()){
-        axisPoint = QPointF(0.5 * image()->width(), 0.5 * image()->height());
-    }
-
     // mirror mode decide own number of brushes
     if (m_currentTransformMode != MIRROR) {
         m_brushTransforms.resize(m_brushesCount);
@@ -167,11 +164,11 @@ void KisToolMultihand::initTransformations()
 
         for (int i = 0; i < m_brushesCount ; i++){
             m.reset();
-            m.translate(axisPoint.x(), axisPoint.y());
+            m.translate(m_axisPoint.x(), m_axisPoint.y());
 
             m.rotateRadians(angle);
 
-            m.translate(-axisPoint.x(), -axisPoint.y());
+            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
             m_brushTransforms[i] = m;
 
             angle += angleAddition;
@@ -197,27 +194,27 @@ void KisToolMultihand::initTransformations()
 
         if (m_mirrorHorizontally){
             m.reset();
-            m.translate(axisPoint.x(),axisPoint.y());
+            m.translate(m_axisPoint.x(),m_axisPoint.y());
             m.scale(-1,1);
-            m.translate(-axisPoint.x(), -axisPoint.y());
+            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
             m_brushTransforms[position] = m;
             position++;
         }
 
         if (m_mirrorVertically){
             m.reset();
-            m.translate(axisPoint.x(),axisPoint.y());
+            m.translate(m_axisPoint.x(),m_axisPoint.y());
             m.scale(1,-1);
-            m.translate(-axisPoint.x(), -axisPoint.y());
+            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
             m_brushTransforms[position] = m;
             position++;
         }
 
         if (m_mirrorVertically && m_mirrorHorizontally){
             m.reset();
-            m.translate(axisPoint.x(),axisPoint.y());
+            m.translate(m_axisPoint.x(),m_axisPoint.y());
             m.scale(-1,-1);
-            m.translate(-axisPoint.x(), -axisPoint.y());
+            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
             m_brushTransforms[position] = m;
         }
 
@@ -226,7 +223,7 @@ void KisToolMultihand::initTransformations()
         int m_areaRadius = m_translateRadius;
         for (int i = 0; i < m_brushesCount ; i++){
             m.reset();
-            m.translate(axisPoint.x(),axisPoint.y());
+            m.translate(m_axisPoint.x(),m_axisPoint.y());
 
             qreal angle = drand48() * M_PI * 2;
             qreal length = drand48();
@@ -236,7 +233,7 @@ void KisToolMultihand::initTransformations()
 
             m.translate(nx,ny);
 
-            m.translate(-axisPoint.x(), -axisPoint.y());
+            m.translate(-m_axisPoint.x(), -m_axisPoint.y());
             m_brushTransforms[i] = m;
         }
     }
@@ -264,6 +261,12 @@ inline double angle(const QPointF& p1, const QPointF& p2)
 
 void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
 {
+    if (mode() == KisTool::OTHER) {
+        m_dragAxis = true;
+        m_axisPoint = convertToPixelCoord(e->point);
+        return;
+    }
+
     if(mode() == KisTool::PAINT_MODE)
         return;
 
@@ -335,6 +338,15 @@ void KisToolMultihand::mousePressEvent(KoPointerEvent *e)
 
 void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
 {
+    if (mode() == KisTool::OTHER){
+        useCursor(KisCursor::crossCursor());
+        if (m_dragAxis) {
+            m_axisPoint = convertToPixelCoord(e->point);
+        }
+        updateCanvas();
+        return;
+    }
+
     /**
      * Update outline
      */
@@ -352,8 +364,7 @@ void KisToolMultihand::mouseMoveEvent(KoPointerEvent *e)
             if (isCanvasOpenGL()) {
                 m_xTilt = e->xTilt();
                 m_yTilt = e->yTilt();
-                // TODO : optimize? but you need to know the size of the 3d brush?
-                canvas()->updateCanvas(QRect(QPoint(0, 0), QSize(currentImage()->width(), currentImage()->height())));
+                updateCanvas();
             }
         }
 #endif
@@ -460,7 +471,10 @@ void KisToolMultihand::mouseReleaseEvent(KoPointerEvent* e)
         setMode(KisTool::HOVER_MODE);
         e->accept();
     }
-    else {
+    else if (mode() == KisTool::OTHER){
+        m_axisPoint = convertToPixelCoord(e->point);
+        finishAxisSetup();
+    } else {
         KisToolPaint::mouseReleaseEvent(e);
     }
 }
@@ -785,6 +799,17 @@ void KisToolMultihand::paint(QPainter& gc, const KoViewConverter &converter)
         QPainterPath path = getOutlinePath(m_outlineDocPoint, outlineMode);
         paintToolOutline(&gc,pixelToView(path));
     }
+
+    if (mode() == KisTool::OTHER){
+        QPainterPath path;
+        path.moveTo(m_axisPoint.x(), 0);
+        path.lineTo(m_axisPoint.x(), currentImage()->height());
+        path.moveTo(0, m_axisPoint.y());
+        path.lineTo(currentImage()->width(), m_axisPoint.y());
+        paintToolOutline(&gc, pixelToView(path));
+
+    }
+
 }
 
 QPointF KisToolMultihand::adjustPosition(const QPointF& point, const QPointF& strokeBegin)
@@ -889,6 +914,12 @@ QWidget * KisToolMultihand::createOptionWidget()
 
     addOptionWidgetOption(m_sliderMagnetism, m_chkAssistant);
 
+    m_axisPointBtn = new QPushButton(i18n("Axis point"), optionWidget);
+    m_axisPointBtn->setCheckable(true);
+
+    connect(m_axisPointBtn, SIGNAL(clicked(bool)),this, SLOT(activateAxisPointModeSetup()));
+    addOptionWidgetOption(m_axisPointBtn);
+
     m_transformModes = new QComboBox(optionWidget);
     m_transformModes->addItem(i18n("Symetry"),int(SYMETRY));
     m_transformModes->addItem(i18n("Mirror"),int(MIRROR));
@@ -979,6 +1010,33 @@ void KisToolMultihand::slotSetTranslateRadius(int radius)
     m_translateRadius = radius;
 }
 
+void KisToolMultihand::activateAxisPointModeSetup()
+{
+    if (m_axisPointBtn->isChecked()){
+        setMode(KisTool::OTHER);
+        useCursor(KisCursor::crossCursor());
+        updateCanvas();
+    } else {
+        finishAxisSetup();
+    }
+}
+
+void KisToolMultihand::updateCanvas()
+{
+    KisCanvas2 *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    if (kisCanvas) {
+        kisCanvas->updateCanvas();
+    }
+}
+
+void KisToolMultihand::finishAxisSetup()
+{
+    setMode(KisTool::HOVER_MODE);
+    m_dragAxis = false;
+    resetCursorStyle();
+    updateCanvas();
+    m_axisPointBtn->setChecked(false);
+}
 
 #include "kis_tool_multihand.moc"
 

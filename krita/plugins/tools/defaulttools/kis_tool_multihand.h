@@ -48,6 +48,7 @@ class FreehandPaintJobExecutor;
 #include "kis_paintop_settings.h"
 #include <kis_cursor.h>
 #include <KoToolFactoryBase.h>
+#include <QPushButton>
 
 
 class KisToolMultihand : public KisToolPaint
@@ -112,6 +113,8 @@ private:
                                 KisPaintOpSettings::OutlineMode outlineMode);
 
     void initTransformations();
+    void updateCanvas();
+    void finishAxisSetup();
 
     QGridLayout *m_optionLayout;
     QCheckBox *m_chkSmooth;
@@ -124,11 +127,13 @@ private:
     QCheckBox *m_mirrorVerticallyChCkBox;
     QCheckBox *m_mirrorHorizontallyChCkBox;
     KisSliderSpinBox *m_translateRadiusSlider;
+    QPushButton *m_axisPointBtn;
 
 private slots:
     void increaseBrushSize();
     void decreaseBrushSize();
     void hideOutline();
+    void activateAxisPointModeSetup();
 
     void slotSetSmoothness(int smoothness);
     void slotSetMagnetism(int magnetism);
@@ -175,6 +180,8 @@ private:
     bool m_mirrorVertically;
     bool m_mirrorHorizontally;
     int m_translateRadius;
+    QPointF m_axisPoint;
+    bool m_dragAxis;
 
     enum enumTransforModes { SYMETRY, MIRROR, TRANSLATE, CUSTOM };
 

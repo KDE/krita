@@ -61,13 +61,13 @@ bool PSDColorModeBlock::read(QIODevice* io)
 void PSDColorModeBlock::indextoRGB(QByteArray data)
 {
  // dont know if it correct or not need more work 
-quint8 rgb = new int[3];
+int rgb[2];
 for(int i=0;i<=256;)
 {
-  rgb[1]=data[i];
+  rgb[0]=data[i];
+  rgb[1]=data[++i];
   rgb[2]=data[++i];
-  rgb[3]=data[++i];
-  QRgb color = qRgb(rgb[1],rgb[2],rgb[3]);
+  QRgb color = qRgb(rgb[0],rgb[1],rgb[2]);
   i=+3;
 }
 }

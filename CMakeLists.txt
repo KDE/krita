@@ -506,6 +506,10 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
+if(SHOULD_BUILD_ACTIVE)
+  macro_optional_add_subdirectory(active)
+endif(SHOULD_BUILD_ACTIVE)
+
 if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
 endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
@@ -540,7 +544,6 @@ add_subdirectory(servicetypes)
 add_subdirectory(templates)
 add_subdirectory(tools)
 add_subdirectory(filters)
-#add_subdirectory(active)
 
 macro_display_feature_log()
 

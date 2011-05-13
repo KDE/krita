@@ -4,7 +4,7 @@
  *  Copyright (c) 2003-2007 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2004 Bart Coppens <kde@bartcoppens.be>
  *  Copyright (c) 2007,2008,2010 Cyrille Berger <cberger@cberger.net>
- *  Copyright (c) 2009 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -65,6 +65,7 @@
 #include <kis_slider_spin_box.h>
 #include <QComboBox>
 #include <QStackedWidget>
+#include <QFormLayout>
 
 #define ENABLE_RECORDING
 static const int HIDE_OUTLINE_TIMEOUT = 800; // ms
@@ -227,8 +228,13 @@ void KisToolMultihand::initTransformations()
             m.reset();
             m.translate(axisPoint.x(),axisPoint.y());
 
-            m.translate(drand48() * 2 * m_areaRadius - m_areaRadius,
-                        drand48() * 2 * m_areaRadius - m_areaRadius);
+            qreal angle = drand48() * M_PI * 2;
+            qreal length = drand48();
+            // convert the polar coordinates to Cartesian coordinates
+            qreal nx = (m_areaRadius * cos(angle)  * length);
+            qreal ny = (m_areaRadius * sin(angle)  * length);
+
+            m.translate(nx,ny);
 
             m.translate(-axisPoint.x(), -axisPoint.y());
             m_brushTransforms[i] = m;
@@ -921,7 +927,13 @@ QWidget * KisToolMultihand::createOptionWidget()
     m_translateRadiusSlider = new KisSliderSpinBox(translateWidget);
     m_translateRadiusSlider->setRange(0, 200);
     m_translateRadiusSlider->setValue(m_translateRadius);
+    m_translateRadiusSlider->setSuffix(" px");
     connect(m_translateRadiusSlider,SIGNAL(valueChanged(int)),this,SLOT(slotSetTranslateRadius(int)));
+
+    QFormLayout *radiusLayout = new QFormLayout(translateWidget);
+    radiusLayout->addRow( i18n("Radius"), m_translateRadiusSlider);
+    translateWidget->setLayout(radiusLayout);
+
     m_modeCustomOption->addWidget(translateWidget);
 
     addOptionWidgetOption(m_modeCustomOption);

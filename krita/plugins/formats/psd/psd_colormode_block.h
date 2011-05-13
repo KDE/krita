@@ -20,7 +20,8 @@
 
 #include "psd.h"
 #include "psd_header.h"
-#include <QByteArray>
+
+#include <QtCore/QByteArray>
 
 class PSDColorModeBlock
 {
@@ -37,6 +38,8 @@ public:
     QByteArray data;
 
     QString error;
+    
+    void indextoRGB(QByteArray data);
 };
 
 #endif // PSD_COLORMODE_BLOCK_H

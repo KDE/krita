@@ -315,11 +315,6 @@ public:
     };
     void setImage(const QImage &);
 
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
-
     bool scaled() const {
         return m_scaled;
     };
@@ -340,7 +335,6 @@ public:
 
 protected:
     QImage m_image;
-    QSizeF m_size;
     bool m_scaled;
     int m_transformFlags;
     int m_aspectFlags;
@@ -359,16 +353,10 @@ public:
         return &m_picture;
     };
 
-    QSizeF size() const {
-        return m_size;
-    };
-    void setSize(const QSizeF &);
-
     static const int Picture;
     virtual OROPrimitive* clone();
 protected:
     QPicture m_picture;
-    QSizeF m_size;
 
 };
 //
@@ -380,11 +368,6 @@ class KOREPORT_EXPORT ORORect: public OROPrimitive
 public:
     ORORect();
     virtual ~ORORect();
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &);
 
     QRectF rect() const {
         return QRectF(m_position, m_size);
@@ -404,7 +387,6 @@ public:
     static const int Rect;
     virtual OROPrimitive* clone();
 protected:
-    QSizeF m_size;
     QPen m_pen;
     QBrush m_brush;
 };
@@ -418,11 +400,6 @@ class KOREPORT_EXPORT OROEllipse: public OROPrimitive
 public:
     OROEllipse();
     virtual ~OROEllipse();
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &);
 
     QRectF rect() const {
         return QRectF(m_position, m_size);
@@ -467,13 +444,6 @@ public:
     QString checkType() {
         return m_checkType;
     };
-
-    QSizeF size() const {
-        return m_size;
-    }
-    void setSize(const QSizeF &s) {
-        m_size = s;
-    }
 
     void setValue(bool v) {
         m_value = v;

@@ -106,6 +106,7 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     layer->setX(elem.attribute("x").toInt());
     layer->setY(elem.attribute("y").toInt());
 
+    QString compop = elem.attribute("composite-op");
     if (compop == "svg:clear") layer->setCompositeOp(COMPOSITE_CLEAR);
     if (compop == "svg:src-over") layer->setCompositeOp(COMPOSITE_OVER);
     if (compop == "svg:add") layer->setCompositeOp(COMPOSITE_ADD);
@@ -120,7 +121,6 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
     if (compop == "svg:soft-light") layer->setCompositeOp(COMPOSITE_SOFT_LIGHT);
     if (compop == "svg:difference") layer->setCompositeOp(COMPOSITE_DIFF);
 
-    qDebug() << ">>>>>" << compop << layer->compositeOpId();
 
 }
 

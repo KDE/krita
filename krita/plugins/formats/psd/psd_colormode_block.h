@@ -39,6 +39,8 @@ public:
 
     QString error;
     
+    /* function for conversion of indexed color map to RGB
+    */
     void indextoRGB(QByteArray data);
 };
 

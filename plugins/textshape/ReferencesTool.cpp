@@ -31,7 +31,7 @@
 
 #include <KLocale>
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): KoToolBase(canvas),
+ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
     m_canvas(canvas)
 {
 }
@@ -40,32 +40,14 @@ ReferencesTool::~ReferencesTool()
 {
 }
 
-
-void ReferencesTool::mouseReleaseEvent(KoPointerEvent* event)
-{
-}
-
-void ReferencesTool::mouseMoveEvent(KoPointerEvent* event)
-{
-}
-
-void ReferencesTool::mousePressEvent(KoPointerEvent* event)
-{
-}
-
-void ReferencesTool::paint(QPainter& painter, const KoViewConverter& converter)
-{
-    Q_UNUSED(painter);
-    Q_UNUSED(converter);
-}
-
-
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
+    TextTool::activate(toolActivation, shapes);
 }
 
 void ReferencesTool::deactivate()
 {
+    TextTool::deactivate();
     canvas()->canvasWidget()->setFocus();
 }
 

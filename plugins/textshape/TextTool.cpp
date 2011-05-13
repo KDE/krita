@@ -724,6 +724,7 @@ void TextTool::updateSelectedShape(const QPointF &point)
                     break; // stop looking.
             }
         }
+
         setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
 
         // This is how we inform the rulers of the active range
@@ -2061,6 +2062,10 @@ bool TextTool::isBidiDocument() const
 
 void TextTool::resourceChanged(int key, const QVariant &var)
 {
+    if (m_textEditor.isNull())
+        return;
+    if (!m_textShapeData)
+        return;
     if (m_allowResourceManagerUpdates == false)
         return;
     if (key == KoText::CurrentTextPosition) {
@@ -2125,7 +2130,6 @@ void TextTool::shapeAddedToCanvas()
 
 void TextTool::shapeDataRemoved()
 {
-    kDebug();
     m_textShapeData = 0;
     m_textShape = 0;
     if (!m_textEditor.isNull() && !m_textEditor.data()->cursor()->isNull()) {

@@ -54,7 +54,7 @@ void ReferencesTool::deactivate()
 QMap<QString, QWidget*> ReferencesTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> widgets;
-    SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(0);
+    SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(this, 0);
     SimpleCitationWidget *scw = new SimpleCitationWidget(0);
     SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
     SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);

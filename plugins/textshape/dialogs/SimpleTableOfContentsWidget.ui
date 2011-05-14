@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>159</width>
-    <height>69</height>
+    <width>320</width>
+    <height>195</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,7 +29,7 @@
       <number>2</number>
      </property>
      <item row="0" column="0">
-      <widget class="QToolButton" name="addRowAbove">
+      <widget class="QToolButton" name="addToC">
        <property name="text">
         <string>Add</string>
        </property>
@@ -75,7 +75,7 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>addRowAbove</tabstop>
+  <tabstop>addToC</tabstop>
  </tabstops>
  <resources/>
  <connections/>

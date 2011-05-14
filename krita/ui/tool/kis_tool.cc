@@ -563,10 +563,9 @@ void KisTool::deleteSelection()
 {
     KisSelectionSP selection = currentSelection();
     KisNodeSP node = currentNode();
+    KisPaintDeviceSP device;
 
-    if(node) {
-        KisPaintDeviceSP device = node->paintDevice();
-
+    if(node && (device = node->paintDevice())) {
         KisTransaction transaction(i18n("Clear"), device);
 
         QRect dirtyRect;
@@ -581,6 +580,9 @@ void KisTool::deleteSelection()
 
         transaction.commit(image()->undoAdapter());
         device->setDirty(dirtyRect);
+    }
+    else {
+        KoToolBase::deleteSelection();
     }
 }
 

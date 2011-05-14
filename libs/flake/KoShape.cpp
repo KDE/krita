@@ -94,7 +94,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistance(1.0)
+      textRunAroundDistance(1.0),
+      textRunAroundThreshold(0.0)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -889,6 +890,18 @@ void KoShape::setTextRunAroundDistance(qreal distance)
     d->textRunAroundDistance = distance;
 }
 
+qreal KoShape::textRunAroundThreshold() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundThreshold;
+}
+
+void KoShape::setTextRunAroundThreshold(qreal threshold)
+{
+    Q_D(KoShape);
+    d->textRunAroundThreshold = threshold;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -1229,6 +1242,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             break;
     }
     style.addProperty("style:wrap", wrap);
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
     style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
@@ -1299,6 +1313,13 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
             setTextRunAroundSide(KoShape::EnoughRunAroundSide);
         else if (wrap == "parallel")
             setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap-dynamic-threshold")) {
+        QString wrapThreshold = styleStack.property(KoXmlNS::style, "wrap-dynamic-threshold");
+        if (!wrapThreshold.isEmpty()) {
+            setTextRunAroundThreshold(KoUnit::parseValue(wrapThreshold));
+        }
     }
 }
 

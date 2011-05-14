@@ -211,17 +211,15 @@ class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 public:
     KoTableOfContentsGeneratorInfo();
     ~KoTableOfContentsGeneratorInfo();
-    void loadOdf(const KoXmlElement &element);
-    void saveOdf(KoXmlWriter * writer) const;
-    void setSharedLoadingData(KoTextSharedLoadingData * loadingData);
+    void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
+    void saveOdf(KoXmlWriter *writer) const;
 
-    TableOfContent * tableOfContentData() const;
+    TableOfContent *tableOfContentData() const;
 
 private:
-    int styleNameToStyleId(QString styleName);
+    int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
 
-    TableOfContent * m_toc;
-    KoTextSharedLoadingData * m_sharedLoadingData;
+    TableOfContent *m_toc;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo*)

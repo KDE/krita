@@ -50,14 +50,29 @@ void IndexEntry::addAttributes(KoXmlWriter* writer) const
 void IndexEntry::saveOdf(KoXmlWriter* writer) const
 {
     switch (name) {
-        case LINK_START     : writer->startElement("text:index-entry-link-start"); break;
-        case CHAPTER        : writer->startElement("text:index-entry-chapter"); break;
-        case SPAN           : writer->startElement("text:index-entry-span"); break;
-        case TEXT           : writer->startElement("text:index-entry-text");  break;
-        case TAB_STOP       : writer->startElement("text:index-entry-tab-stop"); break;
-        case PAGE_NUMBER    : writer->startElement("text:index-entry-page-number"); break;
-        case LINK_END       : writer->startElement("text:index-entry-link-end"); break;
-        case UNKNOWN        : break;
+    case LINK_START:
+        writer->startElement("text:index-entry-link-start");
+        break;
+    case CHAPTER:
+        writer->startElement("text:index-entry-chapter");
+        break;
+    case SPAN:
+        writer->startElement("text:index-entry-span");
+        break;
+    case TEXT:
+        writer->startElement("text:index-entry-text");
+        break;
+    case TAB_STOP:
+        writer->startElement("text:index-entry-tab-stop");
+        break;
+    case PAGE_NUMBER:
+        writer->startElement("text:index-entry-page-number");
+        break;
+    case LINK_END:
+        writer->startElement("text:index-entry-link-end");
+        break;
+    case UNKNOWN:
+        break;
     }
 
     if (!styleName.isNull()) {
@@ -69,15 +84,17 @@ void IndexEntry::saveOdf(KoXmlWriter* writer) const
 }
 
 
-IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName): IndexEntry(_styleName, IndexEntry::LINK_START)
+IndexEntryLinkStart::IndexEntryLinkStart(QString _styleName)
+    : IndexEntry(_styleName, IndexEntry::LINK_START)
 {
 
 }
 
 
-IndexEntryChapter::IndexEntryChapter(QString _styleName):   IndexEntry(_styleName, IndexEntry::CHAPTER),
-                                                            display(QString()),
-                                                            outlineLevel(INVALID_OUTLINE_LEVEL)
+IndexEntryChapter::IndexEntryChapter(QString _styleName)
+    : IndexEntry(_styleName, IndexEntry::CHAPTER)
+    , display(QString())
+    , outlineLevel(INVALID_OUTLINE_LEVEL)
 {
 
 }
@@ -170,7 +187,7 @@ void IndexTitleTemplate::saveOdf(KoXmlWriter* writer) const
 {
     writer->startElement("text:index-title-template");
         writer->addAttribute("text:style-name", styleName);
-        if ( !text.isEmpty() && !text.isNull() ) {
+        if (!text.isEmpty() && !text.isNull()) {
             writer->addTextNode(text);
         }
     writer->endElement();
@@ -228,9 +245,9 @@ TableOfContent* KoTableOfContentsGeneratorInfo::tableOfContentData() const
 }
 
 
-int KoTableOfContentsGeneratorInfo::styleNameToStyleId(QString styleName)
+int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
-    KoParagraphStyle * style = m_sharedLoadingData->paragraphStyle(styleName, true);
+    KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
     if (style) {
         return style->styleId();
     }
@@ -242,7 +259,6 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(QString styleName)
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
 {
     m_toc = new TableOfContent;
-    m_sharedLoadingData = 0;
 }
 
 KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
@@ -254,7 +270,7 @@ KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
 }
 
 
-void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
+void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement& element)
 {
     Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
 
@@ -275,14 +291,14 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
         // first child
         if (p.localName() == "index-title-template") {
             m_toc->tocSource.indexTitleTemplate.styleName = p.attribute("style-name");
-            m_toc->tocSource.indexTitleTemplate.styleId = styleNameToStyleId( m_toc->tocSource.indexTitleTemplate.styleName );
+            m_toc->tocSource.indexTitleTemplate.styleId = styleNameToStyleId(sharedLoadingData, m_toc->tocSource.indexTitleTemplate.styleName);
             m_toc->tocSource.indexTitleTemplate.text = p.text();
         // second child
         } else if (p.localName() == "table-of-content-entry-template") {
             TocEntryTemplate tocEntryTemplate;
             tocEntryTemplate.outlineLevel = p.attribute("outline-level").toInt();
             tocEntryTemplate.styleName = p.attribute("style-name");
-            tocEntryTemplate.styleId = styleNameToStyleId( tocEntryTemplate.styleName );
+            tocEntryTemplate.styleId = styleNameToStyleId(sharedLoadingData, tocEntryTemplate.styleName );
 
             KoXmlElement indexEntry;
             forEachElement(indexEntry, p) {
@@ -300,20 +316,20 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                     // "number" is default according the specs ODF v1.2
                     entryChapter->display = indexEntry.attribute("display", "number");
                     entryChapter->outlineLevel = indexEntry.attribute("outline-level", QString::number(tocEntryTemplate.outlineLevel)).toInt();
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryChapter) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
 
                 } else if (indexEntry.localName() == "index-entry-text") {
                     IndexEntryText * entryText = new IndexEntryText(indexEntry.attribute("style-name", QString()));
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryText) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
 
                 } else if (indexEntry.localName() == "index-entry-page-number") {
                     IndexEntryPageNumber * entryPageNumber = new IndexEntryPageNumber(indexEntry.attribute("style-name", QString()));
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryPageNumber) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
 
                 } else if (indexEntry.localName() == "index-entry-span") {
-                    IndexEntrySpan * entrySpan = new IndexEntrySpan( indexEntry.attribute("style-name", QString()) );
+                    IndexEntrySpan * entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()) );
                     entrySpan->text = indexEntry.text();
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entrySpan) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entrySpan));
 
                 } else if (indexEntry.localName() == "index-entry-tab-stop") {
                     IndexEntryTabStop * entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
@@ -324,16 +340,16 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                     } else {
                         entryTabStop->tab.type = QTextOption::RightTab;
                     }
-                    entryTabStop->setPosition( indexEntry.attribute("position", QString()) );
+                    entryTabStop->setPosition(indexEntry.attribute("position", QString()));
                     entryTabStop->tab.leaderText = indexEntry.attribute("leader-char",".");
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(entryTabStop) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 
                 } else if (indexEntry.localName() == "index-entry-link-start") {
                     IndexEntryLinkStart * link = new IndexEntryLinkStart(indexEntry.attribute("style-name", QString()));
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(link) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
                 } else if (indexEntry.localName() == "index-entry-link-end") {
                     IndexEntryLinkEnd * link = new IndexEntryLinkEnd(indexEntry.attribute("style-name", QString()));
-                    tocEntryTemplate.indexEntries.append( static_cast<IndexEntry*>(link) );
+                    tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
                 }
             }
             m_toc->tocSource.entryTemplate.append(tocEntryTemplate);
@@ -348,8 +364,8 @@ void KoTableOfContentsGeneratorInfo::loadOdf(const KoXmlElement& element)
                 forEachElement(sourceElement, p) {
                     if (sourceElement.localName() == "index-source-style") {
                         indexStyle.styleName = sourceElement.attribute("style-name");
-                        indexStyle.styleId = styleNameToStyleId( indexStyle.styleName );
-                        indexStyles.styles.append( indexStyle );
+                        indexStyle.styleId = styleNameToStyleId(sharedLoadingData, indexStyle.styleName);
+                        indexStyles.styles.append(indexStyle);
                     }
                 }
                 m_toc->tocSource.indexSourceStyles.append(indexStyles);
@@ -362,10 +378,3 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
 {
     m_toc->tocSource.saveOdf(writer);
 }
-
-
-void KoTableOfContentsGeneratorInfo::setSharedLoadingData(KoTextSharedLoadingData* loadingData)
-{
-    m_sharedLoadingData = loadingData;
-}
-

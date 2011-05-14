@@ -2274,8 +2274,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
 
 
     // for "meta-information" about the TOC we use this class
-    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
-    info->setSharedLoadingData( d->textSharedData );
+    KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
 
     info->tableOfContentData()->name = element.attribute("name");
     info->tableOfContentData()->styleName = element.attribute("style-name");
@@ -2287,7 +2286,7 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
         }
 
         if (e.localName() == "table-of-content-source" && e.namespaceURI() == KoXmlNS::text) {
-            info->loadOdf(e);
+            info->loadOdf(d->textSharedData, e);
             // uncomment to see what has been loaded
             //info.tableOfContentData()->dump();
             Q_ASSERT( !tocFormat.hasProperty(KoText::TableOfContentsData) );

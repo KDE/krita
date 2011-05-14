@@ -38,7 +38,6 @@ const int INVALID_OUTLINE_LEVEL = 0;
 
 class IndexEntry
 {
-
 public:
     enum IndexEntryName {UNKNOWN, LINK_START, CHAPTER, SPAN, TEXT, TAB_STOP, PAGE_NUMBER, LINK_END};
 
@@ -54,7 +53,6 @@ public:
 
 class IndexEntryLinkStart : public IndexEntry
 {
-
 public:
     IndexEntryLinkStart(QString _styleName);
 
@@ -63,7 +61,6 @@ public:
 
 class IndexEntryChapter : public IndexEntry
 {
-
 public:
     IndexEntryChapter(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -75,7 +72,6 @@ public:
 
 class IndexEntrySpan : public IndexEntry
 {
-
 public:
     IndexEntrySpan(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -86,7 +82,6 @@ public:
 
 class IndexEntryText : public IndexEntry
 {
-
 public:
     IndexEntryText(QString _styleName);
 };
@@ -94,7 +89,6 @@ public:
 
 class IndexEntryTabStop : public IndexEntry
 {
-
 public:
     IndexEntryTabStop(QString _styleName);
     virtual void addAttributes(KoXmlWriter* writer) const;
@@ -110,7 +104,6 @@ private:
 
 class IndexEntryPageNumber : public IndexEntry
 {
-
 public:
     IndexEntryPageNumber(QString _styleName);
 };
@@ -118,7 +111,6 @@ public:
 
 class IndexEntryLinkEnd : public IndexEntry
 {
-
 public:
     IndexEntryLinkEnd(QString _styleName);
 };
@@ -126,7 +118,6 @@ public:
 
 class TocEntryTemplate
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -139,7 +130,6 @@ public:
 
 class IndexTitleTemplate
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -151,7 +141,6 @@ public:
 
 class IndexSourceStyle
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -162,7 +151,6 @@ public:
 
 class IndexSourceStyles
 {
-
 public:
     void saveOdf(KoXmlWriter * writer) const;
 
@@ -172,7 +160,6 @@ public:
 
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
-
 public:
     KoTableOfContentsGeneratorInfo();
     ~KoTableOfContentsGeneratorInfo();
@@ -199,7 +186,6 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
-
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)

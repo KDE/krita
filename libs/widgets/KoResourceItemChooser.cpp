@@ -151,12 +151,16 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
         KNS3::DownloadDialog dialog( d->knsrcFile, this );
         dialog.exec();
-/*
-        foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-            qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
-        }
-*/
-    }
+
+        foreach (const KNS3::Entry& e, dialog.installedEntries() ) {
+             foreach( const QString &file, e.installedFiles() ) {
+                 qDebug() << "file path from e:" << file;
+                 QFileInfo fi(file);
+                 qDebug() << "file path from fi:" << fi.absolutePath()+"/"+fi.fileName();
+                  d->model->resourceServerAdapter()->loadingResourceFile( fi.absolutePath()+"/"+fi.fileName() );
+              }
+         }
+     }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();

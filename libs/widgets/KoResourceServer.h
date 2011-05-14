@@ -286,6 +286,24 @@ public:
         }
     }
 
+    virtual void loadingResourceFile( const QString & filename ) {
+        QFileInfo fi( filename );
+        if( fi.exists() == false )
+            return;
+
+        T* resource = createResource( filename );
+        resource->load();
+        if(!resource->valid()){
+            kWarning(30009) << "Import failed! Resource is not valid";
+            delete resource;
+            return;
+         }
+
+        if(!addResource(resource)) {
+            delete resource;
+        }
+    }
+
     /**
      * Addes an observer to the server
      * @param observer the observer to be added
@@ -366,8 +384,8 @@ protected:
     void notifyResourceAdded(T* resource)
     {
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
-            observer->resourceAdded(resource);
-        }
+            observer->resourceAdded(resource);            
+        }        
     }
 
     void notifyRemovingResource(T* resource)

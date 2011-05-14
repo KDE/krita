@@ -37,6 +37,7 @@ public:
     virtual QList<KoResource*> resources() = 0;
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
+    virtual void loadingResourceFile( const QString & filename ) = 0;
     virtual void importResourceFile( const QString & filename ) = 0;
     virtual QString extensions() = 0;
 
@@ -112,6 +113,14 @@ public:
             return m_resourceServer->removeResource(res);
 
         return false;
+    }
+
+    void loadingResourceFile( const QString & filename )
+    {
+        if( ! m_resourceServer )
+            return;
+
+        m_resourceServer->loadingResourceFile(filename);
     }
 
     void importResourceFile( const QString & filename )

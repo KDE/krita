@@ -921,7 +921,7 @@ QWidget * KisToolMultihand::createOptionWidget()
     addOptionWidgetOption(m_axisPointBtn);
 
     m_transformModes = new QComboBox(optionWidget);
-    m_transformModes->addItem(i18n("Symetry"),int(SYMETRY));
+    m_transformModes->addItem(i18n("Symmetry"),int(SYMETRY));
     m_transformModes->addItem(i18n("Mirror"),int(MIRROR));
     m_transformModes->addItem(i18n("Translate"),int(TRANSLATE));
     connect(m_transformModes,SIGNAL(currentIndexChanged(int)),SLOT(slotSetCurrentTransformMode(int)));

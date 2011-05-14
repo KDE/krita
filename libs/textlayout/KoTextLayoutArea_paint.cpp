@@ -105,13 +105,13 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         QTextFrame *subFrame = it.currentFrame();
         QTextBlockFormat format = block.blockFormat();
 
-	if (!block.isValid()) {
+        if (!block.isValid()) {
             if (lastBorder) { // draw previous block's border
                 lastBorder->paint(*painter, lastBorderRect);
                 lastBorder = 0;
             }
-	} 
-	
+        }
+
         if (table) {
             m_tableAreas[tableAreaIndex]->paint(painter, context);
             ++tableAreaIndex;
@@ -159,7 +159,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
             // Check and update border drawing code
             if (lastBorder == 0) {
                 lastBorderRect = br;
-            } else if (lastBorder && lastBorder != border) {       
+            } else if (lastBorder && lastBorder != border) {
                 lastBorder->paint(*painter, lastBorderRect);
                 lastBorderRect = br;
             } else if (lastBorder == border) {

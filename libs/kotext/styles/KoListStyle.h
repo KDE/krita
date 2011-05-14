@@ -145,6 +145,18 @@ public:
         Width,          ///< The width, in pt, of  a picture bullet.
         Height,         ///< The height, in pt, of a picture bullet.
         BulletImageKey, ///< Bullet image stored as a key for lookup in the imageCollection
+        Margin,         ///< Stores the margin of the list
+        TextIndent,     ///< Stores the text indent of list item
+        AlignmentMode,   ///< Is true if list-level-position-and-space-mode=label-alignment
+        LabelFollowedBy,  ///< Label followed by one of the enums ListLabelFollowedBy
+        TabStopPosition   ///< Specifies the additional tab stops
+    };
+
+    enum ListLabelFollowedBy
+    {
+        ListTab,  ///< Label is followed by a list tab
+        Space,    ///< Label followed by a Space
+        Nothing      ///< Nothing is present between label and the text
     };
 
     /**

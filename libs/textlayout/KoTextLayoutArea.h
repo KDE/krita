@@ -63,6 +63,9 @@ public:
     /// Returns the last cursor position this frame has
     FrameIterator *endFrameIterator() const;
 
+    QTextFrame::iterator startTextFrameIterator() const;
+    QTextFrame::iterator endTextFrameIterator() const;
+
     /// Layouts as much as we can
     virtual bool layout(FrameIterator *cursor);
 
@@ -111,7 +114,7 @@ public:
     void setNoWrap(qreal maximumAllowedWidth);
 
     qreal listIndent() const;
-    qreal textIndent(QTextBlock block) const;
+    qreal textIndent(QTextBlock block, QTextList *textList) const;
     qreal x() const;
     qreal width() const;
 
@@ -120,6 +123,13 @@ public:
 
     /// Areas that accept page breaks return true, default is false;
     bool acceptsPageBreak() const;
+
+    /// Should be set to true when first starting layouting page
+    /// Should be set to false when we add anything during layout
+    void setVirginPage(bool virgin);
+
+    /// returns true if we have not yet added anything to the page
+    bool virginPage() const;
 
     /// Sets the amound the contenst should be vertically offset due to any outside induced
     /// vertical alignment
@@ -205,6 +215,7 @@ private:
     FrameIterator *m_endOfArea;
 
     bool m_acceptsPageBreak;
+    bool m_virginPage;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
 

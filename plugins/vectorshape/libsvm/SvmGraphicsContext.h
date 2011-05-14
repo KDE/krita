@@ -42,11 +42,14 @@ namespace Libsvm
 
 
 enum GraphicsContextMembers {
-    GCLineColor = 0x0001,
-    GCFillBrush = 0x0002,
-    GCTextColor = 0x0004,
-    GCMapMode   = 0x0008,
-    GCFont      = 0x0010
+    GCLineColor     = 0x0001,
+    GCFillBrush     = 0x0002,
+    GCTextColor     = 0x0004,
+    GCTextFillColor = 0x0008,
+    GCTextAlign     = 0x0010,
+    GCMapMode       = 0x0020,
+    GCFont          = 0x0040,
+    GCOverlineColor = 0x0080
     // ...more here
 };
 
@@ -54,11 +57,14 @@ enum GraphicsContextMembers {
 struct SvmGraphicsContext {
     SvmGraphicsContext();
 
-    QColor   lineColor;
-    QBrush   fillBrush;
-    QColor   textColor;
-    MapMode  mapMode;
-    QFont    font;
+    QColor    lineColor;
+    QBrush    fillBrush;
+    QColor    textColor;
+    QColor    textFillColor;
+    TextAlign textAlign;
+    MapMode   mapMode;
+    QFont     font;
+    QColor    overlineColor;
     // ... much more here;
 
     quint32  changedItems;      // bitmap

@@ -30,6 +30,7 @@
 #include "kis_paint_device.h"
 #include "kis_tool_fill.h"
 #include "kis_tool_brush.h"
+#include "kis_tool_multihand.h"
 #include "kis_tool_freehand.h"
 #include "kis_tool_gradient.h"
 #include "kis_tool_rectangle.h"
@@ -61,6 +62,7 @@ DefaultTools::DefaultTools(QObject *parent, const QVariantList &)
     r->add(new KisToolPathFactory(QStringList()));
     r->add(new KisToolMoveFactory(QStringList()));
     r->add(new KisToolPanFactory(QStringList()));
+    r->add(new KisToolMultiBrushFactory(QStringList()));
 }
 
 DefaultTools::~DefaultTools()

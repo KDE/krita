@@ -78,7 +78,7 @@
 #include "kis_selection_decoration.h"
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_node_commands_adapter.h"
-
+#include "kis_iterator_ng.h"
 #include "kis_clipboard.h"
 #include "kis_view2.h"
 
@@ -717,25 +717,30 @@ void KisSelectionManager::copyFromDevice(KisPaintDeviceSP device)
 
     // TODO if the source is linked... copy from all linked layers?!?
 
-
+    // Copy image data
+    KisPainter gc;
+    gc.begin(clip);
+    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.bitBlt(0, 0, device, r.x(), r.y(), r.width(), r.height());
+    gc.end();
 
     if (selection) {
         // Apply selection mask.
         KisPixelSelectionSP selectionProjection = selection->projection();
-        KisHLineIteratorPixel layerIt = clip->createHLineIterator(0, 0, r.width());
+        KisHLineIteratorSP layerIt = clip->createHLineIteratorNG(0, 0, r.width());
         KisHLineConstIteratorPixel selectionIt = selectionProjection->createHLineIterator(r.x(), r.y(), r.width());
+        //KisHLineConstIteratorSP selectionIt = selectionProjection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
 
         for (qint32 y = 0; y < r.height(); y++) {
 
-            while (!layerIt.isDone()) {
+            for (qint32 x = 0; x < r.width(); x++) {
 
-                cs->applyAlphaU8Mask(layerIt.rawData(), selectionIt.rawData(), 1);
+                cs->applyAlphaU8Mask(layerIt->rawData(), selectionIt.oldRawData(), 1);
 
-
-                ++layerIt;
+                layerIt->nextPixel();
                 ++selectionIt;
             }
-            layerIt.nextRow();
+            layerIt->nextRow();
             selectionIt.nextRow();
         }
     }

@@ -595,6 +595,26 @@ QString KoTextDebug::listAttributes(const QTextListFormat &listFormat)
             key = "bullet-image-key";
             value = QString::number(properties[id].toInt());
             break;
+        case KoListStyle::Margin:
+            key="margin-left";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::TextIndent:
+            key="text-indent";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::AlignmentMode:
+            key="label-alignment";
+            value=QString(properties[id].toBool()? "true":"false");
+            break;
+        case KoListStyle::LabelFollowedBy:
+            key="label-followed-by";
+            value =QString::number(properties[id].toInt());
+            break;
+        case KoListStyle::TabStopPosition:
+            key="tab-stop-position";
+            value =QString::number(properties[id].toInt());
+            break;
         default:
             break;
         }

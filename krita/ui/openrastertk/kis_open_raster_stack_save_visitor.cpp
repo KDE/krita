@@ -22,6 +22,7 @@
 #include <QImage>
 
 #include <KoStore.h>
+#include <KoCompositeOp.h>
 
 #include "kis_adjustment_layer.h"
 #include "filter/kis_filter.h"
@@ -30,6 +31,7 @@
 #include "kis_paint_layer.h"
 #include <generator/kis_generator_layer.h>
 #include "kis_open_raster_save_context.h"
+
 
 struct KisOpenRasterStackSaveVisitor::Private {
     Private() : currentElement(0) {}
@@ -52,6 +54,23 @@ void KisOpenRasterStackSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* la
 {
     elt.setAttribute("name", layer->name());
     elt.setAttribute("opacity", layer->opacity() / 255.0);
+
+    QString compop = layer->compositeOpId();
+    if (layer->compositeOpId() == COMPOSITE_CLEAR) compop = "svg:clear";
+    else if (layer->compositeOpId() == COMPOSITE_OVER) compop = "svg:src-over";
+    else if (layer->compositeOpId() == COMPOSITE_ADD) compop = "svg:add";
+    else if (layer->compositeOpId() == COMPOSITE_MULT) compop = "svg:multiply";
+    else if (layer->compositeOpId() == COMPOSITE_SCREEN) compop = "svg:screen";
+    else if (layer->compositeOpId() == COMPOSITE_OVERLAY) compop = "svg:overlay";
+    else if (layer->compositeOpId() == COMPOSITE_DARKEN) compop = "svg:darken";
+    else if (layer->compositeOpId() == COMPOSITE_LIGHTEN) compop = "svg:lighten";
+    else if (layer->compositeOpId() == COMPOSITE_DODGE) compop = "color-dodge";
+    else if (layer->compositeOpId() == COMPOSITE_BURN) compop = "svg:color-burn";
+    else if (layer->compositeOpId() == COMPOSITE_HARD_LIGHT) compop = "hard-light";
+    else if (layer->compositeOpId() == COMPOSITE_SOFT_LIGHT) compop = "soft-light";
+    else if (layer->compositeOpId() == COMPOSITE_DIFF) compop = "difference";
+    else compop = "krita:" + layer->compositeOpId();
+    elt.setAttribute("composite-op", compop);
 }
 
 bool KisOpenRasterStackSaveVisitor::visit(KisPaintLayer *layer)

@@ -56,7 +56,7 @@ TableIterator::TableIterator(TableIterator *other)
     }
     row = other->row;
     headerRows = other->headerRows;
-    headerRowPositions.resize(headerRows);
+    headerRowPositions.resize(headerRows + 1);
     headerCellAreas.resize(headerRows);
     for (int row = 0; row < headerRows; ++row) {
         headerCellAreas[row].resize(table->columns());

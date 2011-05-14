@@ -45,7 +45,6 @@ public:
 
     // lineTextStart and fragmentIterator can be seen as the "sub cursor" of text blocks
     int lineTextStart; // a value of -1 indicate block not processed yet
-    int lastBlockPosition; // used to prevent infinite loops if content does not match into a text line
     QTextBlock::Iterator fragmentIterator;
 
     TableIterator *currentTableIterator;  //useful if it is pointing to a table

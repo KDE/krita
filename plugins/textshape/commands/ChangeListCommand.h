@@ -95,6 +95,7 @@ private:
 
     int m_flags;
     bool m_first;
+    bool m_alignmentMode;
 
     QList<QTextBlock> m_blocks;
     QHash<int, KoListLevelProperties> m_formerProperties;

@@ -94,7 +94,20 @@ namespace Libsvm
         META_COMMENT_ACTION               = 512
     };
 
-#define META_LAST_ACTION  META_SVG_SOMETHING_ACTION
+#define META_LAST_ACTION  META_RENDERGRAPHIC_ACTION
+
+    /** 
+        Text align
+
+
+        FIXME: Define this in the spec
+    */
+
+    enum TextAlign {
+        ALIGN_TOP,
+        ALIGN_BASELINE,
+        ALIGN_BOTTOM
+    };
 
     /**
        Mtf (FIXME)

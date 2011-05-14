@@ -1691,6 +1691,7 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             KoInlineTextObjectManager *textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager();
 
             KoBookmark *bookmark = new KoBookmark(cursor.block().document());
+            bookmark->setManager(textObjectManager);
             if (textObjectManager && bookmark->loadOdf(ts, d->context)) {
                 textObjectManager->insertInlineObject(cursor, bookmark);
             }

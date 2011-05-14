@@ -160,14 +160,26 @@ void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
         kDebug(31000) << "*** Setting text color to" << context.textColor;
 #endif
     }
-    if (context.changedItems & GCMapMode) {
+    if (context.changedItems & GCTextFillColor) {
         // FIXME
+    }
+    if (context.changedItems & GCTextAlign) {
+        // FIXME: Probably don't need to do anything here.
+    }
+    if (context.changedItems & GCMapMode) {
+        // Reset the transform and then apply the new mapmode to it.
+        m_painter->setTransform(m_outputTransform);
+        m_painter->translate(context.mapMode.origin);
+        // FIXME: Do scaling here too. But we need a testfile for that.
     }
     if (context.changedItems & GCFont) {
         m_painter->setFont(context.font);
 #if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting font to" << context.font;
 #endif
+    }
+    if (context.changedItems & GCOverlineColor) {
+        // FIXME
     }
 
     // Reset all changes until next time.

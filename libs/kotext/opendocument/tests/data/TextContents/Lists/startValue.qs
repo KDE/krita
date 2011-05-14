@@ -5,6 +5,7 @@ listFormat.setStyle(QTextListFormat.ListDecimal);
 setFormatProperty(listFormat, KoListStyle.ListItemSuffix, ".");
 setFormatProperty(listFormat, KoListStyle.StartValue, 1);
 setFormatProperty(listFormat, KoListStyle.RelativeBulletSize,100);
+setFormatProperty(listFormat, KoListStyle.AlignmentMode,false);
 var list = cursor.createList(listFormat);
 cursor.insertText("how are you doing.", defaultListItemFormat);
 

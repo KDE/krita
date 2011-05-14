@@ -84,6 +84,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_startOfArea(0)
  , m_endOfArea()
  , m_acceptsPageBreak(false)
+ , m_virginPage(true)
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
@@ -116,6 +117,7 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
         ++stop;
     }
     int tableAreaIndex = 0;
+    int tocIndex = 0;
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -130,6 +132,14 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
+            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
+                // check if p is over table of content
+                if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
+                        && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
+                    return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+                }
+                ++tocIndex;
+            }
             continue;
         } else {
             if (!block.isValid())
@@ -268,6 +278,16 @@ FrameIterator *KoTextLayoutArea::endFrameIterator() const
     return m_endOfArea;
 }
 
+QTextFrame::iterator KoTextLayoutArea::startTextFrameIterator() const
+{
+    return m_startOfArea->it;
+}
+
+QTextFrame::iterator KoTextLayoutArea::endTextFrameIterator() const
+{
+    return m_endOfArea->it;
+}
+
 bool KoTextLayoutArea::layout(FrameIterator *cursor)
 {
     qDeleteAll(m_tableAreas);
@@ -277,6 +297,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
     m_blockRects.clear();
+    delete m_endNotesArea;
+    m_endNotesArea=0;
     delete m_startOfArea;
     delete m_endOfArea;
     m_dropCapsWidth = 0;
@@ -296,6 +318,16 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         QTextTable *table = qobject_cast<QTextTable*>(cursor->it.currentFrame());
         QTextFrame *subFrame = cursor->it.currentFrame();
         if (table) {
+            if (acceptsPageBreak() && !virginPage()
+                   && (table->frameFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+                m_endOfArea = new FrameIterator(cursor);
+                setBottom(m_y + m_footNotesHeight);
+                if (!m_blockRects.isEmpty()) {
+                    m_blockRects.last().setBottom(m_y);
+                }
+                return false;
+            }
+
             // Let's create KoTextLayoutTableArea and let that handle the table
             KoTextLayoutTableArea *tableArea = new KoTextLayoutTableArea(table, this, m_documentLayout);
             m_tableAreas.append(tableArea);
@@ -303,6 +335,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(m_y);
             }
+            tableArea->setVirginPage(virginPage());
             tableArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
             if (tableArea->layout(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
@@ -314,6 +347,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
                 return false;
             }
+            setVirginPage(false);
             // Expand bounding rect so if we have content outside we show it
             expandBoundingLeft(tableArea->boundingRect().left());
             expandBoundingRight(tableArea->boundingRect().right());
@@ -329,6 +363,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (!m_blockRects.isEmpty()) {
                     m_blockRects.last().setBottom(m_y);
                 }
+                m_endNotesArea->setVirginPage(virginPage());
                 m_endNotesArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
                 if (m_endNotesArea->layout(cursor->subFrameIterator(subFrame)) == false) {
                     m_endOfArea = new FrameIterator(cursor);
@@ -339,6 +374,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     expandBoundingRight(m_endNotesArea->boundingRect().right());
                     return false;
                 }
+                setVirginPage(false);
                 // Expand bounding rect so if we have content outside we show it
                 expandBoundingLeft(m_endNotesArea->boundingRect().left());
                 expandBoundingRight(m_endNotesArea->boundingRect().right());
@@ -354,6 +390,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (!m_blockRects.isEmpty()) {
                     m_blockRects.last().setBottom(m_y);
                 }
+                tocArea->setVirginPage(virginPage());
                 tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
                 if (tocArea->layout(cursor->subFrameIterator(subFrame)) == false) {
                     m_endOfArea = new FrameIterator(cursor);
@@ -364,6 +401,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     expandBoundingRight(tocArea->boundingRect().right());
                     return false;
                 }
+                setVirginPage(false);
                 // Expand bounding rect so if we have content outside we show it
                 expandBoundingLeft(tocArea->boundingRect().left());
                 expandBoundingRight(tocArea->boundingRect().right());
@@ -373,8 +411,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
-            if (acceptsPageBreak()
-                   && cursor->it != m_startOfArea->it
+            if (acceptsPageBreak() && !virginPage()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
@@ -433,12 +470,15 @@ struct LineKeeper
     QPointF position;
 };
 
-QTextLine restartLayout(QTextLayout *layout)
+QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
 {
     QList<LineKeeper> lineKeeps;
     QTextLine line;
     for(int i = 0; i < layout->lineCount(); i++) {
         QTextLine l = layout->lineAt(i);
+        if (l.textStart() > lineTextStartOfLastKeep) {
+            break;
+        }
         LineKeeper lk;
         lk.lineWidth = l.width();
         lk.columns = l.textLength();
@@ -531,6 +571,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QTextOption option = layout->textOption();
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     qreal tabStopDistance =  format.property(KoParagraphStyle::TabStopDistance).toDouble();
+
     if (tabStopDistance > 0) {
         tabStopDistance *= qt_defaultDpiY() / 72.;
         option.setTabStop(tabStopDistance);
@@ -682,29 +723,54 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     layout->setTextOption(option);
 
+    qreal leftMargin = format.leftMargin();
+    qreal rightMargin = format.rightMargin();
+
     m_listIndent = 0;
     if (textList) {
-        m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+        if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+        } else {
+            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+                leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+            }
+        }
         if (!m_isRtl) {
             m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
         }
     }
 
     m_width = right() - left();
-    m_width -= format.leftMargin() + format.rightMargin();
-    m_x = left() + (m_isRtl ? format.rightMargin() : format.leftMargin());
+    m_width -= leftMargin + rightMargin;
+    m_x = left() + (m_isRtl ? rightMargin : leftMargin);
 
     m_documentLayout->clearInlineObjectRegistry(block);
 
     m_indent = 0;
     QTextLine line;
+    bool anyLineAdded = false;
     if (cursor->lineTextStart == -1) {
         layout->beginLayout();
-        m_indent = textIndent(block);
+        m_indent = textIndent(block, textList);
+
         line = layout->createLine();
         cursor->fragmentIterator = block.begin();
     } else {
-        line = restartLayout(layout);
+        line = restartLayout(layout, cursor->lineTextStart);
+        anyLineAdded = true;
+    }
+
+    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            foreach(QTextOption::Tab tab, tabs) {
+                qreal position = tab.position  * 72. / qt_defaultDpiY();
+                position = qMax(position, textList->format().doubleProperty(KoListStyle::TabStopPosition));
+                if (position > x() + m_listIndent - left()) {
+                    m_listIndent = left() + position - x();
+                    break;
+                }
+            }
+        }
     }
 
     //Now once we know the physical context we can work on the borders of the paragraph
@@ -720,11 +786,20 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList) {
         // if list set counterposition. Do this after borders so we can account for them.
-        if (m_isRtl)
-            blockData->setCounterPosition(QPointF(right() -
-            blockData->counterWidth() - format.leftMargin(), m_y));
+        if (m_isRtl) {
+            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+                blockData->setCounterPosition(QPointF(right() -
+                                                      blockData->counterWidth() - leftMargin, m_y));
+            } else {
+                blockData->setCounterPosition(QPointF(right() - leftMargin, m_y));
+            }
+        }
         else {
-            blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
+            if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
+                blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
+            } else {
+                blockData->setCounterPosition(QPointF(left() + leftMargin + m_indent, m_y));
+            }
         }
     }
 
@@ -751,7 +826,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
-        if (acceptsPageBreak() && bottomOfText > maximumAllowedBottom() - 150) {
+        if (acceptsPageBreak() && !format.nonBreakableLines() && bottomOfText > maximumAllowedBottom() - 150) {
             int softBreakPos = block.text().indexOf(QChar(0x000c), line.textStart());
             if (softBreakPos > 0 && softBreakPos < line.textStart() + line.textLength()) {
                 line.setNumColumns(softBreakPos - line.textStart() + 1, line.width());
@@ -766,20 +841,22 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             // but if not then we need to make sure the line becomes invisible
             // we use m_maximalAllowedBottom because we want to be below
             // footnotes too.
-            if (cursor->lastBlockPosition != block.position()) { // guard against infinite loops
-                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
 
-                if (format.nonBreakableLines()) {
-                    //set lineTextStart to -1
-                    cursor->lineTextStart = -1;
-                    layout->endLayout();
-                }
-                cursor->lastBlockPosition = block.position();
+            if (!virginPage() && format.nonBreakableLines()) {
+                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
+                cursor->lineTextStart = -1;
+                layout->endLayout();
+                clearPreregisteredFootNotes();
+                return false; //to indicate block was not done!
+            }
+            if (!virginPage() || anyLineAdded) {
+                line.setPosition(QPointF(x(), m_maximalAllowedBottom));
                 clearPreregisteredFootNotes();
                 return false; //to indicate block was not done!
             }
         }
         confirmFootNotes();
+        anyLineAdded = true;
 
         maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
 
@@ -813,7 +890,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
         if (softBreak) {
-            cursor->lastBlockPosition = -1;
             return false;
         }
     }
@@ -821,9 +897,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_bottomSpacing = format.bottomMargin();
 
     layout->endLayout();
-
+    setVirginPage(false);
     cursor->lineTextStart = -1; //set lineTextStart to -1 and returning true indicate new block
-    cursor->lastBlockPosition = -1;
     return true;
 }
 
@@ -832,7 +907,7 @@ qreal KoTextLayoutArea::listIndent() const
     return m_listIndent;
 }
 
-qreal KoTextLayoutArea::textIndent(QTextBlock block) const
+qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
 {
     if ((block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool())) {
         // if auto-text-indent is set,
@@ -840,6 +915,11 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block) const
         QTextCursor blockCursor(block);
         qreal guessGlyphWidth = QFontMetricsF(blockCursor.charFormat().font()).width('x');
         return guessGlyphWidth * 3;
+    }
+    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+            return textList->format().doubleProperty(KoListStyle::TextIndent);
+        }
     }
     return block.blockFormat().textIndent();
 }
@@ -870,6 +950,16 @@ void KoTextLayoutArea::setAcceptsPageBreak(bool accept)
 bool KoTextLayoutArea::acceptsPageBreak() const
 {
     return m_acceptsPageBreak;
+}
+
+void KoTextLayoutArea::setVirginPage(bool virgin)
+{
+    m_virginPage = virgin;
+}
+
+bool KoTextLayoutArea::virginPage() const
+{
+    return m_virginPage;
 }
 
 void KoTextLayoutArea::setVerticalAlignOffset(qreal offset)

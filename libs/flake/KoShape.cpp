@@ -1243,7 +1243,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
     }
     style.addProperty("style:wrap", wrap);
     style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
-    style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
+    style.addPropertyPt("fo:margin", textRunAroundDistance());
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }

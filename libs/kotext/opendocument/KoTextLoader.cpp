@@ -2276,8 +2276,8 @@ void KoTextLoader::loadTableOfContents(const KoXmlElement &element, QTextCursor 
     // for "meta-information" about the TOC we use this class
     KoTableOfContentsGeneratorInfo *info = new KoTableOfContentsGeneratorInfo();
 
-    info->tableOfContentData()->name = element.attribute("name");
-    info->tableOfContentData()->styleName = element.attribute("style-name");
+    info->m_name = element.attribute("name");
+    info->m_styleName = element.attribute("style-name");
 
     KoXmlElement e;
     forEachElement(e, element) {

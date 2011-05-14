@@ -1430,31 +1430,28 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
 {
-
     writer->startElement("text:table-of-content");
 
-        KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-        if (!info->tableOfContentData()->styleName.isNull())
-            {
-                writer->addAttribute("text:style-name",info->tableOfContentData()->styleName);
-            }
-        writer->addAttribute("text:name",info->tableOfContentData()->name);
+    KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    if (!info->m_styleName.isNull()) {
+            writer->addAttribute("text:style-name",info->m_styleName);
+    }
+    writer->addAttribute("text:name",info->m_name);
 
-        info->saveOdf(writer);
+    info->saveOdf(writer);
 
-        writer->startElement("text:index-body");
-            // write the title (one p block)
-            QTextCursor localBlock = toc->firstCursorPosition();
-            localBlock.movePosition(QTextCursor::NextBlock);
-            int endTitle = localBlock.position();
-            writer->startElement("text:index-title");
-                writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
-            writer->endElement(); // text:index-title
-        from = endTitle;
+    writer->startElement("text:index-body");
+    // write the title (one p block)
+    QTextCursor localBlock = toc->firstCursorPosition();
+    localBlock.movePosition(QTextCursor::NextBlock);
+    int endTitle = localBlock.position();
+    writer->startElement("text:index-title");
+        writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
+    writer->endElement(); // text:index-title
+    from = endTitle;
 
-        QTextBlock block = toc->lastCursorPosition().block();
-        writeBlocks(document, from, to, listStyles, currentTable, toc);
-
+    QTextBlock block = toc->lastCursorPosition().block();
+    writeBlocks(document, from, to, listStyles, currentTable, toc);
 
     writer->endElement(); // table:index-body
     writer->endElement(); // table:table-of-content

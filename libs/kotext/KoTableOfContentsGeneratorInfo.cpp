@@ -215,36 +215,6 @@ void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
 }
 
 
-void TableOfContentSource::saveOdf(KoXmlWriter* writer) const
-{
-    writer->startElement("text:table-of-content-source");
-        writer->addAttribute("text:index-scope", indexScope);
-        writer->addAttribute("text:outline-level", outlineLevel);
-        writer->addAttribute("text:relative-tab-stop-position", relativeTabStopPosition);
-        writer->addAttribute("text:use-index-marks", useIndexMarks);
-        writer->addAttribute("text:use-index-source-styles", useIndexSourceStyles);
-        writer->addAttribute("text:use-outline-level", useOutlineLevel);
-
-        indexTitleTemplate.saveOdf(writer);
-
-        foreach (const TocEntryTemplate &entry, entryTemplate) {
-            entry.saveOdf(writer);
-        }
-
-        foreach (const IndexSourceStyles &sourceStyle, indexSourceStyles) {
-            sourceStyle.saveOdf(writer);
-        }
-
-    writer->endElement(); // text:table-of-content-source
-}
-
-
-TableOfContent* KoTableOfContentsGeneratorInfo::tableOfContentData() const
-{
-    return m_toc;
-}
-
-
 int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName)
 {
     KoParagraphStyle * style = sharedLoadingData->paragraphStyle(styleName, true);
@@ -258,15 +228,13 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
 {
-    m_toc = new TableOfContent;
 }
 
 KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
 {
-    foreach (const TocEntryTemplate &entryTemplate, m_toc->tocSource.entryTemplate) {
+    foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
-    delete m_toc;
 }
 
 
@@ -274,12 +242,12 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 {
     Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
 
-    m_toc->tocSource.indexScope = element.attribute("index-scope", "document"); // enum {document, chapter}
-    m_toc->tocSource.outlineLevel = element.attribute("outline-level").toInt();
-    m_toc->tocSource.relativeTabStopPosition = element.attribute("relative-tab-stop-position","true") == "true";
-    m_toc->tocSource.useIndexMarks = element.attribute("use-index-marks","true") == "true";
-    m_toc->tocSource.useIndexSourceStyles = element.attribute("use-index-source-styles","true") == "true";
-    m_toc->tocSource.useOutlineLevel = element.attribute("use-outline-level","true") == "true";
+    m_indexScope = element.attribute("index-scope", "document"); // enum {document, chapter}
+    m_outlineLevel = element.attribute("outline-level").toInt();
+    m_relativeTabStopPosition = element.attribute("relative-tab-stop-position","true") == "true";
+    m_useIndexMarks = element.attribute("use-index-marks","true") == "true";
+    m_useIndexSourceStyles = element.attribute("use-index-source-styles","true") == "true";
+    m_useOutlineLevel = element.attribute("use-outline-level","true") == "true";
 
     // three other children to visit
     KoXmlElement p;
@@ -290,9 +258,9 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 
         // first child
         if (p.localName() == "index-title-template") {
-            m_toc->tocSource.indexTitleTemplate.styleName = p.attribute("style-name");
-            m_toc->tocSource.indexTitleTemplate.styleId = styleNameToStyleId(sharedLoadingData, m_toc->tocSource.indexTitleTemplate.styleName);
-            m_toc->tocSource.indexTitleTemplate.text = p.text();
+            m_indexTitleTemplate.styleName = p.attribute("style-name");
+            m_indexTitleTemplate.styleId = styleNameToStyleId(sharedLoadingData, m_indexTitleTemplate.styleName);
+            m_indexTitleTemplate.text = p.text();
         // second child
         } else if (p.localName() == "table-of-content-entry-template") {
             TocEntryTemplate tocEntryTemplate;
@@ -352,7 +320,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
                 }
             }
-            m_toc->tocSource.entryTemplate.append(tocEntryTemplate);
+            m_entryTemplate.append(tocEntryTemplate);
 
         // third child
         } else if (p.localName() == "index-source-styles" && p.namespaceURI() == KoXmlNS::text) {
@@ -368,7 +336,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
                         indexStyles.styles.append(indexStyle);
                     }
                 }
-                m_toc->tocSource.indexSourceStyles.append(indexStyles);
+                m_indexSourceStyles.append(indexStyles);
         }
     }// forEachElement
 }
@@ -376,5 +344,23 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 
 void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
 {
-    m_toc->tocSource.saveOdf(writer);
+    writer->startElement("text:table-of-content-source");
+        writer->addAttribute("text:index-scope", m_indexScope);
+        writer->addAttribute("text:outline-level", m_outlineLevel);
+        writer->addAttribute("text:relative-tab-stop-position", m_relativeTabStopPosition);
+        writer->addAttribute("text:use-index-marks", m_useIndexMarks);
+        writer->addAttribute("text:use-index-source-styles", m_useIndexSourceStyles);
+        writer->addAttribute("text:use-outline-level", m_useOutlineLevel);
+
+        m_indexTitleTemplate.saveOdf(writer);
+
+        foreach (const TocEntryTemplate &entry, m_entryTemplate) {
+            entry.saveOdf(writer);
+        }
+
+        foreach (const IndexSourceStyles &sourceStyle, m_indexSourceStyles) {
+            sourceStyle.saveOdf(writer);
+        }
+
+    writer->endElement(); // text:table-of-content-source
 }

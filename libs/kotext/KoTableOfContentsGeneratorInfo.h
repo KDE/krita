@@ -170,41 +170,6 @@ public:
     QList<IndexSourceStyle> styles;
 };
 
-
-class TableOfContentSource
-{
-
-public:
-    void saveOdf(KoXmlWriter * writer) const;
-
-    QString indexScope; // enum {document, chapter}
-    int outlineLevel;
-    bool relativeTabStopPosition;
-    bool useIndexMarks;
-    bool useIndexSourceStyles;
-    bool useOutlineLevel;
-
-    IndexTitleTemplate indexTitleTemplate;
-    QList<TocEntryTemplate> entryTemplate; // N-entries
-    QList<IndexSourceStyles> indexSourceStyles;
-};
-
-
-class TableOfContent
-{
-
-public:
-    QString name;
-    QString styleName;
-    // TODO: add support for those according ODF v1.2
-    // text: protected
-    // text: protection-key
-    // text:protection-key-digest-algorithm
-    // xml:id
-    TableOfContentSource tocSource;
-};
-
-
 class KOTEXT_EXPORT KoTableOfContentsGeneratorInfo
 {
 
@@ -214,14 +179,29 @@ public:
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
 
-    TableOfContent *tableOfContentData() const;
+    QString m_name;
+    QString m_styleName;
+    // TODO: add support for those according ODF v1.2
+    // text: protected
+    // text: protection-key
+    // text:protection-key-digest-algorithm
+    // xml:id
+    QString m_indexScope; // enum {document, chapter}
+    int m_outlineLevel;
+    bool m_relativeTabStopPosition;
+    bool m_useIndexMarks;
+    bool m_useIndexSourceStyles;
+    bool m_useOutlineLevel;
+
+    IndexTitleTemplate m_indexTitleTemplate;
+    QList<TocEntryTemplate> m_entryTemplate; // N-entries
+    QList<IndexSourceStyles> m_indexSourceStyles;
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
 
-    TableOfContent *m_toc;
 };
 
-Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo*)
+Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)
 
 #endif

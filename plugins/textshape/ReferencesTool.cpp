@@ -40,6 +40,10 @@ ReferencesTool::~ReferencesTool()
 {
 }
 
+void ReferencesTool::createActions()
+{
+}
+
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
     TextTool::activate(toolActivation, shapes);

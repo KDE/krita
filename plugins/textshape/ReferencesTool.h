@@ -38,6 +38,8 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
 
+    virtual void createActions();
+
 protected:
     /// reimplemented from superclass
     virtual QMap<QString, QWidget *> createOptionWidgets();

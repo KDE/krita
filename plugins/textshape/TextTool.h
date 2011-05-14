@@ -128,6 +128,8 @@ public:
 
     QRectF textRect(QTextCursor &cursor) const;
 
+    virtual void createActions();
+
 public slots:
     /// start the textedit-plugin.
     void startTextEditingPlugin(const QString &pluginId);

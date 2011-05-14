@@ -235,6 +235,11 @@ public slots:
      */
     void splitTableCells();
 
+     /**
+     * Insert a table of Contents at the current cursor position.
+     */
+    void insertTableOfContents();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);

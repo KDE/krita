@@ -174,7 +174,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
 void TextTool::createActions()
 {
-
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -344,6 +343,7 @@ void TextTool::createActions()
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+
     action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);
@@ -1086,15 +1086,6 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordLeft;
         else if (hit(item, KStandardShortcut::ForwardWord))
             moveOperation = QTextCursor::WordRight;
-#ifndef NDEBUG
-        else if (event->key() == Qt::Key_F12) {
-            textEditor->insertTable(3, 2);
-            QTextTable *table = textEditor->cursor()->currentTable();
-            QTextCursor c = table->cellAt(1,1).firstCursorPosition();
-            c.insertText("foo bar baz");
-            textEditor->setPosition(c.position());
-        }
-#endif
 #ifdef Q_WS_MAC
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {

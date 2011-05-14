@@ -26,14 +26,16 @@
 
 #include <KoTextLayoutRootArea.h>
 #include <KoCanvasBase.h>
+#include <KoTextEditor.h>
 
 #include <kdebug.h>
 
 #include <KLocale>
+#include <KAction>
 
-ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas),
-    m_canvas(canvas)
+ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas)
 {
+    createActions();
 }
 
 ReferencesTool::~ReferencesTool()
@@ -42,6 +44,10 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
+    KAction *action = new KAction(i18n("Table of Contents..."), this);
+    addAction("insert_tableofcentents", action);
+    action->setToolTip(i18n("Insert a Table of Contents into the document."));
+    connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -77,6 +83,11 @@ QMap<QString, QWidget*> ReferencesTool::createOptionWidgets()
     widgets.insert(i18n("Citations"), scw);
     widgets.insert(i18n("Captions"), scapw);
     return widgets;
+}
+
+void ReferencesTool::insertTableOfContents()
+{
+    textEditor()->insertTableOfContents();
 }
 
 #include <ReferencesTool.moc>

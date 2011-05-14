@@ -44,8 +44,11 @@ protected:
     /// reimplemented from superclass
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
+private slots:
+    /// insert a table of contents
+    void insertTableOfContents();
+
 private:
-    KoCanvasBase *m_canvas;
 };
 
 #endif // REFERENCESTOOL_H

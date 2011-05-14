@@ -122,13 +122,14 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    KoTextEditor *textEditor() { return m_textEditor.data(); }
-
     QRectF caretRect(QTextCursor *cursor) const;
 
     QRectF textRect(QTextCursor &cursor) const;
 
+protected:
     virtual void createActions();
+
+    KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
     /// start the textedit-plugin.

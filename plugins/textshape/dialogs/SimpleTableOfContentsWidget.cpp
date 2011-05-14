@@ -29,7 +29,7 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
         m_blockSignals(false)
 {
     widget.setupUi(this);
-    widget.addToC->setDefaultAction(tool->action("insert_toc"));
+    widget.addToC->setDefaultAction(tool->action("insert_tableofcentents"));
 
     connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }

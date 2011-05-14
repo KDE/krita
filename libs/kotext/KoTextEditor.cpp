@@ -29,6 +29,7 @@
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
 #include "KoTextPaste.h"
+#include "KoTableOfContentsGeneratorInfo.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -955,13 +956,15 @@ void KoTextEditor::insertTable(int rows, int columns)
         QString title = i18n("Insert Table");
 
         int changeId;
-        if (!d->caret.atBlockStart())
+        if (!d->caret.atBlockStart()) {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
-        else
+        } else {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
 
-        if (!changeId)
+        if (!changeId) {
             changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
 
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
@@ -1102,13 +1105,12 @@ void KoTextEditor::splitTableCells()
 
 void KoTextEditor::insertTableOfContents()
 {
-    int rows=5; int columns=2;
-
     d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
-    QTextTableFormat tableFormat;
 
-    tableFormat.setWidth(QTextLength(QTextLength::PercentageLength, 100));
-    tableFormat.setMargin(5);
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
+    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
+    tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
 
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (changeTracker && changeTracker->recordChanges()) {
@@ -1117,18 +1119,20 @@ void KoTextEditor::insertTableOfContents()
         QString title = i18n("Insert Table Of Contents");
 
         int changeId;
-        if (!d->caret.atBlockStart())
+        if (!d->caret.atBlockStart()) {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
-        else
+        } else {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
 
-        if (!changeId)
+        if (!changeId) {
             changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
 
-        tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+        tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
 
-    QTextTable *table = d->caret.insertTable(rows, columns, tableFormat);
+    d->caret.insertFrame(tocFormat);
 
     d->updateState(KoTextEditor::Private::NoOp);
 }

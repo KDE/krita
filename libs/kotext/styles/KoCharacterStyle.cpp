@@ -1552,7 +1552,7 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
         } else if (key == QTextCharFormat::FontLetterSpacing) {
             QFontMetricsF fm(font());
             qreal space = (fontLetterSpacing() - 100) * fm.averageCharWidth() / 100;
-            style.addProperty("fo:letter-spacing", QString::number(space) + "pt", KoGenStyle::TextType);
+            style.addPropertyPt("fo:letter-spacing", space, KoGenStyle::TextType);
         } else if (key == QTextFormat::TextOutline) {
             QPen outline = textOutline();
             style.addProperty("style:text-outline", outline.style() == Qt::NoPen ? "false" : "true", KoGenStyle::TextType);

@@ -24,6 +24,7 @@
 #include <klocale.h>
 
 #include "KoTextDocumentLayout.h"
+#include "KoTextLayoutRootArea.h"
 #include "KoTextShapeData.h"
 #include <KoParagraphStyle.h>
 #include <KoTextPage.h>
@@ -301,26 +302,22 @@ void ToCGenerator::update()
     foreach (const BlockPair &blockPair, m_originalBlocksInToc) {
         QTextBlock tocEntryBlock = blockPair.first;
         QTextBlock headingBlock = blockPair.second;
-        #if 0
-        TODO
-        KoShape *shape = layout->shapeForPosition(headingBlock.position());
-        if (shape) {
-            KoTextShapeData *shapeData = qobject_cast<KoTextShapeData *>(shape->userData());
-            Q_ASSERT(shapeData);
-            if (shapeData && shapeData->page()) {
+
+        KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
+        if (rootArea) {
+            if (rootArea->page()) {
                 QString blockText = tocEntryBlock.text();
                 int position = blockText.indexOf(QChar::ReplacementCharacter);
                 // Replace page number, possibly more than one time in one block
                 while (position > -1) {
                     cursor.setPosition(tocEntryBlock.position() + position);
                     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                    QString pageNumber = QString::number(shapeData->page()->pageNumber());
+                    QString pageNumber = QString::number(rootArea->page()->pageNumber());
                     cursor.insertText(pageNumber);
                     position = blockText.indexOf(QChar::ReplacementCharacter, position + 1);
                 }
             }
         }
-        #endif
     }
     cursor.endEditBlock();
     m_originalBlocksInToc.clear();

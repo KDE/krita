@@ -23,17 +23,14 @@
 #include "ToCGenerator.h"
 #include <klocale.h>
 
+#include "KoTextDocumentLayout.h"
+#include "KoTextShapeData.h"
 #include <KoParagraphStyle.h>
-#include <KoTextDocumentLayout.h>
-#include <KoTextShapeData.h>
 #include <KoTextPage.h>
 #include <KoShape.h>
 #include <KoTextDocument.h>
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
-#include <KoTextLoader.h>
-
-
 
 #include <QTextFrame>
 #include <QTimer>

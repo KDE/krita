@@ -21,10 +21,11 @@
 #include "psd_utils.h"
 #include <QtCore/QByteArray>
 #include <qrgb.h>
+#include <QColor>
 
 PSDColorModeBlock::PSDColorModeBlock(PSDColorMode colormode)
-    : blocksize(0)
-    , colormode(colormode)
+        : blocksize(0)
+        , colormode(colormode)
 {
 }
 
@@ -51,27 +52,27 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
-     indextoRGB(data); 
-      qFatal("TODO: Compute the colormap");
+        indextoRGB(data);
+        qFatal("TODO: Compute the colormap");
         return false;
     }
     return valid();
 }
 
-void PSDColorModeBlock::indextoRGB(QByteArray data)
+QColor PSDColorModeBlock::indextoRGB(QByteArray data)
 {
- // dont know if it correct or not need more work 
-int rgb[2];
- QRgb color;
-for(int i=0;i<=256;)
-{
-  rgb[0]=data[i];
-  rgb[1]=data[++i];
-  rgb[2]=data[++i];
-  color = qRgb(rgb[0],rgb[1],rgb[2]);
-  i=+3;
-}
-return color;
+// dont know if it correct or not need more work
+    int r,g,b;
+    QRgb color;
+    for (int i=0;i<=256;)
+    {
+        r=data[i];
+        g=data[++i];
+        b=data[++i];
+        color = qRgb(r,g,b);
+        i=+3;
+    }
+    return color;
 }
 
 

@@ -22,6 +22,7 @@
 #include "psd_header.h"
 
 #include <QtCore/QByteArray>
+#include <QColor>
 
 class PSDColorModeBlock
 {
@@ -38,10 +39,10 @@ public:
     QByteArray data;
 
     QString error;
-    
+
     /* function for conversion of indexed color map to RGB
     */
-    void indextoRGB(QByteArray data);
+    QColor indextoRGB(QByteArray data);
 };
 
 #endif // PSD_COLORMODE_BLOCK_H

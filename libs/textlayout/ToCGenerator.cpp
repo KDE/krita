@@ -41,45 +41,29 @@
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
-ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
-    : QObject(tocFrame),
-    m_state(NeverGeneratedState),
-    m_ToCFrame(tocFrame),
+ToCGenerator::ToCGenerator(QTextFrame *tocFrame, KoTableOfContentsGeneratorInfo *tocInfo)
+    : QObject(tocFrame)
+    , m_ToCFrame(tocFrame)
+    , m_ToCInfo(tocInfo)
 {
     Q_ASSERT(tocFrame);
-    QVariant data = tocFrame->format().property(KoText::TableOfContentsData);
-    m_tocInfo = data.value<KoTableOfContentsGeneratorInfo*>();
-    Q_ASSERT(m_tocInfo);
+    Q_ASSERT(tocInfo);
 
-    m_tocInfo->setGenerator(this);
-/*
+    m_ToCInfo->setGenerator(this);
+
+    // connect to FinishedLayout
+    KoTextDocumentLayout *docLayout = static_cast<KoTextDocumentLayout *>(tocFrame->document()->documentLayout());
+    QObject::connect(docLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
+
     // do a generate right now to have a ToC with placeholder numbers.
-    QTimer::singleShot(0, this, SLOT(documentLayoutFinished()));
-
-    // disabled for now as this requires us to update the list items in 'update' too
-*/
+    QTimer::singleShot(0, this, SLOT(generate()));
 }
 
 ToCGenerator::~ToCGenerator()
 {
-    delete m_tocInfo;
+    delete m_ToCInfo;
 }
 
-void ToCGenerator::documentLayoutFinished()
-{
-    switch (m_state) {
-    case DirtyState:
-    case NeverGeneratedState:
-        generate();
-        m_state = WithoutPageNumbersState;
-        break;
-    case WithoutPageNumbersState:
-        update();
-        m_state = GeneratedState;
-    case GeneratedState:
-        break;
-    };
-}
 
 static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int outlineLevel) {
     KoParagraphStyle *style = new KoParagraphStyle();
@@ -123,19 +107,25 @@ static QString removeWhitespacePrefix(const QString& text)
 
 void ToCGenerator::generate()
 {
+    static bool once = false;
+    if (once)
+        return;
+    once = true;
     QTextCursor cursor = m_ToCFrame->lastCursorPosition();
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
-
-    if (!m_tocInfo)
+qDebug()<<"GENERATE called";
+    if (!m_ToCInfo)
         return;
 
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
+qDebug()<<"GENERATE 1";
 
-    if (!m_tocInfo->m_indexTitleTemplate.text.isNull()) {
-        KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_tocInfo->m_indexTitleTemplate.styleId);
+    if (!m_ToCInfo->m_indexTitleTemplate.text.isNull()) {
+qDebug()<<"GENERATE"<<m_ToCInfo->m_indexTitleTemplate.text;
+        KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
         }
@@ -143,10 +133,9 @@ void ToCGenerator::generate()
         QTextBlock titleTextBlock = cursor.block();
         titleStyle->applyStyle(titleTextBlock);
 
-        cursor.insertText(m_tocInfo->m_indexTitleTemplate.text);
+        cursor.insertText(m_ToCInfo->m_indexTitleTemplate.text);
         cursor.insertBlock(QTextBlockFormat(), QTextCharFormat());
     }
-
 
     // Add TOC
     // Iterate through all blocks to generate TOC
@@ -166,9 +155,9 @@ void ToCGenerator::generate()
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
-            if (outlineLevel >= 1 && (outlineLevel-1) < m_tocInfo->m_entryTemplate.size()) {
+            if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()) {
                 // List's index starts with 0, outline level starts with 0
-                TocEntryTemplate tocEntryTemplate = m_tocInfo->m_entryTemplate.at(outlineLevel - 1);
+                TocEntryTemplate tocEntryTemplate = m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
                 // ensure that we fetched correct entry template
                 Q_ASSERT(tocEntryTemplate.outlineLevel == outlineLevel);
                 if (tocEntryTemplate.outlineLevel != outlineLevel) {
@@ -247,7 +236,8 @@ void ToCGenerator::generate()
                         }
                         case IndexEntry::PAGE_NUMBER: {
                             //IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
-                            cursor.insertText(QString(QChar::ReplacementCharacter));
+                            cursor.insertText(resolvePageNumber(block));
+qDebug()<<"GENERATE"<<tocEntryText<<resolvePageNumber(block);
                             break;
                         }
                         case IndexEntry::LINK_END: {
@@ -275,34 +265,17 @@ void ToCGenerator::generate()
 }
 
 
-void ToCGenerator::update()
+QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
 {
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
-    QTextCursor cursor = m_ToCFrame->lastCursorPosition();
-    cursor.beginEditBlock();
-    foreach (const BlockPair &blockPair, m_originalBlocksInToc) {
-        QTextBlock tocEntryBlock = blockPair.first;
-        QTextBlock headingBlock = blockPair.second;
-
-        KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
-        if (rootArea) {
-            if (rootArea->page()) {
-                QString blockText = tocEntryBlock.text();
-                int position = blockText.indexOf(QChar::ReplacementCharacter);
-                // Replace page number, possibly more than one time in one block
-                while (position > -1) {
-                    cursor.setPosition(tocEntryBlock.position() + position);
-                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                    QString pageNumber = QString::number(rootArea->page()->pageNumber());
-                    cursor.insertText(pageNumber);
-                    position = blockText.indexOf(QChar::ReplacementCharacter, position + 1);
-                }
-            }
+    KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
+    if (rootArea) {
+        if (rootArea->page()) {
+            return QString::number(rootArea->page()->pageNumber());
         }
     }
-    cursor.endEditBlock();
-    m_originalBlocksInToc.clear();
+    return "###";
 }
 
 #include <ToCGenerator.moc>

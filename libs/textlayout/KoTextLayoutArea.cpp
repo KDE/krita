@@ -38,6 +38,7 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
+#include "ToCGenerator.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -54,6 +55,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <KDebug>
 
@@ -384,6 +386,13 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
             } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
+                QVariant data = subFrame->format().property(KoText::TableOfContentsData);
+                KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
+
+                if (!tocInfo->generator()) {
+                    new ToCGenerator(subFrame, tocInfo); // attaches it self to the frame
+                }
+
                 // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
                 tocArea->m_specialTab = true; // make sure page numbers line up
@@ -622,7 +631,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         QTextOption::Tab tab;
         tabs.clear();
         tab.type = QTextOption::RightTab;
-        tab.position = (right() - left()) * qt_defaultDpiY() / 72.;
+        tab.position = (right() - left() + tabOffset) * qt_defaultDpiY() / 72. -10;
         tabs.append(tab);
     }
     option.setTabs(tabs);

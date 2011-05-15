@@ -45,9 +45,13 @@ ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
     : QObject(tocFrame),
     m_state(NeverGeneratedState),
     m_ToCFrame(tocFrame),
-    m_tocInfo(0),
 {
     Q_ASSERT(tocFrame);
+    QVariant data = tocFrame->format().property(KoText::TableOfContentsData);
+    m_tocInfo = data.value<KoTableOfContentsGeneratorInfo*>();
+    Q_ASSERT(m_tocInfo);
+
+    m_tocInfo->setGenerator(this);
 /*
     // do a generate right now to have a ToC with placeholder numbers.
     QTimer::singleShot(0, this, SLOT(documentLayoutFinished()));
@@ -123,8 +127,6 @@ void ToCGenerator::generate()
     cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
-    QVariant data = cursor.currentFrame()->format().property(KoText::TableOfContentsData);
-    m_tocInfo = data.value<KoTableOfContentsGeneratorInfo*>();
     if (!m_tocInfo)
         return;
 

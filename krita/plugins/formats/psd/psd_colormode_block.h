@@ -42,7 +42,7 @@ public:
 
     /* function for conversion of indexed color map to RGB
     */
-    QColor indextoRGB(QByteArray data);
+    QList<QColor> color;
 };
 
 #endif // PSD_COLORMODE_BLOCK_H

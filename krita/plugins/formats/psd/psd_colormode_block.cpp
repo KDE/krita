@@ -52,27 +52,13 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
-        indextoRGB(data);
-        qFatal("TODO: Compute the colormap");
-        return false;
+        for (int i=0; i<=256;)
+        {
+	  color.append(qRgb(data[i],data[++i],data[++i]));
+          qDebug()<<color;
+        }
     }
     return valid();
-}
-
-QColor PSDColorModeBlock::indextoRGB(QByteArray data)
-{
-// dont know if it correct or not need more work
-    int r,g,b;
-    QRgb color;
-    for (int i=0;i<=256;)
-    {
-        r=data[i];
-        g=data[++i];
-        b=data[++i];
-        color = qRgb(r,g,b);
-        i=+3;
-    }
-    return color;
 }
 
 

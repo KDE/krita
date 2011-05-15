@@ -572,13 +572,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     option.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     qreal tabStopDistance =  format.property(KoParagraphStyle::TabStopDistance).toDouble();
 
-    if (tabStopDistance > 0) {
-        tabStopDistance *= qt_defaultDpiY() / 72.;
-        option.setTabStop(tabStopDistance);
-    } else {
-        option.setTabStop(m_documentLayout->defaultTabSpacing());
+    if (tabStopDistance <= 0) {
         tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
+    tabStopDistance *= qt_defaultDpiY() / 72.;
+    option.setTabStop(tabStopDistance);
 
     // tabs
     QList<QTextOption::Tab> tabs;

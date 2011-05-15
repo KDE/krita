@@ -216,7 +216,7 @@ int KoTextDocumentLayout::pageCount() const
 
 void KoTextDocumentLayout::setTabSpacing(qreal spacing)
 {
-    d->defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
+    d->defaultTabSizing = spacing;
 }
 
 qreal KoTextDocumentLayout::defaultTabSpacing()

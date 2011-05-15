@@ -80,8 +80,8 @@ QMap<QString, QWidget*> ReferencesTool::createOptionWidgets()
 
     widgets.insert(i18n("Table of Contents"), stocw);
     widgets.insert(i18n("Footnotes & Endnotes"), sfenw);
-    widgets.insert(i18n("Citations"), scw);
-    widgets.insert(i18n("Captions"), scapw);
+    //widgets.insert(i18n("Citations"), scw);
+    //widgets.insert(i18n("Captions"), scapw);
     return widgets;
 }
 

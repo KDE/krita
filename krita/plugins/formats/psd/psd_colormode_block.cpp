@@ -62,14 +62,16 @@ void PSDColorModeBlock::indextoRGB(QByteArray data)
 {
  // dont know if it correct or not need more work 
 int rgb[2];
+ QRgb color;
 for(int i=0;i<=256;)
 {
   rgb[0]=data[i];
   rgb[1]=data[++i];
   rgb[2]=data[++i];
-  QRgb color = qRgb(rgb[0],rgb[1],rgb[2]);
+  color = qRgb(rgb[0],rgb[1],rgb[2]);
   i=+3;
 }
+return color;
 }
 
 

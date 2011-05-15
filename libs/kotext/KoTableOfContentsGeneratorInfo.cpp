@@ -227,6 +227,7 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
+  : m_generator(0)
 {
 }
 
@@ -235,6 +236,8 @@ KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
     foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
         qDeleteAll(entryTemplate.indexEntries);
     }
+    delete m_generator;
+    m_generator = 0; // just to be safe
 }
 
 
@@ -363,4 +366,15 @@ void KoTableOfContentsGeneratorInfo::saveOdf(KoXmlWriter * writer) const
         }
 
     writer->endElement(); // text:table-of-content-source
+}
+
+void KoTableOfContentsGeneratorInfo::setGenerator(ToCGenerator *generator)
+{
+    delete m_generator;
+    m_generator = generator;
+}
+
+ToCGenerator *KoTableOfContentsGeneratorInfo::generator() const
+{
+    return m_generator;
 }

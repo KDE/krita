@@ -33,6 +33,7 @@
 #include <KoXmlWriter.h>
 
 class KoTextSharedLoadingData;
+class ToCGenerator; // not actually defined in kotext, a textlayouter is free to define
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
@@ -166,6 +167,11 @@ public:
     void loadOdf(KoTextSharedLoadingData *sharedLoadingData, const KoXmlElement &element);
     void saveOdf(KoXmlWriter *writer) const;
 
+    void setGenerator(ToCGenerator *generator);
+
+    ToCGenerator *generator() const;
+
+
     QString m_name;
     QString m_styleName;
     // TODO: add support for those according ODF v1.2
@@ -186,6 +192,7 @@ public:
 
 private:
     int styleNameToStyleId(KoTextSharedLoadingData *sharedLoadingData, QString styleName);
+    ToCGenerator * m_generator;
 };
 
 Q_DECLARE_METATYPE(KoTableOfContentsGeneratorInfo *)

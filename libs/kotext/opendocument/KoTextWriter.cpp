@@ -239,17 +239,17 @@ public:
 
     // For handling <p> with <list-item> merges
     void handleParagraphWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
-    void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
-    void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
 
-    // FOr Handling <list-item> with <p> merges
+    // For Handling <list-item> with <p> merges
     int deleteStartDepth;
     void handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
-    void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
-    void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
     bool checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively = true);
 
@@ -258,9 +258,9 @@ public:
     // For handling <list-item> with <list-item> merges
     void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     QString findChangeIdForListItemMerge(const KoXmlElement &element);
-    void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd);
-    void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd);
     bool checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively = true);
 
@@ -387,7 +387,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
     if (!changeTracker) {
         if (tagInformation.name()) {
-            writer->startElement(tagInformation.name());
+            writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
             QPair<QString, QString> attribute;
             foreach (attribute, tagInformation.attributes()) {
                 writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
@@ -396,7 +396,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         }
         return changeId;
     }
-
+    
     QTextCursor cursor(document);
     QTextBlock block = document->findBlock(position);
 
@@ -2078,8 +2078,8 @@ void KoTextWriter::Private::handleParagraphWithListItemMerge(QTextStream &output
     }
 }
 
-void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter,
                                                           bool removeLeavingContent)
 {
     int listEndIdCounter = endIdCounter;
@@ -2099,7 +2099,7 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
         if (childElement.localName() == "removed-content") {
             writeNode(outputXmlStream, childElement, false);
         } else if ((childElement.localName() == "list-item") || (childElement.localName() == "list-header")) {
-            generateListItemForPWithListMerge(outputXmlStream, childElement, mergeResultElement,\
+            generateListItemForPWithListMerge(outputXmlStream, childElement, mergeResultElement,
                                               changeId, endIdCounter, !tagTypeChangeEnded);
             if (!tagTypeChangeEnded) {
                 tagTypeChangeEnded = true;
@@ -2121,8 +2121,8 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
     }
 }
 
-void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                              QString &mergeResultElement, QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                              QString &mergeResultElement, QString &changeId, int &endIdCounter,
                                                               bool removeLeavingContent)
 {
     int listItemEndIdCounter = endIdCounter;
@@ -2208,8 +2208,8 @@ void KoTextWriter::Private::handleListItemWithParagraphMerge(QTextStream &output
 
 }
 
-void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                          QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                          QString &changeId, int &endIdCounter,
                                                           bool removeLeavingContent)
 {
     static int listDepth = 0;
@@ -2255,7 +2255,7 @@ void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXml
     }
 }
 
-void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                               QString &changeId, int &endIdCounter, bool removeLeavingContent)
 {
     if (!removeLeavingContent) {
@@ -2341,7 +2341,7 @@ void KoTextWriter::Private::handleListItemWithListItemMerge(QTextStream &outputX
     generateListForListItemMerge(outputXmlStream, listElement, changeId, endIdCounter, false, false);
 }
 
-void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                          QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd)
 {
     int listEndIdCounter = endIdCounter;
@@ -2391,7 +2391,7 @@ void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlS
     }
 }
 
-void KoTextWriter::Private::generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                              QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd)
 {
     if (!listItemMergeStart && !listItemMergeEnd) {

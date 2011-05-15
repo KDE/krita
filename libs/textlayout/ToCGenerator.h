@@ -40,7 +40,6 @@ public:
     virtual ~ToCGenerator();
 
     QTextFrame *tocFrame() const { return m_ToCFrame; }
-    void setPageWidth(qreal pageWidthPt);
 
     // TODO API to be called when the shape is printed so we can guarentee
     // the TOC is up-to-date on printing time.
@@ -65,7 +64,6 @@ private:
     QTextFrame *m_ToCFrame;
     KoTableOfContentsGeneratorInfo * m_tocInfo;
     QList<BlockPair> m_originalBlocksInToc;
-    qreal m_pageWidthPt;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

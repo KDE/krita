@@ -85,6 +85,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_endOfArea()
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
+ , m_specialTab(false)
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
@@ -385,6 +386,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
                 // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
+                tocArea->m_specialTab = true; // make sure page numbers line up
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
                 if (!m_blockRects.isEmpty()) {
@@ -615,6 +617,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tab.position = position;
         tabs.append(tab);
         position += tabStopDistance;
+    }
+    if (m_specialTab) {
+        QTextOption::Tab tab;
+        tabs.clear();
+        tab.type = QTextOption::RightTab;
+        tab.position = (right() - left()) * qt_defaultDpiY() / 72.;
+        tabs.append(tab);
     }
     option.setTabs(tabs);
 

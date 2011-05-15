@@ -46,7 +46,6 @@ ToCGenerator::ToCGenerator(QTextFrame *tocFrame)
     m_state(NeverGeneratedState),
     m_ToCFrame(tocFrame),
     m_tocInfo(0),
-    m_pageWidthPt(0.0)
 {
     Q_ASSERT(tocFrame);
 /*
@@ -61,13 +60,6 @@ ToCGenerator::~ToCGenerator()
 {
     delete m_tocInfo;
 }
-
-
-void ToCGenerator::setPageWidth(qreal pageWidthPt)
-{
-    m_pageWidthPt = pageWidthPt;
-}
-
 
 void ToCGenerator::documentLayoutFinished()
 {
@@ -181,7 +173,7 @@ void ToCGenerator::generate()
                     qDebug() << "TOC outline level not found correctly " << outlineLevel;
                 }
 
-                tocTemplateStyle = styleManager->paragraphStyle( tocEntryTemplate.styleId );
+                tocTemplateStyle = styleManager->paragraphStyle(tocEntryTemplate.styleId);
                 if (tocTemplateStyle == 0) {
                     tocTemplateStyle = generateTemplateStyle(styleManager, outlineLevel);
                 }
@@ -199,7 +191,7 @@ void ToCGenerator::generate()
                             //IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
 
                             QString target;
-                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout() );
+                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout());
                             if (layout) {
                                 target = fetchBookmarkRef(block, layout->inlineTextObjectManager());
 
@@ -248,24 +240,12 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::TAB_STOP: {
-                            IndexEntryTabStop * tabStop = static_cast<IndexEntryTabStop*>(entry);
-
-                            QList<QVariant> tabStops;
-                            if (tabStop->tab.type == QTextOption::RightTab){
-                                tabStop->tab.position = m_pageWidthPt;
-                            }
-
-                            tabStops.append( QVariant::fromValue<KoText::Tab>(tabStop->tab) );
-
-                            QTextBlockFormat blockFormat = cursor.blockFormat();
-                            blockFormat.setProperty(KoParagraphStyle::TabPositions, tabStops);
-                            cursor.setBlockFormat(blockFormat);
                             cursor.insertText("\t");
                             break;
                         }
                         case IndexEntry::PAGE_NUMBER: {
                             //IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
-                            cursor.insertText( QString(QChar::ReplacementCharacter) );
+                            cursor.insertText(QString(QChar::ReplacementCharacter));
                             break;
                         }
                         case IndexEntry::LINK_END: {

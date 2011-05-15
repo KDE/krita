@@ -145,6 +145,8 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "-50%" << "0%" << "100%" << "42%";
         } else if (reference == "borderWidths") {
             result << "42px 42pt 12cm" << "0px 0pt 0cm";
+        } else if (reference == "angle") {
+            result << "5deg" << "1rad" << "-3grad" << "3.14rad" << "45";    // OpenDocument 1.1 : no unit == degrees
         } else if (reference == "string") {
             // Now, that sucks !
             kWarning() << "Found a string reference in " << m_name;
@@ -169,6 +171,9 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         } else if (reference == "color") {
             if (initialValue.toLower() == outputValue.toLower())
                 return true;
+        } else if (reference == "angle") {
+            //TODO: implement comparison of angles
+            return (initialValue.toLower() == outputValue.toLower());
         }
     }
     return false;
@@ -183,7 +188,8 @@ TestOpenDocumentStyle::TestOpenDocumentStyle()
 void TestOpenDocumentStyle::initTestCase()
 {
     // Parse the relaxng file quickly
-    QString fileName(SPECS_DATA_DIR "OpenDocument-schema-v1.1.rng");
+    //QString fileName(SPECS_DATA_DIR "OpenDocument-schema-v1.1.rng");
+    QString fileName(SPECS_DATA_DIR "OpenDocument-v1.2-cs01-schema.rng");
     kDebug() << fileName;
     QFile specFile(fileName);
     specFile.open(QIODevice::ReadOnly);
@@ -209,6 +215,12 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
     if (!m_rngRules.contains(name))
         return result;
     QList<QDomElement> elements = m_rngRules.values(name);
+    if ((elements.count() == 1) && (elements.first().firstChildElement().tagName() == "interleave"))
+    {
+        QDomElement root = elements.first().firstChildElement();
+        elements.clear();
+        elements.append(root);
+    }
     foreach (QDomElement element, elements) {
         QDomElement child = element.firstChildElement();
         do {

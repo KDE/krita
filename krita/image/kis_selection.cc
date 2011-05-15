@@ -134,24 +134,22 @@ void KisSelection::updateProjection(const QRect &rc)
     KisPixelSelectionSP currentProjection = projection();
     if(currentProjection == m_d->pixelSelection) return;
 
-
     QRect updateRect = rc;
 
-    if(*(m_d->pixelSelection->defaultPixel()) !=
-       *(currentProjection->defaultPixel())) {
-
-        quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
-        currentProjection->setDefaultPixel(&defPixel);
-        updateRect = selectedRect();
-    }
-
-    currentProjection->clear(rc);
     if(m_d->pixelSelection) {
-        m_d->pixelSelection->renderToProjection(currentProjection.data());
+        if(*(m_d->pixelSelection->defaultPixel()) !=
+           *(currentProjection->defaultPixel())) {
+
+            quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
+            currentProjection->setDefaultPixel(&defPixel);
+            updateRect |= selectedRect();
+        }
+        currentProjection->clear(updateRect);
+        m_d->pixelSelection->renderToProjection(currentProjection.data(), updateRect);
     }
 
     if(m_d->shapeSelection) {
-        m_d->shapeSelection->renderToProjection(currentProjection.data());
+        m_d->shapeSelection->renderToProjection(currentProjection.data(), updateRect);
     }
 }
 
@@ -253,7 +251,9 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsSP bounds)
 
 void KisSelection::clear()
 {
-    m_d->pixelSelection->clear();
+    if(m_d->pixelSelection) {
+        m_d->pixelSelection->clear();
+    }
 
     // FIXME: check whether this is safe
     delete m_d->shapeSelection;

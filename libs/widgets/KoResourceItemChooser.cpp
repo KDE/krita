@@ -132,7 +132,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         int column = index.column();
         if( index.isValid() ) {
 
-            KoResource * resource = resourceFromModelIndex(index);
+            KoResource * resource = resourceFromModelIndex(index);            
             if( resource ) {
                 d->model->resourceServerAdapter()->removeResource(resource);
             }
@@ -152,14 +152,18 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         KNS3::DownloadDialog dialog( d->knsrcFile, this );
         dialog.exec();
 
-        foreach (const KNS3::Entry& e, dialog.installedEntries() ) {
+        foreach (const KNS3::Entry& e, dialog.changedEntries() ) {
+
              foreach( const QString &file, e.installedFiles() ) {
-                 qDebug() << "file path from e:" << file;
                  QFileInfo fi(file);
-                 qDebug() << "file path from fi:" << fi.absolutePath()+"/"+fi.fileName();
                   d->model->resourceServerAdapter()->loadingResourceFile( fi.absolutePath()+"/"+fi.fileName() );
               }
-         }
+
+       foreach( const QString &file, e.uninstalledFiles() ) {
+                 QFileInfo fi(file);
+                 d->model->resourceServerAdapter()->removeResourceFile( fi.absolutePath()+"/"+fi.fileName() );
+              }
+      }
      }
     else if (button == Button_GhnsUpload) {
 

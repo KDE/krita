@@ -286,6 +286,7 @@ public:
         }
     }
 
+    /// loads the resource file into the resource server after it is downloaded using GHNS
     virtual void loadingResourceFile( const QString & filename ) {
         QFileInfo fi( filename );
         if( fi.exists() == false )
@@ -303,6 +304,22 @@ public:
             delete resource;
         }
     }
+
+    /// Removes the resource file from the resource server
+    virtual void removeResourceFile( const QString & filename ) {
+
+        QFileInfo fi( filename );
+
+        T* resource = getResourceByFilename( fi.fileName() );
+        if(!resource){
+            kWarning(30009) << "Resource file do not exist ";
+            return;
+         }
+
+        if(!removeResourceFromServer(resource))
+            return;
+        }
+
 
     /**
      * Addes an observer to the server

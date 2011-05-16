@@ -33,7 +33,7 @@ class ReferencesTool : public TextTool
 public:
     ReferencesTool(KoCanvasBase *canvas);
 
-    ~ReferencesTool();
+    virtual ~ReferencesTool();
 
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();

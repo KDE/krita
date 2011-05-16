@@ -64,7 +64,7 @@ public:
 #ifndef NDEBUG
     explicit TextTool(MockCanvas *canvas);
 #endif
-    ~TextTool();
+    virtual ~TextTool();
 
     /// reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);

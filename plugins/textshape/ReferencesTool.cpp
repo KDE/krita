@@ -65,15 +65,15 @@ QMap<QString, QWidget*> ReferencesTool::createOptionWidgets()
 {
     QMap<QString, QWidget *> widgets;
     SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(this, 0);
-    SimpleCitationWidget *scw = new SimpleCitationWidget(0);
+    //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
     SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
-    SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
+    //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
 
     // Connect to/with simple table of contents option widget
     connect(stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     // Connect to/with simple citation index option widget
-    connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    //connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     // Connect to/with simple citation index option widget
     connect(sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));

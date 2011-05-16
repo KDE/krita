@@ -121,6 +121,59 @@ TextTool::TextTool(KoCanvasBase *canvas)
 {
     setTextMode(true);
 
+    createActions();
+
+    m_textEditingPlugins = canvas->resourceManager()->
+        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
+    if (m_textEditingPlugins == 0) {
+        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
+        QVariant variant;
+        variant.setValue(m_textEditingPlugins);
+        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
+    }
+
+    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
+        connect(plugin, SIGNAL(startMacro(const QString &)),
+                this, SLOT(startMacro(const QString &)));
+        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        QHash<QString, KAction*> actions = plugin->actions();
+        QHash<QString, KAction*>::iterator i = actions.begin();
+        while (i != actions.end()) {
+            addAction(i.key(), i.value());
+            ++i;
+        }
+    }
+
+    // setup the context list.
+    QSignalMapper *signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
+    QList<QAction*> list;
+    list.append(this->action("text_default"));
+    list.append(this->action("format_font"));
+    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
+        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
+        if (factory->showInMenu()) {
+            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
+            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
+            signalMapper->setMapping(a, factory->id());
+            list.append(a);
+            addAction(QString("apply_%1").arg(factory->id()), a);
+        }
+    }
+    setPopupActionList(list);
+
+    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+
+    m_caretTimer.setInterval(500);
+    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
+
+    m_changeTipTimer.setInterval(500);
+    m_changeTipTimer.setSingleShot(true);
+    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
+}
+
+void TextTool::createActions()
+{
     m_actionFormatBold  = new KAction(KIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
@@ -216,67 +269,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     connect(m_actionFormatFontFamily, SIGNAL(triggered(const QString &)),
             this, SLOT(setFontFamily(const QString &)));
 
-    /*
-        m_actionFormatStyleMenu  = new KActionMenu(i18n("Style"), this);
-        addAction("format_stylemenu", m_actionFormatStyleMenu);
-        m_actionFormatStyle  = new KSelectAction(i18n("Style"), this);
-        addAction("format_style", m_actionFormatStyle);
-        connect(m_actionFormatStyle, SIGNAL(activated(int)),
-                this, SLOT(textStyleSelected(int)));
-        updateStyleList();
-
-        // ----------------------- More format actions, for the toolbar only
-        QActionGroup* spacingActionGroup = new QActionGroup(this);
-        spacingActionGroup->setExclusive(true);
-        m_actionFormatSpacingSingle = new KToggleAction(i18n("Line Spacing 1"), "format-line-spacing-simple", Qt::CTRL + Qt::Key_1,
-                this, SLOT(textSpacingSingle()),
-                actionCollection(), "format_spacingsingle");
-        m_actionFormatSpacingSingle->setActionGroup(spacingActionGroup);
-        m_actionFormatSpacingOneAndHalf = new KToggleAction(i18n("Line Spacing 1.5"), "format-line-spacing-double", Qt::CTRL + Qt::Key_5,
-                this, SLOT(textSpacingOneAndHalf()),
-                actionCollection(), "format_spacing15");
-        m_actionFormatSpacingOneAndHalf->setActionGroup(spacingActionGroup);
-        m_actionFormatSpacingDouble = new KToggleAction(i18n("Line Spacing 2"), "format-line-spacing-triple", Qt::CTRL + Qt::Key_2,
-                this, SLOT(textSpacingDouble()),
-                actionCollection(), "format_spacingdouble");
-        m_actionFormatSpacingDouble->setActionGroup(spacingActionGroup);
-
-        m_actionFormatColor = new TKSelectColorAction(i18n("Text Color..."), TKSelectColorAction::TextColor,
-                this, SLOT(textColor()),
-                actionCollection(), "format_color", true);
-        m_actionFormatColor->setDefaultColor(QColor());
-
-
-        m_actionFormatNumber  = new KActionMenu(KIcon("format-list-ordered"), i18n("Number"), this);
-        addAction("format_number", m_actionFormatNumber);
-        m_actionFormatNumber->setDelayed(false);
-        m_actionFormatBullet  = new KActionMenu(KIcon("format-list-unordered"), i18n("Bullet"), this);
-        addAction("format_bullet", m_actionFormatBullet);
-        m_actionFormatBullet->setDelayed(false);
-        QActionGroup* counterStyleActionGroup = new QActionGroup(this);
-        counterStyleActionGroup->setExclusive(true);
-        QList<KoCounterStyleWidget::StyleRepresenter*> stylesList;
-        KoCounterStyleWidget::makeCounterRepresenterList(stylesList);
-        foreach (KoCounterStyleWidget::StyleRepresenter* styleRepresenter, stylesList) {
-            // Dynamically create toggle-actions for each list style.
-            // This approach allows to edit toolbars and extract separate actions from this menu
-            KToggleAction* act = new KToggleAction(styleRepresenter->name(), // TODO icon
-                    actionCollection(),
-                    QString("counterstyle_%1").arg(styleRepresenter->style()));
-            connect(act, SIGNAL(triggered(bool)), this, SLOT(slotCounterStyleSelected()));
-            act->setActionGroup(counterStyleActionGroup);
-            // Add to the right menu: both for "none", bullet for bullets, numbers otherwise
-            if (styleRepresenter->style() == KoParagCounter::STYLE_NONE) {
-                m_actionFormatBullet->insert(act);
-                m_actionFormatNumber->insert(act);
-            } else if (styleRepresenter->isBullet())
-                m_actionFormatBullet->insert(act);
-            else
-                m_actionFormatNumber->insert(act);
-        }
-    */
-
-
     // ------------------- Actions with a key binding and no GUI item
     action  = new KAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
@@ -295,7 +287,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
 
     action  = new KAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action);
-    //action->setShortcut(Qt::CTRL+Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
+    //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
     connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
 
     action  = new KAction(i18n("Line Break"), this);
@@ -347,49 +339,11 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setToolTip(i18n("Change text attributes to their default values"));
     connect(action, SIGNAL(triggered()), this, SLOT(setDefaultFormat()));
 
-    m_textEditingPlugins = canvas->resourceManager()->
-        resource(TextEditingPluginContainer::ResourceId).value<TextEditingPluginContainer*>();
-    if (m_textEditingPlugins == 0) {
-        m_textEditingPlugins = new TextEditingPluginContainer(canvas->resourceManager());
-        QVariant variant;
-        variant.setValue(m_textEditingPlugins);
-        canvas->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
-    }
-
-    foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
-        connect(plugin, SIGNAL(startMacro(const QString &)),
-                this, SLOT(startMacro(const QString &)));
-        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
-        QHash<QString, KAction*> actions = plugin->actions();
-        QHash<QString, KAction*>::iterator i = actions.begin();
-        while (i != actions.end()) {
-            addAction(i.key(), i.value());
-            ++i;
-        }
-    }
-
-    // setup the context list.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
-    QList<QAction*> list;
-    list.append(this->action("text_default"));
-    list.append(this->action("format_font"));
-    foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
-        KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
-        if (factory->showInMenu()) {
-            KAction *a = new KAction(i18n("Apply %1", factory->title()), this);
-            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(a, factory->id());
-            list.append(a);
-            addAction(QString("apply_%1").arg(factory->id()), a);
-        }
-    }
-    setPopupActionList(list);
-
     action = new KAction(i18n("Table..."), this);
     addAction("insert_table", action);
     action->setToolTip(i18n("Insert a table into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+
     action  = new KAction(KIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
     action->setToolTip(i18n("Insert Row Above"));
     addAction("insert_tablerow_above", action);
@@ -508,7 +462,7 @@ TextTool::TextTool(KoCanvasBase *canvas)
     action->setIcon(KIcon("view-refresh"));
     addAction("repaint", action);
     connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
-    
+
 #ifndef NDEBUG
     action = new KAction("Paragraph Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
@@ -519,15 +473,6 @@ TextTool::TextTool(KoCanvasBase *canvas)
     addAction("detailed_debug_styles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
 #endif
-
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
-
-    m_caretTimer.setInterval(500);
-    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
-
-    m_changeTipTimer.setInterval(500);
-    m_changeTipTimer.setSingleShot(true);
-    connect(&m_changeTipTimer, SIGNAL(timeout()), this, SLOT(showChangeTip()));
 }
 
 #ifndef NDEBUG
@@ -724,6 +669,7 @@ void TextTool::updateSelectedShape(const QPointF &point)
                     break; // stop looking.
             }
         }
+
         setShapeData(static_cast<KoTextShapeData*>(m_textShape->userData()));
 
         // This is how we inform the rulers of the active range
@@ -1140,15 +1086,6 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             moveOperation = QTextCursor::WordLeft;
         else if (hit(item, KStandardShortcut::ForwardWord))
             moveOperation = QTextCursor::WordRight;
-#ifndef NDEBUG
-        else if (event->key() == Qt::Key_F12) {
-            textEditor->insertTable(3, 2);
-            QTextTable *table = textEditor->cursor()->currentTable();
-            QTextCursor c = table->cellAt(1,1).firstCursorPosition();
-            c.insertText("foo bar baz");
-            textEditor->setPosition(c.position());
-        }
-#endif
 #ifdef Q_WS_MAC
         // Don't reject "alt" key, it may be used for typing text on Mac OS
         else if ((event->modifiers() & Qt::ControlModifier) || event->text().length() == 0) {
@@ -2061,6 +1998,10 @@ bool TextTool::isBidiDocument() const
 
 void TextTool::resourceChanged(int key, const QVariant &var)
 {
+    if (m_textEditor.isNull())
+        return;
+    if (!m_textShapeData)
+        return;
     if (m_allowResourceManagerUpdates == false)
         return;
     if (key == KoText::CurrentTextPosition) {
@@ -2125,7 +2066,6 @@ void TextTool::shapeAddedToCanvas()
 
 void TextTool::shapeDataRemoved()
 {
-    kDebug();
     m_textShapeData = 0;
     m_textShape = 0;
     if (!m_textEditor.isNull() && !m_textEditor.data()->cursor()->isNull()) {

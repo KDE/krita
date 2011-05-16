@@ -28,44 +28,26 @@
 #include <KoTableOfContentsGeneratorInfo.h>
 class KoInlineTextObjectManager;
 
-typedef QPair<QTextBlock, QTextBlock> BlockPair;
-
 class QTextFrame;
 
 class ToCGenerator : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToCGenerator(QTextFrame *tocFrame);
+    explicit ToCGenerator(QTextFrame *tocFrame, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
-
-    QTextFrame *tocFrame() const { return m_ToCFrame; }
-    void setPageWidth(qreal pageWidthPt);
 
     // TODO API to be called when the shape is printed so we can guarentee
     // the TOC is up-to-date on printing time.
 
 public slots:
-    void documentLayoutFinished();
-    // TODO a slot to connect the parent QTextDocument changed signal to so we
-    // know when the TOC is dirty.
+    void generate();
 
 private:
-    void generate();
-    void update();
+    QString resolvePageNumber(const QTextBlock &headingBlock);
 
-    enum State {
-        DirtyState,
-        NeverGeneratedState,
-        WithoutPageNumbersState,
-        GeneratedState
-    };
-
-    State m_state;
     QTextFrame *m_ToCFrame;
-    KoTableOfContentsGeneratorInfo * m_tocInfo;
-    QList<BlockPair> m_originalBlocksInToc;
-    qreal m_pageWidthPt;
+    KoTableOfContentsGeneratorInfo *m_ToCInfo;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

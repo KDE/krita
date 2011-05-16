@@ -216,7 +216,7 @@ int KoTextDocumentLayout::pageCount() const
 
 void KoTextDocumentLayout::setTabSpacing(qreal spacing)
 {
-    d->defaultTabSizing = spacing * qt_defaultDpiY() / 72.;
+    d->defaultTabSizing = spacing;
 }
 
 qreal KoTextDocumentLayout::defaultTabSpacing()
@@ -245,12 +245,13 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-//TODO FIXME make corresponding root area as dirty and then do layout
-// right now we are just marking all as dirty
-    foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (!rootArea->isDirty())
-            rootArea->setDirty();
-    }
+    // Mark the previous of the corresponding and all following root areas as dirty.
+    KoTextLayoutRootArea *area = rootAreaForPosition(position);
+    if (!area)
+        return;
+    for(int i = qMax(0, d->rootAreaList.indexOf(area) - 1); i < d->rootAreaList.count(); ++i)
+        d->rootAreaList[i]->setDirty();
+
     emitLayoutIsDirty();
 }
 

@@ -22,6 +22,7 @@ set(textlayout_LIB_SRCS
     FloatingAnchorStrategy.cpp
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
+    ToCGenerator.cpp
 )
 
 

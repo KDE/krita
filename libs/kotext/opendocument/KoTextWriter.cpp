@@ -175,7 +175,7 @@ public:
     QHash<QTextList *, QString> saveListStyles(QTextBlock block, int to);
     void saveParagraph(const QTextBlock &block, int from, int to);
     void saveTable(QTextTable *table, QHash<QTextList *, QString> &listStyles);
-    QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level);
+    QTextBlock& saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable);
     void saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc);
     void writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable = 0, QTextFrame *currentFrame = 0, QTextList *currentList = 0);
     void saveInlineRdf(KoTextInlineRdf *rdf, TagInformation *tagInfos);
@@ -239,17 +239,17 @@ public:
 
     // For handling <p> with <list-item> merges
     void handleParagraphWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
-    void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
-    void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &mergeResultElement, QString &changeId, int &endIdCounter, bool removeLeavingContent);
 
-    // FOr Handling <list-item> with <p> merges
+    // For Handling <list-item> with <p> merges
     int deleteStartDepth;
     void handleListItemWithParagraphMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
-    void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
-    void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool removeLeavingContent);
     bool checkForDeleteStartInListItem(KoXmlElement &element, bool checkRecursively = true);
 
@@ -258,9 +258,9 @@ public:
     // For handling <list-item> with <list-item> merges
     void handleListItemWithListItemMerge(QTextStream &outputXmlStream, const KoXmlElement &element);
     QString findChangeIdForListItemMerge(const KoXmlElement &element);
-    void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd);
-    void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+    void generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                        QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd);
     bool checkForDeleteEndInListItem(KoXmlElement &element, bool checkRecursively = true);
 
@@ -387,7 +387,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
     if (!changeTracker) {
         if (tagInformation.name()) {
-            writer->startElement(tagInformation.name());
+            writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
             QPair<QString, QString> attribute;
             foreach (attribute, tagInformation.attributes()) {
                 writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
@@ -396,7 +396,7 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
         }
         return changeId;
     }
-
+    
     QTextCursor cursor(document);
     QTextBlock block = document->findBlock(position);
 
@@ -1430,37 +1430,34 @@ void KoTextWriter::Private::saveTable(QTextTable *table, QHash<QTextList *, QStr
 
 void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *toc)
 {
-
     writer->startElement("text:table-of-content");
 
-        KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
-        if (!info->tableOfContentData()->styleName.isNull())
-            {
-                writer->addAttribute("text:style-name",info->tableOfContentData()->styleName);
-            }
-        writer->addAttribute("text:name",info->tableOfContentData()->name);
+    KoTableOfContentsGeneratorInfo *info = toc->frameFormat().property(KoText::TableOfContentsData).value<KoTableOfContentsGeneratorInfo*>();
+    if (!info->m_styleName.isNull()) {
+            writer->addAttribute("text:style-name",info->m_styleName);
+    }
+    writer->addAttribute("text:name",info->m_name);
 
-        info->saveOdf(writer);
+    info->saveOdf(writer);
 
-        writer->startElement("text:index-body");
-            // write the title (one p block)
-            QTextCursor localBlock = toc->firstCursorPosition();
-            localBlock.movePosition(QTextCursor::NextBlock);
-            int endTitle = localBlock.position();
-            writer->startElement("text:index-title");
-                writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
-            writer->endElement(); // text:index-title
-        from = endTitle;
+    writer->startElement("text:index-body");
+    // write the title (one p block)
+    QTextCursor localBlock = toc->firstCursorPosition();
+    localBlock.movePosition(QTextCursor::NextBlock);
+    int endTitle = localBlock.position();
+    writer->startElement("text:index-title");
+        writeBlocks(document, from, endTitle, listStyles, currentTable, toc);
+    writer->endElement(); // text:index-title
+    from = endTitle;
 
-        QTextBlock block = toc->lastCursorPosition().block();
-        writeBlocks(document, from, to, listStyles, currentTable, toc);
-
+    QTextBlock block = toc->lastCursorPosition().block();
+    writeBlocks(document, from, to, listStyles, currentTable, toc);
 
     writer->endElement(); // table:index-body
     writer->endElement(); // table:table-of-content
 }
 
-QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level)
+QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *, QString> &listStyles, int level, QTextTable *currentTable)
 {
     QTextList *textList, *topLevelTextList;
     topLevelTextList = textList = block.textList();
@@ -1529,7 +1526,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 paraTagInformation.addAttribute("text:style-name", listStyles.value(textList));
 
                 int changeId = openTagRegion(block.position(), KoTextWriter::Private::NumberedParagraph, paraTagInformation);
-                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList);
+                writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, 0, textList);
                 closeTagRegion(changeId);
             } else {
                 if (changeTracker && changeTracker->saveFormat() == KoChangeTracker::DELTAXML) {
@@ -1565,7 +1562,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                 }
 
                 if (textList == topLevelTextList) {
-                    writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, 0, 0, textList);
+                    writeBlocks(textDocument.document(), block.position(), block.position() + block.length() - 1, listStyles, currentTable, 0, textList);
                     // we are generating a text:list-item. Look forward and generate unnumbered list items.
                     while (true) {
                         QTextBlock nextBlock = block.next();
@@ -1576,7 +1573,7 @@ QTextBlock& KoTextWriter::Private::saveList(QTextBlock &block, QHash<QTextList *
                     }
                 } else {
                     //This is a sub-list
-                    block = saveList(block, listStyles, ++level);
+                    block = saveList(block, listStyles, ++level, currentTable);
                     //saveList will return a block one-past the last block of the list.
                     //Since we are doing a block.next() below, we need to go one back.
                     block = block.previous();
@@ -1705,7 +1702,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         if (cursor.currentList() != currentList) {
             int previousBlockNumber = block.blockNumber();
-            block = saveList(block, listStyles, 1);
+            block = saveList(block, listStyles, 1, currentTable);
             int blockNumberToProcess = block.blockNumber();
             if (blockNumberToProcess != previousBlockNumber)
                 continue;
@@ -2078,8 +2075,8 @@ void KoTextWriter::Private::handleParagraphWithListItemMerge(QTextStream &output
     }
 }
 
-void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                          QString &mergeResultElement, QString &changeId, int &endIdCounter,
                                                           bool removeLeavingContent)
 {
     int listEndIdCounter = endIdCounter;
@@ -2099,7 +2096,7 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
         if (childElement.localName() == "removed-content") {
             writeNode(outputXmlStream, childElement, false);
         } else if ((childElement.localName() == "list-item") || (childElement.localName() == "list-header")) {
-            generateListItemForPWithListMerge(outputXmlStream, childElement, mergeResultElement,\
+            generateListItemForPWithListMerge(outputXmlStream, childElement, mergeResultElement,
                                               changeId, endIdCounter, !tagTypeChangeEnded);
             if (!tagTypeChangeEnded) {
                 tagTypeChangeEnded = true;
@@ -2121,8 +2118,8 @@ void KoTextWriter::Private::generateListForPWithListMerge(QTextStream &outputXml
     }
 }
 
-void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                              QString &mergeResultElement, QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListItemForPWithListMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                              QString &mergeResultElement, QString &changeId, int &endIdCounter,
                                                               bool removeLeavingContent)
 {
     int listItemEndIdCounter = endIdCounter;
@@ -2208,8 +2205,8 @@ void KoTextWriter::Private::handleListItemWithParagraphMerge(QTextStream &output
 
 }
 
-void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
-                                                          QString &changeId, int &endIdCounter, \
+void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
+                                                          QString &changeId, int &endIdCounter,
                                                           bool removeLeavingContent)
 {
     static int listDepth = 0;
@@ -2255,7 +2252,7 @@ void KoTextWriter::Private::generateListForListWithPMerge(QTextStream &outputXml
     }
 }
 
-void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListItemForListWithPMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                               QString &changeId, int &endIdCounter, bool removeLeavingContent)
 {
     if (!removeLeavingContent) {
@@ -2341,7 +2338,7 @@ void KoTextWriter::Private::handleListItemWithListItemMerge(QTextStream &outputX
     generateListForListItemMerge(outputXmlStream, listElement, changeId, endIdCounter, false, false);
 }
 
-void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                          QString &changeId, int &endIdCounter, bool listMergeStart, bool listMergeEnd)
 {
     int listEndIdCounter = endIdCounter;
@@ -2391,7 +2388,7 @@ void KoTextWriter::Private::generateListForListItemMerge(QTextStream &outputXmlS
     }
 }
 
-void KoTextWriter::Private::generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element, \
+void KoTextWriter::Private::generateListItemForListItemMerge(QTextStream &outputXmlStream, KoXmlElement &element,
                                                              QString &changeId, int &endIdCounter, bool listItemMergeStart, bool listItemMergeEnd)
 {
     if (!listItemMergeStart && !listItemMergeEnd) {

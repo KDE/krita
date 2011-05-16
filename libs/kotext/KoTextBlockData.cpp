@@ -32,8 +32,7 @@ public:
           counterIsImage(false),
           counterIndex(1),
           border(0),
-          paintStrategy(0),
-          top(0)
+          paintStrategy(0)
     {
     }
 
@@ -52,8 +51,6 @@ public:
     QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    qreal top;
-    qreal bottom;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -175,14 +172,4 @@ void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategyBase *paintStrate
 KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 {
     return d->paintStrategy;
-}
-
-void KoTextBlockData::setEffectiveTop(qreal y)
-{
-    d->top = y;
-}
-
-qreal KoTextBlockData::effectiveTop() const
-{
-    return d->top;
 }

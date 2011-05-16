@@ -401,8 +401,11 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     else {
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
-            while (m_textShapeData->isDirty()){
+            while (m_textShapeData->isDirty()) {
                 lay->layout();
+                if (!m_textShapeData->rootArea()) {
+                    break;
+                }
             }
         }
     }

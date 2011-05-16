@@ -1068,4 +1068,18 @@ bool KoPAView::isMasterUsed( KoPAPageBase * page )
     return used;
 }
 
+void KoPAView::centerPage()
+{
+    KoPageLayout &layout = d->activePage->pageLayout();
+    QSizeF pageSize( layout.width, layout.height );
+
+    QPoint documentCenter =
+        zoomHandler()->documentToView(QPoint(pageSize.width(),
+                                              pageSize.height())).toPoint();
+
+    d->canvasController->setPreferredCenter(documentCenter);
+    d->canvasController->recenterPreferred();
+
+}
+
 #include <KoPAView.moc>

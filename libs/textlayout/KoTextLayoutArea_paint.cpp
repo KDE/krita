@@ -269,64 +269,23 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
         return;
 
     QTextList *list = block.textList();
+
     if (list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();
 
-        KoCharacterStyle *cs = 0;
-        if (m_documentLayout->styleManager()) {
-            const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
-            cs = m_documentLayout->styleManager()->characterStyle(id);
-            if (!cs) {
-                KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
-                                       block.blockFormat().intProperty(KoParagraphStyle::StyleId));
-                if (ps && !ps->hasDefaults()) {
-                    cs = ps->characterStyle();
-                }
-            }
-        }
-
-        // use format from the actual block of the list item
-        QTextCharFormat chFormatBlock;
-        if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
-                cs->applyStyle(chFormatBlock);
-        } else {
-            if (block.text().size() == 0) {
-                chFormatBlock = block.charFormat();
-            } else {
-                chFormatBlock = block.begin().fragment().charFormat();
-            }
-        }
-
-        // fetch the text properties of the list-level-style-bullet
-        if (listFormat.hasProperty(KoListStyle::MarkCharacterStyleId)) {
-            QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
-            QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
-            if (!textPropertiesCharStyle.isNull()) {
-                //calculate the correct font point size taking into account the current block format and the relative font size percent
-                qreal percent=100;
-                if (listFormat.hasProperty(KoListStyle::RelativeBulletSize))
-                    percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
-                else
-                    listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
-
-                textPropertiesCharStyle->setFontPointSize((percent*chFormatBlock.fontPointSize())/100.00);
-                textPropertiesCharStyle->applyStyle(chFormatBlock);
-            }
-        }
-
         if (! data->counterText().isEmpty()) {
-            QFont font(chFormatBlock.font(), m_documentLayout->paintDevice());
+            QFont font(data->labelFormat().font(), m_documentLayout->paintDevice());
 
             KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
             QString result = data->counterText();
 
-            QTextLayout layout(result , font, m_documentLayout->paintDevice());
+            QTextLayout layout(result, font, m_documentLayout->paintDevice());
 
             QList<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
             format.start = 0;
             format.length = data->counterText().length();
-            format.format = chFormatBlock;
+            format.format = data->labelFormat();
 
             layouts.append(format);
             layout.setAdditionalFormats(layouts);
@@ -359,18 +318,19 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, const QTextBlock &block, 
                 // if there is text, then baseline align the counter.
                 QTextLine firstParagLine = block.layout()->lineAt(0);
                 if (KoListStyle::isNumberingStyle(listStyle)) {
-                    counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent()); //if numbered list baseline align
+                    //if numbered list baseline align
+                    counterPosition += QPointF(0, firstParagLine.ascent() - layout.lineAt(0).ascent());
                 } else {
-                    counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0); //for unnumbered list center align
+                     //for unnumbered list center align
+                    counterPosition += QPointF(0, (firstParagLine.height() - layout.lineAt(0).height())/2.0);
                 }
             }
-
             layout.draw(painter, counterPosition);
         }
 
         KoListStyle::Style listStyle = static_cast<KoListStyle::Style>(listFormat.style());
         if (listStyle == KoListStyle::ImageItem && imageCollection) {
-            QFontMetricsF fm(chFormatBlock.font(), m_documentLayout->paintDevice());
+            QFontMetricsF fm(data->labelFormat().font(), m_documentLayout->paintDevice());
             qreal x = qMax(qreal(1), data->counterPosition().x());
             qreal width = qMax(listFormat.doubleProperty(KoListStyle::Width), (qreal)1.0);
             qreal height = qMax(listFormat.doubleProperty(KoListStyle::Height), (qreal)1.0);

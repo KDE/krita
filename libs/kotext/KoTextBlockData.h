@@ -109,6 +109,17 @@ public:
     QPointF counterPosition() const;
 
     /**
+     * Sets a textformat to be used for the counter/bullet
+     * @param font the format
+     */
+    void setLabelFormat(const QTextCharFormat &format);
+
+    /**
+     * Return the format to be used for the counter/bullet
+     */
+    QTextCharFormat labelFormat() const;
+
+    /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
      * Adding the border will increase the refcount.
      * @param border the border used for this paragraph, or 0 if no border is needed (anymore).

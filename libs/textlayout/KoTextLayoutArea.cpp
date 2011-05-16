@@ -539,30 +539,59 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // initialize list item stuff for this parag.
     QTextList *textList = block.textList();
     if (textList) {
-        QTextListFormat format = textList->format();
-        int styleId = format.intProperty(KoListStyle::CharacterStyleId);
-        KoCharacterStyle *charStyle = 0;
-        if (styleId > 0 && m_documentLayout->styleManager())
-            charStyle = m_documentLayout->styleManager()->characterStyle(styleId);
-        if (!charStyle && m_documentLayout->styleManager()) { // try the one from paragraph style
-            KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
-                                       format.intProperty(KoParagraphStyle::StyleId));
-            if (ps && !ps->hasDefaults())
-                charStyle = ps->characterStyle();
+        QTextListFormat listFormat = textList->format();
+
+        KoCharacterStyle *cs = 0;
+        if (m_documentLayout->styleManager()) {
+            const int id = listFormat.intProperty(KoListStyle::CharacterStyleId);
+            cs = m_documentLayout->styleManager()->characterStyle(id);
+            if (!cs) {
+                KoParagraphStyle *ps = m_documentLayout->styleManager()->paragraphStyle(
+                                       block.blockFormat().intProperty(KoParagraphStyle::StyleId));
+                if (ps && !ps->hasDefaults()) {
+                    cs = ps->characterStyle();
+                }
+            }
         }
 
-        if (!(blockData && blockData->hasCounterData())) {
-            QFont font;
-            if (charStyle)
-                font = QFont(charStyle->fontFamily(), qRound(charStyle->fontPointSize()),
-                             charStyle->fontWeight(), charStyle->fontItalic());
-            else {
-                QTextCursor cursor(block);
-                font = cursor.charFormat().font();
+        // use format from the actual block of the list item
+        QTextCharFormat labelFormat;
+        if ( cs && cs->hasProperty(QTextFormat::FontPointSize) ) {
+                cs->applyStyle(labelFormat);
+        } else {
+            if (block.text().size() == 0) {
+                labelFormat = block.charFormat();
+            } else {
+                labelFormat = block.begin().fragment().charFormat();
             }
+        }
+
+        // fetch the text properties of the list-level-style-bullet
+        if (listFormat.hasProperty(KoListStyle::MarkCharacterStyleId)) {
+            QVariant v = listFormat.property(KoListStyle::MarkCharacterStyleId);
+            QSharedPointer<KoCharacterStyle> textPropertiesCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
+            if (!textPropertiesCharStyle.isNull()) {
+                //calculate the correct font point size taking into account the current block format and the relative font size percent
+                qreal percent=100;
+                if (listFormat.hasProperty(KoListStyle::RelativeBulletSize))
+                    percent = listFormat.property(KoListStyle::RelativeBulletSize).toDouble();
+                else
+                    listFormat.setProperty(KoListStyle::RelativeBulletSize, percent);
+
+                textPropertiesCharStyle->setFontPointSize((percent*labelFormat.fontPointSize())/100.00);
+                textPropertiesCharStyle->applyStyle(labelFormat);
+            }
+        }
+
+        QFont font(labelFormat.font(), m_documentLayout->paintDevice());
+
+        if (!(blockData && blockData->hasCounterData())) {
             ListItemsHelper lih(textList, font);
             lih.recalculateBlock(block);
             blockData = dynamic_cast<KoTextBlockData*>(block.userData());
+        }
+        if (blockData) {
+            blockData->setLabelFormat(labelFormat);
         }
     } else if (blockData) { // make sure it is empty
         blockData->setCounterText(QString());
@@ -778,7 +807,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            qDebug()<<"Block liste tab"<<block.text();
             foreach(QTextOption::Tab tab, tabs) {
                 qreal position = tab.position  * 72. / qt_defaultDpiY();
                 position = qMax(position, textList->format().doubleProperty(KoListStyle::TabStopPosition));

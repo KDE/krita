@@ -49,6 +49,7 @@ public:
     bool counterIsImage;
     int counterIndex;
     QPointF counterPos;
+    QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
     qreal top;
@@ -148,6 +149,16 @@ void KoTextBlockData::setCounterPosition(const QPointF &position)
 QPointF KoTextBlockData::counterPosition() const
 {
     return d->counterPos;
+}
+
+void KoTextBlockData::setLabelFormat(const QTextCharFormat &format)
+{
+    d->labelFormat = format;
+}
+
+QTextCharFormat KoTextBlockData::labelFormat() const
+{
+    return d->labelFormat;
 }
 
 KoTextBlockBorderData *KoTextBlockData::border() const

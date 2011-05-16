@@ -32,6 +32,7 @@
 #include <KoTextDocument.h>
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
+#include <KoTextEditor.h>
 
 #include <QTextFrame>
 #include <QTimer>
@@ -107,24 +108,19 @@ static QString removeWhitespacePrefix(const QString& text)
 
 void ToCGenerator::generate()
 {
-    static bool once = false;
-    if (once)
-        return;
-    once = true;
-    QTextCursor cursor = m_ToCFrame->lastCursorPosition();
-    cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
-    cursor.beginEditBlock();
-qDebug()<<"GENERATE called";
     if (!m_ToCInfo)
         return;
+
+    //QTextCursor cursor = m_ToCFrame->lastCursorPosition();
+    KoTextEditor &cursor = *KoTextDocument(m_ToCFrame->document()).textEditor();
+    cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
+    cursor.beginEditBlock();
 
     QTextDocument *doc = m_ToCFrame->document();
     KoTextDocument koDocument(doc);
     KoStyleManager *styleManager = koDocument.styleManager();
-qDebug()<<"GENERATE 1";
 
     if (!m_ToCInfo->m_indexTitleTemplate.text.isNull()) {
-qDebug()<<"GENERATE"<<m_ToCInfo->m_indexTitleTemplate.text;
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
         if (!titleStyle) {
             titleStyle = styleManager->defaultParagraphStyle();
@@ -139,7 +135,7 @@ qDebug()<<"GENERATE"<<m_ToCInfo->m_indexTitleTemplate.text;
 
     // Add TOC
     // Iterate through all blocks to generate TOC
-    QTextBlock block = doc->begin();
+    QTextBlock block = m_ToCFrame->lastCursorPosition().block();
     int blockId = 0;
     while (block.isValid()) {
         QString tocEntryText = block.text();
@@ -237,7 +233,6 @@ qDebug()<<"GENERATE"<<m_ToCInfo->m_indexTitleTemplate.text;
                         case IndexEntry::PAGE_NUMBER: {
                             //IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
                             cursor.insertText(resolvePageNumber(block));
-qDebug()<<"GENERATE"<<tocEntryText<<resolvePageNumber(block);
                             break;
                         }
                         case IndexEntry::LINK_END: {
@@ -252,9 +247,6 @@ qDebug()<<"GENERATE"<<tocEntryText<<resolvePageNumber(block);
                     }
                 }// foreach
                 cursor.setCharFormat(savedCharFormat);   // restore the cursor char format
-
-                m_originalBlocksInToc.append(qMakePair(cursor.block(), block));
-
             } else {
                 qDebug() << "Invalid outline level: " << outlineLevel;
             }

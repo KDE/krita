@@ -386,14 +386,13 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
             } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-                QVariant data = subFrame->format().property(KoText::TableOfContentsData);
+/*                QVariant data = subFrame->format().property(KoText::TableOfContentsData);
                 KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
 
                 if (!tocInfo->generator()) {
                     new ToCGenerator(subFrame, tocInfo); // attaches it self to the frame
                 }
-
-                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
+*/                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
                 tocArea->m_specialTab = true; // make sure page numbers line up
                 m_tableOfContentsAreas.append(tocArea);

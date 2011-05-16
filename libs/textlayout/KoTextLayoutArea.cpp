@@ -511,8 +511,8 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
 //
 // 1) Setup various helper values
 //   a) related to or influenced by lists
-//   b) related to or influenced by tabs
-//   c) related to or influenced by dropcaps
+//   b) related to or influenced by dropcaps
+//   c) related to or influenced by tabs
 // 2)layout each line (possibly restarting where we stopped earlier)
 //   a) fit line into sub lines with as needed for text runaround
 //   b) make sure we keep above maximumAllowedBottom
@@ -778,6 +778,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            qDebug()<<"Block liste tab"<<block.text();
             foreach(QTextOption::Tab tab, tabs) {
                 qreal position = tab.position  * 72. / qt_defaultDpiY();
                 position = qMax(position, textList->format().doubleProperty(KoListStyle::TabStopPosition));

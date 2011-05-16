@@ -216,9 +216,8 @@ QList<ListStyleItem> Lists::otherListStyleItems()
 // ------------------- ListItemsHelper ------------
 /// \internal helper class for calculating text-lists prefixes and indents
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
-        : m_textList(textList),
-        m_fm(font, textList->document()->documentLayout()->paintDevice()),
-        m_displayFont(font)
+        : m_textList(textList)
+        , m_fm(font, textList->document()->documentLayout()->paintDevice())
 {
 }
 

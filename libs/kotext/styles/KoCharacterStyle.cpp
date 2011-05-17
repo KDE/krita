@@ -634,6 +634,9 @@ void KoCharacterStyle::setFontPointSize(qreal size)
 {
     d->setProperty(QTextFormat::FontPointSize, size);
 }
+void KoCharacterStyle::clearFontPointSize() {
+    d->stylesPrivate.remove(QTextFormat::FontPointSize);
+}
 qreal KoCharacterStyle::fontPointSize() const
 {
     return d->propertyDouble(QTextFormat::FontPointSize);

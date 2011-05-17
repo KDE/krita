@@ -150,6 +150,8 @@ public:
     QString fontFamily() const;
     /// See similar named method on QTextCharFormat
     void setFontPointSize(qreal size);
+    /// remove the font point size attribute
+    void clearFontPointSize();
     /// See similar named method on QTextCharFormat
     qreal fontPointSize() const;
     /// See similar named method on QTextCharFormat

@@ -1389,12 +1389,16 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
-    if (!breakBefore.isEmpty() && breakBefore != "auto") {
-        setBreakBefore(true);
+    if (!breakBefore.isEmpty()) {
+        if (breakBefore == "page") {
+            setBreakBefore(true);
+        }
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
-    if (!breakAfter.isEmpty() && breakAfter != "auto") {
-        setBreakAfter(true);
+    if (!breakAfter.isEmpty()) {
+        if (breakAfter == "page") {
+            setBreakAfter(true);
+        }
     }
     const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
     if (keepTogether == "always") {

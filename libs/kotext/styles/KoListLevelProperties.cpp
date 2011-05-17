@@ -729,9 +729,15 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
             charStyle->loadOdf(scontext);
             context.styleStack().restore();
-            setMarkCharacterStyle(charStyle);
-            if (hasBulletRelativeSize==false && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize))        //if not set in bullet-relative-size or any where before then set it now
+            //if not set in bullet-relative-size or any where before then set it now
+            if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
                 setRelativeBulletSize((int)charStyle->percentageFontSize());
+                // in bullet lists in layout we recompute the font point size
+                // relatively to the paragraph size of the list item so drop it
+                // to indicate that it is not correct
+                charStyle->clearFontPointSize();
+            }
+            setMarkCharacterStyle(charStyle);
         }
     }
 }

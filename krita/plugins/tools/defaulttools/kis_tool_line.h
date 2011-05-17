@@ -29,18 +29,17 @@
 #include "kis_types.h"
 #include "KoToolFactoryBase.h"
 #include "flake/kis_node_shape.h"
+#include "kis_paint_information.h"
 
 class KisPainter;
-
 class QPoint;
-
 class KoCanvasBase;
-
 class KisRecordedPolyLinePaintAction;
+class QCheckBox;
+class QPushButton;
 
 class KisToolLine : public KisToolPaint
 {
-
     Q_OBJECT
 
 public:
@@ -59,13 +58,18 @@ private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
     void updatePreview();
+    virtual QWidget* createOptionWidget();
 
 private:
-
-    QPointF m_startPos;
-    QPointF m_endPos;
-
-    KisPainter *m_painter;
+    KisPaintInformation m_startPos;
+    KisPaintInformation m_endPos;
+    KisPainter*         m_painter;
+    QCheckBox*          m_cbPressure;
+    QCheckBox*          m_cbTilt;
+    QCheckBox*          m_cbRotation;
+    QCheckBox*          m_cbTangPressure;
+    QPushButton*        m_bnVaryingEnds;
+    float               m_maxPressure;
 };
 
 

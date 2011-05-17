@@ -1,5 +1,5 @@
 [KNewStuff3]
 ProvidersUrl=http://download.kde.org/ocs/providers.xml
-InstallPath=.kde/share/apps/krita/paintoppresets
+TargetDir=krita/paintoppresets
 Categories=Krita Preset
 UploadCategories=Krita Preset

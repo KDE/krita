@@ -710,9 +710,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal rightMargin = format.rightMargin();
 
     m_listIndent = 0;
+    qreal listLabelIndent = 0;
     if (textList) {
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
+            listLabelIndent = m_listIndent;
         } else {
             if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
@@ -836,7 +838,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
         else {
             if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
-                blockData->setCounterPosition(QPointF(x() - m_listIndent, m_y));
+                blockData->setCounterPosition(QPointF(x() - m_listIndent + listLabelIndent, m_y));
             } else {
                 blockData->setCounterPosition(QPointF(left() + leftMargin + m_indent, m_y));
             }

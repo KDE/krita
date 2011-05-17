@@ -276,11 +276,6 @@ bool KoTextLayoutArea::isStartingAt(FrameIterator *cursor) const
     return false;
 }
 
-FrameIterator *KoTextLayoutArea::endFrameIterator() const
-{
-    return m_endOfArea;
-}
-
 QTextFrame::iterator KoTextLayoutArea::startTextFrameIterator() const
 {
     return m_startOfArea->it;

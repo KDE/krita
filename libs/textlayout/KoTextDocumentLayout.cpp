@@ -539,7 +539,7 @@ void KoTextDocumentLayout::layout()
             }
         } else {
             delete d->layoutPosition;
-            d->layoutPosition = new FrameIterator(rootArea->endFrameIterator());
+            d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 Q_ASSERT(d->rootAreaList.last() == rootArea);
                 return;

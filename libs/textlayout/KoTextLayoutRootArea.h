@@ -65,6 +65,9 @@ public:
 
     bool isDirty() const;
 
+    /// Returns the cursor position of the following root frame
+    FrameIterator *nextStartOfArea() const;
+
     virtual KoText::Direction parentTextDirection() const;
 
     void setBottom(qreal b);

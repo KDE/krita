@@ -508,6 +508,10 @@ void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget 
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
+    // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.
+    if (KoCanvasController::documentSize() == sz)
+        return;
+
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
         setPreferredCenterFractionX(documentSize().width() * preferredCenterFractionX() / sz.width());

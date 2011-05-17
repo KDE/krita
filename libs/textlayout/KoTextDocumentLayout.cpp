@@ -247,10 +247,10 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
 
     // Mark the previous of the corresponding and all following root areas as dirty.
     KoTextLayoutRootArea *area = rootAreaForPosition(position);
-    if (!area)
-        return;
-    for(int i = qMax(0, d->rootAreaList.indexOf(area) - 1); i < d->rootAreaList.count(); ++i)
-        d->rootAreaList[i]->setDirty();
+    int startFromIndex = area ? qMax(0, d->rootAreaList.indexOf(area) - 1) : 0;
+    for(int i = startFromIndex; i < d->rootAreaList.count(); ++i)
+        if (!d->rootAreaList[i]->isDirty())
+            d->rootAreaList[i]->setDirty();
 
     emitLayoutIsDirty();
 }
@@ -539,7 +539,7 @@ void KoTextDocumentLayout::layout()
             }
         } else {
             delete d->layoutPosition;
-            d->layoutPosition = new FrameIterator(rootArea->endFrameIterator());
+            d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 Q_ASSERT(d->rootAreaList.last() == rootArea);
                 return;

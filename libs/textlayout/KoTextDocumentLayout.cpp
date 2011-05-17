@@ -299,6 +299,8 @@ void KoTextDocumentLayout::registerAnchoredObstruction(KoTextLayoutObstruction *
 void KoTextDocumentLayout::positionAnchoredObstructions()
 {
     KoTextPage *page = d->anchoringRootArea->page();
+    if (!page)
+        return;
 
     if (d->anchoringState == Private::AnchoringFinalState) {
         // In the final Layout run we do not try to move subjects

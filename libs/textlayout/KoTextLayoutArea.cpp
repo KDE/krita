@@ -416,6 +416,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
+
+            // FIXME this doesn't work for cells inside tables. We probably should make it more
+            // generic to handle such cases too.
             bool masterPageNameChanged = false;
             QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
             if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {

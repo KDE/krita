@@ -390,8 +390,6 @@ void KoTextDocumentLayout::positionInlineObject(QTextInlineObject item, int posi
     if (anchor) {
         // if there is no anchor strategy set then create one
         if (!anchor->anchorStrategy()) {
-            //place anchored object far away, and let the layout position it later
-            anchor->shape()->setPosition(QPointF(-100000, 0));
             if (anchor->behavesAsCharacter()) {
                 anchor->setAnchorStrategy(new InlineAnchorStrategy(anchor, d->anchoringRootArea));
             } else {

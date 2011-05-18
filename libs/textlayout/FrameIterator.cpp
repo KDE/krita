@@ -47,6 +47,7 @@ FrameIterator::FrameIterator(QTextTableCell cell)
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
+    masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
     if (other->currentTableIterator)
@@ -74,7 +75,8 @@ bool FrameIterator::operator ==(const FrameIterator &other)
             return false;
         return *currentSubFrameIterator == *(other.currentSubFrameIterator);
     } else {
-        return lineTextStart == other.lineTextStart;
+        return masterPageName == other.masterPageName &&
+               lineTextStart == other.lineTextStart;
     }
 }
 

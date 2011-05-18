@@ -416,8 +416,16 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->currentSubFrameIterator = 0;
             }
         } else if (block.isValid()) {
-            if (acceptsPageBreak() && !virginPage()
-                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)) {
+            bool masterPageNameChanged = false;
+            QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
+            if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
+                masterPageNameChanged = true;
+                cursor->masterPageName = masterPageName;
+            }
+
+            if (masterPageNameChanged ||
+                (acceptsPageBreak() && !virginPage()
+                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore))) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {

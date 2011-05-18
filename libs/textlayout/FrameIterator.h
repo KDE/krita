@@ -43,6 +43,8 @@ public:
 
     QTextFrame::iterator it;
 
+    QString masterPageName;
+
     // lineTextStart and fragmentIterator can be seen as the "sub cursor" of text blocks
     int lineTextStart; // a value of -1 indicate block not processed yet
     QTextBlock::Iterator fragmentIterator;

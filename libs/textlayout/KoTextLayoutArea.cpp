@@ -771,8 +771,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QList<QTextOption::Tab> tabs;
     QVariant variant = format.property(KoParagraphStyle::TabPositions);
     qreal tabOffset = - left();
-    if (m_documentLayout->relativeTabs()) {
-        tabOffset += (m_isRtl ? rightMargin : (leftMargin + m_indent)) ;
+
+    if (m_specialTab) {
+        tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
+    } else {
+        if (!m_documentLayout->relativeTabs()) {
+            tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent)) ;
+        }
     }
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
     qreal position = tabOffset * qt_defaultDpiY() / 72.;
@@ -783,7 +788,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             QTextOption::Tab tab;
 
             // conversion here is required because Qt thinks in device units and we don't
-            position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72.;
+            position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
 
             tab.position = position;
             tab.type = koTab.type;
@@ -805,15 +810,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         tabs.append(tab);
         position += tabStopDistance;
     }
-    if (m_specialTab) {
-        QTextOption::Tab tab;
-        tabs.clear();
-        tab.type = QTextOption::RightTab;
-        qreal position = right() - left();
-        position -= (m_isRtl ? format.rightMargin() : format.leftMargin()) ;
-        tab.position = position * qt_defaultDpiY() / 72. - 1; // -1 to awoid wrap due to rounding
-        tabs.append(tab);
-    }
+
     option.setTabs(tabs);
 
     //Now once we know the physical context we can work on the borders of the paragraph
@@ -844,16 +841,19 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+            if (!m_documentLayout->relativeTabs()) {
+                listTab += leftMargin + m_indent;
+            }
             foreach(QTextOption::Tab tab, tabs) {
                 qreal position = tab.position  * 72. / qt_defaultDpiY();
-                if (position > leftMargin + m_indent + listLabelIndent) {
+                if (position > listLabelIndent) {
                     // found the relevant normal tab
-                    if (position > textList->format().doubleProperty(KoListStyle::TabStopPosition)
-                        && textList->format().doubleProperty(KoListStyle::TabStopPosition) > leftMargin + m_indent + listLabelIndent) {
+                    if (position > listTab && listTab > listLabelIndent) {
                         // But special tab is more relevant
-                        position = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                        position = listTab;
                     }
-                    m_indent = position - leftMargin;
+                    m_indent += position;
                     break;
                 }
             }

@@ -426,9 +426,10 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 cursor->masterPageName = masterPageName;
             }
 
-            if (masterPageNameChanged ||
-                (acceptsPageBreak() && !virginPage()
-                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore))) {
+            if (!virginPage() &&
+                (masterPageNameChanged ||
+                    (acceptsPageBreak() &&
+                    (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
                 m_endOfArea = new FrameIterator(cursor);
                 setBottom(m_y + m_footNotesHeight);
                 if (!m_blockRects.isEmpty()) {

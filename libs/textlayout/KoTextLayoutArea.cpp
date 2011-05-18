@@ -727,16 +727,15 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     m_listIndent = 0;
     qreal listLabelIndent = 0;
     if (textList) {
+        if (!m_isRtl) {
+            listLabelIndent = blockData->counterSpacing() + blockData->counterWidth();
+        }
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
-            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
-            listLabelIndent = m_listIndent;
+            m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
             if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
             }
-        }
-        if (!m_isRtl) {
-            m_listIndent += blockData->counterSpacing() + blockData->counterWidth();
         }
     }
 
@@ -817,33 +816,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
     option.setTabs(tabs);
 
-    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            foreach(QTextOption::Tab tab, tabs) {
-                qreal position = tab.position  * 72. / qt_defaultDpiY();
-                position = qMax(position, textList->format().doubleProperty(KoListStyle::TabStopPosition));
-                if (position > x() + m_listIndent - left()) {
-                    m_listIndent = left() + position - x();
-                    break;
-                }
-            }
-        }
-    }
-
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
 
-    if (m_isRtl) {
-        m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
-    } else {
-        m_x += m_listIndent;
-        m_width -= m_listIndent;
-    }
-
     if (textList) {
         // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl) {
+            m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
             if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
                 blockData->setCounterPosition(QPointF(right() -
                                                       blockData->counterWidth() - leftMargin, m_y));
@@ -853,9 +833,29 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
         else {
             if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
-                blockData->setCounterPosition(QPointF(x() - m_listIndent + listLabelIndent, m_y));
+                m_x += m_listIndent;
+                m_width -= m_listIndent;
+                blockData->setCounterPosition(QPointF(x() - listLabelIndent, m_y));
             } else {
-                blockData->setCounterPosition(QPointF(left() + leftMargin + m_indent, m_y));
+                blockData->setCounterPosition(QPointF(x(), m_y));
+            }
+        }
+    }
+
+    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+        if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+            foreach(QTextOption::Tab tab, tabs) {
+                qreal position = tab.position  * 72. / qt_defaultDpiY();
+                if (position > leftMargin + m_indent + listLabelIndent) {
+                    // found the relevant normal tab
+                    if (position > textList->format().doubleProperty(KoListStyle::TabStopPosition)
+                        && textList->format().doubleProperty(KoListStyle::TabStopPosition) > leftMargin + m_indent + listLabelIndent) {
+                        // But special tab is more relevant
+                        position = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                    }
+                    m_indent = position - leftMargin;
+                    break;
+                }
             }
         }
     }

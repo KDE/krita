@@ -397,19 +397,17 @@ qreal KoReportPreRendererPrivate::renderSection(const KRSectionData & sectionDat
         
         if (itemHeight > sectionHeight) {
             sectionHeight = itemHeight;
-        }
-        
-#if 0 //!TODO Handle post processing of text data
-        if (ob->type() == OROTextBox::TextBox) {
-            OROTextBox *text = dynamic_cast<OROTextBox*>(ob);
+        }        
+    }
+    for (int i = 0; i < m_page->primitives(); ++i) {
+        OROPrimitive *prim = m_page->primitive(i);
+        if (prim->type() == OROTextBox::TextBox) {
+            OROTextBox *text = static_cast<OROTextBox*>(prim);
             if (text->requiresPostProcessing()) {
                 m_postProcText.append(text);
             }
-
-#endif
- 
+        }
     }
-
     m_yOffset += sectionHeight;
 
     return sectionHeight;

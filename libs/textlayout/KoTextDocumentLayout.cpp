@@ -360,7 +360,8 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             if (strategy->moveSubject()) {
                 d->anchoringState = Private::AnchoringMovingState;
-                d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+                if (d->anchoringCycle <= 10) // loop-protection
+                    d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
             }
             // move the index to next not positioned shape
             d->anchoringIndex++;

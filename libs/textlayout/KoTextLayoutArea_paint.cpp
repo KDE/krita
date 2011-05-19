@@ -119,7 +119,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
                 m_endNotesArea->paint(painter, context);
-            } if (subFrame->format().intProperty(KoText::SubFrameType) ==
+            } else if (subFrame->format().intProperty(KoText::SubFrameType) ==
                                                     KoText::TableOfContentsFrameType) {
                 m_tableOfContentsAreas[tocIndex]->paint(painter, context);
                 ++tocIndex;

@@ -775,7 +775,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (m_specialTab) {
         tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     } else {
-        if (!m_documentLayout->relativeTabs()) {
+        if (m_documentLayout->relativeTabs()) {
+            tabOffset -= m_indent;
+        } else {
             tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent)) ;
         }
     }
@@ -844,7 +846,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
             if (!m_documentLayout->relativeTabs()) {
                 listTab += leftMargin + m_indent;
+            } else {
+                listTab -= leftMargin + m_indent; // express it relatively like other tabs
             }
+
             foreach(QTextOption::Tab tab, tabs) {
                 qreal position = tab.position  * 72. / qt_defaultDpiY();
                 if (position > listLabelIndent) {

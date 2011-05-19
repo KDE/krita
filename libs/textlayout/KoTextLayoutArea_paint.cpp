@@ -222,6 +222,8 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
                             case (KoGenChange::DeleteChange):
                             format.setBackground(QBrush(m_documentLayout->changeTracker()->getDeletionBgColor()));
                             break;
+                            case (KoGenChange::UNKNOWN):
+                            break;
                         }
 
                         QTextLayout::FormatRange fr;

@@ -595,7 +595,10 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                )
             && !m_caretTimer.isActive()) { // make sure we blink
         m_caretTimer.start();
+        m_caretTimerState = true;
     }
+    if (!m_caretTimerState)
+        m_caretTimer.setInterval(500); // we set it lower during typing, so set it back to normal
 
     if (!m_textShapeData)
         return;
@@ -608,10 +611,7 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
     painter.save();
     QTransform shapeMatrix = m_textShape->absoluteTransformation(&converter);
     shapeMatrix.scale(zoomX, zoomY);
-    painter.setTransform(shapeMatrix * painter.transform());
-    painter.setClipRect(m_textShape->outlineRect(), Qt::IntersectClip);
-    painter.translate(0, -m_textShapeData->documentOffset());
-
+    shapeMatrix.translate(0, -m_textShapeData->documentOffset());
     if (m_caretTimerState) {
         // Lets draw the caret ourselves, as the Qt method doesn't take cursor
         // charFormat into consideration.
@@ -623,8 +623,6 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
 
             QTextLine tl = block.layout()->lineForTextPosition(m_textEditor.data()->position() - block.position());
             if (tl.isValid()) {
-                QPen caretPen = QPen(QColor(0,0,0),0);
-                painter.setPen(caretPen);
                 painter.setRenderHint(QPainter::Antialiasing,false);
                 QRectF rect = caretRect(m_textEditor.data()->cursor());
                 if (tl.ascent() > 0) {
@@ -637,11 +635,10 @@ void TextTool::paint(QPainter &painter, const KoViewConverter &converter)
                     QFontMetricsF fm(block.charFormat().font(), painter.device());
                     rect.setHeight(fm.ascent() + fm.descent());
                 }
-                painter.drawLine(rect.topLeft(), rect.bottomLeft());
-                caretPen.setColor(QColor(255,255,255));
-                caretPen.setStyle(Qt::DotLine);
-                painter.setPen(caretPen);
-                painter.drawLine(rect.topLeft(), rect.bottomLeft());
+                QRectF drawRect(shapeMatrix.map(rect.topLeft()), shapeMatrix.map(rect.bottomLeft()));
+                drawRect.setWidth(2);
+                painter.fillRect(drawRect, QColor(Qt::white));
+                painter.fillRect(drawRect, QBrush(Qt::black, Qt::Dense3Pattern));
             }
         }
     }
@@ -1150,12 +1147,9 @@ void TextTool::keyPressEvent(QKeyEvent *event)
     }
     if (m_caretTimer.isActive()) { // make the caret not blink but decide on the action if its visible or not.
         m_caretTimer.stop();
+        m_caretTimer.setInterval(50);
         m_caretTimer.start();
-        m_caretTimerState = moveOperation != QTextCursor::NoMove; // turn caret off while typing
-        if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return
-                || event->key() == Qt::Key_Backspace) {// except the enter/backspace key
-            m_caretTimerState = true;
-        }
+        m_caretTimerState = true; // turn caret on while typing
     }
     ensureCursorVisible();
 
@@ -1351,6 +1345,7 @@ void TextTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sha
 
     Q_UNUSED(toolActivation);
     m_caretTimer.start();
+    m_caretTimerState = true;
     foreach (KoShape *shape, shapes) {
         m_textShape = dynamic_cast<TextShape*>(shape);
         if (m_textShape)

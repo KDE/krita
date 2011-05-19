@@ -370,6 +370,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 if(SHOULD_BUILD_SCRIPTING)

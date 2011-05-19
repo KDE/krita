@@ -427,6 +427,8 @@ void KoTextDocumentLayout::resizeInlineObject(QTextInlineObject item, int positi
     Q_ASSERT(format.isCharFormat());
     if (d->inlineTextObjectManager == 0)
         return;
+    if(!d->anchoringRootArea->associatedShape())
+        return;
     QTextCharFormat cf = format.toCharFormat();
     KoInlineObject *obj = d->inlineTextObjectManager->inlineTextObject(cf);
     if (obj) {

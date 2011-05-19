@@ -87,7 +87,6 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_endOfArea()
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
- , m_specialTab(false)
  , m_verticalAlignOffset(0)
  , m_preregisteredFootNotesHeight(0)
  , m_footNotesHeight(0)
@@ -389,7 +388,6 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 */                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
-                tocArea->m_specialTab = true; // make sure page numbers line up
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
                 if (!m_blockRects.isEmpty()) {
@@ -771,14 +769,10 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     QVariant variant = format.property(KoParagraphStyle::TabPositions);
     qreal tabOffset = - left();
 
-    if (m_specialTab) {
-        tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
+    if (m_documentLayout->relativeTabs()) {
+        tabOffset -= m_indent;
     } else {
-        if (m_documentLayout->relativeTabs()) {
-            tabOffset -= m_indent;
-        } else {
-            tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent)) ;
-        }
+        tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     }
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
     qreal position = tabOffset * qt_defaultDpiY() / 72.;

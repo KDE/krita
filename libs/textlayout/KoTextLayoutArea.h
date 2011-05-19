@@ -214,7 +214,6 @@ private:
 
     bool m_acceptsPageBreak;
     bool m_virginPage;
-    bool m_specialTab;
     qreal m_verticalAlignOffset;
     QList<QRectF> m_blockRects;
 

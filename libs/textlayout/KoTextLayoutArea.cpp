@@ -756,7 +756,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         cursor->fragmentIterator = block.begin();
     } else {
         line = restartLayout(layout, cursor->lineTextStart);
-        anyLineAdded = true;
     }
 
     // Tabs

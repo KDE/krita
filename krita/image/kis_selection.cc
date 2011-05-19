@@ -155,7 +155,28 @@ void KisSelection::updateProjection(const QRect &rc)
 
 void KisSelection::updateProjection()
 {
-    updateProjection(projection()->selectedRect());
+    /**
+     * This method resembles updateProjection(rect), because
+     * we cannot get an extent of KisSelectionComponent.
+     */
+
+    KisPixelSelectionSP currentProjection = projection();
+    if(currentProjection == m_d->pixelSelection) return;
+
+    if(m_d->pixelSelection) {
+        if(*(m_d->pixelSelection->defaultPixel()) !=
+           *(currentProjection->defaultPixel())) {
+
+            quint8 defPixel = *(m_d->pixelSelection->defaultPixel());
+            currentProjection->setDefaultPixel(&defPixel);
+        }
+        currentProjection->clear();
+        m_d->pixelSelection->renderToProjection(currentProjection.data());
+    }
+
+    if(m_d->shapeSelection) {
+        m_d->shapeSelection->renderToProjection(currentProjection.data());
+    }
 }
 
 void KisSelection::setDeselected(bool deselected)

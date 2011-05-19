@@ -360,7 +360,8 @@ void KoTextDocumentLayout::positionAnchoredObstructions()
 
             if (strategy->moveSubject()) {
                 d->anchoringState = Private::AnchoringMovingState;
-                d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
+                if (d->anchoringCycle <= 10) // loop-protection
+                    d->anchoringRootArea->setDirty(); // make sure we do the layout to flow around
             }
             // move the index to next not positioned shape
             d->anchoringIndex++;
@@ -471,16 +472,6 @@ void KoTextDocumentLayout::layout()
     KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
-        if (d->provider->suggestPageBreak(rootArea)) {
-            d->provider->releaseAllAfter(previousRootArea);
-            // We must also delete them from our own list too
-            int newsize = d->rootAreaList.indexOf(previousRootArea) + 1;
-            while (d->rootAreaList.size() > newsize) {
-                d->rootAreaList.removeLast();
-            }
-            break;
-        }
-
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {

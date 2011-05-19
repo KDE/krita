@@ -54,9 +54,6 @@ public:
     ///   - do other things to other structures (eg resizing the textshape)
     virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) = 0;
 
-    /// Returns true if a page-break should be applied before the "beforeThis" root area
-    virtual bool suggestPageBreak(KoTextLayoutRootArea *beforeThis) { Q_UNUSED(beforeThis); return false; }
-
     /// Returns a suggested a size for the root area
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea) = 0;
 

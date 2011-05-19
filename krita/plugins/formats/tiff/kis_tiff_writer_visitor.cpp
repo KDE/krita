@@ -161,7 +161,7 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
     }
     // Save colorspace information
     uint16 color_type;
-    uint16 sample_format;
+    uint16 sample_format = SAMPLEFORMAT_UINT;
     if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format)) { // unsupported colorspace
         return false;
     }

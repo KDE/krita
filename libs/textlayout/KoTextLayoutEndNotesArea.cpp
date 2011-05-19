@@ -45,6 +45,7 @@ KoTextLayoutEndNotesArea::KoTextLayoutEndNotesArea(KoTextLayoutArea *parent, KoT
 KoTextLayoutEndNotesArea::~KoTextLayoutEndNotesArea()
 {
     qDeleteAll(d->endNoteAreas);
+    delete d;
 }
 
 bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)

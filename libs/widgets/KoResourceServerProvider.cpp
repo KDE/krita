@@ -87,6 +87,15 @@ KoResourceLoaderThread::KoResourceLoaderThread(KoResourceServerBase * server)
     , m_server(server)
 {
     m_fileNames = getFileNames(m_server->extensions());
+    QStringList fileNames = m_server->blackListedFiles();
+
+    if(!fileNames.isEmpty()){
+        foreach( QString s, fileNames){
+            if(m_fileNames.contains(s)){
+               m_fileNames.removeAll(s);
+            }
+        }
+    }
 }
 
 void KoResourceLoaderThread::run()

@@ -34,6 +34,8 @@
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>
 
+#include  <QtCore/QXmlStreamReader>
+#include <qdom.h>
 #include "KoResource.h"
 #include "KoResourceServerObserver.h"
 
@@ -64,6 +66,7 @@ public:
     virtual ~KoResourceServerBase() {}
 
     virtual void loadResources(QStringList filenames) = 0;
+    virtual QStringList blackListedFiles() = 0;
     QString type() { return m_type; }
 
     /**
@@ -96,6 +99,7 @@ public:
         : KoResourceServerBase(type, extensions)
         , m_deleteResource(deleteResource)
         {
+            blackListFile = KStandardDirs::locateLocal("data", "krita/" + type + ".blacklist");
         }
 
     virtual ~KoResourceServer()
@@ -220,17 +224,17 @@ public:
             kWarning(30009) << "Could not remove resource!";
         }
 
-        if (removedFromDisk) {
-            m_resourcesByName.remove(resource->name());
-            m_resourcesByFilename.remove(resource->shortFilename());
-            m_resources.removeAt(m_resources.indexOf(resource));
-            notifyRemovingResource(resource);
-            if (m_deleteResource) { 
+
+          m_resourcesByName.remove(resource->name());
+          m_resourcesByFilename.remove(resource->shortFilename());
+          m_resources.removeAt(m_resources.indexOf(resource));
+          notifyRemovingResource(resource);
+           if (m_deleteResource) {
                 delete resource;
             }
-        } else {
-            // TODO: save blacklist to config file and load it again on next start
-            m_resourceBlackList << resource;
+
+         if(!removedFromDisk) {
+            writeBlackListFile(resource->filename());
         }
 
         return true;
@@ -382,6 +386,12 @@ public:
         notifyResourceChanged(resource);
     }
 
+    QStringList blackListedFiles()
+    {
+        blackListFileNames = readBlackListFile();
+        return blackListFileNames;
+    }
+
 protected:
 
     /**
@@ -419,6 +429,76 @@ protected:
         }
     }
 
+    /// Reads the xml file and returns the filenames as a list
+    QStringList readBlackListFile()
+    {
+        QStringList filenameList;
+
+        QFile f( blackListFile );
+        if (!f.open(QIODevice::ReadOnly)) {
+            return filenameList;
+        }
+
+        QDomDocument doc;
+        if (!doc.setContent(&f)) {
+            kWarning() << "The file could not be parsed.";
+            return filenameList;
+        }
+
+        QDomElement root = doc.documentElement();
+        if (root.tagName() != "resourceFilesList") {
+            kWarning() << "The file doesn't seem to be of interest.";
+            return filenameList;
+        }
+
+        QDomElement file = root.firstChildElement("file");
+
+        while (!file.isNull()) {
+              QDomNode n = file.firstChild();
+              QDomElement e = n.toElement();
+              if (e.tagName() == "name") {
+                  filenameList.append(e.text());
+              }
+             file = file.nextSiblingElement("file");
+        }
+        return filenameList;
+    }
+
+    /// write the blacklist file entries to an xml file
+    void writeBlackListFile( QString fileName )
+    {
+       QFile f(blackListFile);
+       if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            kWarning() << "Cannot write meta information to '" << blackListFile << "'." << endl;
+            return;
+       }
+
+       QDomDocument doc("blackListFile");
+       doc.appendChild(doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ));
+       QDomElement root = doc.createElement("resourceFilesList");
+       doc.appendChild(root);
+
+       if(!blackListFileNames.contains(fileName)){
+           blackListFileNames.append( fileName );
+       }
+
+       foreach(QString file, blackListFileNames) {
+
+           QDomElement fileEl = doc.createElement("file");
+           QDomElement nameEl = doc.createElement("name");
+           QDomText nameText = doc.createTextNode(file);
+           nameEl.appendChild(nameText);
+           fileEl.appendChild(nameEl);
+           root.appendChild(fileEl);
+       }
+
+       QTextStream metastream(&f);
+       metastream << doc.toByteArray();
+
+       f.close();
+
+    }
+
 private:
 
     QHash<QString, T*> m_resourcesByName;
@@ -427,6 +507,8 @@ private:
     QList<T*> m_resources; ///< list of resources in order of addition
     QList<KoResourceServerObserver<T>*> m_observers;
     bool m_deleteResource;
+    QString blackListFile;
+    QStringList blackListFileNames;
 
 };
 

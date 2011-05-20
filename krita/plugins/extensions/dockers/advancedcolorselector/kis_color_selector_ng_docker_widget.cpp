@@ -118,6 +118,8 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_commonColorsAction->setShortcut(QKeySequence(tr("C")));
     connect(m_commonColorsAction, SIGNAL(triggered()), m_commonColorsWidget, SLOT(showPopup()));
     actionCollection->addAction("show_common_colors", m_commonColorsAction);
+
+    reactOnLayerChange();
 }
 
 void KisColorSelectorNgDockerWidget::openSettings()
@@ -190,9 +192,16 @@ void KisColorSelectorNgDockerWidget::updateLayout()
 
 void KisColorSelectorNgDockerWidget::reactOnLayerChange()
 {
+    // this will trigger settings update and therefore an update of the color space setting and therefore it will change
+    // the color space to the current layer
+    emit settingsChanged();
+
     KisNodeSP node = m_canvas->view()->resourceProvider()->currentNode();
     if (node) {
         KisPaintDeviceSP device = node->paintDevice();
+        connect(device.data(), SIGNAL(profileChanged(const KoColorProfile*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+        connect(device.data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SIGNAL(settingsChanged()), Qt::UniqueConnection);
+
         if (device) {
             m_colorHistoryAction->setEnabled(true);
             m_commonColorsAction->setEnabled(true);

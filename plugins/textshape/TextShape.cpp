@@ -356,22 +356,12 @@ void TextShape::update(const QRectF &shape) const
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
+    Q_UNUSED(asynchronous);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-    if (asynchronous) {
-        if (m_textShapeData->isDirty())
-            lay->scheduleLayout();
-    } else {
-        while (m_textShapeData->isDirty()) {
-            lay->layout();
-            if (!m_textShapeData->rootArea()) {
-                // prevent loop if there is no root-area any longer that could be layouted
-                break;
-            }
-            if (!lay->rootAreas().contains(m_textShapeData->rootArea())) {
-                // prevent loop if the root-area is not any longer known by the layouter
-                break;
-            }
-        }
+    if (m_textShapeData->isDirty()) {
+        // Do a simple layout-call which will make sure to relayout till things are done. If more
+        // layouts are scheduled then we don't need to wait for them here but can just continue.
+        lay->layout();
     }
 }

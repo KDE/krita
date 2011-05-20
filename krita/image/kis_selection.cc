@@ -25,6 +25,13 @@
 
 
 struct KisSelection::Private {
+    Private()
+        : isDeselected(false),
+          isVisible(true),
+          shapeSelection(0)
+    {
+    }
+
     bool isDeselected; // true if the selection is empty, no pixels are selected
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsSP defaultBounds;
@@ -37,13 +44,11 @@ KisSelection::KisSelection(KisDefaultBoundsSP defaultBounds)
     : m_d(new Private)
 {
     m_d->defaultBounds = defaultBounds;
-    m_d->isDeselected = false;
-    m_d->isVisible = true;
-    m_d->shapeSelection = 0;
 }
 
 KisSelection::KisSelection(const KisSelection& rhs)
-    : m_d(new Private)
+    : KisShared(),
+      m_d(new Private)
 {
     m_d->isDeselected = rhs.m_d->isDeselected;
     m_d->isVisible = rhs.m_d->isVisible;

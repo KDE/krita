@@ -119,16 +119,18 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         } else if (subFrame) {
             if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::EndNotesFrameType) {
                 m_endNotesArea->paint(painter, context);
-            } else if (subFrame->format().intProperty(KoText::SubFrameType) ==
-                                                    KoText::TableOfContentsFrameType) {
-                m_tableOfContentsAreas[tocIndex]->paint(painter, context);
-                ++tocIndex;
             }
             continue;
         } else {
             if (!block.isValid()) {
                 continue;
             }
+        }
+
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            m_tableOfContentsAreas[tocIndex]->paint(painter, context);
+            ++tocIndex;
+            continue;
         }
 
         QTextLayout *layout = block.layout();

@@ -388,14 +388,19 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = m_endNotesArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
-            } else if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-/*                QVariant data = subFrame->format().property(KoText::TableOfContentsData);
+            }
+        } else if (block.isValid()) {
+            if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+                QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
+                QTextFrame *tocFrame = data.value<QTextDocument *>()->rootFrame();
+                data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
                 KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
-
+/*
                 if (!tocInfo->generator()) {
-                    new ToCGenerator(subFrame, tocInfo); // attaches it self to the frame
+                    new ToCGenerator(tocFrame, tocInfo); // attaches itself to the frame
                 }
-*/                // Let's create KoTextLayoutArea and let that handle the ToC like a plain frame
+*/
+                // Let's create KoTextLayoutArea and let to handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
@@ -404,7 +409,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 tocArea->setVirginPage(virginPage());
                 tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
-                if (tocArea->layout(cursor->subFrameIterator(subFrame)) == false) {
+                if (tocArea->layout(cursor->subFrameIterator(tocFrame)) == false) {
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();
                     setBottom(m_y + m_footNotesHeight);
@@ -421,47 +426,50 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_y = tocArea->bottom();
                 delete cursor->currentSubFrameIterator;
                 cursor->currentSubFrameIterator = 0;
-            }
-        } else if (block.isValid()) {
-            // FIXME this doesn't work for cells inside tables. We probably should make it more
-            // generic to handle such cases too.
-            bool masterPageNameChanged = false;
-            QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
-            if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
-                masterPageNameChanged = true;
-                cursor->masterPageName = masterPageName;
-            }
-            if (!virginPage() &&
-                (masterPageNameChanged ||
-                    (acceptsPageBreak() &&
-                    (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
-                m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y + m_footNotesHeight);
-                if (!m_blockRects.isEmpty()) {
-                    m_blockRects.last().setBottom(m_y);
+            } else {
+                // FIXME this doesn't work for cells inside tables. We probably should make it more
+                // generic to handle such cases too.
+                bool masterPageNameChanged = false;
+                QString masterPageName = block.blockFormat().property(KoParagraphStyle::MasterPageName).toString();
+                if (!masterPageName.isEmpty() && cursor->masterPageName != masterPageName) {
+                    masterPageNameChanged = true;
+                    cursor->masterPageName = masterPageName;
                 }
-                return false;
-            }
-            if (layoutBlock(cursor) == false) {
-                m_endOfArea = new FrameIterator(cursor);
-                setBottom(m_y + m_footNotesHeight);
-                m_blockRects.last().setBottom(m_y);
-                return false;
-            }
-            if (acceptsPageBreak()
-                   && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
-                Q_ASSERT(!cursor->it.atEnd());
-                QTextFrame::iterator nextIt = cursor->it;
-                ++nextIt;
-                bool wasIncremented = !nextIt.currentFrame();
-                if (wasIncremented)
-                    cursor->it = nextIt;
-                m_endOfArea = new FrameIterator(cursor);
-                if (!wasIncremented)
-                    ++(cursor->it);
-                setBottom(m_y + m_footNotesHeight);
-                m_blockRects.last().setBottom(m_y);
-                return false;
+
+                if (!virginPage() &&
+                    (masterPageNameChanged ||
+                        (acceptsPageBreak() &&
+                        (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysBefore)))) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    setBottom(m_y + m_footNotesHeight);
+                    if (!m_blockRects.isEmpty()) {
+                        m_blockRects.last().setBottom(m_y);
+                    }
+                    return false;
+                }
+
+                if (layoutBlock(cursor) == false) {
+                    m_endOfArea = new FrameIterator(cursor);
+                    setBottom(m_y + m_footNotesHeight);
+                    m_blockRects.last().setBottom(m_y);
+                    return false;
+                }
+
+                if (acceptsPageBreak()
+                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
+                    Q_ASSERT(!cursor->it.atEnd());
+                    QTextFrame::iterator nextIt = cursor->it;
+                    ++nextIt;
+                    bool wasIncremented = !nextIt.currentFrame();
+                    if (wasIncremented)
+                        cursor->it = nextIt;
+                    m_endOfArea = new FrameIterator(cursor);
+                    if (!wasIncremented)
+                        ++(cursor->it);
+                    setBottom(m_y + m_footNotesHeight);
+                    m_blockRects.last().setBottom(m_y);
+                    return false;
+                }
             }
         }
         bool atEnd = cursor->it.atEnd();

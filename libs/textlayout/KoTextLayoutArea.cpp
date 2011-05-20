@@ -512,6 +512,11 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
+bool compareTab(const QTextOption::Tab &tab1, const QTextOption::Tab &tab2)
+{
+    return tab1.position < tab2.position;
+}
+
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -770,7 +775,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal tabOffset = - left();
 
     if (m_documentLayout->relativeTabs()) {
-        tabOffset -= m_indent;
+        tabOffset -= (m_isRtl ? 0.0 : (m_indent));
     } else {
         tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     }
@@ -790,6 +795,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
         }
+    }
+
+    if (!tabs.isEmpty()) {
+        //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
+        qSort(tabs.begin(), tabs.end(), compareTab);
+
+        position = tabs.last().position;
     }
 
     // Since we might have tabs relative to first indent we need to always specify a lot of

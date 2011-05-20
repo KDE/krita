@@ -359,7 +359,8 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     if (asynchronous) {
-        lay->scheduleLayout();
+        if (m_textShapeData->isDirty())
+            lay->scheduleLayout();
     } else {
         while (m_textShapeData->isDirty()) {
             lay->layout();

@@ -58,7 +58,6 @@
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
-#include <QEventLoop>
 
 #include <kdebug.h>
 
@@ -360,12 +359,7 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
     if (asynchronous) {
-        if (!lay->layoutBlocked()) {
-            QEventLoop loop;
-            QObject::connect(lay, SIGNAL(finishedLayout()), &loop, SLOT(quit()));
-            lay->scheduleLayout();                
-            loop.exec(QEventLoop::ExcludeUserInputEvents);
-        }
+        lay->scheduleLayout();
     } else {
         while (m_textShapeData->isDirty()) {
             lay->layout();

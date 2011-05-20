@@ -677,6 +677,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
+        proxyObject->emitActivePageChanged();
     }
 
     // Set the current page number in the canvas resource provider

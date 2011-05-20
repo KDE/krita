@@ -384,9 +384,6 @@ void TextShape::update(const QRectF &shape) const
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
-    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-    Q_ASSERT(lay);
-
     if (asynchronous) {
         synchronized(m_mutex) {
             if (m_textShapeData->isDirty()) {
@@ -400,12 +397,16 @@ void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
     }
     else {
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay) {
-            while (m_textShapeData->isDirty()) {
-                lay->layout();
-                if (!m_textShapeData->rootArea()) {
-                    break;
-                }
+        Q_ASSERT(lay);
+        while (m_textShapeData->isDirty()) {
+            lay->layout();
+            if (!m_textShapeData->rootArea()) {
+                // prevent loop if there is no root-area any longer that could be layouted
+                break;
+            }
+            if (!lay->rootAreas().contains(m_textShapeData->rootArea())) {
+                // prevent loop if the root-area is not any longer known by the layouter
+                break;
             }
         }
     }

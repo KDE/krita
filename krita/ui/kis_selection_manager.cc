@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -113,7 +112,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
     Q_ASSERT(selection);
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-    KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
+    KisSelectionDecoration* decoration = new KisSelectionDecoration(this);
     connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
     decoration->setVisible(true);
     m_view->canvasBase()->addDecoration(decoration);

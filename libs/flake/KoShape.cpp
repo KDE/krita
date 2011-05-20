@@ -922,6 +922,8 @@ KoShapeBackground * KoShape::background() const
 void KoShape::setZIndex(int zIndex)
 {
     Q_D(KoShape);
+    if (d->zIndex == zIndex)
+        return;
     notifyChanged();
     d->zIndex = zIndex;
 }

@@ -1114,7 +1114,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         }
     }
 
-    height = qMax(height, objectAscent) + objectDescent;
+    height = qMax(height, objectAscent + objectDescent);
 
     if (height < 0.01) {
         height = 12; // default size for uninitialized styles.
@@ -1144,7 +1144,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
             else if (linespacing == 0.0)
                 linespacing = height * 0.2; // default
         }
-        height = qMax(height, objectAscent) + objectDescent + linespacing;
+        height += linespacing;
     }
     qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)

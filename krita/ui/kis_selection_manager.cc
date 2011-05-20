@@ -112,7 +112,7 @@ KisSelectionManager::KisSelectionManager(KisView2 * view, KisDoc2 * doc)
     Q_ASSERT(selection);
     connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
 
-    KisSelectionDecoration* decoration = new KisSelectionDecoration(this);
+    KisSelectionDecoration* decoration = new KisSelectionDecoration(m_view);
     connect(this, SIGNAL(currentSelectionChanged()), decoration, SLOT(selectionChanged()));
     decoration->setVisible(true);
     m_view->canvasBase()->addDecoration(decoration);

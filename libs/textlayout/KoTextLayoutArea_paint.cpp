@@ -237,8 +237,7 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
             //We set clip because layout-draw doesn't clip text to it correctly after all
             //and adjust to make sure we don't clip edges of glyphs
-            //this line clips lines of text if they overlap bug 273177
-            //painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
+            painter->setClipRect(br.adjusted(-2,-2,2,2), Qt::IntersectClip);
 
             layout->draw(painter, QPointF(0, 0), selections, br);
 

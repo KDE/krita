@@ -186,7 +186,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     // Debug
     //drawNull(painter);
 
-    WmfPainterBackend  wmfPainter;
+    Libwmf::WmfPainterBackend  wmfPainter;
 
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);

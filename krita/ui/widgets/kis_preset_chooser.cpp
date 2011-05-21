@@ -57,7 +57,7 @@ public:
     void setShowText(bool showText) {
         m_showText = showText;
     }
-    
+
 private:
     bool m_showText;
 };
@@ -79,7 +79,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
     if(preview.isNull()) {
         return;
     }
-    
+
     QRect paintRect = option.rect.adjusted(2, 2, -2, -2);
     if (!m_showText) {
     painter->drawImage(paintRect.x(), paintRect.y(),
@@ -88,12 +88,12 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         QSize pixSize(paintRect.height(), paintRect.height());
         painter->drawImage(paintRect.x(), paintRect.y(),
                        preview.scaled(pixSize, Qt::KeepAspectRatio));
-        
-        painter->setPen(Qt::black);      
-        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());      
+
+        painter->setPen(Qt::black);
+        painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
-    
-    if (!preset->settings()->isValid()) {
+
+    if (!preset->settings || !preset->settings()->isValid()) {
         KIcon icon("edit-delete");
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }
@@ -101,19 +101,19 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
 
 class KisPresetProxyAdapter : public KoResourceServerAdapter<KisPaintOpPreset>
 {
-	static bool compareKoResources(const KoResource* a, const KoResource* b){
-		return a->name() < b->name();
-	}
-	
+        static bool compareKoResources(const KoResource* a, const KoResource* b){
+                return a->name() < b->name();
+        }
+
 public:
     KisPresetProxyAdapter(KoResourceServer< KisPaintOpPreset >* resourceServer)
          : KoResourceServerAdapter<KisPaintOpPreset>(resourceServer), m_showAll(false){}
     virtual ~KisPresetProxyAdapter() {}
-    
+
     virtual QList< KoResource* > resources() {
         if( ! resourceServer() )
             return QList<KoResource*>();
-		
+
         QList<KisPaintOpPreset*> serverResources = resourceServer()->resources();
 
         QList<KoResource*> resources;
@@ -122,7 +122,7 @@ public:
                 resources.append( resource );
             }
         }
-        
+
         qSort(resources.begin(), resources.end(), KisPresetProxyAdapter::compareKoResources);
         return resources;
     }
@@ -153,7 +153,7 @@ public:
     {
         m_showAll = show;
     }
-    
+
     ///Resets the model connected to the adapter
     void invalidate() {
         emitRemovingResource(0);
@@ -183,7 +183,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
 
     connect(m_chooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(resourceSelected(KoResource*)));
-            
+
     m_mode = THUMBNAIL;
     updateViewSettings();
 }

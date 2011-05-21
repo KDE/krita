@@ -85,7 +85,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
 
 
-    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
+    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString)));
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -206,11 +206,21 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
+    if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
+        useCursor(KisCursor::pickerCursor());
+    } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
+            if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+            useCursor(KisCursor::crossCursor());
+        }
+    }
     KisTool::keyPressEvent(event);
 }
 
 void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
 {
+    if (mode() != KisTool::PAINT_MODE){
+        resetCursorStyle();
+    }
     KisTool::keyReleaseEvent(event);
 }
 

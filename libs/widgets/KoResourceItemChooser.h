@@ -76,6 +76,8 @@ public:
 
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
+
+    QSize viewSize();
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );

@@ -512,6 +512,11 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
+bool compareTab(const QTextOption::Tab &tab1, const QTextOption::Tab &tab2)
+{
+    return tab1.position < tab2.position;
+}
+
 // layoutBlock() method is structured like this:
 //
 // 1) Setup various helper values
@@ -770,7 +775,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     qreal tabOffset = - left();
 
     if (m_documentLayout->relativeTabs()) {
-        tabOffset -= m_indent;
+        tabOffset -= (m_isRtl ? 0.0 : (m_indent));
     } else {
         tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     }
@@ -790,6 +795,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             tab.delimiter = koTab.delimiter;
             tabs.append(tab);
         }
+    }
+
+    if (!tabs.isEmpty()) {
+        //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
+        qSort(tabs.begin(), tabs.end(), compareTab);
+
+        position = tabs.last().position;
     }
 
     // Since we might have tabs relative to first indent we need to always specify a lot of
@@ -1056,103 +1068,102 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         }
     }
 
-    qreal height = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    qreal height = 0;
     qreal objectAscent = 0.0;
     qreal objectDescent = 0.0;
-    bool useFixedLineHeight = height != 0.0;
-    if (useFixedLineHeight) {
-        // QTextLine has its position at the top of the line. So if the ascent changes between lines in a parag
-        // because of different font sizes, for example, we have to adjust the position to make the fixed
-        // line height be from baseline to baseline instead of from top-of-line to top-of-line
-        QTextLayout *layout = block.layout();
-        if (layout->lineCount() > 1) {
-            QTextLine prevLine = layout->lineAt(layout->lineCount()-2);
-            Q_ASSERT(prevLine.isValid());
-            if (qAbs(prevLine.y() + height - line.y()) < 0.15) { // don't adjust when the line is not where we expect it.
-                const qreal prevBaseline = prevLine.y() + prevLine.ascent();
-                line.setPosition(QPointF(line.x(), prevBaseline + height - line.ascent()));
+    const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
+
+    if (cursor->fragmentIterator.atEnd()) {// no text in parag.
+        qreal fontStretch = 1;
+        if (useFontProperties) {
+            //stretch line height to powerpoint size
+            fontStretch = PresenterFontStretch;
+        }
+        height = block.charFormat().fontPointSize() * fontStretch;
+    } else {
+        qreal fontStretch = 1;
+        if (useFontProperties) {
+            //stretch line height to powerpoint size
+            fontStretch = PresenterFontStretch;
+        } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+            // stretch line height to ms-word size
+            fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+        }
+        // read max font height
+        height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+
+        KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+        objectAscent = qMax(objectAscent, pos.m_ascent);
+        objectDescent = qMax(objectDescent, pos.m_descent);
+
+        while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
+                        block.position() + line.textStart() + line.textLength() - 1))) {
+            cursor->fragmentIterator++;
+            if (cursor->fragmentIterator.atEnd()) {
+                break;
+            }
+            if (!m_documentLayout->changeTracker()
+                || !m_documentLayout->changeTracker()->displayChanges()
+                || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
+                || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
+                || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
+                || m_documentLayout->changeTracker()->displayChanges()) {
+                qreal fontStretch = 1;
+                if (useFontProperties) {
+                    //stretch line height to powerpoint size
+                    fontStretch = PresenterFontStretch;
+                } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
+                    // stretch line height to ms-word size
+                    fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
+                }
+                // read max font height
+                height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
+
+                KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
+                objectAscent = qMax(objectAscent, pos.m_ascent);
+                objectDescent = qMax(objectDescent, pos.m_descent);
             }
         }
-    } else { // not fixed lineheight
-        const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
-
-        if (cursor->fragmentIterator.atEnd()) {// no text in parag.
-            qreal fontStretch = 1;
-            if (useFontProperties) {
-                //stretch line height to powerpoint size
-                fontStretch = PresenterFontStretch;
-            }
-            height = block.charFormat().fontPointSize() * fontStretch;
-        } else {
-            qreal fontStretch = 1;
-            if (useFontProperties) {
-                //stretch line height to powerpoint size
-                fontStretch = PresenterFontStretch;
-            } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                // stretch line height to ms-word size
-                fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
-            }
-            // read max font height
-            height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
-
-            KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-            objectAscent = qMax(objectAscent, pos.m_ascent);
-            objectDescent = qMax(objectDescent, pos.m_descent);
-
-            while (!(cursor->fragmentIterator.atEnd() || cursor->fragmentIterator.fragment().contains(
-                         block.position() + line.textStart() + line.textLength() - 1))) {
-                cursor->fragmentIterator++;
-                if (cursor->fragmentIterator.atEnd()) {
-                 break;
-                }
-                if (!m_documentLayout->changeTracker()
-                    || !m_documentLayout->changeTracker()->displayChanges()
-                    || !m_documentLayout->changeTracker()->containsInlineChanges(cursor->fragmentIterator.fragment().charFormat())
-                    || !m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->isEnabled()
-                    || (m_documentLayout->changeTracker()->elementById(cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt())->getChangeType() != KoGenChange::DeleteChange)
-                    || m_documentLayout->changeTracker()->displayChanges()) {
-                    qreal fontStretch = 1;
-                    if (useFontProperties) {
-                        //stretch line height to powerpoint size
-                        fontStretch = PresenterFontStretch;
-                    } else if ( cursor->fragmentIterator.fragment().charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-                        // stretch line height to ms-word size
-                        fontStretch = cursor->fragmentIterator.fragment().charFormat().property(KoCharacterStyle::FontStretch).toDouble();
-                    }
-                    // read max font height
-                    height = qMax(height, cursor->fragmentIterator.fragment().charFormat().fontPointSize() * fontStretch);
-
-                    KoInlineObjectExtent pos = m_documentLayout->inlineObjectExtent(cursor->fragmentIterator.fragment());
-                    objectAscent = qMax(objectAscent, pos.m_ascent);
-                    objectDescent = qMax(objectDescent, pos.m_descent);
-                }
-            }
-        }
-        if (height < 0.01) height = 12; // default size for uninitialized styles.
     }
 
-    // add linespacing
-    if (! useFixedLineHeight) {
-        qreal linespacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
-        if (linespacing == 0.0) { // unset
+    height = qMax(height, objectAscent + objectDescent);
+
+    if (height < 0.01) {
+        height = 12; // default size for uninitialized styles.
+    }
+
+    qreal lineAdjust = 0.0;
+    qreal fixedLineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+    if (fixedLineHeight != 0.0) {
+        lineAdjust = fixedLineHeight - height;
+        height = fixedLineHeight;
+    } else {
+        qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
+        if (lineSpacing == 0.0) { // unset
             int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
-            if (percent != 0)
-                linespacing = height * ((percent - 100) / 100.0);
-            else if (linespacing == 0.0)
-                linespacing = height * 0.2; // default
+            if (percent != 0) {
+                height *= percent / 100.0;
+            } else
+                height *= 1.2; // default
         }
-        height = qMax(height, objectAscent) + objectDescent + linespacing;
+        height += lineSpacing;
     }
+
     qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
     if (minimum > 0.0)
         height = qMax(height, minimum);
+
     //rounding problems due to Qt-scribe internally using ints.
     //also used when line was moved down because of intersections with other shapes
     if (qAbs(m_y - line.y()) >= 0.126) {
         m_y = line.y();
     }
 
-    return height; // line successfully added
+    if (lineAdjust) {
+        line.setPosition(QPointF(line.x(), line.y() + lineAdjust));
+    }
+
+    return height;
 }
 
 

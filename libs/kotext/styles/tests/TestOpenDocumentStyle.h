@@ -42,6 +42,7 @@ class Attribute : public QObject {
         QStringList m_references;
         QString m_name;
         QStringList m_values;
+        QList<QStringList> m_equivalences;
 };
 
 Q_DECLARE_METATYPE(Attribute*);
@@ -62,9 +63,6 @@ class TestOpenDocumentStyle : public QObject
         template<class T>
         bool basicTestFunction(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value);
 
-        template<class T>
-        bool basicTestFunctionWithShapeContext(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value);
-
     private slots:
         void initTestCase();
         void testTableColumnStyle();
@@ -75,6 +73,8 @@ class TestOpenDocumentStyle : public QObject
         void testTableRowStyle_data();
         void testTableCellStyle();
         void testTableCellStyle_data();
+        void testParagraphStyle();
+        void testParagraphStyle_data();
 };
 
 #endif // TESTOPENDOCUMENTSTYLE_H

@@ -42,14 +42,14 @@ KisColorSelectorBase::KisColorSelectorBase(QWidget *parent) :
     m_popup(0),
     m_parent(0),
     m_colorUpdateAllowed(true),
-    m_hideDistance(40),
+    m_hideDistance(0),
     m_timer(new QTimer(this)),
     m_popupOnMouseOver(false),
     m_popupOnMouseClick(true),
     m_colorSpace(0),
     m_isPopup(false)
 {
-    m_timer->setInterval(350);
+    m_timer->setInterval(0);
     m_timer->setSingleShot(true);
     connect(m_timer, SIGNAL(timeout()), this, SLOT(hidePopup()));
 }

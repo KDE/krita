@@ -1182,9 +1182,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 tab.type = QTextOption::CenterTab;
             else if (type == "right")
                 tab.type = QTextOption::RightTab;
-            else if (type == "char")
+            else if (type == "char") {
                 tab.type = QTextOption::DelimiterTab;
-            else //if ( type == "left" )
+                tab.delimiter = QChar('.');
+            } else //if ( type == "left" )
                 tab.type = QTextOption::LeftTab;
 
             // Tab delimiter char

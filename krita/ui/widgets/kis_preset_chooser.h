@@ -53,6 +53,8 @@ public:
     void setPresetFilter(const KoID & paintopID);
 
     void setViewMode(ViewMode mode);
+
+    void updateViewSettings();
 signals:
     void resourceSelected( KoResource * resource );
     
@@ -63,8 +65,6 @@ public slots:
 
 protected:
     virtual void resizeEvent(QResizeEvent* event);
-    
-    void updateViewSettings();
     
 private:
     KoResourceItemChooser *m_chooser;

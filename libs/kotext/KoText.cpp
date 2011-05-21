@@ -123,6 +123,8 @@ QString KoText::valignmentToString(Qt::Alignment alignment)
         align = "middle";
     else if (alignment == Qt::AlignBottom)
         align = "bottom";
+    else
+        align = "automatic";
     return align;
 }
 

@@ -53,6 +53,8 @@ class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
+class KisSliderSpinBox;
+
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -116,6 +118,7 @@ private slots:
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
+    void slotOpacityChanged(int value);
 private:
 
     const KoColorSpace* m_colorspace;
@@ -135,6 +138,7 @@ private:
     KisView2* m_view;
     QPushButton* m_paletteButton;
     KisPopupButton* m_workspaceWidget;
+    KisSliderSpinBox* m_sliderOpacity;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;

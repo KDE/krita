@@ -95,7 +95,8 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
       textRunAroundDistance(1.0),
-      textRunAroundThreshold(0.0)
+      textRunAroundThreshold(0.0),
+      anchored(false)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -896,6 +897,18 @@ qreal KoShape::textRunAroundThreshold() const
     return d->textRunAroundThreshold;
 }
 
+void KoShape::setAnchored(bool anchored)
+{
+    Q_D(KoShape);
+    d->anchored = anchored;
+}
+
+bool KoShape::isAnchored() const
+{
+    Q_D(const KoShape);
+    return d->anchored;
+}
+
 void KoShape::setTextRunAroundThreshold(qreal threshold)
 {
     Q_D(KoShape);
@@ -922,6 +935,8 @@ KoShapeBackground * KoShape::background() const
 void KoShape::setZIndex(int zIndex)
 {
     Q_D(KoShape);
+    if (d->zIndex == zIndex)
+        return;
     notifyChanged();
     d->zIndex = zIndex;
 }

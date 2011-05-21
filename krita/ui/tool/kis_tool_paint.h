@@ -158,9 +158,6 @@ private:
 private:
 
     QGridLayout *m_optionWidgetLayout;
-
-    QLabel *m_lbOpacity;
-    KisSliderSpinBox *m_slOpacity;
     
     bool m_supportOutline;
 

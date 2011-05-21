@@ -42,6 +42,30 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+
+KoTableCellStyle::RotationAlignment rotationAlignmentFromString(const QString& align)
+{
+    if (align == "bottom")
+        return KoTableCellStyle::RAlignBottom;
+    if (align == "center")
+        return KoTableCellStyle::RAlignCenter;
+    if (align == "top")
+        return KoTableCellStyle::RAlignTop;
+    
+    return KoTableCellStyle::RAlignNone;
+}
+
+QString rotationAlignmentToString(KoTableCellStyle::RotationAlignment align)
+{
+    if (align == KoTableCellStyle::RAlignBottom)
+        return "bottom";
+    if (align == KoTableCellStyle::RAlignTop)
+        return "top";
+    if (align == KoTableCellStyle::RAlignCenter)
+        return "center";
+    return "none";
+}
+
 KoTableCellStylePrivate::KoTableCellStylePrivate()
     : charStyle(0)
     , parentStyle(0)
@@ -385,6 +409,8 @@ void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 
 Qt::Alignment KoTableCellStyle::alignment() const
 {
+    if (propertyInt(VerticalAlignment) == 0)
+        return Qt::AlignTop;
     return static_cast<Qt::Alignment>(propertyInt(VerticalAlignment));
 }
 
@@ -494,6 +520,16 @@ void KoTableCellStyle::setRotationAngle(int value)
 void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection direction)
 {
     setProperty(Direction, direction);
+}
+
+KoTableCellStyle::RotationAlignment KoTableCellStyle::rotationAlignment() const
+{
+    return static_cast<RotationAlignment>(propertyInt(RotationAlign));
+}
+
+void KoTableCellStyle::setRotationAlignment(KoTableCellStyle::RotationAlignment align)
+{
+    setProperty(RotationAlign, align);
 }
 
 KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
@@ -715,6 +751,10 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             setDirection(KoTableCellStyle::TopToBottom);
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "rotation-align")) {
+        setRotationAlignment(rotationAlignmentFromString(styleStack.property(KoXmlNS::style, "rotation-align")));
+    }
+    
     if (styleStack.hasProperty(KoXmlNS::style, "text-align-source")) {
         setAlignFromType(styleStack.property(KoXmlNS::style, "text-align-source") == "value-type");
     }
@@ -739,7 +779,10 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
-        setAlignment(KoText::valignmentFromString(verticalAlign));
+        if (verticalAlign == "automatic")
+            setAlignment((Qt::AlignmentFlag) 0);
+        else
+            setAlignment(KoText::valignmentFromString(verticalAlign));
     }
 }
 
@@ -802,7 +845,10 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
             }
         } else if (key == VerticalAlignment) {
-            style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
+            if (propertyInt(VerticalAlignment) == 0)
+                style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellRightPadding) && (!donePadding)) {
@@ -847,6 +893,8 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:text-align-source", "value-type", KoGenStyle::TableCellType);
             else
                 style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
+        } else if (key == RotationAlign) {
+            style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()));
         }
     }
     if (d->charStyle) {

@@ -61,7 +61,8 @@ public:
         CurrentCompositeOp,
         MirrorHorizontal,
         MirrorVertical,
-        MirrorAxisCenter
+        MirrorAxisCenter,
+        Opacity
     };
 
 
@@ -110,6 +111,9 @@ public:
 
     void setMirrorVertical(bool mirrorVertical);
     bool mirrorVertical() const;
+
+    void setOpacity(int opacity);
+    int opacity();
 
 public slots:
 

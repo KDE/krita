@@ -48,7 +48,7 @@
 #include <KoViewConverter.h>
 
 // Wmf support
-#include "kowmfpaint.h"
+#include "WmfPainterBackend.h"
 
 // Vector shape
 #include "libemf/EmfParser.h"
@@ -186,7 +186,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     // Debug
     //drawNull(painter);
 
-    KoWmfPaint  wmfPainter;
+    WmfPainterBackend  wmfPainter;
 
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);

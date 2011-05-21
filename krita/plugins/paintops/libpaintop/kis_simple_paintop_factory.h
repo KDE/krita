@@ -23,12 +23,14 @@
 #include <kis_paintop_factory.h>
 #include <kis_paintop_settings.h>
 
+
 /**
- *
+ * Base template class for simple paintop factories
  */
 template <class Op, class OpSettings, class OpSettingsWidget> class KisSimplePaintOpFactory  : public KisPaintOpFactory {
 
 public:
+
     KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
                             const QString& pixmap, const QString& model = QString(),
                             const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100)
@@ -69,22 +71,25 @@ public:
         return new OpSettingsWidget(parent);
     }
 
-    QString id() const {
+    QString id() const
+    {
         return m_id;
     }
 
-    QString name() const {
+    QString name() const
+    {
         return m_name;
     }
 
-    QString pixmap() {
+    QString pixmap()
+    {
         return m_pixmap;
     }
-    
-    QString category() const{
+
+    QString category() const
+    {
         return m_category;
     }
-
 private:
     QString m_id;
     QString m_name;

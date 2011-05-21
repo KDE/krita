@@ -75,9 +75,6 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 {
     m_optionWidgetLayout = 0;
 
-    m_lbOpacity = 0;
-    m_slOpacity = 0;
-
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
 
@@ -105,6 +102,9 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
     switch(key){
         case(KisCanvasResourceProvider::CurrentKritaNode):
             slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
+            break;
+        case(KisCanvasResourceProvider::Opacity):
+            slotSetOpacity(v.toInt());
             break;
         default: //nothing
             break;
@@ -244,13 +244,6 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
-    m_lbOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_slOpacity = new KisSliderSpinBox(optionWidget);
-    m_slOpacity->setRange(0, 100);
-    m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
-    connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
-
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
@@ -262,9 +255,6 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addLayout(m_optionWidgetLayout);
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
-
-    m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
-    m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
 
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 

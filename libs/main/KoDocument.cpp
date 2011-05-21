@@ -1647,12 +1647,13 @@ bool KoDocument::openFile()
     }
     d->bLoading = false;
 
-    QPointer<KoUpdater> updater
-            = progressUpdater()->startSubtask(1, "clear undo stack");
-    updater->setProgress(0);
-    undoStack()->clear();
-    updater->setProgress(100);
-
+    if (progressUpdater()) {
+        QPointer<KoUpdater> updater
+                = progressUpdater()->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
+        undoStack()->clear();
+        updater->setProgress(100);
+    }
     delete d->progressUpdater;
     d->progressUpdater = 0;
 

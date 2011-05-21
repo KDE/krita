@@ -68,32 +68,44 @@ KisPaintOpPreset* KisPaintOpPreset::clone() const
     if (settings()) {
         preset->setSettings(settings()->clone());
     }
+    // only valid if we could clone the settings
+    preset->setValid(settings());
+
     preset->setPaintOp(paintOp());
     preset->setName(name());
-    preset->setValid(valid());
 
     return preset;
 }
 
 void KisPaintOpPreset::setPaintOp(const KoID & paintOp)
 {
+    Q_ASSERT(m_d->settings);
     m_d->settings->setProperty("paintop", paintOp.id());
 }
 
 KoID KisPaintOpPreset::paintOp() const
 {
+    Q_ASSERT(m_d->settings);
     return KoID(m_d->settings->getString("paintop"), name());
 }
 
 void KisPaintOpPreset::setSettings(KisPaintOpSettingsSP settings)
 {
+    Q_ASSERT(settings);
     Q_ASSERT(!settings->getString("paintop", "").isEmpty());
-    m_d->settings = settings->clone();
-    setValid(true);
+
+    if (settings) {
+        m_d->settings = settings->clone();
+    }
+    else {
+        m_d->settings = 0;
+    }
+    setValid(m_d->settings);
 }
 
 KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 {
+    Q_ASSERT(m_d->settings);
     Q_ASSERT(!m_d->settings->getString("paintop", "").isEmpty());
 
     return m_d->settings;
@@ -102,20 +114,22 @@ KisPaintOpSettingsSP KisPaintOpPreset::settings() const
 bool KisPaintOpPreset::load()
 {
     dbgImage << "Load preset " << filename();
-    if (filename().isEmpty())
+    setValid(false);
+    if (filename().isEmpty()) {
         return false;
+    }
 
     QImageReader reader(filename(), "PNG");
 
     QString version = reader.text("version");
     QString preset = reader.text("preset");
-    
+
     dbgImage << version << preset;
-    
+
     if (version != "2.2") {
         return false;
     }
-    
+
     if (!reader.read(&m_d->image))
     {
         dbgImage << "Fail to decode PNG";
@@ -126,28 +140,29 @@ bool KisPaintOpPreset::load()
     //Presets was saved with nested cdata section
     preset.replace("<curve><![CDATA[", "<curve>");
     preset.replace("]]></curve>", "</curve>");
-    
+
     QDomDocument doc;
     if (!doc.setContent(preset)) {
         return false;
     }
     fromXML(doc.documentElement());
-    if(!m_d->settings)
+    if (!m_d->settings) {
         return false;
-        
+    }
+    setValid(true);
     return true;
 }
 
 bool KisPaintOpPreset::save()
 {
-    
+
     if (filename().isEmpty())
         return false;
-    
+
     QString paintopid = m_d->settings->getString("paintop", "");
     if (paintopid.isEmpty())
         return false;
-    
+
     QImageWriter writer(filename(), "PNG");
 
     QDomDocument doc;
@@ -157,18 +172,18 @@ bool KisPaintOpPreset::save()
 
     writer.setText("version", "2.2");
     writer.setText("preset", doc.toString());
-    
+
     kDebug() << "preset: " << doc.toString();
-    
+
     QImage img;
-    
+
     if(m_d->image.isNull())
     {
         img = QImage(1,1, QImage::Format_RGB32);
     } else {
         img = m_d->image;
     }
-    
+
     return writer.write(img);
 }
 
@@ -190,12 +205,14 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     if (paintopid.isEmpty())
     {
         dbgImage << "No paintopid attribute";
+        setValid(false);
         return;
     }
-    
+
     if (KisPaintOpRegistry::instance()->get(paintopid) == 0)
     {
         dbgImage << "No paintop " << paintopid;
+        setValid(false);
         return;
     }
 
@@ -204,7 +221,8 @@ void KisPaintOpPreset::fromXML(const QDomElement& presetElt)
     KisPaintOpSettingsSP settings = KisPaintOpRegistry::instance()->settings(id, 0);
     if (!settings)
     {
-        dbgImage << "No settings for " << paintopid;
+        setValid(false);
+        qWarning() << "Could not load settings for preset" << paintopid;
         return;
     }
     settings->fromXML(presetElt);

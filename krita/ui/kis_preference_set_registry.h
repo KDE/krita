@@ -49,11 +49,17 @@ public slots:
     virtual void loadDefaultPreferences() = 0;
 };
 
+class KRITAUI_EXPORT KisAbstractPreferenceSetFactory {
+public:
+    virtual ~KisAbstractPreferenceSetFactory() {};
+    virtual KisPreferenceSet* createPreferenceSet() = 0;
+};
+
 /**
  * This registry does not load the plugins itself: plugins with preferences panes should
  * add those panes when they are loaded themselves.
  */
-class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisPreferenceSet*>
+class KRITAUI_EXPORT KisPreferenceSetRegistry : public QObject, public KoGenericRegistry<KisAbstractPreferenceSetFactory*>
 {
 public:
 

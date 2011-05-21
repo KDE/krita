@@ -130,7 +130,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
 //    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
 
-    if(m_isPopup
+    if(!(e->buttons()&Qt::LeftButton) && m_isPopup
        && (qMin(e->x(), e->y())<-m_hideDistance || qMax(e->x(), e->y())>width()+m_hideDistance)
        && !m_parent->rect().contains(m_parent->mapFromGlobal(e->globalPos()))) {
         if(!m_timer->isActive()) {

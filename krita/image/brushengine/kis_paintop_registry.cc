@@ -80,8 +80,12 @@ KisPaintOp * KisPaintOpRegistry::paintOp(const QString & id, const KisPaintOpSet
 
     KisPaintOpFactory* f = value(id);
     if (f) {
-        return f->createOp(settings, painter, image);
+        KisPaintOp * op = f->createOp(settings, painter, image);
+        if (op) {
+            return op;
+        }
     }
+    qWarning() << "Could not create paintop for factory" << id << "with settings" << settings;
     return 0;
 }
 

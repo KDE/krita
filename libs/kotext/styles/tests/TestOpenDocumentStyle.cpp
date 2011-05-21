@@ -110,6 +110,26 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 }
                             }
                         }
+                        foreach (QString allowedValue, mergedAllowedValues) {
+                            QStringList equivalenceList;
+                            equivalenceList << allowedValue;
+                            
+                            QStringList currentList = allowedValue.split(' ');
+                            currentList.sort();
+                            
+                            foreach (QString otherAllowedValue, mergedAllowedValues) {
+                                if (otherAllowedValue == allowedValue)
+                                    continue;
+                                
+                                QStringList otherList = otherAllowedValue.split(' ');
+                                otherList.sort();
+                                if (otherList == currentList)
+                                    equivalenceList << otherAllowedValue;
+                            }
+                            equivalenceList.sort();
+                            if (!m_equivalences.contains(equivalenceList))
+                                m_equivalences << equivalenceList;
+                        }
                         result << mergedAllowedValues;
                     }
                 } else {
@@ -174,6 +194,17 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         } else if (reference == "angle") {
             //TODO: implement comparison of angles
             return (initialValue.toLower() == outputValue.toLower());
+        }
+    }
+    if (!m_equivalences.empty()) {
+        // Check every equivalence value
+        foreach (QStringList equivalenceList, m_equivalences) {
+            if (equivalenceList.contains(outputValue)) {
+                foreach (QString otherValue, equivalenceList) {
+                    if ((otherValue != outputValue) && (compare(initialValue, otherValue)))
+                        return true;
+                }
+            }   
         }
     }
     return false;

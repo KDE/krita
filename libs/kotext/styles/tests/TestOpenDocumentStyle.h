@@ -42,6 +42,7 @@ class Attribute : public QObject {
         QStringList m_references;
         QString m_name;
         QStringList m_values;
+        QList<QStringList> m_equivalences;
 };
 
 Q_DECLARE_METATYPE(Attribute*);

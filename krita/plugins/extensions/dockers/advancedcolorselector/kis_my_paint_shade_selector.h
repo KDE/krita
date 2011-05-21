@@ -46,7 +46,6 @@ protected:
     KisColorSelectorBase* createPopup() const;
 
 private:
-    void updateSelector();
     float m_colorH, m_colorS, m_colorV;
 
     QImage m_pixelCache;

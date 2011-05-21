@@ -344,7 +344,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug() << "Comparing " << outputPropertyValue << value;
+    kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
     return attribute->compare(outputPropertyValue, value);
 }
 
@@ -381,7 +381,7 @@ bool TestOpenDocumentStyle::basicTestFunctionWithShapeContext(KoGenStyle::Type f
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug() << "Comparing " << outputPropertyValue << value;
+    kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
     return attribute->compare(outputPropertyValue, value);
 }
 

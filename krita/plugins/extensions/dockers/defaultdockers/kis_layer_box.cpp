@@ -184,8 +184,8 @@ KisLayerBox::~KisLayerBox()
 
 void KisLayerBox::setCanvas(KoCanvasBase * canvas)
 {
-    if(m_canvas) {
-        disconnect(m_canvas);
+    if (m_canvas) {
+       m_canvas->disconnectCanvasObserver(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -401,7 +401,7 @@ void KisLayerBox::slotRmClicked()
     for (int i = 0, n = l.count(); i < n; ++i) {
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
         if (!node->systemLocked()) {
-            m_nodeManager->removeNode(node);        
+            m_nodeManager->removeNode(node);
         }
     }
     if (m_canvas && m_canvas->view()) {

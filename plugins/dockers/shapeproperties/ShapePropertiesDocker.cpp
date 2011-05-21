@@ -60,9 +60,13 @@ ShapePropertiesDocker::~ShapePropertiesDocker()
 
 void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
 {
+    if (d->canvas) {
+	d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
+
     d->canvas = canvas;
-    if( d->canvas )
-    {
+    
+    if( d->canvas )  {
         connect( d->canvas->shapeManager(), SIGNAL( selectionChanged() ),
             this, SLOT( selectionChanged() ) );
         connect( d->canvas->shapeManager(), SIGNAL( selectionContentChanged() ),

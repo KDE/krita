@@ -34,7 +34,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
 
 private:
-    KisColorSelectorNgDockerWidget* m_colorSelectorNgWidget;
+    KisColorSelectorNgDockerWidget *m_colorSelectorNgWidget;
 };
 
 

@@ -57,10 +57,14 @@
 class StrokeDocker::Private
 {
 public:
-    Private() {}
+    Private()
+        : canvas(0)
+        , mainWidget(0)
+    {}
 
-    KoStrokeConfigWidget *mainWidget;
     KoLineBorder border;
+    KoCanvasBase *canvas;
+    KoStrokeConfigWidget *mainWidget;
 };
 
 
@@ -187,13 +191,19 @@ void StrokeDocker::selectionChanged()
 
 void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 {
+    if (d->canvas) {
+        d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
+
     if (canvas) {
-        connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), 
+        connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
                 this, SLOT(selectionChanged()));
         connect(canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
                 this, SLOT(resourceChanged(int, const QVariant&)));
         setUnit(canvas->unit());
     }
+
+    d->canvas = canvas;
 }
 
 void StrokeDocker::resourceChanged(int key, const QVariant &value)

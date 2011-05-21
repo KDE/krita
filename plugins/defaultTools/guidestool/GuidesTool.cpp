@@ -83,24 +83,30 @@ void GuidesTool::repaintDecorations()
     if (m_mode == None)
         return;
 
+    canvas()->updateCanvas(updateRectFromGuideLine(m_position, m_orientation));
+}
+
+QRectF GuidesTool::updateRectFromGuideLine(qreal position, Qt::Orientation orientation)
+{
     QRectF rect;
     KoCanvasController *controller = canvas()->canvasController();
     QPoint documentOrigin = canvas()->documentOrigin();
     QPoint canvasOffset(controller->canvasOffsetX(), controller->canvasOffsetY());
-    if (m_orientation == Qt::Horizontal) {
+    if (orientation == Qt::Horizontal) {
         qreal pixelBorder = canvas()->viewConverter()->viewToDocumentY(2.0);
-        rect.setTop(m_position - pixelBorder);
-        rect.setBottom(m_position + pixelBorder);
+        rect.setTop(position - pixelBorder);
+        rect.setBottom(position + pixelBorder);
         rect.setLeft(canvas()->viewConverter()->viewToDocumentX(-canvasOffset.x()-documentOrigin.x()));
         rect.setWidth(canvas()->viewConverter()->viewToDocumentX(canvas()->canvasWidget()->width()));
     } else {
         qreal pixelBorder = canvas()->viewConverter()->viewToDocumentX(2.0);
-        rect.setLeft(m_position - pixelBorder);
-        rect.setRight(m_position + pixelBorder);
+        rect.setLeft(position - pixelBorder);
+        rect.setRight(position + pixelBorder);
         rect.setTop(canvas()->viewConverter()->viewToDocumentY(-canvasOffset.y()-documentOrigin.y()));
         rect.setHeight(canvas()->viewConverter()->viewToDocumentY(canvas()->canvasWidget()->height()));
     }
-    canvas()->updateCanvas(rect);
+
+    return rect;
 }
 
 void GuidesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
@@ -401,7 +407,6 @@ QMap< QString, QWidget*> GuidesTool::createOptionWidgets()
 
 void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
 {
-    QPoint documentStart = canvas()->documentOrigin();
     KoGuidesData *guidesData = canvas()->guidesData();
     const QSizeF pageSize = canvas()->resourceManager()->sizeResource(KoCanvasResource::PageSize);
 
@@ -411,6 +416,14 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
     if (!result->erasePreviousGuides) {
         verticalLines.append(guidesData->verticalGuideLines());
         horizontalLines.append(guidesData->horizontalGuideLines());
+    } else {
+        // trigger repaint at old guide positions
+        foreach(qreal pos, guidesData->verticalGuideLines()) {
+            canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Vertical));
+        }
+        foreach(qreal pos, guidesData->horizontalGuideLines()) {
+            canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Horizontal));
+        }
     }
 
     //vertical guides
@@ -436,6 +449,14 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
         horizontalLines << horizontalJumps * (qreal)i;
     }
     guidesData->setHorizontalGuideLines(horizontalLines);
+
+    // trigger repaint at new guide positions
+    foreach(qreal pos, guidesData->verticalGuideLines()) {
+        canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Vertical));
+    }
+    foreach(qreal pos, guidesData->horizontalGuideLines()) {
+        canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Horizontal));
+    }
 
     delete result;
 }

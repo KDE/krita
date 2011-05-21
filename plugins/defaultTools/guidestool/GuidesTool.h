@@ -75,6 +75,9 @@ private:
     typedef QPair<Qt::Orientation, int> GuideLine;
     GuideLine guideLineAtPosition(const QPointF &position);
 
+    /// Calculates update rectangle for specified guide line
+    QRectF updateRectFromGuideLine(qreal position, Qt::Orientation orientation);
+
     enum EditMode {
         None,
         AddGuide,

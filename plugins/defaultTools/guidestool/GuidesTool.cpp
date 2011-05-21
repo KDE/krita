@@ -458,6 +458,12 @@ void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)
         canvas()->updateCanvas(updateRectFromGuideLine(pos, Qt::Horizontal));
     }
 
+    m_orientation = m_options->orientation();
+    m_index = m_orientation == Qt::Horizontal ? horizontalLines.count()-1 : verticalLines.count()-1;
+    m_options->setHorizontalGuideLines(horizontalLines);
+    m_options->setVerticalGuideLines(verticalLines);
+    m_options->selectGuideLine(m_orientation, m_index);
+
     delete result;
 }
 

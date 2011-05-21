@@ -185,6 +185,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
             this, SIGNAL(resourceSelected(KoResource*)));
             
     m_mode = THUMBNAIL;
+    updateViewSettings();
 }
 
 KisPresetChooser::~KisPresetChooser()
@@ -195,18 +196,21 @@ void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 {
     m_presetProxy->setPresetFilter(paintopID);
     m_presetProxy->invalidate();
+    updateViewSettings();
 }
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)
 {
     m_presetProxy->setPresetNameFilter(searchString);
     m_presetProxy->invalidate();
+    updateViewSettings();
 }
 
 void KisPresetChooser::setShowAll(bool show)
 {
     m_presetProxy->setShowAll(show);
     m_presetProxy->invalidate();
+    updateViewSettings();
 }
 
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
@@ -224,7 +228,20 @@ void KisPresetChooser::resizeEvent(QResizeEvent* event)
 void KisPresetChooser::updateViewSettings()
 {
     if (m_mode == THUMBNAIL) {
-        m_chooser->setColumnCount(m_chooser->width()/50);
+        int resourceCount = m_presetProxy->resources().count();
+        int width = m_chooser->viewSize().width();
+        int maxColums = width/50;
+        int cols = width/100 + 1;
+        while(cols <= maxColums) {
+            int size = width/cols;
+            int rows = ceil(resourceCount/(double)cols);
+            if(rows*size < (m_chooser->viewSize().height()-5)) {
+                break;
+            }
+            cols++;
+        }
+        m_chooser->setRowHeight(floor(width/cols));
+        m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
     } else {
         m_chooser->setColumnCount(1);

@@ -29,6 +29,7 @@ class KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
+    bool firstShown;
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -66,7 +67,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
 
     connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
-   
+    m_d->firstShown = true;
 }
 
 KisPaintOpPresetsChooserPopup::~KisPaintOpPresetsChooserPopup()
@@ -89,4 +90,14 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 {
     KisConfig().setPresetChooserViewMode(KisPresetChooser::DETAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
+}
+
+void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
+{
+    QWidget::paintEvent(event);
+    //Workaround to get the colum and row size right
+    if(m_d->firstShown) {
+        m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
+        m_d->firstShown = false;
+    }
 }

@@ -507,9 +507,10 @@ if(SHOULD_BUILD_BRAINDUMP)
   macro_optional_add_subdirectory(braindump)
 endif(SHOULD_BUILD_BRAINDUMP)
 
-if(SHOULD_BUILD_ACTIVE)
+if (${QTVERSION} VERSION_GREATER 4.7.0)
+  set(SHOULD_BUILD_ACTIVE TRUE)
   macro_optional_add_subdirectory(active)
-endif(SHOULD_BUILD_ACTIVE)
+endif (${QTVERSION} VERSION_GREATER 4.7.0)
 
 if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
@@ -570,6 +571,7 @@ macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
+macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

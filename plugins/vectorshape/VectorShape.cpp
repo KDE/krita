@@ -211,7 +211,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
 
     // Actually paint the WMF.
-    wmfPainter.play(painter, true);
+    wmfPainter.play(painter);
 
     painter.restore();
 }

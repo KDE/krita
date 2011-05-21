@@ -284,6 +284,11 @@ QString KisPaintOpPresetsPopup::currentPaintOp()
     return m_d->uiWdgPaintOpPresetSettings.paintopList->currentItem();
 }
 
+void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
+{
+    m_d->uiWdgPaintOpPresetSettings.scratchPad->setPresetImage(image);
+}
+
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
 {
     if (m_d->detached) {

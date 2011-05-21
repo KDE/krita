@@ -190,6 +190,14 @@ void KisScratchPad::fillSolid(const KoColor& color)
     update();
 }
 
+void KisScratchPad::setPresetImage(const QImage& image)
+{
+    KisPaintDeviceSP device = new KisPaintDevice(m_paintDevice->colorSpace());
+    device->convertFromQImage(image, "");
+    KisPainter painter(m_paintDevice);
+    painter.bitBlt(m_cutoutOverlay.x(), m_cutoutOverlay.y(), device, 0, 0, m_cutoutOverlay.width(), m_cutoutOverlay.height());
+}
+
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
 
     QWidget::contextMenuEvent(event);

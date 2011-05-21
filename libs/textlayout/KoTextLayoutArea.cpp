@@ -411,6 +411,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 tocArea->setVirginPage(virginPage());
                 tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
                 if (tocArea->layout(cursor->subFrameIterator(tocFrame)) == false) {
+                    cursor->lineTextStart = 1; // fake we are not done
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();
                     setBottom(m_y + m_footNotesHeight);
@@ -426,6 +427,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 m_bottomSpacing = 0;
                 m_y = tocArea->bottom();
                 delete cursor->currentSubFrameIterator;
+                cursor->lineTextStart = -1; // fake we are done
                 cursor->currentSubFrameIterator = 0;
             } else {
                 // FIXME this doesn't work for cells inside tables. We probably should make it more

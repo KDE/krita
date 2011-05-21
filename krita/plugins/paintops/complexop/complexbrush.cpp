@@ -36,6 +36,8 @@ ComplexBrush::ComplexBrush(QObject *parent, const QVariantList &sl)
     //setComponentData(ComplexBrushFactory::componentData());
     KisPaintOpRegistry::instance()->add(new KisSimplePaintOpFactory<KisComplexOp, KisComplexOpSettings, KisComplexOpSettingsWidget>("complex", i18n("Mixing Brush"),
                                                                                                                                     KisPaintOpFactory::categoryExperimental(),"krita-mixing.png"));
+    KisPaintOpFactory *factory = KisPaintOpRegistry::instance()->get("complex");
+    factory->setUserVisible(KisPaintOpFactory::NEVER);
 }
 
 ComplexBrush::~ComplexBrush()

@@ -93,7 +93,7 @@ void KisPresetDelegate::paint(QPainter * painter, const QStyleOptionViewItem & o
         painter->drawText(pixSize.width() + 10, option.rect.y() + option.rect.height() - 10, preset->name());
     }
 
-    if (!preset->settings || !preset->settings()->isValid()) {
+    if (!preset->settings() || !preset->settings()->isValid()) {
         KIcon icon("edit-delete");
         icon.paint(painter, QRect(paintRect.x() + paintRect.height() - 25, paintRect.y() + paintRect.height() - 25, 25, 25));
     }

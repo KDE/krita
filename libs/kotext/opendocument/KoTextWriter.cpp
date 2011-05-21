@@ -1446,7 +1446,7 @@ void KoTextWriter::Private::saveTableOfContents(QTextDocument *document, QHash<Q
     localBlock.movePosition(QTextCursor::NextBlock);
     int endTitle = localBlock.position();
     writer->startElement("text:index-title");
-        writeBlocks(document, 0, endTitle, listStyles);
+        writeBlocks(tocDocument, 0, endTitle, listStyles);
     writer->endElement(); // text:index-title
 
     QTextBlock block = tocDocument->rootFrame()->lastCursorPosition().block();

@@ -57,7 +57,7 @@ private:
     inline void checkPageBorder(QPointF &newPosition, QRectF containerBoundingRect);
 
     // true if shape is inside layouted text area
-    inline bool checkTextIntersecion(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
+    inline bool checkTextIntersection(QPointF &relayoutPos, QRectF shpRect, QRectF contRect,
                                      KoTextShapeData *data);
 
     void updateObstruction(qreal documentOffset);

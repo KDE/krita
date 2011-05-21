@@ -72,6 +72,7 @@
 #include "kis_paintop_settings_widget.h"
 #include "ko_favorite_resource_manager.h"
 #include <kis_cmb_paintop.h>
+#include "kis_slider_spin_box.h"
 
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
@@ -149,6 +150,14 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     nodeChanged(view->activeNode());
     connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
 
+    
+    QLabel* labelOpacity = new QLabel(i18n("Opacity: "), this);
+    labelOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
+    m_sliderOpacity = new KisSliderSpinBox(this);
+    m_sliderOpacity->setRange(0, 100);
+    m_sliderOpacity->setValue(100);
+    m_sliderOpacity->setMinimumWidth(150);
+    connect(m_sliderOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
 //     m_brushChooser = new KisPopupButton(this);
 //     //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
 //     m_brushChooser->setText(i18n("Brush Editor"));
@@ -180,6 +189,8 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(hMirrorButton);
     m_layout->addWidget(vMirrorButton);
     m_layout->addWidget(new KSeparator(Qt::Vertical, this));
+    m_layout->addWidget(labelOpacity);
+    m_layout->addWidget(m_sliderOpacity);
     m_layout->addWidget(m_paletteButton);
     m_layout->addSpacerItem(new QSpacerItem(10, 1, QSizePolicy::Expanding, QSizePolicy::Minimum));
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -638,5 +649,9 @@ void KisPaintopBox::slotVerticalMirrorChanged(bool value)
     m_resourceProvider->setMirrorVertical(value);
 }
 
+void KisPaintopBox::slotOpacityChanged(int value)
+{
+    m_resourceProvider->setOpacity(value);
+}
 
 #include "kis_paintop_box.moc"

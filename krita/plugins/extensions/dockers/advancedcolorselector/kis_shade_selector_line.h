@@ -50,9 +50,10 @@ public:
     QString toString() const;
     void fromString(const QString& string);
 
-protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 
 private:
     qreal m_hueDelta;

@@ -197,6 +197,18 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 {
     e->setAccepted(false);
     KisColorSelectorBase::mousePressEvent(e);
+}
+
+void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
+{
+    updateColorPreview(m_pixelCache.pixel(e->x(), e->y()));
+    KisColorSelectorBase::mouseMoveEvent(e);
+}
+
+void KisMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *e)
+{
+    e->setAccepted(false);
+    KisColorSelectorBase::mouseReleaseEvent(e);
 
     if(!e->isAccepted()) {
         QColor color = QColor(m_pixelCache.pixel(e->x(), e->y()));
@@ -217,7 +229,6 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
         commitColor(KoColor(color, colorSpace()), role);
     }
-
 }
 
 KisColorSelectorBase* KisMyPaintShadeSelector::createPopup() const

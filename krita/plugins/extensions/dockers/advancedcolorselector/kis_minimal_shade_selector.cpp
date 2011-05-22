@@ -20,6 +20,7 @@
 #include <QColor>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -87,6 +88,48 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 
     setPopupBehaviour(false, false);
+}
+
+void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent* newEvent = new QMouseEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        line->mouseMoveEvent(newEvent);
+        delete newEvent;
+    }
+    KisColorSelectorBase::mouseMoveEvent(e);
+}
+
+void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent* newEvent = new QMouseEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        line->mousePressEvent(newEvent);
+        delete newEvent;
+    }
+    KisColorSelectorBase::mousePressEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent* newEvent = new QMouseEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        line->mousePressEvent(newEvent);
+        delete newEvent;
+    }
+    KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
 void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)

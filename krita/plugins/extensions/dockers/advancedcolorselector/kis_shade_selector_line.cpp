@@ -176,6 +176,7 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
         return;
 
     KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
+    Q_ASSERT(parent);
 
     KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
     if(e->button()==Qt::RightButton)
@@ -193,3 +194,20 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 
     e->accept();
 }
+
+void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
+{
+    qDebug("dk  ");
+//    if(e->buttons()&Qt::RightButton || e->buttons()&Qt::LeftButton) {
+        QColor color(m_pixelCache.pixel(e->pos()));
+        if(color==m_backgroundColor)
+            return;
+
+        KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
+        Q_ASSERT(parent);
+        parent->updateColorPreview(color);
+//    }
+}
+
+void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent *)
+{}

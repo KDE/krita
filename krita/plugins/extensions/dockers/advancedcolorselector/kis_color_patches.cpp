@@ -149,6 +149,7 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
 
 void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 {
+    KisColorSelectorBase::mouseReleaseEvent(event);
     event->setAccepted(false);
     KisColorSelectorBase::mouseReleaseEvent(event);
     if(event->isAccepted() || !rect().contains(event->pos()))

@@ -26,7 +26,7 @@ class KoColor;
 class QTimer;
 class KoColorSpace;
 class KisCanvas2;
-class KisCanvas2;
+class KisColorPreviewPopup;
 
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
@@ -48,15 +48,16 @@ public slots:
     virtual void showPopup();
     /// commits a color to the resource manager
     void commitColor(const KoColor& koColor, ColorRole role);
+    void updateColorPreview(const QColor& color);
 
 public:
-    void mousePressEvent(QMouseEvent *);
-
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
     QColor findGeneratingColor(const KoColor& ref) const;
 
-protected:
     void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+protected:
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *);
@@ -81,6 +82,7 @@ private:
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
+    KisColorPreviewPopup* m_colorPreviewPopup;
 };
 
 #endif

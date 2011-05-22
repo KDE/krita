@@ -247,6 +247,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
+    KisColorSelectorBase::mouseReleaseEvent(e);
     if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
         m_lastColor=m_currentColor;
         ColorRole role;
@@ -282,6 +283,7 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         m_currentColor=m_mainComponent->currentColor();
+        updateColorPreview(m_currentColor);
     }
 }
 

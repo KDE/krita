@@ -59,6 +59,7 @@ public:
     QFont smallFont;
     KisCanvasResourceProvider *resourceProvider;
     bool detached;
+    bool ignoreHideEvents;
 };
 
 KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resourceProvider, QWidget * parent)
@@ -125,6 +126,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
 
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
+    m_d->ignoreHideEvents = false;
 
 }
 
@@ -242,8 +244,10 @@ void KisPaintOpPresetsPopup::switchDetached()
 
         m_d->detached = !m_d->detached;
         if (m_d->detached) {
+            m_d->ignoreHideEvents = true;
             parentWidget()->setWindowFlags(Qt::Tool);
             parentWidget()->show();
+            m_d->ignoreHideEvents = false;
         }
         else {
             parentWidget()->setWindowFlags(Qt::Popup);
@@ -292,6 +296,9 @@ void KisPaintOpPresetsPopup::setPresetImage(const QImage& image)
 
 void KisPaintOpPresetsPopup::hideEvent(QHideEvent *event)
 {
+    if(m_d->ignoreHideEvents) {
+        return;
+    }
     if (m_d->detached) {
         switchDetached();
     }

@@ -115,8 +115,6 @@ void GuidesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
         useCursor(m_orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor);
     else
         useCursor(Qt::ArrowCursor);
-    if (toolActivation == KoToolBase::TemporaryActivation)
-        canvas()->canvasWidget()->grabMouse();
 
     if (m_options) {
         KoGuidesData *guidesData = canvas()->guidesData();
@@ -249,6 +247,9 @@ void GuidesTool::startGuideLineCreation(Qt::Orientation orientation, qreal posit
     m_mode = AddGuide;
 
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
+
+    // grab the mouse so we get mouse events as the dragging started on a ruler
+    canvas()->canvasWidget()->grabMouse();
 }
 
 void GuidesTool::moveGuideLine(Qt::Orientation orientation, int index)

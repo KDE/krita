@@ -44,6 +44,13 @@ public:
      */
     virtual void setCanvas(KoCanvasBase *canvas) = 0;
 
+    /**
+     * re-implement to notify the observer that its canvas is no longer
+     * among the living. The daisies, it is pushing up. This means you
+     * don't have to unconnect, it's dead.
+     */
+    virtual void unsetCanvas() = 0;
+
 };
 
 #endif // KOCANVASOBSERVERBASE_H

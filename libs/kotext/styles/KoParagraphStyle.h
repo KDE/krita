@@ -133,7 +133,11 @@ public:
         SectionEnd,               ///< end of a named section
 // do 15.5.24
 // continue at 15.5.28
-        ForceDisablingList       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        
+        // other properties
+        BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
+        SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
     };
 
     /// Constructor
@@ -315,7 +319,15 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    
+    qreal backgroundTransparency() const;
+    void setBackgroundTransparency(qreal transparency);
 
+    
+    bool snapToLayoutGrid() const;
+    void setSnapToLayoutGrid(bool value);
+    
     void setBreakBefore(bool on);
     bool breakBefore();
     void setBreakAfter(bool on);

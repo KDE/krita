@@ -980,6 +980,30 @@ QBrush KoParagraphStyle::background() const
     return qvariant_cast<QBrush>(variant);
 }
 
+qreal KoParagraphStyle::backgroundTransparency() const
+{
+    if (hasProperty(BackgroundTransparency))
+        return propertyDouble(BackgroundTransparency);
+    return 0.0;
+}
+
+void KoParagraphStyle::setBackgroundTransparency(qreal transparency)
+{
+    setProperty(BackgroundTransparency, transparency);
+}
+
+void KoParagraphStyle::setSnapToLayoutGrid(bool value)
+{
+    setProperty(SnapToLayoutGrid, value);
+}
+
+bool KoParagraphStyle::snapToLayoutGrid() const
+{
+    if (hasProperty(SnapToLayoutGrid))
+        return propertyBoolean(SnapToLayoutGrid);
+    return false;
+}
+
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
@@ -1420,6 +1444,20 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         }
         setBackground(brush);
     }
+    if (styleStack.hasProperty(KoXmlNS::style, "background-transparency"))
+    {
+        QString transparency = styleStack.property(KoXmlNS::style, "background-transparency");
+        bool ok = false;
+        qreal transparencyValue  = transparency.remove('%').toDouble(&ok);
+        if (ok) {
+            setBackgroundTransparency(transparencyValue/100);
+        }
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "snap-to-layout-grid"))
+    {
+        setSnapToLayoutGrid(styleStack.property(KoXmlNS::style, "snap-to-layout-grid") == "true");
+    }
     
     // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
     if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
@@ -1581,7 +1619,11 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
-    // Padding
+        } else if (key == KoParagraphStyle::BackgroundTransparency) {
+            style.addProperty("style:background-transparency", QString("%1%").arg(backgroundTransparency() * 100));
+        } else if (key == KoParagraphStyle::SnapToLayoutGrid) {
+            style.addProperty("style:snap-to-layout-grid", snapToLayoutGrid());
+        // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::RightPadding) {

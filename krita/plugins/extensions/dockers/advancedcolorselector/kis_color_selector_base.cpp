@@ -78,8 +78,10 @@ void KisColorSelectorBase::setColorSpace(const KoColorSpace *colorSpace)
 
 void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
     m_canvas = canvas;
-
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 //    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());

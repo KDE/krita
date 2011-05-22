@@ -36,7 +36,7 @@ public slots:
     
 private:
     QList<KoColor> m_colorHistory;
-
+    QObject *m_resourceProvider; // to disconnect...
 };
 
 #endif // KIS_COLOR_HISTORY_H

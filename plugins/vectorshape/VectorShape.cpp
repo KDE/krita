@@ -57,6 +57,7 @@
 #include "libsvm/SvmParser.h"
 #include "libsvm/SvmPainterBackend.h"
 
+
 VectorShape::VectorShape()
     : KoFrameShape( KoXmlNS::draw, "image" )
     , m_type(VectorTypeNone)
@@ -186,7 +187,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     // Debug
     //drawNull(painter);
 
-    Libwmf::WmfPainterBackend  wmfPainter;
+    Libwmf::WmfPainterBackend  wmfPainter(&painter, size());
 
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
@@ -195,23 +196,8 @@ void VectorShape::drawWmf(QPainter &painter) const
 
     painter.save();
 
-    // Position the bitmap to the right place and resize it to fit.
-    QRect   wmfBoundingRect = wmfPainter.boundingRect(); // Not QRectF because a wmf contains only ints.
-    QSizeF  shapeSize       = size();
-
-#if DEBUG_VECTORSHAPE
-    kDebug(31000) << "-------------------------------- Starting WMF --------------------------------";
-    kDebug(31000) << "wmfBoundingRect: " << wmfBoundingRect;
-    kDebug(31000) << "shapeSize: "       << shapeSize;
-#endif
-
-    // Create a transformation that makes the Wmf fit perfectly into the shape size.
-    painter.scale(shapeSize.width() / wmfBoundingRect.width(),
-                  shapeSize.height() / wmfBoundingRect.height());
-    painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
-
     // Actually paint the WMF.
-    wmfPainter.play(painter);
+    wmfPainter.play();
 
     painter.restore();
 }

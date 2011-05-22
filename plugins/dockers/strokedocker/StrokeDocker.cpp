@@ -206,6 +206,11 @@ void StrokeDocker::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
 }
 
+void StrokeDocker::unsetCanvas()
+{
+    d->canvas = 0;
+}  
+
 void StrokeDocker::resourceChanged(int key, const QVariant &value)
 {
     switch (key) {

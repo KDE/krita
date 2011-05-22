@@ -18,54 +18,13 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <klocale.h>
+
 #include "kis_rate_option_widget.h"
 #include "kis_rate_option.h"
-
-#include <kis_slider_spin_box.h>
-
-#include <QWidget>
-#include <QCheckBox>
-#include <QLabel>
-#include <QSlider>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-
-#include <klocale.h>
 
 KisRateOptionWidget::KisRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked):
     KisCurveOptionWidget(new KisRateOption(name, label, checked))
 {
-    QWidget* w = new QWidget;
-    QLabel* rateLabel = new QLabel(sliderLabel);
-    m_rateSlider = new KisDoubleSliderSpinBox();
-    m_rateSlider->setRange(0.0, 1.0, 2);
-    m_rateSlider->setSingleStep(0.01);
-    m_rateSlider->setValue(0.3);
-    
-    connect(m_rateSlider, SIGNAL(valueChanged(qreal)),SLOT(rateChanged(qreal)));
-    
-    QHBoxLayout* hl = new QHBoxLayout;
-    hl->addWidget(rateLabel);
-    hl->addWidget(m_rateSlider);
-    hl->setStretchFactor(m_rateSlider, 1);
-
-    QVBoxLayout* vl = new QVBoxLayout;
-    vl->addLayout(hl);
-    vl->addWidget(curveWidget());
-
-    w->setLayout(vl);
-    setConfigurationPage(w);
-    rateChanged(m_rateSlider->value());
-}
-
-void KisRateOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
-{
-    KisCurveOptionWidget::readOptionSetting(setting);
-    m_rateSlider->setValue(static_cast<KisRateOption*>(curveOption())->getRate());
-}
-
-void KisRateOptionWidget::rateChanged(qreal rate)
-{
-    static_cast<KisRateOption*>(curveOption())->setRate(rate);
-    emit sigSettingChanged();
+    KisCurveOptionWidget::setConfigurationPage(curveWidget());
 }

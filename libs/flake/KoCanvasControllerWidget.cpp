@@ -234,6 +234,20 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
+    QWidget *parent = this;
+    while (parent->parentWidget()) {
+        parent = parent->parentWidget();
+    }
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
+    if (!observerProvider) {
+        return;
+    }
+    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+        if (observer) {
+            observer->unsetCanvas();
+        }
+    }
     delete d;
 }
 

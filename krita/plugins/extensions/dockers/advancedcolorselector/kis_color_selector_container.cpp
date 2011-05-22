@@ -68,41 +68,64 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
     connect(m_colorSelector,SIGNAL(settingsButtonClicked()), SIGNAL(openSettings()));
 
-    connect(this,           SIGNAL(settingsChanged()), m_colorSelector,        SLOT(updateSettings()));
-    connect(this,           SIGNAL(settingsChanged()), m_myPaintShadeSelector, SLOT(updateSettings()));
-    connect(this,           SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
-    connect(this,           SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
+    connect(this, SIGNAL(settingsChanged()), m_colorSelector,        SLOT(updateSettings()));
+    connect(this, SIGNAL(settingsChanged()), m_myPaintShadeSelector, SLOT(updateSettings()));
+    connect(this, SIGNAL(settingsChanged()), this,                   SLOT(updateSettings()));
+    connect(this, SIGNAL(settingsChanged()), m_minimalShadeSelector, SLOT(updateSettings()));
+
+}
+
+void KisColorSelectorContainer::unsetCanvas()
+{
+    m_colorSelector->unsetCanvas();
+    m_myPaintShadeSelector->unsetCanvas();
+    m_minimalShadeSelector->unsetCanvas();
+    m_canvas = 0;
 }
 
 void KisColorSelectorContainer::setCanvas(KisCanvas2 *canvas)
 {
-    m_canvas=canvas;
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+        m_canvas->view()->layerManager()->disconnect(this);
+        KActionCollection *ac = m_canvas->view()->actionCollection();
+        ac->takeAction(ac->action("show_color_selector"));
+        ac->takeAction(ac->action("show_mypaint_shade_selector"));
+        ac->takeAction(ac->action("show_minimal_shade_selector"));
+    }
+
+    m_canvas = canvas;
+
     m_colorSelector->setCanvas(canvas);
     m_myPaintShadeSelector->setCanvas(canvas);
     m_minimalShadeSelector->setCanvas(canvas);
 
-    if(m_canvas->view()->layerManager())
-        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()));
-
+    if (m_canvas->view()->layerManager()) {
+        connect(m_canvas->view()->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), SLOT(reactOnLayerChange()), Qt::UniqueConnection);
+    }
     KActionCollection* actionCollection = canvas->view()->actionCollection();
 
-    if(m_colorSelAction!=0)
-        return;     //we don't need to create the actions a second time
-
-    m_colorSelAction = new KAction("Show color selector", this);
-    m_colorSelAction->setShortcut(QKeySequence(tr("S")));
-    connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()));
+    if (!m_colorSelAction != 0) {
+        m_colorSelAction = new KAction("Show color selector", this);
+        m_colorSelAction->setShortcut(QKeySequence(tr("S")));
+        connect(m_colorSelAction, SIGNAL(triggered()), m_colorSelector, SLOT(showPopup()), Qt::UniqueConnection);
+    }
     actionCollection->addAction("show_color_selector", m_colorSelAction);
 
-    m_mypaintAction = new KAction("Show MyPaint shade selector", this);
-    m_mypaintAction->setShortcut(QKeySequence(tr("M")));
-    connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()));
+    if (!m_mypaintAction) {
+        m_mypaintAction = new KAction("Show MyPaint shade selector", this);
+        m_mypaintAction->setShortcut(QKeySequence(tr("M")));
+        connect(m_mypaintAction, SIGNAL(triggered()), m_myPaintShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
+    }
     actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
 
-    m_minimalAction = new KAction("Show minimal shade selector", this);
-    m_minimalAction->setShortcut(QKeySequence(tr("N")));
-    connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()));
+    if (!m_minimalAction) {
+        m_minimalAction = new KAction("Show minimal shade selector", this);
+        m_minimalAction->setShortcut(QKeySequence(tr("N")));
+        connect(m_minimalAction, SIGNAL(triggered()), m_minimalShadeSelector, SLOT(showPopup()), Qt::UniqueConnection);
+    }
     actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);
+
 }
 
 void KisColorSelectorContainer::updateSettings()

@@ -235,6 +235,7 @@ KoFilter::ConversionStatus KisXCFImport::loadFromDevice(QIODevice* device, KisDo
         // Set some properties
         layer->setCompositeOp(layerModeG2K(xcflayer.mode));
         layer->setVisible(xcflayer.isVisible);
+        layer->disableAlphaChannel(xcflayer.mode != GIMP_NORMAL_MODE);
 
         image->addNode(layer.data(), image->rootLayer().data());
 

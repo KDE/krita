@@ -31,7 +31,7 @@ class PAINTOP_EXPORT KisPressureRateOptionWidget : public KisCurveOptionWidget
 public:
     KisPressureRateOptionWidget();
 
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 private slots:
     void rateChanged(int rate);

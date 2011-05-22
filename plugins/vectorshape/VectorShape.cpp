@@ -186,7 +186,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     // Debug
     //drawNull(painter);
 
-    WmfPainterBackend  wmfPainter;
+    Libwmf::WmfPainterBackend  wmfPainter;
 
     if (!wmfPainter.load(m_contents)) {
         drawNull(painter);
@@ -211,7 +211,7 @@ void VectorShape::drawWmf(QPainter &painter) const
     painter.translate(-wmfBoundingRect.left(), -wmfBoundingRect.top());
 
     // Actually paint the WMF.
-    wmfPainter.play(painter, true);
+    wmfPainter.play(painter);
 
     painter.restore();
 }

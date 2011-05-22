@@ -91,3 +91,10 @@ KisDynamicSensorPerspective::KisDynamicSensorPerspective() : KisDynamicSensor(Pe
     setMinimumLabel(i18n("Far"));
     setMaximumLabel(i18n("Near"));
 }
+
+KisDynamicSensorTangentialPressure::KisDynamicSensorTangentialPressure() : KisDynamicSensor(TangentialPressureId)
+{
+    setMinimumLabel(i18n("Low"));
+    setMaximumLabel(i18n("High"));
+}
+

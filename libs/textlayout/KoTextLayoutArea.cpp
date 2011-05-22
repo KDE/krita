@@ -136,18 +136,19 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             ++tableAreaIndex;
             continue;
         } else if (subFrame) {
-            if (subFrame->format().intProperty(KoText::SubFrameType) == KoText::TableOfContentsFrameType) {
-                // check if p is over table of content
-                if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
-                        && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
-                    return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
-                }
-                ++tocIndex;
-            }
             continue;
         } else {
             if (!block.isValid())
                 continue;
+        }
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            // check if p is over table of content
+            if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
+                    && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
+                return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+            }
+            ++tocIndex;
+            continue;
         }
         if (basicallyFound) // a subsequent table or lines have now had their chance
             return pointedAt;

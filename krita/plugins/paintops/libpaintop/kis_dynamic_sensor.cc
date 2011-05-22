@@ -1,7 +1,7 @@
 /*
  *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2011 Lukáš Tvrdý <lukast.dev@gmail.com>
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
  *  the Free Software Foundation; version 2 of the License.
@@ -25,7 +25,9 @@
 #include "sensors/kis_dynamic_sensor_fade.h"
 #include "sensors/kis_dynamic_sensor_list.h"
 
-KisDynamicSensor::KisDynamicSensor(const KoID& id) : m_id(id)
+KisDynamicSensor::KisDynamicSensor(const KoID& id)
+    : m_id(id)
+    , m_customCurve(false)
 {
     setMinimumLabel(i18n("0.0"));
     setMaximumLabel(i18n("1.0"));
@@ -108,7 +110,7 @@ KisDynamicSensor* KisDynamicSensor::createFromXML(const QDomElement& e)
 QList<KoID> KisDynamicSensor::sensorsIds()
 {
     QList<KoID> ids;
-    
+
     ids << PressureId
         << XTiltId
         << YTiltId
@@ -123,7 +125,7 @@ QList<KoID> KisDynamicSensor::sensorsIds()
         << FadeId
         << PerspectiveId
         << TangentialPressureId;
-        
+
     return ids;
 }
 

@@ -23,10 +23,10 @@
 
 struct KisMultiSensorsSelector::Private
 {
-  Ui_WdgMultiSensorsSelector form;
-  KisMultiSensorsModel* model;
-  QWidget* currentConfigWidget;
-  QHBoxLayout* layout;
+    Ui_WdgMultiSensorsSelector form;
+    KisMultiSensorsModel* model;
+    QWidget* currentConfigWidget;
+    QHBoxLayout* layout;
 };
 
 KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent) : QWidget(parent), d(new Private)

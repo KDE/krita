@@ -206,6 +206,30 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
+    if ((event->key() == Qt::Key_K) || (event->key() == Qt::Key_L)) {
+        int step = 20;
+        if (event->key() == Qt::Key_K) {
+            step = -20;
+        }
+        KoColor color = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+        QColor rgb = color.toQColor();
+        int h = 0, s = 0, v = 0;
+        rgb.getHsv(&h,&s,&v);
+        if ((v < 255) || ((s == 0) || (s == 255))) {
+            v += step;
+            v = qBound(0,v,255);
+        } else {
+            s += -step;
+            s = qBound(0,s,255);
+        }
+        rgb.setHsv(h,s,v);
+        color.fromQColor(rgb);
+        canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, color);
+
+        event->accept();
+        return;
+    }
+
     if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
         useCursor(KisCursor::pickerCursor());
     } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {

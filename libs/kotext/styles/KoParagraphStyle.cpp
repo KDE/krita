@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2008 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007,2010 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -1129,8 +1129,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     //if ( hasMarginLeft || hasMarginRight ) {
     // style:auto-text-indent takes precedence
     const QString autoTextIndent(styleStack.property(KoXmlNS::style, "auto-text-indent"));
-    if (!autoTextIndent.isEmpty() && autoTextIndent == "true") {
-        setAutoTextIndent(true);
+    if (!autoTextIndent.isEmpty()) {
+        setAutoTextIndent(autoTextIndent == "true");
     }
     else {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));

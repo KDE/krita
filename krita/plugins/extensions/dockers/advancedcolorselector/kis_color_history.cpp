@@ -28,6 +28,12 @@ KisColorHistory::KisColorHistory(QWidget *parent)
 {
 }
 
+void KisColorHistory::unsetCanvas()
+{
+    KisColorPatches::unsetCanvas();
+    m_resourceProvider = 0;
+}
+
 void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 {
     if (!canvas) return;

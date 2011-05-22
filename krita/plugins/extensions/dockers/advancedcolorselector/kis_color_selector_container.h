@@ -34,6 +34,7 @@ Q_OBJECT
 public:
     explicit KisColorSelectorContainer(QWidget *parent = 0);
     void setCanvas(KisCanvas2* canvas);
+    void unsetCanvas();
 
     enum ShadeSelectorType{MyPaintSelector, MinimalSelector, NoSelector};
 

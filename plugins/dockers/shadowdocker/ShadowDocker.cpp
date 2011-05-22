@@ -102,6 +102,11 @@ void ShadowDocker::selectionChanged()
     d->widget->setShadowBlur( shadow->blur() );
 }
 
+void ShadowDocker::unsetCanvas()
+{
+    d->canvas = 0;
+}
+
 void ShadowDocker::setCanvas( KoCanvasBase *canvas )
 {
     if (d->canvas) {

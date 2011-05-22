@@ -60,6 +60,11 @@ void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)
     m_toolBox->setCanvas(canvas);
 }
 
+void KoToolBoxDocker::unsetCanvas()
+{
+    m_toolBox->unsetCanvas();
+}
+
 void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
 {
     if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {

@@ -31,6 +31,7 @@ Q_OBJECT
 public:
     explicit KisCommonColors(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
+    void unsetCanvas() {}
     KisColorSelectorBase* createPopup() const;
 
 public slots:

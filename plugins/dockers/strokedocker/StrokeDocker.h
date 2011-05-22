@@ -74,7 +74,8 @@ private:
 
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
-
+    virtual void unsetCanvas();
+    
 private:
     class Private;
     Private * const d;

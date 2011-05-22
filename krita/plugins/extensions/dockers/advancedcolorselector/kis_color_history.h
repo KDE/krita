@@ -27,13 +27,14 @@ class KisColorHistory : public KisColorPatches
 public:
     explicit KisColorHistory(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
+    void unsetCanvas();
 
 protected:
     KisColorSelectorBase* createPopup() const;
 
 public slots:
     void commitColor(const KoColor& color);
-    
+
 private:
     QList<KoColor> m_colorHistory;
     QObject *m_resourceProvider; // to disconnect...

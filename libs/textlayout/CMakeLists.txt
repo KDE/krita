@@ -18,6 +18,7 @@ set(textlayout_LIB_SRCS
     KoTextLayoutObstruction.cpp
     FrameIterator.cpp
     TableIterator.cpp
+    KoPointedAt.cpp
     KoTextShapeData.cpp
     FloatingAnchorStrategy.cpp
     InlineAnchorStrategy.cpp

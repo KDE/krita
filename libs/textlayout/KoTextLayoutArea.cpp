@@ -39,6 +39,7 @@
 #include "KoTextLayoutObstruction.h"
 #include "FrameIterator.h"
 #include "ToCGenerator.h"
+#include "KoPointedAt.h"
 
 #include <KoParagraphStyle.h>
 #include <KoCharacterStyle.h>
@@ -103,14 +104,14 @@ KoTextLayoutArea::~KoTextLayoutArea()
     delete m_endOfArea;
 }
 
-int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
+KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) const
 {
     QPointF point = p - QPointF(0, m_verticalAlignOffset);
 
     if (m_startOfArea == 0) // We have not been layouted yet
-        return -1;
+        return KoPointedAt();
 
-    int position = -1;
+    KoPointedAt pointedAt;
     bool basicallyFound = false;
 
     QTextFrame::iterator it = m_startOfArea->it;
@@ -148,7 +149,7 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
                 continue;
         }
         if (basicallyFound) // a subsequent table or lines have now had their chance
-            return position;
+            return pointedAt;
 
         QTextLayout *layout = block.layout();
         QTextFrame::iterator next = it;
@@ -161,31 +162,37 @@ int KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accuracy) co
         for (int i = 0; i < layout->lineCount(); i++) {
             QTextLine line = layout->lineAt(i);
             if (point.y() > line.y() + line.height()) {
-                position = block.position() + line.textStart() + line.textLength();
+                pointedAt.position = block.position() + line.textStart() + line.textLength();
+                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 continue;
             }
             if (accuracy == Qt::ExactHit && point.y() < line.y()) { // between lines
-                return -1;
+                return KoPointedAt();
             }
             if (accuracy == Qt::ExactHit && // left or right of line
                     (point.x() < line.naturalTextRect().left() || point.x() > line.naturalTextRect().right())) {
-                return -1;
+                return KoPointedAt();
             }
             if (point.x() > line.x() + line.naturalTextWidth() && layout->textOption().textDirection() == Qt::RightToLeft) {
                 // totally right of RTL text means the position is the start of the text.
                 //TODO how about the other side?
-                return block.position() + line.textStart();
+                pointedAt.position = block.position() + line.textStart();
+                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
+                return pointedAt;
             }
             if (point.x() > line.x() + line.naturalTextWidth()) {
                 // right of line
                 basicallyFound = true;
-                position = block.position() + line.textStart() + line.textLength();
+                pointedAt.position = block.position() + line.textStart() + line.textLength();
+                pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
                 continue;
             }
-            return block.position() + line.xToCursor(point.x());
+            pointedAt.position = block.position() + line.xToCursor(point.x());
+            pointedAt.fillInBookmark(QTextCursor(block), m_documentLayout->inlineTextObjectManager());
+            return pointedAt;
         }
     }
-    return position;
+    return pointedAt;
 }
 
 QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const

@@ -23,6 +23,7 @@
 #define KOTEXTTOOL_H
 
 #include "TextShape.h"
+#include "KoPointedAt.h"
 
 #include <KoToolBase.h>
 
@@ -283,7 +284,7 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    int pointToPosition(const QPointF & point) const;
+    KoPointedAt hitTest(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);

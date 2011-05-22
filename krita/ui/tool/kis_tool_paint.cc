@@ -68,7 +68,9 @@
 #include <kis_cubic_curve.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
+#include <kaction.h>
 
+const int STEP = 20;
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         : KisTool(canvas, cursor)
@@ -83,6 +85,16 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     m_supportOutline = false;
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
+
+    m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
+    m_lighterColor->setShortcut(Qt::Key_L);
+    connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
+    addAction("make_brush_color_lighter", m_lighterColor);
+
+    m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
+    m_darkerColor->setShortcut(Qt::Key_K);
+    connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
+    addAction("make_brush_color_darker", m_darkerColor);
 
 
     connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString)));
@@ -206,30 +218,6 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
-    if ((event->key() == Qt::Key_K) || (event->key() == Qt::Key_L)) {
-        int step = 20;
-        if (event->key() == Qt::Key_K) {
-            step = -20;
-        }
-        KoColor color = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
-        QColor rgb = color.toQColor();
-        int h = 0, s = 0, v = 0;
-        rgb.getHsv(&h,&s,&v);
-        if ((v < 255) || ((s == 0) || (s == 255))) {
-            v += step;
-            v = qBound(0,v,255);
-        } else {
-            s += -step;
-            s = qBound(0,s,255);
-        }
-        rgb.setHsv(h,s,v);
-        color.fromQColor(rgb);
-        canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, color);
-
-        event->accept();
-        return;
-    }
-
     if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
         useCursor(KisCursor::pickerCursor());
     } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
@@ -429,6 +417,34 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
         return PAINT;
     }
     return NONE;
+}
+
+void KisToolPaint::transformColor(int step)
+{
+    KoColor color = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    QColor rgb = color.toQColor();
+    int h = 0, s = 0, v = 0;
+    rgb.getHsv(&h,&s,&v);
+    if ((v < 255) || ((s == 0) || (s == 255))) {
+        v += step;
+        v = qBound(0,v,255);
+    } else {
+        s += -step;
+        s = qBound(0,s,255);
+    }
+    rgb.setHsv(h,s,v);
+    color.fromQColor(rgb);
+    canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, color);
+}
+
+void KisToolPaint::makeColorDarker()
+{
+    transformColor(-STEP);
+}
+
+void KisToolPaint::makeColorLighter()
+{
+    transformColor(STEP);
 }
 
 

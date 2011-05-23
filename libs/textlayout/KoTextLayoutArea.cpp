@@ -201,6 +201,8 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
 
     if (m_startOfArea == 0) // We have not been layouted yet
         return QRectF();
+    if (m_endOfArea == 0) // no end area yet
+        return QRectF();
 
     QTextFrame::iterator it = m_startOfArea->it;
     QTextFrame::iterator stop = m_endOfArea->it;

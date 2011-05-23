@@ -30,7 +30,7 @@
  </Menu>
 
  <Menu name="View"><text>&amp;View</text>
-  <Action name="view_fullscreen"/>
+  <Action name="view_show_just_the_canvas"/>
   <Action name="mirror_canvas"/>
   <Separator/>
   <Action name="view_newview"/>    
@@ -141,6 +141,7 @@
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
+  <Action name="view_fullscreen" group="settings_show"/>
   <Action name="view_toggledockers" group="settings_show"/>
   <Action name="showStatusBar" group="settings_show"
   <Action name="preferences" group="settings_configure"/>

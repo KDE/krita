@@ -27,6 +27,7 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>

@@ -199,7 +199,7 @@ private slots:
     void slotCreateTemplate();
     void slotFirstRun();
     void showStatusBar(bool toggled);
-
+    void showJustTheCanvas(bool toggled);
 
 private:
 

@@ -38,6 +38,7 @@
 #include <QPrintDialog>
 #include <QObject>
 
+#include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
 #include <klocale.h>
@@ -287,6 +288,12 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+    tAction = new KToggleAction(i18n("Show Canvas Only"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
+    tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
+    actionCollection()->addAction("view_show_just_the_canvas", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
 
     //Workaround, by default has the same shortcut as mirrorCanvas
@@ -873,9 +880,16 @@ void KisView2::slotFirstRun()
 
 void KisView2::showStatusBar(bool toggled)
 {
-    if (m_d->statusBar) m_d->statusBar->setVisible(toggled);
+    if (KoView::statusBar()) {
+        KoView::statusBar()->setVisible(toggled);
+    }
 }
 
-
+void KisView2::showJustTheCanvas(bool toggled)
+{
+    showStatusBar(toggled);
+    shell()->toggleDockersVisibility(toggled);
+    shell()->viewFullscreen(toggled);
+}
 
 #include "kis_view2.moc"

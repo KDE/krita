@@ -32,7 +32,6 @@
  <Menu name="View"><text>&amp;View</text>
   <Action name="view_fullscreen"/>
   <Action name="mirror_canvas"/>
-  <Action name="view_toggledockers"/>
   <Separator/>
   <Action name="view_newview"/>    
   <ActionList name="view_closeallviews"/>   
@@ -142,7 +141,8 @@
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
-  <Separator group="settings_show"/>
+  <Action name="view_toggledockers" group="settings_show"/>
+  <Action name="showStatusBar" group="settings_show"
   <Action name="preferences" group="settings_configure"/>
 </Menu>
 

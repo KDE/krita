@@ -38,6 +38,7 @@
 #include <QPrintDialog>
 #include <QObject>
 
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -47,7 +48,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <ktogglefullscreenaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>

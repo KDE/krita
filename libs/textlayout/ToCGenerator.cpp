@@ -26,6 +26,8 @@
 #include "KoTextDocumentLayout.h"
 #include "KoTextLayoutRootArea.h"
 #include "KoTextShapeData.h"
+#include "ToCDocumentLayout.h"
+
 #include <KoParagraphStyle.h>
 #include <KoTextPage.h>
 #include <KoShape.h>
@@ -34,7 +36,7 @@
 #include <KoStyleManager.h>
 #include <KoTextEditor.h>
 
-#include <QTextFrame>
+#include <QTextDocument>
 #include <QTimer>
 #include <KDebug>
 #include <KoBookmark.h>
@@ -42,22 +44,30 @@
 
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
-ToCGenerator::ToCGenerator(QTextFrame *tocFrame, KoTableOfContentsGeneratorInfo *tocInfo)
-    : QObject(tocFrame)
-    , m_ToCFrame(tocFrame)
+ToCGenerator::ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTableOfContentsGeneratorInfo *tocInfo)
+    : QObject(tocDocument)
+    , m_ToCDocument(tocDocument)
     , m_ToCInfo(tocInfo)
+    , m_block(block)
+    , m_generatedDocumentChangeCount(-1)
 {
-    Q_ASSERT(tocFrame);
+    Q_ASSERT(tocDocument);
     Q_ASSERT(tocInfo);
 
     m_ToCInfo->setGenerator(this);
 
+    tocDocument->setUndoRedoEnabled(false);
+    tocDocument->setDocumentLayout(new ToCDocumentLayout(tocDocument));
+
+    m_documentLayout = static_cast<KoTextDocumentLayout *>(m_block.document()->documentLayout());
+    m_document = m_documentLayout->document();
+
     // connect to FinishedLayout
-    KoTextDocumentLayout *docLayout = static_cast<KoTextDocumentLayout *>(tocFrame->document()->documentLayout());
-    QObject::connect(docLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
+    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(generate()));
 
     // do a generate right now to have a ToC with placeholder numbers.
-    QTimer::singleShot(0, this, SLOT(generate()));
+    generate();
+    m_generatedDocumentChangeCount = -1; // we need one more intial layout to get pagenumbers
 }
 
 ToCGenerator::~ToCGenerator()
@@ -83,9 +93,9 @@ QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManag
         // most possibly inline object
         if (currentFragment.text()[0].unicode() == QChar::ObjectReplacementCharacter && currentFragment.isValid()) {
             KoInlineObject *inlineObject = inlineTextObjectManager->inlineTextObject( currentFragment.charFormat() );
-            KoBookmark * isBookmark = dynamic_cast<KoBookmark*>(inlineObject);
-            if (isBookmark) {
-                return isBookmark->name();
+            KoBookmark *bookmark = dynamic_cast<KoBookmark*>(inlineObject);
+            if (bookmark) {
+                return bookmark->name();
                 break;
             }
         }
@@ -111,14 +121,16 @@ void ToCGenerator::generate()
     if (!m_ToCInfo)
         return;
 
-    //QTextCursor cursor = m_ToCFrame->lastCursorPosition();
-    KoTextEditor &cursor = *KoTextDocument(m_ToCFrame->document()).textEditor();
-    cursor.setPosition(m_ToCFrame->firstPosition(), QTextCursor::KeepAnchor);
+    if (m_documentLayout->documentChangedCount() == m_generatedDocumentChangeCount) {
+        return;
+    }
+
+
+    QTextCursor cursor = m_ToCDocument->rootFrame()->lastCursorPosition();
+    cursor.setPosition(m_ToCDocument->rootFrame()->firstPosition(), QTextCursor::KeepAnchor);
     cursor.beginEditBlock();
 
-    QTextDocument *doc = m_ToCFrame->document();
-    KoTextDocument koDocument(doc);
-    KoStyleManager *styleManager = koDocument.styleManager();
+    KoStyleManager *styleManager = KoTextDocument(m_document).styleManager();
 
     if (!m_ToCInfo->m_indexTitleTemplate.text.isNull()) {
         KoParagraphStyle *titleStyle = styleManager->paragraphStyle(m_ToCInfo->m_indexTitleTemplate.styleId);
@@ -135,12 +147,10 @@ void ToCGenerator::generate()
 
     // Add TOC
     // Iterate through all blocks to generate TOC
-    QTextBlock block = m_ToCFrame->lastCursorPosition().block();
+    QTextBlock block = m_document->rootFrame()->firstCursorPosition().block();
     int blockId = 0;
     while (block.isValid()) {
         QString tocEntryText = block.text();
-        // causes problems when rendering the tabstop
-        // see Layout::decorateParagraph
         tocEntryText.remove(QChar::ObjectReplacementCharacter);
         // some headings contain tabs, replace all occurences with spaces
         tocEntryText.replace('\t',' ');
@@ -175,8 +185,8 @@ void ToCGenerator::generate()
                 foreach (IndexEntry * entry,tocEntryTemplate.indexEntries) {
                     switch(entry->name) {
                         case IndexEntry::LINK_START: {
-                            //IndexEntryLinkStart * linkStart = static_cast<IndexEntryLinkStart*>(entry);
-
+                            //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
+/*
                             QString target;
                             KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout());
                             if (layout) {
@@ -210,19 +220,22 @@ void ToCGenerator::generate()
                             linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
                             cursor.setCharFormat(linkCf);
                             break;
+                         */
                         }
                         case IndexEntry::CHAPTER: {
-                            //IndexEntryChapter * chapter = static_cast<IndexEntryChapter*>(entry);
-                            cursor.insertText(bd->counterText());
+                            //IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
+                            if (bd) {
+                                cursor.insertText(bd->counterText());
+                            }
                             break;
                         }
                         case IndexEntry::SPAN: {
-                            IndexEntrySpan * span = static_cast<IndexEntrySpan*>(entry);
+                            IndexEntrySpan *span = static_cast<IndexEntrySpan*>(entry);
                             cursor.insertText(span->text);
                             break;
                         }
                         case IndexEntry::TEXT: {
-                            //IndexEntryText * text = static_cast<IndexEntryText*>(entry);
+                            //IndexEntryText *text = static_cast<IndexEntryText*>(entry);
                             cursor.insertText(tocEntryText);
                             break;
                         }
@@ -231,14 +244,16 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::PAGE_NUMBER: {
-                            //IndexEntryPageNumber * pageNumber = static_cast<IndexEntryPageNumber*>(entry);
+                            //IndexEntryPageNumber *pageNumber = static_cast<IndexEntryPageNumber*>(entry);
                             cursor.insertText(resolvePageNumber(block));
                             break;
                         }
                         case IndexEntry::LINK_END: {
-                            //IndexEntryLinkEnd * linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
+      /*
+                            //IndexEntryLinkEnd *linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
                             cursor.setCharFormat(savedCharFormat);
                             break;
+      */
                         }
                         default:{
                             qDebug() << "New or unknown index entry";
@@ -254,13 +269,18 @@ void ToCGenerator::generate()
         block = block.next();
     }
     cursor.endEditBlock();
+    KoTextLayoutRootArea *rootArea = m_documentLayout->rootAreaForPosition(m_block.position());
+
+    if (rootArea) {
+        rootArea->setDirty();
+    }
+    m_generatedDocumentChangeCount = m_documentLayout->documentChangedCount();
 }
 
 
 QString ToCGenerator::resolvePageNumber(const QTextBlock &headingBlock)
 {
-    QTextDocument *doc = m_ToCFrame->document();
-    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(doc->documentLayout());
+    KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(m_document->documentLayout());
     KoTextLayoutRootArea *rootArea = layout->rootAreaForPosition(headingBlock.position());
     if (rootArea) {
         if (rootArea->page()) {

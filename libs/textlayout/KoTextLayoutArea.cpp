@@ -304,6 +304,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
     m_footNoteAreas.clear();
     qDeleteAll(m_preregisteredFootNoteAreas);
     m_preregisteredFootNoteAreas.clear();
+    qDeleteAll(m_tableOfContentsAreas);
+    m_tableOfContentsAreas.clear();
     m_blockRects.clear();
     delete m_endNotesArea;
     m_endNotesArea=0;
@@ -393,17 +395,18 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
         } else if (block.isValid()) {
             if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
                 QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
-                data.value<QTextDocument *>()->setDocumentLayout(documentLayout());
-                QTextFrame *tocFrame = data.value<QTextDocument *>()->rootFrame();
+                QTextDocument *tocDocument = data.value<QTextDocument *>();
+
                 data = block.blockFormat().property(KoParagraphStyle::TableOfContentsData);
                 KoTableOfContentsGeneratorInfo *tocInfo = data.value<KoTableOfContentsGeneratorInfo *>();
-/*
+
                 if (!tocInfo->generator()) {
-                    new ToCGenerator(tocFrame, tocInfo); // attaches itself to the frame
+                    // The generator attaches itself to the tocInfo
+                    new ToCGenerator(tocDocument, block, tocInfo);
                 }
-*/
+
                 // Let's create KoTextLayoutArea and let to handle the ToC
-                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, m_documentLayout);
+                KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());
                 m_tableOfContentsAreas.append(tocArea);
                 m_y += m_bottomSpacing;
                 if (!m_blockRects.isEmpty()) {
@@ -411,7 +414,14 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
                 tocArea->setVirginPage(virginPage());
                 tocArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
-                if (tocArea->layout(cursor->subFrameIterator(tocFrame)) == false) {
+                QTextLayout *blayout = block.layout();
+                blayout->beginLayout();
+                QTextLine line = blayout->createLine();
+                line.setNumColumns(0);
+                line.setPosition(QPointF(left(), m_y));
+                blayout->endLayout();
+
+                if (tocArea->layout(cursor->subFrameIterator(tocDocument->rootFrame())) == false) {
                     cursor->lineTextStart = 1; // fake we are not done
                     m_endOfArea = new FrameIterator(cursor);
                     m_y = tocArea->bottom();

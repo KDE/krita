@@ -26,15 +26,17 @@
 #include <QTextBlock>
 
 #include <KoTableOfContentsGeneratorInfo.h>
-class KoInlineTextObjectManager;
 
-class QTextFrame;
+class KoInlineTextObjectManager;
+class KoTextDocumentLayout;
+
+class QTextDocument;
 
 class ToCGenerator : public QObject
 {
     Q_OBJECT
 public:
-    explicit ToCGenerator(QTextFrame *tocFrame, KoTableOfContentsGeneratorInfo *tocInfo);
+    explicit ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
     // TODO API to be called when the shape is printed so we can guarentee
@@ -46,8 +48,12 @@ public slots:
 private:
     QString resolvePageNumber(const QTextBlock &headingBlock);
 
-    QTextFrame *m_ToCFrame;
+    QTextDocument *m_ToCDocument;
     KoTableOfContentsGeneratorInfo *m_ToCInfo;
+    QTextBlock m_block;
+    QTextDocument *m_document;
+    KoTextDocumentLayout *m_documentLayout;
+    int m_generatedDocumentChangeCount;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

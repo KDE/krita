@@ -80,6 +80,9 @@ public:
         return new KisKSF16ColorSpace<_N_>(p->clone());
     }
 
+    virtual bool userVisible() const {
+        return false;
+    }
 };
 
 #endif // KIS_KSF16_COLORSPACE_H_

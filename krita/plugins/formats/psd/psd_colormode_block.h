@@ -40,9 +40,10 @@ public:
 
     QString error;
 
-    /* function for conversion of indexed color map to RGB
+    /* to store rgb colormap values of indexed image
     */
-    QList<QColor> color;
+    QList<QColor> colormap;
+
 };
 
 #endif // PSD_COLORMODE_BLOCK_H

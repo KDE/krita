@@ -52,11 +52,14 @@ bool PSDColorModeBlock::read(QIODevice* io)
     if ((quint32)data.size() != blocksize) return false;
 
     if (colormode == Indexed) {
+
         for (int i=0; i<=767;)
         {
-	  color.append(qRgb(data[i],data[i++],data[i++]));
-          qDebug()<<color<<i;
+          colormap.append(qRgb(data[i],data[i++],data[i++]));
+          qDebug()<<colormap<<i;
         }
+
+
     }
     return valid();
 }

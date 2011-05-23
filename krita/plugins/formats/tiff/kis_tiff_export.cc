@@ -72,6 +72,10 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         kdb->optionswdg->kComboBoxPredictor->removeItem(2);
     }
 
+    if (cs->colorModelId() == CMYKAColorModelID) {
+        kdb->optionswdg->alpha->setChecked(false);
+    }
+
     if (kdb->exec() == QDialog::Rejected) {
         return KoFilter::UserCancelled;
     }

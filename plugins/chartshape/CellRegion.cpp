@@ -43,8 +43,6 @@
 using std::pow;
 using namespace KChart;
 
-<<<<<<< HEAD
-=======
 /************************RegionParser*******************************/
 
 class Parser
@@ -288,8 +286,6 @@ bool Parser::parseRegion2()
 // }
 /************************ENDRegionParser*******************************/
 
-
->>>>>>> fixed the missing cases so the unit tests run again
 static QString columnName( uint column );
 //static int rangeCharToInt( char c );
 

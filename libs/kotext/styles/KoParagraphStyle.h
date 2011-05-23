@@ -32,6 +32,7 @@
 #include <QVariant>
 #include <QTextFormat>
 
+extern QVariant val;
 struct Property;
 class KoCharacterStyle;
 class KoListStyle;
@@ -138,6 +139,9 @@ public:
         // other properties
         BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
         SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
+        JoinBorder,               ///< bool, whether a border for one paragraph is to be extended around the following paragraph
+        RegisterTrue,             ///< bool, align lines on both sides of a printed text
+        StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
     };
 
     /// Constructor
@@ -320,13 +324,17 @@ public:
     /// See similar named method on QTextBlockFormat
     void clearBackground();
     
-    
     qreal backgroundTransparency() const;
     void setBackgroundTransparency(qreal transparency);
 
-    
     bool snapToLayoutGrid() const;
     void setSnapToLayoutGrid(bool value);
+    
+    bool registerTrue() const;
+    void setRegisterTrue(bool value);
+    
+    bool strictLineBreak() const;
+    void setStrictLineBreak(bool value);
     
     void setBreakBefore(bool on);
     bool breakBefore();
@@ -382,6 +390,9 @@ public:
     KoBorder::BorderStyle bottomBorderStyle();
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor();
+    
+    bool joinBorder() const;
+    void setJoinBorder(bool value);
 
     KoText::Direction textProgressionDirection() const;
     void setTextProgressionDirection(KoText::Direction dir);

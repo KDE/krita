@@ -1438,8 +1438,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         }
     }
     const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
-    if (keepTogether == "always") {
-        setNonBreakableLines(true);
+    if (!keepTogether.isEmpty()) {
+        setNonBreakableLines(keepTogether == "always");
     }
 
     // The fo:background-color attribute specifies the background color of a paragraph.
@@ -1503,6 +1503,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         int widows = styleStack.property(KoXmlNS::fo, "widows").toInt(&ok);
         if (ok)
             setWidowThreshold(widows);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "justify-single-word")) {
+        setJustifySingleWord(styleStack.property(KoXmlNS::style, "justify-single-word") == "true");
     }
     
     //following properties KoParagraphStyle provides us are not handled now;
@@ -1569,6 +1573,18 @@ bool KoParagraphStyle::strictLineBreak() const
 void KoParagraphStyle::setStrictLineBreak(bool value)
 {
     setProperty(StrictLineBreak, value);
+}
+
+bool KoParagraphStyle::justifySingleWord() const
+{
+    if (hasProperty(JustifySingleWord))
+        return propertyBoolean(JustifySingleWord);
+    return false;
+}
+
+void KoParagraphStyle::setJustifySingleWord(bool value)
+{
+    setProperty(JustifySingleWord, value);
 }
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
@@ -1644,7 +1660,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             && keys.contains(KoParagraphStyle::TopPadding) && keys.contains(KoParagraphStyle::BottomPadding))
     {
         if ((leftPadding() == rightPadding()) && (topPadding() == bottomPadding()) && (rightPadding() == topPadding())) {
-            style.addPropertyPt("fo:padding", leftPadding());
+            style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::ParagraphType);
             keys.removeOne(KoParagraphStyle::LeftPadding);
             keys.removeOne(KoParagraphStyle::RightPadding);
             keys.removeOne(KoParagraphStyle::TopPadding);
@@ -1689,6 +1705,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         } else if (key == QTextFormat::BlockNonBreakableLines) {
             if (nonBreakableLines()) {
                 style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+            } else {
+                style.addProperty("fo:keep-together", "auto", KoGenStyle::ParagraphType);
             }
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
@@ -1697,22 +1715,24 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BackgroundTransparency) {
-            style.addProperty("style:background-transparency", QString("%1%").arg(backgroundTransparency() * 100));
+            style.addProperty("style:background-transparency", QString("%1%").arg(backgroundTransparency() * 100), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::SnapToLayoutGrid) {
-            style.addProperty("style:snap-to-layout-grid", snapToLayoutGrid());
+            style.addProperty("style:snap-to-layout-grid", snapToLayoutGrid(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::JustifySingleWord) {
+            style.addProperty("style:justify-single-word", justifySingleWord(), KoGenStyle::ParagraphType);
         } else if (key == RegisterTrue) {
-            style.addProperty("style:register-true", registerTrue());
+            style.addProperty("style:register-true", registerTrue(), KoGenStyle::ParagraphType);
         } else if (key == StrictLineBreak) {
             if (strictLineBreak())
-                style.addProperty("style:line-break", "strict");
+                style.addProperty("style:line-break", "strict", KoGenStyle::ParagraphType);
             else
-                style.addProperty("style:line-break", "normal");
+                style.addProperty("style:line-break", "normal", KoGenStyle::ParagraphType);
         } else if (key == JoinBorder) {
-            style.addProperty("style:join-border", joinBorder());
+            style.addProperty("style:join-border", joinBorder(), KoGenStyle::ParagraphType);
         } else if (key == OrphanThreshold) {
-            style.addProperty("fo:orphans", orphanThreshold());
+            style.addProperty("fo:orphans", orphanThreshold(), KoGenStyle::ParagraphType);
         } else if (key == WidowThreshold) {
-            style.addProperty("fo:widows", widowThreshold());
+            style.addProperty("fo:widows", widowThreshold(), KoGenStyle::ParagraphType);
         
         // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {

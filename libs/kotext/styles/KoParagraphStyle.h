@@ -142,6 +142,7 @@ public:
         JoinBorder,               ///< bool, whether a border for one paragraph is to be extended around the following paragraph
         RegisterTrue,             ///< bool, align lines on both sides of a printed text
         StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
+        JustifySingleWord,        ///< bool, if true, a single word will be justified
     };
 
     /// Constructor
@@ -335,6 +336,9 @@ public:
     
     bool strictLineBreak() const;
     void setStrictLineBreak(bool value);
+    
+    bool justifySingleWord() const;
+    void setJustifySingleWord(bool value);
     
     void setBreakBefore(bool on);
     bool breakBefore();

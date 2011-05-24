@@ -500,7 +500,7 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-                finished = rootArea->layout(tmpPosition);
+                finished = rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
                     d->anchoringIndex = 0;
                     d->anchoringCycle++;
@@ -566,7 +566,7 @@ void KoTextDocumentLayout::layout()
             do {
                 delete tmpPosition;
                 tmpPosition = new FrameIterator(d->layoutPosition);
-                rootArea->layout(tmpPosition);
+                rootArea->layoutRoot(tmpPosition);
                 if (3) { //FIXME
                     d->anchoringIndex = 0;
                     d->anchoringCycle++;

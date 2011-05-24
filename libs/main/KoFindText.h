@@ -30,6 +30,7 @@
 #include <QTextCursor>
 
 class QTextDocument;
+class QTextCharFormat;
 class KoResourceManager;
 class KoCanvasBase;
 class KoShape;
@@ -46,6 +47,12 @@ class KOMAIN_EXPORT KoFindText : public KoFindBase
 {
     Q_OBJECT
 public:
+    enum FormatType {
+        HighlightFormat,
+        CurrentMatchFormat,
+        SelectionFormat
+    };
+
     /**
      * Constructor.
      *
@@ -63,6 +70,13 @@ public:
      * Overridden from KoFindBase
      */
     virtual void findPrevious();
+
+    /**
+     * Set the format use. 
+     *
+     * USe this function if you want to overwrite the default formating options.
+     */
+    static void setFormat(FormatType formatType, const QTextCharFormat &format);
 
     /**
      * Helper function to retrieve all QTextDocument objects from a list of shapes.

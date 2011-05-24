@@ -32,7 +32,7 @@ public:
 
 protected:
     void paint(QPainter*);
-    bool isComponent(int x, int y) const;
+    bool containsPointInComponentCoords(int x, int y) const;
 
 private:
     int triangleWidth() const;

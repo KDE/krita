@@ -25,7 +25,7 @@ class KisShadeSelectorLineComboBox;
 
 class KisShadeSelectorLineBase : public QWidget {
 public:
-    KisShadeSelectorLineBase(QWidget *parent = 0) : QWidget(parent)
+    KisShadeSelectorLineBase(QWidget* parent) : QWidget(parent)
     {}
 
     void setLineNumber(int n) {m_lineNumber=n;}
@@ -50,9 +50,10 @@ public:
     QString toString() const;
     void fromString(const QString& string);
 
-protected:
     void paintEvent(QPaintEvent *);
     void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 
 private:
     qreal m_hueDelta;

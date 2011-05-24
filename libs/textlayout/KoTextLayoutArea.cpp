@@ -343,7 +343,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
             }
             tableArea->setVirginPage(virginPage());
             tableArea->setReferenceRect(left(), right(), m_y, maximumAllowedBottom());
-            if (tableArea->layout(cursor->tableIterator(table)) == false) {
+            if (tableArea->layoutTable(cursor->tableIterator(table)) == false) {
                 m_endOfArea = new FrameIterator(cursor);
                 m_y = tableArea->bottom();
                 setBottom(m_y + m_footNotesHeight);

@@ -33,6 +33,9 @@ public:
 public slots:
     void setColor(const QColor& color);
     void updateSettings();
+    void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 
 protected slots:
     void resourceChanged(int key, const QVariant& v);

@@ -128,8 +128,16 @@ inline T cfAddition(T src, T dst) {
 
 template<class T>
 inline T cfSubtract(T src, T dst) {
+    using namespace Arithmetic;
     typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
-    return Arithmetic::clamp<T>(composite_type(dst) - src);
+    return clamp<T>(composite_type(dst) - src);
+}
+
+template<class T>
+inline T cfInverseSubtract(T src, T dst) {
+    using namespace Arithmetic;
+    typedef typename KoColorSpaceMathsTraits<T>::compositetype composite_type;
+    return clamp<T>(composite_type(dst) - inv(src));
 }
 
 template<class T>

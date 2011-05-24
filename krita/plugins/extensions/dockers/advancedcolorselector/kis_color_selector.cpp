@@ -31,14 +31,13 @@
 #include <KComponentData>
 #include <KGlobal>
 #include <KIcon>
+#include <KDebug>
 
 #include "kis_color_selector_ring.h"
 #include "kis_color_selector_triangle.h"
 #include "kis_color_selector_simple.h"
 #include "kis_color_selector_wheel.h"
 #include "kis_color_selector_container.h"
-
-#include <KDebug>
 
 KisColorSelector::KisColorSelector(Configuration conf, QWidget* parent)
                                        : KisColorSelectorBase(parent),
@@ -247,6 +246,7 @@ void KisColorSelector::mouseMoveEvent(QMouseEvent* e)
 
 void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
 {
+    KisColorSelectorBase::mouseReleaseEvent(e);
     if(m_lastColor!=m_currentColor && m_currentColor.isValid()) {
         m_lastColor=m_currentColor;
         ColorRole role;
@@ -255,6 +255,10 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
         else
             role=Background;
         commitColor(KoColor(m_currentColor, colorSpace()), role);
+
+        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
+            hidePopup();
+        }
     }
     e->accept();
     m_grabbingComponent=0;
@@ -282,6 +286,7 @@ void KisColorSelector::mouseEvent(QMouseEvent *e)
         m_grabbingComponent->mouseEvent(e->x(), e->y());
 
         m_currentColor=m_mainComponent->currentColor();
+        updateColorPreview(m_currentColor);
     }
 }
 

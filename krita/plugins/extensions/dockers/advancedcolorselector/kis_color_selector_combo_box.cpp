@@ -22,8 +22,6 @@
 #include "kis_color_selector.h"
 #include "kis_canvas2.h"
 
-#include <KDebug>
-
 class KisColorSelectorComboBoxPrivate : public QWidget {
 public:
     int spacing;

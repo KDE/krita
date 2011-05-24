@@ -276,6 +276,8 @@ public slots:
 
     void setCharFormat(const QTextCharFormat &format);
 
+    void setTableFormat(const QTextTableFormat &format);
+
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
     void setVisualNavigation(bool on);

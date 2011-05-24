@@ -285,6 +285,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    tAction->setChecked(true);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
@@ -885,11 +886,14 @@ void KisView2::showStatusBar(bool toggled)
     }
 }
 
-void KisView2::showJustTheCanvas(bool toggled)
+void KisView2::showJustTheCanvas(bool /*toggled*/)
 {
-    showStatusBar(toggled);
-    shell()->toggleDockersVisibility(toggled);
-    shell()->viewFullscreen(toggled);
+    KToggleAction *action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
+    if (action) action ->toggle();
+    action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
+    if (action) action->toggle();
+    action = dynamic_cast<KToggleAction*>(actionCollection()->action("view_fullscreen"));
+    if (action) action->toggle();
 }
 
 #include "kis_view2.moc"

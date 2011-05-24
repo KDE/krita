@@ -186,41 +186,37 @@ void ToCGenerator::generate()
                     switch(entry->name) {
                         case IndexEntry::LINK_START: {
                             //IndexEntryLinkStart *linkStart = static_cast<IndexEntryLinkStart*>(entry);
-/*
-                            QString target;
-                            KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>( block.document()->documentLayout());
-                            if (layout) {
-                                target = fetchBookmarkRef(block, layout->inlineTextObjectManager());
 
-                                if (target.isNull()) {
-                                    // generate unique name for the bookmark
-                                    target = bd->counterText() + tocEntryText + "|outline" + QString::number(blockId);
-                                    blockId++;
+                            QString target = fetchBookmarkRef(block, m_documentLayout->inlineTextObjectManager());
 
-                                    // insert new KoBookmark
-                                    KoBookmark *bookmark = new KoBookmark(block.document());
-                                    bookmark->setName(target);
-                                    bookmark->setType(KoBookmark::SinglePosition);
-                                    QTextCursor blockCursor(block);
-                                    layout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
-                                }
+                            if (target.isNull()) {
+                                // generate unique name for the bookmark
+                                target = tocEntryText + "|outline" + QString::number(blockId);
+                                blockId++;
 
+                                // insert new KoBookmark
+                                KoBookmark *bookmark = new KoBookmark(block.document());
+                                bookmark->setName(target);
+                                bookmark->setType(KoBookmark::SinglePosition);
+                                QTextCursor blockCursor(block);
+                                m_documentLayout->inlineTextObjectManager()->insertInlineObject(blockCursor, bookmark);
                             }
 
-                            // copy it to alter subset of properties
-                            QTextCharFormat linkCf(savedCharFormat);
-                            linkCf.setAnchor(true);
-                            linkCf.setAnchorHref(target);
+                            if (!target.isNull()) {
+                                // copy it to alter subset of properties
+                                QTextCharFormat linkCf(savedCharFormat);
+                                linkCf.setAnchor(true);
+                                linkCf.setAnchorHref('#'+ target);
 
-                            QBrush foreground = linkCf.foreground();
-                            foreground.setColor(Qt::blue);
+                                QBrush foreground = linkCf.foreground();
+                                foreground.setColor(Qt::blue);
 
-                            linkCf.setForeground(foreground);
-                            linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
-                            linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
-                            cursor.setCharFormat(linkCf);
+                                linkCf.setForeground(foreground);
+                                linkCf.setProperty(KoCharacterStyle::UnderlineStyle, KoCharacterStyle::SolidLine);
+                                linkCf.setProperty(KoCharacterStyle::UnderlineType, KoCharacterStyle::SingleLine);
+                                cursor.setCharFormat(linkCf);
+                            }
                             break;
-                         */
                         }
                         case IndexEntry::CHAPTER: {
                             //IndexEntryChapter *chapter = static_cast<IndexEntryChapter*>(entry);
@@ -249,11 +245,9 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::LINK_END: {
-      /*
                             //IndexEntryLinkEnd *linkEnd = static_cast<IndexEntryLinkEnd*>(entry);
                             cursor.setCharFormat(savedCharFormat);
                             break;
-      */
                         }
                         default:{
                             qDebug() << "New or unknown index entry";

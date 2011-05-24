@@ -20,6 +20,7 @@
 #include <QColor>
 #include <QVBoxLayout>
 #include <QPainter>
+#include <QMouseEvent>
 
 #include <KConfig>
 #include <KConfigGroup>
@@ -41,6 +42,8 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     l->setMargin(0);
 
     updateSettings();
+
+    setMouseTracking(true);
 }
 
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
@@ -87,6 +90,51 @@ void KisMinimalShadeSelector::updateSettings()
         m_shadingLines.at(i)->updateSettings();
 
     setPopupBehaviour(false, false);
+}
+
+void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
+{
+//    kDebug() << e->globalX() << "/" << e->globalY();
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        if(line->rect().contains(newEvent.pos()))
+            line->mousePressEvent(&newEvent);
+    }
+    KisColorSelectorBase::mousePressEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
+{
+//    kDebug() << e->globalX() << "/" << e->globalY();
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseMoveEvent(&newEvent);
+    }
+    KisColorSelectorBase::mouseMoveEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
+{
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseReleaseEvent(&newEvent);
+    }
+    KisColorSelectorBase::mouseReleaseEvent(e);
 }
 
 void KisMinimalShadeSelector::resourceChanged(int key, const QVariant &v)

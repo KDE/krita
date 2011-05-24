@@ -33,6 +33,7 @@ class KisColorSelectorBase : public QWidget
 {
 Q_OBJECT
 public:
+    enum Move {MoveToMousePosition, DontMove};
     explicit KisColorSelectorBase(QWidget *parent = 0);
     ~KisColorSelectorBase();
 
@@ -45,7 +46,7 @@ public:
 public slots:
     virtual void updateSettings();
     virtual void setColor(const QColor& color);
-    virtual void showPopup();
+    virtual void showPopup(Move move=MoveToMousePosition);
     /// commits a color to the resource manager
     void commitColor(const KoColor& koColor, ColorRole role);
     void updateColorPreview(const QColor& color);
@@ -62,12 +63,16 @@ protected:
     virtual KisColorSelectorBase* createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
+    void setHidingDistanceAndTime(int distance, int time);
 
 protected slots:
     void hidePopup();
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
     virtual void resourceChanged(int key, const QVariant& v);
+
+private:
+    void privateCreatePopup();
 
 protected:
     KisCanvas2* m_canvas;
@@ -77,7 +82,7 @@ protected:
 
 private:
     int m_hideDistance;
-    QTimer* m_timer;
+    QTimer* m_hideTimer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;

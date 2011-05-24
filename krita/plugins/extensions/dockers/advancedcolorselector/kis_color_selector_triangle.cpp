@@ -24,8 +24,6 @@
 USING_PART_OF_NAMESPACE_EIGEN
 #include <cmath>
         
-#include <KDebug>
-        
 #include "KoColor.h"
 
 KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :

@@ -35,8 +35,6 @@
 #include "kis_color_selector_base.h"
 #include "kis_minimal_shade_selector.h"
 
-#include <KDebug>
-
 KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
     KisShadeSelectorLineBase(parent), m_displayHelpText(false)
 {
@@ -200,7 +198,7 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
 
 void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
 {
-    kDebug() << e->globalX() << "/" << e->globalY();
+//    kDebug() << e->globalX() << "/" << e->globalY();
     KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
     QColor color(m_pixelCache.pixel(e->pos()));
 

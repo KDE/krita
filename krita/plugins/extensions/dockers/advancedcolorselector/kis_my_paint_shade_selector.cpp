@@ -43,8 +43,6 @@
 #include "KoColor.h"
 #include "KoResourceManager.h"
 
-#include <KDebug>
-
 inline int sqr(int x);
 inline qreal sqr2(qreal x);
 inline int signedSqr(int x);
@@ -201,7 +199,8 @@ void KisMyPaintShadeSelector::mousePressEvent(QMouseEvent* e)
 
 void KisMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *e)
 {
-    updateColorPreview(m_pixelCache.pixel(e->x(), e->y()));
+    if(rect().contains(e->pos()))
+        updateColorPreview(m_pixelCache.pixel(e->x(), e->y()));
     KisColorSelectorBase::mouseMoveEvent(e);
 }
 

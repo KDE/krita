@@ -33,9 +33,6 @@
 #include "kis_color_selector_combo_box.h"
 #include "kis_color_selector.h"
 
-
-#include <KDebug>
-
 KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
     KisPreferenceSet(parent),
     ui(new Ui::KisColorSelectorSettings)

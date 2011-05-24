@@ -26,7 +26,6 @@
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
-#include <KDebug>
 
 #include "KoResourceManager.h"
 
@@ -95,7 +94,7 @@ void KisMinimalShadeSelector::updateSettings()
 
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
-    kDebug() << e->globalX() << "/" << e->globalY();
+//    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
         QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
@@ -117,8 +116,6 @@ void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
                                           e->button(),
                                           e->buttons(),
                                           e->modifiers());
-        QPoint pos = line->mapToGlobal(line->pos());
-        kDebug() << "line rect " << pos.x() << "/" << pos.y() << "  " << line->width() << "*" << line->height();
         if(line->rect().contains(newEvent.pos()))
             line->mouseMoveEvent(&newEvent);
     }

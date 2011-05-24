@@ -40,8 +40,6 @@
 #include "kis_node.h"
 #include "kis_paint_device.h"
 
-#include <KDebug>
-
 KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
     QWidget(parent),
     m_colorSelector(new KisColorSelector(this)),

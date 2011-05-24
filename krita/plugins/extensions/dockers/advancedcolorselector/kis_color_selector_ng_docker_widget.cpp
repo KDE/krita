@@ -42,8 +42,6 @@
 #include "kis_color_selector_settings.h"
 #include "kis_color_selector_container.h"
 
-#include <KDebug>
-
 KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) :
     QWidget(parent),
     m_colorHistoryAction(0),

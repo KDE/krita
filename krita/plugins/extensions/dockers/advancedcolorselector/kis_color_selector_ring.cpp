@@ -26,8 +26,6 @@ USING_PART_OF_NAMESPACE_EIGEN
 
 #include "KoColor.h"
 
-#include <KDebug>
-        
 KisColorSelectorRing::KisColorSelectorRing(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_cachedColorSpace(0),

@@ -72,8 +72,7 @@ KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list, co
         COMPOSITE_UNDEF <<
         COMPOSITE_COPY_RED <<
         COMPOSITE_COPY_GREEN <<
-        COMPOSITE_COPY_BLUE <<
-        COMPOSITE_COPY_OPACITY;
+        COMPOSITE_COPY_BLUE;
     }
 }
 

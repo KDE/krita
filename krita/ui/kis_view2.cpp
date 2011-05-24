@@ -38,6 +38,8 @@
 #include <QPrintDialog>
 #include <QObject>
 
+#include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -47,7 +49,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <ktogglefullscreenaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -264,7 +265,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
@@ -282,6 +282,19 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     actionCollection()->addAction("reset_canvas_transformations", resetCanvasTransformations);
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
+
+    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    tAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+    tAction = new KToggleAction(i18n("Show Canvas Only"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
+    tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
+    actionCollection()->addAction("view_show_just_the_canvas", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
+
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
@@ -863,6 +876,20 @@ void KisView2::slotFirstRun()
         doc->openUrl(fname);
     }
 
+}
+
+void KisView2::showStatusBar(bool toggled)
+{
+    if (KoView::statusBar()) {
+        KoView::statusBar()->setVisible(toggled);
+    }
+}
+
+void KisView2::showJustTheCanvas(bool toggled)
+{
+    showStatusBar(toggled);
+    shell()->toggleDockersVisibility(toggled);
+    shell()->viewFullscreen(toggled);
 }
 
 #include "kis_view2.moc"

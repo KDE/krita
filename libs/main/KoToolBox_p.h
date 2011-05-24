@@ -93,6 +93,7 @@ public slots:
 
     /// set the canvas this docker should listen to for changes.
     void setCanvas(KoCanvasBase *canvas);
+    void unsetCanvas();
 
     /// Set the orientation of the layout to @p orientation
     void setOrientation(Qt::Orientation orientation);

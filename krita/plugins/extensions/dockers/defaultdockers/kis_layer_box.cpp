@@ -182,15 +182,17 @@ KisLayerBox::~KisLayerBox()
     delete m_wdgLayerBox;
 }
 
-void KisLayerBox::setCanvas(KoCanvasBase * canvas)
+void KisLayerBox::setCanvas(KoCanvasBase *canvas)
 {
-    if(m_canvas) {
-        disconnect(m_canvas);
+    if (m_canvas) {
+       m_canvas->disconnectCanvasObserver(this);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
-    connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
-    setImage(m_canvas->view()->image());
+    if (m_canvas) {
+        connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));
+        setImage(m_canvas->view()->image());
+    }
 }
 
 void KisLayerBox::setImage(KisImageWSP image)
@@ -401,7 +403,7 @@ void KisLayerBox::slotRmClicked()
     for (int i = 0, n = l.count(); i < n; ++i) {
         KisNodeSP node = m_nodeModel->nodeFromIndex(l.at(i));
         if (!node->systemLocked()) {
-            m_nodeManager->removeNode(node);        
+            m_nodeManager->removeNode(node);
         }
     }
     if (m_canvas && m_canvas->view()) {

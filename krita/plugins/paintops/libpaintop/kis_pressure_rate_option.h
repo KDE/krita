@@ -44,9 +44,8 @@ public:
      */
     quint8 apply(quint8 opacity, const KisPaintInformation& info) const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
     void setRate(int rate);
     

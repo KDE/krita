@@ -56,7 +56,7 @@ class KoCanvasBase;
 
 class KisSliderSpinBox;
 
-// wacom 
+// wacom
 const static int LEVEL_OF_PRESSURE_RESOLUTION = 1024;
 
 class KRITAUI_EXPORT KisToolPaint
@@ -110,7 +110,7 @@ protected:
     virtual QString quickHelp() const {
         return QString();
     }
-    
+
     /// Reimplemented
     virtual void setupPainter(KisPainter* painter);
 
@@ -119,13 +119,13 @@ protected:
     qreal pressureToCurve(qreal pressure){
         return m_pressureSamples.at( qRound(pressure * LEVEL_OF_PRESSURE_RESOLUTION) );
     }
-    
+
     enum NodePaintAbility {
         NONE,
         PAINT,
         VECTOR
     };
-    
+
     /// Checks if and how the tool can paint on the current node
     NodePaintAbility nodePaintAbility();
 
@@ -139,6 +139,8 @@ private slots:
     void slotSetOpacity(int opacityPerCent);
 
     void slotSetCompositeMode(const QString& compositeOp);
+    void makeColorLighter();
+    void makeColorDarker();
 
 protected slots:
     virtual void resetCursorStyle();
@@ -155,10 +157,12 @@ private:
     void pickColor(const QPointF &documentPixel, bool fromCurrentNode,
                    bool toForegroundColor);
 
+    void transformColor(int step);
+
 private:
 
     QGridLayout *m_optionWidgetLayout;
-    
+
     bool m_supportOutline;
 
     /**
@@ -167,6 +171,9 @@ private:
     bool m_toForegroundColor;
     // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorPickerDelayTimer;
+    KAction* m_lighterColor;
+    KAction* m_darkerColor;
+
 
 signals:
     void sigFavoritePaletteCalled(const QPoint&);

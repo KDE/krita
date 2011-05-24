@@ -22,6 +22,8 @@
 
 #include "textlayout_export.h"
 
+#include "KoPointedAt.h"
+
 #include <KoText.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInsets.h>
@@ -34,6 +36,7 @@ class KoTextDocumentLayout;
 class KoTextBlockData;
 class KoImageCollection;
 class KoInlineNote;
+class KoPointedAt;
 class QTextList;
 class KoTextBlockBorderData;
 class KoTextLayoutEndNotesArea;
@@ -136,7 +139,7 @@ public:
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
-    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
     /// Calc a bounding box rect of the selection
     /// or invalid if not

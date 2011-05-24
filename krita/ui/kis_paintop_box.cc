@@ -307,6 +307,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     }
 
     m_optionWidget->setConfiguration(preset->settings());
+    m_presetsPopup->setPresetImage(preset->image());
     slotUpdatePreset();
 }
 

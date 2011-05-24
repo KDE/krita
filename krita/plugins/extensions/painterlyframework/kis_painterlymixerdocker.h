@@ -39,7 +39,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
-
+    virtual void unsetCanvas() {m_currentCanvas = 0;}
 private slots:
 
     void colorChanged(const KoColor& color);

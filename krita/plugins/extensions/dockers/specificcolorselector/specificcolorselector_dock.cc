@@ -27,7 +27,10 @@
 
 #include "kis_specific_color_selector_widget.h"
 
-SpecificColorSelectorDock::SpecificColorSelectorDock() : QDockWidget(i18n("Specific Color Selector"))
+SpecificColorSelectorDock::SpecificColorSelectorDock()
+    : QDockWidget(i18n("Specific Color Selector"))
+    , m_canvas(0)
+    , m_view(0)
 {
     m_colorSelector = new KisSpecificColorSelectorWidget(this);
     setWidget(m_colorSelector);
@@ -35,16 +38,30 @@ SpecificColorSelectorDock::SpecificColorSelectorDock() : QDockWidget(i18n("Speci
 
 void SpecificColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+    if (m_view) {
+        m_colorSelector->disconnect(m_view->resourceProvider());
+        m_view->resourceProvider()->disconnect(m_colorSelector);
+        m_view->resourceProvider()->disconnect(this);
+        m_view->image()->disconnect(m_colorSelector);
+    }
+
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas);
     Q_ASSERT(canvas);
     KisView2* view = kisCanvas->view();
 
-    m_colorSelector->disconnect(SIGNAL(colorChanged(const KoColor&)));
     connect(m_colorSelector, SIGNAL(colorChanged(const KoColor&)), view->resourceProvider(), SLOT(slotSetFGColor(const KoColor&)));
     connect(view->resourceProvider(), SIGNAL(sigFGColorChanged(const KoColor&)), m_colorSelector, SLOT(setColor(const KoColor&)));
+
     m_colorSelector->setColor(view->resourceProvider()->fgColor());
+
     connect(view->resourceProvider(), SIGNAL(sigNodeChanged(const KisNodeSP)), this, SLOT(layerChanged(const KisNodeSP)));
     connect(view->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_colorSelector, SLOT(setColorSpace(const KoColorSpace*)));
+
+    m_canvas = kisCanvas;
+    m_view = view;
 }
 
 

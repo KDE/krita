@@ -33,6 +33,7 @@ public:
     DigitalMixerDock( );
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas() { m_canvas = 0; }
 public slots:
     void setCurrentColor(const KoColor& );
     void resourceChanged(int, const QVariant&);

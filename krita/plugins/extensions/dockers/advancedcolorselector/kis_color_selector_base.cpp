@@ -78,8 +78,10 @@ void KisColorSelectorBase::setColorSpace(const KoColorSpace *colorSpace)
 
 void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
     m_canvas = canvas;
-
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this,                        SLOT(resourceChanged(int, const QVariant&)), Qt::UniqueConnection);
 //    setColor(m_canvas->resourceManager()->foregroundColor().toQColor());
@@ -128,7 +130,7 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
 {
 //    kDebug()<<"mouse move event, e="<<e->pos()<<"  global="<<e->globalPos();
 
-    if(m_isPopup
+    if(!(e->buttons()&Qt::LeftButton) && m_isPopup
        && (qMin(e->x(), e->y())<-m_hideDistance || qMax(e->x(), e->y())>width()+m_hideDistance)
        && !m_parent->rect().contains(m_parent->mapFromGlobal(e->globalPos()))) {
         if(!m_timer->isActive()) {

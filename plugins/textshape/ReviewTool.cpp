@@ -140,7 +140,7 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
 int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit).position;
     return caretPos;
 }
 

@@ -27,9 +27,9 @@
 #include "komain_export.h"
 
 #include <QtCore/QMetaTypeId>
+#include <QTextCursor>
 
 class QTextDocument;
-class QTextCursor;
 class KoResourceManager;
 class KoCanvasBase;
 class KoShape;

@@ -145,7 +145,9 @@ KoPointedAt KoTextLayoutArea::hitTest(const QPointF &p, Qt::HitTestAccuracy accu
             // check if p is over table of content
             if (point.y() > m_tableOfContentsAreas[tocIndex]->top()
                     && point.y() < m_tableOfContentsAreas[tocIndex]->bottom()) {
-                return m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+                pointedAt = m_tableOfContentsAreas[tocIndex]->hitTest(point, accuracy);
+                pointedAt.position = block.position();
+                return pointedAt;
             }
             ++tocIndex;
             continue;

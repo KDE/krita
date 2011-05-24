@@ -45,7 +45,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     addPaintOpOption(new KisRateOptionWidget(i18n("Color Rate") , i18n("Rate: "), "ColorRate" , false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));
     addPaintOpOption(new KisPressureScatterOptionWidget());
-    addPaintOpOption(new KisAirbrushOption(false));
+//     addPaintOpOption(new KisAirbrushOption(false));
     addPaintOpOption(new KisOverlayModeOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption()));
 }

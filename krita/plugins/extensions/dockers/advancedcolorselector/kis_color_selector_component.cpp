@@ -86,7 +86,7 @@ bool KisColorSelectorComponent::isDirty() const
     return m_dirty || m_lastColorSpace!=colorSpace();
 }
 
-bool KisColorSelectorComponent::isComponent(int x, int y) const
+bool KisColorSelectorComponent::containsPointInComponentCoords(int x, int y) const
 {
     if(x>=0 && y>=0 && x<=width() && y<=height())
         return true;

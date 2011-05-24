@@ -35,13 +35,12 @@
 #include "kis_color_selector_base.h"
 #include "kis_minimal_shade_selector.h"
 
-#include <KDebug>
-
 KisShadeSelectorLine::KisShadeSelectorLine(QWidget *parent) :
     KisShadeSelectorLineBase(parent), m_displayHelpText(false)
 {
     setParam(0, 0, 0, 0, 0, 0);
     updateSettings();
+    setMouseTracking(true);
 }
 
 KisShadeSelectorLine::KisShadeSelectorLine(qreal hueDelta, qreal satDelta, qreal valDelta, QWidget *parent, qreal hueShift, qreal satShift, qreal valShift) :
@@ -176,20 +175,36 @@ void KisShadeSelectorLine::mousePressEvent(QMouseEvent* e)
         return;
 
     KisColorSelectorBase* parent = dynamic_cast<KisColorSelectorBase*>(parentWidget());
+    Q_ASSERT(parent);
 
     KisColorSelectorBase::ColorRole role = KisColorSelectorBase::Foreground;
     if(e->button()==Qt::RightButton)
         role = KisColorSelectorBase::Background;
 
     parent->commitColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8()), role);
+    parent->KisColorSelectorBase::mousePressEvent(e);
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
 
     bool onRightClick = cfg.readEntry("shadeSelectorUpdateOnRightClick", false);
     bool onLeftClick = cfg.readEntry("shadeSelectorUpdateOnLeftClick", false);
 
-    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick))
+    if((e->button()==Qt::LeftButton && onLeftClick) || (e->button()==Qt::RightButton && onRightClick)) {
         parent->setColor(parent->findGeneratingColor(KoColor(color, KoColorSpaceRegistry::instance()->rgb8())));
+    }
 
     e->accept();
 }
+
+void KisShadeSelectorLine::mouseMoveEvent(QMouseEvent *e)
+{
+//    kDebug() << e->globalX() << "/" << e->globalY();
+    KisMinimalShadeSelector* parent = dynamic_cast<KisMinimalShadeSelector*>(parentWidget());
+    QColor color(m_pixelCache.pixel(e->pos()));
+
+    if(parent != 0)
+        parent->updateColorPreview(color);
+}
+
+void KisShadeSelectorLine::mouseReleaseEvent(QMouseEvent *)
+{}

@@ -1166,6 +1166,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    bool reverseAxis = false;
 
     d->title->setVisible( false );
 
@@ -1294,6 +1295,12 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setScalingLogarithmic( true );
         }
 
+        if ( styleStack.hasProperty( KoXmlNS::chart, "reverse-direction" )
+             && styleStack.property( KoXmlNS::chart, "reverse-direction" ) == "true" )
+        {
+            reverseAxis = true;
+        }
+
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-major" ) )
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
@@ -1383,6 +1390,22 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     ta.setFont( font() );
     ta.setFontSize( 50 );
     d->kdRadarPlane->setTextAttributes( ta );
+
+    if ( reverseAxis )
+    {
+        if ( dimension() == XAxisDimension )
+        {
+            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+            if ( plane )
+                plane->setHorizontalRangeReversed( reverseAxis );
+        }
+        else if ( dimension() == YAxisDimension )
+        {
+            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+            if ( plane )
+                plane->setVerticalRangeReversed( reverseAxis );
+        }
+    }   
 
     // Style of axis is still in styleStack
     if ( !loadOdfChartSubtypeProperties( axisElement, context ) )

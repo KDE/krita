@@ -32,7 +32,7 @@ public:
     void setColor(const QColor &color);
 protected:
     void paint(QPainter*);
-    bool isComponent(int x, int y) const;
+    bool containsPointInComponentCoords(int x, int y) const;
 private:
     void paintCache();
     void colorCache();

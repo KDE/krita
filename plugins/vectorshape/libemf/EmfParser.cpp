@@ -22,6 +22,7 @@
 // Qt
 #include <QColor>
 #include <QFile>
+#include <QBuffer>
 
 // KDE
 #include <KDebug>
@@ -83,6 +84,20 @@ bool Parser::load( const QString &fileName )
     delete file;
 
     return result;
+}
+
+bool Parser::load(const QByteArray &contents)
+{
+    // Create a QBuffer to read from...
+    QBuffer  emfBuffer((QByteArray *)&contents, 0);
+    emfBuffer.open(QIODevice::ReadOnly);
+
+    // ...but what we really want is a stream.
+    QDataStream  emfStream;
+    emfStream.setDevice(&emfBuffer);
+    emfStream.setByteOrder(QDataStream::LittleEndian);
+
+    return loadFromStream(emfStream);
 }
 
 bool Parser::loadFromStream( QDataStream &stream ) 

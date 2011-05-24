@@ -211,15 +211,6 @@ void VectorShape::drawEmf(QPainter &painter) const
     //kDebug(31000) << "position: " << position();
     //kDebug(31000) << "-------------------------------------------";
 
-    // Create a QBuffer to read from...
-    QBuffer     emfBuffer((QByteArray *)&m_contents, 0);
-    emfBuffer.open(QIODevice::ReadOnly);
-
-    // ...but what we really want is a stream.
-    QDataStream  emfStream;
-    emfStream.setDevice(&emfBuffer);
-    emfStream.setByteOrder(QDataStream::LittleEndian);
-
     // FIXME: Make it static to save time?
     Libemf::Parser  emfParser;
 
@@ -231,7 +222,8 @@ void VectorShape::drawEmf(QPainter &painter) const
     Libemf::OutputDebugStrategy  emfDebugOutput;
     emfParser.setOutput( &emfDebugOutput );
 #endif
-    emfParser.loadFromStream(emfStream);
+
+    emfParser.load(m_contents);
 }
 
 void VectorShape::drawSvm(QPainter &painter) const

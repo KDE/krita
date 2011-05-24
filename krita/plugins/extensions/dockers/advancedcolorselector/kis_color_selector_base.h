@@ -64,6 +64,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
     void setHidingDistanceAndTime(int distance, int time);
+    bool isPopup() const { return m_isPopup; }
 
 protected slots:
     void hidePopup();

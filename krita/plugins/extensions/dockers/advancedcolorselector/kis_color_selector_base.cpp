@@ -217,7 +217,8 @@ void KisColorSelectorBase::mouseMoveEvent(QMouseEvent* e)
     if(!(e->buttons()&Qt::LeftButton || e->buttons()&Qt::RightButton)
        && (qMin(e->x(), e->y())<-m_hideDistance || e->x() > width()+m_hideDistance || e->y()>height()+m_hideDistance)) {
 
-        // don't hide, if this isn't a popup, otherwise the popup wouldn't get any global mouse events and therefore couldn't hide
+        // don't hide preview, if this isn't a popup, otherwise the popup wouldn't get any global mouse
+        // events and therefore couldn't hide. in case of popup it will be hidden together with the popup
         if(!m_isPopup) m_colorPreviewPopup->hide();
 
         if(m_isPopup && !m_parent->rect().contains(m_parent->mapFromGlobal(e->globalPos()))) {

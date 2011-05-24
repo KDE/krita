@@ -255,6 +255,10 @@ void KisColorSelector::mouseReleaseEvent(QMouseEvent* e)
         else
             role=Background;
         commitColor(KoColor(m_currentColor, colorSpace()), role);
+
+        if(isPopup() && m_mainComponent->containsPoint(e->pos())) {
+            hidePopup();
+        }
     }
     e->accept();
     m_grabbingComponent=0;

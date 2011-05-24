@@ -39,7 +39,7 @@ int KisColorSelectorRing::innerRadius() const
     return (qMin(width(), height())/2)*0.85;
 }
 
-bool KisColorSelectorRing::isComponent(int x, int y) const
+bool KisColorSelectorRing::containsPointInComponentCoords(int x, int y) const
 {
     int outerRadiusSquared = qMin(width(), height())/2;
     int innerRadiusSquared = innerRadius();

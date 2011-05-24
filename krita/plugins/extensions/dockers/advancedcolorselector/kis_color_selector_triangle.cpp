@@ -32,7 +32,7 @@ KisColorSelectorTriangle::KisColorSelectorTriangle(KisColorSelector* parent) :
 {
 }
 
-bool KisColorSelectorTriangle::isComponent(int x, int y) const
+bool KisColorSelectorTriangle::containsPointInComponentCoords(int x, int y) const
 {
     QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x, y));
     if(m_pixelCache.valid(triangleCoords) && m_pixelCache.pixel(triangleCoords)!=qRgba(0,0,0,0))

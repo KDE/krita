@@ -1326,6 +1326,12 @@ void KoTextEditor::setCharFormat(const QTextCharFormat &format)
 //TODO
 }
 
+void KoTextEditor::setTableFormat(const QTextTableFormat &format)
+{
+    Q_UNUSED(format)
+//TODO
+}
+
 void KoTextEditor::setPosition(int pos, QTextCursor::MoveMode m)
 {
     d->caret.setPosition (pos, m);

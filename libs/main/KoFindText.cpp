@@ -257,6 +257,7 @@ void KoFindText::Private::updateCurrentMatch(int position)
 {
     if(currentMatch.first != 0) {
         QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(currentMatch.first);
+        Q_ASSERT(currentMatch.second < sel.count());
         sel[currentMatch.second].format = *highlightFormat;
         selections.insert(currentMatch.first, sel);
     }

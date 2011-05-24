@@ -68,7 +68,7 @@ public:
     QTextFrame::iterator endTextFrameIterator() const;
 
     /// Layouts as much as we can
-    virtual bool layout(FrameIterator *cursor);
+    bool layout(FrameIterator *cursor);
 
     /// Returns the bounding rectangle in textdocument coordinates.
     QRectF boundingRect() const;

@@ -52,7 +52,7 @@ KoTextLayoutRootArea::~KoTextLayoutRootArea()
     delete d;
 }
 
-bool KoTextLayoutRootArea::layout(FrameIterator *cursor)
+bool KoTextLayoutRootArea::layoutRoot(FrameIterator *cursor)
 {
     d->dirty = false;
 

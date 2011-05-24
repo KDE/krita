@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  *
  * Copyright (c) 2010 Arjen Hiemstra <ahiemstra@heimr.nl>
+ * Copyright (C) 2011 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -128,8 +129,6 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
     }
 
     int position = 0;
-    int currentMatch = 0;
-    bool matchFound;
 
     foreach(QTextDocument* document, d->documents) {
         QTextCursor cursor = document->find(pattern, start, flags);
@@ -149,26 +148,14 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
             match.setLocation(QVariant::fromValue(cursor));
             matchList.append(match);
 
-            if(position <= qMin(cursor.anchor(), cursor.position())) {
-                matchFound = true;
-            }
-
-            if(!matchFound) {
-                currentMatch++;
-            }
-
             cursor = document->find(pattern, cursor, flags);
         }
         d->selections.insert(document, selections);
     }
 
-    if(d->selections.size() > 0) {
-        if(position >= d->selections.size()) {
-            position = 0;
-        }
-
-        setCurrentMatch(position);
-        d->updateCurrentMatch(position);
+    if (hasMatches()) {
+        setCurrentMatch(0);
+        d->updateCurrentMatch(0);
     }
 
     d->updateSelections();
@@ -287,6 +274,24 @@ void KoFindText::Private::updateCurrentMatch(int position)
     QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(itr.key());
     sel[currentMatch.second].format = *currentMatchFormat;
     selections.insert(itr.key(), sel);
+}
+
+void KoFindText::setFormat(FormatType formatType, const QTextCharFormat &format)
+{
+    switch (formatType) {
+    case HighlightFormat:
+        delete KoFindText::Private::highlightFormat;
+        KoFindText::Private::highlightFormat = new QTextCharFormat(format);
+        break;
+    case CurrentMatchFormat:
+        delete KoFindText::Private::currentMatchFormat;
+        KoFindText::Private::currentMatchFormat = new QTextCharFormat(format);
+        break;
+    case SelectionFormat:
+        delete KoFindText::Private::currentSelectionFormat;
+        KoFindText::Private::currentSelectionFormat = new QTextCharFormat(format);
+        break;
+    }
 }
 
 #include "KoFindText.moc"

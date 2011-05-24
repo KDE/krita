@@ -228,8 +228,6 @@ void KisColorSelector::mousePressEvent(QMouseEvent* e)
     KisColorSelectorBase::mousePressEvent(e);
 
     if(!e->isAccepted()) {
-        kDebug() << "wahh";
-
         if(m_mainComponent->wantsGrab(e->x(), e->y()))
             m_grabbingComponent=m_mainComponent;
         else if(m_subComponent->wantsGrab(e->x(), e->y()))

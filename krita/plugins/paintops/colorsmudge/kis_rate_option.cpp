@@ -31,18 +31,6 @@
 KisRateOption::KisRateOption(const QString& name, const QString& label, bool checked, const QString& category):
     KisCurveOption(label, name, category, checked) { }
 
-void KisRateOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
-{
-    KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty(m_name + "Value", m_rate);
-}
-
-void KisRateOption::readOptionSetting(const KisPropertiesConfiguration* setting)
-{
-    KisCurveOption::readOptionSetting(setting);
-    m_rate = setting->getDouble(m_name + "Value");
-}
-
 void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {
     if(!isChecked()) {
@@ -50,8 +38,8 @@ void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, 
         return;
     }
     
-    qreal  rate    = scaleMin + (scaleMax - scaleMin) * (m_rate * multiplicator); // scale m_rate into the range scaleMin - scaleMax
-    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * computeValue(info) * 255.0), OPACITY_OPAQUE_U8);
+    qreal  rate    = scaleMin + (scaleMax - scaleMin) * multiplicator * computeValue(info); // scale m_rate into the range scaleMin - scaleMax
+    quint8 opacity = qBound(OPACITY_TRANSPARENT_U8, (quint8)(rate * 255.0), OPACITY_OPAQUE_U8);
 
     painter.setOpacity(opacity);
 }

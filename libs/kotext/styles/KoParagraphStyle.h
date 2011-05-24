@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2008 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007,ducroquet Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  *
@@ -32,6 +32,7 @@
 #include <QVariant>
 #include <QTextFormat>
 
+extern QVariant val;
 struct Property;
 class KoCharacterStyle;
 class KoListStyle;
@@ -133,7 +134,15 @@ public:
         SectionEnd,               ///< end of a named section
 // do 15.5.24
 // continue at 15.5.28
-        ForceDisablingList       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        ForceDisablingList,       ///< bool, for compatibility with the weird text:enable-numbering attribute not used anymore by OpenOffice.org
+        
+        // other properties
+        BackgroundTransparency,   ///< qreal between 0 and 1, background transparency
+        SnapToLayoutGrid,         ///< bool, snap the paragraph to the layout grid of the page
+        JoinBorder,               ///< bool, whether a border for one paragraph is to be extended around the following paragraph
+        RegisterTrue,             ///< bool, align lines on both sides of a printed text
+        StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
+        JustifySingleWord,        ///< bool, if true, a single word will be justified
     };
 
     /// Constructor
@@ -315,7 +324,22 @@ public:
     QBrush background() const;
     /// See similar named method on QTextBlockFormat
     void clearBackground();
+    
+    qreal backgroundTransparency() const;
+    void setBackgroundTransparency(qreal transparency);
 
+    bool snapToLayoutGrid() const;
+    void setSnapToLayoutGrid(bool value);
+    
+    bool registerTrue() const;
+    void setRegisterTrue(bool value);
+    
+    bool strictLineBreak() const;
+    void setStrictLineBreak(bool value);
+    
+    bool justifySingleWord() const;
+    void setJustifySingleWord(bool value);
+    
     void setBreakBefore(bool on);
     bool breakBefore();
     void setBreakAfter(bool on);
@@ -370,6 +394,9 @@ public:
     KoBorder::BorderStyle bottomBorderStyle();
     void setBottomBorderColor(const QColor &color);
     QColor bottomBorderColor();
+    
+    bool joinBorder() const;
+    void setJoinBorder(bool value);
 
     KoText::Direction textProgressionDirection() const;
     void setTextProgressionDirection(KoText::Direction dir);

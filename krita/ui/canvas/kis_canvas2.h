@@ -76,6 +76,8 @@ public:
 
     void notifyZoomChanged();
 
+    virtual void disconnectCanvasObserver(QObject *object);
+
 public: // KoCanvasBase implementation
 
     bool canvasIsOpenGL();

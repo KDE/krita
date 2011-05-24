@@ -23,22 +23,10 @@
 
 #include <kis_curve_option_widget.h>
 
-class KisDoubleSliderSpinBox;
-
 class KisRateOptionWidget: public KisCurveOptionWidget
 {
-    Q_OBJECT
-    
 public:
     KisRateOptionWidget(const QString& label, const QString& sliderLabel, const QString& name, bool checked);
-
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
-    
-private slots:
-    void rateChanged(qreal rate);
-    
-private:
-    KisDoubleSliderSpinBox* m_rateSlider;
 };
 
 #endif // KIS_RATE_OPTION_WIDGET_H

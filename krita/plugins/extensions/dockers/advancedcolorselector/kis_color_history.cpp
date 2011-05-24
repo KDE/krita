@@ -22,16 +22,32 @@
 
 #include <QColor>
 
-KisColorHistory::KisColorHistory(QWidget *parent) :
-    KisColorPatches("lastUsedColors", parent)
+KisColorHistory::KisColorHistory(QWidget *parent)
+    : KisColorPatches("lastUsedColors", parent)
+    , m_resourceProvider(0)
 {
+}
+
+void KisColorHistory::unsetCanvas()
+{
+    KisColorPatches::unsetCanvas();
+    m_resourceProvider = 0;
 }
 
 void KisColorHistory::setCanvas(KisCanvas2 *canvas)
 {
+    if (!canvas) return;
+
     KisColorPatches::setCanvas(canvas);
+
+    if (m_resourceProvider) {
+        m_resourceProvider->disconnect(this);
+    }
+
+    m_resourceProvider = canvas->view()->resourceProvider();
+
     connect(canvas->view()->resourceProvider(), SIGNAL(sigFGColorUsed(KoColor)),
-            this,                               SLOT(commitColor(KoColor)));
+            this,                               SLOT(commitColor(KoColor)), Qt::UniqueConnection);
 }
 
 KisColorSelectorBase* KisColorHistory::createPopup() const
@@ -47,10 +63,10 @@ void KisColorHistory::commitColor(const KoColor& color)
 {
     m_colorHistory.removeAll(color);
     m_colorHistory.prepend(color);
-    
+
     //the history holds 200 colors, but not all are displayed
     if(m_colorHistory.size()>200)
         m_colorHistory.removeLast();
-    
+
     setColors(m_colorHistory);
 }

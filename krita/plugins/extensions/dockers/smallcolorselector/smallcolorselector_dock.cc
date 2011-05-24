@@ -40,6 +40,7 @@ SmallColorSelectorDock::SmallColorSelectorDock()
 
 void SmallColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) m_canvas->disconnectCanvasObserver(this);
     m_canvas = canvas;
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));

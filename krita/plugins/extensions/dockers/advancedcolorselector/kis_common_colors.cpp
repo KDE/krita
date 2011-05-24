@@ -68,8 +68,12 @@ void KisCommonColors::setCanvas(KisCanvas2 *canvas)
 
     KConfigGroup cfg = KGlobal::config()->group("advancedColorSelector");
     if(cfg.readEntry("commonColorsAutoUpdate", false)) {
+        if (m_image && m_image.isValid()) {
+            m_image->disconnect(this);
+        }
         connect(m_canvas->image(),     SIGNAL(sigImageUpdated(const QRect &)),
                 &m_recalculationTimer, SLOT(start()), Qt::UniqueConnection);
+        m_image = m_canvas->image();
     }
 }
 

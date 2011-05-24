@@ -698,9 +698,9 @@ void TextTool::mousePressEvent(KoPointerEvent *event)
             repaintSelection(); // will erase selection
         else
             repaintCaret();
-        int position = pointToPosition(event->point);
-        if (position != -1) {
-            m_textEditor.data()->setPosition(position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
+        KoPointedAt pointedAt = hitTest(event->point);
+        if (pointedAt.position != -1) {
+            m_textEditor.data()->setPosition(pointedAt.position, shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor);
         }
         if (shiftPressed) // altered selection.
             repaintSelection();
@@ -830,15 +830,14 @@ QStringList TextTool::supportedPasteMimeTypes() const
     return list;
 }
 
-int TextTool::pointToPosition(const QPointF & point) const
+KoPointedAt TextTool::hitTest(const QPointF & point) const
 {
     if (!m_textShape || !m_textShapeData) {
-        return -1;
+        return KoPointedAt();
     }
     QPointF p = m_textShape->convertScreenPos(point);
     KoTextLayoutRootArea *rootArea = m_textShapeData->rootArea();
-    int caretPos = rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : -1;
-    return caretPos;
+    return rootArea ? rootArea->hitTest(p, Qt::FuzzyHit) : KoPointedAt();
 }
 
 void TextTool::mouseDoubleClickEvent(KoPointerEvent *event)
@@ -871,32 +870,29 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
     if (QToolTip::isVisible())
         QToolTip::hideText();
 
-    int position = pointToPosition(event->point);
+    KoPointedAt pointedAt = hitTest(event->point);
 
     if (event->buttons() == Qt::NoButton) {
         //if (!m_textShapeData ){//FIXME|| m_textShapeData->endPosition() == position) {
-        if (!m_textShapeData || position < 0) {
+        if (!m_textShapeData || pointedAt.position < 0) {
             useCursor(Qt::IBeamCursor);
             return;
         }
 
-        QTextCursor cursor(*(m_textEditor.data()->cursor()));
-        cursor.setPosition(position);
-
         QTextCursor mouseOver(m_textShapeData->document());
-        mouseOver.setPosition(position);
+        mouseOver.setPosition(pointedAt.position);
 
         if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
             m_changeTipTimer.start();
-            m_changeTipCursorPos = position;
+            m_changeTipCursorPos = pointedAt.position;
         }
 
-        if (cursor.charFormat().isAnchor()) {
+        if (pointedAt.bookmark || !pointedAt.externalHRef.isEmpty()) {
             useCursor(Qt::PointingHandCursor);
             return;
         }
 
-        // check if mouse pointer is not over shape with hyperlink
+        // check if mouse pointer is over shape with hyperlink
         KoShape *selectedShape = canvas()->shapeManager()->shapeAt(event->point);
         if (selectedShape != 0 && selectedShape != m_textShape && selectedShape->hyperLink().size() != 0) {
             useCursor(Qt::PointingHandCursor);
@@ -905,25 +901,25 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
 
         useCursor(Qt::IBeamCursor);
         return;
+    } else {
+        useCursor(Qt::IBeamCursor);
+        if (pointedAt.position == m_textEditor.data()->position()) return;
+        if (pointedAt.position >= 0) {
+            if (m_textEditor.data()->hasSelection())
+                repaintSelection(); // will erase selection
+            else
+                repaintCaret();
+
+            m_textEditor.data()->setPosition(pointedAt.position, QTextCursor::KeepAnchor);
+
+            if (m_textEditor.data()->hasSelection())
+                repaintSelection();
+            else
+                repaintCaret();
+        }
+
+        updateSelectionHandler();
     }
-
-    useCursor(Qt::IBeamCursor);
-    if (position == m_textEditor.data()->position()) return;
-    if (position >= 0) {
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection(); // will erase selection
-        else
-            repaintCaret();
-
-        m_textEditor.data()->setPosition(position, QTextCursor::KeepAnchor);
-
-        if (m_textEditor.data()->hasSelection())
-            repaintSelection();
-        else
-            repaintCaret();
-    }
-
-    updateSelectionHandler();
 }
 
 void TextTool::mouseReleaseEvent(KoPointerEvent *event)
@@ -942,48 +938,18 @@ void TextTool::mouseReleaseEvent(KoPointerEvent *event)
         return;
     }
 
-    // Is there an anchor here ?
-    if (m_textEditor.data()->charFormat().isAnchor() && !m_textEditor.data()->hasSelection()) {
-        QString anchor = m_textEditor.data()->charFormat().anchorHref();
-        // local uri has this prefix but bookmark does not contain it, so strip it
-        if ( anchor.startsWith("#") ){
-            anchor = anchor.right(anchor.size()-1);
-        }
-        if (!anchor.isEmpty()) {
-            KoTextDocument document(m_textShapeData->document());
-            KoInlineTextObjectManager *inlineManager = document.inlineTextObjectManager();
-            if (inlineManager) {
-                QList<QString> bookmarks = inlineManager->bookmarkManager()->bookmarkNameList();
-                // Which are the bookmarks we have ?
-                foreach(const QString& s, bookmarks) {
-                    // Is this bookmark the good one ?
-                    if (s == anchor) {
-                        // if Yes, let's jump to it
-                        KoBookmark *bookmark = inlineManager->bookmarkManager()->retrieveBookmark(s);
-                        m_textEditor.data()->setPosition(bookmark->position());
-                        ensureCursorVisible();
-                        event->accept();
-                        return;
-                    }
-                }
-            }
+    KoPointedAt pointedAt = hitTest(event->point);
 
-            runUrl(event, anchor);
+    // Is there an anchor here ?
+    if (!m_textEditor.data()->hasSelection()) {
+        if (pointedAt.bookmark) {
+            m_textEditor.data()->setPosition(pointedAt.bookmark->position());
+            ensureCursorVisible();
+            event->accept();
             return;
-        } else {
-            QStringList anchorList = m_textEditor.data()->charFormat().anchorNames();
-            QString anchorName;
-            if (!anchorList.isEmpty()) {
-                anchorName = anchorList.takeFirst();
-            }
-            KoTextDocument document(m_textShapeData->document());
-            KoBookmark *bookmark = document.inlineTextObjectManager()->bookmarkManager()->retrieveBookmark(anchorName);
-            if (bookmark) {
-                m_textEditor.data()->setPosition(bookmark->position());
-                ensureCursorVisible();
-            } else {
-                kDebug(32500) << "A bookmark should exist but has not been found";
-            }
+        }
+        if (!pointedAt.externalHRef.isEmpty()) {
+            runUrl(event, pointedAt.externalHRef);
         }
     }
 }
@@ -1064,14 +1030,14 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() - moveDistance);
-            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
         }
         else if (hit(item, KStandardShortcut::Next)) {
             // Scroll down one page. Default: Next
             QPointF point = caretRect(textEditor->cursor()).topLeft();
             qreal moveDistance = canvas()->viewConverter()->viewToDocument(QSizeF(0,canvas()->canvasController()->visibleHeight())).height() * 0.8;
             point.setY(point.y() + moveDistance);
-            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit);
+            destinationPosition = m_textShapeData->rootArea()->hitTest(point, Qt::FuzzyHit).position;
         }
         else if (hit(item, KStandardShortcut::BeginningOfLine))
             // Goto beginning of current line. Default: Home

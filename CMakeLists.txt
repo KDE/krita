@@ -56,6 +56,7 @@ IF (TINY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
     set(SHOULD_BUILD_STAGE FALSE)
@@ -76,6 +77,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
@@ -96,6 +98,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -427,6 +430,12 @@ if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
 
+  
+if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+  set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+
+
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
 option(BUILD_kexi   "Build directory kexi" ON)
@@ -511,6 +520,7 @@ if(SHOULD_BUILD_ACTIVE)
   macro_optional_add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
+
 if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
 endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
@@ -570,6 +580,7 @@ macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
+macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

@@ -52,8 +52,15 @@ QString KisPainterlyMixerDockerFactory::id() const
 
 void KisPainterlyMixerDocker::setCanvas(KoCanvasBase* canvas)
 {
+    if (m_currentCanvas) {
+        m_currentCanvas->disconnectCanvasObserver(this);
+    }
+    
     m_currentCanvas = canvas;
-    connect(m_currentCanvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)), this, SLOT(resourceChanged(int,QVariant)));
+    
+    if (m_currentCanvas) {
+        connect(m_currentCanvas->resourceManager(), SIGNAL(resourceChanged(int,QVariant)), this, SLOT(resourceChanged(int,QVariant)));
+    }
 }
 
 void KisPainterlyMixerDocker::colorChanged(const KoColor& color)

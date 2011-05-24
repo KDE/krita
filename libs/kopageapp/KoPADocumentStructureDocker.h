@@ -68,6 +68,7 @@ public:
     virtual ~KoPADocumentStructureDocker();
 
     virtual void setCanvas( KoCanvasBase* canvas);
+    virtual void unsetCanvas();
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
 
@@ -102,7 +103,7 @@ private slots:
     void itemSelected( const QItemSelection& selected, const QItemSelection& deselected );
     void editCut();
     void editCopy();
-    void editPaste(); 
+    void editPaste();
 
 private:
     void extractSelectedLayersAndShapes( QList<KoPAPageBase*> &pages, QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );

@@ -53,6 +53,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas() { m_canvas = 0; }
 
 private slots:
 

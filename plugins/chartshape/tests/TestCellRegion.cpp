@@ -103,7 +103,7 @@ void TestCellRegion::testToStringMultipleTables()
 
 void TestCellRegion::testFromStringMultipleTables()
 {
-    //QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
+    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 

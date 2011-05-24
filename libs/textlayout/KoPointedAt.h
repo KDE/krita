@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
- * Copyright (C) 2010 Matus Talcik <matus.talcik@gmail.com>
+ * Copyright (C) 2011 Casper Boemann, KO GmbH <cbo@kogmbh.com>
+ * Copyright (C) 2011 Casper Boemann <cbo@boemann.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -16,38 +17,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef _HISTORY_DOCK_H_
-#define _HISTORY_DOCK_H_
+#ifndef KOPOINTEDAT_H
+#define KOPOINTEDAT_H
 
-#include <QDockWidget>
-#include "KisUndoView.h"
+#include "textlayout_export.h"
 
-#include <KoCanvasObserverBase.h>
-#include <klocale.h>
-#include <kundostack.h>
+#include <QString>
+#include <QTextCursor>
 
-#include <KoShapeController.h>
-#include <KoCanvasBase.h>
-#include <KoResourceManager.h>
-#include "kis_types.h"
-#include "kis_canvas2.h"
-#include "kis_view2.h"
-#include "kis_image.h"
-#include "kis_paint_device.h"
+class KoBookmark;
+class QTextDocument;
+class KoInlineTextObjectManager;
 
-class HistoryDock : public QDockWidget, public KoCanvasObserverBase
+class TEXTLAYOUT_EXPORT KoPointedAt
 {
-    Q_OBJECT
 public:
-    HistoryDock();
+    KoPointedAt();
+    KoPointedAt(KoPointedAt *other);
 
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas() { historyCanvas = 0; }
-private:
-    KisUndoView* undoView;
+    void fillInBookmark(QTextCursor cursor, KoInlineTextObjectManager *inlineManager);
 
-    KoCanvasBase* historyCanvas;
+    int position;
+    KoBookmark *bookmark;
+    QString externalHRef;
 };
-
 
 #endif

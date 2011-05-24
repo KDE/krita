@@ -35,7 +35,21 @@ class FLAKE_EXPORT KoCanvasObserverBase
 public:
     KoCanvasObserverBase();
     virtual ~KoCanvasObserverBase();
+
+    /**
+     * re-implement this method in your canvas observer. It will be called
+     * whenever a canvas becomes active. Note that you are responsible for
+     * not connecting more than one time to the signals of a canvas or any
+     * of the QObjects you can access through the canvas.
+     */
     virtual void setCanvas(KoCanvasBase *canvas) = 0;
+
+    /**
+     * re-implement to notify the observer that its canvas is no longer
+     * among the living. The daisies, it is pushing up. This means you
+     * don't have to unconnect, it's dead.
+     */
+    virtual void unsetCanvas() = 0;
 
 };
 

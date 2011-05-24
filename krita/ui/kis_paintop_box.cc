@@ -214,9 +214,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
-    
-    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
-            m_presetsPopup, SLOT(resourceSelected(KoResource*)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -297,6 +294,7 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 
     m_optionWidget->setConfiguration(preset->settings());
     slotUpdatePreset();
+    m_presetsPopup->resourceSelected(resource);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
@@ -463,7 +461,7 @@ void KisPaintopBox::slotSaveActivePreset()
     QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
     if (fileInfo.exists()) {
-        rServer->removeResource(rServer->getResourceByFilename(fileInfo.fileName()));
+        rServer->removeResource(rServer->getResourceByName(name));
     }
     
 //     int i = 1;

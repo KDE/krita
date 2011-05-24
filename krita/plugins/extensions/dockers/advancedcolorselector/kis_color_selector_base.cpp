@@ -161,6 +161,7 @@ void KisColorSelectorBase::setCanvas(KisCanvas2 *canvas)
 
 void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
 {
+    kDebug() << event->globalX() << "/" << event->globalY();
     if(m_popupOnMouseClick && (event->buttons()&Qt::MidButton)>0 && !m_isPopup) {
         //open popup
         showPopup();
@@ -411,6 +412,7 @@ void KisColorSelectorBase::commitColor(const KoColor& color, ColorRole role)
 
 void KisColorSelectorBase::updateColorPreview(const QColor& color)
 {
+    kDebug() << "updating color preview " << color.red() << "," << color.green() << "," << color.blue();
     m_colorPreviewPopup->setColor(color);
 }
 

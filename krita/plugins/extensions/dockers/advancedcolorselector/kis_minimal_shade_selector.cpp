@@ -26,6 +26,7 @@
 #include <KConfigGroup>
 #include <KComponentData>
 #include <KGlobal>
+#include <KDebug>
 
 #include "KoResourceManager.h"
 
@@ -42,6 +43,8 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent) :
     l->setMargin(0);
 
     updateSettings();
+
+    setMouseTracking(true);
 }
 
 void KisMinimalShadeSelector::setCanvas(KisCanvas2 *canvas)
@@ -90,44 +93,49 @@ void KisMinimalShadeSelector::updateSettings()
     setPopupBehaviour(false, false);
 }
 
-void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
-{
-    foreach(KisShadeSelectorLine* line, m_shadingLines) {
-        QMouseEvent* newEvent = new QMouseEvent(e->type(),
-                                          line->mapFromGlobal(e->globalPos()),
-                                          e->button(),
-                                          e->buttons(),
-                                          e->modifiers());
-        line->mouseMoveEvent(newEvent);
-        delete newEvent;
-    }
-    KisColorSelectorBase::mouseMoveEvent(e);
-}
-
 void KisMinimalShadeSelector::mousePressEvent(QMouseEvent * e)
 {
+    kDebug() << e->globalX() << "/" << e->globalY();
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
-        QMouseEvent* newEvent = new QMouseEvent(e->type(),
+        QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
                                           e->button(),
                                           e->buttons(),
                                           e->modifiers());
-        line->mousePressEvent(newEvent);
-        delete newEvent;
+        if(line->rect().contains(newEvent.pos()))
+            line->mousePressEvent(&newEvent);
     }
     KisColorSelectorBase::mousePressEvent(e);
+}
+
+void KisMinimalShadeSelector::mouseMoveEvent(QMouseEvent * e)
+{
+//    kDebug() << e->globalX() << "/" << e->globalY();
+    foreach(KisShadeSelectorLine* line, m_shadingLines) {
+        QMouseEvent newEvent(e->type(),
+                                          line->mapFromGlobal(e->globalPos()),
+                                          e->button(),
+                                          e->buttons(),
+                                          e->modifiers());
+        QPoint pos = line->mapToGlobal(line->pos());
+        kDebug() << "line rect " << pos.x() << "/" << pos.y() << "  " << line->width() << "*" << line->height();
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseMoveEvent(&newEvent);
+    }
+    KisColorSelectorBase::mouseMoveEvent(e);
 }
 
 void KisMinimalShadeSelector::mouseReleaseEvent(QMouseEvent * e)
 {
     foreach(KisShadeSelectorLine* line, m_shadingLines) {
-        QMouseEvent* newEvent = new QMouseEvent(e->type(),
+        QMouseEvent newEvent(e->type(),
                                           line->mapFromGlobal(e->globalPos()),
                                           e->button(),
                                           e->buttons(),
                                           e->modifiers());
-        line->mousePressEvent(newEvent);
-        delete newEvent;
+
+        if(line->rect().contains(newEvent.pos()))
+            line->mouseReleaseEvent(&newEvent);
     }
     KisColorSelectorBase::mouseReleaseEvent(e);
 }

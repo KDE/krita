@@ -25,7 +25,7 @@ class KisShadeSelectorLineComboBox;
 
 class KisShadeSelectorLineBase : public QWidget {
 public:
-    KisShadeSelectorLineBase(QWidget *parent = 0) : QWidget(parent)
+    KisShadeSelectorLineBase(QWidget* parent) : QWidget(parent)
     {}
 
     void setLineNumber(int n) {m_lineNumber=n;}

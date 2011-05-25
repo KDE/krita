@@ -194,7 +194,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
 
     FcPattern *font = FcPatternBuild (0, FC_FAMILY, FcTypeString,fontName.data(), FC_SIZE, FcTypeDouble, (qreal)11, NULL);
     if (font == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         return 1;
     }
 
@@ -202,7 +201,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     FcPattern *matched = 0;
     matched = FcFontMatch (0, font, &result);
     if (matched == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         return 1;
     }
@@ -211,7 +209,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     char * str = 0;
     result = FcPatternGetString (matched, FC_FAMILY, 0,(FcChar8**) &str);
     if (result != FcResultMatch || str == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
         return 1;
@@ -220,7 +217,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     // check if right font was found
     QByteArray foundFontFamily = QByteArray::fromRawData(str, strlen(str));
     if (foundFontFamily != fontName) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
         return 1;
@@ -230,7 +226,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     str = 0;
     result = FcPatternGetString (matched, FC_FILE, 0,(FcChar8**) &str);
     if (result != FcResultMatch) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
         return 1;
@@ -239,7 +234,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     // get index of font inside the font file
     result = FcPatternGetInteger (matched, FC_INDEX, 0, &id);
     if (result != FcResultMatch) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
         return 1;
@@ -248,7 +242,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     // initialize freetype
     error = FT_Init_FreeType( &library );
     if (error) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
         return 1;
@@ -257,7 +250,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     // get font metric
     error = FT_New_Face (library,(char *) str, id, &face);
     if (error) {
-        kDebug() << "Can't calculate font stretch for " << fontFamily;
         FT_Done_FreeType(library);
         FcPatternDestroy (font);
         FcPatternDestroy (matched);
@@ -268,7 +260,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     TT_OS2      *os2;
     os2 = (TT_OS2 *) FT_Get_Sfnt_Table (face, ft_sfnt_os2);
     if(os2 == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FT_Done_Face(face);
         FT_Done_FreeType(library);
         FcPatternDestroy (font);
@@ -280,7 +271,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     TT_Header   *header;
     header = (TT_Header *) FT_Get_Sfnt_Table (face, ft_sfnt_head);
     if(header == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FT_Done_Face(face);
         FT_Done_FreeType(library);
         FcPatternDestroy (font);
@@ -290,7 +280,6 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
 
     // check if the data is valid
     if (header->Units_Per_EM == 0 || (os2->usWinAscent + os2->usWinDescent) == 0) {
-        kWarning(32500) << "Can't calculate font stretch for " << fontFamily;
         FT_Done_Face(face);
         FT_Done_FreeType(library);
         FcPatternDestroy (font);

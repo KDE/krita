@@ -99,7 +99,6 @@ public:
     void setPosition(const QString &position);
 
     KoText::Tab tab;
-private:
     QString m_position;
 };
 

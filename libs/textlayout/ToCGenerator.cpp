@@ -50,6 +50,7 @@ ToCGenerator::ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTable
     , m_ToCInfo(tocInfo)
     , m_block(block)
     , m_generatedDocumentChangeCount(-1)
+    , m_maxTabPosition(0.0)
 {
     Q_ASSERT(tocDocument);
     Q_ASSERT(tocInfo);
@@ -83,6 +84,11 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
     styleManager->add(style);
     return style;
+}
+
+void ToCGenerator::setMaxTabPosition(qreal maxtabPosition)
+{
+    m_maxTabPosition = maxtabPosition;
 }
 
 QString ToCGenerator::fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager* inlineTextObjectManager)
@@ -237,7 +243,20 @@ void ToCGenerator::generate()
                             break;
                         }
                         case IndexEntry::TAB_STOP: {
+                            IndexEntryTabStop *tabEntry = static_cast<IndexEntryTabStop*>(entry);
+
                             cursor.insertText("\t");
+
+                            QTextBlockFormat blockFormat = cursor.blockFormat();
+                            QList<QVariant> tabList;
+                            if (tabEntry->m_position == "MAX") {
+                                tabEntry->tab.position = m_maxTabPosition;
+                            } else {
+                                tabEntry->tab.position = tabEntry->m_position.toDouble();
+                            }
+                            tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
+                            blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
+                            cursor.setBlockFormat(blockFormat);
                             break;
                         }
                         case IndexEntry::PAGE_NUMBER: {

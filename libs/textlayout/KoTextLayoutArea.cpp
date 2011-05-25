@@ -417,6 +417,7 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                     // The generator attaches itself to the tocInfo
                     new ToCGenerator(tocDocument, block, tocInfo);
                 }
+                tocInfo->generator()->setMaxTabPosition(right() - left());
 
                 // Let's create KoTextLayoutArea and let to handle the ToC
                 KoTextLayoutArea *tocArea = new KoTextLayoutArea(this, documentLayout());

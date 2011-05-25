@@ -39,8 +39,7 @@ public:
     explicit ToCGenerator(QTextDocument *tocDocument, QTextBlock block, KoTableOfContentsGeneratorInfo *tocInfo);
     virtual ~ToCGenerator();
 
-    // TODO API to be called when the shape is printed so we can guarentee
-    // the TOC is up-to-date on printing time.
+    void setMaxTabPosition(qreal maxTabPosition);
 
 public slots:
     void generate();
@@ -54,6 +53,7 @@ private:
     QTextDocument *m_document;
     KoTextDocumentLayout *m_documentLayout;
     int m_generatedDocumentChangeCount;
+    qreal m_maxTabPosition;
 
     // Return the ref (name) of the first KoBookmark in the block, if KoBookmark not found, null QString is returned
     QString fetchBookmarkRef(QTextBlock block, KoInlineTextObjectManager * inlineTextObjectManager);

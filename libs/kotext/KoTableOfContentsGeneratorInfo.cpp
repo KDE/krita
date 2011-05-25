@@ -237,7 +237,7 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
   , m_generator(0)
 {
     // index-title-template
-    m_indexTitleTemplate.text = "Indholdsfortegnelse";
+    // m_indexTitleTemplate.text = "title";
 
     // table-of-content-entry-template
     for (int level = 1; level <= m_outlineLevel; level++)  {
@@ -259,16 +259,16 @@ KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
         IndexEntryText *entryText = new IndexEntryText(QString());
         tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
 
-        // index-entry-page-number
-        IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(QString());
-        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
-
         // index-entry-tab-stop
         IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
         entryTabStop->tab.type = QTextOption::RightTab;
-        entryTabStop->setPosition("FIIIIIIIXXXXXXXX MMMMMEEEEEEEE"); //FIXME
+        entryTabStop->setPosition("MAX");
         entryTabStop->tab.leaderText = ".";
         tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
+
+        // index-entry-page-number
+        IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(QString());
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
 
         // index-entry-link-end
         IndexEntryLinkEnd *linkend = new IndexEntryLinkEnd(QString());

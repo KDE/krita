@@ -245,13 +245,17 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-    // Mark the previous of the corresponding and all following root areas as dirty.
+    // Mark the previous of the corresponding root-area as dirty. The previous cause changes on the
+    // to the position corresponding root-area can also affect the previous page. If there is no
+    // root-area for the position then we need to mark the first root-area as dirty.
     KoTextLayoutRootArea *area = rootAreaForPosition(position);
     int startFromIndex = area ? qMax(0, d->rootAreaList.indexOf(area) - 1) : 0;
-    for(int i = startFromIndex; i < d->rootAreaList.count(); ++i)
-        if (!d->rootAreaList[i]->isDirty())
-            d->rootAreaList[i]->setDirty();
-
+    KoTextLayoutRootArea *rootArea = (startFromIndex >= 0 && startFromIndex < d->rootAreaList.count()) ? d->rootAreaList[startFromIndex] : 0;
+    if (rootArea)
+        rootArea->setDirty();
+    // Once done we emit the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout
+    // dirty root-areas and if needed following ones which got dirty cause content moved to them.
+    // Also this will created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
 }
 

@@ -292,6 +292,11 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 {
     Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
 
+    foreach (const TocEntryTemplate &entryTemplate, m_entryTemplate) {
+        qDeleteAll(entryTemplate.indexEntries);
+    }
+    m_entryTemplate.clear();
+
     m_indexScope = element.attribute("index-scope", "document"); // enum {document, chapter}
     m_outlineLevel = element.attribute("outline-level","1").toInt();
     m_relativeTabStopPosition = element.attribute("relative-tab-stop-position","true") == "true";

@@ -712,16 +712,17 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
                 QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
                 if (!minLableDistance.isEmpty())
-                    setMinimumDistance(KoUnit::parseValue(minLableDistance));
-
-                QString width(property.attributeNS(KoXmlNS::fo, "width"));
-                if (!width.isEmpty())
-                    setWidth(KoUnit::parseValue(width));
-
-                QString height(property.attributeNS(KoXmlNS::fo, "height"));
-                if (!height.isEmpty())
-                    setHeight(KoUnit::parseValue(height));
+                    setMinimumDistance(KoUnit::parseValue(minLableDistance));               
             }
+
+            QString width(property.attributeNS(KoXmlNS::fo, "width"));
+            if (!width.isEmpty())
+                setWidth(KoUnit::parseValue(width));
+
+            QString height(property.attributeNS(KoXmlNS::fo, "height"));
+            if (!height.isEmpty())
+                setHeight(KoUnit::parseValue(height));
+
         } else if (localName == "text-properties") {
             QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
             context.styleStack().save();

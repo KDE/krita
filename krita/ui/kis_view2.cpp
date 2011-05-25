@@ -900,38 +900,53 @@ void KisView2::showStatusBar(bool toggled)
 
 void KisView2::showJustTheCanvas(bool toggled)
 {
-    KToggleAction *action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
-    if (action && action->isChecked() == toggled) {
-        action->setChecked(!toggled);
-    }
+    KisConfig cfg;
+    KToggleAction *action;
 
-    action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action && action->isChecked() == toggled) {
-        action->setChecked(!toggled);
-    }
-
-    action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
-    if (action && action->isChecked() != toggled) {
-        action->setChecked(toggled);
-    }
-
-    if (shell()->menuBar()->isVisible() == toggled) {
-        shell()->menuBar()->setVisible(!toggled);
-    }
-
-    foreach(KToolBar* toolbar, shell()->toolBars()) {
-        if (toolbar->isVisible() == toggled) {
-            toolbar->setVisible(!toggled);
+    if (cfg.hideStatusbarFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
+        if (action && action->isChecked() == toggled) {
+            action->setChecked(!toggled);
         }
     }
 
-    if (toggled) {
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    if (cfg.hideDockersFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        if (action && action->isChecked() == toggled) {
+            action->setChecked(!toggled);
+        }
     }
-    else {
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    if (cfg.hideTitlebarFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
+        if (action && action->isChecked() != toggled) {
+            action->setChecked(toggled);
+        }
+    }
+
+    if (cfg.hideMenuFullscreen()) {
+        if (shell()->menuBar()->isVisible() == toggled) {
+            shell()->menuBar()->setVisible(!toggled);
+        }
+    }
+
+    if (cfg.hideToolbarFullscreen()) {
+        foreach(KToolBar* toolbar, shell()->toolBars()) {
+            if (toolbar->isVisible() == toggled) {
+                toolbar->setVisible(!toggled);
+            }
+        }
+    }
+
+    if (cfg.hideScrollbarsFullscreen()) {
+        if (toggled) {
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        }
+        else {
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        }
     }
 }
 

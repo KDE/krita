@@ -213,7 +213,10 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
     if(!stop.currentBlock().isValid() || m_endOfArea->lineTextStart >= 0) {
         ++stop;
     }
+
     int tableAreaIndex = 0;
+    int tocIndex = 0;
+
     for (; it != stop; ++it) {
         QTextBlock block = it.currentBlock();
         QTextTable *table = qobject_cast<QTextTable*>(it.currentFrame());
@@ -243,6 +246,14 @@ QRectF KoTextLayoutArea::selectionBoundingBox(QTextCursor &cursor) const
         } else {
             if (!block.isValid())
                 continue;
+        }
+        if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
+            if (cursor.selectionStart()  <= block.position()
+                && cursor.selectionEnd() >= block.position()) {
+                retval |= m_tableOfContentsAreas[tocIndex]->boundingRect();
+            }
+            ++tocIndex;
+            continue;
         }
 
         if(cursor.selectionEnd() < block.position()) {

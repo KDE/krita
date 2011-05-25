@@ -53,6 +53,7 @@
 #include <KoInlineNote.h>
 #include <KoInlineNote.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoTableOfContentsGeneratorInfo.h>
 
 #include <KDebug>
 
@@ -128,7 +129,29 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
         }
 
         if (block.blockFormat().hasProperty(KoParagraphStyle::TableOfContentsDocument)) {
-            m_tableOfContentsAreas[tocIndex]->paint(painter, context);
+            // Possibly paint the selection of the entire Table of Contents
+            // but since it's a secondary document we need to create a fake selection
+            QVariant data = block.blockFormat().property(KoParagraphStyle::TableOfContentsDocument);
+            QTextDocument *tocDocument = data.value<QTextDocument *>();
+
+            KoTextDocumentLayout::PaintContext tocContext = context;
+            tocContext.textContext.selections = QVector<QAbstractTextDocumentLayout::Selection>();
+
+            bool pure = true;
+            foreach(const QAbstractTextDocumentLayout::Selection & selection,   context.textContext.selections) {
+                if (selection.cursor.selectionStart()  <= block.position()
+                    && selection.cursor.selectionEnd() >= block.position()) {
+                    painter->fillRect(m_tableOfContentsAreas[tocIndex]->boundingRect(), selection.format.background());
+                    if (pure) {
+                        tocContext.textContext.selections.append(QAbstractTextDocumentLayout::Selection());
+                        tocContext.textContext.selections[0].cursor = QTextCursor(tocDocument);
+                        tocContext.textContext.selections[0].cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+                        tocContext.textContext.selections[0].format = selection.format;
+                        pure = false;
+                    }
+                }
+            }
+            m_tableOfContentsAreas[tocIndex]->paint(painter, tocContext);
             ++tocIndex;
             continue;
         }

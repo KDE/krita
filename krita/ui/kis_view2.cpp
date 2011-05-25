@@ -37,7 +37,10 @@
 #include <QApplication>
 #include <QPrintDialog>
 #include <QObject>
+#include <QScrollBar>
 
+#include <kmenubar.h>
+#include <ktoolbar.h>
 #include <kstatusbar.h>
 #include <ktoggleaction.h>
 #include <kaction.h>
@@ -204,19 +207,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     setFocusPolicy(Qt::NoFocus);
 
-    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
-    actionCollection()->addAction("total_refresh", m_d->totalRefresh);
-    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
-    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
-
-    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("createTemplate", m_d->createTemplate);
-    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
-
-    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
-    actionCollection()->addAction("first_run", firstRun);
-    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
-
     setComponentData(KisFactory2::componentData(), false);
 
     if (!doc->isReadWrite()) {
@@ -262,6 +252,19 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
+    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
+    actionCollection()->addAction("total_refresh", m_d->totalRefresh);
+    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
+    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
+
+    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
+    actionCollection()->addAction("createTemplate", m_d->createTemplate);
+    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
+
+    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
+    actionCollection()->addAction("first_run", firstRun);
+    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
+
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
@@ -293,12 +296,21 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
+    tAction->setShortcut(QKeySequence("Ctrl+h"));
+    tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
 
 
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
+    //Workaround, by default has the same shortcut as hide/show dockers
+    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
     if (action) {
         action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
@@ -886,14 +898,41 @@ void KisView2::showStatusBar(bool toggled)
     }
 }
 
-void KisView2::showJustTheCanvas(bool /*toggled*/)
+void KisView2::showJustTheCanvas(bool toggled)
 {
     KToggleAction *action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
-    if (action) action ->toggle();
+    if (action && action->isChecked() == toggled) {
+        action->setChecked(!toggled);
+    }
+
     action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
-    if (action) action->toggle();
-    action = dynamic_cast<KToggleAction*>(actionCollection()->action("view_fullscreen"));
-    if (action) action->toggle();
+    if (action && action->isChecked() == toggled) {
+        action->setChecked(!toggled);
+    }
+
+    action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
+    if (action && action->isChecked() != toggled) {
+        action->setChecked(toggled);
+    }
+
+    if (shell()->menuBar()->isVisible() == toggled) {
+        shell()->menuBar()->setVisible(!toggled);
+    }
+
+    foreach(KToolBar* toolbar, shell()->toolBars()) {
+        if (toolbar->isVisible() == toggled) {
+            toolbar->setVisible(!toggled);
+        }
+    }
+
+    if (toggled) {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    }
+    else {
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    }
 }
 
 #include "kis_view2.moc"

@@ -224,7 +224,7 @@ qreal KoTextDocumentLayout::defaultTabSpacing()
     return d->defaultTabSizing;
 }
 
-
+// this method is called on every char inserted or deleted, on format changes, setting/moving of variables or objects.
 void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(charsAdded);
@@ -245,13 +245,24 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
         from = block.position() + block.length();
     }
 
-    // Mark the previous of the corresponding and all following root areas as dirty.
-    KoTextLayoutRootArea *area = rootAreaForPosition(position);
-    int startFromIndex = area ? qMax(0, d->rootAreaList.indexOf(area) - 1) : 0;
-    for(int i = startFromIndex; i < d->rootAreaList.count(); ++i)
-        if (!d->rootAreaList[i]->isDirty())
+    // Mark the to the position corresponding root-areas as dirty. We determinate the range of the root-areas
+    // the added and removed chars span. Additionaly the previous and following root-area of that range are
+    // selected too cause they can also be affect by changes done to the range. All that root-areas then marked
+    // dirty. If there is no root-area for the position then we don't need to mark anything dirty but still
+    // need to go on to force a scheduled relayout.
+    if (!d->rootAreaList.isEmpty()) {
+        KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
+        KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+        int startIndex = qMax(0, fromArea ? d->rootAreaList.indexOf(fromArea) - 1 : 0);
+        int endIndex = qMax(startIndex, qMin(d->rootAreaList.count() - 1, ((toArea && toArea != fromArea) ? d->rootAreaList.indexOf(toArea) : startIndex) + 1));
+        for(int i = startIndex; i <= endIndex; ++i) {
             d->rootAreaList[i]->setDirty();
+        }
+    }
 
+    // Once done we emit the layoutIsDirty signal. The consumer (e.g. the TextShape) will then layout dirty
+    // root-areas and if needed following ones which got dirty cause content moved to them. Also this will
+    // created new root-areas using KoTextLayoutRootAreaProvider::provide if needed.
     emitLayoutIsDirty();
 }
 

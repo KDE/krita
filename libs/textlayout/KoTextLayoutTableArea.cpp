@@ -210,7 +210,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     }
 }
 
-bool KoTextLayoutTableArea::layout(TableIterator *cursor)
+bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;

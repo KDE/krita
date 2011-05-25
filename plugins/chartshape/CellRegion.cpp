@@ -54,6 +54,7 @@ public:
     {
         m_delimiter.append( QChar::fromLatin1( '.' ) );
         m_delimiter.append( QChar::fromLatin1( ':' ) );
+        m_delimiter.append( QChar::fromLatin1( ';' ) );
         m_delimiter.append( QChar::fromLatin1( ' ' ) );
     }
     bool parse();
@@ -232,11 +233,12 @@ bool Parser::parseRegion2()
     //qDebug() << "ParseRegion2";
     bool res = true;
 
-    if ( m_currentToken.m_type != Token::Identifier )
+    if ( m_currentToken.m_type != Token::Identifier && m_currentToken.m_type != Token::Dot )
         res = false;
 
-    const QString firstIdentifier = m_currentToken.m_identifier;
-    m_currentToken = parseToken();
+    const QString firstIdentifier = m_currentToken.m_type != Token::Dot ? m_currentToken.m_identifier : tableName();
+    if ( m_currentToken.m_type != Token::Dot )
+        m_currentToken = parseToken();
     if ( m_currentToken.m_type == Token::Dot )
     {
         m_currentToken = parseToken();
@@ -378,6 +380,8 @@ CellRegion::CellRegion( TableSource *source, const QString& regions )
     // See ODF specs $8.3.1 "Referencing Table Cells"
     Parser parser( regions );
     const bool success = parser.parse();
+    if ( !success )
+        kDebug() << "Parsing cell region failed";
     d->rects = parser.getResult().toVector();
     d->table = source->get( parser.tableName() );
 //     QStringList regionsList = regions.split( " ", QString::SkipEmptyParts );

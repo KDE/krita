@@ -100,6 +100,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
+    m_layout->addStretch(10);
 }
 
 void KisSpecificColorSelectorWidget::update()

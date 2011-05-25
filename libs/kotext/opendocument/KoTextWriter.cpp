@@ -82,7 +82,7 @@
 class KoTextWriter::TagInformation
 {
     public:
-        TagInformation():tagName(NULL), attributeList()
+        TagInformation():tagName(0), attributeList()
         {
         }
 
@@ -386,14 +386,16 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
     int changeId = 0, returnChangeId = 0;
 
     if (!changeTracker) {
+        //kDebug(30015) << "tag:" << tagInformation.name() << openedTagStack.size();
         if (tagInformation.name()) {
             writer->startElement(tagInformation.name(), elementType != ParagraphOrHeader);
             QPair<QString, QString> attribute;
             foreach (attribute, tagInformation.attributes()) {
                 writer->addAttribute(attribute.first.toLocal8Bit(), attribute.second);
             }
-            openedTagStack.push(tagInformation.name());
         }
+        openedTagStack.push(tagInformation.name());
+        //kDebug(30015) << "stack" << openedTagStack.size();
         return changeId;
     }
     
@@ -546,12 +548,15 @@ int KoTextWriter::Private::openTagRegion(int position, ElementType elementType, 
 
 void KoTextWriter::Private::closeTagRegion(int changeId)
 {
-    if (!changeTracker) return;
-
+    // the tag needs to be closed even if there is no change tracking
+    //kDebug(30015) << "stack" << openedTagStack.size();
     const char *tagName = openedTagStack.pop();
+    //kDebug(30015) << "tag:" << tagName << openedTagStack.size();
     if (tagName) {
         writer->endElement(); // close the tag
     }
+
+    if (!changeTracker) return;
 
     if (changeId)
         changeStack.pop();
@@ -1057,10 +1062,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
                     writer->addTextSpan(text);
                 }
 
-                if (changeTracker)
-                    closeTagRegion(changeId);
-                else if (fragmentTagInformation.name())
-                    writer->endElement();
+                closeTagRegion(changeId);
             } // if (inlineObject)
 
             previousCharFormat = charFormat;
@@ -1104,10 +1106,7 @@ void KoTextWriter::Private::saveParagraph(const QTextBlock &block, int from, int
         }
     }
 
-    if (changeTracker)
-        closeTagRegion(changeId);
-    else if (blockTagInformation.name())
-        writer->endElement();
+    closeTagRegion(changeId);
 }
 
 //Check if the whole Block is a part of a single change

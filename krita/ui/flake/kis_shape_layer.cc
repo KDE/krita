@@ -242,14 +242,12 @@ KoViewConverter* KisShapeLayer::converter() const
 
 bool KisShapeLayer::visible(bool recursive) const
 {
-    Q_ASSERT(KisExternalLayer::visible() == KoShapeLayer::isVisible());
     return KisExternalLayer::visible(recursive);
 }
 
 void KisShapeLayer::setVisible(bool visible)
 {
     KisExternalLayer::setVisible(visible);
-    KoShapeLayer::setVisible(visible);
 }
 
 bool KisShapeLayer::saveLayer(KoStore * store) const

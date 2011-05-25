@@ -42,7 +42,7 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the table
-    bool layout(TableIterator *cursor);
+    bool layoutTable(TableIterator *cursor);
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 

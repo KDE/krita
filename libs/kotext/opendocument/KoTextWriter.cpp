@@ -82,7 +82,7 @@
 class KoTextWriter::TagInformation
 {
     public:
-        TagInformation():tagName(NULL), attributeList()
+        TagInformation():tagName(0), attributeList()
         {
         }
 

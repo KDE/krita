@@ -342,7 +342,7 @@ void KisToolCrop::keyReleaseEvent(QKeyEvent* event)
     if(event->key() == Qt::Key_Return && m_haveCropSelection) {
         crop();
     }
-    KisTool::keyPressEvent(event);
+    KisTool::keyReleaseEvent(event);
 
 }
 

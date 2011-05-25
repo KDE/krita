@@ -56,6 +56,15 @@ void TestCellRegion::testToStringSingleTable()
     QCOMPARE( m_region1.toString(), QString( "$Table1.$B$3:$K$13" ) );
 }
 
+void TestCellRegion::testSkippedTableEntry()
+{
+    const CellRegion region( &m_source, QString( "Table1.$A$3:.$C$3" ) );
+    QVector< QRect > rects;
+    rects.append( QRect( QPoint( 1, 3 ), QPoint( 3, 3 ) ) );
+    QCOMPARE( region.rects(), rects );
+}
+
+
 void TestCellRegion::testFromStringSingleTable()
 {
     QCOMPARE( m_region1, CellRegion( &m_source, "$Table1.$B$3:$K$13" ) );
@@ -103,7 +112,7 @@ void TestCellRegion::testToStringMultipleTables()
 
 void TestCellRegion::testFromStringMultipleTables()
 {
-    QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
+    //QEXPECT_FAIL( "", "Functionality is not yet supported, so its expected to fail", Continue );
     QCOMPARE( m_region2, CellRegion( &m_source, "$Table1.$B$3:$K$13;$Table2.$A$2:$E$7" ) );
 }
 

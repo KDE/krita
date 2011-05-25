@@ -161,7 +161,8 @@ void ToCGenerator::generate()
             int outlineLevel = block.blockFormat().intProperty(KoParagraphStyle::OutlineLevel);
 
             KoParagraphStyle *tocTemplateStyle = 0;
-            if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()) {
+            if (outlineLevel >= 1 && (outlineLevel-1) < m_ToCInfo->m_entryTemplate.size()
+                        && outlineLevel <= m_ToCInfo->m_useOutlineLevel) {
                 // List's index starts with 0, outline level starts with 0
                 TocEntryTemplate tocEntryTemplate = m_ToCInfo->m_entryTemplate.at(outlineLevel - 1);
                 // ensure that we fetched correct entry template

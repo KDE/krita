@@ -227,8 +227,55 @@ int KoTableOfContentsGeneratorInfo::styleNameToStyleId(KoTextSharedLoadingData *
 
 
 KoTableOfContentsGeneratorInfo::KoTableOfContentsGeneratorInfo()
-  : m_generator(0)
+  : 
+   m_indexScope("document")
+  , m_outlineLevel(10)
+  , m_relativeTabStopPosition(true)
+  , m_useIndexMarks(true)
+  , m_useIndexSourceStyles(false)
+  , m_useOutlineLevel(true)
+  , m_generator(0)
 {
+    // index-title-template
+    m_indexTitleTemplate.text = "Indholdsfortegnelse";
+
+    // table-of-content-entry-template
+    for (int level = 1; level <= m_outlineLevel; level++)  {
+        TocEntryTemplate tocEntryTemplate;
+        tocEntryTemplate.outlineLevel = level;
+
+        // index-entry-link-start
+        IndexEntryLinkStart *link = new IndexEntryLinkStart(QString());
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
+
+        // index-entry-chapter
+        // use null String if the style name is not present, it means that we inherit it from the parent
+        IndexEntryChapter *entryChapter = new IndexEntryChapter(QString());
+        entryChapter->display = "number-and-name";
+        entryChapter->outlineLevel = level;
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
+
+        // index-entry-text
+        IndexEntryText *entryText = new IndexEntryText(QString());
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
+
+        // index-entry-page-number
+        IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(QString());
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
+
+        // index-entry-tab-stop
+        IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(QString());
+        entryTabStop->tab.type = QTextOption::RightTab;
+        entryTabStop->setPosition("FIIIIIIIXXXXXXXX MMMMMEEEEEEEE"); //FIXME
+        entryTabStop->tab.leaderText = ".";
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
+
+        // index-entry-link-end
+        IndexEntryLinkEnd *linkend = new IndexEntryLinkEnd(QString());
+        tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(linkend));
+
+        m_entryTemplate.append(tocEntryTemplate);
+    }
 }
 
 KoTableOfContentsGeneratorInfo::~KoTableOfContentsGeneratorInfo()
@@ -246,10 +293,10 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
     Q_ASSERT(element.localName() == "table-of-content-source" && element.namespaceURI() == KoXmlNS::text);
 
     m_indexScope = element.attribute("index-scope", "document"); // enum {document, chapter}
-    m_outlineLevel = element.attribute("outline-level").toInt();
+    m_outlineLevel = element.attribute("outline-level","1").toInt();
     m_relativeTabStopPosition = element.attribute("relative-tab-stop-position","true") == "true";
-    m_useIndexMarks = element.attribute("use-index-marks","true") == "true";
-    m_useIndexSourceStyles = element.attribute("use-index-source-styles","true") == "true";
+    m_useIndexMarks = element.attribute("use-index-marks","f") == "true";
+    m_useIndexSourceStyles = element.attribute("use-index-source-styles","false") == "true";
     m_useOutlineLevel = element.attribute("use-outline-level","true") == "true";
 
     // three other children to visit
@@ -279,7 +326,7 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
 
                 if (indexEntry.localName() == "index-entry-chapter") {
                     // use null String if the style name is not present, it means that we inherit it from the parent
-                    IndexEntryChapter * entryChapter = new IndexEntryChapter(
+                    IndexEntryChapter *entryChapter = new IndexEntryChapter(
                         indexEntry.attribute("style-name", QString())
                     );
 
@@ -290,20 +337,20 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryChapter));
 
                 } else if (indexEntry.localName() == "index-entry-text") {
-                    IndexEntryText * entryText = new IndexEntryText(indexEntry.attribute("style-name", QString()));
+                    IndexEntryText *entryText = new IndexEntryText(indexEntry.attribute("style-name", QString()));
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryText));
 
                 } else if (indexEntry.localName() == "index-entry-page-number") {
-                    IndexEntryPageNumber * entryPageNumber = new IndexEntryPageNumber(indexEntry.attribute("style-name", QString()));
+                    IndexEntryPageNumber *entryPageNumber = new IndexEntryPageNumber(indexEntry.attribute("style-name", QString()));
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryPageNumber) );
 
                 } else if (indexEntry.localName() == "index-entry-span") {
-                    IndexEntrySpan * entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()) );
+                    IndexEntrySpan *entrySpan = new IndexEntrySpan(indexEntry.attribute("style-name", QString()) );
                     entrySpan->text = indexEntry.text();
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entrySpan));
 
                 } else if (indexEntry.localName() == "index-entry-tab-stop") {
-                    IndexEntryTabStop * entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
+                    IndexEntryTabStop *entryTabStop = new IndexEntryTabStop(indexEntry.attribute("style-name", QString()));
 
                     QString type = indexEntry.attribute("type","right"); // left or right
                     if (type == "left") {
@@ -316,10 +363,10 @@ void KoTableOfContentsGeneratorInfo::loadOdf(KoTextSharedLoadingData *sharedLoad
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(entryTabStop));
 
                 } else if (indexEntry.localName() == "index-entry-link-start") {
-                    IndexEntryLinkStart * link = new IndexEntryLinkStart(indexEntry.attribute("style-name", QString()));
+                    IndexEntryLinkStart *link = new IndexEntryLinkStart(indexEntry.attribute("style-name", QString()));
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
                 } else if (indexEntry.localName() == "index-entry-link-end") {
-                    IndexEntryLinkEnd * link = new IndexEntryLinkEnd(indexEntry.attribute("style-name", QString()));
+                    IndexEntryLinkEnd *link = new IndexEntryLinkEnd(indexEntry.attribute("style-name", QString()));
                     tocEntryTemplate.indexEntries.append(static_cast<IndexEntry*>(link));
                 }
             }

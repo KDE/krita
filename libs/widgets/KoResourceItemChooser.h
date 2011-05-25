@@ -77,7 +77,7 @@ public:
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
-    void setKnsrcFile( QString *knsrcFileArg );
+    void setKnsrcFile( const QString& knsrcFileArg );
 
 signals:
     /// Emitted when a resource was selected

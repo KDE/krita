@@ -297,9 +297,9 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
     return static_cast<KoResource*>( index.internalPointer() );
 }
 
-void KoResourceItemChooser::setKnsrcFile(QString *knsrcFileArg)
+void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
 {
-    d->knsrcFile = *knsrcFileArg;
+    d->knsrcFile = knsrcFileArg;
 }
 
 #include <KoResourceItemChooser.moc>

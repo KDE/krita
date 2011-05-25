@@ -42,6 +42,9 @@ KisPatternChooser::KisPatternChooser(QWidget *parent, const char *name)
     KoResourceServer<KisPattern> * rserver = KisResourceServerProvider::instance()->patternServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KisPattern>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    QString knsrcFile = "kritapatterns.knsrc";
+    m_itemChooser->setKnsrcFile( knsrcFile );
+    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->setObjectName(name);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setRowHeight(30);

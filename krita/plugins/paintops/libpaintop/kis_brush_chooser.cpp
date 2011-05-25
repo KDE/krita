@@ -122,6 +122,9 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    QString knsrcFile = "kritabrushes.knsrc";
+    m_itemChooser->setKnsrcFile( knsrcFile );
+    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));

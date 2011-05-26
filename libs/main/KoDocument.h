@@ -929,6 +929,13 @@ protected:
     virtual bool openFile();
 
     /**
+     * This method is called by @a openFile() to allow applications to setup there
+     * own KoProgressUpdater-subTasks which are then taken into account for the
+     * displayed progressbar during loading.
+     */
+    virtual void setupOpenFileSubProgress() {}
+
+    /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading
      *  remote documents)
      *  Applies a filter if necessary, and calls saveNativeFormat in any case

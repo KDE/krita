@@ -526,6 +526,7 @@ void KoTextDocumentLayout::layout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, false);
+            updateProgress(rootArea->startTextFrameIterator());
 
             if (finished) {
                 d->provider->releaseAllAfter(rootArea);
@@ -592,6 +593,7 @@ void KoTextDocumentLayout::layout()
             d->layoutPosition = tmpPosition;
 
             d->provider->doPostLayout(rootArea, true);
+            updateProgress(rootArea->startTextFrameIterator());
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 break;
@@ -697,6 +699,20 @@ QList<KoShape*> KoTextDocumentLayout::shapes() const
             listOfShapes.append(rootArea->associatedShape());
     }
     return listOfShapes;
+}
+
+void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
+{
+    QTextBlock block = it.currentBlock();
+    if (block.isValid()) {
+        Q_ASSERT(block.position() <= document()->rootFrame()->lastPosition());
+        int percent = block.position() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
+        emit layoutProgressChanged(percent);
+    } else if (it.currentFrame()) {
+        Q_ASSERT(it.currentFrame()->firstPosition() <= document()->rootFrame()->lastPosition());
+        int percent = it.currentFrame()->firstPosition() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
+        emit layoutProgressChanged(percent);
+    }
 }
 
 #include <KoTextDocumentLayout.moc>

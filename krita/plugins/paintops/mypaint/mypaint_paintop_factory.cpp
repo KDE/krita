@@ -111,7 +111,7 @@ MyPaintBrushResource* MyPaintFactory::brush(const QString& fileName) const
     }
 }
 
-void MyPaintFactory::addPresets()
+void MyPaintFactory::processAfterLoading()
 {
     KoResourceServer<KisPaintOpPreset>* rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     QMapIterator<QString, MyPaintBrushResource*> i(m_d->brushes);

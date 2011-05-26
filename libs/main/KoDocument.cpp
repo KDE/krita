@@ -1496,6 +1496,8 @@ bool KoDocument::openFile()
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start();
 
+    setupOpenFileSubProgress();
+
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this, d->progressUpdater);

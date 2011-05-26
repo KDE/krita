@@ -2,6 +2,7 @@
  *  preferencesdlg.h - part of KImageShop^WKrita
  *
  *  Copyright (c) 1999 Michael Koch <koch@kde.org>
+ *  Copyright (c) 2003-2011 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -33,6 +34,7 @@
 #include "ui_wdgcolorsettings.h"
 #include "ui_wdgtabletsettings.h"
 #include "ui_wdgperformancesettings.h"
+#include "ui_wdgfullscreensettings.h"
 
 class KoID;
 
@@ -87,7 +89,7 @@ class ColorSettingsTab : public QWidget
 
 public:
 
-    ColorSettingsTab(QWidget *parent = 0, const char * name = 0);
+    ColorSettingsTab(QWidget *parent = 0, const char  *name = 0);
 
 private slots:
 
@@ -96,12 +98,14 @@ private slots:
 
 public:
     void setDefault();
-    WdgColorSettings * m_page;
+    WdgColorSettings  *m_page;
     QButtonGroup m_pasteBehaviourGroup;
 };
 
+//=======================
+
 class WdgTabletSettings : public QWidget, public Ui::WdgTabletSettings {
-    
+
     Q_OBJECT
 
 public:
@@ -114,18 +118,19 @@ public:
 class TabletSettingsTab : public QWidget {
     Q_OBJECT
 public:
-    TabletSettingsTab(QWidget* parent = 0, const char * name = 0);
+    TabletSettingsTab(QWidget *parent = 0, const char  *name = 0);
 
 public:
     void setDefault();
-    WdgTabletSettings * m_page;
-    
-    
+    WdgTabletSettings  *m_page;
+
+
 };
 
+//=======================
 
 /**
- *  "Performance"-tab for preferences dialog
+  * "Performance"-tab for preferences dialog
  */
 
 class WdgPerformanceSettings : public QWidget, public Ui::WdgPerformanceSettings
@@ -197,7 +202,7 @@ class GridSettingsTab : public WdgGridSettingsBase
 {
     Q_OBJECT
 public:
-    GridSettingsTab(QWidget* parent);
+    GridSettingsTab(QWidget *parent);
 public:
     void setDefault();
 private slots:
@@ -210,6 +215,32 @@ private slots:
 private:
     bool m_linkSpacing, m_linkOffset;
 };
+
+//=======================
+
+/**
+ *  Full screen settings tab for preferences dialog
+ */
+
+class WdgFullscreenSettingsBase : public QWidget, public Ui::WdgFullscreenSettings
+{
+    Q_OBJECT
+
+public:
+    WdgFullscreenSettingsBase(QWidget *parent) : QWidget(parent) {
+        setupUi(this);
+    }
+};
+
+class FullscreenSettingsTab : public WdgFullscreenSettingsBase
+{
+    Q_OBJECT
+public:
+    FullscreenSettingsTab(QWidget *parent);
+public:
+    void setDefault();
+};
+
 
 //=======================
 
@@ -233,12 +264,13 @@ protected:
 
 protected:
 
-    GeneralTab* m_general;
-    ColorSettingsTab* m_colorSettings;
-    PerformanceTab* m_performanceSettings;
-    DisplaySettingsTab * m_displaySettings;
-    GridSettingsTab* m_gridSettings;
-    TabletSettingsTab* m_tabletSettings;
+    GeneralTab *m_general;
+    ColorSettingsTab *m_colorSettings;
+    PerformanceTab *m_performanceSettings;
+    DisplaySettingsTab  *m_displaySettings;
+    GridSettingsTab *m_gridSettings;
+    TabletSettingsTab *m_tabletSettings;
+    FullscreenSettingsTab *m_fullscreenSettings;
 
 protected slots:
 

@@ -189,6 +189,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui

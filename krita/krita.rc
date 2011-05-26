@@ -141,9 +141,9 @@
 </Menu>
 
 <Menu name="settings"><text>Settings</text>
-  <Action name="view_fullscreen" group="settings_show"/>
-  <Action name="view_toggledockers" group="settings_show"/>
-  <Action name="showStatusBar" group="settings_show"/>
+  <!--Action name="view_fullscreen" group="settings_show"/-->
+  <!--Action name="view_toggledockers" group="settings_show"/-->
+  <!--Action name="showStatusBar" group="settings_show"/-->
   <Action name="preferences" group="settings_configure"/>
 </Menu>
 

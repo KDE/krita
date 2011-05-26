@@ -1291,7 +1291,6 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
-        Q_ASSERT( region.isValid() );
         if ( bubbleChart )
         {
             setCustomDataRegion( region );            

@@ -18,50 +18,50 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "KoReportImagePlugin.h"
-#include "KoReportItemImage.h"
+#include "KoReportMapsPlugin.h"
+#include "KoReportItemMaps.h"
 #include "KoReportDesignerItemMaps.h"
 #include "KoReportPluginInfo.h"
-#include "krscriptimage.h"
+#include "krscriptmaps.h"
 #include <KIcon>
 
-KoReportImagePlugin::KoReportImagePlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
+KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     Q_UNUSED(args)
     
     KoReportPluginInfo *info = new KoReportPluginInfo();
-    info->setClassName("report:image");
-    info->setIcon(KIcon("insert-image"));
-    info->setName(i18n("Image"));
-    info->setPriority(4);
+    info->setClassName("report:mapbrowser");
+    info->setIcon(KIcon("marbleicon"));
+    info->setName(i18n("Map Browser "));
+    info->setPriority(40);
     setInfo(info);
 }
 
-KoReportImagePlugin::~KoReportImagePlugin()
+KoReportMapsPlugin::~KoReportMapsPlugin()
 {
 
 }
 
-QObject* KoReportImagePlugin::createRendererInstance(QDomNode& element)
+QObject* KoReportMapsPlugin::createRendererInstance(QDomNode& element)
 {
-    return new KoReportItemImage(element);
+    return new KoReportItemMaps(element);
 }
 
-QObject* KoReportImagePlugin::createDesignerInstance(QDomNode& element, KoReportDesigner* designer, QGraphicsScene* scene)
+QObject* KoReportMapsPlugin::createDesignerInstance(QDomNode& element, KoReportDesigner* designer, QGraphicsScene* scene)
 {
     return new KoReportDesignerItemMaps(element, designer, scene);
 }
 
-QObject* KoReportImagePlugin::createDesignerInstance(KoReportDesigner* designer, QGraphicsScene* scene, const QPointF& pos)
+QObject* KoReportMapsPlugin::createDesignerInstance(KoReportDesigner* designer, QGraphicsScene* scene, const QPointF& pos)
 {
     return new KoReportDesignerItemMaps(designer, scene, pos);
 }
 
-QObject* KoReportImagePlugin::createScriptInstance(KoReportItemBase* item)
+QObject* KoReportMapsPlugin::createScriptInstance(KoReportItemBase* item)
 {
-    KoReportItemImage *image = dynamic_cast<KoReportItemImage*>(item);
+    /*KoReportItemMaps *image = dynamic_cast<KoReportItemMaps*>(item);
     if (image) {
-        return new Scripting::Image(image);
-    }
+        return new Scripting::Maps(image);
+    }*/
     return 0;
 }

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=KoReport_Maps
+Comment=Calligra Reports Maps Plugin
+X-KDE-Library=koreport_mapsplugin
+X-KDE-ServiceTypes=KoReport/ItemPlugin
+Type=Service

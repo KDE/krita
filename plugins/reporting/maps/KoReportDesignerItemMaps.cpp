@@ -66,7 +66,7 @@ KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraph
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
-        : KoReportItemImage(element), KoReportDesignerItemRectBase(rw)
+        : KoReportItemMaps(element), KoReportDesignerItemRectBase(rw)
 {
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());

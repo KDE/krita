@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "KoReportItemImage.h"
+#include "KoReportItemMaps.h"
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
 #include <KoGlobal.h>
@@ -26,7 +26,7 @@
 #include <kcodecs.h>
 #include <renderobjects.h>
 
-KoReportItemImage::KoReportItemImage(QDomNode & element)
+KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
     createProperties();
     QDomNodeList nl = element.childNodes();
@@ -54,17 +54,17 @@ KoReportItemImage::KoReportItemImage(QDomNode & element)
 
 }
 
-KoReportItemImage::~KoReportItemImage()
+KoReportItemMaps::~KoReportItemMaps()
 {
     delete m_set;
 }
 
-bool KoReportItemImage::isInline() const
+bool KoReportItemMaps::isInline() const
 {
     return !(inlineImageData().isEmpty());
 }
 
-QByteArray KoReportItemImage::inlineImageData() const
+QByteArray KoReportItemMaps::inlineImageData() const
 {
     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
     QByteArray ba;
@@ -77,7 +77,7 @@ QByteArray KoReportItemImage::inlineImageData() const
     return imageEncoded;
 }
 
-void KoReportItemImage::setInlineImageData(QByteArray dat, const QString &fn)
+void KoReportItemMaps::setInlineImageData(QByteArray dat, const QString &fn)
 {
     if (!fn.isEmpty()) {
         QPixmap pix(fn);
@@ -96,19 +96,19 @@ void KoReportItemImage::setInlineImageData(QByteArray dat, const QString &fn)
 
 }
 
-QString KoReportItemImage::mode() const
+QString KoReportItemMaps::mode() const
 {
     return m_resizeMode->value().toString();
 }
 
-void KoReportItemImage::setMode(const QString &m)
+void KoReportItemMaps::setMode(const QString &m)
 {
     if (mode() != m) {
         m_resizeMode->setValue(m);
     }
 }
 
-void KoReportItemImage::createProperties()
+void KoReportItemMaps::createProperties()
 {
     m_set = new KoProperty::Set(0, "Image");
 
@@ -128,22 +128,22 @@ void KoReportItemImage::createProperties()
 }
 
 
-void KoReportItemImage::setColumn(const QString &c)
+void KoReportItemMaps::setColumn(const QString &c)
 {
     m_controlSource->setValue(c);
 }
 
-QString KoReportItemImage::itemDataSource() const
+QString KoReportItemMaps::itemDataSource() const
 {
     return m_controlSource->value().toString();
 }
 
-QString KoReportItemImage::typeName() const
+QString KoReportItemMaps::typeName() const
 {
     return "report:image";
 }
 
-int KoReportItemImage::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
+int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
 

@@ -32,20 +32,20 @@
 
 namespace Scripting
 {
-class Image;
+class Maps;
 }
 
 /**
  @author
 */
-class KoReportItemImage : public KoReportItemBase
+class KoReportItemMaps : public KoReportItemBase
 {
 public:
-    KoReportItemImage() {
+    KoReportItemMaps() {
         createProperties();
     }
-    KoReportItemImage(QDomNode & element);
-    virtual ~KoReportItemImage();
+    KoReportItemMaps(QDomNode & element);
+    virtual ~KoReportItemMaps();
 
     virtual QString typeName() const;
     virtual int render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script);
@@ -68,7 +68,7 @@ protected:
 private:
     virtual void createProperties();
 
-    friend class Scripting::Image;
+    friend class Scripting::Maps;
 };
 
 #endif

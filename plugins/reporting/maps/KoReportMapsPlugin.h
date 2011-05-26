@@ -1,6 +1,7 @@
 /*
    KoReport Library
    Copyright (C) 2010 by Adam Pigg (adam@piggz.co.uk)
+   Copyright (C) 2010 by Radoslaw Wicik (radoslaw@wicik.pl)
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,17 +19,17 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KOREPORTIMAGEPLUGIN_H
-#define KOREPORTIMAGEPLUGIN_H
+#ifndef KOREPORTMAPSPLUGIN_H
+#define KOREPORTMAPSPLUGIN_H
 
 #include <KoReportPluginInterface.h>
 
 
-class KoReportImagePlugin : public KoReportPluginInterface
+class KoReportMapsPlugin : public KoReportPluginInterface
 {
     public:
-    KoReportImagePlugin(QObject *parent, const QVariantList &args = QVariantList());
-    virtual ~KoReportImagePlugin();
+    KoReportMapsPlugin(QObject *parent, const QVariantList &args = QVariantList());
+    virtual ~KoReportMapsPlugin();
 
     virtual QObject* createRendererInstance(QDomNode& element);
     virtual QObject* createDesignerInstance(QDomNode& element, KoReportDesigner* , QGraphicsScene* scene);
@@ -36,4 +37,4 @@ class KoReportImagePlugin : public KoReportPluginInterface
     virtual QObject* createScriptInstance(KoReportItemBase* item);
 };
 
-#endif // KOREPORTIMAGEPLUGIN_H
+#endif // KOREPORTMAPSPLUGIN_H

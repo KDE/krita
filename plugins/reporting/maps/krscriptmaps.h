@@ -1,6 +1,7 @@
 /*
  * Kexi Report Plugin
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
+ * Copyright (C) 2011 by Radoslaw Wicik (rockford@wicik.pl)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,52 +16,53 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef SCRIPTINGKRSCRIPTIMAGE_H
-#define SCRIPTINGKRSCRIPTIMAGE_H
+#ifndef SCRIPTINGKRSCRIPTMAPS_H
+#define SCRIPTINGKRSCRIPTMAPS_H
 
 #include <QObject>
 #include <QPointF>
 #include <QSizeF>
 
-class KoReportItemImage;
+class KoReportItemMaps;
 
 namespace Scripting
 {
 
 /**
  @author Adam Pigg <adam@piggz.co.uk>
+ @author Radoslaw Wicik <rockford@wicik.pl>
 */
-class Image : public QObject
+class Maps : public QObject
 {
     Q_OBJECT
 public:
-    Image(KoReportItemImage *);
+    Maps(KoReportItemMaps *);
 
-    ~Image();
+    ~Maps();
 public slots:
 
 
     /**
-    * Get the position of the barcode
+    * Get the position of the map
     * @return position in points
      */
     QPointF position();
 
 
     /**
-     * Sets the position of the barcode in points
+     * Sets the position of the map in points
      * @param Position
      */
     void setPosition(const QPointF&);
 
     /**
-     * Get the size of the barcode
+     * Get the size of the map
      * @return size in points
      */
     QSizeF size();
 
     /**
-     * Set the size of the barcode in points
+     * Set the size of the map in points
      * @param Size
      */
     void setSize(const QSizeF&);
@@ -92,10 +94,10 @@ public slots:
      */
     void loadFromFile(const QVariant &);
 private:
-    KoReportItemImage *m_image;
+    KoReportItemMaps *m_map;
 
 };
 
 }
 
-#endif
+#endif //SCRIPTINGKRSCRIPTMAPS_H

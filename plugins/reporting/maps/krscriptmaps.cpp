@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "krscriptimage.h"
-#include "KoReportItemImage.h"
+#include "krscriptmaps.h"
+#include "KoReportItemMaps.h"
 #include <QBuffer>
 #include <kcodecs.h>
 #include <kdebug.h>
@@ -24,58 +24,58 @@
 namespace Scripting
 {
 
-Image::Image(KoReportItemImage *i)
+Maps::Maps(KoReportItemMaps *i)
 {
-    m_image = i;
+    m_map = i;
 }
 
 
-Image::~Image()
+Maps::~Maps()
 {
 }
 
-QPointF Image::position()
+QPointF Maps::position()
 {
-    return m_image->m_pos.toPoint();
+    return m_map->m_pos.toPoint();
 }
-void Image::setPosition(const QPointF& p)
+void Maps::setPosition(const QPointF& p)
 {
-    m_image->m_pos.setPointPos(p);
-}
-
-QSizeF Image::size()
-{
-    return m_image->m_size.toPoint();
-}
-void Image::setSize(const QSizeF& s)
-{
-    m_image->m_size.setPointSize(s);
+    m_map->m_pos.setPointPos(p);
 }
 
-QString Image::resizeMode()
+QSizeF Maps::size()
 {
-    return m_image->m_resizeMode->value().toString();
+    return m_map->m_size.toPoint();
+}
+void Maps::setSize(const QSizeF& s)
+{
+    m_map->m_size.setPointSize(s);
 }
 
-void Image::setResizeMode(const QString &rm)
+QString Maps::resizeMode()
+{
+    return m_map->m_resizeMode->value().toString();
+}
+
+void Maps::setResizeMode(const QString &rm)
 {
     if (rm == "Stretch") {
-        m_image->m_resizeMode->setValue("Stretch");
+        m_map->m_resizeMode->setValue("Stretch");
     } else {
-        m_image->m_resizeMode->setValue("Clip");
+        m_map->m_resizeMode->setValue("Clip");
     }
 }
 
-void Image::setInlineImage(const QByteArray &ba)
+void Maps::setInlineImage(const QByteArray &ba)
 {
-    m_image->setInlineImageData(ba);
+    m_map->setInlineImageData(ba);
 }
 
-void Image::loadFromFile(const QVariant &pth)
+void Maps::loadFromFile(const QVariant &pth)
 {
     QPixmap img;
 
     QString str = pth.toString();
-    m_image->setInlineImageData(QByteArray(), str);
+    m_map->setInlineImageData(QByteArray(), str);
 }
 }

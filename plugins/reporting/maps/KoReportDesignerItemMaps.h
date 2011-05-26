@@ -24,12 +24,12 @@
 #include <qimage.h>
 #include <koproperty/Property.h>
 #include <koproperty/Set.h>
-#include "KoReportItemImage.h"
+#include "KoReportItemMaps.h"
 
 //
 // ReportEntityImage
 //
-class KoReportDesignerItemMaps : public KoReportItemImage, public KoReportDesignerItemRectBase
+class KoReportDesignerItemMaps : public KoReportItemMaps, public KoReportDesignerItemRectBase
 {
   Q_OBJECT
 public:

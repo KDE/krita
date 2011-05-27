@@ -469,8 +469,10 @@ void KoTextDocumentLayout::layout()
     Q_ASSERT(!d->isLayouting);
     d->isLayouting = true;
 
-    bool finished = true;
+    bool finished;
     do {
+        // Try to layout as long as d->restartLayout==true. This can happen for example if
+        // a schedule layout call interrupts the layouting and asks for a new layout run.
         finished = doLayout();
     } while (d->restartLayout);
 
@@ -478,6 +480,7 @@ void KoTextDocumentLayout::layout()
     d->isLayouting = false;
 
     if (finished) {
+        // We are only finished with layouting if continuousLayout()==true.
         emit finishedLayout();
     }
 }
@@ -493,7 +496,7 @@ bool KoTextDocumentLayout::doLayout()
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
         if (d->restartLayout) {
-            return false;
+            return false; // Abort layouting to restart from the beginning.
         }
 
         bool shouldLayout = false;
@@ -546,22 +549,23 @@ bool KoTextDocumentLayout::doLayout()
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                return true;
+                return true; // Finished layouting
             }
 
             if (!continuousLayout()) {
-                return false; // Let's take a break
+                return false; // Let's take a break. We are not finished layouting yet.
             }
         } else {
             delete d->layoutPosition;
             d->layoutPosition = new FrameIterator(rootArea->nextStartOfArea());
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
                 d->provider->releaseAllAfter(rootArea);
+                // We must also delete them from our own list too
                 int newsize = d->rootAreaList.indexOf(rootArea) + 1;
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                return true;
+                return true; // Finished layouting
             }
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
@@ -571,10 +575,10 @@ bool KoTextDocumentLayout::doLayout()
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
         if (d->restartLayout) {
-            return false;
+            return false; // Abort layouting to restart from the beginning.
         }
 
-        // Request a Root Area
+        // Request a new root-area. If NULL is returned then layouting is finished.
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
         if (rootArea) {
@@ -609,10 +613,10 @@ bool KoTextDocumentLayout::doLayout()
             updateProgress(rootArea->startTextFrameIterator());
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
-                return true;
+                return true; // Finished layouting
             }
             if (!continuousLayout()) {
-                return false; // let's take a break
+                return false; // Let's take a break. We are not finished layouting yet.
             }
         } else {
             break; // with no more space there is nothing else we can do
@@ -621,11 +625,12 @@ bool KoTextDocumentLayout::doLayout()
                                                // 50 just to seperate pages
     }
 
-    return true;
+    return true; // Finished layouting
 }
 
 void KoTextDocumentLayout::scheduleLayout()
 {
+    // Compress multiple scheduleLayout calls into one executeScheduledLayout.
     if (d->layoutScheduled) {
         return;
     }
@@ -641,6 +646,8 @@ void KoTextDocumentLayout::executeScheduledLayout()
     }
     d->layoutScheduled = false;
     if (d->isLayouting) {
+        // Since we are already layouting ask for a restart to be sure to also include
+        // root-areas that got dirty and are before the currently processed root-area.
         d->restartLayout = true;
     } else {
         layout();
@@ -722,11 +729,9 @@ void KoTextDocumentLayout::updateProgress(const QTextFrame::iterator &it)
 {
     QTextBlock block = it.currentBlock();
     if (block.isValid()) {
-        Q_ASSERT(block.position() <= document()->rootFrame()->lastPosition());
         int percent = block.position() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
         emit layoutProgressChanged(percent);
     } else if (it.currentFrame()) {
-        Q_ASSERT(it.currentFrame()->firstPosition() <= document()->rootFrame()->lastPosition());
         int percent = it.currentFrame()->firstPosition() / qreal(document()->rootFrame()->lastPosition()) * 100.0;
         emit layoutProgressChanged(percent);
     }

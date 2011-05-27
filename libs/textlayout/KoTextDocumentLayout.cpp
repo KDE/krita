@@ -73,6 +73,7 @@ public:
        , layoutScheduled(false)
        , continuousLayout(true)
        , layoutBlocked(false)
+       , restartLayout(false)
     {
     }
     KoStyleManager *styleManager;
@@ -102,6 +103,8 @@ public:
     bool layoutScheduled;
     bool continuousLayout;
     bool layoutBlocked;
+    bool restartLayout;
+
     enum AnchoringState {
         AnchoringPreState
         ,AnchoringMovingState
@@ -463,28 +466,36 @@ void KoTextDocumentLayout::layout()
         return;
     }
 
-    class LayoutState {
-        public:
-            LayoutState(KoTextDocumentLayout::Private *_d) : d(_d) {
-                Q_ASSERT(!d->isLayouting);
-                d->isLayouting = true;
-            }
-            ~LayoutState() {
-                Q_ASSERT(d->isLayouting);
-                d->isLayouting = false;
-            }
-        private:
-            KoTextDocumentLayout::Private *d;
-    };
-    LayoutState layoutstate(d);
+    Q_ASSERT(!d->isLayouting);
+    d->isLayouting = true;
 
+    bool finished = true;
+    do {
+        finished = doLayout();
+    } while (d->restartLayout);
+
+    Q_ASSERT(d->isLayouting);
+    d->isLayouting = false;
+
+    if (finished) {
+        emit finishedLayout();
+    }
+}
+
+bool KoTextDocumentLayout::doLayout()
+{
     delete d->layoutPosition;
     d->layoutPosition = new FrameIterator(document()->rootFrame());
     d->y = 0;
     d->layoutScheduled = false;
+    d->restartLayout = false;
     KoTextLayoutRootArea *previousRootArea = 0;
 
     foreach (KoTextLayoutRootArea *rootArea, d->rootAreaList) {
+        if (d->restartLayout) {
+            return false;
+        }
+
         bool shouldLayout = false;
 
         if (rootArea->top() != d->y) {
@@ -535,12 +546,11 @@ void KoTextDocumentLayout::layout()
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                emit finishedLayout();
-                return;
+                return true;
             }
 
             if (!continuousLayout()) {
-                return; // Let's take a break
+                return false; // Let's take a break
             }
         } else {
             delete d->layoutPosition;
@@ -551,8 +561,7 @@ void KoTextDocumentLayout::layout()
                 while (d->rootAreaList.size() > newsize) {
                     d->rootAreaList.removeLast();
                 }
-                emit finishedLayout();
-                return;
+                return true;
             }
         }
         d->y = rootArea->bottom() + qreal(50); // (post)Layout method(s) just set this
@@ -561,6 +570,10 @@ void KoTextDocumentLayout::layout()
     }
 
     while (d->layoutPosition->it != document()->rootFrame()->end()) {
+        if (d->restartLayout) {
+            return false;
+        }
+
         // Request a Root Area
         KoTextLayoutRootArea *rootArea = d->provider->provide(this);
 
@@ -596,10 +609,10 @@ void KoTextDocumentLayout::layout()
             updateProgress(rootArea->startTextFrameIterator());
 
             if (d->layoutPosition->it == document()->rootFrame()->end()) {
-                break;
+                return true;
             }
             if (!continuousLayout()) {
-                return; // let's take a break
+                return false; // let's take a break
             }
         } else {
             break; // with no more space there is nothing else we can do
@@ -608,7 +621,7 @@ void KoTextDocumentLayout::layout()
                                                // 50 just to seperate pages
     }
 
-    emit finishedLayout();
+    return true;
 }
 
 void KoTextDocumentLayout::scheduleLayout()
@@ -623,10 +636,14 @@ void KoTextDocumentLayout::scheduleLayout()
 void KoTextDocumentLayout::executeScheduledLayout()
 {
     // Only do the actual layout if it wasn't done meanwhile by someone else.
-    if (d->layoutScheduled) {
-        d->layoutScheduled = false;
-        if (!d->isLayouting)
-            layout();
+    if (!d->layoutScheduled) {
+        return;
+    }
+    d->layoutScheduled = false;
+    if (d->isLayouting) {
+        d->restartLayout = true;
+    } else {
+        layout();
     }
 }
 

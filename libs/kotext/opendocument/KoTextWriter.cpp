@@ -135,7 +135,6 @@ public:
         ,  splitEndBlockNumber(-1)
         ,  splitRegionOpened(false)
         ,  splitIdCounter(1)
-        ,  sectionLevel(0)
         ,  deleteMergeRegionOpened(false)
         ,  deleteMergeEndBlockNumber(-1)
     {
@@ -209,7 +208,6 @@ public:
     int splitEndBlockNumber;
     bool splitRegionOpened;
     bool splitIdCounter;
-    int sectionLevel;
 
     //For saving of delete-changes that result in a merge between two elements
     bool deleteMergeRegionOpened;
@@ -1667,7 +1665,7 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
     QTextBlock block = document->findBlock(from);
-    sectionLevel = 0;
+    int sectionLevel = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
@@ -1679,7 +1677,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QVariant v = format.property(KoParagraphStyle::SectionStart);
             KoSection* section = (KoSection*)(v.value<void*>());
             if (section) {
-                sectionLevel++;
+                ++sectionLevel;
                 section->saveOdf(context);
             }
         }

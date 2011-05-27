@@ -107,6 +107,12 @@ public:
 
     int priority() const;
 
+    /**
+     * This method will be called by the registry after all paintops are loaded
+     * Overwrite to let the factory do something.
+     */
+    virtual void processAfterLoading() {}
+
 private:
     QStringList m_whiteListedCompositeOps;
     int m_priority;

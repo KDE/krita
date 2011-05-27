@@ -5,6 +5,7 @@
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
  * Copyright (C) 2008 Pierre Stirnweiss <pierre.stirnweiss_koffice@gadz.org>
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -64,6 +65,12 @@ public:
         StrikeOutWeight,
         StrikeOutMode,
         StrikeOutText,
+        OverlineStyle,
+        OverlineType,
+	OverlineColor,
+        OverlineWidth,
+        OverlineWeight,
+        OverlineMode,
         UnderlineStyle,
         UnderlineType,
         UnderlineWidth,
@@ -162,10 +169,12 @@ public:
     void setFontItalic(bool italic);
     /// See similar named method on QTextCharFormat
     bool fontItalic() const;
+    /*
     /// See similar named method on QTextCharFormat
     void setFontOverline(bool overline);
     /// See similar named method on QTextCharFormat
     bool fontOverline() const;
+    */
     /// See similar named method on QTextCharFormat
     void setFontFixedPitch(bool fixedPitch);
     /// See similar named method on QTextCharFormat
@@ -244,6 +253,27 @@ public:
     /// Get the current strike out text of this KoCharacterStyle
     QString strikeOutText() const;
 
+    /// Apply a font overline style to this KoCharacterStyle
+    void setOverlineStyle(LineStyle style);
+    /// Get the current font overline style of this KoCharacterStyle
+    LineStyle overlineStyle() const;
+    /// Apply a font overline width to this KoCharacterStyle
+    void setOverlineWidth(LineWeight weight, qreal width);
+    /// Get the current font overline width of this KoCharacterStyle
+    void overlineWidth(LineWeight &weight, qreal &width) const;
+    /// Apply a font overline color to this KoCharacterStyle
+    void setOverlineColor(const QColor &color);
+    /// Get the current font overline color of this KoCharacterStyle
+    QColor overlineColor() const;
+    /// Apply a font overline color to this KoCharacterStyle
+    void setOverlineType(LineType lineType);
+    /// Get the current font overline color of this KoCharacterStyle
+    LineType overlineType() const;
+    /// Apply a overline mode to this KoCharacterStyle
+    void setOverlineMode(LineMode mode);
+    /// Get the current overline mode of this KoCharacterStyle
+    LineMode overlineMode() const;
+    
     /// Apply a font underline style to this KoCharacterStyle
     void setUnderlineStyle(LineStyle style);
     /// Get the current font underline style of this KoCharacterStyle

@@ -517,6 +517,7 @@ void KoTextLayoutArea::decorateParagraph(QPainter *painter, const QTextBlock &bl
                         // Following line was supposed to fix bug 171686 (I cannot reproduce the original problem) but it opens bug 260159. So, deactivated for now.
                         //x2 = qMin(x2, line.naturalTextWidth() + line.cursorToX(line.textStart()));
                         drawStrikeOuts(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
+                        drawOverlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         drawUnderlines(painter, currentFragment, line, x1, x2, startOfFragmentInBlock, fragmentToLineOffset);
                         decorateTabs(painter, tabList, line, currentFragment, startOfBlock, currentTabStop);
                     }
@@ -579,6 +580,51 @@ void KoTextLayoutArea::drawStrikeOuts(QPainter *painter, const QTextFragment &cu
                 drawDecorationLine(painter, color, strikeOutType, strikeOutStyle, width, x1, x2, y);
             else
                 drawDecorationText(painter, line, color, strikeOutText, x1, x2);
+        }
+    }
+}
+
+void KoTextLayoutArea::drawOverlines(QPainter *painter, const QTextFragment &currentFragment, const QTextLine &line, qreal x1, qreal x2, const int startOfFragmentInBlock, const int fragmentToLineOffset) const
+{
+    QTextCharFormat fmt = currentFragment.charFormat();
+    KoCharacterStyle::LineStyle fontOverLineStyle = (KoCharacterStyle::LineStyle) fmt.intProperty(KoCharacterStyle::OverlineStyle);
+    KoCharacterStyle::LineType fontOverLineType = (KoCharacterStyle::LineType) fmt.intProperty(KoCharacterStyle::OverlineType);
+    if ((fontOverLineStyle != KoCharacterStyle::NoLineStyle) &&
+            (fontOverLineType != KoCharacterStyle::NoLineType)) {
+        QTextCharFormat::VerticalAlignment valign = fmt.verticalAlignment();
+
+        QFont font(fmt.font());
+        if (valign == QTextCharFormat::AlignSubScript
+                || valign == QTextCharFormat::AlignSuperScript)
+            font.setPointSize(font.pointSize() * 2 / 3);
+        QFontMetricsF metrics(font, m_documentLayout->paintDevice());
+
+        qreal y = line.position().y();
+        if (valign == QTextCharFormat::AlignSubScript)
+            y += line.height() - metrics.descent() - metrics.overlinePos();
+        else if (valign == QTextCharFormat::AlignSuperScript)
+            y += metrics.ascent() - metrics.overlinePos();
+        else
+            y += line.ascent() - metrics.overlinePos();
+
+        QColor color = fmt.colorProperty(KoCharacterStyle::OverlineColor);
+        if (!color.isValid())
+            color = fmt.foreground().color();
+        KoCharacterStyle::LineMode overlineMode =
+            (KoCharacterStyle::LineMode) fmt.intProperty(KoCharacterStyle::OverlineMode);
+        qreal width = computeWidth( // line thickness
+                          (KoCharacterStyle::LineWeight) fmt.intProperty(KoCharacterStyle::OverlineWeight),
+                          fmt.doubleProperty(KoCharacterStyle::OverlineWidth),
+                          font);
+        if (valign == QTextCharFormat::AlignSubScript
+                || valign == QTextCharFormat::AlignSuperScript) // adjust size.
+            width = width * 2 / 3;
+
+        if (overlineMode == KoCharacterStyle::SkipWhiteSpaceLineMode) {
+            drawDecorationWords(painter, line, currentFragment.text(), color, fontOverLineType,
+                    fontOverLineStyle, QString(), width, y, fragmentToLineOffset, startOfFragmentInBlock);
+        } else {
+            drawDecorationLine(painter, color, fontOverLineType, fontOverLineStyle, width, x1, x2, y);
         }
     }
 }

@@ -143,6 +143,8 @@ public:
         RegisterTrue,             ///< bool, align lines on both sides of a printed text
         StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
         JustifySingleWord,        ///< bool, if true, a single word will be justified
+        BreakBefore,              ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
+        BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
     };
 
     /// Constructor
@@ -340,10 +342,10 @@ public:
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
     
-    void setBreakBefore(bool on);
-    bool breakBefore();
-    void setBreakAfter(bool on);
-    bool breakAfter();
+    void setBreakBefore(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakAfter();
     void setLeftPadding(qreal padding);
     qreal leftPadding();
     void setTopPadding(qreal padding);

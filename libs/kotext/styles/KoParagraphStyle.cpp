@@ -401,50 +401,46 @@ bool KoParagraphStyle::followDocBaseline() const
     return propertyBoolean(FollowDocBaseline);
 }
 
-void KoParagraphStyle::setBreakBefore(bool on)
+void KoParagraphStyle::setBreakBefore(KoText::KoTextBreakProperty value)
 {
+    bool pageBreak = (value == KoText::PageBreak);
+   
     int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
 
-    if(on) {
+    if (pageBreak) {
         prop |= QTextFormat::PageBreak_AlwaysBefore;
     } else {
         prop &= ~QTextFormat::PageBreak_AlwaysBefore;
     }
 
     setProperty(QTextFormat::PageBreakPolicy, prop);
+    setProperty(BreakBefore, value);
 }
 
-bool KoParagraphStyle::breakBefore()
+KoText::KoTextBreakProperty KoParagraphStyle::breakBefore()
 {
-    //we shouldn't use propertyBoolean as this value is not inherited but default to false
-    QVariant var = d->stylesPrivate.value(QTextFormat::PageBreakPolicy);
-    if(var.isNull())
-        return false;
-
-    return var.toInt() & QTextFormat::PageBreak_AlwaysBefore;
+    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakBefore));
 }
 
-void KoParagraphStyle::setBreakAfter(bool on)
+void KoParagraphStyle::setBreakAfter(KoText::KoTextBreakProperty value)
 {
+    bool pageBreak = (value == KoText::PageBreak);
+    
     int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
 
-    if(on) {
+    if (pageBreak) {
         prop |= QTextFormat::PageBreak_AlwaysAfter;
     } else {
         prop &= ~QTextFormat::PageBreak_AlwaysAfter;
     }
 
     setProperty(QTextFormat::PageBreakPolicy, prop);
+    setProperty(BreakAfter, value);
 }
 
-bool KoParagraphStyle::breakAfter()
+KoText::KoTextBreakProperty KoParagraphStyle::breakAfter()
 {
-    //we shouldn't use propertyBoolean as this value is not inherited but default to false
-    QVariant var = d->stylesPrivate.value(QTextFormat::PageBreakPolicy);
-    if(var.isNull())
-        return false;
-
-    return var.toInt() & QTextFormat::PageBreak_AlwaysAfter;
+    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakAfter));
 }
 
 void KoParagraphStyle::setLeftPadding(qreal padding)
@@ -1427,15 +1423,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
     if (!breakBefore.isEmpty()) {
-        if (breakBefore == "page") {
-            setBreakBefore(true);
-        }
+        setBreakBefore(KoText::textBreakFromString(breakBefore));
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
     if (!breakAfter.isEmpty()) {
-        if (breakAfter == "page") {
-            setBreakAfter(true);
-        }
+        setBreakAfter(KoText::textBreakFromString(breakAfter));
     }
     const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
     if (!keepTogether.isEmpty()) {
@@ -1697,11 +1689,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             }
         } else if (key == LineNumbering) {
             style.addProperty("text:number-lines", lineNumbering());
-        } else if (key == QTextFormat::PageBreakPolicy) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
+        } else if (key == BreakAfter) {
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::ParagraphType);
+        } else if (key == BreakBefore) {
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockNonBreakableLines) {
             if (nonBreakableLines()) {
                 style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);

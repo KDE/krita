@@ -600,8 +600,13 @@ QList<ArtisticTextRange> ArtisticTextShape::removeText(int charIndex, int charCo
 
 void ArtisticTextShape::insertText(int charIndex, const QString &str)
 {
+    if (isEmpty()) {
+        appendText(str);
+        return;
+    }
+
     CharIndex charPos = indexOfChar(charIndex);
-    if (charIndex < 0 || isEmpty()) {
+    if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
     } else if (charIndex >= plainText().length()) {
@@ -629,8 +634,15 @@ void ArtisticTextShape::insertText(int charIndex, const ArtisticTextRange &textR
 
 void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange> &textRanges)
 {
+    if (isEmpty()) {
+        beginTextUpdate();
+        m_ranges = textRanges;
+        finishTextUpdate();
+        return;
+    }
+
     CharIndex charPos = indexOfChar(charIndex);
-    if (charIndex < 0 || isEmpty()) {
+    if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
     } else if (charIndex >= plainText().length()) {

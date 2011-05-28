@@ -145,6 +145,8 @@ public:
         JustifySingleWord,        ///< bool, if true, a single word will be justified
         BreakBefore,              ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
         BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
+        AutomaticWritingMode,     ///< bool
+        PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
     };
 
     /// Constructor
@@ -341,6 +343,12 @@ public:
     
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
+    
+    bool automaticWritingMode() const;
+    void setAutomaticWritingMode(bool value);
+    
+    void setPageNumber(int pageNumber);
+    int pageNumber() const;
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();

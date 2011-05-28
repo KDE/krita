@@ -1012,6 +1012,29 @@ void KoParagraphStyle::setJoinBorder(bool value)
     setProperty(JoinBorder, value);
 }
 
+int KoParagraphStyle::pageNumber() const
+{
+    return propertyInt(PageNumber);
+}
+
+void KoParagraphStyle::setPageNumber(int pageNumber)
+{
+    if (pageNumber >= 0)
+        setProperty(PageNumber, pageNumber);
+}
+
+bool KoParagraphStyle::automaticWritingMode() const
+{
+    if (hasProperty(AutomaticWritingMode))
+        return propertyBoolean(AutomaticWritingMode);
+    return true;
+}
+
+void KoParagraphStyle::setAutomaticWritingMode(bool value)
+{
+    setProperty(AutomaticWritingMode, value);
+}
+
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
@@ -1168,12 +1191,12 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     // 15.5.30 - 31
     if (styleStack.hasProperty(KoXmlNS::text, "number-lines")) {
         setLineNumbering(styleStack.property(KoXmlNS::text, "number-lines", "false") == "true");
-        if (lineNumbering()) {
-            bool ok;
-            int startValue = styleStack.property(KoXmlNS::text, "line-number").toInt(&ok);
-            if (ok) {
-                setLineNumberStartValue(startValue);
-            }
+    }
+    if (styleStack.hasProperty(KoXmlNS::text, "line-number")) {
+        bool ok;
+        int startValue = styleStack.property(KoXmlNS::text, "line-number").toInt(&ok);
+        if (ok) {
+            setLineNumberStartValue(startValue);
         }
     }
 
@@ -1433,7 +1456,18 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (!keepTogether.isEmpty()) {
         setNonBreakableLines(keepTogether == "always");
     }
-
+    
+    const QString rawPageNumber(styleStack.property(KoXmlNS::style, "page-number"));
+    if (!rawPageNumber.isEmpty()) {
+        if (rawPageNumber == "auto") {
+            setPageNumber(0);
+        } else {
+            bool ok;
+            int number = rawPageNumber.toInt(&ok);
+            if (ok)
+                setPageNumber(number);
+        }
+    }
     // The fo:background-color attribute specifies the background color of a paragraph.
     const QString bgcolor(styleStack.property(KoXmlNS::fo, "background-color"));
     if (!bgcolor.isEmpty()) {
@@ -1499,6 +1533,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     
     if (styleStack.hasProperty(KoXmlNS::style, "justify-single-word")) {
         setJustifySingleWord(styleStack.property(KoXmlNS::style, "justify-single-word") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode-automatic")) {
+        setAutomaticWritingMode(styleStack.property(KoXmlNS::style, "writing-mode-automatic") == "true");
     }
     
     //following properties KoParagraphStyle provides us are not handled now;
@@ -1689,6 +1727,13 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             }
         } else if (key == LineNumbering) {
             style.addProperty("text:number-lines", lineNumbering());
+        } else if (key == PageNumber) {
+            if (pageNumber() == 0)
+                style.addProperty("style:page-number", "auto", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("style:page-number", pageNumber(), KoGenStyle::ParagraphType);
+        } else if (key == LineNumberStartValue) {
+            style.addProperty("text:line-number", lineNumberStartValue());
         } else if (key == BreakAfter) {
             style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::ParagraphType);
         } else if (key == BreakBefore) {
@@ -1777,6 +1822,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addAttribute("style:master-page-name", masterPageName());
         } else if (key == KoParagraphStyle::DefaultOutlineLevel) {
             style.addAttribute("style:default-outline-level", defaultOutlineLevel());
+        } else if (key == KoParagraphStyle::AutomaticWritingMode) {
+            style.addProperty("style:writing-mode-automatic", automaticWritingMode(), KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

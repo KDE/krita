@@ -381,6 +381,10 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
     kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
+    if (properties.attributeNames().count() > 1)
+    {
+        kWarning(32500) << "Warning : got more than one attribute !";
+    }
     return attribute->compare(outputPropertyValue, value);
 }
 

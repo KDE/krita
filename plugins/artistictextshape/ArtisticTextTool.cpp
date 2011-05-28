@@ -45,6 +45,7 @@
 
 #include <KLocale>
 #include <KIcon>
+#include <KStandardAction>
 #include <KDebug>
 
 #include <QtGui/QAction>
@@ -118,6 +119,9 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+    addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
+    addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
 
     setTextMode(true);
 }
@@ -890,6 +894,20 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
         currentRange.setFont(font);
     }
     canvas()->addCommand(new ReplaceTextRangeCommand(m_currentShape, ranges, from, count, this));
+}
+
+void ArtisticTextTool::selectAll()
+{
+    if (m_currentShape) {
+        m_selection.selectText(0, m_currentShape->plainText().count());
+    }
+}
+
+void ArtisticTextTool::deselectAll()
+{
+    if (m_currentShape) {
+        m_selection.clear();
+    }
 }
 
 #include <ArtisticTextTool.moc>

@@ -94,6 +94,8 @@ private slots:
     void setFontSize(int size);
     void setSuperScript();
     void setSubScript();
+    void selectAll();
+    void deselectAll();
 
 signals:
     void shapeSelected();

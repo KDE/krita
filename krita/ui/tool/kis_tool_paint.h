@@ -138,6 +138,8 @@ private slots:
     void slotPopupQuickHelp();
     void slotSetOpacity(int opacityPerCent);
 
+    void slotPaintOpPresetModified();
+
     void slotSetCompositeMode(const QString& compositeOp);
     void makeColorLighter();
     void makeColorDarker();

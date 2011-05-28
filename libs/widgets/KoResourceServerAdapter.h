@@ -1,6 +1,7 @@
 /*  This file is part of the KDE project
 
     Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -37,9 +38,8 @@ public:
     virtual QList<KoResource*> resources() = 0;
     virtual bool addResource(KoResource* resource) = 0;
     virtual bool removeResource(KoResource* resource) = 0;
-    virtual void loadingResourceFile( const QString & filename ) = 0;
     virtual void removeResourceFile( const QString & filename ) = 0;
-    virtual void importResourceFile( const QString & filename ) = 0;
+    virtual void importResourceFile( const QString & filename , bool fileCreation=true) = 0;
     virtual QString extensions() = 0;
 
 signals:
@@ -116,19 +116,11 @@ public:
         return false;
     }
 
-    void loadingResourceFile( const QString & filename )
+    void importResourceFile( const QString & filename , bool fileCreation=true )
     {
         if( ! m_resourceServer )
             return;
-
-        m_resourceServer->loadingResourceFile(filename);
-    }
-
-    void importResourceFile( const QString & filename )
-    {
-        if( ! m_resourceServer )
-            return;
-        m_resourceServer->importResourceFile(filename);
+        m_resourceServer->importResourceFile( filename, fileCreation );
     }
 
     void removeResourceFile( const QString & filename )

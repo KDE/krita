@@ -2,6 +2,7 @@
    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -71,21 +72,21 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( d->view, 0, 0, 1, 5 );
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-add" ) );
+    button->setIcon( SmallIcon( "document-open" ) );
     button->setToolTip( i18n("Import") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-remove" ) );
+    button->setIcon( SmallIcon( "trash-empty" ) );
     button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "bookmarks" ) );
+    button->setIcon( SmallIcon( "download" ) );
     button->setToolTip( i18n("Download") );
     button->setEnabled( true );
     button->hide();
@@ -93,7 +94,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( button, 1, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "download" ) );
+    button->setIcon( SmallIcon( "go-up" ) );
     button->setToolTip( i18n("Share") );
     button->setEnabled( false );
     button->hide();
@@ -156,7 +157,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
              foreach( const QString &file, e.installedFiles() ) {
                  QFileInfo fi(file);
-                  d->model->resourceServerAdapter()->loadingResourceFile( fi.absolutePath()+"/"+fi.fileName() );
+                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+"/"+fi.fileName() , false );
               }
 
        foreach( const QString &file, e.uninstalledFiles() ) {

@@ -4,6 +4,7 @@
     Copyright (c) 2003 Patrick Julien <freak@codepimps.org>
     Copyright (c) 2005 Sven Langkamp <sven.langkamp@gmail.com>
     Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
+    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -259,8 +260,9 @@ public:
      * Creates a new resourcea from a given file and adds them to the resource server
      * The base implementation does only load one resource per file, override to implement collections
      * @param filename file name of the resource file to be imported
+     * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    virtual void importResourceFile( const QString & filename ) {
+    virtual void importResourceFile( const QString & filename , bool fileCreation=true) {
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
@@ -273,35 +275,19 @@ public:
             return;
          }
 
-         Q_ASSERT(!resource->defaultFileExtension().isEmpty());
-         Q_ASSERT(!saveLocation().isEmpty());
+         if( fileCreation ) {
+             Q_ASSERT(!resource->defaultFileExtension().isEmpty());
+             Q_ASSERT(!saveLocation().isEmpty());
 
-        QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
-        QFileInfo fileInfo(newFilename);
+             QString newFilename = saveLocation() + fi.baseName() + resource->defaultFileExtension();
+             QFileInfo fileInfo(newFilename);
 
-        int i = 1;
-        while (fileInfo.exists()) {
-            fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
-            i++;
-        }
-        resource->setFilename(fileInfo.filePath());
-        if(!addResource(resource)) {
-            delete resource;
-        }
-    }
-
-    /// loads the resource file into the resource server after it is downloaded using GHNS
-    virtual void loadingResourceFile( const QString & filename ) {
-        QFileInfo fi( filename );
-        if( fi.exists() == false )
-            return;
-
-        T* resource = createResource( filename );
-        resource->load();
-        if(!resource->valid()){
-            kWarning(30009) << "Import failed! Resource is not valid";
-            delete resource;
-            return;
+             int i = 1;
+             while (fileInfo.exists()) {
+                 fileInfo.setFile(saveLocation() + fi.baseName() + QString("%1").arg(i) + resource->defaultFileExtension());
+                 i++;
+             }
+             resource->setFilename(fileInfo.filePath());
          }
 
         if(!addResource(resource)) {

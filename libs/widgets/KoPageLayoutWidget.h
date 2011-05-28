@@ -36,6 +36,8 @@ public:
     KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
     ~KoPageLayoutWidget();
 
+    KoPageLayout pageLayout() const;
+
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
     void showPageSpread(bool on);

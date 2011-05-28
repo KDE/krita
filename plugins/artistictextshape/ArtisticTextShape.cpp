@@ -183,7 +183,7 @@ void ArtisticTextShape::createOutline()
 
                 // get the percent value of the actual char position
                 qreal t = m_baseline.percentAtLength( charOffset.x() );
-                // first intialize with invalid position
+                // first initialize with invalid position
                 m_charOffsets[globalCharIndex] = -1;
                 // are we beyond the baseline end?
                 if (t >= 1.0) {
@@ -275,7 +275,7 @@ void ArtisticTextShape::createOutline()
                 m.translate(charPos.x(), charPos.y());
                 m.rotate(rotation);
                 m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
-                // save character positon of current character
+                // save character position of current character
                 m_charPositions[globalCharIndex] = charPos;
                 // advance character position
                 offset = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);

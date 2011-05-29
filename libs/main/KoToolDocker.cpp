@@ -103,7 +103,6 @@ public:
                     QFrame *s;
                     QLabel *l;
                     if (widget->objectName().isEmpty()) {
-                        Q_ASSERT(!(iter.value()->objectName().isEmpty()));
                         continue; // skip this docker in release build when assert don't crash
                     }
                     housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);

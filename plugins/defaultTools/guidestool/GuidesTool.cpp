@@ -383,7 +383,7 @@ void GuidesTool::resourceChanged(int key, const QVariant &res)
 
 QList<QWidget*> GuidesTool::createOptionWidgets()
 {
-    QList< QWidget* > optionWidgets;
+    QList< QWidget* > optionwidgets;
     if (m_mode != EditGuide) {
         m_options = new GuidesToolOptionWidget();
 
@@ -394,16 +394,16 @@ QList<QWidget*> GuidesTool::createOptionWidgets()
                 this, SLOT(guideLinesChanged(Qt::Orientation)));
 
         m_options->setWindowTitle(i18n("Guides Editor"));
-        optionWidgets.append(m_options);
+        optionwidgets.append(m_options);
         m_insert = new InsertGuidesToolOptionWidget();
 
         connect(m_insert, SIGNAL(createGuides(GuidesTransaction*)),
                  this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
 
         m_insert->setWindowTitle(i18n("Guides Insertor"));
-        optionWidgets.append(m_insert);
+        optionwidgets.append(m_insert);
     }
-    return optionWidgets;
+    return optionwidgets;
 }
 
 void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)

@@ -150,6 +150,7 @@ public:
         TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
         KeepWithNext,             ///< Try to keep this block with its following block on the same page
         KeepHyphenation,          ///< bool, wether both parts of a hyphenated word shall lie within a single page
+        HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
     };
 
     enum AutoSpace {
@@ -366,6 +367,9 @@ public:
     
     void setKeepHyphenation(bool value);
     bool keepHyphenation() const;
+    
+    void setHyphenationLadderCount(int value);
+    int hyphenationLadderCount() const;
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();

@@ -983,6 +983,18 @@ void KoParagraphStyle::setKeepHyphenation(bool value)
     setProperty(KeepHyphenation, value);
 }
 
+int KoParagraphStyle::hyphenationLadderCount() const
+{
+    if (hasProperty(HyphenationLadderCount))
+        return propertyInt(HyphenationLadderCount);
+    return 0;
+}
+
+void KoParagraphStyle::setHyphenationLadderCount(int value)
+{
+    setProperty(HyphenationLadderCount, value);
+}
+
 void KoParagraphStyle::setBackground(const QBrush &brush)
 {
     d->setProperty(QTextFormat::BackgroundBrush, brush);
@@ -1585,6 +1597,18 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-keep")) {
         setKeepHyphenation(styleStack.property(KoXmlNS::fo, "hyphenation-keep") == "page");
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-ladder-count")) {
+        QString ladderCount = styleStack.property(KoXmlNS::fo, "hyphenation-ladder-count");
+        if (ladderCount == "no-limit")
+            setHyphenationLadderCount(0);
+        else {
+            bool ok;
+            int value = ladderCount.toInt(&ok);
+            if ((ok) && (value > 0))
+                setHyphenationLadderCount(value);
+        }
+    }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -1886,6 +1910,12 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:hyphenation-keep", "page", KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:hyphenation-keep", "auto", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::HyphenationLadderCount) {
+            int value = hyphenationLadderCount();
+            if (value == 0)
+                style.addProperty("fo:hyphenation-ladder-count", "no-limit", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:hyphenation-ladder-count", value, KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

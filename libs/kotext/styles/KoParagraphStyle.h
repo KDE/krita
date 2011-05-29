@@ -149,8 +149,9 @@ public:
         PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
         TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
         KeepWithNext,             ///< Try to keep this block with its following block on the same page
-        KeepHyphenation,          ///< bool, wether both parts of a hyphenated word shall lie within a single page
+        KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
+        PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
     };
 
     enum AutoSpace {
@@ -361,6 +362,9 @@ public:
     
     void setKeepWithNext(bool value);
     bool keepWithNext() const;
+    
+    void setPunctuationWrap(bool value);
+    bool punctuationWrap() const;
     
     void setTextAutoSpace(AutoSpace value);
     AutoSpace textAutoSpace() const;

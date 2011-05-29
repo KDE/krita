@@ -796,6 +796,18 @@ bool KoParagraphStyle::keepWithNext() const
     return false;
 }
 
+bool KoParagraphStyle::punctuationWrap() const
+{
+    if (hasProperty(PunctuationWrap))
+        return propertyBoolean(PunctuationWrap);
+    return false;
+}
+
+void KoParagraphStyle::setPunctuationWrap(bool value)
+{
+    setProperty(PunctuationWrap, value);
+}
+
 KoParagraphStyle *KoParagraphStyle::parentStyle() const
 {
     return d->parentStyle;
@@ -1609,6 +1621,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 setHyphenationLadderCount(value);
         }
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "punctuation-wrap")) {
+        setPunctuationWrap(styleStack.property(KoXmlNS::style, "punctuation-wrap") == "simple");
+    }
+    
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -1916,6 +1933,11 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:hyphenation-ladder-count", "no-limit", KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:hyphenation-ladder-count", value, KoGenStyle::ParagraphType);
+        } else if (key == PunctuationWrap) {
+            if (punctuationWrap())
+                style.addProperty("style:punctuation-wrap", "simple", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("style:punctuation-wrap", "hanging", KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

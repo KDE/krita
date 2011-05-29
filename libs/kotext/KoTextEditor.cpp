@@ -789,6 +789,7 @@ void KoTextEditor::insertInlineObject(KoInlineObject *inliner)
     d->caret.clearSelection();
 
     d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::insertFrameBreak()
@@ -809,6 +810,7 @@ void KoTextEditor::insertFrameBreak()
         d->caret.setBlockFormat(bf);
     }
     d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 bool KoTextEditor::deleteInlineObjects(bool backward)
@@ -887,6 +889,7 @@ void KoTextEditor::deleteChar()
             d->caret.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         d->deleteSelection();
     }
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::deletePreviousChar()
@@ -900,6 +903,7 @@ void KoTextEditor::deletePreviousChar()
             d->caret.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
         d->deleteSelection();
     }
+    emit cursorPositionChanged();
 }
 
 QTextDocument* KoTextEditor::document() const
@@ -989,6 +993,7 @@ void KoTextEditor::insertTable(int rows, int columns)
     }
 
     d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::insertTableRowAbove()
@@ -1135,6 +1140,7 @@ void KoTextEditor::insertTableOfContents()
     d->caret.insertFrame(tocFormat);
 
     d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::insertText(const QString &text)
@@ -1168,6 +1174,8 @@ void KoTextEditor::insertText(const QString &text)
     }
     d->updateRtlTimer.stop();
     d->updateRtlTimer.start();
+
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::insertText(const QString &text, const QTextCharFormat &format)
@@ -1270,6 +1278,7 @@ void KoTextEditor::newLine()
     }
     d->caret.setBlockFormat(bf);
     d->updateState(KoTextEditor::Private::NoOp);
+    emit cursorPositionChanged();
 }
 
 int KoTextEditor::position() const
@@ -1280,6 +1289,7 @@ int KoTextEditor::position() const
 void KoTextEditor::removeSelectedText()
 {
     d->caret.removeSelectedText();
+    emit cursorPositionChanged();
 }
 
 void KoTextEditor::select(QTextCursor::SelectionType selection)

@@ -378,14 +378,19 @@ void ArtisticTextShape::setFont(int charIndex, int charCount, const QFont &font)
                 currRange.setFont(font);
                 remainingCharCount -= currRange.text().length();
             } else {
-                ArtisticTextRange r = currRange.extract(charPos.second, remainingCharCount);
-                r.setFont(font);
-                if (charPos.second == 0)
-                    m_ranges.insert(charPos.first, r);
-                else
-                    m_ranges.insert(charPos.first+1, r);
+                ArtisticTextRange changedRange = currRange.extract(charPos.second, remainingCharCount);
+                changedRange.setFont(font);
+                if (charPos.second == 0) {
+                    m_ranges.insert(charPos.first, changedRange);
+                } else if (charPos.second >= currRange.text().length()) {
+                    m_ranges.insert(charPos.first+1, changedRange);
+                } else {
+                    ArtisticTextRange remainingRange = currRange.extract(charPos.second);
+                    m_ranges.insert(charPos.first+1, changedRange);
+                    m_ranges.insert(charPos.first+2, remainingRange);
+                }
                 charPos.first++;
-                remainingCharCount -= r.text().length();
+                remainingCharCount -= changedRange.text().length();
             }
         }
         charPos.first++;

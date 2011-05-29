@@ -90,6 +90,8 @@ private slots:
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);
     void anchorChanged(QAction*);
+    void setFontFamiliy(const QFont &font);
+    void setFontSize(int size);
 
 signals:
     void shapeSelected();
@@ -103,7 +105,9 @@ private:
 
     enum FontProperty {
         BoldProperty,
-        ItalicProperty
+        ItalicProperty,
+        FamiliyProperty,
+        SizeProperty
     };
 
     /// Changes the specified font property for the current text selection

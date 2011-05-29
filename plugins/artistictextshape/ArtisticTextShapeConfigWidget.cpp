@@ -22,15 +22,6 @@
 #include "ArtisticTextTool.h"
 #include "ArtisticTextToolSelection.h"
 #include "ArtisticTextShape.h"
-#include "ChangeTextAnchorCommand.h"
-#include "ChangeTextFontCommand.h"
-
-#include <QtGui/QButtonGroup>
-
-#include <KoCanvasController.h>
-#include <KoToolManager.h>
-#include <KoShapeManager.h>
-#include <KoCanvasBase.h>
 
 ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool)
     : m_textTool(textTool)
@@ -46,41 +37,14 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
     widget.anchorEnd->setDefaultAction(textTool->action("artistictext_anchor_end"));
     widget.fontSize->setRange( 2, 1000 );
 
-    connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(propertyChanged()));
-    connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
+    connect(widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SIGNAL(fontFamilyChanged(const QFont&)));
+    connect(widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(fontSizeChanged(int)));
 }
 
 void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
 {
     widget.fontFamily->blockSignals( block );
     widget.fontSize->blockSignals( block );
-}
-
-void ArtisticTextShapeConfigWidget::propertyChanged()
-{
-    ArtisticTextToolSelection *selection = dynamic_cast<ArtisticTextToolSelection*>(m_textTool->selection());
-    if (!selection)
-        return;
-
-    ArtisticTextShape *currentText = selection->selectedShape();
-    if (!currentText)
-        return;
-
-    QFont font = currentText->fontAt(m_textTool->textCursor());
-    font.setFamily( widget.fontFamily->currentFont().family() );
-    font.setBold( widget.bold->isChecked() );
-    font.setItalic( widget.italic->isChecked() );
-    font.setPointSize( widget.fontSize->value() );
-
-    QUndoCommand * cmd = 0;
-    if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
-        if (selection->hasSelection()) {
-            cmd = new ChangeTextFontCommand(currentText, selection->selectionStart(), selection->selectionCount(), font);
-        }
-    }
-
-    if( cmd )
-        m_textTool->canvas()->addCommand(cmd);
 }
 
 void ArtisticTextShapeConfigWidget::updateWidget()
@@ -99,7 +63,6 @@ void ArtisticTextShapeConfigWidget::updateWidget()
 
     widget.fontSize->setValue( font.pointSize() );
     font.setPointSize( 8 );
-
     widget.fontFamily->setCurrentFont( font );
 
     blockChildSignals( false );

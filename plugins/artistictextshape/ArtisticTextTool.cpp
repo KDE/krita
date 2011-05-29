@@ -553,6 +553,8 @@ QList<QWidget *> ArtisticTextTool::createOptionWidgets()
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
     configWidget->setWindowTitle(i18n("Text Properties"));
+    connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamiliy(QFont)));
+    connect(configWidget, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
@@ -772,6 +774,12 @@ void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant 
         case ItalicProperty:
             font.setItalic(value.toBool());
             break;
+        case FamiliyProperty:
+            font.setFamily(value.toString());
+            break;
+        case SizeProperty:
+            font.setPointSize(value.toInt());
+            break;
         }
 
         const int changeCount = qMin(selectedCharCount-collectedCharCount, range.text().count()-index.second);
@@ -804,6 +812,16 @@ void ArtisticTextTool::anchorChanged(QAction* action)
     if (newAnchor != m_currentShape->textAnchor()) {
         canvas()->addCommand(new ChangeTextAnchorCommand(m_currentShape, newAnchor));
     }
+}
+
+void ArtisticTextTool::setFontFamiliy(const QFont &font)
+{
+    changeFontProperty(FamiliyProperty, QVariant(font.family()));
+}
+
+void ArtisticTextTool::setFontSize(int size)
+{
+    changeFontProperty(SizeProperty, QVariant(size));
 }
 
 #include <ArtisticTextTool.moc>

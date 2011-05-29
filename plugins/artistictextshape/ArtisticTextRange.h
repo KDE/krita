@@ -60,7 +60,7 @@ public:
     QFont font() const;
 
     /// Extracts specified part of the text range
-    ArtisticTextRange extract(int from, int count);
+    ArtisticTextRange extract(int from, int count = -1);
 
     /// Checks if specified text range has the same style as this text range
     bool hasEqualStyle(const ArtisticTextRange &other) const;

@@ -76,7 +76,7 @@ ArtisticTextRange ArtisticTextRange::extract(int from, int count)
         extracted.setRotations(m_rotations.mid(from, count));
 
     // remove text
-    m_text.remove(from, count);
+    m_text.remove(from, count < 0 ? m_text.length()-from : count);
     // remove character transformations
     m_xOffsets = m_xOffsets.mid(0, from);
     m_yOffsets = m_yOffsets.mid(0, from);

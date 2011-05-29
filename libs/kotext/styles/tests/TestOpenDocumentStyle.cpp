@@ -187,6 +187,8 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return false;
     if (initialValue == outputValue)
         return true;
+    if (m_name == "style:writing-mode")
+        return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
             if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)

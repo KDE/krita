@@ -147,8 +147,15 @@ public:
         BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
         AutomaticWritingMode,     ///< bool
         PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
+        TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
+        KeepWithNext,             ///< Try to keep this block with its following block on the same page
     };
 
+    enum AutoSpace {
+        NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
+        IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
+    };
+    
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -349,6 +356,12 @@ public:
     
     void setPageNumber(int pageNumber);
     int pageNumber() const;
+    
+    void setKeepWithNext(bool value);
+    bool keepWithNext() const;
+    
+    void setTextAutoSpace(AutoSpace value);
+    AutoSpace textAutoSpace() const;
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();

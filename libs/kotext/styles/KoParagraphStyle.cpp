@@ -318,7 +318,10 @@ void KoParagraphStyle::setAlignLastLine(Qt::Alignment alignment)
 
 Qt::Alignment KoParagraphStyle::alignLastLine() const
 {
-    return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
+    if (hasProperty(AlignLastLine))
+        return static_cast<Qt::Alignment>(propertyInt(AlignLastLine));
+    // Hum, that doesn't sound right !
+    return alignment();
 }
 
 void KoParagraphStyle::setWidowThreshold(int lines)
@@ -779,6 +782,18 @@ void KoParagraphStyle::setNonBreakableLines(bool on)
 bool KoParagraphStyle::nonBreakableLines() const
 {
     return propertyBoolean(QTextFormat::BlockNonBreakableLines);
+}
+
+void KoParagraphStyle::setKeepWithNext(bool value)
+{
+    setProperty(KeepWithNext, value);
+}
+
+bool KoParagraphStyle::keepWithNext() const
+{
+    if (hasProperty(KeepWithNext))
+        return propertyBoolean(KeepWithNext);
+    return false;
 }
 
 KoParagraphStyle *KoParagraphStyle::parentStyle() const
@@ -1539,9 +1554,24 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setAutomaticWritingMode(styleStack.property(KoXmlNS::style, "writing-mode-automatic") == "true");
     }
     
+    if (styleStack.hasProperty(KoXmlNS::fo, "text-align-last")) {
+        setAlignLastLine(KoText::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align-last")));
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
+        setKeepWithNext(styleStack.property(KoXmlNS::fo, "keep-with-next") == "always");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-autospace")) {
+        const QString autoSpace = styleStack.property(KoXmlNS::style, "text-autospace");
+        if (autoSpace == "none")
+            setTextAutoSpace(NoAutoSpace);
+        else if (autoSpace == "ideograph-alpha")
+            setTextAutoSpace(IdeographAlpha);
+    }
+    
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
-    // AlignLastLine,
     // FollowDocBaseline,
 
 }
@@ -1615,6 +1645,18 @@ bool KoParagraphStyle::justifySingleWord() const
 void KoParagraphStyle::setJustifySingleWord(bool value)
 {
     setProperty(JustifySingleWord, value);
+}
+
+void KoParagraphStyle::setTextAutoSpace(KoParagraphStyle::AutoSpace value)
+{
+    setProperty(TextAutoSpace, value);
+}
+
+KoParagraphStyle::AutoSpace KoParagraphStyle::textAutoSpace() const
+{
+    if (hasProperty(TextAutoSpace))
+        return static_cast<AutoSpace>(propertyInt(TextAutoSpace));
+    return NoAutoSpace;
 }
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
@@ -1708,6 +1750,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 if (!align.isEmpty())
                     style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }
+        } else if (key == KoParagraphStyle::AlignLastLine) {
+            QString align = KoText::alignmentToString(alignLastLine());
+            if (!align.isEmpty())
+                style.addProperty("fo:text-align-last", align, KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
             int directionValue = 0;
             bool ok = false;
@@ -1824,6 +1870,16 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addAttribute("style:default-outline-level", defaultOutlineLevel());
         } else if (key == KoParagraphStyle::AutomaticWritingMode) {
             style.addProperty("style:writing-mode-automatic", automaticWritingMode(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::TextAutoSpace) {
+            if (textAutoSpace() == NoAutoSpace)
+                style.addProperty("style:text-autospace", "none", KoGenStyle::ParagraphType);
+            else if (textAutoSpace() == IdeographAlpha)
+                style.addProperty("style:text-autospace", "ideograph-alpha", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::KeepWithNext) {
+            if (keepWithNext())
+                style.addProperty("fo:keep-with-next", "always", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:keep-with-next", "auto", KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

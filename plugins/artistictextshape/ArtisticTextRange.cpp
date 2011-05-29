@@ -76,6 +76,10 @@ ArtisticTextRange ArtisticTextRange::extract(int from, int count)
     if (from < m_rotations.count())
         extracted.setRotations(m_rotations.mid(from, count));
 
+    extracted.setLetterSpacing(m_letterSpacing);
+    extracted.setWordSpacing(m_wordSpacing);
+    extracted.setBaselineShift(m_baselineShift, m_baselineShiftValue);
+
     // remove text
     m_text.remove(from, count < 0 ? m_text.length()-from : count);
     // remove character transformations
@@ -197,6 +201,16 @@ void ArtisticTextRange::setBaselineShift(BaselineShift mode, qreal value)
 {
     m_baselineShift = mode;
     m_baselineShiftValue = value;
+}
+
+qreal ArtisticTextRange::subAndSuperScriptSizeFactor()
+{
+    return 0.58; // taken from wikipedia
+}
+
+qreal ArtisticTextRange::subAndSuperScriptOffsetFactor()
+{
+    return 1./3.; // taken from wikipedia
 }
 
 void ArtisticTextRange::printDebug() const

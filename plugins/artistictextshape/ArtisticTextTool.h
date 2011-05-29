@@ -115,6 +115,9 @@ private:
     /// Changes the specified font property for the current text selection
     void changeFontProperty(FontProperty property, const QVariant &value);
 
+    /// Toggle sub and super script
+    void toggleSubSuperScript(ArtisticTextRange::BaselineShift mode);
+
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
 

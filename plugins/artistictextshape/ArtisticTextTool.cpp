@@ -31,6 +31,7 @@
 #include "ChangeTextOffsetCommand.h"
 #include "ChangeTextFontCommand.h"
 #include "ChangeTextAnchorCommand.h"
+#include "ReplaceTextRangeCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -83,10 +84,12 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     addAction("artistictext_font_italic", m_fontItalic);
 
     m_superScript = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_superScript->setCheckable(true);
     connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
     addAction("artistictext_superscript", m_superScript);
 
     m_subScript = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_subScript->setCheckable(true);
     connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
     addAction("artistictext_subscript", m_subScript);
 
@@ -498,8 +501,12 @@ void ArtisticTextTool::deactivate()
 void ArtisticTextTool::updateActions()
 {
     if( m_currentShape ) {
-        const bool hasSelection = m_selection.hasSelection();
         const QFont font = m_currentShape->fontAt(textCursor());
+        const CharIndex index = m_currentShape->indexOfChar(textCursor());
+        ArtisticTextRange::BaselineShift baselineShift = ArtisticTextRange::None;
+        if (index.first >= 0) {
+            baselineShift = m_currentShape->text().at(index.first).baselineShift();
+        }
         m_fontBold->blockSignals(true);
         m_fontBold->setChecked(font.bold());
         m_fontBold->blockSignals(false);
@@ -517,8 +524,14 @@ void ArtisticTextTool::updateActions()
         }
         m_anchorGroup->blockSignals(false);
         m_anchorGroup->setEnabled(true);
-        m_superScript->setEnabled(hasSelection);
-        m_subScript->setEnabled(hasSelection);
+        m_superScript->blockSignals(true);
+        m_superScript->setChecked(baselineShift == ArtisticTextRange::Super);
+        m_superScript->blockSignals(false);
+        m_subScript->blockSignals(true);
+        m_subScript->setChecked(baselineShift == ArtisticTextRange::Sub);
+        m_subScript->blockSignals(false);
+        m_superScript->setEnabled(true);
+        m_subScript->setEnabled(true);
     } else {
         m_detachPath->setEnabled(false);
         m_convertText->setEnabled(false);
@@ -839,12 +852,46 @@ void ArtisticTextTool::setFontSize(int size)
 
 void ArtisticTextTool::setSuperScript()
 {
-
+    toggleSubSuperScript(ArtisticTextRange::Super);
 }
 
 void ArtisticTextTool::setSubScript()
 {
+    toggleSubSuperScript(ArtisticTextRange::Sub);
+}
 
+void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mode)
+{
+    if (!m_currentShape || !m_selection.hasSelection())
+        return;
+
+    const int from = m_selection.selectionStart();
+    const int count = m_selection.selectionCount();
+    const qreal offsetDirection = mode == ArtisticTextRange::Sub ? 1.0 : -1.0;
+    const qreal offsetFactor = offsetDirection * ArtisticTextRange::subAndSuperScriptOffsetFactor();
+
+    QList<ArtisticTextRange> ranges = m_currentShape->copyText(from, count);
+    const int rangeCount = ranges.count();
+    if (!rangeCount)
+        return;
+
+    // determine if we want to disable the specified mode
+    const bool disableMode = ranges.first().baselineShift() == mode;
+    const qreal fontSize = m_currentShape->defaultFont().pointSizeF();
+
+    for (int i = 0; i < rangeCount; ++i) {
+        ArtisticTextRange &currentRange = ranges[i];
+        QFont font = currentRange.font();
+        if (disableMode) {
+            currentRange.setBaselineShift(ArtisticTextRange::None, 0.0);
+            font.setPointSizeF(fontSize);
+        } else {
+            currentRange.setBaselineShift(mode, fontSize*offsetFactor);
+            font.setPointSizeF(fontSize*ArtisticTextRange::subAndSuperScriptSizeFactor());
+        }
+        currentRange.setFont(font);
+    }
+    canvas()->addCommand(new ReplaceTextRangeCommand(m_currentShape, ranges, from, count, this));
 }
 
 #include <ArtisticTextTool.moc>

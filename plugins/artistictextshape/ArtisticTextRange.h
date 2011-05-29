@@ -133,8 +133,17 @@ public:
     /// Returns the optional baseline shift value
     qreal baselineShiftValue() const;
 
+    /// Returns the normalized baseline shift value in point
+    qreal baselineShiftValueNormalized() const;
+
     /// Sets baseline shift mode and optional value
-    void setBaselineShift(BaselineShift mode, qreal value = 0);
+    void setBaselineShift(BaselineShift mode, qreal value);
+
+    /// Returns the factor to calculate sub and super script font size
+    static qreal subAndSuperScriptSizeFactor();
+
+    /// Returns the factor to calculatre sub and super script offsets
+    static qreal subAndSuperScriptOffsetFactor();
 
     /// Prints debug output
     void printDebug() const;

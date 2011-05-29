@@ -22,6 +22,7 @@ SET ( ArtisticTextShape_SRCS
     RemoveTextRangeCommand.cpp
     MoveStartOffsetStrategy.cpp
     SelectTextStrategy.cpp
+    ReplaceTextRangeCommand.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS

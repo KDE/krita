@@ -149,6 +149,7 @@ public:
         PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
         TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
         KeepWithNext,             ///< Try to keep this block with its following block on the same page
+        KeepHyphenation,          ///< bool, wether both parts of a hyphenated word shall lie within a single page
     };
 
     enum AutoSpace {
@@ -362,6 +363,9 @@ public:
     
     void setTextAutoSpace(AutoSpace value);
     AutoSpace textAutoSpace() const;
+    
+    void setKeepHyphenation(bool value);
+    bool keepHyphenation() const;
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();

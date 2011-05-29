@@ -971,6 +971,18 @@ void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir)
     setProperty(TextProgressionDirection, dir);
 }
 
+bool KoParagraphStyle::keepHyphenation() const
+{
+    if (hasProperty(KeepHyphenation))
+        return propertyBoolean(KeepHyphenation);
+    return false;
+}
+
+void KoParagraphStyle::setKeepHyphenation(bool value)
+{
+    setProperty(KeepHyphenation, value);
+}
+
 void KoParagraphStyle::setBackground(const QBrush &brush)
 {
     d->setProperty(QTextFormat::BackgroundBrush, brush);
@@ -1570,6 +1582,9 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             setTextAutoSpace(IdeographAlpha);
     }
     
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-keep")) {
+        setKeepHyphenation(styleStack.property(KoXmlNS::fo, "hyphenation-keep") == "page");
+    }
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -1866,6 +1881,11 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("fo:keep-with-next", "always", KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:keep-with-next", "auto", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::KeepHyphenation) {
+            if (keepHyphenation())
+                style.addProperty("fo:hyphenation-keep", "page", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:hyphenation-keep", "auto", KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

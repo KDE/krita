@@ -28,12 +28,6 @@
 
 class QImage;
 
-const QString KRITA_PAINTOP_OPACITY = "Krita/opacity";
-const QString KRITA_PAINTOP_COMPOSITEOP = "Krita/compositeop";
-const QString KRITA_PAINTOP_ERASE = "Krita/erase";
-const QString KRITA_PAINTOP_MIRRORHORIZONTAL = "Krita/mirrorhorizontal";
-const QString KRITA_PAINTOP_MIRRORVERTICAL = "Krita/mirrorvertical";
-
 /**
  * A KisPaintOpPreset contains a particular set of settings
  * associated with a paintop, like brush, paintopsettings.

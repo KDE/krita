@@ -25,8 +25,10 @@
 #include "AddTextRangeCommand.h"
 #include "RemoveTextRangeCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
+#include "ArtisticTextShapeOnPathWidget.h"
 #include "MoveStartOffsetStrategy.h"
 #include "SelectTextStrategy.h"
+#include "ChangeTextOffsetCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -58,13 +60,15 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new KAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
+    addAction("artistictext_detach_from_path", m_detachPath);
 
-    m_convertText  = new QAction(KIcon("pathshape"), i18n("Convert to Path"), this);
+    m_convertText  = new KAction(KIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
+    addAction("artistictext_convert_to_path", m_convertText);
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
@@ -493,32 +497,29 @@ void ArtisticTextTool::convertText()
 QList<QWidget *> ArtisticTextTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    QWidget * pathWidget = new QWidget();
-    pathWidget->setObjectName("ArtisticTextPathWidget");
-    QGridLayout * layout = new QGridLayout(pathWidget);
-    QToolButton * detachButton = new QToolButton(pathWidget);
-    detachButton->setDefaultAction( m_detachPath );
-    layout->addWidget( detachButton, 0, 0 );
-    QToolButton * convertButton = new QToolButton(pathWidget);
-    convertButton->setDefaultAction( m_convertText );
-    layout->addWidget( convertButton, 0, 2 );
-    layout->setSpacing(0);
-    layout->setMargin(6);
-    layout->setRowStretch(3, 1);
-    layout->setColumnStretch(1, 1);
-    pathWidget->setWindowTitle(i18n("Text On Path"));
-    widgets.append(pathWidget);
+
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
-    if (m_currentShape) {
-        configWidget->updateWidget();
-    }
+    configWidget->setWindowTitle(i18n("Text Properties"));
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
-
-    configWidget->setWindowTitle(i18n("Text Properties"));
     widgets.append(configWidget);
+
+    ArtisticTextShapeOnPathWidget *pathWidget = new ArtisticTextShapeOnPathWidget(this);
+    pathWidget->setObjectName("ArtisticTextPathWidget");
+    pathWidget->setWindowTitle(i18n("Text On Path"));
+    connect(pathWidget, SIGNAL(offsetChanged(int)), this, SLOT(setStartOffset(int)));
+    connect(this, SIGNAL(shapeSelected()), pathWidget, SLOT(updateWidget()));
+    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
+            pathWidget, SLOT(updateWidget()));
+    widgets.append(pathWidget);
+
+    if (m_currentShape) {
+        pathWidget->updateWidget();
+        configWidget->updateWidget();
+    }
+
     return widgets;
 }
 
@@ -680,6 +681,17 @@ QPainterPath ArtisticTextTool::offsetHandleShape()
     transform.rotate(360. - baseline.angleAtPercent(offset));
 
     return transform.map(handle);
+}
+
+void ArtisticTextTool::setStartOffset(int offset)
+{
+    if (!m_currentShape || !m_currentShape->isOnPath())
+        return;
+
+    const qreal newOffset = static_cast<qreal>(offset) / 100.0;
+    if( newOffset != m_currentShape->startOffset() ) {
+        canvas()->addCommand(new ChangeTextOffsetCommand(m_currentShape, m_currentShape->startOffset(), newOffset));
+    }
 }
 
 #include <ArtisticTextTool.moc>

@@ -85,6 +85,7 @@ private slots:
     void blinkCursor();
     void textChanged();
     void shapeSelectionChanged();
+    void setStartOffset(int offset);
 
 signals:
     void shapeSelected();
@@ -109,8 +110,8 @@ private:
     QPainterPath m_textCursorShape;     ///< our visual text cursor representation
     bool m_hoverHandle;
 
-    QAction * m_detachPath;
-    QAction * m_convertText;
+    KAction * m_detachPath;
+    KAction * m_convertText;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

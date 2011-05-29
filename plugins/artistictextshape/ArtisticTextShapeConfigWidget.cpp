@@ -22,7 +22,6 @@
 #include "ArtisticTextTool.h"
 #include "ArtisticTextToolSelection.h"
 #include "ArtisticTextShape.h"
-#include "ChangeTextOffsetCommand.h"
 #include "ChangeTextAnchorCommand.h"
 #include "ChangeTextFontCommand.h"
 
@@ -61,7 +60,6 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
     connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
     connect( widget.bold, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
     connect( widget.italic, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
-    connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
     connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SLOT(propertyChanged()));
 }
 
@@ -71,7 +69,6 @@ void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
     widget.fontSize->blockSignals( block );
     widget.bold->blockSignals( block );
     widget.italic->blockSignals( block );
-    widget.startOffset->blockSignals( block );
     m_anchorGroup->blockSignals( block );
 }
 
@@ -99,14 +96,9 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     else
         newAnchor = ArtisticTextShape::AnchorEnd;
 
-    qreal newOffset = static_cast<qreal>(widget.startOffset->value()) / 100.0;
-
     QUndoCommand * cmd = 0;
     if ( newAnchor != currentText->textAnchor() ) {
         cmd = new ChangeTextAnchorCommand(currentText, newAnchor);
-    }
-    else if( newOffset != currentText->startOffset() ) {
-        cmd = new ChangeTextOffsetCommand(currentText, currentText->startOffset(), newOffset);
     }
     else if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
         if (selection->hasSelection()) {
@@ -144,8 +136,6 @@ void ArtisticTextShapeConfigWidget::updateWidget()
         widget.anchorMiddle->setChecked( true );
     else
         widget.anchorEnd->setChecked( true );
-    widget.startOffset->setValue( static_cast<int>( currentText->startOffset() * 100.0 ) );
-    widget.startOffset->setEnabled( currentText->isOnPath() );
 
     blockChildSignals( false );
 }

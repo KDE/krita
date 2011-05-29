@@ -29,6 +29,7 @@
 #include "MoveStartOffsetStrategy.h"
 #include "SelectTextStrategy.h"
 #include "ChangeTextOffsetCommand.h"
+#include "ChangeTextFontCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -69,6 +70,16 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
     addAction("artistictext_convert_to_path", m_convertText);
+
+    m_fontBold = new KAction(KIcon("format-text-bold"), i18n("Bold text"), this);
+    m_fontBold->setCheckable(true);
+    connect(m_fontBold, SIGNAL(toggled(bool)), this, SLOT(toggleFontBold(bool)));
+    addAction("artistictext_font_bold", m_fontBold);
+
+    m_fontItalic = new KAction(KIcon("format-text-italic"), i18n("Italic text"), this);
+    m_fontItalic->setCheckable(true);
+    connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
+    addAction("artistictext_font_italic", m_fontItalic);
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
@@ -456,11 +467,22 @@ void ArtisticTextTool::deactivate()
 void ArtisticTextTool::updateActions()
 {
     if( m_currentShape ) {
+        const QFont font = m_currentShape->fontAt(textCursor());
+        m_fontBold->blockSignals(true);
+        m_fontBold->setChecked(font.bold());
+        m_fontBold->blockSignals(false);
+        m_fontBold->setEnabled(true);
+        m_fontItalic->blockSignals(true);
+        m_fontItalic->setChecked(font.italic());
+        m_fontItalic->blockSignals(false);
+        m_fontItalic->setEnabled(true);
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
     } else {
-        m_detachPath->setEnabled( false );
-        m_convertText->setEnabled( false );
+        m_detachPath->setEnabled(false);
+        m_convertText->setEnabled(false);
+        m_fontBold->setEnabled(false);
+        m_fontItalic->setEnabled(false);
     }
 }
 
@@ -587,6 +609,7 @@ void ArtisticTextTool::setTextCursorInternal( int textCursor )
     m_textCursor = textCursor;
     createTextCursorShape();
     updateTextCursorArea();
+    updateActions();
     emit shapeSelected();
 }
 
@@ -692,6 +715,56 @@ void ArtisticTextTool::setStartOffset(int offset)
     if( newOffset != m_currentShape->startOffset() ) {
         canvas()->addCommand(new ChangeTextOffsetCommand(m_currentShape, m_currentShape->startOffset(), newOffset));
     }
+}
+
+void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant &value)
+{
+    if (!m_currentShape)
+        return;
+    if (!m_selection.hasSelection())
+        return;
+
+    // build font ranges
+    const int selectedCharCount = m_selection.selectionCount();
+    const int selectedCharStart = m_selection.selectionStart();
+    QList<ArtisticTextRange> ranges = m_currentShape->text();
+    CharIndex index = m_currentShape->indexOfChar(selectedCharStart);
+    if (index.first < 0)
+        return;
+
+    QUndoCommand * cmd = new QUndoCommand;
+    int collectedCharCount = 0;
+    while(collectedCharCount < selectedCharCount) {
+        ArtisticTextRange &range = ranges[index.first];
+        QFont font = range.font();
+        switch(property) {
+        case BoldProperty:
+            font.setBold(value.toBool());
+            break;
+        case ItalicProperty:
+            font.setItalic(value.toBool());
+            break;
+        }
+
+        const int changeCount = qMin(selectedCharCount-collectedCharCount, range.text().count()-index.second);
+        const int changeStart = selectedCharStart+collectedCharCount;
+        new ChangeTextFontCommand(m_currentShape, changeStart, changeCount, font, cmd);
+        index.first++;
+        index.second = 0;
+        collectedCharCount += changeCount;
+    }
+
+    canvas()->addCommand(cmd);
+}
+
+void ArtisticTextTool::toggleFontBold(bool enabled)
+{
+    changeFontProperty(BoldProperty, QVariant(enabled));
+}
+
+void ArtisticTextTool::toggleFontItalic(bool enabled)
+{
+    changeFontProperty(ItalicProperty, QVariant(enabled));
 }
 
 #include <ArtisticTextTool.moc>

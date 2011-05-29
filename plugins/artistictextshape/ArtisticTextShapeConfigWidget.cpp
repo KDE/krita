@@ -39,10 +39,8 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
 
     widget.setupUi( this );
 
-    widget.bold->setCheckable( true );
-    widget.bold->setIcon( KIcon( "format-text-bold" ) );
-    widget.italic->setCheckable( true );
-    widget.italic->setIcon( KIcon( "format-text-italic" ) );
+    widget.bold->setDefaultAction(textTool->action("artistictext_font_bold"));
+    widget.italic->setDefaultAction(textTool->action("artistictext_font_italic"));
     widget.anchorStart->setIcon( KIcon( "format-justify-left" ) );
     widget.anchorStart->setCheckable( true );
     widget.anchorMiddle->setIcon( KIcon( "format-justify-center" ) );
@@ -58,8 +56,6 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
 
     connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(propertyChanged()));
     connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
-    connect( widget.bold, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
-    connect( widget.italic, SIGNAL(toggled(bool)), this, SLOT(propertyChanged()));
     connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SLOT(propertyChanged()));
 }
 
@@ -67,8 +63,6 @@ void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
 {
     widget.fontFamily->blockSignals( block );
     widget.fontSize->blockSignals( block );
-    widget.bold->blockSignals( block );
-    widget.italic->blockSignals( block );
     m_anchorGroup->blockSignals( block );
 }
 
@@ -128,8 +122,6 @@ void ArtisticTextShapeConfigWidget::updateWidget()
     font.setPointSize( 8 );
 
     widget.fontFamily->setCurrentFont( font );
-    widget.bold->setChecked( font.bold() );
-    widget.italic->setChecked( font.italic() );
     if( currentText->textAnchor() == ArtisticTextShape::AnchorStart )
         widget.anchorStart->setChecked( true );
     else if( currentText->textAnchor() == ArtisticTextShape::AnchorMiddle )

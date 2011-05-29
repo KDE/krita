@@ -86,6 +86,8 @@ private slots:
     void textChanged();
     void shapeSelectionChanged();
     void setStartOffset(int offset);
+    void toggleFontBold(bool enabled);
+    void toggleFontItalic(bool enabled);
 
 signals:
     void shapeSelected();
@@ -96,6 +98,14 @@ private:
     void createTextCursorShape();
     void updateTextCursorArea() const;
     void setCurrentShape(ArtisticTextShape *currentShape);
+
+    enum FontProperty {
+        BoldProperty,
+        ItalicProperty
+    };
+
+    /// Changes the specified font property for the current text selection
+    void changeFontProperty(FontProperty property, const QVariant &value);
 
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
@@ -112,6 +122,8 @@ private:
 
     KAction * m_detachPath;
     KAction * m_convertText;
+    KAction * m_fontBold;
+    KAction * m_fontItalic;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

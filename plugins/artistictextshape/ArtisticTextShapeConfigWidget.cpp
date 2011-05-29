@@ -32,6 +32,8 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
 
     widget.bold->setDefaultAction(textTool->action("artistictext_font_bold"));
     widget.italic->setDefaultAction(textTool->action("artistictext_font_italic"));
+    widget.superScript->setDefaultAction(textTool->action("artistictext_superscript"));
+    widget.subScript->setDefaultAction(textTool->action("artistictext_subscript"));
     widget.anchorStart->setDefaultAction(textTool->action("artistictext_anchor_start"));
     widget.anchorMiddle->setDefaultAction(textTool->action("artistictext_anchor_middle"));
     widget.anchorEnd->setDefaultAction(textTool->action("artistictext_anchor_end"));

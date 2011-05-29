@@ -92,6 +92,8 @@ private slots:
     void anchorChanged(QAction*);
     void setFontFamiliy(const QFont &font);
     void setFontSize(int size);
+    void setSuperScript();
+    void setSubScript();
 
 signals:
     void shapeSelected();
@@ -130,6 +132,8 @@ private:
     KAction * m_convertText;
     KAction * m_fontBold;
     KAction * m_fontItalic;
+    KAction * m_superScript;
+    KAction * m_subScript;
     QActionGroup * m_anchorGroup;
 
     int m_textCursor;

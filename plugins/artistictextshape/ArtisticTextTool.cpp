@@ -82,6 +82,14 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
     addAction("artistictext_font_italic", m_fontItalic);
 
+    m_superScript = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
+    addAction("artistictext_superscript", m_superScript);
+
+    m_subScript = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
+    addAction("artistictext_subscript", m_subScript);
+
     KAction *anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
     anchorStart->setCheckable( true );
     anchorStart->setData(ArtisticTextShape::AnchorStart);
@@ -490,6 +498,7 @@ void ArtisticTextTool::deactivate()
 void ArtisticTextTool::updateActions()
 {
     if( m_currentShape ) {
+        const bool hasSelection = m_selection.hasSelection();
         const QFont font = m_currentShape->fontAt(textCursor());
         m_fontBold->blockSignals(true);
         m_fontBold->setChecked(font.bold());
@@ -508,12 +517,16 @@ void ArtisticTextTool::updateActions()
         }
         m_anchorGroup->blockSignals(false);
         m_anchorGroup->setEnabled(true);
+        m_superScript->setEnabled(hasSelection);
+        m_subScript->setEnabled(hasSelection);
     } else {
         m_detachPath->setEnabled(false);
         m_convertText->setEnabled(false);
         m_fontBold->setEnabled(false);
         m_fontItalic->setEnabled(false);
         m_anchorGroup->setEnabled(false);
+        m_superScript->setEnabled(false);
+        m_subScript->setEnabled(false);
     }
 }
 
@@ -822,6 +835,16 @@ void ArtisticTextTool::setFontFamiliy(const QFont &font)
 void ArtisticTextTool::setFontSize(int size)
 {
     changeFontProperty(SizeProperty, QVariant(size));
+}
+
+void ArtisticTextTool::setSuperScript()
+{
+
+}
+
+void ArtisticTextTool::setSubScript()
+{
+
 }
 
 #include <ArtisticTextTool.moc>

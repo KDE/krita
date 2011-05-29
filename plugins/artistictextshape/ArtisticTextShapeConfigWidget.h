@@ -46,7 +46,6 @@ private:
     void blockChildSignals( bool block );
     Ui::ArtisticTextShapeConfigWidget widget;
     ArtisticTextTool *m_textTool;
-    QButtonGroup * m_anchorGroup;
 };
 
 #endif // ARTISTICTEXTSHAPECONFIGWIDGET_H

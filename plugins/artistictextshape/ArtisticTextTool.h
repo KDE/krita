@@ -28,6 +28,7 @@
 #include <QtCore/QTimer>
 
 class QAction;
+class QActionGroup;
 class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
@@ -88,6 +89,7 @@ private slots:
     void setStartOffset(int offset);
     void toggleFontBold(bool enabled);
     void toggleFontItalic(bool enabled);
+    void anchorChanged(QAction*);
 
 signals:
     void shapeSelected();
@@ -124,6 +126,10 @@ private:
     KAction * m_convertText;
     KAction * m_fontBold;
     KAction * m_fontItalic;
+    KAction * m_anchorStart;
+    KAction * m_anchorMiddle;
+    KAction * m_anchorEnd;
+    QActionGroup * m_anchorGroup;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

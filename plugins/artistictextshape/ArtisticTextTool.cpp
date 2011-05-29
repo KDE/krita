@@ -30,6 +30,7 @@
 #include "SelectTextStrategy.h"
 #include "ChangeTextOffsetCommand.h"
 #include "ChangeTextFontCommand.h"
+#include "ChangeTextAnchorCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -80,6 +81,28 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     m_fontItalic->setCheckable(true);
     connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
     addAction("artistictext_font_italic", m_fontItalic);
+
+    m_anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
+    m_anchorStart->setCheckable( true );
+    m_anchorStart->setData(ArtisticTextShape::AnchorStart);
+    addAction("artistictext_anchor_start", m_anchorStart);
+
+    m_anchorMiddle = new KAction(KIcon("format-justify-center"), i18n("Anchor at Middle"), this);
+    m_anchorMiddle->setCheckable( true );
+    m_anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
+    addAction("artistictext_anchor_middle", m_anchorMiddle);
+
+    m_anchorEnd = new KAction(KIcon("format-justify-right"), i18n("Anchor at End"), this);
+    m_anchorEnd->setCheckable( true );
+    m_anchorEnd->setData(ArtisticTextShape::AnchorEnd);
+    addAction("artistictext_anchor_end", m_anchorEnd);
+
+    m_anchorGroup = new QActionGroup(this);
+    m_anchorGroup->setExclusive(true);
+    m_anchorGroup->addAction(m_anchorStart);
+    m_anchorGroup->addAction(m_anchorMiddle);
+    m_anchorGroup->addAction(m_anchorEnd);
+    connect(m_anchorGroup, SIGNAL(triggered(QAction*)), this, SLOT(anchorChanged(QAction*)));
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
@@ -478,18 +501,27 @@ void ArtisticTextTool::updateActions()
         m_fontItalic->setEnabled(true);
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
+        m_anchorGroup->blockSignals(true);
+        if( m_currentShape->textAnchor() == ArtisticTextShape::AnchorStart )
+            m_anchorStart->setChecked( true );
+        else if( m_currentShape->textAnchor() == ArtisticTextShape::AnchorMiddle )
+            m_anchorMiddle->setChecked( true );
+        else
+            m_anchorEnd->setChecked( true );
+        m_anchorGroup->blockSignals(false);
+        m_anchorGroup->setEnabled(true);
     } else {
         m_detachPath->setEnabled(false);
         m_convertText->setEnabled(false);
         m_fontBold->setEnabled(false);
         m_fontItalic->setEnabled(false);
+        m_anchorGroup->setEnabled(false);
     }
 }
 
 void ArtisticTextTool::detachPath()
 {
-    if( m_currentShape && m_currentShape->isOnPath() )
-    {
+    if( m_currentShape && m_currentShape->isOnPath() ) {
         canvas()->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
         updateActions();
     }
@@ -719,9 +751,7 @@ void ArtisticTextTool::setStartOffset(int offset)
 
 void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant &value)
 {
-    if (!m_currentShape)
-        return;
-    if (!m_selection.hasSelection())
+    if (!m_currentShape || !m_selection.hasSelection())
         return;
 
     // build font ranges
@@ -765,6 +795,17 @@ void ArtisticTextTool::toggleFontBold(bool enabled)
 void ArtisticTextTool::toggleFontItalic(bool enabled)
 {
     changeFontProperty(ItalicProperty, QVariant(enabled));
+}
+
+void ArtisticTextTool::anchorChanged(QAction* action)
+{
+    if (!m_currentShape)
+        return;
+
+    ArtisticTextShape::TextAnchor newAnchor = static_cast<ArtisticTextShape::TextAnchor>(action->data().toInt());
+    if (newAnchor != m_currentShape->textAnchor()) {
+        canvas()->addCommand(new ChangeTextAnchorCommand(m_currentShape, newAnchor));
+    }
 }
 
 #include <ArtisticTextTool.moc>

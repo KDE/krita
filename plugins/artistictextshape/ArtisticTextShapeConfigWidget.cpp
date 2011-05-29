@@ -33,7 +33,7 @@
 #include <KoCanvasBase.h>
 
 ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *textTool)
-    : m_textTool(textTool), m_anchorGroup(0)
+    : m_textTool(textTool)
 {
     Q_ASSERT(m_textTool);
 
@@ -41,29 +41,19 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
 
     widget.bold->setDefaultAction(textTool->action("artistictext_font_bold"));
     widget.italic->setDefaultAction(textTool->action("artistictext_font_italic"));
-    widget.anchorStart->setIcon( KIcon( "format-justify-left" ) );
-    widget.anchorStart->setCheckable( true );
-    widget.anchorMiddle->setIcon( KIcon( "format-justify-center" ) );
-    widget.anchorMiddle->setCheckable( true );
-    widget.anchorEnd->setIcon( KIcon( "format-justify-right" ) );
-    widget.anchorEnd->setCheckable( true );
+    widget.anchorStart->setDefaultAction(textTool->action("artistictext_anchor_start"));
+    widget.anchorMiddle->setDefaultAction(textTool->action("artistictext_anchor_middle"));
+    widget.anchorEnd->setDefaultAction(textTool->action("artistictext_anchor_end"));
     widget.fontSize->setRange( 2, 1000 );
-
-    m_anchorGroup = new QButtonGroup(this);
-    m_anchorGroup->addButton( widget.anchorStart );
-    m_anchorGroup->addButton( widget.anchorMiddle );
-    m_anchorGroup->addButton( widget.anchorEnd );
 
     connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(propertyChanged()));
     connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SLOT(propertyChanged()));
-    connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SLOT(propertyChanged()));
 }
 
 void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )
 {
     widget.fontFamily->blockSignals( block );
     widget.fontSize->blockSignals( block );
-    m_anchorGroup->blockSignals( block );
 }
 
 void ArtisticTextShapeConfigWidget::propertyChanged()
@@ -82,19 +72,8 @@ void ArtisticTextShapeConfigWidget::propertyChanged()
     font.setItalic( widget.italic->isChecked() );
     font.setPointSize( widget.fontSize->value() );
 
-    ArtisticTextShape::TextAnchor newAnchor;
-    if ( widget.anchorStart->isChecked() )
-        newAnchor = ArtisticTextShape::AnchorStart;
-    else if ( widget.anchorMiddle->isChecked() )
-        newAnchor = ArtisticTextShape::AnchorMiddle;
-    else
-        newAnchor = ArtisticTextShape::AnchorEnd;
-
     QUndoCommand * cmd = 0;
-    if ( newAnchor != currentText->textAnchor() ) {
-        cmd = new ChangeTextAnchorCommand(currentText, newAnchor);
-    }
-    else if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
+    if( font.key() != currentText->fontAt(m_textTool->textCursor()).key() ) {
         if (selection->hasSelection()) {
             cmd = new ChangeTextFontCommand(currentText, selection->selectionStart(), selection->selectionCount(), font);
         }
@@ -122,12 +101,6 @@ void ArtisticTextShapeConfigWidget::updateWidget()
     font.setPointSize( 8 );
 
     widget.fontFamily->setCurrentFont( font );
-    if( currentText->textAnchor() == ArtisticTextShape::AnchorStart )
-        widget.anchorStart->setChecked( true );
-    else if( currentText->textAnchor() == ArtisticTextShape::AnchorMiddle )
-        widget.anchorMiddle->setChecked( true );
-    else
-        widget.anchorEnd->setChecked( true );
 
     blockChildSignals( false );
 }

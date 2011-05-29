@@ -175,8 +175,10 @@ QPair<qreal,qreal> KoStyleStack::fontSize(const qreal defaultFontPointSize) cons
                 //percent *= value.left( value.length() - 1 ).toDouble() / 100.0;
                 if (percent == 100)
                     percent = value.left(value.length() - 1).toDouble();
-            } else
-                return QPair<qreal,qreal> ((percent * KoUnit::parseValue(value))/100.0, percent);   // e.g. 12pt
+            } else {
+                // e.g. 12pt and indicate that there was not percentage there
+                return QPair<qreal,qreal> ((percent * KoUnit::parseValue(value))/100.0, 0.0);
+            }
         }
     }
 

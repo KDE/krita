@@ -32,8 +32,7 @@ public:
           counterIsImage(false),
           counterIndex(1),
           border(0),
-          paintStrategy(0),
-          top(0)
+          paintStrategy(0)
     {
     }
 
@@ -49,10 +48,9 @@ public:
     bool counterIsImage;
     int counterIndex;
     QPointF counterPos;
+    QTextCharFormat labelFormat;
     KoTextBlockBorderData *border;
     KoTextBlockPaintStrategyBase *paintStrategy;
-    qreal top;
-    qreal bottom;
 };
 
 KoTextBlockData::KoTextBlockData()
@@ -150,6 +148,16 @@ QPointF KoTextBlockData::counterPosition() const
     return d->counterPos;
 }
 
+void KoTextBlockData::setLabelFormat(const QTextCharFormat &format)
+{
+    d->labelFormat = format;
+}
+
+QTextCharFormat KoTextBlockData::labelFormat() const
+{
+    return d->labelFormat;
+}
+
 KoTextBlockBorderData *KoTextBlockData::border() const
 {
     return d->border;
@@ -164,14 +172,4 @@ void KoTextBlockData::setPaintStrategy(KoTextBlockPaintStrategyBase *paintStrate
 KoTextBlockPaintStrategyBase *KoTextBlockData::paintStrategy() const
 {
     return d->paintStrategy;
-}
-
-void KoTextBlockData::setEffectiveTop(qreal y)
-{
-    d->top = y;
-}
-
-qreal KoTextBlockData::effectiveTop() const
-{
-    return d->top;
 }

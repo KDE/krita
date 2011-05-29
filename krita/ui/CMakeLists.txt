@@ -21,6 +21,7 @@ set(kritaui_LIB_SRCS
     canvas/kis_canvas_widget_base.cpp 
     canvas/kis_canvas2.cpp
     canvas/kis_canvas_controller.cpp
+    canvas/kis_tool_proxy.cpp
     canvas/kis_canvas_decoration.cc
     canvas/kis_coordinates_converter.cpp 
     canvas/kis_grid_manager.cpp 
@@ -188,6 +189,7 @@ add_definitions(${KDE4_ENABLE_EXCEPTIONS})
 
 
 kde4_add_ui_files(kritaui_LIB_SRCS
+    forms/wdgfullscreensettings.ui
     forms/wdgautogradient.ui
     forms/wdggeneralsettings.ui
     forms/wdgperformancesettings.ui

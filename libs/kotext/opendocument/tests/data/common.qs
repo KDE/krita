@@ -200,6 +200,11 @@ KoListStyle.MinimumDistance= ++i;
 KoListStyle.Width= ++i;
 KoListStyle.Height= ++i;
 KoListStyle.BulletImageKey = ++i;
+KoListStyle.Margin = ++i;
+KoListStyle.TextIndent = ++i;
+KoListStyle.AlignmentMode = ++i;
+KoListStyle.LableFollowedBy = ++i;
+KoListStyle.TabStopPosition = ++i;
 
 KoListStyle.SquareItem = QTextListFormat.ListSquare;
 KoListStyle.DiscItem = QTextListFormat.ListDisc;
@@ -226,6 +231,7 @@ var defaultListItemFormat = QTextCharFormat.clone(defaultTextFormat); // new QTe
 
 var defaultListFormat = new QTextListFormat;
 setFormatProperty(defaultListFormat, KoListStyle.Level, 1);
+setFormatProperty(defaultListFormat, KoListStyle.AlignmentMode,false);
 
 // Default table formatting
 QTextTableFormat.clone = function(fmt) {

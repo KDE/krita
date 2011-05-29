@@ -24,7 +24,11 @@
 #include "../KoDocument.h"
 #include "KoSopranoTableModelDelegate.h"
 #include "KoSopranoTableModel.h"
+#include "KoRdfSemanticTreeWidgetItem.h"
 #include "../KoGlobal.h"
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <kdebug.h>
 #include <QComboBox>

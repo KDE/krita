@@ -79,6 +79,7 @@ public:
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
     void setKnsrcFile( const QString& knsrcFileArg );
+    QSize viewSize();
 
 signals:
     /// Emitted when a resource was selected

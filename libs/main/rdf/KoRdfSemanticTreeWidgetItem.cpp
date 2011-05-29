@@ -18,6 +18,7 @@
 */
 
 #include "KoRdfSemanticTreeWidgetItem.h"
+
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
 

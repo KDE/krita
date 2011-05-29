@@ -94,7 +94,9 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       detectCollision(false),
       protectContent(false),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistance(1.0)
+      textRunAroundDistance(1.0),
+      textRunAroundThreshold(0.0),
+      anchored(false)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -398,7 +400,7 @@ bool KoShape::hitTest(const QPointF &position) const
 QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
-    QSizeF mySize = size();
+
     QTransform transform = absoluteTransformation(0);
     QRectF bb = outlineRect();
     if (d->border) {
@@ -889,6 +891,30 @@ void KoShape::setTextRunAroundDistance(qreal distance)
     d->textRunAroundDistance = distance;
 }
 
+qreal KoShape::textRunAroundThreshold() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundThreshold;
+}
+
+void KoShape::setAnchored(bool anchored)
+{
+    Q_D(KoShape);
+    d->anchored = anchored;
+}
+
+bool KoShape::isAnchored() const
+{
+    Q_D(const KoShape);
+    return d->anchored;
+}
+
+void KoShape::setTextRunAroundThreshold(qreal threshold)
+{
+    Q_D(KoShape);
+    d->textRunAroundThreshold = threshold;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -909,6 +935,8 @@ KoShapeBackground * KoShape::background() const
 void KoShape::setZIndex(int zIndex)
 {
     Q_D(KoShape);
+    if (d->zIndex == zIndex)
+        return;
     notifyChanged();
     d->zIndex = zIndex;
 }
@@ -1229,7 +1257,8 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             break;
     }
     style.addProperty("style:wrap", wrap);
-    style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
+    style.addPropertyPt("fo:margin", textRunAroundDistance());
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1299,6 +1328,13 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
             setTextRunAroundSide(KoShape::EnoughRunAroundSide);
         else if (wrap == "parallel")
             setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap-dynamic-threshold")) {
+        QString wrapThreshold = styleStack.property(KoXmlNS::style, "wrap-dynamic-threshold");
+        if (!wrapThreshold.isEmpty()) {
+            setTextRunAroundThreshold(KoUnit::parseValue(wrapThreshold));
+        }
     }
 }
 
@@ -1527,7 +1563,6 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
 
         KoConnectionPoint connector;
 
-        const QRectF bbox = boundingRect();
         const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
         if (align.isEmpty()) {
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1784,7 +1819,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 
     // save glue points see ODF 9.2.19 Glue Points
     if(d->connectors.count()) {
-        QSizeF s = size();
         KoConnectionPoints::const_iterator cp = d->connectors.constBegin();
         KoConnectionPoints::const_iterator lastCp = d->connectors.constEnd();
         for(; cp != lastCp; ++cp) {

@@ -22,68 +22,29 @@
 #include "KoDocumentRdf_p.h"
 #include "KoRdfSemanticItem_p.h"
 #include "KoTextRdfCore.h"
-
+#include "KoRdfFoaFTreeWidgetItem.h"
 #include <QUuid>
 #include <QTemporaryFile>
 #include <kdebug.h>
 #include <kfiledialog.h>
 
-// contacts
-#ifdef KDEPIMLIBS_FOUND
-#include <kabc/addressee.h>
-#include <kabc/stdaddressbook.h>
-#include <kabc/addressbook.h>
-#include <kabc/phonenumber.h>
-#include <kabc/vcardconverter.h>
-#endif
-
-#include "ui_KoRdfFoaFEditWidget.h"
-
 using namespace Soprano;
 
-class KoRdfFoaFPrivate : public KoRdfSemanticItemPrivate
-{
-    // foaf Rdf template,
-    // s == m_uri
-    // s -> <uri:gollum>; p -> <http://xmlns.com/foaf/0.1/name>; o -> "Gollum"
-    // s-> <uri:gollum>; p -> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>; o -> <http://xmlns.com/foaf/0.1/Person>
-public:
-    QString m_uri;   // This is the subject in Rdf
-    QString m_name;
-    QString m_nick;
-    QString m_homePage;
-    QString m_imageUrl;
-    QString m_phone;
-    Ui::KoRdfFoaFEditWidget editWidget;
-#ifdef KDEPIMLIBS_FOUND
-    KABC::Addressee toKABC() const;
-    void fromKABC(KABC::Addressee addr);
-#endif
-
-    KoRdfFoaFPrivate(const KoDocumentRdf *rdf)
-        : KoRdfSemanticItemPrivate(rdf)
-        {}
-
-    KoRdfFoaFPrivate(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItemPrivate(rdf, it)
-        {}
-};
 
 KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(*new KoRdfFoaFPrivate(m_rdf), parent)
+    : KoRdfSemanticItem(m_rdf, parent)
 {
 }
 
 KoRdfFoaF::KoRdfFoaF(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it)
-    : KoRdfSemanticItem(*new KoRdfFoaFPrivate(m_rdf,it), parent)
+    : KoRdfSemanticItem(m_rdf, it, parent)
 {
-    Q_D (KoRdfFoaF);
-    d->m_uri      = it.binding("person").toString();
-    d->m_name     = it.binding("name").toString();
-    d->m_nick     = KoTextRdfCore::optionalBindingAsString(it, "nick");
-    d->m_homePage = KoTextRdfCore::optionalBindingAsString(it, "homepage");
-    d->m_imageUrl = KoTextRdfCore::optionalBindingAsString(it, "img");
-    d->m_phone    = KoTextRdfCore::optionalBindingAsString(it, "phone");
+    m_uri      = it.binding("person").toString();
+    m_name     = it.binding("name").toString();
+    m_nick     = KoTextRdfCore::optionalBindingAsString(it, "nick");
+    m_homePage = KoTextRdfCore::optionalBindingAsString(it, "homepage");
+    m_imageUrl = KoTextRdfCore::optionalBindingAsString(it, "img");
+    m_phone    = KoTextRdfCore::optionalBindingAsString(it, "phone");
     kDebug(30015) << "+++xmlid:" << it.binding("xmlid").toString();
 }
 
@@ -95,37 +56,34 @@ KoRdfFoaF::~KoRdfFoaF()
 
 QString KoRdfFoaF::name() const
 {
-    Q_D (const KoRdfFoaF);
-    return d->m_name;
+    return m_name;
 }
 
 QWidget* KoRdfFoaF::createEditor(QWidget * parent)
 {
-    Q_D (KoRdfFoaF);
     QWidget *ret = new QWidget(parent);
-    d->editWidget.setupUi(ret);
-    d->editWidget.name->setText(d->m_name);
-    d->editWidget.nick->setText(d->m_nick);
-    d->editWidget.url->setText(d->m_homePage);
-    d->editWidget.phone->setText(d->m_phone);
+    editWidget.setupUi(ret);
+    editWidget.name->setText(m_name);
+    editWidget.nick->setText(m_nick);
+    editWidget.url->setText(m_homePage);
+    editWidget.phone->setText(m_phone);
     return ret;
 }
 
 void KoRdfFoaF::updateFromEditorData()
 {
-    Q_D (KoRdfFoaF);
-    if (d->m_uri.size() <= 0) {
+    if (m_uri.size() <= 0) {
         QUuid u = QUuid::createUuid();
-        d->m_uri = u.toString();
+        m_uri = u.toString();
         kDebug(30015) << "no uuid, created one:" << u.toString();
     }
     QString predBase = "http://xmlns.com/foaf/0.1/";
-    kDebug(30015) << "name:" << d->m_name << " newV:" << d->editWidget.name->text();
+    kDebug(30015) << "name:" << m_name << " newV:" << editWidget.name->text();
     setRdfType(predBase + "Person");
-    updateTriple(d->m_name, d->editWidget.name->text(), predBase + "name");
-    updateTriple(d->m_nick, d->editWidget.nick->text(), predBase + "nick");
-    updateTriple(d->m_homePage, d->editWidget.url->text(), predBase + "homepage");
-    updateTriple(d->m_phone, d->editWidget.phone->text(), predBase + "phone");
+    updateTriple(m_name, editWidget.name->text(), predBase + "name");
+    updateTriple(m_nick, editWidget.nick->text(), predBase + "nick");
+    updateTriple(m_homePage, editWidget.url->text(), predBase + "homepage");
+    updateTriple(m_phone, editWidget.phone->text(), predBase + "phone");
     if (documentRdf()) {
         const_cast<KoDocumentRdf*>(documentRdf())->emitSemanticObjectUpdated(this);
     }
@@ -140,22 +98,19 @@ KoRdfSemanticTreeWidgetItem *KoRdfFoaF::createQTreeWidgetItem(QTreeWidgetItem *p
 
 Soprano::Node KoRdfFoaF::linkingSubject() const
 {
-    Q_D (const KoRdfFoaF);
-    return Node::createResourceNode(d->m_uri);
+    return Node::createResourceNode(m_uri);
 }
 
 void KoRdfFoaF::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
-    Q_D (KoRdfFoaF);
-    m["%URI%"] = d->m_uri;
-    m["%NICK%"] = d->m_nick;
-    m["%HOMEPAGE%"] = d->m_homePage;
-    m["%PHONE%"] = d->m_phone;
+    m["%URI%"] = m_uri;
+    m["%NICK%"] = m_nick;
+    m["%HOMEPAGE%"] = m_homePage;
+    m["%PHONE%"] = m_phone;
 }
 
 void KoRdfFoaF::exportToMime(QMimeData *md) const
 {
-    Q_D (const KoRdfFoaF);
     QTemporaryFile file;
     if (file.open()) {
         //QString mimeType = "text/directory"; // text/x-vcard";
@@ -168,7 +123,7 @@ void KoRdfFoaF::exportToMime(QMimeData *md) const
     }
     QString data;
     QTextStream oss(&data);
-    oss << name() << ", " << d->m_phone << flush;
+    oss << name() << ", " << m_phone << flush;
     md->setText(data);
 }
 
@@ -194,7 +149,7 @@ QString KoRdfFoaF::className() const
 }
 
 #ifdef KDEPIMLIBS_FOUND
-KABC::Addressee KoRdfFoaFPrivate::toKABC() const
+KABC::Addressee KoRdfFoaF::toKABC() const
 {
     KABC::Addressee addr;
     addr.setNameFromString(m_name);
@@ -204,7 +159,7 @@ KABC::Addressee KoRdfFoaFPrivate::toKABC() const
     return addr;
 }
 
-void KoRdfFoaFPrivate::fromKABC(KABC::Addressee addr)
+void KoRdfFoaF::fromKABC(KABC::Addressee addr)
 {
     m_name = addr.realName();
     m_nick = addr.nickName();
@@ -216,8 +171,7 @@ void KoRdfFoaFPrivate::fromKABC(KABC::Addressee addr)
 
 void KoRdfFoaF::saveToKABC()
 {
-    Q_D (KoRdfFoaF);
-    kDebug(30015) << "saving name:" << d->m_name;
+    kDebug(30015) << "saving name:" << m_name;
 #ifdef KDEPIMLIBS_FOUND
     KABC::StdAddressBook *ab = static_cast<KABC::StdAddressBook*>
                                (KABC::StdAddressBook::self());
@@ -225,7 +179,7 @@ void KoRdfFoaF::saveToKABC()
         return;
     }
     KABC::Ticket *ticket = ab->requestSaveTicket();
-    KABC::Addressee addr = d->toKABC();
+    KABC::Addressee addr = toKABC();
     ab->insertAddressee(addr);
     KABC::AddressBook* pab = ab;
     pab->save(ticket);
@@ -234,7 +188,6 @@ void KoRdfFoaF::saveToKABC()
 
 void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
 {
-    Q_D (const KoRdfFoaF);
     QString fileName = fileNameConst;
 
 #ifdef KDEPIMLIBS_FOUND
@@ -250,7 +203,7 @@ void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
             return;
         }
     }
-    KABC::Addressee addr = d->toKABC();
+    KABC::Addressee addr = toKABC();
     KABC::VCardConverter converter;
     QByteArray ba = converter.createVCard(addr);
     QFile file(fileName);
@@ -265,18 +218,17 @@ void KoRdfFoaF::exportToFile(const QString &fileNameConst) const
 
 void KoRdfFoaF::importFromData(const QByteArray &ba, KoDocumentRdf *_rdf, KoCanvasBase *host)
 {
-    Q_D (KoRdfFoaF);
 #ifdef KDEPIMLIBS_FOUND
     kDebug(30015) << "data.sz:" << ba.size();
     kDebug(30015) << "_rdf:" << _rdf;
     if (_rdf) {
-        d->m_rdf = _rdf;
+        m_rdf = _rdf;
     }
     KABC::VCardConverter converter;
     KABC::Addressee addr = converter.parseVCard(ba);
-    d->fromKABC(addr);
-    kDebug(30015) << "adding name:" << d->m_name;
-    kDebug(30015) << "uri:" << d->m_uri;
+    fromKABC(addr);
+    kDebug(30015) << "adding name:" << m_name;
+    kDebug(30015) << "uri:" << m_uri;
     importFromDataComplete(ba, documentRdf(), host);
 #else
     kDebug(30015) << "KDEPIM support not built!";

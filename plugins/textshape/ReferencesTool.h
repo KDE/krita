@@ -20,34 +20,35 @@
 #ifndef REFERENCESTOOL_H
 #define REFERENCESTOOL_H
 
-#include <KoToolBase.h>
+#include "TextTool.h"
 
 class KoCanvasBase;
 class QPainter;
 
-/// This tool is the ui for inserting Table of Contents, citatons /bibliography, endnotes, index, table of illustrations etc
+/// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
 
-class ReferencesTool : public KoToolBase
+class ReferencesTool : public TextTool
 {
     Q_OBJECT
 public:
     ReferencesTool(KoCanvasBase *canvas);
 
-    ~ReferencesTool();
+    virtual ~ReferencesTool();
 
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void mousePressEvent(KoPointerEvent* event);
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     virtual void deactivate();
+
+    virtual void createActions();
 
 protected:
     /// reimplemented from superclass
     virtual QMap<QString, QWidget *> createOptionWidgets();
 
+private slots:
+    /// insert a table of contents
+    void insertTableOfContents();
+
 private:
-    KoCanvasBase *m_canvas;
 };
 
 #endif // REFERENCESTOOL_H

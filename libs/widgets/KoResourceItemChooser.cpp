@@ -204,6 +204,10 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
+    //Force an update to get the right column width
+    QRect geometry = d->view->geometry();
+    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
+    d->view->setGeometry(geometry);
 }
 
 void KoResourceItemChooser::setRowHeight( int rowHeight )
@@ -301,6 +305,11 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
 void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
 {
     d->knsrcFile = knsrcFileArg;
+}
+
+QSize KoResourceItemChooser::viewSize()
+{
+    return d->view->size();
 }
 
 #include <KoResourceItemChooser.moc>

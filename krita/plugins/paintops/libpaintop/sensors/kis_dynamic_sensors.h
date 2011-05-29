@@ -107,13 +107,7 @@ public:
     KisDynamicSensorAscension();
     virtual ~KisDynamicSensorAscension() {}
     virtual qreal value(const KisPaintInformation& info){
-        qreal xTilt = info.xTilt();
-        qreal yTilt = info.yTilt();
-        // radians -PI, PI
-        qreal ascension = atan2(-xTilt, yTilt);
-        // map to 0.0..1.0
-        ascension = ascension / (2 * M_PI) + 0.5;
-        return ascension;
+        return KisPaintInformation::ascension(info, true);
     }
 };
 
@@ -123,20 +117,7 @@ public:
     KisDynamicSensorDeclination();
     virtual ~KisDynamicSensorDeclination() {}
     virtual qreal value(const KisPaintInformation& info){
-        qreal xTilt = qBound(-1.0, info.xTilt() / 60.0 , 1.0);
-        qreal yTilt = qBound(-1.0, info.yTilt() / 60.0 , 1.0);
-
-        qreal e;
-        if (fabs(xTilt) > fabs(yTilt)) {
-            e = sqrt(1.0 + yTilt*yTilt);
-        } else {
-            e = sqrt(1.0 + xTilt*xTilt);
-        }
-      
-        qreal cosAlpha = sqrt(xTilt*xTilt + yTilt*yTilt)/e;
-        // in radians in [0, 0.5 * PI] .. mapping to 0.0..1.0
-        qreal declination = acos (cosAlpha) / (M_PI * 0.5);
-        return declination;
+        return KisPaintInformation::declination(info, 60.0, 60.0, true);
     }
 };
 
@@ -147,6 +128,16 @@ public:
     virtual ~KisDynamicSensorPerspective() { }
     virtual qreal value(const KisPaintInformation& info) {
         return info.perspective();
+    }
+};
+
+class KisDynamicSensorTangentialPressure : public KisDynamicSensor
+{
+public:
+    KisDynamicSensorTangentialPressure();
+    virtual ~KisDynamicSensorTangentialPressure() { }
+    virtual qreal value(const KisPaintInformation& info) {
+        return info.tangentialPressure();
     }
 };
 

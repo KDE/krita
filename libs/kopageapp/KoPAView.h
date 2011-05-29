@@ -150,6 +150,8 @@ public:
     /// Insert a new page after the current one
     void insertPage();
 
+    void centerPage();
+
 protected:
 
     /// creates the widgets (called from the constructor)

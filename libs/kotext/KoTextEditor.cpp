@@ -29,6 +29,7 @@
 #include "KoTextLocator.h"
 #include "KoTextOdfSaveHelper.h"
 #include "KoTextPaste.h"
+#include "KoTableOfContentsGeneratorInfo.h"
 #include "changetracker/KoChangeTracker.h"
 #include "changetracker/KoChangeTrackerElement.h"
 #include "changetracker/KoDeleteChangeMarker.h"
@@ -952,16 +953,18 @@ void KoTextEditor::insertTable(int rows, int columns)
     if (changeTracker && changeTracker->recordChanges()) {
         QTextCharFormat charFormat = d->caret.charFormat();
         QTextBlockFormat blockFormat = d->caret.blockFormat();
-        QString title = i18n("Key Press");
+        QString title = i18n("Insert Table");
 
         int changeId;
-        if (!d->caret.atBlockStart())
+        if (!d->caret.atBlockStart()) {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
-        else
+        } else {
             changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
 
-        if (!changeId)
+        if (!changeId) {
             changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
 
         tableFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
     }
@@ -1096,6 +1099,40 @@ void KoTextEditor::splitTableCells()
         QTextTableCell cell = table->cellAt(d->caret);
         table->splitCell(cell.row(), cell.column(),  1, 1);
     }
+
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
+void KoTextEditor::insertTableOfContents()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+
+    QTextFrameFormat tocFormat;
+    tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);
+    KoTableOfContentsGeneratorInfo * info = new KoTableOfContentsGeneratorInfo();
+    tocFormat.setProperty( KoText::TableOfContentsData, QVariant::fromValue<KoTableOfContentsGeneratorInfo*>(info) );
+
+    KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
+    if (changeTracker && changeTracker->recordChanges()) {
+        QTextCharFormat charFormat = d->caret.charFormat();
+        QTextBlockFormat blockFormat = d->caret.blockFormat();
+        QString title = i18n("Insert Table Of Contents");
+
+        int changeId;
+        if (!d->caret.atBlockStart()) {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, charFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        } else {
+            changeId = changeTracker->mergeableId(KoGenChange::InsertChange, title, blockFormat.intProperty(KoCharacterStyle::ChangeTrackerId));
+        }
+
+        if (!changeId) {
+            changeId = KoTextDocument(d->document).changeTracker()->getInsertChangeId(title, 0);
+        }
+
+        tocFormat.setProperty(KoCharacterStyle::ChangeTrackerId, changeId);
+    }
+
+    d->caret.insertFrame(tocFormat);
 
     d->updateState(KoTextEditor::Private::NoOp);
 }
@@ -1284,6 +1321,12 @@ void KoTextEditor::setBlockFormat(const QTextBlockFormat &format)
 }
 
 void KoTextEditor::setCharFormat(const QTextCharFormat &format)
+{
+    Q_UNUSED(format)
+//TODO
+}
+
+void KoTextEditor::setTableFormat(const QTextTableFormat &format)
 {
     Q_UNUSED(format)
 //TODO

@@ -106,6 +106,9 @@ public slots:
 
     /// fill the visible area of the paint device with a solid color
     void fillSolid(const KoColor& color);
+    
+    /// fill the cutoutOverlay rect with the cotent of an image, used to get the image back when selecting a preset
+    void setPresetImage(const QImage& image);
 
 signals:
 

@@ -1,5 +1,6 @@
 /* 
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2010 Lukáš Tvrdý     <lukast.dev@gmail.com>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -28,11 +29,10 @@
 #include <KoColorSpace.h>
 
 KisPressureScatterOption::KisPressureScatterOption()
-        : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::brushCategory(), false)
+        : KisCurveOption(i18n("Scatter"), "Scatter", KisPaintOpOption::brushCategory(), false, 1.0, 0.0, 5.0)
 {
     m_axisX = true;
     m_axisY = true;
-    m_scatterAmount = 1.0;
 }
 
 void KisPressureScatterOption::enableAxisX(bool enable)
@@ -57,12 +57,12 @@ bool KisPressureScatterOption::isAxisYEnabled()
 
 void KisPressureScatterOption::setScatterAmount(qreal amount)
 {
-    m_scatterAmount = amount;
+    KisCurveOption::setValue(amount);
 }
 
 qreal KisPressureScatterOption::scatterAmount()
 {
-    return m_scatterAmount;
+    return KisCurveOption::value();
 }
 
 
@@ -71,7 +71,6 @@ void KisPressureScatterOption::writeOptionSetting(KisPropertiesConfiguration* se
     KisCurveOption::writeOptionSetting(setting);
     setting->setProperty(SCATTER_X, m_axisX);
     setting->setProperty(SCATTER_Y, m_axisY);
-    setting->setProperty(SCATTER_AMOUNT, m_scatterAmount);
 }
 
 void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguration* setting)
@@ -79,7 +78,11 @@ void KisPressureScatterOption::readOptionSetting(const KisPropertiesConfiguratio
     KisCurveOption::readOptionSetting(setting);
     m_axisX = setting->getBool(SCATTER_X, true);
     m_axisY = setting->getBool(SCATTER_Y, true);
-    m_scatterAmount = setting->getDouble(SCATTER_AMOUNT, 1.0);
+    
+    // backward compatibility: test for a "scatter amount" property
+    //                         and use this value if it does exist
+    if(setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue"))
+        KisCurveOption::setValue(setting->getDouble(SCATTER_AMOUNT));
 }
 
 QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal diameter) const
@@ -90,11 +93,11 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal d
     
     qreal sensorValue = computeValue(info);
 
-    qreal jitter = (2.0 * drand48() - 1.0) * diameter * m_scatterAmount * sensorValue;
+    qreal jitter = (2.0 * drand48() - 1.0) * diameter * sensorValue;
     QPointF result(0.0, 0.0);
 
     if (m_axisX && m_axisY){
-        qreal jitterY = (2.0 * drand48() - 1.0) * diameter * m_scatterAmount * sensorValue;
+        qreal jitterY = (2.0 * drand48() - 1.0) * diameter * sensorValue;
         result = QPointF(jitter, jitterY);
         return info.pos() + result;
     }
@@ -116,9 +119,3 @@ QPointF KisPressureScatterOption::apply(const KisPaintInformation& info, qreal d
     
     return info.pos() + result;
 }
-
-
-
-
-
-

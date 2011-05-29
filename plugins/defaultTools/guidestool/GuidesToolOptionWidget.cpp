@@ -35,7 +35,7 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
 
     widget.position->setUnit(m_unit);
 
-    connect(widget.orientation, SIGNAL(activated(int)),
+    connect(widget.orientation, SIGNAL(currentIndexChanged(int)),
              this, SLOT(updateList(int)));
     connect(widget.positionList, SIGNAL(currentRowChanged(int)),
              this, SLOT(updatePosition(int)));

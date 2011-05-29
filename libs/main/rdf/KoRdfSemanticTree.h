@@ -25,12 +25,16 @@
 #include <QSharedPointer>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
 
+class KoRdfFoaF;
+class KoRdfCalendarEvent;
+class KoRdfLocation;
+class KoDocumentRdf;
 class KoRdfSemanticTreePrivate;
 
+namespace Soprano {
+class Model;
+}
 /**
  * @short Manage a QTreeWidget showing a collection of Semantic Items
  * @author Ben Martin <ben.martin@kogmbh.com>

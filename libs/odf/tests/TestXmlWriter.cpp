@@ -243,6 +243,7 @@ void TestXmlWriter::speedTest()
         writer.endDocument();
     }
     out.close();
+    out.remove();
     qDebug("writing %i XML elements using KoXmlWriter: %i ms", NumParagraphs, time.elapsed());
     // TODO we might want to convert this into a QBenchmark test
 }

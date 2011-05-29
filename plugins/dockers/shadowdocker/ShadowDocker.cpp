@@ -33,7 +33,7 @@
 class ShadowDocker::Private
 {
 public:
-    Private() 
+    Private()
     : widget(0), canvas(0)
     {}
     KoShapeShadow shadow;
@@ -102,32 +102,43 @@ void ShadowDocker::selectionChanged()
     d->widget->setShadowBlur( shadow->blur() );
 }
 
+void ShadowDocker::unsetCanvas()
+{
+    d->canvas = 0;
+}
+
 void ShadowDocker::setCanvas( KoCanvasBase *canvas )
 {
-    d->canvas = canvas;
-    if( canvas )
-    {
+    if (d->canvas) {
+        d->canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
+
+    if (canvas) {
         connect( canvas->shapeManager(), SIGNAL( selectionChanged() ),
             this, SLOT( selectionChanged() ) );
         connect( canvas->shapeManager(), SIGNAL( selectionContentChanged() ),
             this, SLOT( selectionChanged() ) );
         d->widget->setUnit( canvas->unit() );
     }
+
+    d->canvas = canvas;
 }
 
 void ShadowDocker::shadowChanged()
 {
-    KoSelection *selection = d->canvas->shapeManager()->selection();
-    KoShape * shape = selection->firstSelectedShape();
-    if( ! shape )
-        return;
+    if (d->canvas) {
+        KoSelection *selection = d->canvas->shapeManager()->selection();
+        KoShape * shape = selection->firstSelectedShape();
+        if( ! shape )
+            return;
 
-    KoShapeShadow * newShadow = new KoShapeShadow();
-    newShadow->setVisible(d->widget->shadowVisible());
-    newShadow->setColor( d->widget->shadowColor() );
-    newShadow->setOffset( d->widget->shadowOffset() );
-    newShadow->setBlur( d->widget->shadowBlur() );
-    d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
+        KoShapeShadow * newShadow = new KoShapeShadow();
+        newShadow->setVisible(d->widget->shadowVisible());
+        newShadow->setColor( d->widget->shadowColor() );
+        newShadow->setOffset( d->widget->shadowOffset() );
+        newShadow->setBlur( d->widget->shadowBlur() );
+        d->canvas->addCommand( new KoShapeShadowCommand( selection->selectedShapes(), newShadow ) );
+    }
 }
 
 void ShadowDocker::locationChanged(Qt::DockWidgetArea area)

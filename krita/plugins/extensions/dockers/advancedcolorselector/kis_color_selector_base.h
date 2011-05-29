@@ -26,47 +26,55 @@ class KoColor;
 class QTimer;
 class KoColorSpace;
 class KisCanvas2;
-class KisCanvas2;
+class KisColorPreviewPopup;
 
 /// Base class for all color selectors, that should support color management and zooming.
 class KisColorSelectorBase : public QWidget
 {
 Q_OBJECT
 public:
+    enum Move {MoveToMousePosition, DontMove};
     explicit KisColorSelectorBase(QWidget *parent = 0);
     ~KisColorSelectorBase();
 
     void setPopupBehaviour(bool onMouseOver, bool onMouseClick);
     void setColorSpace(const KoColorSpace* colorSpace);
     virtual void setCanvas(KisCanvas2* canvas);
+    virtual void unsetCanvas() { m_canvas = 0; }
     const KoColorSpace* colorSpace() const;
     enum ColorRole {Foreground, Background};
 
 public slots:
     virtual void updateSettings();
     virtual void setColor(const QColor& color);
-    virtual void showPopup();
+    virtual void showPopup(Move move=MoveToMousePosition);
     /// commits a color to the resource manager
     void commitColor(const KoColor& koColor, ColorRole role);
+    void updateColorPreview(const QColor& color);
 
 public:
-    void mousePressEvent(QMouseEvent *);
-
     /// finds a QColor, that will be ref.toQColor(), if converting it to the color space of ref
     QColor findGeneratingColor(const KoColor& ref) const;
 
-protected:
     void mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
+protected:
     void keyPressEvent(QKeyEvent *);
     virtual KisColorSelectorBase* createPopup() const = 0;
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
+    void setHidingDistanceAndTime(int distance, int time);
+    bool isPopup() const { return m_isPopup; }
 
 protected slots:
     void hidePopup();
 
     /// if you overwrite this, keep in mind, that you should set the colour only, if m_colorUpdateAllowed is true
     virtual void resourceChanged(int key, const QVariant& v);
+
+private:
+    void privateCreatePopup();
 
 protected:
     KisCanvas2* m_canvas;
@@ -76,11 +84,12 @@ protected:
 
 private:
     int m_hideDistance;
-    QTimer* m_timer;
+    QTimer* m_hideTimer;
     bool m_popupOnMouseOver;
     bool m_popupOnMouseClick;
     mutable const KoColorSpace* m_colorSpace;
     bool m_isPopup; //this instance is a popup
+    KisColorPreviewPopup* m_colorPreviewPopup;
 };
 
 #endif

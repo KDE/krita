@@ -6,6 +6,7 @@ setFormatProperty(listFormat1, KoListStyle.BulletCharacter, 0x25CF);
 setFormatProperty(listFormat1, KoListStyle.MinimumWidth, 18);
 setFormatProperty(listFormat1, KoListStyle.Indent, 18.);
 setFormatProperty(listFormat1, KoListStyle.RelativeBulletSize,45);
+setFormatProperty(listFormat1, KoListStyle.AlignmentMode,false);
 
 var unnumberedFormat = QTextBlockFormat.clone(defaultBlockFormat);
 setFormatProperty(unnumberedFormat, KoParagraphStyle.UnnumberedListItem, 1);

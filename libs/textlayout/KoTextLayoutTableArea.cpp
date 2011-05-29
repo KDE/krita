@@ -22,6 +22,7 @@
 
 #include "TableIterator.h"
 #include "KoTextLayoutArea.h"
+#include "KoPointedAt.h"
 
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
@@ -94,14 +95,14 @@ KoTextLayoutTableArea::~KoTextLayoutTableArea()
     delete d;
 }
 
-int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     int lastRow = d->endOfArea->row;
     if (d->endOfArea->frameIterators[0] == 0) {
         --lastRow;
     }
     if (lastRow <  d->startOfArea->row) {
-        return -1; // empty
+        return KoPointedAt(); // empty
     }
 
     int firstRow = qMax(d->startOfArea->row, d->headerRows);
@@ -156,7 +157,7 @@ int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy acc
             }
         }
     }
-    return -1;
+    return KoPointedAt();
 }
 
 QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
@@ -209,7 +210,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     }
 }
 
-bool KoTextLayoutTableArea::layout(TableIterator *cursor)
+bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;
@@ -271,6 +272,7 @@ bool KoTextLayoutTableArea::layout(TableIterator *cursor)
         setBottom(d->rowPositions[cursor->row + 1] + bottomBorderWidth);
 
         if (complete) {
+            setVirginPage(false);
             cursor->row++;
             for (int col = 0; col < d->table->columns(); ++col) {
                 delete cursor->frameIterators[col];
@@ -361,7 +363,7 @@ void KoTextLayoutTableArea::layoutColumns()
             // into the width of the table.
             qreal diff = (-availableWidth) / qreal(fixedWidthColumns.count());
             foreach(int col, fixedWidthColumns) {
-                d->columnWidths[col] = qMax(0.0, d->columnWidths[col] - diff);
+                d->columnWidths[col] = qMax(qreal(0.0), d->columnWidths[col] - diff);
             }
         }
         availableWidth = 0.0;
@@ -492,6 +494,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
     }
 
     bool allCellsFullyDone = true;
+    bool anyCellTried = false;
     bool noCellsFitted = true;
     int col = 0;
     while (col < d->table->columns()) {
@@ -504,6 +507,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
              * contribute to the row height.
              */
             KoTableCellStyle cellStyle(cell.format().toTableCellFormat());
+            anyCellTried = true;
 
             qreal maxBottom = maximumAllowedBottom();
             if (rowHasExactHeight) {
@@ -544,6 +548,8 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
                     areaTop,
                     maxBottom);
 
+            cellArea->setVirginPage(virginPage());
+
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
@@ -566,7 +572,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         col += cell.columnSpan(); // Skip across column spans.
     }
 
-    if (noCellsFitted && !rowHasExactHeight) {
+    if (anyCellTried && noCellsFitted && !rowHasExactHeight) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
         if (cursor->row > d->startOfArea->row) {
@@ -638,6 +644,8 @@ bool KoTextLayoutTableArea::layoutMergedCellsNotEnding(TableIterator *cursor, qr
                     right,
                     d->rowPositions[cell.row()] + cellStyle.topPadding() + cellStyle.topBorderWidth(),
                     rowBottom - cellStyle.bottomPadding() - cellStyle.bottomBorderWidth());
+
+            cellArea->setVirginPage(virginPage());
 
             FrameIterator *cellCursor =  cursor->frameIterator(col);
             cellArea->layout(cellCursor);

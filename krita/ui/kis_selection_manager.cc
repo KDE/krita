@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>

@@ -185,6 +185,11 @@ void KoToolBox::setCanvas(KoCanvasBase *canvas)
     d->canvas = canvas;
 }
 
+void KoToolBox::unsetCanvas()
+{
+    d->canvas = 0;
+}
+
 void KoToolBox::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);

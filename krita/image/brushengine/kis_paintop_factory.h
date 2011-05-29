@@ -43,6 +43,15 @@ class KRITAIMAGE_EXPORT KisPaintOpFactory : public QObject
 
 public:
 
+    enum PaintopVisibility {
+        AUTO,
+        ALWAYS,
+        NEVER
+    };
+
+    /**
+     * @param whiteListedCompositeOps list of compositeops that don't work with this paintop
+     */
     KisPaintOpFactory(const QStringList & whiteListedCompositeOps = QStringList());
     virtual ~KisPaintOpFactory() {}
 
@@ -70,12 +79,14 @@ public:
      */
     virtual QString pixmap();
 
+    void setUserVisible(PaintopVisibility visibility);
+
     /**
      * Whether this paintop is internal to a certain tool or can be used
      * in various tools. If false, it won't show up in the toolchest.
      * The KoColorSpace argument can be used when certain paintops only support a specific cs
      */
-    virtual bool userVisible(const KoColorSpace * cs = 0);
+    virtual bool userVisible(const KoColorSpace * cs = 0) const;
 
     /**
      * Create and return an settings object for this paintop.
@@ -93,12 +104,19 @@ public:
      * @param newPriority the priority
      */
     void setPriority(int newPriority);
-    
+
     int priority() const;
-    
+
+    /**
+     * This method will be called by the registry after all paintops are loaded
+     * Overwrite to let the factory do something.
+     */
+    virtual void processAfterLoading() {}
+
 private:
     QStringList m_whiteListedCompositeOps;
     int m_priority;
+    PaintopVisibility m_visibility;
 };
 
 #endif

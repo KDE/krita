@@ -42,11 +42,15 @@ ChannelDockerDock::ChannelDockerDock( ) : QDockWidget(i18n("Channels")), m_canva
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 {
-    m_canvas = canvas;
-        
-    KisView2* view = static_cast<KisCanvas2*>(m_canvas)->view();
-    m_model->slotLayerActivated(view->activeLayer());
-    connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), m_model, SLOT(slotLayerActivated(KisLayerSP)));
+    if (m_canvas && m_canvas->view()) {
+        m_canvas->view()->layerManager()->disconnect(m_model);
+    }
+    m_canvas = dynamic_cast<KisCanvas2*>(canvas);
+    if (m_canvas) {
+        KisView2* view = m_canvas->view();
+        m_model->slotLayerActivated(view->activeLayer());
+        connect(view->layerManager(), SIGNAL(sigLayerActivated(KisLayerSP)), m_model, SLOT(slotLayerActivated(KisLayerSP)));
+    }
 }
 
 

@@ -97,10 +97,11 @@ struct AddGeneralOps<Traits, true>
          add<&cfDarkenOnly<Arg> >(cs, COMPOSITE_DARKEN      , i18n("Darken")     , KoCompositeOp::categoryDark());
          add<&cfGammaDark<Arg>  >(cs, COMPOSITE_GAMMA_DARK  , i18n("Gamma Dark") , KoCompositeOp::categoryDark());
 
-         add<&cfAddition<Arg> >(cs, COMPOSITE_ADD     , i18n("Addition"), KoCompositeOp::categoryArithmetic());
-         add<&cfSubtract<Arg> >(cs, COMPOSITE_SUBTRACT, i18n("Subtract"), KoCompositeOp::categoryArithmetic());
-         add<&cfMultiply<Arg> >(cs, COMPOSITE_MULT    , i18n("Multiply"), KoCompositeOp::categoryArithmetic());
-         add<&cfDivide<Arg>   >(cs, COMPOSITE_DIVIDE  , i18n("Divide")  , KoCompositeOp::categoryArithmetic());
+         add<&cfAddition<Arg>        >(cs, COMPOSITE_ADD             , i18n("Addition")         , KoCompositeOp::categoryArithmetic());
+         add<&cfSubtract<Arg>        >(cs, COMPOSITE_SUBTRACT        , i18n("Subtract")         , KoCompositeOp::categoryArithmetic());
+         add<&cfInverseSubtract<Arg> >(cs, COMPOSITE_INVERSE_SUBTRACT, i18n("Inversed-Subtract"), KoCompositeOp::categoryArithmetic());
+         add<&cfMultiply<Arg>        >(cs, COMPOSITE_MULT            , i18n("Multiply")         , KoCompositeOp::categoryArithmetic());
+         add<&cfDivide<Arg>          >(cs, COMPOSITE_DIVIDE          , i18n("Divide")           , KoCompositeOp::categoryArithmetic());
 
          add<&cfArcTangent<Arg>           >(cs, COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")        , KoCompositeOp::categoryNegative());
          add<&cfDifference<Arg>           >(cs, COMPOSITE_DIFF                 , i18n("Difference")           , KoCompositeOp::categoryNegative());
@@ -109,9 +110,6 @@ struct AddGeneralOps<Traits, true>
          add<&cfAdditiveSubstractive<Arg> >(cs, COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive-Substractive"), KoCompositeOp::categoryNegative());
 
          cs->addCompositeOp(new KoCompositeOpDissolve<Traits>(cs, KoCompositeOp::categoryMisc()));
-
-         if(alpha_pos != -1)
-             cs->addCompositeOp(new KoCompositeOpCopyChannel<Traits,alpha_pos>(cs, COMPOSITE_COPY_OPACITY, i18n("Copy Alpha") , KoCompositeOp::categoryMisc()));
      }
 };
 

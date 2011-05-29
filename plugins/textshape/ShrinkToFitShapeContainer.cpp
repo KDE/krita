@@ -123,17 +123,16 @@ ShrinkToFitShapeContainerModel::ShrinkToFitShapeContainerModel(ShrinkToFitShapeC
     : q(q)
     , d(d)
     , m_scale(1.0)
-    , m_dueToLayout(false)
-    , m_changeCount(0)
+    , m_dirty(10)
+    , m_maybeUpdate(false)
 {
 }
 
 void ShrinkToFitShapeContainerModel::finishedLayout()
 {
-    qDebug()<<"container got a finishedlayout";
-    m_dueToLayout = true;
+    m_maybeUpdate = true;
     containerChanged(q, KoShape::SizeChanged);
-    m_dueToLayout = false;
+    m_maybeUpdate = false;
 }
 
 void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *container, KoShape::ChangeType type)
@@ -147,37 +146,33 @@ void ShrinkToFitShapeContainerModel::containerChanged(KoShapeContainer *containe
 
         QSizeF shapeSize = q->size();
         QSizeF documentSize = rootArea->boundingRect().size();
-
-        if (shapeSize == m_shapeSize && documentSize == m_documentSize) {
-            m_changeCount = 0;
+        if (m_maybeUpdate &&shapeSize == m_shapeSize && documentSize == m_documentSize) {
+            m_dirty = 0;
             return; // nothing to update
         }
 
         m_shapeSize = shapeSize;
         m_documentSize = documentSize;
 
-        if (m_dueToLayout && m_changeCount>0 && documentSize.height()*m_scale <= shapeSize.height()) {
-            m_changeCount = 0;
-            return;
-        }
-
-        qreal newScale = 1.0;
-        if ( documentSize.height() > 0.0) {
-            newScale = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
+        if ( documentSize.width() > 0.0 && documentSize.height() > 0.0 ) {
+            if (m_dirty || !m_maybeUpdate) {
+                qreal scaleX = qMin<qreal>(1.0, shapeSize.width() / documentSize.width());
+                qreal scaleY = qMin<qreal>(1.0, shapeSize.height() / documentSize.height());
+                m_scale = (scaleX+scaleY)/2.0 * 0.95;
+                if (m_maybeUpdate && m_dirty)
+                    --m_dirty;
+            }
+        } else {
+            m_scale = 1.0;
+            m_dirty = 1;
         }
 
         QSizeF newSize(shapeSize.width() / m_scale, shapeSize.height() / m_scale);
+        d->childShape->setSize(newSize);
 
-        m_changeCount++;
-
-        if (m_scale != newScale || d->childShape->size() != newSize) {
-            m_scale = newScale;
-            d->childShape->setSize(newSize);
-
-            QTransform m;
-            m.scale(m_scale, m_scale);
-            d->childShape->setTransformation(m);
-        }
+        QTransform m;
+        m.scale(m_scale, m_scale);
+        d->childShape->setTransformation(m);
     }
 }
 

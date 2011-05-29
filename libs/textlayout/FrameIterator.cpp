@@ -34,7 +34,6 @@ FrameIterator::FrameIterator(QTextFrame *frame)
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
-    lastBlockPosition = -1;
 }
 
 FrameIterator::FrameIterator(QTextTableCell cell)
@@ -43,14 +42,13 @@ FrameIterator::FrameIterator(QTextTableCell cell)
     currentTableIterator = 0;
     currentSubFrameIterator = 0;
     lineTextStart = -1;
-    lastBlockPosition = -1;
 }
 
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
+    masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
-    lastBlockPosition = other->lastBlockPosition;
     fragmentIterator = other->fragmentIterator;
     if (other->currentTableIterator)
         currentTableIterator = new TableIterator(other->currentTableIterator);
@@ -77,7 +75,7 @@ bool FrameIterator::operator ==(const FrameIterator &other)
             return false;
         return *currentSubFrameIterator == *(other.currentSubFrameIterator);
     } else {
-        return lineTextStart != other.lineTextStart;
+        return lineTextStart == other.lineTextStart;
     }
 }
 

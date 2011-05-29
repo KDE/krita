@@ -1496,6 +1496,8 @@ bool KoDocument::openFile()
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start();
 
+    setupOpenFileSubProgress();
+
     if (!isNativeFormat(typeName.toLatin1(), ForImport)) {
         if (!d->filterManager)
             d->filterManager = new KoFilterManager(this, d->progressUpdater);
@@ -1647,12 +1649,13 @@ bool KoDocument::openFile()
     }
     d->bLoading = false;
 
-    QPointer<KoUpdater> updater
-            = progressUpdater()->startSubtask(1, "clear undo stack");
-    updater->setProgress(0);
-    undoStack()->clear();
-    updater->setProgress(100);
-
+    if (progressUpdater()) {
+        QPointer<KoUpdater> updater
+                = progressUpdater()->startSubtask(1, "clear undo stack");
+        updater->setProgress(0);
+        undoStack()->clear();
+        updater->setProgress(100);
+    }
     delete d->progressUpdater;
     d->progressUpdater = 0;
 

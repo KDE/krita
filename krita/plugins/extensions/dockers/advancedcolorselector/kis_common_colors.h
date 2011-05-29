@@ -21,6 +21,7 @@
 #include <QMutex>
 #include <QTimer>
 #include "kis_color_patches.h"
+#include <kis_types.h>
 
 class QPushButton;
 
@@ -30,6 +31,7 @@ Q_OBJECT
 public:
     explicit KisCommonColors(QWidget *parent = 0);
     void setCanvas(KisCanvas2 *canvas);
+    void unsetCanvas() {}
     KisColorSelectorBase* createPopup() const;
 
 public slots:
@@ -46,6 +48,7 @@ private:
     QTimer m_delayUpdateTimer;
     QPushButton* m_reloadButton;
     QList<KoColor> m_calculatedColors;
+    KisImageWSP m_image;
 };
 
 #endif

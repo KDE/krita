@@ -119,7 +119,7 @@ KOTEXT_EXPORT QString directionToString(Direction direction);
 
 /// There are several possible text breaks
 enum KoTextBreakProperty {
-    NoBreak,         ///< No text break
+    NoBreak = 0,         ///< No text break
     ColumnBreak,     ///< Column break
     PageBreak        ///< Page break
 };

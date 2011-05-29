@@ -63,6 +63,9 @@ public:
 
     bool noTextAround() const;
 
+    // Don't run around unless available space is > than this when m_side == Enough.
+    qreal runAroundThreshold() const;
+
     static bool compareRectLeft(KoTextLayoutObstruction *o1, KoTextLayoutObstruction *o2);
 private:
     enum Side { None, Left, Right, Empty, Both, Bigger, Enough };
@@ -74,6 +77,7 @@ private:
     QMultiMap<qreal, QLineF> m_edges; //sorted with y-coord
     KoShape *m_shape;
     qreal m_distance;
+    qreal m_runAroundThreshold;
 };
 
 #endif

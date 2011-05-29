@@ -23,6 +23,7 @@
 #define KOTEXTTOOL_H
 
 #include "TextShape.h"
+#include "KoPointedAt.h"
 
 #include <KoToolBase.h>
 
@@ -64,7 +65,7 @@ public:
 #ifndef NDEBUG
     explicit TextTool(MockCanvas *canvas);
 #endif
-    ~TextTool();
+    virtual ~TextTool();
 
     /// reimplemented from superclass
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
@@ -122,11 +123,14 @@ public:
 
     void setShapeData(KoTextShapeData *data);
 
-    KoTextEditor *textEditor() { return m_textEditor.data(); }
-
     QRectF caretRect(QTextCursor *cursor) const;
 
     QRectF textRect(QTextCursor &cursor) const;
+
+protected:
+    virtual void createActions();
+
+    KoTextEditor *textEditor() { return m_textEditor.data(); }
 
 public slots:
     /// start the textedit-plugin.
@@ -280,7 +284,7 @@ private slots:
 private:
     void repaintCaret();
     void repaintSelection();
-    int pointToPosition(const QPointF & point) const;
+    KoPointedAt hitTest(const QPointF & point) const;
     void updateActions();
     void updateStyleManager();
     void updateSelectedShape(const QPointF &point);

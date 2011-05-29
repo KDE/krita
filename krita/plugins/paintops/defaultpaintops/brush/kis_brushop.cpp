@@ -172,7 +172,10 @@ qreal KisBrushOp::paintAt(const KisPaintInformation& info)
     painter()->renderMirrorMask(QRect(QPoint(x,y), QSize(dab->bounds().width(),dab->bounds().height())),dab);
     painter()->setOpacity(origOpacity);
 
-    return spacing(m_spacingOption.apply(info));
+    if(m_spacingOption.isChecked())
+        return spacing(m_spacingOption.apply(info));
+    
+    return spacing(scale);
 }
 
 KisDistanceInformation KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)

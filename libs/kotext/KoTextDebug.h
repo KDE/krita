@@ -63,7 +63,8 @@ class KoTableCellStyle;
  * cursor.insertText("Hello!\n");
  * cursor.insertHtml("<b>World!</b>");
  *
- * KoTextDebug::dumpDocument(&doc);
+ * QTextStream out(stdout);
+ * KoTextDebug::dumpDocument(&doc, out);
  * @endcode
  *
  * will result in this output:
@@ -95,6 +96,7 @@ public:
      * Dump the structure of the specified document.
      *
      * @param document a pointer to the document that should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpDocument(const QTextDocument *document, QTextStream &out);
 
@@ -104,6 +106,7 @@ public:
      * @sa frameAttributes()
      *
      * @param frame a pointer to the frame that should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpFrame(const QTextFrame *frame, QTextStream &out);
 
@@ -111,6 +114,7 @@ public:
      * Dump the structure of the specified block.
      *
      * @param block the block that should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpBlock(const QTextBlock &block, QTextStream &out);
 
@@ -120,6 +124,7 @@ public:
      * @sa tableAttributes()
      *
      * @param a pointer to the table that should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpTable(const QTextTable *table, QTextStream &out);
 
@@ -129,6 +134,7 @@ public:
      * @sa tableCellAttributes()
      *
      * @param cell the cell that should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpTableCell(const QTextTableCell &cell, QTextStream &out);
 
@@ -138,6 +144,7 @@ public:
      * @note { The fragment content will be enclosed in '|' characters. }
      *
      * @param fragment the fragment which's content should be dumped.
+     * @param out output stream to dump to.
      */
     static void dumpFragment(const QTextFragment &fragment, QTextStream &out);
 

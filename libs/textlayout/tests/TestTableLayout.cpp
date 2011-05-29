@@ -55,7 +55,7 @@ void TestTableLayout::cleanupTestCase()
     delete m_doc;
 }
 
-void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle)
+QTextCursor TestTableLayout::setupTest()
 {
     delete m_doc;
     m_doc = new QTextDocument;
@@ -74,18 +74,23 @@ void TestTableLayout::setupTest(const QString &mergedText, const QString &topRig
     Q_ASSERT(m_layout);
     m_doc->setDocumentLayout(m_layout);
 
-//    m_area = provider->provide(m_layout);
-
     m_block = m_doc->begin();
     QTextCursor cursor(m_doc);
 
-    QTextTableFormat tableFormat;
-    if (tableStyle)
-        tableStyle->applyStyle(tableFormat);
+    return cursor;
+}
+
+void TestTableLayout::setupTest(const QString &mergedText, const QString &topRightText, const QString &midRightText, const QString &bottomLeftText, const QString &bottomMidText, const QString &bottomRightText, KoTableStyle* tableStyle)
+{
+    QTextCursor cursor = setupTest();
 
     KoParagraphStyle style;
     style.setStyleId(101); // needed to do manually since we don't use the stylemanager
     style.applyStyle(m_block);
+
+    QTextTableFormat tableFormat;
+    if (tableStyle)
+        tableStyle->applyStyle(tableFormat);
 
     m_table = cursor.insertTable(3,3,tableFormat);
     m_table->mergeCells(0,0,2,2);
@@ -179,6 +184,23 @@ void TestTableLayout::testSetupTest()
     QCOMPARE(bottomLeftCellBlock().text(), QString("20"));
     QCOMPARE(bottomMidCellBlock().text(), QString("21"));
     QCOMPARE(bottomRightCellBlock().text(), QString("22"));
+}
+
+void TestTableLayout::testMergedCells()
+{
+    QTextCursor cursor = setupTest();
+
+    m_table = cursor.insertTable(3, 5);
+    m_table->mergeCells(0,0,2,2);
+    m_table->mergeCells(0,2,3,1);
+    m_table->mergeCells(0,3,3,1);
+    m_table->mergeCells(0,4,3,1);
+    m_table->mergeCells(2,0,1,1);
+    m_table->mergeCells(2,1,1,1);
+
+    m_layout->layout();
+
+    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
 }
 
 void TestTableLayout::testColumnWidthUndefined()

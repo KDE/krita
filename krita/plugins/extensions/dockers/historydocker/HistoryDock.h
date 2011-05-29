@@ -42,7 +42,7 @@ public:
     HistoryDock();
 
     virtual void setCanvas(KoCanvasBase *canvas);
-
+    virtual void unsetCanvas() { historyCanvas = 0; }
 private:
     KisUndoView* undoView;
 

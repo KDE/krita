@@ -72,7 +72,14 @@ public:
         LeftToRight,
         TopToBottom
     };
-
+    
+    enum RotationAlignment {
+        RAlignNone,
+        RAlignBottom,
+        RAlignTop,
+        RAlignCenter
+    };
+    
     enum Property {
         StyleId = QTextTableFormat::UserProperty + 1,
         ShrinkToFit,        ///< Shrink the cell content to fit the size
@@ -84,6 +91,7 @@ public:
         AlignFromType,      ///< Should the alignment property be respected or should the alignment be based on the value type
         RotationAngle,      ///< Rotation angle of the cell content, in degrees
         Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
+        RotationAlign,      ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
     };
 
     /// Constructor
@@ -189,6 +197,9 @@ public:
 
     void setDirection(CellTextDirection direction);
     CellTextDirection direction() const;
+    
+    void setRotationAlignment(RotationAlignment align);
+    RotationAlignment rotationAlignment () const;
 
     /// set the parent style this one inherits its unset properties from.
     void setParentStyle(KoTableCellStyle *parent);

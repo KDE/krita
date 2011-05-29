@@ -135,8 +135,8 @@ public:
                 QList<T*> resources = createResources(front);
                 foreach(T* resource, resources) {
                     Q_CHECK_PTR(resource);
-                    if (resource->load() && resource->valid())
-                    {
+                    if (resource->load() && resource->valid()) {
+
                         m_resourcesByFilename[resource->shortFilename()] = resource;
 
                         if ( resource->name().isNull() ) {
@@ -185,22 +185,22 @@ public:
 
         return true;
     }
-    
+
     /// Remove a resource from Resource Server but not from a file
     bool removeResourceFromServer(T* resource){
         if ( !m_resourcesByFilename.contains( resource->shortFilename() ) ) {
             return false;
         }
-        
+
         m_resourcesByName.remove(resource->name());
         m_resourcesByFilename.remove(resource->shortFilename());
         m_resources.removeAt(m_resources.indexOf(resource));
         notifyRemovingResource(resource);
-        
-        if (m_deleteResource) { 
+
+        if (m_deleteResource) {
             delete resource;
         }
-        
+
         return true;
     }
 
@@ -230,7 +230,7 @@ public:
           m_resourcesByFilename.remove(resource->shortFilename());
           m_resources.removeAt(m_resources.indexOf(resource));
           notifyRemovingResource(resource);
-           if (m_deleteResource) {
+            if (m_deleteResource) {
                 delete resource;
             }
 
@@ -391,7 +391,7 @@ protected:
         createdResources.append(createResource(filename));
         return createdResources;
     }
-    
+
     virtual T* createResource( const QString & filename ) { return new T(filename); }
 
     void notifyResourceAdded(T* resource)

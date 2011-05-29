@@ -29,6 +29,10 @@
 
 struct KisColorSourceOption::Private
 {
+    Private()
+        :type(PLAIN)
+    {}
+
     KisColorSourceOption::Type type;
 
     static QMap<KisColorSourceOption::Type, KoID> type2id;

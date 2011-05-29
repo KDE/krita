@@ -492,7 +492,10 @@ void KoXmlWriter::addTextSpan(const QString& text, const QMap<int, int>& tabCach
             ++nrSpaces;
             break;
         default:
-            str += text[i];
+            // don't add stuff that is not allowed in xml. The stuff we need we have already handled above
+            if (ch.unicode() >= 0x20) {
+                str += text[i];
+            }
             break;
         }
     }

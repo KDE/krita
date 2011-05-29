@@ -123,7 +123,7 @@ void MusicShape::constPaint( QPainter& painter, const KoViewConverter& converter
     applyConversion( painter, converter );
 
     painter.setClipping(true);
-    painter.setClipRect(QRectF(0, 0, size().width(), size().height()));
+    painter.setClipRect(QRectF(0, 0, size().width(), size().height()), Qt::IntersectClip);
 
     m_renderer->renderSheet( painter, m_sheet, m_firstSystem, m_lastSystem );
 }

@@ -25,7 +25,9 @@
 #include "KoViewConverter.h"
 #include "KoSnapGuide.h"
 #include "SnapGuideConfigWidget.h"
-
+#include "KoShapeManager.h"
+#include "KoToolProxy.h"
+#include "KoSelection.h"
 #include <KGlobal>
 #include <KConfigGroup>
 #include <KSharedPtr>
@@ -70,6 +72,15 @@ KoShapeController *KoCanvasBase::shapeController() const
 {
     return d->shapeController;
 }
+
+void KoCanvasBase::disconnectCanvasObserver(QObject *object)
+{
+    shapeManager()->selection()->disconnect(object);
+    resourceManager()->disconnect(object);
+    shapeManager()->disconnect(object);
+    toolProxy()->disconnect(object);
+}
+
 
 KoResourceManager *KoCanvasBase::resourceManager() const
 {

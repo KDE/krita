@@ -59,6 +59,7 @@ KoListLevelProperties::KoListLevelProperties()
     setMarkCharacterStyle(charStyle);
 
     setRelativeBulletSize(100);
+    setAlignmentMode(false);
     connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
 }
 
@@ -374,6 +375,56 @@ qreal KoListLevelProperties::minimumDistance() const
     return propertyDouble(KoListStyle::MinimumDistance);
 }
 
+void KoListLevelProperties::setMargin(qreal value)
+{
+    setProperty(KoListStyle::Margin, value);
+}
+
+qreal KoListLevelProperties::margin() const
+{
+    return propertyDouble(KoListStyle::Margin);
+}
+
+void KoListLevelProperties::setTextIndent(qreal value)
+{
+    setProperty(KoListStyle::TextIndent, value);
+}
+
+qreal KoListLevelProperties::textIndent() const
+{
+    return propertyDouble(KoListStyle::TextIndent);
+}
+
+void KoListLevelProperties::setAlignmentMode(bool isLabelAlignmentMode)
+{
+    setProperty(KoListStyle::AlignmentMode, isLabelAlignmentMode);
+}
+
+bool KoListLevelProperties::alignmentMode() const
+{
+    return propertyBoolean(KoListStyle::AlignmentMode);
+}
+
+void KoListLevelProperties::setTabStopPosition(qreal value)
+{
+    setProperty(KoListStyle::TabStopPosition,value);
+}
+
+qreal KoListLevelProperties::tabStopPosition() const
+{
+    return propertyDouble(KoListStyle::TabStopPosition);
+}
+
+void KoListLevelProperties::setLabelFollowedBy(KoListStyle::ListLabelFollowedBy value)
+{
+    setProperty(KoListStyle::LabelFollowedBy, value);
+}
+
+KoListStyle::ListLabelFollowedBy KoListLevelProperties::labelFollowedBy() const
+{
+    return (KoListStyle::ListLabelFollowedBy)propertyInt(KoListStyle::LabelFollowedBy);
+}
+
 // static
 KoListLevelProperties KoListLevelProperties::fromTextList(QTextList *list)
 {
@@ -601,6 +652,8 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         // the position and spacing of the list label and the list item. The values of the attributes for
                         // text:space-before, text:min-label-width and text:min-label-distance are assumed to be 0.
 
+                        setAlignmentMode(true);
+
                         QString textAlign(p.attributeNS(KoXmlNS::fo, "text-align"));
                         setAlignment(textAlign.isEmpty() ? Qt::AlignLeft : KoText::alignmentFromString(textAlign));
 
@@ -608,7 +661,28 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         QString marginleft(p.attributeNS(KoXmlNS::fo, "margin-left"));
                         qreal ti = textindent.isEmpty() ? 0 : KoUnit::parseValue(textindent);
                         qreal ml = marginleft.isEmpty() ? 0 : KoUnit::parseValue(marginleft);
-                        setIndent(qMax<qreal>(0.0, ti + ml));
+                        setTextIndent(ti);
+                        setMargin(ml);
+
+                        QString labelFollowedBy(p.attributeNS(KoXmlNS::text, "label-followed-by","space"));
+                        if(labelFollowedBy.compare("listtab",Qt::CaseInsensitive)==0) {
+
+                            setLabelFollowedBy(KoListStyle::ListTab);
+
+                            // list tab position is evaluated only if label is followed by listtab
+                            QString tabStop(p.attributeNS(KoXmlNS::text, "list-tab-stop-position"));
+                            qreal tabStopPos = tabStop.isEmpty() ? 0 : KoUnit::parseValue(tabStop);
+                            setTabStopPosition(qMax<qreal>(0.0, tabStopPos));
+
+                        }else if(labelFollowedBy.compare("nothing",Qt::CaseInsensitive)==0) {
+
+                            setLabelFollowedBy(KoListStyle::Nothing);
+
+                        }else {
+
+                            setLabelFollowedBy(KoListStyle::Space);
+
+                        }
 
                         setMinimumWidth(0);
                         setMinimumDistance(0);
@@ -616,9 +690,13 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
                         //TODO support ODF 18.829 text:label-followed-by and 18.832 text:list-tab-stop-position
                      }
                 }
-            } else { // default is mode == "label-width-and-position"
+            }
+
+            if(alignmentMode()!=true ){ // default is mode == "label-width-and-position"
                 // The text:space-before, text:min-label-width, text:minimum-label-distance and fo:text-align attributes
                 // are used to define the position and spacing of the list label and the list item.
+
+                setAlignmentMode(false);
 
                 QString spaceBefore(property.attributeNS(KoXmlNS::text, "space-before"));
                 if (!spaceBefore.isEmpty())
@@ -634,16 +712,17 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
 
                 QString minLableDistance(property.attributeNS(KoXmlNS::text, "min-label-distance"));
                 if (!minLableDistance.isEmpty())
-                    setMinimumDistance(KoUnit::parseValue(minLableDistance));
-
-                QString width(property.attributeNS(KoXmlNS::fo, "width"));
-                if (!width.isEmpty())
-                    setWidth(KoUnit::parseValue(width));
-
-                QString height(property.attributeNS(KoXmlNS::fo, "height"));
-                if (!height.isEmpty())
-                    setHeight(KoUnit::parseValue(height));
+                    setMinimumDistance(KoUnit::parseValue(minLableDistance));               
             }
+
+            QString width(property.attributeNS(KoXmlNS::fo, "width"));
+            if (!width.isEmpty())
+                setWidth(KoUnit::parseValue(width));
+
+            QString height(property.attributeNS(KoXmlNS::fo, "height"));
+            if (!height.isEmpty())
+                setHeight(KoUnit::parseValue(height));
+
         } else if (localName == "text-properties") {
             QSharedPointer<KoCharacterStyle> charStyle = QSharedPointer<KoCharacterStyle>(new KoCharacterStyle);
             context.styleStack().save();
@@ -651,9 +730,15 @@ void KoListLevelProperties::loadOdf(KoShapeLoadingContext& scontext, const KoXml
             context.styleStack().setTypeProperties("text");   // load all style attributes from "style:text-properties"
             charStyle->loadOdf(scontext);
             context.styleStack().restore();
-            setMarkCharacterStyle(charStyle);
-            if (hasBulletRelativeSize==false && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize))        //if not set in bullet-relative-size or any where before then set it now
+            //if not set in bullet-relative-size or any where before then set it now
+            if (!hasBulletRelativeSize && charStyle->hasProperty(KoCharacterStyle::PercentageFontSize)) {
                 setRelativeBulletSize((int)charStyle->percentageFontSize());
+                // in bullet lists in layout we recompute the font point size
+                // relatively to the paragraph size of the list item so drop it
+                // to indicate that it is not correct
+                charStyle->clearFontPointSize();
+            }
+            setMarkCharacterStyle(charStyle);
         }
     }
 }
@@ -729,17 +814,41 @@ void KoListLevelProperties::saveOdf(KoXmlWriter *writer) const
 
     writer->startElement("style:list-level-properties", false);
 
-    if (d->stylesPrivate.contains(KoListStyle::Indent))
-        writer->addAttribute("text:space-before", toPoint(indent()));
+    if(d->stylesPrivate.contains(KoListStyle::AlignmentMode) && alignmentMode()==false) {
 
-    if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
-        writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+        writer->addAttribute("text:list-level-position-and-space-mode","label-width-and-position");
 
-    if (d->stylesPrivate.contains(KoListStyle::Alignment))
-        writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
+        if (d->stylesPrivate.contains(KoListStyle::Indent))
+            writer->addAttribute("text:space-before", toPoint(indent()));
 
-    if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
-        writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+        if (d->stylesPrivate.contains(KoListStyle::MinimumWidth))
+            writer->addAttribute("text:min-label-width", toPoint(minimumWidth()));
+
+        if (d->stylesPrivate.contains(KoListStyle::Alignment))
+            writer->addAttribute("fo:text-align", KoText::alignmentToString(alignment()));
+
+        if (d->stylesPrivate.contains(KoListStyle::MinimumDistance))
+            writer->addAttribute("text:min-label-distance", toPoint(minimumDistance()));
+    } else {
+         writer->addAttribute("text:list-level-position-and-space-mode","label-alignment");
+
+         writer->startElement("style:list-level-label-alignment");
+
+         KoUnit unit(KoUnit::Centimeter);
+         if(labelFollowedBy()==KoListStyle::ListTab) {
+             writer->addAttribute("text:label-followed-by","listtab");
+             writer->addAttribute("text:list-tab-stop-position",unit.toUserStringValue(tabStopPosition())+"cm");
+         } else if (labelFollowedBy()==KoListStyle::Nothing){
+             writer->addAttribute("text:label-followed-by","nothing");
+         }else{
+             writer->addAttribute("text:label-followed-by","space");
+         }
+
+         writer->addAttribute("fo:text-indent",unit.toUserStringValue(textIndent())+"cm");
+         writer->addAttribute("fo:margin-left",unit.toUserStringValue(margin())+"cm");
+
+         writer->endElement();
+    }
 
     writer->endElement(); // list-level-properties
 

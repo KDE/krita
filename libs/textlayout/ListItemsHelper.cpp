@@ -216,9 +216,8 @@ QList<ListStyleItem> Lists::otherListStyleItems()
 // ------------------- ListItemsHelper ------------
 /// \internal helper class for calculating text-lists prefixes and indents
 ListItemsHelper::ListItemsHelper(QTextList *textList, const QFont &font)
-        : m_textList(textList),
-        m_fm(font, textList->document()->documentLayout()->paintDevice()),
-        m_displayFont(font)
+        : m_textList(textList)
+        , m_fm(font, textList->document()->documentLayout()->paintDevice())
 {
 }
 
@@ -300,7 +299,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
                 continue; // we only look for lists
 
             QTextListFormat otherFormat = b.textList()->format();
-            
+
             if (otherFormat.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
                 continue; // different liststyle what means it's another unrelated list
 
@@ -463,14 +462,22 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     int widthPercent = format.intProperty(KoListStyle::RelativeBulletSize);
     if (widthPercent > 0)
-        width +=(m_fm.width(prefix + suffix)*widthPercent)/100.0;
+        width += (m_fm.width(prefix + suffix) * widthPercent) / 100.0;
     else
-        width +=m_fm.width(prefix + suffix);
+        width += m_fm.width(prefix + suffix);
 
     qreal counterSpacing = 0;
     if (listStyle != KoListStyle::None) {
-        counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
-        width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+        if (format.boolProperty(KoListStyle::AlignmentMode) == false) {
+            counterSpacing = qMax(format.doubleProperty(KoListStyle::MinimumDistance), m_fm.width(' '));
+            width = qMax(format.doubleProperty(KoListStyle::MinimumWidth), width);
+        } else {
+            //here counter spacing contains the offset of the list text from the list label
+            counterSpacing = 0;
+            if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::Space) {
+                counterSpacing = m_fm.width(' ');
+            }
+        }
     }
     data->setCounterWidth(width);
     data->setCounterSpacing(counterSpacing);

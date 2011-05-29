@@ -23,6 +23,7 @@
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
     : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)
+    , m_baselineShift(None), m_baselineShiftValue(0.0)
 {
 }
 
@@ -180,6 +181,22 @@ void ArtisticTextRange::setWordSpacing(qreal wordSpacing)
 qreal ArtisticTextRange::wordSpacing() const
 {
     return m_wordSpacing;
+}
+
+ArtisticTextRange::BaselineShift ArtisticTextRange::baselineShift() const
+{
+    return m_baselineShift;
+}
+
+qreal ArtisticTextRange::baselineShiftValue() const
+{
+    return m_baselineShiftValue;
+}
+
+void ArtisticTextRange::setBaselineShift(BaselineShift mode, qreal value)
+{
+    m_baselineShift = mode;
+    m_baselineShiftValue = value;
 }
 
 void ArtisticTextRange::printDebug() const

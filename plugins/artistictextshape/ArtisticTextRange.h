@@ -34,6 +34,14 @@ public:
         RelativeOffset
     };
 
+    enum BaselineShift {
+        None,     ///< no baseline shift
+        Sub,      ///< subscript baseline shift
+        Super,    ///< superscript baseline shift
+        Percent,  ///< percentage baseline shift
+        Length    ///< absolute baseline shift
+    };
+
     ArtisticTextRange(const QString &text, const QFont &font);
     ~ArtisticTextRange();
 
@@ -119,6 +127,15 @@ public:
     /// Returns the word spacing
     qreal wordSpacing() const;
 
+    /// Returns baseline shift mode
+    BaselineShift baselineShift() const;
+
+    /// Returns the optional baseline shift value
+    qreal baselineShiftValue() const;
+
+    /// Sets baseline shift mode and optional value
+    void setBaselineShift(BaselineShift mode, qreal value = 0);
+
     /// Prints debug output
     void printDebug() const;
 
@@ -132,6 +149,8 @@ private:
     QList<qreal> m_rotations; ///< character rotations
     qreal m_letterSpacing; ///< additional inter character spacing
     qreal m_wordSpacing; ///< additional inter word spacing
+    BaselineShift m_baselineShift; ///< baseline shift mode
+    qreal m_baselineShiftValue; ///< optional baseline shift value
 };
 
 #endif // ARTISITICTEXTRANGE_H

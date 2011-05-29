@@ -170,20 +170,21 @@ KoPathTool::~KoPathTool()
 {
 }
 
-QMap<QString, QWidget *>  KoPathTool::createOptionWidgets()
+QList<QWidget *>  KoPathTool::createOptionWidgets()
 {
     Q_D(KoToolBase);
-    QMap<QString, QWidget *> map;
+    QList<QWidget *> list;
 
     PathToolOptionWidget * toolOptions = new PathToolOptionWidget(this);
     connect(this, SIGNAL(typeChanged(int)), toolOptions, SLOT(setSelectionType(int)));
     //connect(this, SIGNAL(pathChanged(KoPathShape*)), widget, SLOT(setSelectedPath(KoPathShape*)));
     updateOptionsWidget();
+    toolOptions->setWindowTitle(i18n("Line/Curve"));
+    list.append(toolOptions);
+    d->canvas->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
+    list.append(d->canvas->createSnapGuideConfigWidget());
 
-    map.insert(i18n("Line/Curve"), toolOptions);
-    map.insert(i18n("Snapping"), d->canvas->createSnapGuideConfigWidget());
-
-    return map;
+    return list;
 }
 
 void KoPathTool::pointTypeChanged(QAction *type)

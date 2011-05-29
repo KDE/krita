@@ -55,7 +55,7 @@ public:
     /// reimplemented
     virtual void deactivate();
     /// reimplemented
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
     /// reimplemented

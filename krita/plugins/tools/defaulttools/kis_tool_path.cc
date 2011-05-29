@@ -208,11 +208,11 @@ void KisToolPath::paint(QPainter &painter, const KoViewConverter &converter)
     m_localTool->paint(painter, converter);
 }
 
-QMap<QString, QWidget *> KisToolPath::createOptionWidgets()
+QList<QWidget *> KisToolPath::createOptionWidgets()
 {
-    QMap<QString, QWidget *> map = KisToolShape::createOptionWidgets();
-    map.unite(m_localTool->createOptionWidgets());
-    return map;
+    QList<QWidget *> list = KisToolShape::createOptionWidgets();
+    list.append(m_localTool->createOptionWidgets());
+    return list;
 }
 
 KisToolPath::LocalTool::LocalTool(KoCanvasBase * canvas, KisToolPath* selectingTool)

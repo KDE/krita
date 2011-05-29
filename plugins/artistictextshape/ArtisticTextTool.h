@@ -126,9 +126,6 @@ private:
     KAction * m_convertText;
     KAction * m_fontBold;
     KAction * m_fontItalic;
-    KAction * m_anchorStart;
-    KAction * m_anchorMiddle;
-    KAction * m_anchorEnd;
     QActionGroup * m_anchorGroup;
 
     int m_textCursor;

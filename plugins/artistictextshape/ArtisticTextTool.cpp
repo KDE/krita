@@ -82,26 +82,26 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
     addAction("artistictext_font_italic", m_fontItalic);
 
-    m_anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
-    m_anchorStart->setCheckable( true );
-    m_anchorStart->setData(ArtisticTextShape::AnchorStart);
-    addAction("artistictext_anchor_start", m_anchorStart);
+    KAction *anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
+    anchorStart->setCheckable( true );
+    anchorStart->setData(ArtisticTextShape::AnchorStart);
+    addAction("artistictext_anchor_start", anchorStart);
 
-    m_anchorMiddle = new KAction(KIcon("format-justify-center"), i18n("Anchor at Middle"), this);
-    m_anchorMiddle->setCheckable( true );
-    m_anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
-    addAction("artistictext_anchor_middle", m_anchorMiddle);
+    KAction *anchorMiddle = new KAction(KIcon("format-justify-center"), i18n("Anchor at Middle"), this);
+    anchorMiddle->setCheckable( true );
+    anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
+    addAction("artistictext_anchor_middle", anchorMiddle);
 
-    m_anchorEnd = new KAction(KIcon("format-justify-right"), i18n("Anchor at End"), this);
-    m_anchorEnd->setCheckable( true );
-    m_anchorEnd->setData(ArtisticTextShape::AnchorEnd);
-    addAction("artistictext_anchor_end", m_anchorEnd);
+    KAction *anchorEnd = new KAction(KIcon("format-justify-right"), i18n("Anchor at End"), this);
+    anchorEnd->setCheckable( true );
+    anchorEnd->setData(ArtisticTextShape::AnchorEnd);
+    addAction("artistictext_anchor_end", anchorEnd);
 
     m_anchorGroup = new QActionGroup(this);
     m_anchorGroup->setExclusive(true);
-    m_anchorGroup->addAction(m_anchorStart);
-    m_anchorGroup->addAction(m_anchorMiddle);
-    m_anchorGroup->addAction(m_anchorEnd);
+    m_anchorGroup->addAction(anchorStart);
+    m_anchorGroup->addAction(anchorMiddle);
+    m_anchorGroup->addAction(anchorEnd);
     connect(m_anchorGroup, SIGNAL(triggered(QAction*)), this, SLOT(anchorChanged(QAction*)));
 
     KoShapeManager *manager = canvas->shapeManager();
@@ -502,12 +502,10 @@ void ArtisticTextTool::updateActions()
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
         m_anchorGroup->blockSignals(true);
-        if( m_currentShape->textAnchor() == ArtisticTextShape::AnchorStart )
-            m_anchorStart->setChecked( true );
-        else if( m_currentShape->textAnchor() == ArtisticTextShape::AnchorMiddle )
-            m_anchorMiddle->setChecked( true );
-        else
-            m_anchorEnd->setChecked( true );
+        foreach(QAction *action, m_anchorGroup->actions()) {
+            if (action->data().toInt() == m_currentShape->textAnchor())
+                action->setChecked(true);
+        }
         m_anchorGroup->blockSignals(false);
         m_anchorGroup->setEnabled(true);
     } else {

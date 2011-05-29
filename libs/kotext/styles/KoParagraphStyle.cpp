@@ -1739,6 +1739,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             keys.removeOne(KoParagraphStyle::BottomPadding);
         }
     }
+    
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
@@ -1755,22 +1756,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             if (!align.isEmpty())
                 style.addProperty("fo:text-align-last", align, KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
-            int directionValue = 0;
-            bool ok = false;
-            directionValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                QString direction;
-                if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr-tb";
-                else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl-tb";
-                else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb-lr";
-                else if (directionValue == KoText::InheritDirection)
-                    direction = "page";
-                if (!direction.isEmpty())
-                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
-            }
+            style.addProperty("style:writing-mode", KoText::directionToString(textProgressionDirection()), KoGenStyle::ParagraphType);
         } else if (key == LineNumbering) {
             style.addProperty("text:number-lines", lineNumbering());
         } else if (key == PageNumber) {

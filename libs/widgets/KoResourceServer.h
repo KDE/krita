@@ -397,8 +397,8 @@ protected:
     void notifyResourceAdded(T* resource)
     {
         foreach(KoResourceServerObserver<T>* observer, m_observers) {
-            observer->resourceAdded(resource);            
-        }        
+            observer->resourceAdded(resource);
+        }
     }
 
     void notifyRemovingResource(T* resource)

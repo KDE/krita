@@ -133,7 +133,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         int column = index.column();
         if( index.isValid() ) {
 
-            KoResource * resource = resourceFromModelIndex(index);            
+            KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
                 d->model->resourceServerAdapter()->removeResource(resource);
             }

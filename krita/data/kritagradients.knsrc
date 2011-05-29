@@ -2,4 +2,4 @@
 ProvidersUrl=http://download.kde.org/ocs/providers.xml
 TargetDir=krita/gradients
 Categories=Krita Gradient
-UploadCategories=Krita Gradient 
+UploadCategories=Krita Gradient

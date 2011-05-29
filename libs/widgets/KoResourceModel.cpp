@@ -130,7 +130,6 @@ void KoResourceModel::resourceAdded(KoResource *resource)
     int newIndex = m_resourceAdapter->resources().indexOf(resource);
     if (newIndex < 0)
         return;
-
     reset();
 }
 

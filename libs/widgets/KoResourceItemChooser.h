@@ -83,7 +83,7 @@ public:
 
 signals:
     /// Emitted when a resource was selected
-    void resourceSelected( KoResource * resource );  
+    void resourceSelected( KoResource * resource );
 
 private slots:
     void slotButtonClicked( int button );

@@ -107,6 +107,7 @@ enum Direction {
     LeftRightTopBottom, ///< Text layout for most western languages
     RightLeftTopBottom, ///< Text layout for languages like Hebrew
     TopBottomRightLeft,  ///< Vertical text layout.
+    TopBottomLeftRight,  ///< Vertical text layout. ?
     PerhapsLeftRightTopBottom, ///< \internal
     PerhapsRightLeftTopBottom, ///< \internal
     InheritDirection    ///< Direction is unspecified and should come from the container
@@ -129,7 +130,7 @@ KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
 KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
-}
+};
 
 Q_DECLARE_METATYPE(KoText::Tab)
 

@@ -134,6 +134,9 @@ KoTextDocumentLayout::KoTextDocumentLayout(QTextDocument *doc, KoTextLayoutRootA
 
 KoTextDocumentLayout::~KoTextDocumentLayout()
 {
+    delete d->paintDevice;
+    delete d->layoutPosition;
+    qDeleteAll(d->rootAreaList);
     qDeleteAll(d->freeObstructions);
     qDeleteAll(d->anchoredObstructions);
     qDeleteAll(d->textAnchors);

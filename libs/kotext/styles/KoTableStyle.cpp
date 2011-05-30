@@ -603,17 +603,7 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
             else
                 style.addProperty("style:page-number", "auto", KoGenStyle::TableType);
         } else if (key == TextProgressionDirection) {
-            KoText::Direction direction = textDirection();
-            if (direction == KoText::LeftRightTopBottom)
-                style.addProperty("style:writing-mode", "lr", KoGenStyle::TableType);
-            else if (direction == KoText::RightLeftTopBottom)
-                style.addProperty("style:writing-mode", "rl", KoGenStyle::TableType);
-            else if (direction == KoText::TopBottomRightLeft)
-                style.addProperty("style:writing-mode", "tb", KoGenStyle::TableType);
-            else if (direction == KoText::InheritDirection)
-                style.addProperty("style:writing-mode", "page", KoGenStyle::TableType);
-            else
-                style.addProperty("style:writing-mode", "auto", KoGenStyle::TableType);
+            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableType);
         }
     }
 }

@@ -29,7 +29,8 @@
 
 #include <KoGenStyle.h>
 
-class Attribute : public QObject {
+class Attribute : public QObject
+{
     Q_OBJECT
     public:
         Attribute(const QDomElement &element);

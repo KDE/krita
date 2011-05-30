@@ -240,8 +240,8 @@ void KoPAView::initGUI()
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &) ));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));

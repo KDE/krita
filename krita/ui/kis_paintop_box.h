@@ -54,6 +54,7 @@ class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
 class KisSliderSpinBox;
+class KAction;
 
 
 /**
@@ -97,15 +98,15 @@ private:
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
-    ///Sets the current composite op in the canvas resource provide
-    ///Composite op will be set to eraser if the erase mode of the input device is active
-    void compositeOpChanged();
-
     ///Sets the internal composite op, without emitting
     /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
     void setCompositeOpInternal(const QString & id);
 
     void setEnabledInternal(bool value);
+    
+    virtual void setConfiguration(const KisPropertiesConfiguration * config);
+
+    virtual void writeConfiguration(KisPropertiesConfiguration *config) const;
 
 private slots:
     void updatePaintops();
@@ -116,9 +117,6 @@ private slots:
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
-    void slotHorizontalMirrorChanged(bool value);
-    void slotVerticalMirrorChanged(bool value);
-    void slotOpacityChanged(int value);
 private:
 
     const KoColorSpace* m_colorspace;
@@ -132,13 +130,15 @@ private:
     KisPopupButton* m_presetWidget;
     KisPopupButton* m_brushChooser;
     KisCmbComposite* m_cmbComposite;
-    QToolButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
     KisView2* m_view;
     QPushButton* m_paletteButton;
     KisPopupButton* m_workspaceWidget;
     KisSliderSpinBox* m_sliderOpacity;
+    KAction* m_eraseAction;
+    KAction* m_hMirrorAction;
+    KAction* m_vMirrorAction;  
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;

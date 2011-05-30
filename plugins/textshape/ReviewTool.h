@@ -57,7 +57,7 @@ public:
     virtual void deactivate();
 
 protected:
-    virtual QMap<QString, QWidget*> createOptionWidgets();
+    virtual QList<QWidget*> createOptionWidgets();
 
 private slots:
     void acceptChange();

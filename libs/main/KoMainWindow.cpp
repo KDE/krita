@@ -84,7 +84,7 @@ public:
         setIgnoreScrollBars(true);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj->isWidgetType())
+        if (!obj || !ev || !obj->isWidgetType())
             return false;
         return KParts::PartManager::eventFilter(obj, ev);
     }

@@ -54,18 +54,15 @@ public:
     virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
     /// reimplemented form KoToolBase
     virtual void deactivate();
-    /// reimplemented form KoToolBase
-    virtual QMap<QString, QWidget*> createOptionWidgets();
 
-    /// Sets up tool state to move the specified guide line
     void moveGuideLine(Qt::Orientation orientation, int index);
-
-    /// Sets up tool state to edit the specified guide line
     void editGuideLine(Qt::Orientation orientation, int index);
 
 public slots:
-    /// Sets up tool state to create a new guide line and activates the tool
-    void createGuideLine(Qt::Orientation orientation, qreal position);
+    void startGuideLineCreation(Qt::Orientation orientation, qreal position);
+
+protected:
+    virtual QList<QWidget*> createOptionWidgets();
 
 private slots:
     void updateGuidePosition(qreal position);
@@ -84,6 +81,7 @@ private:
     QRectF updateRectFromGuideLine(qreal position, Qt::Orientation orientation);
 
     enum EditMode {
+        None,
         AddGuide,
         MoveGuide,
         EditGuide

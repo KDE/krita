@@ -40,7 +40,7 @@ GuidesTool::GuidesTool(KoCanvasBase *canvas)
     m_orientation(Qt::Horizontal),
     m_index(-1),
     m_position(0),
-    m_mode(EditGuide),
+    m_mode(None),
     m_options(0),
     m_isMoving(false)
 {
@@ -52,6 +52,9 @@ GuidesTool::~GuidesTool()
 
 void GuidesTool::paint(QPainter &painter, const KoViewConverter &converter)
 {
+    if (m_mode == None)
+        return;
+
     if (m_mode == EditGuide && m_index == -1)
         return;
 
@@ -77,6 +80,9 @@ void GuidesTool::paint(QPainter &painter, const KoViewConverter &converter)
 
 void GuidesTool::repaintDecorations()
 {
+    if (m_mode == None)
+        return;
+
     canvas()->updateCanvas(updateRectFromGuideLine(m_position, m_orientation));
 }
 
@@ -103,12 +109,14 @@ QRectF GuidesTool::updateRectFromGuideLine(qreal position, Qt::Orientation orien
     return rect;
 }
 
-void GuidesTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*> &)
+void GuidesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &)
 {
-    if (m_index >= 0)
+    if (m_mode != None)
         useCursor(m_orientation == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor);
     else
         useCursor(Qt::ArrowCursor);
+    if (toolActivation == KoToolBase::TemporaryActivation)
+        canvas()->canvasWidget()->grabMouse();
 
     if (m_options) {
         KoGuidesData *guidesData = canvas()->guidesData();
@@ -124,8 +132,7 @@ void GuidesTool::activate(ToolActivation /*toolActivation*/, const QSet<KoShape*
 void GuidesTool::deactivate()
 {
     canvas()->canvasWidget()->releaseMouse();
-    m_mode = EditGuide;
-    m_index = -1;
+    m_mode = None;
 }
 
 void GuidesTool::mousePressEvent(KoPointerEvent *event)
@@ -139,17 +146,18 @@ void GuidesTool::mousePressEvent(KoPointerEvent *event)
 
 void GuidesTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    if (m_mode == None) {
+        useCursor(Qt::ArrowCursor);
+        return;
+    }
+
     if (m_mode == EditGuide && ! m_isMoving) {
         GuideLine line = guideLineAtPosition(event->point);
-        if (line.second < 0) {
+        if (line.second < 0)
             useCursor(Qt::ArrowCursor);
-            setStatusText(i18n("Double click to add guide line."));
-        } else {
+        else
             useCursor(line.first == Qt::Horizontal ? Qt::SizeVerCursor : Qt::SizeHorCursor);
-            setStatusText(i18n("Click and drag to move guide line. Double click to remove guide line."));
-        }
     } else {
-        setStatusText("");
         repaintDecorations();
         m_position = m_orientation == Qt::Horizontal ? event->point.y() : event->point.x();
         updateGuidePosition(m_position);
@@ -233,7 +241,7 @@ void GuidesTool::mouseDoubleClickEvent(KoPointerEvent *event)
     repaintDecorations();
 }
 
-void GuidesTool::createGuideLine(Qt::Orientation orientation, qreal position)
+void GuidesTool::startGuideLineCreation(Qt::Orientation orientation, qreal position)
 {
     m_orientation = orientation;
     m_index = -1;
@@ -241,9 +249,6 @@ void GuidesTool::createGuideLine(Qt::Orientation orientation, qreal position)
     m_mode = AddGuide;
 
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
-
-    // grab the mouse so we get mouse events as the dragging started on a ruler
-    canvas()->canvasWidget()->grabMouse();
 }
 
 void GuidesTool::moveGuideLine(Qt::Orientation orientation, int index)
@@ -267,16 +272,12 @@ void GuidesTool::updateGuidePosition(qreal position)
         if (guidesData) {
             if (m_orientation == Qt::Horizontal) {
                 QList<qreal> guideLines = guidesData->horizontalGuideLines();
-                if (m_index >= 0 && m_index < guideLines.count()) {
-                    guideLines[m_index] = position;
-                    guidesData->setHorizontalGuideLines(guideLines);
-                }
+                guideLines[m_index] = position;
+                guidesData->setHorizontalGuideLines(guideLines);
             } else {
                 QList<qreal> guideLines = guidesData->verticalGuideLines();
-                if (m_index >= 0 && m_index < guideLines.count()) {
-                    guideLines[m_index] = position;
-                    guidesData->setVerticalGuideLines(guideLines);
-                }
+                guideLines[m_index] = position;
+                guidesData->setVerticalGuideLines(guideLines);
             }
         }
     }
@@ -294,9 +295,9 @@ void GuidesTool::guideLineSelected(Qt::Orientation orientation, int index)
     m_index = index;
 
     if (m_orientation == Qt::Horizontal)
-        m_position = guidesData->horizontalGuideLines().value(index);
+        m_position = guidesData->horizontalGuideLines()[index];
     else
-        m_position = guidesData->verticalGuideLines().value(index);
+        m_position = guidesData->verticalGuideLines()[index];
 
     repaintDecorations();
 }
@@ -380,28 +381,29 @@ void GuidesTool::resourceChanged(int key, const QVariant &res)
     }
 }
 
-QMap< QString, QWidget*> GuidesTool::createOptionWidgets()
+QList<QWidget*> GuidesTool::createOptionWidgets()
 {
-    QMap< QString, QWidget* > optionWidgets;
+    QList< QWidget* > optionwidgets;
+    if (m_mode != EditGuide) {
+        m_options = new GuidesToolOptionWidget();
 
-    m_options = new GuidesToolOptionWidget();
+        connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),
+                this, SLOT(guideLineSelected(Qt::Orientation,int)));
 
-    connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),
-            this, SLOT(guideLineSelected(Qt::Orientation,int)));
+        connect(m_options, SIGNAL(guideLinesChanged(Qt::Orientation)),
+                this, SLOT(guideLinesChanged(Qt::Orientation)));
 
-    connect(m_options, SIGNAL(guideLinesChanged(Qt::Orientation)),
-            this, SLOT(guideLinesChanged(Qt::Orientation)));
+        m_options->setWindowTitle(i18n("Guides Editor"));
+        optionwidgets.append(m_options);
+        m_insert = new InsertGuidesToolOptionWidget();
 
-    optionWidgets.insert("Guides Editor", m_options);
+        connect(m_insert, SIGNAL(createGuides(GuidesTransaction*)),
+                 this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
 
-    m_insert = new InsertGuidesToolOptionWidget();
-
-    connect(m_insert, SIGNAL(createGuides(GuidesTransaction*)),
-             this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
-
-    optionWidgets.insert("Guides Insertor", m_insert);
-
-    return optionWidgets;
+        m_insert->setWindowTitle(i18n("Guides Insertor"));
+        optionwidgets.append(m_insert);
+    }
+    return optionwidgets;
 }
 
 void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)

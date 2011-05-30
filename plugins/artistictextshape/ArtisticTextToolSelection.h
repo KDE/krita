@@ -31,7 +31,7 @@ class QPainter;
 class ArtisticTextToolSelection : public KoToolSelection
 {
 public:
-    ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
+    explicit ArtisticTextToolSelection(KoCanvasBase *canvas, QObject *parent = 0);
     virtual ~ArtisticTextToolSelection();
 
     // reimplemented from KoToolSelection

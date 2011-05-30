@@ -318,6 +318,8 @@ protected:
     /// set the url so it gets shown correctly in variables
     void updateDocumentURL();
 
+    virtual void setupOpenFileSubProgress();
+
 private:
 
     friend class KoPAPastePage;

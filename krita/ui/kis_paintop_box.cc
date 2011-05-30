@@ -74,7 +74,6 @@
 #include <kis_cmb_paintop.h>
 #include "kis_slider_spin_box.h"
 
-
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
         , m_resourceProvider(view->resourceProvider())
@@ -110,45 +109,46 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     //m_presetWidget->setText(i18n("Select Brush"));
     m_presetWidget->setFixedSize(32, 32);
 
-    m_eraseModeButton = new QToolButton(this);
-    m_eraseModeButton->setFixedSize(32, 32);
-    m_eraseModeButton->setCheckable(true);
-    KAction* eraseAction = new KAction(i18n("Set eraser mode"), m_eraseModeButton);
-    eraseAction->setIcon(KIcon("draw-eraser"));
-    eraseAction->setShortcut(Qt::Key_E);
-    eraseAction->setCheckable(true);
-    m_eraseModeButton->setDefaultAction(eraseAction);
-    m_view->actionCollection()->addAction("erase_action", eraseAction);
+    QToolButton* eraseModeButton = new QToolButton(this);
+    eraseModeButton->setFixedSize(32, 32);
+    eraseModeButton->setCheckable(true);
+    m_eraseAction = new KAction(i18n("Set eraser mode"), eraseModeButton);
+    m_eraseAction->setIcon(KIcon("draw-eraser"));
+    m_eraseAction->setShortcut(Qt::Key_E);
+    m_eraseAction->setCheckable(true);
+    eraseModeButton->setDefaultAction(m_eraseAction);
+    m_view->actionCollection()->addAction("erase_action", m_eraseAction);
 
     QToolButton* hMirrorButton = new QToolButton(this);
     hMirrorButton->setFixedSize(32, 32);
     hMirrorButton->setCheckable(true);
-    KAction* hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
-    hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
+    m_hMirrorAction = new KAction(i18n("Set horizontal mirror mode"), hMirrorButton);
+    m_hMirrorAction->setIcon(KIcon("object-flip-horizontal"));
 //     hMirrorAction->setShortcut(Qt::Key_H);
-    hMirrorAction->setCheckable(true);
-    hMirrorButton->setDefaultAction(hMirrorAction);
-    m_view->actionCollection()->addAction("hmirror_action", hMirrorAction);
+    m_hMirrorAction->setCheckable(true);
+    hMirrorButton->setDefaultAction(m_hMirrorAction);
+    m_view->actionCollection()->addAction("hmirror_action", m_hMirrorAction);
 
     QToolButton* vMirrorButton = new QToolButton(this);
     vMirrorButton->setFixedSize(32, 32);
     vMirrorButton->setCheckable(true);
-    KAction* vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
-    vMirrorAction->setIcon(KIcon("object-flip-vertical"));
+    m_vMirrorAction = new KAction(i18n("Set vertical mirror mode"), vMirrorButton);
+    m_vMirrorAction->setIcon(KIcon("object-flip-vertical"));
 //     vMirrorAction->setShortcut(Qt::Key_V);
-    vMirrorAction->setCheckable(true);
-    vMirrorButton->setDefaultAction(vMirrorAction);
-    m_view->actionCollection()->addAction("vmirror_action", vMirrorAction);
+    m_vMirrorAction->setCheckable(true);
+    vMirrorButton->setDefaultAction(m_vMirrorAction);
+    m_view->actionCollection()->addAction("vmirror_action", m_vMirrorAction);
 
-    connect(eraseAction, SIGNAL(triggered(bool)), this, SLOT(eraseModeToggled(bool)));
-    connect(hMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotHorizontalMirrorChanged(bool)));
-    connect(vMirrorAction, SIGNAL(triggered(bool)), this, SLOT(slotVerticalMirrorChanged(bool)));
+    connect(m_eraseAction, SIGNAL(toggled(bool)), this, SLOT(eraseModeToggled(bool)));
+    connect(m_hMirrorAction, SIGNAL(toggled(bool)), this, SLOT(slotUpdatePreset()));
+    connect(m_vMirrorAction, SIGNAL(toggled(bool)), this, SLOT(slotUpdatePreset()));
 
     QLabel* labelMode = new QLabel(i18n("Mode: "), this);
     labelMode->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
     m_cmbComposite = new KisCmbComposite(this);
     nodeChanged(view->activeNode());
     connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotSetCompositeMode(const QString&)));
+    connect(m_cmbComposite, SIGNAL(activated(const QString&)), this, SLOT(slotUpdatePreset()));
 
     
     QLabel* labelOpacity = new QLabel(i18n("Opacity: "), this);
@@ -157,7 +157,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_sliderOpacity->setRange(0, 100);
     m_sliderOpacity->setValue(100);
     m_sliderOpacity->setMinimumWidth(150);
-    connect(m_sliderOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+    connect(m_sliderOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotUpdatePreset()));
 //     m_brushChooser = new KisPopupButton(this);
 //     //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
 //     m_brushChooser->setText(i18n("Brush Editor"));
@@ -184,7 +184,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_layout->addWidget(m_presetWidget);
     m_layout->addWidget(labelMode);
     m_layout->addWidget(m_cmbComposite);
-    m_layout->addWidget(m_eraseModeButton);
+    m_layout->addWidget(eraseModeButton);
     m_layout->addWidget(new KSeparator(Qt::Vertical, this));
     m_layout->addWidget(hMirrorButton);
     m_layout->addWidget(vMirrorButton);
@@ -298,15 +298,15 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 {
     KisPaintOpPreset* preset = static_cast<KisPaintOpPreset*>(resource);
     dbgUI << "preset " << preset->name() << "selected";
-    if (!preset->settings()->isValid()) {
+    if (!preset->settings()->isLoadable()) {
         return;
     }
 
     if(preset->paintOp() != currentPaintop()) {
         setCurrentPaintop(preset->paintOp());
     }
-
-    m_optionWidget->setConfiguration(preset->settings());
+kDebug() << "check 1";
+    setConfiguration(preset->settings());
     m_presetsPopup->setPresetImage(preset->image());
     slotUpdatePreset();
 }
@@ -349,7 +349,7 @@ void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
         m_eraserUsed = true;
     }
 
-    m_eraseModeButton->setChecked(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]);
+    m_eraseAction->setChecked(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]);
     setCompositeOpInternal(m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()]);
     updateCompositeOpComboBox();
 }
@@ -378,7 +378,7 @@ const KoID& KisPaintopBox::currentPaintop()
 void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
 {
     if (m_activePreset && m_optionWidget) {
-        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+        writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
         m_optionWidget->disconnect(m_presetWidget);
         m_presetsPopup->setPaintOpSettingsWidget(0);
         m_optionWidget->hide();
@@ -395,11 +395,12 @@ void KisPaintopBox::setCurrentPaintop(const KoID & paintop)
         }
         m_optionWidget = m_paintopOptionWidgets[paintop];
         m_optionWidget->setImage(m_view->image());
-        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
+        writeConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
         preset->settings()->setOptionsWidget(m_optionWidget);
 
         if (!preset->settings()->getProperties().isEmpty()) {
-            m_optionWidget->setConfiguration(preset->settings());
+            kDebug() << "check 2";
+            setConfiguration(preset->settings());
         }
         m_presetsPopup->setPaintOpSettingsWidget(m_optionWidget);
         m_presetsChooserPopup->setPresetFilter(paintop);
@@ -495,7 +496,8 @@ void KisPaintopBox::slotSaveActivePreset()
 
 void KisPaintopBox::slotUpdatePreset()
 {
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+    writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+    m_resourceProvider->setPaintOpPresetModified();
 }
 
 void KisPaintopBox::slotSetupDefaultPreset(){
@@ -511,8 +513,9 @@ void KisPaintopBox::slotSetupDefaultPreset(){
 
     preset->settings()->setNode( m_activePreset->settings()->node() );
     preset->settings()->setOptionsWidget(m_optionWidget);
-    m_optionWidget->setConfiguration(preset->settings());
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>( preset->settings().data() ));
+   kDebug() << "check 3";
+    setConfiguration(preset->settings());
+    writeConfiguration(const_cast<KisPaintOpSettings*>( preset->settings().data() ));
 }
 
 void KisPaintopBox::nodeChanged(const KisNodeSP node)
@@ -533,9 +536,12 @@ void KisPaintopBox::nodeChanged(const KisNodeSP node)
 
 void KisPaintopBox::eraseModeToggled(bool checked)
 {
+    if(!m_compositeOp) {
+        return;
+    }
     m_cmbComposite->setEnabled(!checked);
     m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()] = checked;
-    compositeOpChanged();
+    slotUpdatePreset();
 }
 
 void KisPaintopBox::updateCompositeOpComboBox()
@@ -574,19 +580,9 @@ void KisPaintopBox::updateCompositeOpComboBox()
                 m_cmbComposite->setEnabled(true);
             }
             setEnabledInternal(true);
-            compositeOpChanged();
         } else {
             setEnabledInternal(false);
         }
-    }
-}
-
-void KisPaintopBox::compositeOpChanged()
-{
-    if(m_inputDeviceEraseModes[KoToolManager::instance()->currentInputDevice()]) {
-        m_resourceProvider->setCurrentCompositeOp(COMPOSITE_ERASE);
-    } else {
-        m_resourceProvider->setCurrentCompositeOp(m_compositeOp->id());
     }
 }
 
@@ -619,7 +615,6 @@ void KisPaintopBox::slotSetCompositeMode(const QString& compositeOp)
 {
     m_inputDeviceCompositeModes[KoToolManager::instance()->currentInputDevice()] = compositeOp;
     setCompositeOpInternal(compositeOp);
-    m_resourceProvider->setCurrentCompositeOp(compositeOp);
 }
 
 
@@ -640,19 +635,53 @@ void KisPaintopBox::slotWatchPresetNameLineEdit(const QString& text)
     m_presetsPopup->changeSavePresetButtonText(rServer->getResourceByName(text) != 0);
 }
 
-void KisPaintopBox::slotHorizontalMirrorChanged(bool value)
+void KisPaintopBox::setConfiguration(const KisPropertiesConfiguration* config)
 {
-    m_resourceProvider->setMirrorHorizontal(value);
+    m_optionWidget->setConfiguration(config);
+
+    int opacity = config->getInt(KRITA_PAINTOP_OPACITY, 100);
+    m_sliderOpacity->blockSignals(true);
+    m_sliderOpacity->setValue(opacity);
+    m_sliderOpacity->blockSignals(false);
+    
+    bool horizontalMirror = config->getBool(KRITA_PAINTOP_MIRRORHORIZONTAL);
+    m_hMirrorAction->blockSignals(true);
+    m_hMirrorAction->setChecked(horizontalMirror);
+    m_hMirrorAction->blockSignals(false);
+    
+    bool verticalMirror = config->getBool(KRITA_PAINTOP_MIRRORVERTICAL);
+    m_vMirrorAction->blockSignals(true);
+    m_vMirrorAction->setChecked(verticalMirror);
+    m_vMirrorAction->blockSignals(false);
+    
+    QString compositeOp = config->getString(KRITA_PAINTOP_COMPOSITEOP, COMPOSITE_OVER);
+    slotSetCompositeMode(compositeOp);
+    if(m_compositeOp) {
+        m_cmbComposite->blockSignals(true);
+        m_cmbComposite->setCurrent(compositeOp);
+        m_cmbComposite->blockSignals(false);
+    }
+
+    bool eraseMode = config->getBool(KRITA_PAINTOP_ERASE);
+    m_eraseAction->blockSignals(true);
+    m_eraseAction->setChecked(eraseMode);
+    m_eraseAction->blockSignals(false);
+    eraseModeToggled(eraseMode);
 }
 
-void KisPaintopBox::slotVerticalMirrorChanged(bool value)
+void KisPaintopBox::writeConfiguration(KisPropertiesConfiguration* config) const
 {
-    m_resourceProvider->setMirrorVertical(value);
+    m_optionWidget->writeConfiguration(config);
+    config->setProperty(KRITA_PAINTOP_OPACITY, m_sliderOpacity->value());
+    config->setProperty(KRITA_PAINTOP_MIRRORHORIZONTAL, m_hMirrorAction->isChecked());
+    config->setProperty(KRITA_PAINTOP_MIRRORVERTICAL, m_vMirrorAction->isChecked());
+    if(m_compositeOp) {
+        config->setProperty(KRITA_PAINTOP_COMPOSITEOP, m_compositeOp->id());
+    } else {
+        config->setProperty(KRITA_PAINTOP_COMPOSITEOP, COMPOSITE_OVER);
+    }
+    config->setProperty(KRITA_PAINTOP_ERASE, m_eraseAction->isChecked());
 }
 
-void KisPaintopBox::slotOpacityChanged(int value)
-{
-    m_resourceProvider->setOpacity(value);
-}
 
 #include "kis_paintop_box.moc"

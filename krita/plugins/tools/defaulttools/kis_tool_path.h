@@ -51,7 +51,7 @@ public slots:
 
 private:
     /// reimplemented
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     class LocalTool : public KoCreatePathTool {
         friend class KisToolPath;

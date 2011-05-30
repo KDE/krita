@@ -61,6 +61,9 @@ public:
 public slots:
     void startGuideLineCreation(Qt::Orientation orientation, qreal position);
 
+protected:
+    virtual QList<QWidget*> createOptionWidgets();
+
 private slots:
     void updateGuidePosition(qreal position);
     void guideLineSelected(Qt::Orientation orientation, int index);
@@ -73,7 +76,6 @@ private slots:
 private:
     typedef QPair<Qt::Orientation, int> GuideLine;
     GuideLine guideLineAtPosition(const QPointF &position);
-    virtual QList<QWidget*> createOptionWidgets();
 
     /// Calculates update rectangle for specified guide line
     QRectF updateRectFromGuideLine(qreal position, Qt::Orientation orientation);

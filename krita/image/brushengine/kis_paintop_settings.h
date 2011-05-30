@@ -185,6 +185,11 @@ public:
     /// @return state of the settings, default implementation is true
     virtual bool isValid();
 
+    /// Check if the settings are loadable, that might the the case if we can fallback to something
+    /// Overwrite if the settings can do some kind of fallback
+    /// @return loadable state of the settings, by default implementation return the same as isValid()
+    virtual bool isLoadable();
+
 protected:
      /**
      * @return the option widget of the paintop (can be 0 is no option widgets is set)

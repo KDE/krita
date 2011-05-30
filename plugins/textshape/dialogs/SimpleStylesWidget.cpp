@@ -36,7 +36,7 @@
 class SpecialButton : public QFrame
 {
 public:
-    SpecialButton();
+    SpecialButton(QWidget *parent);
 
     void setStylesWidget(StylesWidget *stylesWidget);
 
@@ -47,18 +47,18 @@ protected:
     StylesWidget *m_stylesWidget;
 };
 
-SpecialButton::SpecialButton()
- : QFrame()
+SpecialButton::SpecialButton(QWidget *parent)
+    : QFrame(parent)
 {
     setFrameShape(QFrame::StyledPanel);
     setFrameShadow(QFrame::Sunken);
 
-    QWidget *preview = new QWidget();
+    QWidget *preview = new QWidget(this);
     preview->setAutoFillBackground(true);
     preview->setBackgroundRole(QPalette::Base);
     preview->setMinimumWidth(50);
     preview->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    QHBoxLayout *l = new QHBoxLayout;
+    QHBoxLayout *l = new QHBoxLayout(this);
     l->addWidget(preview);
     l->setMargin(0);
     setLayout(l);
@@ -98,23 +98,23 @@ void SpecialButton::mousePressEvent(QMouseEvent *)
 
 SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
         : QWidget(parent)
-        ,m_blockSignals(false)
+        , m_blockSignals(false)
 {
     setObjectName("simplestyleswidget");
-    m_popupForBlock = new StylesWidget(0, true, Qt::Popup);
+    m_popupForBlock = new StylesWidget(this, true, Qt::Popup);
     m_popupForBlock->setFrameShape(QFrame::StyledPanel);
     m_popupForBlock->setFrameShadow(QFrame::Raised);
-    m_popupForChar = new StylesWidget(0, false, Qt::Popup);
+    m_popupForChar = new StylesWidget(this, false, Qt::Popup);
     m_popupForChar->setFrameShape(QFrame::StyledPanel);
     m_popupForChar->setFrameShadow(QFrame::Raised);
 
-    SpecialButton *blockFrame = new SpecialButton;
+    SpecialButton *blockFrame = new SpecialButton(this);
     blockFrame->setStylesWidget(m_popupForBlock);
 
-    SpecialButton *charFrame = new SpecialButton;
+    SpecialButton *charFrame = new SpecialButton(this);
     charFrame->setStylesWidget(m_popupForChar);
 
-    QHBoxLayout *l = new QHBoxLayout;
+    QHBoxLayout *l = new QHBoxLayout(this);
     l->addWidget(blockFrame);
     l->addWidget(charFrame);
     l->setMargin(0);
@@ -126,6 +126,10 @@ SimpleStylesWidget::SimpleStylesWidget(QWidget *parent)
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(characterStyleSelected(KoCharacterStyle *)));
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SIGNAL(doneWithFocus()));
     connect(m_popupForChar, SIGNAL(characterStyleSelected(KoCharacterStyle *)), this, SLOT(hidePopups()));
+}
+
+SimpleStylesWidget::~SimpleStylesWidget()
+{
 }
 
 void SimpleStylesWidget::setStyleManager(KoStyleManager *sm)

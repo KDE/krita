@@ -501,7 +501,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
-    QTextDocument *document = new QTextDocument();
+    QTextDocument *document = new QTextDocument(); // this document is leaked
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
     KoTextDocument(document).setInlineTextObjectManager(inlineManager);

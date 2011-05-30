@@ -37,6 +37,7 @@ class StylesWidget : public QFrame
     Q_OBJECT
 public:
     explicit StylesWidget(QWidget *parent = 0,  bool paragraphMode=true, Qt::WindowFlags f = 0);
+    virtual ~StylesWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);

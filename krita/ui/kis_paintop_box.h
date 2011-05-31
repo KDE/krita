@@ -53,7 +53,7 @@ class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
-class KisSliderSpinBox;
+class KisDoubleSliderSpinBox;
 
 
 /**
@@ -118,9 +118,10 @@ private slots:
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
-    void slotOpacityChanged(int value);
+    void slotOpacityChanged(qreal value);
+    void slotPresetChanged();
+    
 private:
-
     const KoColorSpace* m_colorspace;
 
     KisCanvasResourceProvider *m_resourceProvider;
@@ -138,7 +139,7 @@ private:
     KisView2* m_view;
     QPushButton* m_paletteButton;
     KisPopupButton* m_workspaceWidget;
-    KisSliderSpinBox* m_sliderOpacity;
+    KisDoubleSliderSpinBox* m_sliderOpacity;
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;

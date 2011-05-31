@@ -154,11 +154,12 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     
     QLabel* labelOpacity = new QLabel(i18n("Opacity: "), this);
     labelOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_sliderOpacity = new KisSliderSpinBox(this);
-    m_sliderOpacity->setRange(0, 100);
-    m_sliderOpacity->setValue(100);
+    m_sliderOpacity = new KisDoubleSliderSpinBox(this);
+    m_sliderOpacity->setRange(0.0, 1.0, 2);
+    m_sliderOpacity->setValue(1.0);
+    m_sliderOpacity->setSingleStep(0.05);
     m_sliderOpacity->setMinimumWidth(150);
-    connect(m_sliderOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotOpacityChanged(int)));
+    connect(m_sliderOpacity, SIGNAL(valueChanged(qreal)), this, SLOT(slotOpacityChanged(qreal)));
 //     m_brushChooser = new KisPopupButton(this);
 //     //m_brushChooser->setIcon(KIcon("paintop_settings_01"));
 //     m_brushChooser->setText(i18n("Brush Editor"));
@@ -226,6 +227,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
+    
+//     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
+//             m_presetsPopup, SLOT(resourceSelected(KoResource*)));
+    
+    connect(m_optionWidget, SIGNAL(sigConfigurationUpdated()), this, SLOT(slotPresetChanged()));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -649,9 +655,26 @@ void KisPaintopBox::slotVerticalMirrorChanged(bool value)
     m_resourceProvider->setMirrorVertical(value);
 }
 
-void KisPaintopBox::slotOpacityChanged(int value)
+void KisPaintopBox::slotOpacityChanged(qreal value)
 {
-    m_resourceProvider->setOpacity(value);
+//     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
+    
+    if(m_activePreset->settings()->getBool("PressureOpacity")) {
+        m_activePreset->settings()->setProperty("OpacityValue", value);
+        m_optionWidget->setConfiguration(m_activePreset->settings().data());
+    }
 }
+
+void KisPaintopBox::slotPresetChanged()
+{
+    if(m_activePreset->settings()->getBool("PressureOpacity")) {
+        m_sliderOpacity->setDisabled(false);
+        m_sliderOpacity->setValue(m_activePreset->settings()->getDouble("OpacityValue"), false);
+    }
+    else {
+        m_sliderOpacity->setDisabled(true);
+    }
+}
+
 
 #include "kis_paintop_box.moc"

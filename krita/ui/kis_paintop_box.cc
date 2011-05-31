@@ -5,6 +5,7 @@
  *  Copyright (c) 2009-2011 Sven Langkamp (sven.langkamp@gmail.com)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -225,9 +226,6 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
 
     connect(m_resourceProvider, SIGNAL(sigNodeChanged(const KisNodeSP)),
             this, SLOT(nodeChanged(const KisNodeSP)));
-    
-    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
-            m_presetsPopup, SLOT(resourceSelected(KoResource*)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);
@@ -309,6 +307,7 @@ kDebug() << "check 1";
     setConfiguration(preset->settings());
     m_presetsPopup->setPresetImage(preset->image());
     slotUpdatePreset();
+    m_presetsPopup->resourceSelected(resource);
 }
 
 QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
@@ -476,7 +475,7 @@ void KisPaintopBox::slotSaveActivePreset()
     QFileInfo fileInfo(saveLocation + name + newPreset->defaultFileExtension());
 
     if (fileInfo.exists()) {
-        rServer->removeResource(rServer->getResourceByFilename(fileInfo.fileName()));
+        rServer->removeResource(rServer->getResourceByName(name));
     }
     
 //     int i = 1;

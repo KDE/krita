@@ -2,6 +2,7 @@
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -174,6 +175,8 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     KoResourceServer<KisPaintOpPreset> * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
     m_presetProxy = new KisPresetProxyAdapter(rserver);
     m_chooser = new KoResourceItemChooser(m_presetProxy, this);
+    QString knsrcFile = "kritapresets.knsrc";
+    m_chooser->setKnsrcFile(knsrcFile);
     m_chooser->showGetHotNewStuff(true, true);
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);

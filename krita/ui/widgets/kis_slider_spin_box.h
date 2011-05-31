@@ -75,7 +75,7 @@ protected:
     int valueForX(int x) const;
 
     virtual QString valueString() const = 0;
-    virtual void setInternalValue(int value) = 0;
+    virtual void setInternalValue(int value, bool emitSignal) = 0;
 
 protected slots:
     void contextMenuEvent(QContextMenuEvent * event);
@@ -105,14 +105,14 @@ public:
     int value();
 
     ///Set the value, don't use setValue()
-    void setValue(int value);
+    void setValue(int value, bool emitSignal=true);
 
     void setSingleStep(int value);
     void setPageStep(int value);
 
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool emitSignal);
 signals:
     void valueChanged(int value);
 };
@@ -128,12 +128,12 @@ public:
     void setRange(qreal minimum, qreal maximum, int decimals = 0);
 
     qreal value();
-    void setValue(qreal value);
+    void setValue(qreal value, bool emitSignal=true);
 
     void setSingleStep(qreal value);
 protected:
     virtual QString valueString() const;
-    virtual void setInternalValue(int value);
+    virtual void setInternalValue(int value, bool emitSignal);
 signals:
     void valueChanged(qreal value);
 };

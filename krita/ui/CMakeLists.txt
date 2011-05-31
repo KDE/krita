@@ -160,6 +160,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
+    widgets/kis_categorized_list_view.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp

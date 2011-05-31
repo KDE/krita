@@ -176,7 +176,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
     m_presetProxy = new KisPresetProxyAdapter(rserver);
     m_chooser = new KoResourceItemChooser(m_presetProxy, this);
     QString knsrcFile = "kritapresets.knsrc";
-    m_chooser->setKnsrcFile( knsrcFile );
+    m_chooser->setKnsrcFile(knsrcFile);
     m_chooser->showGetHotNewStuff(true, true);
     m_chooser->setColumnCount(10);
     m_chooser->setRowHeight(50);

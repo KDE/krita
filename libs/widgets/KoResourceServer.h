@@ -262,7 +262,7 @@ public:
      * @param filename file name of the resource file to be imported
      * @param fileCreation decides whether to create the file in the saveLocation() directory
      */
-    virtual void importResourceFile( const QString & filename , bool fileCreation=true) {
+    virtual void importResourceFile(const QString & filename , bool fileCreation=true) {
         QFileInfo fi( filename );
         if( fi.exists() == false )
             return;
@@ -275,7 +275,7 @@ public:
             return;
          }
 
-         if( fileCreation ) {
+         if(fileCreation) {
              Q_ASSERT(!resource->defaultFileExtension().isEmpty());
              Q_ASSERT(!saveLocation().isEmpty());
 
@@ -296,17 +296,17 @@ public:
     }
 
     /// Removes the resource file from the resource server
-    virtual void removeResourceFile( const QString & filename ) {
+    virtual void removeResourceFile(const QString & filename)
+    {
+        QFileInfo fi(filename);
 
-        QFileInfo fi( filename );
-
-        T* resource = getResourceByFilename( fi.fileName() );
-        if(!resource){
+        T* resource = getResourceByFilename(fi.fileName());
+        if (!resource) {
             kWarning(30009) << "Resource file do not exist ";
             return;
-         }
+        }
 
-        if(!removeResourceFromServer(resource))
+        if (!removeResourceFromServer(resource))
             return;
         }
 
@@ -420,7 +420,7 @@ protected:
     {
         QStringList filenameList;
 
-        QFile f( blackListFile );
+        QFile f(blackListFile);
         if (!f.open(QIODevice::ReadOnly)) {
             return filenameList;
         }
@@ -451,7 +451,7 @@ protected:
     }
 
     /// write the blacklist file entries to an xml file
-    void writeBlackListFile( QString fileName )
+    void writeBlackListFile(QString fileName)
     {
        QFile f(blackListFile);
        if (!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -460,12 +460,12 @@ protected:
        }
 
        QDomDocument doc("blackListFile");
-       doc.appendChild(doc.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ));
+       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
        QDomElement root = doc.createElement("resourceFilesList");
        doc.appendChild(root);
 
        if(!blackListFileNames.contains(fileName)){
-           blackListFileNames.append( fileName );
+           blackListFileNames.append(fileName);
        }
 
        foreach(QString file, blackListFileNames) {

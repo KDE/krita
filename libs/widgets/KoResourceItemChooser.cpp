@@ -72,21 +72,21 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( d->view, 0, 0, 1, 5 );
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon( "document-open" ) );
+    button->setIcon( SmallIcon("document-open") );
     button->setToolTip( i18n("Import") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "trash-empty" ) );
+    button->setIcon( SmallIcon("trash-empty") );
     button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "download" ) );
+    button->setIcon( SmallIcon("download") );
     button->setToolTip( i18n("Download") );
     button->setEnabled( true );
     button->hide();
@@ -94,7 +94,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( button, 1, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "go-up" ) );
+    button->setIcon( SmallIcon("go-up") );
     button->setToolTip( i18n("Share") );
     button->setEnabled( false );
     button->hide();
@@ -150,19 +150,19 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 #ifdef GHNS
     else if (button == Button_GhnsDownload) {
 
-        KNS3::DownloadDialog dialog( d->knsrcFile, this );
+        KNS3::DownloadDialog dialog(d->knsrcFile, this);
         dialog.exec();
 
-        foreach (const KNS3::Entry& e, dialog.changedEntries() ) {
+        foreach (const KNS3::Entry& e, dialog.changedEntries()) {
 
-             foreach( const QString &file, e.installedFiles() ) {
+             foreach(const QString &file, e.installedFiles()) {
                  QFileInfo fi(file);
                   d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+"/"+fi.fileName() , false );
               }
 
-       foreach( const QString &file, e.uninstalledFiles() ) {
+       foreach(const QString &file, e.uninstalledFiles()) {
                  QFileInfo fi(file);
-                 d->model->resourceServerAdapter()->removeResourceFile( fi.absolutePath()+"/"+fi.fileName() );
+                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+"/"+fi.fileName());
               }
       }
      }
@@ -174,7 +174,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
-                KNS3::UploadDialog dialog( d->knsrcFile, this );
+                KNS3::UploadDialog dialog(d->knsrcFile, this);
                 dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
@@ -272,19 +272,19 @@ void KoResourceItemChooser::updateButtonState()
     if( ! removeButton )
         return;
 
-    QAbstractButton * uploadButton = d->buttonGroup->button( Button_GhnsUpload );
-    if( ! uploadButton )
+    QAbstractButton * uploadButton = d->buttonGroup->button(Button_GhnsUpload);
+    if(!uploadButton)
         return;
 
     KoResource * resource = currentResource();
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
-        uploadButton->setEnabled( resource->removable() );
+        uploadButton->setEnabled(resource->removable());
         return;
     }
 
     removeButton->setEnabled( false );
-    uploadButton->setEnabled( false );
+    uploadButton->setEnabled(false);
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)

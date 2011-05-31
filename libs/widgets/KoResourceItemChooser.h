@@ -78,7 +78,7 @@ public:
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
-    void setKnsrcFile( const QString& knsrcFileArg );
+    void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
 
 signals:

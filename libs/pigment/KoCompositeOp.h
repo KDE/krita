@@ -19,8 +19,10 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <QString>
 #include <klocale.h>
+#include <QString>
+#include <QList>
+#include <QMap>
 
 #include "pigment_export.h"
 
@@ -120,6 +122,24 @@ const QString COMPOSITE_DISPLACE     = "displace";
 const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
 const QString COMPOSITE_UNDEF        = "undefined";
+
+
+class KoID;
+
+class PIGMENTCMS_EXPORT KoCompositeOpRegistry
+{
+    typedef QList<KoID> KoIDList;
+    KoCompositeOpRegistry();
+    
+public:
+    static const KoCompositeOpRegistry& instance();
+    KoIDList getCompositeOps(const QString& categoryID) const;
+    KoIDList getCategories() const;
+    
+private:
+    KoIDList               m_categories;
+    QMap<QString,KoIDList> m_categoryMap;
+};
 
 /**
  * Base for colorspace-specific blending modes.

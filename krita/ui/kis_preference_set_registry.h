@@ -53,6 +53,7 @@ class KRITAUI_EXPORT KisAbstractPreferenceSetFactory {
 public:
     virtual ~KisAbstractPreferenceSetFactory() {};
     virtual KisPreferenceSet* createPreferenceSet() = 0;
+    virtual QString id() const = 0;
 };
 
 /**

@@ -523,7 +523,7 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     d->canvas->canvasWidget()->update();
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
+void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QWidget *>&widgetMap)
 {
     emit toolOptionWidgetsChanged(widgetMap);
 }

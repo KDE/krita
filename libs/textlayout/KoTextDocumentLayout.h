@@ -253,6 +253,7 @@ private:
     class Private;
     Private * const d;
 
+    bool doLayout();
     void updateProgress(const QTextFrame::iterator &it);
 };
 

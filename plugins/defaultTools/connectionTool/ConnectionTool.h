@@ -80,7 +80,7 @@ private slots:
 
 private:
     /// reimplemented from superclass
-    virtual QMap<QString, QWidget *>  createOptionWidgets();
+    virtual QList<QWidget *>  createOptionWidgets();
 
     /**
      * @brief Return the square of the absolute distance between p1 and p2

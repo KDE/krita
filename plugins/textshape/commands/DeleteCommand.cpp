@@ -90,7 +90,7 @@ void DeleteCommand::deleteChar()
     if (!caret->hasSelection())
         caret->movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-    deleteSelection(*caret);
+    deleteSelection();
 }
 
 void DeleteCommand::deletePreviousChar()
@@ -106,12 +106,15 @@ void DeleteCommand::deletePreviousChar()
     if (!caret->hasSelection())
         caret->movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
 
-    deleteSelection(*caret);
+    deleteSelection();
 }
 
-void DeleteCommand::deleteSelection(QTextCursor &selection)
+void DeleteCommand::deleteSelection()
 {
-    QTextCursor cursor(selection);
+    KoTextEditor *textEditor = m_tool->m_textEditor.data();
+    Q_ASSERT(textEditor);
+    QTextCursor *caret = textEditor->cursor();
+    QTextCursor cursor(*caret);
 
     //Store the position and length. Will be used in checkMerge
     m_position = (cursor.anchor() < cursor.position()) ? cursor.anchor():cursor.position();
@@ -142,18 +145,19 @@ void DeleteCommand::deleteSelection(QTextCursor &selection)
         m_format = firstFormat;
 
     //Delete any inline objects present within the selection
-    deleteInlineObjects(selection);
+    deleteInlineObjects();
 
-    //Now finally Delete the selected text
-    selection.deleteChar();
+    //Now finally Delete the selected text. Don't use selection.deleteChar() direct
+    //cause the Texteditor needs to know about the changes too.
+    textEditor->deleteChar();
 }
 
-void DeleteCommand::deleteInlineObjects(QTextCursor &selection)
+void DeleteCommand::deleteInlineObjects()
 {
     KoTextEditor *textEditor = m_tool->m_textEditor.data();
-    if (textEditor == 0)
-        return;
-    QTextCursor cursor(selection);
+    Q_ASSERT(textEditor);
+    QTextCursor *caret = textEditor->cursor();
+    QTextCursor cursor(*caret);
     QTextDocument *document = textEditor->document();
     KoTextDocumentLayout *layout = qobject_cast<KoTextDocumentLayout*>(document->documentLayout());
     Q_ASSERT(layout);

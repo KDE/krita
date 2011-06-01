@@ -296,7 +296,9 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     tAction = new KToggleAction(i18n("Show Canvas Only"), this);
     tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
     tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
-    tAction->setShortcut(QKeySequence("Ctrl+h"));
+    QList<QKeySequence> shortcuts;
+    shortcuts << QKeySequence("Ctrl+h") << QKeySequence("ctrl+Shift+f");
+    tAction->setShortcuts(shortcuts);
     tAction->setChecked(false);
     actionCollection()->addAction("view_show_just_the_canvas", tAction);
     connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
@@ -316,13 +318,20 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
     }
 
+    //Workaround, by default has the same shortcut as full-screen
+    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_fullscreen"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
     if (shell())
     {
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
 
     m_d->statusBar = new KisStatusBar(this);

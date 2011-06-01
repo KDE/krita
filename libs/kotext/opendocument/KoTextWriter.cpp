@@ -1665,6 +1665,7 @@ void KoTextWriter::Private::postProcessListItemSplit(int changeId)
 void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int to, QHash<QTextList *, QString> &listStyles, QTextTable *currentTable, QTextFrame *currentFrame, QTextList *currentList)
 {
     QTextBlock block = document->findBlock(from);
+    int sectionLevel = 0;
 
     while (block.isValid() && ((to == -1) || (block.position() <= to))) {
 
@@ -1676,6 +1677,7 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
             QVariant v = format.property(KoParagraphStyle::SectionStart);
             KoSection* section = (KoSection*)(v.value<void*>());
             if (section) {
+                ++sectionLevel;
                 section->saveOdf(context);
             }
         }
@@ -1731,7 +1733,8 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
         if (format.hasProperty(KoParagraphStyle::SectionEnd)) {
             QVariant v = format.property(KoParagraphStyle::SectionEnd);
             KoSectionEnd* section = (KoSectionEnd*)(v.value<void*>());
-            if (section) {
+            if (section && sectionLevel >= 1) {
+                --sectionLevel;
                 section->saveOdf(context);
             }
         }
@@ -1739,6 +1742,12 @@ void KoTextWriter::Private::writeBlocks(QTextDocument *document, int from, int t
 
         block = block.next();
     } // while
+
+    while (sectionLevel >= 1) {
+        --sectionLevel;
+        KoSectionEnd sectionEnd;
+        sectionEnd.saveOdf(context);
+    }
 }
 
 int KoTextWriter::Private::checkForSplit(const QTextBlock &block)

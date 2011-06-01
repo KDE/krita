@@ -490,30 +490,24 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
+QList<QWidget *> ArtisticTextTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
-    
+    QList<QWidget *> widgets;
     QWidget * pathWidget = new QWidget();
     pathWidget->setObjectName("ArtisticTextPathWidget");
-    
     QGridLayout * layout = new QGridLayout(pathWidget);
-    
     QToolButton * detachButton = new QToolButton(pathWidget);
     detachButton->setDefaultAction( m_detachPath );
     layout->addWidget( detachButton, 0, 0 );
-    
     QToolButton * convertButton = new QToolButton(pathWidget);
     convertButton->setDefaultAction( m_convertText );
     layout->addWidget( convertButton, 0, 2 );
-    
     layout->setSpacing(0);
     layout->setMargin(6);
     layout->setRowStretch(3, 1);
     layout->setColumnStretch(1, 1);
-    
-    widgets.insert(i18n("Text On Path"), pathWidget);
-    
+    pathWidget->setWindowTitle(i18n("Text On Path"));
+    widgets.append(pathWidget);
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
     if (m_currentShape) {
@@ -522,9 +516,9 @@ QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
-            
-    widgets.insert(i18n("Text Properties"), configWidget);
-    
+
+    configWidget->setWindowTitle(i18n("Text Properties"));
+    widgets.append(configWidget);
     return widgets;
 }
 
@@ -597,7 +591,7 @@ void ArtisticTextTool::setTextCursorInternal( int textCursor )
 
 void ArtisticTextTool::createTextCursorShape()
 {
-    if ( m_textCursor < 0 || ! m_currentShape ) 
+    if (m_textCursor < 0 || ! m_currentShape)
         return;
     const QRectF extents = m_currentShape->charExtentsAt(m_textCursor);
     m_textCursorShape = QPainterPath();

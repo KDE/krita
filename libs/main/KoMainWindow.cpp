@@ -84,7 +84,7 @@ public:
         setIgnoreScrollBars(true);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj->isWidgetType())
+        if (!obj || !ev || !obj->isWidgetType())
             return false;
         return KParts::PartManager::eventFilter(obj, ev);
     }
@@ -1550,7 +1550,7 @@ void KoMainWindow::slotProgress(int value)
         d->firstTime = true;
         return;
     }
-    if (d->firstTime) {
+    if (d->firstTime || !d->progress) {
         // The statusbar might not even be created yet.
         // So check for that first, and create it if necessary
         QStatusBar *bar = findChild<QStatusBar *>();

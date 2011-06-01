@@ -35,6 +35,7 @@ class SimpleStylesWidget : public QWidget
     Q_OBJECT
 public:
     explicit SimpleStylesWidget(QWidget *parent = 0);
+    virtual ~SimpleStylesWidget();
 
 public slots:
     void setStyleManager(KoStyleManager *sm);

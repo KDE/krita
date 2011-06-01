@@ -293,8 +293,8 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
     }
 
-    QMap<QString, QWidget *> optionWidgetMap = canvasData->activeTool->optionWidgets();
-    if (optionWidgetMap.empty()) { // no option widget.
+    QList<QWidget *> optionWidgetList = canvasData->activeTool->optionWidgets();
+    if (optionWidgetList.empty()) { // no option widget.
         QWidget *toolWidget;
         QString title;
         foreach(ToolHelper *tool, tools) {
@@ -316,7 +316,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             canvasData->dummyToolWidget = toolWidget;
         }
         canvasData->dummyToolLabel->setText(i18n("Active tool: %1", title));
-        optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
+        optionWidgetList.append(toolWidget);
     }
 
     // Activate the actions for the currently active tool
@@ -324,7 +324,7 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
-        canvasControllerWidget->setToolOptionWidgets(optionWidgetMap);
+        canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
     }
     emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 }
@@ -371,7 +371,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->setToolOptionWidgets(QMap<QString, QWidget *>());
+                canvasControllerWidget->setToolOptionWidgets(QList<QWidget *>());
             }
             // as a last resort just set a blank one
             canvasData = 0;

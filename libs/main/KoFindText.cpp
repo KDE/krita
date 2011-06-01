@@ -53,6 +53,7 @@ public:
     void updateDocumentList();
     void documentDestroyed(QObject *document);
     void updateCurrentMatch(int position);
+    static void initializeFormats();
 
     KoFindText *q;
 
@@ -64,16 +65,18 @@ public:
     int selectionStart;
     int selectionEnd;
 
-    static QTextCharFormat *highlightFormat;
-    static QTextCharFormat *currentMatchFormat;
-    static QTextCharFormat *currentSelectionFormat;
+    static QTextCharFormat highlightFormat;
+    static QTextCharFormat currentMatchFormat;
+    static QTextCharFormat currentSelectionFormat;
+    static bool formatsInitialized;
 
     QPair<QTextDocument*, int> currentMatch;
 };
 
-QTextCharFormat *KoFindText::Private::currentSelectionFormat = 0;
-QTextCharFormat *KoFindText::Private::highlightFormat = 0;
-QTextCharFormat *KoFindText::Private::currentMatchFormat = 0;
+QTextCharFormat KoFindText::Private::highlightFormat;
+QTextCharFormat KoFindText::Private::currentMatchFormat;
+QTextCharFormat KoFindText::Private::currentSelectionFormat;
+bool KoFindText::Private::formatsInitialized = false;
 
 KoFindText::KoFindText(const QList< QTextDocument* >& documents, QObject* parent)
     : KoFindBase(parent), d(new Private(this))
@@ -81,21 +84,7 @@ KoFindText::KoFindText(const QList< QTextDocument* >& documents, QObject* parent
     d->documents = documents;
     d->updateDocumentList();
 
-    if(!d->highlightFormat) {
-        d->highlightFormat = new QTextCharFormat();
-        d->highlightFormat->setBackground(Qt::yellow);
-    }
-
-    if(!d->currentMatchFormat) {
-        d->currentMatchFormat = new QTextCharFormat();
-        d->currentMatchFormat->setBackground(qApp->palette().highlight());
-        d->currentMatchFormat->setForeground(qApp->palette().highlightedText());
-    }
-
-    if(!d->currentSelectionFormat) {
-        d->currentSelectionFormat = new QTextCharFormat();
-        d->currentSelectionFormat->setBackground(qApp->palette().alternateBase());
-    }
+    d->initializeFormats();
 
     KoFindOptionSet *options = new KoFindOptionSet();
     options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
@@ -140,7 +129,7 @@ void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> &
 
             QAbstractTextDocumentLayout::Selection selection;
             selection.cursor = cursor;
-            selection.format = *(d->highlightFormat);
+            selection.format = d->highlightFormat;
             selections.append(selection);
 
             KoFindMatch match;
@@ -178,6 +167,7 @@ void KoFindText::clearMatches()
     d->selectionEnd = -1;
 
     setCurrentMatch(0);
+    d->currentMatch.first = 0;
 }
 
 void KoFindText::findNext()
@@ -196,7 +186,7 @@ void KoFindText::findPrevious()
     if(d->selections.size() == 0) {
         return;
     }
-    
+
     KoFindBase::findPrevious();
     d->updateCurrentMatch(currentMatchIndex());
     d->updateSelections();
@@ -258,7 +248,7 @@ void KoFindText::Private::updateCurrentMatch(int position)
     if(currentMatch.first != 0) {
         QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(currentMatch.first);
         Q_ASSERT(currentMatch.second < sel.count());
-        sel[currentMatch.second].format = *highlightFormat;
+        sel[currentMatch.second].format = highlightFormat;
         selections.insert(currentMatch.first, sel);
     }
     
@@ -273,24 +263,33 @@ void KoFindText::Private::updateCurrentMatch(int position)
     currentMatch.first = itr.key();
     currentMatch.second = position - counter;
     QVector<QAbstractTextDocumentLayout::Selection> sel = selections.value(itr.key());
-    sel[currentMatch.second].format = *currentMatchFormat;
+    sel[currentMatch.second].format = currentMatchFormat;
     selections.insert(itr.key(), sel);
+}
+
+void KoFindText::Private::initializeFormats()
+{
+    if (!formatsInitialized) {
+        highlightFormat.setBackground(Qt::yellow);
+        currentMatchFormat.setBackground(qApp->palette().highlight());
+        currentMatchFormat.setForeground(qApp->palette().highlightedText());
+        currentSelectionFormat.setBackground(qApp->palette().alternateBase());
+    }
 }
 
 void KoFindText::setFormat(FormatType formatType, const QTextCharFormat &format)
 {
+    KoFindText::Private::initializeFormats();
+
     switch (formatType) {
     case HighlightFormat:
-        delete KoFindText::Private::highlightFormat;
-        KoFindText::Private::highlightFormat = new QTextCharFormat(format);
+        KoFindText::Private::highlightFormat = format;
         break;
     case CurrentMatchFormat:
-        delete KoFindText::Private::currentMatchFormat;
-        KoFindText::Private::currentMatchFormat = new QTextCharFormat(format);
+        KoFindText::Private::currentMatchFormat = format;
         break;
     case SelectionFormat:
-        delete KoFindText::Private::currentSelectionFormat;
-        KoFindText::Private::currentSelectionFormat = new QTextCharFormat(format);
+        KoFindText::Private::currentSelectionFormat = format;
         break;
     }
 }

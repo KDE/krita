@@ -466,6 +466,16 @@ KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
     return (CellProtectionFlag) propertyInt(CellProtection);
 }
 
+void KoTableCellStyle::setTextDirection(KoText::Direction value)
+{
+    setProperty(TextWritingMode, value);
+}
+
+KoText::Direction KoTableCellStyle::textDirection() const
+{
+    return (KoText::Direction) propertyInt(TextWritingMode);
+}
+
 bool KoTableCellStyle::printContent() const
 {
     return (hasProperty(PrintContent) && propertyBoolean(PrintContent));
@@ -784,6 +794,9 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
         else
             setAlignment(KoText::valignmentFromString(verticalAlign));
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode"))
+        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
 }
 
 void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)
@@ -894,7 +907,9 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             else
                 style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
         } else if (key == RotationAlign) {
-            style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()));
+            style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()), KoGenStyle::TableCellType);
+        } else if (key == TextWritingMode) {
+            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableCellType);
         }
     }
     if (d->charStyle) {

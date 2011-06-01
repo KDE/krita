@@ -183,7 +183,7 @@ void ArtisticTextShape::createOutline()
 
                 // get the percent value of the actual char position
                 qreal t = m_baseline.percentAtLength( charOffset.x() );
-                // first intialize with invalid position
+                // first initialize with invalid position
                 m_charOffsets[globalCharIndex] = -1;
                 // are we beyond the baseline end?
                 if (t >= 1.0) {
@@ -275,7 +275,7 @@ void ArtisticTextShape::createOutline()
                 m.translate(charPos.x(), charPos.y());
                 m.rotate(rotation);
                 m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
-                // save character positon of current character
+                // save character position of current character
                 m_charPositions[globalCharIndex] = charPos;
                 // advance character position
                 offset = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);
@@ -600,8 +600,13 @@ QList<ArtisticTextRange> ArtisticTextShape::removeText(int charIndex, int charCo
 
 void ArtisticTextShape::insertText(int charIndex, const QString &str)
 {
+    if (isEmpty()) {
+        appendText(str);
+        return;
+    }
+
     CharIndex charPos = indexOfChar(charIndex);
-    if (charIndex < 0 || isEmpty()) {
+    if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
     } else if (charIndex >= plainText().length()) {
@@ -629,8 +634,15 @@ void ArtisticTextShape::insertText(int charIndex, const ArtisticTextRange &textR
 
 void ArtisticTextShape::insertText(int charIndex, const QList<ArtisticTextRange> &textRanges)
 {
+    if (isEmpty()) {
+        beginTextUpdate();
+        m_ranges = textRanges;
+        finishTextUpdate();
+        return;
+    }
+
     CharIndex charPos = indexOfChar(charIndex);
-    if (charIndex < 0 || isEmpty()) {
+    if (charIndex < 0) {
         // insert before first character
         charPos = CharIndex(0, 0);
     } else if (charIndex >= plainText().length()) {

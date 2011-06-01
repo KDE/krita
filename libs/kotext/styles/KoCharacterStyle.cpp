@@ -1,8 +1,9 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
-*  Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
+ *  Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantasic.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -646,6 +647,8 @@ bool KoCharacterStyle::fontItalic() const
 {
     return d->propertyBoolean(QTextFormat::FontItalic);
 }
+///TODO Review legacy fontOverline functions and testing (consider removal)
+/*
 void KoCharacterStyle::setFontOverline(bool overline)
 {
     d->setProperty(QTextFormat::FontOverline, overline);
@@ -654,6 +657,7 @@ bool KoCharacterStyle::fontOverline() const
 {
     return d->propertyBoolean(QTextFormat::FontOverline);
 }
+*/
 void KoCharacterStyle::setFontFixedPitch(bool fixedPitch)
 {
     d->setProperty(QTextFormat::FontFixedPitch, fixedPitch);
@@ -795,6 +799,58 @@ QString KoCharacterStyle::strikeOutText() const
 KoCharacterStyle::LineMode KoCharacterStyle::strikeOutMode() const
 {
     return (KoCharacterStyle::LineMode) d->propertyInt(StrikeOutMode);
+}
+
+void KoCharacterStyle::setOverlineStyle(KoCharacterStyle::LineStyle overline)
+{
+    d->setProperty(OverlineStyle, overline);
+}
+
+KoCharacterStyle::LineStyle KoCharacterStyle::overlineStyle() const
+{
+    return (KoCharacterStyle::LineStyle) d->propertyInt(OverlineStyle);
+}
+
+void KoCharacterStyle::setOverlineType(LineType lineType)
+{
+    d->setProperty(OverlineType, lineType);
+}
+
+KoCharacterStyle::LineType KoCharacterStyle::overlineType() const
+{
+    return (KoCharacterStyle::LineType) d->propertyInt(OverlineType);
+}
+
+void KoCharacterStyle::setOverlineColor(const QColor &color)
+{
+    d->setProperty(KoCharacterStyle::OverlineColor, color);
+}
+
+QColor KoCharacterStyle::overlineColor() const
+{
+    return d->propertyColor(KoCharacterStyle::OverlineColor);
+}
+
+void KoCharacterStyle::setOverlineWidth(LineWeight weight, qreal width)
+{
+    d->setProperty(KoCharacterStyle::OverlineWeight, weight);
+    d->setProperty(KoCharacterStyle::OverlineWidth, width);
+}
+
+void KoCharacterStyle::overlineWidth(LineWeight &weight, qreal &width) const
+{
+    weight = (KoCharacterStyle::LineWeight) d->propertyInt(KoCharacterStyle::OverlineWeight);
+    width = d->propertyDouble(KoCharacterStyle::OverlineWidth);
+}
+
+void KoCharacterStyle::setOverlineMode(LineMode mode)
+{
+    d->setProperty(KoCharacterStyle::OverlineMode, mode);
+}
+
+KoCharacterStyle::LineMode KoCharacterStyle::overlineMode() const
+{
+    return static_cast<KoCharacterStyle::LineMode>(d->propertyInt(KoCharacterStyle::OverlineMode));
 }
 
 void KoCharacterStyle::setUnderlineStyle(KoCharacterStyle::LineStyle underline)
@@ -1165,6 +1221,40 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
     */
 #endif
 
+    // overline modes
+    const QString textOverlineMode(styleStack.property( KoXmlNS::style, "text-overline-mode"));
+    if (!textOverlineMode.isEmpty()) {
+        if (textOverlineMode == "skip-white-space") {
+            setOverlineMode(SkipWhiteSpaceLineMode);
+        } else if (textOverlineMode == "continuous") {
+            setOverlineMode(ContinuousLineMode);
+        }
+    }
+
+    // Specifies whether text is overlined, and if so, whether a single or qreal line will be used for overlining.
+    const QString textOverlineType(styleStack.property(KoXmlNS::style, "text-overline-type"));
+    const QString textOverlineStyle(styleStack.property(KoXmlNS::style, "text-overline-style"));
+    if (!textOverlineType.isEmpty() || !textOverlineStyle.isEmpty()) {    // OASIS 14.4.28
+        LineStyle overlineStyle;
+        LineType overlineType;
+        qreal overlineWidth;
+        LineWeight overlineWeight;
+
+        importOdfLine(textOverlineType, textOverlineStyle,
+                      styleStack.property(KoXmlNS::style, "text-overline-width"),
+                      overlineStyle, overlineType, overlineWeight, overlineWidth);
+        setOverlineStyle(overlineStyle);
+        setOverlineType(overlineType);
+        setOverlineWidth(overlineWeight, overlineWidth);
+    }
+
+    // Specifies the color that is used to overline text. The value of this attribute is either font-color or a color. If the value is font-color, the current text color is used for overlining.
+    QString overLineColor = styleStack.property(KoXmlNS::style, "text-overline-color");   // OO 3.10.23, OASIS 14.4.31
+    if (!overLineColor.isEmpty() && overLineColor != "font-color") {
+        setOverlineColor(QColor(overLineColor));
+    }
+    
+    // underline modes
     const QString textUndelineMode(styleStack.property( KoXmlNS::style, "text-underline-mode"));
     if (!textUndelineMode.isEmpty()) {
         if (textUndelineMode == "skip-white-space") {
@@ -1193,8 +1283,9 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
 
     // Specifies the color that is used to underline text. The value of this attribute is either font-color or a color. If the value is font-color, the current text color is used for underlining.
     QString underLineColor = styleStack.property(KoXmlNS::style, "text-underline-color");   // OO 3.10.23, OASIS 14.4.31
-    if (!underLineColor.isEmpty() && underLineColor != "font-color")
+    if (!underLineColor.isEmpty() && underLineColor != "font-color") {
         setUnderlineColor(QColor(underLineColor));
+    }
 
 
     const QString textLineThroughType(styleStack.property(KoXmlNS::style, "text-line-through-type"));
@@ -1462,6 +1553,34 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:text-transform", "capitalize", KoGenStyle::TextType);
                 break;
             }
+        } else if (key == OverlineStyle) {
+            bool ok = false;
+            int styleId = d->stylesPrivate.value(key).toInt(&ok);
+            if (ok) {
+                style.addProperty("style:text-overline-style", exportOdfLineStyle((KoCharacterStyle::LineStyle) styleId), KoGenStyle::TextType);
+	    }
+        } else if (key == OverlineType) {
+            bool ok = false;
+            int type = d->stylesPrivate.value(key).toInt(&ok);
+            if (ok) {
+                style.addProperty("style:text-overline-type", exportOdfLineType((KoCharacterStyle::LineType) type), KoGenStyle::TextType);
+	    }
+        } else if (key == OverlineColor) {
+            QColor color = d->stylesPrivate.value(key).value<QColor>();
+            if (color.isValid()) {
+                style.addProperty("style:text-overline-color", color.name(), KoGenStyle::TextType);
+	    }
+        } else if (key == OverlineMode) {
+            bool ok = false;
+            int mode = d->stylesPrivate.value(key).toInt(&ok);
+            if (ok) {
+                style.addProperty("style:text-overline-mode", exportOdfLineMode((KoCharacterStyle::LineMode) mode), KoGenStyle::TextType);
+	    }
+        } else if (key == OverlineWidth) {
+            KoCharacterStyle::LineWeight weight;
+            qreal width;
+            overlineWidth(weight, width);
+            style.addProperty("style:text-overline-width", exportOdfLineWidth(weight, width), KoGenStyle::TextType);
         } else if (key == UnderlineStyle) {
             bool ok = false;
             int styleId = d->stylesPrivate.value(key).toInt(&ok);

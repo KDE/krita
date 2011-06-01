@@ -79,6 +79,7 @@ struct KisPainter::Private {
     KoUpdater*                  progressUpdater;
 
     QRegion                     dirtyRegion;
+    QRect                       dirtyRect;
     KisPaintOp*                 paintOp;
     QRect                       bounds;
     KoColor                     paintColor;
@@ -97,6 +98,7 @@ struct KisPainter::Private {
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
     QBitArray                   channelFlags;
+    bool                        useBoundingDirtyRect;
     const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
@@ -153,6 +155,9 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
+
+    KConfigGroup cfg = KGlobal::config()->group("");
+    d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
 }
 
 KisPainter::~KisPainter()
@@ -243,9 +248,16 @@ KisTransaction* KisPainter::takeTransaction()
 
 QRegion KisPainter::takeDirtyRegion()
 {
-    QRegion r = d->dirtyRegion;
-    d->dirtyRegion = QRegion();
-    return r;
+    if (d->useBoundingDirtyRect) {
+        QRegion r(d->dirtyRect);
+        d->dirtyRegion = QRegion();
+        d->dirtyRect = QRect();
+        return r;
+    } else {
+        QRegion r = d->dirtyRegion;
+        d->dirtyRegion = QRegion();
+        return r;
+    }
 }
 
 
@@ -257,9 +269,17 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
         return d->dirtyRegion;
     }
 
-    d->dirtyRegion += r;
-    return d->dirtyRegion;
+    if (d->useBoundingDirtyRect) {
+        d->dirtyRect = d->dirtyRect.united(r);
+        return QRegion(d->dirtyRect);
+    } else {
+        d->dirtyRegion += QRegion(r);
+        return d->dirtyRegion;
+    }
 }
+
+
+
 
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,

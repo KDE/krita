@@ -143,8 +143,22 @@ public:
         RegisterTrue,             ///< bool, align lines on both sides of a printed text
         StrictLineBreak,          ///< bool, if true, line breaks are forbidden between some characters
         JustifySingleWord,        ///< bool, if true, a single word will be justified
+        BreakBefore,              ///< KoText::TextBreakProperty, whether there is a page/column break before the paragraphs
+        BreakAfter,               ///< KoText::TextBreakProperty, whether there is a page/column break after the paragraphs
+        AutomaticWritingMode,     ///< bool
+        PageNumber,               ///< int, 0 means auto (ie. previous page number + 1), N sets up a new page number
+        TextAutoSpace,            ///< AutoSpace, indicating whether to add space between portions of Asian, Western and complex texts
+        KeepWithNext,             ///< Try to keep this block with its following block on the same page
+        KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
+        HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
+        PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
     };
 
+    enum AutoSpace {
+        NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
+        IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
+    };
+    
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
     /// Creates a KoParagrahStyle with the given block format, the block character format and \a parent
@@ -340,10 +354,31 @@ public:
     bool justifySingleWord() const;
     void setJustifySingleWord(bool value);
     
-    void setBreakBefore(bool on);
-    bool breakBefore();
-    void setBreakAfter(bool on);
-    bool breakAfter();
+    bool automaticWritingMode() const;
+    void setAutomaticWritingMode(bool value);
+    
+    void setPageNumber(int pageNumber);
+    int pageNumber() const;
+    
+    void setKeepWithNext(bool value);
+    bool keepWithNext() const;
+    
+    void setPunctuationWrap(bool value);
+    bool punctuationWrap() const;
+    
+    void setTextAutoSpace(AutoSpace value);
+    AutoSpace textAutoSpace() const;
+    
+    void setKeepHyphenation(bool value);
+    bool keepHyphenation() const;
+    
+    void setHyphenationLadderCount(int value);
+    int hyphenationLadderCount() const;
+    
+    void setBreakBefore(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakBefore();
+    void setBreakAfter(KoText::KoTextBreakProperty value);
+    KoText::KoTextBreakProperty breakAfter();
     void setLeftPadding(qreal padding);
     qreal leftPadding();
     void setTopPadding(qreal padding);

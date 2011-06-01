@@ -25,7 +25,7 @@
 class KoFindBase::Private
 {
 public:
-    Private() : currentMatch(0) { }
+    Private() : currentMatch(0), options(0) { }
 
     KoFindMatchList matches;
     int currentMatch;
@@ -33,12 +33,13 @@ public:
 };
 
 KoFindBase::KoFindBase(QObject *parent)
-        : QObject(parent), d(new Private)
+    : QObject(parent), d(new Private)
 {
 }
 
 KoFindBase::~KoFindBase()
 {
+    delete d->options;
     delete d;
 }
 
@@ -160,6 +161,7 @@ void KoFindBase::clearMatches()
 
 void KoFindBase::setOptions(KoFindOptionSet *newOptions)
 {
+    delete d->options;
     d->options = newOptions;
     d->options->setParent(this);
 }

@@ -58,7 +58,7 @@ public:
         }
     }
 
-    QMap<QString, QWidget *> optionWidgets; ///< the optionwidgets associated with this tool
+    QList<QWidget *> optionWidgets; ///< the optionwidgets associated with this tool
     QCursor currentCursor;
     QHash<QString, KAction*> actionCollection;
     QString toolId;

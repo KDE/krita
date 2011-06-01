@@ -247,6 +247,7 @@ install(
     KoInsets.h
     KoPathSegment.h
     KoPointerEvent.h
+    KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeBorderModel.h

@@ -593,6 +593,14 @@ QList<ArtisticTextRange> ArtisticTextShape::removeText(int charIndex, int charCo
     if (!charCount)
         return extractedRanges;
 
+    if (charIndex == 0 && charCount >= plainText().length()) {
+        beginTextUpdate();
+        extractedRanges = m_ranges;
+        m_ranges.clear();
+        finishTextUpdate();
+        return extractedRanges;
+    }
+
     CharIndex charPos = indexOfChar(charIndex);
     if (charPos.first < 0 || charPos.first >= m_ranges.count())
         return extractedRanges;

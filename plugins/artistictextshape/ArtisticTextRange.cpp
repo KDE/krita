@@ -208,11 +208,6 @@ qreal ArtisticTextRange::subAndSuperScriptSizeFactor()
     return 0.58; // taken from wikipedia
 }
 
-qreal ArtisticTextRange::subAndSuperScriptOffsetFactor()
-{
-    return 1./3.; // taken from wikipedia
-}
-
 void ArtisticTextRange::printDebug() const
 {
     kDebug() << "text:" << m_text;

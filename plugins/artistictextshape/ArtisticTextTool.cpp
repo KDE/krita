@@ -867,8 +867,6 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
 
     const int from = m_selection.selectionStart();
     const int count = m_selection.selectionCount();
-    const qreal offsetDirection = mode == ArtisticTextRange::Sub ? 1.0 : -1.0;
-    const qreal offsetFactor = offsetDirection * ArtisticTextRange::subAndSuperScriptOffsetFactor();
 
     QList<ArtisticTextRange> ranges = m_currentShape->copyText(from, count);
     const int rangeCount = ranges.count();
@@ -883,10 +881,10 @@ void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mod
         ArtisticTextRange &currentRange = ranges[i];
         QFont font = currentRange.font();
         if (disableMode) {
-            currentRange.setBaselineShift(ArtisticTextRange::None, 0.0);
+            currentRange.setBaselineShift(ArtisticTextRange::None);
             font.setPointSizeF(fontSize);
         } else {
-            currentRange.setBaselineShift(mode, fontSize*offsetFactor);
+            currentRange.setBaselineShift(mode);
             font.setPointSizeF(fontSize*ArtisticTextRange::subAndSuperScriptSizeFactor());
         }
         currentRange.setFont(font);

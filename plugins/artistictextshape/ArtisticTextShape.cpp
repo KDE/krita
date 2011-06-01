@@ -141,15 +141,15 @@ QPointF adjustCharPosition(const ArtisticTextRange &range, int charIndex, const 
     return QPointF(x, y);
 }
 
-qreal baselineShiftValueNormalized(const ArtisticTextRange &range, const QFontMetricsF &metrics)
+qreal baselineShiftForFontSize(const ArtisticTextRange &range, qreal fontSize)
 {
     switch(range.baselineShift()) {
     case ArtisticTextRange::Sub:
-        return range.baselineShiftValue();
+        return fontSize/3.; // taken from wikipedia
     case ArtisticTextRange::Super:
-        return range.baselineShiftValue();
+        return -fontSize/3.; // taken from wikipedia
     case ArtisticTextRange::Percent:
-        return range.baselineShiftValue() * metrics.height();
+        return range.baselineShiftValue() * fontSize;
     case ArtisticTextRange::Length:
         return range.baselineShiftValue();
     default:
@@ -273,7 +273,7 @@ void ArtisticTextShape::createOutline()
             const int localTextLength = textRange.length();
 
             // set baseline shift
-            const qreal baselineShift = baselineShiftValueNormalized(range, metrics);
+            const qreal baselineShift = baselineShiftForFontSize(range, defaultFont().pointSizeF());
 
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
                 // apply offset to character

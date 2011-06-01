@@ -33,14 +33,21 @@
 #include "KoSectionStyle.h"
 #include "KoTextDocument.h"
 #include "KoTextDocumentLayout.h"
+#include "KoTextLayoutRootArea.h"
 
-#include <QTextLayout>
+#include <klocale.h>
+
+#include <QFont>
+#include <QMap>
+#include <QPixmap>
+#include <QRect>
+#include <QTextTable>
+#include <QTextTableFormat>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QPixmap>
-#include <QMap>
+#include <QTextLayout>
+
 #include <kdebug.h>
-#include <klocale.h>
 
 class KoStyleThumbnailer::Private
 {
@@ -48,6 +55,7 @@ public:
     Private() : pixmapHelperDocument(0){ }
 
     QTextDocument *pixmapHelperDocument;
+    KoTextDocumentLayout *documentLayout;
     QMap<int,QPixmap> pixmapMap; // map of pixmap representations of the styles
 };
 
@@ -66,6 +74,10 @@ void KoStyleThumbnailer::setPixmapHelperDocument(QTextDocument *pixmapHelperDocu
     if (d->pixmapHelperDocument)
         return;
     d->pixmapHelperDocument = pixmapHelperDocument;
+/*    d->pixmapHelperDocument = new QTextDocument;
+    d->documentLayout = new KoTextDocumentLayout(d->pixmapHelperDocument);
+    d->pixmapHelperDocument->setDocumentLayout(d->documentLayout);
+*/
 }
 
 QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
@@ -90,9 +102,78 @@ QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style)
     style->applyStyle(block, true);
     dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->layout();
 
-    d->pixmapHelperDocument->drawContents(&p);
+    KoTextDocumentLayout::PaintContext pc;
+    dynamic_cast<KoTextDocumentLayout*>(d->pixmapHelperDocument->documentLayout())->rootAreaForPosition(0)->paint(&p, pc);
 
     d->pixmapMap.insert(style->styleId(), pm);
+    return pm;
+}
+
+QPixmap KoStyleThumbnailer::thumbnail(KoParagraphStyle *style, QSize size)
+{
+    QPixmap pm(size.width(), size.height());
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing);
+
+    //calculate the space needed for the font size indicator (should the preview big too big with the style's font size
+    QString sizeHint = QString::number(style->characterStyle()->fontPointSize()) + "pt";
+    p.save();
+    QFont sizeHintFont = p.font();
+    sizeHintFont.setPointSize(8);
+    p.setFont(sizeHintFont);
+    QRect sizeHintRect(p.boundingRect(0, 0, 1, 1, Qt::AlignCenter, sizeHint));
+
+    QTextCursor cursor (d->pixmapHelperDocument);
+
+    cursor.select(QTextCursor::Document);
+    cursor.setBlockFormat(QTextBlockFormat());
+    cursor.setBlockCharFormat(QTextCharFormat());
+    cursor.setCharFormat(QTextCharFormat());
+    cursor.insertText(style->name());
+    QTextBlock block = cursor.block();
+    style->applyStyle(block, true);
+    dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->layout();
+
+    QSizeF documentSize = dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->documentSize();
+    if (documentSize.width() > size.width() || documentSize.height() > size.height()) {
+        //calculate the font reduction factor so that the text + the sizeHint fits
+        int reductionFactor = (int)((size.width()+2*sizeHintRect.width())/documentSize.width());
+
+        cursor.select(QTextCursor::Document);
+        QTextTableFormat tbFormat;
+        tbFormat.setCellPadding(0);
+        tbFormat.setCellSpacing(0);
+        tbFormat.setBorderStyle(QTextFrameFormat::BorderStyle_None);
+        QTextTable *table = cursor.insertTable(1, 2, tbFormat);
+        style->characterStyle()->setFontPointSize(style->characterStyle()->fontPointSize()*reductionFactor);
+        style->characterStyle()->applyStyle(&cursor);
+        cursor.insertText(style->name());
+        cursor.movePosition(QTextCursor::NextCell);
+        cursor.setBlockFormat(QTextBlockFormat());
+        cursor.setBlockCharFormat(QTextCharFormat());
+        QTextCharFormat charFormat;
+        charFormat.setFont(sizeHintFont);
+        cursor.setCharFormat(charFormat);
+        cursor.insertText(sizeHint);
+
+        dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->layout();
+        documentSize = dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->documentSize();
+        while (documentSize.width() > size.width() || documentSize.height() > size.height()) {
+            cursor.setPosition(table->cellAt(1, 1).firstCursorPosition().position());
+            cursor.setPosition(table->cellAt(1, 1).lastCursorPosition().position(), QTextCursor::KeepAnchor);
+            QTextCharFormat fmt = cursor.charFormat();
+            fmt.setFontPointSize(fmt.fontPointSize() - 1);
+            dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->layout();
+            documentSize = dynamic_cast<KoTextDocumentLayout *> (d->pixmapHelperDocument->documentLayout())->documentSize();
+        }
+    }
+
+//    p.translate(0, 1.5);
+
+    d->pixmapHelperDocument->drawContents(&p);
+
+//    d->pixmapMap.insert(style->styleId(), pm);
     return pm;
 }
 
@@ -118,8 +199,15 @@ QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style)
     style->applyStyle(block);
     dynamic_cast<KoTextDocumentLayout*> (d->pixmapHelperDocument->documentLayout())->layout();
 
-    d->pixmapHelperDocument->drawContents(&p);
+    KoTextDocumentLayout::PaintContext pc;
+    dynamic_cast<KoTextDocumentLayout*>(d->pixmapHelperDocument->documentLayout())->rootAreaForPosition(0)->paint(&p, pc);
 
     d->pixmapMap.insert(style->styleId(), pm);
     return pm;
 }
+
+QPixmap KoStyleThumbnailer::thumbnail(KoCharacterStyle *style, QSize size)
+{
+    return QPixmap();
+}
+

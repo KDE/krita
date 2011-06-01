@@ -3,6 +3,7 @@
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -122,6 +123,9 @@ KisBrushChooser::KisBrushChooser(QWidget *parent, const char *name)
     KoResourceServer<KisBrush>* rServer = KisBrushServer::instance()->brushServer();
     KoResourceServerAdapter<KisBrush>* adapter = new KoResourceServerAdapter<KisBrush>(rServer);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    QString knsrcFile = "kritabrushes.knsrc";
+    m_itemChooser->setKnsrcFile(knsrcFile);
+    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->setColumnCount(10);
     m_itemChooser->setRowHeight(30);
     m_itemChooser->setItemDelegate(new KisBrushDelegate(this));

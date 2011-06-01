@@ -72,6 +72,7 @@ public:
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
+    virtual QString id() const { return "ColorSelectorSettings"; }
     KisColorSelectorSettingsUpdateRepeater repeater;
 };
 

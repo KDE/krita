@@ -3,6 +3,7 @@
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
+   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -77,7 +78,9 @@ public:
     ///Set a proxy model with will be used to filter the resources
     void setProxyModel( QAbstractProxyModel* proxyModel );
 
+    void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
@@ -89,7 +92,7 @@ private slots:
 private:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
 
-    void updateRemoveButtonState();
+    void updateButtonState();
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

@@ -1086,6 +1086,18 @@ void KoParagraphStyle::setAutomaticWritingMode(bool value)
     setProperty(AutomaticWritingMode, value);
 }
 
+void KoParagraphStyle::setVerticalAlignment(KoParagraphStyle::VerticalAlign value)
+{
+    setProperty(VerticalAlignment, value);
+}
+
+KoParagraphStyle::VerticalAlign KoParagraphStyle::verticalAlignment() const
+{
+    if (hasProperty(VerticalAlignment))
+        return (VerticalAlign) propertyInt(VerticalAlignment);
+    return VAlignAuto;
+}
+
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
@@ -1626,6 +1638,20 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setPunctuationWrap(styleStack.property(KoXmlNS::style, "punctuation-wrap") == "simple");
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "vertical-align")) {
+        const QString valign = styleStack.property(KoXmlNS::style, "vertical-align");
+        if (valign == "auto")
+            setVerticalAlignment(VAlignAuto);
+        else if (valign == "baseline")
+            setVerticalAlignment(VAlignBaseline);
+        else if (valign == "bottom")
+            setVerticalAlignment(VAlignBottom);
+        else if (valign == "middle")
+            setVerticalAlignment(VAlignMiddle);
+        else if (valign == "top")
+            setVerticalAlignment(VAlignTop);
+    }
+    
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -1938,6 +1964,18 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("style:punctuation-wrap", "simple", KoGenStyle::ParagraphType);
             else
                 style.addProperty("style:punctuation-wrap", "hanging", KoGenStyle::ParagraphType);
+        } else if (key == VerticalAlignment) {
+            VerticalAlign valign = verticalAlignment();
+            if (valign == VAlignAuto)
+                style.addProperty("style:vertical-align", "auto", KoGenStyle::ParagraphType);
+            else if (valign == VAlignBaseline)
+                style.addProperty("style:vertical-align", "baseline", KoGenStyle::ParagraphType);
+            else if (valign == VAlignBottom)
+                style.addProperty("style:vertical-align", "bottom", KoGenStyle::ParagraphType);
+            else if (valign == VAlignMiddle)
+                style.addProperty("style:vertical-align", "middle", KoGenStyle::ParagraphType);
+            else if (valign == VAlignTop)
+                style.addProperty("style:vertical-align", "top", KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)

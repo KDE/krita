@@ -152,12 +152,22 @@ public:
         KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
+        VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
         IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
     };
+    
+    enum VerticalAlign {
+        VAlignAuto,
+        VAlignBaseline,
+        VAlignBottom,
+        VAlignMiddle,
+        VAlignTop
+    };
+        
     
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
@@ -374,6 +384,9 @@ public:
     
     void setHyphenationLadderCount(int value);
     int hyphenationLadderCount() const;
+    
+    VerticalAlign verticalAlignment() const;
+    void setVerticalAlignment(VerticalAlign value);
     
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();

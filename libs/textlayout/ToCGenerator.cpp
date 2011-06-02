@@ -70,7 +70,7 @@ static KoParagraphStyle *generateTemplateStyle(KoStyleManager *styleManager, int
     KoParagraphStyle *style = new KoParagraphStyle();
     style->setName("Contents " + QString::number(outlineLevel));
     style->setParent(styleManager->paragraphStyle("Standard"));
-    style->setLeftMargin((outlineLevel - 1) * 8);
+    style->setLeftMargin(QTextLength(QTextLength::FixedLength, (outlineLevel - 1) * 8));
     styleManager->add(style);
     return style;
 }

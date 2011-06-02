@@ -16,45 +16,92 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "kis_compositeop_option.h"
+
 #include <klocale.h>
-#include <kis_categorized_list_view.h>
+#include <kicon.h>
+
+#include <kis_cmb_composite.h>
 #include <KoCompositeOp.h>
 #include <kis_types.h>
 #include <KoID.h>
+#include <ui_wdgCompositeOpOption.h>
+#include <kis_composite_ops_model.h>
 
 KisCompositeOpOption::KisCompositeOpOption(bool creatConfigWidget):
-    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true)
+    KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::brushCategory(), true),
+    m_createConfigWidget(creatConfigWidget)
 {
-    m_checkable = false;
+    m_checkable         = false;
+    m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
+    m_currCompositeOpID = m_prevCompositeOpID;
     
     if(creatConfigWidget) {
-        KisCategorizedListModel<QString>* model = new KisCategorizedListModel<QString>();
-        KisCategorizedListView*           view  = new KisCategorizedListView();
+        QWidget* widget = new QWidget();
         
-        const KoIDList& categories = KoCompositeOpRegistry::instance().getCategories();
+        Ui_wdgCompositeOpOption ui;
+        ui.setupUi(widget);
+        ui.bnEraser->setIcon(KIcon("draw-eraser"));
         
-        for(KoIDList::const_iterator cat=categories.begin(); cat!=categories.end(); ++cat) {
-            const KoIDList& modes = KoCompositeOpRegistry::instance().getCompositeOps(cat->id());
-            
-            for(KoIDList::const_iterator mod=modes.begin(); mod!=modes.end(); ++mod)
-                model->addItem(cat->name(), mod->name());
-        }
+        m_label    = ui.lbChoosenMode;
+        m_list     = ui.list;
+        m_bnEraser = ui.bnEraser;
         
-        view->setModel(model);
-        setConfigurationPage(view);
+        setConfigurationPage(widget);
+        
+        connect(ui.list    , SIGNAL(activated(const QModelIndex&)), this, SLOT(slotCompositeOpChanged(const QModelIndex&)));
+        connect(ui.bnEraser, SIGNAL(toggled(bool))                , this, SLOT(slotEraserToggled(bool)));
     }
 }
 
+KisCompositeOpOption::~KisCompositeOpOption()
+{
+}
 
 void KisCompositeOpOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-//     setting->setProperty(AIRBRUSH_ENABLED, isChecked());
-//     setting->setProperty(AIRBRUSH_RATE, m_optionWidget->sliderRate->value());
+    setting->setProperty("CompositeOp", m_currCompositeOpID);
 }
 
 void KisCompositeOpOption::readOptionSetting(const KisPropertiesConfiguration* setting)
 {
-//     setChecked(setting->getBool(AIRBRUSH_ENABLED));
-//     m_optionWidget->sliderRate->setValue(setting->getInt(AIRBRUSH_RATE,100));
+    QString ompositeOpID = setting->getString("CompositeOp", KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
+    KoID    compositeOp = KoCompositeOpRegistry::instance().getKoID(ompositeOpID);
+    changeCompositeOp(compositeOp);
 }
 
+void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
+{
+    if(compositeOp.id() == m_currCompositeOpID)
+        return;
+    
+    m_prevCompositeOpID = m_currCompositeOpID;
+    m_currCompositeOpID = compositeOp.id();
+    
+    if(m_createConfigWidget) {
+        m_label->setText(compositeOp.name());
+        m_list->setDisabled(m_currCompositeOpID == "erase");
+        
+        m_bnEraser->blockSignals(true);
+        m_bnEraser->setChecked(m_currCompositeOpID == "erase");
+        m_bnEraser->blockSignals(false);
+    }
+    
+    emit sigSettingChanged();
+}
+
+
+void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
+{
+    KoID compositeOp;
+    
+    if(m_list->getModel()->getEntry(compositeOp, index.row()))
+        changeCompositeOp(compositeOp);
+}
+
+void KisCompositeOpOption::slotEraserToggled(bool toggled)
+{
+    if(toggled)
+        changeCompositeOp(KoCompositeOpRegistry::instance().getKoID("erase"));
+    else
+        changeCompositeOp(KoCompositeOpRegistry::instance().getKoID(m_prevCompositeOpID));
+}

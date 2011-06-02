@@ -52,7 +52,8 @@
 #include <kicon.h>
 
 #include <KoDocumentSectionView.h>
-#include "KoColorSpace.h"
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -61,6 +62,7 @@
 #include <kis_group_layer.h>
 #include <kis_mask.h>
 #include <kis_node.h>
+#include <kis_composite_ops_model.h>
 
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
@@ -143,7 +145,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
-    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
+    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
 
     m_newLayerMenu = new KMenu(this);
@@ -274,16 +276,17 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
+    KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
+    int  index = m_wdgLayerBox->cmbComposite->getModel()->getIndex(cmpOp);
+    
     m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCurrent(compositeOp);
+    m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
-void KisLayerBox::slotFillCompositeOps(const KoColorSpace * colorSpace)
+void KisLayerBox::slotFillCompositeOps(const KoColorSpace* colorSpace)
 {
-    m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCompositeOpList(colorSpace->compositeOps());
-    m_wdgLayerBox->cmbComposite->blockSignals(false);
+    m_wdgLayerBox->cmbComposite->getModel()->validateCompositeOps(colorSpace);
 }
 
 // range: 0-100
@@ -434,9 +437,12 @@ void KisLayerBox::slotDuplicateClicked()
     m_nodeManager->duplicateActiveNode();
 }
 
-void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
+void KisLayerBox::slotCompositeOpChanged(int index)
 {
-    m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp));
+    KoID compositeOp;
+    
+    if(m_wdgLayerBox->cmbComposite->getModel()->getEntry(compositeOp, index))
+        m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
 }
 
 void KisLayerBox::slotOpacityChanged()

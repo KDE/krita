@@ -25,6 +25,7 @@
 /**
  * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
  */
+
 class KRITAUI_EXPORT KisCategorizedItemDelegate : public QAbstractItemDelegate
 {
 public:

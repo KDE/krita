@@ -23,6 +23,7 @@
 #include <QString>
 #include <QList>
 #include <QMap>
+#include <QMultiMap>
 
 #include "pigment_export.h"
 
@@ -125,20 +126,40 @@ const QString COMPOSITE_UNDEF        = "undefined";
 
 
 class KoID;
+class KoColorSpace;
 
 class PIGMENTCMS_EXPORT KoCompositeOpRegistry
 {
-    typedef QList<KoID> KoIDList;
+    typedef QMultiMap<KoID,KoID> KoIDMap;
+    typedef QList<KoID>          KoIDList;
     KoCompositeOpRegistry();
     
 public:
     static const KoCompositeOpRegistry& instance();
-    KoIDList getCompositeOps(const QString& categoryID) const;
+    
+    KoID     getDefaultCompositeOp() const;
+    KoID     getKoID(const QString& compositeOpID) const;
+    KoIDMap  getCompositeOps() const;
     KoIDList getCategories() const;
+    KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
+    KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
+    bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
+    
+    template<class TKoIdIterator>
+    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
+        KoIDList list;
+        
+        for(; begin!=end; ++begin){ 
+            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
+                list.push_back(*begin);
+        }
+        
+        return list;
+    }
     
 private:
-    KoIDList               m_categories;
-    QMap<QString,KoIDList> m_categoryMap;
+    KoIDList m_categories;
+    KoIDMap  m_map;
 };
 
 /**

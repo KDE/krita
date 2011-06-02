@@ -19,44 +19,19 @@
 #ifndef _KIS_COMPOSITE_OPS_MODEL_H_
 #define _KIS_COMPOSITE_OPS_MODEL_H_
 
+#include <KoID.h>
 #include <QAbstractListModel>
+#include "widgets/kis_categorized_list_model.h"
 
 class KoCompositeOp;
+class KoColorSpace;
 
-/**
- * This model can be use to show a list of visible composite op in a list view.
- */
-class KisCompositeOpsModel : public QAbstractListModel
+class KRITAUI_EXPORT KisCompositeOpListModel: public KisCategorizedListModel<KoID,KoID>
 {
 public:
-    enum AdditionalRoles {
-        CompositeOpSortRole = 0x1FDFDA
-    };
-public:
-    KisCompositeOpsModel(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist = QList<KoCompositeOp*>());
-    ~KisCompositeOpsModel();
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
-    const QString& itemAt(const QModelIndex & index) const;
-    QModelIndex indexOf(const KoCompositeOp*) const;
-    /**
-     * @return the index for the given composite op id
-     */
-    QModelIndex indexOf(const QString&) const;
-private:
-    struct CompositeOpInfo {
-        CompositeOpInfo(QString _id, QString _description, QString _category) : id(_id), description(_description), category(_category) {}
-        QString id;
-        QString description;
-        QString category;
-
-        bool operator==(const CompositeOpInfo info) const
-        {
-            return ((info.id == id) && (info.description == description) && (info.category == category));
-        }
-
-    };
-    QList< CompositeOpInfo > m_list;
+    virtual QString categoryToString(const KoID& val) const { return val.name(); }
+    virtual QString entryToString   (const KoID& val) const { return val.name(); }
+    void validateCompositeOps(const KoColorSpace* colorSpace);
 };
 
 #endif

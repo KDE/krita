@@ -21,83 +21,88 @@
 #include "widgets/kis_cmb_composite.h"
 
 #include <QItemDelegate>
+#include <QMouseEvent>
 
 #include <klocale.h>
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
-#include "../kis_composite_ops_model.h"
 #include <KCategorizedSortFilterProxyModel>
 #include <kis_categorized_item_delegate.h>
 
-KisCmbComposite::KisCmbComposite(QWidget * parent, const char * name)
-        : KComboBox(parent), m_lastModel(0), m_sortModel(0)
+#include "kis_categorized_list_model.h"
+#include "../kis_composite_ops_model.h"
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// ---- KisCompositeOpListView -------------------------------------------------------- //
+
+KisCompositeOpListView::KisCompositeOpListView(QWidget* parent):
+    QListView(parent)
 {
-    setObjectName(name);
-    setEditable(false);
-    connect(this, SIGNAL(activated(int)), this, SLOT(slotOpActivated(int)));
-    connect(this, SIGNAL(highlighted(int)), this, SLOT(slotOpHighlighted(int)));
-    setItemDelegate(new KisCategorizedItemDelegate(new QItemDelegate));
-    m_sortModel = new KCategorizedSortFilterProxyModel;
-    m_sortModel->setSortRole(KisCompositeOpsModel::CompositeOpSortRole);
-    m_sortModel->setCategorizedModel(true);
-    setModel(m_sortModel);
+    connect(this, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
 }
 
-KisCmbComposite::~KisCmbComposite()
+void KisCompositeOpListView::slotIndexChanged(const QModelIndex& index)
 {
-}
-
-void KisCmbComposite::setCompositeOpList(const QList<KoCompositeOp*> & list, const QList<KoCompositeOp*> & whitelist)
-{
-    KisCompositeOpsModel* model = new KisCompositeOpsModel(list, whitelist);
-    m_sortModel->setSourceModel(model);
-    m_sortModel->sort(0);
-    setMaxVisibleItems(list.size());
-
-    delete m_lastModel;
-    m_lastModel = model;
-}
-
-const QString& KisCmbComposite::itemAt(int idx) const
-{
-    return m_lastModel->itemAt(m_sortModel->mapToSource(m_sortModel->index(idx, 0)));
-}
-
-const QString& KisCmbComposite::currentItem() const
-{
-    return itemAt(currentIndex());
-}
-
-void KisCmbComposite::setCurrent(const KoCompositeOp* op)
-{
-    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(op));
-    if (index.isValid()) {
-        KComboBox::setCurrentIndex(index.row());
+    if(model()->data(index, IsHeaderRole).toBool()) {
+        bool expanded = model()->data(index, ExpandCategoryRole).toBool();
+        int beg       = model()->data(index, CategoryBeginRole).toInt();
+        int end       = model()->data(index, CategoryEndRole).toInt();
+        
+        model()->setData(index, !expanded, ExpandCategoryRole);
+        
+        for(; beg!=end; ++beg)
+            setRowHidden(beg, expanded);
     }
 }
 
-void KisCmbComposite::setCurrent(const QString & s)
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// ---- KisCompositeOpListWidget ------------------------------------------------------ //
+
+KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
+    KisCompositeOpListView(parent)
 {
-    QModelIndex index = m_sortModel->mapFromSource(m_lastModel->indexOf(s));
-    if (index.isValid()) {
-        KComboBox::setCurrentIndex(index.row());
-    }
+    m_model    = new KisCompositeOpListModel();
+    m_delegate = new KisCategorizedItemDelegate2(m_model);
+    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
+    
+    setModel(m_model);
+    setItemDelegate(m_delegate);
 }
 
-void KisCmbComposite::slotOpActivated(int i)
-{
-    if (i >= m_lastModel->rowCount()) return;
 
-    emit activated(itemAt(i));
+KisCompositeOpListWidget::~KisCompositeOpListWidget()
+{
+    delete m_model;
+    delete m_delegate;
 }
 
-void KisCmbComposite::slotOpHighlighted(int i)
-{
-    if (i >= m_lastModel->rowCount()) return;
 
-    emit activated(itemAt(i));
+//////////////////////////////////////////////////////////////////////////////////////////
+// ---- KisCompositeOpComboBox -------------------------------------------------------- //
+
+KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
+    QComboBox(parent)
+{
+    m_view     = new KisCompositeOpListView();
+    m_model    = new KisCompositeOpListModel();
+    m_delegate = new KisCategorizedItemDelegate2(m_model);
+    m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
+    
+    setMaxVisibleItems(100);
+    setSizeAdjustPolicy(AdjustToContents);
+    
+    setView(m_view);
+    setModel(m_model);
+    setItemDelegate(m_delegate);
 }
 
+KisCompositeOpComboBox::~KisCompositeOpComboBox()
+{
+    delete m_view;
+    delete m_model;
+    delete m_delegate;
+}
 
 #include "kis_cmb_composite.moc"
 

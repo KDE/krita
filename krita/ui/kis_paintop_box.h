@@ -54,6 +54,7 @@ class KisPaintOpSettingsWidget;
 class KisCmbPaintop;
 class KisCmbComposite;
 class KisDoubleSliderSpinBox;
+class KisCompositeOpComboBox;
 
 
 /**
@@ -68,7 +69,6 @@ class KisDoubleSliderSpinBox;
  */
 class KisPaintopBox : public QWidget
 {
-
     Q_OBJECT
 
 public:
@@ -83,36 +83,31 @@ signals:
     void signalPaintopChanged(KisPaintOpPresetSP paintop);
 
 public slots:
-
-    void colorSpaceChanged(const KoColorSpace *cs);
+//     void colorSpaceChanged(const KoColorSpace *cs);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource* resource);
 
 private:
-
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
 
-    ///Sets the current composite op in the canvas resource provide
-    ///Composite op will be set to eraser if the erase mode of the input device is active
-    void compositeOpChanged();
-
     ///Sets the internal composite op, without emitting
     /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
-    void setCompositeOpInternal(const QString & id);
+//     void setCompositeOpInternal(const QString & id);
 
-    void setEnabledInternal(bool value);
+//     void setEnabledInternal(bool value);
+    void updateCompositeOp(QString compositeOpID);
+    void updatePaintops();
 
 private slots:
-    void updatePaintops();
-    void nodeChanged(const KisNodeSP node);
-    void eraseModeToggled(bool checked);
-    void updateCompositeOpComboBox();
-    void slotSetCompositeMode(const QString& compositeOp);
+    void slotNodeChanged(const KisNodeSP node);
+    void slotToggleEraseMode(bool checked);
+    void slotColorSpaceChanged(const KoColorSpace* colorSpace);
+    void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
@@ -132,7 +127,7 @@ private:
     KisPopupButton* m_settingsWidget;
     KisPopupButton* m_presetWidget;
     KisPopupButton* m_brushChooser;
-    KisCmbComposite* m_cmbComposite;
+    KisCompositeOpComboBox* m_cmbCompositeOp;
     QToolButton* m_eraseModeButton;
     KisPaintOpPresetsPopup* m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
@@ -143,7 +138,9 @@ private:
 
     QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
     KisPaintOpPresetSP m_activePreset;
-    const KoCompositeOp* m_compositeOp;
+    
+    QString   m_prevCompositeOpID;
+    QString   m_currCompositeOpID;
     KisNodeSP m_previousNode;
 
     typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;

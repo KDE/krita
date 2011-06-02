@@ -22,114 +22,18 @@
 #include <kcategorizedsortfilterproxymodel.h>
 #include "kis_debug.h"
 
-static QStringList opsInOrder;
-
-KisCompositeOpsModel::KisCompositeOpsModel(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist)
+void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpace)
 {
-    foreach(KoCompositeOp* op, list) {
-        if (op->userVisible()) {
-            m_list.push_back(CompositeOpInfo(op->id(), op->description(), op->category()));
+    typedef QList<Category>::iterator Itr;
+    
+    emit layoutAboutToBeChanged();
+    
+    for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat) {
+        for(int i=0; i<cat->entries.size(); ++i) {
+            bool enable = KoCompositeOpRegistry::instance().colorSpaceHasCompositeOp(colorSpace, cat->entries[i]);
+            cat->disabled.setBit(i, !enable);
         }
     }
-    foreach(KoCompositeOp* op, whitelist) {
-        if (!m_list.contains(CompositeOpInfo(op->id(), op->description(), op->category()))) {
-            m_list.push_back(CompositeOpInfo(op->id(), op->description(), op->category()));
-        }
-    }
-    if (opsInOrder.isEmpty()) {
-        opsInOrder <<
-        COMPOSITE_OVER <<
-        COMPOSITE_ERASE <<
-        COMPOSITE_COPY <<
-        COMPOSITE_ALPHA_DARKEN <<
-        COMPOSITE_IN <<
-        COMPOSITE_OUT <<
-        COMPOSITE_XOR <<
-        COMPOSITE_PLUS <<
-        COMPOSITE_MINUS <<
-        COMPOSITE_ADD <<
-        COMPOSITE_SUBTRACT <<
-        COMPOSITE_DIFF <<
-        COMPOSITE_MULT <<
-        COMPOSITE_DIVIDE <<
-        COMPOSITE_DODGE <<
-        COMPOSITE_BURN <<
-        COMPOSITE_BUMPMAP <<
-        COMPOSITE_CLEAR <<
-        COMPOSITE_DISSOLVE <<
-        COMPOSITE_DISPLACE <<
-        COMPOSITE_NO <<
-        COMPOSITE_DARKEN <<
-        COMPOSITE_LIGHTEN <<
-        COMPOSITE_HUE <<
-        COMPOSITE_SATURATION <<
-        COMPOSITE_VALUE <<
-        COMPOSITE_COLOR <<
-        COMPOSITE_COLORIZE <<
-        COMPOSITE_LUMINIZE <<
-        COMPOSITE_SCREEN <<
-        COMPOSITE_OVERLAY <<
-        COMPOSITE_UNDEF <<
-        COMPOSITE_COPY_RED <<
-        COMPOSITE_COPY_GREEN <<
-        COMPOSITE_COPY_BLUE;
-    }
-}
-
-KisCompositeOpsModel::~KisCompositeOpsModel()
-{
-}
-
-int KisCompositeOpsModel::rowCount(const QModelIndex & /*parent*/) const
-{
-    return m_list.count();
-}
-
-QVariant KisCompositeOpsModel::data(const QModelIndex & index, int role) const
-{
-    if (index.isValid()) {
-        switch (role) {
-        case Qt::DisplayRole: {
-            return m_list[index.row()].description;
-        }
-        case CompositeOpSortRole: {
-            int idx = opsInOrder.indexOf(m_list[index.row()].id);
-            if (idx == -1) return opsInOrder.count();
-            return idx;
-        }
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-        case KCategorizedSortFilterProxyModel::CategorySortRole:
-            return m_list[index.row()].category;
-        }
-    }
-    return QVariant();
-}
-
-const QString& KisCompositeOpsModel::itemAt(const QModelIndex & index) const
-{
-    if (!index.isValid()) return COMPOSITE_OVER;
-    return m_list[index.row()].id;
-}
-
-QModelIndex KisCompositeOpsModel::indexOf(const KoCompositeOp* op) const
-{
-    if (!op) return QModelIndex();
-
-    return indexOf(op->id());
-}
-
-QModelIndex KisCompositeOpsModel::indexOf(const QString& id) const
-{
-    int index = 0;
-    foreach(const CompositeOpInfo&  op2, m_list) {
-        if (id == op2.id)
-            break;
-        ++index;
-    }
-    if (index < m_list.count()) {
-        return createIndex(index, 0);
-    } else {
-        return QModelIndex();
-    }
-
+    
+    emit layoutChanged();
 }

@@ -39,96 +39,86 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
         << KoID("hsl"       , i18n("HSL"))
         << KoID("hsv"       , i18n("HSV"));
     
-    m_categoryMap[m_categories[0].id()] // Arithmetic
-        << KoID(COMPOSITE_ADD             , i18n("Addition"))
-        << KoID(COMPOSITE_SUBTRACT        , i18n("Substract"))
-        << KoID(COMPOSITE_MULT            , i18n("Multiply"))
-        << KoID(COMPOSITE_DIVIDE          , i18n("Divide"))
-        << KoID(COMPOSITE_INVERSE_SUBTRACT, i18n("Inverse Substract"));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_ADD             , i18n("Addition")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_SUBTRACT        , i18n("Substract")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_MULT            , i18n("Multiply")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_DIVIDE          , i18n("Divide")));
+    m_map.insert(m_categories[0], KoID(COMPOSITE_INVERSE_SUBTRACT, i18n("Inverse Substract")));
     
-    m_categoryMap[m_categories[1].id()] // Darken
-        << KoID(COMPOSITE_BURN       , i18n("Burn"))
-        << KoID(COMPOSITE_LINEAR_BURN, i18n("Linear Burn"))
-        << KoID(COMPOSITE_DARKEN     , i18n("Darken"))
-        << KoID(COMPOSITE_GAMMA_DARK , i18n("Gamma Dark"));
-        
-    m_categoryMap[m_categories[2].id()] // Lighten
-        << KoID(COMPOSITE_DODGE       , i18n("Color Dodge"))
-        << KoID(COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge"))
-        << KoID(COMPOSITE_LIGHTEN     , i18n("Lighten"))
-        << KoID(COMPOSITE_LINEAR_LIGHT, i18n("Linear Light"))
-        << KoID(COMPOSITE_SCREEN      , i18n("Screen"))
-        << KoID(COMPOSITE_PIN_LIGHT   , i18n("Pin Light"))
-        << KoID(COMPOSITE_VIVID_LIGHT , i18n("Vivid Light"))
-        << KoID(COMPOSITE_HARD_LIGHT  , i18n("Hard Light"))
-        << KoID(COMPOSITE_SOFT_LIGHT  , i18n("Soft Light"))
-        << KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light"));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_BURN       , i18n("Burn")));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_LINEAR_BURN, i18n("Linear Burn")));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_DARKEN     , i18n("Darken")));
+    m_map.insert(m_categories[1], KoID(COMPOSITE_GAMMA_DARK , i18n("Gamma Dark")));
     
-    m_categoryMap[m_categories[3].id()] // Negative
-        << KoID(COMPOSITE_DIFF                 , i18n("Difference"))
-        << KoID(COMPOSITE_EQUIVALENCE          , i18n("Equivalence"))
-        << KoID(COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive Substractive"))
-        << KoID(COMPOSITE_EXCLUSION            , i18n("Exclusion"))
-        << KoID(COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent"));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_DODGE       , i18n("Color Dodge")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_DODGE, i18n("Linear Dodge")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LIGHTEN     , i18n("Lighten")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_LINEAR_LIGHT, i18n("Linear Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SCREEN      , i18n("Screen")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_PIN_LIGHT   , i18n("Pin Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_VIVID_LIGHT , i18n("Vivid Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_HARD_LIGHT  , i18n("Hard Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_SOFT_LIGHT  , i18n("Soft Light")));
+    m_map.insert(m_categories[2], KoID(COMPOSITE_GAMMA_LIGHT , i18n("Gamma Light")));
     
-    m_categoryMap[m_categories[4].id()] // Mix
-        << KoID(COMPOSITE_OVER          , i18n("Normal"))
-        << KoID(COMPOSITE_OVERLAY       , i18n("Overlay"))
-        << KoID(COMPOSITE_ERASE         , i18n("Erase"))
-        << KoID(COMPOSITE_ALPHA_DARKEN  , i18n("Alpha Darken"))
-        << KoID(COMPOSITE_HARD_MIX      , i18n("Hard Mix"))
-        << KoID(COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge"))
-        << KoID(COMPOSITE_GRAIN_EXTRACT , i18n("Grain Extract"))
-        << KoID(COMPOSITE_PARALLEL      , i18n("Parallel"))
-        << KoID(COMPOSITE_ALLANON       , i18n("Allanon"))
-        << KoID(COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean"));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_DIFF                 , i18n("Difference")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_EQUIVALENCE          , i18n("Equivalence")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_ADDITIVE_SUBSTRACTIVE, i18n("Additive Substractive")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_EXCLUSION            , i18n("Exclusion")));
+    m_map.insert(m_categories[3], KoID(COMPOSITE_ARC_TANGENT          , i18n("Arcus Tangent")));
     
-    m_categoryMap[m_categories[5].id()] // Misc
-        << KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap"))
-        << KoID(COMPOSITE_DISSOLVE  , i18n("Dissolve"))
-        << KoID(COMPOSITE_COPY_RED  , i18n("Copy Red"))
-        << KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green"))
-        << KoID(COMPOSITE_COPY_BLUE , i18n("Copy Blue"));
-        
-    m_categoryMap[m_categories[6].id()] // HSY
-        << KoID(COMPOSITE_COLOR         , i18n("Color"))
-        << KoID(COMPOSITE_HUE           , i18n("Hue"))
-        << KoID(COMPOSITE_SATURATION    , i18n("Saturation"))
-        << KoID(COMPOSITE_LUMINIZE      , i18n("Luminosity"))
-        << KoID(COMPOSITE_DEC_SATURATION, i18n("Decrease Saturation"))
-        << KoID(COMPOSITE_INC_SATURATION, i18n("Increase Saturation"))
-        << KoID(COMPOSITE_DEC_LUMINOSITY, i18n("Decrease Luminosity"))
-        << KoID(COMPOSITE_INC_LUMINOSITY, i18n("Increase Luminosity"));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_OVER          , i18n("Normal")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_OVERLAY       , i18n("Overlay")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ERASE         , i18n("Erase")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ALPHA_DARKEN  , i18n("Alpha Darken")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_HARD_MIX      , i18n("Hard Mix")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_MERGE   , i18n("Grain Merge")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GRAIN_EXTRACT , i18n("Grain Extract")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_PARALLEL      , i18n("Parallel")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_ALLANON       , i18n("Allanon")));
+    m_map.insert(m_categories[4], KoID(COMPOSITE_GEOMETRIC_MEAN, i18n("Geometric Mean")));
     
-    m_categoryMap[m_categories[7].id()] // HSI
-        << KoID(COMPOSITE_COLOR_HSI         , i18n("Color HSI"))
-        << KoID(COMPOSITE_HUE_HSI           , i18n("Hue HSI"))
-        << KoID(COMPOSITE_SATURATION_HSI    , i18n("Saturation HSI"))
-        << KoID(COMPOSITE_INTENSITY         , i18n("Intensity"))
-        << KoID(COMPOSITE_DEC_SATURATION_HSI, i18n("Decrease Saturation HSI"))
-        << KoID(COMPOSITE_INC_SATURATION_HSI, i18n("Increase Saturation HSI"))
-        << KoID(COMPOSITE_DEC_INTENSITY     , i18n("Decrease Intensity"))
-        << KoID(COMPOSITE_INC_INTENSITY     , i18n("Increase Intensity"));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_BUMPMAP   , i18n("Bumpmap")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_DISSOLVE  , i18n("Dissolve")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_RED  , i18n("Copy Red")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_GREEN, i18n("Copy Green")));
+    m_map.insert(m_categories[5], KoID(COMPOSITE_COPY_BLUE , i18n("Copy Blue")));
     
-    m_categoryMap[m_categories[8].id()] // HSL
-        << KoID(COMPOSITE_COLOR_HSL         , i18n("Color HSL"))
-        << KoID(COMPOSITE_HUE_HSL           , i18n("Hue HSL"))
-        << KoID(COMPOSITE_SATURATION_HSL    , i18n("Saturation HSL"))
-        << KoID(COMPOSITE_LIGHTNESS         , i18n("Lightness"))
-        << KoID(COMPOSITE_DEC_SATURATION_HSL, i18n("Decrease Saturation HSL"))
-        << KoID(COMPOSITE_INC_SATURATION_HSL, i18n("Increase Saturation HSL"))
-        << KoID(COMPOSITE_DEC_LIGHTNESS     , i18n("Decrease Lightness"))
-        << KoID(COMPOSITE_INC_LIGHTNESS     , i18n("Increase Lightness"));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_COLOR         , i18n("Color")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_HUE           , i18n("Hue")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_SATURATION    , i18n("Saturation")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_LUMINIZE      , i18n("Luminosity")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_DEC_SATURATION, i18n("Decrease Saturation")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_INC_SATURATION, i18n("Increase Saturation")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_DEC_LUMINOSITY, i18n("Decrease Luminosity")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_INC_LUMINOSITY, i18n("Increase Luminosity")));
     
-    m_categoryMap[m_categories[9].id()] // HSV
-        << KoID(COMPOSITE_COLOR_HSV         , i18n("Color HSV"))
-        << KoID(COMPOSITE_HUE_HSV           , i18n("Hue HSV"))
-        << KoID(COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV"))
-        << KoID(COMPOSITE_VALUE             , i18n("Lightness"))
-        << KoID(COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV"))
-        << KoID(COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV"))
-        << KoID(COMPOSITE_DEC_VALUE         , i18n("Decrease Value"))
-        << KoID(COMPOSITE_INC_VALUE         , i18n("Increase Value"));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_COLOR_HSI         , i18n("Color HSI")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_HUE_HSI           , i18n("Hue HSI")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_SATURATION_HSI    , i18n("Saturation HSI")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_INTENSITY         , i18n("Intensity")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_DEC_SATURATION_HSI, i18n("Decrease Saturation HSI")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_INC_SATURATION_HSI, i18n("Increase Saturation HSI")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_DEC_INTENSITY     , i18n("Decrease Intensity")));
+    m_map.insert(m_categories[7], KoID(COMPOSITE_INC_INTENSITY     , i18n("Increase Intensity")));
+    
+    m_map.insert(m_categories[8], KoID(COMPOSITE_COLOR_HSL         , i18n("Color HSL")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_HUE_HSL           , i18n("Hue HSL")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_SATURATION_HSL    , i18n("Saturation HSL")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_LIGHTNESS         , i18n("Lightness")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_DEC_SATURATION_HSL, i18n("Decrease Saturation HSL")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_INC_SATURATION_HSL, i18n("Increase Saturation HSL")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_DEC_LIGHTNESS     , i18n("Decrease Lightness")));
+    m_map.insert(m_categories[8], KoID(COMPOSITE_INC_LIGHTNESS     , i18n("Increase Lightness")));
+    
+    m_map.insert(m_categories[9], KoID(COMPOSITE_COLOR_HSV         , i18n("Color HSV")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_HUE_HSV           , i18n("Hue HSV")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_SATURATION_HSV    , i18n("Saturation HSV")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_VALUE             , i18n("Value")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_DEC_SATURATION_HSV, i18n("Decrease Saturation HSV")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_INC_SATURATION_HSV, i18n("Increase Saturation HSV")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_DEC_VALUE         , i18n("Decrease Value")));
+    m_map.insert(m_categories[9], KoID(COMPOSITE_INC_VALUE         , i18n("Increase Value")));
 }
 
 const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()
@@ -137,12 +127,20 @@ const KoCompositeOpRegistry& KoCompositeOpRegistry::instance()
     return *registry;
 }
 
-KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const QString& categoryID) const
+KoID KoCompositeOpRegistry::getDefaultCompositeOp() const
 {
-    if(m_categoryMap.contains(categoryID))
-        return m_categoryMap[categoryID];
-    
-    return KoIDList();
+    return KoID(COMPOSITE_OVER, i18n("Normal"));
+}
+
+KoID KoCompositeOpRegistry::getKoID(const QString& compositeOpID) const
+{
+    KoIDMap::const_iterator itr = qFind(m_map.begin(), m_map.end(), KoID(compositeOpID));
+    return (itr != m_map.end()) ? *itr : KoID();
+}
+
+KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getCompositeOps() const
+{
+    return m_map;
 }
 
 KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCategories() const
@@ -150,6 +148,55 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCategories() const
     return m_categories;
 }
 
+KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoID& category, const KoColorSpace* colorSpace) const
+{
+    qint32                  num = m_map.count(category);
+    KoIDMap::const_iterator beg = m_map.find(category);
+    KoIDMap::const_iterator end = beg + num;
+    
+    KoIDList list;
+    list.reserve(num);
+    
+    if(colorSpace) {
+        for(; beg!=end; ++beg){ 
+            if(colorSpace->hasCompositeOp(beg->id()))
+                list.push_back(*beg);
+        }
+    }
+    else {
+        for(; beg!=end; ++beg)
+            list.push_back(*beg);
+    }
+    
+    return list;
+}
+
+KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoColorSpace* colorSpace) const
+{
+    KoIDMap::const_iterator beg = m_map.begin();
+    KoIDMap::const_iterator end = m_map.end();
+    
+    KoIDList list;
+    list.reserve(m_map.size());
+    
+    if(colorSpace) {
+        for(; beg!=end; ++beg){ 
+            if(colorSpace->hasCompositeOp(beg->id()))
+                list.push_back(*beg);
+        }
+    }
+    else {
+        for(; beg!=end; ++beg)
+            list.push_back(*beg);
+    }
+    
+    return list;
+}
+
+bool KoCompositeOpRegistry::colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const
+{
+    return colorSpace ? colorSpace->hasCompositeOp(compositeOp.id()) : false;
+}
 
 QString KoCompositeOp::categoryColor()
 {

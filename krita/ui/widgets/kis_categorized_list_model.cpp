@@ -16,13 +16,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+#include <QIcon>
 #include <QPainter>
 #include <QPalette>
 #include <QPolygon>
-#include "kis_categorized_list_view.h"
+#include "kis_categorized_list_model.h"
 #include <QMouseEvent>
 
-void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+KisCategorizedItemDelegate2::KisCategorizedItemDelegate2(QAbstractListModel* model):
+    m_model(model)
+{
+    m_errorIcon = QIcon::fromTheme("dialog-warning");
+}
+
+void KisCategorizedItemDelegate2::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
     qint32 border = 4;
     qint32 xpos   = border + option.rect.x() + option.rect.height();
@@ -32,12 +39,16 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
     qint32 my     = ypos + size / 2;
     
     QRect rect(xpos, ypos, option.rect.width()-xpos, option.rect.height());
+    
     painter->resetTransform();
     
     if(!m_model->data(index, IsHeaderRole).toBool()) {
         QStyleOptionViewItem sovi = option;
         sovi.rect = rect;
+        
         QStyledItemDelegate::paint(painter, sovi, index);
+        if(!(m_model->flags(index) & Qt::ItemIsEnabled))
+            m_errorIcon.paint(painter, 0, ypos, size, size, Qt::AlignCenter, QIcon::Normal, QIcon::On);
     }
     else {
         if(option.state & QStyle::State_MouseOver)
@@ -66,9 +77,9 @@ void ListDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         painter->drawPolygon(triangle);
     }
 }
-
-KisCategorizedListView::KisCategorizedListView():
-    m_delegate(0) { }
+/*
+KisCategorizedListView::KisCategorizedListView(QWidget* parent):
+    QListView(parent), m_delegate(0) { }
 
 KisCategorizedListView::~KisCategorizedListView()
 {
@@ -85,5 +96,5 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
         m_ignoreCurrentChanged = true;
     }
     else QAbstractItemView::mousePressEvent(event);
-}
+}//*/
 

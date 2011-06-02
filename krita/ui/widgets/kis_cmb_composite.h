@@ -23,49 +23,59 @@
 
 #include <krita_export.h>
 #include "kcombobox.h"
-#include "KoCompositeOp.h"
+// #include "KoCompositeOp.h"
 
-class KisCompositeOpsModel;
-class KCategorizedSortFilterProxyModel;
+#include <QListView>
+#include <QComboBox>
 
-/**
- * A combobox filled with the various composition strategies
- * associated with a certain colorspace.
- */
+class KisCompositeOpListModel;
+class QStyledItemDelegate;
 
-class KRITAUI_EXPORT KisCmbComposite : public KComboBox
+class KRITAUI_EXPORT KisCompositeOpListView: public QListView
 {
-
     Q_OBJECT
-
+    
 public:
-
-    KisCmbComposite(QWidget * parent = 0, const char * name = 0);
-    virtual ~KisCmbComposite();
-
-    const QString& currentItem() const;
-
-    void setCompositeOpList(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist = QList<KoCompositeOp*>());
-    void setCurrent(const KoCompositeOp* op);
-    void setCurrent(const QString & s);
-
-signals:
-
-    void activated(const QString&);
-    void highlighted(const QString&);
-
-private slots:
-
-    void slotOpActivated(int i);
-    void slotOpHighlighted(int i);
-
+     KisCompositeOpListView(QWidget* parent=0);
+    
+    const KisCompositeOpListModel* getModel() const { return m_model; }
+    KisCompositeOpListModel*       getModel()       { return m_model; }
+    
+protected slots:
+    void slotIndexChanged(const QModelIndex& index);
+    
 private:
-    // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
-    void setCurrentText(const QString & s);
-    const QString& itemAt(int idx) const;
+    KisCompositeOpListModel* m_model;
+    QStyledItemDelegate*     m_delegate;
+};
 
-    KisCompositeOpsModel* m_lastModel;
-    KCategorizedSortFilterProxyModel* m_sortModel;
+class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCompositeOpListView
+{
+public:
+     KisCompositeOpListWidget(QWidget* parent=0);
+    ~KisCompositeOpListWidget();
+    
+    const KisCompositeOpListModel* getModel() const { return m_model; }
+    KisCompositeOpListModel*       getModel()       { return m_model; }
+    
+private:
+    KisCompositeOpListModel* m_model;
+    QStyledItemDelegate*     m_delegate;
+};
+
+class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
+{
+public:
+     KisCompositeOpComboBox(QWidget* parent=0);
+    ~KisCompositeOpComboBox();
+    
+    const KisCompositeOpListModel* getModel() const { return m_model; }
+    KisCompositeOpListModel*       getModel()       { return m_model; }
+    
+private:
+    KisCompositeOpListModel* m_model;
+    KisCompositeOpListView*  m_view;
+    QStyledItemDelegate*     m_delegate;
 };
 
 #endif

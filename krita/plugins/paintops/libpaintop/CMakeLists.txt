@@ -55,21 +55,22 @@ set(kritalibpaintop_LIB_SRCS
 )
 
 kde4_add_ui_files(kritalibpaintop_LIB_SRCS
-    wdgautobrush.ui
-    wdgBrushSizeOptions.ui
-    wdgcurveoption.ui
-    wdgcustombrush.ui
-    wdgtextbrush.ui
-    wdgincremental.ui
-    wdgmultisensorsselector.ui
-    wdgairbrush.ui
-    wdgfilteroption.ui
-    wdgcoloroptions.ui
-    wdgbrushchooser.ui
+    forms/wdgautobrush.ui
+    forms/wdgBrushSizeOptions.ui
+    forms/wdgcurveoption.ui
+    forms/wdgcustombrush.ui
+    forms/wdgtextbrush.ui
+    forms/wdgincremental.ui
+    forms/wdgmultisensorsselector.ui
+    forms/wdgairbrush.ui
+    forms/wdgfilteroption.ui
+    forms/wdgcoloroptions.ui
+    forms/wdgbrushchooser.ui
+    forms/wdgCompositeOpOption.ui
+    forms/SensorSelector.ui
     sensors/SensorDistanceConfiguration.ui
     sensors/SensorTimeConfiguration.ui
     sensors/SensorFadeConfiguration.ui
-    SensorSelector.ui
 )
 
 kde4_add_library(kritalibpaintop SHARED ${kritalibpaintop_LIB_SRCS} )

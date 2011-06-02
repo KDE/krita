@@ -36,6 +36,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 #include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -46,6 +47,7 @@
 #include "widgets/kis_cmb_idlist.h"
 #include "KoColorProfile.h"
 #include "widgets/kis_channelflags_widget.h"
+#include <kis_composite_ops_model.h>
 
 KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
         qint32 opacity,
@@ -80,8 +82,8 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->intOpacity->setRange(0, 100);
     m_page->intOpacity->setValue(opacity);
 
-    m_page->cmbComposite->setCompositeOpList(colorSpace->compositeOps());
-    m_page->cmbComposite->setCurrent(compositeOp);
+    m_page->cmbComposite->getModel()->validateCompositeOps(colorSpace);
+    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->getModel()->getIndex(KoID(compositeOp->id())));
 
     slotNameChanged(m_page->editName->text());
 
@@ -123,9 +125,14 @@ int KisDlgLayerProperties::getOpacity() const
     return opacity;
 }
 
-const QString& KisDlgLayerProperties::getCompositeOp() const
+QString KisDlgLayerProperties::getCompositeOp() const
 {
-    return m_page->cmbComposite->currentItem();
+    KoID compositeOp;
+    
+    if(m_page->cmbComposite->getModel()->getEntry(compositeOp, m_page->cmbComposite->currentIndex()))
+        return compositeOp.id();
+    
+    return KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 }
 
 QBitArray KisDlgLayerProperties::getChannelFlags() const

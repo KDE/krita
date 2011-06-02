@@ -20,26 +20,42 @@
 
 #include <kis_paintop_option.h>
 #include <krita_export.h>
+#include <QString>
 
 // const QString AIRBRUSH_ENABLED = "AirbrushOption/isAirbrushing";
 // const QString AIRBRUSH_RATE = "AirbrushOption/rate";
 
-class KisAirbrushWidget;
+class QLabel;
+class QModelIndex;
+class QPushButton;
+class KisCompositeOpListWidget;
+class KoID;
 
-/**
- * Allows the user to activate airbrushing of the brush mask (brush is painted at the same position over and over)
- * Rate is set in miliseconds.
- */
 class PAINTOP_EXPORT KisCompositeOpOption: public KisPaintOpOption
 {
+    Q_OBJECT
+    
 public:
-    KisCompositeOpOption(bool creatConfigWidget=false);
+     KisCompositeOpOption(bool creatConfigWidget=false);
+    ~KisCompositeOpOption();
     
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
 
+private slots:
+    void slotCompositeOpChanged(const QModelIndex& index);
+    void slotEraserToggled(bool toggled);
+    
 private:
-    KisAirbrushWidget * m_optionWidget;
+    void changeCompositeOp(const KoID& compositeOp);
+    
+private:
+    QLabel*                   m_label;
+    QPushButton*              m_bnEraser;
+    KisCompositeOpListWidget* m_list;
+    QString                   m_prevCompositeOpID;
+    QString                   m_currCompositeOpID;
+    bool                      m_createConfigWidget;
 
 };
 

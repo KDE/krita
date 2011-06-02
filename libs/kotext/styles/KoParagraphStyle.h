@@ -153,6 +153,8 @@ public:
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        
+        NormalLineHeight,         ///< bool, internal property for reserved usage
     };
 
     enum AutoSpace {
@@ -686,8 +688,6 @@ private:
 
     class Private;
     Private * const d;
-
-    bool normalLineHeight;
 };
 
 #endif

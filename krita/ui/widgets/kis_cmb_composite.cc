@@ -52,6 +52,8 @@ void KisCompositeOpListView::slotIndexChanged(const QModelIndex& index)
         
         for(; beg!=end; ++beg)
             setRowHidden(beg, expanded);
+        
+        emit sigCategoryToggled(index, !expanded);
     }
 }
 
@@ -91,10 +93,13 @@ KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     
     setMaxVisibleItems(100);
     setSizeAdjustPolicy(AdjustToContents);
+    m_view->setResizeMode(QListView::Adjust);
     
     setView(m_view);
     setModel(m_model);
     setItemDelegate(m_delegate);
+    
+    connect(m_view, SIGNAL(sigCategoryToggled(const QModelIndex&, bool)), SLOT(slotCategoryToggled(const QModelIndex&, bool)));
 }
 
 KisCompositeOpComboBox::~KisCompositeOpComboBox()
@@ -104,5 +109,17 @@ KisCompositeOpComboBox::~KisCompositeOpComboBox()
     delete m_delegate;
 }
 
-#include "kis_cmb_composite.moc"
+void KisCompositeOpComboBox::slotCategoryToggled(const QModelIndex& index, bool toggled)
+{
+    Q_UNUSED(index);
+    Q_UNUSED(toggled);
+    
+    //NOTE: this will (should) fit the size of the
+    //      popup widget to the view
+    //      don't know if this is expected behaviour
+    //      on all supported platforms.
+    //      Thre is nothing written about this in the docs.
+    showPopup();
+}
 
+#include "kis_cmb_composite.moc"

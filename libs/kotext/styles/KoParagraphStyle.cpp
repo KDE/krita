@@ -159,6 +159,19 @@ qreal KoParagraphStyle::propertyDouble(int key) const
     return variant.toDouble();
 }
 
+QTextLength KoParagraphStyle::propertyLength(int key) const
+{
+    QVariant variant = value(key);
+    if (variant.isNull())
+        return QTextLength(QTextLength::FixedLength, 0.0);
+    if (!variant.canConvert<QTextLength>())
+    {
+        kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
+        return QTextLength(QTextLength::FixedLength, 0.0);
+    }
+    return variant.value<QTextLength>();
+}
+
 int KoParagraphStyle::propertyInt(int key) const
 {
     QVariant variant = value(key);
@@ -693,47 +706,47 @@ QColor KoParagraphStyle::bottomBorderColor()
     return propertyColor(BottomBorderColor);
 }
 
-void KoParagraphStyle::setTopMargin(qreal topMargin)
+void KoParagraphStyle::setTopMargin(QTextLength topMargin)
 {
     setProperty(QTextFormat::BlockTopMargin, topMargin);
 }
 
-qreal KoParagraphStyle::topMargin() const
+QTextLength KoParagraphStyle::topMargin() const
 {
-    return propertyDouble(QTextFormat::BlockTopMargin);
+    return propertyLength(QTextFormat::BlockTopMargin);
 }
 
-void KoParagraphStyle::setBottomMargin(qreal margin)
+void KoParagraphStyle::setBottomMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockBottomMargin, margin);
 }
 
-qreal KoParagraphStyle::bottomMargin() const
+QTextLength KoParagraphStyle::bottomMargin() const
 {
-    return propertyDouble(QTextFormat::BlockBottomMargin);
+    return propertyLength(QTextFormat::BlockBottomMargin);
 }
 
-void KoParagraphStyle::setLeftMargin(qreal margin)
+void KoParagraphStyle::setLeftMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockLeftMargin, margin);
 }
 
-qreal KoParagraphStyle::leftMargin() const
+QTextLength KoParagraphStyle::leftMargin() const
 {
-    return propertyDouble(QTextFormat::BlockLeftMargin);
+    return propertyLength(QTextFormat::BlockLeftMargin);
 }
 
-void KoParagraphStyle::setRightMargin(qreal margin)
+void KoParagraphStyle::setRightMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockRightMargin, margin);
 }
 
-qreal KoParagraphStyle::rightMargin() const
+QTextLength KoParagraphStyle::rightMargin() const
 {
-    return propertyDouble(QTextFormat::BlockRightMargin);
+    return propertyLength(QTextFormat::BlockRightMargin);
 }
 
-void KoParagraphStyle::setMargin(qreal margin)
+void KoParagraphStyle::setMargin(QTextLength margin)
 {
     setTopMargin(margin);
     setBottomMargin(margin);
@@ -1181,25 +1194,25 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     bool hasMarginRight = false;
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
-        setLeftMargin(KoUnit::parseValue(marginLeft));
+        setLeftMargin(KoText::parseLength(marginLeft));
         hasMarginLeft = true;
     }
     const QString marginRight(styleStack.property(KoXmlNS::fo, "margin-right" ));
     if (!marginRight.isEmpty()) {
-        setRightMargin(KoUnit::parseValue(marginRight));
+        setRightMargin(KoText::parseLength(marginRight));
         hasMarginRight = true;
     }
     const QString marginTop(styleStack.property(KoXmlNS::fo, "margin-top"));
     if (!marginTop.isEmpty()) {
-        setTopMargin(KoUnit::parseValue(marginTop));
+        setTopMargin(KoText::parseLength(marginTop));
     }
     const QString marginBottom(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     if (!marginBottom.isEmpty()) {
-        setBottomMargin(KoUnit::parseValue(marginBottom));
+        setBottomMargin(KoText::parseLength(marginBottom));
     }
     const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
     if (!margin.isEmpty()) {
-        setMargin(KoUnit::parseValue(margin));
+        setMargin(KoText::parseLength(margin));
         hasMarginLeft = true;
         hasMarginRight = true;
     }
@@ -1825,7 +1838,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             && keys.contains(QTextFormat::BlockBottomMargin) && keys.contains(QTextFormat::BlockTopMargin))
     {
         if ((leftMargin() == rightMargin()) && (topMargin() == bottomMargin()) && (rightMargin() == topMargin())) {
-            style.addPropertyPt("fo:margin", leftMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin", leftMargin(), KoGenStyle::ParagraphType);
             keys.removeOne(QTextFormat::BlockLeftMargin);
             keys.removeOne(QTextFormat::BlockRightMargin);
             keys.removeOne(QTextFormat::BlockTopMargin);
@@ -1908,13 +1921,13 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         
         // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
-            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockTopMargin) {
-            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
         
         // Line spacing
         } else if ( key == KoParagraphStyle::MinimumLineHeight ||

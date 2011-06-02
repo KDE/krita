@@ -453,23 +453,23 @@ public:
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
-    qreal topMargin() const;
+    QTextLength topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal bottomMargin() const;
+    QTextLength bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal leftMargin() const;
+    QTextLength leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal rightMargin() const;
+    QTextLength rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     void setIsListHeader(bool on);
     bool isListHeader() const;
@@ -682,6 +682,7 @@ private:
      */
     void loadOdfProperties(KoShapeLoadingContext &scontext);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

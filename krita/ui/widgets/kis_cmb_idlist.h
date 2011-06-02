@@ -21,9 +21,8 @@
 #ifndef KIS_CMB_IDLIST_H_
 #define KIS_CMB_IDLIST_H_
 
-#include "kcombobox.h"
-
-#include "KoID.h"
+#include <QComboBox>
+#include <KoID.h>
 #include <krita_export.h>
 
 /**
@@ -31,12 +30,11 @@
  * descriptive (i18n'ed) text is displayed, but the various
  * signals return a KoID.
  */
-class KRITAUI_EXPORT KisCmbIDList : public KComboBox
+class KRITAUI_EXPORT KisCmbIDList: public QComboBox
 {
     Q_OBJECT
 
 public:
-
     KisCmbIDList(QWidget * parent = 0, const char * name = 0);
     virtual ~KisCmbIDList();
 
@@ -49,7 +47,6 @@ public:
     KoID currentItem() const;
 
 signals:
-
     void activated(const KoID &);
     void highlighted(const KoID &);
 
@@ -63,6 +60,5 @@ private:
     void setCurrentText(const QString & s);
 
     QList<KoID> m_list;
-
 };
 #endif

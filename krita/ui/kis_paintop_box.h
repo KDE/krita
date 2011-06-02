@@ -83,7 +83,7 @@ signals:
     void signalPaintopChanged(KisPaintOpPresetSP paintop);
 
 public slots:
-//     void colorSpaceChanged(const KoColorSpace *cs);
+    void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotSaveActivePreset();
@@ -106,7 +106,6 @@ private:
 private slots:
     void slotNodeChanged(const KisNodeSP node);
     void slotToggleEraseMode(bool checked);
-    void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();

@@ -210,7 +210,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_sliderOpacity      , SIGNAL(valueChanged(qreal))               , SLOT(slotOpacityChanged(qreal)));
     connect(m_paletteButton      , SIGNAL(clicked())                         , SLOT(slotSaveToFavouriteBrushes()));
     connect(m_cmbCompositeOp     , SIGNAL(activated(int))                    , SLOT(slotSetCompositeMode(int)));
-    connect(eraseAction          , SIGNAL(triggered(bool))                   , SLOT( slotToggleEraseMode(bool)));
+    connect(eraseAction          , SIGNAL(triggered(bool))                   , SLOT(slotToggleEraseMode(bool)));
     connect(hMirrorAction        , SIGNAL(triggered(bool))                   , SLOT(slotHorizontalMirrorChanged(bool)));
     connect(vMirrorAction        , SIGNAL(triggered(bool))                   , SLOT(slotVerticalMirrorChanged(bool)));
 

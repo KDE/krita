@@ -521,7 +521,7 @@ QTextLine restartLayout(QTextLayout *layout, int lineTextStartOfLastKeep)
     return line;
 }
 
-bool compareTab(const QTextOption::Tab &tab1, const QTextOption::Tab &tab2)
+bool compareTab(const KoText::Tab &tab1, const KoText::Tab &tab2)
 {
     return tab1.position < tab2.position;
 }
@@ -541,12 +541,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 {
     QTextBlock block(cursor->it.currentBlock());
     KoTextBlockData *blockData = dynamic_cast<KoTextBlockData *>(block.userData());
-    QTextBlockFormat format = block.blockFormat();
+    KoParagraphStyle format(block.blockFormat(), block.charFormat());
+    //QTextBlockFormat format = block.blockFormat();
 
     int dropCapsAffectsNMoreLines = 0;
     qreal dropCapsPositionAdjust;
 
-    KoText::Direction dir = static_cast<KoText::Direction>(format.intProperty(KoParagraphStyle::TextProgressionDirection));
+    KoText::Direction dir = format.textProgressionDirection();
     if (dir == KoText::InheritDirection)
         dir = parentTextDirection();
     if (dir == KoText::AutoDirection)
@@ -654,9 +655,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (formatRanges.count() != layout->additionalFormats().count())
         layout->setAdditionalFormats(formatRanges);
 
-    int dropCaps = format.boolProperty(KoParagraphStyle::DropCaps);
-    int dropCapsLength = format.intProperty(KoParagraphStyle::DropCapsLength);
-    int dropCapsLines = format.intProperty(KoParagraphStyle::DropCapsLines);
+    bool dropCaps = format.dropCaps();
+    int dropCapsLength = format.dropCapsLength();
+    int dropCapsLines = format.dropCapsLines();
     if (dropCaps && dropCapsLength != 0 && dropCapsLines > 1
             && dropCapsAffectsNMoreLines == 0 // first line of this para is not affected by a previous drop-cap
             && block.length() > 1) {
@@ -674,13 +675,13 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         // find out lineHeight for this block.
         QTextBlock::iterator it = block.begin();
         QTextFragment lineRepresentative = it.fragment();
-        qreal lineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+        qreal lineHeight = format.lineHeightAbsolute();
         qreal dropCapsHeight = 0;
         if (lineHeight == 0) {
             lineHeight = lineRepresentative.charFormat().fontPointSize();
-            qreal linespacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
+            qreal linespacing = format.lineSpacing();
             if (linespacing == 0) { // unset
-                int percent = format.intProperty(KoParagraphStyle::PercentLineHeight);
+                int percent = format.lineHeightPercent();
                 if (percent != 0)
                     linespacing = lineHeight * ((percent - 100) / 100.0);
                 else if (linespacing == 0)
@@ -688,14 +689,14 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
             }
             dropCapsHeight = linespacing * (dropCapsLines-1);
         }
-        const qreal minimum = format.doubleProperty(KoParagraphStyle::MinimumLineHeight);
+        const qreal minimum = format.minimumLineHeight();
         if (minimum > 0.0) {
             lineHeight = qMax(lineHeight, minimum);
         }
 
         dropCapsHeight += lineHeight * dropCapsLines;
 
-        int dropCapsStyleId = format.intProperty(KoParagraphStyle::DropCapsTextStyle);
+        int dropCapsStyleId = format.dropCapsTextStyleId();
         KoCharacterStyle *dropCapsCharStyle = 0;
         if (dropCapsStyleId > 0 && m_documentLayout->styleManager()) {
             dropCapsCharStyle = m_documentLayout->styleManager()->characterStyle(dropCapsStyleId);
@@ -733,8 +734,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_dropCapsNChars = 0;
     }
 
-    qreal leftMargin = format.leftMargin();
-    qreal rightMargin = format.rightMargin();
+    ///@TODO: check this : is m_parent->width the right function to call ?
+    qreal leftMargin = format.leftMargin().value(m_parent->width());
+    qreal rightMargin = format.rightMargin().value(m_parent->width());
 
     m_listIndent = 0;
     qreal listLabelIndent = 0;
@@ -771,7 +773,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     // Tabs
-    qreal tabStopDistance =  format.property(KoParagraphStyle::TabStopDistance).toDouble();
+    qreal tabStopDistance = format.tabStopDistance();
 
     if (tabStopDistance <= 0) {
         tabStopDistance = m_documentLayout->defaultTabSpacing();
@@ -779,8 +781,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     tabStopDistance *= qt_defaultDpiY() / 72.;
     option.setTabStop(tabStopDistance);
 
-    QList<QTextOption::Tab> tabs;
-    QVariant variant = format.property(KoParagraphStyle::TabPositions);
+    QList<KoText::Tab> tabs = format.tabPositions();
     qreal tabOffset = - left();
 
     if (m_documentLayout->relativeTabs()) {
@@ -790,21 +791,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
     qreal position = tabOffset * qt_defaultDpiY() / 72.;
-
-    if (!variant.isNull()) {
-        foreach(const QVariant &tv, qvariant_cast<QList<QVariant> >(variant)) {
-            KoText::Tab koTab = tv.value<KoText::Tab>();
-            QTextOption::Tab tab;
-
-            // conversion here is required because Qt thinks in device units and we don't
-            position = (koTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
-
-            tab.position = position;
-            tab.type = koTab.type;
-            tab.delimiter = koTab.delimiter;
-            tabs.append(tab);
-        }
-    }
 
     if (!tabs.isEmpty()) {
         //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
@@ -819,7 +805,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     position -= tabOffset * qt_defaultDpiY() / 72.;
     position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset * qt_defaultDpiY() / 72.;
     for(int i=0 ; i<16; ++i) { // let's just add 16 but we really should limit to pagewidth
-        QTextOption::Tab tab;
+        KoText::Tab tab;
 
         // conversion here is required because Qt thinks in device units and we don't
         tab.position = position;
@@ -827,7 +813,11 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         position += tabStopDistance;
     }
 
-    option.setTabs(tabs);
+    QList<QTextOption::Tab> qTabs;
+    ///@TODO: don't do this kind of conversion, we lose data for layout.
+    foreach (KoText::Tab kTab, tabs)
+        qTabs.append(QTextOption::Tab(kTab.position, kTab.type, kTab.delimiter));
+    option.setTabs(qTabs);
 
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);
@@ -856,7 +846,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     }
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (format.intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+        if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
             qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
             if (!m_documentLayout->relativeTabs()) {
                 listTab += leftMargin + m_indent;
@@ -864,7 +854,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 listTab -= leftMargin + m_indent; // express it relatively like other tabs
             }
 
-            foreach(QTextOption::Tab tab, tabs) {
+            foreach(KoText::Tab tab, tabs) {
                 qreal position = tab.position  * 72. / qt_defaultDpiY();
                 if (position > listLabelIndent) {
                     // found the relevant normal tab
@@ -972,7 +962,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
-    m_bottomSpacing = format.bottomMargin();
+    ///@TODO: fixme : do not use rawValue, use value instead
+    m_bottomSpacing = format.bottomMargin().rawValue();
 
     layout->endLayout();
     setVirginPage(false);

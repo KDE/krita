@@ -1822,6 +1822,19 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         }
     }
     
+    if (keys.contains(QTextFormat::BlockLeftMargin) && keys.contains(QTextFormat::BlockRightMargin)
+            && keys.contains(QTextFormat::BlockBottomMargin) && keys.contains(QTextFormat::BlockTopMargin))
+    {
+        if ((leftMargin() == rightMargin()) && (topMargin() == bottomMargin()) && (rightMargin() == topMargin())) {
+            style.addPropertyPt("fo:margin", leftMargin(), KoGenStyle::ParagraphType);
+            keys.removeOne(QTextFormat::BlockLeftMargin);
+            keys.removeOne(QTextFormat::BlockRightMargin);
+            keys.removeOne(QTextFormat::BlockTopMargin);
+            keys.removeOne(QTextFormat::BlockBottomMargin);
+        }
+    }
+    
+    
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
@@ -1893,7 +1906,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BottomPadding) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::ParagraphType);
-            // Margin
+        
+        // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
@@ -1902,7 +1916,8 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
-    // Line spacing
+        
+        // Line spacing
         } else if ( key == KoParagraphStyle::MinimumLineHeight ||
                     key == KoParagraphStyle::LineSpacing ||
                     key == KoParagraphStyle::PercentLineHeight ||

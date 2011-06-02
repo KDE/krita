@@ -585,8 +585,10 @@ void KisPaintopBox::slotOpacityChanged(qreal value)
 void KisPaintopBox::slotPresetChanged()
 {
     if(m_activePreset->settings()->getBool("PressureOpacity")) {
+        m_sliderOpacity->blockSignals(true);
+        m_sliderOpacity->setValue(m_activePreset->settings()->getDouble("OpacityValue"));
+        m_sliderOpacity->blockSignals(false);
         m_sliderOpacity->setDisabled(false);
-        m_sliderOpacity->setValue(m_activePreset->settings()->getDouble("OpacityValue"), false);
     }
     else m_sliderOpacity->setDisabled(true);
     

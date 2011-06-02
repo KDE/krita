@@ -182,14 +182,14 @@ void KisAbstractSliderSpinBox::mouseReleaseEvent(QMouseEvent* e)
     //Step up/down for buttons
     //Emualting mouse grab too
     if (upButtonRect(spinOpts).contains(e->pos()) && d->upButtonDown) {
-        setInternalValue(d->value + d->singleStep, true);
+        setInternalValue(d->value + d->singleStep);
     } else if (downButtonRect(spinOpts).contains(e->pos()) && d->downButtonDown) {
-        setInternalValue(d->value - d->singleStep, true);
+        setInternalValue(d->value - d->singleStep);
     } else if (progressRect(spinOpts).contains(e->pos()) &&
                !(d->edit->isVisible()) &&
                !(d->upButtonDown || d->downButtonDown)) {
         //Snap to percentage for progress area
-        setInternalValue(valueForX(e->pos().x()), true);
+        setInternalValue(valueForX(e->pos().x()));
     }
 
     d->upButtonDown = false;
@@ -204,7 +204,7 @@ void KisAbstractSliderSpinBox::mouseMoveEvent(QMouseEvent* e)
     //Respect emulated mouse grab.
     if (e->buttons() & Qt::LeftButton &&
         !(d->downButtonDown || d->upButtonDown)) {
-        setInternalValue(valueForX(e->pos().x()), true);
+        setInternalValue(valueForX(e->pos().x()));
         update();
     }
 }
@@ -220,11 +220,11 @@ void KisAbstractSliderSpinBox::keyPressEvent(QKeyEvent* e)
     switch (e->key()) {
     case Qt::Key_Up:
     case Qt::Key_Right:
-        setInternalValue(d->value + d->singleStep, true);
+        setInternalValue(d->value + d->singleStep);
         break;
     case Qt::Key_Down:
     case Qt::Key_Left:
-        setInternalValue(d->value - d->singleStep, true);
+        setInternalValue(d->value - d->singleStep);
         break;
     case Qt::Key_Enter: //Line edit isn't "accepting" key strokes..
     case Qt::Key_Return:
@@ -247,7 +247,7 @@ bool KisAbstractSliderSpinBox::eventFilter(QObject* recv, QEvent* e)
         switch (keyEvent->key()) {
         case Qt::Key_Enter:
         case Qt::Key_Return:
-            setInternalValue(d->edit->text().toDouble()*d->factor, true);
+            setInternalValue(d->edit->text().toDouble()*d->factor);
             hideEdit();
             return true;
         case Qt::Key_Escape:
@@ -463,9 +463,9 @@ int KisSliderSpinBox::value()
     return d->value;
 }
 
-void KisSliderSpinBox::setValue(int value, bool emitSignal)
+void KisSliderSpinBox::setValue(int value)
 {
-    setInternalValue(value, emitSignal);
+    setInternalValue(value);
     update();
 }
 
@@ -486,13 +486,11 @@ void KisSliderSpinBox::setPageStep(int value)
     Q_UNUSED(value);
 }
 
-void KisSliderSpinBox::setInternalValue(int _value, bool emitSignal)
+void KisSliderSpinBox::setInternalValue(int _value)
 {
     Q_D(KisAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
-    
-    if(emitSignal)
-        emit(valueChanged(value()));
+    emit(valueChanged(value()));
 }
 
 struct KisDoubleSliderSpinBoxPrivate : public KisAbstractSliderSpinBoxPrivate {
@@ -523,10 +521,10 @@ qreal KisDoubleSliderSpinBox::value()
     return (qreal)d->value / d->factor;
 }
 
-void KisDoubleSliderSpinBox::setValue(qreal value, bool emitSignal)
+void KisDoubleSliderSpinBox::setValue(qreal value)
 {
     Q_D(KisAbstractSliderSpinBox);
-    setInternalValue(d->value = value * d->factor, emitSignal);
+    setInternalValue(d->value = value * d->factor);
     update();
 }
 
@@ -542,11 +540,9 @@ QString KisDoubleSliderSpinBox::valueString() const
     return QString::number((qreal)d->value / d->factor, 'f', d->validator->decimals());
 }
 
-void KisDoubleSliderSpinBox::setInternalValue(int _value, bool emitSignal)
+void KisDoubleSliderSpinBox::setInternalValue(int _value)
 {
     Q_D(KisAbstractSliderSpinBox);
     d->value = qBound(d->minimum, _value, d->maximum);
-    
-    if(emitSignal)
-        emit(valueChanged(value()));
+    emit(valueChanged(value()));
 }

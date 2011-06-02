@@ -1276,7 +1276,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString tabStopDistance(styleStack.property(KoXmlNS::style, "tab-stop-distance"));
     if (!tabStopDistance.isEmpty()) {
         qreal stopDistance = KoUnit::parseValue(tabStopDistance);
-        if (stopDistance > 0)
+        if (stopDistance >= 0)
             setTabStopDistance(stopDistance);
     }
     KoXmlElement tabStops(styleStack.childNode(KoXmlNS::style, "tab-stops"));

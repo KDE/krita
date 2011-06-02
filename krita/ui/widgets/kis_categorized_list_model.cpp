@@ -77,24 +77,3 @@ void KisCategorizedItemDelegate2::paint(QPainter* painter, const QStyleOptionVie
         painter->drawPolygon(triangle);
     }
 }
-/*
-KisCategorizedListView::KisCategorizedListView(QWidget* parent):
-    QListView(parent), m_delegate(0) { }
-
-KisCategorizedListView::~KisCategorizedListView()
-{
-    delete m_delegate;
-}
-
-void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
-{
-    QModelIndex index = QListView::indexAt(event->pos());
-    
-    if(model()->data(index, IsHeaderRole).toBool()) {
-        bool expanded = model()->data(index, ExpandCategoryRole).toBool();
-        model()->setData(index, !expanded, ExpandCategoryRole);
-        m_ignoreCurrentChanged = true;
-    }
-    else QAbstractItemView::mousePressEvent(event);
-}//*/
-

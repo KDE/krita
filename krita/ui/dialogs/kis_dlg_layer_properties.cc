@@ -83,7 +83,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(const QString& deviceName,
     m_page->intOpacity->setValue(opacity);
 
     m_page->cmbComposite->getModel()->validateCompositeOps(colorSpace);
-    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->getModel()->getIndex(KoID(compositeOp->id())));
+    m_page->cmbComposite->setCurrentIndex(m_page->cmbComposite->indexOf(KoID(compositeOp->id())));
 
     slotNameChanged(m_page->editName->text());
 
@@ -129,7 +129,7 @@ QString KisDlgLayerProperties::getCompositeOp() const
 {
     KoID compositeOp;
     
-    if(m_page->cmbComposite->getModel()->getEntry(compositeOp, m_page->cmbComposite->currentIndex()))
+    if(m_page->cmbComposite->entryAt(compositeOp, m_page->cmbComposite->currentIndex()))
         return compositeOp.id();
     
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();

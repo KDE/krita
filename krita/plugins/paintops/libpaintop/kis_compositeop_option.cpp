@@ -94,7 +94,7 @@ void KisCompositeOpOption::slotCompositeOpChanged(const QModelIndex& index)
 {
     KoID compositeOp;
     
-    if(m_list->getModel()->getEntry(compositeOp, index.row()))
+    if(m_list->entryAt(compositeOp, index.row()))
         changeCompositeOp(compositeOp);
 }
 

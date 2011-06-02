@@ -26,9 +26,6 @@
 #include <klocale.h>
 #include <kis_debug.h>
 #include <KoCompositeOp.h>
-#include <KCategorizedSortFilterProxyModel>
-#include <kis_categorized_item_delegate.h>
-
 #include "kis_categorized_list_model.h"
 #include "../kis_composite_ops_model.h"
 

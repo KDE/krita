@@ -66,6 +66,7 @@ public:
         typedef typename QList<TCategory>::const_iterator       ListItr;
         typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
         
+        m_categories.clear();
         QList<TCategory> categories = map.uniqueKeys();
         
         for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
@@ -96,7 +97,7 @@ public:
         itr->disabled.resize(itr->entries.size());
     }
     
-    bool getEntry(TEntry& entry, int idx) const {
+    bool entryAt(TEntry& entry, int idx) const {
         Index index = getIndex(idx);
         
         if(isValidIndex(index) && !isHeader(index)) {
@@ -106,7 +107,7 @@ public:
         return false;
     }
     
-    int getIndex(const TEntry& entry) const {
+    int indexOf(const TEntry& entry) const {
         typedef typename QList<TEntry>::const_iterator Itr;
         qint32 row = 0;
         
@@ -169,10 +170,10 @@ public:
     }
     
     virtual bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::EditRole) {
-        Index index = getIndex(idx.row());
-        
-        if(!isValidIndex(index))
+        if(!idx.isValid())
             return false;
+        
+        Index index = getIndex(idx.row());
         
         if(role == ExpandCategoryRole && isHeader(index)) {
             emit layoutAboutToBeChanged();
@@ -184,10 +185,10 @@ public:
     }
     
     virtual Qt::ItemFlags flags(const QModelIndex& idx) const {
-        Index index = getIndex(idx.row());
-        
-        if(!isValidIndex(index))
+        if(!idx.isValid())
             return 0;
+        
+        Index index = getIndex(idx.row());
         
         if(isHeader(index))
             return Qt::ItemIsEnabled;
@@ -198,10 +199,10 @@ public:
         return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
     }
     
+protected:
     bool isValidIndex(const Index& index) const { return index.first >= 0;                     }
     bool isHeader(const Index& index)     const { return index.first >= 0 && index.second < 0; }
     
-protected:
     const Index getIndex(int index) const {
         if(index >= 0) {
             int    currRow       = 0;
@@ -253,29 +254,5 @@ private:
     QAbstractListModel* m_model;
     QIcon               m_errorIcon;
 };
-/*
-class KRITAUI_EXPORT KisCategorizedListView: public QListView
-{
-    Q_OBJECT
-    
-public:
-     KisCategorizedListView(QWidget* parent=0);
-    ~KisCategorizedListView();
-    
-    template<class T, class U>
-    void setModel(KisCategorizedListModel<T,U>* model) {
-        delete m_delegate;
-        m_delegate = new ListDelegate(model);
-        QListView::setModel(model);
-        QListView::setItemDelegate(m_delegate);
-    }
-
-private:
-    virtual void mousePressEvent(QMouseEvent* event);
-    
-private:
-    QStyledItemDelegate* m_delegate;
-    bool                 m_ignoreCurrentChanged;
-};//*/
 
 #endif // KIS_CATEGORIZED_LIST_VIEW_H

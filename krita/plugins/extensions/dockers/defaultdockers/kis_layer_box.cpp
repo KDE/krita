@@ -277,7 +277,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
     KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
-    int  index = m_wdgLayerBox->cmbComposite->getModel()->getIndex(cmpOp);
+    int  index = m_wdgLayerBox->cmbComposite->indexOf(cmpOp);
     
     m_wdgLayerBox->cmbComposite->blockSignals(true);
     m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
@@ -441,7 +441,7 @@ void KisLayerBox::slotCompositeOpChanged(int index)
 {
     KoID compositeOp;
     
-    if(m_wdgLayerBox->cmbComposite->getModel()->getEntry(compositeOp, index))
+    if(m_wdgLayerBox->cmbComposite->entryAt(compositeOp, index))
         m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
 }
 

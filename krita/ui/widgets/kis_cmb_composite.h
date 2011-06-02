@@ -23,10 +23,10 @@
 
 #include <krita_export.h>
 #include "kcombobox.h"
-// #include "KoCompositeOp.h"
 
 #include <QListView>
 #include <QComboBox>
+#include <kis_composite_ops_model.h>
 
 class KisCompositeOpListModel;
 class QStyledItemDelegate;
@@ -36,53 +36,54 @@ class KRITAUI_EXPORT KisCompositeOpListView: public QListView
     Q_OBJECT
 public:
     KisCompositeOpListView(QWidget* parent=0);
-    const KisCompositeOpListModel* getModel() const { return m_model; }
-    KisCompositeOpListModel*       getModel()       { return m_model; }
     
 signals:
     void sigCategoryToggled(const QModelIndex& index, bool toggled);
     
 protected slots:
     void slotIndexChanged(const QModelIndex& index);
-    
-private:
-    KisCompositeOpListModel* m_model;
-    QStyledItemDelegate*     m_delegate;
 };
 
 
-class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCompositeOpListView
+template<class TModel>
+class KRITAUI_EXPORT KisCategorizedWidgetBase
+{
+public:
+    KisCategorizedWidgetBase():
+        m_model(0), m_delegate(0) { }
+    
+    int  indexOf(const KoID& entry)       const { return m_model->indexOf(entry);        }
+    bool entryAt(KoID& result, int index) const { return m_model->entryAt(result,index); }
+    
+    const TModel* getModel() const { return m_model; }
+    TModel*       getModel()       { return m_model; }
+    
+protected:
+    TModel*              m_model;
+    QStyledItemDelegate* m_delegate;
+};
+
+
+class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCompositeOpListView, public KisCategorizedWidgetBase<KisCompositeOpListModel>
 {
 public:
      KisCompositeOpListWidget(QWidget* parent=0);
     ~KisCompositeOpListWidget();
-    
-    const KisCompositeOpListModel* getModel() const { return m_model; }
-    KisCompositeOpListModel*       getModel()       { return m_model; }
-    
-private:
-    KisCompositeOpListModel* m_model;
-    QStyledItemDelegate*     m_delegate;
 };
 
 
-class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox
+class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox, public KisCategorizedWidgetBase<KisCompositeOpListModel>
 {
     Q_OBJECT
 public:
      KisCompositeOpComboBox(QWidget* parent=0);
     ~KisCompositeOpComboBox();
     
-    const KisCompositeOpListModel* getModel() const { return m_model; }
-    KisCompositeOpListModel*       getModel()       { return m_model; }
-    
 private slots:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     
 private:
-    KisCompositeOpListModel* m_model;
-    KisCompositeOpListView*  m_view;
-    QStyledItemDelegate*     m_delegate;
+    KisCompositeOpListView* m_view;
 };
 
 #endif

@@ -517,7 +517,7 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         m_prevCompositeOpID = m_currCompositeOpID;
         m_currCompositeOpID = compositeOpID;
         
-        int  index          = m_cmbCompositeOp->getModel()->getIndex(KoID(m_currCompositeOpID));
+        int  index          = m_cmbCompositeOp->indexOf(KoID(m_currCompositeOpID));
         bool isEraseModeSet = (m_currCompositeOpID == COMPOSITE_ERASE);
         
         m_cmbCompositeOp->blockSignals(true);
@@ -539,7 +539,7 @@ void KisPaintopBox::slotSetCompositeMode(int index)
     if(m_activePreset->settings()->hasProperty("CompositeOp")) {
         KoID compositeOp;
     
-        if(m_cmbCompositeOp->getModel()->getEntry(compositeOp, index)) {
+        if(m_cmbCompositeOp->entryAt(compositeOp, index)) {
             m_activePreset->settings()->setProperty("CompositeOp", compositeOp.id());
             m_optionWidget->setConfiguration(m_activePreset->settings().data());
             updateCompositeOp(compositeOp.id());
@@ -592,8 +592,14 @@ void KisPaintopBox::slotPresetChanged()
     }
     else m_sliderOpacity->setDisabled(true);
     
-    if(m_activePreset->settings()->hasProperty("CompositeOp"))
+    if(m_activePreset->settings()->hasProperty("CompositeOp")) {
+        m_cmbCompositeOp->setDisabled(false);
         updateCompositeOp(m_activePreset->settings()->getString("CompositeOp"));
+    }
+    else {
+        updateCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
+        m_cmbCompositeOp->setDisabled(true);
+    }
 }
 
 

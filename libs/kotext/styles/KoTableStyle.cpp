@@ -533,7 +533,6 @@ bool KoTableStyle::isEmpty() const
 void KoTableStyle::saveOdf(KoGenStyle &style)
 {
     QList<int> keys = d->stylesPrivate.keys();
-    bool didMargins = false;
     if ((hasProperty(QTextFormat::FrameLeftMargin)) && 
         (hasProperty(QTextFormat::FrameRightMargin)) && 
         (hasProperty(QTextFormat::FrameTopMargin)) && 
@@ -541,7 +540,10 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
         (rightMargin() == leftMargin()) && (leftMargin() == topMargin()) && (topMargin() == bottomMargin()))
     {
         style.addPropertyPt("fo:margin", topMargin(), KoGenStyle::TableType);
-        didMargins = true;
+        keys.removeAll(QTextFormat::FrameBottomMargin);
+        keys.removeAll(QTextFormat::FrameTopMargin);
+        keys.removeAll(QTextFormat::FrameRightMargin);
+        keys.removeAll(QTextFormat::FrameLeftMargin);
     }
     foreach(int key, keys) {
         if (key == QTextFormat::FrameWidth) {
@@ -577,13 +579,13 @@ void KoTableStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::TableType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameLeftMargin) && !didMargins) {
+        } else if ((key == QTextFormat::FrameLeftMargin)) {
             style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameRightMargin) && !didMargins) {
+        } else if ((key == QTextFormat::FrameRightMargin)) {
             style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameTopMargin) && !didMargins) {
+        } else if ((key == QTextFormat::FrameTopMargin)) {
             style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::TableType);
-        } else if ((key == QTextFormat::FrameBottomMargin) && !didMargins) {
+        } else if ((key == QTextFormat::FrameBottomMargin)) {
             style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::TableType);
         } else if (key == KoTableStyle::CollapsingBorders) {
             if (collapsingBorderModel())

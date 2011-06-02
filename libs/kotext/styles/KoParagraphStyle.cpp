@@ -1924,7 +1924,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() > 0) {
+            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() >= 0) {
                 style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {

@@ -978,7 +978,8 @@ qreal KoTextLayoutArea::listIndent() const
 
 qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
 {
-    if ((block.blockFormat().property(KoParagraphStyle::AutoTextIndent).toBool())) {
+    KoParagraphStyle format (block.blockFormat(), block.charFormat());
+    if (format.autoTextIndent()) {
         // if auto-text-indent is set,
         // return an indent approximately 3-characters wide as per current font
         QTextCursor blockCursor(block);
@@ -990,7 +991,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
             return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }
-    return block.blockFormat().textIndent();
+    return format.textIndent().value(width());
 }
 
 qreal KoTextLayoutArea::x() const

@@ -766,14 +766,14 @@ Qt::Alignment KoParagraphStyle::alignment() const
     return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
 }
 
-void KoParagraphStyle::setTextIndent(qreal margin)
+void KoParagraphStyle::setTextIndent(QTextLength margin)
 {
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-qreal KoParagraphStyle::textIndent() const
+QTextLength KoParagraphStyle::textIndent() const
 {
-    return propertyDouble(QTextFormat::TextIndent);
+    return propertyLength(QTextFormat::TextIndent);
 }
 
 void KoParagraphStyle::setAutoTextIndent(bool on)
@@ -1229,7 +1229,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     else {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));
         if (!textIndent.isEmpty()) {
-            setTextIndent(KoUnit::parseValue(textIndent));
+            setTextIndent(KoText::parseLength(textIndent));
         }
     }
 
@@ -1954,7 +1954,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             }
     //
         } else if (key == QTextFormat::TextIndent) {
-            style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TabStopDistance) {

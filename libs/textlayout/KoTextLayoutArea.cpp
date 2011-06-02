@@ -734,9 +734,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_dropCapsNChars = 0;
     }
 
-    ///@TODO: check this : is m_parent->width the right function to call ?
-    qreal leftMargin = format.leftMargin().value(m_parent->width());
-    qreal rightMargin = format.rightMargin().value(m_parent->width());
+    ///@TODO: check this : is width the right function to call ?
+    qreal leftMargin = format.leftMargin().value(width());
+    qreal rightMargin = format.rightMargin().value(width());
 
     m_listIndent = 0;
     qreal listLabelIndent = 0;

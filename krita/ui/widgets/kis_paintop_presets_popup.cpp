@@ -43,6 +43,8 @@
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
 
+#include <widgets/kis_small_preset_handler.h>
+
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
 #include "kis_config.h"
@@ -111,19 +113,22 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     m_d->settingsWidget = 0;
     setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->bnSave, SIGNAL(clicked()),
             this, SIGNAL(savePresetClicked()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.bnDefaultPreset, SIGNAL(clicked()),
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->bnDefaultPreset, SIGNAL(clicked()),
             this, SIGNAL(defaultPresetClicked()));
 
-    connect(m_d->uiWdgPaintOpPresetSettings.txtPreset, SIGNAL(textChanged(QString)),
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset, SIGNAL(textChanged(QString)),
             this, SIGNAL(presetNameLineEditChanged(QString)));
 
     connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
             this, SIGNAL(paintopActivated(QString)));
 
-
+    //TODO added now
+    connect(this, SIGNAL(paintopActivated(QString)),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(currentPaintopChanged(QString)));
+    
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
     m_d->ignoreHideEvents = false;
@@ -146,8 +151,8 @@ KisPaintOpPresetsPopup::~KisPaintOpPresetsPopup()
 void KisPaintOpPresetsPopup::slotCheckPresetValidity()
 {
     if (m_d->settingsWidget){
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setEnabled( m_d->settingsWidget->presetIsValid() );
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setEnabled( m_d->settingsWidget->presetIsValid() );
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->bnSave->setEnabled( m_d->settingsWidget->presetIsValid() );
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset->setEnabled( m_d->settingsWidget->presetIsValid() );
     }
 }
 
@@ -190,19 +195,19 @@ void KisPaintOpPresetsPopup::changeSavePresetButtonText(bool change)
 
     if (change) {
         palette.setColor(QPalette::Base, QColor(255,200,200));
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Overwrite Preset"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->bnSave->setText(i18n("Overwrite Preset"));
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset->setPalette(palette);
     }
     else {
-        m_d->uiWdgPaintOpPresetSettings.bnSave->setText(i18n("Save to Presets"));
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setPalette(palette);
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->bnSave->setText(i18n("Save to Presets"));
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset->setPalette(palette);
     }
 }
 
 
 QString KisPaintOpPresetsPopup::getPresetName() const
 {
-    return m_d->uiWdgPaintOpPresetSettings.txtPreset->text();
+    return m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset->text();
 }
 
 void KisPaintOpPresetsPopup::setPreset(KisPaintOpPresetSP preset)
@@ -271,7 +276,7 @@ void KisPaintOpPresetsPopup::showScratchPad()
 
 void KisPaintOpPresetsPopup::resourceSelected(KoResource* resource)
 {
-        m_d->uiWdgPaintOpPresetSettings.txtPreset->setText(resource->name());
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->txtPreset->setText(resource->name());
 }
 
 void KisPaintOpPresetsPopup::setPaintOpList(const QList< KisPaintOpFactory* >& list)

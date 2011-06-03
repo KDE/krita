@@ -3,6 +3,7 @@
  *  Copyright (c) 2009 Sven Langkamp <sven.langkamp@gmail.com>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -216,6 +217,11 @@ void KisPresetChooser::setShowAll(bool show)
     updateViewSettings();
 }
 
+void KisPresetChooser::showButtons(bool show)
+{
+    m_chooser->showButtons(show);
+}
+
 void KisPresetChooser::setViewMode(KisPresetChooser::ViewMode mode)
 {
     m_mode = mode;
@@ -246,10 +252,15 @@ void KisPresetChooser::updateViewSettings()
         m_chooser->setRowHeight(floor(width/cols));
         m_chooser->setColumnCount(cols);
         m_delegate->setShowText(false);
-    } else {
+    } else if (m_mode == DETAIL) {
         m_chooser->setColumnCount(1);
         m_delegate->setShowText(true);
+    } else if (m_mode == STRIP) {
+        m_chooser->setRowCount(1);
+        m_chooser->setColumnWidth(m_chooser->viewSize().height());
+        m_delegate->setShowText(false);
     }
+    
 }
 
 #include "kis_preset_chooser.moc"

@@ -815,8 +815,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     QList<QTextOption::Tab> qTabs;
     ///@TODO: don't do this kind of conversion, we lose data for layout.
-    foreach (KoText::Tab kTab, tabs)
+    foreach (KoText::Tab kTab, tabs) {
+#if QT_VERSION >= 0x040700
         qTabs.append(QTextOption::Tab(kTab.position, kTab.type, kTab.delimiter));
+#else
+        QTextOption::Tab tab;
+        tab.position = kTab.position;
+        tab.type = kTab.type;
+        tab.delimiter = kTab.delimiter;
+        qTabs.append(tab);
+#endif
+    }
     option.setTabs(qTabs);
 
     //Now once we know the physical context we can work on the borders of the paragraph

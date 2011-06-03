@@ -79,8 +79,6 @@ void KisCompositeOpOption::changeCompositeOp(const KoID& compositeOp)
     
     if(m_createConfigWidget) {
         m_label->setText(compositeOp.name());
-        m_list->setDisabled(m_currCompositeOpID == "erase");
-        
         m_bnEraser->blockSignals(true);
         m_bnEraser->setChecked(m_currCompositeOpID == "erase");
         m_bnEraser->blockSignals(false);

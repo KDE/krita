@@ -248,7 +248,7 @@ public:
 
         KoPathPoint * nearestPoint = 0;
         qreal minDistance = HUGE_VAL;
-        uint grabSensitivity = q->canvas()->resourceManager()->grabSensitivity();
+        uint grabSensitivity = q->grabSensitivity();
         qreal maxDistance = q->canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
 
         foreach(KoShape *shape, shapes) {
@@ -400,10 +400,8 @@ public:
         q->canvas()->snapGuide()->reset();
         angleSnapStrategy = 0;
 
-        if (shape!=0) {
-           delete shape;
-           shape=0;
-        }
+        delete shape;
+        shape=0;
 
         existingStartPoint = 0;
         existingEndPoint = 0;

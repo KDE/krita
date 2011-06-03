@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,6 +21,7 @@
 #define KOTOOL_H
 
 #include <QString>
+#include <QList>
 #include <QObject>
 #include <QCursor>
 #include <QStringList>
@@ -33,6 +35,7 @@ class KoPointerEvent;
 class KoViewConverter;
 class KoToolSelection;
 class KoToolBasePrivate;
+class KoShapeControllerBase;
 
 class KAction;
 class QAction;
@@ -68,6 +71,13 @@ public:
     virtual ~KoToolBase();
 
     /**
+     * connect the tool to the new shapecontroller. Old connections are removed.
+     *
+     * @param shapeController the new shape controller
+     */
+    void updateShapeController(KoShapeControllerBase *shapeController);
+
+    /**
      * request a repaint of the decorations to be made. This triggers
      * an update call on the canvas, but does not paint directly.
      */
@@ -96,7 +106,7 @@ public:
      *
      * @see m_optionWidgets
      */
-    QMap<QString, QWidget *> optionWidgets();
+    QList<QWidget *> optionWidgets();
 
     /**
      * Returns the internal selection option of this tool.
@@ -378,7 +388,7 @@ protected:
      * Sets the option widget to 0 by default.
      */
     virtual QWidget *createOptionWidget();
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
     /**
      * Add an action under the given name to the collection.
@@ -399,6 +409,12 @@ protected:
      * @see popupActionList
      */
     void setPopupActionList(const QList<QAction*> &list);
+
+    /// Convenience function to get the current handle radius
+    uint handleRadius() const;
+
+    /// Convencience function to get the current grab sensitivity
+    uint grabSensitivity() const;
 
     /**
     * Returns a handle grab rect at the given position.

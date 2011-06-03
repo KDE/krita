@@ -40,7 +40,6 @@ class KoShapeControllerBase;
 class KisView2;
 class KisChildDoc;
 class KisUndoAdapter;
-class KisNodeModel;
 /**
  * The class that represents a Krita document containing content and
    settings.
@@ -143,12 +142,6 @@ public:
      * Add a node to the shape controller
      */
     KoShape * addShape(const KisNodeSP node);
-
-    /**
-     * The layer model provides a light-weight Qt model-view
-     * compatible model on the internal Krita image layer hierarchy.
-     */
-    KisNodeModel * nodeModel() const;
 
 signals:
 

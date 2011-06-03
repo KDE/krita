@@ -39,7 +39,9 @@ class DigitalMixerPatch : public KoColorPatch {
         }
 };
 
-DigitalMixerDock::DigitalMixerDock( ) : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0), m_tellCanvas(true)
+DigitalMixerDock::DigitalMixerDock( ) 
+    : QDockWidget(i18n("Digital Colors Mixer")), m_canvas(0)
+    , m_tellCanvas(true)
 {
     QColor initColors[6] = { Qt::black, Qt::white, Qt::red, Qt::green, Qt::blue, Qt::yellow };
     
@@ -94,6 +96,10 @@ DigitalMixerDock::DigitalMixerDock( ) : QDockWidget(i18n("Digital Colors Mixer")
 
 void DigitalMixerDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+    
     m_canvas = canvas;
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));

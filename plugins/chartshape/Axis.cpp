@@ -687,6 +687,10 @@ void Axis::Private::createStockDiagram()
     kdStockDiagram = new KDChart::StockDiagram( plotArea->kdChart(), kdPlane );
     registerDiagram( kdStockDiagram );
 
+    KDChartModel *model = dynamic_cast<KDChartModel*>( kdStockDiagram->model() );
+    Q_ASSERT( model );
+    model->setDataDimensions( 3 );
+
 #if 0  // Stacked and Percent not supported by KDChart.
     if ( plotAreaChartSubType == StackedChartSubtype )
         kdStockDiagram->setType( KDChart::StockDiagram::Stacked );
@@ -1162,6 +1166,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
 {
     KoStyleStack &styleStack = context.odfLoadingContext().styleStack();
     OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    bool reverseAxis = false;
 
     d->title->setVisible( false );
 
@@ -1290,6 +1295,12 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
             setScalingLogarithmic( true );
         }
 
+        if ( styleStack.hasProperty( KoXmlNS::chart, "reverse-direction" )
+             && styleStack.property( KoXmlNS::chart, "reverse-direction" ) == "true" )
+        {
+            reverseAxis = true;
+        }
+
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-major" ) )
             setMajorInterval( KoUnit::parseValue( styleStack.property( KoXmlNS::chart, "interval-major" ) ) );
         if ( styleStack.hasProperty( KoXmlNS::chart, "interval-minor-divisor" ) )
@@ -1317,6 +1328,29 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 d->kdPlane->setVerticalRange( qMakePair( minimum, maximum ) );
             else
                 d->kdPlane->setHorizontalRange( qMakePair( minimum, maximum ) );
+        }
+        styleStack.setTypeProperties( "text" );
+        if ( styleStack.hasProperty( KoXmlNS::fo, "font-size" ) )
+        {
+            QString fontSizeString =  styleStack.property( KoXmlNS::fo, "font-size" );
+            const QString unitString = fontSizeString.right( 2 );
+            fontSizeString.remove( unitString );
+            bool ok = false;
+            qreal fontSize = fontSizeString.toDouble( &ok );
+            if (unitString == "cm")
+                fontSize = CM_TO_POINT(fontSize);
+            else if (unitString == "pc")
+                fontSize = PI_TO_POINT(fontSize);
+            else if (unitString == "mm")
+                fontSize = MM_TO_POINT(fontSize);
+            else if (unitString == "in")
+                fontSize = INCH_TO_POINT(fontSize);
+            if ( ok )
+            {
+                KDChart::TextAttributes tatt =  kdAxis()->textAttributes();
+                tatt.setFontSize( KDChart::Measure( fontSize, KDChartEnums::MeasureCalculationModeAbsolute ) );
+                kdAxis()->setTextAttributes( tatt );
+            }
         }
     } else {
         setShowLabels( KoOdfWorkaround::fixMissingStyle_DisplayLabel( axisElement, context ) );
@@ -1356,6 +1390,22 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
     ta.setFont( font() );
     ta.setFontSize( 50 );
     d->kdRadarPlane->setTextAttributes( ta );
+
+    if ( reverseAxis )
+    {
+        if ( dimension() == XAxisDimension )
+        {
+            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+            if ( plane )
+                plane->setHorizontalRangeReversed( reverseAxis );
+        }
+        else if ( dimension() == YAxisDimension )
+        {
+            KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( kdPlane() );
+            if ( plane )
+                plane->setVerticalRangeReversed( reverseAxis );
+        }
+    }   
 
     // Style of axis is still in styleStack
     if ( !loadOdfChartSubtypeProperties( axisElement, context ) )
@@ -1522,6 +1572,8 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
         return;
     }
 
+    qDebug() << "changed ChartType";
+
     ChartType oldChartType = d->plotAreaChartType;
 
     KDChart::AbstractDiagram *newDiagram = d->getDiagramAndCreateIfNeeded( newChartType );
@@ -1531,16 +1583,11 @@ void Axis::plotAreaChartTypeChanged( ChartType newChartType )
     //        handle that in some other way.
     Q_ASSERT( newModel );
 
-
-    if (    ( isPolar( newChartType ) && !isPolar( d->plotAreaChartType ) )
-         || ( !isPolar( newChartType ) && isPolar( d->plotAreaChartType ) ) )
-    {
-        foreach ( DataSet *dataSet, d->dataSets ) {
-            if ( dataSet->chartType() != LastChartType ) {
-                dataSet->setChartType( LastChartType );
-                dataSet->setChartSubType( NoChartSubtype );
-            }
-        }
+    foreach ( DataSet *dataSet, d->dataSets ) {
+        //if ( dataSet->chartType() != LastChartType ) {
+            dataSet->setChartType( LastChartType );
+            dataSet->setChartSubType( NoChartSubtype );
+        //}
     }
 
     KDChart::AbstractDiagram *oldDiagram = d->getDiagram( oldChartType );
@@ -1602,7 +1649,6 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
                 type = KDChart::BarDiagram::Normal;
             }
             d->kdBarDiagram->setType( type );
-
         }
         break;
     case LineChartType:
@@ -1671,6 +1717,11 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
         break;
     default:;
         // FIXME: Implement more chart types
+    }
+    Q_FOREACH( DataSet* set,  d->dataSets )
+    {
+        set->setChartType( d->plotAreaChartType );
+        set->setChartSubType( subType );
     }
 }
 

@@ -43,6 +43,7 @@
 #include <KoXmlNS.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
+#include <KoDocumentInfo.h>
 
 #include "KoPACanvas.h"
 #include "KoPAView.h"
@@ -68,14 +69,20 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager;
     bool rulersVisible;
     KoPAPageProvider *pageProvider;
+    QPointer<KoUpdater> odfProgressUpdater;
+    QPointer<KoUpdater> odfMasterPageProgressUpdater;
+    QPointer<KoUpdater> odfPageProgressUpdater;
 };
 
 KoPADocument::KoPADocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoDocument( parentWidget, parent, singleViewMode ),
     d(new Private())
 {
-    d->inlineTextObjectManager = new KoInlineTextObjectManager(this);
+    d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
+    Q_ASSERT(d->inlineTextObjectManager);
     d->rulersVisible = false;
+    connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
+            d->inlineTextObjectManager, SLOT(documentInformationUpdated(const QString &, const QString &)));
 
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
@@ -112,14 +119,21 @@ bool KoPADocument::loadXML( const KoXmlDocument & doc, KoStore * )
     return true;
 }
 
+void KoPADocument::setupOpenFileSubProgress()
+{
+    if (progressUpdater()) {
+        d->odfProgressUpdater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdf");
+        d->odfMasterPageProgressUpdater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdfMasterPages");
+        d->odfPageProgressUpdater = progressUpdater()->startSubtask(5, "KoPADocument::loadOdfPages");
+    }
+}
+
 bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 {
     updateDocumentURL();
 
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdf");
-        updater->setProgress(0);
+    if (d->odfProgressUpdater) {
+        d->odfProgressUpdater->setProgress(0);
     }
     KoOdfLoadingContext loadingContext( odfStore.styles(), odfStore.store(), componentData() );
     KoPALoadingContext paContext(loadingContext, resourceManager());
@@ -145,6 +159,9 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
     KoStyleManager *styleManager = resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();
 
     sharedData->loadOdfStyles(paContext, styleManager);
+    if (d->odfProgressUpdater) {
+        d->odfProgressUpdater->setProgress(20);
+    }
 
     d->masterPages = loadOdfMasterPages( odfStore.styles().masterPages(), paContext );
     if ( !loadOdfProlog( body, paContext ) ) {
@@ -172,7 +189,9 @@ bool KoPADocument::loadOdf( KoOdfReadStore & odfStore)
 
     updatePageCount();
 
-    if (updater) updater->setProgress(100);
+    if (d->odfProgressUpdater) {
+        d->odfProgressUpdater->setProgress(100);
+    }
     return true;
 }
 
@@ -247,10 +266,8 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
     context.odfLoadingContext().setUseStylesAutoStyles( true );
     QList<KoPAPageBase *> masterPages;
 
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KoPADocument::loadOdfMasterPages");
-        updater->setProgress(0);
+    if (d->odfMasterPageProgressUpdater) {
+        d->odfMasterPageProgressUpdater->setProgress(0);
     }
 
     QHash<QString, KoXmlElement*>::const_iterator it( masterStyles.constBegin() );
@@ -262,14 +279,14 @@ QList<KoPAPageBase *> KoPADocument::loadOdfMasterPages( const QHash<QString, KoX
         masterPage->loadOdf( *( it.value() ), context );
         masterPages.append( masterPage );
         context.addMasterPage( it.key(), masterPage );
-        if (updater) {
+        if (d->odfMasterPageProgressUpdater) {
             int progress = 100 * ++count / masterStyles.size();
-            updater->setProgress(progress);
+            d->odfMasterPageProgressUpdater->setProgress(progress);
         }
     }
     context.odfLoadingContext().setUseStylesAutoStyles( false );
-    if (updater) {
-        updater->setProgress(100);
+    if (d->odfMasterPageProgressUpdater) {
+        d->odfMasterPageProgressUpdater->setProgress(100);
     }
     return masterPages;
 }
@@ -282,10 +299,8 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
 
     int childNodesCount = 0;
     int childCount = 0;
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(5, "KoPADocument::loadOdfPages");
-        updater->setProgress(0);
+    if (d->odfPageProgressUpdater) {
+        d->odfPageProgressUpdater->setProgress(0);
         childNodesCount = body.childNodesCount();
     }
 
@@ -299,13 +314,13 @@ QList<KoPAPageBase *> KoPADocument::loadOdfPages( const KoXmlElement & body, KoP
             pages.append( page );
         }
 
-        if (updater) {
+        if (d->odfPageProgressUpdater) {
             int progress = 100 * ++childCount / childNodesCount;
-            updater->setProgress(progress);
+            d->odfPageProgressUpdater->setProgress(progress);
         }
     }
-    if (updater) {
-        updater->setProgress(100);
+    if (d->odfPageProgressUpdater) {
+        d->odfPageProgressUpdater->setProgress(100);
     }
     return pages;
 }
@@ -711,7 +726,8 @@ KoPAMasterPage * KoPADocument::newMasterPage()
 }
 
 /// return the inlineTextObjectManager for this document.
-KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const {
+KoInlineTextObjectManager *KoPADocument::inlineTextObjectManager() const
+{
     return d->inlineTextObjectManager;
 }
 

@@ -20,6 +20,7 @@
 #include "kra/kis_kra_loader.h"
 
 #include "kis_kra_tags.h"
+#include "kis_kra_utils.h"
 #include "kis_kra_load_visitor.h"
 
 #include <KoStore.h>
@@ -333,19 +334,18 @@ KisNode* KisKraLoader::loadNode(const KoXmlElement& element, KisImageWSP image)
     node->setName(name);
 
     if (node->inherits("KisLayer")) {
-        KisLayer* layer = qobject_cast<KisLayer*>(node);
+        KisLayer* layer           = qobject_cast<KisLayer*>(node);
+        QBitArray channelFlags    = stringToFlags(element.attribute(CHANNEL_FLAGS, ""), colorSpace->channelCount());
+        QString   compositeOpName = element.attribute(COMPOSITE_OP, "normal");
 
-        QString channelFlagsString = element.attribute(CHANNEL_FLAGS);
-        if (!channelFlagsString.isEmpty()) {
-            QBitArray channelFlags(channelFlagsString.length());
-            for (int i = 0; i < channelFlagsString.length(); ++i) {
-                channelFlags.setBit(i, channelFlagsString[i] == '1');
-            }
-            layer->setChannelFlags(channelFlags);
-        }
-
-        QString compositeOpName = element.attribute(COMPOSITE_OP, "normal");
+        layer->setChannelFlags(channelFlags);
         layer->setCompositeOp(compositeOpName);
+    }
+    
+    if(node->inherits("KisPaintLayer")) {
+        KisPaintLayer* layer            = qobject_cast<KisPaintLayer*>(node);
+        QBitArray      channelLockFlags = stringToFlags(element.attribute(CHANNEL_LOCK_FLAGS, ""), colorSpace->channelCount());
+        layer->setChannelLockFlags(channelLockFlags);
     }
 
     if (element.attribute(FILE_NAME).isNull())

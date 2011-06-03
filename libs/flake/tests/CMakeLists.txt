@@ -146,3 +146,7 @@ kde4_add_unit_test(TestInputDevice TESTNAME libs-flake-TestInputDevice  ${TestIn
 target_link_libraries(TestInputDevice ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})
 
 ########### end ###############
+
+set(TestSnapStrategy_test_SRCS TestSnapStrategy.cpp )
+kde4_add_unit_test(TestSnapStrategy TESTNAME libs-flake-TestSnapStrategy  ${TestSnapStrategy_test_SRCS})
+target_link_libraries(TestSnapStrategy ${KDE4_KDECORE_LIBS} flake ${QT_QTTEST_LIBRARY})

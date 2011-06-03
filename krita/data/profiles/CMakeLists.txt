@@ -1,4 +1,5 @@
 ########### install files ###############
+add_subdirectory(eci)
 
 install(FILES
     Adobe.icm 
@@ -19,4 +20,5 @@ install(FILES
     WideGamut.icm 
     ycc601.icm 
     ycc709.icm
+    ISO.icc
     DESTINATION ${CMAKE_INSTALL_PREFIX}/share/color/icc/krita)

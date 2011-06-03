@@ -305,6 +305,8 @@ void KisTileDataStore::debugClear()
     }
 
     m_tileDataList.clear();
+    m_clockIterator = m_tileDataList.end();
+
     m_numTiles = 0;
     m_memoryMetric = 0;
 }

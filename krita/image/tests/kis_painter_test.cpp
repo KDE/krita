@@ -36,6 +36,8 @@
 #include "kis_pixel_selection.h"
 #include "kis_fill_painter.h"
 #include <kis_fixed_paint_device.h>
+#include "testutil.h"
+
 
 void KisPainterTest::allCsApplicator(void (KisPainterTest::* funcPtr)(const KoColorSpace*cs))
 {
@@ -180,7 +182,8 @@ void KisPainterTest::testPaintDeviceBltSelectionIrregular(const KoColorSpace * c
     psel->select(QRect(15, 10, 15, 5));
 
     QCOMPARE(psel->selectedExactRect(), QRect(10, 10, 20, 20));
-    QCOMPARE(psel->selected(13, 13), MIN_SELECTED);
+
+    QCOMPARE(TestUtil::alphaDevicePixel(psel, 13, 13), MIN_SELECTED);
     KisSelectionSP sel = new KisSelection();
     sel->setPixelSelection(psel);
     KisPainter painter(dst);
@@ -299,7 +302,7 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     Selection->select(QRect(10, 15, 20, 15));
     Selection->select(QRect(15, 10, 15, 5));
     QCOMPARE(Selection->selectedExactRect(), QRect(10, 10, 20, 20));
-    QCOMPARE(Selection->selected(13, 13), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(Selection, 13, 13), MIN_SELECTED);
 
     KisSelectionSP sel = new KisSelection();
     sel->setPixelSelection(Selection);
@@ -312,7 +315,7 @@ void KisPainterTest::testSelectionBltSelectionIrregular()
     painter.end();
 
     QCOMPARE(dst->selectedExactRect(), QRect(10, 10, 10, 10));
-    QCOMPARE(dst->selected(13, 13), MIN_SELECTED);
+    QCOMPARE(TestUtil::alphaDevicePixel(dst, 13, 13), MIN_SELECTED);
 }
 
 void KisPainterTest::testSelectionBitBltFixedSelection()

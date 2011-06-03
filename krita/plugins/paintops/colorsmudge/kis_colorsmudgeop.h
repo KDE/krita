@@ -29,13 +29,14 @@
 #include <kis_pressure_spacing_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_scatter_option.h>
+#include <kis_pressure_gradient_option.h>
 
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"
 
-class KisBrushBasedPaintOpSettings;
-
 class QPointF;
+class KoAbstractGradient;
+class KisBrushBasedPaintOpSettings;
 class KisPainter;
 
 class KisColorSmudgeOp: public KisBrushBasedPaintOp
@@ -51,10 +52,12 @@ private:
 
 private:
     bool                      m_firstRun;
-    double                    m_rotation;
+    double                    m_angle;
+    quint32                   m_brushIndex;
     KisPaintDeviceSP          m_tempDev;
     KisImageWSP               m_image;
     KisPainter*               m_tempPainter;
+    const KoAbstractGradient* m_gradient;
     KisPressureSizeOption     m_sizeOption;
     KisPressureOpacityOption  m_opacityOption;
     KisPressureSpacingOption  m_spacingOption;
@@ -63,9 +66,9 @@ private:
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;
     KisPressureScatterOption  m_scatterOption;
+    KisPressureGradientOption m_gradientOption;
     QRect                     m_maskBounds;
     KisFixedPaintDeviceSP     m_maskDab;
-    KisFixedPaintDeviceSP     m_colorDev;
 };
 
 #endif // _KIS_COLORSMUDGEOP_H_

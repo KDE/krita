@@ -64,11 +64,13 @@ StyleButtonBox::StyleButtons FillButtons = StyleButtonBox::None|StyleButtonBox::
 StyleButtonBox::StyleButtons FillRuleButtons = StyleButtonBox::EvenOdd|StyleButtonBox::Winding;
 
 StyleDocker::StyleDocker(QWidget * parent)
-    : QDockWidget(parent), m_canvas(0)
-    , m_lastFillCommand(0), m_lastStrokeCommand(0)
+    : QDockWidget(parent)
+    , m_canvas(0)
+    , m_lastFillCommand(0)
+    , m_lastStrokeCommand(0)
     , m_lastColorFill(0)
 {
-    setWindowTitle(i18n("Styles"));
+    setWindowTitle(i18n("Stroke and Fill"));
 
     QWidget *mainWidget = new QWidget(this);
     m_layout = new QGridLayout(mainWidget);
@@ -85,13 +87,13 @@ StyleDocker::StyleDocker(QWidget * parent)
     m_layout->addWidget(m_stack, 1, 1);
 
     m_layout->addWidget(new QLabel(i18n("Opacity:")), 2, 0);
-    
+
     m_opacity = new KDoubleNumInput(mainWidget);
     m_opacity->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     m_opacity->setRange(0.0, 1.0, 0.05, true);
     m_opacity->setValue(1.0);
     m_layout->addWidget(m_opacity, 2, 1);
-    
+
     m_spacer = new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_layout->addItem(m_spacer, 2, 2);
 
@@ -135,7 +137,7 @@ StyleDocker::StyleDocker(QWidget * parent)
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
              this, SLOT(locationChanged(Qt::DockWidgetArea)));
     connect(m_opacity, SIGNAL(valueChanged(double)), this, SLOT(updateOpacity(double)));
-    
+
     setWidget(mainWidget);
 }
 
@@ -145,6 +147,10 @@ StyleDocker::~StyleDocker()
 
 void StyleDocker::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    }
+
     resetColorCommands();
 
     m_canvas = canvas;
@@ -527,15 +533,15 @@ void StyleDocker::updateOpacity(double opacity)
 {
     if (! m_canvas)
         return;
-    
+
     KoSelection *selection = m_canvas->shapeManager()->selection();
     if (! selection || ! selection->count())
         return;
-    
+
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::TopLevelSelection);
     if (!selectedShapes.count())
         return;
-    
+
     m_canvas->addCommand(new KoShapeTransparencyCommand(selectedShapes, 1.0-opacity));
 }
 

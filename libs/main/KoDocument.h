@@ -79,6 +79,7 @@ class KOMAIN_EXPORT KoDocument : public KParts::ReadWritePart, public KoOdfDocum
     Q_OBJECT
 //     Q_PROPERTY( QByteArray dcopObjectId READ dcopObjectId)
     Q_PROPERTY(bool backupFile READ backupFile WRITE setBackupFile)
+    Q_PROPERTY(int pageCount READ pageCount)
 
 public:
 
@@ -926,6 +927,13 @@ protected:
      * This method is called from the KReadOnlyPart::openUrl method.
      */
     virtual bool openFile();
+
+    /**
+     * This method is called by @a openFile() to allow applications to setup there
+     * own KoProgressUpdater-subTasks which are then taken into account for the
+     * displayed progressbar during loading.
+     */
+    virtual void setupOpenFileSubProgress() {}
 
     /**
      *  Saves a document to KReadOnlyPart::m_file (KParts takes care of uploading

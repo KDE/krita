@@ -137,7 +137,7 @@ void OdfCollectionLoader::nextFile()
         if(!m_filterManager)
             m_filterManager = new KoFilterManager(QByteArray(KoOdf::mimeType(KoOdf::Graphics)));
         KoFilter::ConversionStatus status;
-        importedFile = m_filterManager->importDocument(filepath, status);
+        importedFile = m_filterManager->importDocument(filepath, QString(), status);
         //kDebug() << "File:" << filepath << "Import:" << importedFile;
 
         if(status != KoFilter::OK)

@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2004 Adrian Page <adrian@pagenet.plus.com>
+ *  Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +59,9 @@ KisGradientChooser::KisGradientChooser(KisView2 * view, QWidget *parent, const c
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     KoAbstractResourceServerAdapter* adapter = new KoResourceServerAdapter<KoAbstractGradient>(rserver);
     m_itemChooser = new KoResourceItemChooser(adapter, this);
+    QString knsrcFile = "kritagradients.knsrc";
+    m_itemChooser->setKnsrcFile(knsrcFile);
+    m_itemChooser->showGetHotNewStuff(true, true);
     m_itemChooser->setFixedSize(250, 250);
     m_itemChooser->setColumnCount(1);
 

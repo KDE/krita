@@ -34,6 +34,7 @@ public:
     QTextDocument *document;
     KoInsets margins;
     Qt::Alignment textAlignment;
+    KoTextShapeDataBase::ResizeMethod resizeMethod;
 };
 
 #endif

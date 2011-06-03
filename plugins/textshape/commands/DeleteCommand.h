@@ -62,8 +62,8 @@ private:
 
     virtual void deleteChar();
     virtual void deletePreviousChar();
-    virtual void deleteSelection(QTextCursor &selection);
-    virtual void deleteInlineObjects(QTextCursor &selection);
+    virtual void deleteSelection();
+    virtual void deleteInlineObjects();
     virtual void deleteTextAnchor(KoInlineObject *object);
     virtual bool checkMerge(const QUndoCommand *command);
     virtual void updateListChanges();

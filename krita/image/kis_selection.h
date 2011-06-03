@@ -105,7 +105,7 @@ public:
 
     /**
      * Returns selectedness of the specified pixel, or 0 if invalid
-     * coordinates. The projection is not updated before determinging selectedness.
+     * coordinates. The projection is not updated before determining selectedness.
      */
     quint8 selected(qint32 x, qint32 y) const;
 
@@ -148,22 +148,6 @@ public:
      */
     QRect selectedExactRect() const;
 
-    /**
-     * If the parent paint device is interested in keeping up to date
-     * with the dirtyness of this selection, set to true
-     */
-    void setInterestedInDirtyness(bool b);
-
-    /**
-     * returns true if the parent paint device is interested in
-     * keeping up with the dirtyness of the selection.
-     */
-    bool interestedInDirtyness() const;
-
-    virtual void setDirty(const QRect & rc);
-    virtual void setDirty(const QRegion & region);
-    virtual void setDirty();
-
     bool hasPixelSelection() const;
     bool hasShapeSelection() const;
 
@@ -196,7 +180,7 @@ public:
     bool isDeselected();
     void setVisible(bool visible);
     bool isVisible();
-    
+
     ///Reimplemented
     void setDefaultBounds(KisDefaultBoundsSP bounds);
 

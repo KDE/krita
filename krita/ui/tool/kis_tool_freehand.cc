@@ -358,6 +358,11 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
             indirect->setTemporaryTarget(targetDevice);
             indirect->setTemporaryCompositeOp(m_compositeOp);
             indirect->setTemporaryOpacity(m_opacity);
+            
+            KisPaintLayer* paintLayer = dynamic_cast<KisPaintLayer*>(currentNode().data());
+            
+            if(paintLayer)
+                indirect->setTemporaryChannelFlags(paintLayer->channelLockFlags());
         }
         else {
             m_paintIncremental = true;
@@ -635,13 +640,27 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 
 void KisToolFreehand::increaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int increment = 1;
+    if(paintopSize > 100) {
+        increment = 30;
+    } else if (paintopSize > 10){
+        increment = 10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
     showOutlineTemporary();
 }
 
 void KisToolFreehand::decreaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int decrement = -1;
+    if(paintopSize > 100) {
+        decrement = -30;
+    } else if (paintopSize > 20){
+        decrement = -10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
     showOutlineTemporary();
 }
 

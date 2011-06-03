@@ -29,6 +29,7 @@ class KDoubleNumInput;
 class KoColorSlider;
 class QLabel;
 class QHBoxLayout;
+class QLineEdit;
 
 class KisColorInput : public QWidget
 {
@@ -74,6 +75,20 @@ public slots:
     void update();
 private:
     KDoubleNumInput* m_dblNumInput;
+};
+
+class KisHexColorInput : public KisColorInput
+{
+    Q_OBJECT
+public:
+    KisHexColorInput(QWidget* parent, KoColor* color);
+protected:
+    virtual QWidget* createInput();
+public slots:
+    void setValue();
+    void update();
+private:
+    QLineEdit* m_hexInput;
 };
 
 #endif

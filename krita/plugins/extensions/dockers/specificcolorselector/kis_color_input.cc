@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Sven Langkamp <sven.langkamp@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +27,7 @@
 
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QLineEdit>
 
 #include <klocale.h>
 #include <knuminput.h>
@@ -33,6 +35,7 @@
 #include <KoChannelInfo.h>
 #include <KoColor.h>
 #include <KoColorSlider.h>
+#include <KoColorSpace.h>
 
 KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color) : QWidget(parent), m_channelInfo(channelInfo), m_color(color)
 {
@@ -202,6 +205,64 @@ void KisFloatColorInput::update()
         Q_ASSERT(false);
     }
     m_colorSlider->setColors(min, max);
+}
+
+KisHexColorInput::KisHexColorInput(QWidget* parent, KoColor* color) : KisColorInput(parent, 0, color)
+{
+    QHBoxLayout* m_layout = new QHBoxLayout(this);
+    QLabel* m_label = new QLabel(i18n("Color name:"), this);
+    m_label->setMinimumWidth(50);
+    m_layout->addWidget(m_label);
+
+    QWidget* m_input = createInput();
+    m_input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+    m_layout->addWidget(m_input);
+}
+
+void KisHexColorInput::setValue()
+{
+    QString valueString = m_hexInput->text();
+    valueString.remove(QChar('#'));
+
+    QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    foreach(KoChannelInfo* channel, channels) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
+            Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
+            quint8* data = m_color->data() + channel->pos();
+
+            int value = valueString.left(2).toInt(0, 16);
+            *(reinterpret_cast<quint8*>(data)) = value;
+            valueString.remove(0, 2);
+        }
+    }
+    emit(updated());
+}
+
+void KisHexColorInput::update()
+{
+    QString hexString("#");
+
+    QList<KoChannelInfo*> channels = m_color->colorSpace()->channels();
+    foreach(KoChannelInfo* channel, channels) {
+        if (channel->channelType() == KoChannelInfo::COLOR) {
+            Q_ASSERT(channel->channelValueType() == KoChannelInfo::UINT8);
+            quint8* data = m_color->data() + channel->pos();
+            hexString.append(QString("%1").arg(*(reinterpret_cast<quint8*>(data)), 2, 16, QChar('0')));
+        }
+    }
+    m_hexInput->setText(hexString);
+}
+
+QWidget* KisHexColorInput::createInput()
+{
+    m_hexInput = new QLineEdit(this);
+
+    int digits = 2*m_color->colorSpace()->colorChannelCount();
+    QString pattern = QString("#?[a-fA-F0-9]{%1,%2}").arg(digits).arg(digits);
+    kDebug() << pattern;
+    m_hexInput->setValidator(new QRegExpValidator(QRegExp(pattern), this));
+    connect(m_hexInput, SIGNAL(editingFinished()), this, SLOT(setValue()));
+    return m_hexInput;
 }
 
 #include "kis_color_input.moc"

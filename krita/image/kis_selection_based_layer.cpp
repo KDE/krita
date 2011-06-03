@@ -84,11 +84,6 @@ void KisSelectionBasedLayer::initSelection()
     m_d->selection = new KisSelection();
     m_d->selection->getOrCreatePixelSelection()->select(image()->bounds());
     m_d->selection->updateProjection();
-    /**
-     * FIXME: Maybe we should have set up a parent
-     * for being really interested in it?
-     */
-    m_d->selection->setInterestedInDirtyness(true);
 }
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
@@ -195,7 +190,6 @@ void KisSelectionBasedLayer::setSelection(KisSelectionSP selection)
     if (selection) {
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->updateProjection();
-        m_d->selection->setInterestedInDirtyness(true);
     } else
         m_d->selection = 0;
 }

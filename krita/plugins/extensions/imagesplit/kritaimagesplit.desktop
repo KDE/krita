@@ -1,7 +1,11 @@
 [Desktop Entry]
 Name=Image Splitter
-Name[pt]=Divisão da Imagem
+Name[el]=Διαχωριστής εικόνας
+Name[et]=Pildipoolitaja
+Name[nb]=Bildedeler
+Name[pt]=Divisor de Imagens
 Name[pt_BR]=Divisão da imagem
+Name[sv]=Bilddelning
 Name[uk]=Поділ зображень
 Name[x-test]=xxImage Splitterxx
 X-KDE-ServiceTypes=Krita/ViewPlugin

@@ -101,7 +101,7 @@ public:
      *
      * @param widgets the map of widgets
      */
-    void setToolOptionWidgets(const QMap<QString, QWidget *> &widgets);
+    void setToolOptionWidgets(const QList<QWidget *> &widgets);
 
     virtual void zoomIn(const QPoint &center);
 
@@ -147,7 +147,7 @@ signals:
     /**
      * Emit the new tool option widgets to be used with this canvas.
      */
-    void toolOptionWidgetsChanged(const QMap<QString, QWidget *> &widgets);
+    void toolOptionWidgetsChanged(const QList<QWidget *> &widgets);
 
 private slots:
 

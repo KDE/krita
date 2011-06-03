@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007,2008 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007,2010 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007-2011 Pierre Ducroquet <pinaraf@gmail.com>
  * Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
  * Copyright (C) 2008 Roopesh Chander <roop@forwardbias.in>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
@@ -26,7 +26,6 @@
 #include "KoCharacterStyle.h"
 #include "KoListStyle.h"
 #include "KoTextBlockData.h"
-#include "KoTextDocumentLayout.h"
 #include "KoStyleManager.h"
 #include "KoListLevelProperties.h"
 #include "KoTextSharedLoadingData.h"
@@ -225,7 +224,6 @@ void KoParagraphStyle::applyStyle(QTextBlock &block, bool applyListStyle) const
         if (d->listStyle) {
             if (!d->list)
                 d->list = new KoList(block.document(), d->listStyle);
-            qDebug()<<"paragraph has"<<d->listStyle<<d->list;
             d->list->add(block, listLevel());
         } else {
             if (block.textList())
@@ -320,7 +318,10 @@ void KoParagraphStyle::setAlignLastLine(Qt::Alignment alignment)
 
 Qt::Alignment KoParagraphStyle::alignLastLine() const
 {
-    return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
+    if (hasProperty(AlignLastLine))
+        return static_cast<Qt::Alignment>(propertyInt(AlignLastLine));
+    // Hum, that doesn't sound right !
+    return alignment();
 }
 
 void KoParagraphStyle::setWidowThreshold(int lines)
@@ -403,50 +404,46 @@ bool KoParagraphStyle::followDocBaseline() const
     return propertyBoolean(FollowDocBaseline);
 }
 
-void KoParagraphStyle::setBreakBefore(bool on)
+void KoParagraphStyle::setBreakBefore(KoText::KoTextBreakProperty value)
 {
+    bool pageBreak = (value == KoText::PageBreak);
+   
     int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
 
-    if(on) {
+    if (pageBreak) {
         prop |= QTextFormat::PageBreak_AlwaysBefore;
     } else {
         prop &= ~QTextFormat::PageBreak_AlwaysBefore;
     }
 
     setProperty(QTextFormat::PageBreakPolicy, prop);
+    setProperty(BreakBefore, value);
 }
 
-bool KoParagraphStyle::breakBefore()
+KoText::KoTextBreakProperty KoParagraphStyle::breakBefore()
 {
-    //we shouldn't use propertyBoolean as this value is not inherited but default to false
-    QVariant var = d->stylesPrivate.value(QTextFormat::PageBreakPolicy);
-    if(var.isNull())
-        return false;
-
-    return var.toInt() & QTextFormat::PageBreak_AlwaysBefore;
+    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakBefore));
 }
 
-void KoParagraphStyle::setBreakAfter(bool on)
+void KoParagraphStyle::setBreakAfter(KoText::KoTextBreakProperty value)
 {
+    bool pageBreak = (value == KoText::PageBreak);
+    
     int prop = d->stylesPrivate.value(QTextFormat::PageBreakPolicy).toInt();
 
-    if(on) {
+    if (pageBreak) {
         prop |= QTextFormat::PageBreak_AlwaysAfter;
     } else {
         prop &= ~QTextFormat::PageBreak_AlwaysAfter;
     }
 
     setProperty(QTextFormat::PageBreakPolicy, prop);
+    setProperty(BreakAfter, value);
 }
 
-bool KoParagraphStyle::breakAfter()
+KoText::KoTextBreakProperty KoParagraphStyle::breakAfter()
 {
-    //we shouldn't use propertyBoolean as this value is not inherited but default to false
-    QVariant var = d->stylesPrivate.value(QTextFormat::PageBreakPolicy);
-    if(var.isNull())
-        return false;
-
-    return var.toInt() & QTextFormat::PageBreak_AlwaysAfter;
+    return static_cast<KoText::KoTextBreakProperty>(propertyInt(BreakAfter));
 }
 
 void KoParagraphStyle::setLeftPadding(qreal padding)
@@ -787,6 +784,30 @@ bool KoParagraphStyle::nonBreakableLines() const
     return propertyBoolean(QTextFormat::BlockNonBreakableLines);
 }
 
+void KoParagraphStyle::setKeepWithNext(bool value)
+{
+    setProperty(KeepWithNext, value);
+}
+
+bool KoParagraphStyle::keepWithNext() const
+{
+    if (hasProperty(KeepWithNext))
+        return propertyBoolean(KeepWithNext);
+    return false;
+}
+
+bool KoParagraphStyle::punctuationWrap() const
+{
+    if (hasProperty(PunctuationWrap))
+        return propertyBoolean(PunctuationWrap);
+    return false;
+}
+
+void KoParagraphStyle::setPunctuationWrap(bool value)
+{
+    setProperty(PunctuationWrap, value);
+}
+
 KoParagraphStyle *KoParagraphStyle::parentStyle() const
 {
     return d->parentStyle;
@@ -962,6 +983,30 @@ void KoParagraphStyle::setTextProgressionDirection(KoText::Direction dir)
     setProperty(TextProgressionDirection, dir);
 }
 
+bool KoParagraphStyle::keepHyphenation() const
+{
+    if (hasProperty(KeepHyphenation))
+        return propertyBoolean(KeepHyphenation);
+    return false;
+}
+
+void KoParagraphStyle::setKeepHyphenation(bool value)
+{
+    setProperty(KeepHyphenation, value);
+}
+
+int KoParagraphStyle::hyphenationLadderCount() const
+{
+    if (hasProperty(HyphenationLadderCount))
+        return propertyInt(HyphenationLadderCount);
+    return 0;
+}
+
+void KoParagraphStyle::setHyphenationLadderCount(int value)
+{
+    setProperty(HyphenationLadderCount, value);
+}
+
 void KoParagraphStyle::setBackground(const QBrush &brush)
 {
     d->setProperty(QTextFormat::BackgroundBrush, brush);
@@ -980,6 +1025,65 @@ QBrush KoParagraphStyle::background() const
         return QBrush();
     }
     return qvariant_cast<QBrush>(variant);
+}
+
+qreal KoParagraphStyle::backgroundTransparency() const
+{
+    if (hasProperty(BackgroundTransparency))
+        return propertyDouble(BackgroundTransparency);
+    return 0.0;
+}
+
+void KoParagraphStyle::setBackgroundTransparency(qreal transparency)
+{
+    setProperty(BackgroundTransparency, transparency);
+}
+
+void KoParagraphStyle::setSnapToLayoutGrid(bool value)
+{
+    setProperty(SnapToLayoutGrid, value);
+}
+
+bool KoParagraphStyle::snapToLayoutGrid() const
+{
+    if (hasProperty(SnapToLayoutGrid))
+        return propertyBoolean(SnapToLayoutGrid);
+    return false;
+}
+
+bool KoParagraphStyle::joinBorder() const
+{
+    if (hasProperty(JoinBorder))
+        return propertyBoolean(JoinBorder);
+    return false;
+}
+
+void KoParagraphStyle::setJoinBorder(bool value)
+{
+    setProperty(JoinBorder, value);
+}
+
+int KoParagraphStyle::pageNumber() const
+{
+    return propertyInt(PageNumber);
+}
+
+void KoParagraphStyle::setPageNumber(int pageNumber)
+{
+    if (pageNumber >= 0)
+        setProperty(PageNumber, pageNumber);
+}
+
+bool KoParagraphStyle::automaticWritingMode() const
+{
+    if (hasProperty(AutomaticWritingMode))
+        return propertyBoolean(AutomaticWritingMode);
+    return true;
+}
+
+void KoParagraphStyle::setAutomaticWritingMode(bool value)
+{
+    setProperty(AutomaticWritingMode, value);
 }
 
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
@@ -1008,18 +1112,6 @@ void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContex
         int level = element->attributeNS(KoXmlNS::style, "default-outline-level").toInt(&ok);
         if (ok)
             setDefaultOutlineLevel(level);
-    }
-
-    // 15.5.30 - 31
-    if (element->hasAttributeNS(KoXmlNS::text, "number-lines")) {
-        setLineNumbering(element->attributeNS(KoXmlNS::text, "number-lines", "false") == "true");
-            if (lineNumbering()) {
-            bool ok;
-                int startValue = element->attributeNS(KoXmlNS::text, "line-number").toInt(&ok);
-                if (ok) {
-                setLineNumberStartValue(startValue);
-                }
-            }
     }
 
     //1.6: KoTextFormat::load
@@ -1061,7 +1153,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setRightPadding(KoUnit::parseValue(paddingRight));
     }
     const QString paddingTop(styleStack.property(KoXmlNS::fo, "padding-top" ));
-    if (paddingTop.isEmpty()) {
+    if (!paddingTop.isEmpty()) {
         setTopPadding(KoUnit::parseValue(paddingTop));
     }
     const QString paddingBottom(styleStack.property(KoXmlNS::fo, "padding-bottom" ));
@@ -1107,8 +1199,8 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     //if ( hasMarginLeft || hasMarginRight ) {
     // style:auto-text-indent takes precedence
     const QString autoTextIndent(styleStack.property(KoXmlNS::style, "auto-text-indent"));
-    if (!autoTextIndent.isEmpty() && autoTextIndent == "true") {
-        setAutoTextIndent(true);
+    if (!autoTextIndent.isEmpty()) {
+        setAutoTextIndent(autoTextIndent == "true");
     }
     else {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));
@@ -1144,6 +1236,18 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         const QString lineSpacing(styleStack.property(KoXmlNS::style, "line-spacing"));
         if (!lineSpacing.isEmpty()) {    // 3.11.3
             setLineSpacing(KoUnit::parseValue(lineSpacing));
+        }
+    }
+    
+    // 15.5.30 - 31
+    if (styleStack.hasProperty(KoXmlNS::text, "number-lines")) {
+        setLineNumbering(styleStack.property(KoXmlNS::text, "number-lines", "false") == "true");
+    }
+    if (styleStack.hasProperty(KoXmlNS::text, "line-number")) {
+        bool ok;
+        int startValue = styleStack.property(KoXmlNS::text, "line-number").toInt(&ok);
+        if (ok) {
+            setLineNumberStartValue(startValue);
         }
     }
 
@@ -1184,9 +1288,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                 tab.type = QTextOption::CenterTab;
             else if (type == "right")
                 tab.type = QTextOption::RightTab;
-            else if (type == "char")
+            else if (type == "char") {
                 tab.type = QTextOption::DelimiterTab;
-            else //if ( type == "left" )
+                tab.delimiter = QChar('.');
+            } else //if ( type == "left" )
                 tab.type = QTextOption::LeftTab;
 
             // Tab delimiter char
@@ -1391,14 +1496,29 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 
     // The fo:break-before and fo:break-after attributes insert a page or column break before or after a paragraph.
     const QString breakBefore(styleStack.property(KoXmlNS::fo, "break-before"));
-    if (!breakBefore.isEmpty() && breakBefore != "auto") {
-        setBreakBefore(true);
+    if (!breakBefore.isEmpty()) {
+        setBreakBefore(KoText::textBreakFromString(breakBefore));
     }
     const QString breakAfter(styleStack.property(KoXmlNS::fo, "break-after"));
-    if (!breakAfter.isEmpty() && breakAfter != "auto") {
-        setBreakAfter(true);
+    if (!breakAfter.isEmpty()) {
+        setBreakAfter(KoText::textBreakFromString(breakAfter));
     }
-
+    const QString keepTogether(styleStack.property(KoXmlNS::fo, "keep-together"));
+    if (!keepTogether.isEmpty()) {
+        setNonBreakableLines(keepTogether == "always");
+    }
+    
+    const QString rawPageNumber(styleStack.property(KoXmlNS::style, "page-number"));
+    if (!rawPageNumber.isEmpty()) {
+        if (rawPageNumber == "auto") {
+            setPageNumber(0);
+        } else {
+            bool ok;
+            int number = rawPageNumber.toInt(&ok);
+            if (ok)
+                setPageNumber(number);
+        }
+    }
     // The fo:background-color attribute specifies the background color of a paragraph.
     const QString bgcolor(styleStack.property(KoXmlNS::fo, "background-color"));
     if (!bgcolor.isEmpty()) {
@@ -1413,11 +1533,101 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         }
         setBackground(brush);
     }
+    if (styleStack.hasProperty(KoXmlNS::style, "background-transparency"))
+    {
+        QString transparency = styleStack.property(KoXmlNS::style, "background-transparency");
+        bool ok = false;
+        qreal transparencyValue  = transparency.remove('%').toDouble(&ok);
+        if (ok) {
+            setBackgroundTransparency(transparencyValue/100);
+        }
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "snap-to-layout-grid"))
+    {
+        setSnapToLayoutGrid(styleStack.property(KoXmlNS::style, "snap-to-layout-grid") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "register-true"))
+    {
+        setRegisterTrue(styleStack.property(KoXmlNS::style, "register-true") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "join-border"))
+    {
+        setJoinBorder(styleStack.property(KoXmlNS::style, "join-border") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "line-break"))
+    {
+        setStrictLineBreak(styleStack.property(KoXmlNS::style, "line-break") == "strict");
+    }
+    
+    // Support for an old non-standard OpenOffice attribute that we still find in too many documents...
+    if (styleStack.hasProperty(KoXmlNS::text, "enable-numbering")) {
+        setProperty(ForceDisablingList, styleStack.property(KoXmlNS::text, "enable-numbering") == "false");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "orphans")) {
+        bool ok = false;
+        int orphans = styleStack.property(KoXmlNS::fo, "orphans").toInt(&ok);
+        if (ok)
+            setOrphanThreshold(orphans);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "widows")) {
+        bool ok = false;
+        int widows = styleStack.property(KoXmlNS::fo, "widows").toInt(&ok);
+        if (ok)
+            setWidowThreshold(widows);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "justify-single-word")) {
+        setJustifySingleWord(styleStack.property(KoXmlNS::style, "justify-single-word") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode-automatic")) {
+        setAutomaticWritingMode(styleStack.property(KoXmlNS::style, "writing-mode-automatic") == "true");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "text-align-last")) {
+        setAlignLastLine(KoText::alignmentFromString(styleStack.property(KoXmlNS::fo, "text-align-last")));
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "keep-with-next")) {
+        setKeepWithNext(styleStack.property(KoXmlNS::fo, "keep-with-next") == "always");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "text-autospace")) {
+        const QString autoSpace = styleStack.property(KoXmlNS::style, "text-autospace");
+        if (autoSpace == "none")
+            setTextAutoSpace(NoAutoSpace);
+        else if (autoSpace == "ideograph-alpha")
+            setTextAutoSpace(IdeographAlpha);
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-keep")) {
+        setKeepHyphenation(styleStack.property(KoXmlNS::fo, "hyphenation-keep") == "page");
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::fo, "hyphenation-ladder-count")) {
+        QString ladderCount = styleStack.property(KoXmlNS::fo, "hyphenation-ladder-count");
+        if (ladderCount == "no-limit")
+            setHyphenationLadderCount(0);
+        else {
+            bool ok;
+            int value = ladderCount.toInt(&ok);
+            if ((ok) && (value > 0))
+                setHyphenationLadderCount(value);
+        }
+    }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "punctuation-wrap")) {
+        setPunctuationWrap(styleStack.property(KoXmlNS::style, "punctuation-wrap") == "simple");
+    }
+    
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
-    // AlignLastLine,
-    // WidowThreshold,
-    // OrphanThreshold,
     // FollowDocBaseline,
 
 }
@@ -1455,6 +1665,54 @@ void KoParagraphStyle::setTabStopDistance(qreal value)
 qreal KoParagraphStyle::tabStopDistance() const
 {
     return propertyDouble(TabStopDistance);
+}
+
+bool KoParagraphStyle::registerTrue() const
+{
+    if (hasProperty(RegisterTrue))
+        return propertyBoolean(RegisterTrue);
+    return false;
+}
+
+void KoParagraphStyle::setRegisterTrue(bool value)
+{
+    setProperty(RegisterTrue, value);
+}
+
+bool KoParagraphStyle::strictLineBreak() const
+{
+    if (hasProperty(StrictLineBreak))
+        return propertyBoolean(StrictLineBreak);
+    return false;
+}
+
+void KoParagraphStyle::setStrictLineBreak(bool value)
+{
+    setProperty(StrictLineBreak, value);
+}
+
+bool KoParagraphStyle::justifySingleWord() const
+{
+    if (hasProperty(JustifySingleWord))
+        return propertyBoolean(JustifySingleWord);
+    return false;
+}
+
+void KoParagraphStyle::setJustifySingleWord(bool value)
+{
+    setProperty(JustifySingleWord, value);
+}
+
+void KoParagraphStyle::setTextAutoSpace(KoParagraphStyle::AutoSpace value)
+{
+    setProperty(TextAutoSpace, value);
+}
+
+KoParagraphStyle::AutoSpace KoParagraphStyle::textAutoSpace() const
+{
+    if (hasProperty(TextAutoSpace))
+        return static_cast<AutoSpace>(propertyInt(TextAutoSpace));
+    return NoAutoSpace;
 }
 
 void KoParagraphStyle::copyProperties(const KoParagraphStyle *style)
@@ -1526,7 +1784,19 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
     }
 
     QList<int> keys = d->stylesPrivate.keys();
-    foreach(int key, keys) {
+    if (keys.contains(KoParagraphStyle::LeftPadding) && keys.contains(KoParagraphStyle::RightPadding)
+            && keys.contains(KoParagraphStyle::TopPadding) && keys.contains(KoParagraphStyle::BottomPadding))
+    {
+        if ((leftPadding() == rightPadding()) && (topPadding() == bottomPadding()) && (rightPadding() == topPadding())) {
+            style.addPropertyPt("fo:padding", leftPadding(), KoGenStyle::ParagraphType);
+            keys.removeOne(KoParagraphStyle::LeftPadding);
+            keys.removeOne(KoParagraphStyle::RightPadding);
+            keys.removeOne(KoParagraphStyle::TopPadding);
+            keys.removeOne(KoParagraphStyle::BottomPadding);
+        }
+    }
+    
+    foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
             bool ok = false;
@@ -1537,35 +1807,58 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 if (!align.isEmpty())
                     style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
             }
+        } else if (key == KoParagraphStyle::AlignLastLine) {
+            QString align = KoText::alignmentToString(alignLastLine());
+            if (!align.isEmpty())
+                style.addProperty("fo:text-align-last", align, KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TextProgressionDirection) {
-            int directionValue = 0;
-            bool ok = false;
-            directionValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                QString direction;
-                if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr-tb";
-                else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl-tb";
-                else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb-lr";
-                else if (directionValue == KoText::InheritDirection)
-                    direction = "page";
-                if (!direction.isEmpty())
-                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
+            style.addProperty("style:writing-mode", KoText::directionToString(textProgressionDirection()), KoGenStyle::ParagraphType);
+        } else if (key == LineNumbering) {
+            style.addProperty("text:number-lines", lineNumbering());
+        } else if (key == PageNumber) {
+            if (pageNumber() == 0)
+                style.addProperty("style:page-number", "auto", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("style:page-number", pageNumber(), KoGenStyle::ParagraphType);
+        } else if (key == LineNumberStartValue) {
+            style.addProperty("text:line-number", lineNumberStartValue());
+        } else if (key == BreakAfter) {
+            style.addProperty("fo:break-after", KoText::textBreakToString(breakAfter()), KoGenStyle::ParagraphType);
+        } else if (key == BreakBefore) {
+            style.addProperty("fo:break-before", KoText::textBreakToString(breakBefore()), KoGenStyle::ParagraphType);
+        } else if (key == QTextFormat::BlockNonBreakableLines) {
+            if (nonBreakableLines()) {
+                style.addProperty("fo:keep-together", "always", KoGenStyle::ParagraphType);
+            } else {
+                style.addProperty("fo:keep-together", "auto", KoGenStyle::ParagraphType);
             }
-        } else if (key == QTextFormat::PageBreakPolicy) {
-            if (breakBefore())
-                style.addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
-            if (breakAfter())
-                style.addProperty("fo:break-after", "page", KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BackgroundBrush) {
             QBrush backBrush = background();
             if (backBrush.style() != Qt::NoBrush)
                 style.addProperty("fo:background-color", backBrush.color().name(), KoGenStyle::ParagraphType);
             else
                 style.addProperty("fo:background-color", "transparent", KoGenStyle::ParagraphType);
-    // Padding
+        } else if (key == KoParagraphStyle::BackgroundTransparency) {
+            style.addProperty("style:background-transparency", QString("%1%").arg(backgroundTransparency() * 100), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::SnapToLayoutGrid) {
+            style.addProperty("style:snap-to-layout-grid", snapToLayoutGrid(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::JustifySingleWord) {
+            style.addProperty("style:justify-single-word", justifySingleWord(), KoGenStyle::ParagraphType);
+        } else if (key == RegisterTrue) {
+            style.addProperty("style:register-true", registerTrue(), KoGenStyle::ParagraphType);
+        } else if (key == StrictLineBreak) {
+            if (strictLineBreak())
+                style.addProperty("style:line-break", "strict", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("style:line-break", "normal", KoGenStyle::ParagraphType);
+        } else if (key == JoinBorder) {
+            style.addProperty("style:join-border", joinBorder(), KoGenStyle::ParagraphType);
+        } else if (key == OrphanThreshold) {
+            style.addProperty("fo:orphans", orphanThreshold(), KoGenStyle::ParagraphType);
+        } else if (key == WidowThreshold) {
+            style.addProperty("fo:widows", widowThreshold(), KoGenStyle::ParagraphType);
+        
+        // Padding
         } else if (key == KoParagraphStyle::LeftPadding) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::RightPadding) {
@@ -1593,7 +1886,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() > 0) {
                 style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() > 0) {
+            } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() > 0) {
@@ -1617,6 +1910,34 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addAttribute("style:master-page-name", masterPageName());
         } else if (key == KoParagraphStyle::DefaultOutlineLevel) {
             style.addAttribute("style:default-outline-level", defaultOutlineLevel());
+        } else if (key == KoParagraphStyle::AutomaticWritingMode) {
+            style.addProperty("style:writing-mode-automatic", automaticWritingMode(), KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::TextAutoSpace) {
+            if (textAutoSpace() == NoAutoSpace)
+                style.addProperty("style:text-autospace", "none", KoGenStyle::ParagraphType);
+            else if (textAutoSpace() == IdeographAlpha)
+                style.addProperty("style:text-autospace", "ideograph-alpha", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::KeepWithNext) {
+            if (keepWithNext())
+                style.addProperty("fo:keep-with-next", "always", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:keep-with-next", "auto", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::KeepHyphenation) {
+            if (keepHyphenation())
+                style.addProperty("fo:hyphenation-keep", "page", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:hyphenation-keep", "auto", KoGenStyle::ParagraphType);
+        } else if (key == KoParagraphStyle::HyphenationLadderCount) {
+            int value = hyphenationLadderCount();
+            if (value == 0)
+                style.addProperty("fo:hyphenation-ladder-count", "no-limit", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("fo:hyphenation-ladder-count", value, KoGenStyle::ParagraphType);
+        } else if (key == PunctuationWrap) {
+            if (punctuationWrap())
+                style.addProperty("style:punctuation-wrap", "simple", KoGenStyle::ParagraphType);
+            else
+                style.addProperty("style:punctuation-wrap", "hanging", KoGenStyle::ParagraphType);
         }
     }
     if (!writtenLineSpacing && normalLineHeight)
@@ -1750,7 +2071,6 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         buf.close();
         QString elementContents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
         style.addChildElement("style:tab-stops", elementContents);
-
     }
 }
 

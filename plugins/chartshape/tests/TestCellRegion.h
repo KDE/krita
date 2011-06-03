@@ -42,6 +42,7 @@ public:
 private slots:
     void init();
     void testToStringSingleTable();
+    void testSkippedTableEntry();
     void testFromStringSingleTable();
     void testToStringWithSpecialCharactersSingleTable();
     void testFromStringWithSpecialCharactersSingleTable();

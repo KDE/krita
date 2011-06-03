@@ -352,6 +352,21 @@ public:
     }
 
     /**
+     * Same like \a addChildElement above but adds a child style which is not child of any of the properties
+     */
+    void addStyleChildElement(const QString &elementName, const QString& elementContents) {
+        m_properties[StyleChildElement].insertMulti(elementName, elementContents);
+    }
+
+    /**
+     * Same like \a addStyleChildElement above but with QByteArray to explicit convert from QByteArray
+     * to QString using utf8 to prevent a dirty pitfall.
+     */
+    void addStyleChildElement(const QString &elementName, const QByteArray& elementContents) {
+        m_properties[StyleChildElement].insertMulti(elementName, QString::fromUtf8(elementContents));
+    }
+
+    /**
      * @brief Add a style:map to the style.
      * @param styleMap the attributes for the map, associated as (name,value).
      */
@@ -423,6 +438,13 @@ public:
             return it.value();
         return QString();
     }
+
+    /**
+     * Copies properties of defined type from a style to another style.
+     * This is needed in rare cases where two styles have properties of different types
+     * and we want to merge them to one style.
+     */
+    static void copyPropertiesFromStyle(const KoGenStyle &sourceStyle, KoGenStyle &targetStyle, PropertyType type = DefaultType);
 
 private:
 #ifndef NDEBUG

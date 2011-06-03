@@ -82,14 +82,27 @@ public:
      * Create a new paint device with the specified colorspace. The
      * parent node will be notified of changes to this paint device.
      *
-     * @param parent the node that contains this paint device.
+     * @param parent the node that contains this paint device
      * @param colorSpace the colorspace of this paint device
+     * @param defaultBounds boundaries of the device in case it is empty
      * @param name for debugging purposes
      */
     KisPaintDevice(KisNodeWSP parent, const KoColorSpace * colorSpace, KisDefaultBoundsSP defaultBounds = new KisDefaultBounds(), const QString& name = QString());
 
     KisPaintDevice(const KisPaintDevice& rhs);
     virtual ~KisPaintDevice();
+
+protected:
+    /**
+     * A special constructor for usage in KisPixelSelection. It allows
+     * two paint devices to share a data manager.
+     *
+     * @param explicitDataManager data manager to use inside paint device
+     * @param src source paint device to copy parameters from
+     * @param name for debugging purposes
+     */
+    KisPaintDevice(KisDataManagerSP explicitDataManager,
+                   KisPaintDeviceSP src, const QString& name = QString());
 
 public:
 
@@ -432,7 +445,7 @@ public:
      *
      */
 
-    KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
+    virtual KisPaintDeviceSP createThumbnailDevice(qint32 w, qint32 h, const KisSelection *selection = 0, QRect rect = QRect()) const;
 
     /**
      * Creates a thumbnail of the paint device, retaining the aspect ratio.
@@ -652,15 +665,8 @@ public:
     /** Clear the selected pixels from the paint device */
     void clearSelection(KisSelectionSP selection);
 
-    /**
-     * Apply a mask to the image data, i.e. multiply each pixel's opacity by its
-     * selectedness in the mask.
-     */
-    void applySelectionMask(KisSelectionSP mask);
-
 signals:
 
-    void ioProgress(qint8 percentage);
     void profileChanged(const KoColorProfile *  profile);
     void colorSpaceChanged(const KoColorSpace *colorspace);
 
@@ -678,8 +684,11 @@ private:
     QRect calculateExactBounds() const;
 
 private:
-
     KisPaintDevice& operator=(const KisPaintDevice&);
+    void init(KisDataManagerSP explicitDataManager,
+              const KoColorSpace *colorSpace,
+              KisDefaultBoundsSP defaultBounds,
+              KisNodeWSP parent, const QString& name);
 
     // Only KisPainter is allowed to have access to these low-level methods
     friend class KisPainter;

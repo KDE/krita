@@ -27,6 +27,7 @@
 
 #include <KoFilterChain.h>
 #include <KoColorSpace.h>
+#include <KoColorModelStandardIds.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -70,6 +71,10 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
         kdb->optionswdg->kComboBoxPredictor->removeItem(1);
     } else {
         kdb->optionswdg->kComboBoxPredictor->removeItem(2);
+    }
+
+    if (cs->colorModelId() == CMYKAColorModelID) {
+        kdb->optionswdg->alpha->setChecked(false);
     }
 
     if (kdb->exec() == QDialog::Rejected) {

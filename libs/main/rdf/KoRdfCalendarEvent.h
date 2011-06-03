@@ -22,12 +22,21 @@
 
 #include "KoRdfSemanticItem.h"
 
+// calendars
+#ifdef KDEPIMLIBS_FOUND
+#include <kcal/calendarresources.h>
+#include <kcal/calendarlocal.h>
+#include <kcal/vcalformat.h>
+#include <ksystemtimezone.h>
+#include <KConfigGroup>
+#endif
+
+#include <ui_KoRdfCalendarEventEditWidget.h>
+
 namespace KCal
 {
     class Event;
 }
-
-class KoRdfCalendarEventPrivate;
 
 /**
  * @short Calendar event information from Rdf (ical/vevent).
@@ -44,8 +53,8 @@ class KoRdfCalendarEvent : public KoRdfSemanticItem
     Q_OBJECT
 
 public:
-    KoRdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf = 0);
-    KoRdfCalendarEvent(QObject *parent, KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
+    KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf = 0);
+    KoRdfCalendarEvent(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it);
     virtual ~KoRdfCalendarEvent();
 
     // inherited and reimplemented...
@@ -79,6 +88,16 @@ private:
     KCal::Event *toKEvent() const;
     void fromKEvent(KCal::Event *e);
 private:
-    Q_DECLARE_PRIVATE(KoRdfCalendarEvent);
+    Soprano::Node m_linkSubject;
+    QString m_location;
+    QString m_summary;
+    QString m_uid;
+    KDateTime m_dtstart;
+    KDateTime m_dtend;
+    KDateTime::Spec m_startTimespec;
+    KDateTime::Spec m_endTimespec;
+
+    Ui::KoRdfCalendarEventEditWidget editWidget;
+
 };
 #endif

@@ -43,8 +43,8 @@ public:
     quint8 getOpacityU8(const KisPaintInformation& info) { return quint8(qRound(getOpacityf(info) * 255.0)); }
     qreal  getOpacityf(const KisPaintInformation& info);
     
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
+    virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
+    virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 };
 

@@ -32,6 +32,7 @@
 #include "KoShapeConfigFactoryBase.h"
 #include "KoShapeFactoryBase.h"
 #include "KoShape.h"
+#include "KoToolManager.h"
 
 #include <kpagedialog.h>
 #include <klocale.h>
@@ -149,8 +150,10 @@ QUndoCommand* KoShapeController::removeShapes(const QList<KoShape*> &shapes, QUn
     return new KoShapeDeleteCommand(d->shapeController, shapes, parent);
 }
 
-void KoShapeController::setShapeControllerBase(KoShapeControllerBase* shapeControllerBase)
+void KoShapeController::setShapeControllerBase(KoShapeControllerBase *shapeControllerBase,
+                                               KoCanvasBase *canvas)
 {
+    KoToolManager::instance()->updateShapeControllerBase(shapeControllerBase, canvas->canvasController());
     d->shapeController = shapeControllerBase;
 }
 

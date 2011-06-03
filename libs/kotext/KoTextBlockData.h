@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2006 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -108,6 +109,17 @@ public:
     QPointF counterPosition() const;
 
     /**
+     * Sets a textformat to be used for the counter/bullet
+     * @param font the format
+     */
+    void setLabelFormat(const QTextCharFormat &format);
+
+    /**
+     * Return the format to be used for the counter/bullet
+     */
+    QTextCharFormat labelFormat() const;
+
+    /**
      * When a paragraph has a border, it will have a KoTextBlockBorderData instance.
      * Adding the border will increase the refcount.
      * @param border the border used for this paragraph, or 0 if no border is needed (anymore).
@@ -118,18 +130,6 @@ public:
      * Return the border associated with this paragraph, or 0 if there is no border set.
      */
     KoTextBlockBorderData *border() const;
-
-    /**
-     * This is to set the effective top of block. Then follows margin and then the text
-     * @param margin the effective top of the block.
-     */
-    void setEffectiveTop(qreal y);
-
-    /**
-     * Return the effective top of the block. Useful when drawing paragraph background,
-     * or placing anchored shapes relative to this.
-     */
-    qreal effectiveTop() const;
 
     /**
      * sets a paintStrategy of this paragraph

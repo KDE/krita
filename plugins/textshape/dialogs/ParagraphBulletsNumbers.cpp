@@ -28,7 +28,8 @@
 #include <KDialog>
 
 ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
-        : QWidget(parent)
+        : QWidget(parent),
+        m_alignmentMode(false)
 {
     widget.setupUi(this);
 
@@ -44,6 +45,15 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     widget.alignment->addItem(i18nc("Text alignment", "Right"));
     widget.alignment->addItem(i18nc("Text alignment", "Centered"));
 
+    widget.labelFollowedBy->addItem(i18nc("Tab follows the bullet or number", "Tab Stop"));
+    widget.labelFollowedBy->addItem(i18nc("Space", "Space"));
+    widget.labelFollowedBy->addItem(i18nc("None", "Nothing"));
+
+    widget.doubleSpinBox->setSingleStep(0.05);
+    widget.doubleSpinBox_2->setSingleStep(0.05);
+    widget.doubleSpinBox_3->setSingleStep(0.05);
+
+    connect(widget.labelFollowedBy,SIGNAL(currentIndexChanged(int)),this,SLOT(labelFollowedByIndexChanged(int)));
     connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
     connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
@@ -100,6 +110,40 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
     if (s == KoListStyle::CustomCharItem)
         widget.customCharacter->setText(llp.bulletCharacter());
 
+    if(llp.alignmentMode()==false) {//for list-level-position-and-space-mode=label-width-and-position disable the following options
+        widget.label_8->setEnabled(false);
+        widget.label_9->setEnabled(false);
+        widget.label_10->setEnabled(false);
+        widget.label_11->setEnabled(false);
+
+        widget.labelFollowedBy->setEnabled(false);
+        widget.doubleSpinBox->setEnabled(false);
+        widget.doubleSpinBox_2->setEnabled(false);
+        widget.doubleSpinBox_3->setEnabled(false);
+    } else {
+        m_alignmentMode=true;
+        switch(llp.labelFollowedBy()) {
+        case KoListStyle::ListTab:
+            widget.doubleSpinBox->setEnabled(true);
+            widget.labelFollowedBy->setCurrentIndex(0);
+            widget.doubleSpinBox->setValue(KoUnit::toCentimeter(llp.tabStopPosition()));
+            break;
+        case KoListStyle::Space:
+            widget.doubleSpinBox->setEnabled(false);
+            widget.labelFollowedBy->setCurrentIndex(1);
+            break;
+        case KoListStyle::Nothing:
+            widget.doubleSpinBox->setEnabled(false);
+            widget.labelFollowedBy->setCurrentIndex(2);
+            break;
+        default:
+            Q_ASSERT(false);
+        }
+
+        widget.doubleSpinBox_2->setValue(KoUnit::toCentimeter(llp.margin()));
+        widget.doubleSpinBox_3->setValue(KoUnit::toCentimeter(llp.margin())+KoUnit::toCentimeter(llp.textIndent()));
+    }
+
     // *** features not in GUI;
     // character style
     // relative bullet size (percent)
@@ -110,6 +154,9 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level)
 void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
 {
     Q_ASSERT(savingStyle);
+
+    KoUnit *unit=new KoUnit(KoUnit::Centimeter);
+
     const int currentRow = widget.listTypes->currentRow();
     KoListStyle::Style style = m_mapping[currentRow];
     if (style == KoListStyle::None) {
@@ -129,6 +176,29 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     llp.setListItemPrefix(widget.prefix->text());
     llp.setListItemSuffix(widget.suffix->text());
     llp.setLetterSynchronization(widget.letterSynchronization->isVisible() && widget.letterSynchronization->isChecked());
+
+    if(m_alignmentMode==true) {
+        llp.setAlignmentMode(true);
+        switch(widget.labelFollowedBy->currentIndex()) {
+        case 0: llp.setLabelFollowedBy(KoListStyle::ListTab);
+            llp.setTabStopPosition(unit->fromUserValue(widget.doubleSpinBox->value()));
+            break;
+        case 1: llp.setLabelFollowedBy(KoListStyle::Space);
+            break;
+        case 2: llp.setLabelFollowedBy(KoListStyle::Nothing);
+            break;
+        default:
+            Q_ASSERT(false);
+        }
+
+        llp.setMargin(unit->fromUserValue(widget.doubleSpinBox_2->value()));
+        llp.setTextIndent(unit->fromUserValue(widget.doubleSpinBox_3->value())-unit->fromUserValue(widget.doubleSpinBox_2->value()));
+    }
+
+    if (!KoListStyle::isNumberingStyle(style)) {
+        llp.setRelativeBulletSize(45); //for non-numbering bullets the default relative bullet size is 45%(The spec does not say it; we take it)
+    }
+
     if (style == KoListStyle::CustomCharItem)
         llp.setBulletCharacter(currentRow == m_blankCharIndex ? QChar() : widget.customCharacter->text().remove('&').at(0));
 
@@ -145,6 +215,8 @@ void ParagraphBulletsNumbers::save(KoParagraphStyle *savingStyle)
     if (llp.level() != m_previousLevel)
         listStyle->removeLevelProperties(m_previousLevel);
     listStyle->setLevelProperties(llp);
+
+    delete unit;
 }
 
 void ParagraphBulletsNumbers::styleChanged(int index)
@@ -153,7 +225,8 @@ void ParagraphBulletsNumbers::styleChanged(int index)
     bool showLetterSynchronization = false;
     switch (style) {
     case KoListStyle::SquareItem:
-    case KoListStyle::DiscItem:
+    case KoListStyle::Bullet:
+    case KoListStyle::BlackCircle:
     case KoListStyle::CircleItem:
     case KoListStyle::BoxItem:
     case KoListStyle::CustomCharItem:
@@ -237,6 +310,15 @@ void ParagraphBulletsNumbers::recalcPreview()
             answer += ' ';
     }
     emit bulletListItemChanged(answer);
+}
+
+void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
+{
+    if(index==1 || index==2) {
+        widget.doubleSpinBox->setEnabled(false);
+    } else {
+        widget.doubleSpinBox->setEnabled(true);
+    }
 }
 
 #include <ParagraphBulletsNumbers.moc>

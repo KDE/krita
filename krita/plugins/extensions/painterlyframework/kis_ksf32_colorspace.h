@@ -79,6 +79,9 @@ public:
         return new KisKSF32ColorSpace<_N_>(p->clone());
     }
 
+    virtual bool userVisible() const {
+        return false;
+    }
 };
 
 #endif // KIS_KSF32_COLORSPACE_H_

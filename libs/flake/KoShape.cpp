@@ -70,15 +70,6 @@
 
 #include <limits>
 
-// KoShapeCache
-
-/// Empty all cached images from the image cache
-void KoShapeCache::purge()
-{
-    qDeleteAll(deviceData);
-    deviceData.clear();
-}
-
 // KoShapePrivate
 
 KoShapePrivate::KoShapePrivate(KoShape *shape)
@@ -102,10 +93,10 @@ KoShapePrivate::KoShapePrivate(KoShape *shape)
       selectable(true),
       detectCollision(false),
       protectContent(false),
-      cacheMode(KoShape::NoCache),
-      cache(0),
       textRunAroundSide(KoShape::BiggestRunAroundSide),
-      textRunAroundDistance(1.0)
+      textRunAroundDistance(1.0),
+      textRunAroundThreshold(0.0),
+      anchored(false)
 {
     connectors[KoConnectionPoint::TopConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::TopConnectionPoint);
     connectors[KoConnectionPoint::RightConnectionPoint] = KoConnectionPoint::defaultConnectionPoint(KoConnectionPoint::RightConnectionPoint);
@@ -176,34 +167,6 @@ void KoShapePrivate::addShapeManager(KoShapeManager *manager)
 void KoShapePrivate::removeShapeManager(KoShapeManager *manager)
 {
     shapeManagers.remove(manager);
-    if (cacheMode == KoShape::ScaledCache) {
-        if (KoShapeCache *cache = maybeShapeCache()) {
-            KoShapeCache::DeviceData *deviceData = cache->deviceData.take(manager);
-            delete deviceData;
-        }
-    }
-}
-
-KoShapeCache *KoShapePrivate::maybeShapeCache() const
-{
-    return cache;
-}
-
-KoShapeCache *KoShapePrivate::shapeCache() const
-{
-    if (!cache) {
-        const_cast<KoShapePrivate *>(this)->cache = new KoShapeCache;
-    }
-    return cache;
-}
-
-void KoShapePrivate::removeShapeCache()
-{
-    if (cache) {
-        cache->purge();
-        delete cache;
-        cache = 0;
-    }
 }
 
 void KoShapePrivate::convertFromShapeCoordinates(KoConnectionPoint &point, const QSizeF &shapeSize) const
@@ -311,7 +274,6 @@ KoShape::~KoShape()
 {
     Q_D(KoShape);
     d->shapeChanged(Deleted);
-    d->removeShapeCache();
     delete d_ptr;
 }
 
@@ -383,10 +345,12 @@ void KoShape::setSize(const QSizeF &newSize)
 {
     Q_D(KoShape);
     QSizeF oldSize(size());
+
+    // always set size, as d->size and size() may vary
+    d->size = newSize;
+
     if (oldSize == newSize)
         return;
-
-    d->size = newSize;
 
     notifyChanged();
     d->shapeChanged(SizeChanged);
@@ -436,7 +400,7 @@ bool KoShape::hitTest(const QPointF &position) const
 QRectF KoShape::boundingRect() const
 {
     Q_D(const KoShape);
-    QSizeF mySize = size();
+
     QTransform transform = absoluteTransformation(0);
     QRectF bb = outlineRect();
     if (d->border) {
@@ -586,15 +550,6 @@ void KoShape::update() const
 {
     Q_D(const KoShape);
 
-    if (d->cacheMode != NoCache) {
-        KoShapeCache *cache = d->shapeCache();
-        foreach(KoShapeCache::DeviceData *data, cache->deviceData.values()) {
-            data->allExposed = true;
-            data->exposed.clear();
-        }
-
-    }
-
     if (!d->shapeManagers.empty()) {
         QRectF rect(boundingRect());
         foreach(KoShapeManager * manager, d->shapeManagers) {
@@ -611,21 +566,6 @@ void KoShape::update(const QRectF &rect) const
     }
 
     Q_D(const KoShape);
-
-    if (d->cacheMode != NoCache) {
-        KoShapeCache *cache = d->shapeCache();
-        foreach(KoShapeCache::DeviceData *data, cache->deviceData.values()) {
-            if (!data->allExposed) {
-                if (rect.isNull()) {
-                    data->allExposed = true;
-                    data->exposed.clear();
-                }
-                else {
-                    data->exposed.append(rect);
-                }
-            }
-        }
-    }
 
     if (!d->shapeManagers.empty() && isVisible()) {
         QRectF rc(absoluteTransformation(0).mapRect(rect));
@@ -644,8 +584,8 @@ QPainterPath KoShape::outline() const
 
 QRectF KoShape::outlineRect() const
 {
-    Q_D(const KoShape);
-    return QRectF(QPointF(0, 0), QSizeF(qMax(d->size.width(), qreal(0.0001)), qMax(d->size.height(), qreal(0.0001))));
+    const QSizeF s = size();
+    return QRectF(QPointF(0, 0), QSizeF(qMax(s.width(), qreal(0.0001)), qMax(s.height(), qreal(0.0001))));
 }
 
 QPointF KoShape::absolutePosition(KoFlake::Position anchor) const
@@ -701,10 +641,6 @@ void KoShape::notifyChanged()
     Q_D(KoShape);
     foreach(KoShapeManager * manager, d->shapeManagers) {
         manager->notifyShapeChanged(this);
-    }
-    KoShapeCache *cache = d->maybeShapeCache();
-    if (cache) {
-        cache->purge();
     }
 }
 
@@ -955,6 +891,30 @@ void KoShape::setTextRunAroundDistance(qreal distance)
     d->textRunAroundDistance = distance;
 }
 
+qreal KoShape::textRunAroundThreshold() const
+{
+    Q_D(const KoShape);
+    return d->textRunAroundThreshold;
+}
+
+void KoShape::setAnchored(bool anchored)
+{
+    Q_D(KoShape);
+    d->anchored = anchored;
+}
+
+bool KoShape::isAnchored() const
+{
+    Q_D(const KoShape);
+    return d->anchored;
+}
+
+void KoShape::setTextRunAroundThreshold(qreal threshold)
+{
+    Q_D(KoShape);
+    d->textRunAroundThreshold = threshold;
+}
+
 void KoShape::setBackground(KoShapeBackground *fill)
 {
     Q_D(KoShape);
@@ -975,6 +935,8 @@ KoShapeBackground * KoShape::background() const
 void KoShape::setZIndex(int zIndex)
 {
     Q_D(KoShape);
+    if (d->zIndex == zIndex)
+        return;
     notifyChanged();
     d->zIndex = zIndex;
 }
@@ -996,12 +958,6 @@ void KoShape::setVisible(bool on)
     Q_D(KoShape);
     if (d->visible == on) return;
     d->visible = on;
-    if (d->visible) {
-        KoShapeCache *cache = d->maybeShapeCache();
-        if (cache) {
-            cache->purge();
-        }
-    }
 }
 
 bool KoShape::isVisible(bool recursive) const
@@ -1287,7 +1243,7 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
         case RightRunAroundSide:
             wrap = "right";
             break;
-        case AutoRunAroundSide:
+        case EnoughRunAroundSide:
             wrap = "dynamic";
             break;
         case BothRunAroundSide:
@@ -1301,7 +1257,8 @@ QString KoShape::saveStyle(KoGenStyle &style, KoShapeSavingContext &context) con
             break;
     }
     style.addProperty("style:wrap", wrap);
-    style.addProperty("fo:margin", QString::number(textRunAroundDistance()) + "pt");
+    style.addPropertyPt("style:wrap-dynamic-threshold", textRunAroundThreshold());
+    style.addPropertyPt("fo:margin", textRunAroundDistance());
 
     return context.mainStyles().insert(style, context.isSet(KoShapeSavingContext::PresentationShape) ? "pr" : "gr");
 }
@@ -1368,9 +1325,16 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
         else if (wrap == "right")
             setTextRunAroundSide(KoShape::RightRunAroundSide);
         else if (wrap == "dynamic")
-            setTextRunAroundSide(KoShape::AutoRunAroundSide);
+            setTextRunAroundSide(KoShape::EnoughRunAroundSide);
         else if (wrap == "parallel")
             setTextRunAroundSide(KoShape::BothRunAroundSide);
+    }
+
+    if (styleStack.hasProperty(KoXmlNS::style, "wrap-dynamic-threshold")) {
+        QString wrapThreshold = styleStack.property(KoXmlNS::style, "wrap-dynamic-threshold");
+        if (!wrapThreshold.isEmpty()) {
+            setTextRunAroundThreshold(KoUnit::parseValue(wrapThreshold));
+        }
     }
 }
 
@@ -1599,7 +1563,6 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
 
         KoConnectionPoint connector;
 
-        const QRectF bbox = boundingRect();
         const QString align = child.attributeNS(KoXmlNS::draw, "align", QString());
         if (align.isEmpty()) {
 #ifndef NWORKAROUND_ODF_BUGS
@@ -1856,7 +1819,6 @@ void KoShape::saveOdfCommonChildElements(KoShapeSavingContext &context) const
 
     // save glue points see ODF 9.2.19 Glue Points
     if(d->connectors.count()) {
-        QSizeF s = size();
         KoConnectionPoints::const_iterator cp = d->connectors.constBegin();
         KoConnectionPoints::const_iterator lastCp = d->connectors.constEnd();
         for(; cp != lastCp; ++cp) {
@@ -2096,23 +2058,4 @@ KoShapePrivate *KoShape::priv()
 {
     Q_D(KoShape);
     return d;
-}
-
-KoShape::CacheMode KoShape::cacheMode() const
-{
-    Q_D(const KoShape);
-    return d->cacheMode;
-}
-
-void KoShape::setCacheMode(CacheMode mode)
-{
-    Q_D(KoShape);
-    d->cacheMode = mode;
-    if (mode == NoCache) {
-        d->removeShapeCache();
-    } else {
-        KoShapeCache *cache = d->shapeCache();
-        // Reset old cache
-        cache->purge();
-    }
 }

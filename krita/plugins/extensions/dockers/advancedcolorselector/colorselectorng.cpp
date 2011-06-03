@@ -60,14 +60,15 @@ public:
 
 
 ColorSelectorNgPlugin::ColorSelectorNgPlugin(QObject *parent, const QVariantList &)
-        : QObject(parent),
-        m_settingsWidget(new KisColorSelectorSettings())
+        : QObject(parent)
 {
     KoDockRegistry::instance()->add(new ColorSelectorNgDockFactory());
 
     KisPreferenceSetRegistry *preferenceSetRegistry = KisPreferenceSetRegistry::instance();
 
-    preferenceSetRegistry->add(m_settingsWidget);
+    KisColorSelectorSettingsFactory* settingsFactory = new KisColorSelectorSettingsFactory();
+
+    preferenceSetRegistry->add("KisColorSelectorSettingsFactory", settingsFactory);
 }
 
 ColorSelectorNgPlugin::~ColorSelectorNgPlugin()

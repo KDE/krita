@@ -26,10 +26,9 @@
 
 /**
  * A \class KoCellStyle represents a style of a cell to be applied to one or more cells.
- * 
+ *
  * As all the styles it can be shared
  */
-
 class KOODF_EXPORT KoCellStyle : public KoStyle
 {
     KoCellStyle();
@@ -44,6 +43,9 @@ public:
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
 
+    void setBackgroundOpacity(qreal opacity);
+    qreal backgroundOpacity() const;
+
     qreal leftPadding() const;
     void setLeftPadding(qreal padding);
 
@@ -56,6 +58,16 @@ public:
     qreal bottomPadding() const;
     void setBottomPadding(qreal padding);
 
+    QString verticalAlign() const;
+    void setVerticalAlign(const QString& align);
+
+    bool glyphOrientation() const;
+    void setGlyphOrientation(bool orientation);
+
+    void setTextStyle(const KoGenStyle& style);
+    void setParagraphStyle(const KoGenStyle& style);
+    KoGenStyle styleProperties() const;
+
 protected:
     virtual void prepareStyle( KoGenStyle& style ) const;
     virtual QString defaultPrefix() const;
@@ -66,11 +78,17 @@ protected:
 private:
     KoBorder* m_borders;
     QColor m_backgroundColor;
+    qreal m_backgroundOpacity;
 
     qreal m_leftPadding;
     qreal m_topPadding;
     qreal m_rightPadding;
     qreal m_bottomPadding;
+
+    QString m_verticalAlign;
+    bool m_glyphOrientation;
+
+    KoGenStyle m_styleProperties;
 };
 
 #endif

@@ -121,6 +121,7 @@ public:
     QPen defaultPen() const;
 
     void dataChanged( KDChartModel::DataRole role, const QRect &rect ) const;
+    void setAttributesAccordingToType();
 
     DataSet      *parent;
 
@@ -179,6 +180,7 @@ public:
     const QString defaultLabel;
     bool symbolsActivated;
     int symbolID;
+    int loadedDimensions;
 };
 
 DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
@@ -204,7 +206,8 @@ DataSet::Private::Private( DataSet *parent, int dataSetNr ) :
     size( 0 ),
     defaultLabel( i18n( "Series %1", dataSetNr + 1 ) ),
     symbolsActivated( true ),
-    symbolID( 0 )
+    symbolID( 0 ),
+    loadedDimensions( 0 )
 {
 }
 
@@ -217,6 +220,7 @@ KDChart::MarkerAttributes DataSet::Private::defaultMarkerAttributes() const
     KDChart::MarkerAttributes ma;
     // Don't show markers unless we turn them on
     ma.setVisible( false );
+    //ma.setMarkerSizeMode( KDChart::MarkerAttributes::RelativeToDiagramWidthHeightMin );
     return ma;
 }
 
@@ -237,15 +241,41 @@ KDChart::DataValueAttributes DataSet::Private::defaultDataValueAttributes() cons
     attr.setTextAttributes( textAttr );
     // Set positive value position
     KDChart::RelativePosition positivePosition = attr.positivePosition();
-    positivePosition.setAlignment( Qt::AlignCenter | Qt::AlignBottom );
-    positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
+    if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+    {
+        positivePosition.setAlignment( Qt::AlignCenter );
+        positivePosition.setReferencePosition( KDChartEnums::PositionCenter );
+    }
+    else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+    {
+        positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorth );
+    }
+    else
+    {
+        positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
+    }
     positivePosition.setHorizontalPadding( 0.0 );
     positivePosition.setVerticalPadding( -100.0 );
     attr.setPositivePosition( positivePosition );
     // Set negative value position
     KDChart::RelativePosition negativePosition = attr.negativePosition();
-    negativePosition.setAlignment( Qt::AlignCenter | Qt::AlignTop );
-    negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
+    if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+    {
+        negativePosition.setAlignment( Qt::AlignCenter );
+        negativePosition.setReferencePosition( KDChartEnums::PositionCenter );
+    }
+    else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+    {
+        negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouth );
+    }
+    else
+    {
+        negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
+    }
     negativePosition.setHorizontalPadding( 0.0 );
     negativePosition.setVerticalPadding( 100.0 );
     attr.setNegativePosition( negativePosition );
@@ -485,6 +515,96 @@ qreal DataSet::upperErrorLimit() const
     return d->upperErrorLimit;
 }
 
+#include <QDebug>
+void DataSet::Private::setAttributesAccordingToType()
+{
+    KDChart::DataValueAttributes attr = dataValueAttributes;
+    KDChart::RelativePosition positivePosition = attr.positivePosition();
+    if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+    {
+        positivePosition.setAlignment( Qt::AlignCenter );
+        positivePosition.setReferencePosition( KDChartEnums::PositionCenter );
+    }
+    else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+    {
+        positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorth );
+    }
+    else
+    {
+        positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
+    }
+    positivePosition.setHorizontalPadding( 0.0 );
+    positivePosition.setVerticalPadding( -100.0 );
+    attr.setPositivePosition( positivePosition );
+    // Set negative value position
+    KDChart::RelativePosition negativePosition = attr.negativePosition();
+    if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+    {
+        negativePosition.setAlignment( Qt::AlignCenter );
+        negativePosition.setReferencePosition( KDChartEnums::PositionCenter );
+    }
+    else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+    {
+        negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouth );
+    }
+    else
+    {
+        negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
+    }
+    negativePosition.setHorizontalPadding( 0.0 );
+    negativePosition.setVerticalPadding( 100.0 );
+    attr.setNegativePosition( negativePosition );
+    dataValueAttributes = attr;
+    for ( int i = 0; i < sectionsDataValueAttributes.count(); ++i )
+    {
+        KDChart::DataValueAttributes attr = sectionsDataValueAttributes[ i ];
+        KDChart::RelativePosition positivePosition = attr.positivePosition();
+        if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+        {
+            positivePosition.setAlignment( Qt::AlignCenter );
+            positivePosition.setReferencePosition( KDChartEnums::PositionCenter );
+        }
+        else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+        {
+            positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+            positivePosition.setReferencePosition( KDChartEnums::PositionNorth );
+        }
+        else
+        {
+            positivePosition.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+            positivePosition.setReferencePosition( KDChartEnums::PositionNorthWest );
+        }
+        positivePosition.setHorizontalPadding( 0.0 );
+        positivePosition.setVerticalPadding( -100.0 );
+        attr.setPositivePosition( positivePosition );
+        // Set negative value position
+        KDChart::RelativePosition negativePosition = attr.negativePosition();
+        if ( chartType ==  KChart::BarChartType && chartSubType != KChart::NormalChartSubtype )
+        {
+            negativePosition.setAlignment( Qt::AlignCenter );
+            negativePosition.setReferencePosition( KDChartEnums::PositionCenter );
+        }
+        else if ( chartType ==  KChart::BarChartType && chartSubType == KChart::NormalChartSubtype )
+        {
+            negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+            negativePosition.setReferencePosition( KDChartEnums::PositionSouth );
+        }
+        else
+        {
+            negativePosition.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+            negativePosition.setReferencePosition( KDChartEnums::PositionSouthWest );
+        }
+        negativePosition.setHorizontalPadding( 0.0 );
+        negativePosition.setVerticalPadding( 100.0 );
+        attr.setNegativePosition( negativePosition );
+        sectionsDataValueAttributes[ i ] = attr;
+    }
+}
+
 
 void DataSet::setChartType( ChartType type )
 {
@@ -496,9 +616,10 @@ void DataSet::setChartType( ChartType type )
         axis->detachDataSet( this );
 
     d->chartType = type;
+    d->setAttributesAccordingToType();
 
     if ( axis )
-        axis->attachDataSet( this );
+        axis->attachDataSet( this );    
 }
 
 void DataSet::setChartSubType( ChartSubtype subType )
@@ -510,6 +631,7 @@ void DataSet::setChartSubType( ChartSubtype subType )
     axis->detachDataSet( this );
 
     d->chartSubType = subType;
+    d->setAttributesAccordingToType();
 
     axis->attachDataSet( this );
 }
@@ -929,6 +1051,7 @@ void DataSet::Private::dataChanged( KDChartModel::DataRole role, const QRect &re
 {
     if ( !kdChartModel )
         return;
+    Q_UNUSED( rect );
 
     // Stubbornly pretend like everything changed. This as well should be
     // refactored to be done in ChartProxyModel, then we can also fine-tune
@@ -1133,6 +1256,7 @@ bool DataSet::loadOdf( const KoXmlElement &n,
     bool bubbleChart = false;
     if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         bubbleChart = n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:bubble";
+//         bubbleChart =  bubbleChart || n.attributeNS( KoXmlNS::chart, "class", QString() ) == "chart:stock";
     }
     
     // FIXME: Maybe it's easier to understand this if we simply have a counter
@@ -1168,9 +1292,18 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
         const CellRegion region( helper->tableSource, regionString );
         if ( bubbleChart )
-            setCustomDataRegion( region );
+        {
+            setCustomDataRegion( region );            
+        }
         else
+        {
             setYDataRegion( region );
+        }
+        if ( !bubbleChart && d->loadedDimensions == 0 )
+        {
+            setYDataRegion( region );
+            ++d->loadedDimensions;
+        }
     }
     if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
         const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
@@ -1248,6 +1381,102 @@ bool DataSet::loadOdf( const KoXmlElement &n,
         }
 
         ++loadedDataPointCount;
+    }
+    return true;
+}
+
+bool DataSet::loadSeriesIntoDataset( const KoXmlElement &n,
+                       KoShapeLoadingContext &context )
+{
+    d->symbolsActivated = false;
+    KoOdfLoadingContext &odfLoadingContext = context.odfLoadingContext();
+    KoStyleStack &styleStack = odfLoadingContext.styleStack();
+    styleStack.clear();
+    odfLoadingContext.fillStyleStack( n, KoXmlNS::chart, "style-name", "chart" );
+
+    OdfLoadingHelper *helper = (OdfLoadingHelper*)context.sharedData( OdfLoadingHelperId );
+    // OOo assumes that if we use an internal model only, the columns are
+    // interpreted as consecutive data series. Thus we can (and must) ignore
+    // any chart:cell-range-address attribute associated with a series or
+    // data point. Instead the regions are used that are automatically
+    // assigned by SingleModelHelper whenever the structure of the internal
+    // model changes.
+    bool ignoreCellRanges = false;
+    styleStack.setTypeProperties("chart");
+
+    if ( n.hasChildNodes() ){
+        KoXmlNode cn = n.firstChild();
+        while ( !cn.isNull() ){
+            KoXmlElement elem = cn.toElement();
+            const QString name = elem.tagName();
+            if ( name == "domain" && elem.hasAttributeNS( KoXmlNS::table, "cell-range-address") && !ignoreCellRanges ) {
+                Q_ASSERT( false );
+                if ( d->loadedDimensions == 0 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    setXDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+                else if ( d->loadedDimensions == 1 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setYDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+                else if ( d->loadedDimensions == 2 )
+                {
+                    const QString region = elem.attributeNS( KoXmlNS::table, "cell-range-address", QString() );
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setCustomDataRegion( CellRegion( helper->tableSource, region ) );
+                    ++d->loadedDimensions;
+                }
+
+            }
+            cn = cn.nextSibling();
+        }
+    }
+
+    if ( n.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) && !ignoreCellRanges ) {
+        const QString regionString = n.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        const CellRegion region( helper->tableSource, regionString );
+        if ( d->loadedDimensions == 0 )
+                {
+                    setYDataRegion( CellRegion( region ) );
+                    ++d->loadedDimensions;
+                    qDebug() << "YDATA SET";
+                }
+                else if ( d->loadedDimensions == 1 )
+                {
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setXDataRegion( CellRegion( region ) );
+                    ++d->loadedDimensions;
+                    qDebug() << "XDATA SET";
+                }
+                else if ( d->loadedDimensions == 2 )
+                {
+                    // as long as there is not default table for missing data series the same region is used twice
+                    // to ensure the diagram is displayed, even if not as expected from o office or ms office
+                    setCustomDataRegion( CellRegion( region ) );
+                    qDebug() << region.toString();
+                    ++d->loadedDimensions;
+                    qDebug() << "CUSTOMDATA SET";
+                }
+    }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) && !ignoreCellRanges ) {
+        const QString region = n.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
+        setLabelDataRegion( CellRegion( helper->tableSource, region ) );
+    }
+    if ( n.hasAttributeNS( KoXmlNS::chart, "data-label-text" ) ) {
+        const QString enable = n.attributeNS( KoXmlNS::chart, "data-label-text", QString() );
+        setShowLabels( enable == "true" );
+    }
+    if ( styleStack.hasProperty(KoXmlNS::chart, "data-label-number" ) ) {
+        const QString format = styleStack.property( KoXmlNS::chart, "data-label-number" );
+        setValueLabelType( valueLabelTypeFromString( format ) );
     }
     return true;
 }

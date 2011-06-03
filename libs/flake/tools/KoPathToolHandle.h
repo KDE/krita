@@ -47,6 +47,7 @@ public:
     virtual bool check(const QList<KoPathShape*> &selectedShapes) = 0;
 
 protected:
+    uint handleRadius() const;
     KoPathTool *m_tool;
 };
 

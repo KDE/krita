@@ -21,6 +21,7 @@
 #include "ReviewTool.h"
 
 #include <KoCanvasBase.h>
+#include <KoTextLayoutRootArea.h>
 #include <KoChangeTracker.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
@@ -37,6 +38,7 @@
 #include "commands/ShowChangesCommand.h"
 #include "dialogs/TrackedChangeModel.h"
 #include "dialogs/TrackedChangeManager.h"
+#include "dialogs/AcceptRejectChangeDialog.h"
 
 #include <KLocale>
 #include <KAction>
@@ -49,6 +51,7 @@
 #include <QTextBlock>
 #include <QTreeView>
 #include <QVBoxLayout>
+#include <QVector>
 #include <QLabel>
 
 ReviewTool::ReviewTool(KoCanvasBase* canvas): KoToolBase(canvas),
@@ -81,22 +84,39 @@ void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)
 
 void ReviewTool::mouseMoveEvent(KoPointerEvent* event)
 {
-    event->ignore();
-}
-
-void ReviewTool::mousePressEvent(KoPointerEvent* event)
-{
-    if (event->button() != Qt::RightButton)
-        updateSelectedShape(event->point);
-
+    updateSelectedShape(event->point);
     int position = pointToPosition(event->point);
     QTextCursor cursor(m_textShapeData->document());
     cursor.setPosition(position);
 
-    //KoChangeTracker *changeTracker = KoTextDocument(m_textShapeData->document()).changeTracker();
     int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
-    QModelIndex index = m_model->indexForChangeId(changeId);
-    m_changesTreeView->setCurrentIndex(index);
+    if (changeId) {
+        m_canvas->setCursor(QCursor(Qt::PointingHandCursor));
+        QModelIndex index = m_model->indexForChangeId(changeId);
+        m_changesTreeView->setCurrentIndex(index);
+    } else {
+        m_canvas->setCursor(QCursor(Qt::ArrowCursor));
+        m_changesTreeView->setCurrentIndex(QModelIndex());
+    }
+}
+
+void ReviewTool::mousePressEvent(KoPointerEvent* event)
+{
+    int position = pointToPosition(event->point);
+    QTextCursor cursor(m_textShapeData->document());
+    cursor.setPosition(position);
+
+    int changeId = cursor.charFormat().property(KoCharacterStyle::ChangeTrackerId).toInt();
+    if (changeId) {
+        AcceptRejectChangeDialog acceptDialog(KoTextDocument(m_textShapeData->document()).changeTracker(), changeId);
+        if (int result = acceptDialog.exec()) {
+            if (result == (int)(AcceptRejectChangeDialog::eChangeAccepted)) {
+                acceptChange();
+            } else if (result == (int)(AcceptRejectChangeDialog::eChangeRejected)) {
+                rejectChange();
+            }
+        }
+    }
 }
 
 void ReviewTool::updateSelectedShape(const QPointF &point)
@@ -108,8 +128,6 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
             if (textShape) {
                 KoTextShapeData *d = static_cast<KoTextShapeData*>(textShape->userData());
                 const bool sameDocument = d->document() == m_textShapeData->document();
-                if (sameDocument && d->position() < 0)
-                    continue; // don't change to a shape that has no text
                     m_textShape = textShape;
                 if (sameDocument)
                     break; // stop looking.
@@ -122,12 +140,7 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
 int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textEditor->document()->documentLayout()->hitTest(p, Qt::FuzzyHit);
-    caretPos = qMax(caretPos, m_textShapeData->position());
-    if (m_textShapeData->endPosition() == -1) {
-        m_textShapeData->fireResizeEvent(); // requests a layout run ;)
-    }
-    caretPos = qMin(caretPos, m_textShapeData->endPosition());
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit).position;
     return caretPos;
 }
 
@@ -151,6 +164,9 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
         int end = changeRanges.at(i).second;
         if (end < start)
             qSwap(start, end);
+        QTextCursor cursor;
+        cursor.setPosition(start);
+        cursor.setPosition(end, QTextCursor::KeepAnchor);
         QList<TextShape *> shapesToPaint;
         KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
         if (lay) {
@@ -160,8 +176,7 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
                     continue;
                 KoTextShapeData *data = ts->textShapeData();
                 // check if shape contains some of the selection, if not, skip
-                if (!( (data->endPosition() >= start && data->position() <= end)
-                    || (data->position() <= start && data->endPosition() >= end)))
+                if (!data->isCursorVisible(&cursor))
                     continue;
                 if (painter.hasClipping()) {
                     QRect rect = converter.documentToView(ts->boundingRect()).toRect();
@@ -180,7 +195,7 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
         foreach(TextShape *ts, shapesToPaint) {
             KoTextShapeData *data = ts->textShapeData();
             Q_ASSERT(data);
-            if (data->endPosition() == -1)
+            if (data->isDirty())
                 continue;
 
             painter.save();
@@ -189,51 +204,32 @@ void ReviewTool::paint(QPainter& painter, const KoViewConverter& converter)
             painter.setTransform(shapeMatrix * painter.transform());
             painter.setClipRect(QRectF(QPointF(), ts->size()), Qt::IntersectClip);
             painter.translate(0, -data->documentOffset());
-            if ((data->endPosition() >= start && data->position() <= end)
-                || (data->position() <= start && data->endPosition() >= end)) {
-                QRectF clip = textRect(qMax(data->position(), start), qMin(data->endPosition(), end));
-            painter.save();
-            QPen pen;
-            pen.setColor(QColor(Qt::black));
-            pen.setWidth(3);
-            painter.setPen(pen);
-            painter.setClipRect(clip, Qt::IntersectClip);
-            painter.drawRect(clip);
-            painter.restore();
+#if 0 //FIXME refactor to new textlayout
+            if (data->isCursorVisible(&cursor)) {
+                QVector<QRectF> *clipVec = textRect(cursor);
+                QRectF clip;
+                foreach(clip, *clipVec) {
+                    painter.save();
+                    painter.setClipRect(clip, Qt::IntersectClip);
+                    painter.fillRect(clip, QBrush(QColor(0,0,0,90)));
+                    painter.restore();
+                }
+                delete clipVec;
             }
+#endif
 
             painter.restore();
         }
     }
 }
 
-QRectF ReviewTool::textRect ( int startPosition, int endPosition )
+
+QRectF ReviewTool::textRect(QTextCursor &cursor) const
 {
-    Q_ASSERT(startPosition >= 0);
-    Q_ASSERT(endPosition >= 0);
-    if (startPosition > endPosition)
-        qSwap(startPosition, endPosition);
-    QTextBlock block = m_textShapeData->document()->findBlock(startPosition);
-    if (!block.isValid())
+    if (!m_textShapeData)
         return QRectF();
-    QTextLine line1 = block.layout()->lineForTextPosition(startPosition - block.position());
-    if (! line1.isValid())
-        return QRectF();
-    qreal startX = line1.cursorToX(startPosition - block.position());
-    if (startPosition == endPosition)
-        return QRectF(startX, line1.y(), 1, line1.height());
-
-    QTextBlock block2 = m_textShapeData->document()->findBlock(endPosition);
-    if (!block2.isValid())
-        return QRectF();
-    QTextLine line2 = block2.layout()->lineForTextPosition(endPosition - block2.position());
-    if (! line2.isValid())
-        return QRectF();
-    qreal endX = line2.cursorToX(endPosition - block2.position());
-
-    if (line1.textStart() + block.position() == line2.textStart() + block2.position())
-        return QRectF(qMin(startX, endX), line1.y(), qAbs(startX - endX), line1.height());
-    return QRectF(0, line1.y(), 10E6, line2.y() + line2.height() - line1.y());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
+    return lay->selectionBoundingBox(cursor);
 }
 
 void ReviewTool::keyPressEvent(QKeyEvent* event)
@@ -320,9 +316,9 @@ void ReviewTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
+QList<QWidget*> ReviewTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     QWidget *widget = new QWidget();
     widget->setObjectName("hmm");
 
@@ -343,16 +339,20 @@ QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
 
-    widgets.insert(i18n("Changes"), widget);
+    widget->setWindowTitle(i18n("Changes"));
+    widgets.append(widget);
     QWidget *dummy = new QWidget();
     dummy->setObjectName("dummy1");
-    widgets.insert(i18n("Spell checking"), dummy);
+    dummy->setWindowTitle(i18n("Spell checking"));
+    widgets.append(dummy);
     dummy = new QWidget();
     dummy->setObjectName("dummy2");
-    widgets.insert(i18n("Comments"), dummy);
+    dummy->setWindowTitle(i18n("Comments"));
+    widgets.append(dummy);
     dummy = new QWidget();
     dummy->setObjectName("dummy3");
-    widgets.insert(i18n("Statistics"), dummy);
+    dummy->setWindowTitle(i18n("Statistics"));
+    widgets.append(dummy);
     return widgets;
 }
 

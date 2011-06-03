@@ -65,9 +65,9 @@ private:
 RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
         LcmsColorSpace<KoRgbU8Traits>(colorSpaceId(), i18n("RGB (8-bit integer/channel)"),  TYPE_BGRA_8, cmsSigRgbData, p)
 {
-    addChannel(new KoChannelInfo(i18n("Red"),   2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
+    addChannel(new KoChannelInfo(i18n("Blue") , 2, 2, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
     addChannel(new KoChannelInfo(i18n("Green"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));
-    addChannel(new KoChannelInfo(i18n("Blue"),  0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
+    addChannel(new KoChannelInfo(i18n("Red")  , 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 0, 255)));
     addChannel(new KoChannelInfo(i18n("Alpha"), 3, 3, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
     init();
@@ -75,18 +75,18 @@ RgbU8ColorSpace::RgbU8ColorSpace(KoColorProfile *p) :
     // ADD, ALPHA_DARKEN, BURN, DIVIDE, DODGE, ERASE, MULTIPLY, OVER, OVERLAY, SCREEN, SUBTRACT
     addStandardCompositeOps<KoRgbU8Traits>(this);
 
-    addCompositeOp(new RgbCompositeOpDarken<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpLighten<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpHue<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpSaturation<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpValue<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpColor<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDarken<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpLighten<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpHue<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpSaturation<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpValue<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpColor<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpIn<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpOut<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpDiff<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDiff<KoRgbU8Traits>(this));
     addCompositeOp(new RgbCompositeOpBumpmap<KoRgbU8Traits>(this));
 //     addCompositeOp(new RgbCompositeOpClear<KoRgbU8Traits>(this));
-    addCompositeOp(new RgbCompositeOpDissolve<KoRgbU8Traits>(this));
+//     addCompositeOp(new RgbCompositeOpDissolve<KoRgbU8Traits>(this));
 }
 
 

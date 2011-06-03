@@ -24,7 +24,6 @@
 #include "kotext_export.h"
 
 #include <KoXmlReaderForward.h>
-class KoShape;
 class QTextDocument;
 class KoShapeSavingContext;
 class KoShapeLoadingContext;
@@ -73,9 +72,6 @@ public:
 
     /// @return the end bookmark if the type is StartBookmark
     KoTextMeta* endBookmark() const;
-
-    /// @return the KoShape where this bookmark is located
-    KoShape *shape() const;
 
     /// @return the exact cursor position of this bookmark in document
     int position() const;

@@ -117,6 +117,18 @@ public:
      */
     QString aboutInfo(const QString& info) const;
 
+    /**
+     * Obtain the generator of the document, as it was loaded from the document
+     */
+    QString originalGenerator() const;
+
+    /**
+     * Sets the original generator of the document. This does not affect what gets
+     * saved to a document in the meta:generator field, it only changes what
+     * originalGenerator() will return.
+     */
+    void setOriginalGenerator(const QString& generator);
+
     /** Resets part of the meta data */
     void resetMetaData();
 
@@ -188,6 +200,8 @@ private:
     QMap<QString, QString> m_authorInfo;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;
+    /** The original meta:generator of the document */
+    QString m_generator;
 
     bool m_firstSave;
 signals:

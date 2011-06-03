@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) 2010 Dmitry Kazakov <dimula73@gmail.com>
- *  Copyright (c) 2010 José Luis Vergara <pentalis@gmail.com>
+ *  Copyright (c) 2010-2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -84,6 +84,9 @@
 #include "kdebug.h"
 #include <kis_painter.h>
 
+#include <kis_iterator_ng.h>
+#include "kis_math_toolbox.h"
+
 K_PLUGIN_FACTORY(KritaPhongBumpmapFactory, registerPlugin<KritaPhongBumpmap>();)
 K_EXPORT_PLUGIN(KritaPhongBumpmapFactory("krita"))
 
@@ -118,6 +121,9 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
         return;
     }
 
+    //Bypass stuff lol
+    userChosenHeightChannel = "Red";
+    
     timer.start();
 
     KoChannelInfo* m_heightChannel = 0;
@@ -147,7 +153,7 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
     //======================================
     //======Preparation paraphlenalia=======
     //======================================
-
+/*
     QImage bumpmap(outputArea.width(), outputArea.height(), QImage::Format_RGB32);
     bumpmap.fill(0);
 
@@ -155,183 +161,107 @@ void KisFilterPhongBumpmap::process(KisPaintDeviceSP device,
 
     for (int yIndex = 0; yIndex < bumpmap.height(); yIndex++)
         bumpmapByteLines[yIndex] = (QRgb *) bumpmap.scanLine(yIndex);
-
-    qDebug("Tiempo de total preparacion: %d ms", timer.restart());
-
-    // Tiles need to overlap in 2 pixels, to prevent seams between tiles
-    // because only the inner pixels of each tile will be rendered
-    const int TILE_OFFSET = 2;
-    const int TILE_WIDTH = 100;
-    const int TILE_HEIGHT = 100;
-    const int TILE_WIDTH_MINUS_1 = TILE_WIDTH - 1;
-    const int TILE_HEIGHT_MINUS_1 = TILE_HEIGHT - 1;
-    const int COLS_OF_TILES = inputArea.width() / TILE_WIDTH;
-    const int ROWS_OF_TILES = inputArea.height() / TILE_HEIGHT;
-    const int STRAY_COL_WIDTH = (TILE_OFFSET * COLS_OF_TILES) + inputArea.width() % TILE_WIDTH;
-    const int STRAY_ROW_HEIGHT = (TILE_OFFSET * ROWS_OF_TILES) + inputArea.height() % TILE_HEIGHT;
-    const int X_READ_OFFSET = applyRect.topLeft().x();
-    const int Y_READ_OFFSET = applyRect.topLeft().y();
-    const int OUTPUT_OFFSET = 1;
-
-    QVector<quint8*> tileChannels;
+*/
+    //Hardcoded facts about Phong Bumpmap: it _will_ generate an RGBA16 bumpmap
+    const quint32 PIXELS_OF_OUTPUT_AREA = abs(outputArea.width() * outputArea.height());
+    const quint8 BYTE_DEPTH_OF_BUMPMAP = 2; //16 bits per channel
+    const quint8 CHANNEL_COUNT_OF_BUMPMAP = 4; //RGBA
+    const quint32 BYTES_TO_FILL_BUMPMAP_AREA = PIXELS_OF_OUTPUT_AREA * BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
+    QVector<quint8> bumpmap(BYTES_TO_FILL_BUMPMAP_AREA);
+    quint8* bumpmapDataPointer = bumpmap.data();
+    const quint8 PIXEL_SIZE = BYTE_DEPTH_OF_BUMPMAP * CHANNEL_COUNT_OF_BUMPMAP;
+    
+    //qDebug("Tiempo de total preparacion: %d ms", timer.restart());
+    
     PhongPixelProcessor tileRenderer(config);
+    quint32 ki = m_heightChannel->index();
 
     //======================================
     //===============RENDER=================
     //======================================
 
-    for (int col = 0; col < COLS_OF_TILES; col++) {
-        for (int row = 0; row < ROWS_OF_TILES; row++) {
-            // ^^^  Foreach tile
+    qDebug() << "Canary1";
+    
+    QVector<PtrToDouble> toDoubleFuncPtr(device->colorSpace()->channels().count());
+    KisMathToolbox* mathToolbox = KisMathToolboxRegistry::instance()->value(device->colorSpace()->mathToolboxId().id());
+    if (!mathToolbox->getToDoubleChannelPtr(device->colorSpace()->channels(), toDoubleFuncPtr))
+        return;
+    
+    KisHLineIteratorSP iterator;
+    quint32 curPixel = 0;
+    
+    iterator = device->createHLineIteratorNG(inputArea.x(),
+                                             inputArea.y(),
+                                             inputArea.width()
+                                             );
+    
+    curPixel = 0;
+    
+    for (qint32 srcRow = 0; srcRow < inputArea.height(); ++srcRow)
+    {
+        do
+        {
+            const quint8* data = iterator->rawData();
+            //tileRenderer.realheightmap[curPixel] = (double)*data;
 
-            // See TILE_OFFSET for explanation
-            tileLimits.setX( 0 + (TILE_WIDTH - TILE_OFFSET) * col);
-            tileLimits.setY( 0 + (TILE_HEIGHT - TILE_OFFSET) * row);
-            tileLimits.setWidth( TILE_WIDTH );
-            tileLimits.setHeight( TILE_HEIGHT );
+            tileRenderer.realheightmap[curPixel] = toDoubleFuncPtr[ki](data, device->colorSpace()->channels()[ki]->pos());
 
-            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
-                                                tileLimits.y() + Y_READ_OFFSET,
-                                                tileLimits.width(),
-                                                tileLimits.height()
-                                                );
-            quint8* tileHeightmap = tileChannels.data()[m_heightChannel->index()];
-            tileRenderer.heightmap = tileHeightmap;
+            curPixel++;
+        }
+        while (iterator->nextPixel());
+        iterator->nextRow();
+    }
+    
+    qDebug() << "Canary2";
+    
+    const int TILE_WIDTH_MINUS_1 = inputArea.width() - 1;
+    const int TILE_HEIGHT_MINUS_1 = inputArea.height() - 1;
+    
+    for (int y = 1; y < TILE_HEIGHT_MINUS_1; y++) {
+        for (int x = 1; x < TILE_WIDTH_MINUS_1; x++) {
+            // ^^^ Foreach INNER pixel in tile
 
-            for (int x = 1; x < TILE_WIDTH_MINUS_1; x++) {
-                for (int y = 1; y < TILE_HEIGHT_MINUS_1; y++) {
-                    // ^^^ Foreach INNER pixel in tile
+            posup   = (y + 1) * inputArea.width() + x;
+            posdown = (y - 1) * inputArea.width() + x;
+            posleft  = y * inputArea.width() + x - 1;
+            posright = y * inputArea.width() + x + 1;
 
-                    posup   = (y + 1) * tileLimits.width() + x;
-                    posdown = (y - 1) * tileLimits.width() + x;
-                    posleft  = y * tileLimits.width() + x - 1;
-                    posright = y * tileLimits.width() + x + 1;
-
-                    bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
-                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
-                }
-            }
+            memcpy(bumpmapDataPointer,
+                   tileRenderer.testingHeightmapIlluminatePixel(posup, posdown, posleft, posright).data(),
+                   PIXEL_SIZE);
+            
+            bumpmapDataPointer += PIXEL_SIZE;
         }
     }
-
-    // Fill the stray [||] column, past the last square tiles in the row
-    if (STRAY_COL_WIDTH > TILE_OFFSET) {
-        const int STRAY_COL_WIDTH_MINUS_1 = STRAY_COL_WIDTH - 1;
-        tileLimits.setX( 0 + (TILE_WIDTH - TILE_OFFSET) * COLS_OF_TILES );
-        for (int row = 0; row < ROWS_OF_TILES; row++) {
-            // See TILE_OFFSET for explanation
-            tileLimits.setY( 0 + (TILE_HEIGHT - TILE_OFFSET) * row );
-            tileLimits.setWidth( STRAY_COL_WIDTH );
-            tileLimits.setHeight( TILE_HEIGHT );
-
-            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
-                                                tileLimits.y() + Y_READ_OFFSET,
-                                                tileLimits.width(),
-                                                tileLimits.height()
-                                                );
-            quint8* tileHeightmap = tileChannels.data()[m_heightChannel->index()];
-            tileRenderer.heightmap = tileHeightmap;
-
-            for (int x = 1; x < STRAY_COL_WIDTH_MINUS_1; x++) {
-                for (int y = 1; y < TILE_HEIGHT_MINUS_1; y++) {
-                    // ^^^ Foreach INNER pixel in tile
-
-                    posup   = (y + 1) * tileLimits.width() + x;
-                    posdown = (y - 1) * tileLimits.width() + x;
-                    posleft  = y * tileLimits.width() + x - 1;
-                    posright = y * tileLimits.width() + x + 1;
-
-                    bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
-                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
-                }
-            }
-        }
-    }
-
-    // Fill the stray [=] row, past the last square tiles in the columns
-    if (STRAY_COL_WIDTH > TILE_OFFSET) {
-        const int STRAY_ROW_HEIGHT_MINUS_1 = STRAY_ROW_HEIGHT - 1;
-        tileLimits.setY( 0 + (TILE_HEIGHT - TILE_OFFSET) * ROWS_OF_TILES );
-        for (int col = 0; col < COLS_OF_TILES; col++) {
-            // See TILE_OFFSET for explanation
-            tileLimits.setX( 0 + (TILE_WIDTH - TILE_OFFSET) * col);
-            tileLimits.setWidth( TILE_WIDTH );
-            tileLimits.setHeight( STRAY_ROW_HEIGHT );
-
-            tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
-                                                tileLimits.y() + Y_READ_OFFSET,
-                                                tileLimits.width(),
-                                                tileLimits.height()
-                                                );
-            quint8* tileHeightmap = tileChannels.data()[m_heightChannel->index()];
-            tileRenderer.heightmap = tileHeightmap;
-
-            for (int x = 1; x < TILE_HEIGHT_MINUS_1; x++) {
-                for (int y = 1; y < STRAY_ROW_HEIGHT_MINUS_1; y++) {
-                    // ^^^ Foreach INNER pixel in tile
-
-                    posup   = (y + 1) * tileLimits.width() + x;
-                    posdown = (y - 1) * tileLimits.width() + x;
-                    posleft  = y * tileLimits.width() + x - 1;
-                    posright = y * tileLimits.width() + x + 1;
-
-                    bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                    //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
-                    tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
-                }
-            }
-        }
-    }
-
-    // Fill the stray [.] corner, past the last square column and row
-    if ((STRAY_COL_WIDTH > TILE_OFFSET) && (STRAY_ROW_HEIGHT > TILE_OFFSET)) {
-        const int STRAY_ROW_HEIGHT_MINUS_1 = STRAY_ROW_HEIGHT - 1;
-        const int STRAY_COL_WIDTH_MINUS_1 = STRAY_COL_WIDTH - 1;
-        // See TILE_OFFSET for explanation
-        tileLimits.setX( 0 + (TILE_WIDTH - TILE_OFFSET) * COLS_OF_TILES );
-        tileLimits.setY( 0 + (TILE_HEIGHT - TILE_OFFSET) * ROWS_OF_TILES );
-        tileLimits.setWidth( STRAY_COL_WIDTH );
-        tileLimits.setHeight( STRAY_ROW_HEIGHT );
-
-        tileChannels = device->readPlanarBytes(tileLimits.x() + X_READ_OFFSET,
-                                            tileLimits.y() + Y_READ_OFFSET,
-                                            tileLimits.width(),
-                                            tileLimits.height()
-                                            );
-        quint8* tileHeightmap = tileChannels.data()[m_heightChannel->index()];
-        tileRenderer.heightmap = tileHeightmap;
-
-        for (int x = 1; x < STRAY_COL_WIDTH_MINUS_1; x++) {
-            for (int y = 1; y < STRAY_ROW_HEIGHT_MINUS_1; y++) {
-                // ^^^ Foreach INNER pixel in tile
-
-                posup   = (y + 1) * tileLimits.width() + x;
-                posdown = (y - 1) * tileLimits.width() + x;
-                posleft  = y * tileLimits.width() + x - 1;
-                posright = y * tileLimits.width() + x + 1;
-
-                bumpmapByteLines[y + tileLimits.y() - OUTPUT_OFFSET][x + tileLimits.x() - OUTPUT_OFFSET] =
-                //tileRenderer.reallyFastIlluminatePixel(posup, posdown, posleft, posright);
-                tileRenderer.testingSpeedIlluminatePixel(posup, posdown, posleft, posright);
-            }
-        }
-    }
-
-
-    qDebug("Tiempo de calculo: %d ms", timer.restart());
     /*
-    KisPainter leHack(dstInfo.paintDevice());
-    KisPaintDeviceSP sneaky = new KisPaintDevice(dstInfo.paintDevice()->colorSpace());
-    sneaky->convertFromQImage(bumpmap, "");
-    leHack.bitBlt(dstInfo.topLeft(), sneaky, sneaky->exactBounds());
-    */
-    //qDebug() << bumpmap.size();
-    device->convertFromQImage(bumpmap, "", applyRect.topLeft().x(), applyRect.topLeft().y());
-    qDebug("Tiempo deconversion: %d ms", timer.elapsed());
+    for (int x = 1; x < TILE_WIDTH_MINUS_1; x++) {
+        for (int y = 1; y < TILE_HEIGHT_MINUS_1; y++) {
+            // ^^^ Foreach INNER pixel in tile
 
-    delete [] bumpmapByteLines;
+            posup   = (y + 1) * inputArea.width() + x;
+            posdown = (y - 1) * inputArea.width() + x;
+            posleft  = y * inputArea.width() + x - 1;
+            posright = y * inputArea.width() + x + 1;
+
+            // TODO BUG
+            memcpy(bumpmapDataPointer,
+                   tileRenderer.testingHeightmapIlluminatePixel(posup, posdown, posleft, posright).data(),
+                   PIXEL_SIZE);
+            
+            bumpmapDataPointer += PIXEL_SIZE;
+        }
+    }
+    */
+    qDebug() << "Canary3";
+    
+    qDebug("Tiempo de calculo: %d ms", timer.restart());
+    
+    KisPaintDeviceSP bumpmapPaintDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb16());
+    bumpmapPaintDevice->writeBytes(bumpmap.data(), outputArea.x(), outputArea.y(), outputArea.width(), outputArea.height());
+    bumpmapPaintDevice->convertTo(device->colorSpace());
+    device->makeCloneFrom(bumpmapPaintDevice, bumpmapPaintDevice->extent());  // THIS COULD BE BUG GY
+        
+    qDebug("Tiempo deconversion: %d ms", timer.elapsed());
 }
 
 

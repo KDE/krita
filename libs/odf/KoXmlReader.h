@@ -25,9 +25,9 @@
 
 #include "koodf_export.h"
 
+#include <QPair>
 #include <QtXml/qxml.h>
 #include <QtXml/qdom.h>
-#include <qpair.h>
 
 class QIODevice;
 class QTextDecoder;

@@ -156,9 +156,9 @@ void KoTextSharedLoadingData::loadOdfStyles(KoShapeLoadingContext &shapeContext,
     addTableRowStyles(context, context.stylesReader().autoStyles("table-row", true).values(), StylesDotXml);
     addTableRowStyles(context, context.stylesReader().customStyles("table-row").values(), ContentDotXml | StylesDotXml, styleManager);
 
-    addTableCellStyles(context, context.stylesReader().autoStyles("table-cell").values(), ContentDotXml);
-    addTableCellStyles(context, context.stylesReader().autoStyles("table-cell", true).values(), StylesDotXml);
-    addTableCellStyles(context, context.stylesReader().customStyles("table-cell").values(), ContentDotXml | StylesDotXml, styleManager);
+    addTableCellStyles(shapeContext, context.stylesReader().autoStyles("table-cell").values(), ContentDotXml);
+    addTableCellStyles(shapeContext, context.stylesReader().autoStyles("table-cell", true).values(), StylesDotXml);
+    addTableCellStyles(shapeContext, context.stylesReader().customStyles("table-cell").values(), ContentDotXml | StylesDotXml, styleManager);
 
     addSectionStyles(context, context.stylesReader().autoStyles("section").values(), ContentDotXml);
     addSectionStyles(context, context.stylesReader().autoStyles("section", true).values(), StylesDotXml);
@@ -467,7 +467,7 @@ QList<QPair<QString, KoTableRowStyle *> > KoTextSharedLoadingData::loadTableRowS
     return tableRowStyles;
 }
 
-void KoTextSharedLoadingData::addTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements,
+void KoTextSharedLoadingData::addTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements,
                                             int styleTypes, KoStyleManager *styleManager)
 {
     QList<QPair<QString, KoTableCellStyle *> > tableCellStyles(loadTableCellStyles(context, styleElements));
@@ -490,7 +490,7 @@ void KoTextSharedLoadingData::addTableCellStyles(KoOdfLoadingContext &context, Q
     }
 }
 
-QList<QPair<QString, KoTableCellStyle *> > KoTextSharedLoadingData::loadTableCellStyles(KoOdfLoadingContext &context, QList<KoXmlElement*> styleElements)
+QList<QPair<QString, KoTableCellStyle *> > KoTextSharedLoadingData::loadTableCellStyles(KoShapeLoadingContext &context, QList<KoXmlElement*> styleElements)
 {
     QList<QPair<QString, KoTableCellStyle *> > tableCellStyles;
 

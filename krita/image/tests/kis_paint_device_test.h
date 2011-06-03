@@ -44,6 +44,7 @@ private slots:
     void testBltPerformance();
     void testColorSpaceConversion();
     void testDeviceDuplication();
+    void testSharedDataManager();
     void testTranslate();
     void testOpacity();
 };

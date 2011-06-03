@@ -33,7 +33,6 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoAbstractGradient.h>
-#include <KoCompositeOp.h>
 #include <KoResourceServerProvider.h>
 #include <KoStopGradient.h>
 
@@ -73,11 +72,7 @@ void KisCanvasResourceProvider::setResourceManager(KoResourceManager *resourceMa
     v.setValue(KoColor(Qt::white, m_view->image()->colorSpace()));
     m_resourceManager->setResource(KoCanvasResource::BackgroundColor, v);
 
-    setCurrentCompositeOp(COMPOSITE_OVER);
     resetDisplayProfile();
-
-    setMirrorHorizontal(false);
-    setMirrorVertical(false);
 
     connect(m_resourceManager, SIGNAL(resourceChanged(int, const QVariant &)),
             this, SLOT(slotResourceChanged(int, const QVariant&)));
@@ -308,8 +303,6 @@ void KisCanvasResourceProvider::slotResourceChanged(int key, const QVariant & re
     case(CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
         break;
-    case(CurrentCompositeOp) :
-        emit sigCompositeOpChanged(currentCompositeOp());
     default:
         ;
         // Do nothing
@@ -355,19 +348,6 @@ const KoColorProfile *KisCanvasResourceProvider::getScreenProfile(int screen)
 #endif
 }
 
-void KisCanvasResourceProvider::setCurrentCompositeOp(const QString& compositeOp)
-{
-    QVariant v;
-    v.setValue(compositeOp);
-    m_resourceManager->setResource(CurrentCompositeOp, v);
-    emit sigCompositeOpChanged(compositeOp);
-}
-
-QString KisCanvasResourceProvider::currentCompositeOp() const
-{
-    return m_resourceManager->resource(CurrentCompositeOp).value<QString>();
-}
-
 void KisCanvasResourceProvider::slotPainting()
 {
     if (m_fGChanged && m_enablefGChange) {
@@ -396,24 +376,9 @@ void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid
     m_perspectiveGrids.removeOne(grid);
 }
 
-void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
+void KisCanvasResourceProvider::setPaintOpPresetModified()
 {
-    m_resourceManager->setResource(MirrorHorizontal, mirrorHorizontal);
-}
-
-bool KisCanvasResourceProvider::mirrorHorizontal() const
-{
-    return m_resourceManager->resource(MirrorHorizontal).toBool();
-}
-
-void KisCanvasResourceProvider::setMirrorVertical(bool mirrorVertical)
-{
-    m_resourceManager->setResource(MirrorVertical, mirrorVertical);
-}
-
-bool KisCanvasResourceProvider::mirrorVertical() const
-{
-    return m_resourceManager->resource(MirrorVertical).toBool();
+    emit sigPaintOpPresetModified();
 }
 
 #include "kis_canvas_resource_provider.moc"

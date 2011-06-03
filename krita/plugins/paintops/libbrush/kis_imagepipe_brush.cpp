@@ -247,6 +247,43 @@ void KisImagePipeBrush::setParasiteString(const QString& parasite)
     m_d->parasite = KisPipeBrushParasite(parasite);
 }
 
+quint32 KisImagePipeBrush::brushIndex(const KisPaintInformation& info) const
+{
+    quint32 brushIndex = 0;
+    
+    double angle;
+    for (int i = 0; i < m_d->parasite.dim; i++) {
+        int index = m_d->parasite.index[i];
+        switch (m_d->parasite.selection[i]) {
+            case KisParasite::Constant: break;
+            case KisParasite::Incremental:
+                index = (index + 1) % m_d->parasite.rank[i]; break;
+            case KisParasite::Random:
+                index = int(float(m_d->parasite.rank[i]) * KRandom::random() / RAND_MAX); break;
+            case KisParasite::Pressure:
+                index = static_cast<int>(info.pressure() * (m_d->parasite.rank[i] - 1) + 0.5); break;
+            case KisParasite::Angular:
+                // + m_d->PI_2 to be compatible with the gimp
+                angle = info.angle() + M_PI_2;
+                // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
+                if (angle < 0)
+                    angle += 2.0 * M_PI;
+                else if (angle > 2.0 * M_PI)
+                    angle -= 2.0 * M_PI;
+                index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
+                break;
+            default:
+                warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
+                             << " to Constant";
+                             m_d->parasite.selection[i] = KisParasite::Constant; // Not incremental, since that assumes rank > 0
+                             index = 0;
+        }
+        m_d->parasite.index[i] = index;
+        brushIndex += m_d->parasite.brushesCount[i] * index;
+    }
+    
+    return brushIndex;
+}
 
 enumBrushType KisImagePipeBrush::brushType() const
 {
@@ -290,37 +327,7 @@ const KisBoundary* KisImagePipeBrush::boundary() const
 
 void KisImagePipeBrush::selectNextBrush(const KisPaintInformation& info) const
 {
-    m_d->currentBrush = 0;
-    double angle;
-    for (int i = 0; i < m_d->parasite.dim; i++) {
-        int index = m_d->parasite.index[i];
-        switch (m_d->parasite.selection[i]) {
-        case KisParasite::Constant: break;
-        case KisParasite::Incremental:
-            index = (index + 1) % m_d->parasite.rank[i]; break;
-        case KisParasite::Random:
-            index = int(float(m_d->parasite.rank[i]) * KRandom::random() / RAND_MAX); break;
-        case KisParasite::Pressure:
-            index = static_cast<int>(info.pressure() * (m_d->parasite.rank[i] - 1) + 0.5); break;
-        case KisParasite::Angular:
-            // + m_d->PI_2 to be compatible with the gimp
-            angle = info.angle() + M_PI_2;
-            // We need to be in the [0..2*Pi[ interval so that we can more nicely select it
-            if (angle < 0)
-                angle += 2.0 * M_PI;
-            else if (angle > 2.0 * M_PI)
-                angle -= 2.0 * M_PI;
-            index = static_cast<int>(angle / (2.0 * M_PI) * m_d->parasite.rank[i]);
-            break;
-        default:
-            warnImage << "This parasite KisParasite::SelectionMode has not been implemented. Reselecting"
-            << " to Constant";
-            m_d->parasite.selection[i] = KisParasite::Constant; // Not incremental, since that assumes rank > 0
-            index = 0;
-        }
-        m_d->parasite.index[i] = index;
-        m_d->currentBrush += m_d->parasite.brushesCount[i] * index;
-    }
+    m_d->currentBrush = brushIndex(info);
 }
 
 bool KisImagePipeBrush::canPaintFor(const KisPaintInformation& info)

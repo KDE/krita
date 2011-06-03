@@ -1,4 +1,4 @@
-m/*
+/*
  * Copyright (C) 2009 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify

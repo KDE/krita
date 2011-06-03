@@ -1,0 +1,40 @@
+
+The text layout framework
+-------------------------
+The data of the document is stored in a QTextDocument (with some resouces set by the KoTextDocument helper class) The styles are stored in a QStyleManager, and we have some other managers and helpers as needed.
+
+The layout of that document is handled by the KoTextDocumentLayout class.
+It builds a series of KoTextLayoutRootArea which roughly corresponds to a page, but since this is completely abstract such a root area could also be the cell in a spreadsheet. Fr both the spreadsheet case and a normal textshape only a single root area is created, but for Words we can create many root areas.
+
+A KoTextLayoutRootArea is a subclass of KoTextLayoutArea which is the main worker of text layout. Basically it represents the layout of a series of paragraphs. If there is a table in between the paragraphs it will create a new area, namely a KoTextLayoutTableArea.
+
+A KoTextLayoutTableArea holds a KoTextLayoutArea for each of the cells.
+
+Now if a table or paragraph is visible on more than one root area (page) then it is represented by one area for each page. So it is _not_ the same area but a new one that just start where the previous area ended (due to the page break).
+
+
+How we create a new KoTextLayoutRootArea
+----------------------------------------
+The KoTextDocumentLayout doesn't just create a new KoTextLayoutRootArea whenever it needs to. First of all it keeps a list of the root areas it already have, and only that number of root ares is too small or large do we add/remove root areas.
+
+The actual adding/removing of areas is done by the abstract class KoTextLayoutRootAreaProvider. It has a simple implementation in the TextShape that can only return one root area and that is it. It corresponds to there only being one textshape.
+
+In Words we have our own KWRootAreaProvider which creates a new page, new headers and footers, new main text shape and obviously also a new root area which is the thing we were asked for.
+
+In Calligra Tables it would also be a simple provider with a root area corresponding to a cell.
+
+
+Trigging of (re)layout.
+-----------------------
+In order to always have an up to date layout of the current QTextDocument we have a system of marking root areas as dirty.
+A root area can be marked as dirty in several ways:
+ * through KoTextDocumentLayout::documentChanged () which is called by Qt
+   - this goes through all the root areas and marks them as dirty as needed
+ * when any calls setDirty() on a root area (eg a shape does this when changing
+   size og having collisions
+
+When a root area is marked as dirty it asks the KoTextDocumentLayout to emit a signal (layoutIsDirty) which other people can react to
+
+The plain TextShape just connects that signal to KoTextDocumentLayout::layout()
+
+In Words it's a bit more complicated as we do not want the layout to take to much time at a time, in order to keep the ui responsive. So in Words the signal is setting up a timer that calls KoTextDocumentLayout::layout() often until the document is layout til end. An important part of the story is that KoTextDocumentLayout can be set up to not complete the entire layout every time but stop for example after each page. This way we can ensure that at leas for every page the user has a chance to do some ui interaction

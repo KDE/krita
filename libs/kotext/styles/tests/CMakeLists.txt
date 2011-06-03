@@ -3,6 +3,8 @@ include_directories(
     ${KOTEXT_INCLUDES}
     ${QT_INCLUDES})
 
+add_definitions(-DSPECS_DATA_DIR="\\"${CMAKE_CURRENT_SOURCE_DIR}/specs/\\"")
+
 ########### next target ###############
 
 set(TestStyles_test_SRCS TestStyles.cpp)
@@ -26,3 +28,9 @@ target_link_libraries(TestSectionStyle kotext ${QT_QTTEST_LIBRARY})
 set(TestTableCellStyle_test_SRCS TestTableCellStyle.cpp)
 kde4_add_unit_test(TestTableCellStyle TESTNAME libs-kotext-styles-TestTableCellStyle ${TestTableCellStyle_test_SRCS})
 target_link_libraries(TestTableCellStyle kotext ${QT_QTTEST_LIBRARY})
+
+########### next target ###############
+
+set(TestOpenDocumentStyle_test_SRCS TestOpenDocumentStyle.cpp)
+kde4_add_unit_test(TestOpenDocumentStyle TESTNAME libs-kotext-styles-TestOpenDocumentStyle ${TestOpenDocumentStyle_test_SRCS})
+target_link_libraries(TestOpenDocumentStyle kotext ${QT_QTTEST_LIBRARY} ${QT_XML_LIBRARY})

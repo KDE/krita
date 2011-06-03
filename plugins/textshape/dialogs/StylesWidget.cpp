@@ -35,16 +35,24 @@
 StylesWidget::StylesWidget(QWidget *parent, bool paragraphMode, Qt::WindowFlags f)
         : QFrame(parent, f),
         m_styleManager(0),
-        m_stylesModel(new StylesModel(0, paragraphMode, this)),
+        m_stylesModel(new StylesModel(0, paragraphMode)),
         m_stylesDelegate(new StylesDelegate()),
-        m_blockSignals(false)
-        ,m_isHovered(false)
+        m_blockSignals(false),
+        m_isHovered(false)
 {
     widget.setupUi(this);
     widget.stylesView->setModel(m_stylesModel);
     widget.stylesView->setItemDelegate(m_stylesDelegate);
 
     connect(widget.stylesView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(applyStyle()));
+}
+
+
+
+StylesWidget::~StylesWidget()
+{
+    delete m_stylesDelegate;
+    delete m_stylesModel;
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm)

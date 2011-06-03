@@ -30,6 +30,7 @@ set(kowidgets_LIB_SRCS
     KoUniColorChooser.cpp
     KoUniColorDialog.cpp
     KoXYColorSelector.cpp
+    KoStrokeConfigWidget.cpp
     KoShadowConfigWidget.cpp
     KoIconToolTip.cpp
     KoResourceItemChooser.cpp
@@ -87,6 +88,7 @@ install( FILES
     KoZoomMode.h
 
     KoColorPatch.h
+    KoStrokeConfigWidget.h
     KoShadowConfigWidget.h
     KoColorPopupAction.h
     KoColorSetWidget.h

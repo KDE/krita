@@ -487,7 +487,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
         SelectionDecorator decorator(m_mouseWasInsideHandles ? m_lastHandle : KoFlake::NoHandle,
                  true, true);
         decorator.setSelection(koSelection());
-        decorator.setHandleRadius(canvas()->resourceManager()->handleRadius());
+        decorator.setHandleRadius(handleRadius());
         decorator.setHotPosition(m_hotPosition);
         decorator.paint(painter, converter);
     }
@@ -555,8 +555,7 @@ void DefaultTool::selectGuideAtPosition(const QPointF &position)
     // check if we are on a guide line
     KoGuidesData * guidesData = canvas()->guidesData();
     if (guidesData && guidesData->showGuideLines()) {
-        qreal grabSensitivity = canvas()->resourceManager()->grabSensitivity();
-        qreal minDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity);
+        qreal minDistance = canvas()->viewConverter()->viewToDocumentX(grabSensitivity());
         uint i = 0;
         foreach (qreal guidePos, guidesData->horizontalGuideLines()) {
             qreal distance = qAbs(guidePos - position.y());
@@ -1092,12 +1091,17 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
     }
 }
 
-QMap<QString, QWidget *> DefaultTool::createOptionWidgets()
+QList<QWidget *> DefaultTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Arrange"), new DefaultToolArrangeWidget(this));
-    widgets.insert(i18n("Geometry"), new DefaultToolWidget(this));
-    widgets.insert(i18n("Snapping"), canvas()->createSnapGuideConfigWidget());
+    QList<QWidget *> widgets;
+    DefaultToolArrangeWidget *defaultArrange = new DefaultToolArrangeWidget(this);
+    defaultArrange->setWindowTitle(i18n("Arrange"));
+    widgets.append(defaultArrange);
+    DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
+    defaultTool->setWindowTitle(i18n("Geometry"));
+    widgets.append(defaultTool);
+    canvas()->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
+    widgets.append(canvas()->createSnapGuideConfigWidget());
     return widgets;
 }
 

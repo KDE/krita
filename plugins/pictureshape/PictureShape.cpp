@@ -95,7 +95,7 @@ void PictureShape::paint(QPainter &painter, const KoViewConverter &converter)
         return;
     }
     const QRect pixels = pixelsF.toRect();
-    QSize pixmapSize = pixels.size();
+    QSize pixmapSize = pixelsF.size().toSize();
 
     QString key(generate_key(imageData->key(), pixmapSize));
     QPixmap pixmap;
@@ -175,7 +175,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
         m_printQualityImage = image.scaled(pixels, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
     else {
-    QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
+        QSize pixels = converter.documentToView(QRectF(QPointF(0,0), size())).size().toSize();
         QString key(generate_key(imageData->key(), pixels));
         if (QPixmapCache::find(key) == 0) {
             QPixmap pixmap = imageData->pixmap(pixels);

@@ -43,7 +43,6 @@
 
 struct KisSelection::Private {
     KisPaintDeviceWSP parentPaintDevice;
-    bool interestedInDirtyness;
     bool hasPixelSelection;
     bool hasShapeSelection;
     bool isDeselected; // true if the selection is empty, no pixels are selected
@@ -58,7 +57,6 @@ KisSelection::KisSelection(KisPaintDeviceSP dev, KisDefaultBoundsSP defaultBound
 {
     Q_ASSERT(dev);
     m_d->parentPaintDevice = dev;
-    m_d->interestedInDirtyness = false;
     m_d->hasPixelSelection = false;
     m_d->hasShapeSelection = false;
     m_d->isDeselected = false;
@@ -74,7 +72,6 @@ KisSelection::KisSelection(KisPaintDeviceSP parent, KisMaskSP mask, KisDefaultBo
         , m_d(new Private)
 {
     m_d->parentPaintDevice = parent;
-    m_d->interestedInDirtyness = false;
     m_d->hasPixelSelection = true;
     m_d->pixelSelection = new KisPixelSelection();
     m_d->hasShapeSelection = false;
@@ -104,7 +101,6 @@ KisSelection::KisSelection()
         , m_d(new Private)
 {
     m_d->parentPaintDevice = 0;
-    m_d->interestedInDirtyness = false;
     m_d->hasPixelSelection = false;
     m_d->hasShapeSelection = false;
     m_d->isDeselected = false;
@@ -119,7 +115,6 @@ KisSelection::KisSelection(const KisSelection& rhs)
         , m_d(new Private)
 {
     m_d->parentPaintDevice = rhs.m_d->parentPaintDevice;
-    m_d->interestedInDirtyness = false;
     if (rhs.m_d->hasPixelSelection) {
         m_d->pixelSelection = new KisPixelSelection(*rhs.m_d->pixelSelection.data());
         m_d->pixelSelection->setDefaultPixel(rhs.m_d->pixelSelection->defaultPixel());
@@ -199,36 +194,6 @@ QRect KisSelection::selectedExactRect() const
     return exactBounds();
 }
 
-void KisSelection::setInterestedInDirtyness(bool b)
-{
-    m_d->interestedInDirtyness = b;
-}
-
-bool KisSelection::interestedInDirtyness() const
-{
-    return m_d->interestedInDirtyness;
-}
-
-
-void KisSelection::setDirty(const QRect& rc)
-{
-    if (m_d->interestedInDirtyness)
-        KisPaintDevice::setDirty(rc); // Updates m_d->parentPaintDevice
-}
-
-
-void KisSelection::setDirty(const QRegion& reg)
-{
-    if (m_d->interestedInDirtyness)
-        KisPaintDevice::setDirty(reg); // Updates m_d->parentPaintDevice
-}
-
-void KisSelection::setDirty()
-{
-    if (m_d->interestedInDirtyness)
-        KisPaintDevice::setDirty(); // Updates m_d->parentPaintDevice
-}
-
 bool KisSelection::hasPixelSelection() const
 {
     return m_d->hasPixelSelection;
@@ -254,7 +219,7 @@ KisPixelSelectionSP KisSelection::getOrCreatePixelSelection()
     if (!m_d->hasPixelSelection) {
         KisPixelSelectionSP pixelSelection;
         if (m_d->parentPaintDevice)
-            pixelSelection = new KisPixelSelection(m_d->parentPaintDevice, defaultBounds());
+            pixelSelection = new KisPixelSelection(defaultBounds());
         else
             pixelSelection = new KisPixelSelection(defaultBounds());
         setPixelSelection(pixelSelection);

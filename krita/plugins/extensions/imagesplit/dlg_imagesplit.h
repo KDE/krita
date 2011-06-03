@@ -2,6 +2,7 @@
  *  dlg_imagesplit.h -- part of KimageShop^WKrayon^WKrita
  *
  *  Copyright (c) 2009 Boudewijn Rempt <boud@valdyas.org>
+ *  Copyright (c) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -38,17 +39,18 @@ class DlgImagesplit: public KDialog
 
 public:
 
-    DlgImagesplit(KisView2* view);
+    DlgImagesplit(KisView2* view,QString suffix,QStringList listMimeType);
     ~DlgImagesplit();
     bool autoSave();
     int horizontalLines();
     int verticalLines();
+    int cmbIndex;
     QString suffix();
 private slots:
 
     void applyClicked();
     void lineEditEnable();
-
+    void setMimeType(int index);
 private:
     KisView2* m_view;
     WdgImagesplit* m_page;

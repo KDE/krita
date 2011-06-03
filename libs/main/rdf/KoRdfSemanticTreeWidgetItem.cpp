@@ -18,6 +18,7 @@
 */
 
 #include "KoRdfSemanticTreeWidgetItem.h"
+
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
 
@@ -63,7 +64,7 @@ RdfSemanticTreeWidgetApplyStylesheet::~RdfSemanticTreeWidgetApplyStylesheet()
 void RdfSemanticTreeWidgetApplyStylesheet::activated()
 {
     kDebug(30015) << "apply selected stylesheet for semantic item...";
-    KoDocumentRdf *rdf = si->documentRdf();
+    const KoDocumentRdf *rdf = si->documentRdf();
     QString xmlid = rdf->findXmlId(editor());
     kDebug(30015) << "semItem:" << si->name() << "xmlid:" << xmlid;
     KoRdfSemanticItemViewSite vs(si, xmlid);

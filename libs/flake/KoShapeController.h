@@ -45,7 +45,8 @@ class FLAKE_EXPORT KoShapeController
 {
 public:
     /**
-     * Create a new Controller; typically not called by applications, only by the KoToolManager
+     * Create a new Controller; typically not called by applications, only
+     * by the KonCanvasBase constructor.
      * @param canvas the canvas this controller works for.
      * @param shapeController the application provided shapeControllerBase that we can call.
      */
@@ -100,9 +101,11 @@ public:
     /**
      * @brief Set the KoShapeControllerBase used to add/remove shapes
      *
-     * @param shapeControllerBase the new shapeControllerBase
+     * @param shapeControllerBase the new shapeControllerBase.
+     * @param canvas the canvas for which we set the shapecontrollerbase
      */
-    void setShapeControllerBase(KoShapeControllerBase* shapeControllerBase);
+    void setShapeControllerBase(KoShapeControllerBase *shapeControllerBase,
+                                KoCanvasBase *canvas);
 
     /**
      * Return a pointer to the resource manager associated with the

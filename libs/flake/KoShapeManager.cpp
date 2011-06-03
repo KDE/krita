@@ -539,17 +539,19 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 }
 
 QList<KoShape *> KoShapeManager::shapesAt(const QRectF &rect, bool omitHiddenShapes)
-{
+{ 
     d->updateTree();
-
     QList<KoShape*> intersectedShapes(d->tree.intersects(rect));
+    
     for (int count = intersectedShapes.count() - 1; count >= 0; count--) {
+     
         KoShape *shape = intersectedShapes.at(count);
+       
         if (omitHiddenShapes && ! shape->isVisible(true)) {
             intersectedShapes.removeAt(count);
         } else {
             const QPainterPath outline = shape->absoluteTransformation(0).map(shape->outline());
-            if (! outline.intersects(rect) && ! outline.contains(rect)) {
+            if (! outline.intersects(rect) && ! outline.contains(rect)) { 
                 intersectedShapes.removeAt(count);
             }
         }

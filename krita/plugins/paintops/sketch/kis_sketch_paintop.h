@@ -22,6 +22,7 @@
 #include <kis_paintop.h>
 #include <kis_types.h>
 
+#include "kis_density_option.h"
 #include "kis_sketchop_option.h"
 #include "kis_sketch_paintop_settings.h"
 
@@ -29,6 +30,8 @@
 #include <kis_pressure_size_option.h>
 #include <kis_brush_option.h>
 #include <kis_pressure_rotation_option.h>
+#include "kis_linewidth_option.h"
+#include "kis_offset_scale_option.h"
 
 class KisSketchPaintOp : public KisPaintOp
 {
@@ -43,7 +46,7 @@ public:
 private:
     // pixel buffer
     KisPaintDeviceSP m_dab;
-    
+
     // mask detection area
     KisFixedPaintDeviceSP m_maskDab;
     QRectF m_brushBoundingBox;
@@ -51,21 +54,24 @@ private:
 
     // simple mode
     qreal m_radius;
-    
+
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
     KisPressureRotationOption m_rotationOption;
-    
+    KisDensityOption m_densityOption;
+    KisLineWidthOption m_lineWidthOption;
+    KisOffsetScaleOption m_offsetScaleOption;
+
     KisBrushOption m_brushOption;
     SketchProperties m_sketchProperties;
-    
+
     QVector<QPointF> m_points;
     int m_count;
     KisPainter * m_painter;
     KisBrushSP m_brush;
 
 private:
-    void drawConnection(const QPointF &start, const QPointF &end);
+    void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);
     void updateBrushMask(const KisPaintInformation& info, qreal scale, qreal rotation);
 
 };

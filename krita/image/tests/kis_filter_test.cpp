@@ -179,7 +179,7 @@ void KisFilterTest::testOldDataApiAfterCopy()
      * version of the device and we will see a black square instead
      * of empty device in tmp
      */
-    f->process(src, dst, 0, updateRect, kfc);
+    f->process(dst, tmp, 0, updateRect, kfc);
 
     /**
      * In theory, both devices: dst and tmp must be empty by now

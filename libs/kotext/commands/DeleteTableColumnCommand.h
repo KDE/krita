@@ -32,7 +32,7 @@ class DeleteTableColumnCommand : public QUndoCommand
 {
 public:
 
-    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, QUndoCommand *parent = 0);
+    DeleteTableColumnCommand(KoTextEditor *te, QTextTable *t, int changeId = 0, QUndoCommand *parent = 0);
 
     virtual void undo();
     virtual void redo();
@@ -43,6 +43,7 @@ private:
     QTextTable *m_table;
     int m_selectionColumn;
     int m_selectionColumnSpan;
+    int m_changeId;
     QList<KoTableColumnStyle> m_deletedStyles;
 };
 

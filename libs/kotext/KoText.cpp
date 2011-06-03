@@ -107,7 +107,7 @@ Qt::Alignment KoText::valignmentFromString(const QString &align)
     Qt::Alignment alignment = Qt::AlignTop;
     if (align == "top")
         alignment = Qt::AlignTop;
-    else if (align == "center")
+    else if (align == "middle")
         alignment = Qt::AlignVCenter;
     else if (align == "bottom")
         alignment = Qt::AlignBottom;
@@ -120,9 +120,11 @@ QString KoText::valignmentToString(Qt::Alignment alignment)
     if (alignment == (Qt::AlignTop))
         align = "top";
     else if (alignment == Qt::AlignVCenter)
-        align = "center";
+        align = "middle";
     else if (alignment == Qt::AlignBottom)
         align = "bottom";
+    else
+        align = "automatic";
     return align;
 }
 
@@ -135,7 +137,43 @@ KoText::Direction KoText::directionFromString(const QString &writingMode)
         return KoText::RightLeftTopBottom;
     if (writingMode == "tb" || writingMode == "tb-rl")
         return KoText::TopBottomRightLeft;
+    if (writingMode == "tb-lr")
+        return KoText::TopBottomLeftRight;
     if (writingMode == "page")
         return KoText::InheritDirection;
     return KoText::AutoDirection;
+}
+
+QString KoText::directionToString(KoText::Direction direction)
+{
+    if (direction == KoText::LeftRightTopBottom)
+        return "lr";
+    if (direction == KoText::RightLeftTopBottom)
+        return "rl";
+    if (direction == KoText::TopBottomRightLeft)
+        return "tb-rl";
+    if (direction == KoText::TopBottomLeftRight)
+        return "tb-lr";
+    if (direction == KoText::InheritDirection)
+        return "page";
+    
+    return "auto";
+}
+
+KoText::KoTextBreakProperty KoText::textBreakFromString(const QString& textBreak)
+{
+    if (textBreak == "page")
+        return KoText::PageBreak;
+    if (textBreak == "column")
+        return KoText::ColumnBreak;
+    return KoText::NoBreak;
+}
+
+QString KoText::textBreakToString(KoText::KoTextBreakProperty textBreak)
+{
+    if (textBreak == KoText::PageBreak)
+        return "page";
+    if (textBreak == KoText::ColumnBreak)
+        return "column";
+    return "auto";
 }

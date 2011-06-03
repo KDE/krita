@@ -68,7 +68,11 @@ KisHistogramDocker::~KisHistogramDocker()
 
 void KisHistogramDocker::setCanvas(KoCanvasBase* canvas)
 {
-    disconnect();
+    // "Every connection you make emits a signal, so duplicate connections emit two signals"
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+     
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
     if (m_canvas) {
         connect(m_canvas, SIGNAL(imageChanged(KisImageWSP)), SLOT(setImage(KisImageWSP)));

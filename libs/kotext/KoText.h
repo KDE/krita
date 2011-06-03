@@ -78,17 +78,6 @@ struct KOTEXT_EXPORT Tab {
     bool operator==(const Tab &tab) const;
 };
 
-/// Text in this object will be positioned according to the direction.
-enum Direction {
-    AutoDirection,      ///< Take the direction from the text.
-    LeftRightTopBottom, ///< Text layout for most western languages
-    RightLeftTopBottom, ///< Text layout for langauges like Hebrew
-    TopBottomRightLeft,  ///< Vertical text layout.
-    PerhapsLeftRightTopBottom, ///< \internal
-    PerhapsRightLeftTopBottom, ///< \internal
-    InheritDirection    ///< Direction is unspecified and should come from the container
-};
-
 /**
  * Text resources per koffice-document.
  * \sa KoResourceManager KoShapeController::resourceManager()
@@ -101,13 +90,47 @@ enum DocumentResource {
 };
 
 enum KoTextFrameProperty {
-    TableOfContents = QTextFormat::UserProperty + 1,
-    TableOfContentsData = QTextFormat::UserProperty + 2
+    TableOfContentsData = QTextFormat::UserProperty + 1,
+    SubFrameType = QTextFormat::UserProperty + 2
+};
+
+enum KoSubFrameType {
+    EndNotesFrameType,
+    FootNotesFrameType,
+    NoteFrameType,
+    TableOfContentsFrameType
+};
+
+/// Text in the objects will be positioned according to the direction.
+enum Direction {
+    AutoDirection,      ///< Take the direction from the text.
+    LeftRightTopBottom, ///< Text layout for most western languages
+    RightLeftTopBottom, ///< Text layout for languages like Hebrew
+    TopBottomRightLeft,  ///< Vertical text layout.
+    TopBottomLeftRight,  ///< Vertical text layout. ?
+    PerhapsLeftRightTopBottom, ///< \internal
+    PerhapsRightLeftTopBottom, ///< \internal
+    InheritDirection    ///< Direction is unspecified and should come from the container
 };
 
 /// convert the string version of directions (as specified in XSL and ODF) to the Direction enum
 KOTEXT_EXPORT Direction directionFromString(const QString &direction);
-}
+/// convert the Direction enum to the string version of directions (as specified in XSL and ODF)
+KOTEXT_EXPORT QString directionToString(Direction direction);
+
+/// There are several possible text breaks
+enum KoTextBreakProperty {
+    NoBreak = 0,         ///< No text break
+    ColumnBreak,     ///< Column break
+    PageBreak        ///< Page break
+};
+
+/// convert the string version of text break (as specified in ODF) to the KoTextBreakProperty enum
+KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
+/// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
+KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
+
+};
 
 Q_DECLARE_METATYPE(KoText::Tab)
 

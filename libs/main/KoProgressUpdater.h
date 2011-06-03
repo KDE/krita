@@ -55,11 +55,13 @@ class QTime;
  * Doing an smooth.setProgress(50) will move the progress bar to 50% of the share
  * of task 'smooth' which is 5 / 11 of the total and thus to 22.
  *
- *
  * KoProgressUpdater should be created in the main thread;
  * KoProgressProxy must be, if it is gui subclass in the QApplication
  * main thread. The other objects can be created in whatever thread
  * one wants.
+ *
+ * Also to prevent jumps in the progress-calculation and -display it is recommed
+ * to first create all the subtasks and then start to use setProgress on them.
  */
 class KOMAIN_EXPORT KoProgressUpdater : public QObject
 {

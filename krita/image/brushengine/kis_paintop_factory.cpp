@@ -22,6 +22,7 @@
 
 KisPaintOpFactory::KisPaintOpFactory(const QStringList & whiteListedCompositeOps)
     : m_whiteListedCompositeOps(whiteListedCompositeOps), m_priority(100)
+    , m_visibility(AUTO)
 {
 }
 
@@ -30,10 +31,25 @@ QStringList KisPaintOpFactory::whiteListedCompositeOps() const
     return m_whiteListedCompositeOps;
 }
 
-bool KisPaintOpFactory::userVisible(const KoColorSpace * cs)
+
+
+void KisPaintOpFactory::setUserVisible(PaintopVisibility visibility)
 {
-    return cs && cs->id() != "WET";
+    m_visibility = visibility;
 }
+
+bool KisPaintOpFactory::userVisible(const KoColorSpace * cs) const
+{
+    if (m_visibility == AUTO) {
+        return cs && cs->id() != "WET";
+    }
+    else if (m_visibility == NEVER) {
+        return false;
+    }
+    return true;
+}
+
+
 
 QString KisPaintOpFactory::pixmap()
 {

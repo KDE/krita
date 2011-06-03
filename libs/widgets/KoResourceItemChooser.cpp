@@ -2,6 +2,7 @@
    Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
+   Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,6 +50,7 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    QString knsrcFile;
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -70,21 +72,21 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( d->view, 0, 0, 1, 5 );
 
     QPushButton *button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-add" ) );
+    button->setIcon( SmallIcon("document-open") );
     button->setToolTip( i18n("Import") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "list-remove" ) );
+    button->setIcon( SmallIcon("trash-empty") );
     button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
     layout->addWidget( button, 1, 1 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "bookmarks" ) );
+    button->setIcon( SmallIcon("download") );
     button->setToolTip( i18n("Download") );
     button->setEnabled( true );
     button->hide();
@@ -92,7 +94,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( button, 1, 3 );
 
     button = new QPushButton( this );
-    button->setIcon( SmallIcon( "download" ) );
+    button->setIcon( SmallIcon("go-up") );
     button->setToolTip( i18n("Share") );
     button->setEnabled( false );
     button->hide();
@@ -108,7 +110,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->setSpacing( 0 );
     layout->setMargin( 0 );
 
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
 KoResourceItemChooser::~KoResourceItemChooser()
@@ -148,12 +150,22 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 #ifdef GHNS
     else if (button == Button_GhnsDownload) {
 
-        KNS3::DownloadDialog dialog(this);
+        KNS3::DownloadDialog dialog(d->knsrcFile, this);
         dialog.exec();
+
         foreach (const KNS3::Entry& e, dialog.changedEntries()) {
-            qDebug() << "Changed Entry: " << e.name() << e.installedFiles();
-        }
-    }
+
+             foreach(const QString &file, e.installedFiles()) {
+                 QFileInfo fi(file);
+                  d->model->resourceServerAdapter()->importResourceFile( fi.absolutePath()+"/"+fi.fileName() , false );
+              }
+
+       foreach(const QString &file, e.uninstalledFiles()) {
+                 QFileInfo fi(file);
+                 d->model->resourceServerAdapter()->removeResourceFile(fi.absolutePath()+"/"+fi.fileName());
+              }
+      }
+     }
     else if (button == Button_GhnsUpload) {
 
         QModelIndex index = d->view->currentIndex();
@@ -162,7 +174,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
 
             KoResource * resource = resourceFromModelIndex(index);
             if( resource ) {
-                KNS3::UploadDialog dialog(this);
+                KNS3::UploadDialog dialog(d->knsrcFile, this);
                 dialog.setUploadFile(KUrl::fromLocalFile(resource->filename()));
                 dialog.setUploadName(resource->name());
                 dialog.exec();
@@ -170,7 +182,7 @@ void KoResourceItemChooser::slotButtonClicked( int button )
         }
     }
 #endif
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
 void KoResourceItemChooser::showButtons( bool show )
@@ -192,6 +204,10 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
+    //Force an update to get the right column width
+    QRect geometry = d->view->geometry();
+    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
+    d->view->setGeometry(geometry);
 }
 
 void KoResourceItemChooser::setRowHeight( int rowHeight )
@@ -247,22 +263,28 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
     if( resource ) {
         emit resourceSelected( resource );
     }
-    updateRemoveButtonState();
+    updateButtonState();
 }
 
-void KoResourceItemChooser::updateRemoveButtonState()
+void KoResourceItemChooser::updateButtonState()
 {
     QAbstractButton * removeButton = d->buttonGroup->button( Button_Remove );
     if( ! removeButton )
         return;
 
+    QAbstractButton * uploadButton = d->buttonGroup->button(Button_GhnsUpload);
+    if(!uploadButton)
+        return;
+
     KoResource * resource = currentResource();
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
+        uploadButton->setEnabled(resource->removable());
         return;
     }
 
     removeButton->setEnabled( false );
+    uploadButton->setEnabled(false);
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)
@@ -280,5 +302,14 @@ KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& ind
     return static_cast<KoResource*>( index.internalPointer() );
 }
 
+void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
+{
+    d->knsrcFile = knsrcFileArg;
+}
+
+QSize KoResourceItemChooser::viewSize()
+{
+    return d->view->size();
+}
 
 #include <KoResourceItemChooser.moc>

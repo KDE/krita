@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,12 +23,15 @@
 #include <QtGui/QHelpEvent>
 #include <QtGui/QHeaderView>
 
+#include <QDebug>
+
 KoResourceItemView::KoResourceItemView( QWidget * parent )
     : QTableView(parent)
 {
     verticalHeader()->hide();
     horizontalHeader()->hide();
     verticalHeader()->setDefaultSectionSize( 20 );
+    m_viewMode = FIXED_COLUMS;
 }
 
 void KoResourceItemView::resizeEvent( QResizeEvent * event )
@@ -35,9 +39,22 @@ void KoResourceItemView::resizeEvent( QResizeEvent * event )
     QTableView::resizeEvent(event);
 
     int columnCount = model()->columnCount( QModelIndex() );
-    int columnWidth = viewport()->size().width() / columnCount;
-    for( int i = 0; i < columnCount; ++i ) {
-        setColumnWidth( i, columnWidth );
+    int rowCount = model()->rowCount( QModelIndex() );
+    int rowHeight, columnWidth;
+
+    if (m_viewMode == FIXED_COLUMS) {
+        columnWidth = viewport()->size().width() / columnCount;
+        
+        for( int i = 0; i < columnCount; ++i ) {
+            setColumnWidth( i, columnWidth );
+        }
+    } else if (m_viewMode == FIXED_ROWS) {
+        if (rowCount == 0) return;  // Don't divide by zero
+        rowHeight = viewport()->size().height() / rowCount;
+        
+        for( int i = 0; i < rowCount; ++i ) {
+            setRowHeight( i, rowHeight );
+        }
     }
 }
 
@@ -57,4 +74,9 @@ bool KoResourceItemView::viewportEvent( QEvent * event )
     }
 
     return QTableView::viewportEvent( event );
+}
+
+void KoResourceItemView::setViewMode(KoResourceItemView::ViewMode mode)
+{
+    m_viewMode = mode;
 }

@@ -44,7 +44,7 @@
 
 #include "kis_brush_registry.h"
 
-#define MAXIMUM_SCALE 4
+#define MAXIMUM_SCALE 20
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {

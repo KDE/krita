@@ -2,6 +2,7 @@
  *  kis_cmb_composite.cc - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,51 +19,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "widgets/kis_cmb_composite.h"
-
-#include <QItemDelegate>
-#include <QMouseEvent>
-
-#include <klocale.h>
-#include <kis_debug.h>
 #include <KoCompositeOp.h>
+
+#include "kis_cmb_composite.h"
 #include "kis_categorized_list_model.h"
-#include "../kis_composite_ops_model.h"
-
-//////////////////////////////////////////////////////////////////////////////////////////
-// ---- KisCompositeOpListView -------------------------------------------------------- //
-
-KisCompositeOpListView::KisCompositeOpListView(QWidget* parent):
-    QListView(parent)
-{
-    connect(this, SIGNAL(activated(const QModelIndex&)), this, SLOT(slotIndexChanged(const QModelIndex&)));
-}
-
-void KisCompositeOpListView::slotIndexChanged(const QModelIndex& index)
-{
-    if(model()->data(index, IsHeaderRole).toBool()) {
-        bool expanded = model()->data(index, ExpandCategoryRole).toBool();
-        int beg       = model()->data(index, CategoryBeginRole).toInt();
-        int end       = model()->data(index, CategoryEndRole).toInt();
-        
-        model()->setData(index, !expanded, ExpandCategoryRole);
-        
-        for(; beg!=end; ++beg)
-            setRowHidden(beg, expanded);
-        
-        emit sigCategoryToggled(index, !expanded);
-    }
-}
-
+#include "../kis_categorized_item_delegate.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpListWidget ------------------------------------------------------ //
 
 KisCompositeOpListWidget::KisCompositeOpListWidget(QWidget* parent):
-    KisCompositeOpListView(parent)
+    KisCategorizedListView(parent)
 {
     m_model    = new KisCompositeOpListModel();
-    m_delegate = new KisCategorizedItemDelegate2(m_model);
+    m_delegate = new KisCategorizedItemDelegate(m_model, true);
     m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setModel(m_model);
@@ -83,9 +53,9 @@ KisCompositeOpListWidget::~KisCompositeOpListWidget()
 KisCompositeOpComboBox::KisCompositeOpComboBox(QWidget* parent):
     QComboBox(parent)
 {
-    m_view     = new KisCompositeOpListView();
+    m_view     = new KisCategorizedListView();
     m_model    = new KisCompositeOpListModel();
-    m_delegate = new KisCategorizedItemDelegate2(m_model);
+    m_delegate = new KisCategorizedItemDelegate(m_model, true);
     m_model->fill(KoCompositeOpRegistry::instance().getCompositeOps());
     
     setMaxVisibleItems(100);

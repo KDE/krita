@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +22,7 @@
 
 #include <KoID.h>
 #include <QAbstractListModel>
-#include "widgets/kis_categorized_list_model.h"
+#include "kis_categorized_list_model.h"
 
 class KoCompositeOp;
 class KoColorSpace;

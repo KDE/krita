@@ -2,6 +2,7 @@
  *  widgets/kis_cmb_composite.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,53 +19,17 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CMB_COMPOSITE_H_
-#define KIS_CMB_COMPOSITE_H_
+#ifndef KIS_COMPOSITEOP_WIDGETS_H_
+#define KIS_COMPOSITEOP_WIDGETS_H_
 
 #include <krita_export.h>
-#include "kcombobox.h"
-
-#include <QListView>
 #include <QComboBox>
-#include <kis_composite_ops_model.h>
+#include "kis_categorized_list_view.h"
+#include "../kis_composite_ops_model.h"
 
 class KisCompositeOpListModel;
-class QStyledItemDelegate;
 
-class KRITAUI_EXPORT KisCompositeOpListView: public QListView
-{
-    Q_OBJECT
-public:
-    KisCompositeOpListView(QWidget* parent=0);
-    
-signals:
-    void sigCategoryToggled(const QModelIndex& index, bool toggled);
-    
-protected slots:
-    void slotIndexChanged(const QModelIndex& index);
-};
-
-
-template<class TModel>
-class KRITAUI_EXPORT KisCategorizedWidgetBase
-{
-public:
-    KisCategorizedWidgetBase():
-        m_model(0), m_delegate(0) { }
-    
-    int  indexOf(const KoID& entry)       const { return m_model->indexOf(entry);        }
-    bool entryAt(KoID& result, int index) const { return m_model->entryAt(result,index); }
-    
-    const TModel* getModel() const { return m_model; }
-    TModel*       getModel()       { return m_model; }
-    
-protected:
-    TModel*              m_model;
-    QStyledItemDelegate* m_delegate;
-};
-
-
-class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCompositeOpListView, public KisCategorizedWidgetBase<KisCompositeOpListModel>
+class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView, public KisCategorizedWidgetBase<KisCompositeOpListModel>
 {
 public:
      KisCompositeOpListWidget(QWidget* parent=0);
@@ -83,7 +48,7 @@ private slots:
     void slotCategoryToggled(const QModelIndex& index, bool toggled);
     
 private:
-    KisCompositeOpListView* m_view;
+    KisCategorizedListView* m_view;
 };
 
-#endif
+#endif // KIS_COMPOSITEOP_WIDGETS_H_

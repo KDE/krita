@@ -27,8 +27,6 @@
 #include <QList>
 #include <QPixmap>
 
-#include <kcombobox.h>
-
 #include <KoInputDevice.h>
 
 #include <kis_types.h>
@@ -51,8 +49,7 @@ class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
-class KisCmbPaintop;
-class KisCmbComposite;
+class KisPaintOpListWidget;
 class KisDoubleSliderSpinBox;
 class KisCompositeOpComboBox;
 
@@ -74,7 +71,7 @@ class KisPaintopBox : public QWidget
 public:
     KisPaintopBox(KisView2 * view,  QWidget * parent, const char * name);
     KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
-    const KoID & currentPaintop();
+    const KoID& currentPaintop();
     void setCurrentPaintop(const KoID & paintop);
     QPixmap paintopPixmap(const KoID & paintop);
     ~KisPaintopBox();
@@ -94,14 +91,8 @@ public slots:
 private:
     KoID defaultPaintop(const KoInputDevice & inputDevice);
     KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
-
-    ///Sets the internal composite op, without emitting
-    /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
-//     void setCompositeOpInternal(const QString & id);
-
-//     void setEnabledInternal(bool value);
     void updateCompositeOp(QString compositeOpID);
-    void updatePaintops();
+    void updatePaintops(const KoColorSpace* colorSpace);
 
 private slots:
     void slotNodeChanged(const KisNodeSP node);
@@ -116,42 +107,38 @@ private slots:
     void slotPresetChanged();
     
 private:
-    const KoColorSpace* m_colorspace;
-
-    KisCanvasResourceProvider *m_resourceProvider;
-
-    QHBoxLayout* m_layout;
-    QWidget* m_paintopWidget;
-    KisPaintOpSettingsWidget* m_optionWidget;
-    KisPopupButton* m_settingsWidget;
-    KisPopupButton* m_presetWidget;
-    KisPopupButton* m_brushChooser;
-    KisCompositeOpComboBox* m_cmbCompositeOp;
-    QToolButton* m_eraseModeButton;
-    KisPaintOpPresetsPopup* m_presetsPopup;
+    KisCanvasResourceProvider*     m_resourceProvider;
+    QHBoxLayout*                   m_layout;
+    QWidget*                       m_paintopWidget;
+    KisPaintOpSettingsWidget*      m_optionWidget;
+    KisPopupButton*                m_settingsWidget;
+    KisPopupButton*                m_presetWidget;
+    KisPopupButton*                m_brushChooser;
+    KisCompositeOpComboBox*        m_cmbCompositeOp;
+    QToolButton*                   m_eraseModeButton;
+    KisPaintOpPresetsPopup*        m_presetsPopup;
     KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
-    KisView2* m_view;
-    QPushButton* m_paletteButton;
-    KisPopupButton* m_workspaceWidget;
-    KisDoubleSliderSpinBox* m_sliderOpacity;
+    KisView2*                      m_view;
+    QPushButton*                   m_paletteButton;
+    KisPopupButton*                m_workspaceWidget;
+    KisDoubleSliderSpinBox*        m_sliderOpacity;
 
-    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
-    KisPaintOpPresetSP m_activePreset;
-    
-    QString   m_prevCompositeOpID;
-    QString   m_currCompositeOpID;
-    KisNodeSP m_previousNode;
+    KisPaintOpPresetSP  m_activePreset;
+    QString             m_prevCompositeOpID;
+    QString             m_currCompositeOpID;
+    KisNodeSP           m_previousNode;
 
-    typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
-    InputDevicePaintopMap m_currentID;
-
+    typedef QHash<KoInputDevice, KoID>         InputDevicePaintopMap;
     typedef QHash<QString, KisPaintOpPresetSP> PresetMap;
-    typedef QHash<KoInputDevice, PresetMap > InputDevicePresetsMap;
-    InputDevicePresetsMap m_inputDevicePresets;
-
-    QHash<KoInputDevice, bool> m_inputDeviceEraseModes;
-    QHash<KoInputDevice, QString> m_inputDeviceCompositeModes;
-    bool m_eraserUsed;
+    typedef QHash<KoInputDevice, PresetMap >   InputDevicePresetsMap;
+    
+    InputDevicePaintopMap                 m_currentID;
+    InputDevicePresetsMap                 m_inputDevicePresets;
+    QHash<KoInputDevice, bool>            m_inputDeviceEraseModes;
+    QHash<KoInputDevice, QString>         m_inputDeviceCompositeModes;
+    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
+    
+//     bool m_eraserUsed;
 };
 
 

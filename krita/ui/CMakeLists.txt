@@ -134,7 +134,7 @@ set(kritaui_LIB_SRCS
     tool/kis_color_picker_utils.cpp
     widgets/kis_channelflags_widget.cpp 
     widgets/kis_cmb_composite.cc
-    widgets/kis_cmb_paintop.cpp
+    widgets/kis_paintop_list_widget.cpp
     widgets/kis_cmb_idlist.cc 
     widgets/kis_color_space_selector.cc
     widgets/kis_curve_widget.cpp
@@ -160,10 +160,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_scratch_pad.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
-    widgets/kis_categorized_list_model.cpp
     widgets/kis_wdg_generator.cpp
     widgets/kis_workspace_chooser.cpp
     widgets/squeezedcombobox.cpp
+    widgets/kis_categorized_list_view.cpp
 )
 
 if(HAVE_OPENGL)

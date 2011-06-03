@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- *
+ * Copyright (C) Silvio Heinrich <plassy@web.de>   , (C) 2011
+ * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -19,60 +20,24 @@
 
 #include "kis_paintop_options_widget.h"
 #include "kis_paintop_option.h"
+#include "kis_paintop_options_model.h"
 
 #include <QHBoxLayout>
-#include <QItemDelegate>
 #include <QList>
-#include <QListView>
-#include <QLabel>
-#include <QMap>
 #include <QStackedWidget>
 #include <QVBoxLayout>
 
-#include <klocale.h>
-#include <KCategorizedSortFilterProxyModel>
-
 #include <kis_paintop_preset.h>
-#include "kis_paintop_options_model.h"
+#include <kis_cmb_composite.h>
 #include <kis_categorized_item_delegate.h>
-#include <qstyleditemdelegate.h>
 
-class KisPaintopOptionDelegate : public QStyledItemDelegate {
-
-public:
-    KisPaintopOptionDelegate(QObject* parent = 0): QStyledItemDelegate(parent), m_minimumItemHeight(0)
-    {
-    }
-    
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
-    {
-        //on first calling this calculates the mininmal height of the items
-        if(m_minimumItemHeight == 0) {
-            for(int i = 0; i < index.model()->rowCount(); i++) {
-                QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
-                m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
-            }
-        }
-        
-        QSize sizeHint = QStyledItemDelegate::sizeHint(option, index);
-        sizeHint.setHeight(m_minimumItemHeight);
-        return sizeHint;
-    }
-
-private:
-    mutable int m_minimumItemHeight;
-};
-
-class KisPaintOpOptionsWidget::Private
+struct KisPaintOpOptionsWidget::Private
 {
-
-public:
-
-    QList<KisPaintOpOption*> paintOpOptions;
-    QListView* optionsList;
-    KisPaintOpOptionsModel* model;
-    KCategorizedSortFilterProxyModel* proxyModel;
-    QStackedWidget * optionsStack;
+    QList<KisPaintOpOption*>    paintOpOptions;
+    KisCategorizedListView*     optionsList;
+    KisPaintOpOptionListModel*  model;
+    KisCategorizedItemDelegate* delegate;
+    QStackedWidget*             optionsStack;
 };
 
 KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
@@ -80,16 +45,14 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
         , m_d(new Private())
 {
     setObjectName("KisPaintOpPresetsWidget");
-    QHBoxLayout * layout = new QHBoxLayout(this);
-    m_d->optionsList = new QListView(this);
-    m_d->model = new KisPaintOpOptionsModel;
-    m_d->proxyModel = new KCategorizedSortFilterProxyModel;
-    m_d->proxyModel->setSourceModel(m_d->model);
-    m_d->proxyModel->setCategorizedModel(true);
-    m_d->proxyModel->setSortRole(KisPaintOpOptionsModel::SortingRole);
-    m_d->optionsList->setModel(m_d->proxyModel);
-    m_d->optionsList->setItemDelegate(new KisCategorizedItemDelegate(new KisPaintopOptionDelegate));
+    
+    m_d->model       = new KisPaintOpOptionListModel();
+    m_d->delegate    = new KisCategorizedItemDelegate(m_d->model, false);
+    m_d->optionsList = new KisCategorizedListView();
+    m_d->optionsList->setModel(m_d->model);
+    m_d->optionsList->setItemDelegate(m_d->delegate);
     m_d->optionsList->setFixedWidth(128);
+    
     QSizePolicy policy =  QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     policy.setHorizontalStretch(0);
     m_d->optionsList->setSizePolicy(policy);
@@ -98,15 +61,13 @@ KisPaintOpOptionsWidget::KisPaintOpOptionsWidget(QWidget * parent)
     policy = QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     policy.setHorizontalStretch(3);
     m_d->optionsStack->setSizePolicy(policy);
+    
+    QHBoxLayout* layout = new QHBoxLayout(this);
     layout->addWidget(m_d->optionsList);
     layout->addWidget(m_d->optionsStack);
 
-    connect(m_d->optionsList,
-            SIGNAL(activated(const QModelIndex&)),
-            this, SLOT(changePage(const QModelIndex&)));
-    connect(m_d->optionsList,
-            SIGNAL(clicked(QModelIndex)),
-            this, SLOT(changePage(const QModelIndex&)));
+    connect(m_d->optionsList, SIGNAL(activated(const QModelIndex&)), this, SLOT(changePage(const QModelIndex&)));
+    connect(m_d->optionsList, SIGNAL(clicked(QModelIndex))         , this, SLOT(changePage(const QModelIndex&)));
 }
 
 
@@ -114,6 +75,7 @@ KisPaintOpOptionsWidget::~KisPaintOpOptionsWidget()
 {
     qDeleteAll(m_d->paintOpOptions);
     delete m_d->model;
+    delete m_d->delegate;
     delete m_d;
 }
 
@@ -127,13 +89,14 @@ void KisPaintOpOptionsWidget::addPaintOpOption(KisPaintOpOption * option)
 
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
-    m_d->proxyModel->sort(0);
 }
 
 void KisPaintOpOptionsWidget::setConfiguration(const KisPropertiesConfiguration * config)
 {
     Q_ASSERT(!config->getString("paintop").isEmpty());
+    
     m_d->model->reset();
+    
     foreach(KisPaintOpOption* option, m_d->paintOpOptions) {
         option->readOptionSetting(config);
     }
@@ -155,8 +118,12 @@ void KisPaintOpOptionsWidget::setImage(KisImageWSP image)
 
 void KisPaintOpOptionsWidget::changePage(const QModelIndex& index)
 {
-    m_d->optionsStack->setCurrentIndex( m_d->proxyModel->data(index, KisPaintOpOptionsModel::WidgetIndexRole).toInt());
-    emit sigConfigurationItemChanged();
+    KisOptionInfo info;
+    
+    if(m_d->model->entryAt(info, index.row())) {
+        m_d->optionsStack->setCurrentIndex(info.index);
+        emit sigConfigurationItemChanged();
+    }
 }
 
 #include "kis_paintop_options_widget.moc"

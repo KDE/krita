@@ -16,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CATEGORIZED_LIST_VIEW_H
-#define KIS_CATEGORIZED_LIST_VIEW_H
+#ifndef KIS_CATEGORIZED_LIST_MODEL_H
+#define KIS_CATEGORIZED_LIST_MODEL_H
 
 #include <krita_export.h>
 #include <QAbstractListModel>
@@ -41,19 +41,39 @@ template<class TCategory, class TEntry>
 class KisCategorizedListModel: public QAbstractListModel
 {
 protected:
+    struct Entry
+    {
+        Entry(const TEntry& n):
+            data(n), disabled(false) { }
+        
+        bool operator <  (const Entry& c) const { return data <  c.data; }
+        bool operator == (const Entry& c) const { return data == c.data; }
+        
+        TEntry data;
+        bool   disabled;
+    };
+    
     struct Category
     {
         Category(const TCategory& n):
-            id(n), expanded(true) { };
+            data(n), expanded(true) { };
         
-        bool operator < (const Category& c) const { return id < c.id; }
-        bool operator == (const Category& c) const { return id == c.id; }
+        bool operator <  (const Category& c) const { return data <  c.data; }
+        bool operator == (const Category& c) const { return data == c.data; }
         int  size() const { return entries.size() + 1; }
         
-        TCategory     id;
-        QList<TEntry> entries;
-        bool          expanded;
-        QBitArray     disabled;
+        TCategory    data;
+        QList<Entry> entries;
+        bool         expanded;
+    };
+    
+    template<class TCompFunc>
+    struct ComparatorAdapter
+    {
+        ComparatorAdapter(TCompFunc func): compareFunc(func) { }
+        template<class T>
+        bool operator()(const T& a, const T& b) { return compareFunc(a.data, b.data); }
+        TCompFunc compareFunc;
     };
     
     typedef QList<Category>                       CategoryList;
@@ -62,6 +82,8 @@ protected:
     typedef std::pair<qint32,qint32>              Index;
     
 public:
+    void clear() { m_categories.clear(); }
+    
     void fill(const QMap<TCategory,TEntry>& map) {
         typedef typename QList<TCategory>::const_iterator       ListItr;
         typedef typename QMap<TCategory,TEntry>::const_iterator MapItr;
@@ -70,16 +92,21 @@ public:
         QList<TCategory> categories = map.uniqueKeys();
         
         for(ListItr cat=categories.begin(); cat!=categories.end(); ++cat) {
-            qint32 num = map.count(*cat);
             MapItr beg = map.find(*cat);
-            MapItr end = beg + num;
+            MapItr end = beg + map.count(*cat);
             
             m_categories.push_back(*cat);
-            m_categories.last().disabled.resize(num);
             
             for(; beg!=end; ++beg)
                 m_categories.last().entries.push_back(*beg);
         }
+    }
+    
+    void addCategory(const TCategory& category) {
+        Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
+        
+        if(itr == m_categories.end())
+            m_categories.push_back(category);
     }
     
     void addEntry(const TCategory& category, const TEntry& entry)
@@ -87,39 +114,57 @@ public:
         Iterator itr = qFind(m_categories.begin(), m_categories.end(), category);
         
         if(itr != m_categories.end()) {
-            itr->items.push_back(entry);
+            itr->entries.push_back(entry);
         }
         else {
             m_categories.push_back(category);
-            m_categories.back().items.push_back(entry);
+            m_categories.back().entries.push_back(entry);
         }
-        
-        itr->disabled.resize(itr->entries.size());
+    }
+    
+    template<class TLessThan>
+    void sortCategories(TLessThan comparator) {
+        qSort(m_categories.begin(), m_categories.end(), ComparatorAdapter<TLessThan>(comparator));
+    }
+    
+    template<class TLessThan>
+    void sortEntries(TLessThan comparator) {
+        for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat)
+            qSort(cat->entries.begin(), cat->entries.end(), ComparatorAdapter<TLessThan>(comparator));
+    }
+    
+    void sortCategories() {
+        qSort(m_categories.begin(), m_categories.end());
+    }
+    
+    void sortEntries() {
+        for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat)
+            qSort(cat->entries.begin(), cat->entries.end());
     }
     
     bool entryAt(TEntry& entry, int idx) const {
         Index index = getIndex(idx);
         
         if(isValidIndex(index) && !isHeader(index)) {
-            entry = m_categories[index.first].entries[index.second];
+            entry = m_categories[index.first].entries[index.second].data;
             return true;
         }
         return false;
     }
     
-    int indexOf(const TEntry& entry) const {
-        typedef typename QList<TEntry>::const_iterator Itr;
+    QModelIndex indexOf(const TEntry& entry) const {
+        typedef typename QList<Entry>::const_iterator Itr;
         qint32 row = 0;
         
         for(ConstIterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat) {
             Itr itr = qFind(cat->entries.begin(), cat->entries.end(), entry);
             
             if(itr != cat->entries.end())
-                return row + std::distance(cat->entries.begin(), itr) + 1;
+                return index(row + std::distance(cat->entries.begin(), itr) + 1);
             
            row += cat->size();
         }
-        return -1;
+        return index(-1);
     }
     
     virtual int rowCount(const QModelIndex& parent) const {
@@ -149,7 +194,7 @@ public:
             switch(role)
             {
             case Qt::DisplayRole:
-                return categoryToString(m_categories[index.first].id);
+                return categoryToString(m_categories[index.first].data);
             case IsHeaderRole:
                 return true;
             case ExpandCategoryRole:
@@ -160,7 +205,7 @@ public:
             switch(role)
             {
             case Qt::DisplayRole:
-                return entryToString(m_categories[index.first].entries[index.second]);
+                return entryToString(m_categories[index.first].entries[index.second].data);
             case IsHeaderRole:
                 return false;
             }
@@ -193,7 +238,7 @@ public:
         if(isHeader(index))
             return Qt::ItemIsEnabled;
         
-        if(m_categories[index.first].disabled.testBit(index.second))
+        if(m_categories[index.first].entries[index.second].disabled)
             return 0;
         
         return Qt::ItemIsEnabled|Qt::ItemIsSelectable;
@@ -244,15 +289,4 @@ protected:
     CategoryList m_categories;
 };
 
-class KRITAUI_EXPORT KisCategorizedItemDelegate2: public QStyledItemDelegate
-{
-public:
-    KisCategorizedItemDelegate2(QAbstractListModel* model);
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    
-private:
-    QAbstractListModel* m_model;
-    QIcon               m_errorIcon;
-};
-
-#endif // KIS_CATEGORIZED_LIST_VIEW_H
+#endif // KIS_CATEGORIZED_LIST_MODEL_H

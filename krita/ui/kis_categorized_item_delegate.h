@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -20,30 +21,22 @@
 #define _KIS_CATEGORIZED_ITEM_DELEGATE_H_
 
 #include <krita_export.h>
-#include <QAbstractItemDelegate>
+#include <QIcon>
+#include <QStyledItemDelegate>
 
 /**
  * This delegate draw categories using information from a \ref KCategorizedSortFilterProxyModel .
  */
-
-class KRITAUI_EXPORT KisCategorizedItemDelegate : public QAbstractItemDelegate
+class KRITAUI_EXPORT KisCategorizedItemDelegate: public QStyledItemDelegate
 {
 public:
-    /**
-     * The @p _fallback delegate is used to take care of drawing/editing of the items.
-     */
-    KisCategorizedItemDelegate(QAbstractItemDelegate* _fallback, QObject* parent = 0);
-    ~KisCategorizedItemDelegate();
-    virtual QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
-    virtual bool editorEvent(QEvent * event, QAbstractItemModel * model, const QStyleOptionViewItem & option, const QModelIndex & index);
-    virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const;
-    virtual void setEditorData(QWidget * editor, const QModelIndex & index) const;
-    virtual void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const;
-    virtual void updateEditorGeometry(QWidget * editor, const QStyleOptionViewItem & option, const QModelIndex & index) const;
+    KisCategorizedItemDelegate(QAbstractListModel* model, bool indicateError);
+    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    
 private:
-    struct Private;
-    Private* const d;
+    QAbstractListModel* m_model;
+    QIcon               m_errorIcon;
+    bool                m_indicateError;
 };
 
-#endif
+#endif // _KIS_CATEGORIZED_ITEM_DELEGATE_H_

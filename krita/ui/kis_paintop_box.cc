@@ -23,61 +23,49 @@
  */
 
 #include "kis_paintop_box.h"
-#include <QWidget>
-#include <QString>
-#include <QPixmap>
-#include <QLayout>
+
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QToolButton>
 #include <QAction>
-#include <QComboBox>
 
 #include <kactioncollection.h>
 #include <kis_debug.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kglobalsettings.h>
 #include <kacceleratormanager.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
 #include <kseparator.h>
 
-#include <KoToolManager.h>
 #include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 #include <KoResourceSelector.h>
 #include <KoResourceServerAdapter.h>
-#include <KoCompositeOp.h>
+#include <KoToolManager.h>
 
 #include <kis_paint_device.h>
-#include <kis_cmb_composite.h>
 #include <kis_paintop_registry.h>
-#include <kis_canvas_resource_provider.h>
-#include <kis_painter.h>
-#include <kis_paintop.h>
-#include <kis_layer.h>
-#include <kis_resource_server_provider.h>
 #include <kis_paintop_preset.h>
 #include <kis_paintop_settings.h>
 #include <kis_config_widget.h>
 #include <kis_image.h>
 #include <kis_node.h>
+#include <kis_paintop_settings_widget.h>
 
 #include "kis_canvas2.h"
 #include "kis_node_manager.h"
 #include "kis_layer_manager.h"
 #include "kis_view2.h"
 #include "kis_factory2.h"
+#include "kis_canvas_resource_provider.h"
+#include "kis_resource_server_provider.h"
+#include "kis_composite_ops_model.h"
+#include "ko_favorite_resource_manager.h"
+
 #include "widgets/kis_popup_button.h"
 #include "widgets/kis_paintop_presets_popup.h"
 #include "widgets/kis_paintop_presets_chooser_popup.h"
 #include "widgets/kis_workspace_chooser.h"
-#include "kis_paintop_settings_widget.h"
-#include "ko_favorite_resource_manager.h"
-#include <kis_cmb_paintop.h>
-#include "kis_slider_spin_box.h"
+#include "widgets/kis_paintop_list_widget.h"
+#include "widgets/kis_slider_spin_box.h"
 #include "widgets/kis_cmb_composite.h"
-#include "kis_composite_ops_model.h"
 
 KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name)
         : QWidget(parent)
@@ -89,7 +77,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
         , m_view(view)
         , m_activePreset(0)
         , m_previousNode(0)
-        , m_eraserUsed(false)
+//         , m_eraserUsed(false)
 {
     Q_ASSERT(view != 0);
 
@@ -192,12 +180,11 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
     m_presetWidget->setPopupWidget(m_presetsChooserPopup);
 
-    m_colorspace        = view->image()->colorSpace();
     m_prevCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
     
     slotNodeChanged(view->activeNode());
-    updatePaintops();
+    updatePaintops(view->image()->colorSpace());
     setCurrentPaintop(defaultPaintop(KoToolManager::instance()->currentInputDevice()));
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))         , SLOT(slotSetPaintop(QString)));
@@ -241,7 +228,7 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
         setCurrentPaintop( KoID(paintOpId, KisPaintOpRegistry::instance()->get(paintOpId)->name()) );
 }
 
-void KisPaintopBox::updatePaintops()
+void KisPaintopBox::updatePaintops(const KoColorSpace* colorSpace)
 {
     /* get the list of the factories*/
     QList<QString> keys = KisPaintOpRegistry::instance()->keys();
@@ -249,10 +236,10 @@ void KisPaintopBox::updatePaintops()
     
     foreach(const QString & paintopId, keys) {
         KisPaintOpFactory * factory = KisPaintOpRegistry::instance()->get(paintopId);
-        if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()) ,m_colorspace)){
+        if (KisPaintOpRegistry::instance()->userVisible(KoID(factory->id(), factory->name()), colorSpace)){
             factoryList.append(factory);
         }else{
-            kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << m_colorspace->name();
+            kWarning() << "Brush engine " << factory->name() << " is not visible for colorspace" << colorSpace->name();
         }
     }
     
@@ -280,14 +267,11 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
 QPixmap KisPaintopBox::paintopPixmap(const KoID & paintop)
 {
     QString pixmapName = KisPaintOpRegistry::instance()->pixmap(paintop);
-
-    if (pixmapName.isEmpty()) {
+    
+    if(pixmapName.isEmpty())
         return QPixmap();
-    }
 
-    QString fname = KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName);
-
-    return QPixmap(fname);
+    return QPixmap(KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName));
 }
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice & inputDevice)
@@ -601,6 +585,3 @@ void KisPaintopBox::slotPresetChanged()
         m_cmbCompositeOp->setDisabled(true);
     }
 }
-
-
-#include "kis_paintop_box.moc"

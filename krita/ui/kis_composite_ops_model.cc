@@ -1,5 +1,6 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,8 +31,8 @@ void KisCompositeOpListModel::validateCompositeOps(const KoColorSpace* colorSpac
     
     for(Iterator cat=m_categories.begin(); cat!=m_categories.end(); ++cat) {
         for(int i=0; i<cat->entries.size(); ++i) {
-            bool enable = KoCompositeOpRegistry::instance().colorSpaceHasCompositeOp(colorSpace, cat->entries[i]);
-            cat->disabled.setBit(i, !enable);
+            bool enable = KoCompositeOpRegistry::instance().colorSpaceHasCompositeOp(colorSpace, cat->entries[i].data);
+            cat->entries[i].disabled = !enable;
         }
     }
     

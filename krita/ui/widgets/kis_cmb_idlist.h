@@ -2,6 +2,7 @@
  *  kis_cmb_imagetype.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -51,14 +52,10 @@ signals:
     void highlighted(const KoID &);
 
 private slots:
-
     void slotIDActivated(int i);
     void slotIDHighlighted(int i);
 
 private:
-    // Prevent the deprecated Qt3 method being called. Use setCurrent instead.
-    void setCurrentText(const QString & s);
-
     QList<KoID> m_list;
 };
 #endif

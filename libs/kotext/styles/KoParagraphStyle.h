@@ -152,12 +152,24 @@ public:
         KeepHyphenation,          ///< bool, whether both parts of a hyphenated word shall lie within a single page
         HyphenationLadderCount,   ///< int, 0 means no limit, else limit the number of successive hyphenated line areas in a block
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
+        VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
+        
+        NormalLineHeight,         ///< bool, internal property for reserved usage
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
         IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
     };
+    
+    enum VerticalAlign {
+        VAlignAuto,
+        VAlignBaseline,
+        VAlignBottom,
+        VAlignMiddle,
+        VAlignTop
+    };
+        
     
     /// Constructor
     KoParagraphStyle(QObject *parent = 0);
@@ -375,6 +387,9 @@ public:
     void setHyphenationLadderCount(int value);
     int hyphenationLadderCount() const;
     
+    VerticalAlign verticalAlignment() const;
+    void setVerticalAlignment(VerticalAlign value);
+    
     void setBreakBefore(KoText::KoTextBreakProperty value);
     KoText::KoTextBreakProperty breakBefore();
     void setBreakAfter(KoText::KoTextBreakProperty value);
@@ -438,23 +453,23 @@ public:
 
     // ************ properties from QTextBlockFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
-    qreal topMargin() const;
+    QTextLength topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal bottomMargin() const;
+    QTextLength bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal leftMargin() const;
+    QTextLength leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal rightMargin() const;
+    QTextLength rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     void setIsListHeader(bool on);
     bool isListHeader() const;
@@ -464,9 +479,9 @@ public:
     /// duplicated property from QTextBlockFormat
     Qt::Alignment alignment() const;
     /// duplicated property from QTextBlockFormat
-    void setTextIndent(qreal margin);
+    void setTextIndent(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    qreal textIndent() const;
+    QTextLength textIndent() const;
     /// Custom KoParagraphStyle property for auto-text-indent
     void setAutoTextIndent(bool on);
     bool autoTextIndent() const;
@@ -667,14 +682,13 @@ private:
      */
     void loadOdfProperties(KoShapeLoadingContext &scontext);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;
 
     class Private;
     Private * const d;
-
-    bool normalLineHeight;
 };
 
 #endif

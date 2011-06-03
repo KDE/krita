@@ -23,8 +23,6 @@
 
 #include <ui_ArtisticTextShapeConfigWidget.h>
 
-#include "ArtisticTextShape.h"
-
 #include <KoShapeConfigWidgetBase.h>
 
 class ArtisticTextTool;
@@ -39,14 +37,17 @@ public slots:
     /// updates the widget form the current artistic text shape
     void updateWidget();
 
-private slots:
-    void propertyChanged();
+signals:
+    /// Triggered whenever the font familiy has changed
+    void fontFamilyChanged(const QFont&);
+
+    /// Triggered whenever the font size has changed
+    void fontSizeChanged(int);
 
 private:
     void blockChildSignals( bool block );
     Ui::ArtisticTextShapeConfigWidget widget;
     ArtisticTextTool *m_textTool;
-    QButtonGroup * m_anchorGroup;
 };
 
 #endif // ARTISTICTEXTSHAPECONFIGWIDGET_H

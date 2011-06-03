@@ -57,11 +57,13 @@ void ParagraphIndentSpacing::autoTextIndentChanged(int state)
 void ParagraphIndentSpacing::setDisplay(KoParagraphStyle *style)
 {
     m_style = style;
-    widget.first->changeValue(style->textIndent());
-    widget.left->changeValue(style->leftMargin());
-    widget.right->changeValue(style->rightMargin());
-    widget.before->changeValue(style->topMargin());
-    widget.after->changeValue(style->bottomMargin());
+    // TODO : handle relatives
+    widget.first->changeValue(style->textIndent().rawValue());
+    widget.left->changeValue(style->leftMargin().rawValue());
+    widget.right->changeValue(style->rightMargin().rawValue());
+    widget.before->changeValue(style->topMargin().rawValue());
+    widget.after->changeValue(style->bottomMargin().rawValue());
+    
     widget.autoTextIndent->setChecked(style->autoTextIndent());
 
     int index;
@@ -170,11 +172,11 @@ void ParagraphIndentSpacing::save(KoParagraphStyle *style)
     // general note; we have to unset values by setting it to zero instead of removing the item
     // since this dialog may be used on a copy style, which will be applied later. And removing
     // items doesn't work for that.
-    style->setTextIndent(widget.first->value());
-    style->setLeftMargin(widget.left->value());
-    style->setRightMargin(widget.right->value());
-    style->setTopMargin(widget.before->value());
-    style->setBottomMargin(widget.after->value());
+    style->setTextIndent(QTextLength(QTextLength::FixedLength, widget.first->value()));
+    style->setLeftMargin(QTextLength(QTextLength::FixedLength, widget.left->value()));
+    style->setRightMargin(QTextLength(QTextLength::FixedLength, widget.right->value()));
+    style->setTopMargin(QTextLength(QTextLength::FixedLength, widget.before->value()));
+    style->setBottomMargin(QTextLength(QTextLength::FixedLength, widget.after->value()));
     style->setAutoTextIndent(widget.autoTextIndent->isChecked());
     style->setLineHeightAbsolute(0); // since it trumps percentage based line heights, unset it.
     style->setMinimumLineHeight(0);

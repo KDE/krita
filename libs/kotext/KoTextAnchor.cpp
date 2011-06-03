@@ -179,7 +179,9 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     d->document = document;
     d->position = posInDocument;
     d->format = format;
-    d->anchorStrategy->updatePosition(d->shape, document, posInDocument);
+    if (d->anchorStrategy != 0) {
+        d->anchorStrategy->updatePosition(d->shape, document, posInDocument);
+    }
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)

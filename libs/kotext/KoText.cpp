@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006 Thomas Zander <zander@kde.org>
  * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C)  2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -177,3 +178,22 @@ QString KoText::textBreakToString(KoText::KoTextBreakProperty textBreak)
         return "column";
     return "auto";
 }
+
+QTextLength KoText::parseLength(const QString &length)
+{
+    if (length.contains('%'))
+    {
+        QString lengthValue = length.left(length.indexOf('%'));
+        bool ok = false;
+        qreal realLength = lengthValue.toDouble(&ok);
+        if (ok)
+            return QTextLength(QTextLength::PercentageLength, realLength);
+        else
+            return QTextLength(QTextLength::PercentageLength, 0);
+    }
+    else
+    {
+        return QTextLength(QTextLength::FixedLength, KoUnit::parseValue(length));
+    }
+}
+

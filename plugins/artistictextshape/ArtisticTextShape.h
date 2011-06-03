@@ -103,6 +103,9 @@ public:
      */
     QFont fontAt(int charIndex) const;
 
+    /// Returns the default font
+    QFont defaultFont() const;
+
     /// Attaches this text shape to the given path shape
     bool putOnPath(KoPathShape *path);
 
@@ -143,8 +146,11 @@ public:
     /// Returns a pointer to the shape used as baseline
     KoPathShape * baselineShape() const;
 
-    /// Removes a range of text from the given index
+    /// Removes a range of text starting from the given character
     QList<ArtisticTextRange> removeText(int charIndex, int charCount);
+
+    /// Copies a range of text starting from the given character
+    QList<ArtisticTextRange> copyText(int charIndex, int charCount);
 
     /// Adds a range of text at the given index
     void insertText(int charIndex, const QString &plainText);
@@ -163,6 +169,9 @@ public:
 
     /// Replaces a range of text with the specified text range
     bool replaceText(int charIndex, int charCount, const ArtisticTextRange &textRange);
+
+    /// Replaces a range of text with the specified text ranges
+    bool replaceText(int charIndex, int charCount, const QList<ArtisticTextRange> &textRanges);
 
     /// Gets the angle of the char with the given index
     qreal charAngleAt(int charIndex) const;
@@ -191,9 +200,6 @@ private:
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;
 
-    /// Returns the default font
-    QFont defaultFont() const;
-
     QList<ArtisticTextRange> m_ranges;
     KoPostscriptPaintDevice m_paintDevice;
     KoPathShape * m_path; ///< the path shape we are attached to
@@ -207,6 +213,7 @@ private:
     QVector<qreal> m_charOffsets; ///< char positions [0..1] on baseline path
     QVector<QPointF> m_charPositions; ///< char positions in shape coordinates
     int m_textUpdateCounter;
+    QFont m_defaultFont;
 };
 
 #endif // ARTISTICTEXTSHAPE_H

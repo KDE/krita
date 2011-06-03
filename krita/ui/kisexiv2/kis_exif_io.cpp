@@ -26,6 +26,7 @@
 #include <QDateTime>
 #include <QDate>
 #include <QTime>
+#include <QTextCodec>
 
 #include <kis_debug.h>
 
@@ -227,8 +228,7 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     deviceSettingStructure["Columns"] = KisMetaData::Value(columns);
     deviceSettingStructure["Rows"] = KisMetaData::Value(rows);
     QList<KisMetaData::Value> settings;
-    QByteArray null(2);
-    null.fill(0);
+    QByteArray null(2, 0);
     
     for (int index = 4; index < array.size(); )
     {

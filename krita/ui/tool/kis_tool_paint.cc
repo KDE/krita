@@ -318,8 +318,6 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 void KisToolPaint::slotSetOpacity(int opacityPerCent)
 {
     m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
-    kDebug() << "now at " << m_opacity;
-    
 }
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)

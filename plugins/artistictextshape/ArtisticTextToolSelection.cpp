@@ -124,7 +124,7 @@ QPainterPath ArtisticTextToolSelection::outline()
         charTransform.translate( pos.x() - 1, pos.y() );
         charTransform.rotate( 360. - angle );
 
-        QFontMetrics metrics(m_currentShape->fontAt(charIndex));
+        QFontMetricsF metrics(m_currentShape->fontAt(charIndex));
 
         polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
         polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
@@ -132,8 +132,10 @@ QPainterPath ArtisticTextToolSelection::outline()
         if (charIndex == selectionEnd)
             break;
 
-        const qreal w = metrics.charWidth(ranges[charPos.first].text(), charPos.second);
+        const QChar c = ranges[charPos.first].text().at(charPos.second);
+        const qreal w = metrics.width(c);
 
+        bool startNewPolygon = false;
         // advance character index within current range
         charPos.second++;
         // are we at the end of the current range ?
@@ -141,20 +143,37 @@ QPainterPath ArtisticTextToolSelection::outline()
             // go to start of next range
             charPos.first++;
             charPos.second = 0;
+            if (charPos.first >= ranges.size()) {
+                polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
+                polygon.append(charTransform.map(QPointF(w, metrics.descent())));
+                QPainterPath p;
+                p.addPolygon(polygon);
+                outline = outline.united(p);
+                polygon.clear();
+                break;
+            }
+            if (ranges[charPos.first].baselineShift() != ranges[charPos.first-1].baselineShift())
+                startNewPolygon = true;
         }
         // check if next character has an y-offset
-        if (charPos.first < ranges.size() && ranges[charPos.first].hasYOffset(charPos.second)) {
+        if (ranges[charPos.first].hasYOffset(charPos.second))
+            startNewPolygon = true;
+        if (startNewPolygon) {
             // end selection sub range and start a new subrange
             polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
             polygon.append(charTransform.map(QPointF(w, metrics.descent())));
-            outline.addPolygon(polygon);
+            QPainterPath p;
+            p.addPolygon(polygon);
+            outline = outline.united(p);
             polygon.clear();
         }
     }
 
     // if we have some points left, add them to the outline as well
     if (!polygon.isEmpty()) {
-        outline.addPolygon(polygon);
+        QPainterPath p;
+        p.addPolygon(polygon);
+        outline = outline.united(p);
     }
 
     // transform to document coordinates

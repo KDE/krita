@@ -79,15 +79,14 @@ public:
 };
 
 KoParagraphStyle::KoParagraphStyle(QObject *parent)
-        : QObject(parent), d(new Private()), normalLineHeight(false)
+        : QObject(parent), d(new Private())
 {
     d->charStyle = new KoCharacterStyle(this);
 }
 
 KoParagraphStyle::KoParagraphStyle(const QTextBlockFormat &blockFormat, const QTextCharFormat &blockCharFormat, QObject *parent)
         : QObject(parent),
-        d(new Private()),
-        normalLineHeight(false)
+        d(new Private())
 {
     d->stylesPrivate = blockFormat.properties();
     d->charStyle = new KoCharacterStyle(blockCharFormat, this);
@@ -158,6 +157,19 @@ qreal KoParagraphStyle::propertyDouble(int key) const
     if (variant.isNull())
         return 0.0;
     return variant.toDouble();
+}
+
+QTextLength KoParagraphStyle::propertyLength(int key) const
+{
+    QVariant variant = value(key);
+    if (variant.isNull())
+        return QTextLength(QTextLength::FixedLength, 0.0);
+    if (!variant.canConvert<QTextLength>())
+    {
+        kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
+        return QTextLength(QTextLength::FixedLength, 0.0);
+    }
+    return variant.value<QTextLength>();
 }
 
 int KoParagraphStyle::propertyInt(int key) const
@@ -259,7 +271,7 @@ void KoParagraphStyle::unapplyStyle(QTextBlock &block) const
 void KoParagraphStyle::setLineHeightPercent(int lineHeight)
 {
     setProperty(PercentLineHeight, lineHeight);
-    normalLineHeight = false;
+    remove(NormalLineHeight);
 }
 
 int KoParagraphStyle::lineHeightPercent() const
@@ -270,7 +282,7 @@ int KoParagraphStyle::lineHeightPercent() const
 void KoParagraphStyle::setLineHeightAbsolute(qreal height)
 {
     setProperty(FixedLineHeight, height);
-    normalLineHeight = false;
+    remove(NormalLineHeight);
 }
 
 qreal KoParagraphStyle::lineHeightAbsolute() const
@@ -281,7 +293,7 @@ qreal KoParagraphStyle::lineHeightAbsolute() const
 void KoParagraphStyle::setMinimumLineHeight(qreal height)
 {
     setProperty(MinimumLineHeight, height);
-    normalLineHeight = false;
+    remove(NormalLineHeight);
 }
 
 qreal KoParagraphStyle::minimumLineHeight() const
@@ -292,7 +304,7 @@ qreal KoParagraphStyle::minimumLineHeight() const
 void KoParagraphStyle::setLineSpacing(qreal spacing)
 {
     setProperty(LineSpacing, spacing);
-    normalLineHeight = false;
+    remove(NormalLineHeight);
 }
 
 qreal KoParagraphStyle::lineSpacing() const
@@ -303,7 +315,7 @@ qreal KoParagraphStyle::lineSpacing() const
 void KoParagraphStyle::setLineSpacingFromFont(bool on)
 {
     setProperty(LineSpacingFromFont, on);
-    normalLineHeight = false;
+    remove(NormalLineHeight);
 }
 
 bool KoParagraphStyle::lineSpacingFromFont() const
@@ -694,47 +706,47 @@ QColor KoParagraphStyle::bottomBorderColor()
     return propertyColor(BottomBorderColor);
 }
 
-void KoParagraphStyle::setTopMargin(qreal topMargin)
+void KoParagraphStyle::setTopMargin(QTextLength topMargin)
 {
     setProperty(QTextFormat::BlockTopMargin, topMargin);
 }
 
-qreal KoParagraphStyle::topMargin() const
+QTextLength KoParagraphStyle::topMargin() const
 {
-    return propertyDouble(QTextFormat::BlockTopMargin);
+    return propertyLength(QTextFormat::BlockTopMargin);
 }
 
-void KoParagraphStyle::setBottomMargin(qreal margin)
+void KoParagraphStyle::setBottomMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockBottomMargin, margin);
 }
 
-qreal KoParagraphStyle::bottomMargin() const
+QTextLength KoParagraphStyle::bottomMargin() const
 {
-    return propertyDouble(QTextFormat::BlockBottomMargin);
+    return propertyLength(QTextFormat::BlockBottomMargin);
 }
 
-void KoParagraphStyle::setLeftMargin(qreal margin)
+void KoParagraphStyle::setLeftMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockLeftMargin, margin);
 }
 
-qreal KoParagraphStyle::leftMargin() const
+QTextLength KoParagraphStyle::leftMargin() const
 {
-    return propertyDouble(QTextFormat::BlockLeftMargin);
+    return propertyLength(QTextFormat::BlockLeftMargin);
 }
 
-void KoParagraphStyle::setRightMargin(qreal margin)
+void KoParagraphStyle::setRightMargin(QTextLength margin)
 {
     setProperty(QTextFormat::BlockRightMargin, margin);
 }
 
-qreal KoParagraphStyle::rightMargin() const
+QTextLength KoParagraphStyle::rightMargin() const
 {
-    return propertyDouble(QTextFormat::BlockRightMargin);
+    return propertyLength(QTextFormat::BlockRightMargin);
 }
 
-void KoParagraphStyle::setMargin(qreal margin)
+void KoParagraphStyle::setMargin(QTextLength margin)
 {
     setTopMargin(margin);
     setBottomMargin(margin);
@@ -754,14 +766,14 @@ Qt::Alignment KoParagraphStyle::alignment() const
     return static_cast<Qt::Alignment>(propertyInt(QTextFormat::BlockAlignment));
 }
 
-void KoParagraphStyle::setTextIndent(qreal margin)
+void KoParagraphStyle::setTextIndent(QTextLength margin)
 {
     setProperty(QTextFormat::TextIndent, margin);
 }
 
-qreal KoParagraphStyle::textIndent() const
+QTextLength KoParagraphStyle::textIndent() const
 {
-    return propertyDouble(QTextFormat::TextIndent);
+    return propertyLength(QTextFormat::TextIndent);
 }
 
 void KoParagraphStyle::setAutoTextIndent(bool on)
@@ -1086,6 +1098,18 @@ void KoParagraphStyle::setAutomaticWritingMode(bool value)
     setProperty(AutomaticWritingMode, value);
 }
 
+void KoParagraphStyle::setVerticalAlignment(KoParagraphStyle::VerticalAlign value)
+{
+    setProperty(VerticalAlignment, value);
+}
+
+KoParagraphStyle::VerticalAlign KoParagraphStyle::verticalAlignment() const
+{
+    if (hasProperty(VerticalAlignment))
+        return (VerticalAlign) propertyInt(VerticalAlignment);
+    return VAlignAuto;
+}
+
 void KoParagraphStyle::loadOdf(const KoXmlElement *element, KoShapeLoadingContext &scontext)
 {
     KoOdfLoadingContext &context = scontext.odfLoadingContext();
@@ -1170,25 +1194,25 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     bool hasMarginRight = false;
     const QString marginLeft(styleStack.property(KoXmlNS::fo, "margin-left" ));
     if (!marginLeft.isEmpty()) {
-        setLeftMargin(KoUnit::parseValue(marginLeft));
+        setLeftMargin(KoText::parseLength(marginLeft));
         hasMarginLeft = true;
     }
     const QString marginRight(styleStack.property(KoXmlNS::fo, "margin-right" ));
     if (!marginRight.isEmpty()) {
-        setRightMargin(KoUnit::parseValue(marginRight));
+        setRightMargin(KoText::parseLength(marginRight));
         hasMarginRight = true;
     }
     const QString marginTop(styleStack.property(KoXmlNS::fo, "margin-top"));
     if (!marginTop.isEmpty()) {
-        setTopMargin(KoUnit::parseValue(marginTop));
+        setTopMargin(KoText::parseLength(marginTop));
     }
     const QString marginBottom(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     if (!marginBottom.isEmpty()) {
-        setBottomMargin(KoUnit::parseValue(marginBottom));
+        setBottomMargin(KoText::parseLength(marginBottom));
     }
     const QString margin(styleStack.property(KoXmlNS::fo, "margin"));
     if (!margin.isEmpty()) {
-        setMargin(KoUnit::parseValue(margin));
+        setMargin(KoText::parseLength(margin));
         hasMarginLeft = true;
         hasMarginRight = true;
     }
@@ -1205,7 +1229,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     else {
         const QString textIndent(styleStack.property(KoXmlNS::fo, "text-indent"));
         if (!textIndent.isEmpty()) {
-            setTextIndent(KoUnit::parseValue(textIndent));
+            setTextIndent(KoText::parseLength(textIndent));
         }
     }
 
@@ -1230,7 +1254,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             }
         }
         else
-            normalLineHeight = true;
+            setProperty(NormalLineHeight, true);
     }
     else {
         const QString lineSpacing(styleStack.property(KoXmlNS::style, "line-spacing"));
@@ -1252,11 +1276,11 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     }
 
     const QString lineHeightAtLeast(styleStack.property(KoXmlNS::style, "line-height-at-least"));
-    if (!lineHeightAtLeast.isEmpty() && !normalLineHeight && lineHeightAbsolute() == 0) {    // 3.11.2
+    if (!lineHeightAtLeast.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {    // 3.11.2
         setMinimumLineHeight(KoUnit::parseValue(lineHeightAtLeast));
     }  // Line-height-at-least is mutually exclusive with absolute line-height
     const QString fontIndependentLineSpacing(styleStack.property(KoXmlNS::style, "font-independent-line-spacing"));
-    if (!fontIndependentLineSpacing.isEmpty() && !normalLineHeight && lineHeightAbsolute() == 0) {
+    if (!fontIndependentLineSpacing.isEmpty() && !propertyBoolean(NormalLineHeight) && lineHeightAbsolute() == 0) {
         setLineSpacingFromFont(fontIndependentLineSpacing == "true");
     }
 
@@ -1264,7 +1288,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
     const QString tabStopDistance(styleStack.property(KoXmlNS::style, "tab-stop-distance"));
     if (!tabStopDistance.isEmpty()) {
         qreal stopDistance = KoUnit::parseValue(tabStopDistance);
-        if (stopDistance > 0)
+        if (stopDistance >= 0)
             setTabStopDistance(stopDistance);
     }
     KoXmlElement tabStops(styleStack.childNode(KoXmlNS::style, "tab-stops"));
@@ -1626,6 +1650,20 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
         setPunctuationWrap(styleStack.property(KoXmlNS::style, "punctuation-wrap") == "simple");
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "vertical-align")) {
+        const QString valign = styleStack.property(KoXmlNS::style, "vertical-align");
+        if (valign == "auto")
+            setVerticalAlignment(VAlignAuto);
+        else if (valign == "baseline")
+            setVerticalAlignment(VAlignBaseline);
+        else if (valign == "bottom")
+            setVerticalAlignment(VAlignBottom);
+        else if (valign == "middle")
+            setVerticalAlignment(VAlignMiddle);
+        else if (valign == "top")
+            setVerticalAlignment(VAlignTop);
+    }
+    
     //following properties KoParagraphStyle provides us are not handled now;
     // LineSpacingFromFont,
     // FollowDocBaseline,
@@ -1796,6 +1834,19 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         }
     }
     
+    if (keys.contains(QTextFormat::BlockLeftMargin) && keys.contains(QTextFormat::BlockRightMargin)
+            && keys.contains(QTextFormat::BlockBottomMargin) && keys.contains(QTextFormat::BlockTopMargin))
+    {
+        if ((leftMargin() == rightMargin()) && (topMargin() == bottomMargin()) && (rightMargin() == topMargin())) {
+            style.addPropertyLength("fo:margin", leftMargin(), KoGenStyle::ParagraphType);
+            keys.removeOne(QTextFormat::BlockLeftMargin);
+            keys.removeOne(QTextFormat::BlockRightMargin);
+            keys.removeOne(QTextFormat::BlockTopMargin);
+            keys.removeOne(QTextFormat::BlockBottomMargin);
+        }
+    }
+    
+    
     foreach (int key, keys) {
         if (key == QTextFormat::BlockAlignment) {
             int alignValue = 0;
@@ -1867,23 +1918,25 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             style.addPropertyPt("fo:padding-top", topPadding(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::BottomPadding) {
             style.addPropertyPt("fo:padding-bottom", bottomPadding(), KoGenStyle::ParagraphType);
-            // Margin
+        
+        // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addPropertyPt("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
-            style.addPropertyPt("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockTopMargin) {
-            style.addPropertyPt("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyPt("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
-    // Line spacing
+            style.addPropertyLength("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
+        
+        // Line spacing
         } else if ( key == KoParagraphStyle::MinimumLineHeight ||
                     key == KoParagraphStyle::LineSpacing ||
                     key == KoParagraphStyle::PercentLineHeight ||
                     key == KoParagraphStyle::FixedLineHeight ||
                     key == KoParagraphStyle::LineSpacingFromFont) {
 
-            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() > 0) {
+            if (key == KoParagraphStyle::MinimumLineHeight && minimumLineHeight() >= 0) {
                 style.addPropertyPt("style:line-height-at-least", minimumLineHeight(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
@@ -1901,7 +1954,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             }
     //
         } else if (key == QTextFormat::TextIndent) {
-            style.addPropertyPt("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:text-indent", textIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::AutoTextIndent) {
             style.addProperty("style:auto-text-indent", autoTextIndent(), KoGenStyle::ParagraphType);
         } else if (key == KoParagraphStyle::TabStopDistance) {
@@ -1938,9 +1991,21 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
                 style.addProperty("style:punctuation-wrap", "simple", KoGenStyle::ParagraphType);
             else
                 style.addProperty("style:punctuation-wrap", "hanging", KoGenStyle::ParagraphType);
+        } else if (key == VerticalAlignment) {
+            VerticalAlign valign = verticalAlignment();
+            if (valign == VAlignAuto)
+                style.addProperty("style:vertical-align", "auto", KoGenStyle::ParagraphType);
+            else if (valign == VAlignBaseline)
+                style.addProperty("style:vertical-align", "baseline", KoGenStyle::ParagraphType);
+            else if (valign == VAlignBottom)
+                style.addProperty("style:vertical-align", "bottom", KoGenStyle::ParagraphType);
+            else if (valign == VAlignMiddle)
+                style.addProperty("style:vertical-align", "middle", KoGenStyle::ParagraphType);
+            else if (valign == VAlignTop)
+                style.addProperty("style:vertical-align", "top", KoGenStyle::ParagraphType);
         }
     }
-    if (!writtenLineSpacing && normalLineHeight)
+    if (!writtenLineSpacing && propertyBoolean(NormalLineHeight))
         style.addProperty("fo:line-height", QString("normal"), KoGenStyle::ParagraphType);
     // save border stuff
     QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),

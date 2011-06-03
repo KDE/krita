@@ -1,8 +1,6 @@
 
 include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/ui/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc
     ora_load_context.cc

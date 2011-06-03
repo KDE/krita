@@ -79,6 +79,7 @@ struct KisPainter::Private {
     KoUpdater*                  progressUpdater;
 
     QRegion                     dirtyRegion;
+    QRect                       dirtyRect;
     KisPaintOp*                 paintOp;
     QRect                       bounds;
     KoColor                     paintColor;
@@ -97,6 +98,7 @@ struct KisPainter::Private {
     KoColorProfile*             profile;
     const KoCompositeOp*        compositeOp;
     QBitArray                   channelFlags;
+    bool                        useBoundingDirtyRect;
     const KoAbstractGradient*   gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
@@ -153,6 +155,9 @@ void KisPainter::init()
     d->maskImageHeight = 255;
     d->mirrorHorizontaly = false;
     d->mirrorVerticaly = false;
+
+    KConfigGroup cfg = KGlobal::config()->group("");
+    d->useBoundingDirtyRect = cfg.readEntry("aggregate_dirty_regions", true);
 }
 
 KisPainter::~KisPainter()
@@ -243,9 +248,16 @@ KisTransaction* KisPainter::takeTransaction()
 
 QRegion KisPainter::takeDirtyRegion()
 {
-    QRegion r = d->dirtyRegion;
-    d->dirtyRegion = QRegion();
-    return r;
+    if (d->useBoundingDirtyRect) {
+        QRegion r(d->dirtyRect);
+        d->dirtyRegion = QRegion();
+        d->dirtyRect = QRect();
+        return r;
+    } else {
+        QRegion r = d->dirtyRegion;
+        d->dirtyRegion = QRegion();
+        return r;
+    }
 }
 
 
@@ -257,9 +269,17 @@ QRegion KisPainter::addDirtyRect(const QRect & rc)
         return d->dirtyRegion;
     }
 
-    d->dirtyRegion += r;
-    return d->dirtyRegion;
+    if (d->useBoundingDirtyRect) {
+        d->dirtyRect = d->dirtyRect.united(r);
+        return QRegion(d->dirtyRect);
+    } else {
+        d->dirtyRegion += QRegion(r);
+        return d->dirtyRegion;
+    }
 }
+
+
+
 
 
 void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
@@ -747,41 +767,41 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
      * initializing they perform some dummy passes with those parameters, and it must not crash */
     if(width == 0 || height == 0 || d->device.isNull())
         return;
-    
+
     KoColor srcColor(color, d->colorSpace);
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
-    
+
     KisRandomAccessorSP dstIt = d->device->createRandomAccessorNG(x, y);
-    
+
     if(d->selection) {
-        
+
         KisRandomConstAccessorSP maskIt = d->selection->createRandomConstAccessorNG(x, y);
-        
+
         while(rowsRemaining > 0) {
-            
+
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
             qint32 numContiguousSelRows = d->selection->numContiguousRows(dstY, dstX, dstX+width-1);
-            
+
             qint32 rows = qMin(numContiguousDstRows, numContiguousSelRows);
             rows = qMin(rows, rowsRemaining);
-            
+
             while (columnsRemaining > 0) {
-                
+
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
                 qint32 numContiguousSelColumns = d->selection->numContiguousColumns(dstX, dstY, dstY+rows-1);
-                
+
                 qint32 columns = qMin(numContiguousDstColumns, numContiguousSelColumns);
                 columns = qMin(columns, columnsRemaining);
-                
+
                 qint32 dstRowStride = d->device->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
-                
+
                 qint32 maskRowStride = d->selection->rowStride(dstX, dstY);
                 maskIt->moveTo(dstX, dstY);
-                
+
                 d->colorSpace->bitBlt(
                     dstIt->rawData(),
                     dstRowStride,
@@ -796,31 +816,31 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                     d->compositeOp,
                     d->channelFlags
                 );
-                
+
                 dstX             += columns;
                 columnsRemaining -= columns;
             }
-            
+
             dstY          += rows;
             rowsRemaining -= rows;
         }
     }
     else {
-        
+
         while(rowsRemaining > 0) {
-            
+
             qint32 dstX                 = x;
             qint32 columnsRemaining     = width;
             qint32 numContiguousDstRows = d->device->numContiguousRows(dstY, dstX, dstX+width-1);
             qint32 rows                 = qMin(numContiguousDstRows, rowsRemaining);
-            
+
             while(columnsRemaining > 0) {
-                
+
                 qint32 numContiguousDstColumns = d->device->numContiguousColumns(dstX, dstY, dstY+rows-1);
                 qint32 columns                 = qMin(numContiguousDstColumns, columnsRemaining);
                 qint32 dstRowStride            = d->device->rowStride(dstX, dstY);
                 dstIt->moveTo(dstX, dstY);
-                
+
                 d->colorSpace->bitBlt(
                     dstIt->rawData(),
                     dstRowStride,
@@ -835,16 +855,16 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                     d->compositeOp,
                     d->channelFlags
                 );
-                
+
                 dstX             += columns;
                 columnsRemaining -= columns;
             }
-            
+
             dstY          += rows;
             rowsRemaining -= rows;
         }
     }
-    
+
     addDirtyRect(QRect(x, y, width, height));
 }
 
@@ -2424,8 +2444,15 @@ const KoAbstractGradient* KisPainter::gradient() const
 void KisPainter::setPaintOpPreset(KisPaintOpPresetSP preset, KisImageWSP image)
 {
     d->paintOpPreset = preset;
-    delete d->paintOp;
-    d->paintOp = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    KisPaintOp *paintop = KisPaintOpRegistry::instance()->paintOp(preset, this, image);
+    Q_ASSERT(paintop);
+    if (paintop) {
+        delete d->paintOp;
+        d->paintOp = paintop;
+    }
+    else {
+        qWarning() << "Could not create paintop for preset " << preset->name();
+    }
 }
 
 KisPaintOpPresetSP KisPainter::preset() const

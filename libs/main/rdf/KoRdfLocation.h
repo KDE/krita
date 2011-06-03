@@ -22,7 +22,8 @@
 
 #include "KoRdfSemanticItem.h"
 
-class KoRdfLocationPrivate;
+#include <ui_KoRdfLocationEditWidget.h>
+#include <ui_KoRdfLocationViewWidget.h>
 
 /**
  * @short A Location class which handles ICBM (lat/long) data of various kinds.
@@ -72,6 +73,22 @@ public:
     double dlong() const;
 
 private:
-    Q_DECLARE_PRIVATE(KoRdfLocation);
+    Soprano::Node m_linkSubject;
+    QString m_name;
+    double m_dlat;
+    double m_dlong;
+    //
+    // For geo84 simple ontology
+    // geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+    //
+    bool m_isGeo84;
+    //
+    // For lat, long as an Rdf list pointed at by cal:geo
+    //
+    Soprano::Node m_joiner;
+    Ui::KoRdfLocationEditWidget editWidget;
+    Ui::KoRdfLocationViewWidget viewWidget;
+
+
 };
 #endif

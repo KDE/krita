@@ -93,7 +93,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker( KoDocumentSectionView:
 , m_model( 0 )
 {
     setWindowTitle( i18n( "Document" ) );
-    
+
     QWidget *mainWidget = new QWidget( this );
     QGridLayout* layout = new QGridLayout( mainWidget );
     layout->addWidget( m_sectionView = new KoDocumentSectionView( mainWidget ), 0, 0, 1, -1 );
@@ -498,6 +498,12 @@ void KoPADocumentStructureDocker::setCanvas( KoCanvasBase* canvas )
     }
 }
 
+void KoPADocumentStructureDocker::unsetCanvas()
+{
+    m_doc = 0;
+    m_model->setDocument(0);
+}
+
 void KoPADocumentStructureDocker::setActivePage(KoPAPageBase *page)
 {
     if ( m_doc ) {
@@ -533,7 +539,7 @@ void KoPADocumentStructureDocker::thumbnailView()
 void KoPADocumentStructureDocker::setViewMode(KoDocumentSectionView::DisplayMode mode)
 {
     bool expandable = (mode != KoDocumentSectionView::ThumbnailMode);
-    
+
     // if we switch to non-expandable mode (ThumbnailMode) and if current index
     // is not a page, we need to select the corresponding page first, otherwise
     // none of the page will be selected when we do collapse all

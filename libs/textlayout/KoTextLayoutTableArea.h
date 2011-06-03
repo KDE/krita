@@ -23,6 +23,7 @@
 #include "textlayout_export.h"
 
 #include "KoTextLayoutArea.h"
+#include "KoPointedAt.h"
 
 #include <QVector>
 #include <QLineF>
@@ -41,11 +42,11 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the table
-    bool layout(TableIterator *cursor);
+    bool layoutTable(TableIterator *cursor);
 
     void paint(QPainter *painter, const KoTextDocumentLayout::PaintContext &context);
 
-    int hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
+    KoPointedAt hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const;
 
     /// Calc a bounding box rect of the selection
     QRectF selectionBoundingBox(QTextCursor &cursor) const;

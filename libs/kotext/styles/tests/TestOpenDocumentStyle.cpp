@@ -22,6 +22,7 @@
 #include <KoTableColumnStyle.h>
 #include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
+#include <KoParagraphStyle.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoOdfLoadingContext.h>
@@ -110,6 +111,26 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
                                 }
                             }
                         }
+                        foreach (QString allowedValue, mergedAllowedValues) {
+                            QStringList equivalenceList;
+                            equivalenceList << allowedValue;
+                            
+                            QStringList currentList = allowedValue.split(' ');
+                            currentList.sort();
+                            
+                            foreach (QString otherAllowedValue, mergedAllowedValues) {
+                                if (otherAllowedValue == allowedValue)
+                                    continue;
+                                
+                                QStringList otherList = otherAllowedValue.split(' ');
+                                otherList.sort();
+                                if (otherList == currentList)
+                                    equivalenceList << otherAllowedValue;
+                            }
+                            equivalenceList.sort();
+                            if (!m_equivalences.contains(equivalenceList))
+                                m_equivalences << equivalenceList;
+                        }
                         result << mergedAllowedValues;
                     }
                 } else {
@@ -145,6 +166,10 @@ QStringList Attribute::listValuesFromNode(const QDomElement &m_node)
             result << "-50%" << "0%" << "100%" << "42%";
         } else if (reference == "borderWidths") {
             result << "42px 42pt 12cm" << "0px 0pt 0cm";
+        } else if (reference == "angle") {
+            result << "5deg" << "1rad" << "-3grad" << "3.14rad" << "45";    // OpenDocument 1.1 : no unit == degrees
+        } else if (reference == "zeroToHundredPercent") {
+            result << "0%" << "10%" << "100%" << "13.37%" << "42.73%";
         } else if (reference == "string") {
             // Now, that sucks !
             kWarning() << "Found a string reference in " << m_name;
@@ -162,6 +187,8 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return false;
     if (initialValue == outputValue)
         return true;
+    if (m_name == "style:writing-mode")
+        return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
             if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
@@ -169,6 +196,20 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         } else if (reference == "color") {
             if (initialValue.toLower() == outputValue.toLower())
                 return true;
+        } else if (reference == "angle") {
+            //TODO: implement comparison of angles
+            return (initialValue.toLower() == outputValue.toLower());
+        }
+    }
+    if (!m_equivalences.empty()) {
+        // Check every equivalence value
+        foreach (QStringList equivalenceList, m_equivalences) {
+            if (equivalenceList.contains(outputValue)) {
+                foreach (QString otherValue, equivalenceList) {
+                    if ((otherValue != outputValue) && (compare(initialValue, otherValue)))
+                        return true;
+                }
+            }   
         }
     }
     return false;
@@ -183,7 +224,8 @@ TestOpenDocumentStyle::TestOpenDocumentStyle()
 void TestOpenDocumentStyle::initTestCase()
 {
     // Parse the relaxng file quickly
-    QString fileName(SPECS_DATA_DIR "OpenDocument-schema-v1.1.rng");
+    //QString fileName(SPECS_DATA_DIR "OpenDocument-schema-v1.1.rng");
+    QString fileName(SPECS_DATA_DIR "OpenDocument-v1.2-cs01-schema.rng");
     kDebug() << fileName;
     QFile specFile(fileName);
     specFile.open(QIODevice::ReadOnly);
@@ -209,6 +251,12 @@ QList<Attribute*> TestOpenDocumentStyle::listAttributesFromRNGName(const QString
     if (!m_rngRules.contains(name))
         return result;
     QList<QDomElement> elements = m_rngRules.values(name);
+    if ((elements.count() == 1) && (elements.first().firstChildElement().tagName() == "interleave"))
+    {
+        QDomElement root = elements.first().firstChildElement();
+        elements.clear();
+        elements.append(root);
+    }
     foreach (QDomElement element, elements) {
         QDomElement child = element.firstChildElement();
         do {
@@ -271,6 +319,39 @@ QByteArray TestOpenDocumentStyle::generateStyleProperties(const KoGenStyle& genS
 }
 
 template<class T>
+void loadOdf(T* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+{
+    genStyle->loadOdf(mainElement, loadCtxt);
+}
+
+template<>
+void loadOdf<KoTableCellStyle>(KoTableCellStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+{
+    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
+    genStyle->loadOdf(mainElement, shapeCtxt);
+}
+
+template<>
+void loadOdf<KoParagraphStyle>(KoParagraphStyle* genStyle, const KoXmlElement *mainElement, KoOdfLoadingContext &loadCtxt)
+{
+    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
+    genStyle->loadOdf(mainElement, shapeCtxt);
+}
+
+template<class T>
+void saveOdf(T* genStyle, KoGenStyle *styleWriter)
+{
+    genStyle->saveOdf(*styleWriter);
+}
+
+template<>
+void saveOdf<KoParagraphStyle>(KoParagraphStyle *genStyle, KoGenStyle *styleWriter)
+{
+    KoGenStyles styles;
+    genStyle->saveOdf(*styleWriter, styles);
+}
+
+template<class T>
 bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QString &familyName, Attribute *attribute, const QString &value)
 {
     T basicStyle;
@@ -282,13 +363,13 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlDocument *xmlReader = new KoXmlDocument;
     xmlReader->setContent(xmlOutputData, true);
     KoXmlElement mainElement = xmlReader->documentElement();
-    genStyle.loadOdf(&mainElement, loadCtxt);
+    loadOdf<T>(&genStyle, &mainElement, loadCtxt);
 
     // THAT is often poorly implemented
     //QVERIFY(not(genStyle == basicStyle));
 
     KoGenStyle styleWriter(family, familyName.toLatin1());
-    genStyle.saveOdf(styleWriter);
+    saveOdf<T>(&genStyle, &styleWriter);
 
     QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
 
@@ -301,44 +382,11 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     KoXmlElement root = generatedXmlReader->documentElement();
     KoXmlElement properties = root.firstChild().toElement();
     QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug() << "Comparing " << outputPropertyValue << value;
-    return attribute->compare(outputPropertyValue, value);
-}
-
-template<class T>
-bool TestOpenDocumentStyle::basicTestFunctionWithShapeContext(KoGenStyle::Type family, const QString &familyName, Attribute *attribute,
-    const QString &value)
-{
-    T basicStyle;
-    T genStyle;
-    KoOdfStylesReader stylesReader;
-    KoOdfLoadingContext loadCtxt(stylesReader, 0);
-    KoShapeLoadingContext shapeCtxt(loadCtxt, 0);
-
-    QByteArray xmlOutputData = this->generateStyleNodeWithAttribute(familyName, attribute->name(), value);
-    KoXmlDocument *xmlReader = new KoXmlDocument;
-    xmlReader->setContent(xmlOutputData, true);
-    KoXmlElement mainElement = xmlReader->documentElement();
-    genStyle.loadOdf(&mainElement, shapeCtxt);
-
-    // THAT is often poorly implemented
-    //QVERIFY(not(genStyle == basicStyle));
-
-    KoGenStyle styleWriter(family, familyName.toLatin1());
-    genStyle.saveOdf(styleWriter);
-
-    QByteArray generatedXmlOutput = generateStyleProperties(styleWriter, familyName);
-
-    KoXmlDocument *generatedXmlReader = new KoXmlDocument;
-    if (!generatedXmlReader->setContent(generatedXmlOutput)) {
-        kDebug() << "Output XML seems not to be valid : " << generatedXmlOutput;
-        kFatal() << "Unable to set content";
+    kDebug(32500) << "Comparing " << outputPropertyValue << "obtained for " << value;
+    if (properties.attributeNames().count() > 1)
+    {
+        kWarning(32500) << "Warning : got more than one attribute !";
     }
-
-    KoXmlElement root = generatedXmlReader->documentElement();
-    KoXmlElement properties = root.firstChild().toElement();
-    QString outputPropertyValue = properties.attribute(attribute->name());
-    kDebug() << "Comparing " << outputPropertyValue << value;
     return attribute->compare(outputPropertyValue, value);
 }
 
@@ -419,7 +467,27 @@ void TestOpenDocumentStyle::testTableCellStyle()
     QFETCH(Attribute*, attribute);
     QFETCH(QString, value);
 
-    QVERIFY(basicTestFunctionWithShapeContext<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
+    QVERIFY(basicTestFunction<KoTableCellStyle>(KoGenStyle::TableCellStyle, "table-cell", attribute, value));
+}
+
+void TestOpenDocumentStyle::testParagraphStyle_data()
+{
+    QList<Attribute*> attributes = listAttributesFromRNGName("style-paragraph-properties-attlist");
+    QTest::addColumn<Attribute*>("attribute");
+    QTest::addColumn<QString>("value");
+    foreach (Attribute *attribute, attributes) {
+        foreach (QString value, attribute->listValues()) {
+            QTest::newRow(attribute->name().toLatin1()) << attribute << value;
+        }
+    }
+}
+
+void TestOpenDocumentStyle::testParagraphStyle()
+{
+    QFETCH(Attribute*, attribute);
+    QFETCH(QString, value);
+
+    QVERIFY(basicTestFunction<KoParagraphStyle>(KoGenStyle::ParagraphStyle, "paragraph", attribute, value));
 }
 
 QTEST_MAIN(TestOpenDocumentStyle)

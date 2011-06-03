@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
  * Copyright (C) 2006-2009 Thomas Zander <zander@kde.org>
  * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C) 2011 Stuart Dickson <stuart@furkinfantastic.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -204,9 +205,18 @@ void TestStyles::testCopyParagraphStyle()
 
 void TestStyles::testUnapplyStyle()
 {
+    // Used to test OverlineColor style
+    QColor testOverlineColor(255, 128, 64);
+    KoCharacterStyle::LineWeight testOverlineWeight = KoCharacterStyle::ThickLineWeight;
+    qreal testOverlineWidth = 1.5;
+    
     // in this test we should avoid testing any of the hardcodedDefaultProperties; see KoCharacterStyle for details!
     KoParagraphStyle headers;
-    headers.characterStyle()->setFontOverline(true);
+    headers.characterStyle()->setOverlineColor(testOverlineColor);
+    headers.characterStyle()->setOverlineMode(KoCharacterStyle::ContinuousLineMode);
+    headers.characterStyle()->setOverlineStyle(KoCharacterStyle::DottedLine);
+    headers.characterStyle()->setOverlineType(KoCharacterStyle::DoubleLine);
+    headers.characterStyle()->setOverlineWidth(testOverlineWeight, testOverlineWidth);
     headers.characterStyle()->setFontWeight(QFont::Bold);
     headers.setAlignment(Qt::AlignCenter);
     KoParagraphStyle head1;
@@ -223,14 +233,26 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
     QCOMPARE(bf.leftMargin(), 40.);
     QTextCharFormat cf = cursor.charFormat();
-    QCOMPARE(cf.fontOverline(), true);
+    QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineMode), (int) KoCharacterStyle::ContinuousLineMode);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineStyle), (int) KoCharacterStyle::DottedLine);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
+    QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
+    
+    
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();
     QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
     QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);    
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
 
     doc.clear();
     block = doc.begin();
@@ -239,14 +261,21 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
     QCOMPARE(bf.leftMargin(), 40.);
     cf = cursor.charFormat();
-    QCOMPARE(cf.fontOverline(), true);
+    //QCOMPARE(cf.fontOverline(), true);
+    QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineMode), (int) KoCharacterStyle::ContinuousLineMode);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineStyle), (int) KoCharacterStyle::DottedLine);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineType), (int) KoCharacterStyle::DoubleLine);
+    QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineWeight), (int) testOverlineWeight);
+    QCOMPARE(cf.doubleProperty(KoCharacterStyle::OverlineWidth), testOverlineWidth);
+    
 
     head1.unapplyStyle(block);
     bf = cursor.blockFormat();
     QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
     QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
 
     doc.setHtml("bla bla<i>italic</i>enzo");
     block = doc.begin();
@@ -255,7 +284,14 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
     QCOMPARE(bf.leftMargin(), 40.);
     cf = cursor.charFormat();
-    QCOMPARE(cf.fontOverline(), true);
+    //QCOMPARE(cf.fontOverline(), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), true);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), true);
+
 
     head1.unapplyStyle(block);
     cursor.setPosition(0);
@@ -263,20 +299,45 @@ void TestStyles::testUnapplyStyle()
     QCOMPARE(bf.hasProperty(QTextFormat::BlockAlignment), false);
     QCOMPARE(bf.hasProperty(QTextFormat::BlockLeftMargin), false);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
+
 
     cursor.setPosition(8);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
     cursor.setPosition(13);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.fontItalic(), true);
 
     cursor.setPosition(14);
     cf = cursor.charFormat();
-    QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    //QCOMPARE(cf.hasProperty(QTextFormat::FontOverline), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineMode), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineStyle), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineType), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWeight), false);
+    QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineWidth), false);
     QCOMPARE(cf.hasProperty(QTextFormat::FontWeight), false);
     QCOMPARE(cf.hasProperty(QTextFormat::FontItalic), false);
 }

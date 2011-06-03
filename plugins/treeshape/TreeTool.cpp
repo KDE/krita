@@ -306,15 +306,15 @@ KoToolSelection* TreeTool::selection()
     return m_selectionHandler;
 }
 
-QMap<QString, QWidget *> TreeTool::createOptionWidgets()
+QList<QWidget *> TreeTool::createOptionWidgets()
 {
     TreeShapeConfigWidget *widget = new TreeShapeConfigWidget(this);
     connect(this, SIGNAL(updateConfigWidget(TreeShape*)),
             widget, SLOT(updateParameters(TreeShape*)));
     emit updateConfigWidget(0);
 
-    QMap<QString, QWidget *> widgets;
-    widgets[i18n("Tree Shape")] = widget;
+    QList<QWidget *> widgets;
+    widgets.append(widget);
 
     return widgets;
 }

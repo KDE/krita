@@ -192,6 +192,11 @@ public:
 
 signals:
     /**
+     * Signal that is emitted during layouting to inform about the progress done so far.
+     */
+    void layoutProgressChanged(int percent);
+
+    /**
      * Signal is emitted every time a layout run has completely finished (all text is positioned).
      */
     void finishedLayout();
@@ -247,6 +252,9 @@ protected:
 private:
     class Private;
     Private * const d;
+
+    bool doLayout();
+    void updateProgress(const QTextFrame::iterator &it);
 };
 
 #endif

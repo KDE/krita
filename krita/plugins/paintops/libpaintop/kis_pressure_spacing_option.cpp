@@ -22,7 +22,7 @@
 #include <klocale.h>
 
 KisPressureSpacingOption::KisPressureSpacingOption()
-        : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), true )
+        : KisCurveOption(i18n("Spacing"), "Spacing", KisPaintOpOption::brushCategory(), false)
 {
     setMinimumLabel(i18n("0%"));
     setMaximumLabel(i18n("100%"));
@@ -31,16 +31,8 @@ KisPressureSpacingOption::KisPressureSpacingOption()
 
 double KisPressureSpacingOption::apply(const KisPaintInformation & info) const
 {
-    if (!isChecked()) return 1.0;
+    if(!isChecked())
+        return 1.0;
+    
     return computeValue(info);
-}
-
-void KisPressureSpacingOption::readOptionSetting(const KisPropertiesConfiguration* setting)
-{
-    if(setting->hasProperty("Pressure" + m_name))
-    {
-        KisCurveOption::readOptionSetting(setting);
-    } else {
-        readNamedOptionSetting("Size", setting);
-    }
 }

@@ -123,6 +123,8 @@ QString KoText::valignmentToString(Qt::Alignment alignment)
         align = "middle";
     else if (alignment == Qt::AlignBottom)
         align = "bottom";
+    else
+        align = "automatic";
     return align;
 }
 
@@ -135,19 +137,23 @@ KoText::Direction KoText::directionFromString(const QString &writingMode)
         return KoText::RightLeftTopBottom;
     if (writingMode == "tb" || writingMode == "tb-rl")
         return KoText::TopBottomRightLeft;
+    if (writingMode == "tb-lr")
+        return KoText::TopBottomLeftRight;
     if (writingMode == "page")
         return KoText::InheritDirection;
     return KoText::AutoDirection;
 }
 
-QString directionToString(KoText::Direction direction)
+QString KoText::directionToString(KoText::Direction direction)
 {
     if (direction == KoText::LeftRightTopBottom)
         return "lr";
     if (direction == KoText::RightLeftTopBottom)
         return "rl";
     if (direction == KoText::TopBottomRightLeft)
-        return "tb";
+        return "tb-rl";
+    if (direction == KoText::TopBottomLeftRight)
+        return "tb-lr";
     if (direction == KoText::InheritDirection)
         return "page";
     

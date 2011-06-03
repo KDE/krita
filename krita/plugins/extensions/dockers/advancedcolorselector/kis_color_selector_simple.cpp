@@ -22,8 +22,6 @@
 #include <QColor>
 #include <cmath>
 
-#include <KDebug>
-
 KisColorSelectorSimple::KisColorSelectorSimple(KisColorSelector *parent) :
     KisColorSelectorComponent(parent),
     m_lastClickPos(-1,-1)

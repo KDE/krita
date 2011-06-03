@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2009 Sven Langkamp   <sven.langkamp@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -44,15 +45,24 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
 {
     m_curveOptionWidget->setupUi(m_widget);
     setConfigurationPage(m_widget);
+    
     connect(m_curveOptionWidget->curveWidget, SIGNAL(modified()), this, SLOT(transferCurve()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(sensorChanged(KisDynamicSensor*)), SLOT(setSensor(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(parametersChanged()), SIGNAL(sigSettingChanged()));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor*)), SLOT(updateSensorCurveLabels(KisDynamicSensor*)));
     connect(m_curveOptionWidget->sensorSelector, SIGNAL(highlightedSensorChanged(KisDynamicSensor*)), SLOT(updateCurve(KisDynamicSensor*)));
-    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(clicked(bool)), SLOT(transferCurve()));
+    connect(m_curveOptionWidget->checkBoxUseSameCurve, SIGNAL(stateChanged(int)), SLOT(transferCurve()));
+    
     setLabel(m_curveOptionWidget->label_ymin, curveOption->minimumLabel());
     setLabel(m_curveOptionWidget->label_ymax, curveOption->maximumLabel());
+    
     updateSensorCurveLabels(m_curveOptionWidget->sensorSelector->currentHighlighted());
+    
+    m_curveOptionWidget->slider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
+    m_curveOptionWidget->slider->setValue(curveOption->value());
+    
+    connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
+    connect(m_curveOptionWidget->slider          , SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
 }
 
 KisCurveOptionWidget::~KisCurveOptionWidget()
@@ -69,6 +79,8 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 {
     m_curveOption->readOptionSetting(setting);
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->sensor());
+    m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
+    m_curveOptionWidget->slider->setValue(m_curveOption->value());
     updateCurve(m_curveOption->sensor());
 }
 
@@ -100,7 +112,6 @@ QWidget* KisCurveOptionWidget::curveWidget()
 void KisCurveOptionWidget::transferCurve()
 {
     m_curveOptionWidget->sensorSelector->setCurrentCurve(m_curveOptionWidget->curveWidget->curve(), m_curveOptionWidget->checkBoxUseSameCurve->isChecked());
-
     emit sigSettingChanged();
 }
 
@@ -124,4 +135,11 @@ void KisCurveOptionWidget::updateCurve(KisDynamicSensor* sensor)
     bool blockSignal = m_curveOptionWidget->curveWidget->blockSignals(true);
     m_curveOptionWidget->curveWidget->setCurve(sensor->curve());
     m_curveOptionWidget->curveWidget->blockSignals(blockSignal);
+}
+
+void KisCurveOptionWidget::updateValues()
+{
+    m_curveOption->setValue(m_curveOptionWidget->slider->value());
+    m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
+    emit sigSettingChanged();
 }

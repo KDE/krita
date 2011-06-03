@@ -20,7 +20,6 @@ SET ( textshape_SRCS
     TextTool.cpp
     TextEditingPluginContainer.cpp
     TextToolFactory.cpp
-    ToCGenerator.cpp
     ShrinkToFitShapeContainer.cpp
     SimpleRootAreaProvider.cpp
 

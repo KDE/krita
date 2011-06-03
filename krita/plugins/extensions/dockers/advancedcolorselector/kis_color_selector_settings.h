@@ -29,7 +29,6 @@ namespace Ui {
 class KIcon;
 class KisCanvas2;
 
-
 class KisColorSelectorSettings : public KisPreferenceSet {
     Q_OBJECT
 public:
@@ -54,6 +53,27 @@ protected:
 
 private:
     Ui::KisColorSelectorSettings *ui;
+};
+
+class KisColorSelectorSettingsUpdateRepeater : public QObject {
+    Q_OBJECT
+signals:
+    void settingsUpdated();
+public slots:
+    void updateSettings() {
+        emit settingsUpdated();
+    }
+};
+
+class KisColorSelectorSettingsFactory : public KisAbstractPreferenceSetFactory {
+public:
+    KisPreferenceSet* createPreferenceSet() {
+        KisColorSelectorSettings* ps = new KisColorSelectorSettings();
+        QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
+        return ps;
+    }
+    virtual QString id() const { return "ColorSelectorSettings"; }
+    KisColorSelectorSettingsUpdateRepeater repeater;
 };
 
 class KisColorSelectorSettingsDialog : public QDialog {

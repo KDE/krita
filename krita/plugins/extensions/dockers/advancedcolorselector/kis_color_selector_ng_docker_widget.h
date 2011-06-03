@@ -37,7 +37,7 @@ Q_OBJECT
 public:
     explicit KisColorSelectorNgDockerWidget(QWidget *parent = 0);
     void setCanvas(KisCanvas2* canvas);
-
+    void unsetCanvas();
 public slots:
     void openSettings();
 

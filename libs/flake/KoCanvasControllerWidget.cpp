@@ -56,11 +56,12 @@ class KoCanvasControllerWidget::Private
 public:
 
     Private(KoCanvasControllerWidget *qq)
-        : q(qq),
-        canvas(0),
-        ignoreScrollSignals(false),
-        zoomWithWheel(false),
-        vastScrollingFactor(0)
+        : q(qq)
+        , canvas(0)
+        , lastActivatedCanvas(0)
+        , ignoreScrollSignals(false)
+        , zoomWithWheel(false)
+        , vastScrollingFactor(0)
     {
     }
 
@@ -75,8 +76,9 @@ public:
     void activate();
 
     KoCanvasControllerWidget *q;
-    KoCanvasBase * canvas;
-    Viewport * viewportWidget;
+    KoCanvasBase *canvas;
+    KoCanvasBase *lastActivatedCanvas;
+    Viewport *viewportWidget;
     bool ignoreScrollSignals;
     bool zoomWithWheel;
     qreal vastScrollingFactor;
@@ -180,18 +182,24 @@ void KoCanvasControllerWidget::Private::emitPointerPositionChangedSignals(QEvent
 void KoCanvasControllerWidget::Private::activate()
 {
     QWidget *parent = q;
-    while (parent->parentWidget())
+    while (parent->parentWidget()) {
         parent = parent->parentWidget();
-
+    }
     KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
-    if (!observerProvider)
+    if (!observerProvider) {
         return;
-
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-        if (observer) {
-            observer->setCanvas(q->canvas());
+    }
+    // Only notify the canvasobservers that the canvas has changed if it has,
+    // indeed, been changed. Doesn't excuse the canvasdockers from properly
+    // disconnecting
+    if (q->canvas() != lastActivatedCanvas) {
+        foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+            KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+            if (observer) {
+                observer->setCanvas(q->canvas());
+            }
         }
+        lastActivatedCanvas = q->canvas();
     }
 }
 
@@ -226,6 +234,20 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
+    QWidget *parent = this;
+    while (parent->parentWidget()) {
+        parent = parent->parentWidget();
+    }
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
+    if (!observerProvider) {
+        return;
+    }
+    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+        if (observer) {
+            observer->unsetCanvas();
+        }
+    }
     delete d;
 }
 
@@ -501,13 +523,17 @@ void KoCanvasControllerWidget::zoomTo(const QRect &viewRect)
     d->canvas->canvasWidget()->update();
 }
 
-void KoCanvasControllerWidget::setToolOptionWidgets(const QMap<QString, QWidget *>&widgetMap)
+void KoCanvasControllerWidget::setToolOptionWidgets(const QList<QWidget *>&widgetMap)
 {
     emit toolOptionWidgetsChanged(widgetMap);
 }
 
 void KoCanvasControllerWidget::updateDocumentSize(const QSize &sz, bool recalculateCenter)
 {
+    // Don't update if the document-size didn't changed to prevent infinite loops and unneeded updates.
+    if (KoCanvasController::documentSize() == sz)
+        return;
+
     if (!recalculateCenter) {
         // assume the distance from the top stays equal and recalculate the center.
         setPreferredCenterFractionX(documentSize().width() * preferredCenterFractionX() / sz.width());

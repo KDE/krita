@@ -43,6 +43,7 @@ public:
 
     /// reimplemented from KoCanvasObserverBase
     virtual void setCanvas(KoCanvasBase *canvas);
+    virtual void unsetCanvas();
 
 protected slots:
     void updateToolBoxOrientation(Qt::DockWidgetArea area);

@@ -83,7 +83,7 @@ public: // Events
 
 protected:
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
-    virtual QMap<QString, QWidget *>  createOptionWidgets();
+    virtual QList<QWidget *>  createOptionWidgets();
 
 private:
     void setupActions();

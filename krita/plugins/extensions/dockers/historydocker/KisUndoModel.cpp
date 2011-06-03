@@ -89,7 +89,9 @@ void KisUndoModel::setStack(QUndoStack *stack)
         disconnect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
         disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
+
     m_stack = stack;
+    
     if (m_stack != 0) {
         connect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
         connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));

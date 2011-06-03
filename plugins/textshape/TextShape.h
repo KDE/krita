@@ -30,11 +30,8 @@
 
 #include <QTextDocument>
 #include <QPainter>
-#include <QMutex>
-#include <QWaitCondition>
 
 #define TextShape_SHAPEID "TextShapeID"
-
 
 class KoInlineTextObjectManager;
 class KoPageProvider;
@@ -93,10 +90,7 @@ public:
         return m_textShapeData;
     }
 
-    void markLayoutDone();
-
     virtual void update() const;
-
     virtual void update(const QRectF &shape) const;
 
     // required for kpresenter hack
@@ -118,8 +112,6 @@ private:
     void shapeChanged(ChangeType type, KoShape *shape = 0);
 
     KoTextShapeData *m_textShapeData;
-    mutable QMutex m_mutex;
-    mutable QWaitCondition m_waiter;
     KoPageProvider *m_pageProvider;
     KoImageCollection *m_imageCollection;
     QRegion m_paintRegion;

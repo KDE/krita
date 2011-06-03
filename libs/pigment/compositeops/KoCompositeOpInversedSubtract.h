@@ -34,7 +34,7 @@ class KoCompositeOpInversedSubtract : public KoCompositeOpAlphaBase<_CSTraits, K
 public:
 
     KoCompositeOpInversedSubtract(const KoColorSpace * cs)
-            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits>, true >(cs, COMPOSITE_INVERSED_SUBTRACT, i18n("Inversed Subtract"), KoCompositeOp::categoryArithmetic()) {
+            : KoCompositeOpAlphaBase<_CSTraits, KoCompositeOpInversedSubtract<_CSTraits>, true >(cs, COMPOSITE_INVERSE_SUBTRACT, i18n("Inverse Subtract"), KoCompositeOp::categoryArithmetic()) {
     }
 
 public:

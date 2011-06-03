@@ -132,7 +132,7 @@ void KisCanvas2::setCanvasWidget(QWidget * widget)
 {
     connect(widget, SIGNAL(needAdjustOrigin()), this, SLOT(adjustOrigin()), Qt::DirectConnection);
 
-    KisAbstractCanvasWidget * tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
+    KisAbstractCanvasWidget *tmp = dynamic_cast<KisAbstractCanvasWidget*>(widget);
     Q_ASSERT_X(tmp, "setCanvasWidget", "Cannot cast the widget to a KisAbstractCanvasWidget");
     emit canvasDestroyed(widget);
 
@@ -188,7 +188,7 @@ void KisCanvas2::rotateCanvas(qreal angle, bool updateOffset)
 {
     m_d->coordinatesConverter->rotate(m_d->coordinatesConverter->widgetCenterPoint(), angle);
     notifyZoomChanged();
-    
+
     if(updateOffset)
         pan(m_d->coordinatesConverter->updateOffsetAfterTransform());
     else
@@ -491,6 +491,12 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
     if (!widgetRect.isEmpty()) {
         m_d->canvasWidget->widget()->update(widgetRect);
     }
+}
+
+void KisCanvas2::disconnectCanvasObserver(QObject *object)
+{
+    KoCanvasBase::disconnectCanvasObserver(object);
+    m_d->view->disconnect(object);
 }
 
 void KisCanvas2::notifyZoomChanged()

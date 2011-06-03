@@ -27,7 +27,8 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
     : m_side(None),
     m_polygon(QPolygonF()),
     m_line(QRectF()),
-    m_shape(shape)
+    m_shape(shape),
+    m_runAroundThreshold(0)
 {
     QPainterPath path = shape->outline();
 
@@ -51,6 +52,7 @@ KoTextLayoutObstruction::KoTextLayoutObstruction(KoShape *shape, const QTransfor
         m_side = Bigger;
     } else if (shape->textRunAroundSide() == KoShape::EnoughRunAroundSide) {
         m_side = Enough;
+        m_runAroundThreshold = shape->textRunAroundThreshold();
     }
 }
 
@@ -197,6 +199,11 @@ bool KoTextLayoutObstruction::textOnBiggerSide() const
 bool KoTextLayoutObstruction::textOnEnoughSides() const
 {
     return m_side == Enough;
+}
+
+qreal KoTextLayoutObstruction::runAroundThreshold() const
+{
+    return m_runAroundThreshold;
 }
 
 bool KoTextLayoutObstruction::noTextAround() const

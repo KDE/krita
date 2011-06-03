@@ -30,8 +30,6 @@
 #include "kis_canvas2.h"
 #include "KoResourceManager.h"
 
-#include <KDebug>
-
 KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
     KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)
 {
@@ -149,6 +147,7 @@ void KisColorPatches::resizeEvent(QResizeEvent* event)
 
 void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 {
+    KisColorSelectorBase::mouseReleaseEvent(event);
     event->setAccepted(false);
     KisColorSelectorBase::mouseReleaseEvent(event);
     if(event->isAccepted() || !rect().contains(event->pos()))

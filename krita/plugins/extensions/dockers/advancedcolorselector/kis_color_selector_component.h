@@ -55,8 +55,12 @@ public:
     /// set the color, blibs etc
     virtual void setColor(const QColor& color) = 0;
 
-    /// returns true, if this component wants to grab the mouse (normaly true, if isComponent returns true)
-    virtual bool wantsGrab(int x, int y) {return isComponent(x-m_x, y-m_y);}
+    /// returns true, if this component wants to grab the mouse (normaly true, if containsPoint returns true)
+    virtual bool wantsGrab(int x, int y) {return containsPointInComponentCoords(x-m_x, y-m_y);}
+
+    /// returns true, if the component contains the given point
+    bool containsPoint(int x, int y) const {return containsPointInComponentCoords(x-m_x, y-m_y);}
+    bool containsPoint(const QPoint &point) const {return containsPointInComponentCoords(point.x()-m_x, point.y()-m_y);}
 
 public slots:
     /// set hue, saturation, value or/and lightness
@@ -82,7 +86,7 @@ protected:
 
     /// a subclass can implement this method, the default returns true if the coordinates are in the component rect
     /// values for the subclasses are provided in component coordinates, eg (0,0) is top left of component
-    virtual bool isComponent(int x, int y) const;
+    virtual bool containsPointInComponentCoords(int x, int y) const;
 
     qreal m_hue;
     qreal m_hsvSaturation;

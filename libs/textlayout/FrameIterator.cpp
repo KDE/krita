@@ -47,6 +47,7 @@ FrameIterator::FrameIterator(QTextTableCell cell)
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
+    masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
     if (other->currentTableIterator)

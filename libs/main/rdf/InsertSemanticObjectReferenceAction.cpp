@@ -24,6 +24,7 @@
 #include <KoCanvasBase.h>
 #include <KoToolProxy.h>
 #include <KoTextEditor.h>
+#include "KoRdfSemanticTreeWidgetItem.h"
 
 #include <kdebug.h>
 #include <klocale.h>

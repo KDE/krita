@@ -17,21 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "SimpleTableOfContentsWidget.h"
-#include "TextTool.h"
+#include "ReferencesTool.h"
 
 #include <KAction>
 #include <KDebug>
 
 #include <QWidget>
 
-SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(QWidget *parent)
+SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
         m_blockSignals(false)
 {
     widget.setupUi(this);
-//    widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
+    widget.addToC->setDefaultAction(tool->action("insert_tableofcentents"));
 
-//    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
 }
 
 void SimpleTableOfContentsWidget::setStyleManager(KoStyleManager *sm)

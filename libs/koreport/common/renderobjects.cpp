@@ -217,6 +217,11 @@ void OROPrimitive::setPosition(const QPointF & p)
     m_position = p;
 }
 
+void OROPrimitive::setSize(const QSizeF & s)
+{
+    m_size = s;
+}
+
 //
 // OROTextBox
 //
@@ -238,11 +243,6 @@ OROTextBox::OROTextBox()
 
 OROTextBox::~OROTextBox()
 {
-}
-
-void OROTextBox::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void OROTextBox::setText(const QString & s)
@@ -345,11 +345,6 @@ void OROImage::setImage(const QImage & img)
     m_image = img;
 }
 
-void OROImage::setSize(const QSizeF & sz)
-{
-    m_size = sz;
-}
-
 void OROImage::setScaled(bool b)
 {
     m_scaled = b;
@@ -392,11 +387,6 @@ OROPicture::~OROPicture()
 {
 }
 
-void OROPicture::setSize(const QSizeF & sz)
-{
-    m_size = sz;
-}
-
 OROPrimitive* OROPicture::clone()
 {
     OROPicture *theClone = new OROPicture();
@@ -418,11 +408,6 @@ ORORect::ORORect()
 
 ORORect::~ORORect()
 {
-}
-
-void ORORect::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void ORORect::setRect(const QRectF & r)
@@ -462,11 +447,6 @@ OROEllipse::OROEllipse()
 
 OROEllipse::~OROEllipse()
 {
-}
-
-void OROEllipse::setSize(const QSizeF & s)
-{
-    m_size = s;
 }
 
 void OROEllipse::setRect(const QRectF & r)

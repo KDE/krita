@@ -27,26 +27,6 @@
 #include <KoTextLayoutRootArea.h>
 #include <KoTextEditor.h>
 
-#define synchronized(T) QMutex T; \
-    for(Finalizer finalizer(T); finalizer.loop(); finalizer.inc())
-
-struct Finalizer {
-    Finalizer(QMutex &lock) : l(&lock), b(1) {
-        l->lock();
-    }
-    ~Finalizer() {
-        l->unlock();
-    }
-    QMutex *l;
-    short b;
-    short loop() {
-        return b;
-    }
-    void inc() {
-        --b;
-    }
-};
-
 #include <KoCanvasBase.h>
 #include <KoResourceManager.h>
 #include <KoChangeTracker.h>
@@ -78,7 +58,6 @@ struct Finalizer {
 #include <QPainter>
 #include <QPen>
 #include <QTextLayout>
-#include <QThread>
 
 #include <kdebug.h>
 
@@ -362,13 +341,6 @@ bool TextShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingC
     return ok;
 }
 
-void TextShape::markLayoutDone()
-{
-    synchronized(m_mutex) {
-        m_waiter.wakeAll();
-    }
-}
-
 void TextShape::update() const
 {
     KoShapeContainer::update();
@@ -384,26 +356,12 @@ void TextShape::update(const QRectF &shape) const
 
 void TextShape::waitUntilReady(const KoViewConverter &, bool asynchronous) const
 {
+    Q_UNUSED(asynchronous);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
     Q_ASSERT(lay);
-
-    if (asynchronous) {
-        synchronized(m_mutex) {
-            if (m_textShapeData->isDirty()) {
-                if (QThread::currentThread() != QApplication::instance()->thread()) {
-                    // only wait if this is called in the non-main thread.
-                    // this avoids locks due to the layout code expecting the GUI thread to be free while layouting.
-                    m_waiter.wait(&m_mutex);
-                }
-            }
-        }
-    }
-    else {
-        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_textShapeData->document()->documentLayout());
-        if (lay) {
-            while (m_textShapeData->isDirty()){
-                lay->layout();
-            }
-        }
+    if (m_textShapeData->isDirty()) {
+        // Do a simple layout-call which will make sure to relayout till things are done. If more
+        // layouts are scheduled then we don't need to wait for them here but can just continue.
+        lay->layout();
     }
 }

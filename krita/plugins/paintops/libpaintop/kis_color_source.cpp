@@ -54,7 +54,7 @@ void KisUniformColorSource::resize(double , double)
     // Do nothing as plain color does not have size
 }
 
-void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, const QPoint&)
+void KisUniformColorSource::colorize(KisPaintDeviceSP dev, const QRect& size, const QPoint&) const
 {
     Q_UNUSED(size);
     if (!m_cachedColor || !(*dev->colorSpace() == *m_cachedColor->colorSpace())) {
@@ -181,7 +181,7 @@ const KoColorSpace* KisTotalRandomColorSource::colorSpace() const
 {
     return m_colorSpace;
 }
-void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect, const QPoint&)
+void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect, const QPoint&) const
 {
     KoColor kc(dev->colorSpace());
 
@@ -235,7 +235,7 @@ const KoColorSpace* KisPatternColorSource::colorSpace() const
     return m_device->colorSpace();
 }
 
-void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, const QPoint& offset)
+void KisPatternColorSource::colorize(KisPaintDeviceSP device, const QRect& rect, const QPoint& offset) const
 {
     KisFillPainter painter(device);
     if(m_locked)

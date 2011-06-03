@@ -34,6 +34,9 @@ Q_OBJECT
 public:
     KisMyPaintShadeSelector(QWidget *parent = 0);
 
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent *);
 public slots:
     void setColor(const QColor& c);
 
@@ -42,11 +45,9 @@ protected slots:
 
 protected:
     void paintEvent(QPaintEvent *);
-    void mousePressEvent(QMouseEvent *);
     KisColorSelectorBase* createPopup() const;
 
 private:
-    void updateSelector();
     float m_colorH, m_colorS, m_colorV;
 
     QImage m_pixelCache;

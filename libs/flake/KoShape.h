@@ -392,6 +392,34 @@ public:
     void setTextRunAroundDistance(qreal distance);
 
     /**
+     * Return the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @return threshold the threshold
+     */
+    qreal textRunAroundThreshold() const;
+
+    /**
+     * Set the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @param threshold the new threshold
+     */
+    void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Set an indication if the shape is anchored by text.
+     * @param anchored if the shape is anchored by text
+     */
+    void setAnchored(bool anchored);
+
+    /**
+     * Return if the shape is anchored by text
+     * @return true if the shape is anchored by text
+     */
+    bool isAnchored() const;
+
+    /**
      * Set the background of the shape.
      * A shape background can be a plain color, a gradient, a pattern, be fully transparent
      * or have a complex fill.

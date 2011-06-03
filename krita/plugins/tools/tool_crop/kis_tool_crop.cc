@@ -337,6 +337,15 @@ void KisToolCrop::mouseDoubleClickEvent(KoPointerEvent *)
     if (m_haveCropSelection) crop();
 }
 
+void KisToolCrop::keyReleaseEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Return && m_haveCropSelection) {
+        crop();
+    }
+    KisTool::keyReleaseEvent(event);
+
+}
+
 void KisToolCrop::validateSelection(bool updateratio)
 {
     if (canvas() && image()) {

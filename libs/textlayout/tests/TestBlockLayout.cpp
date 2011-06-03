@@ -212,7 +212,6 @@ void TestBlockLayout::testAdvancedLineSpacing()
     style.setLineSpacing(8.0);
     style.remove(KoParagraphStyle::PercentLineHeight);
     style.applyStyle(block);
-
     block = block.next();
     QVERIFY(block.isValid()); // line6
     style.setLineSpacingFromFont(true);
@@ -223,31 +222,37 @@ void TestBlockLayout::testAdvancedLineSpacing()
     m_layout->layout();
     QTextLayout *blockLayout = m_block.layout();
     QCOMPARE(blockLayout->lineAt(0).y(), 0.0);
-    block = m_doc->begin().next(); // line2
+    qreal lineYAbove = blockLayout->lineAt(0).y();
+    block = m_block.next(); // line2
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (12.0 * 0.8)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - (12.0 * 0.8 + 28 - 12)) < ROUNDING);
+    lineYAbove += 9.6;
     block = block.next(); // line3
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (9.6 + 28.0)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - (28.0 + 28 - 12)) < ROUNDING);
+    lineYAbove += 28;
     block = block.next(); // line4
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (37.6 + 40)) < ROUNDING);
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - 40) < ROUNDING);
+    lineYAbove += 40;
     block = block.next(); // line5
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     // qDebug() << blockLayout->lineAt(0).y();
-    QVERIFY(qAbs(blockLayout->lineAt(0).y() - (77.6 + qMax(12 * 1.2, 5.0))) < ROUNDING); // 92
+    QVERIFY(qAbs(blockLayout->lineAt(0).y() - lineYAbove - qMax(12 * 1.2, 5.0)) < ROUNDING); // 92
+    lineYAbove += 14.4;
     block = block.next(); // line6
     QVERIFY(block.isValid());
     blockLayout = block.layout();
     //qDebug() << blockLayout->lineAt(0).y();
     QCOMPARE(blockLayout->lineAt(0).y(), 92.0 + 12 + 8);
+    lineYAbove += 20;
 
     qreal height = block.charFormat().fontPointSize() * 1.2; // 1.2 is the font stretch if setLineSpacingFromFont == true
     block = block.next(); // line 7

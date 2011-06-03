@@ -37,7 +37,7 @@ const QString COMPOSITE_PLUS                  = "plus";
 const QString COMPOSITE_MINUS                 = "minus";
 const QString COMPOSITE_ADD                   = "add";
 const QString COMPOSITE_SUBTRACT              = "subtract";
-const QString COMPOSITE_INVERSED_SUBTRACT     = "inversed_subtract";
+const QString COMPOSITE_INVERSE_SUBTRACT      = "inverse_subtract";
 const QString COMPOSITE_DIFF                  = "diff";
 const QString COMPOSITE_MULT                  = "multiply";
 const QString COMPOSITE_DIVIDE                = "divide";
@@ -111,7 +111,6 @@ const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";
 const QString COMPOSITE_COPY_GREEN   = "copy_green";
 const QString COMPOSITE_COPY_BLUE    = "copy_blue";
-const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";
@@ -120,7 +119,7 @@ const QString COMPOSITE_DISSOLVE     = "dissolve";
 const QString COMPOSITE_DISPLACE     = "displace";
 const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
-const QString COMPOSITE_UNDEF        = "underfined";
+const QString COMPOSITE_UNDEF        = "undefined";
 
 /**
  * Base for colorspace-specific blending modes.

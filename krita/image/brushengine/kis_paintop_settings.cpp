@@ -152,6 +152,11 @@ bool KisPaintOpSettings::isValid()
     return true;
 }
 
+bool KisPaintOpSettings::isLoadable()
+{
+    return isValid();
+}
+
 QPainterPath KisPaintOpSettings::brushOutline(const QPointF& pos, OutlineMode mode, qreal scale, qreal rotation) const
 {
     QPainterPath path;

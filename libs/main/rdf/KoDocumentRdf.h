@@ -47,22 +47,17 @@ class KoTextEditor;
 #include "RdfForward.h"
 #include "KoSemanticStylesheet.h"
 #include "KoRdfSemanticItem.h"
-#include "KoRdfFoaF.h"
-#include "KoRdfCalendarEvent.h"
-#include "KoRdfLocation.h"
 #include "KoRdfSemanticItemViewSite.h"
 #include "RdfSemanticTreeWidgetAction.h"
 #include "InsertSemanticObjectActionBase.h"
 #include "InsertSemanticObjectCreateAction.h"
 #include "InsertSemanticObjectReferenceAction.h"
-#include "KoRdfSemanticTreeWidgetItem.h"
-#include "KoRdfFoaFTreeWidgetItem.h"
-#include "KoRdfCalendarEventTreeWidgetItem.h"
-#include "KoRdfLocationTreeWidgetItem.h"
 #include "KoRdfSemanticTree.h"
 
+class KoRdfCalendarEvent;
+class KoRdfLocation;
 class KoDocumentRdfPrivate;
-
+class KoRdfFoaF;
 /**
  * @short The central access point for the Rdf metadata of an ODF document.
  *
@@ -99,7 +94,7 @@ class KoDocumentRdfPrivate;
  *
  * QTextCursor cursor = ...;
  * Soprano::Model* model = rdf->findStatements( cursor );
- * KoRdfFoaFList foaflist = rdf->foaf( model );
+ g* KoRdfFoaFList foaflist = rdf->foaf( model );
  *
  * Using the Soprano::Model directly is covered in a latter section of
  * this comment.

@@ -52,7 +52,7 @@ public slots:
 
 protected:
     ///Reimplemented from KoToolBase
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private:
     KoPAViewBase * m_view;

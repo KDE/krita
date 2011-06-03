@@ -69,7 +69,7 @@ public:
                         qreal rotation = 0.0,
                         qreal tangentialPressure = 0.0,
                         qreal perspective = 1.0,
-                        int time = 0);
+                        int   time = 0);
 
     KisPaintInformation(const KisPaintInformation& rhs);
 
@@ -80,6 +80,7 @@ public:
     const QPointF& pos() const;
 
     void setPos(const QPointF& p);
+    void setMovement(const KisVector2D& m);
 
     /// The pressure of the value (from 0.0 to 1.0)
     qreal pressure() const;
@@ -110,13 +111,15 @@ public:
     
     /// Number of ms since the beginning of the stroke
     int currentTime() const;
-
+    
     void toXML(QDomDocument&, QDomElement&) const;
 
     static KisPaintInformation fromXML(const QDomElement&);
     
     /// (1-t) * p1 + t * p2
     static KisPaintInformation mix(const QPointF& p, qreal t, const KisPaintInformation& p1, const KisPaintInformation& p2, const KisVector2D& movement);
+    static qreal ascension(const KisPaintInformation& info, bool normalize=true);
+    static qreal declination(const KisPaintInformation& info, qreal maxTiltX=60.0, qreal maxTiltY=60.0, bool normalize=true);
 
 private:
     struct Private;

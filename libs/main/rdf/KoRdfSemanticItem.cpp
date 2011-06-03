@@ -18,7 +18,6 @@
 */
 
 #include "KoRdfSemanticItem.h"
-#include "KoRdfSemanticItem_p.h"
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
 #include <KoInlineObject.h>
@@ -30,6 +29,11 @@
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
 #include <KoTextDocument.h>
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
+#include "KoDocumentRdf.h"
+
 
 #include <kdebug.h>
 #include <QUuid>
@@ -38,33 +42,34 @@
 
 using namespace Soprano;
 
-KoRdfSemanticItemPrivate::KoRdfSemanticItemPrivate(const KoDocumentRdf *rdf)
-    : m_rdf (rdf)
+KoRdfSemanticItem::KoRdfSemanticItem(const KoDocumentRdf *rdf, QObject *parent)
+        : QObject(parent)
+        , m_rdf(rdf)
 {
 }
 
-KoRdfSemanticItemPrivate::KoRdfSemanticItemPrivate(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-    : m_rdf (rdf)
+
+KoRdfSemanticItem::KoRdfSemanticItem(QObject *parent)
+        : QObject(parent)
+        , m_rdf(0)
+{
+}
+
+KoRdfSemanticItem::KoRdfSemanticItem(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it, QObject *parent)
+    : QObject(parent)
+    , m_rdf(rdf)
 {
     m_context = it.binding("graph");
     kDebug(30015) << "KoRdfSemanticItem() context:" << m_context.toString();
 }
 
-KoRdfSemanticItem::KoRdfSemanticItem(KoRdfSemanticItemPrivate &dd, QObject *parent)
-        : QObject(parent)
-        , d_ptr(&dd)
-{
-}
-
 KoRdfSemanticItem::~KoRdfSemanticItem()
 {
-    delete d_ptr;
 }
 
 const KoDocumentRdf *KoRdfSemanticItem::documentRdf() const
 {
-    Q_D(const KoRdfSemanticItem);
-    return d->m_rdf;
+    return m_rdf;
 }
 
 
@@ -208,9 +213,8 @@ Soprano::Node KoRdfSemanticItem::linkingSubject() const
 
 Soprano::Node KoRdfSemanticItem::context() const
 {
-    Q_D(const KoRdfSemanticItem);
-    if (d->m_context.isValid()) {
-        return d->m_context;
+    if (m_context.isValid()) {
+        return m_context;
     }
     return documentRdf()->manifestRdfNode();
 }

@@ -140,7 +140,7 @@ void ReviewTool::updateSelectedShape(const QPointF &point)
 int ReviewTool::pointToPosition(const QPointF & point) const
 {
     QPointF p = m_textShape->convertScreenPos(point);
-    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit);
+    int caretPos = m_textShapeData->rootArea()->hitTest(p, Qt::FuzzyHit).position;
     return caretPos;
 }
 
@@ -316,9 +316,9 @@ void ReviewTool::deactivate()
     canvas()->canvasWidget()->setFocus();
 }
 
-QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
+QList<QWidget*> ReviewTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     QWidget *widget = new QWidget();
     widget->setObjectName("hmm");
 
@@ -339,16 +339,20 @@ QMap<QString, QWidget*> ReviewTool::createOptionWidgets()
     connect(accept, SIGNAL(clicked(bool)), this, SLOT(acceptChange()));
     connect(reject, SIGNAL(clicked(bool)), this, SLOT(rejectChange()));
 
-    widgets.insert(i18n("Changes"), widget);
+    widget->setWindowTitle(i18n("Changes"));
+    widgets.append(widget);
     QWidget *dummy = new QWidget();
     dummy->setObjectName("dummy1");
-    widgets.insert(i18n("Spell checking"), dummy);
+    dummy->setWindowTitle(i18n("Spell checking"));
+    widgets.append(dummy);
     dummy = new QWidget();
     dummy->setObjectName("dummy2");
-    widgets.insert(i18n("Comments"), dummy);
+    dummy->setWindowTitle(i18n("Comments"));
+    widgets.append(dummy);
     dummy = new QWidget();
     dummy->setObjectName("dummy3");
-    widgets.insert(i18n("Statistics"), dummy);
+    dummy->setWindowTitle(i18n("Statistics"));
+    widgets.append(dummy);
     return widgets;
 }
 

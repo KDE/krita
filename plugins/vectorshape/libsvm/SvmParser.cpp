@@ -380,6 +380,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> textAlign;
 
                 mContext.textAlign = (TextAlign)textAlign;
+                //kDebug(31000) << "TextAlign:"  << mContext.textAlign;
                 mContext.changedItems |= GCTextAlign;
             }
             break;
@@ -537,7 +538,9 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
     quint32  height;
     stream >> width;
     stream >> height;
-    font.setPointSize(height);
+    // Multiply by 0.7 since it seems that, just like WMF, the height
+    // in the font struct is actually the height of the character cell.
+    font.setPointSize(height * 7 / 10);
 
     qint8   temp8;
     bool    tempbool;

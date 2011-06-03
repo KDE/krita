@@ -41,7 +41,7 @@ public:
 
     /// Layouts as much as it can
     /// Returns true if it has reached the end of the frame
-    virtual bool layout(FrameIterator *cursor);
+    bool layoutRoot(FrameIterator *cursor);
 
     /// Sets an associated shape which can be retrieved with associatedShape()
     /// KoTextLayoutRootArea doesn't use it for anything.
@@ -64,6 +64,9 @@ public:
     void setDirty();
 
     bool isDirty() const;
+
+    /// Returns the cursor position of the following root frame
+    FrameIterator *nextStartOfArea() const;
 
     virtual KoText::Direction parentTextDirection() const;
 

@@ -36,7 +36,8 @@ public:
     ~Panel();
 
     virtual void setCanvas (KoCanvasBase *canvas);
-
+    virtual void unsetCanvas() { m_canvas = 0; }
+    
 private slots:
     void toolChangeDetected(const QString &toolId);
     void resourceChanged (int key, const QVariant &value);

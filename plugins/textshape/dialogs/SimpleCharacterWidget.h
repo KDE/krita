@@ -39,6 +39,10 @@ public slots:
     void setStyleManager(KoStyleManager *sm);
     void setCurrentFormat(const QTextCharFormat& format);
 
+private slots:
+    void fontFamilyActivated(int index);
+    void fontSizeActivated(int index);
+
 signals:
     void doneWithFocus();
 
@@ -47,6 +51,8 @@ private:
     KoStyleManager *m_styleManager;
     bool m_blockSignals;
     bool m_comboboxHasBidiItems;
+    int m_lastFontFamilyIndex;
+    int m_lastFontSizeIndex;
     QTextBlock m_currentBlock;
     TextTool *m_tool;
 };

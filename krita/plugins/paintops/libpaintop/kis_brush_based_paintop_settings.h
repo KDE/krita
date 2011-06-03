@@ -44,6 +44,9 @@ public:
 
     ///Reimplemented
     virtual bool isValid();
+
+    ///Reimplemented
+    virtual bool isLoadable();
 };
 
 #endif // KIS_BRUSH_BASED_PAINTOP_SETTINGS_H

@@ -1245,7 +1245,7 @@ void KoRuler::createGuideToolConnection(KoCanvasBase *canvas)
         return;
     }
     connect(this, SIGNAL(guideLineCreated(Qt::Orientation,qreal)),
-        tool, SLOT(startGuideLineCreation(Qt::Orientation,qreal)));
+        tool, SLOT(createGuideLine(Qt::Orientation,qreal)));
 }
 
 #include <KoRuler.moc>

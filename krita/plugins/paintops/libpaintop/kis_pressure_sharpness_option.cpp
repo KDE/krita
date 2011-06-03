@@ -29,16 +29,14 @@
 #include <kis_paintop.h>
 
 KisPressureSharpnessOption::KisPressureSharpnessOption()
-        : KisCurveOption(i18n("Sharpness"), "Sharpness", KisPaintOpOption::brushCategory(), false)
+    : KisCurveOption(i18n("Sharpness"), "Sharpness", KisPaintOpOption::brushCategory(), false)
 {
     m_threshold = 40;
-    m_sharpnessFactor = 1.0;
 }
 
 void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty(SHARPNESS_FACTOR, m_sharpnessFactor);
     setting->setProperty(SHARPNESS_THRESHOLD, m_threshold);
 }
 
@@ -46,17 +44,22 @@ void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfigurat
 {
     KisCurveOption::readOptionSetting(setting);
     m_threshold = setting->getInt(SHARPNESS_THRESHOLD, 4);
-    m_sharpnessFactor = setting->getDouble(SHARPNESS_FACTOR, 1.0);
+    
+    // backward compatibility: test for a "sharpness factor" property
+    //                         and use this value if it does exist
+    if(setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue"))
+        KisCurveOption::setValue(setting->getDouble(SHARPNESS_FACTOR));
 }
 
 void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
 {
-    if (!isChecked() || m_sharpnessFactor == 0.0){
+    if (!isChecked() || KisCurveOption::value() == 0.0){
         // brush
         KisPaintOp::splitCoordinate(pt.x(), &x, &xFraction);
         KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
     } else {
-        qreal processedSharpnes = qBound<qreal>(0.0,(computeValue(info) * 2  * m_sharpnessFactor),1.0);
+        qreal processedSharpnes = computeValue(info); //qBound<qreal>(0.0, (computeValue(info) * 2), 1.0);
+        
         if (processedSharpnes == 1.0){
             // pen 
             xFraction = 0.0;

@@ -60,17 +60,6 @@ public:
     virtual qreal paintAt(const KisPaintInformation& info) = 0;
 
     /**
-     * A painterly paintop must have a PainterlyInformation structure,
-     * handle the painterly overlays by its own and implement bidirectionality,
-     * that is, it will pick up colors from the canvas and change its own color
-     * while drawing.
-     * @return true if the current paintop is painterly.
-     */
-    virtual bool painterly() const {
-        return false;
-    }
-
-    /**
      * Draw a line between pos1 and pos2 using the currently set brush and color.
      * If savedDist is less than zero, the brush is painted at pos1 before being
      * painted along the line using the spacing setting.

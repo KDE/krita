@@ -100,6 +100,7 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
+    shape->setAnchored(true);
     d->fakeAsChar = false;
 }
 

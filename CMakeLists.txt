@@ -442,6 +442,11 @@ option(BUILD_kexi   "Build directory kexi" ON)
 option(BUILD_koreport "Build directory libs/koreport" ON)
 ### HACK ###
 
+### Reports and Kexi: marble
+macro_optional_find_package(Marble)
+macro_log_feature(MARBLE_FOUND "Marble" "Marble maps libraries" "" FALSE ""
+                  "Required by maps reporting plugin used by Kexi")
+
 if(BUILD_kexi AND SHOULD_BUILD_KEXI)
     ##
     ## Test for sqlite

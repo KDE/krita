@@ -8,8 +8,6 @@ include_directories( ${KOTEXT_INCLUDES}
 	${CMAKE_SOURCE_DIR}/krita/image/metadata 
 	${EXIV2_INCLUDE_DIR} )
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 add_subdirectory( tests )
 
 

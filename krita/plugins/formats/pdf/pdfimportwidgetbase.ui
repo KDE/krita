@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>240</height>
+    <width>523</width>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,12 +15,9 @@
   </property>
   <layout class="QHBoxLayout">
    <item>
-    <widget class="Q3ButtonGroup" name="buttonGroup1">
+    <widget class="QGroupBox" name="buttonGroup1">
      <property name="title">
       <string>Pages</string>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
      </property>
      <layout class="QVBoxLayout">
       <property name="spacing">
@@ -54,9 +51,9 @@
        </widget>
       </item>
       <item>
-       <widget class="K3ListBox" name="listPages">
+       <widget class="QListWidget" name="listPages">
         <property name="selectionMode">
-         <enum>Q3ListBox::Multi</enum>
+         <enum>QAbstractItemView::MultiSelection</enum>
         </property>
        </widget>
       </item>
@@ -67,6 +64,9 @@
     <widget class="QGroupBox" name="groupBox1">
      <property name="title">
       <string>Dimensions</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
      </property>
      <layout class="QGridLayout">
       <property name="margin">
@@ -291,34 +291,6 @@
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3Frame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/Q3Frame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ButtonGroup</class>
-   <extends>Q3GroupBox</extends>
-   <header>Qt3Support/Q3ButtonGroup</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3ListBox</class>
-   <extends>Q3Frame</extends>
-   <header>q3listbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>K3ListBox</class>
-   <extends>Q3ListBox</extends>
-   <header>k3listbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

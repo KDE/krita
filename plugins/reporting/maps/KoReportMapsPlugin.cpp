@@ -25,6 +25,8 @@
 #include "krscriptmaps.h"
 #include <KIcon>
 
+K_EXPORT_KOREPORT_ITEMPLUGIN(KoReportMapsPlugin, mapsplugin)
+
 KoReportMapsPlugin::KoReportMapsPlugin(QObject *parent, const QVariantList &args) : KoReportPluginInterface(parent)
 {
     Q_UNUSED(args)

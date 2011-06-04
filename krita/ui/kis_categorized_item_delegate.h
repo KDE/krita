@@ -34,6 +34,9 @@ public:
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
     
 private:
+    void paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const;
+    
+private:
     QAbstractListModel* m_model;
     QIcon               m_errorIcon;
     bool                m_indicateError;

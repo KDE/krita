@@ -33,10 +33,7 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     qint32 xpos   = border + option.rect.x() + option.rect.height();
     qint32 ypos   = option.rect.y();
     qint32 size   = option.rect.height();
-    qint32 mx     = size / 2;
-    qint32 my     = ypos + size / 2;
-    
-    QRect rect(xpos, ypos, option.rect.width()-xpos, option.rect.height());
+    QRect  rect(xpos, ypos, option.rect.width()-xpos, option.rect.height());
     
     painter->resetTransform();
     
@@ -59,22 +56,29 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
         
         painter->drawText(rect, m_model->data(index).toString());
         
-        QPolygonF triangle;
-        triangle.push_back(QPointF(-0.2,-0.2));
-        triangle.push_back(QPointF( 0.2,-0.2));
-        triangle.push_back(QPointF( 0.0, 0.2));
-        
-        if(m_model->data(index, ExpandCategoryRole).toBool()) {
-            painter->translate(mx, my);
-            painter->scale(size, -size);
-            
-        }
-        else {
-            painter->translate(mx, my);
-            painter->scale(size, size);
-        }
-        
-        painter->setBrush(QBrush(Qt::black));
-        painter->drawPolygon(triangle);
+        paintTriangle(
+            painter,
+            option.rect.x(),
+            option.rect.y(),
+            size,
+            !m_model->data(index, ExpandCategoryRole).toBool()
+        );
     }
+}
+
+void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const
+{
+    QPolygonF triangle;
+    triangle.push_back(QPointF(-0.2,-0.2));
+    triangle.push_back(QPointF( 0.2,-0.2));
+    triangle.push_back(QPointF( 0.0, 0.2));
+    
+    painter->translate(x + size/2, y + size/2);
+    painter->scale(size, size);
+    
+    if(rotate)
+        painter->rotate(-90);
+    
+    painter->setBrush(QBrush(Qt::black));
+    painter->drawPolygon(triangle);
 }

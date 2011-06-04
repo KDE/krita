@@ -70,7 +70,7 @@ class KisPaintopBox : public QWidget
 public:
     KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
     KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
-    const KoID& currentPaintop();
+    KoID currentPaintop();
     void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
     QPixmap paintopPixmap(const KoID& paintop);
     ~KisPaintopBox();
@@ -161,7 +161,6 @@ private:
     TabletToolMap    m_tabletToolMap;
     PaintOpPresetMap m_paintOpPresetMap;
     TabletToolID     m_currTabletToolID;
-    KoID             m_currPaintOp;
 };
 
 #endif //KIS_PAINTOP_BOX_H_

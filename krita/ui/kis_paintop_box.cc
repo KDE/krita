@@ -257,9 +257,9 @@ QPixmap KisPaintopBox::paintopPixmap(const KoID& paintop)
     return QPixmap(KisFactory2::componentData().dirs()->findResource("kis_images", pixmapName));
 }
 
-const KoID& KisPaintopBox::currentPaintop()
+KoID KisPaintopBox::currentPaintop()
 {
-    return m_currPaintOp;
+    return m_activePreset->paintOp();
 }
 
 void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
@@ -272,16 +272,17 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
-    m_tabletToolMap[m_currTabletToolID].paintOpID = m_currPaintOp;
+    m_tabletToolMap[m_currTabletToolID].paintOpID = currentPaintop();
     m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset;
-    m_currTabletToolID                            = TabletToolID(inputDevice);
     
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
     
     if(toolData == m_tabletToolMap.end())
-        setCurrentPaintop(m_currPaintOp);
+        setCurrentPaintop(currentPaintop());
     else
         setCurrentPaintop(toolData->paintOpID, toolData->preset);
+    
+    m_currTabletToolID = TabletToolID(inputDevice);
 }
 
 void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
@@ -294,10 +295,16 @@ void KisPaintopBox::slotCurrentNodeChanged(KisNodeSP node)
 
 void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset)
 {
-    if (m_activePreset && m_optionWidget) {
-        m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
-        m_optionWidget->disconnect(this);
-        m_optionWidget->hide();
+    if(m_activePreset) {
+        if(m_optionWidget) {
+            m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(m_activePreset->settings().data()));
+            m_optionWidget->disconnect(this);
+            m_optionWidget->hide();
+        }
+        
+        m_paintOpPresetMap[m_activePreset->paintOp()] = m_activePreset->clone();
+        m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset->clone();
+        m_tabletToolMap[m_currTabletToolID].paintOpID = m_activePreset->paintOp();
     }
 
     preset = (!preset) ? activePreset(paintop) : preset;
@@ -334,12 +341,7 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
         kWarning() << "current paintop " << paintop.name() << " was not set, not supported by colorspace";
     }
     
-    m_activePreset                                = preset;
-    m_paintOpPresetMap[paintop]                   = preset->clone();
-    m_tabletToolMap[m_currTabletToolID].preset    = preset->clone();
-    m_tabletToolMap[m_currTabletToolID].paintOpID = paintop;
-    m_currPaintOp                                 = paintop;
-    
+    m_activePreset = preset;
     emit signalPaintopChanged(preset);
 }
 
@@ -467,26 +469,23 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
         if(!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
         
-        if(compositeOpID == m_currCompositeOpID)
-            return;
-        
-        m_prevCompositeOpID = m_currCompositeOpID;
-        m_currCompositeOpID = compositeOpID;
-        
-        int  index          = m_cmbCompositeOp->indexOf(KoID(m_currCompositeOpID));
-        bool isEraseModeSet = (m_currCompositeOpID == COMPOSITE_ERASE);
+        int index = m_cmbCompositeOp->indexOf(KoID(compositeOpID));
         
         m_cmbCompositeOp->blockSignals(true);
         m_cmbCompositeOp->setCurrentIndex(index);
         m_cmbCompositeOp->blockSignals(false);
         
         m_eraseModeButton->blockSignals(true);
-        m_eraseModeButton->setChecked(isEraseModeSet);
+        m_eraseModeButton->setChecked(compositeOpID == COMPOSITE_ERASE);
         m_eraseModeButton->blockSignals(false);
         
-        m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
-        m_optionWidget->setConfiguration(m_activePreset->settings().data());
-        m_resourceProvider->setCurrentCompositeOp(m_currCompositeOpID);
+        if(compositeOpID != m_currCompositeOpID) {
+            m_activePreset->settings()->setProperty("CompositeOp", compositeOpID);
+            m_optionWidget->setConfiguration(m_activePreset->settings().data());
+            m_resourceProvider->setCurrentCompositeOp(compositeOpID);
+            m_prevCompositeOpID = m_currCompositeOpID;
+            m_currCompositeOpID = compositeOpID;
+        }
     }
 }
 

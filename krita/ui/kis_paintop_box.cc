@@ -242,8 +242,8 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     if(!preset->settings()->isLoadable())
         return;
     
-    preset = preset->clone();
-    setCurrentPaintop(preset->paintOp(), preset);    
+    setCurrentPaintop(preset->paintOp(), preset->clone());
+    m_presetsPopup->setPresetImage(preset->image());
     m_presetsPopup->resourceSelected(resource);
 }
 

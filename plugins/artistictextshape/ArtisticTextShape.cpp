@@ -38,7 +38,7 @@
 #include <QtGui/QFont>
 
 ArtisticTextShape::ArtisticTextShape()
-    : m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
+    : m_path(0), m_startOffset(0.0)
     , m_textAnchor( AnchorStart ), m_textUpdateCounter(0)
     , m_defaultFont("ComicSans", 20)
 {
@@ -105,7 +105,9 @@ QPainterPath ArtisticTextShape::outline() const
 QRectF ArtisticTextShape::nullBoundBox() const
 {
     QFontMetrics metrics(defaultFont());
-    return QRectF( QPointF(), QSizeF(metrics.averageCharWidth(), metrics.height()) );
+    QPointF tl(0.0, -metrics.ascent());
+    QPointF br(metrics.averageCharWidth(), metrics.descent());
+    return QRectF(tl, br);
 }
 
 QFont ArtisticTextShape::defaultFont() const
@@ -456,7 +458,7 @@ qreal ArtisticTextShape::startOffset() const
 
 qreal ArtisticTextShape::baselineOffset() const
 {
-    return m_baselineOffset;
+    return m_charPositions.value(0).y();
 }
 
 void ArtisticTextShape::setTextAnchor( TextAnchor anchor )
@@ -825,34 +827,43 @@ QRectF ArtisticTextShape::charExtentsAt(int charIndex) const
 
 void ArtisticTextShape::updateSizeAndPosition( bool global )
 {
+    QTransform shapeTransform = absoluteTransformation(0);
+
+    // determine baseline position in document coordinates
+    QPointF oldBaselinePosition = shapeTransform.map(QPointF(0, baselineOffset()));
+
     createOutline();
 
     QRectF bbox = m_outline.boundingRect();
     if( bbox.isEmpty() )
         bbox = nullBoundBox();
 
-    // calculate the offset we have to apply to keep our position
-    QPointF offset = m_outlineOrigin - bbox.topLeft();
-
-    // cache topleft corner of baseline path
-    m_outlineOrigin = bbox.topLeft();
-
     if( isOnPath() ) {
+        // calculate the offset we have to apply to keep our position
+        QPointF offset = m_outlineOrigin - bbox.topLeft();
+        // cache topleft corner of baseline path
+        m_outlineOrigin = bbox.topLeft();
         // the outline position is in document coordinates
         // so we adjust our position
         QTransform m;
         m.translate( -offset.x(), -offset.y() );
         global ? applyAbsoluteTransformation( m ) : applyTransformation( m );
     } else {
-        // the text outlines baseline is at 0,0
-        m_baselineOffset = -m_outlineOrigin.y();
+        // determine the new baseline position in document coordinates
+        QPointF newBaselinePosition = shapeTransform.map(QPointF(0, -bbox.top()));
+        // apply a transformation to compensate any translation of
+        // our baseline position
+        QPointF delta = oldBaselinePosition - newBaselinePosition;
+        QTransform m;
+        m.translate( delta.x(), delta.y() );
+        applyAbsoluteTransformation(m);
     }
 
     setSize( bbox.size() );
 
     // map outline to shape coordinate system
     QTransform normalizeMatrix;
-    normalizeMatrix.translate( -m_outlineOrigin.x(), -m_outlineOrigin.y() );
+    normalizeMatrix.translate( -bbox.left(), -bbox.top() );
     m_outline = normalizeMatrix.map( m_outline );
     const int charCount = m_charPositions.count();
     for (int i = 0; i < charCount; ++i)

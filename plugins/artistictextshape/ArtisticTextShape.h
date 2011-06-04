@@ -205,7 +205,6 @@ private:
     KoPathShape * m_path; ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
     qreal m_startOffset; ///< the offset from the attached path start point
-    qreal m_baselineOffset; ///< the y-offset from the top-left corner to the baseline
     QPointF m_outlineOrigin; ///< the top-left corner of the non-normalized text outline
     QPainterPath m_outline; ///< the actual text outline
     QPainterPath m_baseline; ///< the baseline path the text is put on

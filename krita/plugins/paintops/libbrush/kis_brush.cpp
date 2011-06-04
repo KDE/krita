@@ -405,13 +405,15 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
-    
-    // old bounds
-    QRect bounds = dst->bounds();
 
-    // new bounds. we don't care if there is some extra memory occcupied.
-    dst->setRect(QRect(0, 0, maskWidth, maskHeight));
-    dst->initialize();
+    if(coloringInformation || dst->data() == 0 || dst->bounds().isEmpty()) {
+        // old bounds
+        QRect bounds = dst->bounds();
+
+        // new bounds. we don't care if there is some extra memory occcupied.
+        dst->setRect(QRect(0, 0, maskWidth, maskHeight));
+        dst->initialize();
+    }
 
     Q_ASSERT(dst->bounds().size().width() >= maskWidth && dst->bounds().size().height() >= maskHeight);
 
@@ -422,9 +424,6 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    } else {
-        // Mask everything out
-        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();

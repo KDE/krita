@@ -144,6 +144,11 @@ public:
         m_paintopID = paintopID;
     }
 
+    KoID presetFilter()
+    {
+        return m_paintopID;
+    }
+
     /// Set a filter for preset name, only presets with name containing the string will be shown
     void setPresetNameFilter(const QString &nameFilter)
     {
@@ -154,6 +159,12 @@ public:
     {
         m_showAll = show;
     }
+
+    bool showAll()
+    {
+        return m_showAll;
+    }
+
 
     ///Resets the model connected to the adapter
     void invalidate() {
@@ -197,9 +208,12 @@ KisPresetChooser::~KisPresetChooser()
 
 void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 {
+    KoID oldFilter = m_presetProxy->presetFilter();
     m_presetProxy->setPresetFilter(paintopID);
-    m_presetProxy->invalidate();
-    updateViewSettings();
+    if(oldFilter.id() != paintopID.id() && !m_presetProxy->showAll()) {
+        m_presetProxy->invalidate();
+        updateViewSettings();
+    }
 }
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)

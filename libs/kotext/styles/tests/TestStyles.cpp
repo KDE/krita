@@ -248,8 +248,9 @@ void TestStyles::testUnapplyStyle()
 
     QTextCursor cursor(block);
     QTextBlockFormat bf = cursor.blockFormat();
+    KoParagraphStyle bfStyle (bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bf.leftMargin(), 40.);
+    QCOMPARE(bfStyle.leftMargin().rawValue(), 40.);
     QTextCharFormat cf = cursor.charFormat();
     QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineMode), (int) KoCharacterStyle::ContinuousLineMode);
@@ -276,8 +277,9 @@ void TestStyles::testUnapplyStyle()
     block = doc.begin();
     head1.applyStyle(block);
     bf = cursor.blockFormat();
+    KoParagraphStyle bfStyle2 (bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bf.leftMargin(), 40.);
+    QCOMPARE(bfStyle2.leftMargin().rawValue(), 40.);
     cf = cursor.charFormat();
     //QCOMPARE(cf.fontOverline(), true);
     QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
@@ -299,8 +301,9 @@ void TestStyles::testUnapplyStyle()
     block = doc.begin();
     head1.applyStyle(block);
     bf = cursor.blockFormat();
+    KoParagraphStyle bfStyle3(bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bf.leftMargin(), 40.);
+    QCOMPARE(bfStyle3.leftMargin().rawValue(), 40.);
     cf = cursor.charFormat();
     //QCOMPARE(cf.fontOverline(), true);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), true);

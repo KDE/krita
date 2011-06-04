@@ -1328,9 +1328,10 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
 
 void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QTextBlock *block)
 {
-
     QTextBlockFormat format = block->blockFormat();
-    qreal spacing = qMax(m_bottomSpacing, format.topMargin());
+    KoParagraphStyle formatStyle(format, block->charFormat());
+    ///@TODO: use value with the proper parameter
+    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin().rawValue());
 
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
@@ -1358,7 +1359,8 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             // Merged mean we don't have inserts inbetween the blocks
             qreal divider = m_y;
             if (spacing) {
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + format.topMargin());
+                ///@TODO: use value with the proper parameter
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin().rawValue());
             }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);

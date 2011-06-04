@@ -130,6 +130,12 @@ QTextLength KoTableStyle::propertyLength(int key) const
         return QTextLength(QTextLength::FixedLength, 0.0);
     if (!variant.canConvert<QTextLength>())
     {
+        // Fake support, for compatibility sake
+        if (variant.canConvert<qreal>())
+        {
+            return QTextLength(QTextLength::FixedLength, variant.toReal());
+        }
+        
         kWarning(32500) << "This should never happen : requested property can't be converted to QTextLength";
         return QTextLength(QTextLength::FixedLength, 0.0);
     }

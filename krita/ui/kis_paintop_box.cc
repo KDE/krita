@@ -182,7 +182,7 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     
     slotNodeChanged(view->activeNode());
     updatePaintops(view->image()->colorSpace());
-    setCurrentPaintop( defaultPaintOp());
+    setCurrentPaintop(defaultPaintOp());
 
     connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))         , SLOT(slotSetPaintop(QString)));
     connect(m_presetsPopup       , SIGNAL(savePresetClicked())               , SLOT(slotSaveActivePreset()));
@@ -273,7 +273,7 @@ void KisPaintopBox::slotSetPaintop(const QString& paintOpId)
 void KisPaintopBox::slotInputDeviceChanged(const KoInputDevice& inputDevice)
 {
     m_tabletToolMap[m_currTabletToolID].paintOpID = m_currPaintOp;
-    m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset->clone();
+    m_tabletToolMap[m_currTabletToolID].preset    = m_activePreset;
     m_currTabletToolID                            = TabletToolID(inputDevice);
     
     TabletToolMap::iterator toolData = m_tabletToolMap.find(inputDevice);
@@ -335,8 +335,8 @@ void KisPaintopBox::setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP pr
     }
     
     m_activePreset                                = preset;
-    m_paintOpPresetMap[paintop]                   = preset;
-    m_tabletToolMap[m_currTabletToolID].preset    = preset;
+    m_paintOpPresetMap[paintop]                   = preset->clone();
+    m_tabletToolMap[m_currTabletToolID].preset    = preset->clone();
     m_tabletToolMap[m_currTabletToolID].paintOpID = paintop;
     m_currPaintOp                                 = paintop;
     

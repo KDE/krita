@@ -119,23 +119,23 @@ public:
 
     // ************ properties from QTextTableFormat
     /// duplicated property from QTextBlockFormat
-    void setTopMargin(qreal topMargin);
+    void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
     qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setBottomMargin(qreal margin);
+    void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setLeftMargin(qreal margin);
+    void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
-    void setRightMargin(qreal margin);
+    void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
     qreal rightMargin() const;
     /// set the margin around the table, making the margin on all sides equal.
-    void setMargin(qreal margin);
+    void setMargin(QTextLength margin);
 
     /// duplicated property from QTextBlockFormat
     void setAlignment(Qt::Alignment alignment);
@@ -230,6 +230,7 @@ private:
     Qt::Alignment alignmentFromString(const QString &align);
     QString alignmentToString(Qt::Alignment alignment);
     qreal propertyDouble(int key) const;
+    QTextLength propertyLength(int key) const;
     int propertyInt(int key) const;
     bool propertyBoolean(int key) const;
     QColor propertyColor(int key) const;

@@ -44,7 +44,7 @@
 
 #include "kis_brush_registry.h"
 
-#define MAXIMUM_SCALE 4
+#define MAXIMUM_SCALE 20
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {
@@ -405,27 +405,16 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
 
     qint32 maskWidth = outputMask->width();
     qint32 maskHeight = outputMask->height();
-    
-    if (coloringInformation) {
 
+    if(coloringInformation || dst->data() == 0 || dst->bounds().isEmpty()) {
         // old bounds
         QRect bounds = dst->bounds();
 
         // new bounds. we don't care if there is some extra memory occcupied.
         dst->setRect(QRect(0, 0, maskWidth, maskHeight));
-
-        if (maskWidth * maskHeight <= bounds.width() * bounds.height()) {
-            // just clear the data in dst,
-            memset(dst->data(), OPACITY_TRANSPARENT_U8, maskWidth * maskHeight * dst->pixelSize());
-        } else {
-            dst->initialize();
-        }
-    } else {
-        if (dst->data() == 0 || dst->bounds().isEmpty()) {
-            qWarning() << "Creating a default black dab: no coloring info and no initialized paint device to mask";
-            dst->clear(QRect(0, 0, maskWidth, maskHeight));
-        }
+        dst->initialize();
     }
+
     Q_ASSERT(dst->bounds().size().width() >= maskWidth && dst->bounds().size().height() >= maskHeight);
 
     quint8* dabPointer = dst->data();
@@ -435,9 +424,6 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         if (dynamic_cast<PlainColoringInformation*>(coloringInformation)) {
             color = const_cast<quint8*>(coloringInformation->color());
         }
-    } else {
-        // Mask everything out
-        cs->setOpacity(dst->data(), OPACITY_TRANSPARENT_U8, dst->bounds().width() * dst->bounds().height());
     }
 
     int rowWidth = dst->bounds().width();

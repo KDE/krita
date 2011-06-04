@@ -1986,6 +1986,13 @@ void KoTextLoader::loadTable(const KoXmlElement &tableElem, QTextCursor &cursor)
             if (tblTag.namespaceURI() == KoXmlNS::table) {
                 if (tblLocalName == "table-column") {
                     loadTableColumn(tblTag, tbl, columns);
+                } else if (tblLocalName == "table-columns") {
+                    KoXmlElement e;
+                    forEachElement(e, tblTag) {
+                        if (e.localName() == "table-column") {
+                            loadTableColumn(e, tbl, columns);
+                        }
+                    }
                 } else if (tblLocalName == "table-row") {
                     if (tblTag.attributeNS(KoXmlNS::delta, "insertion-type") != "")
                         d->openChangeRegion(tblTag);

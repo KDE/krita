@@ -23,7 +23,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="Q3GroupBox" name="groupBox1" >
+    <widget class="QGroupBox" name="groupBox1" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
        <horstretch>0</horstretch>
@@ -176,7 +176,7 @@ You can uncheck the box if you are not using transparency and you want to make t
     </widget>
    </item>
    <item>
-    <widget class="Q3WidgetStack" name="codecsOptionsStack" >
+    <widget class="QStackedWidget" name="codecsOptionsStack" >
      <property name="frameShape" >
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -225,7 +225,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         <number>0</number>
        </property>
        <item>
-        <widget class="Q3GroupBox" name="groupBoxJPEG" >
+        <widget class="QGroupBox" name="groupBoxJPEG" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
            <horstretch>0</horstretch>
@@ -333,7 +333,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         <number>0</number>
        </property>
        <item>
-        <widget class="Q3GroupBox" name="groupBoxDeflate" >
+        <widget class="QGroupBox" name="groupBoxDeflate" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
            <horstretch>0</horstretch>
@@ -454,7 +454,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         <number>0</number>
        </property>
        <item>
-        <widget class="Q3GroupBox" name="groupBoxCCITGroupCCITG3" >
+        <widget class="QGroupBox" name="groupBoxCCITGroupCCITG3" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
            <horstretch>0</horstretch>
@@ -516,7 +516,7 @@ You can uncheck the box if you are not using transparency and you want to make t
         <number>0</number>
        </property>
        <item>
-        <widget class="Q3GroupBox" name="groupBoxPixarLog" >
+        <widget class="QGroupBox" name="groupBoxPixarLog" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
            <horstretch>0</horstretch>
@@ -643,24 +643,6 @@ You can uncheck the box if you are not using transparency and you want to make t
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>Q3GroupBox</class>
-   <extends>QGroupBox</extends>
-   <header>Qt3Support/Q3GroupBox</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QFrame</class>
-   <extends>QFrame</extends>
-   <header>Qt3Support/QFrame</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>Q3WidgetStack</class>
-   <extends>Q3WidgetStack</extends>
-   <header>q3widgetstack.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

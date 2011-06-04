@@ -28,6 +28,7 @@
 #include <QtCore/QTimer>
 
 class QAction;
+class QActionGroup;
 class KoInteractionStrategy;
 
 /// This is the tool for the artistic text shape.
@@ -85,6 +86,16 @@ private slots:
     void blinkCursor();
     void textChanged();
     void shapeSelectionChanged();
+    void setStartOffset(int offset);
+    void toggleFontBold(bool enabled);
+    void toggleFontItalic(bool enabled);
+    void anchorChanged(QAction*);
+    void setFontFamiliy(const QFont &font);
+    void setFontSize(int size);
+    void setSuperScript();
+    void setSubScript();
+    void selectAll();
+    void deselectAll();
 
 signals:
     void shapeSelected();
@@ -95,6 +106,19 @@ private:
     void createTextCursorShape();
     void updateTextCursorArea() const;
     void setCurrentShape(ArtisticTextShape *currentShape);
+
+    enum FontProperty {
+        BoldProperty,
+        ItalicProperty,
+        FamiliyProperty,
+        SizeProperty
+    };
+
+    /// Changes the specified font property for the current text selection
+    void changeFontProperty(FontProperty property, const QVariant &value);
+
+    /// Toggle sub and super script
+    void toggleSubSuperScript(ArtisticTextRange::BaselineShift mode);
 
     /// returns the transformation matrix for the text cursor
     QTransform cursorTransform() const;
@@ -109,8 +133,13 @@ private:
     QPainterPath m_textCursorShape;     ///< our visual text cursor representation
     bool m_hoverHandle;
 
-    QAction * m_detachPath;
-    QAction * m_convertText;
+    KAction * m_detachPath;
+    KAction * m_convertText;
+    KAction * m_fontBold;
+    KAction * m_fontItalic;
+    KAction * m_superScript;
+    KAction * m_subScript;
+    QActionGroup * m_anchorGroup;
 
     int m_textCursor;
     QTimer m_blinkingCursor;

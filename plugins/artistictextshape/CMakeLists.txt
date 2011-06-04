@@ -11,6 +11,7 @@ SET ( ArtisticTextShape_SRCS
     ArtisticTextToolFactory.cpp
     ArtisticTextToolSelection.cpp
     ArtisticTextShapeConfigWidget.cpp
+    ArtisticTextShapeOnPathWidget.cpp
     ArtisticTextShapeLoadingUpdater.cpp
     AttachTextToPathCommand.cpp
     DetachTextFromPathCommand.cpp
@@ -21,10 +22,12 @@ SET ( ArtisticTextShape_SRCS
     RemoveTextRangeCommand.cpp
     MoveStartOffsetStrategy.cpp
     SelectTextStrategy.cpp
+    ReplaceTextRangeCommand.cpp
 )
 
 kde4_add_ui_files( ArtisticTextShape_SRCS
     ArtisticTextShapeConfigWidget.ui
+    ArtisticTextShapeOnPathWidget.ui
 )
 
 kde4_add_plugin( artistictextshape ${ArtisticTextShape_SRCS} )

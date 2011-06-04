@@ -448,7 +448,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action);
+    addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));

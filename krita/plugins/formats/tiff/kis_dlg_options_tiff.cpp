@@ -20,9 +20,9 @@
 #include "kis_dlg_options_tiff.h"
 
 #include <QCheckBox>
-#include <q3groupbox.h>
+#include <QGroupBox>
 #include <QSlider>
-#include <q3widgetstack.h>
+#include <QStackedWidget>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -58,23 +58,23 @@ void KisDlgOptionsTIFF::activated(int index)
         optionswdg->groupBoxPixarLog->hide();*/
     switch (index) {
     case 1:
-        optionswdg->codecsOptionsStack->raiseWidget(1);
+        optionswdg->codecsOptionsStack->setCurrentIndex(1);
 //             optionswdg->groupBoxJPEG->show();
         break;
     case 2:
-        optionswdg->codecsOptionsStack->raiseWidget(2);
+        optionswdg->codecsOptionsStack->setCurrentIndex(2);
 //             optionswdg->groupBoxDeflate->show();
         break;
     case 6:
-        optionswdg->codecsOptionsStack->raiseWidget(3);
+        optionswdg->codecsOptionsStack->setCurrentIndex(3);
 //             optionswdg->groupBoxCCITGroupCCITG3->show();
         break;
     case 8:
-        optionswdg->codecsOptionsStack->raiseWidget(4);
+        optionswdg->codecsOptionsStack->setCurrentIndex(4);
 //             optionswdg->groupBoxPixarLog->show();
         break;
     default:
-        optionswdg->codecsOptionsStack->raiseWidget(0);
+        optionswdg->codecsOptionsStack->setCurrentIndex(0);
     }
 }
 

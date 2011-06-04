@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C)  2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -130,6 +131,8 @@ KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
 KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
+///@TODO: move to KoUnit ?
+KOTEXT_EXPORT QTextLength parseLength (const QString &length);
 };
 
 Q_DECLARE_METATYPE(KoText::Tab)

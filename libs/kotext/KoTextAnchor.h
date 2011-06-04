@@ -35,7 +35,7 @@ class KoShapeContainer;
 /**
  * This class is an interface that positions the shape linked to text anchor
  */
-class KOTEXT_EXPORT KoAnchorStrategy{
+class KOTEXT_EXPORT KoAnchorStrategy {
 public:
     KoAnchorStrategy(){};
     virtual ~KoAnchorStrategy(){};
@@ -188,7 +188,7 @@ public:
     /**
      * Returns true if the anchored frame is positioned as a (potentially big) character in
      * the text layout or false when it will not take any space as an inline object.
-     * An anchor which behaves as a characterin the text will potentially change the
+     * An anchor which behaves as a character in the text will potentially change the
      * ascent/descent of the line.
      */
     bool behavesAsCharacter() const;

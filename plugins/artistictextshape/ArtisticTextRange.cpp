@@ -23,6 +23,7 @@
 
 ArtisticTextRange::ArtisticTextRange(const QString &text, const QFont &font)
     : m_text(text), m_font(font), m_letterSpacing(0.0), m_wordSpacing(0.0)
+    , m_baselineShift(None), m_baselineShiftValue(0.0)
 {
 }
 
@@ -75,8 +76,12 @@ ArtisticTextRange ArtisticTextRange::extract(int from, int count)
     if (from < m_rotations.count())
         extracted.setRotations(m_rotations.mid(from, count));
 
+    extracted.setLetterSpacing(m_letterSpacing);
+    extracted.setWordSpacing(m_wordSpacing);
+    extracted.setBaselineShift(m_baselineShift, m_baselineShiftValue);
+
     // remove text
-    m_text.remove(from, count);
+    m_text.remove(from, count < 0 ? m_text.length()-from : count);
     // remove character transformations
     m_xOffsets = m_xOffsets.mid(0, from);
     m_yOffsets = m_yOffsets.mid(0, from);
@@ -180,6 +185,27 @@ void ArtisticTextRange::setWordSpacing(qreal wordSpacing)
 qreal ArtisticTextRange::wordSpacing() const
 {
     return m_wordSpacing;
+}
+
+ArtisticTextRange::BaselineShift ArtisticTextRange::baselineShift() const
+{
+    return m_baselineShift;
+}
+
+qreal ArtisticTextRange::baselineShiftValue() const
+{
+    return m_baselineShiftValue;
+}
+
+void ArtisticTextRange::setBaselineShift(BaselineShift mode, qreal value)
+{
+    m_baselineShift = mode;
+    m_baselineShiftValue = value;
+}
+
+qreal ArtisticTextRange::subAndSuperScriptSizeFactor()
+{
+    return 0.58; // taken from wikipedia
 }
 
 void ArtisticTextRange::printDebug() const

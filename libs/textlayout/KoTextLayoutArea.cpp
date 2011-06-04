@@ -734,9 +734,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         m_dropCapsNChars = 0;
     }
 
-    ///@TODO: check this : is width the right function to call ?
-    qreal leftMargin = format.leftMargin().value(width());
-    qreal rightMargin = format.rightMargin().value(width());
+    qreal leftMargin = format.leftMargin();
+    qreal rightMargin = format.rightMargin();
 
     m_listIndent = 0;
     qreal listLabelIndent = 0;
@@ -971,8 +970,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
     }
 
-    ///@TODO: fixme : do not use rawValue, use value instead
-    m_bottomSpacing = format.bottomMargin().rawValue();
+    m_bottomSpacing = format.bottomMargin();
 
     layout->endLayout();
     setVirginPage(false);
@@ -1330,8 +1328,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
 {
     QTextBlockFormat format = block->blockFormat();
     KoParagraphStyle formatStyle(format, block->charFormat());
-    ///@TODO: use value with the proper parameter
-    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin().rawValue());
+    qreal spacing = qMax(m_bottomSpacing, formatStyle.topMargin());
 
     KoTextBlockBorderData border(QRectF(x(), m_y, width(), 1));
     border.setEdge(border.Left, format, KoParagraphStyle::LeftBorderStyle,
@@ -1359,8 +1356,7 @@ void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData *blockData, QText
             // Merged mean we don't have inserts inbetween the blocks
             qreal divider = m_y;
             if (spacing) {
-                ///@TODO: use value with the proper parameter
-                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin().rawValue());
+                divider += spacing * m_bottomSpacing / (m_bottomSpacing + formatStyle.topMargin());
             }
             if (!m_blockRects.isEmpty()) {
                 m_blockRects.last().setBottom(divider);

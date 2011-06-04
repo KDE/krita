@@ -32,69 +32,63 @@
 void TestStyles::testStyleInheritance()
 {
     KoParagraphStyle style1;
-    QTextLength length1(QTextLength::FixedLength, 10.0);
-    QTextLength length2(QTextLength::FixedLength, 20.0);
-    QTextLength length3(QTextLength::FixedLength, 15.0);
-    QTextLength length4(QTextLength::FixedLength, 12.0);
-    style1.setTopMargin(length1);
-    QCOMPARE(style1.topMargin(), length1);
+    style1.setTopMargin(QTextLength(QTextLength::FixedLength, 10.0));
+    QCOMPARE(style1.topMargin(), 10.0);
 
     KoParagraphStyle style2;
     style2.setParentStyle(&style1);
 
-    QCOMPARE(style2.topMargin(), length1);
-    style2.setTopMargin(length2);
-    QCOMPARE(style2.topMargin(), length2);
-    QCOMPARE(style1.topMargin(), length1);
+    QCOMPARE(style2.topMargin(), 10.0);
+    style2.setTopMargin(QTextLength(QTextLength::FixedLength, 20.0));
+    QCOMPARE(style2.topMargin(), 20.0);
+    QCOMPARE(style1.topMargin(), 10.0);
 
-    style1.setTopMargin(length3);
-    QCOMPARE(style2.topMargin(), length2);
-    QCOMPARE(style1.topMargin(), length3);
+    style1.setTopMargin(QTextLength(QTextLength::FixedLength, 15.0));
+    QCOMPARE(style2.topMargin(), 20.0);
+    QCOMPARE(style1.topMargin(), 15.0);
 
-    style2.setTopMargin(length3); // the same, resetting the difference.
-    QCOMPARE(style2.topMargin(), length3);
-    QCOMPARE(style1.topMargin(), length3);
+    style2.setTopMargin(QTextLength(QTextLength::FixedLength, 15.0)); // the same, resetting the difference.
+    QCOMPARE(style2.topMargin(), 15.0);
+    QCOMPARE(style1.topMargin(), 15.0);
 
-    style1.setTopMargin(length4); // parent, so both are affected
-    QCOMPARE(style2.topMargin(), length4);
-    QCOMPARE(style1.topMargin(), length4);
+    style1.setTopMargin(QTextLength(QTextLength::FixedLength, 12.0)); // parent, so both are affected
+    QCOMPARE(style2.topMargin(), 12.0);
+    QCOMPARE(style1.topMargin(), 12.0);
 }
 
 void TestStyles::testChangeParent()
 {
-    QTextLength length1(QTextLength::FixedLength, 10.0);
-    QTextLength length2(QTextLength::FixedLength, 20.0);
     KoParagraphStyle style1;
-    style1.setTopMargin(length1);
+    style1.setTopMargin(QTextLength(QTextLength::FixedLength, 10.0));
 
     KoParagraphStyle style2;
-    style2.setTopMargin(length2);
+    style2.setTopMargin(QTextLength(QTextLength::FixedLength, 20.0));
 
     style2.setParentStyle(&style1);
-    QCOMPARE(style1.topMargin(), length1);
-    QCOMPARE(style2.topMargin(), length2);
+    QCOMPARE(style1.topMargin(), 10.0);
+    QCOMPARE(style2.topMargin(), 20.0);
 
     KoParagraphStyle style3;
     style3.setParentStyle(&style1);
-    QCOMPARE(style1.topMargin(), length1);
-    QCOMPARE(style3.topMargin(), length1);
+    QCOMPARE(style1.topMargin(), 10.0);
+    QCOMPARE(style3.topMargin(), 10.0);
 
     // test that separating will leave the child with exactly the same dataset
     // as it had before the inheritance
     style3.setParentStyle(0);
-    QCOMPARE(style1.topMargin(), length1);
-    QCOMPARE(style3.topMargin(), QTextLength(QTextLength::FixedLength, 0.0)); // we hadn't explicitly set the margin on style3
+    QCOMPARE(style1.topMargin(), 10.0);
+    QCOMPARE(style3.topMargin(), 0.0); // we hadn't explicitly set the margin on style3
 
     // test adding it to another will not destroy any data
     style3.setParentStyle(&style1);
-    QCOMPARE(style1.topMargin(), length1); // from style1
-    QCOMPARE(style2.topMargin(), length2); // from style2
-    QCOMPARE(style3.topMargin(), length1); // inherited from style1
+    QCOMPARE(style1.topMargin(), 10.0); // from style1
+    QCOMPARE(style2.topMargin(), 20.0); // from style2
+    QCOMPARE(style3.topMargin(), 10.0); // inherited from style1
 
     // Check that style3 now starts following the parent since it does not have
     // the property set
     style3.setParentStyle(&style2);
-    QCOMPARE(style3.topMargin(), length2); // inherited from style2
+    QCOMPARE(style3.topMargin(), 20.0); // inherited from style2
 }
 
 void TestStyles::testTabsStorage()
@@ -166,13 +160,13 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QTextLength length2(QTextLength::FixedLength, 20.0);
 
     style1.setLeftMargin(length1);
-    QCOMPARE(style1.leftMargin(), length1);
-    QCOMPARE(style2.leftMargin(), length1);
-    QCOMPARE(style3.leftMargin(), length1);
+    QCOMPARE(style1.leftMargin(), 10.0);
+    QCOMPARE(style2.leftMargin(), 10.0);
+    QCOMPARE(style3.leftMargin(), 10.0);
     style2.setRightMargin(length2);
-    QCOMPARE(style1.rightMargin(), length0);
-    QCOMPARE(style2.rightMargin(), length2);
-    QCOMPARE(style3.rightMargin(), length2);
+    QCOMPARE(style1.rightMargin(), 0.0);
+    QCOMPARE(style2.rightMargin(), 20.0);
+    QCOMPARE(style3.rightMargin(), 20.0);
 
     // now actually apply it.
     QTextBlockFormat rawFormat;
@@ -181,24 +175,24 @@ void TestStyles::testApplyParagraphStyleWithParent()
     QCOMPARE(rawFormat.properties().count(), 3);
     QCOMPARE(format.alignment(), Qt::AlignRight);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1002);
-    QCOMPARE(format.leftMargin(), length1);
-    QCOMPARE(format.rightMargin(), length0);
+    QCOMPARE(format.leftMargin(), 10.0);
+    QCOMPARE(format.rightMargin(), 0.0);
 
     style2.applyStyle(rawFormat);
     KoParagraphStyle format2(rawFormat, rawFormat.toCharFormat());
     QCOMPARE(rawFormat.properties().count(), 4);
     QCOMPARE(format2.alignment(), Qt::AlignCenter);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1003);
-    QCOMPARE(format2.leftMargin(), length1);
-    QCOMPARE(format2.rightMargin(), length2);
+    QCOMPARE(format2.leftMargin(), 10.0);
+    QCOMPARE(format2.rightMargin(), 20.0);
 
     style3.applyStyle(rawFormat);
     KoParagraphStyle format3(rawFormat, rawFormat.toCharFormat());
     QCOMPARE(rawFormat.properties().count(), 4);
     QCOMPARE(format3.alignment(), Qt::AlignLeft | Qt::AlignAbsolute);
     QCOMPARE(rawFormat.property(KoParagraphStyle::StyleId).toInt(), 1004);
-    QCOMPARE(format3.leftMargin(), length1);
-    QCOMPARE(format3.rightMargin(), length2);
+    QCOMPARE(format3.leftMargin(), 10.0);
+    QCOMPARE(format3.rightMargin(), 20.0);
 }
 
 void TestStyles::testCopyParagraphStyle()
@@ -217,8 +211,8 @@ void TestStyles::testCopyParagraphStyle()
 
     KoParagraphStyle newStyle;
     newStyle.copyProperties(&style2);
-    QCOMPARE(newStyle.leftMargin(), length1);
-    QCOMPARE(newStyle.rightMargin(), length2);
+    QCOMPARE(newStyle.leftMargin(), 10.0);
+    QCOMPARE(newStyle.rightMargin(), 20.0);
 }
 
 void TestStyles::testUnapplyStyle()
@@ -250,7 +244,7 @@ void TestStyles::testUnapplyStyle()
     QTextBlockFormat bf = cursor.blockFormat();
     KoParagraphStyle bfStyle (bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bfStyle.leftMargin().rawValue(), 40.);
+    QCOMPARE(bfStyle.leftMargin(), 40.);
     QTextCharFormat cf = cursor.charFormat();
     QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
     QCOMPARE(cf.intProperty(KoCharacterStyle::OverlineMode), (int) KoCharacterStyle::ContinuousLineMode);
@@ -279,7 +273,7 @@ void TestStyles::testUnapplyStyle()
     bf = cursor.blockFormat();
     KoParagraphStyle bfStyle2 (bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bfStyle2.leftMargin().rawValue(), 40.);
+    QCOMPARE(bfStyle2.leftMargin(), 40.);
     cf = cursor.charFormat();
     //QCOMPARE(cf.fontOverline(), true);
     QCOMPARE(cf.colorProperty(KoCharacterStyle::OverlineColor), testOverlineColor);
@@ -303,7 +297,7 @@ void TestStyles::testUnapplyStyle()
     bf = cursor.blockFormat();
     KoParagraphStyle bfStyle3(bf, cursor.charFormat());
     QCOMPARE(bf.alignment(), Qt::AlignCenter);
-    QCOMPARE(bfStyle3.leftMargin().rawValue(), 40.);
+    QCOMPARE(bfStyle3.leftMargin(), 40.);
     cf = cursor.charFormat();
     //QCOMPARE(cf.fontOverline(), true);
     QCOMPARE(cf.hasProperty(KoCharacterStyle::OverlineColor), true);

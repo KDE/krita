@@ -1260,7 +1260,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             if (lineHeight.indexOf('%') > -1) { // percent value is between 50% and 200%
                 bool ok;
                 const int percent = lineHeight.remove('%').toInt(&ok);
-                if (ok && percent >= 0) {
+                if (ok) {
                     setLineHeightPercent(percent);
                 }
             }
@@ -1960,10 +1960,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() > 0) {
+            } else if (key == KoParagraphStyle::PercentLineHeight) {
                 style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() > 0) {
+            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() >= 0) {
                 style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacingFromFont && lineHeightAbsolute() == 0) {

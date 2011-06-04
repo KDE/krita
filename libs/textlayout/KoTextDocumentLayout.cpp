@@ -256,27 +256,25 @@ void KoTextDocumentLayout::documentChanged(int position, int charsRemoved, int c
     if (!d->rootAreaList.isEmpty()) {
         KoTextLayoutRootArea *fromArea = rootAreaForPosition(position);
         int startIndex = fromArea ? qMax(0, d->rootAreaList.indexOf(fromArea)) : 0;
-        if (startIndex >= 0) {
-            int endIndex = startIndex;
-            if (charsRemoved != 0 || charsAdded != 0) {
-                // If any characters got removed or added make sure to also catch other root-areas that may be
-                // affected by this change. Note that adding, removing or formatting text will always charsRemoved>0
-                // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
-                // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
-                // those cases we only need to relayout the root-area dirty where the variable is on.
-                KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
-                endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
-                // The previous and following root-area of that range are selected too cause they can also be affect by
-                // changes done to the range of root-areas.
-                if (startIndex >= 1)
-                    --startIndex;
-                if (endIndex + 1 < d->rootAreaList.count())
-                    ++endIndex;
-            }
-            // Mark all selected root-areas as dirty so they are relayouted.
-            for(int i = startIndex; i <= endIndex; ++i) {
-                d->rootAreaList[i]->setDirty();
-            }
+        int endIndex = startIndex;
+        if (charsRemoved != 0 || charsAdded != 0) {
+            // If any characters got removed or added make sure to also catch other root-areas that may be
+            // affected by this change. Note that adding, removing or formatting text will always charsRemoved>0
+            // and charsAdded>0 cause they are changing a range of characters. One case where both is zero is if
+            // the content of a variable changed (see KoVariable::setValue which calls publicDocumentChanged). In
+            // those cases we only need to relayout the root-area dirty where the variable is on.
+            KoTextLayoutRootArea *toArea = fromArea ? rootAreaForPosition(position + qMax(charsRemoved, charsAdded)) : 0;
+            endIndex = (toArea && toArea != fromArea) ? qMax(startIndex, d->rootAreaList.indexOf(toArea)) : startIndex;
+            // The previous and following root-area of that range are selected too cause they can also be affect by
+            // changes done to the range of root-areas.
+            if (startIndex >= 1)
+                --startIndex;
+            if (endIndex + 1 < d->rootAreaList.count())
+                ++endIndex;
+        }
+        // Mark all selected root-areas as dirty so they are relayouted.
+        for(int i = startIndex; i <= endIndex; ++i) {
+            d->rootAreaList[i]->setDirty();
         }
     }
 

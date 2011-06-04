@@ -369,13 +369,15 @@ public:
     QSet<KoEventAction *> eventActions() const;
 
     /**
-     * Return the side text should flow around this shape.
+     * Return the side text should flow around this shape. This implements the ODF style:wrap
+     * attribute that specifies how text is displayed around a frame or graphic object.
      */
     TextRunAroundSide textRunAroundSide() const;
 
     /**
      * Set the side text should flow around this shape.
      * @param side the requested side
+     * @param runThrought run through the foreground or background or...
      */
     void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
 

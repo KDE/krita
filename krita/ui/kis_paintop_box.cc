@@ -242,10 +242,8 @@ void KisPaintopBox::resourceSelected(KoResource* resource)
     if(!preset->settings()->isLoadable())
         return;
     
-    setCurrentPaintop(preset->paintOp());
-    m_optionWidget->setConfiguration(preset->settings());
-    m_presetsPopup->setPresetImage(preset->image());
-    slotUpdatePreset();
+    preset = preset->clone();
+    setCurrentPaintop(preset->paintOp(), preset);    
     m_presetsPopup->resourceSelected(resource);
 }
 
@@ -418,21 +416,13 @@ void KisPaintopBox::slotUpdatePreset()
     }
 }
 
-void KisPaintopBox::slotSetupDefaultPreset(){
-    QString defaultName = m_activePreset->paintOp().id() + ".kpp";
-    QString path = KGlobal::mainComponent().dirs()->findResource("kis_defaultpresets", defaultName);
-    KisPaintOpPresetSP preset = new KisPaintOpPreset(path);
-
-    if ( !preset->load() ){
-        kWarning() << preset->filename() << "could not be found.";
-        kWarning() << "I was looking for " << defaultName;
-        return;
-    }
-
-    preset->settings()->setNode( m_activePreset->settings()->node() );
+void KisPaintopBox::slotSetupDefaultPreset()
+{
+    KisPaintOpPresetSP preset = defaultPreset(m_activePreset->paintOp());
+    preset->settings()->setNode(m_activePreset->settings()->node());
     preset->settings()->setOptionsWidget(m_optionWidget);
     m_optionWidget->setConfiguration(preset->settings());
-    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>( preset->settings().data() ));
+    m_optionWidget->writeConfiguration(const_cast<KisPaintOpSettings*>(preset->settings().data()));
 }
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)

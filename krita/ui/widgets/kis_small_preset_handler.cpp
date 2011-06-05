@@ -18,89 +18,52 @@
 
 #include "kis_small_preset_handler.h"
 
-#include <KoResourceModel.h>
-#include <QAbstractScrollArea>
-
+#include "KoResourceModel.h"
+#include "KoResourceItemView.h"
 #include "kis_paintop_registry.h"
+
+#include <QAbstractScrollArea>
 
 WdgSmallPresetHandler::WdgSmallPresetHandler(QWidget* parent)
                       : QWidget(parent)
 {
     setupUi(this);
-    this->smallPresetChooser->showButtons(false);
-    //this->smallPresetChooser->setViewMode(KisPresetChooser::THUMBNAIL);
-    this->smallPresetChooser->setViewMode(KisPresetChooser::STRIP);
-    antiOOPHack = this->smallPresetChooser->findChild<KoResourceItemView*>();
+    smallPresetChooser->showButtons(false);
+    smallPresetChooser->setViewMode(KisPresetChooser::STRIP);
+    antiOOPHack = smallPresetChooser->findChild<KoResourceItemView*>();
     antiOOPHack->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     antiOOPHack->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    
-    //smallPresetChooser->setShowAll(false);
-    
-    qDebug() << "AERSH";
-/*
-    connect(parent, SIGNAL(paintopActivated(QString)),
-            smallPresetChooser, SLOT(searchTextChanged(QString)));
-            */
-    connect(this->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
-            parent, SLOT(resourceSelected(KoResource*)));
+
+    /* This is an heuristic to fill smallPresetChooser with only the presets
+     * for the paintop that comes selected by default: Pixel Brush.
+     * TODO this must be replaced by a more correct approach.
+     */
+    const QString PIXEL_BRUSH_ID = "paintbrush";
+    smallPresetChooser->setPresetFilter(KoID(PIXEL_BRUSH_ID));
 }
 
-void WdgSmallPresetHandler::currentPaintopChanged(QString printme)
+void WdgSmallPresetHandler::currentPaintopChanged(QString paintOpID)
 {
-    qDebug() << printme;
-    
-//    KisPaintOpPresetSP preset = m_canvas->resourceManager()->resource(KisCanvasResourceProvider::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    //if (preset) {
-        //m_presetChooser->setPresetFilter(preset->paintOp());
-    //}
-    
-    KoID paintOp;
-    KoID test("", "");
-    foreach(paintOp, KisPaintOpRegistry::instance()->listKeys() ) {
-        if (paintOp.id() == printme) {
-            qDebug() << "NOTAN eureka: " << paintOp;
-            test = paintOp;
+    foreach(KoID paintOp, KisPaintOpRegistry::instance()->listKeys() ) {
+        if (paintOp.id() == paintOpID) {
+            smallPresetChooser->setPresetFilter(paintOp);
             break;
         }
     }
-    
-    if (test.id() != "")
-        smallPresetChooser->setPresetFilter(test);
-    else
-        qDebug() << "no hay ID";
-    
-    
 }
 
 void WdgSmallPresetHandler::on_leftScrollBtn_pressed()
 {
-    //QPoint newcoor = scrollCoordinate(-40);
-    //QPoint newcoor(-3 + antiOOPHack->width() / 2, 0);
-    QPoint newcoor(-10, 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(newcoor), QAbstractItemView::EnsureVisible);
+    // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision
+    QPoint beyondLeftMargin(-10, 0);
+    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondLeftMargin), QAbstractItemView::EnsureVisible);
 }
 
 void WdgSmallPresetHandler::on_rightScrollBtn_pressed()
 {
-    //QPoint newcoor = scrollCoordinate(+40);
-    //QPoint newcoor(3 + antiOOPHack->width() / 2, 0);
-    QPoint newcoor(3 + antiOOPHack->viewport()->width(), 0);
-    antiOOPHack->scrollTo(antiOOPHack->indexAt(newcoor), QAbstractItemView::EnsureVisible);
+    // Deciding how far beyond the right margin to put the point (3 pixels) was an arbitrary decision
+    QPoint beyondRightMargin(3 + antiOOPHack->viewport()->width(), 0);
+    antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
 }
-/*
-QPoint WdgSmallPresetHandler::scrollCoordinate(qint8 dx)
-{
-    m_coorX = dx + antiOOPHack->width() / 2;
-
-    int leftcap = 0;
-    int rightcap = antiOOPHack->columnWidth(0) * antiOOPHack->model()->columnCount() - 0;
-    
-    m_coorX = qBound<int>(leftcap, m_coorX, rightcap);
-    qDebug() << "m_coorX: " << m_coorX;
-
-    // antiOOPHack->columnWidth(0) * antiOOPHack->model()->columnCount();    REAL WIDTH of the model
-    return QPoint(m_coorX, 0);
-}
-*/
 
 #include "kis_small_preset_handler.moc"

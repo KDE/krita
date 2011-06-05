@@ -19,31 +19,36 @@
 #ifndef KIS_SMALL_PRESET_HANDLER_H
 #define KIS_SMALL_PRESET_HANDLER_H
 
+#include <QWidget>
 #include "ui_wdgsmallpresethandler.h"
 
-#include "KoResourceItemView.h"
 
-#include <QWidget>
-
+class KoResourceItemView;
 
 class WdgSmallPresetHandler : public QWidget, public Ui::WdgSmallPresetHandler
 {
     Q_OBJECT
     
-    public:
+public:
     WdgSmallPresetHandler(QWidget *parent);
-    //QPoint scrollCoordinate(qint8 dx);
     
-    public slots:
-    void currentPaintopChanged(QString printme);
+public slots:
+    void currentPaintopChanged(QString paintOpID);
     
-    private slots:
+private slots:
+    /**
+    * Those button events scroll the preset strip to the left and to the right respectively.
+    *
+    * The form file (.ui) uses a different repeat speed for the left and the right scroll button:
+    * those were adjusted to make both buttons feel similar in scroll speed when pressed.
+    * Factors like the position of each icon in the strip affect how far it scrolls with each
+    * event, thus needing fine tuning according to how are icons placed in the widget.
+    */
     void on_leftScrollBtn_pressed();
     void on_rightScrollBtn_pressed();
     
-    private:
+private:
     KoResourceItemView* antiOOPHack;
-    //qint16 m_coorX;
 };
 
 

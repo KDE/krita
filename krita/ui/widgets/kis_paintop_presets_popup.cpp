@@ -125,9 +125,11 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.paintopList, SIGNAL(activated(const QString&)),
             this, SIGNAL(paintopActivated(QString)));
 
-    //TODO added now
     connect(this, SIGNAL(paintopActivated(QString)),
             m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(currentPaintopChanged(QString)));
+
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
+            this, SIGNAL(signalResourceSelected(KoResource*)));
     
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();

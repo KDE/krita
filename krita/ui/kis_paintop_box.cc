@@ -221,6 +221,9 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     connect(m_presetsPopup, SIGNAL(presetNameLineEditChanged(QString)),
             this, SLOT(slotWatchPresetNameLineEdit(QString)));
 
+    connect(m_presetsPopup, SIGNAL(signalResourceSelected(KoResource*)),
+            this, SLOT(resourceSelected(KoResource*)));
+            
     connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*)),
             this, SLOT(resourceSelected(KoResource*)));
 

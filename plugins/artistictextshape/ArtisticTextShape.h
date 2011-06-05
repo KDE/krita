@@ -197,6 +197,9 @@ private:
     void beginTextUpdate();
     void finishTextUpdate();
 
+    /// Calculates abstract character positions in baseline coordinates
+    QVector<QPointF> calculateAbstractCharacterPositions();
+
     /// Returns the bounding box for an empty text shape
     QRectF nullBoundBox() const;
 

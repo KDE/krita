@@ -115,34 +115,6 @@ QFont ArtisticTextShape::defaultFont() const
     return m_defaultFont;
 }
 
-QPointF adjustCharPosition(const ArtisticTextRange &range, int charIndex, const QPointF &charPos, const QPointF &advance)
-{
-    qreal x = charPos.x();
-    qreal y = charPos.y();
-
-    const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
-    const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
-
-    if (range.hasXOffset(charIndex)) {
-        if (absoluteXOffset)
-            x = range.xOffset(charIndex);
-        else
-            x += range.xOffset(charIndex);
-    } else {
-        x += advance.x();
-    }
-    if (range.hasYOffset(charIndex)) {
-        if (absoluteYOffset)
-            y = range.yOffset(charIndex);
-        else
-            y += range.yOffset(charIndex);
-    } else {
-        y += advance.y();
-    }
-
-    return QPointF(x, y);
-}
-
 qreal baselineShiftForFontSize(const ArtisticTextRange &range, qreal fontSize)
 {
     switch(range.baselineShift()) {
@@ -159,6 +131,73 @@ qreal baselineShiftForFontSize(const ArtisticTextRange &range, qreal fontSize)
     }
 }
 
+QVector<QPointF> ArtisticTextShape::calculateAbstractCharacterPositions()
+{
+    const int totalTextLength = plainText().length();
+
+    QVector<QPointF> charPositions;
+
+    // one more than the number of characters for position after the last character
+    charPositions.resize(totalTextLength+1);
+
+    // the character index within the text shape
+    int globalCharIndex = 0;
+
+    QPointF charPos(0, 0);
+    QPointF advance(0, 0);
+
+    const bool attachedToPath = isOnPath();
+
+    foreach(const ArtisticTextRange &range, m_ranges) {
+        QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
+        const QString textRange = range.text();
+        const qreal letterSpacing = range.letterSpacing();
+        const int localTextLength = textRange.length();
+
+        const bool absoluteXOffset = range.xOffsetType() == ArtisticTextRange::AbsoluteOffset;
+        const bool absoluteYOffset = range.yOffsetType() == ArtisticTextRange::AbsoluteOffset;
+
+        // set baseline shift
+        const qreal baselineShift = baselineShiftForFontSize(range, defaultFont().pointSizeF());
+
+        for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
+            // apply offset to character
+            if (range.hasXOffset(localCharIndex)) {
+                if (absoluteXOffset)
+                    charPos.rx() = range.xOffset(localCharIndex);
+                else
+                    charPos.rx() += range.xOffset(localCharIndex);
+            } else {
+                charPos.rx() += advance.x();
+            }
+            if (range.hasYOffset(localCharIndex)) {
+                if (absoluteYOffset) {
+                    // when attached to a path, absolute y-offsets are ignored
+                    if (!attachedToPath)
+                        charPos.ry() = range.yOffset(localCharIndex);
+                } else {
+                    charPos.ry() += range.yOffset(localCharIndex);
+                }
+            } else {
+                charPos.ry() += advance.y();
+            }
+
+            // apply baseline shift
+            charPos.ry() += baselineShift;
+
+            // save character position of current character
+            charPositions[globalCharIndex] = charPos;
+            // advance character position
+            advance = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);
+
+            charPos.ry() -= baselineShift;
+        }
+    }
+    charPositions[globalCharIndex] = charPos + advance;
+
+    return charPositions;
+}
+
 void ArtisticTextShape::createOutline()
 {
     // reset relevant data
@@ -166,139 +205,104 @@ void ArtisticTextShape::createOutline()
     m_charPositions.clear();
     m_charOffsets.clear();
 
-    const int totalTextLength = plainText().length();
-
-    // one more than the number of characters for position after the last character
-    m_charPositions.resize(totalTextLength+1);
+    // calculate character positions in baseline coordinates
+    m_charPositions = calculateAbstractCharacterPositions();
 
     // the character index within the text shape
     int globalCharIndex = 0;
 
     if( isOnPath() ) {
         // one more than the number of characters for offset after the last character
-        m_charOffsets.resize(totalTextLength + 1);
-
+        m_charOffsets.insert(0, m_charPositions.size(), -1);
         // the current character position
-        QPointF charOffset(m_startOffset * m_baseline.length(), 0.0);
-        // adjust starting character position to anchor point
+        qreal startCharOffset = m_startOffset * m_baseline.length();
+        // calculate total text width
         qreal totalTextWidth = 0.0;
         foreach (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             totalTextWidth += metrics.width(range.text());
         }
-        qreal anchorPosition = 0.0;
+        // adjust starting character position to anchor point
         if( m_textAnchor == AnchorMiddle )
-            anchorPosition = 0.5 * totalTextWidth;
+            startCharOffset -= 0.5 * totalTextWidth;
         else if( m_textAnchor == AnchorEnd )
-            anchorPosition = totalTextWidth;
-
-        charOffset -= QPointF(anchorPosition, 0.0);
+            startCharOffset -= totalTextWidth;
 
         QPointF pathPoint;
-        QPointF advance;
         qreal rotation = 0.0;
+        qreal charOffset;
 
         foreach (const ArtisticTextRange &range, m_ranges) {
             QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString localText = range.text();
             const int localTextLength = localText.length();
-            const qreal letterSpacing = range.letterSpacing();
 
             for (int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
-                // apply offset to character
-                // TODO: handle absolute x and y offsets correctly see svg spec 10.13.3 Text on a path layout rules
-                charOffset = adjustCharPosition(range, localCharIndex, charOffset, advance);
+                QPointF charPos = m_charPositions[globalCharIndex];
 
+                // apply advance along baseline
+                charOffset = startCharOffset + charPos.x();
+
+                const qreal charMidPoint = charOffset + 0.5 * metrics.width(localText[localCharIndex]);
+                // get the normalized position of the middle of the character
+                const qreal midT = m_baseline.percentAtLength(charMidPoint);
+                // is the character midpoint beyond the baseline ends?
+                if (midT <= 0.0 || midT >= 1.0) {
+                    if (midT >= 1.0) {
+                        pathPoint = m_baseline.pointAtPercent(1.0);
+                        for (int i = globalCharIndex; i < m_charPositions.size(); ++i) {
+                            m_charPositions[i] = pathPoint;
+                            m_charOffsets[i] = 1.0;
+                        }
+                        break;
+                    } else {
+                        m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(0.0);
+                        m_charOffsets[globalCharIndex] = 0.0;
+                        continue;
+                    }
+                }
                 // get the percent value of the actual char position
-                qreal t = m_baseline.percentAtLength( charOffset.x() );
-                // first initialize with invalid position
-                m_charOffsets[globalCharIndex] = -1;
-                // are we beyond the baseline end?
-                if (t >= 1.0) {
-                    m_charPositions[globalCharIndex] = pathPoint;
-                    continue;
-                }
+                qreal t = m_baseline.percentAtLength(charOffset);
 
-                const qreal currentCharWidth = metrics.width(localText[localCharIndex]);
-
-                // are we beyond the baseline start?
-                if (t >= 0.0) {
-                    // get the path point of the given path position
-                    pathPoint = m_baseline.pointAtPercent( t );
-                    // get the normalized position of the middle of the character
-                    t = m_baseline.percentAtLength( charOffset.x() + 0.5 * currentCharWidth );
-                }
+                // get the path point of the given path position
+                pathPoint = m_baseline.pointAtPercent(t);
 
                 // save character offset as fraction of baseline length
-                m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x());
+                m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset);
                 // save character position as point
                 m_charPositions[globalCharIndex] = pathPoint;
 
-                // add the advance of the current character to the character position
-                advance = QPointF(currentCharWidth+letterSpacing, 0.0);
-
-                if (t <= 0.0) {
-                    // if this is not the first character but our position is still
-                    // zero or less, disable the previous character from display
-                    if (globalCharIndex)
-                        m_charOffsets[globalCharIndex-1] = -1;
-                    continue;
-                }
-
-                // are we beyond the baseline end?
-                if( t >= 1.0 )
-                    break;
-
                 // get the angle at the given path position
-                const qreal angle = m_baseline.angleAtPercent( t );
+                const qreal angle = m_baseline.angleAtPercent(midT);
                 if (range.hasRotation(localCharIndex))
                     rotation = range.rotation(localCharIndex);
 
                 QTransform m;
-                m.translate( pathPoint.x(), pathPoint.y() );
-                m.rotate( 360. - angle + rotation);
-                m.translate(0.0, charOffset.y());
-                m_outline.addPath( m.map( m_charOutlines[globalCharIndex] ) );
+                m.translate(pathPoint.x(), pathPoint.y());
+                m.rotate(360. - angle + rotation);
+                m.translate(0.0, charPos.y());
+                m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
             }
         }
         // save offset and position after last character
-        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(charOffset.x()+advance.x());
+        m_charOffsets[globalCharIndex] = m_baseline.percentAtLength(startCharOffset + m_charPositions[globalCharIndex].x());
         m_charPositions[globalCharIndex] = m_baseline.pointAtPercent(m_charOffsets[globalCharIndex]);
     } else {
-        QPointF charPos(0, 0);
-        QPointF advance(0, 0);
         qreal rotation = 0.0;
         foreach(const ArtisticTextRange &range, m_ranges) {
-            QFontMetricsF metrics(QFont(range.font(), &m_paintDevice));
             const QString textRange = range.text();
-            const qreal letterSpacing = range.letterSpacing();
             const int localTextLength = textRange.length();
-
-            // set baseline shift
-            const qreal baselineShift = baselineShiftForFontSize(range, defaultFont().pointSizeF());
-
             for(int localCharIndex = 0; localCharIndex < localTextLength; ++localCharIndex, ++globalCharIndex) {
-                // apply offset to character
-                charPos = adjustCharPosition(range, localCharIndex, charPos, advance);
-
+                const QPointF &charPos = m_charPositions[globalCharIndex];
                 if (range.hasRotation(localCharIndex))
                     rotation = range.rotation(localCharIndex);
-
-                charPos.ry() += baselineShift;
 
                 QTransform m;
                 m.translate(charPos.x(), charPos.y());
                 m.rotate(rotation);
                 m_outline.addPath(m.map(m_charOutlines[globalCharIndex]));
-                // save character position of current character
-                m_charPositions[globalCharIndex] = charPos;
-                // advance character position
-                advance = QPointF(metrics.width(textRange[localCharIndex])+letterSpacing, 0.0);
-
-                charPos.ry() -= baselineShift;
             }
         }
-        m_charPositions[globalCharIndex] = charPos + advance;
     }
 }
 

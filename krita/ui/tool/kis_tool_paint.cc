@@ -69,7 +69,6 @@
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
 #include <kaction.h>
-#include <kis_paintop_preset.h>
 
 const int STEP = 20;
 
@@ -98,7 +97,7 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
     addAction("make_brush_color_darker", m_darkerColor);
 
 
-    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigPaintOpPresetModified()), this, SLOT(slotPaintOpPresetModified()));
+    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString)));
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -114,8 +113,11 @@ void KisToolPaint::resourceChanged(int key, const QVariant & v)
 
     switch(key){
         case(KisCanvasResourceProvider::CurrentKritaNode):
-            slotPaintOpPresetModified();
-            break;        
+            slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
+            break;
+        case(KisCanvasResourceProvider::Opacity):
+            slotSetOpacity(v.toInt());
+            break;
         default: //nothing
             break;
     }
@@ -130,7 +132,7 @@ void KisToolPaint::activate(ToolActivation toolActivation, const QSet<KoShape*> 
 {
     KisTool::activate(toolActivation, shapes);
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
-    slotPaintOpPresetModified();
+    slotSetCompositeMode(kiscanvas->view()->resourceProvider()->currentCompositeOp());
     resetCursorStyle();
 }
 
@@ -383,14 +385,13 @@ void KisToolPaint::setupPainter(KisPainter* painter)
     KisTool::setupPainter(painter);
     painter->setOpacity(m_opacity);
     painter->setCompositeOp(m_compositeOp);
-    
+
     QPointF axisCenter = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorAxisCenter).toPointF();
     if (axisCenter.isNull()){
         axisCenter = QPointF(0.5 * image()->width(), 0.5 * image()->height());
     }
-    KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-    bool mirrorMaskHorizontal = settings->getBool(KRITA_PAINTOP_MIRRORHORIZONTAL);
-    bool mirrorMaskVertical = settings->getBool(KRITA_PAINTOP_MIRRORVERTICAL);
+    bool mirrorMaskHorizontal = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorHorizontal).toBool();
+    bool mirrorMaskVertical = canvas()->resourceManager()->resource(KisCanvasResourceProvider::MirrorVertical).toBool();
     painter->setMirrorInformation(axisCenter, mirrorMaskHorizontal, mirrorMaskVertical);
 }
 
@@ -446,18 +447,5 @@ void KisToolPaint::makeColorLighter()
     transformColor(STEP);
 }
 
-void KisToolPaint::slotPaintOpPresetModified()
-{
-    if(!currentPaintOpPreset()) {
-        return;
-    }
-    KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
-    slotSetOpacity(settings->getInt(KRITA_PAINTOP_OPACITY));
-    if(settings->getBool(KRITA_PAINTOP_ERASE)) {
-        slotSetCompositeMode(COMPOSITE_ERASE);
-    } else {
-        slotSetCompositeMode(settings->getString(KRITA_PAINTOP_COMPOSITEOP));
-    }
-}
 
 #include "kis_tool_paint.moc"

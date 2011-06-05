@@ -229,6 +229,11 @@ public:
     //========== Capabilities =================================================//
 
     /**
+     * Tests if the colorspace offers the specific composite op.
+     */
+    virtual bool hasCompositeOp(const QString & id) const;
+    
+    /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
     virtual QList<KoCompositeOp*> compositeOps() const;

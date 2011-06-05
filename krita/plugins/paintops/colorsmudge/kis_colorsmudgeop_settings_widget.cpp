@@ -32,12 +32,14 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_gradient_option.h>
 #include <kis_airbrush_option.h>
+#include <kis_compositeop_option.h>
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(parent)
 {
     setObjectName("brush option widget");
 
+    addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSpacingOption()));

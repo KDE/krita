@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,50 +18,40 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CMB_PAINTOP_H_
-#define KIS_CMB_PAINTOP_H_
+#ifndef KIS_PAINTOP_LIST_WIDGET_H_
+#define KIS_PAINTOP_LIST_WIDGET_H_
 
 #include <krita_export.h>
-#include "kcombobox.h"
-#include "kis_paintop_factory.h"
-#include <QListView>
+#include "kis_categorized_list_view.h"
 
-class KisPaintOpsModel;
-class KCategorizedSortFilterProxyModel;
+class KisPaintOpFactory;
+class KisPaintOpListModel;
 
 /**
- * A combobox filled with the paintops
+ * A ListBox filled with the paintops
  */
-
-class KRITAUI_EXPORT KisCmbPaintop : public QListView
+//*
+class KRITAUI_EXPORT KisPaintOpListWidget: public KisCategorizedListView, public KisCategorizedWidgetBase<KisPaintOpListModel>
 {
-
     Q_OBJECT
-
 public:
-
-    KisCmbPaintop(QWidget * parent = 0, const char * name = 0);
-    virtual ~KisCmbPaintop();
-
-    const QString& currentItem() const;
-
+     KisPaintOpListWidget(QWidget* parent=0, const char* name=0);
+    ~KisPaintOpListWidget();
+    
+    QString currentItem() const;
+    
     void setPaintOpList(const QList<KisPaintOpFactory*>& list);
     void setCurrent(const KisPaintOpFactory* op);
     void setCurrent(const QString & paintOpId);
-
+    
 signals:
     void activated(const QString&);
-
+    
 private slots:
     void slotOpActivated(const QModelIndex& index);
-
-private:
-    // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
-    void setCurrentText(const QString & s);
-    const QString& itemAt(int idx) const;
-
-    KisPaintOpsModel* m_lastModel;
-    KCategorizedSortFilterProxyModel* m_sortModel;
+    
+protected:
+    QString itemAt(int idx) const;
 };
 
-#endif
+#endif // KIS_PAINTOP_LIST_WIDGET_H_

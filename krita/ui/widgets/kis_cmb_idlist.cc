@@ -22,12 +22,10 @@
 
 #include <klocale.h>
 #include <kis_debug.h>
-
-#include "KoID.h"
-
+#include <KoID.h>
 
 KisCmbIDList::KisCmbIDList(QWidget * parent, const char * name)
-        : KComboBox(parent)
+    : QComboBox(parent)
 {
     setObjectName(name);
     setEditable(false);
@@ -51,7 +49,7 @@ void KisCmbIDList::setIDList(const QList<KoID>  & list)
 
 KoID KisCmbIDList::currentItem() const
 {
-    qint32 i = KComboBox::currentIndex();
+    qint32 i = QComboBox::currentIndex();
     if (i > m_list.count() - 1) return KoID();
 
     return m_list[i];
@@ -62,11 +60,11 @@ void KisCmbIDList::setCurrent(const KoID id)
     qint32 index = m_list.indexOf(id);
 
     if (index >= 0) {
-        KComboBox::setCurrentIndex(index);
+        QComboBox::setCurrentIndex(index);
     } else {
         m_list.push_back(id);
         addItem(id.name());
-        KComboBox::setCurrentIndex(m_list.count() - 1);
+        QComboBox::setCurrentIndex(m_list.count() - 1);
     }
 }
 
@@ -74,7 +72,7 @@ void KisCmbIDList::setCurrent(const QString & s)
 {
     for (qint32 i = 0; i < m_list.count(); ++i) {
         if (m_list.at(i).id() == s) {
-            KComboBox::setCurrentIndex(i);
+            QComboBox::setCurrentIndex(i);
             break;
         }
     }

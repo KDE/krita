@@ -22,7 +22,9 @@
 #include <QPainter>
 
 KisCategorizedItemDelegate::KisCategorizedItemDelegate(QAbstractListModel* model, bool indicateError):
-    m_model(model), m_indicateError(indicateError)
+    m_model(model),
+    m_indicateError(indicateError),
+    m_minimumItemHeight(0)
 {
     m_errorIcon = QIcon::fromTheme("dialog-warning");
 }
@@ -50,11 +52,11 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
     }
     else {
         if(option.state & QStyle::State_MouseOver)
-            painter->fillRect(option.rect, Qt::lightGray);
-        else
             painter->fillRect(option.rect, Qt::gray);
+        else
+            painter->fillRect(option.rect, Qt::lightGray);
         
-        painter->drawText(rect, m_model->data(index).toString());
+        painter->drawText(option.rect, m_model->data(index).toString(), QTextOption(Qt::AlignVCenter|Qt::AlignHCenter));
         
         paintTriangle(
             painter,
@@ -64,6 +66,21 @@ void KisCategorizedItemDelegate::paint(QPainter* painter, const QStyleOptionView
             !m_model->data(index, ExpandCategoryRole).toBool()
         );
     }
+    
+    painter->resetTransform();
+}
+
+QSize KisCategorizedItemDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    //on first calling this calculates the mininmal height of the items
+    if(m_minimumItemHeight == 0) {
+        for(int i=0; i<index.model()->rowCount(); i++) {
+            QSize indexSize = QStyledItemDelegate::sizeHint(option, index.model()->index(i, 0));
+            m_minimumItemHeight = qMax(m_minimumItemHeight, indexSize.height());
+        }
+    }
+    
+    return QSize(QStyledItemDelegate::sizeHint(option, index).width(), m_minimumItemHeight);
 }
 
 void KisCategorizedItemDelegate::paintTriangle(QPainter* painter, qint32 x, qint32 y, qint32 size, bool rotate) const

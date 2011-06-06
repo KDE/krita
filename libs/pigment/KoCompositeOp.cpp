@@ -179,7 +179,9 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoC
     KoIDMap::const_iterator end = m_map.end();
     
     KoIDList list;
+#if QT_VERSION >= 0x040700
     list.reserve(m_map.size());
+#endif
     
     if(colorSpace) {
         for(; beg!=end; ++beg){ 

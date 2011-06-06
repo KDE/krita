@@ -74,6 +74,7 @@ public:
     void emitPointerPositionChangedSignals(QEvent *event);
 
     void activate();
+    void unsetCanvas();
 
     KoCanvasControllerWidget *q;
     KoCanvasBase *canvas;
@@ -203,6 +204,23 @@ void KoCanvasControllerWidget::Private::activate()
     }
 }
 
+void KoCanvasControllerWidget::Private::unsetCanvas()
+{
+    QWidget *parent = q;
+    while (parent->parentWidget()) {
+        parent = parent->parentWidget();
+    }
+    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
+    if (!observerProvider) {
+        return;
+    }
+    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
+        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
+        if (observer) {
+            observer->unsetCanvas();
+        }
+    }
+}
 
 ////////////
 KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, QWidget *parent)
@@ -234,20 +252,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
-    QWidget *parent = this;
-    while (parent->parentWidget()) {
-        parent = parent->parentWidget();
-    }
-    KoCanvasSupervisor *observerProvider = dynamic_cast<KoCanvasSupervisor*>(parent);
-    if (!observerProvider) {
-        return;
-    }
-    foreach(KoCanvasObserverBase *docker, observerProvider->canvasObservers()) {
-        KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
-        if (observer) {
-            observer->unsetCanvas();
-        }
-    }
+    d->unsetCanvas();
     delete d;
 }
 
@@ -287,6 +292,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
 {
     Q_ASSERT(canvas); // param is not null
     if (d->canvas) {
+        d->unsetCanvas();
         proxyObject->emitCanvasRemoved(this);
         canvas->setCanvasController(0);
         d->canvas->canvasWidget()->removeEventFilter(this);

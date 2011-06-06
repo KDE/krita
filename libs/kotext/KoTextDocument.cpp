@@ -38,7 +38,7 @@
 #include "KoOdfNotesConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
 
-Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection);
+Q_DECLARE_METATYPE(QAbstractTextDocumentLayout::Selection)
 
 const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");

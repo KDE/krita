@@ -129,7 +129,7 @@ public:
     enum SeperatorFlag {
         SeperatorTop = 0x0001,/* SeperatorBottom = 0x0002, SeperatorRight = 0x0004,*/ SeperatorLeft = 0x0008
     };
-    Q_DECLARE_FLAGS(Seperators, SeperatorFlag);
+    Q_DECLARE_FLAGS(Seperators, SeperatorFlag)
     Section(QWidget *parent = 0)
         : QWidget(parent),
         m_layout(new SectionLayout(this))

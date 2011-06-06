@@ -93,6 +93,7 @@ signals:
     void defaultPresetClicked();
     void presetNameLineEditChanged(const QString& presetName);
     void paintopActivated(const QString& presetName);
+    void signalResourceSelected(KoResource* resource);
 
 private slots:
     void fillScratchPadGradient();

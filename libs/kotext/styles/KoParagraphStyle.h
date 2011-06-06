@@ -154,12 +154,12 @@ public:
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
         
-        NormalLineHeight,         ///< bool, internal property for reserved usage
+        NormalLineHeight          ///< bool, internal property for reserved usage
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
-        IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
+        IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
     
     enum VerticalAlign {

@@ -79,8 +79,15 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 {
     m_curveOption->readOptionSetting(setting);
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->sensor());
+    
+    m_curveOptionWidget->checkBoxUseCurve->blockSignals(true);
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
+    m_curveOptionWidget->checkBoxUseCurve->blockSignals(false);
+    
+    m_curveOptionWidget->slider->blockSignals(true);
     m_curveOptionWidget->slider->setValue(m_curveOption->value());
+    m_curveOptionWidget->slider->blockSignals(false);
+    
     updateCurve(m_curveOption->sensor());
 }
 

@@ -71,7 +71,7 @@ enum PSDColorSamplers {
     OPACITY,
     ANPA      = 3000 // LAB
 };
-};
+}
 
 /**
  * Convert PsdColorMode to pigment colormodelid and colordepthid.

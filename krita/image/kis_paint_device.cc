@@ -216,9 +216,13 @@ void KisPaintDevice::init(KisDataManagerSP explicitDataManager,
     }
     else {
         const qint32 pixelSize = colorSpace->pixelSize();
-        KoColor defaultPixel(Qt::transparent, colorSpace);
+        
+        quint8* defaultPixel = new quint8[colorSpace->pixelSize()];
+        colorSpace->fromQColor(Qt::transparent, defaultPixel);
 
-        m_datamanager = new KisDataManager(pixelSize, defaultPixel.data());
+        m_datamanager = new KisDataManager(pixelSize, defaultPixel);
+        delete[] defaultPixel;
+        
         Q_CHECK_PTR(m_datamanager);
     }
     m_d->cache.setupCache();

@@ -155,7 +155,9 @@ KoCompositeOpRegistry::KoIDList KoCompositeOpRegistry::getCompositeOps(const KoI
     KoIDMap::const_iterator end = beg + num;
     
     KoIDList list;
+#if QT_VERSION >= 0x040700
     list.reserve(num);
+#endif
     
     if(colorSpace) {
         for(; beg!=end; ++beg){ 

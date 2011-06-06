@@ -42,8 +42,7 @@
 #include <kis_paintop_settings_widget.h>
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
-
-#include <widgets/kis_small_preset_handler.h>
+#include <widgets/kis_preset_selector_strip.h>
 
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>

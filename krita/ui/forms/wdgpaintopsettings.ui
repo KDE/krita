@@ -115,7 +115,7 @@
       <number>3</number>
      </property>
      <item>
-      <widget class="WdgSmallPresetHandler" name="presetWidget" native="true">
+      <widget class="KisPresetSelectorStrip" name="presetWidget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -216,9 +216,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WdgSmallPresetHandler</class>
+   <class>KisPresetSelectorStrip</class>
    <extends>QWidget</extends>
-   <header>kis_small_preset_handler.h</header>
+   <header>kis_preset_selector_strip.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_small_preset_handler.h"
+#include "kis_preset_selector_strip.h"
 
 #include "KoResourceModel.h"
 #include "KoResourceItemView.h"
@@ -27,7 +27,7 @@
 #include <QtGui/QMouseEvent>
 #include <QtCore/QTimer>
 
-WdgSmallPresetHandler::WdgSmallPresetHandler(QWidget* parent)
+KisPresetSelectorStrip::KisPresetSelectorStrip(QWidget* parent)
                       : QWidget(parent)
 {
     setupUi(this);
@@ -41,9 +41,7 @@ WdgSmallPresetHandler::WdgSmallPresetHandler(QWidget* parent)
     refresher->setSingleShot(true);
     
     /* This is an heuristic to fill smallPresetChooser with only the presets
-     * for the paintop that comes selected by default: Pixel Brush.
-     * TODO this must be replaced by a more correct approach.
-     */
+     * for the paintop that comes selected by default: Pixel Brush. */
     const QString PIXEL_BRUSH_ID = "paintbrush";
     smallPresetChooser->setPresetFilter(KoID(PIXEL_BRUSH_ID));
     
@@ -58,18 +56,18 @@ WdgSmallPresetHandler::WdgSmallPresetHandler(QWidget* parent)
     connect(refresher, SIGNAL(timeout()), this, SLOT(repaintDeleteButton()));
 }
 
-WdgSmallPresetHandler::~WdgSmallPresetHandler()
+KisPresetSelectorStrip::~KisPresetSelectorStrip()
 {
     delete refresher;
 }
 
-void WdgSmallPresetHandler::showEvent(QShowEvent* event)
+void KisPresetSelectorStrip::showEvent(QShowEvent* event)
 {
     deletePresetBtn->hide();
     QWidget::showEvent(event);
 }
 
-void WdgSmallPresetHandler::currentPaintopChanged(QString paintOpID)
+void KisPresetSelectorStrip::currentPaintopChanged(QString paintOpID)
 {
     foreach (KoID paintOp, KisPaintOpRegistry::instance()->listKeys()) {
         if (paintOp.id() == paintOpID) {
@@ -80,21 +78,21 @@ void WdgSmallPresetHandler::currentPaintopChanged(QString paintOpID)
     deletePresetBtn->hide();
 }
 
-void WdgSmallPresetHandler::startRefreshingTimer()
+void KisPresetSelectorStrip::startRefreshingTimer()
 {
-    // Estimated time it takes for the ResourceView to scroll when a widget that's
-    // only partially visible becomes visible
+    // Estimated time it takes for the ResourceView to scroll when a widget
+    // that is only partially visible becomes visible
     refresher->start(450);
 }
 
-void WdgSmallPresetHandler::repaintDeleteButton()
+void KisPresetSelectorStrip::repaintDeleteButton()
 {
     if (deletePresetBtn->isVisible()) {
         prepareDeleteButton();
     }
 }
 
-void WdgSmallPresetHandler::prepareDeleteButton()
+void KisPresetSelectorStrip::prepareDeleteButton()
 {
     const quint8 HEURISTIC_OFFSET = 3;  // This number is just conjured out of the nether to make
                                         // things look good
@@ -111,7 +109,7 @@ void WdgSmallPresetHandler::prepareDeleteButton()
     deletePresetBtn->setVisible(true);
 }
 
-void WdgSmallPresetHandler::on_leftScrollBtn_pressed()
+void KisPresetSelectorStrip::on_leftScrollBtn_pressed()
 {
     // Deciding how far beyond the left margin (10 pixels) was an arbitrary decision
     QPoint beyondLeftMargin(-10, 0);
@@ -120,7 +118,7 @@ void WdgSmallPresetHandler::on_leftScrollBtn_pressed()
     deletePresetBtn->setVisible(false);
 }
 
-void WdgSmallPresetHandler::on_rightScrollBtn_pressed()
+void KisPresetSelectorStrip::on_rightScrollBtn_pressed()
 {
     // Deciding how far beyond the right margin to put the point (10 pixels) was an arbitrary decision
     QPoint beyondRightMargin(10 + antiOOPHack->viewport()->width(), 0);
@@ -129,10 +127,10 @@ void WdgSmallPresetHandler::on_rightScrollBtn_pressed()
     deletePresetBtn->setVisible(false);
 }
 
-void WdgSmallPresetHandler::on_deletePresetBtn_pressed()
+void KisPresetSelectorStrip::on_deletePresetBtn_pressed()
 {
     KoResourceItemChooser* veryAntiOOPHack = smallPresetChooser->findChild<KoResourceItemChooser*>();
     veryAntiOOPHack->slotButtonClicked(KoResourceItemChooser::Button_Remove);
 }
 
-#include "kis_small_preset_handler.moc"
+#include "kis_preset_selector_strip.moc"

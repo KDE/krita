@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>335</height>
+    <width>657</width>
+    <height>319</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -32,9 +32,6 @@
       </size>
      </property>
     </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="WdgSmallPresetHandler" name="presetWidget" native="true"/>
    </item>
    <item row="0" column="2" rowspan="2">
     <widget class="QFrame" name="frame">
@@ -64,30 +61,21 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" rowspan="2">
-    <widget class="QFrame" name="frmOptionWidgetContainer">
+   <item row="2" column="1">
+    <widget class="QPushButton" name="bnDefaultPreset">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
-       <verstretch>4</verstretch>
+       <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="maximumSize">
-      <size>
-       <width>100</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+     <property name="text">
+      <string>Default preset</string>
      </property>
     </widget>
    </item>
    <item row="2" column="2">
-    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_" stretch="0,0,0,0">
      <item>
       <widget class="QPushButton" name="fillLayer">
        <property name="text">
@@ -117,6 +105,88 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="0" column="1">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="WdgSmallPresetHandler" name="presetWidget" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>40</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Name:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="txtPreset">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Current brush definition</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="bnSave">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>save the current brush definition under this name</string>
+         </property>
+         <property name="text">
+          <string>&amp;Save to presets</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="1">
+    <widget class="QFrame" name="frmOptionWidgetContainer">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>4</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

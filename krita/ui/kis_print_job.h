@@ -20,9 +20,9 @@
 #ifndef KISPRINTJOB_H
 #define KISPRINTJOB_H
 
-#include <KoPrintingDialog.h>
 #include <kis_types.h>
 
+#include <KoPrintJob.h>
 
 class KisPrintJob : public KoPrintJob
 {

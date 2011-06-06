@@ -32,21 +32,16 @@ target_link_libraries(rtreetestapp komain ${QT_QTTEST_LIBRARY} )
 
 set(documentstructuretest_SRCS documentstructuretest.cpp )
 kde4_add_unit_test(DocumentStructureTest TESTNAME libs-komain-DocumentStructureTest ${documentstructuretest_SRCS})
-target_link_libraries(DocumentStructureTest komain  ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
+target_link_libraries(DocumentStructureTest komain  ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
 set(KoProgressUpdater_test_SRCS KoProgressUpdater_test.cpp )
 kde4_add_unit_test(KoProgressUpdaterTest TESTNAME libs-komain-KoProgressUpdaterTest ${KoProgressUpdater_test_SRCS})
-target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
+target_link_libraries(KoProgressUpdaterTest komain ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestAction_test_SRCS TestAction.cpp )
-kde4_add_unit_test(TestActionTest TESTNAME libs-komain-TestActionTest ${TestAction_test_SRCS})
-target_link_libraries(TestActionTest komain ${QT_QTTEST_LIBRARY} ${KDE4_THREADWEAVER_LIBRARIES})
-
-########### next target ###############
 
 set(findmatch_test_SRCS testfindmatch.cpp )
 kde4_add_unit_test(testfindmatch TESTNAME libs-komain-testfindmatch ${findmatch_test_SRCS})

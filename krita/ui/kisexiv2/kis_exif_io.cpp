@@ -37,6 +37,7 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 #include <kis_meta_data_schema_registry.h>
+#include <filters/libmsooxml/MsooXmlDiagramReader_p.h>
 
 struct KisExifIO::Private {
 };
@@ -46,7 +47,6 @@ struct KisExifIO::Private {
 // convert ExifVersion and FlashpixVersion to a KisMetaData value
 KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
 {
-    qDebug() << "tid" << value->typeId();
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
     if(dvalue)
     {
@@ -55,6 +55,7 @@ KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
         dvalue->copy((Exiv2::byte*)array.data());
         return KisMetaData::Value(QString(array));
     } else {
+        Q_ASSERT(value->typeId() == Exiv2::asciiString);
         return KisMetaData::Value(QString::fromAscii(value->toString().c_str()));
     }
 }
@@ -73,12 +74,18 @@ KisMetaData::Value exifArrayToKMDIntOrderedArray(const Exiv2::Value::AutoPtr val
 {
     QList<KisMetaData::Value> v;
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    Q_ASSERT(dvalue);
-    QByteArray array(dvalue->count(), 0);
-    dvalue->copy((Exiv2::byte*)array.data());
-    for (int i = 0; i < array.size(); i++) {
-        QChar c((char)array[i]);
-        v.push_back(KisMetaData::Value(QString(c).toInt(0)));
+    if(dvalue)
+    {
+        QByteArray array(dvalue->count(), 0);
+        dvalue->copy((Exiv2::byte*)array.data());
+        for (int i = 0; i < array.size(); i++) {
+            QChar c((char)array[i]);
+            v.push_back(KisMetaData::Value(QString(c).toInt(0)));
+        }
+    } else {
+        Q_ASSERT(value->typeId() == Exiv2::asciiString);
+        QString str = QString::fromAscii(value->toString().c_str());
+        v.push_back(KisMetaData::Value(str.toInt()));
     }
     return KisMetaData::Value(v, KisMetaData::Value::OrderedArray);
 }
@@ -230,7 +237,6 @@ KisMetaData::Value deviceSettingDescriptionExifToKMD(const Exiv2::Value::AutoPtr
     }
     int columns = (reinterpret_cast<quint16*>(array.data()))[0];
     int rows = (reinterpret_cast<quint16*>(array.data()))[1];
-    qDebug() << columns << rows;
     deviceSettingStructure["Columns"] = KisMetaData::Value(columns);
     deviceSettingStructure["Rows"] = KisMetaData::Value(rows);
     QList<KisMetaData::Value> settings;

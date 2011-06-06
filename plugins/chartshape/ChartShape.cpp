@@ -63,7 +63,7 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 
-// KOffice
+// Calligra
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoEmbeddedDocumentSaver.h>

@@ -178,8 +178,8 @@ void KoOdfLoadingContext::parseGenerator() const
             KoXmlElement generator = KoXml::namedItemNS(office, KoXmlNS::meta, "generator");
             if (!generator.isNull()) {
                 d->generator = generator.text();
-                if (d->generator.startsWith("KOffice")) {
-                    d->generatorType = KOffice;
+                if (d->generator.startsWith("Calligra")) {
+                    d->generatorType = Calligra;
                 }
                 // NeoOffice is a port of OpenOffice to Mac OS X
                 else if (d->generator.startsWith("OpenOffice.org") || d->generator.startsWith("NeoOffice") || d->generator.startsWith("LibreOffice")) {

@@ -52,4 +52,4 @@ install(TARGETS defaulttools DESTINATION ${PLUGIN_INSTALL_DIR})
 
 install( FILES defaulttools.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
-#kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )
+#kde4_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )

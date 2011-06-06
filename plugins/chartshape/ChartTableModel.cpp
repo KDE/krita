@@ -33,7 +33,7 @@
 // KDE
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>

@@ -36,7 +36,7 @@
 #include "KoID.h"
 
 #include "widgets/kis_cmb_idlist.h"
-#include "widgets/squeezedcombobox.h"// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with KOffice are expected to have a good path, but better warn the user in case
+#include "widgets/squeezedcombobox.h"// TODO: add a label that would display if there isn't a good color conversion path (use KoColorConversionSystem::isGoodPath), all color spaces shiped with Calligra are expected to have a good path, but better warn the user in case
 
 DlgColorSpaceConversion::DlgColorSpaceConversion(QWidget *  parent,
         const char * name)

@@ -84,7 +84,7 @@ Thesaurus::Thesaurus()
     KConfigGroup cfg = KGlobal::config()->group("");
     m_dataFile = cfg.readEntry("datafile");
     if (m_dataFile.isEmpty())
-        m_dataFile = KGlobal::dirs()->findResource("data", "koffice/thesaurus/thesaurus.txt");
+        m_dataFile = KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt");
     setCaption();
 
     m_noMatch = i18n("(No match)");
@@ -291,7 +291,7 @@ void Thesaurus::dialogClosed()
 void Thesaurus::slotChangeLanguage()
 {
     QString filename = KFileDialog::getOpenFileName(
-            KGlobal::dirs()->findResource("data", "koffice/thesaurus/thesaurus.txt"));
+            KGlobal::dirs()->findResource("data", "calligra/thesaurus/thesaurus.txt"));
     if (!filename.isNull()) {
         m_dataFile = filename;
         setCaption();

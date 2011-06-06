@@ -35,7 +35,7 @@
 #include <kstandarddirs.h>
 #include <KDebug>
 
-// KOffice
+// Calligra
 #include "KoUnit.h"
 #include "KoStore.h"
 #include "KoXmlNS.h"
@@ -188,7 +188,7 @@ void KoUnavailShape::draw(QPainter &painter) const
 
     // Get the question mark "icon".
     QPixmap questionMark;
-    questionMark.load(KStandardDirs::locate("data", "koffice/icons/questionmark.png"));
+    questionMark.load(KStandardDirs::locate("data", "calligra/icons/questionmark.png"));
 
     // The size of the image is:
     //  - the size of the shape if  shapesize < 2cm

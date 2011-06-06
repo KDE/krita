@@ -55,7 +55,7 @@ void KoPAPage::saveOdf( KoShapeSavingContext & context ) const
     paContext.xmlWriter().startElement( "draw:page" );
     paContext.xmlWriter().addAttribute( "draw:name", paContext.pageName( this ) );
     if (!name().isEmpty() && name() != paContext.pageName( this )) {
-        paContext.xmlWriter().addAttribute( "koffice:name", name() );
+        paContext.xmlWriter().addAttribute( "calligra:name", name() );
     }
     paContext.xmlWriter().addAttribute( "draw:id", "page" + QString::number( paContext.page() ) );
     paContext.xmlWriter().addAttribute( "draw:master-page-name", paContext.masterPageName( m_masterPage ) );
@@ -102,8 +102,8 @@ void KoPAPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &
         name = element.attributeNS( KoXmlNS::draw, "name" );
         loadingContext.addPage( name, this );
     }
-    if ( element.hasAttributeNS( KoXmlNS::koffice, "name" ) ) {
-        name = element.attributeNS( KoXmlNS::koffice, "name" );
+    if ( element.hasAttributeNS( KoXmlNS::calligra, "name" ) ) {
+        name = element.attributeNS( KoXmlNS::calligra, "name" );
     }
     setName( name );
 }

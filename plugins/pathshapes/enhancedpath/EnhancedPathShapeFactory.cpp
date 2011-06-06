@@ -194,7 +194,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-right-koffice";
+        t.icon = "arrow-right-calligra";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -227,7 +227,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-left-koffice";
+        t.icon = "arrow-left-calligra";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -260,7 +260,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-up-koffice";
+        t.icon = "arrow-up-calligra";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);
@@ -293,7 +293,7 @@ void EnhancedPathShapeFactory::addArrow()
         t.name = i18n("Arrow");
         t.family = "arrow";
         t.toolTip = i18n("An arrow");
-        t.icon = "arrow-down-koffice";
+        t.icon = "arrow-down-calligra";
         t.properties = dataToProperties(modifiers, commands, handles, formulae);
 
         addTemplate(t);

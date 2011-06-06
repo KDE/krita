@@ -25,7 +25,7 @@
 int main(int /*argc*/, char ** /*argv*/)
 {
     KComponentData componentData("filterchain_test");    // we need an instance when using the trader
-    KOfficeFilter::Graph g("application/x-kspread");
+    CalligraFilter::Graph g("application/x-kspread");
     g.dump();
     g.setSourceMimeType("application/x-kword");
     g.dump();
@@ -59,11 +59,11 @@ int main(int /*argc*/, char ** /*argv*/)
         chain->dump();
     }
 
-    // Try to find the closest KOffice part
+    // Try to find the closest Calligra part
     mimeType = "";
     chain = g.chain(manager, mimeType);
     if (!chain)
-        kDebug() << "It was already a KOffice part, OK";
+        kDebug() << "It was already a Calligra part, OK";
     else
         kError() << "We really got a chain? ugh :}" << endl;
 

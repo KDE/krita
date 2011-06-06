@@ -19,7 +19,7 @@
 
 #include "KoDeleteChangeMarker.h"
 
-//KOffice includes
+//Calligra includes
 #include <KoTextDocument.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
@@ -39,12 +39,12 @@
 #include <QPainter>
 
 /*********************************** ODF Bug Work-around code **********************************************/
-const QString KoDeleteChangeMarker::RDFListName("http://www.koffice.org/list#");
-const QString KoDeleteChangeMarker::RDFListItemName("http://www.koffice.org/list-item#");
+const QString KoDeleteChangeMarker::RDFListName("http://www.calligra-suite.org/list#");
+const QString KoDeleteChangeMarker::RDFListItemName("http://www.calligra-suite.org/list-item#");
 const QString KoDeleteChangeMarker::RDFListValidity("http://www.kofficde.org/list-status#valid");
-const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.koffice.org/list-item-status#valid");
-const QString KoDeleteChangeMarker::RDFListLevel("http://www.koffice.org/list-status#level");
-const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.koffice.org/deleteChangeMetadata");
+const QString KoDeleteChangeMarker::RDFListItemValidity("http://www.calligra-suite.org/list-item-status#valid");
+const QString KoDeleteChangeMarker::RDFListLevel("http://www.calligra-suite.org/list-status#level");
+const QString KoDeleteChangeMarker::RDFDeleteChangeContext("http://www.calligra-suite.org/deleteChangeMetadata");
 /***********************************************************************************************************/
 
 class KoDeleteChangeMarker::Private

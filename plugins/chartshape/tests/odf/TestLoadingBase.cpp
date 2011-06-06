@@ -29,7 +29,7 @@
 // KDE
 #include <qtest_kde.h>
 
-// KOffice
+// Calligra
 #include <KoStore.h>
 #include <KoOdfReadStore.h>
 #include <KoTextShapeDataBase.h>

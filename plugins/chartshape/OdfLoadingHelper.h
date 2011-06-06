@@ -26,7 +26,7 @@
 // Qt
 #include <QString>
 
-// KOffice
+// Calligra
 #include "KoSharedLoadingData.h"
 #include "KoXmlReader.h"
 

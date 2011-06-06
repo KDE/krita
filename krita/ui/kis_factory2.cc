@@ -139,8 +139,8 @@ const KComponentData &KisFactory2::componentData()
 
         s_instance->dirs()->addResourceType("kis_backgrounds", "data", "krita/backgrounds/");
 
-        // Tell the iconloader about share/apps/koffice/icons
-        KIconLoader::global()->addAppDir("koffice");
+        // Tell the iconloader about share/apps/calligra/icons
+        KIconLoader::global()->addAppDir("calligra");
     }
 
     return *s_instance;

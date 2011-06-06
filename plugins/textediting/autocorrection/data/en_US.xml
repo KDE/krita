@@ -799,7 +799,7 @@
     <item find="isnot" replace="is not" />
     <item find="jewelery" replace="jewelry" />
     <item find="kindergarden" replace="kindergarten" />
-    <item find="koffice" replace="KOffice" />
+    <item find="calligra" replace="Calligra" />
     <item find="libary" replace="library" />
     <item find="libray" replace="library" />
     <item find="liek" replace="like" />
@@ -4054,7 +4054,7 @@
     <word exception="Esq." />
   </UpperCaseExceptions>
   <TwoUpperLetterExceptions>
-    <word exception="KOffice" />
+    <word exception="Calligra" />
     <word exception="KWord" />
     <word exception="KSpread" />
     <word exception="KPresenter" />

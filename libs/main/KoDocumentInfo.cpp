@@ -21,7 +21,7 @@
 #include "KoDocumentInfo.h"
 
 #include "KoDocument.h"
-#include "kofficeversion.h"
+#include "calligraversion.h"
 #include "KoOdfWriteStore.h"
 
 #include <QDateTime>
@@ -121,7 +121,7 @@ bool KoDocumentInfo::saveOasis(KoStore* store)
 
     xmlWriter->startElement("meta:generator");
     xmlWriter->addTextNode(QString("Calligra/%1")
-                           .arg(KOFFICE_VERSION_STRING));
+                           .arg(CALLIGRA_VERSION_STRING));
     xmlWriter->endElement();
 
     if (!saveOasisAboutInfo(*xmlWriter))

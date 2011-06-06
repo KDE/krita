@@ -1,4 +1,4 @@
-/* This file is part of the KOffice libraries
+/* This file is part of the Calligra libraries
    Copyright (C) 2001 Werner Trobin <trobin@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@ Boston, MA 02110-1301, USA.
 #include "KoFilterVertex.h"
 #include "PriorityQueue_p.h"
 
-namespace KOfficeFilter {
+namespace CalligraFilter {
 
 Edge::Edge(Vertex* vertex, KoFilterEntry::Ptr filterEntry) :
         m_vertex(vertex), m_filterEntry(filterEntry), d(0)

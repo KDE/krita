@@ -157,7 +157,7 @@ public:
      * @param format the character format for the inline object.
      * @param pd the postscript-paintdevice that all text is rendered on. Use this for QFont and related
      *  classes so the inline object can be reused on any paintdevice.
-     * @param painter the painting object to paint on.  Note that unline many places in koffice painting
+     * @param painter the painting object to paint on.  Note that unline many places in calligra painting
      *    should happen at the position indicated by the rect, not at top-left.
      * @param rect the rectangle inside which the variable can paint itself.  Painting outside the rect
      *    will give varous problems with regards to repainting issues.

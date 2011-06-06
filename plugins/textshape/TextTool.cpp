@@ -1415,8 +1415,10 @@ void TextTool::repaintCaret()
         }
 
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        Q_ASSERT(textShape);
-        Q_ASSERT(textShape->textShapeData());
+        if (!textShape)
+            return;
+        if (!textShape->textShapeData());
+            return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());

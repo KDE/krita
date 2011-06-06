@@ -22,7 +22,6 @@
 #include <QWidget>
 #include "ui_wdgsmallpresethandler.h"
 
-
 class KoResourceItemView;
 
 class WdgSmallPresetHandler : public QWidget, public Ui::WdgSmallPresetHandler
@@ -31,11 +30,22 @@ class WdgSmallPresetHandler : public QWidget, public Ui::WdgSmallPresetHandler
     
 public:
     WdgSmallPresetHandler(QWidget *parent);
+    virtual ~WdgSmallPresetHandler();
+
+    virtual void showEvent(QShowEvent *event);
     
 public slots:
     void currentPaintopChanged(QString paintOpID);
-    
+    void startRefreshingTimer();
+    void repaintDeleteButton();
+
 private slots:
+    /**
+    * Properly position the delete button on the bottom right corner of the currently
+    * selected preset item
+    */
+    void prepareDeleteButton();
+    
     /**
     * Those button events scroll the preset strip to the left and to the right respectively.
     *
@@ -47,8 +57,15 @@ private slots:
     void on_leftScrollBtn_pressed();
     void on_rightScrollBtn_pressed();
     
+    /**
+    * This small button will hover over a preset when it is selected;
+    * and will remove it when pressed
+    */
+    void on_deletePresetBtn_pressed();
+    
 private:
     KoResourceItemView* antiOOPHack;
+    QTimer* refresher;
 };
 
 

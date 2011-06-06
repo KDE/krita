@@ -46,6 +46,8 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:
+    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
+    
     explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
@@ -87,18 +89,18 @@ public:
 
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
-
+    
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
 
-private slots:
+public slots:
     void slotButtonClicked( int button );
+    
+private slots:
     void activated ( const QModelIndex & index );
 
 private:
-    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
-
     void updateButtonState();
 
     /// Resource for a given model index

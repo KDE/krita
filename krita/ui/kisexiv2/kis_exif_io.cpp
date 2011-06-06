@@ -46,11 +46,17 @@ struct KisExifIO::Private {
 // convert ExifVersion and FlashpixVersion to a KisMetaData value
 KisMetaData::Value exifVersionToKMDValue(const Exiv2::Value::AutoPtr value)
 {
+    qDebug() << "tid" << value->typeId();
     const Exiv2::DataValue* dvalue = dynamic_cast<const Exiv2::DataValue*>(&*value);
-    Q_ASSERT(dvalue);
-    QByteArray array(dvalue->count(), 0);
-    dvalue->copy((Exiv2::byte*)array.data());
-    return KisMetaData::Value(QString(array));
+    if(dvalue)
+    {
+        Q_ASSERT(dvalue);
+        QByteArray array(dvalue->count(), 0);
+        dvalue->copy((Exiv2::byte*)array.data());
+        return KisMetaData::Value(QString(array));
+    } else {
+        return KisMetaData::Value(QString::fromAscii(value->toString().c_str()));
+    }
 }
 
 // convert from KisMetaData value to ExifVersion and FlashpixVersion

@@ -44,7 +44,7 @@ WdgSmallPresetHandler::WdgSmallPresetHandler(QWidget* parent)
 
 void WdgSmallPresetHandler::currentPaintopChanged(QString paintOpID)
 {
-    foreach(KoID paintOp, KisPaintOpRegistry::instance()->listKeys() ) {
+    foreach (KoID paintOp, KisPaintOpRegistry::instance()->listKeys()) {
         if (paintOp.id() == paintOpID) {
             smallPresetChooser->setPresetFilter(paintOp);
             break;

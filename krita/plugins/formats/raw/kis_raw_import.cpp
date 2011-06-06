@@ -51,7 +51,6 @@ KisRawImport::KisRawImport(QObject *parent, const QVariantList &)
     QWidget* widget = new QWidget;
     m_rawWidget.setupUi(widget);
     m_dialog->setMainWidget(widget);
-
     connect(m_rawWidget.pushButtonUpdate, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
 }
 
@@ -168,6 +167,7 @@ void KisRawImport::slotUpdatePreview()
 {
     QByteArray imageData;
     RawDecodingSettings settings = rawDecodingSettings();
+    settings.sixteenBitsImage =  false;
     int width, height, rgbmax;
     KDcraw dcraw;
     dcraw.decodeHalfRAWImage(m_chain->inputFile(), settings, imageData, width, height, rgbmax);
@@ -175,12 +175,8 @@ void KisRawImport::slotUpdatePreview()
     for (int y = 0; y < height; ++y) {
         QRgb *pixel= reinterpret_cast<QRgb *>(image.scanLine(y));
         for (int x = 0; x < width; ++x) {
-            quint16* ptr = ((quint16*)imageData.data()) + (y * width + x) * 3;
-#if KDCRAW_VERSION < 0x000400
-            pixel[x] = qRgb(ptr[0] & 0xFF, ptr[1] & 0xFF, ptr[2]  & 0xFF);
-#else
-            pixel[x] = qRgb(ptr[0] / 0xFF, ptr[1] / 0xFF, ptr[2] / 0xFF);
-#endif
+            quint8* ptr = ((quint8*)imageData.data()) + (y * width + x) * 3;
+            pixel[x] = qRgb(ptr[0], ptr[1], ptr[2]);
         }
     }
     m_rawWidget.preview->setPixmap(QPixmap::fromImage(image));

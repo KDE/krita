@@ -118,8 +118,8 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     find_package(OpenCTL)
     find_package(OpenShiva)
     find_package(QtShiva )
-
-    if(NOT OPENCTL_FOUND VERSION_GREATER 0.9.15.1 )
+    
+    if(NOT ${OPENCTL_VERSION} VERSION_GREATER 0.9.15.1 )
         # Workaround for the following issues:
         # http://bugs.kde.org/274675 http://bugs.kde.org/248051
         # http://redmine.opengtl.org/issues/72

@@ -1,3 +1,5 @@
+
+set(MAPS_PLUG koreport_mapsplugin)
 include_directories( ${KOMAIN_INCLUDES}
 ${KOODF_INCLUDES}
 ${CMAKE_SOURCE_DIR}/libs/
@@ -16,12 +18,12 @@ set(koreport_mapsplugin_LIB_SRCS
     krscriptmaps.cpp
 )
 
-kde4_add_plugin(koreport_mapsplugin ${koreport_mapsplugin_LIB_SRCS})
+kde4_add_plugin(${MAPS_PLUG} ${koreport_mapsplugin_LIB_SRCS})
 
-target_link_libraries(koreport_mapsplugin ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport ${KOPROPERTY_LIBS})
+target_link_libraries(${MAPS_PLUG} ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} koreport ${KOPROPERTY_LIBS})
 
 
 ########### install files ###############
 
-install(TARGETS koreport_mapsplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS ${MAPS_PLUG}  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  koreport_mapsplugin.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

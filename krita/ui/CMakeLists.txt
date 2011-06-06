@@ -158,6 +158,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_progress_widget.cpp
     widgets/kis_selection_options.cc 
     widgets/kis_scratch_pad.cpp
+    widgets/kis_preset_selector_strip.cpp
     widgets/kis_tree_view_popup.cc 
     widgets/kis_slider_spin_box.cpp
     widgets/kis_wdg_generator.cpp
@@ -222,6 +223,7 @@ kde4_add_ui_files(kritaui_LIB_SRCS
     forms/wdgpaintactioneditor.ui
     forms/wdgmultipliersdoublesliderspinbox.ui
     forms/wdgnodequerypatheditor.ui
+    forms/wdgpresetselectorstrip.ui
 )
 
 kde4_add_library(kritaui SHARED ${kritaui_LIB_SRCS} )

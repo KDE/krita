@@ -184,18 +184,19 @@ KisPaintopBox::KisPaintopBox(KisView2 * view, QWidget *parent, const char * name
     updatePaintops(view->image()->colorSpace());
     setCurrentPaintop(defaultPaintOp());
 
-    connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))         , SLOT(slotSetPaintop(QString)));
-    connect(m_presetsPopup       , SIGNAL(savePresetClicked())               , SLOT(slotSaveActivePreset()));
-    connect(m_presetsPopup       , SIGNAL(defaultPresetClicked())            , SLOT(slotSetupDefaultPreset()));
-    connect(m_presetsPopup       , SIGNAL(presetNameLineEditChanged(QString)), SLOT(slotWatchPresetNameLineEdit(QString)));
-    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))     , SLOT(resourceSelected(KoResource*)));
-    connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))   , SLOT(slotNodeChanged(const KisNodeSP)));
-    connect(m_sliderOpacity      , SIGNAL(valueChanged(qreal))               , SLOT(slotOpacityChanged(qreal)));
-    connect(m_paletteButton      , SIGNAL(clicked())                         , SLOT(slotSaveToFavouriteBrushes()));
-    connect(m_cmbCompositeOp     , SIGNAL(activated(int))                    , SLOT(slotSetCompositeMode(int)));
-    connect(eraseAction          , SIGNAL(triggered(bool))                   , SLOT(slotToggleEraseMode(bool)));
-    connect(hMirrorAction        , SIGNAL(triggered(bool))                   , SLOT(slotHorizontalMirrorChanged(bool)));
-    connect(vMirrorAction        , SIGNAL(triggered(bool))                   , SLOT(slotVerticalMirrorChanged(bool)));
+    connect(m_presetsPopup       , SIGNAL(paintopActivated(QString))          , SLOT(slotSetPaintop(QString)));
+    connect(m_presetsPopup       , SIGNAL(savePresetClicked())                , SLOT(slotSaveActivePreset()));
+    connect(m_presetsPopup       , SIGNAL(defaultPresetClicked())             , SLOT(slotSetupDefaultPreset()));
+    connect(m_presetsPopup       , SIGNAL(presetNameLineEditChanged(QString)) , SLOT(slotWatchPresetNameLineEdit(QString)));
+    connect(m_presetsPopup       , SIGNAL(signalResourceSelected(KoResource*)), SLOT(resourceSelected(KoResource*)));
+    connect(m_presetsChooserPopup, SIGNAL(resourceSelected(KoResource*))      , SLOT(resourceSelected(KoResource*)));
+    connect(m_resourceProvider   , SIGNAL(sigNodeChanged(const KisNodeSP))    , SLOT(slotNodeChanged(const KisNodeSP)));
+    connect(m_sliderOpacity      , SIGNAL(valueChanged(qreal))                , SLOT(slotOpacityChanged(qreal)));
+    connect(m_paletteButton      , SIGNAL(clicked())                          , SLOT(slotSaveToFavouriteBrushes()));
+    connect(m_cmbCompositeOp     , SIGNAL(activated(int))                     , SLOT(slotSetCompositeMode(int)));
+    connect(eraseAction          , SIGNAL(triggered(bool))                    , SLOT(slotToggleEraseMode(bool)));
+    connect(hMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotHorizontalMirrorChanged(bool)));
+    connect(vMirrorAction        , SIGNAL(triggered(bool))                    , SLOT(slotVerticalMirrorChanged(bool)));
 
     //Needed to connect canvas to favoriate resource manager
     m_view->canvasBase()->createFavoriteResourceManager(this);

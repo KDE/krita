@@ -122,8 +122,8 @@ void WdgSmallPresetHandler::on_leftScrollBtn_pressed()
 
 void WdgSmallPresetHandler::on_rightScrollBtn_pressed()
 {
-    // Deciding how far beyond the right margin to put the point (3 pixels) was an arbitrary decision
-    QPoint beyondRightMargin(3 + antiOOPHack->viewport()->width(), 0);
+    // Deciding how far beyond the right margin to put the point (10 pixels) was an arbitrary decision
+    QPoint beyondRightMargin(10 + antiOOPHack->viewport()->width(), 0);
     antiOOPHack->scrollTo(antiOOPHack->indexAt(beyondRightMargin), QAbstractItemView::EnsureVisible);
     
     deletePresetBtn->setVisible(false);

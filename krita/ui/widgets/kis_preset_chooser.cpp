@@ -257,7 +257,8 @@ void KisPresetChooser::updateViewSettings()
         m_delegate->setShowText(true);
     } else if (m_mode == STRIP) {
         m_chooser->setRowCount(1);
-        m_chooser->setColumnWidth(m_chooser->viewSize().height());
+        // An offset of 7 keeps the cell exactly square, TODO: use constants, not hardcoded numbers
+        m_chooser->setColumnWidth(m_chooser->viewSize().height() - 7);
         m_delegate->setShowText(false);
     }
     

@@ -10,47 +10,35 @@
     <height>348</height>
    </rect>
   </property>
-  <layout class="QGridLayout">
-   <property name="topMargin">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
     <number>0</number>
    </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <property name="verticalSpacing">
-    <number>0</number>
-   </property>
-   <item row="0" column="0">
-    <layout class="QHBoxLayout">
+   <item>
+    <layout class="QHBoxLayout" name="hbox2">
      <property name="margin">
       <number>0</number>
      </property>
      <item>
-      <widget class="KisCmbComposite" name="cmbComposite" native="true">
+      <widget class="KisCompositeOpComboBox" name="cmbComposite"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hbox3">
+     <item>
+      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>10</height>
+         <width>10</width>
+         <height>15</height>
         </size>
-       </property>
-       <property name="toolTip">
-        <string>Blending mode</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="KisDoubleSliderSpinBox" name="doubleOpacity" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
        </property>
       </widget>
      </item>
@@ -59,7 +47,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item>
     <widget class="KoDocumentSectionView" name="listLayers" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -69,8 +57,8 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout">
+   <item>
+    <layout class="QHBoxLayout" name="hbox1">
      <item>
       <widget class="QToolButton" name="bnAdd">
        <property name="sizePolicy">
@@ -259,8 +247,8 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>KisCmbComposite</class>
-   <extends>QWidget</extends>
+   <class>KisCompositeOpComboBox</class>
+   <extends>QComboBox</extends>
    <header>widgets/kis_cmb_composite.h</header>
   </customwidget>
   <customwidget>

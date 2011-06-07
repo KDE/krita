@@ -32,6 +32,7 @@
 #include <kis_brush_option_widget.h>
 #include "kis_spray_shape_dynamics.h"
 #include <kis_airbrush_option.h>
+#include <kis_compositeop_option.h>
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
         : KisPaintOpOptionsWidget(parent)
@@ -42,8 +43,9 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     m_ColorOption = new KisColorOption();
     m_brushOption = new KisBrushOptionWidget();
 
-    addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_brushOption);
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(m_sprayOption);
     addPaintOpOption(m_sprayShapeOption);
     addPaintOpOption(m_sprayShapeDynamicOption);
     addPaintOpOption(m_ColorOption);

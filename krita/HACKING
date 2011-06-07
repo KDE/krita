@@ -4,6 +4,8 @@ dislikes. Me, (Boudewijn that is), I like indents of four spaces, and
 no scope prefixes for variables. However, in the interests of
 consistency, these are the rules new code should adhere to:
 
+See also http://techbase.kde.org/Policies/Kdelibs_Coding_Style -- that document
+is leading.
 
 Indentation
 

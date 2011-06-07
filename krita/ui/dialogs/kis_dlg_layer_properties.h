@@ -58,7 +58,7 @@ public:
 
     QString getName() const;
     qint32 getOpacity() const;
-    const QString& getCompositeOp() const;
+    QString getCompositeOp() const;
 
     /**
      * @return a bit array of channel flags in the order in which the

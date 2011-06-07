@@ -777,8 +777,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (tabStopDistance <= 0) {
         tabStopDistance = m_documentLayout->defaultTabSpacing();
     }
-    tabStopDistance *= qt_defaultDpiY() / 72.;
-    option.setTabStop(tabStopDistance);
 
     QList<KoText::Tab> tabs = format.tabPositions();
     qreal tabOffset = - left();
@@ -788,8 +786,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     } else {
         tabOffset -= (m_isRtl ? rightMargin : (leftMargin + m_indent));
     }
+
     // Set up a var to keep track of where last added tab is. Conversion of tabOffset is required because Qt thinks in device units and we don't
-    qreal position = tabOffset * qt_defaultDpiY() / 72.;
+    qreal position = tabOffset;
 
     if (!tabs.isEmpty()) {
         //unfortunately the tabs are not guaranteed to be ordered, so lets do that ourselves
@@ -801,8 +800,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     // Since we might have tabs relative to first indent we need to always specify a lot of
     // regular interval tabs (relative to the indent naturally)
     // So first figure out where the first regular interval tab should be.
-    position -= tabOffset * qt_defaultDpiY() / 72.;
-    position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset * qt_defaultDpiY() / 72.;
+    position = tabOffset;
+    position = (int(position / tabStopDistance) + 1) * tabStopDistance + tabOffset;
     for(int i=0 ; i<16; ++i) { // let's just add 16 but we really should limit to pagewidth
         KoText::Tab tab;
 
@@ -816,16 +815,17 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     ///@TODO: don't do this kind of conversion, we lose data for layout.
     foreach (KoText::Tab kTab, tabs) {
 #if QT_VERSION >= 0x040700
-        qTabs.append(QTextOption::Tab(kTab.position, kTab.type, kTab.delimiter));
+        qTabs.append(QTextOption::Tab((kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1, kTab.type, kTab.delimiter));
 #else
         QTextOption::Tab tab;
-        tab.position = kTab.position;
+        tab.position = (kTab.position + tabOffset) * qt_defaultDpiY() / 72. -1;
         tab.type = kTab.type;
         tab.delimiter = kTab.delimiter;
         qTabs.append(tab);
 #endif
     }
     option.setTabs(qTabs);
+    option.setTabStop(tabStopDistance * qt_defaultDpiY() / 72.);
 
     //Now once we know the physical context we can work on the borders of the paragraph
     handleBordersAndSpacing(blockData, &block);

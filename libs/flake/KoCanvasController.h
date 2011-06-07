@@ -325,7 +325,7 @@ private:
 class FLAKE_EXPORT KoCanvasControllerProxyObject : public QObject
 {
     Q_OBJECT
-    Q_DISABLE_COPY(KoCanvasControllerProxyObject);
+    Q_DISABLE_COPY(KoCanvasControllerProxyObject)
 public:
     KoCanvasControllerProxyObject(KoCanvasController *canvasController, QObject *parent = 0);
 

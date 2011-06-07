@@ -133,7 +133,7 @@ KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
 ///@TODO: move to KoUnit ?
 KOTEXT_EXPORT QTextLength parseLength (const QString &length);
-};
+}
 
 Q_DECLARE_METATYPE(KoText::Tab)
 

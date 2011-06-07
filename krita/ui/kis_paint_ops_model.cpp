@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,100 +19,55 @@
  */
 
 #include "kis_paint_ops_model.h"
-#include <kis_paintop_factory.h>
 
-#include <kcategorizedsortfilterproxymodel.h>
 #include "kis_debug.h"
 #include <kis_paintop_registry.h>
-#include "kis_factory2.h"
+#include <kis_paintop_factory.h>
 #include <kstandarddirs.h>
+#include "kis_factory2.h"
 
-static const QString DEFAULT_PAINTOP = "paintbrush";
-static QStringList categories;
+bool categorySortFunc(const QString& a, const QString& b) {
+    return a > b;
+}
 
-KisPaintOpsModel::KisPaintOpsModel(const QList<KisPaintOpFactory*>& list)
+QVariant KisPaintOpListModel::data(const QModelIndex& idx, int role) const
 {
-    QString fileName;
-    foreach(KisPaintOpFactory* op, list) {
-        fileName = KisFactory2::componentData().dirs()->findResource("kis_images", op->pixmap());
-        QPixmap pixmap(fileName);
-        if (pixmap.isNull()){
+    if(idx.isValid() && role == Qt::DecorationRole) {
+        BaseClass::Index index = getIndex(idx.row());
+        
+        if(!BaseClass::isHeader(index))
+            return BaseClass::m_categories[index.first].entries[index.second].data.icon;
+        
+        return QVariant();
+    }
+    
+    return BaseClass::data(idx, role);
+}
+
+void KisPaintOpListModel::fill(const QList<KisPaintOpFactory*>& list)
+{
+    BaseClass::clear();
+    
+    typedef QList<KisPaintOpFactory*>::const_iterator Iterator;
+    
+    for(Iterator itr=list.begin(); itr!=list.end(); ++itr) {
+        KisPaintOpFactory* op       = *itr;
+        QString            fileName = KisFactory2::componentData().dirs()->findResource("kis_images", op->pixmap());
+        QPixmap            pixmap(fileName);
+        
+        if(pixmap.isNull()){
             pixmap = QPixmap(22,22);
             pixmap.fill();
         }
-        m_list.push_back(PaintOpInfo(op->id(), op->name(), op->category(), pixmap, op->priority()));
-    }
-
-    qSort(m_list);
-    
-    if (categories.isEmpty()){
-        categories << KisPaintOpFactory::categoryStable() << KisPaintOpFactory::categoryExperimental();
+        
+        BaseClass::addEntry(op->category(), KisPaintOpInfo(op->id(), op->name(), op->category(), pixmap, op->priority()));
     }
     
+    BaseClass::sortCategories(categorySortFunc);
+    BaseClass::sortEntries();
 }
 
-KisPaintOpsModel::~KisPaintOpsModel()
+int KisPaintOpListModel::indexOf(const KisPaintOpFactory* op) const
 {
-}
-
-int KisPaintOpsModel::rowCount(const QModelIndex & /*parent*/) const
-{
-    return m_list.count();
-}
-
-QVariant KisPaintOpsModel::data(const QModelIndex & index, int role) const
-{
-    if (index.isValid()) {
-        switch (role) {
-        case Qt::DisplayRole: {
-            return m_list[index.row()].name;
-        }
-        case Qt::DecorationRole:{
-            return m_list[index.row()].icon;
-        }
-
-        case PaintOpSortRole: {
-            return index.row();
-        }
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-            return m_list[index.row()].category;
-        case KCategorizedSortFilterProxyModel::CategorySortRole:
-            int idx = categories.indexOf(m_list[index.row()].category);
-            if (idx == -1){ 
-                return categories.count();
-            }
-            return idx;
-        }
-    }
-    return QVariant();
-}
-
-const QString& KisPaintOpsModel::itemAt(const QModelIndex & index) const
-{
-    if (!index.isValid()) return DEFAULT_PAINTOP;
-    return m_list[index.row()].id;
-}
-
-QModelIndex KisPaintOpsModel::indexOf(const KisPaintOpFactory* op) const
-{
-    if (!op) return QModelIndex();
-
-    return indexOf(op->id());
-}
-
-QModelIndex KisPaintOpsModel::indexOf(const QString& id) const
-{
-    int index = 0;
-    foreach(const PaintOpInfo&  op2, m_list) {
-        if (id == op2.id)
-            break;
-        ++index;
-    }
-    
-    if (index < m_list.count()) {
-        return createIndex(index, 0);
-    } else {
-        return QModelIndex();
-    }
-
+    return BaseClass::indexOf(KisPaintOpInfo(op->id(), op->category())).row();
 }

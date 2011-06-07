@@ -55,7 +55,7 @@ class KoPrintingDialogPrivate;
  * with the painter().
  *
  * XXX: preparePage(int) is no longer pure virtual! Only KSpread reimplements it -- what should be changed
- *      to the docs? (BSAR) 
+ *      to the docs? (BSAR)
  *
  * This typically means that the preparePage() makes sure the shapeManager is updated and the correct cliprect
  * is set on the painter().
@@ -89,6 +89,10 @@ public:
     QPrinter &printer();
 
 public slots:
+
+    /**
+     * @see KoPrintJob::startPrinting
+     */
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
@@ -147,6 +151,10 @@ private:
     Q_PRIVATE_SLOT(d, void printPage(const QVariant &page))
     Q_PRIVATE_SLOT(d, void stopPressed())
 };
+
+
+
+
 
 #endif
 

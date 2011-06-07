@@ -717,9 +717,12 @@ void KoParagraphStyle::setTopMargin(QTextLength topMargin)
     setProperty(QTextFormat::BlockTopMargin, topMargin);
 }
 
-QTextLength KoParagraphStyle::topMargin() const
+qreal KoParagraphStyle::topMargin() const
 {
-    return propertyLength(QTextFormat::BlockTopMargin);
+    if (parentStyle())
+        return propertyLength(QTextFormat::BlockTopMargin).value(parentStyle()->topMargin());
+    else
+        return propertyLength(QTextFormat::BlockTopMargin).value(0);
 }
 
 void KoParagraphStyle::setBottomMargin(QTextLength margin)
@@ -727,9 +730,12 @@ void KoParagraphStyle::setBottomMargin(QTextLength margin)
     setProperty(QTextFormat::BlockBottomMargin, margin);
 }
 
-QTextLength KoParagraphStyle::bottomMargin() const
+qreal KoParagraphStyle::bottomMargin() const
 {
-    return propertyLength(QTextFormat::BlockBottomMargin);
+    if (parentStyle())
+        return propertyLength(QTextFormat::BlockBottomMargin).value(parentStyle()->topMargin());
+    else
+        return propertyLength(QTextFormat::BlockBottomMargin).value(0);
 }
 
 void KoParagraphStyle::setLeftMargin(QTextLength margin)
@@ -737,9 +743,12 @@ void KoParagraphStyle::setLeftMargin(QTextLength margin)
     setProperty(QTextFormat::BlockLeftMargin, margin);
 }
 
-QTextLength KoParagraphStyle::leftMargin() const
+qreal KoParagraphStyle::leftMargin() const
 {
-    return propertyLength(QTextFormat::BlockLeftMargin);
+    if (parentStyle())
+        return propertyLength(QTextFormat::BlockLeftMargin).value(parentStyle()->topMargin());
+    else
+        return propertyLength(QTextFormat::BlockLeftMargin).value(0);
 }
 
 void KoParagraphStyle::setRightMargin(QTextLength margin)
@@ -747,9 +756,12 @@ void KoParagraphStyle::setRightMargin(QTextLength margin)
     setProperty(QTextFormat::BlockRightMargin, margin);
 }
 
-QTextLength KoParagraphStyle::rightMargin() const
+qreal KoParagraphStyle::rightMargin() const
 {
-    return propertyLength(QTextFormat::BlockRightMargin);
+    if (parentStyle())
+        return propertyLength(QTextFormat::BlockRightMargin).value(parentStyle()->topMargin());
+    else
+        return propertyLength(QTextFormat::BlockRightMargin).value(0);
 }
 
 void KoParagraphStyle::setMargin(QTextLength margin)
@@ -1248,7 +1260,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
             if (lineHeight.indexOf('%') > -1) { // percent value is between 50% and 200%
                 bool ok;
                 const int percent = lineHeight.remove('%').toInt(&ok);
-                if (ok && percent >= 0) {
+                if (ok) {
                     setLineHeightPercent(percent);
                 }
             }
@@ -1844,7 +1856,7 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             && keys.contains(QTextFormat::BlockBottomMargin) && keys.contains(QTextFormat::BlockTopMargin))
     {
         if ((leftMargin() == rightMargin()) && (topMargin() == bottomMargin()) && (rightMargin() == topMargin())) {
-            style.addPropertyLength("fo:margin", leftMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin", propertyLength(QTextFormat::BlockLeftMargin), KoGenStyle::ParagraphType);
             keys.removeOne(QTextFormat::BlockLeftMargin);
             keys.removeOne(QTextFormat::BlockRightMargin);
             keys.removeOne(QTextFormat::BlockTopMargin);
@@ -1927,13 +1939,13 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
         
         // Margin
         } else if (key == QTextFormat::BlockLeftMargin) {
-            style.addPropertyLength("fo:margin-left", leftMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-left", propertyLength(QTextFormat::BlockLeftMargin), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockRightMargin) {
-            style.addPropertyLength("fo:margin-right", rightMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-right", propertyLength(QTextFormat::BlockRightMargin), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockTopMargin) {
-            style.addPropertyLength("fo:margin-top", topMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-top", propertyLength(QTextFormat::BlockTopMargin), KoGenStyle::ParagraphType);
         } else if (key == QTextFormat::BlockBottomMargin) {
-            style.addPropertyLength("fo:margin-bottom", bottomMargin(), KoGenStyle::ParagraphType);
+            style.addPropertyLength("fo:margin-bottom", propertyLength(QTextFormat::BlockBottomMargin), KoGenStyle::ParagraphType);
         
         // Line spacing
         } else if ( key == KoParagraphStyle::MinimumLineHeight ||
@@ -1948,10 +1960,10 @@ void KoParagraphStyle::saveOdf(KoGenStyle &style, KoGenStyles &mainStyles)
             } else if (key == KoParagraphStyle::LineSpacing && lineSpacing() != 0) {
                 style.addPropertyPt("style:line-spacing", lineSpacing(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::PercentLineHeight && lineHeightPercent() > 0) {
+            } else if (key == KoParagraphStyle::PercentLineHeight) {
                 style.addProperty("fo:line-height", QString("%1%").arg(lineHeightPercent()), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
-            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() > 0) {
+            } else if (key == KoParagraphStyle::FixedLineHeight && lineHeightAbsolute() >= 0) {
                 style.addPropertyPt("fo:line-height", lineHeightAbsolute(), KoGenStyle::ParagraphType);
                 writtenLineSpacing = true;
             } else if (key == KoParagraphStyle::LineSpacingFromFont && lineHeightAbsolute() == 0) {

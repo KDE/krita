@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -45,7 +46,8 @@ public:
     
     enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
-        DETAIL  /// Shows thumbsnails with text next to it
+        DETAIL,  /// Shows thumbsnails with text next to it
+        STRIP  /// Shows thumbnails arranged in a single row
     };
     
     ///Set id for paintop to be accept by the proxy model
@@ -55,6 +57,10 @@ public:
     void setViewMode(ViewMode mode);
 
     void updateViewSettings();
+    
+    void showButtons(bool show);
+    
+    
 signals:
     void resourceSelected( KoResource * resource );
     

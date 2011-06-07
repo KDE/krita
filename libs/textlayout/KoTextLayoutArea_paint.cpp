@@ -133,6 +133,9 @@ void KoTextLayoutArea::paint(QPainter *painter, const KoTextDocumentLayout::Pain
 
         QTextLayout *layout = block.layout();
         KoTextBlockBorderData *border = 0;
+
+        if (blockIndex >= m_blockRects.count())
+            break;
         QRectF br = m_blockRects[blockIndex];
         ++blockIndex;
 

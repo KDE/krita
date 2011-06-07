@@ -65,7 +65,7 @@ public:
         NumberHeadingRows,      ///< Count the number of heading rows
         Visible,                ///< If true, the table is visible
         PageNumber,             ///< The page number that is applied after the page break
-        TextProgressionDirection,   ///< The direction of the text in the table
+        TextProgressionDirection    ///< The direction of the text in the table
     };
 
     /// Constructor
@@ -121,19 +121,19 @@ public:
     /// duplicated property from QTextBlockFormat
     void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
-    QTextLength topMargin() const;
+    qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
     void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength bottomMargin() const;
+    qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength leftMargin() const;
+    qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
     void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength rightMargin() const;
+    qreal rightMargin() const;
     /// set the margin around the table, making the margin on all sides equal.
     void setMargin(QTextLength margin);
 

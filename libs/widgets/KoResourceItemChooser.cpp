@@ -3,6 +3,7 @@
    Copyright (c) 2007 Jan Hambrecht <jaham@gmx.net>
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -201,6 +202,18 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
+void KoResourceItemChooser::setRowCount( int rowCount )
+{
+    int resourceCount = d->model->resourceServerAdapter()->resources().count();
+    d->model->setColumnCount( static_cast<qreal>(resourceCount) / rowCount );
+    //Force an update to get the right row height (in theory)
+    QRect geometry = d->view->geometry();
+    d->view->setViewMode(KoResourceItemView::FIXED_ROWS);
+    d->view->setGeometry(geometry.adjusted(0, 0, 0, 1));
+    d->view->setGeometry(geometry);
+}
+
+
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
@@ -213,6 +226,11 @@ void KoResourceItemChooser::setColumnCount( int columnCount )
 void KoResourceItemChooser::setRowHeight( int rowHeight )
 {
     d->view->verticalHeader()->setDefaultSectionSize( rowHeight );
+}
+
+void KoResourceItemChooser::setColumnWidth( int columnWidth )
+{
+    d->view->horizontalHeader()->setDefaultSectionSize( columnWidth );
 }
 
 void KoResourceItemChooser::setItemDelegate( QAbstractItemDelegate * delegate )

@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
  *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,67 +18,63 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_PAINT_OPS_MODEL_H_
-#define _KIS_PAINT_OPS_MODEL_H_
+#ifndef _KIS_PAINTOP_LIST_MODEL_H_
+#define _KIS_PAINTOP_LIST_MODEL_H_
 
 #include <QAbstractListModel>
 #include <QPixmap>
+#include <krita_export.h>
+#include "kis_categorized_list_model.h"
 
 class KisPaintOpFactory;
 
-/**
- * This model can be use to show a list of paint ops in a list view.
- */
-class KisPaintOpsModel : public QAbstractListModel
+struct KRITAUI_EXPORT KisPaintOpInfo
 {
-public:
+    KisPaintOpInfo() { }
+    KisPaintOpInfo(const KisPaintOpInfo& v):
+        id(v.id),  name(v.name), category(v.category), icon(v.icon), priority(v.priority) { }
     
-    enum AdditionalRoles {
-        PaintOpSortRole = 0xF1DFDB
-    };
+    KisPaintOpInfo(const QString& _id, const QString& _name, const QString& _category, const QPixmap& _icon, qint32 _priority):
+        id(_id),  name(_name), category(_category), icon(_icon), priority(_priority) { }
     
-public:
+    KisPaintOpInfo(const QString& _id):
+        id(_id) { }
     
-    KisPaintOpsModel(const QList<KisPaintOpFactory*>& list);
-    ~KisPaintOpsModel();
+        KisPaintOpInfo(const QString& _id, const QString& _category) :
+            id(_id), category(_category) { }
     
-    int rowCount(const QModelIndex & parent = QModelIndex()) const;
-    QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
+    bool operator==(const KisPaintOpInfo info) const{
+        return (info.id == id);// && (info.category == category); //((info.id == id) && (info.name == name) && (info.category == category) && (info.priority == priority));
+    }
     
-    const QString& itemAt(const QModelIndex & index) const;
-    QModelIndex indexOf(const KisPaintOpFactory*) const;
-    /**
-     * @return the index for the given paint op id
-     */
-    QModelIndex indexOf(const QString&) const;
-
+    bool operator<( const KisPaintOpInfo& other ) const{
+        if(priority < other.priority)
+            return true;
+        else if((priority == other.priority) && (name < other.name))
+            return true;
     
-private:
-    struct PaintOpInfo {
-        PaintOpInfo(QString _id, QString _name, QString _category, QPixmap _icon, int _priority) : id(_id), name(_name), category(_category), icon(_icon), priority(_priority) {}
-        QString id;
-        QString name;
-        QString category;
-        QPixmap icon;
-        int priority;
-
-        bool operator==(const PaintOpInfo info) const
-        {
-            return ((info.id == id) && (info.name == name) && (info.category == category) && (info.priority == priority));
-        }
-        
-        bool operator<( const PaintOpInfo & other ) const{
-            if (priority < other.priority) {
-                return true;
-            } else
-            if ((priority == other.priority) && (name < other.name)) {
-                return true;
-            }
-            return false;
-        }
-    };
+        return false;
+    }
     
-    QList< PaintOpInfo > m_list;
+    QString id;
+    QString name;
+    QString category;
+    QPixmap icon;
+    qint32  priority;
 };
 
-#endif
+class KRITAUI_EXPORT KisPaintOpListModel: public KisCategorizedListModel<QString,KisPaintOpInfo>
+{
+    typedef KisCategorizedListModel<QString,KisPaintOpInfo> BaseClass;
+    
+public:
+    virtual QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const;
+    void fill(const QList<KisPaintOpFactory*>& list);
+    int indexOf(const KisPaintOpFactory* op) const;
+    using BaseClass::indexOf;
+    
+    virtual QString categoryToString (const QString&        val) const { return val;      }
+    virtual QString entryToString    (const KisPaintOpInfo& val) const { return val.name; }
+};
+
+#endif //_KIS_PAINTOP_LIST_MODEL_H_

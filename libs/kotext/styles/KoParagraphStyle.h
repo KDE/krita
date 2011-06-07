@@ -154,12 +154,12 @@ public:
         PunctuationWrap,          ///< bool, whether a punctuation mark can be at the end of a full line (false) or not (true)
         VerticalAlignment,        ///< KoParagraphStyle::VerticalAlign, the alignment of this paragraph text
         
-        NormalLineHeight,         ///< bool, internal property for reserved usage
+        NormalLineHeight          ///< bool, internal property for reserved usage
     };
 
     enum AutoSpace {
         NoAutoSpace,              ///< space should not be added between portions of Asian, Western and complex texts
-        IdeographAlpha,           ///< space should be added between portions of Asian, Western and complex texts
+        IdeographAlpha            ///< space should be added between portions of Asian, Western and complex texts
     };
     
     enum VerticalAlign {
@@ -455,19 +455,19 @@ public:
     /// duplicated property from QTextBlockFormat
     void setTopMargin(QTextLength topMargin);
     /// duplicated property from QTextBlockFormat
-    QTextLength topMargin() const;
+    qreal topMargin() const;
     /// duplicated property from QTextBlockFormat
     void setBottomMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength bottomMargin() const;
+    qreal bottomMargin() const;
     /// duplicated property from QTextBlockFormat
     void setLeftMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength leftMargin() const;
+    qreal leftMargin() const;
     /// duplicated property from QTextBlockFormat
     void setRightMargin(QTextLength margin);
     /// duplicated property from QTextBlockFormat
-    QTextLength rightMargin() const;
+    qreal rightMargin() const;
     /// set the margin around the paragraph, making the margin on all sides equal.
     void setMargin(QTextLength margin);
 

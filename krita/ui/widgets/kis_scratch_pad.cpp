@@ -196,6 +196,7 @@ void KisScratchPad::setPresetImage(const QImage& image)
     device->convertFromQImage(image, "");
     KisPainter painter(m_paintDevice);
     painter.bitBlt(m_cutoutOverlay.x(), m_cutoutOverlay.y(), device, 0, 0, m_cutoutOverlay.width(), m_cutoutOverlay.height());
+    update();
 }
 
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {

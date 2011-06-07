@@ -137,6 +137,11 @@ quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels, bool clear, quint8 def
     return buf;
 }
 
+bool KoColorSpace::hasCompositeOp(const QString& id) const
+{
+    return d->compositeOps.contains(id);
+}
+
 QList<KoCompositeOp*> KoColorSpace::compositeOps() const
 {
     return d->compositeOps.values();

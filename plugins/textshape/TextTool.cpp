@@ -448,7 +448,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action);
+    addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
@@ -1415,8 +1415,10 @@ void TextTool::repaintCaret()
         }
 
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        Q_ASSERT(textShape);
-        Q_ASSERT(textShape->textShapeData());
+        if (!textShape)
+            return;
+        if (!textShape->textShapeData());
+            return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());

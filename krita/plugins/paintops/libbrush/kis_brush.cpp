@@ -44,7 +44,8 @@
 
 #include "kis_brush_registry.h"
 
-#define MAXIMUM_SCALE 20
+const static int MAXIMUM_MIPMAP_SCALE = 10;
+const static int MAXIMUM_MIPMAP_SIZE  = 400;
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {
@@ -569,10 +570,15 @@ void KisBrush::createScaledBrushes() const
     if (image().isNull()) {
         return;
     }
+    
     // Construct a series of brushes where each one's dimensions are
     // half the size of the previous one.
-    int width = image().width() * MAXIMUM_SCALE;
-    int height = image().height() * MAXIMUM_SCALE;
+    // IMORTANT: and make sure that a brush with a size > MAXIMUM_MIPMAP_SIZE
+    // will not get scaled up anymore or the memory consumption gets to height
+    // also don't scale the brush up more then MAXIMUM_MIPMAP_SCALE times
+    int scale  = qBound(1, MAXIMUM_MIPMAP_SIZE*2 / qMax(image().width(),image().height()), MAXIMUM_MIPMAP_SCALE);
+    int width  = image().width()  * scale;
+    int height = image().height() * scale;
 
     QImage scaledImage;
     while (true) {

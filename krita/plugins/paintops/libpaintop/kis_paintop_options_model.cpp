@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (c) 2010 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2011 Silvio Heinrich <plassyqweb.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,79 +19,62 @@
  */
 
 #include "kis_paintop_options_model.h"
-
-#include <kcategorizedsortfilterproxymodel.h>
 #include "kis_paintop_option.h"
 
-KisPaintOpOptionsModel::KisPaintOpOptionsModel()
+void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption* option, int widgetIndex)
 {
+    BaseCalss::addEntry(option->category(), KisOptionInfo(option, widgetIndex));
 }
 
-KisPaintOpOptionsModel::~KisPaintOpOptionsModel()
+QString KisPaintOpOptionListModel::categoryToString(const QString& val) const
 {
+    return val;
 }
 
-int KisPaintOpOptionsModel::rowCount(const QModelIndex & /*parent*/ ) const
+QString KisPaintOpOptionListModel::entryToString(const KisOptionInfo& val) const
 {
-    return m_list.count();
+    return val.option->label();
 }
 
-bool KisPaintOpOptionsModel::setData(const QModelIndex &index, const QVariant &value, int role )
+QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
 {
-    if (index.isValid())
-    {
-        switch (role) {
-        case Qt::CheckStateRole: {
-           if(m_list[index.row()]->isCheckable()) {
-                m_list[index.row()]->setChecked( value.toInt() == Qt::Checked);
-                return true;
-            }
-            break;
-        }
-        }
+    if(idx.isValid() && role == Qt::CheckStateRole) {
+        KisOptionInfo info;
+        
+        if(BaseCalss::entryAt(info, idx.row()) && info.option->isCheckable())
+            return info.option->isChecked() ? Qt::Checked : Qt::Unchecked;
+        
+        return QVariant();
     }
-    return false;
+    
+    return BaseCalss::data(idx, role);
 }
 
-QVariant KisPaintOpOptionsModel::data(const QModelIndex & index, int role ) const
+bool KisPaintOpOptionListModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
-    if (index.isValid()) {
-        switch (role) {
-        case Qt::DisplayRole: {
-            return m_list[index.row()]->label();
+    if(idx.isValid() && role == Qt::CheckStateRole) {
+        KisOptionInfo info;
+        
+        if(BaseCalss::entryAt(info, idx.row()) && info.option->isCheckable()) {
+            info.option->setChecked(value.toInt() == Qt::Checked);
+            return true;
         }
-        case Qt::CheckStateRole: {
-           if(m_list[index.row()]->isCheckable()) {
-                return m_list[index.row()]->isChecked() ? Qt::Checked : Qt::Unchecked;
-            }
-            break;
-        }
-        case SortingRole:
-            return index.row();
-        case WidgetIndexRole:
-            return m_widgetIndex[index.row()];
-        case KCategorizedSortFilterProxyModel::CategoryDisplayRole:
-        case KCategorizedSortFilterProxyModel::CategorySortRole:
-            return m_list[index.row()]->category();
-        }
+        
+        return false;
     }
-    return QVariant();
+    
+    return BaseCalss::setData(idx, value, role);
 }
 
-Qt::ItemFlags KisPaintOpOptionsModel::flags(const QModelIndex & index) const
+Qt::ItemFlags KisPaintOpOptionListModel::flags(const QModelIndex& idx) const
 {
-    Qt::ItemFlags flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-    if(m_list[index.row()]->isCheckable())
-    {
-        flags |= Qt::ItemIsUserCheckable;
+    Qt::ItemFlags flags = 0;
+    KisOptionInfo info;
+    
+    if(idx.isValid() && BaseCalss::entryAt(info, idx.row())) {
+        if(info.option->isCheckable())
+            flags |= Qt::ItemIsUserCheckable;
     }
-    return flags;
-}
-
-void KisPaintOpOptionsModel::addPaintOpOption(KisPaintOpOption * option, int widgetIndex)
-{
-    beginResetModel();
-    m_list.append(option);
-    m_widgetIndex.append(widgetIndex);
-    endResetModel();
+    
+    return BaseCalss::flags(idx) | flags;
 }

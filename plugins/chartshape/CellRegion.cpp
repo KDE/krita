@@ -117,7 +117,7 @@ bool Parser::parse()
 Parser::Token Parser::parseToken()
 {
     Token::TokenType type = Token::End;
-    if ( m_pos != m_input.end() )
+    if ( m_pos != m_input.constEnd() )
     {
         switch( m_delimiter.indexOf( *m_pos ) )
         {
@@ -154,15 +154,18 @@ Parser::Token Parser::parseToken()
 
         if ( type == Token::Identifier )
             identifier = m_input.mid( startPos, m_index - startPos );
-        ++m_pos;
-        ++m_index;
+        if ( m_pos != m_input.constEnd() )
+        {
+            ++m_pos;
+            ++m_index;
+        }
     }
     else
     {
         int startPos = m_index;
         for ( ; m_pos != m_input.constEnd() && !m_delimiter.contains( *m_pos ); ++m_pos, ++m_index )
             ;
-        if ( startPos == m_index )
+        if ( m_pos != m_input.constEnd() && startPos == m_index )
         {
             ++m_index;
             ++m_pos;

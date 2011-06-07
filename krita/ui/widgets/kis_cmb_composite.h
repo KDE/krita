@@ -2,6 +2,7 @@
  *  widgets/kis_cmb_composite.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2004 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,54 +19,36 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_CMB_COMPOSITE_H_
-#define KIS_CMB_COMPOSITE_H_
+#ifndef KIS_COMPOSITEOP_WIDGETS_H_
+#define KIS_COMPOSITEOP_WIDGETS_H_
 
 #include <krita_export.h>
-#include "kcombobox.h"
-#include "KoCompositeOp.h"
+#include <QComboBox>
+#include "kis_categorized_list_view.h"
+#include "../kis_composite_ops_model.h"
 
-class KisCompositeOpsModel;
-class KCategorizedSortFilterProxyModel;
+class KisCompositeOpListModel;
 
-/**
- * A combobox filled with the various composition strategies
- * associated with a certain colorspace.
- */
-
-class KRITAUI_EXPORT KisCmbComposite : public KComboBox
+class KRITAUI_EXPORT KisCompositeOpListWidget: public KisCategorizedListView, public KisCategorizedWidgetBase<KisCompositeOpListModel>
 {
-
-    Q_OBJECT
-
 public:
-
-    KisCmbComposite(QWidget * parent = 0, const char * name = 0);
-    virtual ~KisCmbComposite();
-
-    const QString& currentItem() const;
-
-    void setCompositeOpList(const QList<KoCompositeOp*>& list, const QList<KoCompositeOp*>& whitelist = QList<KoCompositeOp*>());
-    void setCurrent(const KoCompositeOp* op);
-    void setCurrent(const QString & s);
-
-signals:
-
-    void activated(const QString&);
-    void highlighted(const QString&);
-
-private slots:
-
-    void slotOpActivated(int i);
-    void slotOpHighlighted(int i);
-
-private:
-    // Prevent deprectated Qt3 method from being called. Use setCurrent instead.
-    void setCurrentText(const QString & s);
-    const QString& itemAt(int idx) const;
-
-    KisCompositeOpsModel* m_lastModel;
-    KCategorizedSortFilterProxyModel* m_sortModel;
+     KisCompositeOpListWidget(QWidget* parent=0);
+    ~KisCompositeOpListWidget();
 };
 
-#endif
+
+class KRITAUI_EXPORT KisCompositeOpComboBox: public QComboBox, public KisCategorizedWidgetBase<KisCompositeOpListModel>
+{
+    Q_OBJECT
+public:
+     KisCompositeOpComboBox(QWidget* parent=0);
+    ~KisCompositeOpComboBox();
+    
+private slots:
+    void slotCategoryToggled(const QModelIndex& index, bool toggled);
+    
+private:
+    KisCategorizedListView* m_view;
+};
+
+#endif // KIS_COMPOSITEOP_WIDGETS_H_

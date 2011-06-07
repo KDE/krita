@@ -895,10 +895,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
 
-        // during fit is where documentLayout->positionInlineObjects is called
-        //so now is a good time to position the obstructions
-        documentLayout()->positionAnchoredObstructions();
-
         qreal bottomOfText = line.y() + line.height();
 
         bool softBreak = false;
@@ -966,6 +962,16 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         line = layout->createLine();
         cursor->lineTextStart = line.isValid() ? line.textStart() : 0;
         if (softBreak) {
+            return false;
+        }
+
+        // during fit is where documentLayout->positionInlineObjects is called
+        //so now is a good time to position the obstructions
+        int oldObstructionCount = documentLayout()->currentObstructions().size();
+
+        documentLayout()->positionAnchoredObstructions();
+
+        if (oldObstructionCount < documentLayout()->currentObstructions().size()) {
             return false;
         }
     }

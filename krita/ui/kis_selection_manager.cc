@@ -190,7 +190,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
-    m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
     m_smooth  = new KAction(i18n("Smooth..."), this);

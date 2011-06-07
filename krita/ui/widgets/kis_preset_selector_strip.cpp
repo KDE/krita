@@ -131,6 +131,8 @@ void KisPresetSelectorStrip::on_deletePresetBtn_pressed()
 {
     KoResourceItemChooser* veryAntiOOPHack = smallPresetChooser->findChild<KoResourceItemChooser*>();
     veryAntiOOPHack->slotButtonClicked(KoResourceItemChooser::Button_Remove);
+    deletePresetBtn->hide();
+    smallPresetChooser->updateViewSettings();
 }
 
 #include "kis_preset_selector_strip.moc"

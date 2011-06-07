@@ -9,6 +9,7 @@ add_subdirectory( shaders )
 add_subdirectory( images )
 add_subdirectory( backgrounds )
 add_subdirectory( cursors )
+add_subdirectory( workspaces )
 ########### install files ###############
 
 install( FILES  

@@ -24,6 +24,7 @@
 #include <kis_paintop_options_widget.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_airbrush_option.h>
+#include <kis_compositeop_option.h>
 
 KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpOptionsWidget(parent)
@@ -32,6 +33,7 @@ KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* par
     m_particleOption =  new KisParticleOpOption();
 
     addPaintOpOption(m_particleOption);
+    addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisAirbrushOption());
     addPaintOpOption(m_paintActionTypeOption);
 }

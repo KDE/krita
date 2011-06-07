@@ -411,11 +411,13 @@ void KisPaintopBox::slotUpdatePreset()
     
     if(m_activePreset->settings()->hasProperty("CompositeOp")) {
         m_cmbCompositeOp->setDisabled(false);
+        m_eraseModeButton->setDisabled(false);
         updateCompositeOp(m_activePreset->settings()->getString("CompositeOp"));
     }
     else {
         updateCompositeOp(KoCompositeOpRegistry::instance().getDefaultCompositeOp().id());
         m_cmbCompositeOp->setDisabled(true);
+        m_eraseModeButton->setDisabled(true);
     }
 }
 

@@ -387,7 +387,6 @@ void KisSelectionManager::cut()
 
     layer->paintDevice()->clearSelection(m_view->selection());
     QRect rect = m_view->selection()->selectedRect();
-    deselect();
 
     transaction.commit(m_view->image()->undoAdapter());
 

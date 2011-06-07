@@ -36,7 +36,6 @@ class KoResource;
  */
 class KRITAUI_EXPORT KisPresetChooser : public QWidget
 {
-
     Q_OBJECT
 
 public:
@@ -55,17 +54,14 @@ public:
     void setPresetFilter(const KoID & paintopID);
 
     void setViewMode(ViewMode mode);
-    
     void showButtons(bool show);
     
 signals:
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource * resource);
     
 public slots:
     void searchTextChanged(const QString& searchString);
-    
     void setShowAll(bool show);
-
     void updateViewSettings();
     
 protected:

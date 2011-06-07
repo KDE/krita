@@ -133,7 +133,7 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
     
-    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked(bool)),
+    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
             
     KisConfig cfg;

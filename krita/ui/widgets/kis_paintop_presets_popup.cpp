@@ -130,6 +130,9 @@ KisPaintOpPresetsPopup::KisPaintOpPresetsPopup(KisCanvasResourceProvider * resou
     connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResource*)),
             this, SIGNAL(signalResourceSelected(KoResource*)));
     
+    connect(m_d->uiWdgPaintOpPresetSettings.bnSave, SIGNAL(clicked(bool)),
+            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
+            
     KisConfig cfg;
     m_d->detached = !cfg.paintopPopupDetached();
     m_d->ignoreHideEvents = false;

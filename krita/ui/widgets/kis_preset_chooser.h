@@ -55,11 +55,8 @@ public:
     void setPresetFilter(const KoID & paintopID);
 
     void setViewMode(ViewMode mode);
-
-    void updateViewSettings();
     
     void showButtons(bool show);
-    
     
 signals:
     void resourceSelected( KoResource * resource );
@@ -69,6 +66,8 @@ public slots:
     
     void setShowAll(bool show);
 
+    void updateViewSettings();
+    
 protected:
     virtual void resizeEvent(QResizeEvent* event);
     

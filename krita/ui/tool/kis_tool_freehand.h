@@ -111,6 +111,7 @@ protected:
     QTimer m_strokeTimer;
     KisPaintInformation m_olderPaintInformation;
     KisPaintInformation m_previousPaintInformation;
+    bool m_haveTangent;
     QPointF m_previousTangent;
     double m_dragDist;
     QPointF m_strokeBegin;

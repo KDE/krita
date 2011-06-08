@@ -47,6 +47,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeBackground.h>
 
 
 // The XML of a frame looks something like this:
@@ -165,7 +166,13 @@ KoUnavailShape::~KoUnavailShape()
 void KoUnavailShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion(painter, converter);
-    draw(painter);
+    if (background()) {
+        QPainterPath p;
+        p.addRect(QRectF(QPointF(), size()));
+        background()->paint(painter, p);
+    } else {
+        draw(painter);
+    }
 }
 
 void KoUnavailShape::draw(QPainter &painter) const

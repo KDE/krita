@@ -2352,7 +2352,10 @@ void KoDocument::addShell(KoMainWindow *shell)
 void KoDocument::removeShell(KoMainWindow *shell)
 {
     //kDebug(30003) <<"shell" << (void*)shell <<"removed from doc" << this;
-    d->shells.removeAll(shell);
+    if (shell) {
+        disconnect(shell, SIGNAL(documentSaved()), d->undoStack, SLOT(setClean()));
+        d->shells.removeAll(shell);
+    }
 }
 
 const QList<KoMainWindow*>& KoDocument::shells() const

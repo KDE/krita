@@ -55,6 +55,7 @@ private slots:
     void updateSensorCurveLabels(KisDynamicSensor* sensor);
     void updateCurve(KisDynamicSensor* sensor);
     void updateValues();
+    void disableWidgets(bool disable);
     
 private:
     QWidget* m_widget;

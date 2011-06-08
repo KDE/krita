@@ -89,6 +89,7 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
     m_curveOptionWidget->slider->blockSignals(false);
     
     updateCurve(m_curveOption->sensor());
+    disableWidgets(!m_curveOption->isCurveUsed());
 }
 
 bool KisCurveOptionWidget::isCheckable()
@@ -148,5 +149,14 @@ void KisCurveOptionWidget::updateValues()
 {
     m_curveOption->setValue(m_curveOptionWidget->slider->value());
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
+    disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emit sigSettingChanged();
 }
+
+void KisCurveOptionWidget::disableWidgets(bool disable)
+{
+    m_curveOptionWidget->checkBoxUseSameCurve->setDisabled(disable);
+    m_curveOptionWidget->curveWidget->setDisabled(disable);
+    m_curveOptionWidget->sensorSelector->setDisabled(disable);
+}
+

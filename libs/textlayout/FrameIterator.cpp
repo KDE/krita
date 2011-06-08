@@ -86,6 +86,7 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
         currentTableIterator = 0;
     } else if(currentTableIterator == 0) {
         currentTableIterator = new TableIterator(table);
+        currentTableIterator->masterPageName = masterPageName;
     }
     return currentTableIterator;
 }
@@ -97,6 +98,7 @@ FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
         currentSubFrameIterator = 0;
     } else if(currentSubFrameIterator == 0) {
         currentSubFrameIterator = new FrameIterator(subFrame);
+        currentSubFrameIterator->masterPageName = masterPageName;
     }
     return currentSubFrameIterator;
 }

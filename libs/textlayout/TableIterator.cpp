@@ -98,11 +98,13 @@ FrameIterator *TableIterator::frameIterator(int column)
     FrameIterator *it = 0;
     if (row == table->rows()) {
         delete frameIterators[column];
+        frameIterators[column] = it;
     } else if (frameIterators[column] == 0) {
-        delete frameIterators[column];
         it = new FrameIterator(table->cellAt(row, column));
         it->masterPageName = masterPageName;
+        frameIterators[column] = it;
+    } else {
+        it = frameIterators[column];
     }
-    frameIterators[column] = it;
-    return frameIterators[column];
+    return it;
 }

@@ -746,8 +746,9 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         if (textList->format().boolProperty(KoListStyle::AlignmentMode) == false) {
             m_listIndent = textList->format().doubleProperty(KoListStyle::Indent) + listLabelIndent;
         } else {
-            if (! format.hasProperty(QTextFormat::BlockLeftMargin)) {
+            if (!format.hasProperty(KoParagraphStyle::ListLevel)) {
                 leftMargin = textList->format().doubleProperty(KoListStyle::Margin);
+                m_listIndent = textList->format().doubleProperty(KoListStyle::Indent);
             }
         }
     }
@@ -1000,7 +1001,7 @@ qreal KoTextLayoutArea::textIndent(QTextBlock block, QTextList *textList) const
         return guessGlyphWidth * 3;
     }
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (! block.blockFormat().hasProperty(QTextFormat::TextIndent)) {
+        if (! block.blockFormat().hasProperty(KoParagraphStyle::ListLevel)) {
             return textList->format().doubleProperty(KoListStyle::TextIndent);
         }
     }

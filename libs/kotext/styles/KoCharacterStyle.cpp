@@ -1331,11 +1331,13 @@ void KoCharacterStyle::loadOdfProperties(KoStyleStack &styleStack)
         else {
             QRegExp re("(-?[\\d.]+)%.*");
             if (re.exactMatch(textPosition)) {
-                float value = re.capturedTexts()[1].toFloat();
-                if (value > 0)
+                int percent = re.capturedTexts()[1].toInt();
+                if (percent > 0)
                     setVerticalAlignment(QTextCharFormat::AlignSuperScript);
-                else if (value < 0)
+                else if (percent < 0)
                     setVerticalAlignment(QTextCharFormat::AlignSubScript);
+                else // set explicit to overwrite inherited text-position's
+                    setVerticalAlignment(QTextCharFormat::AlignNormal);
             }
         }
     }
@@ -1648,6 +1650,8 @@ void KoCharacterStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:text-position", "super", KoGenStyle::TextType);
             else if (verticalAlignment() == QTextCharFormat::AlignSubScript)
                 style.addProperty("style:text-position", "sub", KoGenStyle::TextType);
+            else if (d->stylesPrivate.contains(QTextFormat::TextVerticalAlignment)) // no superscript or subscript
+                style.addProperty("style:text-position", "0% 100%", KoGenStyle::TextType);
         } else if (key == QTextFormat::FontPointSize) {
             // when there is percentageFontSize!=100% property ignore the fontSize property and store the percentage property
             if ( (!hasProperty(KoCharacterStyle::PercentageFontSize)) || (percentageFontSize()==100))

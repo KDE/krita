@@ -140,6 +140,7 @@ KoUnavailShape::Private::Private()
 KoUnavailShape::Private::~Private()
 {
     qDeleteAll(objectEntries);
+    qDeleteAll(embeddedFiles);
 }
 
 

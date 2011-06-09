@@ -7,6 +7,7 @@
  *                2002 Patrick Julien <freak@codepimps.org>
  *                2003-2010 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
+ *                2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -187,6 +188,7 @@ public:
     KAction * totalRefresh;
     KAction* mirrorCanvas;
     KAction* createTemplate;
+    KAction *saveIncremental;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -252,6 +254,12 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
+    // krita/krita.rc must also be modified to add actions the menu entries
+    
+    m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
+    connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
     m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
@@ -858,6 +866,32 @@ void KisView2::slotCreateTemplate()
 
     KisFactory2::componentData().dirs()->addResourceType("krita_template", "data", "krita/templates/");
 
+}
+
+void KisView2::slotSaveIncremental()
+{
+    KoDocument* pDoc = koDocument();
+    if (!pDoc) return;
+    
+    QString file = pDoc->localFilePath();
+    QRegExp regex("_\\d{1,4}.");   // Find incremental numbers
+    regex.indexIn(file);
+    QStringList list = regex.capturedTexts();
+    QString version = list.at(0);
+    version.chop(1);
+    version.remove(0, 1);
+    int intVersion = version.toInt(0);
+    intVersion++;
+    QString newVersion = QString::number(intVersion);
+
+    while (newVersion.length() < version.length()) {
+        newVersion.prepend("0");
+    }
+    newVersion.prepend("_");
+    newVersion.append(".");
+    file.replace(regex, newVersion);
+    
+    pDoc->saveAs(file);
 }
 
 void KisView2::disableControls()

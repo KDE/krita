@@ -67,11 +67,11 @@ bool FrameIterator::operator ==(const FrameIterator &other)
         return false;
 
     if (currentTableIterator || other.currentTableIterator) {
-        if (currentTableIterator != other.currentTableIterator)
+        if (!currentTableIterator || !other.currentTableIterator)
             return false;
         return *currentTableIterator == *(other.currentTableIterator);
     } else if (currentSubFrameIterator || other.currentSubFrameIterator) {
-        if (currentSubFrameIterator != other.currentSubFrameIterator)
+        if (!currentSubFrameIterator || !other.currentSubFrameIterator)
             return false;
         return *currentSubFrameIterator == *(other.currentSubFrameIterator);
     } else {

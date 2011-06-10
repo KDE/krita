@@ -136,7 +136,7 @@ public slots:
 private slots:
 
     void slotPopupQuickHelp();
-    void slotSetOpacity(int opacityPerCent);
+    void slotSetOpacity(qreal opacity);
 
     void slotSetCompositeMode(const QString& compositeOp);
     void makeColorLighter();

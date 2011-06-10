@@ -1,5 +1,5 @@
 /* 
- *  Copyright (c) 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,31 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_PRESSURE_SCATTER_OPTION_WIDGET_H
-#define KIS_PRESSURE_SCATTER_OPTION_WIDGET_H
+#ifndef KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
+#define KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H
 
+#include "kis_pressure_flow_opacity_option.h"
 #include "kis_curve_option_widget.h"
 
 class KisDoubleSliderSpinBox;
+class KisCurveOptionWidget;
+class QStackedWidget;
+class QButtonGroup;
 
-class QCheckBox;
-
-class PAINTOP_EXPORT KisPressureScatterOptionWidget: public KisCurveOptionWidget
+class PAINTOP_EXPORT KisFlowOpacityOptionWidget: public KisCurveOptionWidget
 {
     Q_OBJECT
     
 public:
-    KisPressureScatterOptionWidget();
-
+    KisFlowOpacityOptionWidget();
+    
     virtual void readOptionSetting(const KisPropertiesConfiguration* setting);
     
 private slots:
-    void xAxisEnabled(bool enable);
-    void yAxisEnabled(bool enable);
-    
+    void slotSliderValueChanged();
+
 private:
-    QCheckBox* m_axisX;
-    QCheckBox* m_axisY;
+    KisDoubleSliderSpinBox* m_opacitySlider;
+    KisDoubleSliderSpinBox* m_flowSlider;
 };
 
-#endif // KIS_PRESSURE_RATE_OPTION_WIDGET_H
+#endif // KIS_PRESSURE_FLOW_OPACITY_OPTION_WIDGET_H

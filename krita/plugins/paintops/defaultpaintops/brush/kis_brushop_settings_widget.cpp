@@ -38,6 +38,7 @@
 #include <kis_color_source_option_widget.h>
 #include <kis_pressure_spacing_option.h>
 #include <kis_compositeop_option.h>
+#include <kis_pressure_flow_opacity_option_widget.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         : KisBrushBasedPaintopOptionWidget(parent)
@@ -46,10 +47,10 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisFlowOpacityOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSpacingOption()));
     addPaintOpOption(new KisPressureMirrorOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption()));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption()));
     addPaintOpOption(new KisPressureSharpnessOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption()));

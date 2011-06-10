@@ -93,6 +93,7 @@ struct KisPainter::Private {
     const KisPattern*           pattern;
     QPointF                     duplicateOffset;
     quint8                      opacity;
+    quint8                      flow;
     quint32                     pixelSize;
     const KoColorSpace*         colorSpace;
     KoColorProfile*             profile;
@@ -142,6 +143,7 @@ void KisPainter::init()
     d->paintOp = 0;
     d->pattern = 0;
     d->opacity = OPACITY_OPAQUE_U8;
+    d->flow = OPACITY_OPAQUE_U8;
     d->sourceLayer = 0;
     d->fillStyle = FillStyleNone;
     d->strokeStyle = StrokeStyleBrush;
@@ -364,6 +366,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                               selection->data() + selX,
                               srcWidth * selection->pixelSize(),
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -397,6 +400,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
                               mergedSelectionBytes,
                               srcWidth * selection->pixelSize(),
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -522,6 +526,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
                                       maskIt.rawData(),
                                       maskRowStride,
                                       d->opacity,
+                                      d->flow,
                                       rows,
                                       columns,
                                       d->compositeOp,
@@ -571,6 +576,7 @@ void KisPainter::bitBlt(qint32 dstX, qint32 dstY,
                                       0,
                                       0,
                                       d->opacity,
+                                      d->flow,
                                       rows,
                                       columns,
                                       d->compositeOp,
@@ -686,6 +692,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
                                       maskIt.rawData(),
                                       maskRowStride,
                                       d->opacity,
+                                      d->flow,
                                       rows,
                                       columns,
                                       d->compositeOp,
@@ -735,6 +742,7 @@ void KisPainter::bitBltOldData(qint32 dstX, qint32 dstY,
                                       0,
                                       0,
                                       d->opacity,
+                                      d->flow,
                                       rows,
                                       columns,
                                       d->compositeOp,
@@ -811,6 +819,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                     maskIt->oldRawData(),
                     maskRowStride,
                     d->opacity,
+                    d->flow,
                     rows,
                     columns,
                     d->compositeOp,
@@ -850,6 +859,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                     0,
                     0,
                     d->opacity,
+                    d->flow,
                     rows,
                     columns,
                     d->compositeOp,
@@ -912,6 +922,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                               selBytes,
                               srcWidth * d->selection->pixelSize(),
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -929,6 +940,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
                               0,
                               0,
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -993,6 +1005,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                               selection->data() + selX,
                               srcWidth * selection->pixelSize(),
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -1026,6 +1039,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
                               mergedSelectionBytes,
                               srcWidth * selection->pixelSize(),
                               d->opacity,
+                              d->flow,
                               srcHeight,
                               srcWidth,
                               d->compositeOp,
@@ -1344,7 +1358,7 @@ void KisPainter::fillPainterPath(const QPainterPath& path)
     case FillStyleGenerator:
         Q_ASSERT(d->generator != 0);
         if (d->generator) { // if the user hasn't got any generators, we shouldn't crash...
-            d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());\
+            d->fillPainter->fillRect(fillRect.x(), fillRect.y(), fillRect.width(), fillRect.height(), generator());
         }
         break;
     }
@@ -2379,6 +2393,16 @@ void KisPainter::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
 KisPainter::StrokeStyle KisPainter::strokeStyle() const
 {
     return d->strokeStyle;
+}
+
+void KisPainter::setFlow(quint8 flow)
+{
+    d->flow = flow;
+}
+
+quint8 KisPainter::flow() const
+{
+    return d->flow;
 }
 
 void KisPainter::setOpacity(quint8 opacity)

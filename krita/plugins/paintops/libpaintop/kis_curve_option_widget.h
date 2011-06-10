@@ -36,7 +36,7 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:    
-    KisCurveOptionWidget(KisCurveOption* curveOption);
+    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider=false);
     ~KisCurveOptionWidget();
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;

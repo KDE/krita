@@ -416,14 +416,14 @@ bool KisCanvasResourceProvider::mirrorVertical() const
     return m_resourceManager->resource(MirrorVertical).toBool();
 }
 
-void KisCanvasResourceProvider::setOpacity(int opacity)
+void KisCanvasResourceProvider::setOpacity(qreal opacity)
 {
     m_resourceManager->setResource(Opacity, opacity);
 }
 
-int KisCanvasResourceProvider::opacity()
+qreal KisCanvasResourceProvider::opacity()
 {
-    return m_resourceManager->resource(Opacity).toInt();
+    return m_resourceManager->resource(Opacity).toDouble();
 }
 
 #include "kis_canvas_resource_provider.moc"

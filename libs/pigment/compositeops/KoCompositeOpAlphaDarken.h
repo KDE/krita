@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
+ * Copyright (c) 2006 Cyrille Berger  <cberger@cberger.net>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -20,103 +21,51 @@
 #ifndef KOCOMPOSITEOPALPHADARKEN_H_
 #define KOCOMPOSITEOPALPHADARKEN_H_
 
-#include "KoColorSpaceMaths.h"
-#include "KoCompositeOpOver.h"
-#include "KoColorSpaceConstants.h"
-
-#define NATIVE_OPACITY_OPAQUE KoColorSpaceMathsTraits<channels_type>::unitValue
-#define NATIVE_OPACITY_TRANSPARENT KoColorSpaceMathsTraits<channels_type>::zeroValue
+#include "KoCompositeOpFunctions.h"
+#include "KoCompositeOpBase.h"
 
 /**
  * A template version of the alphadarken composite operation to use in colorspaces<
  */
-template<class _CSTraits>
-class KoCompositeOpAlphaDarken : public KoCompositeOp
+template<class Traits>
+class KoCompositeOpAlphaDarken: public KoCompositeOpBase< Traits, KoCompositeOpAlphaDarken<Traits> >
 {
-    typedef typename _CSTraits::channels_type channels_type;
-    typedef typename KoColorSpaceMathsTraits<typename _CSTraits::channels_type>::compositetype compositetype;
-
+    typedef KoCompositeOpBase< Traits, KoCompositeOpAlphaDarken<Traits> > base_class;
+    typedef typename Traits::channels_type                                channels_type;
+    
+    static const qint32 channels_nb = Traits::channels_nb;
+    static const qint32 alpha_pos   = Traits::alpha_pos;
+    
 public:
-
-    KoCompositeOpAlphaDarken(const KoColorSpace * cs)
-            : KoCompositeOp(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix()) {
-    }
-
+    KoCompositeOpAlphaDarken(const KoColorSpace* cs):
+        base_class(cs, COMPOSITE_ALPHA_DARKEN, i18n("Alpha darken"), KoCompositeOp::categoryMix(), false) { }
+    
 public:
-    using KoCompositeOp::composite;
-
-    void composite(quint8 *dstRowStart,
-                   qint32 dststride,
-                   const quint8 *srcRowStart,
-                   qint32 srcstride,
-                   const quint8 *maskRowStart,
-                   qint32 maskstride,
-                   qint32 rows,
-                   qint32 cols,
-                   quint8 U8_opacity,
-                   const QBitArray & channelFlags) const {
-        qint32 srcInc = (srcstride == 0) ? 0 : _CSTraits::channels_nb;
-
-        bool allChannelFlags = channelFlags.isEmpty();
-        while (rows-- > 0) {
-
-            const channels_type *s = reinterpret_cast<const channels_type *>(srcRowStart);
-            channels_type *d = reinterpret_cast<channels_type *>(dstRowStart);
-
-            const quint8 *mask = maskRowStart;
-
-            channels_type opacity = KoColorSpaceMaths<quint8, channels_type>::scaleToA(U8_opacity);
-
-            for (qint32 i = cols; i > 0; i--, s += srcInc, d += _CSTraits::channels_nb) {
-
-                channels_type srcAlpha = s[_CSTraits::alpha_pos];
-                channels_type dstAlpha = d[_CSTraits::alpha_pos];
-
-                // apply the alphamask
-                if (mask != 0) {
-                    if (*mask != OPACITY_OPAQUE_U8) {
-                        channels_type tmpOpacity = KoColorSpaceMaths<quint8 , channels_type>::scaleToA(*mask);
-                        srcAlpha =  KoColorSpaceMaths<channels_type>::multiply(srcAlpha, tmpOpacity);
-                    }
-                    mask++;
-                }
-
-                if (opacity != NATIVE_OPACITY_OPAQUE) {
-                    srcAlpha = KoColorSpaceMaths<channels_type>::multiply(srcAlpha, opacity);
-                }
-
-                // not transparent
-                if (srcAlpha != NATIVE_OPACITY_TRANSPARENT )
-                {
-                    if (srcAlpha >= dstAlpha) {
-                      if (allChannelFlags) {
-                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                              if ((int)i != _CSTraits::alpha_pos) {
-                                  d[i] = s[i];
-                              }
-                          }
-                      } else {
-                          for (uint i = 0; i < _CSTraits::channels_nb; i++) {
-                              if ((int)i != _CSTraits::alpha_pos && channelFlags.testBit(i)) {
-                                  d[i] = s[i];
-                              }
-                          }
-                      }
-                      d[_CSTraits::alpha_pos] = srcAlpha;
-                  } else {
-                      channels_type srcBlend = KoColorSpaceMaths<channels_type>::divide(srcAlpha, dstAlpha);
-                      KoCompositeOpOverCompositor<_CSTraits, _CSTraits::channels_nb-1>::composeColorChannels(srcBlend, s, d, allChannelFlags, channelFlags);
-                  }
-                }
-            }
-
-            srcRowStart += srcstride;
-            dstRowStart += dststride;
-            if (maskRowStart) {
-                maskRowStart += maskstride;
+    template<bool alphaLocked, bool allChannelFlags>
+    inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
+                                                     channels_type*       dst, channels_type dstAlpha,
+                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
+        using namespace Arithmetic;
+        
+        srcAlpha = mul(srcAlpha, opacity);
+        
+        if(dstAlpha != zeroValue<channels_type>()) {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+                    dst[i] = lerp(dst[i], src[i], srcAlpha);
             }
         }
+        else {
+            for(qint32 i=0; i <channels_nb; i++) {
+                if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i)))
+                    dst[i] = src[i];
+            }
+        }
+        
+        channels_type alpha1 = unionShapeOpacity(srcAlpha, dstAlpha);       // alpha with 0% flow
+        channels_type alpha2 = (dstAlpha > srcAlpha) ? dstAlpha : srcAlpha; // alpha with 100% flow
+        return lerp(alpha1, alpha2, flow);
     }
 };
 
-#endif
+#endif // KOCOMPOSITEOPALPHADARKEN_H_

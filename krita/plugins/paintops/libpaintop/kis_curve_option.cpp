@@ -20,7 +20,7 @@
 #include "kis_curve_option.h"
 
 KisCurveOption::KisCurveOption(const QString & label, const QString& name, const QString & category,
-                               bool checked, qreal value, qreal min, qreal max, bool useCurve
+                               bool checked, qreal value, qreal min, qreal max, bool useCurve, bool separateCurveValue
 )
         : m_label(label)
         , m_category(category)
@@ -29,6 +29,7 @@ KisCurveOption::KisCurveOption(const QString & label, const QString& name, const
         , m_checkable(true)
         , m_checked(checked)
         , m_useCurve(useCurve)
+        , m_separateCurveValue(separateCurveValue)
 {
     setSensor(KisDynamicSensor::id2Sensor(PressureId.id()));
     setMinimumLabel(i18n("0.0"));
@@ -74,9 +75,8 @@ qreal KisCurveOption::value() const
 
 void KisCurveOption::writeOptionSetting(KisPropertiesConfiguration* setting) const
 {
-    if (m_checkable) {
+    if(m_checkable)
         setting->setProperty("Pressure" + m_name, isChecked());
-    }
     
     setting->setProperty(m_name + "Sensor"  , sensor()->toXML());
     setting->setProperty(m_name + "UseCurve", m_useCurve);

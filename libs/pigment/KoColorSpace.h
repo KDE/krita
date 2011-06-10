@@ -505,6 +505,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const KoCompositeOp * op,
@@ -521,6 +522,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const KoCompositeOp * op) const;
@@ -536,6 +538,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const QString & op,
@@ -552,6 +555,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const QString& op) const;

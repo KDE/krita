@@ -37,7 +37,7 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
     }
 }
 
-KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
+KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider)
         : KisPaintOpOption(curveOption->label(), curveOption->category(), curveOption->isChecked())
         , m_widget(new QWidget)
         , m_curveOptionWidget(new Ui_WdgCurveOption())
@@ -60,6 +60,9 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     
     m_curveOptionWidget->slider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->slider->setValue(curveOption->value());
+    
+    if(hideSlider)
+        m_curveOptionWidget->slider->hide();
     
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->slider          , SIGNAL(valueChanged(qreal)), SLOT(updateValues()));

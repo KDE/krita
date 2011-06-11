@@ -856,24 +856,29 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
     if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
         if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
-            if (!m_documentLayout->relativeTabs()) {
-                listTab += leftMargin + m_indent;
-            } else {
-                listTab -= leftMargin + m_indent; // express it relatively like other tabs
-            }
-
-            foreach(KoText::Tab tab, tabs) {
-                qreal position = tab.position  * 72. / qt_defaultDpiY();
-                if (position > listLabelIndent) {
-                    // found the relevant normal tab
-                    if (position > listTab && listTab > listLabelIndent) {
-                        // But special tab is more relevant
-                        position = listTab;
-                    }
-                    m_indent += position;
-                    break;
+            if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
+                qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                if (!m_documentLayout->relativeTabs()) {
+                    listTab += leftMargin + m_indent;
+                } else {
+                    listTab -= leftMargin + m_indent; // express it relatively like other tabs
                 }
+
+                foreach(KoText::Tab tab, tabs) {
+                    qreal position = tab.position  * 72. / qt_defaultDpiY();
+                    if (position > listLabelIndent) {
+                        // found the relevant normal tab
+                        if (position > listTab && listTab > listLabelIndent) {
+                            // But special tab is more relevant
+                            position = listTab;
+                        }
+                        m_indent += position;
+                        break;
+                    }
+                }
+            }
+            else {
+                m_indent = 0;
             }
         }
     }

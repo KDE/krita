@@ -170,7 +170,8 @@ KisLayerBox::KisLayerBox()
     m_nodeModel = new KisNodeModel(this);
 
     // connect model updateUI() to enable/disable controls
-    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
+    // connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));      NOTE: commented for temporary bug fix
+    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(setCurrentNode(KisNodeSP)));  // NOTE: temporary bug fix - Pentalis
     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
@@ -270,6 +271,7 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     if (node) {
         m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(node));
+        m_nodeManager->activateNode(node);   // NOTE: temporary bug fix - Pentalis
         updateUI();
     }
 }

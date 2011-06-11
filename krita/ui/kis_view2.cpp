@@ -884,22 +884,22 @@ void KisView2::slotSaveIncremental()
     KoDocument* pDoc = koDocument();
     if (!pDoc) return;
     
-    QString fileName = pDoc->localFilePath();
-    bool foundVersion = true;
-    bool fileAlreadyExists = false;  // We'll check this to rename with a different letter
+    bool foundVersion;
+    bool fileAlreadyExists;
     QString version = "000";
+    QString newVersion;
     QString letter;
-
+    QString fileName = pDoc->localFilePath();
+    
     // Find current version filenames
     QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
     regex.indexIn(fileName);     //  Perform the search
     QStringList matches = regex.capturedTexts();
-    if (matches.isEmpty()) foundVersion = false;
+    foundVersion = matches.at(0).isEmpty() ? false : true;
 
     // If the filename has a version, prepare it for incrementation
     if (foundVersion) {
         version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
-        qDebug() << version;
         if (version.contains(QRegExp("[a-z]"))) {
             version.chop(1);             //  Trim "."
             letter = version.right(1);   //  Save letter
@@ -908,6 +908,15 @@ void KisView2::slotSaveIncremental()
             version.chop(1);             //  Trim "."
         }
         version.remove(0, 1);            //  Trim "_"
+    } else {
+        // ...else, simply add a version to it so the next loop works
+        QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
+        regex2.indexIn(fileName);
+        QStringList matches2 = regex2.capturedTexts();
+        QString extensionPlusVersion = matches2.at(0);
+        extensionPlusVersion.prepend(version);
+        extensionPlusVersion.prepend("_");
+        fileName.replace(regex2, extensionPlusVersion);
     }
 
     // Prepare the base for new version filename
@@ -919,13 +928,11 @@ void KisView2::slotSaveIncremental()
     }
 
     // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
-    QString newVersion;
     do {
         newVersion = baseNewVersion;
         newVersion.prepend("_");
         if (!letter.isNull()) newVersion.append(letter);
         newVersion.append(".");
-        qDebug() << newVersion;
         fileName.replace(regex, newVersion);
         fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
         if (fileAlreadyExists) {
@@ -944,7 +951,6 @@ void KisView2::slotSaveIncremental()
         return;
     }
     
-    // Attempt to save
     pDoc->saveAs(fileName);
     
     shell()->updateCaption();

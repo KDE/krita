@@ -70,21 +70,25 @@ bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
     quint16 channelSize = header->channelDepth/8;
     qDebug() << "channelSize  " << channelSize << endl;
 
-    channelDataLength = header->height * header->width * header->nChannels * channelSize;
+    channelDataLength = header->height * header->width * channelSize;
+
     qDebug() << "channelDataLength  " << channelDataLength << endl;
     QByteArray r,g,b,a;
     quint8 rs,gs,bs;
     KoColorSpaceMaths<quint16, quint8> *kcsm;
-    r = io->read(channelDataLength / header->nChannels);
-    g = io->read(channelDataLength / header->nChannels);
-    b = io->read(channelDataLength / header->nChannels);
+    r = io->read(channelDataLength);
+    g = io->read(channelDataLength);
+    b = io->read(channelDataLength);
     for (int k=1;k<=channelDataLength;k++){
         rs = kcsm->scaleToA(r[k]);
         gs = kcsm->scaleToA(g[k]);
-          bs = kcsm->scaleToA(b[k]);
+        bs = kcsm->scaleToA(b[k]);
+        for (int i=0;i<header->width;i++)
+            for (int j=0;j<header->height;j++)
 
-            image.setPixel(1,1,qRgb(rs,gs,bs));
-}
+                image.setPixel(QPoint(i,j),qRgb(r[i],g[i],b[i]));
+
+    }
 
     qDebug() << "Position after reading all three channels" << io->pos();
 

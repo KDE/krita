@@ -53,8 +53,15 @@ public:
     ///@param paintopID id of the paintop for which the presets will be shown
     void setPresetFilter(const KoID & paintopID);
 
+    /// Set a list of preset names for resources that should be show, others will be hidden
+    /// Turns on name filter mode
+    ///@param filteredNames list of names of presets that will be shown
+    void setFilteredNames(const QStringList filteredNames);
+
     void setViewMode(ViewMode mode);
     void showButtons(bool show);
+    
+    KoResource* currentResource();
     
 signals:
     void resourceSelected(KoResource * resource);

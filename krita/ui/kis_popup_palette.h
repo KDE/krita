@@ -20,7 +20,7 @@
 #define KIS_POPUP_PALETTE_H
 
 #define brushInnerRadius 80.0
-#define brushOuterRadius 100.0
+#define brushOuterRadius 130.0
 #define colorInnerRadius 55.0
 #define colorOuterRadius 75.0
 #define brushRadius (brushInnerRadius+brushOuterRadius)/2
@@ -39,8 +39,7 @@ class KisTriangleColorSelector;
 class KisPopupPalette : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY (int hoveredBrush READ hoveredBrush WRITE setHoveredBrush);
-    Q_PROPERTY (int selectedBrush READ selectedBrush WRITE setSelectedBrush);
+    Q_PROPERTY (int hoveredPreset READ hoveredPreset WRITE setHoveredPreset);
     Q_PROPERTY (int hoveredColor READ hoveredColor WRITE setHoveredColor);
     Q_PROPERTY (int selectedColor READ selectedColor WRITE setSelectedColor);
 
@@ -70,10 +69,12 @@ protected:
     //functions to calculate index of favorite brush or recent color in array
     //n is the total number of favorite brushes or recent colors
     int calculateIndex(QPointF, int n);
+    
+    int calculatePresetIndex(QPointF, int n);
 
     //functions to set up hoveredBrush
-    void setHoveredBrush( int x );
-    int hoveredBrush() const;
+    void setHoveredPreset( int x );
+    int hoveredPreset() const;
     //functions to set up hoveredColor
     void setHoveredColor( int x );
     int hoveredColor() const;
@@ -87,9 +88,10 @@ private:
     void drawArcRisen(QPainter& painter, const QColor& color1, const QColor& color2, int radius);
     bool isPointInPixmap(QPointF&, int pos);
 
+    QPainterPath pathFromPresetIndex(int index);
+
 private:
-    int m_hoveredBrush;
-    int m_selectedBrush;
+    int m_hoveredPreset;
     int m_hoveredColor;
     int m_selectedColor;
     KoFavoriteResourceManager* m_resourceManager;

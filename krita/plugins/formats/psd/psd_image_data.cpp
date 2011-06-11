@@ -18,6 +18,7 @@
 
 #include <QFile>
 #include <QImage>
+#include <QDebug>
 
 #include "psd_image_data.h"
 #include "psd_utils.h"
@@ -62,7 +63,7 @@ bool PSDImageData::read(QIODevice *io, PSDHeader *header){
 
 bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
 {
-    QImage image=QImage(header->width,header->height, QImage::Format_RGB32 );
+    QImage image(header->width,header->height, QImage::Format_RGB32 );
 
     qDebug() << "compression: "<< compression;
     qDebug() << "Position after read " << io->pos();
@@ -79,15 +80,28 @@ bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
     r = io->read(channelDataLength);
     g = io->read(channelDataLength);
     b = io->read(channelDataLength);
-    for (int k=1;k<=channelDataLength;k++){
+
+    for (int k = 1; k <= channelDataLength; k++){
         rs = kcsm->scaleToA(r[k]);
         gs = kcsm->scaleToA(g[k]);
         bs = kcsm->scaleToA(b[k]);
-        for (int i=0;i<header->width;i++)
-            for (int j=0;j<header->height;j++)
+        qDebug() << "Iterating over the data in the channel arrays. Iteration" << k
+                 << "Channel size" << channelSize
+                 << "red value" << rs
+                 << "green value" << gs
+                 << "blue value" << bs;
+    
+        for (int row = 0; row < header->height; row++) {
+            qDebug() << "\tIterating over the rows. Current row" << row
+                     << "r, g, b" << rs << gs << bs;
 
-                image.setPixel(QPoint(i,j),qRgb(r[i],g[i],b[i]));
+            for (int col = 0; col < header->width; col++) {
+               qDebug() << "\t\titerating over the columns. Current column" << col
+                        << "r, g, b" << rs << gs << bs;
 
+                image.setPixel(QPoint(col, row), qRgb(rs, gs, bs));
+            }
+        }
     }
 
     qDebug() << "Position after reading all three channels" << io->pos();

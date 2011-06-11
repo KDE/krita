@@ -24,6 +24,9 @@
 #include "psd_layer_record.h"
 #include <QImage>
 #include <QFile>
+
+#include <kis_paint_device.h>
+#include <kis_types.h>
 class QIODevice;
 
 class PSDImageData
@@ -33,9 +36,8 @@ public:
     PSDImageData(PSDHeader *header);
     virtual ~PSDImageData();
 
-    bool read(QIODevice *io, PSDHeader *header);
-    bool readRawData(QIODevice *io, PSDHeader *header);
-
+    bool read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header);
+    bool readRawData(KisPaintDeviceSP dev,QIODevice *io, PSDHeader *header);
 
     quint16 compression;
     quint16 channelDataLength;

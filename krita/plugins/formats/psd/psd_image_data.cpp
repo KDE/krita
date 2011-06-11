@@ -24,6 +24,7 @@
 #include "psd_utils.h"
 
 #include "KoColorSpaceMaths.h"
+#include <KoColorSpaceTraits.h>
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -32,7 +33,7 @@ PSDImageData::~PSDImageData(){
 
 }
 
-bool PSDImageData::read(QIODevice *io, PSDHeader *header){
+bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
     qDebug() << "Position before read " << io->pos();
 
@@ -41,7 +42,7 @@ bool PSDImageData::read(QIODevice *io, PSDHeader *header){
     switch(compression){
 
       case 0: // Raw Data
-            readRawData(io,header);
+            readRawData(dev,io,header);
             break;
 
       case 1: // RLE
@@ -61,7 +62,7 @@ bool PSDImageData::read(QIODevice *io, PSDHeader *header){
     return true;
 }
 
-bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
+bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *header)
 {
     QImage image(header->width,header->height, QImage::Format_RGB32 );
 
@@ -76,7 +77,7 @@ bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
     qDebug() << "channelDataLength  " << channelDataLength << endl;
 
     QByteArray r,g,b,a;
-    quint8 rs,gs,bs;
+  //  quint8 rs,gs,bs;
 
     r = io->read(channelDataLength);
     g = io->read(channelDataLength);
@@ -85,26 +86,26 @@ bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
    // KoColorSpaceMaths<quint16, quint8> *kcsm;
 
     int row,col,index;
+
         for (row = 0; row < header->height; row++) {
+           KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
            for ( col = 0; col < header->width; col++) {
            index = (row * header->width + col) * channelSize;
-           qDebug()<<index;
-           /**
-             * When i use scaled values data rgb = 0,0,0 ?
-             * but when i dont use scaled values image is correct
-             */
-        /*   rs = kcsm->scaleToA(r[index]);
-             gs = kcsm->scaleToA(g[index]);
-             bs = kcsm->scaleToA(b[index]);
-          */ qDebug()<<rs<<gs<<bs;
-           image.setPixel(col, row, qRgb(r[index], g[index], b[index]));
-            }
+           if (header->nChannels == 3){
+               while(!it.isDone()){
+                KoRgbU16Traits::setRed(it.rawData(),r[index]);
+                KoRgbU16Traits::setGreen(it.rawData(),g[index]);
+                KoRgbU16Traits::setBlue(it.rawData(),b[index]);
+                ++it;
+               }
+               image.setPixel(col,row,qRgb(r[index],g[index],b[index]));
+          }
         }
-
-
+}
     qDebug() << "Position after reading all three channels" << io->pos();
 
     image.save("test.png");
     return true;
 }
+
 

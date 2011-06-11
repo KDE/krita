@@ -74,35 +74,33 @@ bool PSDImageData::readRawData(QIODevice *io, PSDHeader *header)
     channelDataLength = header->height * header->width * channelSize;
 
     qDebug() << "channelDataLength  " << channelDataLength << endl;
+
     QByteArray r,g,b,a;
     quint8 rs,gs,bs;
-    KoColorSpaceMaths<quint16, quint8> *kcsm;
+
     r = io->read(channelDataLength);
     g = io->read(channelDataLength);
     b = io->read(channelDataLength);
 
-    for (int k = 1; k <= channelDataLength; k++){
-        rs = kcsm->scaleToA(r[k]);
-        gs = kcsm->scaleToA(g[k]);
-        bs = kcsm->scaleToA(b[k]);
-        qDebug() << "Iterating over the data in the channel arrays. Iteration" << k
-                 << "Channel size" << channelSize
-                 << "red value" << rs
-                 << "green value" << gs
-                 << "blue value" << bs;
-    
-        for (int row = 0; row < header->height; row++) {
-            qDebug() << "\tIterating over the rows. Current row" << row
-                     << "r, g, b" << rs << gs << bs;
+   // KoColorSpaceMaths<quint16, quint8> *kcsm;
 
-            for (int col = 0; col < header->width; col++) {
-               qDebug() << "\t\titerating over the columns. Current column" << col
-                        << "r, g, b" << rs << gs << bs;
-
-                image.setPixel(QPoint(col, row), qRgb(rs, gs, bs));
+    int row,col,index;
+        for (row = 0; row < header->height; row++) {
+           for ( col = 0; col < header->width; col++) {
+           index = (row * header->width + col) * channelSize;
+           qDebug()<<index;
+           /**
+             * When i use scaled values data rgb = 0,0,0 ?
+             * but when i dont use scaled values image is correct
+             */
+        /*   rs = kcsm->scaleToA(r[index]);
+             gs = kcsm->scaleToA(g[index]);
+             bs = kcsm->scaleToA(b[index]);
+          */ qDebug()<<rs<<gs<<bs;
+           image.setPixel(col, row, qRgb(r[index], g[index], b[index]));
             }
         }
-    }
+
 
     qDebug() << "Position after reading all three channels" << io->pos();
 

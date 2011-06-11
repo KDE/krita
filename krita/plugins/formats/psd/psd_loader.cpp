@@ -46,6 +46,7 @@
 #include "psd_resource_section.h"
 #include "psd_layer_section.h"
 #include "psd_resource_block.h"
+#include "psd_image_data.h"
 
 PSDLoader::PSDLoader(KisDoc2 *doc)
 {
@@ -141,12 +142,15 @@ KisImageBuilder_Result PSDLoader::decode(const KUrl& uri)
     // read the projection into our single layer
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << f.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
-        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
+        PSDImageData imageData(&header);
+        imageData.read(&f,&header);
+	KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
         KisTransaction("", layer -> paintDevice());
         //readLayerData(&f, layer->paintDevice(), f.pos(), QRect(0, 0, header.width, header.height));
         m_image->addNode(layer, m_image->rootLayer());
     }
     else {
+
         // read the channels for the various layers
         for(int i = 0; i < layerSection.nLayers; ++i) {
 

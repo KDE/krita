@@ -40,6 +40,7 @@
 #include <QObject>
 #include <QScrollBar>
 
+#include <kio/netaccess.h>
 #include <kmenubar.h>
 #include <ktoolbar.h>
 #include <kstatusbar.h>
@@ -254,11 +255,16 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
-    // krita/krita.rc must also be modified to add actions the menu entries
+    // krita/krita.rc must also be modified to add actions to the menu entries
     
     m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
     actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
     connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    
+    if (koDocument()->localFilePath().isNull()) {
+        m_d->saveIncremental->setEnabled(false);
+    }
     
     m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
     actionCollection()->addAction("total_refresh", m_d->totalRefresh);
@@ -868,30 +874,80 @@ void KisView2::slotCreateTemplate()
 
 }
 
+void KisView2::slotDocumentSaved()
+{
+    m_d->saveIncremental->setEnabled(true);
+}
+
 void KisView2::slotSaveIncremental()
 {
     KoDocument* pDoc = koDocument();
     if (!pDoc) return;
     
-    QString file = pDoc->localFilePath();
-    QRegExp regex("_\\d{1,4}.");   // Find incremental numbers
-    regex.indexIn(file);
-    QStringList list = regex.capturedTexts();
-    QString version = list.at(0);
-    version.chop(1);
-    version.remove(0, 1);
-    int intVersion = version.toInt(0);
-    intVersion++;
-    QString newVersion = QString::number(intVersion);
+    QString fileName = pDoc->localFilePath();
+    bool foundVersion = true;
+    bool fileAlreadyExists = false;  // We'll check this to rename with a different letter
+    QString version = "000";
+    QString letter;
 
-    while (newVersion.length() < version.length()) {
-        newVersion.prepend("0");
+    // Find current version filenames
+    QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
+    regex.indexIn(fileName);     //  Perform the search
+    QStringList matches = regex.capturedTexts();
+    if (matches.isEmpty()) foundVersion = false;
+
+    // If the filename has a version, prepare it for incrementation
+    if (foundVersion) {
+        version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+        qDebug() << version;
+        if (version.contains(QRegExp("[a-z]"))) {
+            version.chop(1);             //  Trim "."
+            letter = version.right(1);   //  Save letter
+            version.chop(1);             //  Trim letter
+        } else {
+            version.chop(1);             //  Trim "."
+        }
+        version.remove(0, 1);            //  Trim "_"
     }
-    newVersion.prepend("_");
-    newVersion.append(".");
-    file.replace(regex, newVersion);
+
+    // Prepare the base for new version filename
+    int intVersion = version.toInt(0);
+    ++intVersion;
+    QString baseNewVersion = QString::number(intVersion);
+    while (baseNewVersion.length() < version.length()) {
+        baseNewVersion.prepend("0");
+    }
+
+    // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
+    QString newVersion;
+    do {
+        newVersion = baseNewVersion;
+        newVersion.prepend("_");
+        if (!letter.isNull()) newVersion.append(letter);
+        newVersion.append(".");
+        qDebug() << newVersion;
+        fileName.replace(regex, newVersion);
+        fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+        if (fileAlreadyExists) {
+            if (!letter.isNull()) {
+                char letterCh = letter.at(0).toLatin1();
+                ++letterCh;
+                letter = QString(QChar(letterCh));
+            } else {
+                letter = "a";
+            }
+        }
+    } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
+
+    if (letter == "{") {
+        KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
+        return;
+    }
     
-    pDoc->saveAs(file);
+    // Attempt to save
+    pDoc->saveAs(fileName);
+    
+    shell()->updateCaption();
 }
 
 void KisView2::disableControls()

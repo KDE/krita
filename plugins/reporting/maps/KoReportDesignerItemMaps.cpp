@@ -39,10 +39,12 @@
 // ReportEntitiesImage
 //
 // contructors/deconstructors
+//#define KDE_DEFAULT_DEBUG_AREA 44021
+#define myDebug() kDebug(44021) << "\e[35m=="
 
 void KoReportDesignerItemMaps::init(QGraphicsScene * scene)
 {
-    kDebug();
+    myDebug() << "\e[35m======\e[0m";
     if (scene)
         scene->addItem(this);
 
@@ -58,16 +60,17 @@ void KoReportDesignerItemMaps::init(QGraphicsScene * scene)
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(KoReportDesigner * rw, QGraphicsScene* scene, const QPointF &pos)
         : KoReportDesignerItemRectBase(rw)
 {
-  kDebug();
+    myDebug() << "\e[35m======KoReportDesigner\e[0m";
     init(scene);
     m_size.setSceneSize(QSizeF(100, 100));
     m_pos.setScenePos(pos);
-    m_name->setValue(m_reportDesigner->suggestEntityName("image"));
+    m_name->setValue(m_reportDesigner->suggestEntityName("mapbrowser"));
 }
 
 KoReportDesignerItemMaps::KoReportDesignerItemMaps(QDomNode & element, KoReportDesigner * rw, QGraphicsScene* scene)
         : KoReportItemMaps(element), KoReportDesignerItemRectBase(rw)
 {
+    myDebug() << "\e[35m======QDomNode\e[0m";
     init(scene);
     setSceneRect(m_pos.toScene(), m_size.toScene());
 }
@@ -91,20 +94,28 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
-
+    myDebug() << "\e[35m======Paint\e[0m";
     // store any values we plan on changing so we can restore them
     QPen  p = painter->pen();
 
-    if (isInline()) {
-        //QImage t_img = _image;
-        QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
-        if (mode() == "stretch") {
-            t_img = t_img.scaled(rect().width(), rect().height(), Qt::KeepAspectRatio);
-        }
-        painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
-    } else {
-        painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "image"));
-    }
+//     if (isInline()) {
+//         //QImage t_img = _image;
+//         QImage t_img = m_staticImage->value().value<QPixmap>().toImage();
+//         if (mode() == "stretch") {
+//             t_img = t_img.scaled(rect().width(), rect().height(), Qt::KeepAspectRatio);
+//         }
+//         painter->drawImage(rect().left(), rect().top(), t_img, 0, 0, rect().width(), rect().height());
+//     } else {
+//         painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "image"));
+//     }
+    painter->setBrush(QBrush(QColor(0xce, 0x00, 0xef, 0xaa)));
+    painter->drawRoundedRect(rect(),30,30);
+    //painter->drawRect(rect());
+    //painter->fillRect(rect(),);
+    
+    painter->setPen(Qt::black);
+    painter->drawText(rect(), 0, dataSourceAndObjectTypeName(itemDataSource(), "maps"));
+    
 
     //Draw a border so user knows the object edge
     painter->setPen(QPen(QColor(224, 224, 224)));
@@ -119,28 +130,30 @@ void KoReportDesignerItemMaps::paint(QPainter* painter, const QStyleOptionGraphi
 
 void KoReportDesignerItemMaps::buildXML(QDomDocument & doc, QDomElement & parent)
 {
-    QDomElement entity = doc.createElement("report:image");
+    myDebug() << "\e[35m====== BUILDING XML \e[0m";
+    QDomElement entity = doc.createElement("report:maps");
 
     // properties
     addPropertyAsAttribute(&entity, m_name);
-    addPropertyAsAttribute(&entity, m_resizeMode);
+    //addPropertyAsAttribute(&entity, m_resizeMode);
     entity.setAttribute("report:z-index", zValue());
     buildXMLRect(doc, entity, &m_pos, &m_size);
 
 
-    if (isInline()) {
-        QDomElement map = doc.createElement("report:inline-image-data");
-        map.appendChild(doc.createTextNode(inlineImageData()));
-        entity.appendChild(map);
-    } else {
-        addPropertyAsAttribute(&entity, m_controlSource);
-    }
+//     if (isInline()) {
+//         QDomElement map = doc.createElement("report:inline-image-data");
+//         map.appendChild(doc.createTextNode(inlineImageData()));
+//         entity.appendChild(map);
+//     } else {
+//         addPropertyAsAttribute(&entity, m_controlSource);
+//     }
 
     parent.appendChild(entity);
 }
 
 void KoReportDesignerItemMaps::slotPropertyChanged(KoProperty::Set &s, KoProperty::Property &p)
 {
+    myDebug() << p.name() << ":" << p.value();
     if (p.name() == "Name") {
         //For some reason p.oldValue returns an empty string
         if (!m_reportDesigner->isEntityNameUnique(p.value().toString(), this)) {
@@ -156,6 +169,7 @@ void KoReportDesignerItemMaps::slotPropertyChanged(KoProperty::Set &s, KoPropert
 
 void KoReportDesignerItemMaps::mousePressEvent(QGraphicsSceneMouseEvent * event)
 {
+    myDebug() << "\e[35m======\e[0m";
     m_controlSource->setListData(m_reportDesigner->fieldKeys(), m_reportDesigner->fieldNames());
     KoReportDesignerItemRectBase::mousePressEvent(event);
 }

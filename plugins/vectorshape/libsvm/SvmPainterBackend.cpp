@@ -143,15 +143,32 @@ void SvmPainterBackend::textArray(SvmGraphicsContext &context,
 void SvmPainterBackend::updateFromGraphicscontext(SvmGraphicsContext &context)
 {
     if (context.changedItems & GCLineColor) {
-        m_painter->setPen(context.lineColor);
+        QPen pen = m_painter->pen();
+        if (context.lineColorSet) {
+            pen.setColor(context.lineColor);
+            pen.setStyle(Qt::SolidLine);
+        }
+        else
+            pen.setStyle(Qt::NoPen);
+        m_painter->setPen(pen);
 #if DEBUG_SVMPAINT
         kDebug(31000) << "*** Setting line color to" << context.lineColor;
 #endif
     }
-    if (context.changedItems & GCFillBrush) {
-        m_painter->setBrush(context.fillBrush);
+    if (context.changedItems & GCFillColor) {
+        QBrush brush(m_painter->brush());
+        if (context.fillColorSet) {
+            brush.setColor(context.fillColor);
+            brush.setStyle(Qt::SolidPattern);
+        }
+        else
+            brush.setStyle(Qt::NoBrush);
+        m_painter->setBrush(brush);
 #if DEBUG_SVMPAINT
-        kDebug(31000) << "*** Setting fill brush to" << context.fillBrush;
+        if (context.fillColorSet)
+            kDebug(31000) << "*** Setting fill color to" << context.fillColor;
+        else
+            kDebug(31000) << "*** Unsetting fill color";
 #endif
     }
     if (context.changedItems & GCTextColor) {

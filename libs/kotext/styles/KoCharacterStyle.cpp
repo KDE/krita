@@ -293,6 +293,7 @@ qreal KoCharacterStyle::Private::calculateFontStretch(QString fontFamily)
     qreal height = os2->usWinAscent + os2->usWinDescent;
     height = height * (2048 / header->Units_Per_EM);
     stretch = (1.215 * height)/2500;
+    stretch = (1.15 * height)/2500; // seems a better guess but probably not right
 
     FT_Done_Face(face);
     FT_Done_FreeType(library);

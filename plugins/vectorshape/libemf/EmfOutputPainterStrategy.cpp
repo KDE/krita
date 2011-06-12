@@ -1438,9 +1438,12 @@ static QPainter::CompositionMode  rasteropToQtComposition(long rop)
     } opTab[] = {
         // ### untested (conversion from Qt::RasterOp)
         { 0x00CC0020, QPainter::CompositionMode_Source }, // CopyROP
-        { 0x00EE0086, QPainter::CompositionMode_SourceOver }, // OrROP
-        { 0x008800C6, QPainter::CompositionMode_SourceIn }, // AndROP
-        { 0x00660046, QPainter::CompositionMode_Xor }, // XorROP
+        { 0x00EE0086, QPainter::RasterOp_SourceOrDestination }, // OrROP
+        { 0x008800C6, QPainter::RasterOp_SourceAndDestination }, // AndROP
+        { 0x00660046, QPainter::RasterOp_SourceXorDestination }, // XorROP
+        // ----------------------------------------------------------------
+        // FIXME: Checked above this, below is still todo
+        // ----------------------------------------------------------------
         { 0x00440328, QPainter::CompositionMode_DestinationOut }, // AndNotROP
         { 0x00330008, QPainter::CompositionMode_DestinationOut }, // NotCopyROP
         { 0x001100A6, QPainter::CompositionMode_SourceOut }, // NandROP

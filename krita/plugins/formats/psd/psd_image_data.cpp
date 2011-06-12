@@ -19,9 +19,11 @@
 #include <QFile>
 #include <QImage>
 #include <QDebug>
+#include <QBuffer>
 
 #include "psd_image_data.h"
 #include "psd_utils.h"
+#include "compression.h"
 
 #include "KoColorSpaceMaths.h"
 #include <KoColorSpaceTraits.h>
@@ -39,6 +41,7 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
     // Types start with a capital letter, variables with a lower case letter, so _c_ompression, not _C_ompression
     psdread(io, &compression);
+    qDebug() << "COMPRESSION TYPE " << compression;
     switch(compression){
 
       case 0: // Raw Data
@@ -46,12 +49,16 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
             break;
 
       case 1: // RLE
+       readRLEData(dev,io,header);
+            qDebug()<<"RLE ENCODED";
         break;
 
       case 2: // ZIP without prediction
+            qDebug()<<"ZIP without prediction";
         break;
 
       case 3: // ZIP with prediction
+            qDebug()<<"ZIP with prediction";
         break;
 
       default:
@@ -74,19 +81,17 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
 
     channelDataLength = header->height * header->width * channelSize;
 
+    qDebug() << "Height: " << header->height;
+    qDebug() << "Width: "  << header->width;
     qDebug() << "channelDataLength  " << channelDataLength << endl;
 
     QByteArray r,g,b,a;
-  //  quint8 rs,gs,bs;
 
     r = io->read(channelDataLength);
     g = io->read(channelDataLength);
     b = io->read(channelDataLength);
 
-   // KoColorSpaceMaths<quint16, quint8> *kcsm;
-
     int row,col,index;
-
         for (row = 0; row < header->height; row++) {
            KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
            for ( col = 0; col < header->width; col++) {
@@ -98,7 +103,7 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
                 KoRgbU16Traits::setBlue(it.rawData(),b[index]);
                 ++it;
                }
-               image.setPixel(col,row,qRgb(r[index],g[index],b[index]));
+              dev->setPixel(col,row,qRgb(r[index],g[index],b[index]));
           }
         }
 }
@@ -108,4 +113,20 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
     return true;
 }
 
+bool PSDImageData::readRLEData(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
+
+   /* QByteArray compressedBytes;
+    QBuffer buf(&unCompressedBytes);
+    int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
+    foreach(int rleRowLength, channelInfo->rleRowLengths) {
+        compressedBytes = io->read(rleRowLength);
+        if (compressedBytes.length() == 0) {
+           // error = QString("Could not read enough RLE bytes");
+            return QByteArray();
+        }
+        buf.write(Compression::uncompress(uncompressedLength, compressedBytes,Compression::CompressionType("RLE")));
+    }*/
+    //qDebug()<<buf.data();
+return true;
+}
 

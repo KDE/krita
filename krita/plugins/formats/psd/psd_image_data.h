@@ -38,9 +38,10 @@ public:
 
     bool read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header);
     bool readRawData(KisPaintDeviceSP dev,QIODevice *io, PSDHeader *header);
+    bool readRLEData(KisPaintDeviceSP dev,QIODevice *io, PSDHeader *header);
 
     quint16 compression;
-    quint16 channelDataLength;
+    quint64 channelDataLength;
 
 };
 

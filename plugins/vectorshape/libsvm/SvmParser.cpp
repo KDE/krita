@@ -149,11 +149,11 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "compressionMode:" << header.compressionMode;
     kDebug(31000) << "mapMode:" << "Origin" << header.mapMode.origin
                   << "scaleX"
-                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.numerator
-                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator)
+                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.denominator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.denominator)
                   << "scaleY"
-                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.numerator
-                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator);
+                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.denominator
+                  << (qreal(header.mapMode.scaleY.numerator) / header.mapMode.scaleY.denominator);
     kDebug(31000) << "size:" << header.width << header.height;
     kDebug(31000) << "actionCount:" << header.actionCount;
     kDebug(31000) << "================ SVM HEADER ================";
@@ -390,11 +390,11 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.mapMode;
                 kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
                               << "scaleX"
-                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.numerator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator)
+                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
                               << "scaleY"
-                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.numerator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator);
+                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
+                              << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
                 mContext.changedItems |= GCMapMode;
             }
             break;

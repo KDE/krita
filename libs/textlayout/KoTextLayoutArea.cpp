@@ -1098,9 +1098,6 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if ( block.charFormat().hasProperty(KoCharacterStyle::FontStretch)) {
-            // stretch line height to ms-word size
-            fontStretch = block.charFormat().property(KoCharacterStyle::FontStretch).toDouble();
         }
         height = block.charFormat().fontPointSize() * fontStretch;
     } else {

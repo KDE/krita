@@ -68,7 +68,7 @@ void Maps::setResizeMode(const QString &rm)
 
 void Maps::setInlineImage(const QByteArray &ba)
 {
-    m_map->setInlineImageData(ba);
+    //m_map->setInlineImageData(ba);
 }
 
 void Maps::loadFromFile(const QVariant &pth)
@@ -76,6 +76,6 @@ void Maps::loadFromFile(const QVariant &pth)
     QPixmap img;
 
     QString str = pth.toString();
-    m_map->setInlineImageData(QByteArray(), str);
+    //m_map->setInlineImageData(QByteArray(), str);
 }
 }

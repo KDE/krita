@@ -26,30 +26,33 @@
 #include <kcodecs.h>
 #include <renderobjects.h>
 
+#define myDebug() kDebug(44021) << "\e[35m=="
+
 KoReportItemMaps::KoReportItemMaps(QDomNode & element)
 {
+    myDebug() << "\e[35m======";
     createProperties();
     QDomNodeList nl = element.childNodes();
     QString n;
     QDomNode node;
 
     m_name->setValue(element.toElement().attribute("report:name"));
-    m_controlSource->setValue(element.toElement().attribute("report:item-data-source"));
-    m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
+    //m_controlSource->setValue(element.toElement().attribute("report:Maps-data-source"));
+    //m_resizeMode->setValue(element.toElement().attribute("report:resize-mode", "stretch"));
     Z = element.toElement().attribute("report:z-index").toDouble();
 
     parseReportRect(element.toElement(), &m_pos, &m_size);
-
+    myDebug() << "\e[35m====== childgren:";
     for (int i = 0; i < nl.count(); i++) {
         node = nl.item(i);
         n = node.nodeName();
 
-        if (n == "report:inline-image-data") {
-
-            setInlineImageData(node.firstChild().nodeValue().toLatin1());
-        } else {
-            kDebug() << "while parsing image element encountered unknow element: " << n;
-        }
+//         if (n == "report:Maps-data") {
+// 
+//             setInlineImageData(node.firstChild().nodeValue().toLatin1());
+//         } else {
+            myDebug() << "\e[35m====== while parsing image element encountered unknow element: " << n;
+//         }
     }
 
 }
@@ -59,72 +62,73 @@ KoReportItemMaps::~KoReportItemMaps()
     delete m_set;
 }
 
-bool KoReportItemMaps::isInline() const
-{
-    return !(inlineImageData().isEmpty());
-}
+// bool KoReportItemMaps::isInline() const
+// {
+//     return !(inlineImageData().isEmpty());
+// }
 
-QByteArray KoReportItemMaps::inlineImageData() const
-{
-    QPixmap pixmap = m_staticImage->value().value<QPixmap>();
-    QByteArray ba;
-    QBuffer buffer(&ba);
-    buffer.open(QIODevice::ReadWrite);
-    pixmap.save(&buffer, "PNG");   // writes pixmap into ba in PNG format,
-    //TODO should i remember the format used, or save as PNG as its lossless?
+// QByteArray KoReportItemMaps::inlineImageData() const
+// {
+//     QPixmap pixmap = m_staticImage->value().value<QPixmap>();
+//     QByteArray ba;
+//     QBuffer buffer(&ba);
+//     buffer.open(QIODevice::ReadWrite);
+//     pixmap.save(&buffer, "PNG");   // writes pixmap into ba in PNG format,
+//     //TODO should i remember the format used, or save as PNG as its lossless?
+// 
+//     QByteArray imageEncoded(KCodecs::base64Encode(buffer.buffer(), true));
+//     return imageEncoded;
+// }
 
-    QByteArray imageEncoded(KCodecs::base64Encode(buffer.buffer(), true));
-    return imageEncoded;
-}
+// void KoReportItemMaps::setInlineImageData(QByteArray dat, const QString &fn)
+// {
+//     //oryginal image function
+//     if (!fn.isEmpty()) {
+//         QPixmap pix(fn);
+//         if (!pix.isNull())
+//             m_staticImage->setValue(pix);
+//         else {
+//             QPixmap blank(1, 1);
+//             blank.fill();
+//             m_staticImage->setValue(blank);
+//         }
+//     } else {
+//         const QByteArray binaryStream(KCodecs::base64Decode(dat));
+//         const QPixmap pix(QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly));
+//         m_staticImage->setValue(pix);
+//     }
+// 
+// }
 
-void KoReportItemMaps::setInlineImageData(QByteArray dat, const QString &fn)
-{
-    if (!fn.isEmpty()) {
-        QPixmap pix(fn);
-        if (!pix.isNull())
-            m_staticImage->setValue(pix);
-        else {
-            QPixmap blank(1, 1);
-            blank.fill();
-            m_staticImage->setValue(blank);
-        }
-    } else {
-        const QByteArray binaryStream(KCodecs::base64Decode(dat));
-        const QPixmap pix(QPixmap::fromImage(QImage::fromData(binaryStream), Qt::ColorOnly));
-        m_staticImage->setValue(pix);
-    }
+// QString KoReportItemMaps::mode() const
+// {
+//     return m_resizeMode->value().toString();
+// }
 
-}
-
-QString KoReportItemMaps::mode() const
-{
-    return m_resizeMode->value().toString();
-}
-
-void KoReportItemMaps::setMode(const QString &m)
-{
-    if (mode() != m) {
-        m_resizeMode->setValue(m);
-    }
-}
+// void KoReportItemMaps::setMode(const QString &m)
+// {
+//     if (mode() != m) {
+//         m_resizeMode->setValue(m);
+//     }
+// }
 
 void KoReportItemMaps::createProperties()
 {
-    m_set = new KoProperty::Set(0, "Image");
+    m_set = new KoProperty::Set(0, "Maps");
 
     m_controlSource = new KoProperty::Property("item-data-source", QStringList(), QStringList(), QString(), i18n("Data Source"));
 
-    QStringList keys, strings;
-    keys << "clip" << "stretch";
-    strings << i18n("Clip") << i18n("Stretch");
-    m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
+    //QStringList keys, strings;
+    //keys << "clip" << "stretch";
+    //strings << i18n("Clip") << i18n("Stretch");
+    //m_resizeMode = new KoProperty::Property("resize-mode", keys, strings, "clip", i18n("Resize Mode"));
 
-    m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
+    //m_staticImage = new KoProperty::Property("static-image", QPixmap(), i18n("Static Image"));
 
     addDefaultProperties();
     m_set->addProperty(m_controlSource);
-    m_set->addProperty(m_resizeMode);
-    m_set->addProperty(m_staticImage);
+    //m_set->addProperty(m_resizeMode);
+    //m_set->addProperty(m_staticImage);
 }
 
 
@@ -140,31 +144,38 @@ QString KoReportItemMaps::itemDataSource() const
 
 QString KoReportItemMaps::typeName() const
 {
-    return "report:image";
+    return "report:maps";
 }
 
 int KoReportItemMaps::render(OROPage* page, OROSection* section,  QPointF offset, QVariant data, KRScriptHandler *script)
 {
     Q_UNUSED(script)
+    
+    ///@todo Remove this in real code
+    Q_UNUSED(data) 
+    
+    myDebug() << "Render";
 
-    QString uudata;
+    /*QString uudata;
     QByteArray imgdata;
     if (!isInline()) {
         imgdata = data.toByteArray();
     } else {
         uudata = inlineImageData();
         imgdata = KCodecs::base64Decode(uudata.toLatin1());
-    }
+    }*/
 
-    QImage img;
-    img.loadFromData(imgdata);
+    //QImage img;
+    //img.loadFromData(imgdata);
+    QImage img(300,400,QImage::Format_ARGB32);
+    img.fill(QColor(0xce, 0x00, 0xef, 0xff).rgba());
     OROImage * id = new OROImage();
     id->setImage(img);
-    if (mode().toLower() == "stretch") {
+    //if (mode().toLower() == "stretch") {
         id->setScaled(true);
         id->setAspectRatioMode(Qt::KeepAspectRatio);
         id->setTransformationMode(Qt::SmoothTransformation);
-    }
+    //}
 
     id->setPosition(m_pos.toScene() + offset);
     id->setSize(m_size.toScene());

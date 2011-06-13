@@ -44,24 +44,24 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
     qDebug() << "COMPRESSION TYPE " << compression;
     switch(compression){
 
-      case 0: // Raw Data
-            readRawData(dev,io,header);
-            break;
-
-      case 1: // RLE
-       readRLEData(dev,io,header);
-            qDebug()<<"RLE ENCODED";
+    case 0: // Raw Data
+        readRawData(dev,io,header);
         break;
 
-      case 2: // ZIP without prediction
-            qDebug()<<"ZIP without prediction";
+    case 1: // RLE
+        readRLEData(dev,io,header);
+        qDebug()<<"RLE ENCODED";
         break;
 
-      case 3: // ZIP with prediction
-            qDebug()<<"ZIP with prediction";
+    case 2: // ZIP without prediction
+        qDebug()<<"ZIP without prediction";
         break;
 
-      default:
+    case 3: // ZIP with prediction
+        qDebug()<<"ZIP with prediction";
+        break;
+
+    default:
         break;
 
     }
@@ -71,8 +71,6 @@ bool PSDImageData::read(KisPaintDeviceSP dev ,QIODevice *io, PSDHeader *header){
 
 bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *header)
 {
-    QImage image(header->width,header->height, QImage::Format_RGB32 );
-
     qDebug() << "compression: "<< compression;
     qDebug() << "Position after read " << io->pos();
 
@@ -92,30 +90,29 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
     b = io->read(channelDataLength);
 
     int row,col,index;
-        for (row = 0; row < header->height; row++) {
-           KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
-           for ( col = 0; col < header->width; col++) {
-           index = (row * header->width + col) * channelSize;
-           if (header->nChannels == 3){
-               while(!it.isDone()){
-                KoRgbU16Traits::setRed(it.rawData(),r[index]);
-                KoRgbU16Traits::setGreen(it.rawData(),g[index]);
-                KoRgbU16Traits::setBlue(it.rawData(),b[index]);
-                ++it;
-               }
-              dev->setPixel(col,row,qRgb(r[index],g[index],b[index]));
-          }
+    for (row = 0; row < header->height; row++) {
+        KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
+        for ( col = 0; col < header->width; col++) {
+            index = (row * header->width + col) * channelSize;
+            if (header->nChannels == 3){
+                while(!it.isDone()){
+                    KoRgbU16Traits::setRed(it.rawData(),r[index]);
+                    KoRgbU16Traits::setGreen(it.rawData(),g[index]);
+                    KoRgbU16Traits::setBlue(it.rawData(),b[index]);
+                    ++it;
+                }
+                dev->setPixel(col,row,qRgb(r[index],g[index],b[index]));
+            }
         }
-}
+    }
     qDebug() << "Position after reading all three channels" << io->pos();
 
-    image.save("test.png");
     return true;
 }
 
 bool PSDImageData::readRLEData(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
 
-   /* QByteArray compressedBytes;
+    /* QByteArray compressedBytes;
     QBuffer buf(&unCompressedBytes);
     int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
     foreach(int rleRowLength, channelInfo->rleRowLengths) {
@@ -127,6 +124,6 @@ bool PSDImageData::readRLEData(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *h
         buf.write(Compression::uncompress(uncompressedLength, compressedBytes,Compression::CompressionType("RLE")));
     }*/
     //qDebug()<<buf.data();
-return true;
+    return true;
 }
 

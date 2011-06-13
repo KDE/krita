@@ -553,7 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
-            allCellsFullyDone = allCellsFullyDone && cellFully;
+            allCellsFullyDone = allCellsFullyDone && (cellFully || rowHasExactHeight);
 
             noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom());
 

@@ -254,19 +254,6 @@ void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
                               const quint8 *srcRowStart, qint32 srcRowStride,
                               const quint8 *maskRowStart, qint32 maskRowStride,
                               qint32 rows, qint32 numColumns,
-                              quint8 opacity, quint8 flow) const
-{
-    composite(dstRowStart, dstRowStride,
-              srcRowStart, srcRowStride,
-              maskRowStart, maskRowStride,
-              rows, numColumns,
-              opacity, flow, d->defaultChannelFlags);
-}
-
-void KoCompositeOp::composite(quint8 *dstRowStart, qint32 dstRowStride,
-                              const quint8 *srcRowStart, qint32 srcRowStride,
-                              const quint8 *maskRowStart, qint32 maskRowStride,
-                              qint32 rows, qint32 numColumns,
                               quint8 opacity, const QBitArray& channelFlags) const
 {
     composite(dstRowStart, dstRowStride,

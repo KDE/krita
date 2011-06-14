@@ -497,10 +497,10 @@ public:
      * @param channelFlags a bit array reflecting which channels will be composited and which
      *        channels won't. The order is pixel order, not colorspace order.
      */
-    virtual void bitBlt(quint8 *dst,
+    virtual void bitBlt(quint8* dst,
                         qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
+                        const KoColorSpace* srcSpace,
+                        const quint8* src,
                         qint32 srcRowStride,
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
@@ -508,58 +508,24 @@ public:
                         quint8 flow,
                         qint32 rows,
                         qint32 cols,
-                        const KoCompositeOp * op,
-                        const QBitArray & channelFlags) const;
-
-    /**
-     * Convenience function for the above where all channels are turned on.
-     */
-    virtual void bitBlt(quint8 *dst,
-                        qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
-                        qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        quint8 flow,
-                        qint32 rows,
-                        qint32 cols,
-                        const KoCompositeOp * op) const;
-
+                        const KoCompositeOp* op,
+                        const QBitArray& channelFlags=QBitArray()) const;
     /**
      * Convenience function for the above if you don't have the composite op object yet.
      */
-    virtual void bitBlt(quint8 *dst,
+    virtual void bitBlt(quint8* dst,
                         qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
+                        const KoColorSpace* srcSpace,
+                        const quint8* src,
                         qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
+                        const quint8* srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
                         quint8 flow,
                         qint32 rows,
                         qint32 cols,
-                        const QString & op,
-                        const QBitArray & channelFlags) const;
-
-    /**
-     * Convenience function for the above, if you simply want all channels composited
-     */
-    virtual void bitBlt(quint8 *dst,
-                        qint32 dststride,
-                        const KoColorSpace * srcSpace,
-                        const quint8 *src,
-                        qint32 srcRowStride,
-                        const quint8 *srcAlphaMask,
-                        qint32 maskRowStride,
-                        quint8 opacity,
-                        quint8 flow,
-                        qint32 rows,
-                        qint32 cols,
-                        const QString& op) const;
-
+                        const QString& op,
+                        const QBitArray& channelFlags=QBitArray()) const;
 
     /**
      * Serialize this color following Create's swatch color specification available

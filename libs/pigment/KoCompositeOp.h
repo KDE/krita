@@ -22,8 +22,8 @@
 #include <klocale.h>
 #include <QString>
 #include <QList>
-#include <QMap>
 #include <QMultiMap>
+#include <QBitArray>
 
 #include "pigment_export.h"
 
@@ -249,16 +249,7 @@ public:
                             const quint8 *maskRowStart, qint32 maskRowStride,
                             qint32 rows, qint32 numColumns,
                             quint8 opacity,
-                            const QBitArray& channelFlags) const;
-    
-    /**
-    * Same as previous, but without channelFlags parameter
-    */
-    void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                   const quint8 *srcRowStart, qint32 srcRowStride,
-                   const quint8 *maskRowStart, qint32 maskRowStride,
-                   qint32 rows, qint32 numColumns,
-                   quint8 opacity=255, quint8 flow=255) const;
+                            const QBitArray& channelFlags=QBitArray()) const;
     
 private:
     KoCompositeOp();

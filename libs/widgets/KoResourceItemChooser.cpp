@@ -24,6 +24,7 @@
 #include <QGridLayout>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <QComboBox>
 #include <QHeaderView>
 #include <QAbstractProxyModel>
 
@@ -50,6 +51,7 @@ public:
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
+    QComboBox *tagSearchCombo, *tagOpCombo;
     QString knsrcFile;
 };
 
@@ -68,22 +70,30 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->buttonGroup = new QButtonGroup( this );
     d->buttonGroup->setExclusive( false );
 
-    QGridLayout* layout = new QGridLayout( this );
-    layout->addWidget( d->view, 0, 0, 1, 5 );
+    d->tagSearchCombo = new QComboBox( this );
+    d->tagSearchCombo->setEditable( true );
+    d->tagSearchCombo->setEnabled( true );
+    d->tagSearchCombo->hide();
+
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->addWidget( d->tagSearchCombo );
+    layout->addWidget( d->view );
+
+    QGridLayout* buttonLayout = new QGridLayout;
 
     QPushButton *button = new QPushButton( this );
     button->setIcon( SmallIcon("document-open") );
     button->setToolTip( i18n("Import") );
     button->setEnabled( true );
     d->buttonGroup->addButton( button, Button_Import );
-    layout->addWidget( button, 1, 0 );
+    buttonLayout->addWidget( button, 0, 0 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("trash-empty") );
     button->setToolTip( i18n("Delete") );
     button->setEnabled( false );
     d->buttonGroup->addButton( button, Button_Remove );
-    layout->addWidget( button, 1, 1 );
+    buttonLayout->addWidget( button, 0, 1 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("download") );
@@ -91,7 +101,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setEnabled( true );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsDownload );
-    layout->addWidget( button, 1, 3 );
+    buttonLayout->addWidget( button, 0, 3 );
 
     button = new QPushButton( this );
     button->setIcon( SmallIcon("go-up") );
@@ -99,16 +109,23 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     button->setEnabled( false );
     button->hide();
     d->buttonGroup->addButton( button, Button_GhnsUpload);
-    layout->addWidget( button, 1, 4 );
+    buttonLayout->addWidget( button, 0, 4 );
 
 
     connect( d->buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ));
 
-    layout->setColumnStretch( 0, 1 );
-    layout->setColumnStretch( 1, 1 );
-    layout->setColumnStretch( 2, 2 );
-    layout->setSpacing( 0 );
-    layout->setMargin( 0 );
+    buttonLayout->setColumnStretch( 0, 1 );
+    buttonLayout->setColumnStretch( 1, 1 );
+    buttonLayout->setColumnStretch( 2, 2 );
+    buttonLayout->setSpacing( 0 );
+    buttonLayout->setMargin( 0 );
+
+    d->tagOpCombo = new QComboBox( this );
+    d->tagOpCombo->setEditable( true );
+    d->tagOpCombo->setEnabled( false );
+
+    layout->addWidget( d->tagOpCombo );
+    layout->addLayout( buttonLayout );
 
     updateButtonState();
 }
@@ -201,6 +218,11 @@ void KoResourceItemChooser::showGetHotNewStuff( bool showDownload, bool showUplo
 #endif
 }
 
+void KoResourceItemChooser::showTagSearchBar(bool showSearchBar)
+{
+    showSearchBar ? d->tagSearchCombo->show() : d->tagSearchCombo->hide();
+}
+
 void KoResourceItemChooser::setColumnCount( int columnCount )
 {
     d->model->setColumnCount( columnCount );
@@ -280,11 +302,13 @@ void KoResourceItemChooser::updateButtonState()
     if( resource ) {
         removeButton->setEnabled( resource->removable() );
         uploadButton->setEnabled(resource->removable());
+        d->tagOpCombo->setEnabled( resource->removable());
         return;
     }
 
     removeButton->setEnabled( false );
     uploadButton->setEnabled(false);
+    d->tagOpCombo->setEnabled( false );
 }
 
 KoResource* KoResourceItemChooser::resourceFromModelIndex(const QModelIndex& index)

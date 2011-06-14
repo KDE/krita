@@ -187,7 +187,7 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
         // http://en.wikipedia.org/wiki/Lab_color_space
         // L for lightness and a and b for the color-opponent dimension
 
-       lb = io->read(channelDataLength);
+        lb = io->read(channelDataLength);
         ab = io->read(channelDataLength);
         bb = io->read(channelDataLength);
 
@@ -198,7 +198,7 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
         a_coef = 1.00;
         b_coef = 1.00;
 
-   /*     for (row = 0; row < header->height; row++){
+        /*     for (row = 0; row < header->height; row++){
             KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
             for ( col = 0; col < header->width; col++) {
                 index = (row * header->width + col) * channelSize;
@@ -229,7 +229,7 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
                 quint64 vY3 = vY * vY * vY;
                 quint64 vZ3 = vZ * vZ * vZ;
 */
-      /*          if ( vY3 > 0.008856 )
+        /*          if ( vY3 > 0.008856 )
                     vY = vY3;
                 else
                     vY = (vY - 16 / 116 ) / 7.787;
@@ -244,8 +244,8 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
                 else
                     vZ = (vZ - 16 / 116 ) / 7.787;*/
 
-                // Converted values from LAB -> XYZ
-/*
+        // Converted values from LAB -> XYZ
+        /*
                 quint64 X = rX * vX;
                 quint64 Y = rY * vY;
                 quint64 Z = rZ * vZ;

@@ -45,8 +45,7 @@ public:
     template<bool alphaLocked, bool allChannelFlags>
     inline static channels_type composeColorChannels(const channels_type* src, channels_type srcAlpha,
                                                      channels_type*       dst, channels_type dstAlpha,
-                                                     channels_type opacity, channels_type flow, const QBitArray& channelFlags) {
-        Q_UNUSED(flow);
+                                                     channels_type opacity, const QBitArray& channelFlags) {
         using namespace Arithmetic;
         
         channels_type blendAlpha = opacity;

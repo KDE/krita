@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Adrian Page     <adrian@pagenet.plus.com>
+ * Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
  * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
@@ -182,7 +182,7 @@ public:
     static QString categoryMix();
     static QString categoryMisc();
     
-    struct PIGMENTCMS_EXPORT ParameterInfo
+    struct ParameterInfo
     {
         quint8*       dstRowStart;
         qint32        dstRowStride;
@@ -192,9 +192,8 @@ public:
         qint32        maskRowStride;
         qint32        rows;
         qint32        cols;
-        quint8        opacity;
-        quint8        opacity2;
-        quint8        flow;
+        float         opacity;
+        float         flow;
         QBitArray     channelFlags;
     };
     
@@ -249,28 +248,17 @@ public:
      * @param rows number of scanlines to blend
      * @param numColumns length of the row of pixels in pixels
      * @param opacity transparency with which to blend
-     * @param flow transparency with which to blend the dab
      * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                           const quint8 *srcRowStart, qint32 srcRowStride,
-                           const quint8 *maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 numColumns,
-                           quint8 opacity, quint8 flow, const QBitArray& channelFlags) const;
-
-    /**
-    * Same as previous, but without flow parameter
-    */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
                             const quint8 *srcRowStart, qint32 srcRowStride,
                             const quint8 *maskRowStart, qint32 maskRowStride,
                             qint32 rows, qint32 numColumns,
-                            quint8 opacity,
-                            const QBitArray& channelFlags=QBitArray()) const;
-                            
+                            quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
+    
     /**
-        * Same as previous, but uses a parameter structure
-        */
+    * Same as previous, but uses a parameter structure
+    */
     virtual void composite(const ParameterInfo& params) const;
     
 private:

@@ -259,17 +259,17 @@ void KoColorSpace::bitBlt(quint8* dst,
                           const quint8* srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
-                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const QString& op,
                           const QBitArray& channelFlags) const
 {
     if (d->compositeOps.contains(op)) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(op), channelFlags);
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op), channelFlags);
     } else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
     }
+
 }
 
 void KoColorSpace::bitBlt(quint8* dst,
@@ -277,10 +277,9 @@ void KoColorSpace::bitBlt(quint8* dst,
                           const KoColorSpace* srcSpace,
                           const quint8* src,
                           qint32 srcRowStride,
-                          const quint8* srcAlphaMask,
+                          const quint8 *srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
-                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const KoCompositeOp* op,
@@ -309,16 +308,42 @@ void KoColorSpace::bitBlt(quint8* dst,
                       conversionData, conversionBufferStride,
                       srcAlphaMask, maskRowStride,
                       rows,  cols,
-                      opacity, flow, channelFlags);
+                      opacity, channelFlags);
     } else {
         op->composite(dst, dstRowStride,
                       src, srcRowStride,
                       srcAlphaMask, maskRowStride,
                       rows,  cols,
-                      opacity, flow, channelFlags);
+                      opacity, channelFlags);
     }
 
 }
+
+void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::ParameterInfo& params, const KoCompositeOp* op) const
+{
+    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
+    
+    if(params.rows <= 0 || params.cols <= 0)
+        return;
+    
+    if(!(*this == *srcSpace)) {
+        quint32           conversionBufferStride = params.cols * pixelSize();
+        QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
+        quint8*           conversionData         = conversionCache->data();
+        
+        for(qint32 row=0; row<params.rows; row++) {
+            srcSpace->convertPixelsTo(params.srcRowStart + row*params.srcRowStride    ,
+                                      conversionData     + row*conversionBufferStride, this, params.cols);
+        }
+        
+        KoCompositeOp::ParameterInfo paramInfo(params);
+        paramInfo.srcRowStart  = conversionData;
+        paramInfo.srcRowStride = conversionBufferStride;
+        op->composite(paramInfo);
+    }
+    else op->composite(params);
+}
+
 
 QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
 {

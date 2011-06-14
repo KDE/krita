@@ -81,8 +81,7 @@ private:
         
         qint32        srcInc    = (params.srcRowStride == 0) ? 0 : channels_nb;
         bool          useMask   = params.maskRowStart != 0;
-        channels_type flow      = scale<channels_type>(params.flow);
-        channels_type opacity   = mul(scale<channels_type>(params.opacity), flow);
+        channels_type opacity   = scale<channels_type>(params.opacity);
         quint8*       dstRowStart  = params.dstRowStart;
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
@@ -98,7 +97,7 @@ private:
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
                 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
-                    src, srcAlpha, dst, dstAlpha, blend, flow, channelFlags
+                    src, srcAlpha, dst, dstAlpha, blend, channelFlags
                 );
                 
                 if(alpha_pos != -1)

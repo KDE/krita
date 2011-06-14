@@ -1043,6 +1043,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
+    if(rootDocument() && rootDocument()->isLoading()) {
+        e->setAccepted(false);
+        return;
+    }
     if (queryClose()) {
         if (d->docToOpen) {
             // The open pane is visible

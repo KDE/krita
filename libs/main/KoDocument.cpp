@@ -1647,7 +1647,6 @@ bool KoDocument::openFile()
         QTimer::singleShot(0, notify, SLOT(sendEvent()));
         deleteOpenPane();
     }
-    d->bLoading = false;
 
     if (progressUpdater()) {
         QPointer<KoUpdater> updater
@@ -1658,6 +1657,8 @@ bool KoDocument::openFile()
     }
     delete d->progressUpdater;
     d->progressUpdater = 0;
+
+    d->bLoading = false;
 
     return ok;
 }

@@ -42,7 +42,11 @@ public:
 
     quint16 compression;
     quint64 channelDataLength;
+    quint32 channelSize;
 
+    QByteArray r,g,b,a; // RGB
+    QByteArray cba,mba,yba,kba; // CMYK
+    QByteArray lb,ab,bb; // LAB
 };
 
 #endif // PSD_IMAGE_DATA_H

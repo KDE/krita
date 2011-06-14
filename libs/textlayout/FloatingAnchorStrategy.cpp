@@ -107,6 +107,9 @@ bool FloatingAnchorStrategy::moveSubject()
     checkPageBorder(newPosition, containerBoundingRect);
 
     if (newPosition == m_anchor->shape()->position()) {
+        if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+            updateObstruction(data->documentOffset());
+        }
         return true;
     }
 

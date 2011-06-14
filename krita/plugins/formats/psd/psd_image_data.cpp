@@ -25,8 +25,10 @@
 #include "psd_utils.h"
 #include "compression.h"
 
-#include "KoColorSpaceMaths.h"
+#include <KoColorSpace.h>
+#include <KoColorSpaceMaths.h>
 #include <KoColorSpaceTraits.h>
+
 
 PSDImageData::PSDImageData(PSDHeader *header)
 {
@@ -94,15 +96,11 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
         KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
         for ( col = 0; col < header->width; col++) {
             index = (row * header->width + col) * channelSize;
-            if (header->nChannels == 3){
-                while(!it.isDone()){
-                    KoRgbU16Traits::setRed(it.rawData(),r[index]);
-                    KoRgbU16Traits::setGreen(it.rawData(),g[index]);
-                    KoRgbU16Traits::setBlue(it.rawData(),b[index]);
-                    ++it;
-                }
-                dev->setPixel(col,row,qRgb(r[index],g[index],b[index]));
-            }
+            KoRgbU16Traits::setRed(it.rawData(),r[index]);
+            KoRgbU16Traits::setGreen(it.rawData(),g[index]);
+            KoRgbU16Traits::setBlue(it.rawData(),b[index]);
+            dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+            ++it;
         }
     }
     qDebug() << "Position after reading all three channels" << io->pos();
@@ -112,18 +110,6 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
 
 bool PSDImageData::readRLEData(KisPaintDeviceSP dev, QIODevice *io, PSDHeader *header){
 
-    /* QByteArray compressedBytes;
-    QBuffer buf(&unCompressedBytes);
-    int uncompressedLength = (right - left) * (m_header.channelDepth / 8);
-    foreach(int rleRowLength, channelInfo->rleRowLengths) {
-        compressedBytes = io->read(rleRowLength);
-        if (compressedBytes.length() == 0) {
-           // error = QString("Could not read enough RLE bytes");
-            return QByteArray();
-        }
-        buf.write(Compression::uncompress(uncompressedLength, compressedBytes,Compression::CompressionType("RLE")));
-    }*/
-    //qDebug()<<buf.data();
     return true;
 }
 

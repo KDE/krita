@@ -244,28 +244,28 @@ void TestKoCompositeOps::testCompositeAlphaDarken()
     p16f.red = 10000; p16f.green = 15000; p16f.blue = 20000; p16f.alpha = HALF_OPACITY;
     p16f1.red = 15000; p16f1.green = 1000; p16f1.blue = 16000; p16f1.alpha = HALF_OPACITY;
     alphaDarken.composite(p16fPtr1, KoRgbU16Traits::pixelSize, p16fPtr, KoRgbU16Traits::pixelSize, 0, 0, 1, 1, 255);
-    QCOMPAREui(p16f1.red, 10000);
-    QCOMPAREui(p16f1.green, 15000);
-    QCOMPAREui(p16f1.blue, 20000);
-    QCOMPAREui(p16f1.alpha, HALF_OPACITY);
+    QCOMPAREui(p16f1.red, 12501);
+    QCOMPAREui(p16f1.green, 7999);
+    QCOMPAREui(p16f1.blue, 17999);
+    QCOMPAREui(p16f1.alpha, 49150);
 
     // Test no mask, full opacity, quarter-transparent src, half-transparent dst
     p16f.red = 10000; p16f.green = 15000; p16f.blue = 20000; p16f.alpha = QUARTER_OPACITY;
     p16f1.red = 15000; p16f1.green = 1000; p16f1.blue = 16000; p16f1.alpha = HALF_OPACITY;
     alphaDarken.composite(p16fPtr1, KoRgbU16Traits::pixelSize, p16fPtr, KoRgbU16Traits::pixelSize, 0, 0, 1, 1, 255);
-    QCOMPAREui(p16f1.red, 12501);
-    QCOMPAREui(p16f1.green, 7999);
-    QCOMPAREui(p16f1.blue, 17999);
-    QCOMPAREui(p16f1.alpha, HALF_OPACITY);
+    QCOMPAREui(p16f1.red, 13751);
+    QCOMPAREui(p16f1.green, 4499);
+    QCOMPAREui(p16f1.blue, 16999);
+    QCOMPAREui(p16f1.alpha, 40958);
 
     // Test no mask, full opacity, quarter-transparent dst, half-transparent src
     p16f.red = 10000; p16f.green = 15000; p16f.blue = 20000; p16f.alpha = HALF_OPACITY;
     p16f1.red = 15000; p16f1.green = 1000; p16f1.blue = 16000; p16f1.alpha = QUARTER_OPACITY;
     alphaDarken.composite(p16fPtr1, KoRgbU16Traits::pixelSize, p16fPtr, KoRgbU16Traits::pixelSize, 0, 0, 1, 1, 255);
-    QCOMPAREui(p16f1.red, 10000);
-    QCOMPAREui(p16f1.green, 15000);
-    QCOMPAREui(p16f1.blue, 20000);
-    QCOMPAREui(p16f1.alpha, HALF_OPACITY);
+    QCOMPAREui(p16f1.red, 12501);
+    QCOMPAREui(p16f1.green, 7999);
+    QCOMPAREui(p16f1.blue, 17999);
+    QCOMPAREui(p16f1.alpha, 40958);
 }
 
 void TestKoCompositeOps::testCompositeAdd()
@@ -391,7 +391,7 @@ void TestKoCompositeOps::testCompositeBurn()
     p16f1.red = 26000; p16f1.green = 26000; p16f1.blue = 30000; p16f1.alpha = FULL_OPACITY;
     burn.composite(p16fPtr1, KoRgbU16Traits::pixelSize, p16fPtr, KoRgbU16Traits::pixelSize, 0, 0, 1, 1, 255);
     QCOMPAREui(p16f1.red, 2527);
-    QCOMPAREui(p16f1.green, 11042);
+    QCOMPAREui(p16f1.green, 11041);
     QCOMPAREui(p16f1.blue, 14913);
     QCOMPAREui(p16f1.alpha, FULL_OPACITY);
 
@@ -1383,7 +1383,7 @@ void TestKoCompositeOps::testCompositeCopy2()
     QCOMPAREui(p16f1.red, 13760);
     QCOMPAREui(p16f1.green, 4472);
     QCOMPAREui(p16f1.blue, 16992);
-    QCOMPAREui(p16f1.alpha, 20446);
+    QCOMPAREui(p16f1.alpha, 20447);
 }
 
 void TestKoCompositeOps::testCompositeCopy()

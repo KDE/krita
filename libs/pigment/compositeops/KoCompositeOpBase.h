@@ -34,6 +34,7 @@
  *            channels_type srcAlpha,
  *            channels_type* dst,
  *            channels_type dstAlpha,
+ *            channels_type maskAlpha,
  *            channels_type opacity,
  *            const QBitArray& channelFlags
  *        )
@@ -58,30 +59,38 @@ public:
         const QBitArray& flags           = params.channelFlags.isEmpty() ? QBitArray(channels_nb,true) : params.channelFlags;
         bool             allChannelFlags = params.channelFlags.isEmpty() || params.channelFlags == QBitArray(channels_nb,true);
         bool             alphaLocked     = (alpha_pos != -1) && !flags.testBit(alpha_pos);
+        bool             useMask         = params.maskRowStart != 0;
         
-        if(alphaLocked) {
-            if(allChannelFlags)
-                genericComposite<true,true>(params, flags);
-            else
-                genericComposite<true,false>(params, flags);
+        if(useMask) {
+            if(alphaLocked) {
+                if(allChannelFlags) { genericComposite<true,true,true> (params, flags); }
+                else                { genericComposite<true,true,false>(params, flags); }
+            }
+            else {
+                if(allChannelFlags) { genericComposite<true,false,true> (params, flags); }
+                else                { genericComposite<true,false,false>(params, flags); }
+            }
         }
         else {
-            if(allChannelFlags)
-                genericComposite<false,true>(params, flags);
-            else
-                genericComposite<false,false>(params, flags);
+            if(alphaLocked) {
+                if(allChannelFlags) { genericComposite<false,true,true> (params, flags); }
+                else                { genericComposite<false,true,false>(params, flags); }
+            }
+            else {
+                if(allChannelFlags) { genericComposite<false,false,true> (params, flags); }
+                else                { genericComposite<false,false,false>(params, flags); }
+            }
         }
     }
 
 private:
-    template<bool alphaLocked, bool allChannelFlags>
+    template<bool useMask, bool alphaLocked, bool allChannelFlags>
     void genericComposite(const KoCompositeOp::ParameterInfo& params, const QBitArray& channelFlags) const {
         
         using namespace Arithmetic;
         
-        qint32        srcInc    = (params.srcRowStride == 0) ? 0 : channels_nb;
-        bool          useMask   = params.maskRowStart != 0;
-        channels_type opacity   = scale<channels_type>(params.opacity);
+        qint32        srcInc       = (params.srcRowStride == 0) ? 0 : channels_nb;
+        channels_type opacity      = scale<channels_type>(params.opacity);
         quint8*       dstRowStart  = params.dstRowStart;
         const quint8* srcRowStart  = params.srcRowStart;
         const quint8* maskRowStart = params.maskRowStart;
@@ -94,10 +103,10 @@ private:
             for(qint32 c=0; c<params.cols; ++c) {
                 channels_type srcAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : src[alpha_pos];
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue<channels_type>() : dst[alpha_pos];
-                channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask)) : opacity;
+                channels_type mskAlpha = useMask ? scale<channels_type>(*mask) : unitValue<channels_type>();
                 
                 channels_type newDstAlpha = _compositeOp::template composeColorChannels<alphaLocked,allChannelFlags>(
-                    src, srcAlpha, dst, dstAlpha, blend, channelFlags
+                    src, srcAlpha, dst, dstAlpha, mskAlpha, opacity, channelFlags
                 );
                 
                 if(alpha_pos != -1)
@@ -105,7 +114,9 @@ private:
                 
                 src += srcInc;
                 dst += channels_nb;
-                ++mask;
+                
+                if(useMask)
+                    ++mask;
             }
             
             srcRowStart  += params.srcRowStride;

@@ -38,6 +38,7 @@ set(kowidgets_LIB_SRCS
     KoResourceModel.cpp
     KoResourceItemDelegate.cpp
     KoResourceItemView.cpp
+    KoResourceTagging.cpp
     KoItemToolTip.cpp
     KoCheckerBoardPainter.cpp
     KoResourceServerAdapter.cpp
@@ -101,6 +102,7 @@ install( FILES
     KoXYColorSelector.h
     KoResourceItemChooser.h
     KoResourceSelector.h
+    KoResourceTagging.h
     KoLineStyleSelector.h
     KoDockWidgetTitleBar.h
     KoDockWidgetTitleBar.h

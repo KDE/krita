@@ -32,6 +32,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
+#include <QCompleter>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -43,6 +44,7 @@
 #include "KoResourceItemDelegate.h"
 #include "KoResourceModel.h"
 #include "KoResource.h"
+#include "KoResourceTagging.h"
 
 class KoResourceItemChooser::Private
 {
@@ -52,7 +54,10 @@ public:
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
     QComboBox *tagSearchCombo, *tagOpCombo;
+    KoResourceTagging *tagObject;
+    KoResource *curResource;
     QString knsrcFile;
+    QCompleter *tagCompleter;
 };
 
 KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent )
@@ -124,9 +129,13 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->tagOpCombo->setEditable( true );
     d->tagOpCombo->setEnabled( false );
 
+    connect( d->tagOpCombo, SIGNAL(activated(QString)), this, SLOT(tagOpComboActivated(QString)));
+    connect( d->tagOpCombo, SIGNAL(editTextChanged(QString)), this, SLOT(tagOpComboTextChanged(QString)));
+
     layout->addWidget( d->tagOpCombo );
     layout->addLayout( buttonLayout );
 
+    d->tagObject = new KoResourceTagging();
     updateButtonState();
 }
 
@@ -280,11 +289,13 @@ void KoResourceItemChooser::activated( const QModelIndex & index )
     if( ! index.isValid() )
         return;
 
-    KoResource * resource = resourceFromModelIndex(index);
+    d->curResource = resourceFromModelIndex(index);
 
-    if( resource ) {
-        emit resourceSelected( resource );
+    if( d->curResource ) {
+        emit resourceSelected( d->curResource );
+        setTagOpCombo(d->tagObject->getAssignedTagsList(d->curResource ));
     }
+
     updateButtonState();
 }
 
@@ -334,6 +345,66 @@ void KoResourceItemChooser::setKnsrcFile(const QString& knsrcFileArg)
 QSize KoResourceItemChooser::viewSize()
 {
     return d->view->size();
+}
+
+void KoResourceItemChooser::setTagOpCombo(QStringList tagsList)
+{
+    QString tags;
+    if(!tagsList.isEmpty()) {
+        tagsList.sort();
+        tags = tagsList.join(", ");
+        tags.append(", ");
+        d->tagOpCombo->setEditText( tags );
+     }
+    else
+    {
+        d->tagOpCombo->clear();
+    }
+
+    QStringList tagNamesList = d->tagObject->getTagNamesList();
+    QStringList autoCompletionTagsList;
+    for(int i=0; i< tagNamesList.count(); i++) {
+        if (!tagsList.contains(tagNamesList.at(i))) {
+            autoCompletionTagsList  << tags + tagNamesList.at(i);
+        }
+    }
+
+    d->tagCompleter = new QCompleter(autoCompletionTagsList, this);
+    d->tagOpCombo->setCompleter(d->tagCompleter);
+}
+
+void KoResourceItemChooser::tagOpComboActivated(QString lineEditText)
+{
+    QStringList tagsListNew = lineEditText.split(", ");
+    if(tagsListNew.contains("")) {
+        tagsListNew.removeAll("");
+    }
+
+    QStringList tagsList = d->tagObject->getAssignedTagsList(d->curResource);
+
+    foreach(const QString& tag, tagsListNew) {
+        if(!tagsList.contains(tag)) {
+            d->tagObject->addTag(d->curResource, tag);
+        }
+     }
+
+     foreach(const QString& tag, tagsList) {
+        if(!tagsListNew.contains(tag)) {
+            d->tagObject->delTag(d->curResource, tag);
+        }
+     }
+
+    setTagOpCombo( d->tagObject->getAssignedTagsList(d->curResource));
+}
+
+void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
+{
+    if(lineEditText.isEmpty()) {
+        QStringList assignedTagsList = d->tagObject->getAssignedTagsList(d->curResource);
+        foreach(const QString& tag, assignedTagsList) {
+            d->tagObject->delTag(d->curResource, tag);
+        }
+    }
 }
 
 #include <KoResourceItemChooser.moc>

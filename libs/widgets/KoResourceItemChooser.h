@@ -90,6 +90,9 @@ signals:
 private slots:
     void slotButtonClicked( int button );
     void activated ( const QModelIndex & index );
+    void setTagOpCombo(QStringList assignedTagsList);
+    void tagOpComboActivated(QString lineEditText);
+    void tagOpComboTextChanged(QString lineEditText);
 
 private:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };

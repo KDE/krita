@@ -190,7 +190,6 @@ void TestDocumentLayout::setupTest(const QString &initText)
 
 void TestDocumentLayout::testRootAreaZeroWidth()
 {
-    /*
     setupTest("a");
 
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
@@ -206,7 +205,6 @@ void TestDocumentLayout::testRootAreaZeroWidth()
     QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
     QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
     QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
-    */
 }
 
 void TestDocumentLayout::testRootAreaZeroHeight()
@@ -230,7 +228,6 @@ void TestDocumentLayout::testRootAreaZeroHeight()
 
 void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
 {
-    /*
     setupTest("a");
 
     MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
@@ -246,7 +243,6 @@ void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
     QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
     QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
     QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
-    */
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

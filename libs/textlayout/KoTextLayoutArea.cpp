@@ -899,7 +899,12 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
 
         documentLayout()->setAnchoringParagraphRect(m_blockRects.last());
 
-        runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y));
+        if (!runAroundHelper.fit( /* resetHorizontalPosition */ false, QPointF(x(), m_y))) {
+            cursor->lineTextStart = -1;
+            layout->endLayout();
+            clearPreregisteredFootNotes();
+            return false;
+        }
 
         qreal bottomOfText = line.y() + line.height();
 

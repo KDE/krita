@@ -80,9 +80,13 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
     connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
     connect(this, SIGNAL(finished(int)), SLOT(close()));
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -103,8 +107,11 @@ void KisFilterDialog::updatePreview()
 {
     if (!d->currentFilter) return;
 
-    d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
-    d->mask->setDirty();
+    if(d->uiFilterDialog.checkBoxPreview->isChecked()) {
+        d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+        d->mask->setDirty();
+    }
+
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
     d->uiFilterDialog.pushButtonApply->setText(i18n("Apply"));
 }
@@ -140,6 +147,17 @@ void KisFilterDialog::createMask()
         close();
         accept();
     }
+}
+
+void KisFilterDialog::previewCheckBoxChange(int state)
+{
+    d->mask->setVisible(state == Qt::Checked);
+    d->node->setDirty(d->node->extent());
+    updatePreview();
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+    group.config()->sync();
 }
 
 

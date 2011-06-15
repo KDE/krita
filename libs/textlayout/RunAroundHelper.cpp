@@ -148,6 +148,7 @@ void RunAroundHelper::createLineParts()
     } else {
         QList<QRectF> lineParts;
         QRectF rightLineRect = m_lineRect;
+        bool lastRightRectValid = false;
         qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
         // Devide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
@@ -156,10 +157,15 @@ void RunAroundHelper::createLineParts()
             QRectF lineRect = validObstruction->getRightLinePart(rightLineRect);
             if (lineRect.isValid()) {
                 rightLineRect = lineRect;
+                lastRightRectValid = true;
+            } else {
+                lastRightRectValid = false;
             }
         }
-        lineParts.append(rightLineRect);
-        Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());
+        if (lastRightRectValid) {
+            lineParts.append(rightLineRect);
+        }
+        //Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());
         // Select invalid parts because of wrap.
         for (int i = 0; i < m_validObstructions.size(); i++) {
             KoTextLayoutObstruction *obstruction = m_validObstructions.at(i);

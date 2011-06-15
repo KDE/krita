@@ -25,9 +25,9 @@
 #include <QPainter>
 #include <qtest_kde.h>
 
-class MockTextShape;
 class QTextDocument;
 class KoTextDocumentLayout;
+class KoStyleManager;
 
 class TestDocumentLayout : public QObject
 {
@@ -38,18 +38,24 @@ public:
 private slots:
     void initTestCase();
 
+#if 0
     /// Test the hittest of KoTextDocumentLayout
     void testHitTest();
     /// Test the hittest of KoTextDocumentLayout regarding setions
     void testHitTestSection();
+#endif
+
+    void testRootAreaZeroWidth();
+    void testRootAreaZeroHeight();
+    void testRootAreaZeroWidthAndHeight();
 
 private:
-    void initForNewTest();
+    void setupTest(const QString &initText = QString());
 
 private:
-    MockTextShape *shape1;
-    QTextDocument *doc;
-    KoTextDocumentLayout *layout;
+    QTextDocument *m_doc;
+    KoStyleManager *m_styleManager;
+    KoTextDocumentLayout *m_layout;
 };
 
 #endif

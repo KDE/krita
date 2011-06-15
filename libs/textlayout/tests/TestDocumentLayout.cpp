@@ -19,19 +19,28 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 #include "TestDocumentLayout.h"
-#include "MockTextShape.h"
+#include "MockRootAreaProvider.h"
 #include <QtGui>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
 
+#include <KoTextDocument.h>
+#include <KoStyleManager.h>
+#include <KoTextBlockData.h>
+#include <KoTextBlockBorderData.h>
+#include <KoInlineTextObjectManager.h>
+#include <KoTextDocumentLayout.h>
+#include <KoTextLayoutRootArea.h>
+#include <KoShape.h>
+
 void TestDocumentLayout::initTestCase()
 {
-    shape1 = 0;
-    doc = 0;
-    layout = 0;
+    m_doc = 0;
+    m_layout = 0;
 }
 
+#if 0
 void TestDocumentLayout::initForNewTest()
 {
     // this leaks memory like mad, but who cares ;)
@@ -144,6 +153,100 @@ void TestDocumentLayout::testHitTestSection()
     QCOMPARE(layout->hitTest(QPointF(20, paragOffets[1]), Qt::ExactHit), 109);
     QCOMPARE(layout->hitTest(QPointF(20, paragOffets[1]), Qt::FuzzyHit), 109);
     QVERIFY(layout->hitTest(QPointF(20, paragOffets[1] + 20), Qt::FuzzyHit) > 109);
+}
+#endif
+
+void TestDocumentLayout::setupTest(const QString &initText)
+{
+    m_doc = new QTextDocument;
+    Q_ASSERT(m_doc);
+
+    MockRootAreaProvider *provider = new MockRootAreaProvider();
+    Q_ASSERT(provider);
+    KoTextDocument(m_doc).setInlineTextObjectManager(new KoInlineTextObjectManager);
+
+    m_doc->setDefaultFont(QFont("Sans Serif", 12, QFont::Normal, false)); //do it manually since we do not load the appDefaultStyle
+
+    m_styleManager = new KoStyleManager();
+    KoTextDocument(m_doc).setStyleManager(m_styleManager);
+
+    m_layout = new KoTextDocumentLayout(m_doc, provider);
+    Q_ASSERT(m_layout);
+    m_doc->setDocumentLayout(m_layout);
+
+    QTextBlock block = m_doc->begin();
+    if (initText.length() > 0) {
+        QTextCursor cursor(m_doc);
+        cursor.insertText(initText);
+        KoParagraphStyle style;
+        style.setStyleId(101); // needed to do manually since we don't use the stylemanager
+        QTextBlock b2 = m_doc->begin();
+        while (b2.isValid()) {
+            style.applyStyle(b2);
+            b2 = b2.next();
+        }
+    }
+}
+
+void TestDocumentLayout::testRootAreaZeroWidth()
+{
+    /*
+    setupTest("a");
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    provider->setSuggestedSize(QSizeF(0.,200.));
+
+    m_layout->layout();
+
+    QVERIFY(provider->m_askedForMoreThenOneArea);
+    QVERIFY(provider->m_area);
+    QVERIFY(!provider->m_area->isDirty());
+    QVERIFY(provider->m_area->virginPage());
+    QVERIFY(provider->m_area->nextStartOfArea());
+    QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
+    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
+    */
+}
+
+void TestDocumentLayout::testRootAreaZeroHeight()
+{
+    setupTest("a");
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    provider->setSuggestedSize(QSizeF(200.,0.));
+
+    m_layout->layout();
+
+    QVERIFY(!provider->m_askedForMoreThenOneArea); // we add the text anyways even if it does not match in height
+    QVERIFY(provider->m_area);
+    QVERIFY(!provider->m_area->isDirty());
+    QVERIFY(!provider->m_area->virginPage()); // should not be virigin any longer cause we added text
+    QVERIFY(provider->m_area->nextStartOfArea());
+    QVERIFY(!provider->m_area->isStartingAt(provider->m_area->nextStartOfArea())); // start- and end-iterator should not be equal cause we added text
+    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,200.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,200.,0.));
+}
+
+void TestDocumentLayout::testRootAreaZeroWidthAndHeight()
+{
+    /*
+    setupTest("a");
+
+    MockRootAreaProvider *provider = dynamic_cast<MockRootAreaProvider*>(m_layout->provider());
+    provider->setSuggestedSize(QSizeF(0.,0.));
+
+    m_layout->layout();
+
+    QVERIFY(provider->m_askedForMoreThenOneArea);
+    QVERIFY(provider->m_area);
+    QVERIFY(!provider->m_area->isDirty());
+    QVERIFY(provider->m_area->virginPage());
+    QVERIFY(provider->m_area->nextStartOfArea());
+    QVERIFY(provider->m_area->isStartingAt(provider->m_area->nextStartOfArea()));
+    QCOMPARE(provider->m_area->boundingRect(), QRectF(0.,0.,0.,0.));
+    QCOMPARE(provider->m_area->referenceRect(), QRectF(0.,0.,0.,0.));
+    */
 }
 
 QTEST_KDEMAIN(TestDocumentLayout, GUI)

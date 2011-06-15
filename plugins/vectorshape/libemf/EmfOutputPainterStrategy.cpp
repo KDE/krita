@@ -42,7 +42,6 @@ OutputPainterStrategy::OutputPainterStrategy()
     : m_header( 0 )
     , m_path( 0 )
     , m_currentlyBuildingPath( false )
-    , m_image( 0 )
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
@@ -62,7 +61,6 @@ OutputPainterStrategy::OutputPainterStrategy(QPainter &painter, QSize &size,
     , m_windowExtIsSet(false)
     , m_viewportExtIsSet(false)
     , m_windowViewportIsSet(false)
-    , m_image( 0 )
     , m_fillRule(Qt::OddEvenFill)
     , m_mapMode(MM_TEXT)
     , m_textAlignMode(TA_NOUPDATECP) // == TA_TOP == TA_LEFT
@@ -78,7 +76,6 @@ OutputPainterStrategy::~OutputPainterStrategy()
 {
     delete m_header;
     delete m_path;
-    delete m_image;
 }
 
 void OutputPainterStrategy::paintBounds(const Header *header)
@@ -215,11 +212,6 @@ void OutputPainterStrategy::setPixelV( QPoint &point, quint8 red, quint8 green, 
     m_painter->drawPoint( point );
 
     m_painter->restore();
-}
-
-QImage* OutputPainterStrategy::image()
-{
-    return m_image;
 }
 
 

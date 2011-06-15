@@ -208,10 +208,6 @@ private:
     // the window / viewport calculation is redone.
     QTransform    m_outputTransform;
 #endif
-    /**
-       The image we are painting to
-    */
-    QImage *m_image;
 
     // ----------------------------------------------------------------
     //                     The playback device context

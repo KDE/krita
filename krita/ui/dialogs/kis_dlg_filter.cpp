@@ -20,6 +20,7 @@
 
 #include "kis_dlg_filter.h"
 
+#include <kguiitem.h>
 #include <KoCompositeOp.h>
 
 // From krita/image
@@ -75,10 +76,11 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.filterSelection->setImage(d->image);
+    d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
+    d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
-    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
     connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
@@ -113,7 +115,6 @@ void KisFilterDialog::updatePreview()
     }
 
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply"));
 }
 
 void KisFilterDialog::apply()
@@ -123,7 +124,6 @@ void KisFilterDialog::apply()
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply Again"));
 }
 
 void KisFilterDialog::close()

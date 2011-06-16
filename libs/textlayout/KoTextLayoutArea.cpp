@@ -460,7 +460,8 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 if (!nextIt.currentFrame())
                     cursor->it = nextIt;
                 m_endOfArea = new FrameIterator(cursor);
-                ++(cursor->it);
+                if (!cursor->it.atEnd())
+                    ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);
                 return false;

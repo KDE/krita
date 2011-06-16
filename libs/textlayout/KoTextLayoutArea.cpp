@@ -85,7 +85,7 @@ KoTextLayoutArea::KoTextLayoutArea(KoTextLayoutArea *p, KoTextDocumentLayout *do
  , m_maximumAllowedWidth(0.0)
  , m_dropCapsWidth(0)
  , m_startOfArea(0)
- , m_endOfArea()
+ , m_endOfArea(0)
  , m_acceptsPageBreak(false)
  , m_virginPage(true)
  , m_verticalAlignOffset(0)

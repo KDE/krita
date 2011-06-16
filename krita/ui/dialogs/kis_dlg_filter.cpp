@@ -20,6 +20,7 @@
 
 #include "kis_dlg_filter.h"
 
+#include <kguiitem.h>
 #include <KoCompositeOp.h>
 
 // From krita/image
@@ -75,14 +76,19 @@ KisFilterDialog::KisFilterDialog(QWidget* parent, KisNodeSP node, KisImageWSP im
     d->uiFilterDialog.pushButtonCreateMaskEffect->hide(); // TODO fixme, understand why the mask isn't created, and then remove that line
     d->uiFilterDialog.filterSelection->setPaintDevice(d->node->original());
     d->uiFilterDialog.filterSelection->setImage(d->image);
+    d->uiFilterDialog.pushButtonOk->setGuiItem(KStandardGuiItem::ok());
+    d->uiFilterDialog.pushButtonCancel->setGuiItem(KStandardGuiItem::cancel());
 
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonOk, SIGNAL(pressed()), SLOT(accept()));
-    connect(d->uiFilterDialog.pushButtonApply, SIGNAL(pressed()), SLOT(apply()));
     connect(d->uiFilterDialog.pushButtonCancel, SIGNAL(pressed()), SLOT(reject()));
+    connect(d->uiFilterDialog.checkBoxPreview, SIGNAL(stateChanged(int)), SLOT(previewCheckBoxChange(int)));
 
     connect(d->uiFilterDialog.filterSelection, SIGNAL(configurationChanged()), SLOT(updatePreview()));
     connect(this, SIGNAL(finished(int)), SLOT(close()));
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    d->uiFilterDialog.checkBoxPreview->setChecked(group.readEntry("showPreview", true));
 }
 
 KisFilterDialog::~KisFilterDialog()
@@ -103,10 +109,12 @@ void KisFilterDialog::updatePreview()
 {
     if (!d->currentFilter) return;
 
-    d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
-    d->mask->setDirty();
+    if(d->uiFilterDialog.checkBoxPreview->isChecked()) {
+        d->mask->setFilter(d->uiFilterDialog.filterSelection->configuration());
+        d->mask->setDirty();
+    }
+
     d->uiFilterDialog.pushButtonOk->setEnabled(true);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply"));
 }
 
 void KisFilterDialog::apply()
@@ -116,7 +124,6 @@ void KisFilterDialog::apply()
     KisFilterConfiguration* config = d->uiFilterDialog.filterSelection->configuration();
     emit(sigPleaseApplyFilter(d->node, config));
     d->uiFilterDialog.pushButtonOk->setEnabled(false);
-    d->uiFilterDialog.pushButtonApply->setText(i18n("Apply Again"));
 }
 
 void KisFilterDialog::close()
@@ -140,6 +147,17 @@ void KisFilterDialog::createMask()
         close();
         accept();
     }
+}
+
+void KisFilterDialog::previewCheckBoxChange(int state)
+{
+    d->mask->setVisible(state == Qt::Checked);
+    d->node->setDirty(d->node->extent());
+    updatePreview();
+
+    KConfigGroup group(KGlobal::config(), "filterdialog");
+    group.writeEntry("showPreview", d->uiFilterDialog.checkBoxPreview->isChecked());
+    group.config()->sync();
 }
 
 

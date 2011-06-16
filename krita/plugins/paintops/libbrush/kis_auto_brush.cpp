@@ -100,7 +100,7 @@ struct MaskProcessor
                     }
                 }
 
-                m_cs->setOpacity(dabPointer, alphaValue, 1);
+                m_cs->applyAlphaU8Mask(dabPointer, &alphaValue, 1);
                 dabPointer += m_pixelSize;
             }//endfor x
             dabPointer += offset;

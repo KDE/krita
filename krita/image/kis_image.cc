@@ -190,6 +190,8 @@ KisImage::~KisImage()
     delete m_d->perspectiveGrid;
     delete m_d->nserver;
     delete m_d;
+
+    disconnect(); // in case Qt gets confused
 }
 
 void KisImage::aboutToAddANode(KisNode *parent, int index)
@@ -428,11 +430,11 @@ void KisImage::scale(double sx, double sy, KoUpdater *progress, KisFilterStrateg
 
     m_d->adapter->beginMacro(i18n("Scale Image"));
     m_d->adapter->addCommand(new KisImageLockCommand(KisImageWSP(this), true));
-    
+
     if(!scaleOnlyShapes) {
         m_d->adapter->addCommand(new KisImageResizeCommand(KisImageWSP(this), newSize));
     }
-    
+
     KisTransformVisitor visitor(KisImageWSP(this), sx, sy, 0.0, 0.0, 0.0, 0, 0, progress, filterStrategy, scaleOnlyShapes);
     m_d->rootLayer->accept(visitor);
 
@@ -1082,7 +1084,7 @@ vKisAnnotationSP_it KisImage::beginAnnotations()
                 annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
             }
         }
-#endif        
+#endif
     }
 
     if (annotation)

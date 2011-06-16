@@ -23,6 +23,7 @@
 #include <kio/deletejob.h>
 
 #include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
@@ -101,6 +102,20 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageWSP imag
     KisOpenRasterStackSaveVisitor orssv(&osc);
 
     image->rootLayer()->accept(orssv);
+
+    if (store->open("Thumbnails/thumbnail.png")) {
+        QSize previewSize = image->bounds().size();
+        previewSize.scale(QSize(256,256), Qt::KeepAspectRatio);
+
+        QImage preview = image->convertToQImage(QRect(0, 0, previewSize.width(), previewSize.height()), previewSize, 0);
+
+        KoStoreDevice io(store);
+        if (io.open(QIODevice::WriteOnly)) {
+            preview.save(&io, "PNG", 0);
+        }
+        io.close();
+        store->close();
+    }
 
     delete store;
     return KisImageBuilder_RESULT_OK;

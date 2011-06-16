@@ -457,10 +457,11 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 Q_ASSERT(!cursor->it.atEnd());
                 QTextFrame::iterator nextIt = cursor->it;
                 ++nextIt;
-                if (!nextIt.currentFrame())
+                bool wasIncremented = !nextIt.currentFrame();
+                if (wasIncremented)
                     cursor->it = nextIt;
                 m_endOfArea = new FrameIterator(cursor);
-                if (!cursor->it.atEnd())
+                if (!wasIncremented)
                     ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);

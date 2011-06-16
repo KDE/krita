@@ -161,12 +161,16 @@ void RunAroundHelper::createLineParts()
                 lastRightRectValid = false;
             }
         }
+        int validObstructionsSize = m_validObstructions.size();
         if (lastRightRectValid) {
             lineParts.append(rightLineRect);
         }
-        //Q_ASSERT(m_validObstructions.size() + 1 == lineParts.size());
+        else {
+            --validObstructionsSize;
+        }
+        Q_ASSERT(validObstructionsSize + 1 == lineParts.size());
         // Select invalid parts because of wrap.
-        for (int i = 0; i < m_validObstructions.size(); i++) {
+        for (int i = 0; i < validObstructionsSize; i++) {
             KoTextLayoutObstruction *obstruction = m_validObstructions.at(i);
             if (obstruction->noTextAround()) {
                 lineParts.replace(i, QRectF());

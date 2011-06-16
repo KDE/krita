@@ -118,20 +118,25 @@ KisLayerBox::KisLayerBox()
     m_wdgLayerBox->bnViewMode->setIcon(KIcon("view-choose"));
     m_wdgLayerBox->bnViewMode->setText(i18n("View mode"));
 
-    m_wdgLayerBox->bnAdd->setIcon(SmallIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIcon(BarIcon("list-add"));
+    m_wdgLayerBox->bnAdd->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDelete->setIcon(SmallIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIcon(BarIcon("list-remove"));
+    m_wdgLayerBox->bnDelete->setIconSize(QSize(22, 22));
 
     m_wdgLayerBox->bnRaise->setEnabled(false);
-    m_wdgLayerBox->bnRaise->setIcon(SmallIcon("go-up"));
-
+    m_wdgLayerBox->bnRaise->setIcon(BarIcon("go-up"));
+    m_wdgLayerBox->bnRaise->setIconSize(QSize(22, 22));
+    
     m_wdgLayerBox->bnLower->setEnabled(false);
-    m_wdgLayerBox->bnLower->setIcon(SmallIcon("go-down"));
+    m_wdgLayerBox->bnLower->setIcon(BarIcon("go-down"));
+    m_wdgLayerBox->bnLower->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnProperties->setIcon(SmallIcon("document-properties"));
+    m_wdgLayerBox->bnProperties->setIcon(BarIcon("document-properties"));
+    m_wdgLayerBox->bnProperties->setIconSize(QSize(22, 22));
 
-    m_wdgLayerBox->bnDuplicate->setIcon(SmallIcon("edit-copy"));
-
+    m_wdgLayerBox->bnDuplicate->setIcon(BarIcon("edit-copy"));
+    m_wdgLayerBox->bnDuplicate->setIconSize(QSize(22, 22));
 
     connect(m_wdgLayerBox->bnAdd, SIGNAL(clicked()), SLOT(slotNewPaintLayer()));
     connect(m_wdgLayerBox->bnDelete, SIGNAL(clicked()), SLOT(slotRmClicked()));

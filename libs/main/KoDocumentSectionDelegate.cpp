@@ -96,43 +96,43 @@ void KoDocumentSectionDelegate::paint(QPainter *p, const QStyleOptionViewItem &o
     p->restore();
 }
 
-bool KoDocumentSectionDelegate::editorEvent(QEvent *e, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
+bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    if ((e->type() == QEvent::MouseButtonPress || e->type() == QEvent::MouseButtonDblClick)
+    if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
             && (index.flags() & Qt::ItemIsEnabled)) {
-        QMouseEvent *me = static_cast<QMouseEvent*>(e);
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        const QRect ir = iconsRect(option, index).translated(option.rect.topLeft()),
-                    tr = textRect(option, index).translated(option.rect.topLeft());
+        const QRect ICONS_RECT = iconsRect(option, index).translated(option.rect.topLeft());
+        const QRect TEXT_RECT = textRect(option, index).translated(option.rect.topLeft());
 
-        if (ir.isValid() && ir.contains(me->pos())) {
-            const int iconWidth = option.decorationSize.width();
-            int x = me->pos().x() - ir.left();
-            if (x % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin
-                Model::PropertyList lp = index.data(Model::PropertiesRole).value<Model::PropertyList>();
+        if (ICONS_RECT.isValid() && ICONS_RECT.contains(mouseEvent->pos())) {
+            const int ICON_WIDTH = option.decorationSize.width();
+            int xPos = mouseEvent->pos().x() - ICONS_RECT.left();
+            if (xPos % (ICON_WIDTH + d->margin) < ICON_WIDTH) { //it's on an icon, not a margin
+                Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                 int p = -1;
-                for (int i = 0, n = lp.count(); i < n; ++i) {
-                    if (lp[i].isMutable)
-                        x -= iconWidth + d->margin;
-                    p += 1;
-                    if (x < 0)
-                        break;
+                for (int i = 0, n = propertyList.count(); i < n; ++i) {
+                    if (propertyList[i].isMutable) {
+                        xPos -= ICON_WIDTH + d->margin;
+                    }
+                    ++p;
+                    if (xPos < 0) break;
                 }
-                lp[p].state = !lp[p].state.toBool();
-                model->setData(index, QVariant::fromValue(lp), Model::PropertiesRole);
+                propertyList[p].state = !propertyList[p].state.toBool();
+                model->setData(index, QVariant::fromValue(propertyList), Model::PropertiesRole);
             }
             return true;
         }
-        if (me->button() != Qt::LeftButton) {
+        if (mouseEvent->button() != Qt::LeftButton) {
             d->view->setCurrentIndex(index);
             return false;
         }
     }
-    else if (e->type() == QEvent::ToolTip) {
-        QHelpEvent *he = static_cast<QHelpEvent*>(e);
-        d->tip.showTip(d->view, he->pos(), option, index);
+    else if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+        d->tip.showTip(d->view, helpEvent->pos(), option, index);
         return true;
-    } else if (e->type() == QEvent::Leave) {
+    } else if (event->type() == QEvent::Leave) {
         d->tip.hide();
     }
 

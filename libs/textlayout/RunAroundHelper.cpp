@@ -62,7 +62,7 @@ void RunAroundHelper::updateObstruction(KoTextLayoutObstruction *obstruction)
     }
 }
 
-bool RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
+void RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
 {
     Q_ASSERT(line.isValid());
     if (resetHorizontalPosition) {
@@ -84,7 +84,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
             line.setNumColumns(1);
 
         line.setPosition(position);
-        return false;
+        return;
     }
 
     // Too little width because of  wrapping is handled in the remainder of this method
@@ -120,7 +120,6 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, QPointF position)
     line.setLineWidth(m_textWidth);
     line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
-    return true;
 }
 
 void RunAroundHelper::validateObstructions()

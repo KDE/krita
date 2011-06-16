@@ -111,7 +111,7 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             if (xPos % (ICON_WIDTH + d->margin) < ICON_WIDTH) { //it's on an icon, not a margin
                 Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                 int p = -1;
-                for (int i = 0, n = propertyList.count(); i < n; ++i) {
+                for (int i = 0; i < propertyList.count(); ++i) {
                     if (propertyList[i].isMutable) {
                         xPos -= ICON_WIDTH + d->margin;
                     }

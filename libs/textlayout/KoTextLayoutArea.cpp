@@ -454,8 +454,12 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
 
             if (acceptsPageBreak()
                    && (block.blockFormat().pageBreakPolicy() & QTextFormat::PageBreak_AlwaysAfter)) {
-                m_endOfArea = new FrameIterator(cursor);
                 Q_ASSERT(!cursor->it.atEnd());
+                QTextFrame::iterator nextIt = cursor->it;
+                ++nextIt;
+                if (!nextIt.currentFrame())
+                    cursor->it = nextIt;
+                m_endOfArea = new FrameIterator(cursor);
                 ++(cursor->it);
                 setBottom(m_y + m_footNotesHeight);
                 m_blockRects.last().setBottom(m_y);

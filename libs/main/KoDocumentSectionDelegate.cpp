@@ -102,18 +102,17 @@ bool KoDocumentSectionDelegate::editorEvent(QEvent *event, QAbstractItemModel *m
             && (index.flags() & Qt::ItemIsEnabled)) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        const QRect ICONS_RECT = iconsRect(option, index).translated(option.rect.topLeft());
-        const QRect TEXT_RECT = textRect(option, index).translated(option.rect.topLeft());
+        const QRect iconsRect_ = iconsRect(option, index).translated(option.rect.topLeft());
 
-        if (ICONS_RECT.isValid() && ICONS_RECT.contains(mouseEvent->pos())) {
-            const int ICON_WIDTH = option.decorationSize.width();
-            int xPos = mouseEvent->pos().x() - ICONS_RECT.left();
-            if (xPos % (ICON_WIDTH + d->margin) < ICON_WIDTH) { //it's on an icon, not a margin
+        if (iconsRect_.isValid() && iconsRect_.contains(mouseEvent->pos())) {
+            const int iconWidth = option.decorationSize.width();
+            int xPos = mouseEvent->pos().x() - iconsRect_.left();
+            if (xPos % (iconWidth + d->margin) < iconWidth) { //it's on an icon, not a margin
                 Model::PropertyList propertyList = index.data(Model::PropertiesRole).value<Model::PropertyList>();
                 int p = -1;
                 for (int i = 0; i < propertyList.count(); ++i) {
                     if (propertyList[i].isMutable) {
-                        xPos -= ICON_WIDTH + d->margin;
+                        xPos -= iconWidth + d->margin;
                     }
                     ++p;
                     if (xPos < 0) break;

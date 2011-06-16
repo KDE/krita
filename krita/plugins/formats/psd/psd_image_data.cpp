@@ -16,6 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+// XXX: we need this include to be able to convert byte order. Photoshop stores shorts like AB, we need BA to set the values
+#include <netinet/in.h> // htonl
+
 #include <QFile>
 #include <QImage>
 #include <QDebug>
@@ -98,23 +101,50 @@ bool PSDImageData::readRawData(KisPaintDeviceSP dev , QIODevice *io, PSDHeader *
     case 2: // indexed
         break;
 
+    // Use enums, not intes
     case 3: // RGB
 
-        r = io->read(channelDataLength);
-        g = io->read(channelDataLength);
-        b = io->read(channelDataLength);
-        for (row = 0; row < header->height; row++) {
-            KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
-            for ( col = 0; col < header->width; col++) {
-                index = (row * header->width + col) * channelSize;
-                KoRgbU16Traits::setRed(it.rawData(),r[index]);
-                KoRgbU16Traits::setGreen(it.rawData(),g[index]);
-                KoRgbU16Traits::setBlue(it.rawData(),b[index]);
-                dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
 
-                ++it;
+        // XXX: this code is only valid for images with channelsize == 2
+        if (channelSize == 2) {
+
+            // Actually, the next step will be to not slurp all the data into a huge QByteArray, but use 
+            // position and seek to read the bytes, this takes to much memory.
+            r = io->read(channelDataLength);
+            g = io->read(channelDataLength);
+            b = io->read(channelDataLength);
+
+            for (row = 0; row < header->height; row++) {
+                KisHLineIterator it = dev->createHLineIterator(0, row, header->width);
+                for ( col = 0; col < header->width; col++) {
+
+                    // since we're in two-bytes/channel mode anyway, don't multiply with the channelsize.
+                    // we will convert the _byte_ array to an array of _shorts_, so the index points to
+                    // the short.
+                    index = row * header->width + col;
+    
+                    // step 1: get the constData() -- which is the quint8 array in the byte array. We use const to avoid having Qt make a copy
+                    // step 2: reinterpret_cast that array to an array of const quint16 (const short)
+                    // step 3: get the quint16 at the index position
+                    // step 4: convert from network to host byte order
+                    quint16 red = ntohs(reinterpret_cast<const quint16 *>(r.constData())[index]);
+                    // step 5: set the value
+                    KoRgbU16Traits::setRed(it.rawData(), red);
+
+                    // same here
+                    quint16 green = ntohs(reinterpret_cast<const quint16 *>(g.constData())[index]);
+                    KoRgbU16Traits::setGreen(it.rawData(), green);
+
+                    // same here
+                    quint16 blue = ntohs(reinterpret_cast<const quint16 *>(b.constData())[index]);
+                    KoRgbU16Traits::setBlue(it.rawData(), blue);
+
+                    dev->colorSpace()->setOpacity(it.rawData(), OPACITY_OPAQUE_U8, 1);
+
+                    ++it;
+                }
+
             }
-
         }
         break;
 

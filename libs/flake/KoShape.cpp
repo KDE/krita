@@ -282,7 +282,7 @@ void KoShape::paintDecorations(QPainter &painter, const KoViewConverter &convert
     Q_UNUSED(painter);
     Q_UNUSED(converter);
     Q_UNUSED(canvas);
-    /* Since this code is not actually used (kivio is going to be the main user) lets disable instead of fix.
+    /* Since this code is not actually used (flow is going to be the main user) lets disable instead of fix.
         if (selected)
         {
             // draw connectors

@@ -182,6 +182,7 @@ void KisToolFreehand::mousePressEvent(KoPointerEvent *e)
                                                          KisVector2D::Zero(),
                                                          e->rotation(), e->tangentialPressure(), perspective, m_strokeTimeMeasure.elapsed());
         m_previousTangent = QPointF(0.0, 0.0);
+        m_haveTangent = false;
         m_strokeBegin = e->point;
 
         e->accept();
@@ -244,7 +245,8 @@ void KisToolFreehand::mouseMoveEvent(KoPointerEvent *e)
                             m_strokeTimeMeasure.elapsed());
 
     if (m_smooth) {
-        if (m_previousTangent.isNull()) {
+        if (!m_haveTangent) {
+            m_haveTangent = true;
             m_previousTangent = (info.pos() - m_previousPaintInformation.pos()) * (m_smoothness / 3.0);
         } else {
             QPointF newTangent = (info.pos() - m_olderPaintInformation.pos()) * (m_smoothness / 6.0);
@@ -300,6 +302,7 @@ void KisToolFreehand::finishStroke()
                     control2,
                     m_previousPaintInformation);
     m_previousTangent = QPointF(0.0, 0.0);
+    m_haveTangent = false;
 }
 
 void KisToolFreehand::keyPressEvent(QKeyEvent *event)
@@ -390,6 +393,7 @@ void KisToolFreehand::initPaint(KoPointerEvent *)
     }
 
     m_previousTangent = QPointF(0, 0);
+    m_haveTangent = false;
 
 
 #ifdef ENABLE_RECORDING // Temporary, to figure out what is going without being
@@ -640,13 +644,27 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
 
 void KisToolFreehand::increaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int increment = 1;
+    if(paintopSize > 100) {
+        increment = 30;
+    } else if (paintopSize > 10){
+        increment = 10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(increment, 0);
     showOutlineTemporary();
 }
 
 void KisToolFreehand::decreaseBrushSize()
 {
-    currentPaintOpPreset()->settings()->changePaintOpSize(-1, 0);
+    int paintopSize = currentPaintOpPreset()->settings()->paintOpSize().width();
+    int decrement = -1;
+    if(paintopSize > 100) {
+        decrement = -30;
+    } else if (paintopSize > 20){
+        decrement = -10;
+    }
+    currentPaintOpPreset()->settings()->changePaintOpSize(decrement, 0);
     showOutlineTemporary();
 }
 

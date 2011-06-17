@@ -112,8 +112,8 @@ private:
     ShrinkToFitShapeContainerPrivate *d;
     qreal m_scale;
     QSizeF m_shapeSize, m_documentSize;
-    bool m_dueToLayout;
-    int m_changeCount;
+    int m_dirty;
+    bool m_maybeUpdate;
 };
 
 #endif

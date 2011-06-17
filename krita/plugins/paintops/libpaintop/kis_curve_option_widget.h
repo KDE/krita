@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
- * Copyright (C) Boudewijn Rempt <boud@valdyas.org>, (C) 2008
- * Copyright (C) Sven Langkamp <sven.langkamp@gmail.com>, (C) 2009
+ * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2009 Sven Langkamp   <sven.langkamp@gmail.com>
+ * Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -35,7 +36,7 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:    
-    KisCurveOptionWidget(KisCurveOption* curveOption);
+    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider=false);
     ~KisCurveOptionWidget();
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
@@ -45,17 +46,16 @@ public:
     bool isChecked() const;
     void setChecked(bool checked);
     
-protected:
     KisCurveOption* curveOption();
-    
     QWidget* curveWidget();
 
 private slots:
-
     void transferCurve();
     void setSensor(KisDynamicSensor* sensor);
     void updateSensorCurveLabels(KisDynamicSensor* sensor);
     void updateCurve(KisDynamicSensor* sensor);
+    void updateValues();
+    void disableWidgets(bool disable);
     
 private:
     QWidget* m_widget;

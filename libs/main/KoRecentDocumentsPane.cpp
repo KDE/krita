@@ -121,7 +121,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const KComponentDa
     m_documentList->selectionModel()->select(firstIndex, QItemSelectionModel::Select);
     m_documentList->selectionModel()->setCurrentIndex(firstIndex, QItemSelectionModel::Select);
 
-#if KDE_IS_VERSION(4,6,40)
+#if KDE_IS_VERSION(4,6,80)
     d->m_previewJob = KIO::filePreview(fileList, QSize(200, 200));
 #else
     d->m_previewJob = KIO::filePreview(fileList, 200, 200, 0);

@@ -1,6 +1,3 @@
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
-
 set(kritatoolcurves_PART_SRCS
 #    tool_curves.cc
     kis_curve_framework.cc
@@ -18,7 +15,6 @@ kde4_add_plugin(kritatoolcurves ${kritatoolcurves_PART_SRCS})
 
 
 target_link_libraries(kritatoolcurves kritaui 
-    ${KDE4_KDE3SUPPORT_LIBS}
 )
 
 install(TARGETS kritatoolcurves  DESTINATION ${PLUGIN_INSTALL_DIR})

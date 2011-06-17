@@ -112,49 +112,61 @@ QPainterPath ArtisticTextToolSelection::outline()
     QPainterPath outline;
 
     QPolygonF polygon;
-    polygon.reserve(m_selectionCount*4);
 
     QList<ArtisticTextRange> ranges = m_currentShape->text();
-    const int selectionEnd = m_selectionStart+m_selectionCount;
-    for (int charIndex = m_selectionStart; charIndex <= selectionEnd; ++charIndex) {
-        const QPointF pos = m_currentShape->charPositionAt(charIndex);
-        const qreal angle = m_currentShape->charAngleAt(charIndex);
+    int globalCharIndex = m_selectionStart;
+    int remainingChars = m_selectionCount;
+    while (remainingChars) {
+        const ArtisticTextRange &currentRange = ranges[charPos.first];
 
-        QTransform charTransform;
-        charTransform.translate( pos.x() - 1, pos.y() );
-        charTransform.rotate( 360. - angle );
+        int currentTextLength = currentRange.text().length();
+        while (charPos.second < currentTextLength && remainingChars > 0) {
+            const QPointF pos = m_currentShape->charPositionAt(globalCharIndex);
+            const qreal angle = m_currentShape->charAngleAt(globalCharIndex);
 
-        QFontMetrics metrics(m_currentShape->fontAt(charIndex));
+            QTransform charTransform;
+            charTransform.translate( pos.x() - 1, pos.y() );
+            charTransform.rotate( 360. - angle );
 
-        polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
-        polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
+            QFontMetricsF metrics(currentRange.font());
 
-        if (charIndex == selectionEnd)
-            break;
+            polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
+            polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
 
-        const qreal w = metrics.charWidth(ranges[charPos.first].text(), charPos.second);
+            // advance to next character
+            charPos.second++;
+            globalCharIndex++;
+            remainingChars--;
 
-        // advance character index within current range
-        charPos.second++;
-        // are we at the end of the current range ?
-        if (charPos.second >= ranges[charPos.first].text().length()) {
-            // go to start of next range
-            charPos.first++;
-            charPos.second = 0;
+            // next character has y-offset or we are at the end of this text range
+            const bool hasYOffset = currentRange.hasYOffset(charPos.second);
+            const bool atRangeEnd = charPos.second == currentTextLength;
+            const bool atSelectionEnd = remainingChars == 0;
+            if (hasYOffset || atRangeEnd || atSelectionEnd) {
+                if (hasYOffset || atRangeEnd) {
+                    const QChar c = currentRange.text().at(charPos.second-1);
+                    const qreal w = metrics.width(c);
+                    polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
+                    polygon.append(charTransform.map(QPointF(w, metrics.descent())));
+                } else {
+                    const QPointF pos = m_currentShape->charPositionAt(globalCharIndex);
+                    const qreal angle = m_currentShape->charAngleAt(globalCharIndex);
+                    charTransform.reset();
+                    charTransform.translate( pos.x() - 1, pos.y() );
+                    charTransform.rotate( 360. - angle );
+                    polygon.prepend(charTransform.map(QPointF(0.0, -metrics.ascent())));
+                    polygon.append(charTransform.map(QPointF(0.0, metrics.descent())));
+                }
+                QPainterPath p;
+                p.addPolygon(polygon);
+                outline = outline.united(p);
+                polygon.clear();
+            }
         }
-        // check if next character has an y-offset
-        if (charPos.first < ranges.size() && ranges[charPos.first].hasYOffset(charPos.second)) {
-            // end selection sub range and start a new subrange
-            polygon.prepend(charTransform.map(QPointF(w, -metrics.ascent())));
-            polygon.append(charTransform.map(QPointF(w, metrics.descent())));
-            outline.addPolygon(polygon);
-            polygon.clear();
-        }
-    }
 
-    // if we have some points left, add them to the outline as well
-    if (!polygon.isEmpty()) {
-        outline.addPolygon(polygon);
+        // go to first character of next text range
+        charPos.first++;
+        charPos.second = 0;
     }
 
     // transform to document coordinates

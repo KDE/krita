@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2004 Boudewijn Rempt <boud@valdyas.org>
  *  Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
@@ -193,7 +192,6 @@ void KisSelectionManager::setup(KActionCollection * collection)
     m_toggleDisplaySelection->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_H));
     connect(m_toggleDisplaySelection, SIGNAL(triggered()), this, SLOT(toggleDisplaySelection()));
 
-    m_toggleDisplaySelection->setCheckedState(KGuiItem(i18n("Hide Selection")));
     m_toggleDisplaySelection->setChecked(true);
 
     m_smooth  = new KAction(i18n("Smooth..."), this);
@@ -368,7 +366,6 @@ void KisSelectionManager::cut()
 
         layer->paintDevice()->clearSelection(m_view->selection());
         QRect rect = m_view->selection()->selectedRect();
-        deselect();
 
         transaction.commit(m_view->image()->undoAdapter());
 

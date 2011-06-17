@@ -24,6 +24,7 @@
 #include <QList>
 #include <QSharedData>
 #include <QStringList>
+#include <QReadWriteLock>
 
 template <typename T>
 class KisTridiagonalSystem
@@ -251,6 +252,8 @@ struct KisCubicCurve::Data : public QSharedData {
     }
     ~Data() {
     }
+
+    QReadWriteLock mutex;
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
     mutable bool validSpline;
@@ -286,7 +289,7 @@ void KisCubicCurve::Data::keepSorted()
 }
 
 qreal KisCubicCurve::Data::value(qreal x)
-{
+{    
     updateSpline();
     /* Automatically extend non-existing parts of the curve
      * (e.g. before the first point) and cut off big y-values
@@ -357,55 +360,87 @@ bool KisCubicCurve::operator==(const KisCubicCurve& curve) const
 }
 
 qreal KisCubicCurve::value(qreal x) const
-{
-    return d->data->value(x);
+{    
+    d->data->mutex.lockForWrite();
+
+    qreal value = d->data->value(x);
+    
+    d->data->mutex.unlock();
+    
+    return value;
 }
 
 QList<QPointF> KisCubicCurve::points() const
-{
+{    
     return d->data->points;
 }
 
 void KisCubicCurve::setPoints(const QList<QPointF>& points)
 {
+    d->data->mutex.lockForWrite();
+    
     d->data.detach();
     d->data->points = points;
     d->data->invalidate();
+    
+    d->data->mutex.unlock();
 }
 
 void KisCubicCurve::setPoint(int idx, const QPointF& point)
 {
+    d->data->mutex.lockForWrite();
+    
     d->data.detach();
     d->data->points[idx] = point;
     d->data->keepSorted();
     d->data->invalidate();
+    
+    d->data->mutex.unlock();
 }
 
 int KisCubicCurve::addPoint(const QPointF& point)
 {
+    d->data->mutex.lockForWrite();
+    
     d->data.detach();
     d->data->points.append(point);
     d->data->keepSorted();
     d->data->invalidate();
+    
+    d->data->mutex.unlock();
+    
     return d->data->points.indexOf(point);
 }
 
 void KisCubicCurve::removePoint(int idx)
 {
+    d->data->mutex.lockForWrite();
+    
     d->data.detach();
     d->data->points.removeAt(idx);
     d->data->invalidate();
+    
+    d->data->mutex.unlock();
 }
 
 QString KisCubicCurve::toString() const
 {
     QString sCurve;
+    
+    if(d->data->points.count() < 1)
+        return sCurve;
+    
+    d->data->mutex.lockForWrite();
+    
     foreach(const QPointF & pair, d->data->points) {
         sCurve += QString::number(pair.x());
         sCurve += ',';
         sCurve += QString::number(pair.y());
         sCurve += ';';
     }
+    
+    d->data->mutex.unlock();
+    
     return sCurve;
 }
 
@@ -426,14 +461,26 @@ void KisCubicCurve::fromString(const QString& string)
     setPoints(points);
 }
 
-const QVector<quint16>& KisCubicCurve::uint16Transfer(int size) const
+const QVector<quint16> KisCubicCurve::uint16Transfer(int size) const
 {
+    d->data->mutex.lockForWrite();
+    
     d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF, size);
-    return d->data->u16Transfer;
+    QVector<quint16> u16Transfer = d->data->u16Transfer;
+    
+    d->data->mutex.unlock();
+    
+    return u16Transfer;
 }
 
-const QVector<qreal>& KisCubicCurve::floatTransfer(int size) const
+const QVector<qreal> KisCubicCurve::floatTransfer(int size) const
 {
+    d->data->mutex.lockForWrite();
+    
     d->data->updateTransfer<qreal, qreal>(&d->data->fTransfer, d->data->validFTransfer, 0.0, 1.0, size);
-    return d->data->fTransfer;
+    QVector<qreal> fTransfer = d->data->fTransfer;
+    
+    d->data->mutex.unlock();
+    
+    return fTransfer;
 }

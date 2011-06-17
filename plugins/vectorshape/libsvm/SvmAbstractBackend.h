@@ -62,20 +62,18 @@ public:
     /**
        Cleanup routine
 
-       This function is called when the painting is done.  Any
+       This function is called when the parsing is done.  Any
        initializations that are done in init() can be undone here if
        necessary.
-
-       \param header the SVM Header record
     */
-    virtual void cleanup( /*const Header *header*/ ) = 0;
+    virtual void cleanup() = 0;
 
     /**
        Close-out routine
     */
     virtual void eof() = 0;
 
-    virtual void rect( SvmGraphicsContext &context, const QRect &rect ) = 0;
+    virtual void rect(SvmGraphicsContext &context, const QRect &rect) = 0;
 
     /**
        Handler META_POLYLINE_ACTION
@@ -86,8 +84,8 @@ public:
        \param context the graphics context to be used when drawing the polyline
        \param polygon the sequence of points that describe the line
 
-       \note the line is not meant to be closed (i.e. do not connect
-       the last point to the first point) or filled.
+       \note the line is not meant to be closed nor filled, i.e. do
+       not connect the last point to the first point.
     */
     virtual void polyLine(SvmGraphicsContext &context, const QPolygon &polyline) = 0;
 

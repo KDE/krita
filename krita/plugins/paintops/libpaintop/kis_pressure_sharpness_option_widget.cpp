@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kis_pressure_sharpness_option_widget.h"
-
 #include <QWidget>
 #include <QCheckBox>
 #include <QHBoxLayout>
@@ -29,20 +27,13 @@
 
 #include <kis_slider_spin_box.h>
 
+#include "kis_curve_option_widget.h"
 #include "kis_pressure_sharpness_option.h"
+#include "kis_pressure_sharpness_option_widget.h"
 
-KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget()
-    : KisCurveOptionWidget(new KisPressureSharpnessOption())
+KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
+    KisCurveOptionWidget(new KisPressureSharpnessOption())
 {
-    QWidget* w = new QWidget;
-    
-    QLabel* sharpnessLbl = new QLabel(i18n("Sharpness"));
-    
-    m_sharpnessFactor = new KisDoubleSliderSpinBox();
-    m_sharpnessFactor->setRange(0.0,1.0,2);
-    m_sharpnessFactor->setValue(1.0);
-    m_sharpnessFactor->setSingleStep(0.01);
-    
     QLabel* thresholdLbl = new QLabel(i18n("Threshold"));
     
     m_threshold = new KisSliderSpinBox();
@@ -50,47 +41,25 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget()
     m_threshold->setValue(40);
     m_threshold->setSingleStep(1);
 
-    QGridLayout * gridLayout = new QGridLayout;
-    gridLayout->addWidget(sharpnessLbl, 0,0, Qt::AlignRight);
-    gridLayout->addWidget(m_sharpnessFactor, 0,1);
-
-    gridLayout->addWidget(thresholdLbl, 1,0, Qt::AlignRight);
-    gridLayout->addWidget(m_threshold, 1,1);
-    
-    gridLayout->setColumnStretch(1,1);
+    QHBoxLayout* hl = new QHBoxLayout;
+    hl->addWidget(thresholdLbl);
+    hl->addWidget(m_threshold, 1);
     
     QVBoxLayout* vl = new QVBoxLayout;
-    vl->addLayout(gridLayout);
-    vl->addWidget(curveWidget());
+    vl->addLayout(hl);
+    vl->addWidget(KisCurveOptionWidget::curveWidget());
 
+    QWidget* w = new QWidget;
     w->setLayout(vl);
-
-    setConfigurationPage(w);
     
-    connect(m_sharpnessFactor, SIGNAL(valueChanged(qreal)),this, SLOT(setSharpnessFactor(qreal)));
+    KisCurveOptionWidget::setConfigurationPage(w);
+    
     connect(m_threshold,SIGNAL(valueChanged(int)),this, SLOT(setThreshold(int)));
-    
-    setSharpnessFactor(m_sharpnessFactor->value());
     setThreshold(m_threshold->value());
-
-}
-
-void KisPressureSharpnessOptionWidget::readOptionSetting(const KisPropertiesConfiguration* setting)
-{
-    KisCurveOptionWidget::readOptionSetting(setting);
-    m_sharpnessFactor->setValue(static_cast<KisPressureSharpnessOption*>(curveOption())->sharpnessFactor());
-    m_threshold->setValue(static_cast<KisPressureSharpnessOption*>(curveOption())->threshold());
-}
-
-
-void KisPressureSharpnessOptionWidget::setSharpnessFactor(qreal sharpness)
-{
-    static_cast<KisPressureSharpnessOption*>(curveOption())->setSharpnessFactor(sharpness);
-    emit sigSettingChanged();
 }
 
 void KisPressureSharpnessOptionWidget::setThreshold(int threshold)
 {
-    static_cast<KisPressureSharpnessOption*>(curveOption())->setThreshold(threshold);
+    static_cast<KisPressureSharpnessOption*>(KisCurveOptionWidget::curveOption())->setThreshold(threshold);
     emit sigSettingChanged();
 }

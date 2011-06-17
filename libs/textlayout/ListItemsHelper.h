@@ -65,7 +65,6 @@ public:
 private:
     QTextList *m_textList;
     QFontMetricsF m_fm;
-    QFont m_displayFont;
 };
 
 #endif

@@ -23,7 +23,6 @@
 #include "komain_export.h"
 
 #include <QObject>
-#include <QMap>
 
 class KoMainWindow;
 
@@ -42,7 +41,7 @@ public slots:
     /**
      * Update the option widgets to the argument ones, removing the currently set widgets.
      */
-    void newOptionWidgets(const QMap<QString, QWidget *> & optionWidgetMap);
+    void newOptionWidgets(const QList<QWidget *> & optionWidgetList);
 
 
 private:

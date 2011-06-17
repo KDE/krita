@@ -51,7 +51,7 @@ public:
 signals:
     void unitChanged(const KoUnit &unit);
 
-private slots:
+public slots:
     void setPageLayout(const KoPageLayout &layout);
 
 protected slots:

@@ -56,6 +56,7 @@ IF (TINY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE TRUE)
 ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_WORDS FALSE)
     set(SHOULD_BUILD_STAGE FALSE)
@@ -76,6 +77,7 @@ ELSEIF (CREATIVEONLY)
     set(SHOULD_BUILD_CALLIGRA FALSE)
     set(SHOULD_BUILD_CSTESTER FALSE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ELSE()
     set(SHOULD_BUILD_WORDS TRUE)
     set(SHOULD_BUILD_STAGE TRUE)
@@ -96,6 +98,7 @@ ELSE()
     set(SHOULD_BUILD_CALLIGRA TRUE)
     set(SHOULD_BUILD_CSTESTER TRUE)
     set(SHOULD_BUILD_KOABSTRACTION TRUE)
+    set(SHOULD_BUILD_ACTIVE FALSE)
 ENDIF()
 
 if(KDE4_BUILD_TESTS)
@@ -132,6 +135,10 @@ endif(KDE_VERSION LESS "4.4.0")
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+find_package(Boost REQUIRED) # for pigment and stage
+if (NOT Boost_FOUND)
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
+endif (NOT Boost_FOUND)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -187,11 +194,6 @@ macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (br
 macro_optional_find_package(KdepimLibs)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
-##
-## Test for boost
-##
-macro_optional_find_package(Boost)
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Stage")
 
 ##
 ## Test for eigen2
@@ -370,6 +372,7 @@ set(KOMAIN_INCLUDES ${KDE4_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${CMAKE_SOURCE_DIR}/libs/widgets
                     ${CMAKE_SOURCE_DIR}/libs/main
+                    ${CMAKE_SOURCE_DIR}/libs/main/rdf
                     ${CMAKE_SOURCE_DIR}/libs/main/config)
 
 if(SHOULD_BUILD_SCRIPTING)
@@ -407,14 +410,9 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 
 ### Tables: eigen2, boost
-if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
+if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
-
-### Stage: boost
-if(NOT Boost_FOUND)
-    set(SHOULD_BUILD_STAGE FALSE)
-endif(NOT Boost_FOUND)
+endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
@@ -425,6 +423,12 @@ endif(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)
 if(NOT KdepimLibs_FOUND)
     set(SHOULD_BUILD_KPLATO FALSE)
 endif(NOT KdepimLibs_FOUND)
+
+  
+if (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+  set(SHOULD_BUILD_ACTIVE FALSE)
+endif (NOT ${QTVERSION} VERSION_GREATER 4.7.0)
+
 
 ### HACK ###
 # Those BUILD_ are illegally used below before they are defined, which cause problem on a first build
@@ -510,6 +514,7 @@ if(SHOULD_BUILD_ACTIVE)
   macro_optional_add_subdirectory(active)
 endif(SHOULD_BUILD_ACTIVE)
 
+
 if(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
     set(SHOULD_BUILD_KOABSTRACTION FALSE)
 endif(NOT SHOULD_BUILD_TABLES OR NOT SHOULD_BUILD_WORDS OR NOT SHOULD_BUILD_STAGE)
@@ -569,6 +574,7 @@ macro_display_application_enabled(kchart ${SHOULD_BUILD_KCHART})
 macro_display_application_enabled(mobile ${SHOULD_BUILD_MOBILE})
 macro_display_application_enabled(calligra ${SHOULD_BUILD_CALLIGRA})
 macro_display_application_enabled(cstester ${SHOULD_BUILD_CSTESTER})
+macro_display_application_enabled(active ${SHOULD_BUILD_ACTIVE})
 
 message(STATUS "--------------------------------------------------------------------------" )
 

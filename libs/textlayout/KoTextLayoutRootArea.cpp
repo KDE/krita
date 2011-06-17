@@ -19,6 +19,7 @@
 
 #include "KoTextLayoutRootArea.h"
 
+#include "FrameIterator.h"
 
 #include <KoTextPage.h>
 
@@ -29,11 +30,13 @@ public:
         : shape(0)
         , dirty(true)
         , textpage(0)
+        , nextStartOfArea(0)
     {
     }
     KoShape *shape;
     bool dirty;
     KoTextPage *textpage;
+    FrameIterator *nextStartOfArea;
 };
 
 KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
@@ -44,17 +47,21 @@ KoTextLayoutRootArea::KoTextLayoutRootArea(KoTextDocumentLayout *documentLayout)
 
 KoTextLayoutRootArea::~KoTextLayoutRootArea()
 {
+    delete d->nextStartOfArea;
     delete d->textpage;
     delete d;
 }
 
-bool KoTextLayoutRootArea::layout(FrameIterator *cursor)
+bool KoTextLayoutRootArea::layoutRoot(FrameIterator *cursor)
 {
     d->dirty = false;
 
     setVirginPage(true);
 
-    return KoTextLayoutArea::layout(cursor);
+    bool retval = KoTextLayoutArea::layout(cursor);
+    delete d->nextStartOfArea;
+    d->nextStartOfArea = new FrameIterator(cursor);
+    return retval;
 }
 
 void KoTextLayoutRootArea::setAssociatedShape(KoShape *shape)
@@ -89,6 +96,12 @@ bool KoTextLayoutRootArea::isDirty() const
 {
     return d->dirty;
 }
+
+FrameIterator *KoTextLayoutRootArea::nextStartOfArea() const
+{
+    return d->nextStartOfArea;
+}
+
 
 KoText::Direction KoTextLayoutRootArea::parentTextDirection() const
 {

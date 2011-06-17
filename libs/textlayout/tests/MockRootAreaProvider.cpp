@@ -23,6 +23,7 @@
 
 MockRootAreaProvider::MockRootAreaProvider()
     : m_area(0),
+    m_suggestedSize(QSizeF(200,1000)),
     m_askedForMoreThenOneArea(false)
 {
 }
@@ -43,7 +44,12 @@ void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
 
 QSizeF MockRootAreaProvider::suggestSize(KoTextLayoutRootArea *rootArea)
 {
-    return QSizeF(200,1000);
+    return m_suggestedSize;
+}
+
+void MockRootAreaProvider::setSuggestedSize(QSizeF size)
+{
+    m_suggestedSize = size;
 }
 
 QList<KoTextLayoutObstruction *> MockRootAreaProvider::relevantObstructions(KoTextLayoutRootArea *rootArea)

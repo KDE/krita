@@ -47,6 +47,7 @@ FrameIterator::FrameIterator(QTextTableCell cell)
 FrameIterator::FrameIterator(FrameIterator *other)
 {
     it = other->it;
+    masterPageName = other->masterPageName;
     lineTextStart = other->lineTextStart;
     fragmentIterator = other->fragmentIterator;
     if (other->currentTableIterator)
@@ -66,11 +67,11 @@ bool FrameIterator::operator ==(const FrameIterator &other)
         return false;
 
     if (currentTableIterator || other.currentTableIterator) {
-        if (currentTableIterator != other.currentTableIterator)
+        if (!currentTableIterator || !other.currentTableIterator)
             return false;
         return *currentTableIterator == *(other.currentTableIterator);
     } else if (currentSubFrameIterator || other.currentSubFrameIterator) {
-        if (currentSubFrameIterator != other.currentSubFrameIterator)
+        if (!currentSubFrameIterator || !other.currentSubFrameIterator)
             return false;
         return *currentSubFrameIterator == *(other.currentSubFrameIterator);
     } else {
@@ -85,6 +86,7 @@ TableIterator *FrameIterator::tableIterator(QTextTable *table)
         currentTableIterator = 0;
     } else if(currentTableIterator == 0) {
         currentTableIterator = new TableIterator(table);
+        currentTableIterator->masterPageName = masterPageName;
     }
     return currentTableIterator;
 }
@@ -96,6 +98,7 @@ FrameIterator *FrameIterator::subFrameIterator(QTextFrame *subFrame)
         currentSubFrameIterator = 0;
     } else if(currentSubFrameIterator == 0) {
         currentSubFrameIterator = new FrameIterator(subFrame);
+        currentSubFrameIterator->masterPageName = masterPageName;
     }
     return currentSubFrameIterator;
 }

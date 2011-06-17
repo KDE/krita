@@ -26,13 +26,17 @@ namespace Libsvm
 
 SvmGraphicsContext::SvmGraphicsContext()
     : lineColor(Qt::black)
-    , fillBrush(Qt::NoBrush)
+    , lineColorSet(true)
+    , fillColor(Qt::white)
+    , fillColorSet(false)
     , textColor(Qt::black)
-    , textFillColor(Qt::NoPen)  // FIXME: Black?
+    , textFillColor(Qt::black)
+    , textFillColorSet(false)
     , textAlign(ALIGN_TOP)      // FIXME: Correct?
     , mapMode()
     , font("Helvetica", 300)    // 300 is of course a completely arbitrary value
-    , overlineColor(Qt::NoPen)
+    , overlineColor(Qt::black)
+    , overlineColorSet(false)
       //... more here
     , changedItems(0xffffffff)  // Everything changed the first time.
 {

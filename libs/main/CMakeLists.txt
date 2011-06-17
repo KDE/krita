@@ -82,11 +82,6 @@ set(komain_LIB_SRCS
     rdf/KoDocumentRdfBase.cpp
     rdf/KoDocumentRdfEditWidgetBase.cpp
 
-    ActionJob_p.cpp
-    KoAction.cpp
-    KoExecutePolicy.cpp
-    KoJobsListPolicy.cpp
-
     KoFindBase.cpp
     KoFindMatch.cpp
     KoFindText.cpp
@@ -148,7 +143,6 @@ target_link_libraries(komain ${extra_libs}
     ${KDE4_KABC_LIBS}
     ${KDE4_KFILE_LIBRARY}
     ${KDE4_KCAL_LIBS}
-    ${KDE4_THREADWEAVER_LIBRARIES}
     kowidgets
     textlayout
 )

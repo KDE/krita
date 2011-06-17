@@ -107,6 +107,8 @@ public:
 
     KoCanvasController *canvasController;
     KoZoomController *zoomController;
+    KoCopyController *copyController;
+    KoCutController *cutController;
 
     KAction *editPaste;
     KAction *deleteSelectionAction;
@@ -240,8 +242,8 @@ void KoPAView::initGUI()
     if (shell())
     {
         shell()->createDockWidget( &toolBoxFactory );
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-             shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &) ));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+             shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &) ));
     }
 
     connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
@@ -263,9 +265,9 @@ void KoPAView::initGUI()
 void KoPAView::initActions()
 {
     KAction *action = actionCollection()->addAction( KStandardAction::Cut, "edit_cut", 0, 0);
-    new KoCutController(kopaCanvas(), action);
+    d->cutController = new KoCutController(kopaCanvas(), action);
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
-    new KoCopyController(kopaCanvas(), action);
+    d->copyController = new KoCopyController(kopaCanvas(), action);
     d->editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", proxyObject, SLOT( editPaste() ) );
     connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
     connect(d->canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(clipboardDataChanged()));
@@ -391,6 +393,20 @@ KoZoomController* KoPAView::zoomController() const
     return d->zoomController;
 }
 
+KoCopyController* KoPAView::copyController() const
+{
+    return d->copyController;
+}
+
+KoCutController* KoPAView::cutController() const
+{
+    return d->cutController;
+}
+
+KAction* KoPAView::deleteSelectionAction() const
+{
+    return d->deleteSelectionAction;
+}
 
 void KoPAView::importDocument()
 {
@@ -485,6 +501,10 @@ void KoPAView::editSelectAll()
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( !selection )
         return;
+    if (!this->isVisible()) {
+        emit selectAllRequested();
+        return;
+    }
 
     QList<KoShape*> shapes = activePage()->shapes();
 
@@ -505,6 +525,11 @@ void KoPAView::editSelectAll()
 
 void KoPAView::editDeselectAll()
 {
+    if (!this->isVisible()) {
+        emit deselectAllRequested();
+        return;
+    }
+
     KoSelection* selection = kopaCanvas()->shapeManager()->selection();
     if( selection )
         selection->deselectAll();
@@ -677,6 +702,7 @@ void KoPAView::setActivePage( KoPAPageBase* page )
 
     if ( shell() && pageChanged ) {
         d->documentStructureDocker->setActivePage(d->activePage);
+        proxyObject->emitActivePageChanged();
     }
 
     // Set the current page number in the canvas resource provider
@@ -1066,6 +1092,20 @@ bool KoPAView::isMasterUsed( KoPAPageBase * page )
     }
 
     return used;
+}
+
+void KoPAView::centerPage()
+{
+    KoPageLayout &layout = d->activePage->pageLayout();
+    QSizeF pageSize( layout.width, layout.height );
+
+    QPoint documentCenter =
+        zoomHandler()->documentToView(QPoint(pageSize.width(),
+                                              pageSize.height())).toPoint();
+
+    d->canvasController->setPreferredCenter(documentCenter);
+    d->canvasController->recenterPreferred();
+
 }
 
 #include <KoPAView.moc>

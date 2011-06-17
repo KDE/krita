@@ -60,7 +60,7 @@ void FloatingAnchorStrategy::updateObstruction(qreal documentOffset)
 bool FloatingAnchorStrategy::moveSubject()
 {
     if (!m_anchor->shape()->parent()) {
-        return true; // let's fake we moved to force another relayout
+        return false; // let's fake we moved to force another relayout
     }
 
     QRectF pageContentRect = m_anchor->shape()->parent()->boundingRect();
@@ -69,7 +69,7 @@ bool FloatingAnchorStrategy::moveSubject()
     // get the page data
     KoTextShapeData *data = qobject_cast<KoTextShapeData*>(m_anchor->shape()->parent()->userData());
     if (!data) {
-        return true; // let's fake we moved to force another relayout
+        return false; // let's fake we moved to force another relayout
     }
 
     QTextBlock block = m_anchor->document()->findBlock(m_anchor->positionInDocument());
@@ -77,7 +77,7 @@ bool FloatingAnchorStrategy::moveSubject()
 
     // there should be always at least one line
     if (layout->lineCount() == 0) {
-        return true; // let's fake we moved to force another relayout
+        return false; // let's fake we moved to force another relayout
     }
 
     QRectF boundingRect = m_anchor->shape()->boundingRect();
@@ -87,12 +87,12 @@ bool FloatingAnchorStrategy::moveSubject()
 
     // set anchor bounding rectangle horizontal position and size
     if (!countHorizontalRel(anchorBoundingRect, containerBoundingRect, block, layout)) {
-        return true; // let's fake we moved to force another relayout
+        return false; // let's fake we moved to force another relayout
     }
 
     // set anchor bounding rectangle vertical position
     if (!countVerticalRel(anchorBoundingRect, containerBoundingRect, data, block, layout)) {
-        return true; // let's fake we moved to force another relayout
+        return false; // let's fake we moved to force another relayout
     }
 
     // Set shape horizontal alignment inside anchor bounding rectangle
@@ -107,7 +107,10 @@ bool FloatingAnchorStrategy::moveSubject()
     checkPageBorder(newPosition, containerBoundingRect);
 
     if (newPosition == m_anchor->shape()->position()) {
-        return false;
+        if (m_anchor->shape()->textRunAroundSide() != KoShape::RunThrough) {
+            updateObstruction(data->documentOffset());
+        }
+        return true;
     }
 
     // set the shape to the proper position based on the data
@@ -144,12 +147,10 @@ bool FloatingAnchorStrategy::countHorizontalRel(QRectF &anchorBoundingRect, QRec
      case KoTextAnchor::HChar:
          if (layout->lineCount() != 0) {
              QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-             if (tl.isValid()) {
-                 anchorBoundingRect.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()) + containerBoundingRect.x());
-                 anchorBoundingRect.setWidth(0.1); // just some small value
-             } else {
+             if (!tl.isValid())
                  return false; // lets go for a second round.
-             }
+            anchorBoundingRect.setX(tl.cursorToX(m_anchor->positionInDocument() - block.position()) + containerBoundingRect.x());
+            anchorBoundingRect.setWidth(0.1); // just some small value
          } else {
              return false; // lets go for a second round.
          }
@@ -282,12 +283,14 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
         if (layout->lineCount() != 0) {
             qreal top = layout->lineAt(0).y();
             QTextLine tl = layout->lineAt(layout->lineCount() - 1);
+            if (!tl.isValid())
+                return false; // lets go for a second round.
             anchorBoundingRect.setY(top + containerBoundingRect.y()  - data->documentOffset());
             anchorBoundingRect.setHeight(tl.y() + tl.height() - top);
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*>(block.userData());
-            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
-                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
-            }
+//            if(blockData && m_anchor->verticalRel() == KoTextAnchor::VParagraph) {
+//                anchorBoundingRect.setY(paragraphRect().top() + containerBoundingRect.y()  - data->documentOffset());
+//            }
         } else {
             return false; // lets go for a second round.
         }
@@ -295,8 +298,9 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
 
     case KoTextAnchor::VLine:
         if (layout->lineCount()) {
-                QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-            Q_ASSERT(tl.isValid());
+            QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
+            if (!tl.isValid())
+                return false; // lets go for a second round.
             anchorBoundingRect.setY(tl.y() - m_anchor->shape()->size().height()
                          + containerBoundingRect.y() - data->documentOffset());
             anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());
@@ -309,7 +313,8 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     case KoTextAnchor::VChar:
      if (layout->lineCount()) {
          QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-         Q_ASSERT(tl.isValid());
+         if (!tl.isValid())
+             return false; // lets go for a second round.
          if (m_anchor->behavesAsCharacter() && m_anchor->verticalRel() == KoTextAnchor::VChar) {
              //char relative is behaving in a special way when as-char
              anchorBoundingRect.setY(tl.y() + containerBoundingRect.y() - data->documentOffset());
@@ -326,7 +331,8 @@ bool FloatingAnchorStrategy::countVerticalRel(QRectF &anchorBoundingRect, QRectF
     case KoTextAnchor::VBaseline:
      if (layout->lineCount()) {
          QTextLine tl = layout->lineForTextPosition(m_anchor->positionInDocument() - block.position());
-         Q_ASSERT(tl.isValid());
+         if (!tl.isValid())
+             return false; // lets go for a second round.
          anchorBoundingRect.setY(tl.y() + tl.ascent() - m_anchor->shape()->size().height()
             + containerBoundingRect.y() - data->documentOffset());
          anchorBoundingRect.setHeight(2*m_anchor->shape()->size().height());

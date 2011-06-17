@@ -68,15 +68,14 @@
 #include <kis_cubic_curve.h>
 #include "kis_color_picker_utils.h"
 #include <kis_paintop.h>
+#include <kaction.h>
 
+const int STEP = 20;
 
 KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
         : KisTool(canvas, cursor)
 {
     m_optionWidgetLayout = 0;
-
-    m_lbOpacity = 0;
-    m_slOpacity = 0;
 
     m_opacity = OPACITY_OPAQUE_U8;
     m_compositeOp = 0;
@@ -87,8 +86,18 @@ KisToolPaint::KisToolPaint(KoCanvasBase * canvas, const QCursor & cursor)
 
     KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas);
 
+    m_lighterColor = new KAction(i18n("Make Brush color lighter"), this);
+    m_lighterColor->setShortcut(Qt::Key_L);
+    connect(m_lighterColor, SIGNAL(activated()), SLOT(makeColorLighter()));
+    addAction("make_brush_color_lighter", m_lighterColor);
 
-    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString))); 
+    m_darkerColor = new KAction(i18n("Make Brush color darker"), this);
+    m_darkerColor->setShortcut(Qt::Key_K);
+    connect(m_darkerColor, SIGNAL(activated()), SLOT(makeColorDarker()));
+    addAction("make_brush_color_darker", m_darkerColor);
+
+
+    connect(kiscanvas->view()->resourceProvider(), SIGNAL(sigCompositeOpChanged(QString)), this, SLOT(slotSetCompositeMode(QString)));
     connect(this, SIGNAL(sigFavoritePaletteCalled(const QPoint&)), kiscanvas, SIGNAL(favoritePaletteCalled(const QPoint&)));
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->view()->resourceProvider(), SLOT(slotPainting()));
 }
@@ -98,13 +107,16 @@ KisToolPaint::~KisToolPaint()
 {
 }
 
-void KisToolPaint::resourceChanged(int key, const QVariant & v)
+void KisToolPaint::resourceChanged(int key, const QVariant& v)
 {
     KisTool::resourceChanged(key, v);
 
     switch(key){
         case(KisCanvasResourceProvider::CurrentKritaNode):
             slotSetCompositeMode(canvas()->resourceManager()->resource(KisCanvasResourceProvider::CurrentCompositeOp).toString());
+            break;
+        case(KisCanvasResourceProvider::Opacity):
+            slotSetOpacity(v.toDouble());
             break;
         default: //nothing
             break;
@@ -206,11 +218,21 @@ void KisToolPaint::mouseReleaseEvent(KoPointerEvent *event)
 
 void KisToolPaint::keyPressEvent(QKeyEvent *event)
 {
+    if ((event->key() == Qt::Key_Control) && (event->modifiers() == Qt::ControlModifier)) {
+        useCursor(KisCursor::pickerCursor());
+    } else if ((event->key() == Qt::Key_Control || event->key() == Qt::Key_Shift)) {
+            if (event->modifiers() == (Qt::ShiftModifier | Qt::ControlModifier)) {
+            useCursor(KisCursor::crossCursor());
+        }
+    }
     KisTool::keyPressEvent(event);
 }
 
 void KisToolPaint::keyReleaseEvent(QKeyEvent* event)
 {
+    if (mode() != KisTool::PAINT_MODE){
+        resetCursorStyle();
+    }
     KisTool::keyReleaseEvent(event);
 }
 
@@ -244,13 +266,6 @@ QWidget * KisToolPaint::createOptionWidget()
     QWidget * optionWidget = new QWidget();
     optionWidget->setObjectName(toolId());
 
-    m_lbOpacity = new QLabel(i18n("Opacity: "), optionWidget);
-    m_lbOpacity->setAlignment(Qt::AlignVCenter | Qt::AlignRight);
-    m_slOpacity = new KisSliderSpinBox(optionWidget);
-    m_slOpacity->setRange(0, 100);
-    m_slOpacity->setValue(m_opacity / OPACITY_OPAQUE_U8 * 100);
-    connect(m_slOpacity, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacity(int)));
-
     QVBoxLayout* verticalLayout = new QVBoxLayout(optionWidget);
     verticalLayout->setObjectName("KisToolPaint::OptionWidget::VerticalLayout");
     verticalLayout->setMargin(0);
@@ -262,9 +277,6 @@ QWidget * KisToolPaint::createOptionWidget()
     verticalLayout->addLayout(m_optionWidgetLayout);
     m_optionWidgetLayout->setSpacing(1);
     m_optionWidgetLayout->setMargin(0);
-
-    m_optionWidgetLayout->addWidget(m_lbOpacity, 1, 0);
-    m_optionWidgetLayout->addWidget(m_slOpacity, 1, 1);
 
     verticalLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
@@ -305,9 +317,9 @@ void KisToolPaint::addOptionWidgetOption(QWidget *control, QWidget *label)
 }
 
 
-void KisToolPaint::slotSetOpacity(int opacityPerCent)
+void KisToolPaint::slotSetOpacity(qreal opacity)
 {
-    m_opacity = (int)(qreal(opacityPerCent) * OPACITY_OPAQUE_U8 / 100);
+    m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }
 
 void KisToolPaint::slotSetCompositeMode(const QString& compositeOp)
@@ -405,6 +417,34 @@ KisToolPaint::NodePaintAbility KisToolPaint::nodePaintAbility()
         return PAINT;
     }
     return NONE;
+}
+
+void KisToolPaint::transformColor(int step)
+{
+    KoColor color = canvas()->resourceManager()->resource(KoCanvasResource::ForegroundColor).value<KoColor>();
+    QColor rgb = color.toQColor();
+    int h = 0, s = 0, v = 0;
+    rgb.getHsv(&h,&s,&v);
+    if ((v < 255) || ((s == 0) || (s == 255))) {
+        v += step;
+        v = qBound(0,v,255);
+    } else {
+        s += -step;
+        s = qBound(0,s,255);
+    }
+    rgb.setHsv(h,s,v);
+    color.fromQColor(rgb);
+    canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, color);
+}
+
+void KisToolPaint::makeColorDarker()
+{
+    transformColor(-STEP);
+}
+
+void KisToolPaint::makeColorLighter()
+{
+    transformColor(STEP);
 }
 
 

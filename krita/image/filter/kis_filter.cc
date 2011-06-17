@@ -96,13 +96,18 @@ void KisFilter::process(const KisPaintDeviceSP src,
                 const KisFilterConfiguration* config,
                 KoUpdater* progressUpdater ) const
 {
+    // we're not filtering anything, so return.
+    if (applyRect.isEmpty()) {
+        return;
+    }
     QRect nR = neededRect(applyRect, config);
     // Create a temporary device that will be filtered, sharing the source data
     KisPaintDeviceSP temporary;
     if(src == dst && sel == 0)
     {
         temporary = src;
-    } else {
+    }
+    else {
         temporary = new KisPaintDevice(src->colorSpace());
         temporary->makeCloneFromRough(src, nR);
     }

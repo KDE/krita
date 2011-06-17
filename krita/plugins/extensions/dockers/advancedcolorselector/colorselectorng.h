@@ -33,8 +33,6 @@ class ColorSelectorNgPlugin : public QObject
 public:
     ColorSelectorNgPlugin(QObject *parent, const QVariantList &);
     virtual ~ColorSelectorNgPlugin();
-private:
-    KisColorSelectorSettings* m_settingsWidget;
 };
 
 #endif

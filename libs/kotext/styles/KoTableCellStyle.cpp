@@ -42,6 +42,30 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+
+KoTableCellStyle::RotationAlignment rotationAlignmentFromString(const QString& align)
+{
+    if (align == "bottom")
+        return KoTableCellStyle::RAlignBottom;
+    if (align == "center")
+        return KoTableCellStyle::RAlignCenter;
+    if (align == "top")
+        return KoTableCellStyle::RAlignTop;
+    
+    return KoTableCellStyle::RAlignNone;
+}
+
+QString rotationAlignmentToString(KoTableCellStyle::RotationAlignment align)
+{
+    if (align == KoTableCellStyle::RAlignBottom)
+        return "bottom";
+    if (align == KoTableCellStyle::RAlignTop)
+        return "top";
+    if (align == KoTableCellStyle::RAlignCenter)
+        return "center";
+    return "none";
+}
+
 KoTableCellStylePrivate::KoTableCellStylePrivate()
     : charStyle(0)
     , parentStyle(0)
@@ -385,6 +409,8 @@ void KoTableCellStyle::setAlignment(Qt::Alignment alignment)
 
 Qt::Alignment KoTableCellStyle::alignment() const
 {
+    if (propertyInt(VerticalAlignment) == 0)
+        return Qt::AlignTop;
     return static_cast<Qt::Alignment>(propertyInt(VerticalAlignment));
 }
 
@@ -438,6 +464,16 @@ void KoTableCellStyle::setCellProtection(KoTableCellStyle::CellProtectionFlag pr
 KoTableCellStyle::CellProtectionFlag KoTableCellStyle::cellProtection() const
 {
     return (CellProtectionFlag) propertyInt(CellProtection);
+}
+
+void KoTableCellStyle::setTextDirection(KoText::Direction value)
+{
+    setProperty(TextWritingMode, value);
+}
+
+KoText::Direction KoTableCellStyle::textDirection() const
+{
+    return (KoText::Direction) propertyInt(TextWritingMode);
 }
 
 bool KoTableCellStyle::printContent() const
@@ -494,6 +530,16 @@ void KoTableCellStyle::setRotationAngle(int value)
 void KoTableCellStyle::setDirection(KoTableCellStyle::CellTextDirection direction)
 {
     setProperty(Direction, direction);
+}
+
+KoTableCellStyle::RotationAlignment KoTableCellStyle::rotationAlignment() const
+{
+    return static_cast<RotationAlignment>(propertyInt(RotationAlign));
+}
+
+void KoTableCellStyle::setRotationAlignment(KoTableCellStyle::RotationAlignment align)
+{
+    setProperty(RotationAlign, align);
 }
 
 KoTableCellStyle::CellTextDirection KoTableCellStyle::direction() const
@@ -715,6 +761,10 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
             setDirection(KoTableCellStyle::TopToBottom);
     }
     
+    if (styleStack.hasProperty(KoXmlNS::style, "rotation-align")) {
+        setRotationAlignment(rotationAlignmentFromString(styleStack.property(KoXmlNS::style, "rotation-align")));
+    }
+    
     if (styleStack.hasProperty(KoXmlNS::style, "text-align-source")) {
         setAlignFromType(styleStack.property(KoXmlNS::style, "text-align-source") == "value-type");
     }
@@ -739,8 +789,14 @@ void KoTableCellStyle::loadOdfProperties(KoStyleStack &styleStack)
     // Alignment
     const QString verticalAlign(styleStack.property(KoXmlNS::style, "vertical-align"));
     if (!verticalAlign.isEmpty()) {
-        setAlignment(KoText::valignmentFromString(verticalAlign));
+        if (verticalAlign == "automatic")
+            setAlignment((Qt::AlignmentFlag) 0);
+        else
+            setAlignment(KoText::valignmentFromString(verticalAlign));
     }
+    
+    if (styleStack.hasProperty(KoXmlNS::style, "writing-mode"))
+        setTextDirection(KoText::directionFromString(styleStack.property(KoXmlNS::style, "writing-mode")));
 }
 
 void KoTableCellStyle::copyProperties(const KoTableCellStyle *style)
@@ -802,7 +858,10 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("draw:opacity", QString("%1%").arg(backBrush.color().alphaF() * 100.0), KoGenStyle::GraphicType);
             }
         } else if (key == VerticalAlignment) {
-            style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
+            if (propertyInt(VerticalAlignment) == 0)
+                style.addProperty("style:vertical-align", "automatic", KoGenStyle::TableCellType);
+            else
+                style.addProperty("style:vertical-align", KoText::valignmentToString(alignment()), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellLeftPadding) && (!donePadding)) {
             style.addPropertyPt("fo:padding-left", leftPadding(), KoGenStyle::TableCellType);
         } else if ((key == QTextFormat::TableCellRightPadding) && (!donePadding)) {
@@ -847,6 +906,10 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
                 style.addProperty("style:text-align-source", "value-type", KoGenStyle::TableCellType);
             else
                 style.addProperty("style:text-align-source", "fix", KoGenStyle::TableCellType);
+        } else if (key == RotationAlign) {
+            style.addProperty("style:rotation-align", rotationAlignmentToString(rotationAlignment()), KoGenStyle::TableCellType);
+        } else if (key == TextWritingMode) {
+            style.addProperty("style:writing-mode", KoText::directionToString(textDirection()), KoGenStyle::TableCellType);
         }
     }
     if (d->charStyle) {
@@ -955,100 +1018,6 @@ void KoTableCellStyle::saveOdf(KoGenStyle &style)
             QStringList blw = borderLineWidth.split(' ', QString::SkipEmptyParts);
             setEdgeDoubleBorderValues(BottomLeftToTopRight, KoUnit::parseValue(blw[0], 1.0), KoUnit::parseValue(blw[1], 0.1));
         }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-if (key == QTextFormat::BlockAlignment) {
-            int alignValue = 0;
-            bool ok = false;
-            alignValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                Qt::Alignment alignment = (Qt::Alignment) alignValue;
-                QString align = KoText::alignmentToString(alignment);
-                if (!align.isEmpty())
-                    style.addProperty("fo:text-align", align, KoGenStyle::ParagraphType);
-            }
-        } else if (key == KoTableCellStyle::TextProgressionDirection) {
-            int directionValue = 0;
-            bool ok = false;
-            directionValue = d->stylesPrivate.value(key).toInt(&ok);
-            if (ok) {
-                QString direction = "";
-                if (directionValue == KoText::LeftRightTopBottom)
-                    direction = "lr";
-                else if (directionValue == KoText::RightLeftTopBottom)
-                    direction = "rl";
-                else if (directionValue == KoText::TopBottomRightLeft)
-                    direction = "tb";
-                if (!direction.isEmpty())
-                    style.addProperty("style:writing-mode", direction, KoGenStyle::ParagraphType);
-            }
-        }
-    // Border
-    QString leftBorder = QString("%1pt %2 %3").arg(QString::number(leftBorderWidth()),
-                         odfBorderStyleString(leftBorderStyle()),
-                         leftBorderColor().name());
-    QString rightBorder = QString("%1pt %2 %3").arg(QString::number(rightBorderWidth()),
-                          odfBorderStyleString(rightBorderStyle()),
-                          rightBorderColor().name());
-    QString topBorder = QString("%1pt %2 %3").arg(QString::number(topBorderWidth()),
-                        odfBorderStyleString(topBorderStyle()),
-                        topBorderColor().name());
-    QString bottomBorder = QString("%1pt %2 %3").arg(QString::number(bottomBorderWidth()),
-                           odfBorderStyleString(bottomBorderStyle()),
-                           bottomBorderColor().name());
-    if (leftBorder == rightBorder && leftBorder == topBorder && leftBorder == bottomBorder) {
-        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border", leftBorder, KoGenStyle::ParagraphType);
-    } else {
-        if (leftBorderWidth() > 0 && leftBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-left", leftBorder, KoGenStyle::ParagraphType);
-        if (rightBorderWidth() > 0 && rightBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-right", rightBorder, KoGenStyle::ParagraphType);
-        if (topBorderWidth() > 0 && topBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-top", topBorder, KoGenStyle::ParagraphType);
-        if (bottomBorderWidth() > 0 && bottomBorderStyle() != KoParagraphStyle::BorderNone)
-            style.addProperty("fo:border-bottom", bottomBorder, KoGenStyle::ParagraphType);
-    }
-    QString leftBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(leftInnerBorderWidth()),
-                                  QString::number(leftBorderSpacing()),
-                                  QString::number(leftBorderWidth()));
-    QString rightBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(rightInnerBorderWidth()),
-                                   QString::number(rightBorderSpacing()),
-                                   QString::number(rightBorderWidth()));
-    QString topBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(topInnerBorderWidth()),
-                                 QString::number(topBorderSpacing()),
-                                 QString::number(topBorderWidth()));
-    QString bottomBorderLineWidth = QString("%1pt %2pt %3pt").arg(QString::number(bottomInnerBorderWidth()),
-                                    QString::number(bottomBorderSpacing()),
-                                    QString::number(bottomBorderWidth()));
-    if (leftBorderLineWidth == rightBorderLineWidth &&
-            leftBorderLineWidth == topBorderLineWidth &&
-            leftBorderLineWidth == bottomBorderLineWidth &&
-            leftBorderStyle() == KoParagraphStyle::BorderDouble &&
-            rightBorderStyle() == KoParagraphStyle::BorderDouble &&
-            topBorderStyle() == KoParagraphStyle::BorderDouble &&
-            bottomBorderStyle() == KoParagraphStyle::BorderDouble) {
-        style.addProperty("style:border-line-width", leftBorderLineWidth, KoGenStyle::ParagraphType);
-    } else {
-        if (leftBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-left", leftBorderLineWidth, KoGenStyle::ParagraphType);
-        if (rightBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-right", rightBorderLineWidth, KoGenStyle::ParagraphType);
-        if (topBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-top", topBorderLineWidth, KoGenStyle::ParagraphType);
-        if (bottomBorderStyle() == KoParagraphStyle::BorderDouble)
-            style.addProperty("style:border-line-width-bottom", bottomBorderLineWidth, KoGenStyle::ParagraphType);
     }
 */
 }

@@ -67,7 +67,7 @@ public:
     /// HParagraphContent, HParagraphStartMargin, HParagraphEndMargin, VParagraph)
     QRectF paragraphRect();
 
-    /// set number of page to which this text anchor is anchored (needed for HParagraphContent,
+    /// set paragraph rectangle to which this text anchor is anchored (needed for HParagraphContent,
     /// HParagraphStartMargin, HParagraphEndMargin, VParagraph)
     void setParagraphRect(const QRectF &paragraphRect);
 

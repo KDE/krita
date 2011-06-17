@@ -149,11 +149,11 @@ bool SvmParser::parse(const QByteArray &data)
     kDebug(31000) << "compressionMode:" << header.compressionMode;
     kDebug(31000) << "mapMode:" << "Origin" << header.mapMode.origin
                   << "scaleX"
-                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.numerator
-                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator)
+                  << header.mapMode.scaleX.numerator << header.mapMode.scaleX.denominator
+                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.denominator)
                   << "scaleY"
-                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.numerator
-                  << (qreal(header.mapMode.scaleX.numerator) / header.mapMode.scaleX.numerator);
+                  << header.mapMode.scaleY.numerator << header.mapMode.scaleY.denominator
+                  << (qreal(header.mapMode.scaleY.numerator) / header.mapMode.scaleY.denominator);
     kDebug(31000) << "size:" << header.width << header.height;
     kDebug(31000) << "actionCount:" << header.actionCount;
     kDebug(31000) << "================ SVM HEADER ================";
@@ -325,29 +325,29 @@ bool SvmParser::parse(const QByteArray &data)
         case META_LINECOLOR_ACTION:
             {
                 quint32  colorData;
-                bool     doSet;
 
                 stream >> colorData;
-                stream >> doSet;
+                stream >> mContext.lineColorSet;
 
-                mContext.lineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
-                kDebug(31000) << "Color:"  << mContext.lineColor;
+                mContext.lineColor = QColor::fromRgb(colorData);
+                kDebug(31000) << "Color:"  << mContext.lineColor 
+                              << '(' << mContext.lineColorSet << ')';
                 mContext.changedItems |= GCLineColor;
             }
             break;
         case META_FILLCOLOR_ACTION:
             {
                 quint32  colorData;
-                bool     doSet;
 
                 stream >> colorData;
-                stream >> doSet;
+                stream >> mContext.fillColorSet;
+                //mContext.fillColorSet = false;
                 
-                kDebug(31000) << "Fill color :" << colorData << '(' << doSet << ')';
+                kDebug(31000) << "Fill color :" << hex << colorData << dec
+                              << '(' << mContext.fillColorSet << ')';
 
-                mContext.fillBrush = doSet ? QBrush(QColor::fromRgb(colorData)) : Qt::NoBrush;
-                kDebug(31000) << "Brush:"  << mContext.fillBrush;
-                mContext.changedItems |= GCFillBrush;
+                mContext.fillColor = QColor::fromRgb(colorData);
+                mContext.changedItems |= GCFillColor;
             }
             break;
         case META_TEXTCOLOR_ACTION:
@@ -362,15 +362,16 @@ bool SvmParser::parse(const QByteArray &data)
         case META_TEXTFILLCOLOR_ACTION:
             {
                 quint32  colorData;
-                bool     doSet;
 
                 stream >> colorData;
-                stream >> doSet;
+                stream >> mContext.textFillColorSet;
                 
-                kDebug(31000) << "Text fill color :" << colorData << '(' << doSet << ')';
+                kDebug(31000) << "Text fill color :" << colorData
+                              << '(' << mContext.textFillColorSet << ')';
 
-                mContext.textFillColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
-                kDebug(31000) << "Color:"  << mContext.textFillColor;
+                mContext.textFillColor = QColor::fromRgb(colorData);
+                kDebug(31000) << "Color:"  << mContext.textFillColor
+                              << '(' << mContext.textFillColorSet << ')';
                 mContext.changedItems |= GCTextFillColor;
             }
             break;
@@ -380,6 +381,7 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> textAlign;
 
                 mContext.textAlign = (TextAlign)textAlign;
+                kDebug(31000) << "TextAlign:"  << mContext.textAlign;
                 mContext.changedItems |= GCTextAlign;
             }
             break;
@@ -388,11 +390,11 @@ bool SvmParser::parse(const QByteArray &data)
                 stream >> mContext.mapMode;
                 kDebug(31000) << "mapMode:" << "Origin" << mContext.mapMode.origin
                               << "scaleX"
-                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.numerator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator)
+                              << mContext.mapMode.scaleX.numerator << mContext.mapMode.scaleX.denominator
+                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.denominator)
                               << "scaleY"
-                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.numerator
-                              << (qreal(mContext.mapMode.scaleX.numerator) / mContext.mapMode.scaleX.numerator);
+                              << mContext.mapMode.scaleY.numerator << mContext.mapMode.scaleY.denominator
+                              << (qreal(mContext.mapMode.scaleY.numerator) / mContext.mapMode.scaleY.denominator);
                 mContext.changedItems |= GCMapMode;
             }
             break;
@@ -432,15 +434,14 @@ bool SvmParser::parse(const QByteArray &data)
         case META_OVERLINECOLOR_ACTION:
             {
                 quint32  colorData;
-                bool     doSet;
 
                 stream >> colorData;
-                stream >> doSet;
+                stream >> mContext.overlineColorSet;
                 
-                kDebug(31000) << "Overline color :" << colorData << '(' << doSet << ')';
+                kDebug(31000) << "Overline color :" << colorData
+                              << '(' << mContext.overlineColorSet << ')';
 
-                mContext.overlineColor = doSet ? QColor::fromRgb(colorData) : Qt::NoPen;
-                kDebug(31000) << "Brush:"  << mContext.overlineColor;
+                mContext.overlineColor = QColor::fromRgb(colorData);
                 mContext.changedItems |= GCOverlineColor;
             }
             break;
@@ -537,7 +538,9 @@ void SvmParser::parseFont(QDataStream &stream, QFont &font)
     quint32  height;
     stream >> width;
     stream >> height;
-    font.setPointSize(height);
+    // Multiply by 0.7 since it seems that, just like WMF, the height
+    // in the font struct is actually the height of the character cell.
+    font.setPointSize(height * 7 / 10);
 
     qint8   temp8;
     bool    tempbool;

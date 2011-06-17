@@ -70,12 +70,61 @@ public:
             canvas(cc),
             inputDevice(id),
             dummyToolWidget(0),
-            dummyToolLabel(0) {
+            dummyToolLabel(0)
+    {
     }
 
-    ~CanvasData() {
+    ~CanvasData()
+    {
         // the dummy tool widget does not necessarily have a parent and we create it, so we delete it.
         delete dummyToolWidget;
+    }
+
+    void activateToolActions()
+    {
+        disabledActions.clear();
+        // we do several things here
+        // 1. enable the actions of the active tool
+        // 2. disable conflicting actions
+        // 3. replace conflicting actions in the action collection
+        KActionCollection *ac = canvas->actionCollection();
+        QHash<QString, KAction*> toolActions = activeTool->actions();
+        QHash<QString, KAction*>::const_iterator it(toolActions.constBegin());
+        for (; it != toolActions.constEnd(); ++it) {
+            if (ac) {
+                QAction* action = ac->action(it.key());
+                if (action) {
+                    ac->takeAction(action);
+                    if (action != it.value()) {
+                        action->setEnabled(false);
+                        disabledActions.append(action);
+                    }
+                    it.value()->setShortcut(action->shortcut());
+                }
+                ac->addAction(it.key(), it.value());
+            }
+            it.value()->setEnabled(true);
+        }
+    }
+
+    void deactivateToolActions()
+    {
+        if (!activeTool)
+            return;
+        // disable actions of active tool
+        foreach(KAction *action, activeTool->actions()) {
+            action->setEnabled(false);
+        }
+        // enable actions which where disables on activating the active tool
+        // and re-add them to the action collection
+        KActionCollection *ac = canvas->actionCollection();
+        foreach(QAction *action, disabledActions) {
+            action->setEnabled(true);
+            if(ac) {
+                ac->addAction(action->objectName(), action);
+            }
+        }
+        disabledActions.clear();
     }
 
     KoToolBase *activeTool;     // active Tool
@@ -87,6 +136,7 @@ public:
     const KoInputDevice inputDevice;
     QWidget *dummyToolWidget;  // the widget shown in the toolDocker.
     QLabel *dummyToolLabel;
+    QList<QAction*> disabledActions; ///< disabled conflicting actions
 };
 
 KoToolManager::Private::Private(KoToolManager *qq)
@@ -177,9 +227,7 @@ void KoToolManager::Private::switchTool(KoToolBase *tool, bool temporary)
     }
 
     if (newActiveTool) {
-        foreach(KAction *action, canvasData->activeTool->actions()) {
-            action->setEnabled(false);
-        }
+        canvasData->deactivateToolActions();
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         canvasData->activeTool->deactivate();
@@ -293,8 +341,8 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
         canvasData->activeTool->activate(toolActivation, shapesToOperateOn);
     }
 
-    QMap<QString, QWidget *> optionWidgetMap = canvasData->activeTool->optionWidgets();
-    if (optionWidgetMap.empty()) { // no option widget.
+    QList<QWidget *> optionWidgetList = canvasData->activeTool->optionWidgets();
+    if (optionWidgetList.empty()) { // no option widget.
         QWidget *toolWidget;
         QString title;
         foreach(ToolHelper *tool, tools) {
@@ -316,15 +364,15 @@ void KoToolManager::Private::postSwitchTool(bool temporary)
             canvasData->dummyToolWidget = toolWidget;
         }
         canvasData->dummyToolLabel->setText(i18n("Active tool: %1", title));
-        optionWidgetMap.insert(i18n("Tool Options"), toolWidget);
+        optionWidgetList.append(toolWidget);
     }
 
     // Activate the actions for the currently active tool
-    activateActions(canvasData->canvas->actionCollection(), canvasData->activeTool->actions());
+    canvasData->activateToolActions();
 
     KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
     if (canvasControllerWidget) {
-        canvasControllerWidget->setToolOptionWidgets(optionWidgetMap);
+        canvasControllerWidget->setToolOptionWidgets(optionWidgetList);
     }
     emit q->changedTool(canvasData->canvas, uniqueToolIds.value(canvasData->activeTool));
 }
@@ -371,7 +419,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         } else {
             KoCanvasControllerWidget *canvasControllerWidget = dynamic_cast<KoCanvasControllerWidget*>(canvasData->canvas);
             if (canvasControllerWidget) {
-                canvasControllerWidget->setToolOptionWidgets(QMap<QString, QWidget *>());
+                canvasControllerWidget->setToolOptionWidgets(QList<QWidget *>());
             }
             // as a last resort just set a blank one
             canvasData = 0;
@@ -678,22 +726,6 @@ void KoToolManager::Private::switchToolTemporaryRequested(const QString &id)
     switchTool(id, true);
 }
 
-void KoToolManager::Private::activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions)
-{
-    QHash<QString, KAction*>::const_iterator it( actions.constBegin());
-    for (; it != actions.constEnd(); ++it) {
-        if (ac) {
-            QAction* action = ac->action(it.key());
-                if (action) {
-                    ac->takeAction(action);
-                    it.value()->setShortcut(action->shortcut());
-                }
-                ac->addAction(it.key(), it.value());
-        }
-        it.value()->setEnabled(true);
-    }
-}
-
 // ******** KoToolManager **********
 KoToolManager::KoToolManager()
     : QObject(),
@@ -761,7 +793,8 @@ void KoToolManager::registerTools(KActionCollection *ac, KoCanvasController *con
         QHash<QString, KAction*> actions = tool->actions();
         QHash<QString, KAction*>::const_iterator it(actions.constBegin());
         for (; it != actions.constEnd(); ++it) {
-            ac->addAction(it.key(), it.value());
+            if (!ac->action(it.key()))
+                ac->addAction(it.key(), it.value());
         }
     }
     foreach(ToolHelper * th, d->tools) {

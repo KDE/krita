@@ -25,7 +25,8 @@
 #include <KoTriangleColorSelector.h>
 #include <KoColor.h>
 
-KisTriangleColorSelectorDock::KisTriangleColorSelectorDock() : QDockWidget(i18n("Triangle Color Selector")), m_canvas(0)
+KisTriangleColorSelectorDock::KisTriangleColorSelectorDock() 
+    : QDockWidget(i18n("Triangle Color Selector")), m_canvas(0)
 {
     m_colorSelector = new KoTriangleColorSelector(this);
     setWidget(m_colorSelector);
@@ -34,7 +35,12 @@ KisTriangleColorSelectorDock::KisTriangleColorSelectorDock() : QDockWidget(i18n(
 
 void KisTriangleColorSelectorDock::setCanvas(KoCanvasBase * canvas)
 {
+    if (m_canvas) {
+        m_canvas->disconnectCanvasObserver(this);
+    }
+    
     m_canvas = canvas;
+    
     connect(m_canvas->resourceManager(), SIGNAL(resourceChanged(int, const QVariant&)),
             this, SLOT(resourceChanged(int, const QVariant&)));
     m_colorSelector->setQColor(m_canvas->resourceManager()->foregroundColor().toQColor());

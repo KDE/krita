@@ -235,6 +235,11 @@ public slots:
      */
     void splitTableCells();
 
+     /**
+     * Insert a table of Contents at the current cursor position.
+     */
+    void insertTableOfContents();
+
     void insertText(const QString &text);
 
     void insertText(const QString &text, const QTextCharFormat &format);
@@ -270,6 +275,8 @@ public slots:
     void setBlockFormat(const QTextBlockFormat &format);
 
     void setCharFormat(const QTextCharFormat &format);
+
+    void setTableFormat(const QTextTableFormat &format);
 
     void setPosition(int pos, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 

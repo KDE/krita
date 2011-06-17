@@ -261,12 +261,12 @@ int KoReportItemField::render(OROPage* page, OROSection* section,  QPointF offse
         clone->setPosition(m_pos.toScene());
         section->addPrimitive(clone);
     }
-    
+    int height = m_pos.toScene().y() + tb->size().height();
     //If there is no page to add the item to, delete it now because it wont be deleted later
     if (!page) {
         delete tb;
     }
-    return m_pos.toScene().y() + tb->size().height();
+    return height;
 }
 
 

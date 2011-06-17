@@ -36,6 +36,7 @@
 #include <kis_paintop_settings.h>
 #include <kis_default_bounds.h>
 #include <kis_dumb_undo_adapter.h>
+#include <kis_canvas_resource_provider.h>
 
 class KisScratchPadDefaultBounds : public KisDefaultBounds
 {
@@ -61,6 +62,7 @@ KisScratchPad::KisScratchPad(QWidget *parent)
     , m_compositeOp(0)
     , m_scale(1.0)
     , m_opacity(OPACITY_OPAQUE_U8)
+    , m_resourceProvider(0)
 {
     setAutoFillBackground(false);
 
@@ -190,6 +192,20 @@ void KisScratchPad::fillSolid(const KoColor& color)
     update();
 }
 
+void KisScratchPad::setPresetImage(const QImage& image)
+{
+    KisPaintDeviceSP device = new KisPaintDevice(m_paintDevice->colorSpace());
+    device->convertFromQImage(image, "");
+    KisPainter painter(m_paintDevice);
+    painter.bitBlt(m_cutoutOverlay.x(), m_cutoutOverlay.y(), device, 0, 0, m_cutoutOverlay.width(), m_cutoutOverlay.height());
+    update();
+}
+
+void KisScratchPad::setCanvasResourceProvider(KisCanvasResourceProvider* resourceProvider)
+{
+    m_resourceProvider = resourceProvider;
+}
+
 void KisScratchPad::contextMenuEvent ( QContextMenuEvent * event ) {
 
     QWidget::contextMenuEvent(event);
@@ -316,6 +332,7 @@ void KisScratchPad::wheelEvent ( QWheelEvent * event ) {
 }
 
 void KisScratchPad::initPainting(QEvent* event) {
+    Q_ASSERT(m_resourceProvider);
     if (currentPaintOpPreset() && currentPaintOpPreset()->settings()) {
         m_paintIncremental = currentPaintOpPreset()->settings()->paintIncremental();
         /// todo: create a KoPointerEvent and use it here
@@ -369,6 +386,8 @@ void KisScratchPad::initPainting(QEvent* event) {
 
     m_painter->setPaintColor(m_paintColor);
     m_painter->setBackgroundColor(m_backgroundColor);
+    m_painter->setGradient(m_resourceProvider->currentGradient());
+    m_painter->setPattern(m_resourceProvider->currentPattern());
     m_painter->setPaintOpPreset(m_preset, 0);
 
     QPointF pos;

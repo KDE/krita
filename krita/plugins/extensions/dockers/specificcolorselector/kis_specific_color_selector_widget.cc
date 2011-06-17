@@ -31,7 +31,9 @@
 #include "kis_debug.h"
 
 
-KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent) : QWidget(parent), m_colorSpace(0)
+KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
+    : QWidget(parent),
+      m_colorSpace(0)
 {
     m_layout = new QVBoxLayout(this);
     setColorSpace(KoColorSpaceRegistry::instance()->rgb8());
@@ -100,6 +102,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs)
         connect(input, SIGNAL(updated()), this,  SLOT(update()));
         connect(this,  SIGNAL(updated()), input, SLOT(update()));
     }
+    m_layout->addStretch(10);
 }
 
 void KisSpecificColorSelectorWidget::update()

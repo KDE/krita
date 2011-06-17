@@ -78,12 +78,18 @@ QPixmap KoImageData::pixmap(const QSize &size)
     if (d->pixmap.isNull() || d->pixmap.size() != wantedSize) {
         switch (d->dataStoreState) {
         case KoImageDataPrivate::StateEmpty: {
+#if 0       // this is not possible as it gets called during the paint method
+            // and will crash. Therefore create a tmp pixmap and return it.
             d->pixmap = QPixmap(1, 1);
             QPainter p(&d->pixmap);
             p.setPen(QPen(Qt::gray));
             p.drawPoint(0, 0);
             p.end();
             break;
+#endif
+            QPixmap tmp(1, 1);
+            tmp.fill(Qt::gray);
+            return tmp;
         }
         case KoImageDataPrivate::StateNotLoaded:
             image(); // forces load

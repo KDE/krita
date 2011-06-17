@@ -40,5 +40,9 @@ void KisColorSelectorNgDock::setCanvas(KoCanvasBase * canvas)
     m_colorSelectorNgWidget->setCanvas(dynamic_cast<KisCanvas2*>(canvas));
 }
 
+void KisColorSelectorNgDock::unsetCanvas()
+{
+    m_colorSelectorNgWidget->unsetCanvas();
+}
 
 #include "kis_color_selector_ng_dock.moc"

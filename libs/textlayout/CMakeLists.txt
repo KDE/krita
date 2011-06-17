@@ -18,10 +18,12 @@ set(textlayout_LIB_SRCS
     KoTextLayoutObstruction.cpp
     FrameIterator.cpp
     TableIterator.cpp
+    KoPointedAt.cpp
     KoTextShapeData.cpp
     FloatingAnchorStrategy.cpp
     InlineAnchorStrategy.cpp
     AnchorStrategy.cpp
+    ToCGenerator.cpp
 )
 
 
@@ -46,6 +48,7 @@ install(
     KoTextLayoutArea.h
     KoTextLayoutRootArea.h
     KoTextShapeData.h
+    KoPointedAt.h
     textlayout_export.h
     DESTINATION
     ${INCLUDE_INSTALL_DIR} COMPONENT Devel

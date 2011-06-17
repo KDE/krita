@@ -109,11 +109,11 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
             // if we don't do that we get an endless change of the variable.
             QString currentValue = value();
             if (currentValue.isEmpty() || ! m_fixed) {
-                pagenumber = page->pageNumber(m_pageselect, m_pageadjust);
+                pagenumber = page->visiblePageNumber(m_pageselect, m_pageadjust);
                 QString newValue = pagenumber >= 0 ? QString::number(pagenumber) : QString();
                 // only update value when changed
                 if (currentValue != newValue) {
-                    setValue(newValue);
+                     setValue(newValue);
                 }
             }
         }
@@ -122,7 +122,7 @@ void PageVariable::resize(const QTextDocument *document, QTextInlineObject objec
         if (page) {
             // the text is not yet layouted therefore we don't get the rootArea
             // if we don't do that we get an endless change of the variable.
-            pagenumber = page->pageNumber(m_pageselect);
+            pagenumber = page->visiblePageNumber(m_pageselect);
             setValue(pagenumber >= 0 ? m_continuation : QString());
         }
         break;

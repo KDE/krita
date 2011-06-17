@@ -39,14 +39,8 @@ public:
      */
     void apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin=0.0, qreal scaleMax=1.0, qreal multiplicator=1.0) const;
 
-    void writeOptionSetting(KisPropertiesConfiguration* setting) const;
-    void readOptionSetting(const KisPropertiesConfiguration* setting);
-
-    void setRate(qreal rate) { m_rate = qBound<qreal>(0.0, rate, 1.0); }
-    qreal getRate() const { return m_rate; }
-    
-private:
-    qreal m_rate;
+    void setRate(qreal rate) { KisCurveOption::setValue(rate); }
+    qreal getRate() const { return KisCurveOption::value(); }
 };
 
 #endif // KIS_RATE_OPTION_H

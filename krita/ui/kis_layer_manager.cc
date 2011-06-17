@@ -383,6 +383,7 @@ void KisLayerManager::addCloneLayer()
 
 void KisLayerManager::addCloneLayer(KisNodeSP parent, KisNodeSP above)
 {
+    Q_ASSERT(!m_activeLayer->inherits("KisGroupLayer"));
     KisImageWSP image = m_view->image();
     if (image) {
         // Check whether we are not cloning a parent layer

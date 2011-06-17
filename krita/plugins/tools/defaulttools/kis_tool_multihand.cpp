@@ -541,23 +541,15 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
         }
     }
 
-    if (!targetDevice)
+    if (!targetDevice) {
         targetDevice = paintDevice;
+    }
 
-
+    m_transaction = new KisTransaction(m_transactionText, targetDevice);
+    // setup painters
     for (int i = 0; i < m_brushesCount; i++){
-        KisPainter * painter;
-
-/*        if (painter){
-            delete painter;
-        }*/
-
-        painter = new KisPainter(targetDevice, currentSelection());
-        //painter->beginTransaction( m_transactionText + QString::number(i) );
-        m_transaction = new KisTransaction(m_transactionText, targetDevice);
-
+        KisPainter * painter = new KisPainter(targetDevice, currentSelection());
         setupPainter(painter);
-
         if (m_paintIncremental) {
                 painter->setCompositeOp(m_compositeOp);
                 painter->setOpacity(m_opacity);
@@ -565,11 +557,8 @@ void KisToolMultihand::initPaint(KoPointerEvent *)
                 painter->setCompositeOp(paintDevice->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
                 painter->setOpacity(OPACITY_OPAQUE_U8);
         }
-
         m_painters.append(painter);
-
     }
-
 
     m_previousTangent = QPointF(0, 0);
 
@@ -861,7 +850,11 @@ void KisToolMultihand::updateOutlineRect()
         canvas()->updateCanvas(m_oldOutlineRect);
     }
 
+#ifdef __GNUC__
 #warning "Remove adjusted() call -- it smells hacky"
+#else
+#pragma WARNING( "Remove adjusted() call -- it smells hacky" )
+#endif
     m_oldOutlineRect = outlineDocRect.adjusted(-2,-2,2,2);
 
     canvas()->updateCanvas(m_oldOutlineRect);

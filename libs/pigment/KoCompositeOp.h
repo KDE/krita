@@ -1,5 +1,6 @@
 /*
- *  Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ * Copyright (c) 2005 Adrian Page <adrian@pagenet.plus.com>
+ * Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,8 +20,11 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <QString>
 #include <klocale.h>
+#include <QString>
+#include <QList>
+#include <QMultiMap>
+#include <QBitArray>
 
 #include "pigment_export.h"
 
@@ -37,7 +41,7 @@ const QString COMPOSITE_PLUS                  = "plus";
 const QString COMPOSITE_MINUS                 = "minus";
 const QString COMPOSITE_ADD                   = "add";
 const QString COMPOSITE_SUBTRACT              = "subtract";
-const QString COMPOSITE_INVERSED_SUBTRACT     = "inversed_subtract";
+const QString COMPOSITE_INVERSE_SUBTRACT      = "inverse_subtract";
 const QString COMPOSITE_DIFF                  = "diff";
 const QString COMPOSITE_MULT                  = "multiply";
 const QString COMPOSITE_DIVIDE                = "divide";
@@ -111,7 +115,6 @@ const QString COMPOSITE_COPY         = "copy";
 const QString COMPOSITE_COPY_RED     = "copy_red";
 const QString COMPOSITE_COPY_GREEN   = "copy_green";
 const QString COMPOSITE_COPY_BLUE    = "copy_blue";
-const QString COMPOSITE_COPY_OPACITY = "copy_opacity";
 
 const QString COMPOSITE_COLORIZE     = "colorize";
 const QString COMPOSITE_BUMPMAP      = "bumpmap";
@@ -120,7 +123,45 @@ const QString COMPOSITE_DISSOLVE     = "dissolve";
 const QString COMPOSITE_DISPLACE     = "displace";
 const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
-const QString COMPOSITE_UNDEF        = "underfined";
+const QString COMPOSITE_UNDEF        = "undefined";
+
+
+class KoID;
+class KoColorSpace;
+
+class PIGMENTCMS_EXPORT KoCompositeOpRegistry
+{
+    typedef QMultiMap<KoID,KoID> KoIDMap;
+    typedef QList<KoID>          KoIDList;
+    KoCompositeOpRegistry();
+    
+public:
+    static const KoCompositeOpRegistry& instance();
+    
+    KoID     getDefaultCompositeOp() const;
+    KoID     getKoID(const QString& compositeOpID) const;
+    KoIDMap  getCompositeOps() const;
+    KoIDList getCategories() const;
+    KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
+    KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
+    bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
+    
+    template<class TKoIdIterator>
+    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
+        KoIDList list;
+        
+        for(; begin!=end; ++begin){ 
+            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
+                list.push_back(*begin);
+        }
+        
+        return list;
+    }
+    
+private:
+    KoIDList m_categories;
+    KoIDMap  m_map;
+};
 
 /**
  * Base for colorspace-specific blending modes.
@@ -140,6 +181,21 @@ public:
     static QString categoryHSV();
     static QString categoryMix();
     static QString categoryMisc();
+    
+    struct ParameterInfo
+    {
+        quint8*       dstRowStart;
+        qint32        dstRowStride;
+        const quint8* srcRowStart;
+        qint32        srcRowStride;
+        const quint8* maskRowStart;
+        qint32        maskRowStride;
+        qint32        rows;
+        qint32        cols;
+        float         opacity;
+        float         flow;
+        QBitArray     channelFlags;
+    };
     
 public:
 
@@ -174,43 +230,37 @@ public:
      * @return the category associated with the composite op
      */
     QString category() const;
-
+    
+    // WARNING: A derived class needs to overwrite at least one
+    //          of the following virtual methods or a call to
+    //          composite(...) will lead to an endless recursion/stack overflow
+    
     /**
-      @param dstRowStart pointer to the start of the byte array we will composite the source on
-      @param dstRowStride length of the rows of the block of destination pixels in bytes
-      @param srcRowStart pointer to the start of the byte array we will mix with dest
-      @param srcRowStride length of the rows of the block of src in bytes
-       pixels (may be different from the rowstride of the dst pixels,
-       in which case the smaller value is used). If srcRowStride is null
-       it is assumed that the source is a constant color.
-      @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
-      @param maskRowStride length of the mask scanlines in bytes
-      @param rows number of scanlines to blend
-      @param numColumns length of the row of pixels in pixels
-      @param opacity transparency with which to blend
-    */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                           const quint8 *srcRowStart, qint32 srcRowStride,
-                           const quint8 *maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 numColumns,
-                           quint8 opacity) const;
-
-    /**
-     * Same as previous, but with a bit array that determines which channels
-     * (channels are in the order of the channels in the colorspace) should
-     * be excluded (false) or included (true) in the bitBlt.
-     *
-     * For instance:
-     * if this is COMPOSITY_COPY
-     * composite(..., [1, 0]) for grayscale is the same as old COMPOSITE_COPY_GRAY --
-     * only the gray channel is copied.
+     * @param dstRowStart pointer to the start of the byte array we will composite the source on
+     * @param dstRowStride length of the rows of the block of destination pixels in bytes
+     * @param srcRowStart pointer to the start of the byte array we will mix with dest
+     * @param srcRowStride length of the rows of the block of src in bytes
+     * pixels (may be different from the rowstride of the dst pixels,
+     * in which case the smaller value is used). If srcRowStride is null
+     * it is assumed that the source is a constant color.
+     * @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
+     * @param maskRowStride length of the mask scanlines in bytes
+     * @param rows number of scanlines to blend
+     * @param numColumns length of the row of pixels in pixels
+     * @param opacity transparency with which to blend
+     * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                           const quint8 *srcRowStart, qint32 srcRowStride,
-                           const quint8 *maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 numColumns,
-                           quint8 opacity,
-                           const QBitArray & channelFlags) const = 0;
+                            const quint8 *srcRowStart, qint32 srcRowStride,
+                            const quint8 *maskRowStart, qint32 maskRowStride,
+                            qint32 rows, qint32 numColumns,
+                            quint8 opacity, const QBitArray& channelFlags=QBitArray()) const;
+    
+    /**
+    * Same as previous, but uses a parameter structure
+    */
+    virtual void composite(const ParameterInfo& params) const;
+    
 private:
     KoCompositeOp();
     struct Private;

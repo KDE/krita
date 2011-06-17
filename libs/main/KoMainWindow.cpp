@@ -84,7 +84,7 @@ public:
         setIgnoreScrollBars(true);
     }
     virtual bool eventFilter(QObject *obj, QEvent *ev) {
-        if (!obj->isWidgetType())
+        if (!obj || !ev || !obj->isWidgetType())
             return false;
         return KParts::PartManager::eventFilter(obj, ev);
     }
@@ -1043,6 +1043,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent)
 
 void KoMainWindow::closeEvent(QCloseEvent *e)
 {
+    if(rootDocument() && rootDocument()->isLoading()) {
+        e->setAccepted(false);
+        return;
+    }
     if (queryClose()) {
         if (d->docToOpen) {
             // The open pane is visible
@@ -1525,7 +1529,6 @@ void KoMainWindow::slotRemoveView()
 
 void KoMainWindow::viewFullscreen(bool fullScreen)
 {
-    //TODO optional hide toolbars, statusbar, dockers, etc. Probably introduce own 'view modes' with there own kconfig-settings
     if (fullScreen) {
         setWindowState(windowState() | Qt::WindowFullScreen);   // set
     } else {
@@ -1551,7 +1554,7 @@ void KoMainWindow::slotProgress(int value)
         d->firstTime = true;
         return;
     }
-    if (d->firstTime) {
+    if (d->firstTime || !d->progress) {
         // The statusbar might not even be created yet.
         // So check for that first, and create it if necessary
         QStatusBar *bar = findChild<QStatusBar *>();

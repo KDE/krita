@@ -77,8 +77,14 @@ void ParagraphLayout::save(KoParagraphStyle *style)
         align = Qt::AlignLeft;
     style->setAlignment(align);
     style->setNonBreakableLines(widget.keepTogether->isChecked());
-    style->setBreakBefore(widget.breakBefore->isChecked());
-    style->setBreakAfter(widget.breakAfter->isChecked());
+    if (widget.breakBefore->isChecked())
+        style->setBreakBefore(KoText::PageBreak);
+    else
+        style->setBreakBefore(KoText::NoBreak);
+    if (widget.breakAfter->isChecked())
+        style->setBreakAfter(KoText::PageBreak);
+    else
+        style->setBreakAfter(KoText::NoBreak);
 }
 
 #include <ParagraphLayout.moc>

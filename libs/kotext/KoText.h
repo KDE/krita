@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C)  2006, 2010 Thomas Zander <zander@kde.org>
  * Copyright (C)  2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * Copyright (C)  2011 Pierre Ducroquet <pinaraf@pinaraf.info>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -107,6 +108,7 @@ enum Direction {
     LeftRightTopBottom, ///< Text layout for most western languages
     RightLeftTopBottom, ///< Text layout for languages like Hebrew
     TopBottomRightLeft,  ///< Vertical text layout.
+    TopBottomLeftRight,  ///< Vertical text layout. ?
     PerhapsLeftRightTopBottom, ///< \internal
     PerhapsRightLeftTopBottom, ///< \internal
     InheritDirection    ///< Direction is unspecified and should come from the container
@@ -119,7 +121,7 @@ KOTEXT_EXPORT QString directionToString(Direction direction);
 
 /// There are several possible text breaks
 enum KoTextBreakProperty {
-    NoBreak,         ///< No text break
+    NoBreak = 0,         ///< No text break
     ColumnBreak,     ///< Column break
     PageBreak        ///< Page break
 };
@@ -129,6 +131,8 @@ KOTEXT_EXPORT KoTextBreakProperty textBreakFromString(const QString &textBreak);
 /// convert the KoTextBreakProperty enum to the string version of text break (as specified in ODF)
 KOTEXT_EXPORT QString textBreakToString (KoTextBreakProperty textBreak);
 
+///@TODO: move to KoUnit ?
+KOTEXT_EXPORT QTextLength parseLength (const QString &length);
 }
 
 Q_DECLARE_METATYPE(KoText::Tab)

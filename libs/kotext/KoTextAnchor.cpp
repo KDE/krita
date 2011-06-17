@@ -100,6 +100,8 @@ KoTextAnchor::KoTextAnchor(KoShape *shape)
     : KoInlineObject(*(new KoTextAnchorPrivate(this, shape)), false)
 {
     Q_D(KoTextAnchor);
+    shape->setAnchored(true);
+    shape->setVisible(false);
     d->fakeAsChar = false;
 }
 
@@ -178,7 +180,9 @@ void KoTextAnchor::updatePosition(const QTextDocument *document, QTextInlineObje
     d->document = document;
     d->position = posInDocument;
     d->format = format;
-    d->anchorStrategy->updatePosition(d->shape, document, posInDocument);
+    if (d->anchorStrategy != 0) {
+        d->anchorStrategy->updatePosition(d->shape, document, posInDocument);
+    }
 }
 
 void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd)
@@ -189,6 +193,13 @@ void KoTextAnchor::resize(const QTextDocument *document, QTextInlineObject objec
     Q_UNUSED(format);
     Q_UNUSED(pd);
     Q_D(KoTextAnchor);
+
+    if (!d->shape->isVisible()) {
+        // Per default the shape this anchor presents is hidden and we only make it visible once an explicit resize-request
+        // was made. This prevents shapes that are anchored at e.g. hidden textboxes to not become visible as long as they
+        // are not asked to resize.
+        d->shape->setVisible(true);
+    }
 
     // important detail; top of anchored shape is at the baseline.
     QFontMetricsF fm(format.font(), pd);

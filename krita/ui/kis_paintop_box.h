@@ -22,13 +22,11 @@
 #ifndef KIS_PAINTOP_BOX_H_
 #define KIS_PAINTOP_BOX_H_
 
-#include <QHash>
+#include <QMap>
 #include <QWidget>
 #include <QList>
-#include <QPixmap>
 
-#include <kcombobox.h>
-
+#include <KoID.h>
 #include <KoInputDevice.h>
 
 #include <kis_types.h>
@@ -39,7 +37,6 @@ class QPushButton;
 class QString;
 class QHBoxLayout;
 
-class KoID;
 class KoColorSpace;
 class KoResourceSelector;
 class KoResource;
@@ -51,8 +48,10 @@ class KisPopupButton;
 class KisPaintOpPresetsPopup;
 class KisPaintOpPresetsChooserPopup;
 class KisPaintOpSettingsWidget;
-class KisCmbPaintop;
-class KisCmbComposite;
+class KisPaintOpListWidget;
+class KisDoubleSliderSpinBox;
+class KisCompositeOpComboBox;
+
 
 /**
  * This widget presents all paintops that a user can paint with.
@@ -66,93 +65,102 @@ class KisCmbComposite;
  */
 class KisPaintopBox : public QWidget
 {
-
     Q_OBJECT
 
 public:
-    KisPaintopBox(KisView2 * view,  QWidget * parent, const char * name);
+    KisPaintopBox(KisView2* view, QWidget* parent, const char* name);
     KisPaintOpPresetSP paintOpPresetSP(KoID * = 0);
-    const KoID & currentPaintop();
-    void setCurrentPaintop(const KoID & paintop);
-    QPixmap paintopPixmap(const KoID & paintop);
+    KoID currentPaintop();
+    void setCurrentPaintop(const KoID& paintop, KisPaintOpPresetSP preset=0);
+    QPixmap paintopPixmap(const KoID& paintop);
     ~KisPaintopBox();
 
 signals:
     void signalPaintopChanged(KisPaintOpPresetSP paintop);
 
 public slots:
-
-    void colorSpaceChanged(const KoColorSpace *cs);
+    void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
     void slotCurrentNodeChanged(KisNodeSP node);
     void slotSaveActivePreset();
     void slotUpdatePreset();
     void slotSetupDefaultPreset();
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource* resource);
 
 private:
-
-    KoID defaultPaintop(const KoInputDevice & inputDevice);
-    KisPaintOpPresetSP activePreset(const KoID & paintop, const KoInputDevice & inputDevice);
-
-    ///Sets the current composite op in the canvas resource provide
-    ///Composite op will be set to eraser if the erase mode of the input device is active
-    void compositeOpChanged();
-
-    ///Sets the internal composite op, without emitting
-    /// @param id id of the composite op, when empty COMPOSITE_OVER will be used
-    void setCompositeOpInternal(const QString & id);
-
-    void setEnabledInternal(bool value);
+    KoID defaultPaintOp();
+    KisPaintOpPresetSP defaultPreset(const KoID& paintOp);
+    KisPaintOpPresetSP activePreset(const KoID& paintOp);
+    void updateCompositeOp(QString compositeOpID);
+    void updatePaintops(const KoColorSpace* colorSpace);
 
 private slots:
-    void updatePaintops();
-    void nodeChanged(const KisNodeSP node);
-    void eraseModeToggled(bool checked);
-    void updateCompositeOpComboBox();
-    void slotSetCompositeMode(const QString& compositeOp);
+    void slotNodeChanged(const KisNodeSP node);
+    void slotToggleEraseMode(bool checked);
+    void slotSetCompositeMode(int index);
     void slotSetPaintop(const QString& paintOpId);
     void slotSaveToFavouriteBrushes();
     void slotWatchPresetNameLineEdit(const QString& text);
     void slotHorizontalMirrorChanged(bool value);
     void slotVerticalMirrorChanged(bool value);
+    void slotOpacityChanged(qreal value);
+    
 private:
+    KisCanvasResourceProvider*           m_resourceProvider;
+    QHBoxLayout*                         m_layout;
+    QWidget*                             m_paintopWidget;
+    KisPaintOpSettingsWidget*            m_optionWidget;
+    KisPopupButton*                      m_settingsWidget;
+    KisPopupButton*                      m_presetWidget;
+    KisPopupButton*                      m_brushChooser;
+    KisCompositeOpComboBox*              m_cmbCompositeOp;
+    QToolButton*                         m_eraseModeButton;
+    KisPaintOpPresetsPopup*              m_presetsPopup;
+    KisPaintOpPresetsChooserPopup*       m_presetsChooserPopup;
+    KisView2*                            m_view;
+    QPushButton*                         m_paletteButton;
+    KisPopupButton*                      m_workspaceWidget;
+    KisDoubleSliderSpinBox*              m_sliderOpacity;
+    QMap<KoID,KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
 
-    const KoColorSpace* m_colorspace;
+    KisPaintOpPresetSP  m_activePreset;
+    QString             m_prevCompositeOpID;
+    QString             m_currCompositeOpID;
+    KisNodeSP           m_previousNode;
+    
+    struct TabletToolID
+    {
+        TabletToolID(const KoInputDevice& dev) {
+            uniqueID = dev.uniqueTabletId();
+            pointer  = (dev.pointer() == QTabletEvent::UnknownPointer) ? QTabletEvent::Cursor : dev.pointer();
+        }
+        
+        bool operator == (const TabletToolID& id) const {
+            return pointer == id.pointer && uniqueID == id.uniqueID;
+        }
+        
+        bool operator < (const TabletToolID& id) const {
+            if(uniqueID == id.uniqueID)
+                return pointer < id.pointer;
+            return uniqueID < id.uniqueID;
+        }
+        
+        QTabletEvent::PointerType  pointer;
+        qint64                     uniqueID;
+    };
+    
+    struct TabletToolData
+    {
+        KoID               paintOpID;
+        KisPaintOpPresetSP preset;
+    };
 
-    KisCanvasResourceProvider *m_resourceProvider;
-
-    QHBoxLayout* m_layout;
-    QWidget* m_paintopWidget;
-    KisPaintOpSettingsWidget* m_optionWidget;
-    KisPopupButton* m_settingsWidget;
-    KisPopupButton* m_presetWidget;
-    KisPopupButton* m_brushChooser;
-    KisCmbComposite* m_cmbComposite;
-    QToolButton* m_eraseModeButton;
-    KisPaintOpPresetsPopup* m_presetsPopup;
-    KisPaintOpPresetsChooserPopup* m_presetsChooserPopup;
-    KisView2* m_view;
-    QPushButton* m_paletteButton;
-    KisPopupButton* m_workspaceWidget;
-
-    QMap<KoID, KisPaintOpSettingsWidget*> m_paintopOptionWidgets;
-    KisPaintOpPresetSP m_activePreset;
-    const KoCompositeOp* m_compositeOp;
-    KisNodeSP m_previousNode;
-
-    typedef QHash<KoInputDevice, KoID> InputDevicePaintopMap;
-    InputDevicePaintopMap m_currentID;
-
-    typedef QHash<QString, KisPaintOpPresetSP> PresetMap;
-    typedef QHash<KoInputDevice, PresetMap > InputDevicePresetsMap;
-    InputDevicePresetsMap m_inputDevicePresets;
-
-    QHash<KoInputDevice, bool> m_inputDeviceEraseModes;
-    QHash<KoInputDevice, QString> m_inputDeviceCompositeModes;
-    bool m_eraserUsed;
+    typedef QMap<TabletToolID, TabletToolData> TabletToolMap;
+    typedef QMap<KoID, KisPaintOpPresetSP>     PaintOpPresetMap;
+    
+    TabletToolMap    m_tabletToolMap;
+    PaintOpPresetMap m_paintOpPresetMap;
+    TabletToolID     m_currTabletToolID;
 };
-
-
 
 #endif //KIS_PAINTOP_BOX_H_

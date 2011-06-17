@@ -101,6 +101,7 @@ void Panel::setInitialButtonIcon(QToolButton *button, const QString &name) const
 
 void Panel::setCanvas (KoCanvasBase *canvas)
 {
+    m_canvas->disconnectCanvasObserver(this); // "Every connection you make emits a signal, so duplicate connections emit two signals"
     m_canvas = canvas;
     Q_ASSERT(m_canvas);
     connect(m_canvas->toolProxy(), SIGNAL(toolChanged(const QString&)), this, SLOT(toolChangeDetected(const QString&)));

@@ -43,6 +43,8 @@ signals:
 private slots:
     void slotThumbnailMode();
     void slotDetailMode();
+
+    virtual void paintEvent(QPaintEvent* );
    
 private:
 

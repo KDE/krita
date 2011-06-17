@@ -66,7 +66,7 @@ KoFilter::ConversionStatus KisBMPImport::convert(const QByteArray& from, const Q
 {
     dbgFile << "BMP import! From:" << from << ", To:" << to << "";
 
-    if (from != "image/bmp")
+    if (!(from == "image/bmp" || from == "image/x-xpixmap" || from == "image/gif" || from == "image/x-xbitmap"))
         return KoFilter::NotImplemented;
 
     if (to != "application/x-krita")

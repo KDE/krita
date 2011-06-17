@@ -72,7 +72,7 @@ void KisFilterColorToAlpha::process(KisPaintDeviceSP device,
 
     QVariant value;
     QColor cTA = (config->getProperty("targetcolor", value)) ? value.value<QColor>() : QColor(255, 255, 255);
-    int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 0;
+    int threshold = (config->getProperty("threshold", value)) ? value.toInt() : 1;
     qreal thresholdF = threshold;
 
     int totalCost = rect.width() * rect.height() / 100;

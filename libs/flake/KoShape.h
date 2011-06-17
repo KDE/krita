@@ -369,13 +369,15 @@ public:
     QSet<KoEventAction *> eventActions() const;
 
     /**
-     * Return the side text should flow around this shape.
+     * Return the side text should flow around this shape. This implements the ODF style:wrap
+     * attribute that specifies how text is displayed around a frame or graphic object.
      */
     TextRunAroundSide textRunAroundSide() const;
 
     /**
      * Set the side text should flow around this shape.
      * @param side the requested side
+     * @param runThrought run through the foreground or background or...
      */
     void setTextRunAroundSide(TextRunAroundSide side, Through runThrought = Background);
 
@@ -390,6 +392,34 @@ public:
      * @param distance the space around this shape to keep free from text
      */
     void setTextRunAroundDistance(qreal distance);
+
+    /**
+     * Return the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @return threshold the threshold
+     */
+    qreal textRunAroundThreshold() const;
+
+    /**
+     * Set the threshold above which text should flow around this shape.
+     * The text will not flow around the shape on a side unless the space available on that side
+     * is above this threshold. Only used when the text run around side is EnoughRunAroundSide.
+     * @param threshold the new threshold
+     */
+    void setTextRunAroundThreshold(qreal threshold);
+
+    /**
+     * Set an indication if the shape is anchored by text.
+     * @param anchored if the shape is anchored by text
+     */
+    void setAnchored(bool anchored);
+
+    /**
+     * Return if the shape is anchored by text
+     * @return true if the shape is anchored by text
+     */
+    bool isAnchored() const;
 
     /**
      * Set the background of the shape.

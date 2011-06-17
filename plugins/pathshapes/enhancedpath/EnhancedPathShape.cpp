@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2010 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2010,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2009-2010 Thomas Zander <zander@kde.org>
  * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
@@ -38,6 +38,7 @@
 
 EnhancedPathShape::EnhancedPathShape(const QRectF &viewBox)
 : m_viewBox(viewBox), m_viewBoxOffset(0.0, 0.0), m_mirrorVertically(false), m_mirrorHorizontally(false)
+, m_cacheResults(false)
 {
 }
 
@@ -77,9 +78,12 @@ void EnhancedPathShape::updatePath(const QSizeF &)
 {
     if (isParametricShape()) {
         clear();
+        enableResultCache(true);
 
         foreach (EnhancedPathCommand *cmd, m_commands)
             cmd->execute();
+
+        enableResultCache(false);
 
         m_viewBound = outline().boundingRect();
 
@@ -173,12 +177,18 @@ qreal EnhancedPathShape::evaluateReference(const QString &reference)
     // referenced formula
     case '?': {
         QString fname = reference.mid(1);
-        FormulaStore::const_iterator formulaIt = m_formulae.constFind(fname);
-        if (formulaIt != m_formulae.constEnd())
-        {
-            EnhancedPathFormula * formula = formulaIt.value();
-            if (formula)
-                res = formula->evaluate();
+        if (m_cacheResults && m_resultChache.contains(fname)) {
+            res = m_resultChache.value(fname);
+        } else {
+            FormulaStore::const_iterator formulaIt = m_formulae.constFind(fname);
+            if (formulaIt != m_formulae.constEnd()) {
+                EnhancedPathFormula * formula = formulaIt.value();
+                if (formula) {
+                    res = formula->evaluate();
+                    if (m_cacheResults)
+                        m_resultChache.insert(fname, res);
+                }
+            }
         }
         break;
     }
@@ -552,4 +562,10 @@ void EnhancedPathShape::updateTextArea()
         r = m_viewMatrix.mapRect(r).translated(m_viewBoxOffset);
         setPreferredTextRect(r);
     }
+}
+
+void EnhancedPathShape::enableResultCache(bool enable)
+{
+    m_resultChache.clear();
+    m_cacheResults = enable;
 }

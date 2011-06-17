@@ -60,9 +60,9 @@ private slots:
     void changePage(const QModelIndex&);
 
 private:
-
-    class Private;
-    Private * const m_d;
+    
+    struct Private;
+    Private* const m_d;
 
 };
 

@@ -23,62 +23,29 @@
 #include "KoDocumentRdf.h"
 #include "KoDocumentRdf_p.h"
 #include "KoTextRdfCore.h"
+#include "KoRdfLocationTreeWidgetItem.h"
 
 #include <QTemporaryFile>
 #include <kdebug.h>
 #include <kfiledialog.h>
 
-#include <ui_KoRdfLocationEditWidget.h>
-#include <ui_KoRdfLocationViewWidget.h>
-
 using namespace Soprano;
 
-
-class KoRdfLocationPrivate : public KoRdfSemanticItemPrivate
-{
-public:
-    Soprano::Node m_linkSubject;
-    QString m_name;
-    double m_dlat;
-    double m_dlong;
-    //
-    // For geo84 simple ontology
-    // geo84: <http://www.w3.org/2003/01/geo/wgs84_pos#>
-    //
-    bool m_isGeo84;
-    //
-    // For lat, long as an Rdf list pointed at by cal:geo
-    //
-    Soprano::Node m_joiner;
-    Ui::KoRdfLocationEditWidget editWidget;
-    Ui::KoRdfLocationViewWidget viewWidget;
-
-    KoRdfLocationPrivate(const KoDocumentRdf *rdf)
-        : KoRdfSemanticItemPrivate(rdf)
-        {}
-
-    KoRdfLocationPrivate(const KoDocumentRdf *rdf, Soprano::QueryResultIterator &it)
-        : KoRdfSemanticItemPrivate(rdf, it)
-        {}
-};
-
 KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf)
-    : KoRdfSemanticItem(*new KoRdfLocationPrivate(m_rdf), parent)
+    : KoRdfSemanticItem(m_rdf, parent)
 {
-    Q_D (KoRdfLocation);
-    d->m_isGeo84 = true;
+    m_isGeo84 = true;
 }
 
 KoRdfLocation::KoRdfLocation(QObject *parent, const KoDocumentRdf *m_rdf, Soprano::QueryResultIterator &it, bool isGeo84)
-    : KoRdfSemanticItem(*new KoRdfLocationPrivate(m_rdf, it), parent)
+    : KoRdfSemanticItem(m_rdf, it, parent)
 {
-    Q_D (KoRdfLocation);
-    d->m_linkSubject = it.binding("geo");
-    d->m_dlong = KoTextRdfCore::optionalBindingAsString(it, "long", "0").toDouble();
-    d->m_dlat  = KoTextRdfCore::optionalBindingAsString(it, "lat",  "0").toDouble();
-    d->m_name  = QString("%1,%2").arg(d->m_dlong).arg(d->m_dlat);
-    d->m_joiner = it.binding("joiner");
-    d->m_isGeo84 = isGeo84;
+    m_linkSubject = it.binding("geo");
+    m_dlong = KoTextRdfCore::optionalBindingAsString(it, "long", "0").toDouble();
+    m_dlat  = KoTextRdfCore::optionalBindingAsString(it, "lat",  "0").toDouble();
+    m_name  = QString("%1,%2").arg(m_dlong).arg(m_dlat);
+    m_joiner = it.binding("joiner");
+    m_isGeo84 = isGeo84;
 }
 
 KoRdfLocation::~KoRdfLocation()
@@ -147,17 +114,15 @@ KoRdfSemanticTreeWidgetItem *KoRdfLocation::createQTreeWidgetItem(QTreeWidgetIte
 
 Soprano::Node KoRdfLocation::linkingSubject() const
 {
-    Q_D (const KoRdfLocation);
-    kDebug(30015) << "KoRdfLocation::linkingSubject() subj:" << d->m_linkSubject;
-    return d->m_linkSubject;
+    kDebug(30015) << "KoRdfLocation::linkingSubject() subj:" << m_linkSubject;
+    return m_linkSubject;
 }
 
 void KoRdfLocation::setupStylesheetReplacementMapping(QMap<QString, QString> &m)
 {
-    Q_D (KoRdfLocation);
-    m["%DLAT%"] = QString("%1").arg(d->m_dlat);
-    m["%DLONG%"] = QString("%1").arg(d->m_dlong);
-    m["%ISGEO84%"] = QString("%1").arg(d->m_isGeo84);
+    m["%DLAT%"] = QString("%1").arg(m_dlat);
+    m["%DLONG%"] = QString("%1").arg(m_dlong);
+    m["%ISGEO84%"] = QString("%1").arg(m_isGeo84);
 }
 
 void KoRdfLocation::exportToMime(QMimeData *md) const
@@ -207,19 +172,16 @@ void KoRdfLocation::importFromData(const QByteArray& ba, KoDocumentRdf* m_rdf, K
 
 QString KoRdfLocation::name() const
 {
-    Q_D (const KoRdfLocation);
-    return d->m_name;
+    return m_name;
 }
 
 double KoRdfLocation::dlat() const
 {
-    Q_D (const KoRdfLocation);
-    return d->m_dlat;
+    return m_dlat;
 }
 
 double KoRdfLocation::dlong() const
 {
-    Q_D (const KoRdfLocation);
-    return d->m_dlong;
+    return m_dlong;
 }
 

@@ -1,10 +1,8 @@
-
 The text layout framework
 -------------------------
-The data of the document is stored in a QTextDocument (with some resouces set by the KoTextDocument helper class) The styles are stored in a QStyleManager, and we have some other managers and helpers as needed.
+The data of the document is stored in a QTextDocument (with some resouces set by the KoTextDocument helper class) The styles are stored in a KoStyleManager, and we have some other managers and helpers as needed.
 
-The layout of that document is handled by the KoTextDocumentLayout class.
-It builds a series of KoTextLayoutRootArea which roughly corresponds to a page, but since this is completely abstract such a root area could also be the cell in a spreadsheet. Fr both the spreadsheet case and a normal textshape only a single root area is created, but for Words we can create many root areas.
+The layout of that document is handled by the KoTextDocumentLayout class. It builds a series of KoTextLayoutRootArea which roughly corresponds to a page, but since this is completely abstract such a root area could also be the cell in a spreadsheet. For both the spreadsheet case and a normal textshape only a single root area is created, but for Words we can create many root areas.
 
 A KoTextLayoutRootArea is a subclass of KoTextLayoutArea which is the main worker of text layout. Basically it represents the layout of a series of paragraphs. If there is a table in between the paragraphs it will create a new area, namely a KoTextLayoutTableArea.
 
@@ -19,13 +17,13 @@ The KoTextDocumentLayout doesn't just create a new KoTextLayoutRootArea whenever
 
 The actual adding/removing of areas is done by the abstract class KoTextLayoutRootAreaProvider. It has a simple implementation in the TextShape that can only return one root area and that is it. It corresponds to there only being one textshape.
 
-In Words we have our own KWRootAreaProvider which creates a new page, new headers and footers, new main text shape and obviously also a new root area which is the thing we were asked for.
+In Words every KWTextFrameSet has an own KWRootAreaProvider. This way headers, footers and the main text have different providers. The provider can depend on each other to allow layouting in a defined order.
 
 In Calligra Tables it would also be a simple provider with a root area corresponding to a cell.
 
 
-Trigging of (re)layout.
------------------------
+Trigging of (re)layout
+----------------------
 In order to always have an up to date layout of the current QTextDocument we have a system of marking root areas as dirty.
 A root area can be marked as dirty in several ways:
  * through KoTextDocumentLayout::documentChanged () which is called by Qt
@@ -33,8 +31,18 @@ A root area can be marked as dirty in several ways:
  * when any calls setDirty() on a root area (eg a shape does this when changing
    size og having collisions
 
-When a root area is marked as dirty it asks the KoTextDocumentLayout to emit a signal (layoutIsDirty) which other people can react to
+When a root area is marked as dirty it asks the KoTextDocumentLayout to emit a signal (layoutIsDirty) which other people can react to. The plain TextShape just connects that signal to KoTextDocumentLayout::scheduleLayout(). This will schedule a layout for later using QTimer::singleShot. If multiple layouts are scheduled they will be compressed to one single layout run.
 
-The plain TextShape just connects that signal to KoTextDocumentLayout::layout()
+The KoTextDocumentLayout class provides the two methods layout() and scheduleLayout(). The first allows synchronous and the second asynchronous layouting.
 
-In Words it's a bit more complicated as we do not want the layout to take to much time at a time, in order to keep the ui responsive. So in Words the signal is setting up a timer that calls KoTextDocumentLayout::layout() often until the document is layout til end. An important part of the story is that KoTextDocumentLayout can be set up to not complete the entire layout every time but stop for example after each page. This way we can ensure that at leas for every page the user has a chance to do some ui interaction
+On layouting all root areas are checked if they are dirty. Those who are will be relayouted. If a root area is relayouted then the change may effect other root areas. This will be detected cause every root area keeps information where content started and ended using the FrameIterator class.
+
+
+FrameIterator and TableIterator
+-------------------------------
+
+Iterators are used to mark positions within a QTextDocument. Every root area has a start- and end-iterator that presents a view on a part of the document.
+
+The start-iterator of a root area is the end-iterator of the previous root area.
+
+During layouting every root area becomes dirty and will be relayouted if the start-iterator doesn't match any longer to the end-iterator of the previous root area. This makes it possible to propagate changes within a root area as result of a relayout forward.

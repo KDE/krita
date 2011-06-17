@@ -44,7 +44,6 @@ set(flake_SRCS
     #KoUnavailCollection.cpp
     KoToolBase.cpp
     KoCanvasController.cpp
-    KoCanvasControllerGraphicsWidget.cpp
     KoCanvasControllerWidget.cpp
     KoCanvasControllerWidgetViewport_p.cpp
     KoShapeRegistry.cpp
@@ -248,6 +247,7 @@ install(
     KoInsets.h
     KoPathSegment.h
     KoPointerEvent.h
+    KoRTree.h
     KoSelection.h
     KoShape.h
     KoShapeBorderModel.h

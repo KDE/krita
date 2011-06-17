@@ -5,8 +5,9 @@
  *                1999 Michael Koch    <koch@kde.org>
  *                1999 Carsten Pfeiffer <pfeiffer@kde.org>
  *                2002 Patrick Julien <freak@codepimps.org>
- *                2003-20010 Boudewijn Rempt <boud@valdyas.org>
+ *                2003-2010 Boudewijn Rempt <boud@valdyas.org>
  *                2004 Clarence Dang <dang@kde.org>
+ *                2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -37,7 +38,13 @@
 #include <QApplication>
 #include <QPrintDialog>
 #include <QObject>
+#include <QScrollBar>
 
+#include <kio/netaccess.h>
+#include <kmenubar.h>
+#include <ktoolbar.h>
+#include <kstatusbar.h>
+#include <ktoggleaction.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmenu.h>
@@ -47,7 +54,6 @@
 #include <kservice.h>
 #include <kservicetypetrader.h>
 #include <kstandardaction.h>
-#include <ktogglefullscreenaction.h>
 #include <kurl.h>
 #include <kxmlguiwindow.h>
 #include <kxmlguifactory.h>
@@ -183,6 +189,7 @@ public:
     KAction * totalRefresh;
     KAction* mirrorCanvas;
     KAction* createTemplate;
+    KAction *saveIncremental;
     KisSelectionManager *selectionManager;
     KisControlFrame * controlFrame;
     KisNodeManager * nodeManager;
@@ -202,19 +209,6 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 {
 
     setFocusPolicy(Qt::NoFocus);
-
-    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
-    actionCollection()->addAction("total_refresh", m_d->totalRefresh);
-    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
-    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
-
-    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
-    actionCollection()->addAction("createTemplate", m_d->createTemplate);
-    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
-
-    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
-    actionCollection()->addAction("first_run", firstRun);
-    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
 
     setComponentData(KisFactory2::componentData(), false);
 
@@ -261,10 +255,33 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
     connect(m_d->resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile *)), m_d->canvas, SLOT(slotSetDisplayProfile(const KoColorProfile *)));
 
+    // krita/krita.rc must also be modified to add actions to the menu entries
+    
+    m_d->saveIncremental = new KAction(i18n("Save Incremental &Version"), this);
+    actionCollection()->addAction("save_incremental_version", m_d->saveIncremental);
+    connect(m_d->saveIncremental, SIGNAL(triggered()), this, SLOT(slotSaveIncremental()));
+    connect(shell(), SIGNAL(documentSaved()), this, SLOT(slotDocumentSaved()));
+    
+    if (koDocument()->localFilePath().isNull()) {
+        m_d->saveIncremental->setEnabled(false);
+    }
+    
+    m_d->totalRefresh = new KAction(i18n("Total Refresh"), this);
+    actionCollection()->addAction("total_refresh", m_d->totalRefresh);
+    m_d->totalRefresh->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_R));
+    connect(m_d->totalRefresh, SIGNAL(triggered()), this, SLOT(slotTotalRefresh()));
+
+    m_d->createTemplate = new KAction( i18n( "&Create Template From Image..." ), this);
+    actionCollection()->addAction("createTemplate", m_d->createTemplate);
+    connect(m_d->createTemplate, SIGNAL(triggered()), this, SLOT(slotCreateTemplate()));
+
+    KAction *firstRun = new KAction( i18n( "Load Tutorial"), this);
+    actionCollection()->addAction("first_run", firstRun);
+    connect(firstRun, SIGNAL(triggered()), this, SLOT(slotFirstRun()));
+
     m_d->mirrorCanvas = new KToggleAction(i18n("Mirror Image"), this);
     m_d->mirrorCanvas->setChecked(false);
     actionCollection()->addAction("mirror_canvas", m_d->mirrorCanvas);
-
     m_d->mirrorCanvas->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_I));
     connect(m_d->mirrorCanvas, SIGNAL(toggled(bool)),m_d->canvas, SLOT(mirrorCanvas(bool)));
 
@@ -283,8 +300,40 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
     resetCanvasTransformations->setShortcut(QKeySequence("Ctrl+'"));
     connect(resetCanvasTransformations, SIGNAL(triggered()),m_d->canvas, SLOT(resetCanvasTransformations()));
 
+    KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
+    tAction->setChecked(true);
+    tAction->setToolTip(i18n("Shows or hides the status bar"));
+    actionCollection()->addAction("showStatusBar", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+
+    tAction = new KToggleAction(i18n("Show Canvas Only"), this);
+    tAction->setCheckedState(KGuiItem(i18n("Return to Window")));
+    tAction->setToolTip(i18n("Shows just the canvas or the whole window"));
+    QList<QKeySequence> shortcuts;
+    shortcuts << QKeySequence("Ctrl+h") << QKeySequence("ctrl+Shift+f");
+    tAction->setShortcuts(shortcuts);
+    tAction->setChecked(false);
+    actionCollection()->addAction("view_show_just_the_canvas", tAction);
+    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showJustTheCanvas(bool)));
+
+
     //Workaround, by default has the same shortcut as mirrorCanvas
     KAction* action = dynamic_cast<KAction*>(actionCollection()->action("format_italic"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
+    //Workaround, by default has the same shortcut as hide/show dockers
+    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_toggledockers"));
+    if (action) {
+        action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
+        action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
+    }
+
+    //Workaround, by default has the same shortcut as full-screen
+    action = dynamic_cast<KAction*>(shell()->actionCollection()->action("view_fullscreen"));
     if (action) {
         action->setShortcut(QKeySequence(), KAction::DefaultShortcut);
         action->setShortcut(QKeySequence(), KAction::ActiveShortcut);
@@ -295,8 +344,8 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
         KoToolBoxFactory toolBoxFactory(m_d->canvasController, " ");
         shell()->createDockWidget(&toolBoxFactory);
 
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QMap<QString, QWidget *> &)),
-                shell()->dockerManager(), SLOT(newOptionWidgets(const  QMap<QString, QWidget *> &)));
+        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(const QList<QWidget *> &)),
+                shell()->dockerManager(), SLOT(newOptionWidgets(const  QList<QWidget *> &)));
     }
 
     m_d->statusBar = new KisStatusBar(this);
@@ -308,7 +357,7 @@ KisView2::KisView2(KisDoc2 * doc, QWidget * parent)
 
 
     connect(layerManager(), SIGNAL(currentColorSpaceChanged(const KoColorSpace*)),
-            m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+            m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
     connect(m_d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)),
             m_d->controlFrame->paintopBox(), SLOT(slotCurrentNodeChanged(KisNodeSP)));
@@ -676,7 +725,7 @@ void KisView2::connectCurrentImage()
     m_d->canvas->connectCurrentImage();
 
     if (m_d->controlFrame) {
-        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(colorSpaceChanged(const KoColorSpace*)));
+        connect(image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace *)), m_d->controlFrame->paintopBox(), SLOT(slotColorSpaceChanged(const KoColorSpace*)));
     }
 
 }
@@ -825,6 +874,88 @@ void KisView2::slotCreateTemplate()
 
 }
 
+void KisView2::slotDocumentSaved()
+{
+    m_d->saveIncremental->setEnabled(true);
+}
+
+void KisView2::slotSaveIncremental()
+{
+    KoDocument* pDoc = koDocument();
+    if (!pDoc) return;
+    
+    bool foundVersion;
+    bool fileAlreadyExists;
+    QString version = "000";
+    QString newVersion;
+    QString letter;
+    QString fileName = pDoc->localFilePath();
+    
+    // Find current version filenames
+    QRegExp regex("_\\d{1,5}[.]|_\\d{1,4}[a-z][.]"); //  Regexp to find incremental versions in the filename
+    regex.indexIn(fileName);     //  Perform the search
+    QStringList matches = regex.capturedTexts();
+    foundVersion = matches.at(0).isEmpty() ? false : true;
+
+    // If the filename has a version, prepare it for incrementation
+    if (foundVersion) {
+        version = matches.at(matches.count() - 1);     //  Look at the last index, we don't care about other matches
+        if (version.contains(QRegExp("[a-z]"))) {
+            version.chop(1);             //  Trim "."
+            letter = version.right(1);   //  Save letter
+            version.chop(1);             //  Trim letter
+        } else {
+            version.chop(1);             //  Trim "."
+        }
+        version.remove(0, 1);            //  Trim "_"
+    } else {
+        // ...else, simply add a version to it so the next loop works
+        QRegExp regex2("[.][a-z]{2,4}$");  //  Heuristic to find file extension
+        regex2.indexIn(fileName);
+        QStringList matches2 = regex2.capturedTexts();
+        QString extensionPlusVersion = matches2.at(0);
+        extensionPlusVersion.prepend(version);
+        extensionPlusVersion.prepend("_");
+        fileName.replace(regex2, extensionPlusVersion);
+    }
+
+    // Prepare the base for new version filename
+    int intVersion = version.toInt(0);
+    ++intVersion;
+    QString baseNewVersion = QString::number(intVersion);
+    while (baseNewVersion.length() < version.length()) {
+        baseNewVersion.prepend("0");
+    }
+
+    // Check if the file exists under the new name and search until options are exhausted (test appending a to z)
+    do {
+        newVersion = baseNewVersion;
+        newVersion.prepend("_");
+        if (!letter.isNull()) newVersion.append(letter);
+        newVersion.append(".");
+        fileName.replace(regex, newVersion);
+        fileAlreadyExists = KIO::NetAccess::exists(fileName, KIO::NetAccess::DestinationSide, this);
+        if (fileAlreadyExists) {
+            if (!letter.isNull()) {
+                char letterCh = letter.at(0).toLatin1();
+                ++letterCh;
+                letter = QString(QChar(letterCh));
+            } else {
+                letter = "a";
+            }
+        }
+    } while (fileAlreadyExists && letter != "{");  // x, y, z, {...
+
+    if (letter == "{") {
+        KMessageBox::error(this, "Alternative names exhausted, try saving with a higher number", "Couldn't save incremental version");
+        return;
+    }
+    
+    pDoc->saveAs(fileName);
+    
+    shell()->updateCaption();
+}
+
 void KisView2::disableControls()
 {
     // prevents possible crashes, if somebody changes the paintop during dragging by using the mousewheel
@@ -863,6 +994,65 @@ void KisView2::slotFirstRun()
         doc->openUrl(fname);
     }
 
+}
+
+void KisView2::showStatusBar(bool toggled)
+{
+    if (KoView::statusBar()) {
+        KoView::statusBar()->setVisible(toggled);
+    }
+}
+
+void KisView2::showJustTheCanvas(bool toggled)
+{
+    KisConfig cfg;
+    KToggleAction *action;
+
+    if (cfg.hideStatusbarFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(actionCollection()->action("showStatusBar"));
+        if (action && action->isChecked() == toggled) {
+            action->setChecked(!toggled);
+        }
+    }
+
+    if (cfg.hideDockersFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_toggledockers"));
+        if (action && action->isChecked() == toggled) {
+            action->setChecked(!toggled);
+        }
+    }
+
+    if (cfg.hideTitlebarFullscreen()) {
+        action = dynamic_cast<KToggleAction*>(shell()->actionCollection()->action("view_fullscreen"));
+        if (action && action->isChecked() != toggled) {
+            action->setChecked(toggled);
+        }
+    }
+
+    if (cfg.hideMenuFullscreen()) {
+        if (shell()->menuBar()->isVisible() == toggled) {
+            shell()->menuBar()->setVisible(!toggled);
+        }
+    }
+
+    if (cfg.hideToolbarFullscreen()) {
+        foreach(KToolBar* toolbar, shell()->toolBars()) {
+            if (toolbar->isVisible() == toggled) {
+                toolbar->setVisible(!toggled);
+            }
+        }
+    }
+
+    if (cfg.hideScrollbarsFullscreen()) {
+        if (toggled) {
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        }
+        else {
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+            dynamic_cast<KoCanvasControllerWidget*>(canvasController())->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        }
+    }
 }
 
 #include "kis_view2.moc"

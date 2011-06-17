@@ -40,6 +40,9 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoBookmark.h>
 #include <KoTextMeta.h>
+#include "KoRdfFoaF.h"
+#include "KoRdfCalendarEvent.h"
+#include "KoRdfLocation.h"
 
 #include <kconfig.h>
 #include <kdebug.h>

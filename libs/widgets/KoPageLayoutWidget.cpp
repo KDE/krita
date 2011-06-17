@@ -80,6 +80,7 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     setPageLayout(layout);
     if (layout.format == 0) // make sure we always call this during startup, even if the A3 (index=0) was chosen
         sizeChanged(layout.format);
+
     showTextDirection(false);
     /* disable advanced page layout features by default */
     d->widget.facingPageLabel->setVisible(false);
@@ -92,6 +93,11 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
 KoPageLayoutWidget::~KoPageLayoutWidget()
 {
     delete d;
+}
+
+KoPageLayout KoPageLayoutWidget::pageLayout() const
+{
+    return d->pageLayout;
 }
 
 void KoPageLayoutWidget::sizeChanged(int row)

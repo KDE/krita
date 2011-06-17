@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007,2010 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007,2010,2011 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
  * Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
  *   Contact: Suresh Chande suresh.chande@nokia.com
@@ -138,6 +138,9 @@ private:
     /// Updates the size and position of an optionally existing text-on-shape text area
     void updateTextArea();
 
+    /// Enables chaching results
+    void enableResultCache(bool enable);
+
     typedef QMap<QString, EnhancedPathFormula*> FormulaStore;
     typedef QList<qreal> ModifierStore;
     typedef QMap<QString, EnhancedPathParameter*> ParameterStore;
@@ -155,6 +158,8 @@ private:
     ParameterStore m_parameters; ///< the shared parameters
     bool m_mirrorVertically; ///<whether or not the shape is to be mirrored vertically before transforming it
     bool m_mirrorHorizontally; ///<whether or not the shape is to be mirrored horizontally before transforming it
+    QHash<QString, qreal> m_resultChache; ///< cache for intermediate results used when evaluating path
+    bool m_cacheResults; ///< indicates if result cache is enabled
 };
 
 #endif // KOENHANCEDPATHSHAPE_H

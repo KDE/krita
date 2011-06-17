@@ -813,4 +813,4 @@ void TestSnapStrategy::testSquareDistanceToLine()
     QVERIFY(result4 == toCompWithFour);
     
 } 
-QTEST_KDEMAIN(TestSnapStrategy, GUI);
+QTEST_KDEMAIN(TestSnapStrategy, GUI)

@@ -31,6 +31,7 @@
 #include <KoInlineTextObjectManager.h>
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
+#include <KoTableRowStyle.h>
 #include <KoTableStyle.h>
 
 #include <QtGui>
@@ -334,6 +335,21 @@ void TestTableLayout::testColumnWidthRelative()
     QVERIFY(qAbs(bottomLeftCellBlock().layout()->lineAt(0).width() - 200.0*0.2) < ROUNDING);
     QVERIFY(qAbs(bottomMidCellBlock().layout()->lineAt(0).width() - 200.0*0.5) < ROUNDING);
     QVERIFY(qAbs(bottomRightCellBlock().layout()->lineAt(0).width() - 200.0*0.1) < ROUNDING);
+}
+
+void TestTableLayout::testRowHeightFixed()
+{
+    KoTableStyle *tableStyle = new KoTableStyle;
+
+    setupTest("merged text", "top right text", "mid right text", "bottom left text", "bottom mid text", "bottom right text", tableStyle);
+    KoTableColumnAndRowStyleManager styleManager = KoTableColumnAndRowStyleManager::getManager(m_table);
+    KoTableRowStyle row1style;
+    row1style.setRowHeight(3.2);
+    styleManager.setRowStyle(1, row1style);
+
+    m_layout->layout();
+
+    QVERIFY(!dynamic_cast<MockRootAreaProvider*>(m_layout->provider())->m_askedForMoreThenOneArea);
 }
 
 QTEST_KDEMAIN(TestTableLayout, GUI)

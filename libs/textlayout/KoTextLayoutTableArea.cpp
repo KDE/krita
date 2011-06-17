@@ -22,6 +22,7 @@
 
 #include "TableIterator.h"
 #include "KoTextLayoutArea.h"
+#include "KoPointedAt.h"
 
 #include <KoTableColumnAndRowStyleManager.h>
 #include <KoTableColumnStyle.h>
@@ -94,14 +95,14 @@ KoTextLayoutTableArea::~KoTextLayoutTableArea()
     delete d;
 }
 
-int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
+KoPointedAt KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy accuracy) const
 {
     int lastRow = d->endOfArea->row;
     if (d->endOfArea->frameIterators[0] == 0) {
         --lastRow;
     }
     if (lastRow <  d->startOfArea->row) {
-        return -1; // empty
+        return KoPointedAt(); // empty
     }
 
     int firstRow = qMax(d->startOfArea->row, d->headerRows);
@@ -156,7 +157,7 @@ int KoTextLayoutTableArea::hitTest(const QPointF &point, Qt::HitTestAccuracy acc
             }
         }
     }
-    return -1;
+    return KoPointedAt();
 }
 
 QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
@@ -209,7 +210,7 @@ QRectF KoTextLayoutTableArea::selectionBoundingBox(QTextCursor &cursor) const
     }
 }
 
-bool KoTextLayoutTableArea::layout(TableIterator *cursor)
+bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 {
     d->startOfArea = new TableIterator(cursor);
     d->headerRows = cursor->headerRows;
@@ -552,7 +553,7 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             FrameIterator *cellCursor = cursor->frameIterator(col);
 
             bool cellFully = cellArea->layout(cellCursor);
-            allCellsFullyDone = allCellsFullyDone && cellFully;
+            allCellsFullyDone = allCellsFullyDone && (cellFully || rowHasExactHeight);
 
             noCellsFitted = noCellsFitted && (cellArea->top() >= cellArea->bottom());
 
@@ -773,7 +774,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
         QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
         QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 
-        if (startTableCell != endTableCell && startTableCell.isValid()) {
+        if (startTableCell.isValid() && startTableCell != endTableCell) {
             int selectionRow;
             int selectionColumn;
             int selectionRowSpan;

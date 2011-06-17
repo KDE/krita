@@ -34,7 +34,10 @@ public:
     virtual QSizeF suggestSize(KoTextLayoutRootArea *rootArea);
     virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
 
+    void setSuggestedSize(QSizeF size);
+
     KoTextLayoutRootArea *m_area;
+    QSizeF m_suggestedSize;
     bool m_askedForMoreThenOneArea;
 };
 

@@ -29,7 +29,7 @@
 /**
  * Interface for a single OpenDocumentText page.
  *
- * The KWord KWPageTextInfo class does implement this interface to provide
+ * The Words KWPageTextInfo class does implement this interface to provide
  * application specific functionality for single pages.
  * @see KoTextShapeData::setPage();
  */

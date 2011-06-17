@@ -253,7 +253,7 @@ void Thesaurus::checkSection(QTextDocument *document, int startPosition, int end
         m_replaceLineEdit->setEnabled(false);
         m_replaceLabel->setEnabled(false);
     }
-    else { // called from an application, e.g. KWord
+    else { // called from an application, e.g. Words
         QTextCursor cursor(document);
         cursor.setPosition(startPosition);
         cursor.setPosition(endPosition, QTextCursor::KeepAnchor);

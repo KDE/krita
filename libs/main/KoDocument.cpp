@@ -2271,7 +2271,7 @@ KService::Ptr KoDocument::readNativeService(const KComponentData &componentData)
         // The old way is kept as fallback for compatibility, but in theory this is really never used anymore.
 
         // Try by path first, so that we find the global one (which has the native mimetype)
-        // even if the user created a kword.desktop in ~/.kde/share/applnk or any subdir of it.
+        // even if the user created a words.desktop in ~/.kde/share/applnk or any subdir of it.
         // If he created it under ~/.kde/share/applnk/Office/ then no problem anyway.
         service = KService::serviceByDesktopPath(QString::fromLatin1("Office/%1.desktop").arg(instname));
     }

@@ -49,19 +49,19 @@ class KOODF_EXPORT KoBorder
 {
 public:
 
-    /// The type of border.  Note that some of the border types are legacies from the old KWord format.
+    /// The type of border.  Note that some of the border types are legacies from the old Words format.
     enum BorderStyle {
         BorderNone, ///< no border. This value forces the computed value of 'border-width' to be '0'.
         BorderDotted,   ///< The border is a series of dots.
         BorderDashed,   ///< The border is a series of short line segments.
         BorderSolid,    ///< The border is a single line segment.
         BorderDouble,   ///< The border is two solid lines. The sum of the two lines and the space between them equals the value of 'border-width'.
-        BorderGroove,   ///< The border looks as though it were carved into the canvas. (old kword type)
-        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas. (old kword type)
-        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old kword type)
-        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old kword type)
+        BorderGroove,   ///< The border looks as though it were carved into the canvas. (old words type)
+        BorderRidge,    ///< The opposite of 'groove': the border looks as though it were coming out of the canvas. (old words type)
+        BorderInset,    ///< The border makes the entire box look as though it were embedded in the canvas. (old words type)
+        BorderOutset,   ///< The opposite of 'inset': the border makes the entire box look as though it were coming out of the canvas. (old words type)
 
-        // kword legacy
+        // words legacy
         BorderDashDotPattern,
         BorderDashDotDotPattern
     };

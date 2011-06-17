@@ -20785,7 +20785,7 @@
 ;char;coal;#;burn;
   00 Some KDE specific extensions:
 ;KDE;K Desktop Environment;#Desktop Environment;Desktop;
-;KWord;#word processor;
+;Words;#word processor;
 ;Calligra;#;office suite;
   00 Some function words, which are not part of WordNet:
 ;if;on condition that;provided that;supposing that;whether;whenever;#;condition;

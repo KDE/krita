@@ -1115,7 +1115,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // documents.
     //
     // FIXME: The check isEmpty() fixes a crash that happened when a
-    //        chart shape was saved from KWord.  There are two
+    //        chart shape was saved from Words.  There are two
     //        problems with this fix:
     //        1. Checking the tag hierarchy is hardly the right way to do this
     //        2. The position doesn't seem to be saved yet.

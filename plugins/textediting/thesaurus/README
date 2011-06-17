@@ -15,7 +15,7 @@ Implementation:
 
 Technically, this is a Text-Editing plugin, which means that it will typically
 add an action to a context menu, in this case: "Show related words".
-You can see this in KWord when you click the right mouse button over
+You can see this in Words when you click the right mouse button over
 a word or over selected text.
 
 The Thesaurus plugin just calls the WordNet binary "wn", which has

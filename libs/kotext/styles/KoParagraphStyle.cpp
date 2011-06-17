@@ -1430,10 +1430,10 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
                     case '.':
                         tab.filling = TF_DOTS; break;
                     case '-':
-                    case '_':  // TODO in KWord: differentiate --- and ___
+                    case '_':  // TODO in Words: differentiate --- and ___
                         tab.filling = TF_LINE; break;
                     default:
-                        // KWord doesn't have support for "any char" as filling.
+                        // Words doesn't have support for "any char" as filling.
                         break;
                     }
                 }

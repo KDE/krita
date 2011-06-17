@@ -219,7 +219,7 @@ bool KoBorder::operator==(const KoBorder &other) const
 KoBorder::BorderStyle KoBorder::odfBorderStyle(const QString &borderstyle)
 {
     // Note: the styles marked "Not odf compatible" below are legacies
-    //       from the old kword format.  There are also lots of border
+    //       from the old words format.  There are also lots of border
     //       styles in the MS DOC that we may have to handle at some point.
     if (borderstyle == "none")
         return BorderNone;

@@ -66,7 +66,7 @@ Note that this implies that the naming prefix 'Ko' is restricted to the libs, cl
 outside the libs are not allowed to use it.
 
 Futher names are
-KW for KWord classes
+KW for Words classes
 KoPA for the libs/kopageapp library
 KPr for KPresenter
 Kis for Krita (from KImage-shop)

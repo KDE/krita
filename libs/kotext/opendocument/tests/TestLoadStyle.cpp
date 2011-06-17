@@ -45,7 +45,7 @@
 TestLoadStyle::TestLoadStyle()
 {
     componentData = new KComponentData("TestLoadStyle");
-    componentData->dirs()->addResourceType("styles", "data", "kword/styles/");
+    componentData->dirs()->addResourceType("styles", "data", "words/styles/");
 }
 
 TestLoadStyle::~TestLoadStyle()

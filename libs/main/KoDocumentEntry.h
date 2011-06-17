@@ -91,7 +91,7 @@ public:
         /**
          * OnlyEmbeddableDocuments specifies if only Calligra Parts should be
          * listed which are embeddable into other koDocuments, or all (if false)
-         * (eg.: it makes no sense to embed Kexi into KWord,
+         * (eg.: it makes no sense to embed Kexi into Words,
          *  but it makes sense to embed it into KoShell)
          */
         OnlyEmbeddableDocuments = 1

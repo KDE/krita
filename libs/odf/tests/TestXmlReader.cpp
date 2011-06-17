@@ -607,7 +607,7 @@ void TestXmlReader::testDocument()
     xmldevice.open(QIODevice::WriteOnly);
     QTextStream xmlstream(&xmldevice);
     xmlstream << "<calligra>";
-    xmlstream << "  <kword/>\n";
+    xmlstream << "  <words/>\n";
     xmlstream << "  <kpresenter/>\n";
     xmlstream << "  <krita/>\n";
     xmlstream << "</calligra>";

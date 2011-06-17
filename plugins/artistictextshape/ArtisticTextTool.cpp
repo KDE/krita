@@ -348,7 +348,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Delete:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else if( textCursor() >= 0 && textCursor() < m_currentShape->plainText().length()) {
                 removeFromTextCursor( textCursor(), 1 );
             }
@@ -356,7 +355,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
         case Qt::Key_Backspace:
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             } else {
                 removeFromTextCursor( textCursor()-1, 1 );
             }
@@ -441,7 +439,6 @@ void ArtisticTextTool::keyPressEvent(QKeyEvent *event)
             }
             if (m_selection.hasSelection()) {
                 removeFromTextCursor(m_selection.selectionStart(), m_selection.selectionCount());
-                m_selection.clear();
             }
             addToTextCursor( event->text() );
         }
@@ -677,6 +674,10 @@ void ArtisticTextTool::createTextCursorShape()
 void ArtisticTextTool::removeFromTextCursor( int from, unsigned int count )
 {
     if ( from >= 0 ) {
+        if (m_selection.hasSelection()) {
+            // clear selection before text is removed, or else selection will be invalid
+            m_selection.clear();
+        }
         QUndoCommand *cmd = new RemoveTextRangeCommand(this, m_currentShape, from, count);
         canvas()->addCommand( cmd );
     }

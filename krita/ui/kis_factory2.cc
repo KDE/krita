@@ -98,8 +98,6 @@ KAboutData* KisFactory2::aboutData()
 
 const KComponentData &KisFactory2::componentData()
 {
-    QString homedir = qgetenv("HOME");
-
     if (!s_instance) {
         if (s_aboutData)
             s_instance = new KComponentData(s_aboutData);

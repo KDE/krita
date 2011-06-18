@@ -1,5 +1,6 @@
-/*
+    /*
  *  Copyright (C) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (C) 2011 Boudewijn Rempt <boud@valdyas.org>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,10 +18,22 @@
  */
 
 #include "kis_color_space_selector.h"
+
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpaceEngine.h>
 #include <KoID.h>
+
+#include <QDesktopServices>
+
+#include <kcomponentdata.h>
+#include <kfiledialog.h>
+#include <kstandarddirs.h>
+#include <kglobal.h>
+#include <kio/copyjob.h>
+
+#include "kis_factory2.h"
 
 #include "ui_wdgcolorspaceselector.h"
 
@@ -43,6 +56,8 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent),
             this, SLOT(fillCmbProfiles()));
     connect(d->colorSpaceSelector->cmbProfile, SIGNAL(activated(const QString &)),
             this, SLOT(colorSpaceChanged()));
+    connect(d->colorSpaceSelector->bnInstallProfile, SIGNAL(clicked()), this, SLOT(installProfile()));
+
     fillCmbProfiles();
 }
 
@@ -114,6 +129,24 @@ void KisColorSpaceSelector::colorSpaceChanged()
     if(valid) {
         emit colorSpaceChanged(currentColorSpace());
     }
+}
+
+void KisColorSpaceSelector::installProfile()
+{
+    KUrl homedir(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
+    QStringList profileNames = KFileDialog::getOpenFileNames(homedir, "*.icm *.icc", this, "Install Color Profiles");
+
+    KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    Q_ASSERT(iccEngine);
+
+    QString saveLocation = KGlobal::mainComponent().dirs()->saveLocation("icc_profiles");
+
+    foreach (QString profileName, profileNames) {
+        KIO::copy(KUrl(profileName), saveLocation);
+        iccEngine->addProfile(saveLocation + profileName);
+    }
+
+    fillCmbProfiles();
 }
 
 #include "kis_color_space_selector.moc"

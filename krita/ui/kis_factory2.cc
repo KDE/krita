@@ -131,7 +131,7 @@ const KComponentData &KisFactory2::componentData()
         // for images in the paintop box
         s_instance->dirs()->addResourceType("kis_images", "data", "krita/images/");
 
-        s_instance->dirs()->addResourceType("icc_profiles", "data", "krita/profiles/");
+        s_instance->dirs()->addResourceType("icc_profiles", 0, "krita/profiles/");
 
         s_instance->dirs()->addResourceType("kis_shaders", "data", "krita/shaders/");
 

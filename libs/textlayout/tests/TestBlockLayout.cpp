@@ -617,7 +617,7 @@ void TestBlockLayout::testBorderData()
 
     KoParagraphStyle style;
     m_styleManager->add(&style);
-    style.setTopMargin(10);
+    style.setTopMargin(QTextLength(QTextLength::FixedLength, 10));
     KoListStyle listStyle;
     KoListLevelProperties llp = listStyle.levelProperties(1);
     llp.setStyle(KoListStyle::DecimalItem);
@@ -644,7 +644,7 @@ void TestBlockLayout::testBorderData()
     QCOMPARE(data->counterPosition(), QPointF(3, 48.8));
 
 
-    style.setBottomMargin(5); //bottom spacing
+    style.setBottomMargin(QTextLength(QTextLength::FixedLength, 5)); //bottom spacing
     // manually reapply and relayout to force immediate reaction.
     block = m_doc->begin().next();
     style.applyStyle(block);

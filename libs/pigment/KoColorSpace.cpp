@@ -137,6 +137,11 @@ quint8 *KoColorSpace::allocPixelBuffer(quint32 numPixels, bool clear, quint8 def
     return buf;
 }
 
+bool KoColorSpace::hasCompositeOp(const QString& id) const
+{
+    return d->compositeOps.contains(id);
+}
+
 QList<KoCompositeOp*> KoColorSpace::compositeOps() const
 {
     return d->compositeOps.values();
@@ -254,15 +259,16 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const quint8 *srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
+                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const QString & op,
                           const QBitArray & channelFlags) const
 {
     if (d->compositeOps.contains(op)) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op), channelFlags);
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(op), channelFlags);
     } else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(COMPOSITE_OVER), channelFlags);
     }
 
 }
@@ -275,14 +281,15 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const quint8 *srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
+                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const QString& op) const
 {
     if (d->compositeOps.contains(op)) {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(op));
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(op));
     } else {
-        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, rows, cols, d->compositeOps.value(COMPOSITE_OVER));
+        bitBlt(dst, dststride, srcSpace, src, srcRowStride, srcAlphaMask, maskRowStride, opacity, flow, rows, cols, d->compositeOps.value(COMPOSITE_OVER));
     }
 }
 
@@ -294,6 +301,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const quint8 *srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
+                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const KoCompositeOp * op,
@@ -322,13 +330,13 @@ void KoColorSpace::bitBlt(quint8 *dst,
                       conversionData, conversionBufferStride,
                       srcAlphaMask, maskRowStride,
                       rows,  cols,
-                      opacity, channelFlags);
+                      opacity, flow, channelFlags);
     } else {
         op->composite(dst, dstRowStride,
                       src, srcRowStride,
                       srcAlphaMask, maskRowStride,
                       rows,  cols,
-                      opacity, channelFlags);
+                      opacity, flow, channelFlags);
     }
 
 }
@@ -344,6 +352,7 @@ void KoColorSpace::bitBlt(quint8 *dst,
                           const quint8 *srcAlphaMask,
                           qint32 maskRowStride,
                           quint8 opacity,
+                          quint8 flow,
                           qint32 rows,
                           qint32 cols,
                           const KoCompositeOp * op) const
@@ -370,14 +379,14 @@ void KoColorSpace::bitBlt(quint8 *dst,
                       conversionData, conversionBufferStride,
                       srcAlphaMask, maskRowStride,
                       rows,  cols,
-                      opacity);
+                      opacity, flow);
 
     } else {
         op->composite(dst, dstRowStride,
                       src, srcRowStride,
                       srcAlphaMask, maskRowStride,
                       rows, cols,
-                      opacity);
+                      opacity, flow);
     }
 
 }

@@ -1091,12 +1091,17 @@ void DefaultTool::selectionReorder(KoShapeReorderCommand::MoveShapeType order)
     }
 }
 
-QMap<QString, QWidget *> DefaultTool::createOptionWidgets()
+QList<QWidget *> DefaultTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
-    widgets.insert(i18n("Arrange"), new DefaultToolArrangeWidget(this));
-    widgets.insert(i18n("Geometry"), new DefaultToolWidget(this));
-    widgets.insert(i18n("Snapping"), canvas()->createSnapGuideConfigWidget());
+    QList<QWidget *> widgets;
+    DefaultToolArrangeWidget *defaultArrange = new DefaultToolArrangeWidget(this);
+    defaultArrange->setWindowTitle(i18n("Arrange"));
+    widgets.append(defaultArrange);
+    DefaultToolWidget *defaultTool = new DefaultToolWidget(this);
+    defaultTool->setWindowTitle(i18n("Geometry"));
+    widgets.append(defaultTool);
+    canvas()->createSnapGuideConfigWidget()->setWindowTitle(i18n("Snapping"));
+    widgets.append(canvas()->createSnapGuideConfigWidget());
     return widgets;
 }
 

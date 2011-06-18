@@ -1,6 +1,7 @@
 /*
  *  Copyright (c) 2002 Patrick Julien <freak@codepimps.org>
  *  Copyright (C) 2011 Silvio Heinrich <plassy@web.de>
+ *  Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -35,7 +36,6 @@ class KoResource;
  */
 class KRITAUI_EXPORT KisPresetChooser : public QWidget
 {
-
     Q_OBJECT
 
 public:
@@ -45,27 +45,35 @@ public:
     
     enum ViewMode{
         THUMBNAIL, /// Shows thumbnails
-        DETAIL  /// Shows thumbsnails with text next to it
+        DETAIL,  /// Shows thumbsnails with text next to it
+        STRIP  /// Shows thumbnails arranged in a single row
     };
     
     ///Set id for paintop to be accept by the proxy model
     ///@param paintopID id of the paintop for which the presets will be shown
     void setPresetFilter(const KoID & paintopID);
 
-    void setViewMode(ViewMode mode);
+    /// Set a list of preset names for resources that should be show, others will be hidden
+    /// Turns on name filter mode
+    ///@param filteredNames list of names of presets that will be shown
+    void setFilteredNames(const QStringList filteredNames);
 
     void updateViewSettings();
-
     QStringList getTagNamesList(const QString& searchString);
     void returnKeyPressed(QString lineEditText);
-
+    void setViewMode(ViewMode mode);
+    void showButtons(bool show);
+    
+    KoResource* currentResource();
+    
 signals:
-    void resourceSelected( KoResource * resource );
+    void resourceSelected(KoResource * resource);
     
 public slots:
     void searchTextChanged(const QString& searchString);
     void setShowAll(bool show);
-
+    void updateViewSettings();
+    
 protected:
     virtual void resizeEvent(QResizeEvent* event);
     

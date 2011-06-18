@@ -187,6 +187,10 @@ bool Attribute::compare(const QString& initialValue, const QString& outputValue)
         return false;
     if (initialValue == outputValue)
         return true;
+    if (m_name == "style:writing-mode")
+        return KoText::directionFromString(initialValue) == KoText::directionFromString(outputValue);
+    if (m_references.contains("percent") && initialValue.contains('%'))
+        return false;
     foreach (QString reference, m_references) {
         if ((reference == "positiveLength") || (reference == "nonNegativeLength") || (reference == "length")) {
             if (qAbs(KoUnit::parseValue(initialValue) - KoUnit::parseValue(outputValue)) < 0.0001)
@@ -385,7 +389,7 @@ bool TestOpenDocumentStyle::basicTestFunction(KoGenStyle::Type family, const QSt
     {
         kWarning(32500) << "Warning : got more than one attribute !";
     }
-    return attribute->compare(outputPropertyValue, value);
+    return attribute->compare(value, outputPropertyValue);
 }
 
 void TestOpenDocumentStyle::testTableColumnStyle_data()

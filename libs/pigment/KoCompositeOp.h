@@ -19,8 +19,11 @@
 #ifndef KOCOMPOSITEOP_H
 #define KOCOMPOSITEOP_H
 
-#include <QString>
 #include <klocale.h>
+#include <QString>
+#include <QList>
+#include <QMap>
+#include <QMultiMap>
 
 #include "pigment_export.h"
 
@@ -121,6 +124,44 @@ const QString COMPOSITE_NO           = "nocomposition";
 const QString COMPOSITE_PASS_THROUGH = "pass through"; // XXX: not implemented anywhere yet
 const QString COMPOSITE_UNDEF        = "undefined";
 
+
+class KoID;
+class KoColorSpace;
+
+class PIGMENTCMS_EXPORT KoCompositeOpRegistry
+{
+    typedef QMultiMap<KoID,KoID> KoIDMap;
+    typedef QList<KoID>          KoIDList;
+    KoCompositeOpRegistry();
+    
+public:
+    static const KoCompositeOpRegistry& instance();
+    
+    KoID     getDefaultCompositeOp() const;
+    KoID     getKoID(const QString& compositeOpID) const;
+    KoIDMap  getCompositeOps() const;
+    KoIDList getCategories() const;
+    KoIDList getCompositeOps(const KoColorSpace* colorSpace) const;
+    KoIDList getCompositeOps(const KoID& category, const KoColorSpace* colorSpace=0) const;
+    bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
+    
+    template<class TKoIdIterator>
+    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
+        KoIDList list;
+        
+        for(; begin!=end; ++begin){ 
+            if( colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps)
+                list.push_back(*begin);
+        }
+        
+        return list;
+    }
+    
+private:
+    KoIDList m_categories;
+    KoIDMap  m_map;
+};
+
 /**
  * Base for colorspace-specific blending modes.
  */
@@ -173,43 +214,52 @@ public:
      * @return the category associated with the composite op
      */
     QString category() const;
-
+    
+    // WARNING: A derived class needs to overwrite at least one
+    //          of the following virtual methods or a call to
+    //          composite(...) will lead to an endless recursion/stack overflow
+    
     /**
-      @param dstRowStart pointer to the start of the byte array we will composite the source on
-      @param dstRowStride length of the rows of the block of destination pixels in bytes
-      @param srcRowStart pointer to the start of the byte array we will mix with dest
-      @param srcRowStride length of the rows of the block of src in bytes
-       pixels (may be different from the rowstride of the dst pixels,
-       in which case the smaller value is used). If srcRowStride is null
-       it is assumed that the source is a constant color.
-      @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
-      @param maskRowStride length of the mask scanlines in bytes
-      @param rows number of scanlines to blend
-      @param numColumns length of the row of pixels in pixels
-      @param opacity transparency with which to blend
-    */
-    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
-                           const quint8 *srcRowStart, qint32 srcRowStride,
-                           const quint8 *maskRowStart, qint32 maskRowStride,
-                           qint32 rows, qint32 numColumns,
-                           quint8 opacity) const;
-
-    /**
-     * Same as previous, but with a bit array that determines which channels
-     * (channels are in the order of the channels in the colorspace) should
-     * be excluded (false) or included (true) in the bitBlt.
-     *
-     * For instance:
-     * if this is COMPOSITY_COPY
-     * composite(..., [1, 0]) for grayscale is the same as old COMPOSITE_COPY_GRAY --
-     * only the gray channel is copied.
+     * @param dstRowStart pointer to the start of the byte array we will composite the source on
+     * @param dstRowStride length of the rows of the block of destination pixels in bytes
+     * @param srcRowStart pointer to the start of the byte array we will mix with dest
+     * @param srcRowStride length of the rows of the block of src in bytes
+     * pixels (may be different from the rowstride of the dst pixels,
+     * in which case the smaller value is used). If srcRowStride is null
+     * it is assumed that the source is a constant color.
+     * @param maskRowStart start of the byte mask that determines whether and if so, then how much of src is used for blending
+     * @param maskRowStride length of the mask scanlines in bytes
+     * @param rows number of scanlines to blend
+     * @param numColumns length of the row of pixels in pixels
+     * @param opacity transparency with which to blend
+     * @param flow transparency with which to blend the dab
+     * @param channelFlags a bit array that determines which channels should be processed (channels are in the order of the channels in the colorspace)
      */
     virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
                            const quint8 *srcRowStart, qint32 srcRowStride,
                            const quint8 *maskRowStart, qint32 maskRowStride,
                            qint32 rows, qint32 numColumns,
-                           quint8 opacity,
-                           const QBitArray & channelFlags) const = 0;
+                           quint8 opacity, quint8 flow, const QBitArray& channelFlags) const;
+
+    /**
+    * Same as previous, but without flow parameter
+    */
+    virtual void composite(quint8 *dstRowStart, qint32 dstRowStride,
+                            const quint8 *srcRowStart, qint32 srcRowStride,
+                            const quint8 *maskRowStart, qint32 maskRowStride,
+                            qint32 rows, qint32 numColumns,
+                            quint8 opacity,
+                            const QBitArray& channelFlags) const;
+    
+    /**
+    * Same as previous, but without channelFlags parameter
+    */
+    void composite(quint8 *dstRowStart, qint32 dstRowStride,
+                   const quint8 *srcRowStart, qint32 srcRowStride,
+                   const quint8 *maskRowStart, qint32 maskRowStride,
+                   qint32 rows, qint32 numColumns,
+                   quint8 opacity=255, quint8 flow=255) const;
+    
 private:
     KoCompositeOp();
     struct Private;

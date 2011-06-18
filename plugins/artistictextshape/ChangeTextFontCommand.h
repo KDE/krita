@@ -30,8 +30,8 @@ class ArtisticTextShape;
 class ChangeTextFontCommand : public QUndoCommand
 {
 public:
-    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font);
-    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font);
+    ChangeTextFontCommand(ArtisticTextShape *shape, const QFont &font, QUndoCommand *parent = 0);
+    ChangeTextFontCommand(ArtisticTextShape *shape, int from, int count, const QFont &font, QUndoCommand *parent = 0);
     virtual void undo();
     virtual void redo();
 

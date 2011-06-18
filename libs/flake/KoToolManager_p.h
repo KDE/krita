@@ -101,9 +101,6 @@ public:
     // received to help correct input device detection.
 
     bool layerEnabled;
-
-private:
-    void activateActions(KActionCollection* ac,  QHash<QString, KAction*> actions);
 };
 
 /// \internal

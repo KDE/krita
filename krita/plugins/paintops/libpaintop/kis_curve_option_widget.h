@@ -36,7 +36,7 @@ class PAINTOP_EXPORT KisCurveOptionWidget : public KisPaintOpOption
 {
     Q_OBJECT
 public:    
-    KisCurveOptionWidget(KisCurveOption* curveOption);
+    KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider=false);
     ~KisCurveOptionWidget();
 
     virtual void writeOptionSetting(KisPropertiesConfiguration* setting) const;
@@ -55,6 +55,7 @@ private slots:
     void updateSensorCurveLabels(KisDynamicSensor* sensor);
     void updateCurve(KisDynamicSensor* sensor);
     void updateValues();
+    void disableWidgets(bool disable);
     
 private:
     QWidget* m_widget;

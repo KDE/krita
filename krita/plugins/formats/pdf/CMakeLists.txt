@@ -1,8 +1,6 @@
 
 include_directories( ${CMAKE_BINARY_DIR}/filters/ ${POPPLER_INCLUDE_DIR} )
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 ########### next target ###############
 
 set(kritapdfimport_PART_SRCS kis_pdf_import.cpp kis_pdf_import_widget.cpp )
@@ -13,7 +11,7 @@ kde4_add_plugin(kritapdfimport ${kritapdfimport_PART_SRCS})
 
 
 
-target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} ${KDE4_KDE3SUPPORT_LIBS})
+target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} )
 
 install(TARGETS kritapdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############

@@ -2,6 +2,7 @@
  *  kis_cmb_imagetype.h - part of KImageShop/Krayon/Krita
  *
  *  Copyright (c) 2005 Boudewijn Rempt (boud@valdyas.org)
+ *  Copyright (c) 2011 Silvio Heinrich <plassy@web.de>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,9 +22,8 @@
 #ifndef KIS_CMB_IDLIST_H_
 #define KIS_CMB_IDLIST_H_
 
-#include "kcombobox.h"
-
-#include "KoID.h"
+#include <QComboBox>
+#include <KoID.h>
 #include <krita_export.h>
 
 /**
@@ -31,12 +31,11 @@
  * descriptive (i18n'ed) text is displayed, but the various
  * signals return a KoID.
  */
-class KRITAUI_EXPORT KisCmbIDList : public KComboBox
+class KRITAUI_EXPORT KisCmbIDList: public QComboBox
 {
     Q_OBJECT
 
 public:
-
     KisCmbIDList(QWidget * parent = 0, const char * name = 0);
     virtual ~KisCmbIDList();
 
@@ -49,20 +48,14 @@ public:
     KoID currentItem() const;
 
 signals:
-
     void activated(const KoID &);
     void highlighted(const KoID &);
 
 private slots:
-
     void slotIDActivated(int i);
     void slotIDHighlighted(int i);
 
 private:
-    // Prevent the deprecated Qt3 method being called. Use setCurrent instead.
-    void setCurrentText(const QString & s);
-
     QList<KoID> m_list;
-
 };
 #endif

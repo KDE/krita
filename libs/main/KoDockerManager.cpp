@@ -34,7 +34,6 @@
 #include "KoMainWindow.h"
 #include "KoDockWidgetTitleBar.h"
 
-#include <QList>
 #include <QGridLayout>
 
 class ToolDockerFactory : public KoDockFactoryBase
@@ -164,9 +163,9 @@ KoDockerManager::~KoDockerManager()
     delete d;
 }
 
-void KoDockerManager::newOptionWidgets(const QMap<QString, QWidget *> &optionWidgetMap)
+void KoDockerManager::newOptionWidgets(const QList<QWidget *> &optionWidgetList)
 {
-    d->toolOptionsDocker->setOptionWidgets(optionWidgetMap);
+    d->toolOptionsDocker->setOptionWidgets(optionWidgetList);
 }
 
 #include <KoDockerManager.moc>

@@ -48,6 +48,15 @@ public:
     };
 
     /**
+     * Returns the unique number of this page for internal purposes. All pages
+     * are numbered consecutively starting by 1.
+     *
+     * This is used for example to anchor images to pages. The image then referes
+     * to the unique page-number.
+     */
+    virtual int pageNumber() const = 0;
+
+    /**
      * Returns the number of this page for display purposes.
      *
      * Example how the parameters are used within ODF to display the
@@ -67,7 +76,7 @@ public:
      * \return the user visible page number, or -1 if the page referenced does not
      * exist.
      */
-    virtual int pageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
+    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const = 0;
 
     /**
      * Returns the name of the master-page that should be used for this page or a null

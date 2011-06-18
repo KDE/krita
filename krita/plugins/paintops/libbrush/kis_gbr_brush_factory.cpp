@@ -40,8 +40,9 @@ KisBrushSP KisGbrBrushFactory::getOrCreateBrush(const QDomElement& brushDefiniti
         QFileInfo info(brushFileName);
         brush = rServer->getResourceByFilename(info.fileName());
     }
-    if(!brush)
-        return 0;
+    if(!brush) {
+        brush = rServer->resources().first();
+    }
 
     bool result;
     QLocale c(QLocale::German);

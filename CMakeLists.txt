@@ -135,6 +135,10 @@ endif(KDE_VERSION LESS "4.4.0")
 find_package(Perl REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(PNG REQUIRED)
+find_package(Boost REQUIRED) # for pigment and stage
+if (NOT Boost_FOUND)
+    MESSAGE(FATAL_ERROR "Did not find Boost. Boost is required for the core libraries, stage, tables and krita.")
+endif (NOT Boost_FOUND)
 
 if (APPLE)
    find_package(Carbon REQUIRED)
@@ -190,11 +194,6 @@ macro_log_feature(CREATERESOURCES_FOUND "Create Resources" "Create Resources (br
 macro_optional_find_package(KdepimLibs)
 macro_log_feature(KDEPIMLIBS_FOUND "KDE PIMLibs" "KDE Personal Information Management Libraries" "http://www.kde.org/" FALSE "" "Required by KPlato and the KDE address book integration (available as a module in KDE)")
 
-##
-## Test for boost
-##
-macro_optional_find_package(Boost)
-macro_log_feature(Boost_FOUND "Boost" "Boost C++ Libraries" "http://www.boost.org" FALSE "" "Required by Stage")
 
 ##
 ## Test for eigen2
@@ -411,14 +410,9 @@ set(KOPROPERTY_INCLUDES ${KOODF_INCLUDES}
 
 
 ### Tables: eigen2, boost
-if(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
+if(NOT EIGEN2_FOUND)
     set(SHOULD_BUILD_TABLES FALSE)
-endif(NOT EIGEN2_FOUND OR NOT Boost_FOUND)
-
-### Stage: boost
-if(NOT Boost_FOUND)
-    set(SHOULD_BUILD_STAGE FALSE)
-endif(NOT Boost_FOUND)
+endif(NOT EIGEN2_FOUND)
 
 ### Krita: pigment, eigen2, exiv2
 if(NOT EIGEN2_FOUND OR NOT EXIV2_FOUND OR NOT HAVE_REQUIRED_LCMS_VERSION)

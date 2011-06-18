@@ -2,8 +2,6 @@ add_subdirectory(tests)
 
 include_directories( ${KRITA_INCLUDES} ${LCMS_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 
-add_definitions(-DQT3_SUPPORT -DQT3_SUPPORT_WARNINGS)
-
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
     kis_jpeg_source.cpp

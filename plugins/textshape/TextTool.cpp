@@ -448,7 +448,7 @@ void TextTool::createActions()
     connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
-    addAction("edit_selectall", action);
+    addAction("edit_select_all", action);
 
     action = new KAction(i18n("Special Character..."), this);
     action->setIcon(KIcon("character-set"));
@@ -501,7 +501,7 @@ TextTool::TextTool(MockCanvas *canvas)  // constructor for our unit tests;
 {
     // we could init some vars here, but we probably don't have to
     KGlobal::setLocale(new KLocale("en"));
-    QTextDocument *document = new QTextDocument();
+    QTextDocument *document = new QTextDocument(); // this document is leaked
 
     KoInlineTextObjectManager *inlineManager = new KoInlineTextObjectManager();
     KoTextDocument(document).setInlineTextObjectManager(inlineManager);
@@ -1415,8 +1415,10 @@ void TextTool::repaintCaret()
         }
 
         TextShape *textShape = static_cast<TextShape*>(rootArea->associatedShape());
-        Q_ASSERT(textShape);
-        Q_ASSERT(textShape->textShapeData());
+        if (!textShape)
+            return;
+        if (!textShape->textShapeData());
+            return;
 
         QRectF repaintRect = caretRect(textEditor->cursor());
         repaintRect.moveTop(repaintRect.top() - textShape->textShapeData()->documentOffset());
@@ -1481,9 +1483,9 @@ KoToolSelection* TextTool::selection()
     return m_textEditor.data();
 }
 
-QMap<QString, QWidget *> TextTool::createOptionWidgets()
+QList<QWidget *> TextTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
+    QList<QWidget *> widgets;
     SimpleCharacterWidget *scw = new SimpleCharacterWidget(this, 0);
     SimpleParagraphWidget *spw = new SimpleParagraphWidget(this, 0);
     SimpleStylesWidget *ssw = new SimpleStylesWidget(0);
@@ -1513,10 +1515,14 @@ QMap<QString, QWidget *> TextTool::createOptionWidgets()
     updateStyleManager();
     if (m_textShape)
         updateActions();
-    widgets.insert(i18n("Character"), scw);
-    widgets.insert(i18n("Paragraph"), spw);
-    widgets.insert(i18n("Styles"), ssw);
-    widgets.insert(i18n("Table"), stw);
+    scw->setWindowTitle(i18n("Character"));
+    widgets.append(scw);
+    spw->setWindowTitle(i18n("Paragraph"));
+    widgets.append(spw);
+    ssw->setWindowTitle(i18n("Styles"));
+    widgets.append(ssw);
+    stw->setWindowTitle(i18n("Table"));
+    widgets.append(stw);
     return widgets;
 }
 

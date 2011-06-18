@@ -241,7 +241,7 @@ void GuidesTool::createGuideLine(Qt::Orientation orientation, qreal position)
     m_mode = AddGuide;
 
     KoToolManager::instance()->switchToolRequested(GuidesToolId);
-
+    
     // grab the mouse so we get mouse events as the dragging started on a ruler
     canvas()->canvasWidget()->grabMouse();
 }
@@ -380,28 +380,24 @@ void GuidesTool::resourceChanged(int key, const QVariant &res)
     }
 }
 
-QMap< QString, QWidget*> GuidesTool::createOptionWidgets()
+QList<QWidget*> GuidesTool::createOptionWidgets()
 {
-    QMap< QString, QWidget* > optionWidgets;
-
+    QList< QWidget* > optionwidgets;
     m_options = new GuidesToolOptionWidget();
-
+    m_options->setWindowTitle(i18n("Guides Editor"));
     connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),
             this, SLOT(guideLineSelected(Qt::Orientation,int)));
-
     connect(m_options, SIGNAL(guideLinesChanged(Qt::Orientation)),
             this, SLOT(guideLinesChanged(Qt::Orientation)));
-
-    optionWidgets.insert("Guides Editor", m_options);
+    optionwidgets.append(m_options);
 
     m_insert = new InsertGuidesToolOptionWidget();
-
+    m_insert->setWindowTitle(i18n("Guides Insertor"));
     connect(m_insert, SIGNAL(createGuides(GuidesTransaction*)),
              this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
+    optionwidgets.append(m_insert);
 
-    optionWidgets.insert("Guides Insertor", m_insert);
-
-    return optionWidgets;
+    return optionwidgets;
 }
 
 void GuidesTool::insertorCreateGuidesSlot(GuidesTransaction *result)

@@ -24,7 +24,7 @@
 
 #include <KoToolBase.h>
 
-#include <QMap>
+#include <QList>
 
 class KoPathShape;
 class KoPathPoint;
@@ -85,7 +85,7 @@ protected:
     virtual void paintPath(KoPathShape& pathShape, QPainter &painter, const KoViewConverter &converter);
 
     /// reimplemented
-    virtual QMap<QString, QWidget *> createOptionWidgets();
+    virtual QList<QWidget *> createOptionWidgets();
 
 private:
     Q_DECLARE_PRIVATE(KoCreatePathTool);

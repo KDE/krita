@@ -4,6 +4,7 @@
    Copyright (c) 2007 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (c) 2010 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+   Copyright (c) 2011 José Luis Vergara <pentalis@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,15 +47,23 @@ class KOWIDGETS_EXPORT KoResourceItemChooser : public QWidget
 {
   Q_OBJECT
 public:
+    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
+    
     explicit KoResourceItemChooser( KoAbstractResourceServerAdapter * resourceAdapter, QWidget *parent = 0 );
     ~KoResourceItemChooser();
 
-    /// Sets number of columns in the view
+    /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
     void setColumnCount( int columnCount );
 
+    /// Sets number of rows in the view and causes the number of colums to be calculated accordingly
+    void setRowCount( int rowCount );
+    
     /// Sets the height of the view rows
     void setRowHeight( int rowHeight );
 
+    /// Sets the width of the view columns
+    void setColumnWidth( int columnWidth );
+    
     /// Sets a custom delegate for the view
     void setItemDelegate( QAbstractItemDelegate * delegate );
 
@@ -83,7 +92,6 @@ public:
 
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
-
     QStringList getTaggedResourceFileNames(QString lineEditText);
     QStringList getTagNamesList(QString lineEditText);
 
@@ -91,8 +99,10 @@ signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
 
-private slots:
+public slots:
     void slotButtonClicked( int button );
+    
+private slots:
     void activated ( const QModelIndex & index );
     void setTagOpCombo(QStringList assignedTagsList);
     void tagOpComboActivated(QString lineEditText);
@@ -101,8 +111,6 @@ private slots:
     void tagSearchComboTextChanged(QString lineEditText);
 
 private:
-    enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };
-
     void updateButtonState();
 
     /// Resource for a given model index

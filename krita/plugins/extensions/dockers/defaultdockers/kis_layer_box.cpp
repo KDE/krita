@@ -52,7 +52,8 @@
 #include <kicon.h>
 
 #include <KoDocumentSectionView.h>
-#include "KoColorSpace.h"
+#include <KoColorSpace.h>
+#include <KoCompositeOp.h>
 
 #include <kis_types.h>
 #include <kis_image.h>
@@ -61,6 +62,7 @@
 #include <kis_group_layer.h>
 #include <kis_mask.h>
 #include <kis_node.h>
+#include <kis_composite_ops_model.h>
 
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_slider_spin_box.h"
@@ -143,7 +145,7 @@ KisLayerBox::KisLayerBox()
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
     connect(&m_delayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
-    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(const QString&)), SLOT(slotCompositeOpChanged(const QString&)));
+    connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
 
     m_newLayerMenu = new KMenu(this);
@@ -168,7 +170,8 @@ KisLayerBox::KisLayerBox()
     m_nodeModel = new KisNodeModel(this);
 
     // connect model updateUI() to enable/disable controls
-    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));
+    // connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(updateUI()));      NOTE: commented for temporary bug fix
+    connect(m_nodeModel, SIGNAL(nodeActivated(KisNodeSP)), SLOT(setCurrentNode(KisNodeSP)));  // NOTE: temporary bug fix - Pentalis
     connect(m_nodeModel, SIGNAL(rowsInserted(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsRemoved(const QModelIndex&, int, int)), SLOT(updateUI()));
     connect(m_nodeModel, SIGNAL(rowsMoved(const QModelIndex&, int, int, const QModelIndex&, int)), SLOT(updateUI()));
@@ -268,22 +271,24 @@ void KisLayerBox::setCurrentNode(KisNodeSP node)
 {
     if (node) {
         m_wdgLayerBox->listLayers->setCurrentIndex(m_nodeModel->indexFromNode(node));
+        m_nodeManager->activateNode(node);   // NOTE: temporary bug fix - Pentalis
         updateUI();
     }
 }
 
 void KisLayerBox::slotSetCompositeOp(const KoCompositeOp* compositeOp)
 {
+    KoID cmpOp = KoCompositeOpRegistry::instance().getKoID(compositeOp->id());
+    int  index = m_wdgLayerBox->cmbComposite->indexOf(cmpOp);
+    
     m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCurrent(compositeOp);
+    m_wdgLayerBox->cmbComposite->setCurrentIndex(index);
     m_wdgLayerBox->cmbComposite->blockSignals(false);
 }
 
-void KisLayerBox::slotFillCompositeOps(const KoColorSpace * colorSpace)
+void KisLayerBox::slotFillCompositeOps(const KoColorSpace* colorSpace)
 {
-    m_wdgLayerBox->cmbComposite->blockSignals(true);
-    m_wdgLayerBox->cmbComposite->setCompositeOpList(colorSpace->compositeOps());
-    m_wdgLayerBox->cmbComposite->blockSignals(false);
+    m_wdgLayerBox->cmbComposite->getModel()->validateCompositeOps(colorSpace);
 }
 
 // range: 0-100
@@ -434,9 +439,12 @@ void KisLayerBox::slotDuplicateClicked()
     m_nodeManager->duplicateActiveNode();
 }
 
-void KisLayerBox::slotCompositeOpChanged(const QString& _compositeOp)
+void KisLayerBox::slotCompositeOpChanged(int index)
 {
-    m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(_compositeOp));
+    KoID compositeOp;
+    
+    if(m_wdgLayerBox->cmbComposite->entryAt(compositeOp, index))
+        m_nodeManager->nodeCompositeOpChanged(m_nodeManager->activeColorSpace()->compositeOp(compositeOp.id()));
 }
 
 void KisLayerBox::slotOpacityChanged()

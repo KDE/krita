@@ -23,12 +23,17 @@
 #include "PictureShape.h"
 #include "PictureShapeConfigWidget.h"
 
+#include <QByteArray>
+#include <QBuffer>
+#include <QImage>
+
 #include <KoXmlNS.h>
 #include "KoShapeControllerBase.h"
 #include <KoShapeLoadingContext.h>
 #include <KoOdfLoadingContext.h>
-#include "KoImageCollection.h"
-
+#include <KoImageCollection.h>
+#include <KoImageData.h>
+#include <KoProperties.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -49,6 +54,24 @@ KoShape *PictureShapeFactory::createDefaultShape(KoResourceManager *documentReso
         defaultShape->setImageCollection(documentResources->imageCollection());
     }
     return defaultShape;
+}
+
+KoShape *PictureShapeFactory::createShape(const KoProperties *params, KoResourceManager *documentResources) const
+{
+    PictureShape *shape = static_cast<PictureShape*>(createDefaultShape(documentResources));
+    if (params->contains("qimage")) {
+        QImage image = params->property("qimage").value<QImage>();
+        Q_ASSERT(!image.isNull());
+
+        if (shape->imageCollection()) {
+            KoImageData *data = shape->imageCollection()->createImageData(image);
+            shape->setUserData(data);
+            shape->setSize(data->imageSize());
+            shape->update();
+        }
+    }
+    return shape;
+
 }
 
 bool PictureShapeFactory::supports(const KoXmlElement &e, KoShapeLoadingContext &context) const

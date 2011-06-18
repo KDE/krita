@@ -37,7 +37,7 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
     }
 }
 
-KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
+KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, bool hideSlider)
         : KisPaintOpOption(curveOption->label(), curveOption->category(), curveOption->isChecked())
         , m_widget(new QWidget)
         , m_curveOptionWidget(new Ui_WdgCurveOption())
@@ -61,6 +61,9 @@ KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption)
     m_curveOptionWidget->slider->setRange(curveOption->minValue(), curveOption->maxValue(), 2);
     m_curveOptionWidget->slider->setValue(curveOption->value());
     
+    if(hideSlider)
+        m_curveOptionWidget->slider->hide();
+    
     connect(m_curveOptionWidget->checkBoxUseCurve, SIGNAL(stateChanged(int))  , SLOT(updateValues()));
     connect(m_curveOptionWidget->slider          , SIGNAL(valueChanged(qreal)), SLOT(updateValues()));
 }
@@ -79,9 +82,17 @@ void KisCurveOptionWidget::readOptionSetting(const KisPropertiesConfiguration* s
 {
     m_curveOption->readOptionSetting(setting);
     m_curveOptionWidget->sensorSelector->setCurrent(m_curveOption->sensor());
+    
+    m_curveOptionWidget->checkBoxUseCurve->blockSignals(true);
     m_curveOptionWidget->checkBoxUseCurve->setChecked(m_curveOption->isCurveUsed());
+    m_curveOptionWidget->checkBoxUseCurve->blockSignals(false);
+    
+    m_curveOptionWidget->slider->blockSignals(true);
     m_curveOptionWidget->slider->setValue(m_curveOption->value());
+    m_curveOptionWidget->slider->blockSignals(false);
+    
     updateCurve(m_curveOption->sensor());
+    disableWidgets(!m_curveOption->isCurveUsed());
 }
 
 bool KisCurveOptionWidget::isCheckable()
@@ -141,5 +152,14 @@ void KisCurveOptionWidget::updateValues()
 {
     m_curveOption->setValue(m_curveOptionWidget->slider->value());
     m_curveOption->setCurveUsed(m_curveOptionWidget->checkBoxUseCurve->isChecked());
+    disableWidgets(!m_curveOptionWidget->checkBoxUseCurve->isChecked());
     emit sigSettingChanged();
 }
+
+void KisCurveOptionWidget::disableWidgets(bool disable)
+{
+    m_curveOptionWidget->checkBoxUseSameCurve->setDisabled(disable);
+    m_curveOptionWidget->curveWidget->setDisabled(disable);
+    m_curveOptionWidget->sensorSelector->setDisabled(disable);
+}
+

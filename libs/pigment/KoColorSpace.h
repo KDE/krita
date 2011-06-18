@@ -229,6 +229,11 @@ public:
     //========== Capabilities =================================================//
 
     /**
+     * Tests if the colorspace offers the specific composite op.
+     */
+    virtual bool hasCompositeOp(const QString & id) const;
+    
+    /**
      * Returns the list of user-visible composite ops supported by this colorspace.
      */
     virtual QList<KoCompositeOp*> compositeOps() const;
@@ -500,6 +505,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const KoCompositeOp * op,
@@ -516,6 +522,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const KoCompositeOp * op) const;
@@ -531,6 +538,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const QString & op,
@@ -547,6 +555,7 @@ public:
                         const quint8 *srcAlphaMask,
                         qint32 maskRowStride,
                         quint8 opacity,
+                        quint8 flow,
                         qint32 rows,
                         qint32 cols,
                         const QString& op) const;

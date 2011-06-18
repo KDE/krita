@@ -113,7 +113,9 @@ void KisSketchPaintOp::updateBrushMask(const KisPaintInformation& info, qreal sc
 KisDistanceInformation KisSketchPaintOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, const KisDistanceInformation& savedDist)
 {
     Q_UNUSED(savedDist);
-    if (!painter()) return KisDistanceInformation();
+    
+    if (!m_brush || !painter())
+        return KisDistanceInformation();
 
     if (!m_dab) {
         m_dab = new KisPaintDevice(painter()->device()->colorSpace());

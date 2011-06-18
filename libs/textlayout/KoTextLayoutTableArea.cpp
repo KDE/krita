@@ -774,7 +774,7 @@ void KoTextLayoutTableArea::paintCell(QPainter *painter, const KoTextDocumentLay
         QTextTableCell startTableCell = d->table->cellAt(selection.cursor.selectionStart());
         QTextTableCell endTableCell = d->table->cellAt(selection.cursor.selectionEnd());
 
-        if (startTableCell != endTableCell && startTableCell.isValid()) {
+        if (startTableCell.isValid() && startTableCell != endTableCell) {
             int selectionRow;
             int selectionColumn;
             int selectionRowSpan;

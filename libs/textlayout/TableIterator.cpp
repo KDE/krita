@@ -95,12 +95,16 @@ bool TableIterator::operator ==(const TableIterator &other)
 
 FrameIterator *TableIterator::frameIterator(int column)
 {
+    FrameIterator *it = 0;
     if (row == table->rows()) {
         delete frameIterators[column];
-        frameIterators[column] = 0;
+        frameIterators[column] = it;
     } else if (frameIterators[column] == 0) {
-        delete frameIterators[column];
-        frameIterators[column] = new FrameIterator(table->cellAt(row, column));
+        it = new FrameIterator(table->cellAt(row, column));
+        it->masterPageName = masterPageName;
+        frameIterators[column] = it;
+    } else {
+        it = frameIterators[column];
     }
-    return frameIterators[column];
+    return it;
 }

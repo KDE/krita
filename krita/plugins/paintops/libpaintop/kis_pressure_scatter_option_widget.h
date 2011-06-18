@@ -26,7 +26,7 @@ class KisDoubleSliderSpinBox;
 
 class QCheckBox;
 
-class PAINTOP_EXPORT KisPressureScatterOptionWidget : public KisCurveOptionWidget
+class PAINTOP_EXPORT KisPressureScatterOptionWidget: public KisCurveOptionWidget
 {
     Q_OBJECT
     

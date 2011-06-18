@@ -360,13 +360,14 @@ void KoCreatePathTool::addPathShape(KoPathShape *pathShape)
     }
 }
 
-QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
+QList<QWidget *> KoCreatePathTool::createOptionWidgets()
 {
     Q_D(KoCreatePathTool);
 
-    QMap<QString, QWidget *> map;
+    QList<QWidget *> list;
     SnapGuideConfigWidget *widget = new SnapGuideConfigWidget(canvas()->snapGuide());
-    map.insert(i18n("Snapping"), widget);
+    widget->setWindowTitle(i18n("Snapping"));
+    list.append(widget);
 
     QWidget *angleWidget = new QWidget();
     angleWidget->setObjectName("Angle Constraints");
@@ -376,11 +377,12 @@ QMap<QString, QWidget *> KoCreatePathTool::createOptionWidgets()
     angleEdit->setRange(1, 360, 1);
     angleEdit->setSuffix(QChar(Qt::Key_degree));
     layout->addWidget(angleEdit, 0, 1);
-    map.insert(i18n("Angle Constraints"), angleWidget);
+    widget->setWindowTitle(i18n("Angle Constraints"));
+    list.append(angleWidget);
 
     connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
 
-    return map;
+    return list;
 }
 
 #include <KoCreatePathTool.moc>

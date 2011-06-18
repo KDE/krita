@@ -122,7 +122,7 @@ public: // Events
     virtual void customMoveEvent( KoPointerEvent * event );
 
 protected:
-    QMap<QString, QWidget *> createOptionWidgets();
+    QList<QWidget *> createOptionWidgets();
 
     virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
 

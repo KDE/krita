@@ -92,6 +92,7 @@ public:
         RotationAngle,      ///< Rotation angle of the cell content, in degrees
         Direction,          ///< The direction of the text in the cell. This is a CellTextDirection.
         RotationAlign,      ///< How the edge of the text is aligned after rotation. This is a RotationAlignment
+        TextWritingMode     ///< KoText::Direction, the direction for writing text in the cell
     };
 
     /// Constructor
@@ -176,6 +177,9 @@ public:
 
     void setAlignment(Qt::Alignment alignment);
     Qt::Alignment alignment() const;
+    
+    KoText::Direction textDirection() const;
+    void setTextDirection (KoText::Direction value);
 
     void setWrap(bool state);
     bool wrap() const;

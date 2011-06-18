@@ -673,3 +673,6 @@ vcl/inc/vcl/gdimtf.hxx		The main GDI file object
 vcl/source/gdimtf.cxx
 vcl/inc/vcl/metaact.hxx         Metafile actions
 vcl/source/metaact.cxx
+vcl/inc/vcl/outdev.hxx          Enums, defines and flags for outdevice:
+                                Push, DrawText, Drawimage, Grid, ComplexTextLayout,
+                                DrawModes, AntiAlias, AddFontSubstitute

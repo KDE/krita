@@ -33,7 +33,7 @@
 * it contains the version at compile time. See KOffice::versionString() if you need
 * the KOffice version used at runtime.
 */
-#define KOFFICE_VERSION_STRING "2.4 Alpha 1"
+#define KOFFICE_VERSION_STRING "2.4 Alpha 2"
 
 /**
  * @def KOFFICE_VERSION_MAJOR
@@ -54,7 +54,7 @@
  * @ingroup KOfficeMacros
  * @brief Release version of KOffice, at compile time
 */
-#define KOFFICE_VERSION_RELEASE 71
+#define KOFFICE_VERSION_RELEASE 72
 
 /**
  * @ingroup KOfficeMacros

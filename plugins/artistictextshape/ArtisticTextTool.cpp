@@ -25,8 +25,13 @@
 #include "AddTextRangeCommand.h"
 #include "RemoveTextRangeCommand.h"
 #include "ArtisticTextShapeConfigWidget.h"
+#include "ArtisticTextShapeOnPathWidget.h"
 #include "MoveStartOffsetStrategy.h"
 #include "SelectTextStrategy.h"
+#include "ChangeTextOffsetCommand.h"
+#include "ChangeTextFontCommand.h"
+#include "ChangeTextAnchorCommand.h"
+#include "ReplaceTextRangeCommand.h"
 
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -40,6 +45,7 @@
 
 #include <KLocale>
 #include <KIcon>
+#include <KStandardAction>
 #include <KDebug>
 
 #include <QtGui/QAction>
@@ -58,17 +64,64 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas), m_selection(canvas, this), m_currentShape(0), m_hoverText(0), m_hoverPath(0), m_hoverHandle(false)
     , m_textCursor( -1 ), m_showCursor( true ), m_currentStrategy(0)
 {
-    m_detachPath  = new QAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
+    m_detachPath  = new KAction(KIcon("artistictext-detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
+    addAction("artistictext_detach_from_path", m_detachPath);
 
-    m_convertText  = new QAction(KIcon("pathshape"), i18n("Convert to Path"), this);
+    m_convertText  = new KAction(KIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
+    addAction("artistictext_convert_to_path", m_convertText);
+
+    m_fontBold = new KAction(KIcon("format-text-bold"), i18n("Bold text"), this);
+    m_fontBold->setCheckable(true);
+    connect(m_fontBold, SIGNAL(toggled(bool)), this, SLOT(toggleFontBold(bool)));
+    addAction("artistictext_font_bold", m_fontBold);
+
+    m_fontItalic = new KAction(KIcon("format-text-italic"), i18n("Italic text"), this);
+    m_fontItalic->setCheckable(true);
+    connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
+    addAction("artistictext_font_italic", m_fontItalic);
+
+    m_superScript = new KAction(KIcon("format-text-superscript"), i18n("Superscript"), this);
+    m_superScript->setCheckable(true);
+    connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
+    addAction("artistictext_superscript", m_superScript);
+
+    m_subScript = new KAction(KIcon("format-text-subscript"), i18n("Subscript"), this);
+    m_subScript->setCheckable(true);
+    connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
+    addAction("artistictext_subscript", m_subScript);
+
+    KAction *anchorStart = new KAction(KIcon("format-justify-left"), i18n("Anchor at Start"), this);
+    anchorStart->setCheckable( true );
+    anchorStart->setData(ArtisticTextShape::AnchorStart);
+    addAction("artistictext_anchor_start", anchorStart);
+
+    KAction *anchorMiddle = new KAction(KIcon("format-justify-center"), i18n("Anchor at Middle"), this);
+    anchorMiddle->setCheckable( true );
+    anchorMiddle->setData(ArtisticTextShape::AnchorMiddle);
+    addAction("artistictext_anchor_middle", anchorMiddle);
+
+    KAction *anchorEnd = new KAction(KIcon("format-justify-right"), i18n("Anchor at End"), this);
+    anchorEnd->setCheckable( true );
+    anchorEnd->setData(ArtisticTextShape::AnchorEnd);
+    addAction("artistictext_anchor_end", anchorEnd);
+
+    m_anchorGroup = new QActionGroup(this);
+    m_anchorGroup->setExclusive(true);
+    m_anchorGroup->addAction(anchorStart);
+    m_anchorGroup->addAction(anchorMiddle);
+    m_anchorGroup->addAction(anchorEnd);
+    connect(m_anchorGroup, SIGNAL(triggered(QAction*)), this, SLOT(anchorChanged(QAction*)));
 
     KoShapeManager *manager = canvas->shapeManager();
     connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
     connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+
+    addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
+    addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
 
     setTextMode(true);
 }
@@ -452,18 +505,51 @@ void ArtisticTextTool::deactivate()
 void ArtisticTextTool::updateActions()
 {
     if( m_currentShape ) {
+        const QFont font = m_currentShape->fontAt(textCursor());
+        const CharIndex index = m_currentShape->indexOfChar(textCursor());
+        ArtisticTextRange::BaselineShift baselineShift = ArtisticTextRange::None;
+        if (index.first >= 0) {
+            baselineShift = m_currentShape->text().at(index.first).baselineShift();
+        }
+        m_fontBold->blockSignals(true);
+        m_fontBold->setChecked(font.bold());
+        m_fontBold->blockSignals(false);
+        m_fontBold->setEnabled(true);
+        m_fontItalic->blockSignals(true);
+        m_fontItalic->setChecked(font.italic());
+        m_fontItalic->blockSignals(false);
+        m_fontItalic->setEnabled(true);
         m_detachPath->setEnabled( m_currentShape->isOnPath() );
         m_convertText->setEnabled( true );
+        m_anchorGroup->blockSignals(true);
+        foreach(QAction *action, m_anchorGroup->actions()) {
+            if (action->data().toInt() == m_currentShape->textAnchor())
+                action->setChecked(true);
+        }
+        m_anchorGroup->blockSignals(false);
+        m_anchorGroup->setEnabled(true);
+        m_superScript->blockSignals(true);
+        m_superScript->setChecked(baselineShift == ArtisticTextRange::Super);
+        m_superScript->blockSignals(false);
+        m_subScript->blockSignals(true);
+        m_subScript->setChecked(baselineShift == ArtisticTextRange::Sub);
+        m_subScript->blockSignals(false);
+        m_superScript->setEnabled(true);
+        m_subScript->setEnabled(true);
     } else {
-        m_detachPath->setEnabled( false );
-        m_convertText->setEnabled( false );
+        m_detachPath->setEnabled(false);
+        m_convertText->setEnabled(false);
+        m_fontBold->setEnabled(false);
+        m_fontItalic->setEnabled(false);
+        m_anchorGroup->setEnabled(false);
+        m_superScript->setEnabled(false);
+        m_subScript->setEnabled(false);
     }
 }
 
 void ArtisticTextTool::detachPath()
 {
-    if( m_currentShape && m_currentShape->isOnPath() )
-    {
+    if( m_currentShape && m_currentShape->isOnPath() ) {
         canvas()->addCommand( new DetachTextFromPathCommand( m_currentShape ) );
         updateActions();
     }
@@ -490,41 +576,34 @@ void ArtisticTextTool::convertText()
     emit done();
 }
 
-QMap<QString, QWidget *> ArtisticTextTool::createOptionWidgets()
+QList<QWidget *> ArtisticTextTool::createOptionWidgets()
 {
-    QMap<QString, QWidget *> widgets;
-    
-    QWidget * pathWidget = new QWidget();
-    pathWidget->setObjectName("ArtisticTextPathWidget");
-    
-    QGridLayout * layout = new QGridLayout(pathWidget);
-    
-    QToolButton * detachButton = new QToolButton(pathWidget);
-    detachButton->setDefaultAction( m_detachPath );
-    layout->addWidget( detachButton, 0, 0 );
-    
-    QToolButton * convertButton = new QToolButton(pathWidget);
-    convertButton->setDefaultAction( m_convertText );
-    layout->addWidget( convertButton, 0, 2 );
-    
-    layout->setSpacing(0);
-    layout->setMargin(6);
-    layout->setRowStretch(3, 1);
-    layout->setColumnStretch(1, 1);
-    
-    widgets.insert(i18n("Text On Path"), pathWidget);
-    
+    QList<QWidget *> widgets;
+
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
-    if (m_currentShape) {
-        configWidget->updateWidget();
-    }
+    configWidget->setWindowTitle(i18n("Text Properties"));
+    connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamiliy(QFont)));
+    connect(configWidget, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
     connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
     connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
             configWidget, SLOT(updateWidget()));
-            
-    widgets.insert(i18n("Text Properties"), configWidget);
-    
+    widgets.append(configWidget);
+
+    ArtisticTextShapeOnPathWidget *pathWidget = new ArtisticTextShapeOnPathWidget(this);
+    pathWidget->setObjectName("ArtisticTextPathWidget");
+    pathWidget->setWindowTitle(i18n("Text On Path"));
+    connect(pathWidget, SIGNAL(offsetChanged(int)), this, SLOT(setStartOffset(int)));
+    connect(this, SIGNAL(shapeSelected()), pathWidget, SLOT(updateWidget()));
+    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
+            pathWidget, SLOT(updateWidget()));
+    widgets.append(pathWidget);
+
+    if (m_currentShape) {
+        pathWidget->updateWidget();
+        configWidget->updateWidget();
+    }
+
     return widgets;
 }
 
@@ -592,12 +671,13 @@ void ArtisticTextTool::setTextCursorInternal( int textCursor )
     m_textCursor = textCursor;
     createTextCursorShape();
     updateTextCursorArea();
+    updateActions();
     emit shapeSelected();
 }
 
 void ArtisticTextTool::createTextCursorShape()
 {
-    if ( m_textCursor < 0 || ! m_currentShape ) 
+    if (m_textCursor < 0 || ! m_currentShape)
         return;
     const QRectF extents = m_currentShape->charExtentsAt(m_textCursor);
     m_textCursorShape = QPainterPath();
@@ -686,6 +766,148 @@ QPainterPath ArtisticTextTool::offsetHandleShape()
     transform.rotate(360. - baseline.angleAtPercent(offset));
 
     return transform.map(handle);
+}
+
+void ArtisticTextTool::setStartOffset(int offset)
+{
+    if (!m_currentShape || !m_currentShape->isOnPath())
+        return;
+
+    const qreal newOffset = static_cast<qreal>(offset) / 100.0;
+    if( newOffset != m_currentShape->startOffset() ) {
+        canvas()->addCommand(new ChangeTextOffsetCommand(m_currentShape, m_currentShape->startOffset(), newOffset));
+    }
+}
+
+void ArtisticTextTool::changeFontProperty(FontProperty property, const QVariant &value)
+{
+    if (!m_currentShape || !m_selection.hasSelection())
+        return;
+
+    // build font ranges
+    const int selectedCharCount = m_selection.selectionCount();
+    const int selectedCharStart = m_selection.selectionStart();
+    QList<ArtisticTextRange> ranges = m_currentShape->text();
+    CharIndex index = m_currentShape->indexOfChar(selectedCharStart);
+    if (index.first < 0)
+        return;
+
+    QUndoCommand * cmd = new QUndoCommand;
+    int collectedCharCount = 0;
+    while(collectedCharCount < selectedCharCount) {
+        ArtisticTextRange &range = ranges[index.first];
+        QFont font = range.font();
+        switch(property) {
+        case BoldProperty:
+            font.setBold(value.toBool());
+            break;
+        case ItalicProperty:
+            font.setItalic(value.toBool());
+            break;
+        case FamiliyProperty:
+            font.setFamily(value.toString());
+            break;
+        case SizeProperty:
+            font.setPointSize(value.toInt());
+            break;
+        }
+
+        const int changeCount = qMin(selectedCharCount-collectedCharCount, range.text().count()-index.second);
+        const int changeStart = selectedCharStart+collectedCharCount;
+        new ChangeTextFontCommand(m_currentShape, changeStart, changeCount, font, cmd);
+        index.first++;
+        index.second = 0;
+        collectedCharCount += changeCount;
+    }
+
+    canvas()->addCommand(cmd);
+}
+
+void ArtisticTextTool::toggleFontBold(bool enabled)
+{
+    changeFontProperty(BoldProperty, QVariant(enabled));
+}
+
+void ArtisticTextTool::toggleFontItalic(bool enabled)
+{
+    changeFontProperty(ItalicProperty, QVariant(enabled));
+}
+
+void ArtisticTextTool::anchorChanged(QAction* action)
+{
+    if (!m_currentShape)
+        return;
+
+    ArtisticTextShape::TextAnchor newAnchor = static_cast<ArtisticTextShape::TextAnchor>(action->data().toInt());
+    if (newAnchor != m_currentShape->textAnchor()) {
+        canvas()->addCommand(new ChangeTextAnchorCommand(m_currentShape, newAnchor));
+    }
+}
+
+void ArtisticTextTool::setFontFamiliy(const QFont &font)
+{
+    changeFontProperty(FamiliyProperty, QVariant(font.family()));
+}
+
+void ArtisticTextTool::setFontSize(int size)
+{
+    changeFontProperty(SizeProperty, QVariant(size));
+}
+
+void ArtisticTextTool::setSuperScript()
+{
+    toggleSubSuperScript(ArtisticTextRange::Super);
+}
+
+void ArtisticTextTool::setSubScript()
+{
+    toggleSubSuperScript(ArtisticTextRange::Sub);
+}
+
+void ArtisticTextTool::toggleSubSuperScript(ArtisticTextRange::BaselineShift mode)
+{
+    if (!m_currentShape || !m_selection.hasSelection())
+        return;
+
+    const int from = m_selection.selectionStart();
+    const int count = m_selection.selectionCount();
+
+    QList<ArtisticTextRange> ranges = m_currentShape->copyText(from, count);
+    const int rangeCount = ranges.count();
+    if (!rangeCount)
+        return;
+
+    // determine if we want to disable the specified mode
+    const bool disableMode = ranges.first().baselineShift() == mode;
+    const qreal fontSize = m_currentShape->defaultFont().pointSizeF();
+
+    for (int i = 0; i < rangeCount; ++i) {
+        ArtisticTextRange &currentRange = ranges[i];
+        QFont font = currentRange.font();
+        if (disableMode) {
+            currentRange.setBaselineShift(ArtisticTextRange::None);
+            font.setPointSizeF(fontSize);
+        } else {
+            currentRange.setBaselineShift(mode);
+            font.setPointSizeF(fontSize*ArtisticTextRange::subAndSuperScriptSizeFactor());
+        }
+        currentRange.setFont(font);
+    }
+    canvas()->addCommand(new ReplaceTextRangeCommand(m_currentShape, ranges, from, count, this));
+}
+
+void ArtisticTextTool::selectAll()
+{
+    if (m_currentShape) {
+        m_selection.selectText(0, m_currentShape->plainText().count());
+    }
+}
+
+void ArtisticTextTool::deselectAll()
+{
+    if (m_currentShape) {
+        m_selection.clear();
+    }
 }
 
 #include <ArtisticTextTool.moc>

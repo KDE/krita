@@ -103,7 +103,7 @@ private slots:
     void slotNewEffectMask();
     void slotNewTransformationMask();
     void slotNewSelectionMask();
-    void slotCompositeOpChanged(const QString&);
+    void slotCompositeOpChanged(int index);
     void slotOpacityChanged();
     void slotOpacitySliderMoved(qreal opacity);
 

@@ -44,15 +44,16 @@
 
 
 StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *parent)
-        : QAbstractListModel(parent),
-        m_styleManager(0),
-        m_currentParagraphStyle(0),
-        m_currentCharacterStyle(0),
-        m_pureParagraphStyle(true),
-        m_pureCharacterStyle(true),
-        m_paragraphMode(paragraphMode),
-        m_styleMapper(new QSignalMapper(this))
-        ,m_tmpTextShape(0)
+    : QAbstractListModel(parent),
+      m_styleManager(0),
+      m_currentParagraphStyle(0),
+      m_currentCharacterStyle(0),
+      m_pureParagraphStyle(true),
+      m_pureCharacterStyle(true),
+      m_styleThumbnailer(0),
+      m_paragraphMode(paragraphMode),
+      m_styleMapper(new QSignalMapper(this)),
+      m_tmpTextShape(0)
 {
     setStyleManager(manager);
     m_paragIcon = KIcon("kotext-paragraph");
@@ -62,6 +63,7 @@ StylesModel::StylesModel(KoStyleManager *manager, bool paragraphMode, QObject *p
 
 StylesModel::~StylesModel()
 {
+    delete m_styleThumbnailer;
     delete m_tmpTextShape;
 }
 
@@ -161,15 +163,16 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
         disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
     }
     m_styleManager = sm;
-    m_styleThumbnailer = new KoStyleThumbnailer;
-
+    if (!m_styleThumbnailer) {
+        m_styleThumbnailer = new KoStyleThumbnailer;
+    }
     if (m_styleManager == 0) {
         return;
     }
 
     delete m_tmpTextShape;
 
-    KoInlineTextObjectManager *itom = new KoInlineTextObjectManager;
+    KoInlineTextObjectManager *itom = new KoInlineTextObjectManager(this);
     m_tmpTextShape = new TextShape(itom);
     m_tmpTextShape->setSize(QSizeF(250, 300));
     m_styleThumbnailer->setPixmapHelperDocument(m_tmpTextShape->textShapeData()->document());

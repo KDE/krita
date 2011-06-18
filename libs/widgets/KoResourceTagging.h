@@ -46,6 +46,8 @@ public:
 
     QStringList getTagNamesList();
 
+    QStringList searchTag(const QString& tag);
+
 private:
     QMultiHash<QString, QString> m_tagRepo;
     QHash<QString, int> m_tagList;

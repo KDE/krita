@@ -55,12 +55,15 @@ public:
     void setViewMode(ViewMode mode);
 
     void updateViewSettings();
+
+    QStringList getTagNamesList(const QString& searchString);
+    void returnKeyPressed(QString lineEditText);
+
 signals:
     void resourceSelected( KoResource * resource );
     
 public slots:
     void searchTextChanged(const QString& searchString);
-    
     void setShowAll(bool show);
 
 protected:

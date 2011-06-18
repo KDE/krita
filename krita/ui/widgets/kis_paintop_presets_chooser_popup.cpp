@@ -24,6 +24,7 @@
 #include <ui_wdgpaintoppresets.h>
 #include <kmenu.h>
 #include <kis_config.h>
+#include <QCompleter>
 
 class KisPaintOpPresetsChooserPopup::Private
 {
@@ -65,6 +66,12 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(searchTextChanged(const QString&)));
 
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(textChanged(const QString&)),
+                this, SLOT(setLineEditCompleter(const QString&)));
+
+    connect(m_d->uiWdgPaintOpPresets.searchBar, SIGNAL(returnPressed(QString)),
+                this, SLOT(returnKeyPressed(QString)));
+
     connect(m_d->uiWdgPaintOpPresets.showAllCheckBox, SIGNAL(toggled(bool)),
             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setShowAll(bool)));
     m_d->firstShown = true;
@@ -100,4 +107,20 @@ void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)
         m_d->uiWdgPaintOpPresets.wdgPresetChooser->updateViewSettings();
         m_d->firstShown = false;
     }
+}
+
+void KisPaintOpPresetsChooserPopup::setLineEditCompleter(const QString& searchString)
+{
+    QCompleter* tagCompleter = new QCompleter(m_d->uiWdgPaintOpPresets.wdgPresetChooser->getTagNamesList(searchString),this);
+    m_d->uiWdgPaintOpPresets.searchBar->setCompleter(tagCompleter);
+}
+
+void KisPaintOpPresetsChooserPopup::returnKeyPressed(QString lineEditText)
+{
+    m_d->uiWdgPaintOpPresets.wdgPresetChooser->returnKeyPressed(lineEditText);
+    if(!lineEditText.endsWith(", ")) {
+        lineEditText.append(", ");
+    }
+    m_d->uiWdgPaintOpPresets.searchBar->setText(lineEditText);
+    setLineEditCompleter(lineEditText);
 }

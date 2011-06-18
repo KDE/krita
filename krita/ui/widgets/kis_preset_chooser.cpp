@@ -119,7 +119,7 @@ public:
 
         QList<KoResource*> resources;
         foreach( KisPaintOpPreset* resource, serverResources ) {
-            if(filterAcceptsPreset(resource)) {
+            if(filterAcceptsPreset(resource) || (m_tagSearch && m_taggedResourceNameList.contains(resource->filename())) ) {
                 resources.append( resource );
             }
         }
@@ -150,6 +150,16 @@ public:
         m_nameFilter = nameFilter;
     }
 
+    void setTaggedResourceFileNames(const QStringList &resourceFileNames)
+    {
+        m_taggedResourceNameList= resourceFileNames;
+    }
+
+    void setTagSearch(bool tagSearch)
+    {
+        m_tagSearch=tagSearch;
+    }
+
     void setShowAll(bool show)
     {
         m_showAll = show;
@@ -163,7 +173,9 @@ public:
 private:
     KoID m_paintopID;
     QString m_nameFilter;
+    QStringList m_taggedResourceNameList;
     bool m_showAll;
+    bool m_tagSearch;
 };
 
 KisPresetChooser::KisPresetChooser(QWidget *parent, const char *name)
@@ -204,9 +216,25 @@ void KisPresetChooser::setPresetFilter(const KoID& paintopID)
 
 void KisPresetChooser::searchTextChanged(const QString& searchString)
 {
+    if(searchString.isEmpty()) {
+        m_presetProxy->setTagSearch(false);
+    }
     m_presetProxy->setPresetNameFilter(searchString);
     m_presetProxy->invalidate();
     updateViewSettings();
+}
+
+void KisPresetChooser::returnKeyPressed(QString lineEditText)
+{
+    m_presetProxy->setTagSearch(true);
+    m_presetProxy->setTaggedResourceFileNames(m_chooser->getTaggedResourceFileNames(lineEditText));
+    m_presetProxy->invalidate();
+    updateViewSettings();
+}
+
+QStringList KisPresetChooser::getTagNamesList(const QString& searchString)
+{
+    return m_chooser->getTagNamesList(searchString);
 }
 
 void KisPresetChooser::setShowAll(bool show)

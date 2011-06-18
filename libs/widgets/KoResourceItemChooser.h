@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QCompleter>
 
 #include "kowidgets_export.h"
 #include <KoConfig.h>
@@ -83,6 +84,9 @@ public:
     void setKnsrcFile(const QString& knsrcFileArg);
     QSize viewSize();
 
+    QStringList getTaggedResourceFileNames(QString lineEditText);
+    QStringList getTagNamesList(QString lineEditText);
+
 signals:
     /// Emitted when a resource was selected
     void resourceSelected( KoResource * resource );
@@ -93,6 +97,8 @@ private slots:
     void setTagOpCombo(QStringList assignedTagsList);
     void tagOpComboActivated(QString lineEditText);
     void tagOpComboTextChanged(QString lineEditText);
+    void tagSearchComboActivated(QString lineEditText);
+    void tagSearchComboTextChanged(QString lineEditText);
 
 private:
     enum Buttons { Button_Import, Button_Remove, Button_GhnsDownload, Button_GhnsUpload };

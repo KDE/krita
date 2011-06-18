@@ -30,12 +30,12 @@ KoResourceTagging::KoResourceTagging()
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
 {
-    return m_tagRepo.values(resource->filename());;
+    return m_tagRepo.values(resource->filename());
 }
 
 QStringList KoResourceTagging::getTagNamesList()
 {
-    return m_tagList.uniqueKeys();;
+    return m_tagList.uniqueKeys();
 }
 
 void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
@@ -74,3 +74,31 @@ void KoResourceTagging::delTag( KoResource* resource,const QString& tag)
     }
 }
 
+QStringList KoResourceTagging::searchTag(const QString& lineEditText)
+{
+    QStringList tagsList = lineEditText.split(", ");
+    if(tagsList.contains("")) {
+       tagsList.removeAll("");
+    }
+
+    QStringList keysList = m_tagRepo.keys(tagsList.takeFirst());
+
+    if(tagsList.count() >= 1) {
+        QStringList resultKeysList;
+        bool tagPresence;
+        foreach(QString key, keysList) {
+            tagPresence=true;
+            foreach(QString tag, tagsList) {
+                if(!m_tagRepo.contains(key,tag)) {
+                    tagPresence=false;
+                    break;
+                }
+            }
+            if(tagPresence) {
+                resultKeysList.append(key);
+            }
+        }
+        return resultKeysList;
+    }
+    return keysList;
+}

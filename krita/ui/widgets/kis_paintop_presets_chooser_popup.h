@@ -43,7 +43,8 @@ signals:
 private slots:
     void slotThumbnailMode();
     void slotDetailMode();
-
+    void returnKeyPressed(QString lineEditText);
+    void setLineEditCompleter(const QString& searchString);
     virtual void paintEvent(QPaintEvent* );
    
 private:

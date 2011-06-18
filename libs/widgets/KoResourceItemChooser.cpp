@@ -32,7 +32,6 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdebug.h>
-#include <QCompleter>
 
 #ifdef GHNS
 #include <knewstuff3/downloaddialog.h>
@@ -79,6 +78,9 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     d->tagSearchCombo->setEditable( true );
     d->tagSearchCombo->setEnabled( true );
     d->tagSearchCombo->hide();
+
+    connect( d->tagSearchCombo, SIGNAL(activated(QString)), this, SLOT(tagSearchComboActivated(QString)));
+    connect( d->tagSearchCombo, SIGNAL(editTextChanged(QString)), this, SLOT(tagSearchComboTextChanged(QString)));
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->addWidget( d->tagSearchCombo );
@@ -136,6 +138,11 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addLayout( buttonLayout );
 
     d->tagObject = new KoResourceTagging();
+
+    d->tagCompleter = new QCompleter(getTagNamesList(""),this);
+    d->tagSearchCombo->setCompleter(d->tagCompleter);
+
+
     updateButtonState();
 }
 
@@ -359,19 +366,13 @@ void KoResourceItemChooser::setTagOpCombo(QStringList tagsList)
     else
     {
         d->tagOpCombo->clear();
+        d->tagOpCombo->clearEditText();
     }
 
-    QStringList tagNamesList = d->tagObject->getTagNamesList();
-    QStringList autoCompletionTagsList;
-    for(int i=0; i< tagNamesList.count(); i++) {
-        if (!tagsList.contains(tagNamesList.at(i))) {
-            autoCompletionTagsList  << tags + tagNamesList.at(i);
-        }
-    }
-
-    d->tagCompleter = new QCompleter(autoCompletionTagsList, this);
+    d->tagCompleter = new QCompleter(getTagNamesList(tags),this);
     d->tagOpCombo->setCompleter(d->tagCompleter);
 }
+
 
 void KoResourceItemChooser::tagOpComboActivated(QString lineEditText)
 {
@@ -405,6 +406,70 @@ void KoResourceItemChooser::tagOpComboTextChanged(QString lineEditText)
             d->tagObject->delTag(d->curResource, tag);
         }
     }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagOpCombo->setCompleter(d->tagCompleter);
+}
+
+QStringList KoResourceItemChooser::getTagNamesList(QString lineEditText)
+{
+    QStringList tagNamesList = d->tagObject->getTagNamesList();
+
+    if(lineEditText.contains(", ")) {
+        QStringList tagsList = lineEditText.split(", ");
+        if(tagsList.contains("")) {
+           tagsList.removeAll("");
+         }
+
+        QStringList autoCompletionTagsList;
+        QString joinText;
+
+        if(lineEditText.endsWith(", ")) {
+            joinText=lineEditText;
+        }
+        else {
+            tagsList.removeLast();
+            joinText = tagsList.join(", ");
+            joinText.append(", ");
+        }
+
+        for(int i=0; i< tagNamesList.count(); i++) {
+            if (!tagsList.contains(tagNamesList.at(i))) {
+                autoCompletionTagsList  << joinText + tagNamesList.at(i);
+            }
+        }
+        return autoCompletionTagsList;
+    }
+    return tagNamesList;
+ }
+
+QStringList KoResourceItemChooser::getTaggedResourceFileNames(QString lineEditText)
+{
+    return d->tagObject->searchTag(lineEditText);
+}
+
+void KoResourceItemChooser::tagSearchComboActivated(QString lineEditText)
+{
+    d->model->resourceServerAdapter()->setTagSearch(true);
+    d->model->resourceServerAdapter()->setTaggedResourceFileNames(getTaggedResourceFileNames(lineEditText));
+    d->model->resourceServerAdapter()->updateServer();
+
+    if(!lineEditText.endsWith(", ")) {
+        lineEditText.append(", ");
+    }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagSearchCombo->setCompleter(d->tagCompleter);
+    d->tagSearchCombo->setEditText( lineEditText );
+
+}
+
+void KoResourceItemChooser::tagSearchComboTextChanged(QString lineEditText)
+{
+    if(lineEditText.isEmpty()) {
+        d->model->resourceServerAdapter()->setTagSearch(false);
+        d->model->resourceServerAdapter()->updateServer();
+    }
+    d->tagCompleter = new QCompleter(getTagNamesList(lineEditText),this);
+    d->tagSearchCombo->setCompleter(d->tagCompleter);
 }
 
 #include <KoResourceItemChooser.moc>

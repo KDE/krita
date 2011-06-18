@@ -23,6 +23,7 @@
 #define KO_RESOURCESERVER_ADAPTER_H_
 
 #include "KoResourceServer.h"
+#include <KoResource.h>
 
 #include "kowidgets_export.h"
 
@@ -41,6 +42,9 @@ public:
     virtual void removeResourceFile(const QString & filename) = 0;
     virtual void importResourceFile(const QString & filename, bool fileCreation=true) = 0;
     virtual QString extensions() = 0;
+    virtual void setTaggedResourceFileNames(const QStringList& resourceFileNames)=0;
+    virtual void setTagSearch(bool tagSearch)=0;
+    virtual void updateServer()=0;
 
 signals:
     void resourceAdded(KoResource*);
@@ -64,6 +68,7 @@ public:
         : KoAbstractResourceServerAdapter(parent)
         , m_resourceServer(resourceServer)
     {
+        m_tagSearch=false;
     }
 
     virtual ~KoResourceServerAdapter()
@@ -86,9 +91,19 @@ public:
         QList<T*> serverResources = m_resourceServer->resources();
 
         QList<KoResource*> resources;
+
         foreach( T* resource, serverResources ) {
             resources.append( resource );
         }
+
+        if(m_tagSearch) {
+            foreach(KoResource* resource, resources) {
+                if(!m_resourceFileNames.contains(resource->filename())) {
+                    resources.removeAll(resource);
+                }
+            }
+        }
+
         return resources;
     }
 
@@ -156,6 +171,21 @@ public:
         return m_resourceServer->extensions();
     }
     
+    void setTaggedResourceFileNames(const QStringList& resourceFileNames)
+    {
+        m_resourceFileNames = resourceFileNames;
+    }
+
+    void setTagSearch(bool tagSearch )
+    {
+        m_tagSearch = tagSearch;
+    }
+
+    void updateServer()
+    {
+        emitRemovingResource(0);
+    }
+
 protected:
     KoResourceServer<T>* resourceServer()
     {
@@ -164,6 +194,8 @@ protected:
 
 private:
     KoResourceServer<T>* m_resourceServer;
+    QStringList m_resourceFileNames;
+    bool m_tagSearch;
 };
 
 #endif // KO_RESOURCESERVER_ADAPTER_H_

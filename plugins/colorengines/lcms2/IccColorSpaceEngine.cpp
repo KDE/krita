@@ -113,6 +113,24 @@ IccColorSpaceEngine::~IccColorSpaceEngine()
     delete d;
 }
 
+void IccColorSpaceEngine::addProfile(const QString &filename)
+{
+    KoColorSpaceRegistry* registry = KoColorSpaceRegistry::instance();
+
+    KoColorProfile *profile = new IccColorProfile(filename);
+    Q_CHECK_PTR(profile);
+
+    profile->load();
+    if (profile->valid()) {
+        kDebug(31000) << "Valid profile : " << profile->fileName() << profile->name();
+        registry->addProfileToMap(profile);
+    } else {
+        kDebug(31000) << "Invalid profile : " << profile->fileName() << profile->name();
+        delete profile;
+    }
+
+}
+
 KoColorConversionTransformation* IccColorSpaceEngine::createColorTransformation(const KoColorSpace* srcColorSpace, const KoColorSpace* dstColorSpace, KoColorConversionTransformation::Intent renderingIntent) const
 {
     return new KoLcmsColorConversionTransformation(

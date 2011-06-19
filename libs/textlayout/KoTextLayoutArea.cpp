@@ -838,7 +838,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     handleBordersAndSpacing(blockData, &block);
     m_blockRects.last().setLeft(m_blockRects.last().left() + qMin(m_indent, qreal(0.0)));
 
-    if (textList) {
+    if (textList && block.layout()->lineCount() == 1) {
         // if list set counterposition. Do this after borders so we can account for them.
         if (m_isRtl) {
             m_width -= blockData->counterWidth() + blockData->counterSpacing() + m_listIndent;
@@ -858,33 +858,33 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 blockData->setCounterPosition(QPointF(x(), m_y));
             }
         }
-    }
 
-    if (textList && textList->format().boolProperty(KoListStyle::AlignmentMode)) {
-        if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
-            if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
-                qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
-                if (!m_documentLayout->relativeTabs()) {
-                    listTab += leftMargin + m_indent;
-                } else {
-                    listTab -= leftMargin + m_indent; // express it relatively like other tabs
-                }
+        if (textList->format().boolProperty(KoListStyle::AlignmentMode)) {
+            if (block.blockFormat().intProperty(KoListStyle::LabelFollowedBy) == KoListStyle::ListTab) {
+                if (textList->format().hasProperty(KoListStyle::TabStopPosition)) {
+                    qreal listTab = textList->format().doubleProperty(KoListStyle::TabStopPosition);
+                    if (!m_documentLayout->relativeTabs()) {
+                        listTab += leftMargin + m_indent;
+                    } else {
+                        listTab -= leftMargin + m_indent; // express it relatively like other tabs
+                    }
 
-                foreach(KoText::Tab tab, tabs) {
-                    qreal position = tab.position  * 72. / qt_defaultDpiY();
-                    if (position > listLabelIndent) {
-                        // found the relevant normal tab
-                        if (position > listTab && listTab > listLabelIndent) {
-                            // But special tab is more relevant
-                            position = listTab;
+                    foreach(KoText::Tab tab, tabs) {
+                        qreal position = tab.position  * 72. / qt_defaultDpiY();
+                        if (position > listLabelIndent) {
+                            // found the relevant normal tab
+                            if (position > listTab && listTab > listLabelIndent) {
+                                // But special tab is more relevant
+                                position = listTab;
+                            }
+                            m_indent += position;
+                            break;
                         }
-                        m_indent += position;
-                        break;
                     }
                 }
-            }
-            else {
-                m_indent = 0;
+                else {
+                    m_indent = 0;
+                }
             }
         }
     }

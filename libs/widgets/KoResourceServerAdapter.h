@@ -184,7 +184,7 @@ public:
     void updateServer()
     {
         emitRemovingResource(0);
-    }
+    }    
 
 protected:
     KoResourceServer<T>* resourceServer()

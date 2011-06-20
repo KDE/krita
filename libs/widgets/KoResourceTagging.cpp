@@ -21,11 +21,21 @@
 #include "KoResourceTagging.h"
 
 #include <QStringList>
+#include <kstandarddirs.h>
+#include <QFile>
 
+#include "KoResourceServerAdapter.h"
 
-KoResourceTagging::KoResourceTagging()
+KoResourceTagging::KoResourceTagging(KoResourceModel* model)
 {
+    m_model = model;
+    m_tagsXMLFile = KStandardDirs::locateLocal("data", "krita/tags.xml");
+    readXMLFile();
+}
 
+KoResourceTagging::~KoResourceTagging()
+{
+    writeXMLFile();
 }
 
 QStringList KoResourceTagging::getAssignedTagsList( KoResource* resource )
@@ -44,7 +54,12 @@ void KoResourceTagging::addTag( KoResource* resource,const QString& tag)
         return;
     }
 
-    m_tagRepo.insert( resource->filename(), tag );
+    addTag( resource->filename(), tag );
+}
+
+void KoResourceTagging::addTag(const QString& fileName,const QString& tag)
+{
+    m_tagRepo.insert( fileName, tag );
 
     if(m_tagList.contains(tag))
     {
@@ -101,4 +116,155 @@ QStringList KoResourceTagging::searchTag(const QString& lineEditText)
         return resultKeysList;
     }
     return keysList;
+}
+
+void KoResourceTagging::writeXMLFile()
+{
+   QFile f(m_tagsXMLFile);
+   bool fileExists = f.exists();
+
+   if (!f.open(QIODevice::ReadWrite | QIODevice::Text)) {
+        kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
+        return;
+   }
+   QDomDocument doc;
+   QDomElement root;
+
+   if (!fileExists) {
+       QDomDocument docTemp("tags");
+       doc = docTemp;
+       doc.appendChild(doc.createProcessingInstruction("xml", "version=\"1.0\" encoding=\"UTF-8\""));
+       root = doc.createElement("tags");
+       doc.appendChild(root);
+   }
+   else {
+       if (!doc.setContent(&f)) {
+           kWarning() << "The file could not be parsed.";
+           return;
+       }
+
+       root = doc.documentElement();
+       if (root.tagName() != "tags") {
+           kWarning() << "The file doesn't seem to be of interest.";
+           return;
+       }
+   }
+
+   QStringList resourceNames = m_tagRepo.uniqueKeys();
+
+   if(fileExists) {
+       QDomNodeList resourceNodesList = root.childNodes();
+       /// resource are checked and added or removed according to need.
+       for(int i = 0; i < resourceNodesList.count() ; i++) {
+           QDomElement resourceEl = resourceNodesList.at(i).toElement();
+           if(resourceEl.tagName() == "resource") {
+               if (resourceNames.contains(resourceEl.attribute("identifier"))) {
+                   resourceNames.removeAll(resourceEl.attribute("identifier"));
+                   /// Tags are checked for a resource and added or removed according to need.
+                   QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+                   QStringList tags = m_tagRepo.values(resourceEl.attribute("identifier"));
+                   for(int j = 0; j < tagNodesList.count() ; j++) {
+                       QDomElement tagEl = tagNodesList.at(j).toElement();
+                       if(tags.contains(tagEl.text())) {
+                           tags.removeAll(tagEl.text());
+                       }
+                       else {
+                           resourceNodesList.at(i).removeChild(tagNodesList.at(j--));
+                       }
+                   }
+                   foreach(QString tag, tags) {
+                       QDomElement newTagEl = doc.createElement("tag");
+                       QDomText tagNameText = doc.createTextNode(tag);
+                       newTagEl.appendChild(tagNameText);
+                       resourceNodesList.at(i).appendChild(newTagEl);
+                   }
+               }
+               else {
+                    if( isServerResource(resourceEl.attribute("identifier"))) {
+                       root.removeChild(resourceNodesList.at(i--));
+                   }
+               }
+           }
+      }
+   }
+
+   foreach(QString resourceName, resourceNames ) {
+
+       QDomElement resourceEl = doc.createElement("resource");
+       resourceEl.setAttribute("identifier",resourceName);
+
+       QStringList tags = m_tagRepo.values(resourceName);
+       foreach (QString tag, tags) {
+           QDomElement tagEl = doc.createElement("tag");
+           QDomText tagNameText = doc.createTextNode(tag);
+           tagEl.appendChild(tagNameText);
+           resourceEl.appendChild(tagEl);
+       }
+       root.appendChild(resourceEl);
+   }
+
+   f.remove();
+   if(!f.open(QIODevice::WriteOnly | QIODevice::Text)) {
+       kWarning() << "Cannot write meta information to '" << m_tagsXMLFile << "'.";
+   }
+   QTextStream metastream(&f);
+   metastream << doc.toByteArray();
+
+   f.close();
+
+}
+
+void KoResourceTagging::readXMLFile()
+{
+    QFile f(m_tagsXMLFile);
+    if (!f.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
+    QDomDocument doc;
+    if (!doc.setContent(&f)) {
+        kWarning() << "The file could not be parsed.";
+        return;
+    }
+
+    QDomElement root = doc.documentElement();
+    if (root.tagName() != "tags") {
+        kWarning() << "The file doesn't seem to be of interest.";
+        return;
+    }
+
+    QDomNodeList resourceNodesList = root.childNodes();
+
+    for(int i=0; i< resourceNodesList.count(); i++) {
+        QDomElement resourceEl = resourceNodesList.at(i).toElement();
+        if(resourceEl.tagName() == "resource") {
+            if (isServerResource(resourceEl.attribute("identifier"))) {
+                QDomNodeList tagNodesList = resourceNodesList.at(i).childNodes();
+                for(int j = 0; j < tagNodesList.count() ; j++) {
+                    QDomElement tagEl = tagNodesList.at(j).toElement();
+                    addTag(resourceEl.attribute("identifier"), tagEl.text());
+                }
+            }
+        }
+    }
+
+
+}
+
+bool KoResourceTagging::isServerResource(QString resourceName)
+{
+    bool removeChild = false;
+    QStringList extensionsList = m_model->resourceServerAdapter()->extensions().split(":");
+    foreach (QString extension, extensionsList) {
+        if(resourceName.contains(extension.remove("*"))) {
+            removeChild = true;
+            break;
+        }
+    }
+
+    if(!removeChild && !resourceName.contains(".")) {
+        removeChild = true;
+    }
+
+    return removeChild;
 }

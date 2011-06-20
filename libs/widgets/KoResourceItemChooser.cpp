@@ -49,7 +49,7 @@
 class KoResourceItemChooser::Private
 {
 public:
-    Private() : model(0), view(0), buttonGroup(0) {}
+    Private() : model(0), view(0), buttonGroup(0) , tagObject(0){}
     KoResourceModel* model;
     KoResourceItemView* view;
     QButtonGroup* buttonGroup;
@@ -138,7 +138,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
     layout->addWidget( d->tagOpCombo );
     layout->addLayout( buttonLayout );
 
-    d->tagObject = new KoResourceTagging();
+    d->tagObject = new KoResourceTagging(d->model);
 
     d->tagCompleter = new QCompleter(getTagNamesList(""),this);
     d->tagSearchCombo->setCompleter(d->tagCompleter);
@@ -149,6 +149,7 @@ KoResourceItemChooser::KoResourceItemChooser( KoAbstractResourceServerAdapter * 
 
 KoResourceItemChooser::~KoResourceItemChooser()
 {
+    delete d->tagObject;
     delete d;
 }
 

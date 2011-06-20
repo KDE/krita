@@ -58,7 +58,6 @@ public:
     ///@param filteredNames list of names of presets that will be shown
     void setFilteredNames(const QStringList filteredNames);
 
-    void updateViewSettings();
     QStringList getTagNamesList(const QString& searchString);
     void returnKeyPressed(QString lineEditText);
     void setViewMode(ViewMode mode);

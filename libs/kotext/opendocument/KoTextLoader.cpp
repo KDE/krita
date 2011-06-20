@@ -138,6 +138,7 @@ public:
     QMap<QString, QString> removeLeavingContentChangeIdMap;
     QVector<QString> nameSpacesList;
     bool deleteMergeStarted;
+    QList<QVariant> openingSections;
     void copyRemoveLeavingContentStart(const KoXmlNode &node, QTextStream &xmlStream);
     void copyRemoveLeavingContentEnd(const KoXmlNode &node, QTextStream &xmlStream);
     void copyInsertAroundContent(const KoXmlNode &node, QTextStream &xmlStream);
@@ -432,13 +433,7 @@ KoTextLoader::~KoTextLoader()
     delete d;
 }
 
-
 void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor)
-{
-    loadBody(bodyElem, cursor, 0);
-}
-
-void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, KoSection *section)
 {
     static int rootCallChecker = 0;
     if (rootCallChecker == 0) {
@@ -453,13 +448,16 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, K
     cursor.beginEditBlock();
     const QTextDocument *document = cursor.block().document();
 
-    if (section) {
+    if (! d->openingSections.isEmpty()) {
         QTextBlock block = cursor.block();
         QTextBlockFormat format = block.blockFormat();
         QVariant v;
-        v.setValue<void*>(section);
-        format.setProperty(KoParagraphStyle::SectionStart, v);
+        v = format.property(KoParagraphStyle::SectionStartings);
+        d->openingSections.append(v.value<QList<QVariant> >()); // if we had some already we need to append the new ones
+        v.setValue<QList<QVariant> >(d->openingSections);
+        format.setProperty(KoParagraphStyle::SectionStartings, v);
         cursor.setBlockFormat(format);
+        d->openingSections.clear();
     }
 
     KoOdfNotesConfiguration *notesConfiguration =
@@ -1260,7 +1258,7 @@ void KoTextLoader::loadListItem(KoXmlElement &e, QTextCursor &cursor, int level)
     } else {
         loadBody(e, cursor);
     }
-    
+
     if (!cursor.blockFormat().boolProperty(KoParagraphStyle::ForceDisablingList)) {
         if (!current.textList()) {
             if (!d->currentList->style()->hasLevelProperties(level)) {
@@ -1428,19 +1426,26 @@ void KoTextLoader::loadSection(const KoXmlElement &sectionElem, QTextCursor &cur
         return;
     }
 
-    loadBody(sectionElem, cursor, section);
+    QVariant v;
+    v.setValue<void *>(section);
+    d->openingSections.append(v);
+
+    loadBody(sectionElem, cursor);
 
     // Close the section on the last block of text we have loaded just now.
     KoSectionEnd *sectionEnd = new KoSectionEnd();
     sectionEnd->name = section->name();
+    v.setValue<void *>(sectionEnd);
 
     QTextBlock block = cursor.block();
     QTextBlockFormat format = block.blockFormat();
-    QVariant v;
-    v.setValue<void*>(sectionEnd);
-    format.setProperty(KoParagraphStyle::SectionEnd, v);
+    QVariant listv;
+    listv = format.property(KoParagraphStyle::SectionEndings);
+    QList<QVariant> sectionEndings = v.value<QList<QVariant> >();
+    sectionEndings.append(v);
+    listv.setValue<QList<QVariant> >(sectionEndings);
+    format.setProperty(KoParagraphStyle::SectionEndings, listv);
     cursor.setBlockFormat(format);
-
 }
 
 void KoTextLoader::loadNote(const KoXmlElement &noteElem, QTextCursor &cursor)

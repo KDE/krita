@@ -27,6 +27,7 @@
 // Qt + kde
 #include <QHash>
 #include <QTextCharFormat>
+#include <QTextBlock>
 
 class KoCanvasBase;
 class KoTextLocator;
@@ -143,6 +144,10 @@ public:
      * @return a list of all inline objects that are endnotes
      */
     QList<KoInlineNote*> endNotes() const;
+
+    QList<KoInlineNote*> footNotes() const;
+
+    void reNumbering( QTextBlock block );
 
 public slots:
     void documentInformationUpdated(const QString &info, const QString &data);

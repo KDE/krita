@@ -21,8 +21,12 @@
 #define REFERENCESTOOL_H
 
 #include "TextTool.h"
+#include "dialogs/SimpleTableOfContentsWidget.h"
+#include "dialogs/SimpleFootEndNotesWidget.h"
 
 class KoCanvasBase;
+class KAction;
+class KoInlineNote;
 class QPainter;
 
 /// This tool is the ui for inserting Table of Contents, Citations/bibliography, footnotes, endnotes, index, table of illustrations etc
@@ -47,8 +51,14 @@ protected:
 private slots:
     /// insert a table of contents
     void insertTableOfContents();
+    void insertFootNote();
+    void insertEndNote();
 
 private:
+    SimpleTableOfContentsWidget *stocw;
+    SimpleFootEndNotesWidget *sfenw;
+    KoInlineNote *note;
+
 };
 
 #endif // REFERENCESTOOL_H

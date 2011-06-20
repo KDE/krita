@@ -220,6 +220,62 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
     return answers;
 }
 
+QList<KoInlineNote*> KoInlineTextObjectManager::footNotes() const
+{
+    QList<KoInlineNote*> answers;
+    foreach(KoInlineObject* object, m_objects) {
+        KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
+        if (note && note->type() == KoInlineNote::Footnote) {
+            if(note->autoNumbering())
+                answers.append(note);
+        }
+    }
+    return answers;
+}
+
+void KoInlineTextObjectManager::reNumbering(QTextBlock block)
+{
+    int i=1;
+
+    while(block.isValid())
+    {
+        QString text = block.text();
+        int pos = text.indexOf(QChar::ObjectReplacementCharacter);
+
+        while (pos >= 0 && pos <= block.length() )
+        {
+            QTextCursor c1(block);
+            c1.setPosition(block.position() + pos);
+            c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
+
+            KoInlineNote *note = dynamic_cast<KoInlineNote*>(this->inlineTextObject(c1));
+            if (note && note->type() == KoInlineNote::Footnote)
+            {
+                if(note->autoNumbering())
+                {
+                    note->setLabel(QString().number(i));
+
+                    QTextCursor cursor = note->textFrame()->firstCursorPosition();
+                    cursor.movePosition(QTextCursor::WordRight,QTextCursor::KeepAnchor);
+                    cursor.removeSelectedText();
+                    QTextCharFormat *fmat = new QTextCharFormat();
+                    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+                    if(note->autoNumbering())
+                    {
+                        cursor.insertText(note->label(),*fmat);
+                    }
+                    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+                    cursor.insertText(" ",*fmat);
+                    i++;
+                }
+            }
+
+            pos = text.indexOf(QChar::ObjectReplacementCharacter, pos + 1);
+        }
+        block = block.next();
+    }
+}
+
 QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
 {
     QList<KoInlineNote*> answers;

@@ -301,7 +301,8 @@ QTextFrame *KoTextDocument::footNotesFrame()
 
     QTextFrame *frame = resource.value<QTextFrame *>();
 
-    if (frame == 0) {
+    if (frame == 0)
+    {
         QTextCursor cursor(m_document->rootFrame()->lastCursorPosition());
         QTextFrameFormat format;
         format.setProperty(KoText::SubFrameType, KoText::FootNotesFrameType);

@@ -24,6 +24,7 @@
 #include "KoBookmark.h"
 #include "KoInlineTextObjectManager.h"
 #include <KoOdf.h>
+#include <KoInlineNote.h>
 #include "KoTextDocument.h"
 #include "KoTextDrag.h"
 #include "KoTextLocator.h"
@@ -50,6 +51,7 @@
 
 #include <QApplication>
 #include <QFontDatabase>
+#include <QLabel>
 #include <QTextBlock>
 #include <QTextBlockFormat>
 #include <QTextCharFormat>
@@ -1108,9 +1110,43 @@ void KoTextEditor::splitTableCells()
     d->updateState(KoTextEditor::Private::NoOp);
 }
 
+KoInlineNote *KoTextEditor::insertFootNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Add Footnote"));
+
+    KoInlineNote *note = new KoInlineNote(KoInlineNote::Footnote);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    note->setMotherFrame(KoTextDocument(d->caret.document()).footNotesFrame());
+
+    d->updateState(KoTextEditor::Private::NoOp);
+    return note;
+}
+
+void KoTextEditor::insertEndNote()
+{
+    d->updateState(KoTextEditor::Private::Custom, i18n("Add Endnote"));
+    /*KoInlineNote *note = new KoInlineNote(KoInlineNote::Endnote);
+    note->setMotherFrame(KoTextDocument(d->caret.block().document()).endNotesFrame());
+    note->setLabel("i");
+    //note->setAutoNumbering(true);
+    KoInlineTextObjectManager *manager = KoTextDocument(d->document).inlineTextObjectManager();
+    manager->insertInlineObject(d->caret,note);
+    d->caret.setPosition(note->textCursorPosition());
+
+    emit cursorPositionChanged();
+
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    d->caret.insertText("i",*fmat);
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    d->caret.insertText(" ",*fmat);*/
+    d->updateState(KoTextEditor::Private::NoOp);
+}
+
 void KoTextEditor::insertTableOfContents()
 {
-    d->updateState(KoTextEditor::Private::Custom, i18n("Insert Table Of Contents"));
+    d->updateState(KoTextEditor::Private::Custom, i18n("Add"));
 
     QTextFrameFormat tocFormat;
     tocFormat.setProperty(KoText::SubFrameType, KoText::TableOfContentsFrameType);

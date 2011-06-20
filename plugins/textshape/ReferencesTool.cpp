@@ -28,10 +28,15 @@
 #include <KoCanvasBase.h>
 #include <KoTextEditor.h>
 
+#include <KoInlineNote.h>
+#include <KoTextDocumentLayout.h>
+#include <KoInlineTextObjectManager.h>
+
 #include <kdebug.h>
 
 #include <KLocale>
 #include <KAction>
+#include <QTextDocument>
 
 ReferencesTool::ReferencesTool(KoCanvasBase* canvas): TextTool(canvas)
 {
@@ -44,10 +49,22 @@ ReferencesTool::~ReferencesTool()
 
 void ReferencesTool::createActions()
 {
-    KAction *action = new KAction(i18n("Table of Contents..."), this);
+    KAction *action;
+    KAction *action1;
+    KAction *action2;
+
+    action = new KAction(i18n("Add ToC"), this);
     addAction("insert_tableofcentents", action);
     action->setToolTip(i18n("Insert a Table of Contents into the document."));
     connect(action, SIGNAL(triggered()), this, SLOT(insertTableOfContents()));
+    action1 = new KAction(i18n("Add Footnote"),this);
+    addAction("insert_footnote",action1);
+    action1->setToolTip(i18n("Insert a Foot Note into the document."));
+    connect(action1, SIGNAL(triggered()), this, SLOT(insertFootNote()));
+    action2 = new KAction(i18n("Add Endnote"),this);
+    addAction("insert_endnote",action2);
+    action2->setToolTip(i18n("Insert an End Note into the document."));
+    connect(action2, SIGNAL(triggered()), this, SLOT(insertEndNote()));
 }
 
 void ReferencesTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
@@ -64,9 +81,9 @@ void ReferencesTool::deactivate()
 QList<QWidget*> ReferencesTool::createOptionWidgets()
 {
     QList<QWidget *> widgets;
-    SimpleTableOfContentsWidget *stocw = new SimpleTableOfContentsWidget(this, 0);
+    stocw = new SimpleTableOfContentsWidget(this, 0);
     //SimpleCitationWidget *scw = new SimpleCitationWidget(0);
-    SimpleFootEndNotesWidget *sfenw = new SimpleFootEndNotesWidget(0);
+    sfenw = new SimpleFootEndNotesWidget(this,0);
     //SimpleCaptionsWidget *scapw = new SimpleCaptionsWidget(0);
 
     // Connect to/with simple table of contents option widget
@@ -90,6 +107,42 @@ QList<QWidget*> ReferencesTool::createOptionWidgets()
 void ReferencesTool::insertTableOfContents()
 {
     textEditor()->insertTableOfContents();
+}
+
+void ReferencesTool::insertFootNote()
+{
+    note = textEditor()->insertFootNote();
+    note->setAutoNumbering(sfenw->widget.autoNumbering->isChecked());
+    if(note->autoNumbering())
+    {
+        note->setLabel(QString().number(note->manager()->footNotes().count()));
+    }
+    else
+    {
+        note->setLabel(sfenw->widget.characterEdit->text());
+    }
+
+    QTextCursor cursor = note->textCursor();
+    QTextCharFormat *fmat = new QTextCharFormat();
+    fmat->setVerticalAlignment(QTextCharFormat::AlignSuperScript);
+    if(note->autoNumbering())
+    {
+        cursor.insertText(note->label(),*fmat);
+    }
+    else
+    {
+        cursor.insertText(sfenw->widget.characterEdit->text(),*fmat);
+    }
+
+    fmat->setVerticalAlignment(QTextCharFormat::AlignNormal);
+    cursor.insertText(" ",*fmat);
+
+    note->manager()->reNumbering(note->textFrame()->document()->begin());
+}
+
+void ReferencesTool::insertEndNote()
+{
+    textEditor()->insertEndNote();
 }
 
 #include <ReferencesTool.moc>

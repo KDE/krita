@@ -514,11 +514,15 @@ bool KoShape::compareShapeZIndex(KoShape *s1, KoShape *s2)
         return false;
     }
 
-    if(s1->runThrough() > s2->runThrough()) {
-        return false;
-    }
-    if(s1->runThrough() < s2->runThrough()) {
-        return true;
+    if (s1->runThrough() < 0 || s2->runThrough() < 0) {
+        // If one of them is runThrough==Background and the other is not then we don't need to
+        // evaluate the z-Index. Note that on runThrough==Foreground we still need to.
+        if (s1->runThrough() > s2->runThrough()) {
+            return false;
+        }
+        if (s1->runThrough() < s2->runThrough()) {
+            return true;
+        }
     }
 
     return index1 < index2;
